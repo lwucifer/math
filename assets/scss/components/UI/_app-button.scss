@@ -1,22 +1,29 @@
 // Button style base
 .btn {
+    // Reset & base style
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 1.6rem;
+    max-width: 100%;
+    cursor: pointer;
+
+    // Display and align
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: inherit;
-    white-space: nowrap;
-    cursor: pointer;
-    text-decoration: none;
-    border-radius: 40px;
+
+    // Default styles
+    border-radius: 5px;
     padding: .5rem 2rem;
     border-color: transparent;
-    background-color: $color-brand;
-    color: #fff !important;
-    font-size: $font-size-base;
-    max-width: 100%;
-
+    background-color: $color-text-sub;
+    color: $color-text;
+    font-weight: 700;
+    
     &:hover, &:focus {
-        color: #fff;
+        color: $color-primary;
+        border-color: $color-primary;
     }
 
     &.disabled, &[disabled] {
@@ -27,26 +34,14 @@
 
 
 // Size of button
-.btn--xs {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-.btn--sm {
-    height: 32px;
-}
-
 .btn--primary {
-    height: 40px;
-    font-weight: 500;
+    height: 4rem;
+    background-color: $color-primary;
+    color: #fff;
 }
 
 .btn--lg {
-    height: 50px;
-    font-size: 24px;
-    font-weight: 700;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    height: 5rem;
 }
 
 .btn--full-width {
@@ -63,40 +58,45 @@
 
 
 // Color of button
-.btn--white {
+@each $name, $color in $colors {
+    .btn--color-#{$name} {
+        background-color: $color;
+    }
+}
+
+.btn--color-white {
     background-color: #fff;
-    color: $color-brand !important;
-
-    &:hover, &:focus {
-        color: $color-brand !important;
-    }
+    color: $color-primary;
 }
 
-.btn--gray {
-    background-color: #E6E7E8;
-    color: $color-text-dark !important;
-
-    &:hover, &:focus {
-        color: $color-brand !important;
-    }
-}
-
-// Out line buttons
-.btn--outline {
-    background-color: transparent !important;
-    border: 1px solid $color-brand;
-}
 
 // Border-radius
-.btn--less-border-radius {
-    border-radius: 5px;
+.btn--square {
+    border-radius: 0;
 }
 
-// Inside button
-.btn-append {
-    margin-left: 1rem;
+.btn--rounded {
+    border-radius: 20px;
 }
 
-.btn-prepend {
-    margin-right: 1rem;
+
+// Button outline
+.btn-outline {
+    background-color: transparent !important;
+    border: 1px solid $color-text;
+    color: $color-text;
+}
+
+// Color of button
+@each $name, $color in $colors {
+    .btn-outline--color-#{$name} {
+        border-color: $color;
+        color: $color;
+    }
+}
+
+.btn-outline--color-white {
+    background-color: transparent;
+    color: #fff;
+    border-color: #fff;
 }

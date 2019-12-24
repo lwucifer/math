@@ -5,34 +5,53 @@ $color-yellow: #F2C94C;
 
 $color-primary: $color-green;
 $color-brand: $color-green;
+$color-secondary: $color-red;
+// $color-info: 
+$color-success: lighten($color-green, 10);
+$color-error: $color-red;
+$color-warning: darken($color-yellow, 10);
 
 $color-text: #333333;
 $color-text-sub: #999999;
 $color-text-gray: #666666;
 $color-image-placeholder: #f6f6f6;
 $color-border: #EEEEEE;
+$color-active: $color-red;
+$color-disabled: $color-text-sub;
 
-$text-colors: (
+
+$colors: (
   primary: $color-green,
   secondary: $color-red,
   // info: ,
   success: lighten($color-green, 10),
   error: $color-red,
   warning: darken($color-yellow, 10),
+);
+
+$text-colors: (
+  primary: $color-primary,
+  secondary: $color-secondary,
+  // info: ,
+  success: $color-secondary,
+  error: $color-error,
+  warning: $color-warning,
   base: $color-text,
   sub: $color-text-sub,
   gray: $color-text-gray,
   white: #fff,
-  black: #000
+  black: #000,
+  active: $color-active,
+  disabled: $color-disabled
 );
 
 $bg-colors: (
-  primary: $color-green,
-  secondary: $color-red,
+  primary: $color-primary,
+  secondary: $color-secondary,
   // info: ,
-  success: lighten($color-green, 10),
-  error: $color-red,
-  warning: darken($color-yellow, 10),
+  success: $color-success,
+  error: $color-error,
+  warning: $color-warning,
   gray: #E5E5E5,
   white: #fff,
   black: #000
@@ -41,8 +60,6 @@ $bg-colors: (
 
 // Fonts
 $font-base: "Open Sans", sans-serif;
-$font-subbase: "SF Pro Text", sans-serif;
-$font-subbase-2: "Roboto", sans-serif;
 $font-size-base: 1.4rem;
 $font-size-caption: 1.2rem;
 $line-height-base: (19/14);

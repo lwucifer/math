@@ -50,6 +50,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
+    '@nuxtjs/svg',
   ],
 
   /*
@@ -71,6 +72,11 @@ module.exports = {
 
   styleResources: {
     scss: [
+      '~assets/scss/abstracts/_variables.scss',
+      '~assets/scss/abstracts/_functions.scss',
+      '~assets/scss/abstracts/_mixins.scss',
+      '~assets/scss/abstracts/*.scss',
+      '~assets/scss/vendors/*.scss'
     ],
   },
 
