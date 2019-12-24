@@ -1,0 +1,119 @@
+// Colors
+$color-green: #32AF85;
+$color-red: #E9446A;
+$color-yellow: #F2C94C;
+
+$color-primary: $color-green;
+$color-brand: $color-green;
+
+$color-text: #333333;
+$color-text-sub: #999999;
+$color-text-gray: #666666;
+$color-image-placeholder: #f6f6f6;
+$color-border: #EEEEEE;
+
+$text-colors: (
+  primary: $color-green,
+  secondary: $color-red,
+  // info: ,
+  success: lighten($color-green, 10),
+  error: $color-red,
+  warning: darken($color-yellow, 10),
+  base: $color-text,
+  sub: $color-text-sub,
+  gray: $color-text-gray,
+  white: #fff,
+  black: #000
+);
+
+$bg-colors: (
+  primary: $color-green,
+  secondary: $color-red,
+  // info: ,
+  success: lighten($color-green, 10),
+  error: $color-red,
+  warning: darken($color-yellow, 10),
+  gray: #E5E5E5,
+  white: #fff,
+  black: #000
+);
+
+
+// Fonts
+$font-base: "Open Sans", sans-serif;
+$font-subbase: "SF Pro Text", sans-serif;
+$font-subbase-2: "Roboto", sans-serif;
+$font-size-base: 1.4rem;
+$font-size-caption: 1.2rem;
+$line-height-base: (19/14);
+
+
+// Typo
+$text-size: (
+  heading-1: 2.5rem,
+  heading-2: 2.4rem,
+  heading-3: 2.2rem,
+  heading-4: 2rem,
+  text-body: 1.4rem,
+  title: 1.6rem,
+  caption: 1.2rem
+);
+
+
+// use in include-media mixin
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+// Grid options - to make grid
+$grid: (
+    container: (
+        gap: 15,
+        responsive: (
+            sm: 540,
+            md: 720,
+            lg: 962,
+            xl: 1170
+        )
+    ),
+    columns: (
+        max: 12,
+        gap: 30
+    ),
+    breakpoints: (
+        default: 0,
+        sm: 576,
+        md: 768,
+        lg: 992,
+        xl: 1200
+    )
+) !default;
+
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: ($spacer * .25),
+  2: ($spacer * .5),
+  3: $spacer,
+  4: ($spacer * 2),
+  5: ($spacer * 3),
+  6: ($spacer * 4),
+  auto: auto
+) !default;
+
+$xy-border: (
+  top: t,
+  right: r,
+  bottom: b,
+  left: l,
+  all: a
+) !default;
+
+$z-index: (
+  modal: 9999,
+  header: 99,
+  dropdown: 9
+);

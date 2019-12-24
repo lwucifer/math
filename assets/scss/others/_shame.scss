@@ -1,0 +1,15 @@
+// hoangnd custom style icon scroll loading 
+.loading-circles.custom-spinner {
+  border: 2px solid #2CAE86;
+  border-right-color: transparent;
+  animation: loading-rotating linear .85s infinite;
+}
+
+@keyframes loading-rotating {
+  0%{
+    transform: rotate(0);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}

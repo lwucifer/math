@@ -1,0 +1,174 @@
+.app-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+.app-player__content {
+    position: relative;
+    z-index: 1;
+    background: $color-brand;
+    color: #EFF9FE;
+}
+
+.app-player__components {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    
+    @include media(">=md") {
+        height: 70px;
+    }
+}
+
+.app-player__track-details {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 300;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    a {
+        text-transform: uppercase;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    @include media(">=md") {
+        font-size: 16px;
+    }
+}
+
+.app-player__controls {
+    display: flex;
+    align-items: center;
+
+    svg {
+        fill: #EFF9FE;
+    }
+
+    button {
+
+        &.active {
+            svg {
+                fill: $color-text-dark;
+            }
+        }
+
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+}
+
+.app-player__center {
+    flex: 1 0 100px;
+    width: 120px;
+    margin: 0 15px;
+
+    @include media(">=md") {
+        flex: 1 0 auto;
+        margin-top: 20px;
+    }
+}
+
+.app-player__volume-control {
+    margin-right: 10px;
+    display: none;
+
+    > div {
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    @include media(">=md") {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.app-player__volume-slider-wrapper {
+    width: 100px;
+}
+
+.seek-bar {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+
+    $this: &;
+
+    &__bar {
+        width: 100%;
+        height: 5px;
+        background: #EFF9FE;
+        border-radius: 5px;
+        position: relative;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    &__seek, &__buffered {
+        height: 5px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        border-radius: 5px 0 0 5px;
+        pointer-events: none;
+        transition: all linear 0.1s;
+    }
+
+    &__seek {
+        background: $color-text-dark;
+        z-index: 1;
+    }
+
+    &__buffered {
+        background: #D1D3D4;
+        z-index: 0;
+    }
+
+    &__point {
+        width: 12px;
+        height: 12px;
+        border-radius: 8px;
+        background: #EFF9FE;
+        position: absolute;
+        top: -3.25px;
+        z-index: 3;
+        transition: all linear 0.1s;
+        pointer-events: none;
+    }
+
+    &__current-time, &__duration {
+        font-weight: 300;
+        font-size: 10px;
+
+        @include media(">=md") {
+            font-size: 14px;
+        }
+    }
+}
+
+.app-player__button-play {
+    width: 15px;
+}
+
+.app-player__btn-loop {
+    width: 14px;
+}
+
+.app-player__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}

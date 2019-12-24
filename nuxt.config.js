@@ -78,6 +78,7 @@ module.exports = {
    ** Global CSS
    */
   css: [
+    '@/assets/scss/styles.scss'
   ],
 
   /*

@@ -1,0 +1,55 @@
+html {
+    font-size: 50%;
+    font-family: $font-base;
+  
+    @include media(">=lg") {
+      font-size: 62.5%; // 1rem = 10px, 10px/16px = 62.5%
+    }
+}
+
+body {
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    color: $color-text;
+}
+
+
+// Text size
+@each $name, $font-size in $text-size {
+    .#{$name} {
+        font-size: $font-size;
+    }
+}
+
+
+// Text case
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+
+// align
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+// Font
+.font-base {
+    font-family: $font-base;
+}
+
+.font-subbase {
+    font-family: $font-subbase;
+}
+
+.font-subbase-2 {
+    font-family: $font-subbase-2;
+}

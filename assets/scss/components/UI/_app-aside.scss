@@ -1,0 +1,106 @@
+.app-aside {
+    display: none;
+    position: fixed;
+    // left: 0;
+    top: 150px;
+    z-index: 100;
+    transform: translate(-100%, 0);
+
+    // Fix 12/12/2011
+    left: calc((100vw - 962px)/2);
+
+    $this: &;
+
+    &__menu {
+        list-style-type: none;
+        background-color: $color-brand;
+        color: #fff;
+        overflow: hidden;
+        // padding: 10px 0;
+        // border-top-right-radius: 8px;
+        // border-bottom-right-radius: 8px;
+        
+        // Fix 12/12/2011
+        border-radius: 8px;
+        font-size: 12px;
+    }
+
+    &__menu-item {
+        > a {
+            display: block;
+            padding: 0 5px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 300;
+
+            > span {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 15px 0;
+            }
+
+            svg {
+                fill: #fff;
+                margin-bottom: 5px;
+    
+                &.headphone {
+                    width: 1.5 * 14px;
+                    height: 1.5 * 12px;
+                }
+                &.camera {
+                    width: 1.5 * 14px;
+                    height: 1.5 * 12px;
+                }
+                &.download {
+                    width: 1.5 * 15px;
+                    height: 1.5 * 14px;
+                }
+                &.star {
+                    width: 1.5 * 14px;
+                    height: 1.5 * 13px;
+                }
+                &.ticket {
+                    width: 1.5 * 19px;
+                    height: 1.5 * 11px;
+                }
+            }
+            &:hover {
+                color: inherit;
+            }
+
+            &.nuxt-link-active {
+                // background-color: $color-brand;
+            }
+        }
+
+        &:not(:last-child) {
+            a > span {
+                border-bottom: 1px solid #fff;
+            }
+        }
+    }
+
+    &.active {
+        #{$this}__menu {
+            background-color: #d1d2d4;
+        }
+
+        #{$this}__menu-item {
+            > a {
+                &.nuxt-link-active {
+                    background-color: $color-brand;
+                    > span {   
+                        border-bottom-color: $color-brand !important;
+                        margin-top: -1px;
+                        border-top-color: $color-brand !important;
+                    }
+                }
+            }
+        }
+    }
+
+    @include media(">=#{(962 + (67*2)) + 'px'}") {
+        display: block;
+    }
+}

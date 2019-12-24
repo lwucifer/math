@@ -1,0 +1,29 @@
+.app-text-field {
+    background-color: #fff;
+    box-shadow: none;
+    color: inherit;
+}
+
+.app-text-field.error {
+    input {
+        border-color: red !important;
+    }
+}
+
+.app-text-field__input {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgba(#939598,.8);
+    padding: 0 10px;
+
+    &, &::placeholder {
+        font-size: inherit;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $color-brand;
+    }
+}

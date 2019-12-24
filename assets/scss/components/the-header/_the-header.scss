@@ -1,0 +1,40 @@
+.the-header__content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 98;
+    background-color: #F7F7F7;
+    padding: 15px 0;
+    box-shadow: 0 0 15px 0 rgba(#000, .05);
+}
+
+.the-header__components {
+    .menu-desktop{
+        display: none;
+        @include media(">=#{(962 + (67*2)) + 'px'}"){
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .menu-mb{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include media(">=#{(962 + (67*2)) + 'px'}"){
+            display: none;
+        }
+        .menu-icon{
+            height: 24px;
+            width: 24px;
+            cursor: pointer;
+        }
+    }
+}
+
+.the-header__size {
+    width: 100%;
+    height: 70px;
+}

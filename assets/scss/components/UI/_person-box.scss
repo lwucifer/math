@@ -1,0 +1,23 @@
+.person-box {
+    text-align: center;
+
+    &__img {
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 10px;
+
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    &__name {
+        text-decoration: none;
+        color: $color-text-dark !important;
+
+        &:hover {
+            color: $color-green !important;
+        }
+    }
+}
