@@ -7,7 +7,7 @@
 
       <ul class="the-header__menu">
         <li>
-          <n-link to="">Timeline</n-link>
+          <n-link to="" class="active">Timeline</n-link>
         </li>
         <li>
           <n-link to="">Khoá học</n-link>
@@ -21,7 +21,7 @@
       </ul>
 
       <form class="the-header__search" @submit.prevent>
-        <input type="text">
+        <input type="text" placeholder="Tìm kiếm">
         <button type="submit">
           <IconSearch width="15" height="15" />
         </button>
@@ -32,14 +32,23 @@
           <li>
             <a href="" class="the-header__noti">
               <IconGlobe width="34" height="29" />
-              <span class="text-white bg-error">(12)</span>
+              <span class="text-white">12</span>
             </a>
           </li>
         </ul>
 
-        <app-button></app-button>
-        <div class="the-header__user">
+        <div v-if="isAuthenticated" class="the-header__user">
+          <div class="the-header__user-avt">
+            <img src="https://via.placeholder.com/44x44" alt="">
+          </div>
+
+          <div class="the-header__user-name">Nguyễn Tiến Đạt</div>
+          <div class="the-header__user-arrow">
+            <IconCaretDown width="13" height="7" />
+          </div>
         </div>
+
+        <app-button v-else outline square color="primary">Đăng nhập</app-button>
       </div>
     </div>
   </div>
@@ -49,20 +58,22 @@
 import Logo from "~/assets/svg/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/search.svg?inline"
 import IconGlobe from "~/assets/svg/globe.svg?inline";
+import IconCaretDown from "~/assets/svg/caret-down.svg?inline";
 
 export default {
   components: {
     Logo,
     IconSearch,
-    IconGlobe
+    IconGlobe,
+    IconCaretDown
   },
 
   data: () => ({
-    isAuthenticated: false
+    isAuthenticated: true
   })
 }
 </script>
 
-<style>
-
+<style lang="scss">
+@import "~/assets/scss/components/the-header/_the-header.scss";
 </style>

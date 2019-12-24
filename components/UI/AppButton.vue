@@ -46,13 +46,13 @@ export default {
       };
 
       const outlineColorClasses = {
-        "btn-outline--primary": this.color === "primary",
-        "btn-outline--secondary": this.color === "secondary",
-        "btn-outline--info": this.color === "info",
-        "btn-outline--success": this.color === "success",
-        "btn-outline--error": this.color === "error",
-        "btn-outline--warning": this.color === "warning",
-        "btn-outline--white": this.color === "white",
+        "btn-outline--color-primary": this.color === "primary",
+        "btn-outline--color-secondary": this.color === "secondary",
+        "btn-outline--color-info": this.color === "info",
+        "btn-outline--color-success": this.color === "success",
+        "btn-outline--color-error": this.color === "error",
+        "btn-outline--color-warning": this.color === "warning",
+        "btn-outline--color-white": this.color === "white",
       };
 
       const borderRadiusClasses = {
