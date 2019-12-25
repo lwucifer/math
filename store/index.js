@@ -4,22 +4,23 @@ const state = () => ({
 
 const actions = {
   async nuxtServerInit({ commit }) {
+    console.log("[nuxtServerInit]");
     // get auth info from session
-  //   const options = {
-  //     method: 'GET',
-  //     url: '/auth/info',
-  //   };
+    //   const options = {
+    //     method: 'GET',
+    //     url: '/auth/info',
+    //   };
 
-  //   const res = await this.$axios(options);
+    //   const res = await this.$axios(options);
 
-  //   if (res.data.authUser) {
-  //     commit('setUser', res.data.authUser);
-  //   } else {
-  //     commit('setUser', null);
-  //   }
+    //   if (res.data.authUser) {
+    //     commit('setUser', res.data.authUser);
+    //   } else {
+    //     commit('setUser', null);
+    //   }
   },
 
-  
+
 };
 
 const getters = {};
