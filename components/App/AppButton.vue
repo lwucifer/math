@@ -94,5 +94,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/UI/_app-button.scss";
+@import "~/assets/scss/components/app/_app-button.scss";
 </style>

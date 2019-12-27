@@ -1,0 +1,60 @@
+.post-editor {
+    background-color: #fff;
+    padding: 2rem;
+}
+
+.post-editor__top {
+    display: flex;
+    margin-bottom: 1.4rem;
+}
+
+.post-editor__avatar {
+    flex: 0 0 6rem;
+    width: 6rem;
+    height: 6rem;
+    margin-right: 1.6rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: $color-image-placeholder;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.post-editor__editor {
+    flex: 1 0 calc(100% - 8.2rem);
+    width: calc(100% - 8.2rem);
+
+    .ProseMirror {
+        padding: 2.1rem 0;
+    }
+
+    .ProseMirror-focused {
+        outline: none;
+    }
+}
+
+.post-editor__toolbar {
+    margin-top: 1.2rem;
+}
+
+.post-editor__toolbar-item {
+    display: inline-block;
+
+    svg {
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    span {
+        vertical-align: middle;
+    }
+
+    &:not(:last-child) {
+        margin-right: 3.5rem;
+    }
+}

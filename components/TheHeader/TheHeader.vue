@@ -16,7 +16,7 @@
           <n-link to="">Trường học</n-link>
         </li>
         <li>
-          <n-link to="">Tin nhắn <span class="text-active">(2)</span></n-link>
+          <n-link to="">Tin nhắn <span class="the-header__menu-status text-active">(2)</span></n-link>
         </li>
       </ul>
 
@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import Logo from "~/assets/svg/schoolly.svg?inline";
-import IconSearch from "~/assets/svg/search.svg?inline"
-import IconGlobe from "~/assets/svg/globe.svg?inline";
-import IconCaretDown from "~/assets/svg/caret-down.svg?inline";
+import Logo from "~/assets/svg/icons/schoolly.svg?inline";
+import IconSearch from "~/assets/svg/icons/search.svg?inline"
+import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
+import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 
 export default {
   components: {

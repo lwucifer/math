@@ -1,0 +1,8 @@
+.editor *.is-empty:nth-child(1)::before,
+.editor *.is-empty:nth-child(2)::before {
+  content: attr(data-empty-text);
+  float: left;
+  pointer-events: none;
+  height: 0;
+  color: $color-text-sub;
+}
