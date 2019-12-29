@@ -1,6 +1,6 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
-import { auth } from '../services';
+import { auth } from '../services/Auth';
 
 /**
  * initial state
