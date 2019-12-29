@@ -53,6 +53,7 @@ a.app-content-box {
         }
 
         .app-content-box__title {
+            margin-bottom: 3px;
             @include set-line((
                 lineClamp: 2,
                 lineHeight: (22/16)

@@ -33,6 +33,7 @@
               <div class="timeline-aside-tab-pane">
                 <app-content-box
                   v-for="(item, index) in coursesList"
+                  class="align-items-center"
                   size="sm"
                   :key="index"
                   :image="item.image"
