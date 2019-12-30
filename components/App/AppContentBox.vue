@@ -45,8 +45,8 @@ export default {
   computed: {
     classes() {
       const directionClasses = {
-        "app-content-box--horizontal": this.direction === "horizontal",
-        "app-content-box--vertical": this.direction === "vertical"
+        "app-content-box-horizontal": this.direction === "horizontal",
+        "app-content-box-vertical": this.direction === "vertical"
       };
 
       const sizeClasses = {

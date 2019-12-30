@@ -7,7 +7,28 @@
         <div class="col-md-8">
           <PostEditor />
 
-          <TimelineBox />
+          <TimelineBox class="mb-4">
+            <template slot="media-content">
+              <app-divider class="my-4"></app-divider>
+              <app-content-box
+                tag="a"
+                target="_blank"
+                href=""
+                class="mb-4"
+                size="md"
+                image="https://via.placeholder.com/150x150"
+                title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP" 
+                desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
+                meta-footer="cellphones.com.vn"
+              />
+            </template>
+          </TimelineBox>
+
+          <TimelineBox>
+            <template slot="media-content">
+              <TimelineBoxSlider :images="banners" class="my-4"/>
+            </template>
+          </TimelineBox>
         </div>
 
         <div class="col-md-4">
@@ -42,13 +63,13 @@
                   :title="item.title"
                   :desc="item.desc"
                 >
-                  <n-link slot="image" to="">
+                  <n-link slot="image" to>
                     <img :src="item.image" :alt="item.title" />
                   </n-link>
 
-                  <n-link slot="title" to="">{{ item.title }}</n-link>
+                  <n-link slot="title" to>{{ item.title }}</n-link>
 
-                  <n-link slot="desc" to="">{{ item.desc }}</n-link>
+                  <n-link slot="desc" to>{{ item.desc }}</n-link>
                 </app-content-box>
               </div>
 
@@ -80,6 +101,7 @@ import SliderBanner from "~/components/Slider/SliderBanner";
 import PostEditor from "~/components/PostEditor/PostEditor";
 import AsideBox from "~/components/AsideBox/AsideBox";
 import TimelineBox from "~/components/TimelineBox/TimelineBox";
+import TimelineBoxSlider from "~/components/TimelineBox/TimelineBoxSlider";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -88,7 +110,8 @@ export default {
     SliderBanner,
     PostEditor,
     AsideBox,
-    TimelineBox
+    TimelineBox,
+    TimelineBoxSlider
   },
 
   data() {

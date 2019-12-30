@@ -26,6 +26,8 @@
         class="timeline-box__post-desc"
       >Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</p>
       <a href @click.prevent class="timeline-box__post-readmore">Xem thêm</a>
+
+      <slot name="media-content" />
     </div>
 
     <div class="timeline-box__interactive">
