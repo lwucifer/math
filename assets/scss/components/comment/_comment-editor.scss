@@ -1,0 +1,86 @@
+.comment-editor {
+    @include clearfix;
+}
+
+.comment-editor__editor-wrapper {
+    position: relative;
+    flex-grow: 1;
+    margin-top: 2.5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-end;
+    border: 1px solid $color-border;
+    border-radius: 17.5px;
+    background: #F8F8F8;
+
+    .editor *.is-empty:nth-child(1)::before,
+    .editor *.is-empty:nth-child(2)::before {
+        color: $color-text-gray-2;
+        font-size: $font-size-caption;
+        line-height: 1.8rem;
+    }
+}
+
+.comment-editor__editor {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: $color-text-gray;
+    max-width: 100%;
+
+    .ProseMirror {
+        padding: .75rem 1.2rem;
+    }
+
+    .ProseMirror-focused {
+        outline: none;
+    }
+}
+
+.comment-editor__avatar {
+    margin-right: 8px;
+    float: left;
+}
+
+.comment-editor__actions {
+    flex-shrink: 0;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+}
+
+.comment-editor__button {
+    padding: .75rem;
+    svg {
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        fill: $color-text-gray-2;
+    }
+
+    &:nth-of-type(1) {
+        right: 1.1rem + 2rem + 1.4rem;
+    }
+
+    &:nth-of-type(2) {
+        right: 1.1rem;
+    }
+
+    &.image {
+        &:hover {
+            svg {
+                fill: $color-blue;
+            }
+        }
+    }
+
+    &.emoji {
+        &:hover {
+            svg {
+                fill: $color-purple;
+            }
+        }
+    }
+}

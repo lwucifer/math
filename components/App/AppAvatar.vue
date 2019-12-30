@@ -1,27 +1,19 @@
-<template functional>
-  <span
-    :class="[
-      data.class,
-      data.staticClass,
-      'app-avatar',
-      props.shape === 'circle' && 'app-avatar-circle',
-      props.shape === 'square' && 'app-avatar-square',
-      props.size === 'sm' && 'app-avatar--size-sm',
-      props.size === 'lg' && 'app-avatar--size-lg',
-    ]"
-    :style="[
-      ['px', 'rem', '%', 'em'].every(char => props.size.toString().indexOf(char) > -1) && `width: ${props.size}px; height: ${props.size}px;`,
-    ]"
-    v-bind="data.attrs"
-    v-on="listeners"
-  >
-    <img :src="props.src" :srcset="props.srcSet" :alt="props.alt" @error="props.loadError()" />
-  </span>
-</template>
-
 <script>
 export default {
+  functional: true,
+
   props: {
+    tag: {
+      type: String,
+      default: "span"
+    },
+    nuxt: Boolean,
+    to: {
+      type: [String, Object] // Vue-router prop. Denotes the target route of the link.
+    },
+    exact: {
+      type: Boolean // Vue-router prop. Exactly match the link. Without this, '/' will match every route.
+    },
     shape: {
       type: String,
       default: "circle" // circle | square,
@@ -40,8 +32,46 @@ export default {
       type: String
     },
     loadError: {
-      type: Function
+      type: Function,
+      default: () => {}
     }
+  },
+
+  render(h, ctx) {
+    return h(ctx.props.nuxt ? "n-link" : ctx.props.tag, {
+      props: {
+        to: ctx.to,
+        exact: ctx.exact
+      },
+      attrs: ctx.attrs,
+      class: [
+        "app-avatar",
+        ctx.data.class,
+        ctx.data.staticClass,
+        ctx.props.shape === "circle" && "app-avatar-circle",
+        ctx.props.shape === "square" && "app-avatar-square",
+        ctx.props.size === "xs" && "app-avatar--size-xs",
+        ctx.props.size === "sm" && "app-avatar--size-sm",
+        ctx.props.size === "lg" && "app-avatar--size-lg"
+      ],
+      style: [
+        ["px", "rem", "%", "em"].every(
+          char => ctx.props.size.toString().indexOf(char) > -1
+        ) && `width: ${ctx.props.size}px; height: ${ctx.props.size}px;`
+      ],
+      on: ctx.$listeners
+    },
+    [h('img', {
+      attrs: {
+        src: ctx.props.src,
+        srcset: ctx.props.srcSet,
+        alt: ctx.props.alt,
+      },
+      on: {
+        error: ctx.props.loadError
+      }
+    })]
+    );
   }
 };
 </script>

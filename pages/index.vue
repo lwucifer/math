@@ -6,6 +6,8 @@
       <div class="row">
         <div class="col-md-8">
           <PostEditor />
+
+          <TimelineBox />
         </div>
 
         <div class="col-md-4">
@@ -61,6 +63,10 @@
                   :desc="item.desc"
                 ></app-content-box>
               </div>-->
+
+              <div class="text-center mt-4">
+                <app-button class="timeline-aside-btn">Xem Tất Cả</app-button>
+              </div>
             </div>
           </AsideBox>
         </div>
@@ -73,6 +79,7 @@
 import SliderBanner from "~/components/Slider/SliderBanner";
 import PostEditor from "~/components/PostEditor/PostEditor";
 import AsideBox from "~/components/AsideBox/AsideBox";
+import TimelineBox from "~/components/TimelineBox/TimelineBox";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -80,7 +87,8 @@ export default {
   components: {
     SliderBanner,
     PostEditor,
-    AsideBox
+    AsideBox,
+    TimelineBox
   },
 
   data() {

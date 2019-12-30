@@ -4,6 +4,7 @@
     overflow: hidden;
     width: 6rem;
     height: 6rem;
+    flex-shrink: 0;
 
     img {
         display: block;

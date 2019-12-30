@@ -31,7 +31,7 @@
         <ul class="the-header__right-menu">
           <li>
             <a href="" class="the-header__noti">
-              <IconGlobe width="34" height="29" />
+              <IconGlobeNoti width="34" height="29" />
               <span class="text-white">12</span>
             </a>
           </li>
@@ -57,14 +57,14 @@
 <script>
 import Logo from "~/assets/svg/icons/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline"
-import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
+import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 
 export default {
   components: {
     Logo,
     IconSearch,
-    IconGlobe,
+    IconGlobeNoti,
     IconCaretDown
   },
 

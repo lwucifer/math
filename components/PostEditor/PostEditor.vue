@@ -13,19 +13,19 @@
     <app-divider class="my-3" />
 
     <div class="post-editor__toolbar">
-      <button class="post-editor__toolbar-item">
+      <button class="post-editor__toolbar-item image">
         <IconAddImage />
         <span>Hình ảnh</span>
       </button>
-      <button class="post-editor__toolbar-item">
+      <button class="post-editor__toolbar-item tag">
         <IconUserGroup />
         <span>Tag bạn bè</span>
       </button>
-      <button class="post-editor__toolbar-item">
+      <button class="post-editor__toolbar-item check-in">
         <IconPinLocation />
         <span>Check in</span>
       </button>
-      <button class="post-editor__toolbar-item">
+      <button class="post-editor__toolbar-item emoji">
         <IconEmoji />
         <span>Nhãn cảm xúc</span>
       </button>

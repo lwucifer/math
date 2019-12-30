@@ -1,6 +1,7 @@
 .post-editor {
     background-color: #fff;
     padding: 2rem;
+    margin-bottom: 1.8rem;
 }
 
 .post-editor__top {
@@ -56,5 +57,41 @@
 
     &:not(:last-child) {
         margin-right: 3.5rem;
+    }
+
+    &.image {
+        fill: $color-blue;
+
+        svg {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    &.tag {
+        fill: $color-yellow;
+
+        svg {
+            width: 2.2rem;
+            height: 1.7rem;
+        }
+    }
+
+    &.check-in {
+        fill: $color-pink;
+
+        svg {
+            width: 1.6rem;
+            height: 2rem;
+        }
+    }
+
+    &.emoji {
+        fill: $color-purple;
+
+        svg {
+            width: 2rem;
+            height: 2rem;
+        }
     }
 }
