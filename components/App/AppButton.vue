@@ -13,7 +13,7 @@ export default {
     },
     size: {
       type: String,
-      default: "default" // 'default' | 'lg'
+      default: "md" // 'sm' | 'md' | 'lg'
     },
     color: {
       type: String,
@@ -30,7 +30,8 @@ export default {
   computed: {
     classes() {
       const sizeClasses = {
-        "btn--size-default": this.size === "default",
+        "btn--size-sm": this.size === "sm",
+        "btn--size-md": this.size === "md",
         "btn--size-lg": this.size === "lg",
         "btn--full-width": this.fullWidth
       };

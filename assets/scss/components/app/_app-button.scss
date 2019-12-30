@@ -21,10 +21,10 @@
     color: $color-text;
     font-weight: 700;
     
-    &:hover, &:focus {
-        color: $color-primary;
-        border-color: $color-primary;
-    }
+    // &:hover, &:focus {
+    //     color: $color-primary;
+    //     border-color: $color-primary;
+    // }
 
     &.disabled, &[disabled] {
         pointer-events: none;
@@ -35,14 +35,16 @@
 
 
 // Size of button
-.btn--primary {
-    height: 4rem;
-    background-color: $color-primary;
-    color: #fff;
+.btn--size-sm {
+    height: 3.2rem;
+}
+
+.btn--size-md {
+    height: 3.8rem;
 }
 
 .btn--lg {
-    height: 5rem;
+    height: 4.8rem;
 }
 
 .btn--full-width {
@@ -62,6 +64,7 @@
 @each $name, $color in $colors {
     .btn--color-#{$name} {
         background-color: $color;
+        color: #fff;
     }
 }
 
