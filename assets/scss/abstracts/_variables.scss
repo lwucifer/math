@@ -1,94 +1,103 @@
 // Colors
-$color-green: #32AF85;
-$color-red: #E9446A;
-$color-yellow: #F2C94C;
-$color-dark: #333333;
+$color-green: #32AF85 !default;
+$color-red: #E9446A !default;
+$color-blue: #1481FE !default;
+$color-yellow: #F2C94C !default;
+$color-dark: #333333 !default;
 
 //
-$color-primary: $color-green;
-$color-brand: $color-green;
-$color-secondary: $color-red;
+$color-primary: $color-green !default;
+$color-brand: $color-green !default;
+$color-secondary: $color-red !default;
 // $color-info: 
-$color-success: lighten($color-green, 10);
-$color-error: $color-red;
-$color-warning: darken($color-yellow, 10);
+$color-success: lighten($color-green, 10) !default;
+$color-error: $color-red !default;
+$color-warning: darken($color-yellow, 10) !default;
 
 //
-$color-text: $color-dark;
-$color-text-sub: #999999;
-$color-text-gray: #666666;
-$color-image-placeholder: #f6f6f6;
-$color-border: #EEEEEE;
-$color-active: $color-red;
-$color-disabled: $color-text-sub;
+$color-text: $color-dark !default;
+$color-text-sub: #999999 !default;
+$color-text-gray: #666666 !default;
+$color-text-gray-2: #CCCCCC !default;
+$color-text-white: #fff !default;
+
+$color-image-placeholder: #f6f6f6 !default;
+$color-border: #EEEEEE !default;
+$color-active: $color-red !default;
+$color-disabled: #CCCCCC !default;
 
 
 $colors: (
-  primary: $color-green,
-  secondary: $color-red,
-  // info: ,
-  success: lighten($color-green, 10),
-  error: $color-red,
-  warning: darken($color-yellow, 10),
-);
+    primary: $color-green,
+    secondary: $color-red,
+    // info: ,
+    success: lighten($color-green, 10),
+    error: $color-red,
+    warning: darken($color-yellow, 10),
+) !default;
 
 $text-colors: (
-  primary: $color-primary,
-  secondary: $color-secondary,
-  // info: ,
-  success: $color-secondary,
-  error: $color-error,
-  warning: $color-warning,
-  base: $color-text,
-  sub: $color-text-sub,
-  gray: $color-text-gray,
-  white: #fff,
-  black: #000,
-  active: $color-active,
-  disabled: $color-disabled
-);
+    primary: $color-primary,
+    secondary: $color-secondary,
+    // info: ,
+    success: $color-secondary,
+    error: $color-error,
+    warning: $color-warning,
+    base: $color-text,
+    sub: $color-text-sub,
+    gray: $color-text-gray,
+    gray-2: $color-text-gray-2,
+    white: #fff,
+    black: #000,
+    active: $color-active,
+    disabled: $color-disabled
+) !default;
 
 $bg-colors: (
-  primary: $color-primary,
-  secondary: $color-secondary,
-  // info: ,
-  success: $color-success,
-  error: $color-error,
-  warning: $color-warning,
-  gray: #FBFCFE,
-  white: #fff,
-  black: #000
-);
+    primary: $color-primary,
+    secondary: $color-secondary,
+    // info: ,
+    success: $color-success,
+    error: $color-error,
+    warning: $color-warning,
+    gray: #FBFCFE,
+    white: #fff,
+    black: #000
+) !default;
 
 
 // Fonts
-$font-base: "Open Sans", sans-serif;
-$font-size-base: 1.4rem;
-$font-size-caption: 1.2rem;
-$line-height-base: (19/14);
+$font-base: "Open Sans", sans-serif !default;
+$font-size-base: 1.4rem !default;
+$font-size-caption: 1.2rem !default;
+$line-height-base: (19/14) !default;
 
 
 // Typo
 $text-size: (
-  heading-1: 2.5rem,
-  heading-2: 2.4rem,
-  heading-3: 2.2rem,
-  heading-4: 2rem,
-  text-body: 1.4rem,
-  title: 1.6rem,
-  caption: 1.2rem
-);
+    heading-1: 4.4rem,
+    heading-2: 3.2rem,
+    heading-3: 2.4rem,
+    heading-4: 1.8rem,
+    heading-5: 1.6rem,
+    heading-6: 1.4rem,
+    subheading: 2rem,
+    body-1: 1.6rem,
+    body-2: 1.4rem,
+    title: 1.6rem,
+    caption: 1.2rem
+) !default;
 
 // 
-$border-radius-common: 12px;
+$border-radius-common: 12px !default;
 
 
 // use in include-media mixin
 $breakpoints: (
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
 ) !default;
 
 // Grid options - to make grid
@@ -117,26 +126,26 @@ $grid: (
 
 $spacer: 1rem !default;
 $spacers: (
-  0: 0,
-  1: ($spacer * .25),
-  2: ($spacer * .5),
-  3: $spacer,
-  4: ($spacer * 2),
-  5: ($spacer * 3),
-  6: ($spacer * 4),
-  auto: auto
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 2),
+    5: ($spacer * 3),
+    6: ($spacer * 4),
+    auto: auto
 ) !default;
 
 $xy-border: (
-  top: t,
-  right: r,
-  bottom: b,
-  left: l,
-  all: a
+    top: t,
+    right: r,
+    bottom: b,
+    left: l,
+    all: a
 ) !default;
 
 $z-index: (
-  modal: 9999,
-  header: 99,
-  dropdown: 9
-);
+    modal: 9999,
+    header: 99,
+    dropdown: 9
+) !default;
