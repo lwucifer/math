@@ -3,6 +3,8 @@
     <TheHeader />
 
     <nuxt class="page-content"/>
+
+    <portal-target name="modal" slim></portal-target>
   </div>
 </template>
 

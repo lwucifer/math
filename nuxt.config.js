@@ -51,6 +51,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/svg',
+    'portal-vue/nuxt'
   ],
 
   /*
