@@ -1,0 +1,79 @@
+.timeline-box-slider {
+    .swiper-slide {
+        width: calc((100% - 45px)/4);
+        cursor: pointer;
+
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+    
+    .swiper-button-prev, .swiper-button-next {
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+        width: 3.3rem;
+        height: 4.5rem;
+        margin-top: -(4.5rem/2);
+        font-size: 3rem;
+        background-image: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba($color-dark, .5);
+
+        svg {
+            width: 1.6rem;
+            height: 1.6rem;
+            fill: #fff;
+        }
+
+        &:hover {
+            background-color: $color-primary;
+        }
+    }
+
+    .swiper-button-prev {
+        left: 0;
+    }
+
+    .swiper-button-next {
+        right: 0;
+    }
+}
+
+.slider-video-item {
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0,0,0, .5);
+    }
+
+    &:hover {
+        .slider-video-item__btn {
+            opacity: 1;
+        }
+    }
+}
+
+.slider-video-item__btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 27px;
+    height: 27px;
+    margin-top: -(27px/2);
+    margin-left: -(27px/2);
+    opacity: .7;
+
+    svg {
+        fill: #fff;
+    }
+}

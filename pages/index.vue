@@ -7,28 +7,36 @@
         <div class="col-md-8">
           <PostEditor />
 
-          <TimelineBox class="mb-4">
+          <Post class="mb-4">
             <template slot="media-content">
               <app-divider class="my-4"></app-divider>
               <app-content-box
                 tag="a"
                 target="_blank"
-                href=""
+                href
                 class="mb-4"
                 size="md"
                 image="https://via.placeholder.com/150x150"
-                title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP" 
+                title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
                 desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
                 meta-footer="cellphones.com.vn"
               />
             </template>
-          </TimelineBox>
+          </Post>
 
-          <TimelineBox>
+          <Post>
             <template slot="media-content">
-              <TimelineBoxSlider :images="banners" class="my-4"/>
+              <PostSlider
+                :images="timelineSliderItems"
+                class="my-4"
+                @click="modalDetailShow = true"
+              />
             </template>
-          </TimelineBox>
+          </Post>
+
+          <app-modal v-if="modalDetailShow" @click-overlay="modalDetailShow = false" :width="1170">
+            <PostDetail />
+          </app-modal>
         </div>
 
         <div class="col-md-4">
@@ -100,8 +108,9 @@
 import SliderBanner from "~/components/Slider/SliderBanner";
 import PostEditor from "~/components/PostEditor/PostEditor";
 import AsideBox from "~/components/AsideBox/AsideBox";
-import TimelineBox from "~/components/TimelineBox/TimelineBox";
-import TimelineBoxSlider from "~/components/TimelineBox/TimelineBoxSlider";
+import Post from "~/components/Post/Post";
+import PostSlider from "~/components/Post/PostSlider";
+import PostDetail from "~/components/Post/PostDetail";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -110,14 +119,16 @@ export default {
     SliderBanner,
     PostEditor,
     AsideBox,
-    TimelineBox,
-    TimelineBoxSlider
+    Post,
+    PostSlider,
+    PostDetail
   },
 
   data() {
     return {
       banners: new Array(3).fill(BannerImage, 0),
       coursesTab: 0,
+      modalDetailShow: false,
       messages: [
         {
           image: "https://via.placeholder.com/64x64",
@@ -171,6 +182,40 @@ export default {
           image: "https://via.placeholder.com/64x64",
           title: "Chiến lược tài chính",
           desc: "Ts. Lê Thẩm Dương"
+        }
+      ],
+      timelineSliderItems: [
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+1"
+        },
+        {
+          type: "video",
+          src: "https://via.placeholder.com/171x171?text=Image+2"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+3"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+4"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+5"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+6"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+7"
+        },
+        {
+          type: "image",
+          src: "https://via.placeholder.com/171x171?text=Image+8"
         }
       ]
     };

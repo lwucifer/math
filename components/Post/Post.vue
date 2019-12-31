@@ -54,12 +54,20 @@
 
       <app-divider class="my-3" />
 
+      <div class="timeline-box__comment-list">
+        <CommentItem>
+          <CommentItem :level="2" />
+          <CommentEditor reply/>
+        </CommentItem>
+      </div>
+
       <CommentEditor class="timeline-box__comment-editor" />
     </div>
   </div>
 </template>
 
 <script>
+import CommentItem from "~/components/Comment/CommentItem";
 import CommentEditor from "~/components/Comment/CommentEditor";
 
 import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
@@ -69,11 +77,12 @@ import IconShare from "~/assets/svg/icons/share.svg?inline";
 
 export default {
   components: {
+    CommentItem,
     CommentEditor,
     IconGlobe,
     IconHeart,
     IconBubble,
-    IconShare
+    IconShare,
   }
 };
 </script>

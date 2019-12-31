@@ -1,0 +1,71 @@
+.comment-item {
+    margin-bottom: 2rem;
+}
+
+.comment-item__avatar {
+    float: left;
+}
+
+.comment-item__name {
+    font-weight: 700;
+    margin-bottom: 4px;
+    
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.comment-item__right {
+    margin-left: 5.1rem;
+    line-height: (17/14);
+}
+
+.comment-item__content {
+    color: $color-text-gray;
+    margin-bottom: 1rem;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.comment-item__actions {
+    margin-top: 1rem;
+    margin-bottom: 1.6rem;
+
+    a {
+        text-decoration: none;
+        color: $color-text-sub;
+
+        &:any-link {
+            color: $color-text-sub;
+        }
+
+        &:not(:last-child) {
+            margin-right: 1rem;
+        }
+    }
+}
+
+.comment-item__time {
+    font-style: italic;
+}
+
+.comment-item__action {
+    font-weight: 700;
+}
+
+// MODIFIER
+.comment-item--level-2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .comment-item__actions {
+        margin-bottom: 0;
+    }
+    
+    .comment-item__right {
+        margin-left: 2.4rem;
+    }
+}

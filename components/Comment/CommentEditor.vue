@@ -1,6 +1,6 @@
 <template>
-  <div class="comment-editor">
-    <app-avatar size="sm" src="https://via.placeholder.com/40x40" class="comment-editor__avatar" />
+  <div class="comment-editor" :class="classes">
+    <app-avatar :size="reply ? 'xs' : 'sm'" src="https://via.placeholder.com/40x40" class="comment-editor__avatar" />
 
     <div class="comment-editor__editor-wrapper">
       <client-only>
@@ -34,14 +34,25 @@ export default {
     IconEmoji
   },
 
+  props: {
+    reply: Boolean
+  },
+
   data() {
     return {
       editor: null
     };
   },
 
+  computed: {
+    classes() {
+      return {
+        'comment-editor--reply': this.reply
+      }
+    }
+  },
+
   mounted() {
-    console.log('comment editor mounted')
     this.editor = new Editor({
       content: '',
       extensions: [
