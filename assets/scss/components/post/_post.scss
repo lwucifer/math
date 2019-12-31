@@ -1,25 +1,25 @@
-.timeline-box {
+.post {
     background-color: #fff;
     padding: 2rem;
 }
 
-.timeline-box__top {
+.post__top {
     display: flex;
     align-items: center;
     margin-bottom: 1.1rem;
 }
 
-.timeline-box__title {
+.post__title {
     margin-left: 6px;
 }
 
-.timeline-box__title-row {
+.post__title-row {
     display: flex;
     align-items: center;
     margin-bottom: 3px;
 }
 
-.timeline-box__name {
+.post__name {
     font-weight: 700;
     font-size: map-get($text-size, 'title');
 
@@ -29,7 +29,7 @@
     }
 }
 
-.timeline-box__share-for {
+.post__share-for {
     margin-left: 1rem;
 
     svg {
@@ -37,7 +37,7 @@
     }
 }
 
-.timeline-box__time {
+.post__time {
     text-decoration: none;
     color: $color-text-sub;
     font-style: italic;
@@ -47,16 +47,16 @@
     }
 }
 
-.timeline-box__post {
+.post__post {
     margin-bottom: 2rem;
 }
 
-.timeline-box__post-readmore {
+.post__post-readmore {
     font-weight: 700;
     font-style: italic;
 }
 
-.timeline-box__count {
+.post__count {
     display: flex;
     justify-content: space-between;
      
@@ -65,12 +65,12 @@
     }
 }
 
-.timeline-box__actions {
+.post__actions {
     display: flex;
     justify-content: space-between;
 }
 
-.timeline-box__button {
+.post__button {
     display: inline-flex;
     align-items: center;
     color: $color-text-gray;
@@ -89,6 +89,6 @@
     }
 }
 
-.timeline-box__comment-list {
+.post__comment-list {
     margin-top: 2rem;
 }

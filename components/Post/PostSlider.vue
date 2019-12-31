@@ -1,7 +1,7 @@
 <template>
-  <div v-swiper:mySwiper="swiperOptions" class="timeline-box-slider" v-on="$listeners">
+  <div v-swiper:mySwiper="swiperOptions" class="post-slider" v-on="$listeners">
     <div class="swiper-wrapper">
-      <div class="swiper-slide timeline-box-slider-container" v-for="(item, index) in images" :key="index">
+      <div class="swiper-slide post-slider-container" v-for="(item, index) in images" :key="index">
         <div v-if="item.type ==='video'" class="slider-video-item">
           <img :src="item.src" alt="">
           <button type="button" class="slider-video-item__btn">
@@ -59,5 +59,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/timeline-box/_timeline-box-slider.scss";
+@import "~/assets/scss/components/post/_post-slider.scss";
 </style>
