@@ -1,8 +1,5 @@
 .post-slider {
     .swiper-slide {
-        width: calc((100% - 45px)/4);
-        cursor: pointer;
-
         img {
             display: block;
             width: 100%;
@@ -46,7 +43,7 @@
 .slider-video-item {
     position: relative;
 
-    &:before {
+    &:after {
         content: "";
         position: absolute;
         top: 0;
@@ -72,6 +69,7 @@
     margin-top: -(27px/2);
     margin-left: -(27px/2);
     opacity: .7;
+    z-index: 1;
 
     svg {
         fill: #fff;

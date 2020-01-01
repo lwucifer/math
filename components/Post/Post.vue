@@ -28,6 +28,8 @@
       <a href @click.prevent class="post__post-readmore">Xem thêm</a>
 
       <slot name="media-content" />
+      
+      <slot />
     </div>
 
     <div class="post__interactive">

@@ -1,4 +1,4 @@
-.app-modal {
+.app-modal-wrapper {
     position: fixed;
     top: 0;
     right: 0;
@@ -11,15 +11,17 @@
 }
 
 .app-modal-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    height: 100%;
+    z-index: map-get($z-index, modal);
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-.app-modal-wrapper {
+.app-modal {
     position: relative;
     padding-bottom: 24px;
     margin: 0 auto;
@@ -33,4 +35,23 @@
     position: relative;
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app-modal-centered {
+    text-align: center;
+
+    &:before {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    .app-modal {
+        top: 0;
+        vertical-align: middle;
+        display: inline-block;
+        text-align: left;
+    }
 }

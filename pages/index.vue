@@ -29,14 +29,20 @@
               <PostSlider
                 :images="timelineSliderItems"
                 class="my-4"
-                @click="modalDetailShow = true"
+                @click-item="modalDetailShow = true"
               />
             </template>
-          </Post>
 
-          <app-modal v-if="modalDetailShow" @click-overlay="modalDetailShow = false" :width="1170">
-            <PostDetail />
-          </app-modal>
+            <app-modal
+              v-if="modalDetailShow"
+              centered
+              :width="1170"
+              :component-class="{ 'post-detail-modal': true }"
+              @close="modalDetailShow = false"
+            >
+              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+            </app-modal>
+          </Post>
         </div>
 
         <div class="col-md-4">
@@ -191,11 +197,11 @@ export default {
         },
         {
           type: "video",
-          src: "https://via.placeholder.com/171x171?text=Image+2"
+          src: "https://via.placeholder.com/1920x1080?text=Image+2"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+3"
+          src: "https://via.placeholder.com/360x480?text=Image+3"
         },
         {
           type: "image",

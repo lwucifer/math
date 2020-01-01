@@ -1,18 +1,24 @@
 <template>
-  <div v-swiper:mySwiper="swiperOptions" class="post-slider" v-on="$listeners">
+  <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
     <div class="swiper-wrapper">
       <div class="swiper-slide post-slider-container" v-for="(item, index) in images" :key="index">
-        <div v-if="item.type ==='video'" class="slider-video-item">
-          <img :src="item.src" alt="">
+        <div
+          v-if="item.type ==='video'"
+          class="slider-item slider-video-item"
+          @click="$emit('click-item', item, index)"
+        >
+          <img :src="item.src" alt />
           <button type="button" class="slider-video-item__btn">
             <IconPlayCircle />
           </button>
         </div>
-        
-        <img v-else :src="item.src" />
+
+        <div v-else class="slider-item" @click="$emit('click-item', item, index)">
+          <img :src="item.src" alt />
+        </div>
       </div>
     </div>
-    
+
     <div class="swiper-button-prev">
       <IconChevronLeft />
     </div>
@@ -23,6 +29,7 @@
 </template>
 
 <script>
+import { assignIn } from "lodash";
 import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconPlayCircle from "~/assets/svg/icons/play-circle.svg?inline";
@@ -39,22 +46,31 @@ export default {
       type: Array,
       required: true,
       default: () => [],
-      validator: value => value.every(item => ['type', 'src'].every(key => key in item))
+      validator: value =>
+        value.every(item => ["type", "src"].every(key => key in item))
     },
 
     swiperOptions: {
       type: Object,
-      default: () => ({
-        slidesPerView: 'auto',
-        spaceBetween: 5,
-        slidesOffsetAfter: 40,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
-      })
+      default: () => {}
     }
   },
+
+  data() {
+    const defaultSwiperOptions = {
+      slidesPerView: "auto",
+      spaceBetween: 5,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      }
+    };
+
+    return {
+      defaultSwiperOptions,
+      currentSwiperOptions: assignIn(defaultSwiperOptions, this.swiperOptions)
+    };
+  }
 };
 </script>
 
