@@ -1,0 +1,37 @@
+.app-dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.app-dropdown__content {
+    position: absolute;
+    top: 100%;
+    background-color: #fff;
+    box-shadow: 0px 2px 16px rgba(29, 36, 62, 0.12);
+}
+
+
+// Active
+.app-dropdown-active {
+
+}
+
+// Modifier
+.app-dropdown--left {
+    .app-dropdown__content {
+        right: 0;
+    }
+}
+
+.app-dropdown--center {
+    .app-dropdown__content {
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+}
+
+.app-dropdown--right {
+    .app-dropdown__content {
+        left: 0;
+    }
+}
