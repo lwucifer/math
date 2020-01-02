@@ -5,7 +5,7 @@ module.exports = {
     exec_mode: 'cluster', // enables clustering
     instances: 'max', // or an integer
     cwd: './',
-    script: '../../node_modules/nuxt-start/bin/nuxt-start.js',
+    script: './node_modules/nuxt-start/bin/nuxt-start.js',
     node_args: "",
     autorestart: true,
     watch: false,
