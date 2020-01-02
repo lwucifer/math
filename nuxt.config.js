@@ -5,7 +5,7 @@ module.exports = {
 
 
   head: {
-    title: 'nuxt-full-stack-template',
+    title: 'Schoolly',
     meta: [{
         charset: 'utf-8'
       },
