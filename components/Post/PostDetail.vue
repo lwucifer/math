@@ -5,7 +5,7 @@
     </div>
 
     <div class="post-detail__right">
-      <Post />
+      <Post show-edit />
     </div>
     
     <div class="post-detail__actions">

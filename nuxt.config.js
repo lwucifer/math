@@ -42,6 +42,7 @@ module.exports = {
     { src: '@/plugins/click-outside.js', ssr: false },
     { src: '@/plugins/global.js' },
     { src: '@/plugins/vue-awesome-swiper.js', ssr: false },
+    { src: '@/plugins/textarea-autosize.js', ssr: false },
   ],
 
   /*

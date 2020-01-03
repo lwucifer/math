@@ -93,7 +93,7 @@ a.app-content-box {
         .app-content-box__desc {
             @include set-line((
                 lineClamp: 3,
-                lineHeight: (19/14)
+                lineHeight: $line-height-base
             ));
         }
 

@@ -140,3 +140,9 @@
     margin-right: 1rem;
     max-width: 65px;
 }
+
+.the-header__user-arrow {
+    svg {
+        fill: $color-text;
+    }
+}

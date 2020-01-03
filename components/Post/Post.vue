@@ -18,17 +18,38 @@
         <div class="post__title-row">
           <n-link class="post__time" to>30 phút</n-link>
         </div>
+
+        <template v-if="showEdit">
+          <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
+        </template>
       </div>
     </div>
 
     <div class="post__post">
-      <p
-        class="post__post-desc"
-      >Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</p>
-      <a href @click.prevent class="post__post-readmore">Xem thêm</a>
+      <template v-if="edit">
+        <textarea rows="3" class="post__edit-desc" placeholder="Thêm mô tả" v-textarea-autosize>Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</textarea>
+        <input type="text" placeholder="Cùng với ai?" class="post__edit-tag" />
+        <input type="text" placeholder="Ở đâu?" class="post__edit-location" />
+
+        <div class="post__edit-actions">
+          <app-select class="post__edit-select" :options="shareWithOpts" v-model="shareWith">
+            <IconGlobe slot="prepend" class="post__edit-select__prepend d-block"/>
+          </app-select>
+
+          <button class="post__edit-btn post__edit-btn-cancel" @click="edit = false">Huỷ</button>
+          <button class="post__edit-btn post__edit-btn-done" @click="edit = false">Chỉnh sửa xong</button>
+        </div>
+      </template>
+
+      <template v-else>
+        <p
+          class="post__post-desc"
+        >Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</p>
+        <a href @click.prevent class="post__post-readmore">Xem thêm</a>
+      </template>
 
       <slot name="media-content" />
-      
+
       <slot />
     </div>
 
@@ -41,15 +62,15 @@
       <app-divider class="my-3" />
 
       <div class="post__actions">
-        <button type="button" class="post__button active">
+        <button class="post__button active">
           <IconHeart class="svg-icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
-        <button type="button" class="post__button">
+        <button class="post__button">
           <IconBubble class="svg-icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
-        <button type="button" class="post__button">
+        <button class="post__button">
           <IconShare class="svg-icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
@@ -59,7 +80,7 @@
       <div class="post__comment-list">
         <CommentItem>
           <CommentItem :level="2" />
-          <CommentEditor reply/>
+          <CommentEditor reply />
         </CommentItem>
       </div>
 
@@ -84,7 +105,23 @@ export default {
     IconGlobe,
     IconHeart,
     IconBubble,
-    IconShare,
+    IconShare
+  },
+
+  props: {
+    showEdit: Boolean
+  },
+
+  data() {
+    return {
+      edit: false,
+      shareWith: 0,
+      shareWithOpts: [
+        { value: 0, text: 'Công khai' },
+        { value: 1, text: 'Bạn bè' },
+        { value: 3, text: 'Chỉ mình tôi' },
+      ]
+    };
   }
 };
 </script>

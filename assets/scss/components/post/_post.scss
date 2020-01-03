@@ -114,3 +114,96 @@
         }
     }
 }
+
+.post__btn-edit {
+    border: 1px solid $color-disabled;
+    background-color: $color-border;
+    color: $color-text-sub;
+    padding: 0 4px;
+    margin-top: 0.3rem;
+}
+
+.post__edit-desc,
+.post__edit-tag,
+.post__edit-location {
+    background-color: #fff;
+    border: 1px solid $color-border;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    font-size: 1.2rem;
+
+    &::placeholder {
+        color: $color-disabled;
+    }
+
+    &:focus {
+        border-color: $color-primary;
+    }
+}
+
+.post__edit-desc {
+    resize: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: block;
+    border-bottom-color: transparent;
+}
+
+.post__edit-tag,
+.post__edit-location {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.post__edit-tag {
+    margin-bottom: 9px;
+}
+
+.post__edit-location {
+    margin-bottom: 5px;
+}
+
+.post__edit-btn {
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: .4rem .7rem;
+    line-height: (14/12);
+    border: 1px solid transparent;
+}
+
+.post__edit-btn-cancel {
+    background-color: $color-border;
+    border: 1px solid $color-disabled;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    margin-left: auto;
+}
+
+.post__edit-btn-done {
+    background-color: $color-green;
+    color: #fff;
+}
+
+.post__edit-actions {
+    display: flex;
+    align-items: center;
+}
+
+.post__edit-select {
+    .app-select__selected {
+        line-height: (17/14);
+        padding: 3px 5px;
+        background-color: $color-border;
+        border-color: transparent;
+        color: $color-text-gray;
+    }
+
+    .app-select__arrow svg {
+        fill: $color-text-gray;
+    }
+
+    &__prepend {
+        fill: $color-text-gray;
+    }
+}
