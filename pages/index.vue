@@ -16,12 +16,32 @@
                 href
                 class="mb-4"
                 size="md"
-                image="https://via.placeholder.com/150x150"
+                image="http://lorempixel.com/150/150"
                 title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
                 desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
                 meta-footer="cellphones.com.vn"
               />
             </template>
+          </Post>
+
+          <Post>
+            <template slot="media-content">
+              <PostSlider
+                :images="timelineSliderItems"
+                class="my-4"
+                @click-item="modalDetailShow = true"
+              />
+            </template>
+
+            <app-modal
+              v-if="modalDetailShow"
+              centered
+              :width="1170"
+              :component-class="{ 'post-detail-modal': true }"
+              @close="modalDetailShow = false"
+            >
+              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+            </app-modal>
           </Post>
 
           <Post>
@@ -137,18 +157,18 @@ export default {
       modalDetailShow: false,
       messages: [
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Mr. Damian",
           desc: "Tiếng Trung cơ bản cho người mới bắt đầu 1"
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Nguyễn Đăng Dũng",
           desc:
             "Nắm được các kỹ năng cơ bản của giao tiếp: kỹ năng nghe, nói, khen chê và phi ngôn ngữ."
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Trần Quyền",
           desc: "Tiếng Trung cơ bản cho người mới bắt đầu 1"
         }
@@ -165,27 +185,27 @@ export default {
       ],
       coursesList: [
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Chiến lược tài chính",
           desc: "Ts. Lê Thẩm Dương"
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Thực hành làm kế toán tổng hợp trên phầm mềm Misa",
           desc: "Nguyễn Lê Hoàng"
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Chiến lược tài chính",
           desc: "Ts. Lê Thẩm Dương"
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Chiến lược tài chính",
           desc: "Ts. Lê Thẩm Dương"
         },
         {
-          image: "https://via.placeholder.com/64x64",
+          image: "http://lorempixel.com/64/64",
           title: "Chiến lược tài chính",
           desc: "Ts. Lê Thẩm Dương"
         }
@@ -193,35 +213,35 @@ export default {
       timelineSliderItems: [
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+1"
+          src: "http://lorempixel.com/171/171"
         },
         {
           type: "video",
-          src: "https://via.placeholder.com/1920x1080?text=Image+2"
+          src: "http://lorempixel.com/1920/1080"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/360x480?text=Image+3"
+          src: "http://lorempixel.com/1024/768"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+4"
+          src: "http://lorempixel.com/171/171"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+5"
+          src: "http://lorempixel.com/171/171"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+6"
+          src: "http://lorempixel.com/171/171"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+7"
+          src: "http://lorempixel.com/171/171"
         },
         {
           type: "image",
-          src: "https://via.placeholder.com/171x171?text=Image+8"
+          src: "http://lorempixel.com/171/171"
         }
       ]
     };

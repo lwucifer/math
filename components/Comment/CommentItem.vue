@@ -1,6 +1,6 @@
 <template>
   <div class="comment-item" :class="classes">
-    <app-avatar src="https://via.placeholder.com/40x40" :size="level === 2 ? 'xs' : 'sm'" class="comment-item__avatar" />
+    <app-avatar src="http://lorempixel.com/40/40" :size="level === 2 ? 'xs' : 'sm'" class="comment-item__avatar" />
 
     <div class="comment-item__right">
       <div class="comment-item__name">

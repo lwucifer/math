@@ -54,11 +54,7 @@ export default {
         ctx.props.size === "sm" && "app-avatar--size-sm",
         ctx.props.size === "lg" && "app-avatar--size-lg"
       ],
-      style: [
-        ["px", "rem", "%", "em"].every(
-          char => ctx.props.size.toString().indexOf(char) > -1
-        ) && `width: ${ctx.props.size}px; height: ${ctx.props.size}px;`
-      ],
+      style: typeof ctx.props.size === "number" ? `width: ${ctx.props.size}px; height: ${ctx.props.size}px` : '',
       on: ctx.$listeners
     },
     [h('img', {

@@ -1,6 +1,6 @@
 <template>
   <div class="comment-editor" :class="classes">
-    <app-avatar :size="reply ? 'xs' : 'sm'" src="https://via.placeholder.com/40x40" class="comment-editor__avatar" />
+    <app-avatar :size="reply ? 'xs' : 'sm'" src="http://lorempixel.com/40/40" class="comment-editor__avatar" />
 
     <div class="comment-editor__editor-wrapper">
       <client-only>

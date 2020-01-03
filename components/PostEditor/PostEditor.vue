@@ -2,7 +2,7 @@
   <div class="editor post-editor">
     <div class="post-editor__top">
       <div class="post-editor__avatar">
-        <img src="https://via.placeholder.com/60x60" alt />
+        <img src="http://lorempixel.com/60/60" alt />
       </div>
 
       <client-only>
