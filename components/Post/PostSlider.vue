@@ -2,16 +2,12 @@
   <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
     <div class="swiper-wrapper">
       <div class="swiper-slide post-slider-container" v-for="(item, index) in images" :key="index">
-        <div
-          v-if="item.type ==='video'"
-          class="slider-item slider-video-item"
+        <app-video
+          v-if="item.type === 'video'"
+          class="slider-item"
+          :posterSrc="item.src"
           @click="$emit('click-item', item, index)"
-        >
-          <img :src="item.src" alt />
-          <button type="button" class="slider-video-item__btn">
-            <IconPlayCircle />
-          </button>
-        </div>
+        ></app-video>
 
         <div v-else class="slider-item" @click="$emit('click-item', item, index)">
           <img :src="item.src" alt />

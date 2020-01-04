@@ -2,7 +2,7 @@
   <div class="post">
     <div class="post__top">
       <n-link to class="post__avatar-wrapper">
-        <app-avatar class="post__avatar" src="http://lorempixel.com/64/64/people" size="lg"></app-avatar>
+        <app-avatar class="post__avatar" src="https://picsum.photos/64/64" size="lg"></app-avatar>
       </n-link>
 
       <div class="post__title">

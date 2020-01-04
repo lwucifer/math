@@ -7,6 +7,7 @@ import AppAvatar from "~/components/App/AppAvatar";
 import AppModal from "~/components/App/AppModal";
 import AppDropdown from "~/components/App/AppDropdown";
 import AppSelect from "~/components/App/AppSelect";
+import AppVideo from "~/components/App/AppVideo";
 
 Vue.component("app-button", AppButton);
 Vue.component("app-divider", AppDivider);
@@ -15,3 +16,4 @@ Vue.component("app-avatar", AppAvatar);
 Vue.component("app-modal", AppModal);
 Vue.component("app-dropdown", AppDropdown);
 Vue.component("app-select", AppSelect);
+Vue.component("app-video", AppVideo);

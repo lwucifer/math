@@ -38,7 +38,7 @@
         </ul>
 
         <div v-if="isAuthenticated" class="the-header__user">
-          <app-avatar class="the-header__user-avt" src="http://lorempixel.com/60/60/people" :size="44"></app-avatar>
+          <app-avatar class="the-header__user-avt" src="https://picsum.photos/60/60" :size="44"></app-avatar>
 
           <div class="the-header__user-name">Nguyễn Tiến Đạt</div>
           <div class="the-header__user-arrow">
