@@ -55,7 +55,7 @@ export default {
   data() {
     const defaultSwiperOptions = {
       slidesPerView: "auto",
-      spaceBetween: 5,
+      spaceBetween: 4,
       navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev"

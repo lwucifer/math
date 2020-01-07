@@ -32,19 +32,9 @@
               <PostSlider
                 :images="timelineSliderItems"
                 class="my-4"
-                @click-item="modalDetailShow = true"
+                @click-item="handleClickImage"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST SLIDER -->
 
@@ -57,16 +47,6 @@
                 @click-item="modalDetailShow = true"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST 1 IMAGE -->
 
@@ -82,16 +62,6 @@
                 @click-item="modalDetailShow = true"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST 2 IMAGE -->
 
@@ -108,16 +78,6 @@
                 @click-item="modalDetailShow = true"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST 3 IMAGE -->
 
@@ -135,16 +95,6 @@
                 @click-item="modalDetailShow = true"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST 4 IMAGE -->
 
@@ -163,18 +113,18 @@
                 @click-item="modalDetailShow = true"
               />
             </template>
-
-            <app-modal
-              v-if="modalDetailShow"
-              centered
-              :width="1170"
-              :component-class="{ 'post-detail-modal': true }"
-              @close="modalDetailShow = false"
-            >
-              <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
-            </app-modal>
           </Post>
           <!-- END DEMO FOR POST 5 IMAGE -->
+
+          <app-modal
+            v-if="modalDetailShow"
+            centered
+            :width="1170"
+            :component-class="{ 'post-detail-modal': true }"
+            @close="$router.push('/')"
+          >
+            <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+          </app-modal>
         </div>
 
         <div class="col-md-4">
@@ -254,6 +204,8 @@ import PostImage from "~/components/Post/PostImage";
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
+  watchQuery: ["post_id", "photo_id"],
+
   components: {
     SliderBanner,
     PostEditor,
@@ -326,39 +278,69 @@ export default {
       ],
       timelineSliderItems: [
         {
+          id: 0,
           type: "image",
           src: "https://picsum.photos/171/171"
         },
         {
+          id: 1,
           type: "video",
           src: "https://picsum.photos/1920/1080"
         },
         {
+          id: 2,
           type: "image",
           src: "https://picsum.photos/1024/768"
         },
         {
+          id: 3,
           type: "image",
-          src: "https://picsum.photos/171/171"
+          src: "https://picsum.photos/180/180"
         },
         {
+          id: 4,
           type: "image",
-          src: "https://picsum.photos/171/171"
+          src: "https://picsum.photos/200/200"
         },
         {
+          id: 5,
           type: "image",
-          src: "https://picsum.photos/171/171"
+          src: "https://picsum.photos/350/350"
         },
         {
+          id: 6,
           type: "image",
-          src: "https://picsum.photos/171/171"
+          src: "https://picsum.photos/400/400"
         },
         {
+          id: 7,
           type: "image",
-          src: "https://picsum.photos/171/171"
+          src: "https://picsum.photos/240/240"
         }
       ]
     };
+  },
+
+  watch: {
+    $route: {
+      immediate: true,
+      handler: function(newValue) {
+        console.log("watch $route", newValue);
+        if (newValue.query.post_id) {
+          this.modalDetailShow = true;
+        } else {
+          this.modalDetailShow = false;
+        }
+      }
+    }
+  },
+
+  methods: {
+    handleClickImage(imageObj) {
+      // if (typeof history.pushState != "undefined") {
+      //   history.pushState({}, '', `${window.location.origin}/post/`);
+      // }
+    }
   }
 };
 </script>
