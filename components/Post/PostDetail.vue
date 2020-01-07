@@ -2,6 +2,9 @@
   <div class="post-detail">
     <div class="post-detail__left">
       <PostSlider :images="images" :swiperOptions="sliderOptions" />
+      <!-- <div class="slider-item">
+        <img :src="images[0].src" alt="">
+      </div> -->
     </div>
 
     <div class="post-detail__right">
@@ -57,7 +60,9 @@ export default {
       dropdownShow: false,
       sliderOptions: {
         slidesPerView: 1,
-        setWrapperSize: true
+        setWrapperSize: true,
+        autoHeight: true,
+        watchOverflow: true,
       }
     }
   }
