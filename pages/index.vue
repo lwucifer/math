@@ -7,6 +7,23 @@
         <div class="col-md-8">
           <PostEditor />
 
+            <Post class="mb-4" v-for="(item, index) in postsList" :key="index">
+              <template slot="media-content">
+                <app-divider class="my-4"></app-divider>
+                <app-content-box
+                  tag="a"
+                  target="_blank"
+                  href
+                  class="mb-4"
+                  size="md"
+                  image="https://picsum.photos/150/150"
+                  title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
+                  desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
+                  meta-footer="cellphones.com.vn"
+                />
+              </template>
+            </Post>
+
           <!-- DEMO FOR POST LINK -->
           <Post class="mb-4">
             <template slot="media-content">
@@ -252,6 +269,8 @@ import PostDetail from "~/components/Post/PostDetail";
 import PostImage from "~/components/Post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
+import { mapState } from 'vuex';
+import * as actionTypes from '~/utils/action-types';
 
 export default {
   components: {
@@ -262,6 +281,12 @@ export default {
     PostSlider,
     PostDetail,
     PostImage
+  },
+  async fetch({ params, query, store }) {
+    await Promise.all([
+      store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.LIST}`)
+    ]);
   },
 
   data() {
@@ -359,6 +384,9 @@ export default {
         }
       ]
     };
+  },
+  computed : {
+    ...mapState("social", ["postsList"])
   }
 };
 </script>
