@@ -7,114 +7,124 @@
         <div class="col-md-8">
           <PostEditor />
 
-          <!-- DEMO FOR POST LINK -->
-          <Post class="mb-4">
-            <template slot="media-content">
-              <app-divider class="my-4"></app-divider>
-              <app-content-box
-                tag="a"
-                target="_blank"
-                href
-                class="mb-4"
-                size="md"
-                image="https://picsum.photos/150/150"
-                title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
-                desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
-                meta-footer="cellphones.com.vn"
-              />
-            </template>
+          <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
+            <PostImage
+              :images="post.attachments.map(item => ({ type: 'image', src: item.thumb }))"
+              class="my-4"
+              @click-item="handleClickImage(post)"
+            />
           </Post>
-          <!-- END DEMO FOR POST LINK -->
 
-          <!-- DEMO FOR POST SLIDER -->
-          <Post>
-            <template slot="media-content">
-              <PostSlider
-                :images="timelineSliderItems"
-                class="my-4"
-                @click-item="handleClickImage"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST SLIDER -->
+          <div class="d-none">
+            <!-- DEMO FOR POST LINK -->
+            <Post class="mb-4">
+              <template slot="media-content">
+                <app-divider class="my-4"></app-divider>
+                <app-content-box
+                  tag="a"
+                  target="_blank"
+                  href
+                  class="mb-4"
+                  size="md"
+                  image="https://picsum.photos/150/150"
+                  title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
+                  desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
+                  meta-footer="cellphones.com.vn"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST LINK -->
 
-          <!-- DEMO FOR POST 1 IMAGE -->
-          <Post>
-            <template slot="media-content">
-              <PostImage
-                :images="[{ type: 'image', src: 'https://picsum.photos/1920/1080'}]"
-                class="my-4"
-                @click-item="modalDetailShow = true"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST 1 IMAGE -->
+            <!-- DEMO FOR POST SLIDER -->
+            <Post>
+              <template slot="media-content">
+                <PostSlider
+                  :images="timelineSliderItems"
+                  class="my-4"
+                  @click-item="handleClickImage"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST SLIDER -->
 
-          <!-- DEMO FOR POST 2 IMAGE -->
-          <Post>
-            <template slot="media-content">
-              <PostImage
-                :images="[
-                  { type: 'image', src: 'https://picsum.photos/361/361'},
-                  { type: 'image', src: 'https://picsum.photos/361/361'},
-                ]"
-                class="my-4"
-                @click-item="modalDetailShow = true"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST 2 IMAGE -->
+            <!-- DEMO FOR POST 1 IMAGE -->
+            <Post>
+              <template slot="media-content">
+                <PostImage
+                  :images="[{ type: 'image', src: 'https://picsum.photos/1920/1080'}]"
+                  class="my-4"
+                  @click-item="modalDetailShow = true"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST 1 IMAGE -->
 
-          <!-- DEMO FOR POST 3 IMAGE -->
-          <Post>
-            <template slot="media-content">
-              <PostImage
-                :images="[
-                  { type: 'image', src: 'https://picsum.photos/546/362'},
-                  { type: 'image', src: 'https://picsum.photos/179/179'},
-                  { type: 'image', src: 'https://picsum.photos/179/179'},
-                ]"
-                class="my-4"
-                @click-item="modalDetailShow = true"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST 3 IMAGE -->
+            <!-- DEMO FOR POST 2 IMAGE -->
+            <Post>
+              <template slot="media-content">
+                <PostImage
+                  :images="[
+                    { type: 'image', src: 'https://picsum.photos/361/361'},
+                    { type: 'image', src: 'https://picsum.photos/361/361'},
+                  ]"
+                  class="my-4"
+                  @click-item="modalDetailShow = true"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST 2 IMAGE -->
 
-          <!-- DEMO FOR POST 4 IMAGE -->
-          <Post>
-            <template slot="media-content">
-              <PostImage
-                :images="[
-                  { type: 'image', src: 'https://picsum.photos/555/555'},
-                  { type: 'image', src: 'https://picsum.photos/182/182'},
-                  { type: 'image', src: 'https://picsum.photos/182/182'},
-                  { type: 'image', src: 'https://picsum.photos/182/182'},
-                ]"
-                class="my-4"
-                @click-item="modalDetailShow = true"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST 4 IMAGE -->
+            <!-- DEMO FOR POST 3 IMAGE -->
+            <Post>
+              <template slot="media-content">
+                <PostImage
+                  :images="[
+                    { type: 'image', src: 'https://picsum.photos/546/362'},
+                    { type: 'image', src: 'https://picsum.photos/179/179'},
+                    { type: 'image', src: 'https://picsum.photos/179/179'},
+                  ]"
+                  class="my-4"
+                  @click-item="modalDetailShow = true"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST 3 IMAGE -->
 
-          <!-- DEMO FOR POST 5 IMAGE -->
-          <Post>
-            <template slot="media-content">
-              <PostImage
-                :images="[
-                  { type: 'image', src: 'https://picsum.photos/729/437'},
-                  { type: 'image', src: 'https://picsum.photos/178/178'},
-                  { type: 'image', src: 'https://picsum.photos/178/178'},
-                  { type: 'image', src: 'https://picsum.photos/178/178'},
-                  { type: 'image', src: 'https://picsum.photos/178/178'},
-                ]"
-                class="my-4"
-                @click-item="modalDetailShow = true"
-              />
-            </template>
-          </Post>
-          <!-- END DEMO FOR POST 5 IMAGE -->
+            <!-- DEMO FOR POST 4 IMAGE -->
+            <Post>
+              <template slot="media-content">
+                <PostImage
+                  :images="[
+                    { type: 'image', src: 'https://picsum.photos/555/555'},
+                    { type: 'image', src: 'https://picsum.photos/182/182'},
+                    { type: 'image', src: 'https://picsum.photos/182/182'},
+                    { type: 'image', src: 'https://picsum.photos/182/182'},
+                  ]"
+                  class="my-4"
+                  @click-item="modalDetailShow = true"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST 4 IMAGE -->
+
+            <!-- DEMO FOR POST 5 IMAGE -->
+            <Post>
+              <template slot="media-content">
+                <PostImage
+                  :images="[
+                    { type: 'image', src: 'https://picsum.photos/729/437'},
+                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                  ]"
+                  class="my-4"
+                  @click-item="modalDetailShow = true"
+                />
+              </template>
+            </Post>
+            <!-- END DEMO FOR POST 5 IMAGE -->
+          </div>
 
           <app-modal
             v-if="modalDetailShow"
@@ -202,6 +212,8 @@ import PostDetail from "~/components/Post/PostDetail";
 import PostImage from "~/components/Post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
+import { mapState } from 'vuex';
+import * as actionTypes from '~/utils/action-types';
 
 export default {
   watchQuery: ["post_id", "photo_id"],
@@ -214,6 +226,12 @@ export default {
     PostSlider,
     PostDetail,
     PostImage
+  },
+  async fetch({ params, query, store }) {
+    await Promise.all([
+      store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.LIST}`)
+    ]);
   },
 
   data() {
@@ -320,6 +338,9 @@ export default {
       ]
     };
   },
+  computed : {
+    ...mapState("social", ["postsList"])
+  },
 
   watch: {
     $route: {
@@ -336,7 +357,7 @@ export default {
   },
 
   methods: {
-    handleClickImage(imageObj) {
+    handleClickImage(post) {
       // if (typeof history.pushState != "undefined") {
       //   history.pushState({}, '', `${window.location.origin}/post/`);
       // }

@@ -17,3 +17,10 @@ export const AUTHEN_LDAP = {
     EDIT: 'authenLdapEdit',
     DELETE: 'authenLdapDelete',
 }
+
+export const SOCIAL_POST = {
+    LIST: 'socialPostsList',
+    ADD: 'socialPostsAdd',
+    EDIT: 'socialPostsEdit',
+    DELETE: 'socialPostsDelete',
+}
