@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import PostSlider from "~/components/Post/PostSlider";
-import Post from "~/components/Post/Post";
+import PostSlider from "./PostSlider";
+import Post from "./Post";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 
