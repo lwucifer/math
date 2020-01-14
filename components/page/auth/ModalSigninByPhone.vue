@@ -50,6 +50,7 @@
     import IconPhone from "~/assets/svg/icons/phone.svg?inline";
     import IconLock from "~/assets/svg/icons/lock.svg?inline";
     import * as actionTypes from "../../../utils/action-types";
+    import { mapState, mapActions } from 'vuex';
 
     export default {
         components: {
@@ -58,6 +59,9 @@
         },
         props: {
             visible: Boolean
+        },
+        computed : {
+
         },
         data() {
             return {
@@ -78,45 +82,51 @@
             }
         },
         methods: {
+            ...mapActions("auth", [actionTypes.AUTH.LOGIN]),
             nextlogin() {
-                if (this.step === 2) {
+                const that = this;
+                if (that.step === 2) {
                     let data = {
-                        email: this.areaCode + this.phone,
-                        password: this.password
+                        email: that.areaCode + that.phone,
+                        password: that.password
                     };
-                    this.$store.dispatch(actionTypes.AUTH.LOGIN, data);
+                    that[actionTypes.AUTH.LOGIN](data);
                 }
-                if (this.step === 1) {
-                    if (this.phone.length > 10) {
-                        this.phoneError = true;
+                if (that.step === 1) {
+                    if (that.phone.length > 10) {
+                        that.phoneError = true;
                     } else {
-                        this.phoneError = false;
-                        this.step = 2;
+                        that.phoneError = false;
+                        that.step = 2;
                     }
                 }
             },
             forgot() {
-                this.step = 3;
-                this.sendOTP();
+                const that = this;
+                that.step = 3;
+                that.sendOTP();
             },
             resendOTP() {
-                if(this.countDown === 0) {
-                    this.countDown = this.countDownDefault;
-                    this.sendOTP();
+                const that = this;
+                if(that.countDown === 0) {
+                    that.countDown = that.countDownDefault;
+                    that.sendOTP();
                 }
             },
             sendOTP() {
-                this.countDownTimer();
+                const that = this;
+                that.countDownTimer();
             },
             countDownTimer() {
-                if(this.countDown > 0) {
+                const that = this;
+                if(that.countDown > 0) {
                     setTimeout(() => {
-                        this.countDown -= 1
-                        this.countDownTimer()
+                        that.countDown -= 1
+                        that.countDownTimer()
                     }, 1000)
                 }
             },
-        }
+        },
     }
 </script>
 
