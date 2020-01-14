@@ -1,7 +1,7 @@
 <template>
   <div class="post-image" :class="classes">
     <div v-if="images.length > 1" class="post-image-grid">
-      <div class="post-image-item" v-for="(item, index) in images" :key="index">
+      <div class="post-image-item" v-for="item in images" :key="item.id" @click="$emit('click-item', item)">
         <div class="post-image-item__container">
           <app-video v-if="item.type === 'video'" :posterSrc="item.src"></app-video>
           <img v-else :src="item.src" alt />

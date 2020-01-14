@@ -9,9 +9,9 @@
 
           <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
             <PostImage
-              :images="post.attachments.map(item => ({ type: 'image', src: item.thumb }))"
+              :images="post.attachments.map(item => ({ id: item.id, type: item.object, src: item.thumb }))"
               class="my-4"
-              @click-item="handleClickImage(post)"
+              @click-item="imageObj => handleClickImage(imageObj, post)"
             />
           </Post>
 
@@ -212,8 +212,8 @@ import PostDetail from "~/components/Post/PostDetail";
 import PostImage from "~/components/Post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
-import { mapState } from 'vuex';
-import * as actionTypes from '~/utils/action-types';
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
@@ -229,8 +229,7 @@ export default {
   },
   async fetch({ params, query, store }) {
     await Promise.all([
-      store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
   },
 
@@ -338,29 +337,66 @@ export default {
       ]
     };
   },
-  computed : {
+  computed: {
     ...mapState("social", ["postsList"])
+  },
+
+  mounted() {
+    if (process.browser) {
+      window.addEventListener("popstate", this.handlerPopstate);
+    }
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("popstate", this.handlerPopstate);
   },
 
   watch: {
     $route: {
       immediate: true,
       handler: function(newValue) {
-        console.log("watch $route", newValue);
-        if (newValue.query.post_id) {
-          this.modalDetailShow = true;
-        } else {
-          this.modalDetailShow = false;
-        }
+        // if (newValue.query.post_id) {
+        //   this.modalDetailShow = true;
+        // } else {
+        //   this.modalDetailShow = false;
+        // }
+        console.log("watch $route, newValue");
       }
     }
   },
 
   methods: {
-    handleClickImage(post) {
-      // if (typeof history.pushState != "undefined") {
-      //   history.pushState({}, '', `${window.location.origin}/post/`);
-      // }
+    /**
+     * Click image -> change url
+     * @param { Object } imageObj - { type: image | video, post: post object }
+     */
+    handleClickImage(imageObj, post) {
+      console.log("handleClickImage", imageObj);
+      if (typeof history.pushState != "undefined") {
+        history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/post?image_id=${imageObj.id}`
+        );
+      }
+    },
+
+    /**
+     * Hande click nav button of browser
+     * @param { Object } event - event emited
+     */
+    handlerPopstate(event) {
+      console.log("event.state", event.state);
+      const fullPath = document.location.href.replace(
+        window.location.origin,
+        ""
+      );
+      const isTheater = document.location.search.includes("&theater");
+
+      if (event.state.theater) {
+      } else {
+        this.$router.push();
+      }
     }
   }
 };
