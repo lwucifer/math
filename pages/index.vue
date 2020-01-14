@@ -131,9 +131,9 @@
             centered
             :width="1170"
             :component-class="{ 'post-detail-modal': true }"
-            @close="$router.push('/')"
+            @close="handleCloseModal"
           >
-            <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+            <PostDetail :images="timelineSliderItems" @click-close="handleCloseModal" />
           </app-modal>
         </div>
 
@@ -228,6 +228,7 @@ export default {
     PostImage
   },
   async fetch({ params, query, store }) {
+    console.log('watchQuery')
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
@@ -337,31 +338,20 @@ export default {
       ]
     };
   },
+
   computed: {
     ...mapState("social", ["postsList"])
   },
 
   mounted() {
     if (process.browser) {
-      window.addEventListener("popstate", this.handlerPopstate);
+      window.addEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
     }
   },
 
   beforeDestroy() {
-    window.removeEventListener("popstate", this.handlerPopstate);
-  },
-
-  watch: {
-    $route: {
-      immediate: true,
-      handler: function(newValue) {
-        // if (newValue.query.post_id) {
-        //   this.modalDetailShow = true;
-        // } else {
-        //   this.modalDetailShow = false;
-        // }
-        console.log("watch $route, newValue");
-      }
+    if (process.browser) {
+      window.removeEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
     }
   },
 
@@ -372,31 +362,49 @@ export default {
      */
     handleClickImage(imageObj, post) {
       console.log("handleClickImage", imageObj);
-      if (typeof history.pushState != "undefined") {
-        history.pushState(
+      if (typeof window.history.pushState != "undefined") {
+        window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post?image_id=${imageObj.id}`
+          `${window.location.origin}/post?photo_id=${imageObj.id}`
         );
       }
+
+      this.modalDetailShow = true;
     },
 
     /**
      * Hande click nav button of browser
      * @param { Object } event - event emited
      */
-    handlerPopstate(event) {
+    handlePopstate(event) {
       console.log("event.state", event.state);
       const fullPath = document.location.href.replace(
         window.location.origin,
         ""
       );
-      const isTheater = document.location.search.includes("&theater");
+      // const isTheater = document.location.search.includes("&theater");
 
       if (event.state.theater) {
+        this.modalDetailShow = true;
       } else {
         this.$router.push();
       }
+    },
+
+    /**
+     * Click close modal -> set url in browser to '/'
+     */
+    handleCloseModal() {
+      if (typeof window.history.pushState != "undefined") {
+        window.history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/`
+        );
+      }
+
+      this.modalDetailShow = false;
     }
   }
 };
