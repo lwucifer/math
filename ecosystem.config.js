@@ -9,12 +9,12 @@ module.exports = {
     node_args: "",
     autorestart: true,
     watch: false,
-    max_memory_restart: '7G',
+    max_memory_restart: '2G',
     error_file: "/data/log/web/SchoollyApp.err.log",
     out_file: "/data/log/web/SchoollyApp.out.log",
     env: {
       HOST: "0.0.0.0",
-      PORT: 4003
+      PORT: 5000
     },
   }, ],
 
