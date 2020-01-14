@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import CommentItem from "~/components/Comment/CommentItem";
-import CommentEditor from "~/components/Comment/CommentEditor";
+import CommentItem from "~/components/page/timeline/comment/CommentItem";
+import CommentEditor from "~/components/page/timeline/comment/CommentEditor";
 
 import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";

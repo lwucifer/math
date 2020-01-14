@@ -203,13 +203,13 @@
 </template>
 
 <script>
-import SliderBanner from "~/components/Slider/SliderBanner";
-import PostEditor from "~/components/PostEditor/PostEditor";
-import AsideBox from "~/components/AsideBox/AsideBox";
-import Post from "~/components/Post/Post";
-import PostSlider from "~/components/Post/PostSlider";
-import PostDetail from "~/components/Post/PostDetail";
-import PostImage from "~/components/Post/PostImage";
+import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
+import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
+import AsideBox from "~/components/layout/asideBox/AsideBox";
+import Post from "~/components/page/timeline/post/Post";
+import PostSlider from "~/components/page/timeline/post/PostSlider";
+import PostDetail from "~/components/page/timeline/post/PostDetail";
+import PostImage from "~/components/page/timeline/post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
