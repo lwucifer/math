@@ -2,7 +2,9 @@
     <div class="the-header">
         <div class="container the-header__content">
             <div class="the-header__logo">
-                <Logo/>
+                <n-link to="/">
+                    <Logo/>
+                </n-link>
             </div>
 
             <ul class="the-header__menu">
