@@ -9,9 +9,9 @@
 
           <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
             <PostImage
-              :images="post.attachments.map(item => ({ type: 'image', src: item.thumb }))"
+              :images="post.attachments.map(item => ({ id: item.id, type: item.object, src: item.thumb }))"
               class="my-4"
-              @click-item="handleClickImage(post)"
+              @click-item="imageObj => handleClickImage(imageObj, post)"
             />
           </Post>
 
@@ -131,9 +131,9 @@
             centered
             :width="1170"
             :component-class="{ 'post-detail-modal': true }"
-            @close="$router.push('/')"
+            @close="handleCloseModal"
           >
-            <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+            <PostDetail slot="content" :images="timelineSliderItems" @click-close="handleCloseModal" />
           </app-modal>
         </div>
 
@@ -212,8 +212,8 @@ import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
-import { mapState } from 'vuex';
-import * as actionTypes from '~/utils/action-types';
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
@@ -228,9 +228,9 @@ export default {
     PostImage
   },
   async fetch({ params, query, store }) {
+    console.log('watchQuery')
     await Promise.all([
-      store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
   },
 
@@ -338,29 +338,73 @@ export default {
       ]
     };
   },
-  computed : {
+
+  computed: {
     ...mapState("social", ["postsList"])
   },
 
-  watch: {
-    $route: {
-      immediate: true,
-      handler: function(newValue) {
-        console.log("watch $route", newValue);
-        if (newValue.query.post_id) {
-          this.modalDetailShow = true;
-        } else {
-          this.modalDetailShow = false;
-        }
-      }
+  mounted() {
+    if (process.browser) {
+      window.addEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
+    }
+  },
+
+  beforeDestroy() {
+    if (process.browser) {
+      window.removeEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
     }
   },
 
   methods: {
-    handleClickImage(post) {
-      // if (typeof history.pushState != "undefined") {
-      //   history.pushState({}, '', `${window.location.origin}/post/`);
-      // }
+    /**
+     * Click image -> change url
+     * @param { Object } imageObj - { type: image | video, post: post object }
+     */
+    handleClickImage(imageObj, post) {
+      console.log("handleClickImage", imageObj);
+      if (typeof window.history.pushState != "undefined") {
+        window.history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/post?photo_id=${imageObj.id}`
+        );
+      }
+
+      this.modalDetailShow = true;
+    },
+
+    /**
+     * Hande click nav button of browser
+     * @param { Object } event - event emited
+     */
+    handlePopstate(event) {
+      console.log("event.state", event.state);
+      const fullPath = document.location.href.replace(
+        window.location.origin,
+        ""
+      );
+      // const isTheater = document.location.search.includes("&theater");
+
+      if (event.state.theater) {
+        this.modalDetailShow = true;
+      } else {
+        this.$router.push();
+      }
+    },
+
+    /**
+     * Click close modal -> set url in browser to '/'
+     */
+    handleCloseModal() {
+      if (typeof window.history.pushState != "undefined") {
+        window.history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/`
+        );
+      }
+
+      this.modalDetailShow = false;
     }
   }
 };

@@ -16,12 +16,12 @@ export default function({ store, $axios, redirect }) {
   });
 
   $axios.onRequestError(err => {
-    console.log("[onRequestError]", err);
+    // console.log("[onRequestError]", err);
     // console.log("onRequestError", err);
   });
 
   $axios.onResponseError(error => {
-    console.log("[onResponseError]", error);
+    // console.log("[onResponseError]", error);
     // const code = parseInt(error.response && error.response.status);
     // if (code === 401) {
     //   removeToken();
