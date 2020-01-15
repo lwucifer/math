@@ -12,13 +12,13 @@
                     <n-link to="" class="active">Timeline</n-link>
                 </li>
                 <li>
-                    <n-link to="">Khoá học</n-link>
+                    <n-link to="/course">Khoá học</n-link>
                 </li>
                 <li>
-                    <n-link to="">Trường học</n-link>
+                    <n-link to="/school">Trường học</n-link>
                 </li>
                 <li>
-                    <n-link to="">Tin nhắn <span class="the-header__menu-status text-active">(2)</span></n-link>
+                    <n-link to="message">Tin nhắn <span class="the-header__menu-status text-active">(2)</span></n-link>
                 </li>
             </ul>
 
