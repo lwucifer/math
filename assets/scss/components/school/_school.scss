@@ -1,0 +1,58 @@
+.school__side {
+    background-color: transparent;
+}
+.school__side .aside-box__title {
+    color: #333;
+    font-size: 2.2rem;
+}
+.school__side a:any-link, .school__side a:any-link:hover {
+    color: #666;
+    text-decoration: none;
+    font-size: 1.8rem;
+}
+.none-decoration {
+    text-decoration: none;
+}
+.school-jobs {
+    background-color: #fff;
+    padding: 2rem 1rem 0;
+    margin-top: 2rem;
+}
+.school-about__content-job + .school-about__content-job {
+    border-top: 1px solid #eee;
+}
+.school-jobs h3{
+    font-size: 1.8rem;
+}
+.school-about__content-job {
+    padding: 2rem;
+}
+.school-about__content-job a:any-link, .school-about__content-job a:any-link:hover {
+    color: #666;
+    text-decoration: none;
+    font-size: 1.6rem;
+}
+.school-list-slider >h3 {
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+}
+.school-nav {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    background-color: #fff;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+.school-nav li {
+    display: inline-block;
+}
+.school-nav li a.active {
+    color: #333;
+    font-weight: bold;
+}
+.school-nav li a{
+    font-size: 1.4rem;
+    color: #666;
+    text-decoration: none;
+}

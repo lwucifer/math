@@ -38,4 +38,30 @@
     .swiper-button-next {
         right: 0;
     }
+
+    .swiper-pagination {
+        margin-top: 2.5rem !important;
+        position: relative;
+        line-height: 0;
+        margin-bottom: -1rem;
+    }
+
+    .slider-title {
+        color: #333;
+        text-decoration: none;
+        font-size: 1.6rem;
+        font-weight: bold;
+        margin-top: 1rem;
+        display: block;
+    }
+}
+.slider-box {
+    background-color: #fff;
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+}
+
+.post-slider-title {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
 }
