@@ -49,7 +49,7 @@
                 </div>
 
                 <app-button v-else outline square color="primary" @click="showLogin = true">Đăng nhập</app-button>
-                <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false"/>
+                <ModalSigninByPhone :visible="showLogin" :step="1" @click-close="showLogin = false"/>
             </div>
         </div>
     </div>
