@@ -32,7 +32,6 @@ const actions = {
     }
   },
 
-
 };
 
 /**
@@ -45,7 +44,7 @@ const mutations = {
 
   [mutationTypes.AUTH.SET_LOGOUT](state) {
     state.loggedUser = null;
-  }
+  },
 };
 
 export default {

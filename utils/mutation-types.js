@@ -4,6 +4,7 @@ export const AUTH = {
     SET_LOGOUT: 'setLogout',
     SET_TOKEN: 'setToken',
     SET_ACCESS_TOKEN: 'setAccessToken',
+    SET_OTP: 'setAccessToken',
     REMOVE_TOKEN: 'removeToken',
 }
 
