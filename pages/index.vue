@@ -133,7 +133,7 @@
             :component-class="{ 'post-detail-modal': true }"
             @close="handleCloseModal"
           >
-            <PostDetail :images="timelineSliderItems" @click-close="handleCloseModal" />
+            <PostDetail slot="content" :images="timelineSliderItems" @click-close="handleCloseModal" />
           </app-modal>
         </div>
 
