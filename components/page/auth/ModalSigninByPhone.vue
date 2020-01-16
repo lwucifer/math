@@ -58,7 +58,8 @@
             IconLock
         },
         props: {
-            visible: Boolean
+            visible: Boolean,
+            step: Number
         },
         computed : {
 
@@ -78,16 +79,17 @@
                 newpassword: '',
                 countDownDefault: 120,
                 countDown: 120,
-                phoneError: false
+                phoneError: false,
+                timeout: ''
             }
         },
         methods: {
             ...mapActions("auth", [actionTypes.AUTH.LOGIN]),
             nextlogin() {
                 const that = this;
-                if (that.step === 2) {
+                if (that.step === 2 && that.password && that.phone) {
                     let data = {
-                        email: that.areaCode + that.phone,
+                        phone: that.areaCode + that.phone,
                         password: that.password
                     };
                     that[actionTypes.AUTH.LOGIN](data);
@@ -97,7 +99,7 @@
                         that.phoneError = true;
                     } else {
                         that.phoneError = false;
-                        that.step = 2;
+                        that.step = that.phone ? 2 : 1;
                     }
                 }
             },
@@ -109,18 +111,19 @@
             resendOTP() {
                 const that = this;
                 if(that.countDown === 0) {
-                    that.countDown = that.countDownDefault;
                     that.sendOTP();
                 }
             },
             sendOTP() {
                 const that = this;
+                that.countDown = that.countDownDefault;
+                clearTimeout(that.timeout);
                 that.countDownTimer();
             },
             countDownTimer() {
                 const that = this;
                 if(that.countDown > 0) {
-                    setTimeout(() => {
+                    that.timeout = setTimeout(() => {
                         that.countDown -= 1
                         that.countDownTimer()
                     }, 1000)

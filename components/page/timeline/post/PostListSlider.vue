@@ -3,26 +3,31 @@
         <h3 class="post-slider-title" v-if="title">{{title}}</h3>
         <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
             <div class="swiper-wrapper">
-                <div class="swiper-slide post-slider-container" v-for="(item, index) in images" :key="index">
+                <div class="swiper-slide post-slider-container" v-for="(item, index) in posts" :key="index">
                     <app-video
-                        v-if="item.type === 'video'"
+                        v-if="item.image_type === 'video'"
                         class="slider-item"
-                        :posterSrc="item.src"
+                        :posterSrc="item.image"
                         @click="$emit('click-item', item, index)"
                     ></app-video>
 
                     <div v-else class="slider-item" @click="$emit('click-item', item, index)">
-                        <img :src="item.src" alt/>
+                        <img :src="item.image" alt/>
                     </div>
+
+                    <n-link class="slider-title" v-if="item.name && currentSwiperOptions.showName" to>
+                        {{item.name}}
+                    </n-link>
                 </div>
             </div>
 
-            <div class="swiper-button-prev">
+            <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
                 <IconChevronLeft/>
             </div>
-            <div class="swiper-button-next">
+            <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
                 <IconChevronRight/>
             </div>
+            <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
         </div>
     </div>
 </template>
@@ -41,12 +46,12 @@
         },
 
         props: {
-            images: {
+            posts: {
                 type: Array,
                 required: true,
                 default: () => [],
                 validator: value =>
-                    value.every(item => ["type", "src"].every(key => key in item))
+                    value.every(item => ["image", "name"].every(key => key in item))
             },
 
             swiperOptions: {
@@ -54,7 +59,6 @@
                 default: () => {
                 }
             },
-
             title: {type: String},
         },
 
@@ -65,7 +69,9 @@
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev"
-                }
+                },
+                pagination: false,
+                showName: false
             };
 
             return {
