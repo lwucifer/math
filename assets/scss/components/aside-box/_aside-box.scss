@@ -28,3 +28,14 @@
     color: #333;
     text-decoration: underline;
 }
+
+.aside-box.nav-links {
+    padding: 0;
+    margin-bottom: 3rem;
+    .aside-box__content {
+        display: flex;
+        .btn {
+            margin-right: 1rem;
+        }
+    }
+}

@@ -44,6 +44,7 @@ export default {
         "btn--color-error": this.color === "error",
         "btn--color-warning": this.color === "warning",
         "btn--color-white": this.color === "white",
+        "btn--color-gray": this.color === "gray",
       };
 
       const outlineColorClasses = {

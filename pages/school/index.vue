@@ -4,7 +4,7 @@
             <div class="col-md-3">
                 <AsideBox title="Trường của tôi" class="school__side">
                     <div v-for="(item, index) in myschools" class="mb-3">
-                        <n-link slot="title" to>{{item.name}}</n-link>
+                        <n-link slot="title" :to="'/school/view'">{{item.name}}</n-link>
                     </div>
                     <app-button class="timeline-aside-btn mt-4" fullWidth>Tạo trường mới</app-button>
                 </AsideBox>

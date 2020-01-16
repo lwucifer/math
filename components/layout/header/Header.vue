@@ -49,7 +49,7 @@
                 </div>
 
                 <app-button v-else outline square color="primary" @click="showLogin = true">Đăng nhập</app-button>
-                <ModalSigninByPhone :visible="showLogin" :step="1" @click-close="showLogin = false"/>
+                <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false"/>
             </div>
         </div>
     </div>
@@ -61,7 +61,6 @@
     import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
     import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
     import ModalSigninByPhone from "~/components/page/auth/ModalSigninByPhone";
-
 
     export default {
         components: {

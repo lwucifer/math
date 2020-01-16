@@ -49,6 +49,17 @@ a {
             color: $color-brand;
         }
     }
+    &.link-gray {
+        color: #666;
+        text-decoration: none;
+        &.active,
+        &:hover {
+            color: $color-brand;
+        }
+        &.active {
+            font-weight: bold;
+        }
+    }
 }
 
 button {
@@ -85,4 +96,8 @@ button, select, input, textarea {
 
 .svg-icon {
     fill: $color-text;
+}
+hr {
+    border-top: 1px solid #eee;
+    border-bottom: 0;
 }

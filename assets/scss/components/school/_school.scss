@@ -5,7 +5,14 @@
     color: #333;
     font-size: 2.2rem;
 }
-.school__side a:any-link, .school__side a:any-link:hover {
+.school__side a:any-link.active {
+    color: #333;
+    font-weight: bold;
+}
+.school__side a:any-link:hover {
+    color: #32AF85;
+}
+.school__side a:any-link {
     color: #666;
     text-decoration: none;
     font-size: 1.8rem;
@@ -27,7 +34,7 @@
 .school-about__content-job {
     padding: 2rem;
 }
-.school-about__content-job a:any-link, .school-about__content-job a:any-link:hover {
+.school-about__content-job a:any-link {
     color: #666;
     text-decoration: none;
     font-size: 1.6rem;
