@@ -7,6 +7,8 @@
         <div class="col-md-8">
           <PostEditor />
 
+          <app-skeleton class="mb-4"></app-skeleton>
+
           <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
             <PostImage
               :images="post.attachments.map(item => ({ id: item.id, type: item.object, src: item.thumb }))"
