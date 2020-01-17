@@ -36,7 +36,7 @@
                 <div :class="this.isAuthenticated ? 'col-md-9' : 'col-md-12'">
                     <div class="row">
                         <div :class="classes" v-for="course in courses">
-                            <CourseDetail :course="course"/>
+                            <CourseItem :course="course"/>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
 
 <script>
     import CourseSlider from "~/components/page/course/CourseSlider";
-    import CourseDetail from "~/components/page/course/CourseDetail";
+    import CourseItem from "~/components/page/course/CourseItem";
     import AsideBox from "~/components/layout/asideBox/AsideBox";
     import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
     import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
@@ -59,7 +59,7 @@
 
         components: {
             CourseSlider,
-            CourseDetail,
+            CourseItem,
             SliderBanner,
             AsideBox
         },

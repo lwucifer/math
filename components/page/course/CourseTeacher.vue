@@ -3,7 +3,7 @@
         <app-avatar :src="teacher.avatar" :size="125"/>
         <p class="course-teacher__name">{{teacher.name}}</p>
         <p>Giảng viên</p>
-        <app-button square class="mt-3">Tạo khóa học</app-button>
+        <n-link square class="mt-3 btn btn--color-primary btn--square color-white" to="/course/create">Tạo khóa học</n-link>
     </div>
 </template>
 
