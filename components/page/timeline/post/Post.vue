@@ -8,7 +8,7 @@
       <div class="post__title">
         <div class="post__title-row">
           <h5 class="post__name">
-            <n-link to>Hannah Phạm</n-link>
+            <n-link to>{{ fullname }}</n-link>
           </h5>
           <span class="post__share-for">
             <IconGlobe class="svg-icon" />
@@ -16,7 +16,7 @@
         </div>
 
         <div class="post__title-row">
-          <n-link class="post__time" to>30 phút</n-link>
+          <n-link class="post__time" to>{{ updated }}</n-link>
         </div>
 
         <template v-if="showEdit">
@@ -44,7 +44,7 @@
       <template v-else>
         <p
           class="post__post-desc"
-        >Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</p>
+        >{{ content }}</p>
         <a href @click.prevent class="post__post-readmore">Xem thêm</a>
       </template>
 
@@ -55,8 +55,8 @@
 
     <div class="post__interactive">
       <div class="post__count">
-        <span>20 lượt thích</span>
-        <span>6 bình luận</span>
+        <span>{{ likes }} lượt thích</span>
+        <span>{{ comments }} bình luận</span>
       </div>
 
       <app-divider class="my-3" />
@@ -86,9 +86,9 @@
           <CommentItem :level="2" />
 
           <div class="text-center">
-            <a href="" class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
+            <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
           </div>
- 
+
           <CommentEditor reply />
         </CommentItem>
       </div>
@@ -120,7 +120,27 @@ export default {
   },
 
   props: {
-    showEdit: Boolean
+    showEdit: Boolean,
+    fullname: {
+      type: String,
+      default: ""
+    },
+    updated: {
+      type: String,
+      default: ""
+    },
+    likes: {
+      type: Number,
+      default: 0
+    },
+    comments: {
+      type: Number,
+      default: 0
+    },
+    content: {
+      type: Number,
+      default: 0
+    }
   },
 
   data() {
