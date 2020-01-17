@@ -25,3 +25,17 @@ export const SOCIAL_POST = {
     EDIT: 'socialPostsEdit',
     DELETE: 'socialPostsDelete',
 }
+
+export const SOCIAL_LIKES = {
+    LIST: 'socialLikesList',
+    ADD: 'socialLikesAdd',
+    DELETE: 'socialLikesDelete',
+}
+
+export const SOCIAL_SHARES = {
+    LIST: 'socialSharesList',
+}
+
+export const SOCIAL_COMMENTS = {
+    LIST: 'socialCommentsList',
+}
