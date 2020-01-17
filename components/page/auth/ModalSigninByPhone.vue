@@ -13,22 +13,22 @@
 
         <div slot="content">
             <!--Step 3-->
-            <div class="form-group" v-if="step === 3">
+            <div class="form-group_border-bottom" v-if="step === 3">
                 <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP"/>
             </div>
-            <div class="form-group" v-if="step === 3">
+            <div class="form-group_border-bottom" v-if="step === 3">
                 <IconLock  width="13" height="23"/>
                 <input type="password" v-model="newpassword" class="form-control" placeholder="Mật khẩu mới"/>
             </div>
 
             <!--Step 2-->
-            <div class="form-group" v-if="step === 2">
+            <div class="form-group_border-bottom" v-if="step === 2">
                 <IconLock  width="13" height="23"/>
                 <input type="password" v-model="password" class="form-control" placeholder="Mật khẩu"/>
             </div>
 
             <!--Step 1-->
-            <div class="form-group" v-if="step === 1">
+            <div class="form-group_border-bottom" v-if="step === 1">
                 <IconPhone  width="11" height="28"/>
                 <app-select class="phone-select" :options="areaCodes" v-model="areaCode"/>
                 <input type="text" maxlength="20" v-model="phone" class="form-control" placeholder="Số điện thoại"/>
@@ -59,7 +59,7 @@
         },
         props: {
             visible: Boolean,
-            step: Number
+            //step: Number
         },
         computed : {
 

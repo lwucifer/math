@@ -117,18 +117,19 @@
     float: left;
     padding: .5rem 0 1rem;
 }
-.form-group {
+.form-group_border-bottom {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
+    .form-control {
+        height: 4rem;
+        border: 0;
+        font-size: 1.4rem;
+        line-height: normal;
+        padding: 2px;
+    }
 }
-.form-control {
-    height: 4rem;
-    border: 0;
-    font-size: 1.4rem;
-    line-height: normal;
-    padding: 2px;
-}
+
 .color-primary {
     color: #2CAE86;
 }
@@ -141,4 +142,25 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 3rem white inset !important;
+}
+
+// New folder modal
+.new-folder-modal .app-modal-content {
+    padding: 1.5rem 2rem 0;
+    .btn {
+        width: 125px;
+        margin: 2rem .5rem;
+    }
+    .title {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+    .btn-close {
+        right: -1rem;
+    }
+}
+.form-control_border {
+    height: 3.5rem;
+    border: 1px solid #EEEEEE;
+    padding: .8rem;
 }
