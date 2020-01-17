@@ -9,6 +9,7 @@ import AppDropdown from "~/components/common/dropdown/AppDropdown";
 import AppSelect from "~/components/common/select/AppSelect";
 import AppVideo from "~/components/common/video/AppVideo";
 import AppSkeleton from "~/components/common/skeleton/AppSkeleton";
+import AppDatePicker from "~/components/common/datepicker/AppDatePicker";
 
 Vue.component("app-button", AppButton);
 Vue.component("app-divider", AppDivider);
@@ -19,3 +20,4 @@ Vue.component("app-dropdown", AppDropdown);
 Vue.component("app-select", AppSelect);
 Vue.component("app-video", AppVideo);
 Vue.component("app-skeleton", AppSkeleton);
+Vue.component("app-date-picker", AppDatePicker);

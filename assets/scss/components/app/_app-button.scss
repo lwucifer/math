@@ -37,13 +37,14 @@
 // Size of button
 .btn--size-sm {
     height: 3.2rem;
+    font-size: 1.4rem;
 }
 
 .btn--size-md {
     height: 3.8rem;
 }
 
-.btn--lg {
+.btn--size-lg {
     height: 4.8rem;
 }
 
@@ -68,9 +69,22 @@
     }
 }
 
+.btn--color-info {
+    color: #fff;
+    background-color: #ccc;
+}
+
 .btn--color-white {
     background-color: #fff;
     color: $color-primary;
+    border: 1px solid $color-primary;
+}
+
+.btn--color-gray {
+    background-color: #fff;
+    color: #999;
+    border: 1px solid #ccc;
+    font-weight: normal;
 }
 
 

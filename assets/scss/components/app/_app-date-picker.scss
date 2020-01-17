@@ -1,0 +1,24 @@
+.mx-input {
+    height: 30px;
+    padding: 0 1rem;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    color: #999;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: .5rem;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.mx-datepicker {
+    width: 15.5rem;
+}
+label {
+    margin-right: 0.3rem;
+}
+.app-date-picker {
+    display: inline-block;
+    + .app-date-picker {
+        margin-left: 2.6rem;
+    }
+}
