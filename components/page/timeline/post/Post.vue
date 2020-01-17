@@ -33,7 +33,7 @@
 
         <div class="post__edit-actions">
           <app-select class="post__edit-select" :options="shareWithOpts" v-model="shareWith">
-            <IconGlobe slot="prepend" class="post__edit-select__prepend d-block"/>
+            <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
           </app-select>
 
           <button class="post__edit-btn post__edit-btn-cancel" @click="edit = false">Huỷ</button>
@@ -79,7 +79,16 @@
 
       <div class="post__comment-list">
         <CommentItem>
+          <CommentItemReplied />
+        </CommentItem>
+
+        <CommentItem>
           <CommentItem :level="2" />
+
+          <div class="text-center">
+            <a href="" class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
+          </div>
+ 
           <CommentEditor reply />
         </CommentItem>
       </div>
@@ -91,6 +100,7 @@
 
 <script>
 import CommentItem from "~/components/page/timeline/comment/CommentItem";
+import CommentItemReplied from "~/components/page/timeline/comment/CommentItemReplied";
 import CommentEditor from "~/components/page/timeline/comment/CommentEditor";
 
 import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
@@ -101,6 +111,7 @@ import IconShare from "~/assets/svg/icons/share.svg?inline";
 export default {
   components: {
     CommentItem,
+    CommentItemReplied,
     CommentEditor,
     IconGlobe,
     IconHeart,
@@ -117,9 +128,9 @@ export default {
       edit: false,
       shareWith: 0,
       shareWithOpts: [
-        { value: 0, text: 'Công khai' },
-        { value: 1, text: 'Bạn bè' },
-        { value: 3, text: 'Chỉ mình tôi' },
+        { value: 0, text: "Công khai" },
+        { value: 1, text: "Bạn bè" },
+        { value: 3, text: "Chỉ mình tôi" }
       ]
     };
   }

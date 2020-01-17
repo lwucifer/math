@@ -207,3 +207,12 @@
         fill: $color-text-gray;
     }
 }
+
+.post__comment-more {
+    text-decoration: none;
+    color: $color-primary;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
