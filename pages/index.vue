@@ -16,6 +16,13 @@
               @click-item="imageObj => handleClickImage(imageObj, post)"
             />
           </Post>
+          <Post class="mb-4" v-for="post in postsList" :key="post.label"
+          :fullname="post.creator.fullname"
+          :updated="post.updated"
+          :likes="post.likes"
+          :comments="post.comments"
+          :content="post.content">
+          </Post>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
