@@ -7,12 +7,21 @@
         <div class="col-md-8">
           <PostEditor />
 
+          <app-skeleton class="mb-4"></app-skeleton>
+
           <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
             <PostImage
               :images="post.attachments.map(item => ({ id: item.id, type: item.object, src: item.thumb }))"
               class="my-4"
               @click-item="imageObj => handleClickImage(imageObj, post)"
             />
+          </Post>
+          <Post class="mb-4" v-for="post in postsList" :key="post.label"
+          :fullname="post.creator.fullname"
+          :updated="post.updated"
+          :likes="post.likes"
+          :comments="post.comments"
+          :content="post.content">
           </Post>
 
           <div class="d-none">

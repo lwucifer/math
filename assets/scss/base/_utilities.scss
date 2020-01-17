@@ -138,3 +138,8 @@
 .icon-play--transformed {
     transform: translate(10%, 0);
 }
+
+// clearfix
+.clearfix {
+    @include clearfix;
+}
