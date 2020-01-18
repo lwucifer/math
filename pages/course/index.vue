@@ -14,7 +14,7 @@
             <div v-else>
                 <AsideBox title="Khóa học theo chủ đề" class="nav-links">
                     <app-button @click="activate(0)" :color="active_el === 0 ? 'primary' : 'gray'" square>Tất cả</app-button>
-                    <app-button color="gray" square v-for="item in categories"
+                    <app-button color="gray" square v-for="(item, i) in categories" :key="i"
                                 @click="activate(item.id)" :color="active_el === item.id ? 'primary' : 'gray'"
                     >
                         {{item.name}}
@@ -29,7 +29,7 @@
                             <n-link to>Trả phí</n-link>
                         </div>
                         <div>
-                            <n-link :to="'/course/category/' + item.id" v-for="item in categories">{{item.name}}</n-link>
+                            <n-link :to="'/course/category/' + item.id" v-for="(item, i) in categories" :key="i">{{item.name}}</n-link>
                         </div>
                     </AsideBox>
                 </div>
