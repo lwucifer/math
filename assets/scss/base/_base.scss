@@ -60,6 +60,17 @@ a {
             font-weight: bold;
         }
     }
+    &.link-dark {
+        color: #333;
+        text-decoration: none;
+        &.active,
+        &:hover {
+            color: $color-brand;
+        }
+        &.active {
+            font-weight: bold;
+        }
+    }
 }
 
 button {
@@ -103,6 +114,9 @@ hr {
 }
 .border-0 {
     border: 0 !important;
+}
+.vertical-align-middle {
+    vertical-align: middle;
 }
 
 // From
@@ -175,4 +189,13 @@ hr {
 .form-group-inline-item {
     display: flex;
     align-items: center;
+}
+
+// Custom col
+.row .custom-col-lg-5 {
+    @media (min-width: 992px) {
+        max-width: 20%;
+        -webkit-box-flex: 0;
+        flex: 0 0 20%;
+    }
 }
