@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="course-folder__main" v-if="list.length > 0">
+                <div class="course-folder__main" v-if="isAuthenticated">
                     <div class="course-folder__toolbar">
                         <div>
                             <span class="h3">Kho nhập liệu</span>
@@ -95,7 +95,7 @@
 
         data() {
             return {
-                isAuthenticated: true,
+                isAuthenticated: false,
                 showModalNew: false,
                 time1: null,
                 time2: null,

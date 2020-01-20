@@ -12,5 +12,8 @@ export const AUTH = {
 export const PUBLIC = {}
 
 export const SOCIAL = {
-    SET_POSTS_LIST: 'setPostsList'
+    SET_POSTS_LIST: 'setPostsList',
+    SET_SOCIAL_LIKES_LIST: 'setSocialLikesList',
+    SET_SOCIAL_SHARES_LIST: 'setSocialSharesList',
+    SET_SOCIAL_SHARES_LIST: 'setSocialCommentsList'
 }

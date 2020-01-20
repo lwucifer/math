@@ -10,4 +10,7 @@ export const SEND_OTP = `/auth/otp`
 /**
  * POSTS
  */
-export const POSTS = ` /social/posts`
+export const POSTS = `/social/posts`
+export const LIKES = `/social/likes`
+export const SHARES = `/social/shares`
+export const COMMENTS = `/social/comments`

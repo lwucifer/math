@@ -1,12 +1,18 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
 import SocialPosts from "../services/social/post";
+import Likes from "../services/social/likes";
+import Shares from "../services/social/shares";
+import Comments from "../services/social/comments";
 
 /**
  * initial state
  */
 const state = () => ({
-    postsList: {}
+    postsList: {},
+    likesList: {},
+    sharesList: {},
+    commentsList: {}
 });
 
 /**
@@ -146,61 +152,109 @@ const actions = {
             // console.log("[SocialPosts] list.err", err)
             return err;
         }
+    },
+
+    async [actionTypes.SOCIAL_LIKES.LIST]({ commit }, payload) {
+        try {
+            // const result = await new Likes(this.$axios)[actionTypes.BASE.LIST](payload);
+            const result = [{
+                    id: "0",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: "Dat Leo",
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "1",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: "Dat Leo 1",
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "2",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: " Nguyen Dat Leo",
+                    timestamp: "2019-01-04 14:00:00"
+                }
+            ];
+            console.log("[Likes] list", result);
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_LIKES_LIST, result);
+        } catch (err) {
+            console.log("[Likes] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_SHARES.LIST]({ commit }, payload) {
+        try {
+            // const result = await new Shares(this.$axios)[actionTypes.BASE.LIST](payload);
+            const result = [{
+                    id: "0",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: "Dat Leo",
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "1",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: "Dat Leo 1",
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "2",
+                    avatar: "https://picsum.photos/2560/1440",
+                    fullname: " Nguyen Dat Leo",
+                    timestamp: "2019-01-04 14:00:00"
+                }
+            ];
+            console.log("[Likes] list", result);
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_SHARES_LIST, result);
+        } catch (err) {
+            console.log("[Likes] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_COMMENTS.LIST]({ commit }, payload) {
+        try {
+            // const result = await new Comments(this.$axios)[actionTypes.BASE.LIST](payload);
+            const result = [{
+                    id: "0",
+                    creator: "Dat Leo",
+                    comment: 'Day la comment 1',
+                    likes: 20,
+                    replies: 21,
+                    liked: true,
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "1",
+                    creator: "Dat Leo fake",
+                    comment: 'Day la comment 11',
+                    likes: 201,
+                    replies: 212,
+                    liked: true,
+                    timestamp: "2019-01-04 14:00:00"
+                },
+                {
+                    id: "2",
+                    creator: "Dat Leo fake 2",
+                    comment: 'Day la comment 12',
+                    likes: 120,
+                    replies: 121,
+                    liked: true,
+                    timestamp: "2019-01-04 14:00:00"
+                }
+            ];
+            console.log("[Likes] list", result);
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_COMMENTS_LIST, result);
+        } catch (err) {
+            console.log("[Likes] list.err", err);
+            return err;
+        }
     }
-
-    // /**
-    //  * ADD
-    //  * @param {*} param0
-    //  * @param {*} payload
-    //  */
-    // async [actionTypes.FIREWALL.ADD]({
-    //     commit
-    // }, payload) {
-    //     try {
-    //         const result = await new FirewallService(this.$axios)[actionTypes.BASE.ADD](payload);
-    //         console.log("[FirewallService] add", result);
-    //         return result;
-    //     } catch (err) {
-    //         console.log("[FirewallService] add.err", err)
-    //         return err;
-    //     }
-    // },
-
-    // /**
-    //  * EDIT
-    //  * @param {*} param0
-    //  * @param {*} payload
-    //  */
-    // async [actionTypes.FIREWALL.EDIT]({
-    //     commit
-    // }, payload) {
-    //     try {
-    //         const result = await new FirewallService(this.$axios)[actionTypes.BASE.EDIT](payload);
-    //         console.log("[FirewallService] edit", result);
-    //         return result;
-    //     } catch (err) {
-    //         console.log("[FirewallService] edit.err", err)
-    //         return err;
-    //     }
-    // },
-
-    // /**
-    //  * DELETE
-    //  * @param {*} param0
-    //  * @param {*} payload
-    //  */
-    // async [actionTypes.FIREWALL.DELETE]({
-    //     commit
-    // }, payload) {
-    //     try {
-    //         const result = await new FirewallService(this.$axios)[actionTypes.BASE.DELETE](payload);
-    //         console.log("[FirewallService] delete", result);
-    //         return result;
-    //     } catch (err) {
-    //         console.log("[FirewallService] delete.err", err)
-    //         return err;
-    //     }
-    // },
 };
 
 /**
@@ -209,6 +263,16 @@ const actions = {
 const mutations = {
     [mutationTypes.SOCIAL.SET_POSTS_LIST](state, _postsList) {
         state.postsList = _postsList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_LIKES_LIST](state, _likesList) {
+        state.likesList = _likesList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_SHARES_LIST](state, _sharesList) {
+        state.sharesList = _sharesList;
+        W;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_COMMENTS_LIST](state, _commentsList) {
+        state.commentsList = _commentsList;
     }
 };
 
