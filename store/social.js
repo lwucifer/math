@@ -12,7 +12,9 @@ const state = () => ({
     postsList: {},
     likesList: {},
     sharesList: {},
-    commentsList: {}
+    commentsList: {},
+    mediasList: {},
+    notificationsList: {}
 });
 
 /**
@@ -207,11 +209,11 @@ const actions = {
                     timestamp: "2019-01-04 14:00:00"
                 }
             ];
-            console.log("[Likes] list", result);
+            console.log("[Shares] list", result);
             // set to mutation
             commit(mutationTypes.SOCIAL.SET_SOCIAL_SHARES_LIST, result);
         } catch (err) {
-            console.log("[Likes] list.err", err);
+            console.log("[Shares] list.err", err);
             return err;
         }
     },
@@ -222,7 +224,7 @@ const actions = {
             const result = [{
                     id: "0",
                     creator: "Dat Leo",
-                    comment: 'Day la comment 1',
+                    comment: "Day la comment 1",
                     likes: 20,
                     replies: 21,
                     liked: true,
@@ -231,7 +233,7 @@ const actions = {
                 {
                     id: "1",
                     creator: "Dat Leo fake",
-                    comment: 'Day la comment 11',
+                    comment: "Day la comment 11",
                     likes: 201,
                     replies: 212,
                     liked: true,
@@ -240,18 +242,85 @@ const actions = {
                 {
                     id: "2",
                     creator: "Dat Leo fake 2",
-                    comment: 'Day la comment 12',
+                    comment: "Day la comment 12",
                     likes: 120,
                     replies: 121,
                     liked: true,
                     timestamp: "2019-01-04 14:00:00"
                 }
             ];
-            console.log("[Likes] list", result);
+            console.log("[Comment] list", result);
             // set to mutation
             commit(mutationTypes.SOCIAL.SET_SOCIAL_COMMENTS_LIST, result);
         } catch (err) {
-            console.log("[Likes] list.err", err);
+            console.log("[Comment] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_MEDIAS.LIST]({ commit }, payload) {
+        try {
+            // const result = await new Comments(this.$axios)[actionTypes.BASE.LIST](payload);
+            const result = [{
+                    id: "1",
+                    creator: "Dat Leo",
+                    type: "image",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                },
+                {
+                    id: "2",
+                    creator: "Dat Leo 1",
+                    type: "image",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                },
+                {
+                    id: "3",
+                    creator: "Dat Leo 1",
+                    type: "video",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                }
+            ];
+            console.log("[Medias] list", result);
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_MEDIAS_LIST, result);
+        } catch (err) {
+            console.log("[Medias] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_NOTIFICATIONS.LIST]({ commit }, payload) {
+        try {
+            // const result = await new Comments(this.$axios)[actionTypes.BASE.LIST](payload);
+            const result = [{
+                    id: "1",
+                    creator: "Dat Leo",
+                    type: "image",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                },
+                {
+                    id: "2",
+                    creator: "Dat Leo 1",
+                    type: "image",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                },
+                {
+                    id: "3",
+                    creator: "Dat Leo 1",
+                    type: "video",
+                    thumd: "https://picsum.photos/2560/1440",
+                    url: "https://picsum.photos/2560/1440"
+                }
+            ];
+            console.log("[Medias] list", result);
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_NOTIFICATIONS_LIST, result);
+        } catch (err) {
+            console.log("[Medias] list.err", err);
             return err;
         }
     }
@@ -269,10 +338,18 @@ const mutations = {
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_SHARES_LIST](state, _sharesList) {
         state.sharesList = _sharesList;
-        W;
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_COMMENTS_LIST](state, _commentsList) {
         state.commentsList = _commentsList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_MEDIAS_LIST](state, _mediasList) {
+        state.mediasList = _mediasList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_NOTIFICATIONS_LIST](
+        state,
+        _notificationsList
+    ) {
+        state.notificationsList = _notificationsList;
     }
 };
 
