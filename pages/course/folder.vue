@@ -95,7 +95,7 @@
 
         data() {
             return {
-                isAuthenticated: false,
+                isAuthenticated: true,
                 showModalNew: false,
                 time1: null,
                 time2: null,
