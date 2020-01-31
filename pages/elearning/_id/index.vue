@@ -1,6 +1,8 @@
 <template>
     <div class="container">
         <h1>{{title}}</h1>
+        <div class="info">
+        </div>
 
         <ElearningSliderTab :lessons="sciences" :swiperOptions="sliderOptions" title="Bài giảng cùng giáo viên"/>
         <ElearningSliderTab :lessons="sciences" :swiperOptions="sliderOptions" title="Bài giảng liên quan" class="mt-5"/>
