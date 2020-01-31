@@ -1,6 +1,9 @@
 <template>
     <div class="elearning-item">
         <img :src="data.image" alt/>
+        <div class="video" v-if="data.video">
+            <IconVideo2/>
+        </div>
         <div class="content">
             <n-link class="title" to>{{data.name}}</n-link>
             <div class="name">
@@ -38,13 +41,15 @@
     import IconSave from "~/assets/svg/icons/save.svg?inline";
     import IconShare from "~/assets/svg/icons/share.svg?inline";
     import IconHeart from "~/assets/svg/icons/heart.svg?inline";
+    import IconVideo2 from "~/assets/svg/icons/video2.svg?inline";
 
     export default {
         components: {
             IconDots,
             IconShare,
             IconSave,
-            IconHeart
+            IconHeart,
+            IconVideo2
         },
 
         props: {
