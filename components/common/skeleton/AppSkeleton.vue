@@ -1,5 +1,5 @@
 <template>
-  <div class="app-skeleton animation">
+  <div v-if="loading" class="app-skeleton" :class="classes">
     <div class="app-skeleton__header">
       <div class="app-skeleton__avatar"></div>
       <div>
@@ -19,7 +19,24 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    active: {
+      type: Boolean,
+      default: true
+    },
+    loading: Boolean
+  },
+
+  computed: {
+    classes() {
+      return {
+        'active': this.active,
+        'animation': this.loading,
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss">
