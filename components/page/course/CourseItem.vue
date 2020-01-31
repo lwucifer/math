@@ -48,5 +48,5 @@
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/course/_course-detail.scss";
+    @import "~/assets/scss/components/course/_course-item.scss";
 </style>

@@ -1,0 +1,26 @@
+.elearning-account h1 {
+    margin-bottom: 2rem;
+}
+.elearning-account__toolbar {
+    display: flex;
+    align-items: center;
+    margin: 2.5rem 0;
+}
+.elearning-account__categories a {
+    display: inline-block;
+    margin-right: 3rem;
+    cursor: pointer;
+}
+.elearning-account__toolbar .app-select {
+    margin-right: 2rem;
+}
+.elearning-account__toolbar .btn {
+    margin-right: 3rem;
+}
+.elearning-account__toolbar .form-group {
+    margin-bottom: 0;
+}
+.elearning-account__toolbar .form-control,
+.elearning-account__toolbar .app-select {
+    height: 3.5rem;
+}

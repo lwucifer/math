@@ -1,221 +1,139 @@
 <template>
-    <div class="container mb-6">
+    <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <AsideBox title="Trường của tôi" class="school__side">
-                    <div v-for="(item, index) in myschools" class="mb-3">
-                        <n-link slot="title" to>{{item.name}}</n-link>
-                    </div>
-                    <app-button class="timeline-aside-btn mt-4" fullWidth>Tạo trường mới</app-button>
-                </AsideBox>
+                <CourseSide/>
             </div>
             <div class="col-md-9">
-                <SchoolAbout :school="school"/>
-
-                <div v-if="school.jobs.length > 0" class="mt-6 school-jobs">
-                    <h3>Thông tin tuyển dụng</h3>
-                    <div class="school-about__content-job" v-for="item in school.jobs">
-                        <n-link to>{{item.name}}</n-link>
+                <div class="course-detail__main">
+                    <div class="course-detail__toolbar">
+                        <span class="h3">Khóa học</span>
+                    </div>
+                    <div class="course-detail__content">
+                        <h3 class="title">Nội dung khóa học</h3>
+                        <div class="content">
+                            <div class="chapter" v-for="(chapter, i) in chapters" :class="active_el == chapter.id ? 'active' : ''">
+                                <div class="chapter-title">
+                                    <div>
+                                        <IconList/>
+                                        <strong>Chương {{i + 1}}:</strong>
+                                        <span>{{chapter.name}}</span>
+                                    </div>
+                                    <div class="actions">
+                                        <a @click="active(chapter.id)" :class="active_el == chapter.id ? 'active' : ''">
+                                            <IconUp/></a>
+                                        <a @click="remove(chapter.id)"><IconClose/></a>
+                                    </div>
+                                </div>
+                                <div class="lessons">
+                                    <div class="lesson" v-for="(lesson, j) in chapter.lessons">
+                                        <div class="lesson-title">
+                                            <IconListDark/>
+                                            <strong>Bài {{j + 1}}:</strong>
+                                            <span>{{lesson.name}}</span>
+                                        </div>
+                                        <div class="lesson-file">
+                                            <a href class="active">Upload video</a>
+                                            <a href>Upload tài liệu</a>
+                                        </div>
+                                        <div class="lesson-upload" v-if="lesson.file">
+                                            <span class="pr-3">{{lesson.file}}</span>
+                                            <span class="color-primary"><IconTick/> Upload thành công</span>
+                                        </div>
+                                        <div class="lesson-upload" v-else>
+                                            <app-button size="sm" square class="mr-3">Chọn file</app-button>
+                                            <span>Lưu ý: Chỉ upload video <3GB, dịnh dạng .mp4</span>
+                                        </div>
+                                    </div>
+                                    <a href class="btn-plus"><IconPlus/><span>Thêm bài giảng</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href class="btn-plus"><IconPlus/><span>Thêm chương</span></a>
                     </div>
                 </div>
-
-                <PostListSlider :posts="posts" :swiperOptions="sliderOptions" :showName="true" :title="'Tin tức - sự kiện'" class="slider-box"/>
-                <PostListSlider :posts="posts" :swiperOptions="sliderOptions" :showName="true" :title="'Sáng kiến - kinh nghiệm'"  class="slider-box"/>
-                <PostListSlider :posts="posts" :swiperOptions="sliderOptions" :showName="true" :title="'Văn bản pháp luật'" class="slider-box"/>
-
-                <PostSlider :images="images" :swiperOptions="sliderOptions2" :title="'Thư viện'" class="slider-box"/>
-                <PostSlider :images="images" :swiperOptions="sliderOptions2" :title="'Thư viện ảnh'" class="slider-box"/>
-                <PostSlider :images="videos" :swiperOptions="sliderOptions2" :title="'Video'"  class="slider-box"/>
+                <div class="course-detail__toolbar-bottom">
+                    <app-button color="info" square>Quay lại</app-button>
+                    <app-button color="white" square class="ml-auto mr-4">Lưu lại</app-button>
+                    <app-button color="primary" square>Tiếp tục</app-button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import SchoolDetail from "~/components/page/school/SchoolDetail";
-    import SchoolAbout from "~/components/page/school/SchoolAbout";
-    import PostSlider from "~/components/page/timeline/post/PostSlider";
-    import PostListSlider from "~/components/page/timeline/post/PostListSlider";
-    import AsideBox from "~/components/layout/asideBox/AsideBox";
+    import CourseSide from "~/components/page/course/CourseSide";
+    import IconList from "~/assets/svg/icons/list.svg?inline";
+    import IconListDark from "~/assets/svg/icons/list-dark.svg?inline";
+    import IconPlus from "~/assets/svg/icons/plus.svg?inline";
+    import IconUp from "~/assets/svg/icons/up.svg?inline";
+    import IconClose from "~/assets/svg/icons/close.svg?inline";
+    import IconTick from "~/assets/svg/icons/tick.svg?inline";
     import {mapState} from 'vuex';
     import * as actionTypes from '~/utils/action-types';
 
     export default {
-        name: "School",
-
-        watchQuery: ["school_id"],
+        name: "Course",
 
         components: {
-            SchoolDetail,
-            AsideBox,
-            PostSlider,
-            PostListSlider,
-            SchoolAbout
+            CourseSide,
+            IconListDark,
+            IconList,
+            IconPlus,
+            IconUp,
+            IconClose,
+            IconTick
         },
 
         data() {
             return {
-                isAuthenticated: true,
-                school: {
-                    id: '1',
-                    name: 'Đại học Đại Nam',
-                    logo: 'https://picsum.photos/171/171',
-                    avatar: 'https://picsum.photos/251/251',
-                    province: 'Hà Nội',
-                    district: 'Hà Đông',
-                    ward: 'Phú Lãm',
-                    address: '69 ',
-                    description: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet libero rutrum, aliquam massa nec, egestas lacus. Aliquam tristique mollis turpis non tempor.</p><br/>' +
-                        '<p><b>Cơ sở chính:</b> Phú Lãm, Hà Đông, Hà Nội</p>' +
-                        '<p><b>Cơ sở 1:</b> 56 Vũ Trọng Phụng, Thanh Xuân, Hà Nội</p>' +
-                        '<p><b>Điện thoại:</b> (024) 35577799 - Fax: (024) 35578759</p>' +
-                        '<p><b>Email:</b> dnu@dainam.edu.vn</p>',
-                    level: 1,
-                    teachers: 10,
-                    students: 1000,
-                    status: 1,
-                    jobs: [
-                        {
-                            id: 1,
-                            name: 'Tuyển 01 giáo viên tiếng Anh',
-                        },
-                        {
-                            id: 2,
-                            name: 'Tuyển 05 đầu bếp căng tin',
-                        }
-                    ]
-                },
-                myschools: [
+                isAuthenticated: false,
+                active_el: 1,
+                chapters: [
                     {
                         id: 1,
-                        name: 'Đại học Đại Nam',
+                        name: 'Tên chương',
+                        lessons: [
+                            {
+                                id: 1,
+                                name: 'Giới thiệu chung',
+                                file: ''
+                            },
+                            {
+                                id: 2,
+                                name: 'Mở đầu',
+                                file: 'Bài 1.mp4'
+                            }
+                        ]
                     },
-                    {
-                        id: 2,
-                        name: 'Trung tâm tiếng Anh Appolo',
-                    }
-                ],
-                sliderOptions: {
-                    spaceBetween: 10,
-                    slidesPerView: 4,
-                    setWrapperSize: true,
-                    autoHeight: true,
-                    watchOverflow: true,
-                    navigation: false,
-                    pagination: {
-                        el: '.swiper-pagination',
-                    },
-                    showName: true
-                },
-                sliderOptions2: {
-                    spaceBetween: 10,
-                    slidesPerView: 4,
-                    setWrapperSize: true,
-                    autoHeight: true,
-                    watchOverflow: true
-                },
-                posts: [
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 1,
-                        name: "Thông báo: Tổ chức thi lần 3 học phần điều kiện tốt nghiệp TOEIC và Nguyên lý CBCN Mác",
-                    },
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 2,
-                        name: "ĐH Đại Nam phát động tuần lễ “nói không” với túi nilon và đồ nhựa sử dụng 1 lần",
-                    },
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 3,
-                        name: "Thông báo: Tổ chức thi lần 3 học phần điều kiện tốt nghiệp TOEIC và Nguyên lý CBCN Mác",
-                    },
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 4,
-                        name: "ĐH Đại Nam phát động tuần lễ “nói không” với túi nilon và đồ nhựa sử dụng 1 lần",
-                    },
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 5,
-                        name: "Thông báo: Tổ chức thi lần 3 học phần điều kiện tốt nghiệp TOEIC và Nguyên lý CBCN Mác",
-                    },
-                    {
-                        image_type: "image",
-                        image: "https://picsum.photos/200/120",
-                        id: 6,
-                        name: "ĐH Đại Nam phát động tuần lễ “nói không” với túi nilon và đồ nhựa sử dụng 1 lần",
-                    },
-                ],
-                images: [
-                    {
-                        id: 1,
-                        type: "image",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 2,
-                        type: "image",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 3,
-                        type: "image",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 4,
-                        type: "image",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 5,
-                        type: "image",
-                        src: "https://picsum.photos/200/120"
-                    },
-                ],
-                videos: [
-                    {
-                        id: 1,
-                        type: "video",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 2,
-                        type: "video",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 3,
-                        type: "video",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 4,
-                        type: "video",
-                        src: "https://picsum.photos/200/120"
-                    },{
-                        id: 5,
-                        type: "video",
-                        src: "https://picsum.photos/200/120"
-                    },
-                ],
+                ]
             };
         },
         computed: {
             ...mapState("auth", ["loggedUser"]),
-            classes() {
-                return {
-                    "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
-                    "col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4": this.isAuthenticated,
-                };
-            }
         },
 
         watch: {},
 
-        methods: {}
+        methods: {
+            active(id)  {
+                if (this.active_el == id) {
+                    this.active_el = null;
+                } else {
+                    this.active_el = id;
+                }
+            },
+            remove(id)  {
+                const that = this;
+                that.chapters = _.filter(that.chapters, function(item) {
+                    return item.id !== id;
+                });
+            }
+        }
     };
 </script>
 
 <style>
-    @import "~/assets/scss/components/school/_school.scss";
+    @import "~/assets/scss/components/course/_course-detail.scss";
 </style>
