@@ -291,6 +291,7 @@ const actions = {
             return err;
         }
     },
+    
     async [actionTypes.SOCIAL_NOTIFICATIONS.LIST]({ commit }, payload) {
         try {
             // const result = await new Comments(this.$axios)[actionTypes.BASE.LIST](payload);

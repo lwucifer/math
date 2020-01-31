@@ -138,8 +138,8 @@ export default {
       default: 0
     },
     content: {
-      type: Number,
-      default: 0
+      type: String,
+      default: ''
     }
   },
 

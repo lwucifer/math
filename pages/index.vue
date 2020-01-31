@@ -7,22 +7,30 @@
         <div class="col-md-8">
           <PostEditor />
 
-          <app-skeleton class="mb-4"></app-skeleton>
+          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
 
-          <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
-            <PostImage
-              :images="post.attachments.map(item => ({ id: item.id, type: item.object, src: item.thumb }))"
-              class="my-4"
-              @click-item="imageObj => handleClickImage(imageObj, post)"
-            />
-          </Post>
-          <Post class="mb-4" v-for="post in postsList" :key="post.label"
-          :fullname="post.creator.fullname"
-          :updated="post.updated"
-          :likes="post.likes"
-          :comments="post.comments"
-          :content="post.content">
-          </Post>
+          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
+
+          <template v-if="!loading">
+            <Post
+              v-for="post in postsList"
+              class="mb-4"
+              :key="post.label"
+              :fullname="post.creator && post.creator.fullname"
+              :updated="post.updated"
+              :likes="post.likes"
+              :comments="post.comments"
+              :content="post.content"
+            >
+              <PostImage
+                v-if="post.attachments && post.attachments.length"
+                slot="media-content"
+                class="my-4"
+                :images="post.attachments"
+                @click-item="imageObj => handleClickImage(imageObj, post)"
+              />
+            </Post>
+          </template>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
@@ -60,7 +68,7 @@
             <Post>
               <template slot="media-content">
                 <PostImage
-                  :images="[{ type: 'image', src: 'https://picsum.photos/1920/1080'}]"
+                  :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
                 />
@@ -73,8 +81,8 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/361/361'},
-                    { type: 'image', src: 'https://picsum.photos/361/361'},
+                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
+                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -88,9 +96,9 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/546/362'},
-                    { type: 'image', src: 'https://picsum.photos/179/179'},
-                    { type: 'image', src: 'https://picsum.photos/179/179'},
+                    { object: 'image', thumb: 'https://picsum.photos/546/362'},
+                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
+                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -104,10 +112,10 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/555/555'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/555/555'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -121,11 +129,11 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/729/437'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/729/437'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -142,7 +150,7 @@
             :component-class="{ 'post-detail-modal': true }"
             @close="handleCloseModal"
           >
-            <PostDetail slot="content" :images="timelineSliderItems" @click-close="handleCloseModal" />
+            <PostDetail v-if="modalDetailShow" slot="content" :post="dataModalDetail" @click-close="handleCloseModal" @click-prev="handleClickPrev" @click-next="handleClickNext"/>
           </app-modal>
         </div>
 
@@ -236,8 +244,9 @@ export default {
     PostDetail,
     PostImage
   },
+  
   async fetch({ params, query, store }) {
-    console.log('watchQuery')
+    console.log("watchQuery");
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
@@ -245,9 +254,11 @@ export default {
 
   data() {
     return {
+      loading: true,
       banners: new Array(3).fill(BannerImage, 0),
       coursesTab: 0,
       modalDetailShow: false,
+      dataModalDetail: {},
       messages: [
         {
           image: "https://picsum.photos/64/64",
@@ -353,14 +364,22 @@ export default {
   },
 
   mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
+
     if (process.browser) {
-      window.addEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
+      window.addEventListener("popstate", event =>
+        setTimeout(() => this.handlePopstate(event))
+      );
     }
   },
 
   beforeDestroy() {
     if (process.browser) {
-      window.removeEventListener("popstate", event => setTimeout(() => this.handlePopstate(event)));
+      window.removeEventListener("popstate", event =>
+        setTimeout(() => this.handlePopstate(event))
+      );
     }
   },
 
@@ -370,16 +389,18 @@ export default {
      * @param { Object } imageObj - { type: image | video, post: post object }
      */
     handleClickImage(imageObj, post) {
-      console.log("handleClickImage", imageObj);
       if (typeof window.history.pushState != "undefined") {
+        this.dataModalDetail = post;
+        this.modalDetailShow = true;
+
         window.history.pushState(
           { theater: true },
           "",
           `${window.location.origin}/post?photo_id=${imageObj.id}`
         );
+      } else {
+        this.$router.push(`${window.location.origin}/post?photo_id=${imageObj.id}`)
       }
-
-      this.modalDetailShow = true;
     },
 
     /**
@@ -414,6 +435,21 @@ export default {
       }
 
       this.modalDetailShow = false;
+      this.dataModalDetail = {};
+    },
+
+    /**
+     * on click prev arrow on modal post detail -> get prev image info
+     */
+    handleClickPrev() {
+      console.log("handleClickPrev")
+    },
+
+    /**
+     * on click next arrow on modal post detail -> get next image info
+     */
+    handleClickNext() {
+      console.log("handleClickNext")
     }
   }
 };
