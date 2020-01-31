@@ -87,6 +87,13 @@
     font-weight: normal;
 }
 
+.btn--color-red {
+    background-color: #fff;
+    color: $color-red;
+    border: 1px solid $color-red;
+    font-weight: normal;
+}
+
 
 // Border-radius
 .btn--square {

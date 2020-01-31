@@ -15,33 +15,7 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide elearning-slider-tab-container" v-for="(item, index) in list" :key="index">
                     <div class="slider-item" @click="$emit('click-item', item, index)">
-                        <div class="elearning-slider-tab__image">
-                            <img :src="item.image" alt/>
-                            <div class="status-online" v-if="item.onlineStatus && item.online === 1">
-                                {{item.onlineStatus}}
-                            </div>
-                            <div class="online" v-if="item.online">Trực tiếp</div>
-                        </div>
-                        <div class="bottom">
-                            <n-link class="slider-title" v-if="item.name && currentSwiperOptions.showName" to>
-                                {{item.name}}
-                            </n-link>
-
-                            <div class="elearning-slider-tab_teacher">
-                                <div>
-                                    <app-avatar :src="item.teacher.avatar" :size="20"/>
-                                    <span class="name">{{item.teacher.name}}</span>
-                                </div>
-                                <div>
-                                    <div class="stars">
-                                        <IconStar width="12" height="12" v-for="index in item.teacher.star" :key="index"/>
-                                        <IconStarO width="12" height="12" v-for="index in (5 - item.teacher.star)" :key="index"/>
-                                    </div>
-                                    <span><strong>{{item.teacher.star}}</strong> ({{item.teacher.starAmount}})</span>
-                                </div>
-                                <div class="price">{{item.price}}đ</div>
-                            </div>
-                        </div>
+                        <ElearningItem2 :item="item" />
                     </div>
                 </div>
             </div>
@@ -59,6 +33,7 @@
 
 <script>
     import {assignIn} from "lodash";
+    import ElearningItem2 from "~/components/page/elearning/ElearningItem2";
     import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
     import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
     import IconBooks from "~/assets/svg/icons/books.svg?inline";
@@ -74,6 +49,7 @@
             IconNote,
             IconStarO,
             IconStar,
+            ElearningItem2
         },
 
         props: {
