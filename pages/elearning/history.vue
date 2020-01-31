@@ -2,33 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <div class="elearning-history__side">
-                    <div class="elearning-history__avatar">
-                        <app-avatar :src="teacher.avatar" :size="125"/>
-                        <a href>
-                            <IconPhoto/>
-                        </a>
-                    </div>
-                    <p class="elearning-history__name">{{teacher.name}}</p>
-                    <div class="elearning-history__side-links">
-                        <n-link class="link-gray" to>
-                            <IconUser3/>
-                            Thông tin tài khoản
-                        </n-link>
-                        <n-link class="link-gray" to>
-                            <IconBell/>
-                            Thông báo
-                        </n-link>
-                        <n-link class="link-gray active" to>
-                            <IconHistory/>
-                            Lịch sử giao dịch
-                        </n-link>
-                        <n-link class="link-gray" to>
-                            <IconExclamation/>
-                            Trợ giúp
-                        </n-link>
-                    </div>
-                </div>
+                <ElearningSlide active="3" :teacher="teacher"/>
             </div>
             <div class="col-md-9">
                 <div class="elearning-history__main">
@@ -79,6 +53,7 @@
 
 <script>
     import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
+    import ElearningSlide from "~/components/page/elearning/ElearningSlide";
     import IconExclamation from "~/assets/svg/icons/exclamation.svg?inline";
     import IconUser3 from "~/assets/svg/icons/user3.svg?inline";
     import IconHistory from "~/assets/svg/icons/history.svg?inline";
@@ -94,6 +69,7 @@
 
         components: {
             ElearningSliderTab,
+            ElearningSlide,
             IconHistory,
             IconBell,
             IconUser3,

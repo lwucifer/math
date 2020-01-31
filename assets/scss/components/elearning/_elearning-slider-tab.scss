@@ -13,46 +13,6 @@
             }
         }
     }
-    .elearning-slider-tab__image {
-        position: relative;
-    }
-    .status-online {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        height: 3.5rem;
-        font-weight: bold;
-        font-size: 1.2rem;
-        color: #fff;
-        padding: 0 3rem;
-        z-index: 9;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        background-color: rgba(50, 175, 133,.69);
-    }
-    .online {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background-color: $color-red;
-        color: #fff;
-        padding: .2rem .8rem;
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        &:before {
-            content: '';
-            display: inline-block;
-            background-color: #fff;
-            height: .6rem;
-            width: .6rem;
-            border-radius: 50%;
-            margin-right: .5rem;
-        }
-    }
 }
 .elearning-slider.post-slider  {
     margin-left: -2rem;
@@ -65,36 +25,8 @@
         width: 4rem;
     }
 }
-.elearning-slider-tab_teacher >div {
-    display: flex;
-    align-items: center;
-    padding-top: 0.5rem;
-    .name {
-        color: #999;
-        padding-left: .5rem;
-    }
-    .stars {
-        + span {
-            margin-left: auto;
-        }
-        svg {
-            margin-right: .5rem;
-        }
-    }
-    &.price {
-        color: $color-red;
-        justify-content: flex-end;
-        font-size: 1.6rem;
-        font-weight: bold;
-    }
-}
 .elearning-slider-tab-container {
     .slider-item {
-        background-color: #fff;
-        box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
         margin: 1rem 0;
-    }
-    .bottom {
-        padding: 0 1rem 1rem;
     }
 }

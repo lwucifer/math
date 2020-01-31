@@ -1,6 +1,6 @@
 <template>
     <div class="app-date-picker">
-        <label>{{label}}</label>
+        <label v-if="label">{{label}}</label>
         <date-picker v-model="text" @change="change()" valueType="format" format="DD/MM/YYYY"></date-picker>
     </div>
 </template>
