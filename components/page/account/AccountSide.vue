@@ -3,7 +3,7 @@
         <div class="elearning-side__avatar">
             <app-avatar :src="teacher.avatar" :size="125"/>
             <a href>
-                <IconPhoto width="14" height="14"/>
+                <IconPhoto/>
             </a>
         </div>
         <p class="elearning-side__name">{{teacher.name}}</p>
