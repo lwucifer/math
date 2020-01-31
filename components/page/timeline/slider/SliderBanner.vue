@@ -49,6 +49,8 @@ export default {
 };
 </script>
 
+<style src="swiper/dist/css/swiper.css"></style>
+
 <style lang="scss">
 @import "~/assets/scss/components/UI/_slider-banner.scss";
 </style>
