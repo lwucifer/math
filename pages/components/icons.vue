@@ -88,7 +88,7 @@ export default {
 
     convertIconPath(path) {
       const fileName = path.replace("./", "");
-      return `~assets/svg/icons/${fileName}?inline`;
+      return `~/assets/svg/icons/${fileName}?inline`;
     }
   }
 };
