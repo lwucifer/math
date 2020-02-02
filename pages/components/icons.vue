@@ -60,14 +60,12 @@ export default {
 
     req.keys().forEach(key => {
       const icon = req(key);
-      console.log("key", key);
       this.icons.push({ path: key, icon });
     });
   },
 
   methods: {
     handleClick(path) {
-      console.log("handleClick", path);
       this.dataModal = { path };
       this.modal = true;
     },
