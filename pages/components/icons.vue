@@ -10,7 +10,7 @@
         />
       </div>
 
-      <app-modal v-if="modal" @close="hideModal">
+      <app-modal v-if="modal" @close="hideModal" :width="600">
         <div class="modal-content" slot="content">
           <code>
             <div v-text="`<template>`"></div>
@@ -21,7 +21,7 @@
             <div v-text="`</template>`"></div>
             <br />
             <div v-text="`<script>`"></div>
-            <div>{{ `import ${convertIconComponentName(dataModal.path)} ${convertIconPath(dataModal.path)};` }}</div>
+            <div>{{ `import ${convertIconComponentName(dataModal.path)} from '${convertIconPath(dataModal.path)}';` }}</div>
             <br />
             <div>
               export default {
