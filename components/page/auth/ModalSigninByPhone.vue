@@ -104,15 +104,20 @@ export default {
   methods: {
     ...mapActions("auth", ["login", "status"]),
     nextlogin() {
-      debugger;
       const that = this;
       if (that.step === 2 && that.password && that.phone) {
         let data = {
-          phone: that.phone,
+          phone_number: that.phone,
           password: that.password,
           firebase_token: ""
         };
-        that.login(data);
+        const doAdd = that.login(data).then(result => {
+          debugger;
+          if (result.success == 1) {
+            this.$emit("click-close");
+          } else {
+          }
+        });
       }
       if (that.step === 1) {
         if (that.phone.length > 10) {
@@ -120,7 +125,7 @@ export default {
         } else {
           that.phoneError = false;
           that.step = that.phone ? 2 : 1;
-          that.status(that.phone);
+          // that.status({ phone: that.phone });
         }
       }
     },

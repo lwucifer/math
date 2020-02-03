@@ -19,15 +19,16 @@ const getters = {};
  * initial actions
  */
 const actions = {
-    async [actionTypes.AUTH.LOGIN]({ commit }, { phone, password, firebase_token }) {
+    async [actionTypes.AUTH.LOGIN]({ commit }, { phone_number, password, firebase_token }) {
         const result = await new auth(this.$axios).login({
-            phone,
+            phone_number,
             password,
             firebase_token
         });
         if (result.success) {
-            commit(mutationTypes.AUTH.SET_LOGIN, result.data);
+            commit(mutationTypes.AUTH.SET_LOGIN, result);
         }
+        return result;
     },
 
     async [actionTypes.AUTH.LOGOUT]({ commit }) {
@@ -37,9 +38,8 @@ const actions = {
         }
     },
 
-    async [actionTypes.AUTH.STATUS]({ commit }, phone) {
-        debugger;
-        const result = await new auth(this.$axios).status(phone);
+    async [actionTypes.AUTH.STATUS]({ commit }, { phone }) {
+        const result = await new auth(this.$axios).status({ phone });
         if (result.success) {
             commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
         }
