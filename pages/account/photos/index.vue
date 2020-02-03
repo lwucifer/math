@@ -8,13 +8,13 @@
             <div class="col-md-8">
                 <div class="account__main">
                     <ul class="account__tab-nav">
-                        <li><a class="active">Timeline</a></li>
+                        <li><n-link :to="'/account'">Timeline</n-link></li>
                         <li><n-link :to="'/account/friends'">Bạn bè</n-link></li>
-                        <li><n-link :to="'/account/photos'">Ảnh</n-link></li>
+                        <li><a class="active">Ảnh</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <AccountTimeline/>
+                        <AccountPhotos/>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
 <script>
 import AccountCover from "~/components/page/account/AccountCover";
 import AccountSide from "~/components/page/account/AccountSide";
-import AccountTimeline from "~/components/page/account/AccountTimeline";
+import AccountPhotos from "~/components/page/account/AccountPhotos";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -33,7 +33,7 @@ import * as actionTypes from "~/utils/action-types";
 export default {
   components: {
     AccountSide,
-    AccountTimeline,
+    AccountPhotos,
     AccountCover,
   },
 

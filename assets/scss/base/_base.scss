@@ -186,9 +186,9 @@ hr {
         visibility: hidden;
     }
     label {
-        width: 110px;
+        min-width: 10rem;
         font-size: 1.6rem;
-        margin-right: 2rem;
+        margin-right: 1.5rem;
     }
 }
 .form-group-inline {
@@ -236,4 +236,32 @@ hr {
 .icon {
     width: 1em;
     height: 1em;
+}
+
+
+.color-999 {
+    color: #999 !important;
+}
+
+// Custom width
+.w-auto {
+    width: auto !important;
+}
+.min-w-0 {
+    min-width: 0 !important;
+}
+.max-w-170 {
+    max-width: 17rem !important;
+}
+.max-w-150 {
+    max-width: 15rem !important;
+}
+.max-w-120 {
+    max-width: 12rem !important;
+}
+.max-w-100 {
+    max-width: 10rem !important;
+}
+.w-170 {
+    width: 17rem !important;
 }

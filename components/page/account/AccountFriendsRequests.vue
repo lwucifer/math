@@ -1,20 +1,13 @@
 <template>
 	<div class="account-friends">
-		<div class="account-friends__title">
+		<div class="account-friends__title d-block mb-4">
 			<h3>Bạn bè</h3>
-			<n-link :to="'/account/friends/requests'" 
-			class="btn btn--size-md btn--color-white btn--square btn--normal">
-				Lời mời kết bạn <span>8</span>
-			</n-link>
-		</div>
-		<div class="account-friends__search form-group">
-			<input class="form-control" type="" v-model="name" placeholder="Tìm kiếm bạn bè">
-			<a><span><IconSearch/></span></a>
+			<p class="color-999 mt-2">Bạn có 87 lời mời kết bạn</p>
 		</div>
 		<div class="account-friends__list">
 			<div class="row">
 				<div class="col-md-6 col-xs-12" v-for="item in friends">
-					<AccountFriendsItem :data="item"/>
+					<AccountFriendsRequestsItem :data="item"/>
 				</div>
 			</div>
 		</div>
@@ -22,13 +15,11 @@
 </template>
 
 <script>
-import AccountFriendsItem from "~/components/page/account/AccountFriendsItem";
-import IconSearch from '~/assets/svg/icons/search.svg?inline';
+import AccountFriendsRequestsItem from "~/components/page/account/AccountFriendsRequestsItem";
 
 export default {
   components: {
-  	AccountFriendsItem,
-  	IconSearch
+  	AccountFriendsRequestsItem,
   },
 
   data() {

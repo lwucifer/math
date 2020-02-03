@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <AccountCover/>
+        <AccountCover :status="status"/>
         <div class="row">
             <div class="col-md-4">
                 <AccountSide account="account"/>
@@ -39,7 +39,8 @@ export default {
 
   data() {
     return {
-      account: {
+        status: 3,
+        account: {
             id: '1',
             name: 'Dat Pham',
             avatar: 'https://picsum.photos/170/170',
@@ -57,5 +58,3 @@ export default {
 <style lang="scss">
     @import "~/assets/scss/components/account/_account.scss";
 </style>
-
-
