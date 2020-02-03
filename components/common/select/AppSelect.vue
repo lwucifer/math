@@ -1,39 +1,74 @@
 <template>
   <div class="app-select" :class="classes" v-click-outside="hideOptions">
-    <div v-if="mode === 'tags'" class="app-select__selected" @click="handleClickSelected">
-      <div class="app-select__selected-tags">
-        <app-tag class="mb-2" v-for="id in value" :key="id">{{ id }}</app-tag>
+    <!-- TAGS MODE -->
+    <template v-if="mode === 'tags'">
+      <div class="app-select__selected" @click.self="handleClickSelected">
+        <span class="app-select__placeholder" v-if="!value.length">{{ $attrs.placeholder || '' }}</span>
+        <app-tag
+          v-for="(item, index) in selectedValues"
+          :key="item.value"
+          class="mb-2 mr-2"
+          show-close
+          @close="handleCloseTag(item, index)"
+        >{{ item.text }}</app-tag>
+
+        <div class="app-select__field">
+          <input
+            ref="search"
+            type="text"
+            autocomplete="off"
+            class="app-select__field__input"
+            v-model="search"
+            @input="handleInputSearch"
+          />
+          <!-- <span class="app-select__field__mirror">{{ search }}</span> -->
+        </div>
       </div>
 
-      <div class="app-select__field">
-        <input ref="search" type="text" autocomplete="off" class="app-select__field__input" v-model="search" @input="handleInputSearch">
-        <!-- <span class="app-select__field__mirror">{{ search }}</span> -->
-      </div>
-    </div>
+      <div class="app-select__options" v-show="active">
+        <div v-if="!optionsVisible.length" class="app-select__option">{{ emptyMessage }}</div>
 
-    <div v-else class="app-select__selected" tabindex="0" @click="handleClickSelected">
-      <span class="app-select__prepend" v-if="$slots.prepend">
-        <slot name="prepend" />
-      </span>
-      <span class="app-select__selected-value">{{ selectedText }}</span>
-      <span class="app-select__arrow">
-        <IconCaretDown />
-      </span>
-    </div>
-
-    <div class="app-select__options" v-show="active">
-      <div v-if="!options.length" class="app-select__option">{{ emptyMessage }}</div>
-      
-      <div
-        v-for="option in options"
-        class="app-select__option"
-        :key="option.value"
-        @click="handleClickOption(option)"
-      >
-        <slot v-if="$scopedSlots.option || $slot.option" name="option" :option="option" />
-        <template v-else>{{ option.text }}</template>
+        <div
+          v-for="option in optionsVisible"
+          v-show="value.findIndex(id => id === option.value)"
+          class="app-select__option"
+          :key="option.value"
+          @click="handleClickOption(option)"
+        >
+          <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
+          <template v-else>{{ option.text }}</template>
+        </div>
       </div>
-    </div>
+    </template>
+    <!-- END TAGS MODE -->
+
+    <!-- DEFAULT MODE -->
+    <template v-else>
+      <div class="app-select__selected" tabindex="0" @click="handleClickSelected">
+        <span class="app-select__prepend" v-if="$slots.prepend">
+          <slot name="prepend" />
+        </span>
+        <span class="app-select__selected-value">{{ selectedText }}</span>
+        <span class="app-select__arrow">
+          <IconCaretDown />
+        </span>
+      </div>
+
+      <div class="app-select__options" v-show="active">
+        <div v-if="!options.length" class="app-select__option">{{ emptyMessage }}</div>
+
+        <div
+          v-for="option in options"
+          class="app-select__option"
+          :key="option.value"
+          @click="handleClickOption(option)"
+        >
+          <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
+          <template v-else>{{ option.text }}</template>
+        </div>
+      </div>
+    </template>
+    <!-- END DEFAULT MODE -->
   </div>
 </template>
 
@@ -60,55 +95,63 @@ export default {
     value: [String, Number, Array],
     mode: {
       type: String,
-      default: '' // '' | 'tags'
+      default: "" // '' | 'tags'
     },
     emptyMessage: {
       type: String,
-      default: 'No option'
+      default: "No option"
     }
   },
 
   data: () => ({
     active: false,
-    search: ''
+    search: ""
   }),
 
   computed: {
     classes() {
       return {
-        'app-select__tags': this.mode === 'tags'
-      }
+        "app-select--tags": this.mode === "tags"
+      };
     },
 
     selectedText() {
-      const [selected = {}] = this.options.filter(item => item.value === this.value);
-      return selected && selected.text
+      const [selected = {}] = this.options.filter(
+        item => item.value === this.value
+      );
+      return selected && selected.text;
     },
 
     selectedValues() {
-      return this.values.map(id => {
-        const option = this.options.filter(option => option.value === id)
-      })
-    }
-  },
+      if (this.mode !== "tags") return;
+      return this.value.map(id => {
+        const [optionItem = {}] = this.options.filter(
+          option => option.value === id
+        );
+        return optionItem;
+      });
+    },
 
-  mounted() {
-    console.log('this', this)
+    optionsVisible() {
+      return this.options.filter(option => this.value.findIndex(id => id === option.value) === -1)
+    }
   },
 
   methods: {
     hideOptions() {
       this.active = false;
-      this.search = '';
+      this.search = "";
     },
 
-    chooseTag(option) {
-
+    unSelectOption(index) {
+      return this.value
+        .slice(0, index)
+        .concat(this.value.slice(index + 1, this.value.length));
     },
 
     handleClickOption(option) {
-      if (this.mode === 'tags') {
-        this.chooseTag(option);
+      if (this.mode === "tags") {
+        this.$emit("change", [...this.value, option.value]);
       } else {
         // on default mode
         this.$emit("change", option.value);
@@ -125,10 +168,14 @@ export default {
     handleInputSearch(e) {
       // Set width of input
       const el = e.target;
-      el.style.width = el.scrollWidth + 'px';
+      el.style.width = el.scrollWidth + "px";
 
       // Emit event to parent
-      this.$emit('search', e.target.value);
+      this.$emit("search", e.target.value);
+    },
+
+    handleCloseTag(id, index) {
+      this.$emit("change", this.unSelectOption(index));
     }
   }
 };

@@ -58,8 +58,21 @@
     user-select: none;
 }
 
+// Mode = 'tags'
+.app-select--tags {
+    .app-select__placeholder {
+        // line-height: 20px;
+    }
+    
+    .app-select__selected {
+        display: block;
+        white-space: normal;
+    }
+}
+
 .app-select__field {
     margin-left: 4px;
+    display: inline-block;
     
     &__input {
         width: 0.75em;
