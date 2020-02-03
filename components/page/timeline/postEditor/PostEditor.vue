@@ -12,8 +12,7 @@
 
     <app-divider class="my-3" />
 
-    <!-- <app-select :options="tagOptions" v-model="tag" style="width: 100%" class="mb-3"/> -->
-    <app-select mode="tags" :options="tagOptions" v-model="tag" style="width: 100%">
+    <app-select mode="tags" :options="tagOptions" v-model="tag" placeholder="Cùng với ai?" style="width: 100%">
       <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
         <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
         {{ option.text }}
@@ -63,12 +62,17 @@ export default {
   data() {
     return {
       editor: null,
+      tmpTag: 0,
       tag: [0],
       tagOptions: [
         { value: 0, text: 'Nguyen Tien Dat' },
         { value: 1, text: 'Nguyen Van A' },
-        { value: 2, text: 'Pham Van B' },
-        { value: 3, text: 'Nguyen Thi C' }
+        { value: 2, text: 'Nguyen Van B' },
+        { value: 3, text: 'Nguyen Van C' },
+        { value: 4, text: 'Nguyen Van D' },
+        { value: 5, text: 'Nguyen Van E' },
+        { value: 6, text: 'Nguyen Van F' },
+        { value: 7, text: 'Nguyen Van G' },
       ]
     };
   },
