@@ -7,6 +7,7 @@ export default {
     fullWidth: Boolean,
     square: Boolean,
     rounded: Boolean,
+    normal: Boolean,
     tag: {
       type: String,
       default: "button" // 'button', 'a'
@@ -30,6 +31,7 @@ export default {
   computed: {
     classes() {
       const sizeClasses = {
+        "btn--size-xs": this.size === "xs",
         "btn--size-sm": this.size === "sm",
         "btn--size-md": this.size === "md",
         "btn--size-lg": this.size === "lg",
@@ -63,6 +65,10 @@ export default {
         "btn--rouned": this.rounded
       };
 
+      const fontWeightClasses = {
+        "btn--normal": this.normal,
+      };
+
       if (this.flat) return { ...sizeClasses, "btn--flat": true };
       if (this.outline)
         return {
@@ -71,7 +77,7 @@ export default {
           ...outlineColorClasses,
           ...borderRadiusClasses
         };
-      return { ...sizeClasses, ...colorClasses, ...borderRadiusClasses };
+      return { ...sizeClasses, ...colorClasses, ...borderRadiusClasses, ...fontWeightClasses };
     }
   },
 

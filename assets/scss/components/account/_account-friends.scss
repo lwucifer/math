@@ -1,0 +1,47 @@
+.account-friends {
+	background-color: #fff;
+	padding: 1rem 2rem;
+}
+.account-friends__search {
+	margin-top: 2rem;
+	.form-control {
+		max-width: 35rem;
+		padding-left: 4rem;
+	}
+	a {
+		position: absolute;
+		left: 0;
+		display: flex;
+		align-items: center; 
+		height: 4rem;
+		padding: 0 1.5rem;
+		z-index: 9;
+		span {
+			display: block;
+			width: 1.6rem;
+			height: 1.6rem;
+		}
+	}
+}
+.account-friends__title {
+	display: flex;
+	align-items: center;
+	h3 {
+		font-size: 1.8rem;
+	}
+	.btn {
+		margin-left: auto;
+	    padding: .5rem 1.2rem;
+		>span {
+			font-weight: bold;
+			color: #fff;
+			background-color: $color-red;
+			width: 2.4rem;
+			height: 2.4rem;
+			margin-left: .5rem;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+	}
+}

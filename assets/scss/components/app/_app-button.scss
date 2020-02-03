@@ -35,8 +35,16 @@
 
 
 // Size of button
+.btn--size-xs {
+    height: 2.5rem;
+    font-size: 1.4rem;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0 1rem;
+}
+
 .btn--size-sm {
-    height: 3.5rem;
+    height: 3.3rem;
     font-size: 1.4rem;
 }
 
@@ -84,16 +92,24 @@
     background-color: #fff;
     color: #999;
     border: 1px solid #ccc;
-    font-weight: normal;
+}
+
+.btn--color-secondary {
+    background: #F9F9F9;
+    border: 1px solid #EEEEEE;
+    color: #666;
 }
 
 .btn--color-red {
     background-color: #fff;
     color: $color-red;
     border: 1px solid $color-red;
-    font-weight: normal;
 }
 
+
+.btn--normal {
+    font-weight: normal;
+}
 
 // Border-radius
 .btn--square {
