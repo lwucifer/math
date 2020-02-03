@@ -12,6 +12,16 @@
 
     <app-divider class="my-3" />
 
+    <!-- <app-select :options="tagOptions" v-model="tag" style="width: 100%" class="mb-3"/> -->
+    <app-select mode="tags" :options="tagOptions" v-model="tag" style="width: 100%">
+      <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+        <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+        {{ option.text }}
+      </div>
+    </app-select>
+
+    <app-divider class="my-3" />
+
     <div class="post-editor__toolbar">
       <button class="post-editor__toolbar-item image">
         <IconAddImage />
@@ -52,7 +62,14 @@ export default {
 
   data() {
     return {
-      editor: null
+      editor: null,
+      tag: [0],
+      tagOptions: [
+        { value: 0, text: 'Nguyen Tien Dat' },
+        { value: 1, text: 'Nguyen Van A' },
+        { value: 2, text: 'Pham Van B' },
+        { value: 3, text: 'Nguyen Thi C' }
+      ]
     };
   },
 

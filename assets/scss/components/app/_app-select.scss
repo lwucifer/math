@@ -12,19 +12,19 @@
     cursor: pointer;
     white-space: nowrap;
     height: 100%;
+    width: 100%;
+}
+
+.app-select__selected-value {
+    margin-right: 6px;
 }
 
 .app-select__arrow {
-    svg {
-        display: block;
-    }
-}
-
-.app-select__arrow {
-    margin-left: 6px;
+    margin-left: auto;
     user-select: none;
 
     svg {
+        display: block;
         fill: #c4c4c4;
     }
 }
@@ -56,4 +56,14 @@
 .app-select__prepend {
     margin-right: 5px;
     user-select: none;
+}
+
+.app-select__field {
+    margin-left: 4px;
+    
+    &__input {
+        width: 0.75em;
+        max-width: 100%;
+        border: 0;
+    }
 }
