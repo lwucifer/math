@@ -1,0 +1,116 @@
+<template>
+	<div class="account-friends">
+		<div class="account-friends__title">
+			<h3>Bạn bè</h3>
+			<app-button square color="white">Lời mời kết bạn <span>8</span></app-button>
+		</div>
+		<div class="account-friends__search form-group">
+			<input class="form-control" type="" v-model="name" placeholder="Tìm kiếm bạn bè">
+			<a><span><IconSearch/></span></a>
+		</div>
+		<div class="account-friends__list">
+			<div class="row">
+				<div class="col-md-6 col-xs-12" v-for="item in friends">
+					<AccountFriendsItem :data="item"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+import AccountFriendsItem from "~/components/page/account/AccountFriendsItem";
+import IconSearch from '~/assets/svg/icons/search.svg?inline';
+
+export default {
+  components: {
+  	AccountFriendsItem,
+  	IconSearch
+  },
+
+  data() {
+  	return {
+	  	name: '',
+	  	friends: [
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  		{
+	  			id: 1,
+	  			name: 'Scarlett Black',
+	  			mutual_friends: 69,
+	  			avatar: 'https://picsum.photos/100/100',
+	  		},
+	  	],
+	  }
+  },
+
+  computed: {
+  },
+
+  mounted() {},
+
+  methods: {}
+};
+</script>
+
+<style lang="scss">
+    @import "~/assets/scss/components/account/_account-friends.scss";
+</style>

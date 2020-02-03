@@ -30,6 +30,7 @@ export default {
   computed: {
     classes() {
       const sizeClasses = {
+        "btn--size-xs": this.size === "xs",
         "btn--size-sm": this.size === "sm",
         "btn--size-md": this.size === "md",
         "btn--size-lg": this.size === "lg",
