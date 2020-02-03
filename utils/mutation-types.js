@@ -5,7 +5,8 @@ export const AUTH = {
     SET_TOKEN: "setToken",
     SET_ACCESS_TOKEN: "setAccessToken",
     SET_OTP: "setAccessToken",
-    REMOVE_TOKEN: "removeToken"
+    REMOVE_TOKEN: "removeToken",
+    SET_ACCOUNT_STATUS: "setAccountStatus"
 };
 
 export const PUBLIC = {};

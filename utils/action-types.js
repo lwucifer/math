@@ -9,7 +9,8 @@ export const AUTH = {
     LOGIN: "login",
     REGISTER: "register",
     LOGOUT: "logout",
-    SENDOTP: "sendotp"
+    SENDOTP: "sendotp",
+    STATUS: "status"
 };
 
 export const AUTHEN_LDAP = {

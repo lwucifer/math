@@ -1,0 +1,61 @@
+.account-photos {
+	background-color: #fff;
+	padding: 1rem 2rem;
+}
+.account-photos__title {
+	display: flex;
+	align-items: center;
+	h3 {
+		font-size: 1.8rem;
+	}
+	.btn {
+		height: 3rem;
+		padding: 0 1rem;
+		margin-left: auto;
+	}
+}
+.account-photos__nav {
+	list-style: none;
+	display: flex;
+	margin-top: 1.7rem;
+	margin-bottom: 1.5rem;
+	li {
+		margin-right: 3rem;
+		a {
+			color: #999;
+			cursor: pointer;
+			&:hover {
+				color: #333;
+			}
+			&.active {
+				color: #333;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
+.account-photos__list {
+	.row >div {
+		line-height: 0
+	}
+	.row.photos {
+		margin-left: -0.3rem;
+		margin-right: -0.3rem;
+		.photo {
+			padding: 0.3rem;
+		}
+	}
+	.video-item {
+		position: relative;
+		.time {
+			position: absolute;
+			right: 1rem;
+			bottom: 1rem;
+			color: #fff;
+			background: rgba(0, 0, 0, 0.5);
+			padding: .5em 1rem;
+			line-height: 1;
+		}
+	}
+}

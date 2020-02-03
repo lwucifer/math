@@ -6,9 +6,20 @@
 }
 .account__side-item .row >div {
 	text-align: center;
+	a {
+		text-decoration: none;
+		color: #333;
+		&:hover {
+			color: $color-primary;
+		}
+	}
 }
-.account__side-item button {
+.account__side-item .btn {
+	color: #fff;
 	margin-top: 1rem;
+	&:hover {
+		color: #fff;
+	}
 }
 .account__side-item h3 span {
 	font-weight: normal;
@@ -38,50 +49,6 @@
 	padding: 1rem 2rem 2rem;
 	margin-bottom: 2rem;
 }
-.account__cover {
-	position: relative;
-}
-.change-cover {
-	position: absolute;
-	right: 1.5rem;
-	top: 1.5rem;
-}
-.account__avatar {
-	position: absolute;
-	left: 3rem;
-	bottom: -4.5rem;
-    display: flex;
-    align-items: center;
-    z-index: 9;
-}
-.account__avatar h3 {
-	color: #fff;
-	font-size: 2.5rem;
-	margin-left: 2rem;
-}
-.account__avatar .avatar {
-	position: relative;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    line-height: 0;
-    display: inline-block;
-    border: .4rem solid #fff;
-}
-.change-avatar {
-	position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5rem;
-    background: rgba(51, 51, 51, 0.7);
-    padding: .8rem;
-    transition: all 300ms;
-    text-align: center;
-    z-index: 9;
-}
-.account__avatar .avatar:hover .change-avatar{
-	bottom: 0;
-}
 
 .account__tab-nav >li> a.active {
 	font-weight: bold;
@@ -90,17 +57,20 @@
 .account__tab-nav >li> a:hover {
 	color: #32AF85;
 }
-.account__tab-nav >li> a{
-	height: 4.5rem;
-	line-height: 4.5rem;
-	display: inline-block;
-	padding: 0 2rem;
-	border-right: 1px solid #eee;
-	cursor: pointer;
-}
 .account__tab-nav {
 	list-style: none;
 	display: flex;
 	margin-bottom: 2rem;
 	background-color: #fff;
+	>li> a{
+		height: 4.5rem;
+		line-height: 4.5rem;
+		display: inline-block;
+		padding: 0 2rem;
+		border-right: 1px solid #eee;
+		cursor: pointer;
+		font-size: 1.6rem;
+	    color: #999;
+	    text-decoration: none;
+	}
 }
