@@ -14,7 +14,7 @@
             <div v-else>
                 <AsideBox title="Khóa học theo chủ đề" class="nav-links">
                     <app-button @click="activate(0)" :color="active_el === 0 ? 'primary' : 'gray'" square>Tất cả</app-button>
-                    <app-button color="gray" square v-for="(item, i) in categories" :key="i"
+                    <app-button square v-for="(item, i) in categories" :key="i"
                                 @click="activate(item.id)" :color="active_el === item.id ? 'primary' : 'gray'"
                     >
                         {{item.name}}
@@ -35,7 +35,7 @@
                 </div>
                 <div :class="this.isAuthenticated ? 'col-md-9' : 'col-md-12'">
                     <div class="row">
-                        <div :class="classes" v-for="course in courses">
+                        <div :class="classes" v-for="(course, index) in courses" :key="index">
                             <CourseItem :course="course"/>
                         </div>
                     </div>

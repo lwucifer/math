@@ -12,21 +12,21 @@
 		<div class="account-photos__list">
 			<!-- Content my photo -->
 			<div class="row photos" v-if="tab == 1">
-				<div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="item in photos">
+				<div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="(item, index) in photos" :key="index">
 					<img :src="item.src" alt/>
 				</div>
 			</div>
 
 			<!-- Content photo tags-->
 			<div class="row photos" v-if="tab == 2">
-				<div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="item in photos">
+				<div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="(item, index) in photos" :key="index">
 					<img :src="item.src" alt/>
 				</div>
 			</div>
 
 			<!-- Content video-->
 			<div class="row" v-if="tab == 3">
-				<div class="col-md-6 col-sm-12 mb-4" v-for="item in videos">
+				<div class="col-md-6 col-sm-12 mb-4" v-for="(item, index) in videos" :key="index">
 					<div class="video-item">
 						<img :src="item.src" alt/>
 						<span class="time">{{item.time}}</span>

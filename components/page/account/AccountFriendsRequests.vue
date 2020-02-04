@@ -6,7 +6,7 @@
 		</div>
 		<div class="account-friends__list">
 			<div class="row">
-				<div class="col-md-6 col-xs-12" v-for="item in friends">
+				<div class="col-md-6 col-xs-12" v-for="(item, index) in friends" :key="index">
 					<AccountFriendsRequestsItem :data="item"/>
 				</div>
 			</div>

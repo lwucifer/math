@@ -12,7 +12,9 @@
                     <div class="course-detail__content">
                         <h3 class="title">Nội dung khóa học</h3>
                         <div class="content">
-                            <div class="chapter" v-for="(chapter, i) in chapters" :class="active_el == chapter.id ? 'active' : ''">
+                            <div class="chapter" 
+                            v-for="(chapter, i) in chapters" :key="i"
+                            :class="active_el == chapter.id ? 'active' : ''">
                                 <div class="chapter-title">
                                     <div>
                                         <IconList/>
@@ -26,7 +28,8 @@
                                     </div>
                                 </div>
                                 <div class="lessons">
-                                    <div class="lesson" v-for="(lesson, j) in chapter.lessons">
+                                    <div class="lesson" 
+                                    v-for="(lesson, j) in chapter.lessons" :key="j">
                                         <div class="lesson-title">
                                             <IconListDark/>
                                             <strong>Bài {{j + 1}}:</strong>
