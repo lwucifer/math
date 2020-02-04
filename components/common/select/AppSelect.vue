@@ -7,7 +7,7 @@
         <app-tag
           v-for="(item, index) in selectedValues"
           :key="item.value"
-          class="mb-2 mr-2"
+          class="ma-1"
           show-close
           @close="handleCloseTag(item, index)"
         >{{ item.text }}</app-tag>
@@ -59,7 +59,7 @@
 
         <div
           v-for="option in options"
-          class="app-select__option"
+          :class="['app-select__option', option.value === value && 'active']"
           :key="option.value"
           @click="handleClickOption(option)"
         >
