@@ -102,7 +102,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("auth", ["login", "status"]),
+    ...mapActions("auth", ["login", "status", "forgotPassword"]),
     nextlogin() {
       const that = this;
       if (that.step === 2 && that.password && that.phone) {
@@ -112,14 +112,12 @@ export default {
           firebase_token: ""
         };
         const doAdd = that.login(data).then(result => {
-          debugger;
           if (result.success == 1) {
             this.$emit("click-close");
           } else {
           }
         });
-      }
-      if (that.step === 1) {
+      } else if (that.step === 1) {
         if (that.phone.length > 10) {
           that.phoneError = true;
         } else {
@@ -127,6 +125,17 @@ export default {
           that.step = that.phone ? 2 : 1;
           // that.status({ phone: that.phone });
         }
+      } else {
+        let data = {
+          firebase_token: "",
+          password: that.newpassword
+        };
+        const doAdd = that.forgotPassword(data).then(result => {
+          if (result.success == 1) {
+            this.$emit("click-close");
+          } else {
+          }
+        });
       }
     },
     forgot() {
