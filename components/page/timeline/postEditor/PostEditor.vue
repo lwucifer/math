@@ -10,16 +10,26 @@
       </client-only>
     </div>
 
-    <app-divider class="my-3" />
+    <app-divider class="mt-3 mb-0" />
 
-    <app-select mode="tags" :options="tagOptions" v-model="tag" placeholder="Cùng với ai?" style="width: 100%">
+
+    <app-select mode="tags" :options="tagOptions" v-model="tag" class="post-editor__select" placeholder="Cùng với ai?" style="width: 100%">
       <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
         <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
         {{ option.text }}
       </div>
     </app-select>
 
-    <app-divider class="my-3" />
+    <app-divider class="ma-0" />
+
+    <app-select :options="checkinOptions" v-model="checkin" class="post-editor__select" placeholder="Tại" style="width: 100%">
+      <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+        <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+        {{ option.text }}
+      </div>
+    </app-select>
+
+    <app-divider class="mt-0 mb-3" />
 
     <div class="post-editor__toolbar">
       <button class="post-editor__toolbar-item image">
@@ -62,8 +72,8 @@ export default {
   data() {
     return {
       editor: null,
-      tmpTag: 0,
-      tag: [0],
+      tag: [],
+      checkin: null,
       tagOptions: [
         { value: 0, text: 'Nguyen Tien Dat' },
         { value: 1, text: 'Nguyen Van A' },
@@ -73,6 +83,13 @@ export default {
         { value: 5, text: 'Nguyen Van E' },
         { value: 6, text: 'Nguyen Van F' },
         { value: 7, text: 'Nguyen Van G' },
+      ],
+      checkinOptions: [
+        { value: 0, text: 'Hà Nội' },
+        { value: 1, text: 'Saudi Arabia' },
+        { value: 2, text: 'Svalbard and Jan Mayen' },
+        { value: 3, text: 'Mongolia' },
+        { value: 4, text: 'Republic of Kosovo' },
       ]
     };
   },
