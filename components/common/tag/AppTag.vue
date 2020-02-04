@@ -1,10 +1,10 @@
 <template>
-  <div class="app-tag">
+  <span class="app-tag">
     <slot />
-    <i class="app-tag__close" @click="handleClose">
+    <i v-if="showClose" class="app-tag__close" @click="handleClose">
       <IconClose class="icon" />
     </i>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -15,9 +15,13 @@ export default {
     IconClose
   },
 
+  props: {
+    showClose: Boolean
+  },
+
   methods: {
     handleClose() {
-      console.log('close')
+      this.$emit('close')
     }
   }
 };
