@@ -43,6 +43,17 @@ const actions = {
         if (result.success) {
             commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
         }
+    },
+
+    async [actionTypes.AUTH.FORGOT_PASSWORD]({ commit }, { firebase_token, password }) {
+        const result = await new auth(this.$axios).forgotPassword({
+            firebase_token,
+            password
+        });
+        if (result.success) {
+            commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
+        }
+        return result;
     }
 };
 

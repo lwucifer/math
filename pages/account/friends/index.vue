@@ -23,99 +23,99 @@
 </template>
 
 <script>
-import AccountFriends from "~/components/page/account/AccountFriends";
-import AccountSide from "~/components/page/account/AccountSide";
-import AccountCover from "~/components/page/account/AccountCover";
+    import AccountFriends from "~/components/page/account/AccountFriends";
+    import AccountSide from "~/components/page/account/AccountSide";
+    import AccountCover from "~/components/page/account/AccountCover";
 
-export default {
-  components: {
-    AccountFriends,
-    AccountCover,
-    AccountSide
-  },
+    export default {
+        components: {
+            AccountFriends,
+            AccountCover,
+            AccountSide
+        },
 
-  data() {
-    return {
-        friends: [
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-            {
-                id: 1,
-                name: 'Scarlett Black',
-                mutual_friends: 69,
-                avatar: 'https://picsum.photos/100/100',
-            },
-        ],
-      }
-  },
+        data() {
+            return {
+                friends: [
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                {
+                    id: 1,
+                    name: 'Scarlett Black',
+                    mutual_friends: 69,
+                    avatar: 'https://picsum.photos/100/100',
+                },
+                ],
+            }
+        },
 
-  computed: {
-  },
+        computed: {
+        },
 
-  mounted() {},
+        mounted() {},
 
-  methods: {}
-};
+        methods: {}
+    };
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-friends.scss";
+@import "~/assets/scss/components/account/_account-friends.scss";
 </style>

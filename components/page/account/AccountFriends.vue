@@ -13,7 +13,7 @@
 		</div>
 		<div class="account-friends__list">
 			<div class="row">
-				<div class="col-md-6 col-xs-12" v-for="item in friends">
+				<div class="col-md-6 col-xs-12" v-for="(item, index) in friends" :key="index">
 					<AccountFriendsItem :data="item"/>
 				</div>
 			</div>
@@ -22,98 +22,98 @@
 </template>
 
 <script>
-import AccountFriendsItem from "~/components/page/account/AccountFriendsItem";
-import IconSearch from '~/assets/svg/icons/search.svg?inline';
+	import AccountFriendsItem from "~/components/page/account/AccountFriendsItem";
+	import IconSearch from '~/assets/svg/icons/search.svg?inline';
 
-export default {
-  components: {
-  	AccountFriendsItem,
-  	IconSearch
-  },
+	export default {
+		components: {
+			AccountFriendsItem,
+			IconSearch
+		},
 
-  data() {
-  	return {
-	  	name: '',
-	  	friends: [
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  	],
-	  }
-  },
+		data() {
+			return {
+				name: '',
+				friends: [
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				],
+			}
+		},
 
-  computed: {
-  },
+		computed: {
+		},
 
-  mounted() {},
+		mounted() {},
 
-  methods: {}
-};
+		methods: {}
+	};
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-friends.scss";
+@import "~/assets/scss/components/account/_account-friends.scss";
 </style>

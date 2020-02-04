@@ -1,10 +1,10 @@
 <template>
     <app-modal
-        centered
-        :width="606"
-        :component-class="{ 'account-edit-modal': true }"
-        @close="$router.push('/')"
-        v-if="visible"
+    centered
+    :width="606"
+    :component-class="{ 'account-edit-modal': true }"
+    @close="$router.push('/')"
+    v-if="visible"
     >
         <div slot="content">
             <h3>Chỉnh sửa thông tin</h3>
@@ -32,10 +32,10 @@
             </div>
 
             <div class="text-center">
-                <app-button color="info" class="mr-3" square @click="$emit('click-close')">
+                <app-button size="lg" color="info" class="mr-3" square @click="$emit('click-close')">
                     Hủy bỏ
                 </app-button>
-                <app-button square @click="save()">Cập nhật thông tin</app-button>
+                <app-button  size="lg" square @click="save()">Cập nhật thông tin</app-button>
             </div>
         </div>
     </app-modal>
@@ -80,6 +80,6 @@
     }
 </script>
 
-<style>
-    @import "~/assets/scss/components/account/_account-edit-modal.scss";
+<style lang="scss">
+@import "~/assets/scss/components/account/_account-edit-modal.scss";
 </style>

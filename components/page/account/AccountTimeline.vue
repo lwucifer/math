@@ -8,22 +8,22 @@
 
     <template v-if="!loading">
       <Post
-        v-for="post in postsList"
-        class="mb-4"
-        :key="post.label"
-        :fullname="post.creator && post.creator.fullname"
-        :updated="post.updated"
-        :likes="post.likes"
-        :comments="post.comments"
-        :content="post.content"
+      v-for="post in postsList"
+      class="mb-4"
+      :key="post.label"
+      :fullname="post.creator && post.creator.fullname"
+      :updated="post.updated"
+      :likes="post.likes"
+      :comments="post.comments"
+      :content="post.content"
       >
-        <PostImage
-          v-if="post.attachments && post.attachments.length"
-          slot="media-content"
-          class="my-4"
-          :images="post.attachments"
-          @click-item="imageObj => handleClickImage(imageObj, post)"
-        />
+      <PostImage
+      v-if="post.attachments && post.attachments.length"
+      slot="media-content"
+      class="my-4"
+      :images="post.attachments"
+      @click-item="imageObj => handleClickImage(imageObj, post)"
+      />
       </Post>
     </template>
 
@@ -33,15 +33,15 @@
         <template slot="media-content">
           <app-divider class="my-4"></app-divider>
           <app-content-box
-            tag="a"
-            target="_blank"
-            href
-            class="mb-4"
-            size="md"
-            image="https://picsum.photos/150/150"
-            title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
-            desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
-            meta-footer="cellphones.com.vn"
+          tag="a"
+          target="_blank"
+          href
+          class="mb-4"
+          size="md"
+          image="https://picsum.photos/150/150"
+          title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
+          desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
+          meta-footer="cellphones.com.vn"
           />
         </template>
       </Post>
@@ -51,9 +51,9 @@
       <Post>
         <template slot="media-content">
           <PostSlider
-            :images="timelineSliderItems"
-            class="my-4"
-            @click-item="handleClickImage"
+          :images="timelineSliderItems"
+          class="my-4"
+          @click-item="handleClickImage"
           />
         </template>
       </Post>
@@ -63,9 +63,9 @@
       <Post>
         <template slot="media-content">
           <PostImage
-            :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
-            class="my-4"
-            @click-item="modalDetailShow = true"
+          :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
+          class="my-4"
+          @click-item="modalDetailShow = true"
           />
         </template>
       </Post>
@@ -75,12 +75,12 @@
       <Post>
         <template slot="media-content">
           <PostImage
-            :images="[
-              { object: 'image', thumb: 'https://picsum.photos/361/361'},
-              { object: 'image', thumb: 'https://picsum.photos/361/361'},
-            ]"
-            class="my-4"
-            @click-item="modalDetailShow = true"
+          :images="[
+          { object: 'image', thumb: 'https://picsum.photos/361/361'},
+          { object: 'image', thumb: 'https://picsum.photos/361/361'},
+          ]"
+          class="my-4"
+          @click-item="modalDetailShow = true"
           />
         </template>
       </Post>
@@ -90,13 +90,13 @@
       <Post>
         <template slot="media-content">
           <PostImage
-            :images="[
-              { object: 'image', thumb: 'https://picsum.photos/546/362'},
-              { object: 'image', thumb: 'https://picsum.photos/179/179'},
-              { object: 'image', thumb: 'https://picsum.photos/179/179'},
-            ]"
-            class="my-4"
-            @click-item="modalDetailShow = true"
+          :images="[
+          { object: 'image', thumb: 'https://picsum.photos/546/362'},
+          { object: 'image', thumb: 'https://picsum.photos/179/179'},
+          { object: 'image', thumb: 'https://picsum.photos/179/179'},
+          ]"
+          class="my-4"
+          @click-item="modalDetailShow = true"
           />
         </template>
       </Post>
@@ -106,14 +106,14 @@
       <Post>
         <template slot="media-content">
           <PostImage
-            :images="[
-              { object: 'image', thumb: 'https://picsum.photos/555/555'},
-              { object: 'image', thumb: 'https://picsum.photos/182/182'},
-              { object: 'image', thumb: 'https://picsum.photos/182/182'},
-              { object: 'image', thumb: 'https://picsum.photos/182/182'},
-            ]"
-            class="my-4"
-            @click-item="modalDetailShow = true"
+          :images="[
+          { object: 'image', thumb: 'https://picsum.photos/555/555'},
+          { object: 'image', thumb: 'https://picsum.photos/182/182'},
+          { object: 'image', thumb: 'https://picsum.photos/182/182'},
+          { object: 'image', thumb: 'https://picsum.photos/182/182'},
+          ]"
+          class="my-4"
+          @click-item="modalDetailShow = true"
           />
         </template>
       </Post>
@@ -123,15 +123,15 @@
       <Post>
         <template slot="media-content">
           <PostImage
-            :images="[
-              { object: 'image', thumb: 'https://picsum.photos/729/437'},
-              { object: 'image', thumb: 'https://picsum.photos/178/178'},
-              { object: 'image', thumb: 'https://picsum.photos/178/178'},
-              { object: 'image', thumb: 'https://picsum.photos/178/178'},
-              { object: 'image', thumb: 'https://picsum.photos/178/178'},
-            ]"
-            class="my-4"
-            @click-item="modalDetailShow = true"
+          :images="[
+          { object: 'image', thumb: 'https://picsum.photos/729/437'},
+          { object: 'image', thumb: 'https://picsum.photos/178/178'},
+          { object: 'image', thumb: 'https://picsum.photos/178/178'},
+          { object: 'image', thumb: 'https://picsum.photos/178/178'},
+          { object: 'image', thumb: 'https://picsum.photos/178/178'},
+          ]"
+          class="my-4"
+          @click-item="modalDetailShow = true"
           />
         </template>
       </Post>
@@ -139,11 +139,11 @@
     </div>
 
     <app-modal
-      v-if="modalDetailShow"
-      centered
-      :width="1170"
-      :component-class="{ 'post-detail-modal': true }"
-      @close="handleCloseModal"
+    v-if="modalDetailShow"
+    centered
+    :width="1170"
+    :component-class="{ 'post-detail-modal': true }"
+    @close="handleCloseModal"
     >
       <PostDetail v-if="modalDetailShow" slot="content" :post="dataModalDetail" @click-close="handleCloseModal" @click-prev="handleClickPrev" @click-next="handleClickNext"/>
     </app-modal>
@@ -151,39 +151,39 @@
 </template>
 
 <script>
-import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
-import Post from "~/components/page/timeline/post/Post";
-import PostSlider from "~/components/page/timeline/post/PostSlider";
-import PostDetail from "~/components/page/timeline/post/PostDetail";
-import PostImage from "~/components/page/timeline/post/PostImage";
+  import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
+  import Post from "~/components/page/timeline/post/Post";
+  import PostSlider from "~/components/page/timeline/post/PostSlider";
+  import PostDetail from "~/components/page/timeline/post/PostDetail";
+  import PostImage from "~/components/page/timeline/post/PostImage";
 
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
+  import { mapState } from "vuex";
+  import * as actionTypes from "~/utils/action-types";
 
-export default {
-  watchQuery: ["post_id", "photo_id"],
+  export default {
+    watchQuery: ["post_id", "photo_id"],
 
-  components: {
-    PostEditor,
-    Post,
-    PostSlider,
-    PostDetail,
-    PostImage
-  },
-  
-  async fetch({ params, query, store }) {
-    console.log("watchQuery");
-    await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
-    ]);
-  },
+    components: {
+      PostEditor,
+      Post,
+      PostSlider,
+      PostDetail,
+      PostImage
+    },
+    
+    async fetch({ params, query, store }) {
+      console.log("watchQuery");
+      await Promise.all([
+        store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
+        ]);
+    },
 
-  data() {
-    return {
-      loading: true,
-      modalDetailShow: false,
-      dataModalDetail: {},
-      timelineSliderItems: [
+    data() {
+      return {
+        loading: true,
+        modalDetailShow: false,
+        dataModalDetail: {},
+        timelineSliderItems: [
         {
           id: 0,
           type: "image",
@@ -224,40 +224,40 @@ export default {
           type: "image",
           src: "https://picsum.photos/240/240"
         }
-      ]
-    };
-  },
+        ]
+      };
+    },
 
-  computed: {
-    ...mapState("social", ["postsList"])
-  },
+    computed: {
+      ...mapState("social", ["postsList"])
+    },
 
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 500);
+    mounted() {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
 
-    if (process.browser) {
-      window.addEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
-    }
-  },
+      if (process.browser) {
+        window.addEventListener("popstate", event =>
+          setTimeout(() => this.handlePopstate(event))
+          );
+      }
+    },
 
-  beforeDestroy() {
-    if (process.browser) {
-      window.removeEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
-    }
-  },
+    beforeDestroy() {
+      if (process.browser) {
+        window.removeEventListener("popstate", event =>
+          setTimeout(() => this.handlePopstate(event))
+          );
+      }
+    },
 
-  methods: {
+    methods: {
     /**
      * Click image -> change url
      * @param { Object } imageObj - { type: image | video, post: post object }
      */
-    handleClickImage(imageObj, post) {
+     handleClickImage(imageObj, post) {
       if (typeof window.history.pushState != "undefined") {
         this.dataModalDetail = post;
         this.modalDetailShow = true;
@@ -266,7 +266,7 @@ export default {
           { theater: true },
           "",
           `${window.location.origin}/post?photo_id=${imageObj.id}`
-        );
+          );
       } else {
         this.$router.push(`${window.location.origin}/post?photo_id=${imageObj.id}`)
       }
@@ -276,12 +276,12 @@ export default {
      * Hande click nav button of browser
      * @param { Object } event - event emited
      */
-    handlePopstate(event) {
+     handlePopstate(event) {
       console.log("event.state", event.state);
       const fullPath = document.location.href.replace(
         window.location.origin,
         ""
-      );
+        );
       // const isTheater = document.location.search.includes("&theater");
 
       if (event.state.theater) {
@@ -294,13 +294,13 @@ export default {
     /**
      * Click close modal -> set url in browser to '/'
      */
-    handleCloseModal() {
+     handleCloseModal() {
       if (typeof window.history.pushState != "undefined") {
         window.history.pushState(
           { theater: true },
           "",
           `${window.location.origin}/`
-        );
+          );
       }
 
       this.modalDetailShow = false;
@@ -310,14 +310,14 @@ export default {
     /**
      * on click prev arrow on modal post detail -> get prev image info
      */
-    handleClickPrev() {
+     handleClickPrev() {
       console.log("handleClickPrev")
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
      */
-    handleClickNext() {
+     handleClickNext() {
       console.log("handleClickNext")
     }
   }

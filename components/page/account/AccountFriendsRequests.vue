@@ -6,7 +6,7 @@
 		</div>
 		<div class="account-friends__list">
 			<div class="row">
-				<div class="col-md-6 col-xs-12" v-for="item in friends">
+				<div class="col-md-6 col-xs-12" v-for="(item, index) in friends" :key="index">
 					<AccountFriendsRequestsItem :data="item"/>
 				</div>
 			</div>
@@ -15,96 +15,96 @@
 </template>
 
 <script>
-import AccountFriendsRequestsItem from "~/components/page/account/AccountFriendsRequestsItem";
+	import AccountFriendsRequestsItem from "~/components/page/account/AccountFriendsRequestsItem";
 
-export default {
-  components: {
-  	AccountFriendsRequestsItem,
-  },
+	export default {
+		components: {
+			AccountFriendsRequestsItem,
+		},
 
-  data() {
-  	return {
-	  	name: '',
-	  	friends: [
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  		{
-	  			id: 1,
-	  			name: 'Scarlett Black',
-	  			mutual_friends: 69,
-	  			avatar: 'https://picsum.photos/100/100',
-	  		},
-	  	],
-	  }
-  },
+		data() {
+			return {
+				name: '',
+				friends: [
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				{
+					id: 1,
+					name: 'Scarlett Black',
+					mutual_friends: 69,
+					avatar: 'https://picsum.photos/100/100',
+				},
+				],
+			}
+		},
 
-  computed: {
-  },
+		computed: {
+		},
 
-  mounted() {},
+		mounted() {},
 
-  methods: {}
-};
+		methods: {}
+	};
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-friends.scss";
+@import "~/assets/scss/components/account/_account-friends.scss";
 </style>

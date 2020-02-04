@@ -216,6 +216,6 @@
     };
 </script>
 
-<style>
+<style lang="scss">
     @import "~/assets/scss/components/school/_school.scss";
 </style>

@@ -51,4 +51,15 @@ export default class Auth {
 
         return data;
     }
+
+    async [actionTypes.AUTH.FORGOT_PASSWORD](payload) {
+        debugger;
+        const { firebase_token, password } = payload;
+        const { data } = await this.$axios.post(`${APIs.FORGOT_PASSWORD}`, {
+            firebase_token,
+            password
+        });
+
+        return data;
+    }
 }

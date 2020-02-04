@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="course-folder__list row">
-                        <div class="col-lg-4 col-sm-6 col-xs-12 mb-4" v-for="item in list">
+                        <div class="col-lg-4 col-sm-6 col-xs-12 mb-4" v-for="(item, index) in list" :key="index">
                             <n-link class="item" to>
                                 <IconFolder/>
                                 <span>{{item.name}}</span>
@@ -33,14 +33,14 @@
                     <hr/>
                     <div class="course-folder__categories">
                         <div class="nav-links">
-                            <a square v-for="item in categories"
+                            <a square v-for="(item, index) in categories" :key="index"
                                @click="activate(item.id)" :class="active_el === item.id ? 'active' : ''"
                             >
                                 {{item.name}}
                             </a>
                         </div>
                         <div class="course-folder__files row">
-                            <div class="col-lg-3 col-sm-2 col-xs-12" v-for="item in files">
+                            <div class="col-lg-3 col-sm-2 col-xs-12" v-for="(item, index) in files" :key="index">
                                 <CourseFile :file="item"/>
                             </div>
                         </div>
@@ -192,6 +192,6 @@
     };
 </script>
 
-<style>
+<style lang="scss">
     @import "~/assets/scss/components/course/_course-folder.scss";
 </style>
