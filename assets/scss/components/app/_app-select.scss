@@ -34,7 +34,7 @@
     z-index: map-get($z-index, 'dropdown');
     top: 100%;
     left: 0;
-    margin-top: -1px;
+    margin-top: 5px;
     min-width: 100%;
     background-color: #fff;
     border: 1px solid $color-border;
@@ -62,17 +62,23 @@
     user-select: none;
 }
 
+.app-select__placeholder {
+    color: $color-text-sub;
+}
+
 // Mode = 'tags'
 .app-select--tags {
-    .app-select__placeholder {
-        // line-height: 20px;
-    }
-    
     .app-select__selected {
         flex-wrap: wrap;
         white-space: normal;
-        padding-top: 0;
-        padding-bottom: 0;
+        height: auto;
+        min-height: 4rem;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+
+        .app-tag:nth-child(1) {
+            margin-left: 0 !important;
+        }
     }
 
     .app-select__option {

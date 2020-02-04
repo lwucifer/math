@@ -44,10 +44,11 @@
 
     <!-- DEFAULT MODE -->
     <template v-else>
-      <div class="app-select__selected" tabindex="0" @click="handleClickSelected">
+      <div class="app-select__selected" tabindex="0" @click="handleClickSelected" @focus="handleClickSelected">
         <span class="app-select__prepend" v-if="$slots.prepend">
           <slot name="prepend" />
         </span>
+        <span class="app-select__placeholder" v-if="!value">{{ $attrs.placeholder || '' }}</span>
         <span class="app-select__selected-value">{{ selectedText }}</span>
         <span class="app-select__arrow">
           <IconCaretDown />
