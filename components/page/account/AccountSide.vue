@@ -26,8 +26,14 @@
                     </tr>
                 </tbody>
             </table>
+
             <app-button square fullWidth @click="showEdit = true">Chỉnh sửa thông tin</app-button>
             <AccountEditModal :visible="showEdit" @click-close="showEdit = false" 
+            :account="account"/>
+
+            <app-button square fullWidth @click="showChangePass = true">Đổi mật khẩu</app-button>
+            <AccountChangePasswordModal :visible="showChangePass" 
+            @click-close="showChangePass = false" 
             :account="account"/>
         </div>
 
@@ -109,12 +115,14 @@
 
 <script>
     import AccountEditModal from "~/components/page/account/AccountEditModal";
+    import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
 
     export default {
         name: "E-learning",
 
         components: {
-            AccountEditModal
+            AccountEditModal,
+            AccountChangePasswordModal
         },
 
         props: {
@@ -127,6 +135,7 @@
 
         data: () => ({
             showEdit: false,
+            showChangePass: false,
             account: {
                 id: '1',
                 name: 'Master King',
@@ -140,6 +149,6 @@
     };
 </script>
 
-<style>
+<style lang="scss">
     @import "~/assets/scss/components/elearning/_elearning-side.scss";
 </style>

@@ -32,10 +32,10 @@
             </div>
 
             <div class="text-center">
-                <app-button color="info" class="mr-3" square @click="$emit('click-close')">
+                <app-button size="lg" color="info" class="mr-3" square @click="$emit('click-close')">
                     Hủy bỏ
                 </app-button>
-                <app-button square @click="save()">Cập nhật thông tin</app-button>
+                <app-button  size="lg" square @click="save()">Cập nhật thông tin</app-button>
             </div>
         </div>
     </app-modal>
@@ -80,6 +80,6 @@
     }
 </script>
 
-<style>
+<style lang="scss">
     @import "~/assets/scss/components/account/_account-edit-modal.scss";
 </style>

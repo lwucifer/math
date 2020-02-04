@@ -1,9 +1,13 @@
 <template>
     <div class="account-friends-item">
         <div class="account-friends-item__info">
-            <app-avatar :src="data.avatar" :size="100"/>
+            <n-link :to="'/account/1'">
+                <app-avatar :src="data.avatar" :size="100"/>
+            </n-link>
             <div>
-                <strong>{{ data.name }}</strong>
+                <n-link :to="'/account/1'" class="bold link-dark">
+                    {{ data.name }}
+                </n-link>
                 <p>{{ data.mutual_friends }} bạn chung</p>
             </div>
         </div>

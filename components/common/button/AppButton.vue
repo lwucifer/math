@@ -35,6 +35,7 @@ export default {
         "btn--size-sm": this.size === "sm",
         "btn--size-md": this.size === "md",
         "btn--size-lg": this.size === "lg",
+        "btn--size-xl": this.size === "xl",
         "btn--full-width": this.fullWidth
       };
 
