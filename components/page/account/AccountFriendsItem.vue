@@ -35,7 +35,6 @@
 <script>
     import IconTickGray from '~/assets/svg/icons/tick-gray.svg?inline';
     
-
     export default {
         components: {
             IconTickGray,
@@ -62,5 +61,5 @@
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-friends-item.scss";
+@import "~/assets/scss/components/account/_account-friends-item.scss";
 </style>

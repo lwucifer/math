@@ -71,24 +71,23 @@
 </template>
 
 <script>
-import AsideBox from "~/components/layout/asideBox/AsideBox";
-import IconPages from '~/assets/svg/icons/pages.svg?inline';
+  import AsideBox from "~/components/layout/asideBox/AsideBox";
+  import IconPages from '~/assets/svg/icons/pages.svg?inline';
 
-export default {
-  components: {
-  	AsideBox,
-  	IconPages
-  },
+  export default {
+    components: {
+      AsideBox,
+      IconPages
+    },
 
-  data() {
-    return {
-    };
-  },
+    data() {
+      return {};
+    },
 
-  computed: {},
+    computed: {},
 
-  methods: {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="scss">

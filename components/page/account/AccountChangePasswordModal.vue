@@ -1,10 +1,10 @@
 <template>
     <app-modal
-        centered
-        :width="606"
-        :component-class="{ 'account-edit-modal': true }"
-        @close="$router.push('/')"
-        v-if="visible"
+    centered
+    :width="606"
+    :component-class="{ 'account-edit-modal': true }"
+    @close="$router.push('/')"
+    v-if="visible"
     >
         <div slot="content" >
             <div v-if="success" class="change-pass-success text-center">
@@ -110,5 +110,5 @@
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-edit-modal.scss";
+@import "~/assets/scss/components/account/_account-edit-modal.scss";
 </style>

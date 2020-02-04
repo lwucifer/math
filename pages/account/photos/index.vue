@@ -23,39 +23,39 @@
 </template>
 
 <script>
-import AccountCover from "~/components/page/account/AccountCover";
-import AccountSide from "~/components/page/account/AccountSide";
-import AccountPhotos from "~/components/page/account/AccountPhotos";
+    import AccountCover from "~/components/page/account/AccountCover";
+    import AccountSide from "~/components/page/account/AccountSide";
+    import AccountPhotos from "~/components/page/account/AccountPhotos";
 
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
+    import { mapState } from "vuex";
+    import * as actionTypes from "~/utils/action-types";
 
-export default {
-  components: {
-    AccountSide,
-    AccountPhotos,
-    AccountCover,
-  },
-
-  data() {
-    return {
-      account: {
-            id: '1',
-            name: 'Dat Pham',
-            avatar: 'https://picsum.photos/170/170',
-            cover: 'https://picsum.photos/1170/400',
+    export default {
+        components: {
+            AccountSide,
+            AccountPhotos,
+            AccountCover,
         },
+
+        data() {
+            return {
+                account: {
+                    id: '1',
+                    name: 'Dat Pham',
+                    avatar: 'https://picsum.photos/170/170',
+                    cover: 'https://picsum.photos/1170/400',
+                },
+            };
+        },
+
+        computed: {},
+
+        methods: {}
     };
-  },
-
-  computed: {},
-
-  methods: {}
-};
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account.scss";
+@import "~/assets/scss/components/account/_account.scss";
 </style>
 
 

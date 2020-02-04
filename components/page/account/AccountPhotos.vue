@@ -6,8 +6,8 @@
 		</div>
 		<ul class="account-photos__nav">
 			<li><a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Ảnh của bạn</a></li>
-            <li><a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Ảnh được tags</a></li>
-            <li><a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Video</a></li>
+			<li><a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Ảnh được tags</a></li>
+			<li><a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Video</a></li>
 		</ul>
 		<div class="account-photos__list">
 			<!-- Content my photo -->
@@ -39,46 +39,46 @@
 
 <script>
 
-export default {
-  components: {
-  },
+	export default {
+		components: {
+		},
 
-  data() {
-  	return {
-  		tab: 1,
-	  	photos: [
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  		{ src: 'https://picsum.photos/179/179' },
-	  	],
-	  	videos: [
-	  		{ src: 'https://picsum.photos/350/179', time: '0:29' },
-	  		{ src: 'https://picsum.photos/350/179', time: '0:29' },
-	  		{ src: 'https://picsum.photos/350/179', time: '0:29' },
-	  		{ src: 'https://picsum.photos/350/179', time: '0:29' },
-	  		{ src: 'https://picsum.photos/350/179', time: '0:29' },
-	  	],
-	  }
-  },
+		data() {
+			return {
+				tab: 1,
+				photos: [
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				{ src: 'https://picsum.photos/179/179' },
+				],
+				videos: [
+				{ src: 'https://picsum.photos/350/179', time: '0:29' },
+				{ src: 'https://picsum.photos/350/179', time: '0:29' },
+				{ src: 'https://picsum.photos/350/179', time: '0:29' },
+				{ src: 'https://picsum.photos/350/179', time: '0:29' },
+				{ src: 'https://picsum.photos/350/179', time: '0:29' },
+				],
+			}
+		},
 
-  computed: {
-  },
+		computed: {
+		},
 
-  mounted() {},
+		mounted() {},
 
-  methods: {}
-};
+		methods: {}
+	};
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-photos.scss";
+@import "~/assets/scss/components/account/_account-photos.scss";
 </style>

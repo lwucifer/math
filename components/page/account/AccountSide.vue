@@ -61,8 +61,8 @@
             </div>
             <n-link class="btn btn--size-md btn--full-width btn--color-primary btn--square"
             :to="'/account/photos'">
-                Xem toàn bộ ảnh
-            </n-link>
+            Xem toàn bộ ảnh
+        </n-link>
         </div>
 
         <div class="account__side-item friends">
@@ -107,10 +107,10 @@
             </div>
             <n-link class="mt-0 btn btn--size-md btn--full-width btn--color-primary btn--square"
             :to="'/account/friends'">
-                Tất cả bạn bè
-            </n-link>
-        </div>
+            Tất cả bạn bè
+        </n-link>
     </div>
+</div>
 </template>
 
 <script>
@@ -150,5 +150,5 @@
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/elearning/_elearning-side.scss";
+@import "~/assets/scss/components/elearning/_elearning-side.scss";
 </style>

@@ -72,46 +72,46 @@
 </template>
 
 <script>
-import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconMessenger from "~/assets/svg/icons/messenger.svg?inline";
-import IconUserCross from "~/assets/svg/icons/user-cross.svg?inline";
-import IconUserTick from "~/assets/svg/icons/user-tick.svg?inline";
-import IconUserArrow from "~/assets/svg/icons/user-arrow.svg?inline";
+    import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
+    import IconMessenger from "~/assets/svg/icons/messenger.svg?inline";
+    import IconUserCross from "~/assets/svg/icons/user-cross.svg?inline";
+    import IconUserTick from "~/assets/svg/icons/user-tick.svg?inline";
+    import IconUserArrow from "~/assets/svg/icons/user-arrow.svg?inline";
 
-export default {
+    export default {
 
-  components: {
-    IconPhoto,
-    IconMessenger,
-    IconUserCross,
-    IconUserTick,
-    IconUserArrow
-  },
+      components: {
+        IconPhoto,
+        IconMessenger,
+        IconUserCross,
+        IconUserTick,
+        IconUserArrow
+    },
 
-  props: {
+    props: {
         status: [String, Number]
     },
 
-  data() {
-    return {
-        dropdownShow: false,
-        account: {
-            id: '1',
-            name: 'Dat Pham',
-            avatar: 'https://picsum.photos/170/170',
-            cover: 'https://picsum.photos/1170/400',
-        },
-    };
-  },
+    data() {
+        return {
+            dropdownShow: false,
+            account: {
+                id: '1',
+                name: 'Dat Pham',
+                avatar: 'https://picsum.photos/170/170',
+                cover: 'https://picsum.photos/1170/400',
+            },
+        };
+    },
 
-  computed: {},
+    computed: {},
 
-  methods: {}
+    methods: {}
 };
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-cover.scss";
+@import "~/assets/scss/components/account/_account-cover.scss";
 </style>
 
 

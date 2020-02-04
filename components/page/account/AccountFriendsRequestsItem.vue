@@ -49,5 +49,5 @@
 </script>
 
 <style lang="scss">
-    @import "~/assets/scss/components/account/_account-friends-item.scss";
+@import "~/assets/scss/components/account/_account-friends-item.scss";
 </style>
