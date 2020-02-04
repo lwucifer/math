@@ -7,6 +7,7 @@ export const LOGOUT = `/auth/logout`;
 export const AUTH_INFO = `/auth/info`;
 export const SEND_OTP = `/auth/otp`;
 export const CHECK_PHONE = `/user/checkPhone`;
+export const FORGOT_PASSWORD = `/user/forgotPasswd`;
 
 /**
  * SOCIALS
