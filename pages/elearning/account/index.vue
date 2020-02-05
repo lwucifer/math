@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <ElearningSlde active="1" :teacher="teacher" />
+        <ElearningSide active="1" :teacher="teacher" />
       </div>
       <div class="col-md-9">
         <div class="elearning-account__main">
