@@ -166,44 +166,6 @@
 		display: flex;
 		align-items: center;
 	}
-	.teacher-top {
-		.right {
-			>div {
-				padding: 1rem 3rem;
-			}
-			strong {
-				display: block;
-				font-size: 2.5rem;
-				font-weight: bold;
-			}
-			margin-left: auto;
-			text-align: center;
-			display: flex;
-			align-items: center;
-			font-size: 1.6rem;
-		}
-		.name {
-			font-size: 1.6rem;
-			font-weight: bold;
-		}
-		.info {
-			>p {
-				margin: 1rem 0;
-			}
-			padding: 1rem 2rem;
-		}
-		display: flex;
-		align-items: center;
-	}
-	.teacher-bottom {
-		h4 {
-			font-size: 1.6rem;
-		}
-		p {
-			font-size: 1.6rem;
-			color: #666;
-		}
-	}
 	.chapter {
 		+ {
 			.chapter {

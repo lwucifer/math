@@ -54,8 +54,6 @@ import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
-import IconStar from "~/assets/svg/icons/star.svg?inline";
-import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 
 export default {
   components: {
@@ -63,21 +61,17 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    IconStarO,
-    IconStar,
     ElearningItem2
   },
 
   props: {
     lessons: {
       type: Array,
-      required: true,
       default: () => []
     },
 
     sciences: {
       type: Array,
-      required: true,
       default: () => []
     },
 

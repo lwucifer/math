@@ -18,13 +18,7 @@
         </div>
         <div>
           <div class="stars">
-            <IconStar width="12" height="12" v-for="index in item.teacher.star" :key="index" />
-            <IconStarO
-              width="12"
-              height="12"
-              v-for="index in (5 - item.teacher.star)"
-              :key="index"
-            />
+            <app-stars :stars="3"/>
           </div>
           <span>
             <strong>{{item.teacher.star}}</strong>
@@ -43,8 +37,6 @@ import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
-import IconStar from "~/assets/svg/icons/star.svg?inline";
-import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
 
 export default {
@@ -53,8 +45,6 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    IconStarO,
-    IconStar,
     IconVideo3
   },
 
