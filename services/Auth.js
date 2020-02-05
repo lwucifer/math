@@ -7,7 +7,7 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.LOGIN](payload) {
-        debugger;
+        // debugger;
         const { phone_number, password, firebase_token } = payload;
         const { data } = await this.$axios.post(`${APIs.LOGIN}`, {
             phone_number,

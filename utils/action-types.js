@@ -14,13 +14,6 @@ export const AUTH = {
     FORGOT_PASSWORD: "forgotPassword"
 };
 
-export const AUTHEN_LDAP = {
-    LIST: "authenLdapList",
-    ADD: "authenLdapAdd",
-    EDIT: "authenLdapEdit",
-    DELETE: "authenLdapDelete"
-};
-
 export const SOCIAL_POST = {
     LIST: "socialPostsList",
     ADD: "socialPostsAdd",
