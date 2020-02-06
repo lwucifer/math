@@ -3,13 +3,13 @@
     <IconStar class="star"
       :width="size"
       :height="size"
-      v-for="index in stars"
+      v-for="(i,index) in stars"
       :key="index"
     />
     <IconStarO class="star"
       :width="size"
       :height="size"
-      v-for="index in (5 - stars)"
+      v-for="(i,index) in (5 - stars)"
       :key="index"
     />
   </div>

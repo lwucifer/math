@@ -1,6 +1,5 @@
 <template>
   <div class="course-teacher-info">
-    <h3>Giảng viên</h3>
     <div class="teacher-top">
       <app-avatar src="https://picsum.photos/125/125" :size="125" />
       <div class="info">
