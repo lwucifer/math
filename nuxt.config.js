@@ -40,7 +40,7 @@ module.exports = {
         { src: "@/plugins/global.js" },
         { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
         { src: "@/plugins/textarea-autosize.js", ssr: false },
-        { src: "@/plugins/firebase-auth.js"},
+        // { src: "@/plugins/firebase-auth.js"},
     ],
 
     /*
