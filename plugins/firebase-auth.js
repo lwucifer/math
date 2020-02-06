@@ -1,4 +1,4 @@
-import { auth } from '@/services/FirebaseInit.js'
+import { auth } from '@/services/firebase/FirebaseInit.js'
 
 export default (context) => {
   const { store } = context
