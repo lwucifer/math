@@ -19,3 +19,11 @@ export const SOCIAL = {
     SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList"
 };
+
+export const ACCOUNT_PERSONAL = {
+    SET_ACCOUNT_PERSONAL_LIST: "setAccountPersonalList"
+};
+
+export const ACCOUNT_LINK = {
+    SET_ACCOUNT_LINK_LIST: "setAccountLinkList"
+};

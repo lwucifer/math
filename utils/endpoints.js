@@ -8,6 +8,10 @@ export const AUTH_INFO = `/auth/info`;
 export const SEND_OTP = `/auth/otp`;
 export const CHECK_PHONE = `/user/checkPhone`;
 export const FORGOT_PASSWORD = `/user/forgotPasswd`;
+export const CHANGE_PASSWORD = `/user/changePasswd`;
+export const ACCOUNT_PERSONAL = `/account/personal`;
+export const ACCOUNT_LINK = `/account/link`;
+export const ACCOUNT_PHONE = `/account/phone`;
 
 /**
  * SOCIALS
