@@ -126,13 +126,10 @@
         border: 0;
         font-size: 1.4rem;
         line-height: normal;
-        padding: 2px;
+        padding: .2rem;
     }
 }
 
-.color-primary {
-    color: #2CAE86;
-}
 input::-webkit-input-placeholder {
     font-size: 1.4rem;
     transform:translate3d(0,1px,0)
@@ -148,7 +145,7 @@ input:-webkit-autofill:active  {
 .new-folder-modal .app-modal-content {
     padding: 1.5rem 2rem 0;
     .btn {
-        width: 125px;
+        width: 12.5rem;
         margin: 2rem .5rem;
     }
     .title {
@@ -161,6 +158,6 @@ input:-webkit-autofill:active  {
 }
 .form-control_border {
     height: 3.5rem;
-    border: 1px solid #EEEEEE;
+    border: 1px solid $color-border;
     padding: .8rem;
 }
