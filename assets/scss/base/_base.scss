@@ -120,9 +120,6 @@ hr {
 }
 
 // From
-.color-white {
-    color: #fff !important;
-}
 ::placeholder {
     color: #ccc;
     opacity: 1;
@@ -265,11 +262,16 @@ hr {
     fill: $color-text;
 }
 
-
-.box11 {
-    padding: 1rem;
-    background-color: #fff;
+.btn-load-more {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: $color-primary;
+    cursor: pointer;
 }
+.box {
+    padding: 1rem 1.5rem;
+    background-color: #fff;
+}  
 .box12 {
     padding: 1rem 2rem;
     background-color: #fff;
@@ -277,6 +279,35 @@ hr {
 .box23 {
     padding: 2rem 3rem;
     background-color: #fff;
+}
+.d-flex-center {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.fill-red path {
+    fill: $color-red !important;
+}
+.fill-primary path {
+    fill: $color-primary !important;
+}
+.fill-dark path{
+    fill: #333 !important;
+}
+.fill-666 path {
+    fill: #666 !important;
+}
+.fill-999 path {
+    fill: #999 !important;
+}
+.fill-whit path {
+    fill: #fff !important;
+}
+.color-red {
+    color: $color-red;
+}
+.color-white {
+    color: #fff !important;
 }
 .color-999 {
     color: #999 !important;
