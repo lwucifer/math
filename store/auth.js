@@ -54,6 +54,15 @@ const actions = {
             commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
         }
         return result;
+    },
+
+    async [actionTypes.AUTH.CHANGE_PASSWORD]({ commit }, { oldPass, newPass, verify_new_pass }) {
+        const result = await new auth(this.$axios).changePassword({
+            oldPass,
+            newPass,
+            verify_new_pass
+        });
+        return result;
     }
 };
 

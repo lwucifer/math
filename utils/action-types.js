@@ -11,7 +11,8 @@ export const AUTH = {
     LOGOUT: "logout",
     SENDOTP: "sendotp",
     STATUS: "status",
-    FORGOT_PASSWORD: "forgotPassword"
+    FORGOT_PASSWORD: "forgotPassword",
+    CHANGE_PASSWORD: "changePassword"
 };
 
 export const SOCIAL_POST = {
@@ -41,4 +42,28 @@ export const SOCIAL_MEDIAS = {
 
 export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications"
+};
+
+export const ACCOUNT_PERSONAL = {
+    LIST: "accountPersonalList",
+    EDIT_AVATAR: "accountPersonalEditAvatar",
+    EDIT_COVER: "accountPersonalEditCover",
+    EDIT_PHONE: "accountPersonalEditPhone"
+};
+
+export const ACCOUNT_LINK = {
+    LIST: "accountLinkList",
+    ADD: "accountLinkAdd"
+};
+
+export const ACCOUNT_TRANSACTIONS = {
+    LIST: "accountTransactionList"
+};
+
+export const ACCOUNT_REVENUE = {
+    LIST: "accountRevenueList"
+};
+
+export const ACCOUNT_EARNING = {
+    LIST: "accountEarningList"
 };

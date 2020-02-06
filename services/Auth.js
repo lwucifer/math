@@ -62,4 +62,16 @@ export default class Auth {
 
         return data;
     }
+
+    async [actionTypes.AUTH.CHANGE_PASSWORD](payload) {
+        debugger;
+        const { oldPass, newPass, verify_new_pass } = payload;
+        const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, {
+            oldPass,
+            newPass,
+            verify_new_pass
+        });
+
+        return data;
+    }
 }
