@@ -12,6 +12,9 @@ export const CHANGE_PASSWORD = `/user/changePasswd`;
 export const ACCOUNT_PERSONAL = `/account/personal`;
 export const ACCOUNT_LINK = `/account/link`;
 export const ACCOUNT_PHONE = `/account/phone`;
+export const ACCOUNT_TRANSACTIONS = `/account/transactions`;
+export const ACCOUNT_REVENUE = `/account/revenue`;
+export const ACCOUNT_EARNING = `/account/earning`;
 
 /**
  * SOCIALS

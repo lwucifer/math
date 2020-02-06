@@ -27,3 +27,15 @@ export const ACCOUNT_PERSONAL = {
 export const ACCOUNT_LINK = {
     SET_ACCOUNT_LINK_LIST: "setAccountLinkList"
 };
+
+export const ACCOUNT_TRANSACTIONS = {
+    SET_ACCOUNT_TRANSACTIONS_LIST: "setAccountTransactionList"
+};
+
+export const ACCOUNT_REVENUE = {
+    SET_ACCOUNT_REVENUE_LIST: "setAccountRevenueList"
+};
+
+export const ACCOUNT_EARNING = {
+    SET_ACCOUNT_EARNING_LIST: "setAccountEarningList"
+};

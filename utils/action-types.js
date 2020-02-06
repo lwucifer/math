@@ -47,9 +47,23 @@ export const SOCIAL_NOTIFICATIONS = {
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
     EDIT_AVATAR: "accountPersonalEditAvatar",
-    EDIT_COVER: "accountPersonalEditCover"
+    EDIT_COVER: "accountPersonalEditCover",
+    EDIT_PHONE: "accountPersonalEditPhone"
 };
 
 export const ACCOUNT_LINK = {
-    LIST: "accountLinkList"
+    LIST: "accountLinkList",
+    ADD: "accountLinkAdd"
+};
+
+export const ACCOUNT_TRANSACTIONS = {
+    LIST: "accountTransactionList"
+};
+
+export const ACCOUNT_REVENUE = {
+    LIST: "accountRevenueList"
+};
+
+export const ACCOUNT_EARNING = {
+    LIST: "accountEarningList"
 };
