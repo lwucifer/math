@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import IconClose from "~/assets/svg/icons/close.svg?inline";
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   components: {
