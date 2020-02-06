@@ -12,16 +12,19 @@
       <span role="button" tabindex="0" class="post-editor-upload__button">
         <input type="file" ref="inputFile" class="post-editor-upload__input" v-bind="$attrs" @input="handleInput">
       </span>
+      <IconPlus class="icon" />
     </div>
   </div>
 </template>
 
 <script>
+import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import('~/assets/svg/icons/close.svg?inline');
 
 export default {
   components: {
-    IconClose
+    IconClose,
+    IconPlus
   },
 
   methods: {

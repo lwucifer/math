@@ -260,6 +260,7 @@ hr {
     width: 1em;
     height: 1em;
     fill: $color-text;
+    transition: fill .3s;
 }
 
 .btn-load-more {

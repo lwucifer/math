@@ -31,14 +31,36 @@
         fill: $color-text-gray-2;
         font-size: 12px;
     }
+
+    &:hover {
+        svg {
+            fill: $color-primary;
+        }
+    }
 }
 
 .post-editor-upload__control {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 10rem;
     height: 10rem;
     border: 1px dashed $color-text-gray-2;
     cursor: pointer;
+    transition: border .3s;
+
+    svg {
+        fill: $color-text-gray-2;
+        font-size: 20px;
+    }
+
+    &:hover {
+        border-color: $color-primary;
+
+        svg {
+            fill: $color-primary;
+        }
+    }
 }
 
 .post-editor-upload__input {
