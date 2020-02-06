@@ -10,7 +10,9 @@
       </client-only>
     </div>
 
-    <app-upload class="post-editor__uploader"></app-upload>
+    <PostEditorUpload class="post-editor__uploader">
+      
+    </PostEditorUpload>
 
     <div class="post-editor__tagger-summary">
       <!-- <template v-if="status !== null">cảm thấy {{ status }}</template> -->
@@ -90,6 +92,7 @@
 <script>
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
+import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
 import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
@@ -97,6 +100,7 @@ import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 
 export default {
   components: {
+    PostEditorUpload,
     IconAddImage,
     IconUserGroup,
     IconPinLocation,

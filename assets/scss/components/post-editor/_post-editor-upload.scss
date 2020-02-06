@@ -1,12 +1,12 @@
-.app-upload {
+.post-editor-upload {
     display: flex;
 }
 
-.app-upload__list {
+.post-editor-upload__list {
     display: flex;
 }
 
-.app-upload__list-item {
+.post-editor-upload__list-item {
     width: 10rem;
     height: 10rem;
     position: relative;
@@ -20,7 +20,7 @@
     }
 }
 
-.app-upload__list-item__close {
+.post-editor-upload__list-item__close {
     position: absolute;
     top: 0;
     right: 0;
@@ -33,7 +33,7 @@
     }
 }
 
-.app-upload__control {
+.post-editor-upload__control {
     display: inline-block;
     width: 10rem;
     height: 10rem;
@@ -41,7 +41,7 @@
     cursor: pointer;
 }
 
-.app-upload__input {
+.post-editor-upload__input {
     position: absolute;
     z-index: -1;
 }
