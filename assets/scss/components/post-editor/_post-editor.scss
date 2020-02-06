@@ -101,6 +101,10 @@
         border: none;
         padding-left: 0;
         padding-right: 0;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     .app-select__option {
@@ -110,5 +114,12 @@
 
     .app-select__arrow {
         display: none;
+    }
+}
+
+.post-editor__tagger-summary {
+    a {
+        text-decoration: none;
+        color: $color-text;
     }
 }

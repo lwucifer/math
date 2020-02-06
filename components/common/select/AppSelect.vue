@@ -2,7 +2,7 @@
   <div class="app-select" :class="classes" v-click-outside="hideOptions">
     <!-- TAGS MODE -->
     <template v-if="mode === 'tags'">
-      <div class="app-select__selected" @click.self="handleClickSelected">
+      <div class="app-select__selected" @click="handleClickSelected">
         <span class="app-select__placeholder" v-if="!value.length">{{ $attrs.placeholder || '' }}</span>
         <app-tag
           v-for="(item, index) in selectedValues"
@@ -19,7 +19,7 @@
             autocomplete="off"
             class="app-select__field__input"
             v-model="search"
-            @input="handleInputSearch"
+            @input="handleSearchTag"
           />
           <!-- <span class="app-select__field__mirror">{{ search }}</span> -->
         </div>
@@ -44,12 +44,42 @@
 
     <!-- DEFAULT MODE -->
     <template v-else>
-      <div class="app-select__selected" tabindex="0" @click="handleClickSelected" @focus="handleClickSelected">
+      <div class="app-select__selected" tabindex="0" @click="handleClickSelected">
         <span class="app-select__prepend" v-if="$slots.prepend">
           <slot name="prepend" />
         </span>
-        <span class="app-select__placeholder" v-if="!value">{{ $attrs.placeholder || '' }}</span>
+
+        <span
+          v-if="value === null || value === undefined"
+          class="app-select__placeholder"
+        >{{ $attrs.placeholder || '' }}</span>
+
         <span class="app-select__selected-value">{{ selectedText }}</span>
+
+        <div class="mr-auto"></div>
+
+        <template v-if="searchable">
+          <div class="app-select__search">
+            <input
+              type="text"
+              autocomplete="off"
+              class="app-select__search-input"
+              v-model="search"
+              @input="handleSearchDefault"
+            />
+          </div>
+        </template>
+
+        <template v-if="showClear">
+          <span
+            v-if="!(value === null || value === undefined)"
+            class="app-select__clear"
+            @click.stop="handleClickClear"
+          >
+            <IconClose class="icon" />
+          </span>
+        </template>
+
         <span class="app-select__arrow">
           <IconCaretDown />
         </span>
@@ -74,11 +104,15 @@
 </template>
 
 <script>
-import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
+const IconCaretDown = () => import("~/assets/svg/icons/caret-down.svg?inline");
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
+  inheritAttrs: false,
+  
   components: {
-    IconCaretDown
+    IconCaretDown,
+    IconClose
   },
 
   model: {
@@ -101,7 +135,9 @@ export default {
     emptyMessage: {
       type: String,
       default: "No option"
-    }
+    },
+    showClear: Boolean,
+    searchable: Boolean
   },
 
   data: () => ({
@@ -112,7 +148,9 @@ export default {
   computed: {
     classes() {
       return {
-        "app-select--tags": this.mode === "tags"
+        active: this.active,
+        "app-select--tags": this.mode === "tags",
+        "app-select--searchable": this.searchable
       };
     },
 
@@ -134,7 +172,9 @@ export default {
     },
 
     optionsVisible() {
-      return this.options.filter(option => this.value.findIndex(id => id === option.value) === -1)
+      return this.options.filter(
+        option => this.value.findIndex(id => id === option.value) === -1
+      );
     }
   },
 
@@ -162,11 +202,12 @@ export default {
     },
 
     handleClickSelected() {
+      console.log("handleClickSelected");
       this.active = !this.active;
       this.$refs.search && this.$refs.search.focus();
     },
 
-    handleInputSearch(e) {
+    handleSearchTag(e) {
       // Set width of input
       const el = e.target;
       el.style.width = el.scrollWidth + "px";
@@ -175,8 +216,20 @@ export default {
       this.$emit("search", e.target.value);
     },
 
+    handleSearchDefault(e) {
+      this.$emit("search", e.target.value);
+    },
+
     handleCloseTag(id, index) {
       this.$emit("change", this.unSelectOption(index));
+    },
+
+    handleClickClear() {
+      if (this.mode === "tags") {
+        this.$emit("change", []);
+      } else {
+        this.$emit("change", null);
+      }
     }
   }
 };
