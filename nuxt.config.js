@@ -4,17 +4,17 @@ module.exports = {
     head: {
         title: "Schoolly",
         meta: [{
-                charset: "utf-8"
-            },
-            {
-                name: "viewport",
-                content: "width=device-width, initial-scale=1"
-            },
-            {
-                hid: "description",
-                name: "description",
-                content: "Nuxt full stack template for creating web app easily."
-            }
+            charset: "utf-8"
+        },
+        {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1"
+        },
+        {
+            hid: "description",
+            name: "description",
+            content: "Nuxt full stack template for creating web app easily."
+        }
         ],
         link: [{
             rel: "icon",
@@ -100,6 +100,14 @@ module.exports = {
          ** Run ESLint on save
          */
         extend(config, { isDev, isClient }) {
+            config.node = {
+                console: false,
+                fs: 'empty',
+                net: 'empty',
+                tls: 'empty',
+                child_process: 'empty',
+                module: 'empty',
+            }
             if (isDev && isClient) {
                 // config.module.rules.push({
                 //   enforce: 'pre',
