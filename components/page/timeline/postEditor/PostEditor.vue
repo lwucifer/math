@@ -10,9 +10,12 @@
       </client-only>
     </div>
 
-    <PostEditorUpload class="post-editor__uploader">
-      
-    </PostEditorUpload>
+    <PostEditorUpload
+      :fileList="fileList"
+      :previewList="previewList"
+      @remove-item="removeUploadItem"
+      @change="handleUploadChange"
+    />
 
     <div class="post-editor__tagger-summary">
       <!-- <template v-if="status !== null">cảm thấy {{ status }}</template> -->
@@ -92,6 +95,7 @@
 <script>
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
+import { getBase64 } from "~/utils/file";
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
@@ -116,6 +120,8 @@ export default {
       tag: [],
       checkin: null,
       status: "lovely",
+      fileList: [],
+      previewList: [],
       tagOptions: [
         { value: 0, text: "Nguyen Tien Dat" },
         { value: 1, text: "Nguyen Van A" },
@@ -165,6 +171,26 @@ export default {
 
   beforeDestroy() {
     this.editor.destroy();
+  },
+
+  methods: {
+    handleUploadChange(event) {
+      Array.from(event.target.files).forEach(file => {
+        this.fileList.push(file);
+        getBase64(file, fileSrc => {
+          this.previewList.push(fileSrc);
+        });
+      });
+    },
+
+    removeUploadItem(index) {
+      this.fileList = this.fileList
+        .slice(0, index)
+        .concat(this.fileList.slice(index + 1, this.fileList.length));
+      this.previewList = this.previewList
+        .slice(0, index)
+        .concat(this.previewList.slice(index + 1, this.previewList.length));
+    }
   }
 };
 </script>

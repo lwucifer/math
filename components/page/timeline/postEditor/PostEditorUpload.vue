@@ -1,16 +1,23 @@
 <template>
   <div class="post-editor-upload">
     <div class="post-editor-upload__list">
-      <div class="post-editor-upload__list-item">
-        <img src="https://picsum.photos/100/100" alt="">
-        <span class="post-editor-upload__list-item__close">
+      <div v-for="(image, index) in previewList" :key="index" class="post-editor-upload__list-item">
+        <img :src="image" alt />
+        <span class="post-editor-upload__list-item__close" @click="handleClickClose(index)">
           <IconClose class="icon" />
         </span>
       </div>
     </div>
     <div class="post-editor-upload__control" @click="handleClickControl">
       <span role="button" tabindex="0" class="post-editor-upload__button">
-        <input type="file" ref="inputFile" class="post-editor-upload__input" v-bind="$attrs" @input="handleInput">
+        <input
+          v-if="input"
+          type="file"
+          ref="inputFile"
+          class="post-editor-upload__input"
+          v-bind="$attrs"
+          @change="handleChange"
+        />
       </span>
       <IconPlus class="icon" />
     </div>
@@ -19,24 +26,63 @@
 
 <script>
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
-const IconClose = () => import('~/assets/svg/icons/close.svg?inline');
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
+  inheritAttrs: false,
+
   components: {
     IconClose,
     IconPlus
   },
 
+  props: {
+    fileList: {
+      type: Array,
+      default: () => []
+    },
+    previewList: {
+      type: Array,
+      default: () => []
+    },
+  },
+
+  data() {
+    return {
+      input: true
+    }
+  },
+
+  watch: {
+    previewList(newValue, oldValue) {
+      if (newValue.length >= oldValue.length) {
+        this.$nextTick(() => {
+          this.scrollToEnd()
+        })
+      }
+    }
+  },
+
   methods: {
-    handleInput(e) {
-      console.log('handleInput', e)
+    scrollToEnd() {
+      this.$el.scrollLeft = this.$el.scrollWidth;
+    },
+
+    handleChange(e) {
+      this.$emit("change", e);
+      this.input = false;
+      setTimeout(() => this.input = true);
     },
 
     handleClickControl() {
-      this.$refs.inputFile.click()
+      this.$refs.inputFile.click();
+    },
+
+    handleClickClose(index) {
+      this.$emit("remove-item", index);
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

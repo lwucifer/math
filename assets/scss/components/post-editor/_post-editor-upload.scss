@@ -1,5 +1,7 @@
 .post-editor-upload {
     display: flex;
+    overflow-x: auto;
+    padding-bottom: 10px;
 }
 
 .post-editor-upload__list {
@@ -7,6 +9,7 @@
 }
 
 .post-editor-upload__list-item {
+    flex: 0 0 10rem;
     width: 10rem;
     height: 10rem;
     position: relative;
@@ -43,6 +46,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 10rem;
     width: 10rem;
     height: 10rem;
     border: 1px dashed $color-text-gray-2;
@@ -64,6 +68,5 @@
 }
 
 .post-editor-upload__input {
-    position: absolute;
-    z-index: -1;
+    display: none;
 }
