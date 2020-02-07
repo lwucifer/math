@@ -39,3 +39,7 @@ export const ACCOUNT_REVENUE = {
 export const ACCOUNT_EARNING = {
     SET_ACCOUNT_EARNING_LIST: "setAccountEarningList"
 };
+
+export const EARNING_SUMMARY = {
+    SET_EARNING_SUMMARY_LIST: "setEarningSummaryList"
+};
