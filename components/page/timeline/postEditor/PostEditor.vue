@@ -11,6 +11,7 @@
     </div>
 
     <PostEditorUpload
+      v-show="fileList.length"
       :fileList="fileList"
       :previewList="previewList"
       @remove-item="removeUploadItem"
@@ -18,7 +19,7 @@
     />
 
     <div class="post-editor__tagger-summary">
-      <!-- <template v-if="status !== null">cảm thấy {{ status }}</template> -->
+      <template v-if="label !== null">cảm thấy <b>{{ getLabelText() }}</b></template>
       <template v-if="tag && tag.length">
         cùng với
         <b v-for="(item, index) in selectedTags" :key="item.value">
@@ -72,7 +73,7 @@
     </div>
 
     <div class="post-editor__toolbar">
-      <button class="post-editor__toolbar-item image">
+      <button class="post-editor__toolbar-item image" @click="handleClickUploadImage">
         <IconAddImage />
         <span>Hình ảnh</span>
       </button>
@@ -84,10 +85,29 @@
         <IconPinLocation />
         <span>Check in</span>
       </button>
-      <button class="post-editor__toolbar-item emoji">
-        <IconEmoji />
-        <span>Nhãn cảm xúc</span>
-      </button>
+      <app-dropdown open-on-click v-model="labelDropdrown">
+        <button
+          slot="activator"
+          slot-scope="{ on }"
+          class="post-editor__toolbar-item emoji"
+          v-on="on"
+        >
+          <IconEmoji />
+          <span>Nhãn cảm xúc</span>
+        </button>
+
+        <ul class="post-editor__status-list">
+          <li
+            v-for="item in labelList"
+            :key="item.id"
+            :class="{ 'active': label === item.id }"
+            @click="handleClickLabel(item.id)"
+          >
+            <i class="mr-4">{{ item.icon }}</i>
+            <span>{{ item.des }}</span>
+          </li>
+        </ul>
+      </app-dropdown>
     </div>
   </div>
 </template>
@@ -119,9 +139,10 @@ export default {
       showCheckin: false,
       tag: [],
       checkin: null,
-      status: "lovely",
       fileList: [],
       previewList: [],
+      label: null,
+      labelDropdrown: false,
       tagOptions: [
         { value: 0, text: "Nguyen Tien Dat" },
         { value: 1, text: "Nguyen Van A" },
@@ -138,6 +159,33 @@ export default {
         { value: 2, text: "Svalbard and Jan Mayen" },
         { value: 3, text: "Mongolia" },
         { value: 4, text: "Republic of Kosovo" }
+      ],
+      labelList: [
+        {
+          id: 1,
+          icon: "😄",
+          des: "vui vẻ"
+        },
+        {
+          id: 2,
+          icon: "😍",
+          des: "hạnh phúc"
+        },
+        {
+          id: 3,
+          icon: "😡",
+          des: "tức giận"
+        },
+        {
+          id: 4,
+          icon: "😞",
+          des: "thất vọng"
+        },
+        {
+          id: 5,
+          icon: "😞",
+          des: "suy ngẫm"
+        }
       ]
     };
   },
@@ -174,13 +222,14 @@ export default {
   },
 
   methods: {
-    handleUploadChange(event) {
-      Array.from(event.target.files).forEach(file => {
-        this.fileList.push(file);
-        getBase64(file, fileSrc => {
-          this.previewList.push(fileSrc);
-        });
-      });
+    getLabelText() {
+      const [labelObj = {}] = this.labelList.filter(
+        item => item.id === this.label
+      );
+
+      return "icon" in labelObj && "des" in labelObj
+        ? `${labelObj.icon} ${labelObj.des}`
+        : "";
     },
 
     removeUploadItem(index) {
@@ -190,6 +239,25 @@ export default {
       this.previewList = this.previewList
         .slice(0, index)
         .concat(this.previewList.slice(index + 1, this.previewList.length));
+    },
+
+    handleUploadChange(event) {
+      Array.from(event.target.files).forEach(file => {
+        this.fileList.push(file);
+        getBase64(file, fileSrc => {
+          this.previewList.push(fileSrc);
+        });
+      });
+    },
+
+    handleClickUploadImage() {
+      console.log(this);
+      this.$children[0].handleClickControl();
+    },
+
+    handleClickLabel(id) {
+      this.label = id;
+      this.labelDropdrown = false;
     }
   }
 };
