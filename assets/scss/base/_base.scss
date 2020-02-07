@@ -109,16 +109,32 @@ button, select, input, textarea {
     fill: $color-text;
 }
 hr {
-    border-top: 1px solid #eee;
+    border-top: 1px solid $color-border;
     border-bottom: 0;
 }
-.border-0 {
-    border: 0 !important;
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: bold;
+    color: #333;
 }
-.vertical-align-middle {
-    vertical-align: middle;
+h1, .h1 {
+    font-size: 3rem;
 }
-
+h2, .h2 {
+    font-size: 2.5rem;
+}
+h3, .h3 {
+    font-size: 2rem;
+}
+h4, .h4 {
+    font-size: 1.8rem;
+}
+h5, .h5 {
+    font-size: 1.6rem;
+}
+h6, .h6 {
+    font-size: 1.4rem;
+}
 // From
 ::placeholder {
     color: #ccc;
@@ -244,6 +260,8 @@ hr {
         flex: 0 0 20%;
     }
 }
+
+// Custom class
 .m-0 {
     margin: 0 !important;
 }
@@ -301,8 +319,11 @@ hr {
 .fill-999 path {
     fill: #999 !important;
 }
-.fill-whit path {
+.fill-white path {
     fill: #fff !important;
+}
+.color-primary {
+    color: $color-primary;
 }
 .color-red {
     color: $color-red;
@@ -313,16 +334,33 @@ hr {
 .color-999 {
     color: #999 !important;
 }
+.color-666 {
+    color: #666 !important;
+}
 .bold {
     font-weight: bold !important;
 }
 .normal {
     font-weight: normal !important;
 }
-
-// Custom width
+.border-0 {
+    border: 0 !important;
+}
+.items-center {
+    align-items: center;
+}
+.middle,
+.vertical-align-middle {
+    vertical-align: middle;
+}
 .full-width {
     width: 100% !important;
+}
+.mb-15 {
+    margin-bottom: 1.5rem;
+}
+.mt-15 {
+    margin-top: 1.5rem;
 }
 .w-auto {
     width: auto !important;
@@ -347,6 +385,15 @@ hr {
 }
 .max-w-100 {
     max-width: 10rem !important;
+}
+.w-20 {
+    width: 2rem !important;
+}
+.w-30 {
+    width: 3rem !important;
+}
+.w-50 {
+    width: 5rem !important;
 }
 .w-170 {
     width: 17rem !important;

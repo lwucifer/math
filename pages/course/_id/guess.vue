@@ -35,7 +35,7 @@
       </div>
       <div class="col-md-9">
         <div class="course-guess__content">
-          <h3>Lợi ích từ khóa học</h3>
+          <h5>Lợi ích từ khóa học</h5>
           <div class="row">
             <div class="col-md-6">
               <div class="icon">
@@ -81,7 +81,7 @@
         </div>
 
         <div class="course-guess__content pb-3">
-          <h3>Mô tả tổng quát</h3>
+          <h5>Mô tả tổng quát</h5>
           <div>
             <p>- Bạn đang mong muốn xây dựng một Hệ thống Kinh doanh Online Bài Bản cho riêng mình mà vẫn chưa tìm được hướng đi rõ ràng từ việc xác định sản phẩm kinh doanh - mô hình kinh doanh phù hợp, cách để liên hệ nhà cung cấp để đàm phán nhập hàng, cách nghiên cứu khách hàng, đối thủ, quảng cáo và tối ưu...... ?</p>
             <p>- Bạn đã có kinh nghiệm Kinh doanh online, và đang mong muốn mở rộng Hệ Thống Online Đa Kênh ngoài kênh truyền thống sang Facebook, Instagram, Zalo, Youtube, Email Marketing, Website, SMS...?</p>
@@ -92,7 +92,7 @@
         </div>
 
         <div class="course-guess__content">
-          <h3>Giáo trình</h3>
+          <h5>Giáo trình</h5>
           <div class="chapters-info">
             <p>
               Thể loại:
@@ -158,6 +158,7 @@
         </div>
 
         <div class="course-guess__content pb-3">
+          <h5>Giảng viên</h5>
           <CourseTeacherInfo :teacher="teacher"/>
         </div>
           
