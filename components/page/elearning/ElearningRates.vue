@@ -49,6 +49,7 @@
 
     <div class="elearning-rates__commnents">
       <ElearningRateComment :data="{}" v-for="(item, index) in  5" :key="index" />
+      <app-pagination :pagination="pagination" @pagechange="onPageChange" class="mt-4 mb-3"/>
     </div>
   </div>
 </template>
@@ -71,9 +72,22 @@ export default {
 
   data() {
     return {
-      active: 0
+      active: 0,
+      pagination: {
+        total: 10,
+        page: 2,
+        pager: 10,
+      }
     };
-  }
+  },
+
+  methods: {
+    onPageChange(e) {
+      const that = this;
+      that.pagination = {...that.pagination, page: e};
+      console.log(that.pagination)
+    }
+  },
 };
 </script>
 
