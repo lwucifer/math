@@ -25,3 +25,8 @@ export const SHARES = `/social/shares`;
 export const COMMENTS = `/social/comments`;
 export const MEDIAS = `/social/medias`;
 export const NOTIFICATIONS = `/social/notifications`;
+
+/**
+ * EARNING
+ */
+export const EARNING_SUMMARY = `/earning/summary`;
