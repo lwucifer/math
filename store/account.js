@@ -29,9 +29,12 @@ const actions = {
             const result = await new Personal(this.$axios)[actionTypes.BASE.DETAIL](
                 payload
             );
-            console.log("[Personal] list", result);
+            console.log("[Personal] list", result.data);
             // set to mutation
-            commit(mutationTypes.ACCOUNT_PERSONAL.SET_ACCOUNT_PERSONAL_LIST, result);
+            commit(
+                mutationTypes.ACCOUNT_PERSONAL.SET_ACCOUNT_PERSONAL_LIST,
+                result.data
+            );
         } catch (err) {
             console.log("[Personal] list.err", err);
             return err;
