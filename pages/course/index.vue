@@ -4,7 +4,9 @@
     <div class="container">
       <div v-if="this.isAuthenticated">
         <div class="mb-4">
-          <app-button size="lg" color="white" square class="mr-5">Kho nhập liệu</app-button>
+          <app-button size="lg" color="white" square class="mr-5"
+            >Kho nhập liệu</app-button
+          >
           <app-button size="lg" square>Tạo khóa học</app-button>
         </div>
         <AsideBox
@@ -22,14 +24,16 @@
             @click="activate(0)"
             :color="active_el === 0 ? 'primary' : 'gray'"
             square
-          >Tất cả</app-button>
+            >Tất cả</app-button
+          >
           <app-button
             square
             v-for="(item, i) in categories"
             :key="i"
             @click="activate(item.id)"
             :color="active_el === item.id ? 'primary' : 'gray'"
-          >{{item.name}}</app-button>
+            >{{ item.name }}</app-button
+          >
         </AsideBox>
       </div>
       <div class="row">
@@ -44,13 +48,18 @@
                 :to="'/course/category/' + item.id"
                 v-for="(item, i) in categories"
                 :key="i"
-              >{{item.name}}</n-link>
+                >{{ item.name }}</n-link
+              >
             </div>
           </AsideBox>
         </div>
         <div :class="this.isAuthenticated ? 'col-md-9' : 'col-md-12'">
           <div class="row">
-            <div :class="classes" v-for="(course, index) in courses" :key="index">
+            <div
+              :class="classes"
+              v-for="(course, index) in earningSummaryList"
+              :key="index"
+            >
               <CourseItem :course="course" />
             </div>
           </div>
@@ -68,6 +77,7 @@ import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import axios from "axios";
 
 export default {
   name: "Course",
@@ -79,60 +89,16 @@ export default {
     AsideBox
   },
 
+  async fetch({ params, query, store }) {
+    console.log("get earning summary");
+    await store.dispatch(`course/${actionTypes.EARNING_SUMMARY.LIST}`)
+  },
+
   data() {
     return {
       banners: new Array(3).fill(BannerImage, 0),
       isAuthenticated: true,
-      courses: [
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        },
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        },
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        },
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        },
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        },
-        {
-          id: "1",
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/259/155",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70"
-        }
-      ],
+      courses: [],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
@@ -226,6 +192,7 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
+    ...mapState("course", ["earningSummaryList"]),
     classes() {
       return {
         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,

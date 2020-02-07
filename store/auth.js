@@ -1,19 +1,31 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
+import { removeToken, setToken, setAccessToken } from "../utils/auth";
 
 /**
  * initial state
  */
 const state = () => ({
-    loggedUser: null,
-    accountStatus: ""
+    accountStatus: "",
+    token: null,
+    access_token: null
 });
 
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    isAuthenticated(state, getters, rootState) {
+        return !!state.token;
+    },
+    token(state) {
+        return state.token;
+    },
+    accessToken(state) {
+        return state.access_token;
+    }
+};
 
 /**
  * initial actions
@@ -26,7 +38,9 @@ const actions = {
             firebase_token
         });
         if (result.success) {
-            commit(mutationTypes.AUTH.SET_LOGIN, result);
+            console.log("Login [REPONSE]", result);
+            commit(mutationTypes.AUTH.SET_TOKEN, result.data);
+            commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.token);
         }
         return result;
     },
@@ -70,9 +84,15 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-    [mutationTypes.AUTH.SET_LOGIN](state, _loggedUser) {
-        console.log("huydv", _loggedUser);
-        state.loggedUser = _loggedUser;
+    [mutationTypes.AUTH.SET_TOKEN](state, token) {
+        const renewToken = Object.assign({}, state.token, token);
+        state.token = renewToken;
+        setToken(renewToken);
+    },
+
+    [mutationTypes.AUTH.SET_ACCESS_TOKEN](state, access_token) {
+        state.access_token = access_token;
+        setAccessToken(access_token);
     },
 
     [mutationTypes.AUTH.SET_LOGOUT](state) {
