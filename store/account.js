@@ -26,7 +26,7 @@ const getters = {};
 const actions = {
     async [actionTypes.ACCOUNT_PERSONAL.LIST]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.LIST](
+            const result = await new Personal(this.$axios)[actionTypes.BASE.DETAIL](
                 payload
             );
             console.log("[Personal] list", result);
