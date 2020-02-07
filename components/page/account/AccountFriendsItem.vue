@@ -12,8 +12,8 @@
             </div>
         </div>
 
-        <app-dropdown class="account-friends-item__actions ml-auto" align-content="center"open-on-click v-model="dropdownShow" content-width="150px">
-            <app-button slot="activator" color="secondary" square size="xs">
+        <app-dropdown class="account-friends-item__actions ml-auto" position="center" open-on-click v-model="dropdownShow" content-width="150px">
+            <app-button slot="activator" slot-scope="{ on }" color="secondary" square size="xs" v-on="on">
                 <IconTickGray class="mr-2"/> Bạn bè
             </app-button>
             <ul class="account-friends-item__actions-list">
