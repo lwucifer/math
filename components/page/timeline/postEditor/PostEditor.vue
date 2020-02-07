@@ -109,6 +109,17 @@
         </ul>
       </app-dropdown>
     </div>
+
+    <app-divider class="my-3" />
+
+    <div class="post-editor__privacy d-flex align-items-center justify-content-between mt-3">
+      <span class="mr-3">Chế độ đăng tin</span>
+      <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
+        <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
+      </app-select>
+    </div>
+
+    <app-button full-width square class="mt-4">Đăng tin</app-button>
   </div>
 </template>
 
@@ -121,6 +132,7 @@ import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
 import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
+import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 
 export default {
   components: {
@@ -129,7 +141,8 @@ export default {
     IconUserGroup,
     IconPinLocation,
     IconEmoji,
-    EditorContent
+    EditorContent,
+    IconGlobe
   },
 
   data() {
@@ -143,6 +156,7 @@ export default {
       previewList: [],
       label: null,
       labelDropdrown: false,
+      shareWith: 0,
       tagOptions: [
         { value: 0, text: "Nguyen Tien Dat" },
         { value: 1, text: "Nguyen Van A" },
@@ -186,6 +200,11 @@ export default {
           icon: "😞",
           des: "suy ngẫm"
         }
+      ],
+      shareWithOpts: [
+        { value: 0, text: "Công khai" },
+        { value: 1, text: "Bạn bè" },
+        { value: 3, text: "Chỉ mình tôi" }
       ]
     };
   },
@@ -256,7 +275,7 @@ export default {
     },
 
     handleClickLabel(id) {
-      this.label = id;
+      this.label === id ? (this.label = null) : (this.label = id);
       this.labelDropdrown = false;
     }
   }

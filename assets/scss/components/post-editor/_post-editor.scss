@@ -129,6 +129,8 @@
 .post-editor__status-list {
     list-style-type: none;
     width: 34.8rem;
+    max-height: 275px;
+    overflow-y: auto;
 
     li {
         display: flex;
@@ -145,5 +147,24 @@
         font-style: normal;
         line-height: 1;
         font-size: 3.2rem;
+    }
+}
+
+.post-editor__select-private {
+    .app-select__selected {
+        line-height: (17/14);
+        padding: 3px 5px;
+        background-color: $color-border;
+        border-color: transparent;
+        color: $color-text-gray;
+        height: 2.4rem;
+    }
+
+    .app-select__arrow svg {
+        fill: $color-text-gray;
+    }
+
+    &__prepend {
+        fill: $color-text-gray;
     }
 }
