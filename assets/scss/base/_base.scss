@@ -136,6 +136,17 @@ h6, .h6 {
     font-size: 1.4rem;
 }
 // From
+input::-webkit-input-placeholder {
+    font-size: 1.4rem;
+    transform:translate3d(0,1px,0)
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 3rem white inset !important;
+}
+
 ::placeholder {
     color: #ccc;
     opacity: 1;
@@ -303,12 +314,17 @@ h6, .h6 {
     display: flex !important;
     align-items: center !important;
 }
-
+.font-size-12{
+    font-size: 1.2rem;
+}
 .fill-red path {
     fill: $color-red !important;
 }
 .fill-primary path {
     fill: $color-primary !important;
+}
+.fill-blue path {
+    fill: $color-blue !important;
 }
 .fill-dark path{
     fill: #333 !important;
@@ -323,10 +339,13 @@ h6, .h6 {
     fill: #fff !important;
 }
 .color-primary {
-    color: $color-primary;
+    color: $color-primary !important;
 }
 .color-red {
-    color: $color-red;
+    color: $color-red !important;
+}
+.color-blue {
+    color: $color-blue !important;
 }
 .color-white {
     color: #fff !important;
@@ -343,8 +362,23 @@ h6, .h6 {
 .normal {
     font-weight: normal !important;
 }
+.border {
+    border: 1px solid $color-border;
+}
 .border-0 {
     border: 0 !important;
+}
+.border-red {
+    border-color: $color-red !important;
+}
+.border-primary {
+    border-color: $color-primary !important;
+}
+.border-blue {
+    border-color: $color-blue !important;
+}
+.text-decoration-none{
+    text-decoration: none;
 }
 .items-center {
     align-items: center;
