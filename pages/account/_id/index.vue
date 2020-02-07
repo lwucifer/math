@@ -43,9 +43,9 @@ export default {
     AccountCover
   },
   async fetch({ params, query, store }) {
-    // const userId = store.state.auth.token.user.id;
+    const userId = store.state.auth.token.user.id;
     await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, 5)
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },
 
