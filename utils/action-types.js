@@ -67,3 +67,7 @@ export const ACCOUNT_REVENUE = {
 export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
+
+export const EARNING_SUMMARY = {
+    LIST: "earningSummary"
+};
