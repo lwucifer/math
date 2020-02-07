@@ -1,0 +1,36 @@
+.app-pagination {
+    list-style: none;
+    display: block;
+    margin-left: -0.6rem;
+    margin-right: -0.6rem;
+    text-align: center;
+    li {
+        display: inline-block;
+        margin: 0 0.6rem;
+    }
+
+    .link {
+        display: inline-block;
+        background: #eee;
+        border-radius: 5px;
+        color: #333;
+        font-size: 1.4rem;
+        height: 3.2rem;
+        padding: 0 1.2rem;
+        line-height: 3.2rem;
+        text-align: center;
+
+        &:not(.active):not(.disable) {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #ddd;
+            }
+        }
+
+        &.active {
+            color: #fff;
+            background-color: $color-primary;
+        }
+    }
+}
