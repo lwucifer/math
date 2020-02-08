@@ -77,6 +77,8 @@
                 }
 
                 .tabs-content{
+                    height: 65vh;
+                    overflow-y: scroll;
                     .align-item{
                         padding: 8px 15px;
                         display: flex;
@@ -211,6 +213,8 @@
                 .aside-box__content{
                     padding-left: 15px;
                     padding-right: 15px;
+                    height: 75vh;
+                    overflow-y: scroll;
         
                     .message-box__time{
                         max-width: 80%;
