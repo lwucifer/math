@@ -23,18 +23,18 @@
 
 .app-modal {
     position: relative;
-    padding-bottom: 24px;
+    padding-bottom: 2.4rem;
     margin: 0 auto;
     position: relative;
-    top: 100px;
+    top: 10rem;
     width: auto;
-    max-width: calc(100% - 15px);
+    max-width: calc(100% - 1.5rem);
 }
 
 .app-modal-content {
     position: relative;
     background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 .4rem 1.2rem rgba(0, 0, 0, 0.15);
 }
 
 .app-modal-centered {
@@ -54,4 +54,25 @@
         display: inline-block;
         text-align: left;
     }
+}
+
+// New folder modal
+.new-folder-modal .app-modal-content {
+    padding: 1.5rem 2rem 0;
+    .btn {
+        width: 12.5rem;
+        margin: 2rem .5rem;
+    }
+    .title {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+    .btn-close {
+        right: -1rem;
+    }
+}
+.form-control_border {
+    height: 3.5rem;
+    border: 1px solid $color-border;
+    padding: .8rem;
 }

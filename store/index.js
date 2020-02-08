@@ -1,3 +1,5 @@
+import auth from './auth.js'
+
 const state = () => ({
   authUser: null,
 });

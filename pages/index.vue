@@ -7,13 +7,30 @@
         <div class="col-md-8">
           <PostEditor />
 
-          <Post class="mb-4" v-for="(post, index) in postsList" :key="index">
-            <PostImage
-              :images="post.attachments.map(item => ({ type: 'image', src: item.thumb }))"
-              class="my-4"
-              @click-item="handleClickImage(post)"
-            />
-          </Post>
+          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
+
+          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
+
+          <template v-show="!loading">
+            <Post
+              v-for="post in postsList"
+              class="mb-4"
+              :key="post.label"
+              :fullname="post.creator && post.creator.fullname"
+              :updated="post.updated"
+              :likes="post.likes"
+              :comments="post.comments"
+              :content="post.content"
+            >
+              <PostImage
+                v-if="post.attachments && post.attachments.length"
+                slot="media-content"
+                class="my-4"
+                :images="post.attachments"
+                @click-item="imageObj => handleClickImage(imageObj, post)"
+              />
+            </Post>
+          </template>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
@@ -51,7 +68,7 @@
             <Post>
               <template slot="media-content">
                 <PostImage
-                  :images="[{ type: 'image', src: 'https://picsum.photos/1920/1080'}]"
+                  :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
                 />
@@ -64,8 +81,8 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/361/361'},
-                    { type: 'image', src: 'https://picsum.photos/361/361'},
+                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
+                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -79,9 +96,9 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/546/362'},
-                    { type: 'image', src: 'https://picsum.photos/179/179'},
-                    { type: 'image', src: 'https://picsum.photos/179/179'},
+                    { object: 'image', thumb: 'https://picsum.photos/546/362'},
+                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
+                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -95,10 +112,10 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/555/555'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
-                    { type: 'image', src: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/555/555'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
+                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -112,11 +129,11 @@
               <template slot="media-content">
                 <PostImage
                   :images="[
-                    { type: 'image', src: 'https://picsum.photos/729/437'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
-                    { type: 'image', src: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/729/437'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
+                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
                   ]"
                   class="my-4"
                   @click-item="modalDetailShow = true"
@@ -131,9 +148,9 @@
             centered
             :width="1170"
             :component-class="{ 'post-detail-modal': true }"
-            @close="$router.push('/')"
+            @close="handleCloseModal"
           >
-            <PostDetail :images="timelineSliderItems" @click-close="modalDetailShow = false" />
+            <PostDetail v-if="modalDetailShow" slot="content" :post="dataModalDetail" @click-close="handleCloseModal" @click-prev="handleClickPrev" @click-next="handleClickNext"/>
           </app-modal>
         </div>
 
@@ -203,17 +220,17 @@
 </template>
 
 <script>
-import SliderBanner from "~/components/Slider/SliderBanner";
-import PostEditor from "~/components/PostEditor/PostEditor";
-import AsideBox from "~/components/AsideBox/AsideBox";
-import Post from "~/components/Post/Post";
-import PostSlider from "~/components/Post/PostSlider";
-import PostDetail from "~/components/Post/PostDetail";
-import PostImage from "~/components/Post/PostImage";
+import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
+import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
+import AsideBox from "~/components/layout/asideBox/AsideBox";
+import Post from "~/components/page/timeline/post/Post";
+import PostSlider from "~/components/page/timeline/post/PostSlider";
+import PostDetail from "~/components/page/timeline/post/PostDetail";
+import PostImage from "~/components/page/timeline/post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
-import { mapState } from 'vuex';
-import * as actionTypes from '~/utils/action-types';
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
@@ -227,18 +244,21 @@ export default {
     PostDetail,
     PostImage
   },
+  
   async fetch({ params, query, store }) {
+    console.log("watchQuery");
     await Promise.all([
-      store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
   },
 
   data() {
     return {
+      loading: true,
       banners: new Array(3).fill(BannerImage, 0),
       coursesTab: 0,
       modalDetailShow: false,
+      dataModalDetail: {},
       messages: [
         {
           image: "https://picsum.photos/64/64",
@@ -338,29 +358,98 @@ export default {
       ]
     };
   },
-  computed : {
+
+  computed: {
     ...mapState("social", ["postsList"])
   },
 
-  watch: {
-    $route: {
-      immediate: true,
-      handler: function(newValue) {
-        console.log("watch $route", newValue);
-        if (newValue.query.post_id) {
-          this.modalDetailShow = true;
-        } else {
-          this.modalDetailShow = false;
-        }
-      }
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
+
+    if (process.browser) {
+      window.addEventListener("popstate", event =>
+        setTimeout(() => this.handlePopstate(event))
+      );
+    }
+  },
+
+  beforeDestroy() {
+    if (process.browser) {
+      window.removeEventListener("popstate", event =>
+        setTimeout(() => this.handlePopstate(event))
+      );
     }
   },
 
   methods: {
-    handleClickImage(post) {
-      // if (typeof history.pushState != "undefined") {
-      //   history.pushState({}, '', `${window.location.origin}/post/`);
-      // }
+    /**
+     * Click image -> change url
+     * @param { Object } imageObj - { type: image | video, post: post object }
+     */
+    handleClickImage(imageObj, post) {
+      if (typeof window.history.pushState != "undefined") {
+        this.dataModalDetail = post;
+        this.modalDetailShow = true;
+
+        window.history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/post?photo_id=${imageObj.id}`
+        );
+      } else {
+        this.$router.push(`${window.location.origin}/post?photo_id=${imageObj.id}`)
+      }
+    },
+
+    /**
+     * Hande click nav button of browser
+     * @param { Object } event - event emited
+     */
+    handlePopstate(event) {
+      console.log("event.state", event.state);
+      const fullPath = document.location.href.replace(
+        window.location.origin,
+        ""
+      );
+      // const isTheater = document.location.search.includes("&theater");
+
+      if (event.state.theater) {
+        this.modalDetailShow = true;
+      } else {
+        this.$router.push();
+      }
+    },
+
+    /**
+     * Click close modal -> set url in browser to '/'
+     */
+    handleCloseModal() {
+      if (typeof window.history.pushState != "undefined") {
+        window.history.pushState(
+          { theater: true },
+          "",
+          `${window.location.origin}/`
+        );
+      }
+
+      this.modalDetailShow = false;
+      this.dataModalDetail = {};
+    },
+
+    /**
+     * on click prev arrow on modal post detail -> get prev image info
+     */
+    handleClickPrev() {
+      console.log("handleClickPrev")
+    },
+
+    /**
+     * on click next arrow on modal post detail -> get next image info
+     */
+    handleClickNext() {
+      console.log("handleClickNext")
     }
   }
 };

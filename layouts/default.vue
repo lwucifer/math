@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TheHeader from "~/components/TheHeader/TheHeader"
+import TheHeader from "~/components/layout/header/Header"
 
 export default {
   components: {
