@@ -1,6 +1,18 @@
 .page-message{
+    .aside-box{
+        padding: 0;
+    }
+    .form-group{
+        margin-bottom: 0;
+    }
     .list-unstyle{
         list-style: none;
+    }
+    .aside-box{
+        margin-bottom: 0;
+    }
+    .aside-box__top{
+        margin-bottom: 0;
     }
     @media screen and (min-width: 768px) {
         .col-sidebar{
@@ -27,6 +39,7 @@
                 padding: 15px;
 
                 .input-group{
+                    width: 100%;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -167,13 +180,15 @@
     .col-content{
         .box{
             background-color: #ffffff;
+            padding-top: 0;
+            padding-bottom: 0;
             .message-chat__content{
                 
                 .aside-box__top{
                     border-bottom: 1px solid #EEEEEE;
                     display: flex;
                     justify-content: space-between;
-                    padding: 4px 15px;
+                    padding: 15px;
         
                     .message-desc{
                         display: flex;
@@ -342,6 +357,7 @@
             @media screen and (min-width: 768px) {
                 .message-chat__content{
                     padding-right: 0;
+                    padding-left: 0;
                     border-right: 1px solid #EEEEEE ;
                 }
             }
@@ -352,9 +368,12 @@
                     text-align: center;
 
                     .message-info__acc__image{
+                        width: 100%;
+                        display: inline-block;
                         .app-avatar{
                             max-width: 65px;
                             max-height: 65px;
+                            float: none;
                         }
                     }
                     .message-info__acc__title{
