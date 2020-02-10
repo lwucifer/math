@@ -6,23 +6,23 @@
         <tbody>
           <tr>
             <td>Email</td>
-            <td>{{personalList.email}}</td>
+            <td>{{account.email}}</td>
           </tr>
           <tr>
             <td>Số điện thoại</td>
-            <td>{{personalList.phone_number}}</td>
+            <td>{{account.phone_number}}</td>
           </tr>
           <tr>
             <td>Ngày sinh</td>
-            <td>{{personalList.bithday}}</td>
+            <td>{{account.bithday}}</td>
           </tr>
           <tr>
             <td>Giới tính</td>
-            <td>{{personalList.sex == 1 ? "Nam" : "Nữ"}}</td>
+            <td>{{account.sex == 1 ? "Nam" : "Nữ"}}</td>
           </tr>
           <tr>
             <td>Địa chỉ</td>
-            <td>{{personalList.address}}</td>
+            <td>{{account.address}}</td>
           </tr>
         </tbody>
       </table>
@@ -148,7 +148,7 @@ export default {
       email: "hello@gmail.com",
       address: "10 Lê Văn Lương",
       sex: 1,
-      birthday: "06/09/1996"
+      birthday: "06/09/1996",
     }
   }),
   computed: {

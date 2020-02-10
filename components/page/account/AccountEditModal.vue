@@ -8,18 +8,19 @@
   >
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" v-model="email" class="form-control" />
-      </div>
-      <div class="form-group form-group-inline">
-        <div class="form-group-inline-item">
-          <label>Số điện thoại</label>
-          <input type="text" v-model="phone" class="max-w-170 form-control" />
+      <app-input labelFixed type="text" v-model="email" label="Email" />
+      <div class="row">
+        <div class="col-6">
+          <app-input
+            labelFixed
+            type="text"
+            v-model="phone"
+            label="Số điện thoại"
+          />
         </div>
-        <div class="form-group-inline-item">
+        <div class="col-6">
           <label class="min-w-0">Ngày sinh</label>
-          <app-date-picker v-model="birthday" class="w-170 form-control" />
+          <app-date-picker v-model="birthday"/>
         </div>
       </div>
       <div class="form-group">
@@ -52,13 +53,7 @@ export default {
   },
   computed: {},
   data() {
-    return {
-      sex: "",
-      email: "",
-      phone: "",
-      address: "",
-      birthday: ""
-    };
+    return { email: "" };
   },
   methods: {
     save() {
@@ -66,12 +61,22 @@ export default {
     }
   },
 
-  created() {
-    this.sex = this.account.sex;
-    this.email = this.account.email;
-    this.phone = this.account.phone;
-    this.address = this.account.address;
-    this.birthday = this.account.birthday;
+  computed: {
+    sex() {
+      return this.account.sex;
+    },
+    email() {
+      return this.account.email;
+    },
+    phone() {
+      return this.account.phone;
+    },
+    address() {
+      return this.account.address;
+    },
+    birthday() {
+      return this.account.birthday;
+    }
   }
 };
 </script>
