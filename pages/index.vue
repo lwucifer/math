@@ -18,8 +18,8 @@
               :key="post.post_id"
               :fullname="post.author && post.author.fullname"
               :updated="post.created_at"
-              :likes="post.likes"
-              :comments="post.comments"
+              :likes="post.total_like"
+              :comments="post.total_comment"
               :content="post.content"
             >
               <PostImage

@@ -299,7 +299,7 @@ export default {
       this.$emit('submit', {
         content: this.editor.getHTML(),
         link: this.link,
-        post_image: [],
+        post_image: this.fileList,
         list_tag: [],
         check_in: {},
         privacy: 8,

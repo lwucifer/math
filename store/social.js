@@ -46,6 +46,7 @@ const actions = {
         try {
             const { data: result = {} } = await new SocialPosts(this.$axios)[actionTypes.BASE.ADD](payload);
             console.log("[SocialPosts] add", result);
+            return result;
         } catch (err) {
             console.log("[SocialPosts] add.err", err)
             return err;
