@@ -47,7 +47,7 @@
 
           <div
             class="the-header__user-name"
-          >{{$store.state.auth.token.user.username ? $store.state.auth.token.user.username : $store.state.auth.token.user.phone_number}}</div>
+          >{{$store.state.auth.token.user ? ($store.state.auth.token.user.username ? $store.state.auth.token.user.username : $store.state.auth.token.user.phone_number) : ''}}</div>
           <div class="the-header__user-arrow">
             <IconCaretDown width="13" height="7" />
           </div>
