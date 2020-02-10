@@ -28,12 +28,12 @@
     <div class="actions" v-if="status == 2">
       <app-dropdown
         class="friend-actions mr-3"
-        align-content="center"
+        position="center"
         open-on-click
         v-model="dropdownShow"
         content-width="150px"
       >
-        <app-button slot="activator" square>
+        <app-button slot="activator" slot-scope="{ on }" square v-on="on">
           <IconUserArrow class="mr-2" />Chờ xác nhận
         </app-button>
         <ul class="friend-actions-list">
@@ -52,12 +52,12 @@
     <div class="actions" v-if="status == 3">
       <app-dropdown
         class="friend-actions mr-3"
-        align-content="center"
+        position="center"
         open-on-click
         v-model="dropdownShow"
         content-width="150px"
       >
-        <app-button slot="activator" square>
+        <app-button slot="activator" slot-scope="{ on }" square v-on="on">
           <IconUserTick class="mr-2" />Bạn bè
         </app-button>
         <ul class="friend-actions-list">

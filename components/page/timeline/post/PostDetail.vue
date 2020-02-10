@@ -41,11 +41,11 @@
     <div class="post-detail__actions">
       <app-dropdown
         class="post-detail__actions-menu"
-        align-content="left"
+        position="left"
         open-on-click
         v-model="dropdownShow"
       >
-        <button slot="activator" type="button" class="post-detail__actions-btn">
+        <button slot="activator" slot-scope="{ on }" type="button" class="post-detail__actions-btn" v-on="on">
           <IconDots />
         </button>
 
