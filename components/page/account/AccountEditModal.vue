@@ -3,18 +3,19 @@
     <!-- @close="$router.push('/')" -->
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" v-model="email" class="form-control" />
-      </div>
-      <div class="form-group form-group-inline">
-        <div class="form-group-inline-item">
-          <label>Số điện thoại</label>
-          <input type="text" v-model="phone_number" class="max-w-170 form-control" />
+      <app-input labelFixed type="text" v-model="email" label="Email" />
+      <div class="row">
+        <div class="col-6">
+          <app-input
+            labelFixed
+            type="text"
+            v-model="phone"
+            label="Số điện thoại"
+          />
         </div>
-        <div class="form-group-inline-item">
+        <div class="col-6">
           <label class="min-w-0">Ngày sinh</label>
-          <app-date-picker v-model="birthday" class="w-170 form-control" />
+          <app-date-picker v-model="birthday"/>
         </div>
       </div>
       <div class="form-group">
@@ -51,13 +52,7 @@ export default {
     ...mapState("account", ["personalList"])
   },
   data() {
-    return {
-      sex: "",
-      email: "",
-      phone: "",
-      address: "",
-      birthday: ""
-    };
+    return { email: "" };
   },
   methods: {
     ...mapActions("account", ["accountPersonalEdit"]),
@@ -78,12 +73,31 @@ export default {
     }
   },
 
+<<<<<<< HEAD
+  computed: {
+    sex() {
+      return this.account.sex;
+    },
+    email() {
+      return this.account.email;
+    },
+    phone() {
+      return this.account.phone;
+    },
+    address() {
+      return this.account.address;
+    },
+    birthday() {
+      return this.account.birthday;
+    }
+=======
   created() {
     this.sex = this.personalList.sex;
     this.email = this.personalList.email;
     this.phone_number = this.personalList.phone_number;
     this.address = this.personalList.address;
     this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
+>>>>>>> 316ac7112bae0cbd5fa25523aa27550d78be4df8
   }
 };
 </script>

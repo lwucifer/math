@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <td>Ngày sinh</td>
-            <td>{{personalList.bithday | getSysdateSimpleFormat}}</td>
+            <td>{{personalList.bithday}}</td>
           </tr>
           <tr>
             <td>Giới tính</td>
@@ -148,7 +148,7 @@ export default {
       email: "hello@gmail.com",
       address: "10 Lê Văn Lương",
       sex: 1,
-      birthday: "06/09/1996"
+      birthday: "06/09/1996",
     }
   }),
   computed: {

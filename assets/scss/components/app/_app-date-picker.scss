@@ -13,12 +13,12 @@
 .mx-datepicker {
     width: 15.5rem;
 }
-label {
-    margin-right: 0.3rem;
-}
 .app-date-picker {
     display: inline-block;
     + .app-date-picker {
         margin-left: 2.6rem;
+    }
+    label {
+        margin-right: 0.3rem;
     }
 }

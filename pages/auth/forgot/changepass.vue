@@ -3,37 +3,27 @@
     <div class="auth__main">
       <h3>Quên mật khẩu?</h3>
       <div class="auth_content mt-5">
-        <div class="form-group">
-          <input type="text" v-model="otp" class="form-control" placeholder="Nhập mã OTP" />
-          <p
-            class="font-size-12 color-red text-left full-width mt-2"
-            v-if="error"
-          >Tài khoản không tồn tại</p>
-        </div>
-        <div class="form-group">
-          <input
-            type="text"
-            v-model="password"
-            class="form-control"
-            placeholder="Nhập mật khẩu mới"
-          />
-          <p
-            class="font-size-12 color-red text-left full-width mt-2"
-            v-if="error"
-          >Tài khoản không tồn tại</p>
-        </div>
-        <div class="form-group">
-          <input
-            type="text"
-            v-model="coPassword"
-            class="form-control"
-            placeholder="Xác nhận mật khẩu"
-          />
-          <p
-            class="font-size-12 color-red text-left full-width mt-2"
-            v-if="error"
-          >Tài khoản không tồn tại</p>
-        </div>
+        <app-input
+          message="Tài khoản không tồn tại"
+          type="text"
+          v-model="otp"
+          placeholder="Nhập mã OTP"
+          :validate="error ? 2 : 0"
+        />
+        <app-input
+          message="Tài khoản không tồn tại"
+          type="password"
+          v-model="password"
+          placeholder="Nhập mật khẩu mới"
+          :validate="error ? 2 : 0"
+        />
+        <app-input
+          message="Tài khoản không tồn tại"
+          type="password"
+          v-model="coPassword"
+          placeholder="Xác nhận mật khẩu"
+          :validate="error ? 2 : 0"
+        />
         <app-button color="primary" square fullWidth @click="login" class="mb-3">Xác nhận</app-button>
         <a @click="sendOTP" :class="countDown === 0 ? '' : 'disable'"
          class="btn-send-otp">Gửi lại mã xác thực ({{countDown}}s)</a>

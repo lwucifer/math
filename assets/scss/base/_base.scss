@@ -217,19 +217,6 @@ input:-webkit-autofill:active  {
         }
     }
     textarea.form-control { height: auto; }
-    .custom-file-upload {
-        background-color: $color-primary;
-        color: #fff;
-        height: 3rem;
-        font-size: 1.4rem;
-        padding: 0 2rem;
-        line-height: 3rem;
-        text-align: center;
-    }
-    .form-control-upload {
-        opacity: 0;
-        visibility: hidden;
-    }
     label {
         min-width: 10rem;
         font-size: 1.6rem;
@@ -262,7 +249,26 @@ input:-webkit-autofill:active  {
     display: flex;
     align-items: center;
 }
-
+.app-input-secondary {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    .input {
+        display: flex;
+        flex: 1;
+        padding: 0;
+        .app-select__selected {
+            border: 1px solid #eee;
+            background-color: #fff;
+        }
+    }
+    label {
+        font-size: 1.6rem;
+        &.label-fixed {
+            width: 11rem;
+        }
+    }
+}
 // Custom col
 .row .custom-col-lg-5 {
     @media (min-width: 992px) {
