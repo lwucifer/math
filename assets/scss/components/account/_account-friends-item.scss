@@ -1,0 +1,46 @@
+.account-friends-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 2rem;
+	.account-friends-item__info {
+		display: flex;
+		align-items: center;
+		>div {
+			margin-left: 1rem;
+		}
+		p {
+			margin-top: .5rem;
+			color: #999;
+		}
+	}
+}
+
+.account-friends-item__actions {
+    .app-dropdown__content {
+    	box-shadow: none;
+        border: 1px solid $color-border;
+        margin-top: .8rem;
+    }
+}
+.account-friends-item__actions-list {
+    list-style-type: none;
+    width: 15rem;
+    text-align: center;
+    li {
+        &:not(:last-child) {
+            border-bottom: 1px solid $color-border;
+        }
+    }
+    a {
+    	cursor: pointer;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        font-size: 1.4rem;
+        line-height: 22/16;
+        padding: 1rem 1.2rem;
+        &:hover {
+            color: $color-primary;
+        }
+    }
+}

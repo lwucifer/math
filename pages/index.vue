@@ -11,7 +11,7 @@
 
           <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
 
-          <template v-if="!loading">
+          <template v-show="!loading">
             <Post
               v-for="post in postsList"
               class="mb-4"

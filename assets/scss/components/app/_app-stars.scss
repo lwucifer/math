@@ -1,0 +1,16 @@
+.app-stars {
+    &.sm {
+        margin-left: -.3rem;
+        margin-right: -.3rem;
+        .star {
+            margin: 0 .3rem;
+        }
+    }
+    &.lg {
+        margin-left: -.5rem;
+        margin-right: -.5rem;
+        .star {
+            margin: 0 .5rem;
+        }
+    }
+}

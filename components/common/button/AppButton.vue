@@ -7,6 +7,7 @@ export default {
     fullWidth: Boolean,
     square: Boolean,
     rounded: Boolean,
+    normal: Boolean,
     tag: {
       type: String,
       default: "button" // 'button', 'a'
@@ -30,9 +31,11 @@ export default {
   computed: {
     classes() {
       const sizeClasses = {
+        "btn--size-xs": this.size === "xs",
         "btn--size-sm": this.size === "sm",
         "btn--size-md": this.size === "md",
         "btn--size-lg": this.size === "lg",
+        "btn--size-xl": this.size === "xl",
         "btn--full-width": this.fullWidth
       };
 
@@ -46,6 +49,7 @@ export default {
         "btn--color-white": this.color === "white",
         "btn--color-gray": this.color === "gray",
         "btn--color-red": this.color === "red",
+        "btn--color-default": this.color === "default",
       };
 
       const outlineColorClasses = {
@@ -63,6 +67,10 @@ export default {
         "btn--rouned": this.rounded
       };
 
+      const fontWeightClasses = {
+        "btn--normal": this.normal,
+      };
+
       if (this.flat) return { ...sizeClasses, "btn--flat": true };
       if (this.outline)
         return {
@@ -71,7 +79,7 @@ export default {
           ...outlineColorClasses,
           ...borderRadiusClasses
         };
-      return { ...sizeClasses, ...colorClasses, ...borderRadiusClasses };
+      return { ...sizeClasses, ...colorClasses, ...borderRadiusClasses, ...fontWeightClasses };
     }
   },
 
