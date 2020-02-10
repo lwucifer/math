@@ -19,7 +19,7 @@ export const ACCOUNT_EARNING = `/account/earning`;
 /**
  * SOCIALS
  */
-export const POSTS = `/social/posts`;
+export const POSTS = `/social/api/post`;
 export const LIKES = `/social/likes`;
 export const SHARES = `/social/shares`;
 export const COMMENTS = `/social/comments`;

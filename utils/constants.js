@@ -33,3 +33,11 @@ export const CHECK_SHOW_FORM_USER = {
 export const ROOT_EVENTS = {
     CHANGE_SYSTEM_TIME: 'changeSystemTime'
 }
+
+export const POST_TYPES= {
+    STATUS: 1,
+    PHOTO: 2,
+    SHARE: 3,
+    LINK: 4,
+    VIDEO: 5
+}

@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <PostEditor />
+          <PostEditor @submit="handlePostEditorSubmit" />
 
           <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
 
@@ -15,9 +15,9 @@
             <Post
               v-for="post in postsList"
               class="mb-4"
-              :key="post.label"
-              :fullname="post.creator && post.creator.fullname"
-              :updated="post.updated"
+              :key="post.post_id"
+              :fullname="post.author && post.author.fullname"
+              :updated="post.created_at"
               :likes="post.likes"
               :comments="post.comments"
               :content="post.content"
@@ -220,6 +220,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { POST_TYPES } from "~/utils/constants";
+
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
 import AsideBox from "~/components/layout/asideBox/AsideBox";
@@ -229,8 +233,6 @@ import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
@@ -246,7 +248,6 @@ export default {
   },
   
   async fetch({ params, query, store }) {
-    console.log("watchQuery");
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
     ]);
@@ -254,6 +255,7 @@ export default {
 
   data() {
     return {
+      POST_TYPES: Object.freeze(POST_TYPES),
       loading: true,
       banners: new Array(3).fill(BannerImage, 0),
       coursesTab: 0,
@@ -450,6 +452,19 @@ export default {
      */
     handleClickNext() {
       console.log("handleClickNext")
+    },
+
+    /**
+     * Submit POST a post
+     */
+    async handlePostEditorSubmit(data) {
+      const formData = new FormData();
+      for (const key in data) {
+        formData.append(key, data[key]);
+      };
+      console.log('formData after append', FormData);
+      const doAdd = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.ADD}`, formData);
+      console.log('doAdd result', doAdd);
     }
   }
 };
