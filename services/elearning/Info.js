@@ -1,8 +1,8 @@
 import * as APIs from "../../utils/endpoints";
 import BaseService from "../BaseService";
 
-export default class Summary extends BaseService {
+export default class Info extends BaseService {
     constructor($axios) {
-        super($axios, APIs.EARNING_SUMMARY);
+        super($axios, APIs.ELEARNING_INFO);
     }
 }

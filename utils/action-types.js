@@ -3,6 +3,7 @@ export const BASE = {
     ADD: "add",
     EDIT: "edit",
     DELETE: "delete",
+    DETAIL: "detail",
     EDIT_PAYLOAD: "editPayload"
 };
 
@@ -70,6 +71,11 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
 
-export const EARNING_SUMMARY = {
-    LIST: "earningSummary"
+export const ELEARNING_SUMMARY = {
+    LIST: "elearningSummaryList"
+};
+
+export const ELEARNING = {
+    INFO: "elearningInfo",
+    PROGRAM: "elearningProgram"
 };
