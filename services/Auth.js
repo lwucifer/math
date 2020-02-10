@@ -43,7 +43,7 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.STATUS](payload) {
-        debugger;
+        // debugger;
         const { phone } = payload;
         const { data } = await this.$axios.post(`${APIs.CHECK_PHONE}`, {
             phone
@@ -53,7 +53,7 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.FORGOT_PASSWORD](payload) {
-        debugger;
+        // debugger;
         const { firebase_token, password } = payload;
         const { data } = await this.$axios.post(`${APIs.FORGOT_PASSWORD}`, {
             firebase_token,
@@ -64,7 +64,7 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.CHANGE_PASSWORD](payload) {
-        debugger;
+        // debugger;
         const { oldPass, newPass, verify_new_pass } = payload;
         const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, {
             oldPass,
