@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import CourseSide from "~/components/page/course/CourseSide";
 import CourseSlider from "~/components/page/course/CourseSlider";
 import CourseItem from "~/components/page/course/CourseItem";
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
@@ -193,6 +194,7 @@ export default {
   name: "Course",
 
   components: {
+    CourseSide,
     CourseSlider,
     CourseItem,
     CourseTeacherInfo,

@@ -74,8 +74,8 @@ export default {
     return {
       active: 0,
       pagination: {
-        total: 10,
-        page: 2,
+        total: 15,
+        page: 6,
         pager: 10,
       }
     };

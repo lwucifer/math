@@ -14,6 +14,7 @@ import AppDatePicker from "~/components/common/datepicker/AppDatePicker";
 import AppSpin from "~/components/common/spin/AppSpin";
 import AppTag from "~/components/common/tag/AppTag";
 import AppStars from "~/components/common/stars/AppStars";
+import AppInput from "~/components/common/input/AppInput";
 import Pagination from "~/components/common/pagination/Pagination";
 
 Vue.component("app-button", AppButton);
@@ -30,4 +31,5 @@ Vue.component("app-date-picker", AppDatePicker);
 Vue.component("app-spin", AppSpin);
 Vue.component("app-tag", AppTag);
 Vue.component("app-stars", AppStars);
+Vue.component("app-input", AppInput);
 Vue.component("app-pagination", Pagination);

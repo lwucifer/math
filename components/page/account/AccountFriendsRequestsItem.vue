@@ -16,7 +16,7 @@
             <app-button square size="xs" class="d-block" fullWidth>
                 Đồng ý
             </app-button>
-            <app-button square size="xs" color="secondary" class="d-block mt-3" fullWidth>
+            <app-button square size="xs" color="default" class="d-block mt-3" fullWidth>
                 Từ chối
             </app-button>
         </div>

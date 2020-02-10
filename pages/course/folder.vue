@@ -2,13 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <div class="course-folder__side">
-          <CourseTeacher :teacher="teacher" />
-          <div class="course-folder__side-links">
-            <n-link class="link-gray" to>Khóa học</n-link>
-            <n-link class="active link-gray" to>Kho nhập liệu</n-link>
-          </div>
-        </div>
+        <CourseSide/>
       </div>
       <div class="col-md-9">
         <div class="course-folder__main" v-if="isAuthenticated">
@@ -78,7 +72,7 @@
 </template>
 
 <script>
-import CourseTeacher from "~/components/page/course/CourseTeacher";
+import CourseSide from "~/components/page/course/CourseSide";
 import CourseFile from "~/components/page/course/CourseFile";
 import AsideBox from "~/components/layout/asideBox/AsideBox";
 import IconFolder from "~/assets/svg/icons/folder.svg?inline";
@@ -91,8 +85,8 @@ export default {
   name: "Course",
 
   components: {
+    CourseSide,
     CourseNewFolderModal,
-    CourseTeacher,
     CourseFile,
     IconFolder,
     IconUpload,
