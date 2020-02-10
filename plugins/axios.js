@@ -4,12 +4,15 @@ export default function({ store, $axios, redirect }) {
         console.log("[onRequest]", config.url);
 
         if (checkRequestAuthorize(config.url)) {
-            if (!store.getters["auth/token"]) return;
-            config.headers.common["Authorization"] = `Bearer ${
-              config.url.includes("/refresh_token")
-                ? store.state.auth.token.token
-                : store.state.auth.access_token
-            }`;
+            // if (!store.getters["auth/token"]) return;
+            config.headers.common[
+                "Authorization"
+            ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo0LCJwaG9uZV9udW1iZXIiOiIwMzU2MjU3MzI1In0sImlhdCI6MTU3NTUzNDcxOSwiZXhwIjoxODM0NzM0NzE5fQ.w-oB2pH2aPiyzTXpSQumuShy5xQQEGfURDp1-KjzfkM`;
+            // Bearer ${
+            //   config.url.includes("/refresh_token")
+            //     ? store.state.auth.token.token
+            //     : store.state.auth.access_token
+            // }
         } else {
             config.headers.common = {};
         }

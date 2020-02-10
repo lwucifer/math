@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <td>Ngày sinh</td>
-            <td>{{personalList.bithday}}</td>
+            <td>{{personalList.bithday | getSysdateSimpleFormat}}</td>
           </tr>
           <tr>
             <td>Giới tính</td>

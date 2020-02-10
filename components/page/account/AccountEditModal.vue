@@ -1,11 +1,6 @@
 <template>
-  <app-modal
-    centered
-    :width="606"
-    :component-class="{ 'account-edit-modal': true }"
-    @close="$router.push('/')"
-    v-if="visible"
-  >
+  <app-modal centered :width="606" :component-class="{ 'account-edit-modal': true }" v-if="visible">
+    <!-- @close="$router.push('/')" -->
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
       <div class="form-group">
@@ -15,7 +10,7 @@
       <div class="form-group form-group-inline">
         <div class="form-group-inline-item">
           <label>Số điện thoại</label>
-          <input type="text" v-model="phone" class="max-w-170 form-control" />
+          <input type="text" v-model="phone_number" class="max-w-170 form-control" />
         </div>
         <div class="form-group-inline-item">
           <label class="min-w-0">Ngày sinh</label>
@@ -40,6 +35,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+import { getSysdateSimpleFormat } from "../../../utils/moment";
 export default {
   components: {},
   props: {
@@ -50,7 +47,9 @@ export default {
       default: () => {}
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("account", ["personalList"])
+  },
   data() {
     return {
       sex: "",
@@ -61,17 +60,30 @@ export default {
     };
   },
   methods: {
+    ...mapActions("account", ["accountPersonalEdit"]),
     save() {
       console.log(this.sex);
+      const data = {
+        email: this.email,
+        sex: this.sex,
+        phone_number: this.phone_number,
+        address: this.address,
+        birthday: this.birthday
+      };
+      this.accountPersonalEdit(data).then(result => {
+        if (result.success == true) {
+          console.log("huydv");
+        }
+      });
     }
   },
 
   created() {
-    this.sex = this.account.sex;
-    this.email = this.account.email;
-    this.phone = this.account.phone;
-    this.address = this.account.address;
-    this.birthday = this.account.birthday;
+    this.sex = this.personalList.sex;
+    this.email = this.personalList.email;
+    this.phone_number = this.personalList.phone_number;
+    this.address = this.personalList.address;
+    this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
   }
 };
 </script>
