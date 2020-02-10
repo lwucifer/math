@@ -24,9 +24,9 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 
 import IconImage from "~/assets/svg/icons/image.svg?inline";
 
-import TabContact from "~/components/Messages/TabContact";
-import TabMessage from "~/components/Messages/TabMessage";
-import TabInfo from "~/components/Messages/TabInfo";
+import TabContact from "~/components/page/chat/TabContact";
+import TabMessage from "~/components/page/chat/TabMessage";
+import TabInfo from "~/components/page/chat/TabInfo";
 
 export default {
   components: {
