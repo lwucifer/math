@@ -2,7 +2,8 @@ export const BASE = {
     LIST: "list",
     ADD: "add",
     EDIT: "edit",
-    DELETE: "delete"
+    DELETE: "delete",
+    DETAIL: "detail"
 };
 
 export const AUTH = {
@@ -68,6 +69,11 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
 
-export const EARNING_SUMMARY = {
-    LIST: "earningSummary"
+export const ELEARNING_SUMMARY = {
+    LIST: "elearningSummaryList"
 };
+
+export const ELEARNING = {
+    INFO: 'elearningInfo',
+    PROGRAM: 'elearningProgram'
+}

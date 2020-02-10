@@ -40,6 +40,11 @@ export const ACCOUNT_EARNING = {
     SET_ACCOUNT_EARNING_LIST: "setAccountEarningList"
 };
 
-export const EARNING_SUMMARY = {
-    SET_EARNING_SUMMARY_LIST: "setEarningSummaryList"
+export const ELEARNING_SUMMARY = {
+    SET_ELEARNING_SUMMARY_LIST: "setElearningSummaryList"
 };
+
+export const ELEARNING = {
+    SET_ELEARNING_INFO: 'setElearningInfo',
+    SET_ELEARNING_PROGRAM: 'setElearningProgram'
+}
