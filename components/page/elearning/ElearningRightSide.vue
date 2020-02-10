@@ -4,7 +4,7 @@
     <div class="price">
         Miễn phí
     </div>
-    <app-button color="red" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
+    <app-button color="secondary" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
     <ul class="info">
       <li>
         <IconBook class="mr-2"/>Trình độ: Lớp 10

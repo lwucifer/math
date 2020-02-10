@@ -99,10 +99,16 @@
     border: 1px solid #ccc;
 }
 
-.btn--color-secondary {
+.btn--color-default {
     background: #F9F9F9;
     border: 1px solid #EEEEEE;
     color: #666;
+}
+
+.btn--color-secondary {
+    background: $color-red;
+    border: 1px solid $color-red;
+    color: #fff;
 }
 
 .btn--color-red {

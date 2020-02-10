@@ -1,125 +1,128 @@
 <template>
-  <div class="editor post-editor">
-    <div class="post-editor__top">
-      <div class="post-editor__avatar">
-        <img src="https://picsum.photos/60/60" alt />
+  <div class="editor post-editor" :class="{ 'active': active }" @click="setActive(true)">
+    <div class="post-editor__overlay" @click.stop="active = false"></div>
+    <div class="post-editor__components" @click.self="editor.view.dom.focus()">
+      <div class="post-editor__top">
+        <div class="post-editor__avatar">
+          <img src="https://picsum.photos/60/60" alt />
+        </div>
+
+        <client-only>
+          <editor-content :editor="editor" class="post-editor__editor" ref="editor" />
+        </client-only>
       </div>
 
-      <client-only>
-        <editor-content :editor="editor" class="post-editor__editor" />
-      </client-only>
-    </div>
+      <PostEditorUpload
+        v-show="fileList.length"
+        :fileList="fileList"
+        :previewList="previewList"
+        @remove-item="removeUploadItem"
+        @change="handleUploadChange"
+      />
 
-    <PostEditorUpload
-      v-show="fileList.length"
-      :fileList="fileList"
-      :previewList="previewList"
-      @remove-item="removeUploadItem"
-      @change="handleUploadChange"
-    />
+      <div class="post-editor__tagger-summary">
+        <template v-if="label !== null">cảm thấy <b>{{ getLabelText() }}</b></template>
+        <template v-if="tag && tag.length">
+          cùng với
+          <b v-for="(item, index) in selectedTags" :key="item.value">
+            <n-link to>{{ item.text }}</n-link>
+            {{ index < (selectedTags.length - 1) ? ', ' : '' }}
+          </b>
+        </template>
+        <template v-if="checkin !== null">
+          tại
+          <b>
+            <n-link to>{{ selectedCheckin }}</n-link>
+          </b>
+        </template>
+      </div>
 
-    <div class="post-editor__tagger-summary">
-      <template v-if="label !== null">cảm thấy <b>{{ getLabelText() }}</b></template>
-      <template v-if="tag && tag.length">
-        cùng với
-        <b v-for="(item, index) in selectedTags" :key="item.value">
-          <n-link to>{{ item.text }}</n-link>
-          {{ index < (selectedTags.length - 1) ? ', ' : '' }}
-        </b>
-      </template>
-      <template v-if="checkin !== null">
-        tại
-        <b>
-          <n-link to>{{ selectedCheckin }}</n-link>
-        </b>
-      </template>
-    </div>
+      <app-divider class="mt-3 mb-0" />
 
-    <app-divider class="mt-3 mb-0" />
-
-    <div v-show="showTags">
-      <app-select
-        mode="tags"
-        :options="tagOptions"
-        v-model="tag"
-        class="post-editor__select"
-        placeholder="Cùng với ai?"
-        style="width: 100%"
-      >
-        <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-          <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
-          {{ option.text }}
-        </div>
-      </app-select>
-      <app-divider class="ma-0" />
-    </div>
-
-    <div v-show="showCheckin">
-      <app-select
-        :options="checkinOptions"
-        v-model="checkin"
-        class="post-editor__select"
-        placeholder="Tại"
-        show-clear
-        searchable
-        style="width: 100%"
-      >
-        <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-          <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
-          {{ option.text }}
-        </div>
-      </app-select>
-      <app-divider class="mt-0 mb-3" />
-    </div>
-
-    <div class="post-editor__toolbar">
-      <button class="post-editor__toolbar-item image" @click="handleClickUploadImage">
-        <IconAddImage />
-        <span>Hình ảnh</span>
-      </button>
-      <button class="post-editor__toolbar-item tag" @click="showTags = !showTags">
-        <IconUserGroup />
-        <span>Tag bạn bè</span>
-      </button>
-      <button class="post-editor__toolbar-item check-in" @click="showCheckin = !showCheckin">
-        <IconPinLocation />
-        <span>Check in</span>
-      </button>
-      <app-dropdown open-on-click v-model="labelDropdrown">
-        <button
-          slot="activator"
-          slot-scope="{ on }"
-          class="post-editor__toolbar-item emoji"
-          v-on="on"
+      <div v-show="showTags">
+        <app-select
+          mode="tags"
+          :options="tagOptions"
+          v-model="tag"
+          class="post-editor__select"
+          placeholder="Cùng với ai?"
+          style="width: 100%"
         >
-          <IconEmoji />
-          <span>Nhãn cảm xúc</span>
+          <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+            <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+            {{ option.text }}
+          </div>
+        </app-select>
+        <app-divider class="ma-0" />
+      </div>
+
+      <div v-show="showCheckin">
+        <app-select
+          :options="checkinOptions"
+          v-model="checkin"
+          class="post-editor__select"
+          placeholder="Tại"
+          show-clear
+          searchable
+          style="width: 100%"
+        >
+          <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+            <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+            {{ option.text }}
+          </div>
+        </app-select>
+        <app-divider class="mt-0 mb-3" />
+      </div>
+
+      <div class="post-editor__toolbar">
+        <button class="post-editor__toolbar-item image" @click="handleClickUploadImage">
+          <IconAddImage />
+          <span>Hình ảnh</span>
         </button>
-
-        <ul class="post-editor__status-list">
-          <li
-            v-for="item in labelList"
-            :key="item.id"
-            :class="{ 'active': label === item.id }"
-            @click="handleClickLabel(item.id)"
+        <button class="post-editor__toolbar-item tag" @click="showTags = !showTags">
+          <IconUserGroup />
+          <span>Tag bạn bè</span>
+        </button>
+        <button class="post-editor__toolbar-item check-in" @click="showCheckin = !showCheckin">
+          <IconPinLocation />
+          <span>Check in</span>
+        </button>
+        <app-dropdown class="post-editor__label-dropdown" open-on-click v-model="labelDropdrown">
+          <button
+            slot="activator"
+            slot-scope="{ on }"
+            class="post-editor__toolbar-item emoji"
+            v-on="on"
           >
-            <i class="mr-4">{{ item.icon }}</i>
-            <span>{{ item.des }}</span>
-          </li>
-        </ul>
-      </app-dropdown>
+            <IconEmoji />
+            <span>Nhãn cảm xúc</span>
+          </button>
+
+          <ul class="post-editor__status-list">
+            <li
+              v-for="item in labelList"
+              :key="item.id"
+              :class="{ 'active': label === item.id }"
+              @click="handleClickLabel(item.id)"
+            >
+              <i class="mr-4">{{ item.icon }}</i>
+              <span>{{ item.des }}</span>
+            </li>
+          </ul>
+        </app-dropdown>
+      </div>
+
+      <app-divider class="my-3" />
+
+      <div class="post-editor__privacy d-flex align-items-center justify-content-between mt-3">
+        <span class="mr-3">Chế độ đăng tin</span>
+        <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
+          <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
+        </app-select>
+      </div>
+
+      <app-button full-width square class="mt-4">Đăng tin</app-button>
     </div>
-
-    <app-divider class="my-3" />
-
-    <div class="post-editor__privacy d-flex align-items-center justify-content-between mt-3">
-      <span class="mr-3">Chế độ đăng tin</span>
-      <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
-        <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
-      </app-select>
-    </div>
-
-    <app-button full-width square class="mt-4">Đăng tin</app-button>
   </div>
 </template>
 
@@ -157,6 +160,7 @@ export default {
       label: null,
       labelDropdrown: false,
       shareWith: 0,
+      active: false,
       tagOptions: [
         { value: 0, text: "Nguyen Tien Dat" },
         { value: 1, text: "Nguyen Van A" },
@@ -241,6 +245,10 @@ export default {
   },
 
   methods: {
+    setActive(value) {
+      this.active = value;
+    },
+
     getLabelText() {
       const [labelObj = {}] = this.labelList.filter(
         item => item.id === this.label
@@ -270,7 +278,6 @@ export default {
     },
 
     handleClickUploadImage() {
-      console.log(this);
       this.$children[0].handleClickControl();
     },
 

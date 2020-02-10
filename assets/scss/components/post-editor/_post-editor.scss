@@ -1,7 +1,32 @@
 .post-editor {
+    margin-bottom: 1.8rem;
+    position: relative;
+    z-index: 2;
+
+    &.active {
+        .post-editor__overlay {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+.post-editor__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(#000, .8);
+    transition: visibility .3s, opacity .3s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.post-editor__components {
+    position: relative;
     background-color: #fff;
     padding: 2rem;
-    margin-bottom: 1.8rem;
 }
 
 .post-editor__top {
@@ -166,5 +191,11 @@
 
     &__prepend {
         fill: $color-text-gray;
+    }
+}
+
+.post-editor__label-dropdown {
+    .app-dropdown__content {
+        top: calc(100% + 1.5rem);
     }
 }
