@@ -73,7 +73,6 @@ export default {
     }
   },
 
-<<<<<<< HEAD
   computed: {
     sex() {
       return this.account.sex;
@@ -90,14 +89,6 @@ export default {
     birthday() {
       return this.account.birthday;
     }
-=======
-  created() {
-    this.sex = this.personalList.sex;
-    this.email = this.personalList.email;
-    this.phone_number = this.personalList.phone_number;
-    this.address = this.personalList.address;
-    this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
->>>>>>> 316ac7112bae0cbd5fa25523aa27550d78be4df8
   }
 };
 </script>
