@@ -1,7 +1,32 @@
 .post-editor {
+    margin-bottom: 1.8rem;
+    position: relative;
+    z-index: 2;
+
+    &.active {
+        .post-editor__overlay {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+.post-editor__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(#000, .8);
+    transition: visibility .3s, opacity .3s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.post-editor__components {
+    position: relative;
     background-color: #fff;
     padding: 2rem;
-    margin-bottom: 1.8rem;
 }
 
 .post-editor__top {
@@ -118,8 +143,59 @@
 }
 
 .post-editor__tagger-summary {
+    color: $color-text-gray;
+    
     a {
         text-decoration: none;
         color: $color-text;
+    }
+}
+
+.post-editor__status-list {
+    list-style-type: none;
+    width: 34.8rem;
+    max-height: 275px;
+    overflow-y: auto;
+
+    li {
+        display: flex;
+        align-items: center;
+        padding: .9rem 2rem;
+        cursor: pointer;
+
+        &:hover, &.active {
+            background-color: $color-border;
+        }
+    }
+
+    i {
+        font-style: normal;
+        line-height: 1;
+        font-size: 3.2rem;
+    }
+}
+
+.post-editor__select-private {
+    .app-select__selected {
+        line-height: (17/14);
+        padding: 3px 5px;
+        background-color: $color-border;
+        border-color: transparent;
+        color: $color-text-gray;
+        height: 2.4rem;
+    }
+
+    .app-select__arrow svg {
+        fill: $color-text-gray;
+    }
+
+    &__prepend {
+        fill: $color-text-gray;
+    }
+}
+
+.post-editor__label-dropdown {
+    .app-dropdown__content {
+        top: calc(100% + 1.5rem);
     }
 }

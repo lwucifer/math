@@ -18,12 +18,12 @@
         <strong class="color-primary ml-2">{{data.status}}%</strong>
         <app-dropdown
           class="elearning-item__actions-menu ml-auto"
-          align-content="right"
+          position="right"
           open-on-click
           v-model="dropdownShow"
           content-width="230px"
         >
-          <button slot="activator" type="button" class="elearning-item__actions-btn">
+          <button slot="activator" slot-scope="{ on }" type="button" class="elearning-item__actions-btn" v-on="on">
             <IconDots />
           </button>
           <ul class="elearning-item__actions-list">
