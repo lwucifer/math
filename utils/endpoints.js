@@ -27,6 +27,8 @@ export const MEDIAS = `/social/medias`;
 export const NOTIFICATIONS = `/social/notifications`;
 
 /**
- * EARNING
+ * ELEARNING
  */
-export const EARNING_SUMMARY = `/earning/summary`;
+export const ELEARNING_SUMMARY = `/elearning/summary`;
+export const ELEARNING_INFO = `/elearning/info`;
+export const ELEARNING_PROGRAM = `/elearning/program`;

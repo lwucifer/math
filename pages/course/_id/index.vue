@@ -21,11 +21,14 @@
                 <div class="chapter-title">
                   <div>
                     <IconList />
-                    <strong>Chương {{i + 1}}:</strong>
-                    <span>{{chapter.name}}</span>
+                    <strong>Chương {{ i + 1 }}:</strong>
+                    <span>{{ chapter.name }}</span>
                   </div>
                   <div class="actions">
-                    <a @click="active(chapter.id)" :class="active_el == chapter.id ? 'active' : ''">
+                    <a
+                      @click="active(chapter.id)"
+                      :class="active_el == chapter.id ? 'active' : ''"
+                    >
                       <IconUp />
                     </a>
                     <a @click="remove(chapter.id)">
@@ -34,25 +37,34 @@
                   </div>
                 </div>
                 <div class="lessons">
-                  <div class="lesson" v-for="(lesson, j) in chapter.lessons" :key="j">
+                  <div
+                    class="lesson"
+                    v-for="(lesson, j) in chapter.lessons"
+                    :key="j"
+                  >
                     <div class="lesson-title">
                       <IconListDark />
-                      <strong>Bài {{j + 1}}:</strong>
-                      <span>{{lesson.name}}</span>
+                      <strong>Bài {{ j + 1 }}:</strong>
+                      <span>{{ lesson.name }}</span>
                     </div>
                     <div class="lesson-file">
                       <a href class="active">Upload video</a>
                       <a href>Upload tài liệu</a>
                     </div>
                     <div class="lesson-upload" v-if="lesson.file">
-                      <span class="pr-3">{{lesson.file}}</span>
+                      <span class="pr-3">{{ lesson.file }}</span>
                       <span class="color-primary">
                         <IconTick />Upload thành công
                       </span>
                     </div>
                     <div class="lesson-upload" v-else>
-                      <app-button size="sm" square class="mr-3">Chọn file</app-button>
-                      <span>Lưu ý: Chỉ upload video <3GB, dịnh dạng .mp4</span>
+                      <app-button size="sm" square class="mr-3"
+                        >Chọn file</app-button
+                      >
+                      <span
+                        >Lưu ý: Chỉ upload video nhỏ hơn 3GB, dịnh dạng
+                        .mp4</span
+                      >
                     </div>
                   </div>
                   <a href class="btn-plus">
@@ -70,7 +82,9 @@
         </div>
         <div class="course-detail__toolbar-bottom">
           <app-button color="info" square>Quay lại</app-button>
-          <app-button color="white" square class="ml-auto mr-4">Lưu lại</app-button>
+          <app-button color="white" square class="ml-auto mr-4"
+            >Lưu lại</app-button
+          >
           <app-button color="primary" square>Tiếp tục</app-button>
         </div>
       </div>
@@ -88,6 +102,7 @@ import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   name: "Course",
@@ -127,7 +142,13 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning", ["elearningInfo"])
+  },
+
+  async fetch({ params, query, store }) {
+    const elearningId = get(params, "id", "");
+    await store.dispatch(`elearning/${actionTypes.ELEARNING.INFO}`, elearningId);
   },
 
   watch: {},

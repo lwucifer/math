@@ -91,7 +91,7 @@ export default {
 
   async fetch({ params, query, store }) {
     console.log("get earning summary");
-    await store.dispatch(`course/${actionTypes.EARNING_SUMMARY.LIST}`)
+    await store.dispatch(`course/${actionTypes.ELEARNING_SUMMARY.LIST}`)
   },
 
   data() {
