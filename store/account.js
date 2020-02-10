@@ -40,6 +40,17 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_PERSONAL.EDIT]({ commit }, payload) {
+        try {
+            const result = await new Personal(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
+            console.log("[Personal] edit", result);
+        } catch (err) {
+            console.log("[Personal] edit.err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_AVATAR]({ commit }, payload) {
         try {
             const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](

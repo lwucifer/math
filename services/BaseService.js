@@ -41,4 +41,11 @@ export default class BaseService {
 
         return result;
     }
+
+    async [actionTypes.BASE.EDIT_PAYLOAD](payload) {
+        console.log("[BaseService] params", payload);
+        const { data } = await this.$axios.put(this.$api, payload);
+
+        return data;
+    }
 }

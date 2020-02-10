@@ -6,10 +6,10 @@ export default function({ store, $axios, redirect }) {
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
             config.headers.common["Authorization"] = `Bearer ${
-              config.url.includes("/refresh_token")
-                ? store.state.auth.token.token
-                : store.state.auth.access_token
-            }`;
+        config.url.includes("/refresh_token")
+          ? store.state.auth.token.token
+          : store.state.auth.access_token
+      }`;
         } else {
             config.headers.common = {};
         }
