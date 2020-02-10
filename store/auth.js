@@ -1,7 +1,7 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
-import { removeToken, setToken, setAccessToken } from "../utils/auth";
+import { setToken, setAccessToken } from "../utils/auth";
 
 /**
  * initial state
