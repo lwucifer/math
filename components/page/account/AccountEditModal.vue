@@ -1,11 +1,6 @@
 <template>
-  <app-modal
-    centered
-    :width="606"
-    :component-class="{ 'account-edit-modal': true }"
-    @close="$router.push('/')"
-    v-if="visible"
-  >
+  <app-modal centered :width="606" :component-class="{ 'account-edit-modal': true }" v-if="visible">
+    <!-- @close="$router.push('/')" -->
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
       <app-input labelFixed type="text" v-model="email" label="Email" />
@@ -41,6 +36,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+import { getSysdateSimpleFormat } from "../../../utils/moment";
 export default {
   components: {},
   props: {
@@ -51,16 +48,32 @@ export default {
       default: () => {}
     }
   },
-  computed: {},
+  computed: {
+    ...mapState("account", ["personalList"])
+  },
   data() {
     return { email: "" };
   },
   methods: {
+    ...mapActions("account", ["accountPersonalEdit"]),
     save() {
       console.log(this.sex);
+      const data = {
+        email: this.email,
+        sex: this.sex,
+        phone_number: this.phone_number,
+        address: this.address,
+        birthday: this.birthday
+      };
+      this.accountPersonalEdit(data).then(result => {
+        if (result.success == true) {
+          console.log("huydv");
+        }
+      });
     }
   },
 
+<<<<<<< HEAD
   computed: {
     sex() {
       return this.account.sex;
@@ -77,6 +90,14 @@ export default {
     birthday() {
       return this.account.birthday;
     }
+=======
+  created() {
+    this.sex = this.personalList.sex;
+    this.email = this.personalList.email;
+    this.phone_number = this.personalList.phone_number;
+    this.address = this.personalList.address;
+    this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
+>>>>>>> 316ac7112bae0cbd5fa25523aa27550d78be4df8
   }
 };
 </script>

@@ -6,23 +6,23 @@
         <tbody>
           <tr>
             <td>Email</td>
-            <td>{{account.email}}</td>
+            <td>{{personalList.email}}</td>
           </tr>
           <tr>
             <td>Số điện thoại</td>
-            <td>{{account.phone_number}}</td>
+            <td>{{personalList.phone_number}}</td>
           </tr>
           <tr>
             <td>Ngày sinh</td>
-            <td>{{account.bithday}}</td>
+            <td>{{personalList.bithday}}</td>
           </tr>
           <tr>
             <td>Giới tính</td>
-            <td>{{account.sex == 1 ? "Nam" : "Nữ"}}</td>
+            <td>{{personalList.sex == 1 ? "Nam" : "Nữ"}}</td>
           </tr>
           <tr>
             <td>Địa chỉ</td>
-            <td>{{account.address}}</td>
+            <td>{{personalList.address}}</td>
           </tr>
         </tbody>
       </table>

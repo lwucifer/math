@@ -1,6 +1,6 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
-import Summary from "../services/earning/Summary";
+import Summary from "../services/elearning/Summary";
 
 const cources = [
   {
@@ -69,8 +69,8 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.EARNING_SUMMARY.LIST]({ commit }, payload) {
-    commit(mutationTypes.EARNING_SUMMARY.SET_EARNING_SUMMARY_LIST, cources);
+  async [actionTypes.ELEARNING_SUMMARY.LIST]({ commit }, payload) {
+    commit(mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST, cources);
     // try {
     //   const result = await new Summary(this.$axios)[actionTypes.BASE.LIST](
     //     payload
@@ -89,7 +89,7 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.EARNING_SUMMARY.SET_EARNING_SUMMARY_LIST](
+  [mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST](
     state,
     _earningSummaryList
   ) {

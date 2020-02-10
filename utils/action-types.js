@@ -2,7 +2,9 @@ export const BASE = {
     LIST: "list",
     ADD: "add",
     EDIT: "edit",
-    DELETE: "delete"
+    DELETE: "delete",
+    DETAIL: "detail",
+    EDIT_PAYLOAD: "editPayload"
 };
 
 export const AUTH = {
@@ -46,6 +48,7 @@ export const SOCIAL_NOTIFICATIONS = {
 
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
+    EDIT: "accountPersonalEdit",
     EDIT_AVATAR: "accountPersonalEditAvatar",
     EDIT_COVER: "accountPersonalEditCover",
     EDIT_PHONE: "accountPersonalEditPhone"
@@ -68,6 +71,11 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
 
-export const EARNING_SUMMARY = {
-    LIST: "earningSummary"
+export const ELEARNING_SUMMARY = {
+    LIST: "elearningSummaryList"
+};
+
+export const ELEARNING = {
+    INFO: "elearningInfo",
+    PROGRAM: "elearningProgram"
 };
