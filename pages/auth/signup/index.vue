@@ -12,7 +12,7 @@
         <app-input type="password" v-model="password" placeholder="Mật khẩu" />
         <app-input type="text" v-model="fullname" placeholder="Họ và tên" />
       </div>
-      <app-button color="primary" square fullWidth @click="showModalOTP = true">Đăng ký</app-button>
+      <app-button color="primary" square fullWidth @click="hanldeShowModalOTP">Đăng ký</app-button>
       <hr class="mt-4 mb-4" />
       <div>
         <p>Đăng ký nhanh với</p>
@@ -77,7 +77,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["register"]),
+    ...mapActions("auth", ["register", "sendotp"]),
     async submitRegister() {
       try {
         const token = await this.$recaptcha.execute("register");
@@ -108,6 +108,19 @@ export default {
     acceptOTP() {
       this.listQuery.verify_token = "";
       this.submitRegister();
+    },
+    async hanldeShowModalOTP() {
+      debugger;
+      if (this.phone != "") {
+        this.showModalOTP = true;
+        const token = await this.$recaptcha.execute("sendotp");
+        console.log("ReCaptcha token:", token);
+        const data = {
+          phone: this.phone,
+          g_recaptcha_response: token
+        };
+        this.sendotp(data);
+      }
     }
   }
 };
