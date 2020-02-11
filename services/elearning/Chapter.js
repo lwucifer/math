@@ -3,6 +3,6 @@ import BaseService from "../BaseService";
 
 export default class Chapter extends BaseService {
     constructor($axios) {
-        super($axios, APIs.CREATING_CHAPTERS);
+        super($axios, APIs.ELEARNING_CREATING_CHAPTERS);
     }
 }

@@ -3,6 +3,6 @@ import BaseService from "../BaseService";
 
 export default class Answer extends BaseService {
     constructor($axios) {
-        super($axios, APIs.CREATING_ANSWERS);
+        super($axios, APIs.ELEARNING_CREATING_ANSWERS);
     }
 }

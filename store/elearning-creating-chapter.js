@@ -1,6 +1,6 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
-import Chapter from "~/services/creating/Chapter";
+import Chapter from "~/services/elearning/Chapter";
 
 /**
  * initial state
@@ -18,19 +18,19 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.CREATING_CHAPTER.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, payload) {
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
       // set to mutation
-      commit(mutationTypes.CREATING_CHAPTER.SET_CREATING_CHAPTER_LIST, result);
+      commit(mutationTypes.ELEARNING_CREATING_CHAPTER.SET_ELEARNING_CREATING_CHAPTER_LIST, result);
     } catch (error) {
       console.log("[Creating chapters] list.error", error);
     }
   },
 
-  async [actionTypes.CREATING_CHAPTER.ADD]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.ADD]({ commit }, payload) {
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.ADD](
         payload
@@ -42,7 +42,7 @@ const actions = {
     }
   },
 
-  async [actionTypes.CREATING_CHAPTER.EDIT]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.EDIT]({ commit }, payload) {
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.EDIT](
         payload
@@ -54,7 +54,7 @@ const actions = {
     }
   },
   
-  async [actionTypes.CREATING_CHAPTER.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.DELETE]({ commit }, payload) {
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.DELETE](
         payload
@@ -71,7 +71,7 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.CREATING_CHAPTER.SET_CREATING_CHAPTER_LIST](state, _chapters) {
+  [mutationTypes.ELEARNING_CREATING_CHAPTER.SET_ELEARNING_CREATING_CHAPTER_LIST](state, _chapters) {
     console.log("SET_CREATING_CHAPTER_LIST", _chapters);
     state.chapters = _chapters;
   }

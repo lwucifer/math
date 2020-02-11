@@ -80,16 +80,16 @@ export const ELEARNING = {
     PROGRAM: "elearningProgram"
 };
 
-export const CREATING_ANSWER = {
-    LIST: 'creatingAnswerList',
-    ADD: 'creatingAnswerAdd',
-    EDIT: 'creatingAnswerEdit',
-    DELETE: 'creatingAnswerDelete',
+export const ELEARNING_CREATING_ANSWER = {
+    LIST: 'elearningCreatingAnswerList',
+    ADD: 'elearningCreatingAnswerAdd',
+    EDIT: 'elearningCreatingAnswerEdit',
+    DELETE: 'elearningCreatingAnswerDelete',
 }
 
-export const CREATING_CHAPTER = {
-    LIST: 'creatingChapterList',
-    ADD: 'creatingChapterAdd',
-    EDIT: 'creatingChapterEdit',
-    DELETE: 'creatingChapterDelete',
+export const ELEARNING_CREATING_CHAPTER = {
+    LIST: 'elearningCreatingChapterList',
+    ADD: 'elearningCreatingChapterAdd',
+    EDIT: 'elearningCreatingChapterEdit',
+    DELETE: 'elearningCreatingChapterDelete',
 }
