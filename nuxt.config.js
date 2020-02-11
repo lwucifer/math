@@ -41,8 +41,8 @@ module.exports = {
         { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
-        { src: "@/plugins/vue-moment.js" }
-        // { src: "@/plugins/firebase-auth.js"},
+        { src: "@/plugins/vue-moment.js" },
+        { src: "@/plugins/firebase-auth.js"},
     ],
     /**
      * Global middleware
