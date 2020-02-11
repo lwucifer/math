@@ -21,7 +21,7 @@
       <input
         v-else
         :type="type"
-        :vlaue="text"
+        :value="text"
         @input="updateInput"
         :placeholder="placeholder"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
@@ -42,7 +42,7 @@ export default {
   components: {
     IconSuccess
   },
-   model: {
+  model: {
     event: "input"
   },
 
@@ -91,7 +91,7 @@ export default {
       type: [String, Number],
       required: false,
       default: 6
-    },
+    }
   },
 
   data() {
@@ -105,14 +105,16 @@ export default {
   },
 
   computed: {
-    text() { return this.value },
+    text() {
+      return this.value;
+    },
 
     classSize() {
       const classSize = {
         "input--size-xs": this.size === "xs",
         "input--size-sm": this.size === "sm",
         "input--size-md": this.size === "md" || !this.size,
-        "input--size-lg": this.size === "lg",
+        "input--size-lg": this.size === "lg"
       };
       return classSize;
     }

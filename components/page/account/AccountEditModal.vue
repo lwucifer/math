@@ -6,7 +6,7 @@
       <app-input labelFixed type="text" v-model="email" label="Email" />
       <div class="row">
         <div class="col-6">
-          <app-input labelFixed type="text" v-model="phone" label="Số điện thoại" />
+          <app-input labelFixed type="text" v-model="phone_number" label="Số điện thoại" />
         </div>
         <div class="col-6">
           <label class="min-w-0">Ngày sinh</label>
@@ -43,11 +43,8 @@ export default {
       default: () => {}
     }
   },
-  computed: {
-    ...mapState("account", ["personalList"])
-  },
   data() {
-    return { email: "" };
+    return {};
   },
   methods: {
     ...mapActions("account", ["accountPersonalEdit"]),
@@ -69,21 +66,22 @@ export default {
   },
 
   computed: {
-    sex() {
-      return this.account.sex;
-    },
-    email() {
-      return this.account.email;
-    },
-    phone() {
-      return this.account.phone;
-    },
-    address() {
-      return this.account.address;
-    },
-    birthday() {
-      return this.account.birthday;
-    }
+    ...mapState("account", ["personalList"])
+    // sex() {
+    //   return this.personalList ? this.personalList.sex : "";
+    // },
+    // email() {
+    //   return this.personalList ? this.personalList.email : "";
+    // },
+    // phone() {
+    //   return this.personalList ? this.personalList.phone : "";
+    // },
+    // address() {
+    //   return this.personalList ? this.personalList.address : "";
+    // },
+    // birthday() {
+    //   return this.personalList ? this.personalList.birthday : "";
+    // }
   },
 
   created() {
