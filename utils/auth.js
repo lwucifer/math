@@ -1,5 +1,5 @@
 import Cookie from "js-cookie";
-import { SCHOOLLY_ACCESS_TOKEN, TOKEN_USER } from "./config";
+import { SCHOOLLY_ACCESS_TOKEN, TOKEN_USER_SCHOOLLY } from "./config";
 
 /**
  * get access_token from local storage
@@ -14,7 +14,7 @@ export const getAccessToken = () => {
  */
 export const getToken = () => {
     if (process.server) return;
-    const token = window.localStorage.getItem(TOKEN_USER);
+    const token = window.localStorage.getItem(TOKEN_USER_SCHOOLLY);
     return token ? JSON.parse(token) : null;
 };
 
@@ -32,19 +32,19 @@ export const setAccessToken = accessToken => {
 
 export const setToken = _token => {
     if (!_token) return;
-    Cookie.set(TOKEN_USER, _token, {
+    Cookie.set(TOKEN_USER_SCHOOLLY, _token, {
         expires: parseInt(process.env.SESSION_EXPIRES)
     });
     if (process.server) return;
-    window.localStorage.setItem(TOKEN_USER, JSON.stringify(_token));
+    window.localStorage.setItem(TOKEN_USER_SCHOOLLY, JSON.stringify(_token));
 };
 
 export const removeToken = () => {
     Cookie.remove(SCHOOLLY_ACCESS_TOKEN);
-    Cookie.remove(TOKEN_USER);
+    Cookie.remove(TOKEN_USER_SCHOOLLY);
     if (process.server) return;
     window.localStorage.removeItem(SCHOOLLY_ACCESS_TOKEN);
-    window.localStorage.removeItem(TOKEN_USER);
+    window.localStorage.removeItem(TOKEN_USER_SCHOOLLY);
 };
 
 export const isAuthenticated = () => {
@@ -58,7 +58,7 @@ export const getTokenFromCookie = req => {
     if (!req || !req.headers || !req.headers.cookie) return;
     const jwtCookie = req.headers.cookie
         .split(";")
-        .find(c => c.trim().startsWith(TOKEN_USER));
+        .find(c => c.trim().startsWith(TOKEN_USER_SCHOOLLY));
     if (!jwtCookie) return null;
     const userCookie = decodeURIComponent(jwtCookie.split("=")[1]);
     return typeof userCookie === "string" ? JSON.parse(userCookie) : userCookie;
