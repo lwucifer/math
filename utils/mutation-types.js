@@ -48,3 +48,10 @@ export const ELEARNING = {
     SET_ELEARNING_INFO: 'setElearningInfo',
     SET_ELEARNING_PROGRAM: 'setElearningProgram'
 }
+
+export const CREATING_ANSWER = {
+    SET_CREATING_ANSWER_LIST: 'setCreatingAnswerList',
+    SET_CREATING_ANSWER_ADD: 'setCreatingAnswerAdd',
+    SET_CREATING_ANSWER_EDIT: 'setCreatingAnswerEdit',
+    SET_CREATING_ANSWER_DELETE: 'setCreatingAnswerDelete',
+}

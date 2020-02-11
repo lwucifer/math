@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
 import IconGoogle from "~/assets/svg/icons/google.svg?inline";
 import * as actionTypes from "~/utils/action-types";
@@ -56,8 +55,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   components: {
     IconFacebook,
-    IconGoogle,
-    IconSuccess
+    IconGoogle
   },
 
   data() {

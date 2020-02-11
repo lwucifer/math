@@ -52,7 +52,7 @@ export default {
     maxVisibleButtons: {
       type: Number,
       required: false,
-      default: 3
+      default: 7
     },
     pagination: {
       type: Object,
