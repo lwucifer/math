@@ -49,3 +49,17 @@ export const ELEARNING = {
     SET_ELEARNING_INFO: 'setElearningInfo',
     SET_ELEARNING_PROGRAM: 'setElearningProgram'
 }
+
+export const ELEARNING_CREATING_ANSWER = {
+    SET_ELEARNING_CREATING_ANSWER_LIST: 'setElearningCreatingAnswerList',
+    SET_ELEARNING_CREATING_ANSWER_ADD: 'setElearningCreatingAnswerAdd',
+    SET_ELEARNING_CREATING_ANSWER_EDIT: 'setElearningCreatingAnswerEdit',
+    SET_ELEARNING_CREATING_ANSWER_DELETE: 'setElearningCreatingAnswerDelete',
+}
+
+export const ELEARNING_CREATING_CHAPTER = {
+    SET_ELEARNING_CREATING_CHAPTER_LIST: 'setElearningCreatingChapterList',
+    SET_ELEARNING_CREATING_CHAPTER_ADD: 'setElearningCreatingChapterAdd',
+    SET_ELEARNING_CREATING_CHAPTER_EDIT: 'setElearningCreatingChapterEdit',
+    SET_ELEARNING_CREATING_CHAPTER_DELETE: 'setElearningCreatingChapterDelete',
+}

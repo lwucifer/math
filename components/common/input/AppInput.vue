@@ -1,10 +1,23 @@
 <template>
   <div class="app-input" :class="classSize">
     <label v-if="label" :class="labelFixed ? 'label-fixed' : ''">{{label}}</label>
+    <!-- Date picker -->
+    <div class="app-input__input" v-if="type == 'date'">
+      <app-date-picker :value="value" @input="updateInput" />
+    </div>
+
     <!-- Input upload -->
-    <div class="app-input-file-upload" v-if="type == 'file'">
-      <label for="file" class="app-input-file-upload__label">{{placeholder}}</label>
-      <input id="file" type="file" class="app-input-file-upload__input" />
+    <div class="app-input-file-upload" v-else-if="type == 'file'">
+      <label class="app-input-file-upload__label">
+        {{placeholder}}
+        <input
+          type="file"
+          class="app-input-file-upload__input"
+          :value="value"
+          @input="updateInput"
+        />
+        <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+      </label>
     </div>
 
     <!-- Input text -->
@@ -13,7 +26,7 @@
         v-if="textarea"
         :rows="rows"
         :type="type"
-        :vlaue="value"
+        :value="value"
         @input="updateInput"
         :placeholder="placeholder"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
@@ -21,7 +34,7 @@
       <input
         v-else
         :type="type"
-        :value="text"
+        :value="value"
         @input="updateInput"
         :placeholder="placeholder"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
@@ -43,6 +56,7 @@ export default {
     IconSuccess
   },
   model: {
+    prop: "value",
     event: "input"
   },
 
@@ -99,16 +113,12 @@ export default {
   },
 
   methods: {
-    updateInput: function(e) {
-      this.$emit("input", e.target.value);
+    updateInput: function() {
+      this.$emit("input", this.value);
     }
   },
 
   computed: {
-    text() {
-      return this.value;
-    },
-
     classSize() {
       const classSize = {
         "input--size-xs": this.size === "xs",

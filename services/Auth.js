@@ -8,23 +8,19 @@ export default class Auth {
 
     async [actionTypes.AUTH.LOGIN](payload) {
         // debugger;
-        const { phone_number, password, firebase_token } = payload;
+        const { phone, email, password, g_recaptcha_response } = payload;
         const { data } = await this.$axios.post(`${APIs.LOGIN}`, {
-            phone_number,
+            phone,
+            email,
             password,
-            firebase_token
+            g_recaptcha_response
         });
 
         return data;
     }
 
     async [actionTypes.AUTH.REGISTER](payload) {
-        const { email, password } = payload;
-        const { data } = await this.$axios.post(`${APIs.REGISTER}`, {
-            email,
-            password
-        });
-
+        const { data } = await this.$axios.post(`${APIs.REGISTER}`, payload);
         return data;
     }
 
@@ -34,10 +30,10 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.SENDOTP](payload) {
-        const { phone } = payload;
-        const { data } = await this.$axios.post(`${APIs.SEND_OTP}`, {
-            phone
-        });
+        const { data } = await this.$axios.post(
+            `${APIs.REGISTER_VALIDATE}`,
+            payload
+        );
 
         return data;
     }

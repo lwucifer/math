@@ -41,8 +41,8 @@ module.exports = {
         { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
-        { src: "@/plugins/vue-moment.js" }
-        // { src: "@/plugins/firebase-auth.js"},
+        { src: "@/plugins/vue-moment.js" },
+        { src: "@/plugins/firebase-auth.js"},
     ],
     /**
      * Global middleware
@@ -58,7 +58,8 @@ module.exports = {
         "@nuxtjs/axios",
         "@nuxtjs/style-resources",
         "@nuxtjs/svg",
-        "portal-vue/nuxt"
+        "portal-vue/nuxt",
+        "@nuxtjs/recaptcha"
     ],
 
     /*
@@ -76,6 +77,11 @@ module.exports = {
             retries: 3
         }, // interceptor retry time request
         debug: false // default false
+    },
+
+    recaptcha: {
+        siteKey: process.env.CAPTCHA_SITEKEY,
+        version: 3
     },
 
     styleResources: {
