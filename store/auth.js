@@ -31,17 +31,28 @@ const getters = {
  * initial actions
  */
 const actions = {
-    async [actionTypes.AUTH.LOGIN]({ commit }, { phone_number, password, firebase_token }) {
+    async [actionTypes.AUTH.LOGIN]({ commit }, { phone, email, password, g_recaptcha_response }) {
         const result = await new auth(this.$axios).login({
-            phone_number,
+            phone,
+            email,
             password,
-            firebase_token
+            g_recaptcha_response
         });
         if (result.success) {
             console.log("Login [REPONSE]", result);
             commit(mutationTypes.AUTH.SET_TOKEN, result.data);
-            commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.token);
+            commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
         }
+        return result;
+    },
+
+    async [actionTypes.AUTH.REGISTER]({ commit }, payload) {
+        const result = await new auth(this.$axios).register(payload);
+        // if (result.success) {
+        //     console.log("Login [REPONSE]", result);
+        //     commit(mutationTypes.AUTH.SET_TOKEN, result.data);
+        //     commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
+        // }
         return result;
     },
 
