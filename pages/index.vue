@@ -15,12 +15,14 @@
             <Post
               v-for="post in postsList"
               class="mb-4"
+              show-menu-dropdown
               :key="post.post_id"
               :fullname="post.author && post.author.fullname"
               :updated="post.created_at"
               :likes="post.total_like"
               :comments="post.total_comment"
               :content="post.content"
+              :privacy="post.privacy"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -224,7 +226,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES } from "~/utils/constants";
 
@@ -253,7 +255,8 @@ export default {
   
   async fetch({ params, query, store }) {
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
     ]);
   },
 
@@ -366,7 +369,8 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["postsList"])
+    ...mapState("social", ["postsList"]),
+    ...mapGetters("social", ["configPrivacyLevels"])
   },
 
   mounted() {
@@ -396,6 +400,7 @@ export default {
      */
     handleClickImage(imageObj, post) {
       if (typeof window.history.pushState != "undefined") {
+        console.log('handleClickImage', imageObj)
         this.dataModalDetail = post;
         this.modalDetailShow = true;
 
