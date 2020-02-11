@@ -36,7 +36,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { getSysdateSimpleFormat } from "../../../utils/moment";
+import { getDateBirthDay } from "../../../utils/moment";
 export default {
   components: {},
   props: {
@@ -83,7 +83,7 @@ export default {
     this.email = this.personalList.email;
     this.phone_number = this.personalList.phone_number;
     this.address = this.personalList.address;
-    this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
+    this.birthday = getDateBirthDay(this.personalList.bithday);
   }
 };
 </script>
