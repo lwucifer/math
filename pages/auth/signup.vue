@@ -70,7 +70,8 @@ export default {
       byEmail: false,
       statusValidate: 1,
       showModalOTP: false,
-      listQuery: {}
+      listQuery: {},
+      otp: ""
     };
   },
   async mounted() {
