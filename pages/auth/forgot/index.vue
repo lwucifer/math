@@ -3,16 +3,13 @@
     <div class="auth__main">
       <h3>Quên mật khẩu?</h3>
       <div class="auth_content mt-5">
-        <div class="form-group">
-          <input
-            type="text"
-            v-model="email"
-            class="form-control"
-            :class="error ? 'border-red' : ''"
-            placeholder="Nhập số điện thoại hoặc email"
-          />
-          <p class="font-size-12 color-red text-left full-width mt-2" v-if="error">Tài khoản không tồn tại</p>
-        </div>
+        <app-input
+          message="Tài khoản không tồn tại"
+          type="text"
+          v-model="email"
+          placeholder="Nhập số điện thoại hoặc email"
+          :validate="error ? 2 : 0"
+        />
         <app-button color="primary" square fullWidth @click="login" class="mb-3">Khôi phục mật khẩu</app-button>
       </div>
     </div>
@@ -38,7 +35,8 @@ export default {
   methods: {
     ...mapActions("auth", ["login"]),
     login() {
-      this.error = true;
+      this.error = this.email;
+      console.log(this.email);
     }
   }
 };

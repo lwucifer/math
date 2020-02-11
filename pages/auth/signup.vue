@@ -7,19 +7,10 @@
         <a :class="byEmail ? 'active' : ''" @click="byEmail = true">Email</a>
       </div>
       <div class="auth_content">
-        <div class="form-group" v-if="byEmail">
-          <input type="text" v-model="email" class="form-control" placeholder="Email" />
-        </div>
-
-        <div class="form-group" v-else>
-          <input type="number" v-model="phone" class="form-control" placeholder="Số điện thoại" />
-        </div>
-        <div class="form-group">
-          <input type="password" v-model="password" class="form-control" placeholder="Mật khẩu" />
-        </div>
-        <div class="form-group">
-          <input type="text" v-model="fullname" class="form-control" placeholder="Họ và tên" />
-        </div>
+        <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email"/>
+        <app-input v-else type="text" v-model="phone" placeholder="Số điện thoại" />
+        <app-input type="password" v-model="password" placeholder="Mật khẩu"/>
+        <app-input type="text" v-model="fullname" placeholder="Họ và tên"/>
       </div>
       <app-button color="primary" square fullWidth @click="login">Đăng ký</app-button>
       <hr class="mt-4 mb-4" />
