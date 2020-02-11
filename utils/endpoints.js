@@ -32,3 +32,4 @@ export const NOTIFICATIONS = `/social/notifications`;
 export const ELEARNING_SUMMARY = `/elearning/summary`;
 export const ELEARNING_INFO = `/elearning/info`;
 export const ELEARNING_PROGRAM = `/elearning/program`;
+export const CREATING_ANSWERS = "/creating/answers";

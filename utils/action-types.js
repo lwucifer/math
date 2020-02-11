@@ -79,3 +79,10 @@ export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram"
 };
+
+export const CREATING_ANSWER = {
+    LIST: 'creatingAnswerList',
+    ADD: 'creatingAnswerAdd',
+    EDIT: 'creatingAnswerEdit',
+    DELETE: 'creatingAnswerDelete',
+}
