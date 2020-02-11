@@ -3,6 +3,7 @@
  *********************************/
 export const LOGIN = `/user/public/login`;
 export const REGISTER = `/user/public/register`;
+export const REGISTER_VALIDATE = `/user/public/validate`;
 export const LOGOUT = `/auth/logout`;
 export const AUTH_INFO = `/auth/info`;
 export const SEND_OTP = `/auth/otp`;

@@ -2,6 +2,7 @@ import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
 import { setToken, setAccessToken } from "../utils/auth";
+import { authFire } from "../services/firebase/FirebaseInit";
 
 /**
  * initial state
@@ -54,6 +55,19 @@ const actions = {
         //     commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
         // }
         return result;
+    },
+
+    [actionTypes.AUTH.SENDOTP]({ dispatch, commit }, payload) {
+        console.log("VERIFY_WITH_PHONE", payload);
+        return authFire
+            .signInWithPhoneNumber(payload.phone, payload.g_recaptcha_response)
+            .then(result => {
+                console.log("auth.signInWithPhoneNumber.result", result);
+                // dispatch(actionTypes.USERS.VERIFY, result.verificationId);
+            })
+            .catch(err => {
+                console.log("auth.signInWithPhoneNumber.catch", err);
+            });
     },
 
     async [actionTypes.AUTH.LOGOUT]({ commit }) {

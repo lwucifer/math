@@ -30,10 +30,10 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.SENDOTP](payload) {
-        const { phone } = payload;
-        const { data } = await this.$axios.post(`${APIs.SEND_OTP}`, {
-            phone
-        });
+        const { data } = await this.$axios.post(
+            `${APIs.REGISTER_VALIDATE}`,
+            payload
+        );
 
         return data;
     }
