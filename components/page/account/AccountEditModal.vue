@@ -9,14 +9,10 @@
           <app-input labelFixed type="text" v-model="phone_number" label="Số điện thoại" />
         </div>
         <div class="col-6">
-          <label class="min-w-0">Ngày sinh</label>
-          <app-date-picker v-model="birthday" />
+          <app-input labelFixed type="date" v-model="birthday" label="Ngày sinh" />
         </div>
       </div>
-      <div class="form-group">
-        <label>Địa chỉ</label>
-        <input type="text" v-model="address" class="form-control" />
-      </div>
+      <app-input labelFixed type="text" v-model="address" label="Địa chỉ" />
       <div class="form-group">
         <label>Giới tính</label>
         <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
