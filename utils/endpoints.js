@@ -30,8 +30,8 @@ export const NOTIFICATIONS = `/social/notifications`;
 /**
  * ELEARNING
  */
-export const ELEARNING_SUMMARY = `/elearning/summary`;
+export const ELEARNING_SUMMARY = `/elearning/public/summary`;
 export const ELEARNING_INFO = `/elearning/info`;
 export const ELEARNING_PROGRAM = `/elearning/program`;
-export const CREATING_ANSWERS = "/creating/answers";
-export const CREATING_CHAPTERS = "/creating/chapters";
+export const ELEARNING_CREATING_ANSWERS = "/elearning/creating/answers";
+export const ELEARNING_CREATING_CHAPTERS = "/elearning/creating/chapters";

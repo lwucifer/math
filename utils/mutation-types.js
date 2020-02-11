@@ -49,16 +49,16 @@ export const ELEARNING = {
     SET_ELEARNING_PROGRAM: 'setElearningProgram'
 }
 
-export const CREATING_ANSWER = {
-    SET_CREATING_ANSWER_LIST: 'setCreatingAnswerList',
-    SET_CREATING_ANSWER_ADD: 'setCreatingAnswerAdd',
-    SET_CREATING_ANSWER_EDIT: 'setCreatingAnswerEdit',
-    SET_CREATING_ANSWER_DELETE: 'setCreatingAnswerDelete',
+export const ELEARNING_CREATING_ANSWER = {
+    SET_ELEARNING_CREATING_ANSWER_LIST: 'setElearningCreatingAnswerList',
+    SET_ELEARNING_CREATING_ANSWER_ADD: 'setElearningCreatingAnswerAdd',
+    SET_ELEARNING_CREATING_ANSWER_EDIT: 'setElearningCreatingAnswerEdit',
+    SET_ELEARNING_CREATING_ANSWER_DELETE: 'setElearningCreatingAnswerDelete',
 }
 
-export const CREATING_CHAPTER = {
-    SET_CREATING_CHAPTER_LIST: 'setCreatingChapterList',
-    SET_CREATING_CHAPTER_ADD: 'setCreatingChapterAdd',
-    SET_CREATING_CHAPTER_EDIT: 'setCreatingChapterEdit',
-    SET_CREATING_CHAPTER_DELETE: 'setCreatingChapterDelete',
+export const ELEARNING_CREATING_CHAPTER = {
+    SET_ELEARNING_CREATING_CHAPTER_LIST: 'setElearningCreatingChapterList',
+    SET_ELEARNING_CREATING_CHAPTER_ADD: 'setElearningCreatingChapterAdd',
+    SET_ELEARNING_CREATING_CHAPTER_EDIT: 'setElearningCreatingChapterEdit',
+    SET_ELEARNING_CREATING_CHAPTER_DELETE: 'setElearningCreatingChapterDelete',
 }

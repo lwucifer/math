@@ -1,6 +1,6 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
-import Answer from "~/services/creating/Answer";
+import Answer from "~/services/elearning/Answer";
 
 /**
  * initial state
@@ -18,19 +18,19 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.CREATING_ANSWER.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_ANSWER.LIST]({ commit }, payload) {
     try {
       const result = await new Answer(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
       // set to mutation
-      commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_LIST, result);
+      commit(mutationTypes.ELEARNING_CREATING_ANSWER.SET_ELEARNING_CREATING_ANSWER_LIST, result);
     } catch (error) {
       console.log("[Creating answers] list.error", error);
     }
   },
 
-  async [actionTypes.CREATING_ANSWER.ADD]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_ANSWER.ADD]({ commit }, payload) {
     try {
       const result = await new Answer(this.$axios)[actionTypes.BASE.ADD](
         payload
@@ -42,7 +42,7 @@ const actions = {
     }
   },
 
-  async [actionTypes.CREATING_ANSWER.EDIT]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_ANSWER.EDIT]({ commit }, payload) {
     try {
       const result = await new Answer(this.$axios)[actionTypes.BASE.EDIT](
         payload
@@ -54,7 +54,7 @@ const actions = {
     }
   },
   
-  async [actionTypes.CREATING_ANSWER.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_ANSWER.DELETE]({ commit }, payload) {
     try {
       const result = await new Answer(this.$axios)[actionTypes.BASE.DELETE](
         payload
@@ -71,8 +71,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_LIST](state, _answers) {
-    console.log("SET_CREATING_ANSWER_LIST", _answers);
+  [mutationTypes.ELEARNING_CREATING_ANSWER.SET_ELEARNING_CREATING_ANSWER_LIST](state, _answers) {
+    console.log("SET_ELEARNING_CREATING_ANSWER_LIST", _answers);
     state.answers = _answers;
   }
 };
