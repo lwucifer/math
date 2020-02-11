@@ -25,6 +25,10 @@
 <script>
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
+import {
+  createSigninWithPhone,
+  createSigninWithEmail
+} from "../../models/auth/Signin";
 
 export default {
   components: {},
@@ -47,21 +51,10 @@ export default {
       try {
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
-        let data = {};
-        if (this.byEmail == false) {
-          data = {
-            phone: this.phone,
-            password: this.password,
-            g_recaptcha_response: token
-          };
-        } else {
-          data = {
-            email: this.email,
-            password: this.password,
-            g_recaptcha_response: token
-          };
-        }
-        const doAdd = this.login(data).then(result => {
+        let loginModel = !this.byEmail
+          ? createSigninWithPhone(this.phone, this.password, token)
+          : createSigninWithEmail(this.email, this.password, token);
+        const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$router.push("/");
           } else {
