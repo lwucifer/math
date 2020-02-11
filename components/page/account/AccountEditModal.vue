@@ -6,16 +6,11 @@
       <app-input labelFixed type="text" v-model="email" label="Email" />
       <div class="row">
         <div class="col-6">
-          <app-input
-            labelFixed
-            type="text"
-            v-model="phone"
-            label="Số điện thoại"
-          />
+          <app-input labelFixed type="text" v-model="phone_number" label="Số điện thoại" />
         </div>
         <div class="col-6">
           <label class="min-w-0">Ngày sinh</label>
-          <app-date-picker v-model="birthday"/>
+          <app-date-picker v-model="birthday" />
         </div>
       </div>
       <div class="form-group">
@@ -37,7 +32,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { getSysdateSimpleFormat } from "../../../utils/moment";
+import { getDateBirthDay } from "../../../utils/moment";
 export default {
   components: {},
   props: {
@@ -48,11 +43,8 @@ export default {
       default: () => {}
     }
   },
-  computed: {
-    ...mapState("account", ["personalList"])
-  },
   data() {
-    return { email: "" };
+    return {};
   },
   methods: {
     ...mapActions("account", ["accountPersonalEdit"]),
@@ -74,21 +66,30 @@ export default {
   },
 
   computed: {
-    sex() {
-      return this.account.sex;
-    },
-    email() {
-      return this.account.email;
-    },
-    phone() {
-      return this.account.phone;
-    },
-    address() {
-      return this.account.address;
-    },
-    birthday() {
-      return this.account.birthday;
-    }
+    ...mapState("account", ["personalList"])
+    // sex() {
+    //   return this.personalList ? this.personalList.sex : "";
+    // },
+    // email() {
+    //   return this.personalList ? this.personalList.email : "";
+    // },
+    // phone() {
+    //   return this.personalList ? this.personalList.phone : "";
+    // },
+    // address() {
+    //   return this.personalList ? this.personalList.address : "";
+    // },
+    // birthday() {
+    //   return this.personalList ? this.personalList.birthday : "";
+    // }
+  },
+
+  created() {
+    this.sex = this.personalList.sex;
+    this.email = this.personalList.email;
+    this.phone_number = this.personalList.phone_number;
+    this.address = this.personalList.address;
+    this.birthday = getDateBirthDay(this.personalList.bithday);
   }
 };
 </script>
