@@ -46,6 +46,10 @@ export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications"
 };
 
+export const SOCIAL_CONFIG = {
+    LIST: 'socialConfigList'
+};
+
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
     EDIT: "accountPersonalEdit",

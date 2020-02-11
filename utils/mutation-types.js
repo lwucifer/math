@@ -17,7 +17,8 @@ export const SOCIAL = {
     SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
     SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
     SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
-    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList"
+    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
+    SET_SOCIAL_CONFIG_LIST: "setSocialConfigList"
 };
 
 export const ACCOUNT_PERSONAL = {
