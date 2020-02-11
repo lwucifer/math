@@ -97,7 +97,7 @@
 
       <app-divider class="my-3" />
 
-      <div class="post__comment-list">
+      <div class="post__comment-list d-none">
         <CommentItem>
           <CommentItemReplied />
         </CommentItem>

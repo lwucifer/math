@@ -50,6 +50,10 @@ export const SOCIAL_CONFIG = {
     LIST: 'socialConfigList'
 };
 
+export const SOCIAL_FEEDS = {
+    LIST: 'socialFeedsList'
+}
+
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
     EDIT: "accountPersonalEdit",

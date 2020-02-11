@@ -5,6 +5,7 @@ import Likes from "~/services/social/likes";
 import Shares from "~/services/social/shares";
 import Comments from "~/services/social/comments";
 import Config from "~/services/social/config";
+import Feeds from "~/services/social/feeds";
 
 /**
  * initial state
@@ -16,7 +17,8 @@ const state = () => ({
   commentsList: {},
   mediasList: {},
   notificationsList: {},
-  configList: {}
+  configs: {},
+  feeds: {}
 });
 
 /**
@@ -24,7 +26,7 @@ const state = () => ({
  */
 const getters = {
   configPrivacyLevels: state =>
-    state.configList.privacy_levels ? state.configList.privacy_levels : []
+    state.configs.privacy_levels ? state.configs.privacy_levels : []
 };
 
 /**
@@ -56,6 +58,19 @@ const actions = {
       return result;
     } catch (err) {
       console.log("[SocialPosts] add.err", err);
+      return err;
+    }
+  },
+
+  async [actionTypes.SOCIAL_POST.DELETE]({ commit }, payload) {
+    try {
+      const { data: result = {} } = await new SocialPosts(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](payload);
+      console.log("[SocialPosts] delete", result);
+      return result;
+    } catch (err) {
+      console.log("[SocialPosts] delete.err", err);
       return err;
     }
   },
@@ -248,7 +263,22 @@ const actions = {
       console.log("[SocialConfig] list.err", err);
       return err;
     }
-  }
+  },
+
+  async [actionTypes.SOCIAL_FEEDS.LIST]({ commit }, payload) {
+    try {
+      const { data: result = [] } = await new Feeds(this.$axios)[
+        actionTypes.BASE.LIST
+      ](payload);
+      console.log("[SocialFeed] list", result);
+
+      // set to mutation
+      commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, result);
+    } catch (err) {
+      console.log("[SocialFeed] list.err", err);
+      return err;
+    }
+  },
 };
 
 /**
@@ -282,9 +312,13 @@ const mutations = {
     state.notificationsList = _notificationsList;
   },
 
-  [mutationTypes.SOCIAL.SET_SOCIAL_CONFIG_LIST](state, _configList) {
-    state.configList = _configList;
-  }
+  [mutationTypes.SOCIAL.SET_SOCIAL_CONFIG_LIST](state, _configs) {
+    state.configs = _configs;
+  },
+
+  [mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST](state, _feeds) {
+    state.feeds = _feeds;
+  },
 };
 
 export default {

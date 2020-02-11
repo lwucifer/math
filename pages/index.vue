@@ -13,7 +13,7 @@
 
           <template v-show="!loading">
             <Post
-              v-for="post in postsList"
+              v-for="post in feeds.listPost"
               class="mb-4"
               show-menu-dropdown
               :key="post.post_id"
@@ -23,6 +23,7 @@
               :comments="post.total_comment"
               :content="post.content"
               :privacy="post.privacy"
+              @delete="deletePost(post.post_id)"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -256,7 +257,7 @@ export default {
   async fetch({ params, query, store }) {
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
+      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`),
     ]);
   },
 
@@ -369,7 +370,7 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["postsList"]),
+    ...mapState("social", ["feeds"]),
     ...mapGetters("social", ["configPrivacyLevels"])
   },
 
@@ -474,6 +475,14 @@ export default {
       console.log('formData after append', FormData);
       const doAdd = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.ADD}`, formData);
       console.log('doAdd result', doAdd);
+    },
+
+    /**
+     * DELETE a post
+     */
+    async deletePost(id) {
+      const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, { id });
+      console.log('doDelete', doDelete)
     }
   }
 };
