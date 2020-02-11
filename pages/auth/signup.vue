@@ -7,12 +7,12 @@
         <a :class="byEmail ? 'active' : ''" @click="byEmail = true">Email</a>
       </div>
       <div class="auth_content">
-        <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email"/>
+        <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email" />
         <app-input v-else type="text" v-model="phone" placeholder="Số điện thoại" />
-        <app-input type="password" v-model="password" placeholder="Mật khẩu"/>
-        <app-input type="text" v-model="fullname" placeholder="Họ và tên"/>
+        <app-input type="password" v-model="password" placeholder="Mật khẩu" />
+        <app-input type="text" v-model="fullname" placeholder="Họ và tên" />
       </div>
-      <app-button color="primary" square fullWidth @click="login">Đăng ký</app-button>
+      <app-button color="primary" square fullWidth @click="showModalOTP = true">Đăng ký</app-button>
       <hr class="mt-4 mb-4" />
       <div>
         <p>Đăng ký nhanh với</p>
@@ -30,6 +30,19 @@
         </div>
       </div>
     </div>
+    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
+      <h3 class="color-primary" slot="header">
+        Xác thực tài khoản
+        <a class="btn-close" @click="$emit('click-close')">X</a>
+      </h3>
+
+      <div slot="content">
+        <div class="form-group_border-bottom">
+          <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
+        </div>
+        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
+      </div>
+    </app-modal>
   </div>
 </template>
 
@@ -52,16 +65,50 @@ export default {
       phone: "",
       email: "",
       password: "",
+      fullname: "",
       error: false,
       byEmail: false,
-      statusValidate: 1
+      statusValidate: 1,
+      showModalOTP: false,
+      listQuery: {}
     };
+  },
+  async mounted() {
+    await this.$recaptcha.init();
   },
 
   methods: {
-    ...mapActions("auth", ["login"]),
-    login() {
-      this.error = true;
+    ...mapActions("auth", ["register"]),
+    async submitRegister() {
+      try {
+        const token = await this.$recaptcha.execute("register");
+        console.log("ReCaptcha token:", token);
+        let data = {};
+        if (this.byEmail == false) {
+          (this.listQuery.phone = this.phone),
+            (this.listQuery.password = this.password),
+            (this.listQuery.fullname = this.fullname),
+            (this.listQuery.g_recaptcha_response = token);
+        } else {
+          (this.listQuery.email = this.email),
+            (this.listQuery.password = this.password),
+            (this.listQuery.fullname = this.fullname),
+            (this.listQuery.g_recaptcha_response = token);
+        }
+        debugger;
+        const doAdd = this.register(this.listQuery).then(result => {
+          if (result.success == true) {
+            this.$router.push("/auth/signin");
+          } else {
+          }
+        });
+      } catch (error) {
+        console.log("Login error:", error);
+      }
+    },
+    acceptOTP() {
+      this.listQuery.verify_token = "";
+      this.submitRegister();
     }
   }
 };

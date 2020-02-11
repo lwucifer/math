@@ -57,7 +57,8 @@ module.exports = {
         "@nuxtjs/axios",
         "@nuxtjs/style-resources",
         "@nuxtjs/svg",
-        "portal-vue/nuxt"
+        "portal-vue/nuxt",
+        "@nuxtjs/recaptcha"
     ],
 
     /*
@@ -75,6 +76,11 @@ module.exports = {
             retries: 3
         }, // interceptor retry time request
         debug: false // default false
+    },
+
+    recaptcha: {
+        siteKey: process.env.CAPTCHA_SITEKEY,
+        version: 3
     },
 
     styleResources: {
