@@ -86,3 +86,10 @@ export const CREATING_ANSWER = {
     EDIT: 'creatingAnswerEdit',
     DELETE: 'creatingAnswerDelete',
 }
+
+export const CREATING_CHAPTER = {
+    LIST: 'creatingChapterList',
+    ADD: 'creatingChapterAdd',
+    EDIT: 'creatingChapterEdit',
+    DELETE: 'creatingChapterDelete',
+}

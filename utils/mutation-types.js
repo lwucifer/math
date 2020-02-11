@@ -55,3 +55,10 @@ export const CREATING_ANSWER = {
     SET_CREATING_ANSWER_EDIT: 'setCreatingAnswerEdit',
     SET_CREATING_ANSWER_DELETE: 'setCreatingAnswerDelete',
 }
+
+export const CREATING_CHAPTER = {
+    SET_CREATING_CHAPTER_LIST: 'setCreatingChapterList',
+    SET_CREATING_CHAPTER_ADD: 'setCreatingChapterAdd',
+    SET_CREATING_CHAPTER_EDIT: 'setCreatingChapterEdit',
+    SET_CREATING_CHAPTER_DELETE: 'setCreatingChapterDelete',
+}
