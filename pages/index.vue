@@ -23,10 +23,14 @@
               :content="post.content"
             >
               <PostImage
-                v-if="post.attachments && post.attachments.length"
+                v-if="post.files && post.files.length"
                 slot="media-content"
                 class="my-4"
-                :images="post.attachments"
+                :images="post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
             </Post>

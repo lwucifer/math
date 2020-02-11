@@ -114,14 +114,14 @@
 
       <app-divider class="my-3" />
 
-      <div class="post-editor__privacy d-flex align-items-center justify-content-between mt-3">
+      <div class="post-editor__privacy mt-3">
         <span class="mr-3">Chế độ đăng tin</span>
         <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
           <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
         </app-select>
       </div>
 
-      <app-button full-width square class="mt-4" @click="submit">Đăng tin</app-button>
+      <app-button full-width square class="post-editor__submit mt-4" @click="submit">Đăng tin</app-button>
     </div>
   </div>
 </template>
@@ -299,7 +299,7 @@ export default {
       this.$emit('submit', {
         content: this.editor.getHTML(),
         link: this.link,
-        post_image: this.fileList,
+        post_image: this.fileList[0],
         list_tag: [],
         check_in: {},
         privacy: 8,
