@@ -16,7 +16,7 @@
         </div>
 
         <div class="post__title-row">
-          <n-link class="post__time" to>{{ updated }}</n-link>
+          <n-link class="post__time" to>{{ updated | moment('from') }}</n-link>
         </div>
 
         <template v-if="showEdit">
@@ -42,10 +42,11 @@
       </template>
 
       <template v-else>
-        <p
+        <div
           class="post__post-desc"
-        >{{ content }}</p>
-        <a href @click.prevent class="post__post-readmore">Xem thêm</a>
+          v-html="content"
+        ></div>
+        <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
       </template>
 
       <slot name="media-content" />
