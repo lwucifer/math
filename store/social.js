@@ -107,6 +107,17 @@ const actions = {
     }
   },
 
+  async [actionTypes.SOCIAL_LIKES.ADD]({ commit}, payload ) {
+    try {
+      const { data = {} } = await new Likes(this.$axios)[actionTypes.BASE.ADD](payload);
+      console.log("[SocialLikes] add data", data);
+      return data;
+    } catch (err) {
+      console.log("[SocialLikes] add.err", err);
+      return err;
+    }
+  },
+
   async [actionTypes.SOCIAL_SHARES.LIST]({ commit }, payload) {
     try {
       // const result = await new Shares(this.$axios)[actionTypes.BASE.LIST](payload);
