@@ -27,11 +27,11 @@ export default class BaseService {
         return data;
     }
 
-    async [actionTypes.BASE.DELETE](payload) {
-        const { data } = await this.$axios.delete(this.$api, payload);
-
+    async [actionTypes.BASE.DELETE](id) {
+        const { data } = await this.$axios.delete(`${this.$api}/${id}`);
         return data;
     }
+    
     async [actionTypes.BASE.DETAIL](id) {
         const { data } = await this.$axios.get(`${this.$api}/${id}`);
 

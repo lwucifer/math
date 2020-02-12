@@ -50,7 +50,8 @@ export const ELEARNING_SUMMARY = {
 export const ELEARNING = {
     SET_ELEARNING_INFO: "setElearningInfo",
     SET_ELEARNING_PROGRAM: "setElearningProgram",
-    SET_ELEARNING_RELATED: "setElearningRelated"
+    SET_ELEARNING_RELATED: "setElearningRelated",
+    SET_ELEARNING_SUBJECT: "setElearningSubject",
 };
 
 export const CREATING_ANSWER = {

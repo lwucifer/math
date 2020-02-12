@@ -7,8 +7,12 @@
 
     <div v-for="(item, index) in data.list" :key="index" class="elearning-lesson-side__item">
       <div class="title">
-        <strong class="color-primary">{{item.name}}</strong>
-        <p>{{item.status}} - {{item.times}}</p>
+        <div @click="e => e.target.classList.toggle('active')" class="toggle">
+          <strong class="title color-primary mb-2">{{item.name}}</strong>
+          <IconUp class="up"/>
+          <IconDown class="down"/>
+        </div>
+        <p class="color-999 font-size-12 mb-2">{{item.status}} - {{item.times}}</p>
       </div>
 
       <div
@@ -17,19 +21,19 @@
         :key="j"
         :class="lesson.status ? 'active' : ''"
       >
-        <div class="lesson-title">
+        <div class="lesson-title mb-2">
           <p class="text-uppercase">{{lesson.name}}</p>
           <div class="check" :class="lesson.status ? 'checked' : ''">
-            <IconTick v-if="lesson.status" height="10" width="10" />
+            <IconTick v-if="lesson.status" height="12" width="12" />
           </div>
         </div>
         <div class="bottom d-flex">
           <div>
-            <IconPlay />
+            <IconPlay class="mr-2" />
             <span>{{lesson.time}}</span>
           </div>
           <div :class="lesson.status ? 'color-primary' : 'color-red'" class="ml-auto">
-            <IconPageTick :class="lesson.status ? 'fill-primary' : 'fill-red'" />
+            <IconPageTick class="mr-2" :class="lesson.status ? 'fill-primary' : 'fill-red'" />
             <span>Làm bài tập</span>
           </div>
         </div>
@@ -60,11 +64,13 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      check: {}
+    };
   }
 };
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/lesson/_elearning-lesson-side.scss";
+@import "~/assets/scss/components/elearning/course/_elearning-course-side.scss";
 </style>
