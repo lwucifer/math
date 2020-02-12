@@ -5,6 +5,11 @@
     <div class="app-input__input" v-if="type == 'date'">
       <app-date-picker :value="value" @input="updateInput" />
     </div>
+    
+    <!-- Select -->
+    <div class="app-input__select" v-else-if="type == 'select'">
+      <slot/>
+    </div>
 
     <!-- Input upload -->
     <div class="app-input-file-upload" v-else-if="type == 'file'">
@@ -14,6 +19,7 @@
           type="file"
           class="app-input-file-upload__input"
           :value="value"
+          :disabled="disabled"
           @input="updateInput"
         />
         <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
@@ -29,12 +35,14 @@
         :value="value"
         @input="updateInput"
         :placeholder="placeholder"
+        :disabled="disabled"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
       />
       <input
         v-else
         :type="type"
         :value="value"
+        :disabled="disabled"
         @input="updateInput"
         :placeholder="placeholder"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
@@ -101,6 +109,10 @@ export default {
       type: Boolean,
       default: false
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     rows: {
       type: [String, Number],
       required: false,
@@ -115,18 +127,22 @@ export default {
   methods: {
     updateInput: function(event) {
       this.$emit("input", event.target.value);
+      console.log(event)
     }
   },
 
   computed: {
     classSize() {
+      const disableClass = {
+        "disabled":  this.disabled
+      };
       const classSize = {
         "input--size-xs": this.size === "xs",
         "input--size-sm": this.size === "sm",
         "input--size-md": this.size === "md" || !this.size,
         "input--size-lg": this.size === "lg"
       };
-      return classSize;
+      return {...classSize, ...disableClass};
     }
   }
 };

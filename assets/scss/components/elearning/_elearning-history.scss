@@ -1,23 +1,42 @@
 .elearning-history__main {
 	background-color: #fff;
-	padding: 1rem 2rem;
-}
-.table {
-	width: 100%;
-	th {
-		color: #999;
-		border-bottom: 1px solid #eee;
-		text-align: left;
-		font-weight: normal;
-		padding: 1rem 0;
+	padding: 1rem 0;
+	.dates,
+	h3 {
+		padding: 0 2rem;
 	}
-	tr {
-		>td {
+	.table {
+		width: 100%;
+
+		th {
+			color: #999;
+			border-bottom: 1px solid #eee;
+			text-align: left;
+			font-weight: normal;
 			padding: 1rem 0;
+			&:first-child{
+				padding-left: 2rem;
+			}
+			&:last-child{
+				padding-right: 2rem;
+			}
 		}
-		&:nth-child(2n) {
+
+		tr {
 			>td {
-				background-color: #f8f8f8;
+				padding: 1rem 0;
+				&:first-child{
+					padding-left: 2rem;
+				}
+				&:last-child{
+					padding-right: 2rem;
+				}
+			}
+
+			&:nth-child(2n) {
+				>td {
+					background-color: #f8f8f8;
+				}
 			}
 		}
 	}

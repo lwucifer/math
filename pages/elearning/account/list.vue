@@ -1,26 +1,12 @@
 <template>
   <div class="container elearning-account">
     <h1>Bài giảng và khóa học của tôi</h1>
-    <div class="elearning-account__categories">
+    <div class="elearning-account__categories mb-3">
       <a class="link-gray active">Tất cả (5)</a>
       <a class="link-gray">Bài giảng (3)</a>
       <a class="link-gray">Khóa học (3)</a>
       <a class="link-gray">Yêu thích (3)</a>
       <a class="link-gray">Lưu trữ (0)</a>
-    </div>
-    <div class="elearning-account__toolbar">
-      <app-button rounded size="sm">
-        <IconFilter class="mr-2" />Lọc kết quả
-      </app-button>
-      <app-select v-model="opt1" :options="opts1" />
-      <app-select v-model="opt2" :options="opts3" />
-      <app-select v-model="opt2" :options="opts3" />
-      <div class="form-group">
-        <input class="form-control" placeholder="Nhập tên bài giảng, khóa học" />
-        <span class="unit">
-          <IconSearch />
-        </span>
-      </div>
     </div>
     <div class="row">
       <div
@@ -132,7 +118,9 @@ export default {
 
   watch: {},
 
-  methods: {}
+  methods: {
+    
+  }
 };
 </script>
 
