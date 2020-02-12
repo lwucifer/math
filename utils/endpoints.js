@@ -20,18 +20,21 @@ export const ACCOUNT_EARNING = `/account/earning`;
 /**
  * SOCIALS
  */
+export const FEED = `/social/api/feed`;
 export const POSTS = `/social/api/post`;
 export const LIKES = `/social/likes`;
 export const SHARES = `/social/shares`;
 export const COMMENTS = `/social/comments`;
 export const MEDIAS = `/social/medias`;
 export const NOTIFICATIONS = `/social/notifications`;
+export const SOCIAL_CONFIG = `/social/api/config`;
 
 /**
  * ELEARNING
  */
-export const ELEARNING_SUMMARY = `/elearning/summary`;
+export const ELEARNING_SUMMARY = `/elearning/public/summary`;
 export const ELEARNING_INFO = `/elearning/info`;
 export const ELEARNING_PROGRAM = `/elearning/program`;
-export const CREATING_ANSWERS = "/creating/answers";
-export const CREATING_CHAPTERS = "/creating/chapters";
+export const ELEARNING_CREATING_ANSWERS = "/elearning/creating/answers";
+export const ELEARNING_CREATING_CHAPTERS = "/elearning/creating/chapters";
+export const ELEARNING_PUBLIC_RELATED = "/elearning/public/related";

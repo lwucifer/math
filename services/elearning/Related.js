@@ -1,8 +1,8 @@
 import * as APIs from "../../utils/endpoints";
 import BaseService from "../BaseService";
 
-export default class Chapter extends BaseService {
+export default class Related extends BaseService {
     constructor($axios) {
-        super($axios, APIs.CREATING_CHAPTERS);
+        super($axios, APIs.ELEARNING_PUBLIC_RELATED);
     }
 }

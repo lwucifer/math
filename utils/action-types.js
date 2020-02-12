@@ -47,6 +47,14 @@ export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications"
 };
 
+export const SOCIAL_CONFIG = {
+    LIST: "socialConfigList"
+};
+
+export const SOCIAL_FEEDS = {
+    LIST: "socialFeedsList"
+};
+
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
     EDIT: "accountPersonalEdit",
@@ -78,7 +86,8 @@ export const ELEARNING_SUMMARY = {
 
 export const ELEARNING = {
     INFO: "elearningInfo",
-    PROGRAM: "elearningProgram"
+    PROGRAM: "elearningProgram",
+    RELATED: "elearningPublicRelated"
 };
 
 export const CREATING_ANSWER = {
@@ -93,4 +102,17 @@ export const CREATING_CHAPTER = {
     ADD: "creatingChapterAdd",
     EDIT: "creatingChapterEdit",
     DELETE: "creatingChapterDelete"
+};
+export const ELEARNING_CREATING_ANSWER = {
+    LIST: "elearningCreatingAnswerList",
+    ADD: "elearningCreatingAnswerAdd",
+    EDIT: "elearningCreatingAnswerEdit",
+    DELETE: "elearningCreatingAnswerDelete"
+};
+
+export const ELEARNING_CREATING_CHAPTER = {
+    LIST: "elearningCreatingChapterList",
+    ADD: "elearningCreatingChapterAdd",
+    EDIT: "elearningCreatingChapterEdit",
+    DELETE: "elearningCreatingChapterDelete"
 };

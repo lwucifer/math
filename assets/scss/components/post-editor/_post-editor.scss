@@ -8,7 +8,22 @@
             visibility: visible;
             opacity: 1;
         }
+
+        .post-editor__privacy,
+        .post-editor__submit {
+            display: flex;
+        }
     }
+}
+
+.post-editor__privacy {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.post-editor__submit {
+    display: none;
 }
 
 .post-editor__overlay {
