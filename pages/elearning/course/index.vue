@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <ElearningLessonSide :data="data" />
+          <ElearningCourseSide :data="data" />
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import ElearningLessonSide from "~/components/page/elearning/lesson/ElearningLessonSide";
+import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -52,7 +52,7 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningLessonSide
+    ElearningCourseSide
   },
 
   data() {
@@ -149,7 +149,6 @@ export default {
           },
         ]
       },
-      active_el: 0
     };
   },
   computed: {
@@ -159,5 +158,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/lesson/_elearning-lesson.scss";
+@import "~/assets/scss/components/elearning/course/_elearning-course.scss";
 </style>
