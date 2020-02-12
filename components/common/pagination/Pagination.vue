@@ -1,6 +1,32 @@
 <template>
   <div>
-    <ul class="app-pagination" v-if="total < 8">
+    <div class="app-pagination-2" v-if="type === 2">
+      <div class="left">
+        <span>Số dòng trên một trang</span>
+        <app-select v-model="pager" :options="opts"  class="select-pager"/>
+        <span>{{pages.first}}-{{pages.last}} của tổng số {{pages.totalElements}}</span>
+      </div>
+      <div class="right">
+        <span>Đi đến trang</span>
+        <input type="text" class="current" :value="current" @change="(e) => goTo(e.target.value)"/>
+        <ul>
+          <li @click="goTo(1)" :class="current == 1 ? 'disable' : ''">
+            <IconAngleDoubleLeft />
+          </li>
+          <li @click="goTo(prev)" :class="current == 1 ? 'disable' : ''">
+            <IconAngleLeft />
+          </li>
+          <li @click="goTo(next)" :class="current == total ? 'disable' : ''">
+            <IconAngleRight />
+          </li>
+          <li @click="goTo(total)" :class="current == total ? 'disable' : ''">
+            <IconAngleDoubleRight />
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <ul class="app-pagination" v-else-if="total < 8">
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
         <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{i}}</a>
       </li>
@@ -41,18 +67,37 @@
 </template>
 
 <script>
+import IconAngleLeft from "~/assets/svg/design-icons/angle-left.svg?inline";
+import IconAngleRight from "~/assets/svg/design-icons/angle-right.svg?inline";
+import IconAngleDoubleRight from '~/assets/svg/design-icons/angle-double-right.svg?inline';
+import IconAngleDoubleLeft from '~/assets/svg/design-icons/angle-double-left.svg?inline';
+
+
 export default {
-  components: {},
+  components: {
+    IconAngleDoubleRight,
+    IconAngleDoubleLeft,
+    IconAngleLeft,
+    IconAngleRight
+  },
 
   data() {
-    return {};
+    return {
+      pager: 10,
+      opts: [
+        { value: 10, text: "10" },
+        { value: 20, text: "20" },
+        { value: 30, text: "30" },
+        { value: 50, text: "50" }
+      ],
+    };
   },
 
   props: {
-    maxVisibleButtons: {
+    type: {
       type: Number,
       required: false,
-      default: 7
+      default: 1
     },
     pagination: {
       type: Object,
@@ -63,8 +108,12 @@ export default {
 
   methods: {
     goTo(e) {
-      this.$emit("pagechange", e);
+      this.$emit("pagechange", {page: e, pager: this.pager});
     }
+  },
+
+  created () {
+    this.opt = this.pagination.pager;
   },
 
   computed: {
@@ -86,7 +135,6 @@ export default {
         : null;
     }
   },
-  created() {}
 };
 </script>
 

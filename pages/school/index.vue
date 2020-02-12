@@ -1,29 +1,36 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-3">
-        <AsideBox title="Trường của tôi" class="school__side">
-          <div v-for="(item, index) in myschools" class="mb-3" :key="index">
-            <n-link slot="title" :to="'/school/view'">{{item.name}}</n-link>
-          </div>
-          <app-button class="timeline-aside-btn mt-4" fullWidth>Tạo trường mới</app-button>
-        </AsideBox>
-      </div>
-      <div class="col-md-9">
-        <div class="row">
-          <div :class="classes" v-for="(school, index) in schools" :key="index">
-            <SchoolDetail :school="school" />
-          </div>
+      <div class="col-12">
+        <school-filter
+          title="Danh sách trường học"
+          :provinces="provinces"
+          :districts="districts"
+          :villages="villages"
+          :school-types="schoolTypes"
+        >
+
+        </school-filter>
+        <!--Detail school types-->
+        <div>
+          <school-list-box
+            :name="nurserySchools.name"
+            :description="nurserySchools.description"
+            :items="nurserySchools.list">
+          </school-list-box>
         </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SchoolDetail from "~/components/page/school/SchoolDetail";
-import AsideBox from "~/components/layout/asideBox/AsideBox";
-import { mapState } from "vuex";
+import SchoolDetail from "~/components/page/school/SchoolDetail"
+import SchoolFilter from "~/components/page/school/SchoolFilter"
+import SchoolListBox from "~/components/page/school/SchoolListBox"
+import AsideBox from "~/components/layout/asideBox/AsideBox"
+import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -32,7 +39,9 @@ export default {
   watchQuery: ["school_id"],
 
   components: {
+    SchoolFilter,
     SchoolDetail,
+    SchoolListBox,
     AsideBox
   },
 
@@ -134,7 +143,113 @@ export default {
           id: 2,
           name: "Trung tâm tiếng Anh Appolo"
         }
-      ]
+      ],
+      provinces: [
+        {
+          value: 1,
+          text: 'Hà Nội'
+        },
+        {
+          value: 2,
+          text: 'Hải Phòng'
+        },
+        {
+          value: 3,
+          text: 'Nam Định'
+        },
+        {
+          value: 4,
+          text: 'Hải Dương'
+        },
+      ],
+      districts: [
+        {
+          value: 1,
+          text: 'Cầu Giấy'
+        },
+        {
+          value: 2,
+          text: 'Thanh Xuân'
+        },
+        {
+          value: 3,
+          text: 'Nam Từ Liêm'
+        },
+      ],
+      villages: [
+        {
+          value: 1,
+          text: 'Dịch Vọng'
+        },
+        {
+          value: 2,
+          text: 'Khương Trung'
+        },
+        {
+          value: 3,
+          text: 'Xuân Trường'
+        },
+      ],
+      schoolTypes: [
+        {
+          value: 1,
+          text: 'Cấp 1'
+        },
+        {
+          value: 2,
+          text: 'Cấp 2'
+        },
+        {
+          value: 3,
+          text: 'Cấp 3'
+        }
+      ],
+      nurserySchools: {
+        name: 'Mầm non',
+        description: '(50 trường - 100 giáo viên - 1000 học sinh)',
+        list: [
+          {
+            id: 1,
+            image: 'https://picsum.photos/218/129',
+            name: "Trường THCS Nguyễn Thị Thập",
+            address: "Hà Đông, Hà Nội",
+            teachersCounter: 100,
+            studentsCounter: 1000,
+          },
+          {
+            id: 2,
+            image: 'https://picsum.photos/218/129',
+            name: "Trường THCS Nguyễn Thị Thập",
+            address: "Hà Đông, Hà Nội",
+            teachersCounter: 100,
+            studentsCounter: 1000,
+          },
+          {
+            id: 3,
+            image: 'https://picsum.photos/218/129',
+            name: "Trường THCS Nguyễn Thị Thập",
+            address: "Hà Đông, Hà Nội",
+            teachersCounter: 100,
+            studentsCounter: 1000,
+          },
+          {
+            id: 4,
+            image: 'https://picsum.photos/218/129',
+            name: "Trường THCS Nguyễn Thị Thập",
+            address: "Hà Đông, Hà Nội",
+            teachersCounter: 100,
+            studentsCounter: 1000,
+          },
+          {
+            id: 5,
+            image: 'https://picsum.photos/218/129',
+            name: "Trường THCS Nguyễn Thị Thập",
+            address: "Hà Đông, Hà Nội",
+            teachersCounter: 100,
+            studentsCounter: 1000,
+          },
+        ]
+      }
     };
   },
   computed: {

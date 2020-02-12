@@ -35,7 +35,7 @@
             </li>
             <li>
               <a href class="d-flex">
-                <IconHeart />
+                <IconHeart class="fill-666"/>
                 <span>Thêm vào yêu thích</span>
               </a>
             </li>
