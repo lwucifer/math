@@ -1,7 +1,7 @@
 <template>
-  <div class="container elearning-lesson">
+  <div class="container elearning-view">
     <h2>{{title}}</h2>
-    <div class="elearning-lesson__info">
+    <div class="elearning-view__info">
       <div class="author">
         <app-avatar :src="lesson.avatar" :size="32" />
         <span class="name ml-2">{{ lesson.author }}</span>
@@ -27,10 +27,10 @@
       </div>
     </div>
 
-    <div class="elearning-lesson__main">
+    <div class="elearning-view__main">
       <div class="row">
         <div class="col-md-9">
-          <div class="elearning-lesson__main-nav">
+          <div class="elearning-view__main-nav">
             <a href="#tab1" :class="tab == 1 ? 'active' : ''" @click="tab = 1">Giới thiệu</a>
 
             <a href="#tab2" :class="tab == 2 ? 'active' : ''" @click="tab = 2">Nội dung bài giảng</a>
@@ -97,7 +97,7 @@
             </div>
           </div>
 
-          <div id="tab2" class="box elearning-lesson__content">
+          <div id="tab2" class="box elearning-view__content">
             <h5>Nội dung bài giảng</h5>
             <div class="info">
               <div class="info-item">

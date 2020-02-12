@@ -113,8 +113,8 @@ export default {
   },
 
   methods: {
-    updateInput: function() {
-      this.$emit("input", this.value);
+    updateInput: function(event) {
+      this.$emit("input", event.target.value);
     }
   },
 

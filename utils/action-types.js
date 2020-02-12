@@ -14,7 +14,8 @@ export const AUTH = {
     SENDOTP: "sendotp",
     STATUS: "status",
     FORGOT_PASSWORD: "forgotPassword",
-    CHANGE_PASSWORD: "changePassword"
+    CHANGE_PASSWORD: "changePassword",
+    VERIFY_OTP: "verifiOtp"
 };
 
 export const SOCIAL_POST = {
@@ -47,12 +48,12 @@ export const SOCIAL_NOTIFICATIONS = {
 };
 
 export const SOCIAL_CONFIG = {
-    LIST: 'socialConfigList'
+    LIST: "socialConfigList"
 };
 
 export const SOCIAL_FEEDS = {
-    LIST: 'socialFeedsList'
-}
+    LIST: "socialFeedsList"
+};
 
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
@@ -86,19 +87,32 @@ export const ELEARNING_SUMMARY = {
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
-    RELATED: 'elearningPublicRelated'
+    RELATED: "elearningPublicRelated"
 };
 
+export const CREATING_ANSWER = {
+    LIST: "creatingAnswerList",
+    ADD: "creatingAnswerAdd",
+    EDIT: "creatingAnswerEdit",
+    DELETE: "creatingAnswerDelete"
+};
+
+export const CREATING_CHAPTER = {
+    LIST: "creatingChapterList",
+    ADD: "creatingChapterAdd",
+    EDIT: "creatingChapterEdit",
+    DELETE: "creatingChapterDelete"
+};
 export const ELEARNING_CREATING_ANSWER = {
-    LIST: 'elearningCreatingAnswerList',
-    ADD: 'elearningCreatingAnswerAdd',
-    EDIT: 'elearningCreatingAnswerEdit',
-    DELETE: 'elearningCreatingAnswerDelete',
-}
+    LIST: "elearningCreatingAnswerList",
+    ADD: "elearningCreatingAnswerAdd",
+    EDIT: "elearningCreatingAnswerEdit",
+    DELETE: "elearningCreatingAnswerDelete"
+};
 
 export const ELEARNING_CREATING_CHAPTER = {
-    LIST: 'elearningCreatingChapterList',
-    ADD: 'elearningCreatingChapterAdd',
-    EDIT: 'elearningCreatingChapterEdit',
-    DELETE: 'elearningCreatingChapterDelete',
-}
+    LIST: "elearningCreatingChapterList",
+    ADD: "elearningCreatingChapterAdd",
+    EDIT: "elearningCreatingChapterEdit",
+    DELETE: "elearningCreatingChapterDelete"
+};
