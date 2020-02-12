@@ -14,16 +14,12 @@
           <template v-show="!loading">
             <Post
               v-for="post in feeds.listPost"
+              :key="post.post_id"
+              :post="post"
               class="mb-4"
               show-menu-dropdown
-              :key="post.post_id"
-              :fullname="post.author && post.author.fullname"
-              :updated="post.created_at"
-              :likes="post.total_like"
-              :comments="post.total_comment"
-              :content="post.content"
-              :privacy="post.privacy"
-              @delete="deletePost(post.post_id)"
+              @delete="deletePost"
+              @like="likePost"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -41,7 +37,7 @@
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
-            <Post class="mb-4">
+            <!-- <Post class="mb-4">
               <template slot="media-content">
                 <app-divider class="my-4"></app-divider>
                 <app-content-box
@@ -56,11 +52,11 @@
                   meta-footer="cellphones.com.vn"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST LINK -->
 
             <!-- DEMO FOR POST SLIDER -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostSlider
                   :images="timelineSliderItems"
@@ -68,11 +64,11 @@
                   @click-item="handleClickImage"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST SLIDER -->
 
             <!-- DEMO FOR POST 1 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
@@ -80,11 +76,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 1 IMAGE -->
 
             <!-- DEMO FOR POST 2 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -95,11 +91,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 2 IMAGE -->
 
             <!-- DEMO FOR POST 3 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -111,11 +107,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 3 IMAGE -->
 
             <!-- DEMO FOR POST 4 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -128,11 +124,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 4 IMAGE -->
 
             <!-- DEMO FOR POST 5 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -146,7 +142,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
@@ -483,6 +479,10 @@ export default {
     async deletePost(id) {
       const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, { id });
       console.log('doDelete', doDelete)
+    },
+
+    async likePost(id) {
+      console.log('likePost', id)
     }
   }
 };

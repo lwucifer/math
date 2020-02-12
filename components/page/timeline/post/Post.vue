@@ -8,14 +8,14 @@
       <div class="post__title">
         <div class="post__title-row">
           <h5 class="post__name">
-            <n-link to>{{ fullname }}</n-link>
+            <n-link to>{{ post.author.fullname }}</n-link>
           </h5>
         </div>
 
         <div class="post__title-row">
-          <n-link class="post__time" to>{{ updated | moment('from') }}</n-link>
-          <span class="post__share-for" :title="privacy ? privacy.desc : ''">
-            <img :src="privacy ? privacy.image : ''" alt />
+          <n-link class="post__time" to>{{ post.created_at | moment('from') }}</n-link>
+          <span class="post__share-for" :title="post.privacy ? post.privacy.desc : ''">
+            <img :src="post.privacy ? post.privacy.image : ''" alt />
             <!-- <IconGlobe class="icon" /> -->
           </span>
         </div>
@@ -64,7 +64,7 @@
       </template>
 
       <template v-else>
-        <div class="post__post-desc" v-html="content"></div>
+        <div class="post__post-desc" v-html="post.content"></div>
         <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
       </template>
 
@@ -75,14 +75,14 @@
 
     <div class="post__interactive">
       <div class="post__count">
-        <span>{{ likes }} lượt thích</span>
-        <span>{{ comments }} bình luận</span>
+        <span>{{ post.total_like }} lượt thích</span>
+        <span>{{ post.total_comment }} bình luận</span>
       </div>
 
       <app-divider class="my-3" />
 
       <div class="post__actions">
-        <button class="post__button active">
+        <button class="post__button" :class="{ 'active': post.is_like }" @click="handleClickLike">
           <IconHeart class="icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
@@ -144,18 +144,6 @@ export default {
   props: {
     showEdit: Boolean,
     showMenuDropdown: Boolean,
-    fullname: {
-      type: String,
-      default: ""
-    },
-    updated: {
-      type: String,
-      default: ""
-    },
-    likes: {
-      type: Number,
-      default: 0
-    },
     comments: {
       type: Number,
       default: 0
@@ -164,11 +152,18 @@ export default {
       type: String,
       default: ""
     },
-    privacy: {
+    post: {
       type: Object,
       default: () => {},
       validator: value =>
-        ["desc", "image", "name", "value"].every(key => key in value)
+        [
+          "author",
+          "created_at",
+          "total_like",
+          "total_comment",
+          "content",
+          "privacy"
+        ].every(key => key in value)
     }
   },
 
@@ -187,7 +182,11 @@ export default {
 
   methods: {
     handleClickDelete() {
-      this.$emit("delete");
+      this.$emit("delete", this.post.post_id);
+    },
+
+    handleClickLike() {
+      this.$emit("like", this.post.post_id)
     }
   }
 };
