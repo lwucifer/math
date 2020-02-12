@@ -6,7 +6,8 @@ export const AUTH = {
     SET_ACCESS_TOKEN: "setAccessToken",
     SET_OTP: "setAccessToken",
     REMOVE_TOKEN: "removeToken",
-    SET_ACCOUNT_STATUS: "setAccountStatus"
+    SET_ACCOUNT_STATUS: "setAccountStatus",
+    SET_FIREBASE_TOKEN: "setFirebaseToken"
 };
 
 export const PUBLIC = {};
@@ -47,21 +48,35 @@ export const ELEARNING_SUMMARY = {
 };
 
 export const ELEARNING = {
-    SET_ELEARNING_INFO: 'setElearningInfo',
-    SET_ELEARNING_PROGRAM: 'setElearningProgram',
-    SET_ELEARNING_RELATED: 'setElearningRelated'
-}
+    SET_ELEARNING_INFO: "setElearningInfo",
+    SET_ELEARNING_PROGRAM: "setElearningProgram",
+    SET_ELEARNING_RELATED: "setElearningRelated"
+};
+
+export const CREATING_ANSWER = {
+    SET_CREATING_ANSWER_LIST: "setCreatingAnswerList",
+    SET_CREATING_ANSWER_ADD: "setCreatingAnswerAdd",
+    SET_CREATING_ANSWER_EDIT: "setCreatingAnswerEdit",
+    SET_CREATING_ANSWER_DELETE: "setCreatingAnswerDelete"
+};
+
+export const CREATING_CHAPTER = {
+    SET_CREATING_CHAPTER_LIST: "setCreatingChapterList",
+    SET_CREATING_CHAPTER_ADD: "setCreatingChapterAdd",
+    SET_CREATING_CHAPTER_EDIT: "setCreatingChapterEdit",
+    SET_CREATING_CHAPTER_DELETE: "setCreatingChapterDelete"
+};
 
 export const ELEARNING_CREATING_ANSWER = {
-    SET_ELEARNING_CREATING_ANSWER_LIST: 'setElearningCreatingAnswerList',
-    SET_ELEARNING_CREATING_ANSWER_ADD: 'setElearningCreatingAnswerAdd',
-    SET_ELEARNING_CREATING_ANSWER_EDIT: 'setElearningCreatingAnswerEdit',
-    SET_ELEARNING_CREATING_ANSWER_DELETE: 'setElearningCreatingAnswerDelete',
-}
+    SET_ELEARNING_CREATING_ANSWER_LIST: "setElearningCreatingAnswerList",
+    SET_ELEARNING_CREATING_ANSWER_ADD: "setElearningCreatingAnswerAdd",
+    SET_ELEARNING_CREATING_ANSWER_EDIT: "setElearningCreatingAnswerEdit",
+    SET_ELEARNING_CREATING_ANSWER_DELETE: "setElearningCreatingAnswerDelete"
+};
 
 export const ELEARNING_CREATING_CHAPTER = {
-    SET_ELEARNING_CREATING_CHAPTER_LIST: 'setElearningCreatingChapterList',
-    SET_ELEARNING_CREATING_CHAPTER_ADD: 'setElearningCreatingChapterAdd',
-    SET_ELEARNING_CREATING_CHAPTER_EDIT: 'setElearningCreatingChapterEdit',
-    SET_ELEARNING_CREATING_CHAPTER_DELETE: 'setElearningCreatingChapterDelete',
-}
+    SET_ELEARNING_CREATING_CHAPTER_LIST: "setElearningCreatingChapterList",
+    SET_ELEARNING_CREATING_CHAPTER_ADD: "setElearningCreatingChapterAdd",
+    SET_ELEARNING_CREATING_CHAPTER_EDIT: "setElearningCreatingChapterEdit",
+    SET_ELEARNING_CREATING_CHAPTER_DELETE: "setElearningCreatingChapterDelete"
+};

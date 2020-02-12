@@ -1,5 +1,6 @@
 <template>
   <div class="auth auth-signin">
+    <div id="label-verify-phone"></div>
     <div class="auth__main">
       <h3>Đăng ký</h3>
       <div class="auth__nav">
@@ -51,6 +52,11 @@ import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
 import IconGoogle from "~/assets/svg/icons/google.svg?inline";
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
+import firebase from "@/services/firebase/FirebaseInit";
+import {
+  createSignupWithPhone,
+  createSignupWithEmail
+} from "../../../models/auth/Signup";
 
 export default {
   components: {
@@ -69,33 +75,52 @@ export default {
       statusValidate: 1,
       showModalOTP: false,
       listQuery: {},
-      otp: ""
+      otp: "",
+      verify_token: ""
     };
   },
   async mounted() {
     await this.$recaptcha.init();
+
+    // Start Firebase invisible reCAPTCHA verifier
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "label-verify-phone",
+      {
+        size: "invisible",
+        callback: () => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          console.log("RecaptchaVerifier resolved");
+        }
+      }
+    );
+
+    // window.recaptchaVerifier.render().then(widgetId => {
+    //   window.recaptchaWidgetId = widgetId;
+    // });
   },
 
   methods: {
-    ...mapActions("auth", ["register", "sendotp"]),
+    ...mapActions("auth", ["register", "sendotp", "status", "verifiOtp"]),
     async submitRegister() {
       try {
         const token = await this.$recaptcha.execute("register");
         console.log("ReCaptcha token:", token);
-        let data = {};
-        if (this.byEmail == false) {
-          (this.listQuery.phone = this.phone),
-            (this.listQuery.password = this.password),
-            (this.listQuery.fullname = this.fullname),
-            (this.listQuery.g_recaptcha_response = token);
-        } else {
-          (this.listQuery.email = this.email),
-            (this.listQuery.password = this.password),
-            (this.listQuery.fullname = this.fullname),
-            (this.listQuery.g_recaptcha_response = token);
-        }
+        let registerModel = !this.byEmail
+          ? createSignupWithPhone(
+              this.phone,
+              this.password,
+              this.fullname,
+              token,
+              this.verify_token
+            )
+          : createSignupWithEmail(
+              this.email,
+              this.password,
+              this.fullname,
+              token
+            );
         debugger;
-        const doAdd = this.register(this.listQuery).then(result => {
+        const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
             this.$router.push("/auth/signin");
           } else {
@@ -106,20 +131,39 @@ export default {
       }
     },
     acceptOTP() {
-      this.listQuery.verify_token = "";
-      this.submitRegister();
+      this.verifiOtp(this.otp).then(result => {
+        console.log("result huydv", result);
+        if (result) {
+          this.verify_token = result.user.ma;
+          console.log("result huydv11111", result);
+          this.submitRegister();
+        }
+      });
     },
     async hanldeShowModalOTP() {
-      debugger;
-      if (this.phone != "") {
-        this.showModalOTP = true;
-        const token = await this.$recaptcha.execute("sendotp");
-        console.log("ReCaptcha token:", token);
-        const data = {
+      if (this.phone != "" && this.password != "" && this.fullname != "") {
+        const tokenCheckPhone = await this.$recaptcha.execute("status");
+        const dataChecKPhone = {
           phone: this.phone,
-          g_recaptcha_response: token
+          g_recaptcha_response: tokenCheckPhone
         };
-        this.sendotp(data);
+        const doAdd = this.status(dataChecKPhone).then(result => {
+          if (result.data == true) {
+          } else {
+            this.showModalOTP = true;
+            const data = {
+              phone: this.phone,
+              appVerifier: window.recaptchaVerifier
+            };
+            this.sendotp(data);
+            // .then(result => {
+            //   console.log("result huydv", result);
+            //   if (result) {
+            //     console.log("result huydv11111", result);
+            //   }
+            // });
+          }
+        });
       }
     }
   }
