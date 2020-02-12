@@ -1,4 +1,4 @@
-.elearning-lesson__info {
+.elearning-view__info {
     display: flex;
     align-items: center;
     font-size: 1.6rem;
@@ -12,7 +12,7 @@
         margin-right: 3.5rem;
     }
 }
-.elearning-lesson__content {
+.elearning-view__content {
     .info {
         display: flex;
         align-items: center;
@@ -29,12 +29,12 @@
         margin-bottom: 1rem;
     }
 }
-.elearning-lesson__main {
+.elearning-view__main {
     .box {
         margin-bottom: 2rem;
     }
 }
-.elearning-lesson__main-nav {
+.elearning-view__main-nav {
     padding: 0 1.5rem;
     background-color: #fff;
     margin-bottom: 2rem;
