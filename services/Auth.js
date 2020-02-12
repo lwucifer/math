@@ -29,21 +29,20 @@ export default class Auth {
         return data;
     }
 
-    async [actionTypes.AUTH.SENDOTP](payload) {
+    // async [actionTypes.AUTH.SENDOTP](payload) {
+    //     const { data } = await this.$axios.post(
+    //         `${APIs.REGISTER_VALIDATE}`,
+    //         payload
+    //     );
+
+    //     return data;
+    // }
+
+    async [actionTypes.AUTH.STATUS](payload) {
         const { data } = await this.$axios.post(
             `${APIs.REGISTER_VALIDATE}`,
             payload
         );
-
-        return data;
-    }
-
-    async [actionTypes.AUTH.STATUS](payload) {
-        // debugger;
-        const { phone } = payload;
-        const { data } = await this.$axios.post(`${APIs.CHECK_PHONE}`, {
-            phone
-        });
 
         return data;
     }
