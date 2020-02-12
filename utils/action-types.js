@@ -87,7 +87,8 @@ export const ELEARNING_SUMMARY = {
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
-    RELATED: "elearningPublicRelated"
+    RELATED: "elearningPublicRelated",
+    SUBJECT: "elearningPublicSubject",
 };
 
 export const CREATING_ANSWER = {
