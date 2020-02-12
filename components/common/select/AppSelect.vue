@@ -81,7 +81,10 @@
         </template>
 
         <span class="app-select__arrow">
-          <IconCaretDown />
+          <!--Slot for change the caret icon-->
+          <slot name="placeholder-icon">
+            <IconCaretDown />
+          </slot>
         </span>
       </div>
 
