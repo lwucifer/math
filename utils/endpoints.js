@@ -38,3 +38,4 @@ export const ELEARNING_PROGRAM = `/elearning/program`;
 export const ELEARNING_CREATING_ANSWERS = "/elearning/creating/answers";
 export const ELEARNING_CREATING_CHAPTERS = "/elearning/creating/chapters";
 export const ELEARNING_PUBLIC_RELATED = "/elearning/public/related";
+export const ELEARNING_PUBLIC_SUBJECT = "/elearning/public/subject";
