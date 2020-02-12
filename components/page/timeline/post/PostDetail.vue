@@ -22,7 +22,7 @@
         </a>
 
         <div class="post-detail__media">
-          <img :src="post.attachments[0].thumb" alt />
+          <img :src="post.files[0].link.high" alt />
         </div>
       </template>
     </div>

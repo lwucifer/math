@@ -10,19 +10,41 @@
           <h5 class="post__name">
             <n-link to>{{ fullname }}</n-link>
           </h5>
-          <span class="post__share-for">
-            <IconGlobe class="svg-icon" />
-          </span>
         </div>
 
         <div class="post__title-row">
           <n-link class="post__time" to>{{ updated | moment('from') }}</n-link>
+          <span class="post__share-for" :title="privacy ? privacy.desc : ''">
+            <img :src="privacy ? privacy.image : ''" alt />
+            <!-- <IconGlobe class="icon" /> -->
+          </span>
         </div>
 
         <template v-if="showEdit">
           <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
         </template>
       </div>
+
+      <app-dropdown
+        v-if="showMenuDropdown"
+        class="post__menu-dropdown"
+        position="left"
+        open-on-click
+        v-model="menuDropdown"
+      >
+        <button slot="activator" slot-scope="{ on }" v-on="on" class="post__menu-dropdown__btn">
+          <IconDots class="icon" />
+        </button>
+
+        <ul class="post__menu-dropdown__list">
+          <li>
+            <a href>Chỉnh sửa bài viết</a>
+          </li>
+          <li>
+            <a href @click.prevent="handleClickDelete">Xoá</a>
+          </li>
+        </ul>
+      </app-dropdown>
     </div>
 
     <div class="post__post">
@@ -42,10 +64,7 @@
       </template>
 
       <template v-else>
-        <div
-          class="post__post-desc"
-          v-html="content"
-        ></div>
+        <div class="post__post-desc" v-html="content"></div>
         <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
       </template>
 
@@ -64,21 +83,21 @@
 
       <div class="post__actions">
         <button class="post__button active">
-          <IconHeart class="svg-icon" width="2.1rem" height="1.8rem" />Thích
+          <IconHeart class="icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
         <button class="post__button">
-          <IconBubble class="svg-icon" width="2.1rem" height="2rem" />Bình luận
+          <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
         <button class="post__button">
-          <IconShare class="svg-icon" width="2.1rem" height="2.1rem" />Chia sẻ
+          <IconShare class="icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
 
       <app-divider class="my-3" />
 
-      <div class="post__comment-list">
+      <div class="post__comment-list d-none">
         <CommentItem>
           <CommentItemReplied />
         </CommentItem>
@@ -108,6 +127,7 @@ import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBubble from "~/assets/svg/icons/bubble.svg?inline";
 import IconShare from "~/assets/svg/icons/share.svg?inline";
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 export default {
   components: {
@@ -117,11 +137,13 @@ export default {
     IconGlobe,
     IconHeart,
     IconBubble,
-    IconShare
+    IconShare,
+    IconDots
   },
 
   props: {
     showEdit: Boolean,
+    showMenuDropdown: Boolean,
     fullname: {
       type: String,
       default: ""
@@ -140,13 +162,20 @@ export default {
     },
     content: {
       type: String,
-      default: ''
+      default: ""
+    },
+    privacy: {
+      type: Object,
+      default: () => {},
+      validator: value =>
+        ["desc", "image", "name", "value"].every(key => key in value)
     }
   },
 
   data() {
     return {
       edit: false,
+      menuDropdown: false,
       shareWith: 0,
       shareWithOpts: [
         { value: 0, text: "Công khai" },
@@ -154,6 +183,12 @@ export default {
         { value: 3, text: "Chỉ mình tôi" }
       ]
     };
+  },
+
+  methods: {
+    handleClickDelete() {
+      this.$emit("delete");
+    }
   }
 };
 </script>

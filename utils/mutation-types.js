@@ -17,7 +17,9 @@ export const SOCIAL = {
     SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
     SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
     SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
-    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList"
+    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
+    SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
+    SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -46,7 +48,8 @@ export const ELEARNING_SUMMARY = {
 
 export const ELEARNING = {
     SET_ELEARNING_INFO: 'setElearningInfo',
-    SET_ELEARNING_PROGRAM: 'setElearningProgram'
+    SET_ELEARNING_PROGRAM: 'setElearningProgram',
+    SET_ELEARNING_RELATED: 'setElearningRelated'
 }
 
 export const ELEARNING_CREATING_ANSWER = {

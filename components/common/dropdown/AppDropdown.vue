@@ -50,6 +50,22 @@ export default {
         "app-dropdown--left": this.position === 'left',
         "app-dropdown--center": this.position === 'center',
         "app-dropdown--right": this.position === 'right',
+
+        "app-dropdown--top-left": this.position === 'topLeft',
+        "app-dropdown--top-right": this.position === 'topRight',
+        "app-dropdown--top-center": this.position === 'topCenter',
+
+        "app-dropdown--bottom-left": this.position === 'bottomLeft',
+        "app-dropdown--bottom-right": this.position === 'bottomRight',
+        "app-dropdown--bottom-center": this.position === 'bottomCenter',
+
+        "app-dropdown--left-top": this.position === 'leftTop',
+        "app-dropdown--left-middle": this.position === 'leftMiddle',
+        "app-dropdown--left-bottom": this.position === 'leftBottom',
+
+        "app-dropdown--right-top": this.position === 'rightTop',
+        "app-dropdown--right-middle": this.position === 'rightMiddle',
+        "app-dropdown--right-bottom": this.position === 'rightBottom',
       };
     }
   },
