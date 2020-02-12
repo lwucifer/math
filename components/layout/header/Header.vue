@@ -9,7 +9,7 @@
 
       <ul class="the-header__menu">
         <li>
-          <n-link to="/" class="active">Timeline</n-link>
+          <n-link to="/">Timeline</n-link>
         </li>
         <li>
           <n-link to="/course">Khoá học</n-link>
