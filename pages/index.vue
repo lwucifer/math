@@ -225,7 +225,8 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { POST_TYPES } from "~/utils/constants";
+import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
+import { createLike } from "~/models/social/Like";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -477,12 +478,14 @@ export default {
      * DELETE a post
      */
     async deletePost(id) {
-      const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, { id });
+      const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, id);
       console.log('doDelete', doDelete)
     },
 
     async likePost(id) {
-      console.log('likePost', id)
+      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
+      const doLike = await this.$store.dispatch(`social/${actionTypes.SOCIAL_LIKES.ADD}`, likeModel);
+      console.log('likePost', doLike)
     }
   }
 };
