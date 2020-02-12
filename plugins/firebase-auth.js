@@ -1,13 +1,13 @@
-import { auth } from '@/services/firebase/FirebaseInit.js'
+import { authFire } from '@/services/firebase/FirebaseInit.js'
 
 export default (context) => {
   const { store } = context
 
   return new Promise((resolve, reject) => {
-    auth.onAuthStateChanged(user => {
+    authFire.onAuthStateChanged(user => {
       console.log("[onAuthStateChanged]", user);
 
-      store.commit('setUser', user)
+      // store.commit('setUser', user)
       resolve()
     })
   })

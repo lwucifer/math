@@ -1,0 +1,30 @@
+.elearning-lesson-side__lesson {
+    padding: 1rem;
+    background-color: #f8f8f8;
+    margin-bottom: 1rem;
+    &.active {
+        background-color: rgba($color:$color-primary, $alpha: 0.1);
+    }
+    .bottom {
+        >div {
+            display: flex;
+            align-items: center;
+        }
+    }
+    .lesson-title {
+        display: flex;
+        .check {
+            border: 2px solid #ccc;
+            background-color: #fff;
+            min-width: 2rem;
+            height: 2rem;
+            text-align: center;
+            line-height: 2rem;
+            display: block;
+            &.checked {
+                border-color: $color-primary;
+                background-color: transparent;
+            }
+        }
+    }
+}

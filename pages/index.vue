@@ -13,20 +13,23 @@
 
           <template v-show="!loading">
             <Post
-              v-for="post in postsList"
-              class="mb-4"
+              v-for="post in feeds.listPost"
               :key="post.post_id"
-              :fullname="post.author && post.author.fullname"
-              :updated="post.created_at"
-              :likes="post.total_like"
-              :comments="post.total_comment"
-              :content="post.content"
+              :post="post"
+              class="mb-4"
+              show-menu-dropdown
+              @delete="deletePost"
+              @like="likePost"
             >
               <PostImage
-                v-if="post.attachments && post.attachments.length"
+                v-if="post.files && post.files.length"
                 slot="media-content"
                 class="my-4"
-                :images="post.attachments"
+                :images="post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
             </Post>
@@ -34,7 +37,7 @@
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
-            <Post class="mb-4">
+            <!-- <Post class="mb-4">
               <template slot="media-content">
                 <app-divider class="my-4"></app-divider>
                 <app-content-box
@@ -49,11 +52,11 @@
                   meta-footer="cellphones.com.vn"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST LINK -->
 
             <!-- DEMO FOR POST SLIDER -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostSlider
                   :images="timelineSliderItems"
@@ -61,11 +64,11 @@
                   @click-item="handleClickImage"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST SLIDER -->
 
             <!-- DEMO FOR POST 1 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
@@ -73,11 +76,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 1 IMAGE -->
 
             <!-- DEMO FOR POST 2 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -88,11 +91,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 2 IMAGE -->
 
             <!-- DEMO FOR POST 3 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -104,11 +107,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 3 IMAGE -->
 
             <!-- DEMO FOR POST 4 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -121,11 +124,11 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 4 IMAGE -->
 
             <!-- DEMO FOR POST 5 IMAGE -->
-            <Post>
+            <!-- <Post>
               <template slot="media-content">
                 <PostImage
                   :images="[
@@ -139,7 +142,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post>
+            </Post> -->
             <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
@@ -220,7 +223,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES } from "~/utils/constants";
 
@@ -249,7 +252,8 @@ export default {
   
   async fetch({ params, query, store }) {
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
+      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`),
     ]);
   },
 
@@ -362,7 +366,8 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["postsList"])
+    ...mapState("social", ["feeds"]),
+    ...mapGetters("social", ["configPrivacyLevels"])
   },
 
   mounted() {
@@ -392,6 +397,7 @@ export default {
      */
     handleClickImage(imageObj, post) {
       if (typeof window.history.pushState != "undefined") {
+        console.log('handleClickImage', imageObj)
         this.dataModalDetail = post;
         this.modalDetailShow = true;
 
@@ -465,6 +471,18 @@ export default {
       console.log('formData after append', FormData);
       const doAdd = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.ADD}`, formData);
       console.log('doAdd result', doAdd);
+    },
+
+    /**
+     * DELETE a post
+     */
+    async deletePost(id) {
+      const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, { id });
+      console.log('doDelete', doDelete)
+    },
+
+    async likePost(id) {
+      console.log('likePost', id)
     }
   }
 };
