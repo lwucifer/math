@@ -6,7 +6,7 @@ import Related from "~/services/elearning/Related";
  * initial state
  */
 const state = () => ({
-    related: []
+  elearningRelated: []
 });
 
 /**
@@ -18,27 +18,27 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING.RELATED]({ commit }, payload) {
+  async [actionTypes.ELEARNING.RELATED]({ commit }, params) {
     try {
+      const options = { params };
       const result = await new Related(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
       // set to mutation
       commit(mutationTypes.ELEARNING.SET_ELEARNING_RELATED, result);
     } catch (error) {
       console.log("[Elearning related] list.error", error);
     }
-  },
-
+  }
 };
 
 /**
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING.SET_ELEARNING_RELATED](state, _related) {
-    console.log("SET_ELEARNING_RELATED", _related);
-    state.related = _related;
+  [mutationTypes.ELEARNING.SET_ELEARNING_RELATED](state, elearningRelated) {
+    console.log("SET_ELEARNING_RELATED", elearningRelated);
+    state.elearningRelated = elearningRelated;
   }
 };
 
