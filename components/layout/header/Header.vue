@@ -9,7 +9,7 @@
 
       <ul class="the-header__menu">
         <li>
-          <n-link to="/" class="active">Timeline</n-link>
+          <n-link to="/">Timeline</n-link>
         </li>
         <li>
           <n-link to="/course">Khoá học</n-link>
@@ -47,7 +47,7 @@
 
           <div
             class="the-header__user-name"
-          >{{$store.state.auth.token.user ? ($store.state.auth.token.user.username ? $store.state.auth.token.user.username : $store.state.auth.token.user.phone_number) : ''}}</div>
+          >{{$store.state.auth.token ? $store.state.auth.token.fullname : ''}}</div>
           <div class="the-header__user-arrow">
             <IconCaretDown width="13" height="7" />
           </div>

@@ -17,7 +17,9 @@ export const SOCIAL = {
     SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
     SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
     SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
-    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList"
+    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
+    SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
+    SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -46,5 +48,20 @@ export const ELEARNING_SUMMARY = {
 
 export const ELEARNING = {
     SET_ELEARNING_INFO: 'setElearningInfo',
-    SET_ELEARNING_PROGRAM: 'setElearningProgram'
+    SET_ELEARNING_PROGRAM: 'setElearningProgram',
+    SET_ELEARNING_RELATED: 'setElearningRelated'
+}
+
+export const ELEARNING_CREATING_ANSWER = {
+    SET_ELEARNING_CREATING_ANSWER_LIST: 'setElearningCreatingAnswerList',
+    SET_ELEARNING_CREATING_ANSWER_ADD: 'setElearningCreatingAnswerAdd',
+    SET_ELEARNING_CREATING_ANSWER_EDIT: 'setElearningCreatingAnswerEdit',
+    SET_ELEARNING_CREATING_ANSWER_DELETE: 'setElearningCreatingAnswerDelete',
+}
+
+export const ELEARNING_CREATING_CHAPTER = {
+    SET_ELEARNING_CREATING_CHAPTER_LIST: 'setElearningCreatingChapterList',
+    SET_ELEARNING_CREATING_CHAPTER_ADD: 'setElearningCreatingChapterAdd',
+    SET_ELEARNING_CREATING_CHAPTER_EDIT: 'setElearningCreatingChapterEdit',
+    SET_ELEARNING_CREATING_CHAPTER_DELETE: 'setElearningCreatingChapterDelete',
 }

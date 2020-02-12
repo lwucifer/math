@@ -71,6 +71,12 @@ export default {
     designIcons: []
   }),
 
+  head() {
+    return {
+      title: 'Icons - Schoolly'
+    }
+  },
+
   created() {
     // https://webpack.js.org/guides/dependency-management/#requirecontext
     const req = require.context(

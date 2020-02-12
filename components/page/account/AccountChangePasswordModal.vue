@@ -18,38 +18,29 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else class="account-form-change-pass">
         <h3>Thay đổi mật khẩu</h3>
-        <div class="form-group">
-          <label class="w-150 bold">Mật khẩu hiện tại</label>
-          <input
-            type="password"
-            v-model="oldPassword"
-            class="form-control"
-            :class="error ? 'form-control-error' : ''"
-          />
-          <i v-if="error" class="error pl-16">Mật khẩu phải có từ 8-32 ký tự</i>
-        </div>
-        <div class="form-group">
-          <label class="w-150 bold">Mật khẩu mới</label>
-          <input
-            type="password"
-            v-model="newPassword"
-            class="form-control"
-            :class="error2 ? 'form-control-error' : ''"
-          />
-          <i v-if="error2" class="error pl-16">Mật khẩu phải có từ 8-32 ký tự</i>
-        </div>
-        <div class="form-group">
-          <label class="w-150 bold">Xác nhận mật khẩu</label>
-          <input
-            type="password"
-            v-model="coNewPassword"
-            class="form-control"
-            :class="error3 ? 'form-control-error' : ''"
-          />
-          <i v-if="error3" class="error pl-16">Mật khẩu phải có từ 8-32 ký tự</i>
-        </div>
+        <app-input
+          v-model="oldPassword"
+          label="Mật khẩu hiện tại"
+          type="password"
+          :validate="error ? 1 : 0"
+          message="Mật khẩu phải có từ 8-32 ký tự"
+        />
+        <app-input
+          v-model="newPassword"
+          label="Mật khẩu mới"
+          type="password"
+          :validate="error ? 1 : 0"
+          message="Mật khẩu phải có từ 8-32 ký tự"
+        />
+        <app-input
+          v-model="coNewPassword"
+          label="Xác nhận mật khẩu"
+          type="password"
+          :validate="error ? 1 : 0"
+          message="Mật khẩu phải có từ 8-32 ký tự"
+        />
         <div class="text-center">
           <app-button
             size="lg"
@@ -118,10 +109,10 @@ export default {
     },
     reset() {
       const that = this;
-      (that.oldPassword = ""),
-        (that.newPassword = ""),
-        (that.coNewPassword = ""),
-        (that.error = false);
+      that.oldPassword = "";
+      that.newPassword = "";
+      that.coNewPassword = "";
+      that.error = false;
       that.error2 = false;
       that.error3 = false;
       that.success = false;

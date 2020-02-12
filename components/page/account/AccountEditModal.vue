@@ -3,24 +3,16 @@
     <!-- @close="$router.push('/')" -->
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" v-model="email" class="form-control" />
-      </div>
-      <div class="form-group form-group-inline">
-        <div class="form-group-inline-item">
-          <label>Số điện thoại</label>
-          <input type="text" v-model="phone_number" class="max-w-170 form-control" />
+      <app-input labelFixed type="text" v-model="email" label="Email" />
+      <div class="row">
+        <div class="col-6">
+          <app-input labelFixed type="text" v-model="phone_number" label="Số điện thoại" />
         </div>
-        <div class="form-group-inline-item">
-          <label class="min-w-0">Ngày sinh</label>
-          <app-date-picker v-model="birthday" class="w-170 form-control" />
+        <div class="col-6">
+          <app-input labelFixed type="date" v-model="birthday" label="Ngày sinh" />
         </div>
       </div>
-      <div class="form-group">
-        <label>Địa chỉ</label>
-        <input type="text" v-model="address" class="form-control" />
-      </div>
+      <app-input labelFixed type="text" v-model="address" label="Địa chỉ" />
       <div class="form-group">
         <label>Giới tính</label>
         <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
@@ -36,7 +28,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { getSysdateSimpleFormat } from "../../../utils/moment";
+import { getDateBirthDay } from "../../../utils/moment";
 export default {
   components: {},
   props: {
@@ -47,17 +39,8 @@ export default {
       default: () => {}
     }
   },
-  computed: {
-    ...mapState("account", ["personalList"])
-  },
   data() {
-    return {
-      sex: "",
-      email: "",
-      phone: "",
-      address: "",
-      birthday: ""
-    };
+    return {};
   },
   methods: {
     ...mapActions("account", ["accountPersonalEdit"]),
@@ -78,12 +61,31 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState("account", ["personalList"])
+    // sex() {
+    //   return this.personalList ? this.personalList.sex : "";
+    // },
+    // email() {
+    //   return this.personalList ? this.personalList.email : "";
+    // },
+    // phone() {
+    //   return this.personalList ? this.personalList.phone : "";
+    // },
+    // address() {
+    //   return this.personalList ? this.personalList.address : "";
+    // },
+    // birthday() {
+    //   return this.personalList ? this.personalList.birthday : "";
+    // }
+  },
+
   created() {
     this.sex = this.personalList.sex;
     this.email = this.personalList.email;
     this.phone_number = this.personalList.phone_number;
     this.address = this.personalList.address;
-    this.birthday = getSysdateSimpleFormat(this.personalList.bithday);
+    this.birthday = getDateBirthDay(this.personalList.bithday);
   }
 };
 </script>

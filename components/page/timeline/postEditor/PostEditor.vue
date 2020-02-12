@@ -1,14 +1,14 @@
 <template>
   <div class="editor post-editor" :class="{ 'active': active }" @click="setActive(true)">
     <div class="post-editor__overlay" @click.stop="active = false"></div>
-    <div class="post-editor__components" @click.self="editor.view.dom.focus()">
+    <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
         <div class="post-editor__avatar">
           <img src="https://picsum.photos/60/60" alt />
         </div>
 
         <client-only>
-          <editor-content :editor="editor" class="post-editor__editor" ref="editor" />
+          <editor-content :editor="editor" class="post-editor__editor" />
         </client-only>
       </div>
 
@@ -114,14 +114,14 @@
 
       <app-divider class="my-3" />
 
-      <div class="post-editor__privacy d-flex align-items-center justify-content-between mt-3">
+      <div class="post-editor__privacy mt-3">
         <span class="mr-3">Chế độ đăng tin</span>
         <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
           <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
         </app-select>
       </div>
 
-      <app-button full-width square class="mt-4">Đăng tin</app-button>
+      <app-button full-width square class="post-editor__submit mt-4" @click="submit">Đăng tin</app-button>
     </div>
   </div>
 </template>
@@ -209,7 +209,14 @@ export default {
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
-      ]
+      ],
+      // Form submit data
+      link: '',
+      post_image: [],
+      list_tag: [],
+      check_in: {},
+      privacy: 8,
+      label_id: null 
     };
   },
 
@@ -284,6 +291,20 @@ export default {
     handleClickLabel(id) {
       this.label === id ? (this.label = null) : (this.label = id);
       this.labelDropdrown = false;
+    },
+
+    submit() {
+      console.log('submit', this.editor.getHTML());
+
+      this.$emit('submit', {
+        content: this.editor.getHTML(),
+        link: this.link,
+        post_image: this.fileList[0],
+        list_tag: [],
+        check_in: {},
+        privacy: 8,
+        label_id: null
+      });
     }
   }
 };

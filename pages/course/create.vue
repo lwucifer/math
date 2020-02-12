@@ -12,45 +12,40 @@
           <div class="course-detail__content pb-4">
             <h3 class="title">Thông tin khóa học</h3>
             <div class="content pb-0">
-              <div class="form-group">
-                <label>Tên khóa học</label>
-                <input type="text" v-model="name" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label>Ảnh khóa học</label>
-                <label for="file" class="custom-file-upload">Upload</label>
-                <input id="file" type="file" class="form-control-upload" />
-              </div>
-              <div class="form-group">
-                <label>Mô tả ngắn</label>
-                <input type="text" v-model="desc" class="form-control" />
-              </div>
-              <div class="form-group form-group-inline">
-                <div class="form-group-inline-item">
-                  <label>Danh mục</label>
-                  <app-select v-model="cat" :options="catOpts" class="form-control" />
+              <app-input labelFixed type="text" v-model="name" label="Tên khóa học" />
+              <app-input
+                labelFixed
+                type="file"
+                v-model="desc"
+                label="Ảnh khóa học"
+                placeholder="Upload"
+              />
+              <app-input labelFixed type="text" v-model="desc" label="Mô tả ngắn" />
+              <div class="row">
+                <div class="col-6 app-input-secondary">
+                  <label class="label-fixed">Danh mục</label>
+                  <app-select v-model="cat" :options="catOpts" class="input" />
                 </div>
-                <div class="form-group-inline-item">
-                  <label>Danh mục con</label>
-                  <app-select v-model="cat" :options="catOpts" class="form-control" />
+                <div class="col-6 app-input-secondary">
+                  <label class="label-fixed">Danh mục con</label>
+                  <app-select v-model="cat" :options="catOpts" class="input" />
                 </div>
               </div>
-              <div class="form-group form-group-inline">
-                <div class="form-group-inline-item">
-                  <label>Giá khóa học</label>
-                  <input type="text" v-model="price" class="form-control" />
-                  <span class="unit">VNĐ</span>
+              <div class="row">
+                <div class="col-6">
+                  <app-input
+                    labelFixed
+                    type="text"
+                    v-model="price"
+                    unit="VNĐ"
+                    label="Giá khóa học"
+                  />
                 </div>
-                <div class="form-group-inline-item">
-                  <label>Giảm giá</label>
-                  <input type="text" v-model="off" class="form-control" />
-                  <span class="unit">%</span>
+                <div class="col-6">
+                  <app-input labelFixed type="text" v-model="off" unit="%" label="Giảm giá" />
                 </div>
               </div>
-              <div class="form-group">
-                <label>Mô tả</label>
-                <textarea type="text" v-model="content" class="form-control" rows="6" />
-              </div>
+              <app-input labelFixed type="text" v-model="content" textarea label="Mô tả" rows="6" />
             </div>
           </div>
         </div>

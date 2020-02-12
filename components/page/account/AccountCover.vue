@@ -70,7 +70,7 @@
         </ul>
       </app-dropdown>
 
-      <app-button square color="secondary">
+      <app-button square color="default">
         <IconMessenger class="mr-2" />Nhắn tin
       </app-button>
     </div>
