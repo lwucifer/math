@@ -10,7 +10,8 @@ import { authFire } from "../services/firebase/FirebaseInit";
 const state = () => ({
     accountStatus: "",
     token: null,
-    access_token: null
+    access_token: null,
+    firebaseToken: ""
 });
 
 /**
@@ -60,14 +61,39 @@ const actions = {
     [actionTypes.AUTH.SENDOTP]({ dispatch, commit }, payload) {
         console.log("VERIFY_WITH_PHONE", payload);
         return authFire
-            .signInWithPhoneNumber(payload.phone, payload.g_recaptcha_response)
-            .then(result => {
-                console.log("auth.signInWithPhoneNumber.result", result);
-                // dispatch(actionTypes.USERS.VERIFY, result.verificationId);
+            .signInWithPhoneNumber(payload.phone, payload.appVerifier)
+            .then(function(confirmationResult) {
+                // SMS sent. Prompt user to type the code from the message, then sign the
+                // user in with confirmationResult.confirm(code).
+                window.confirmationResult = confirmationResult ?
+                    confirmationResult :
+                    "";
+                return confirmationResult;
             })
-            .catch(err => {
-                console.log("auth.signInWithPhoneNumber.catch", err);
+            .catch(function(error) {
+                console.log("error", error);
+                return error;
             });
+    },
+
+    [actionTypes.AUTH.VERIFY_OTP]({ dispatch, commit }, payload) {
+        if (confirmationResult) {
+            return confirmationResult
+                .confirm(payload)
+                .then(result => {
+                    // User signed in successfully.
+                    const user = result.user;
+                    console.log("user", user);
+                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user.refreshToken);
+                    return result;
+                    // ...
+                })
+                .catch(error => {
+                    // User couldn't sign in (bad verification code?)
+                    // ...
+                    return error;
+                });
+        }
     },
 
     async [actionTypes.AUTH.LOGOUT]({ commit }) {
@@ -77,11 +103,10 @@ const actions = {
         }
     },
 
-    async [actionTypes.AUTH.STATUS]({ commit }, { phone }) {
-        const result = await new auth(this.$axios).status({ phone });
-        if (result.success) {
-            commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
-        }
+    async [actionTypes.AUTH.STATUS]({ commit }, payload) {
+        debugger;
+        const result = await new auth(this.$axios).status(payload);
+        return result;
     },
 
     async [actionTypes.AUTH.FORGOT_PASSWORD]({ commit }, { firebase_token, password }) {
@@ -127,6 +152,10 @@ const mutations = {
     [mutationTypes.AUTH.SET_ACCOUNT_STATUS](state, _status) {
         console.log("huydv", _status);
         state.accountStatus = _status;
+    },
+    [mutationTypes.AUTH.SET_FIREBASE_TOKEN](state, _firebaseToken) {
+        console.log("firebase Token", _firebaseToken);
+        state.firebaseToken = _firebaseToken;
     }
 };
 

@@ -1,12 +1,34 @@
-class Signup {
-  constructor(phone, password, name, province_id) {
-    this.phone = phone;
-    this.password = password;
-    this.name = name;
-    this.province_id = province_id;
-  }
+class SignupByPhone {
+    constructor(phone, password, fullname, recaptcha, firebase_token) {
+        this.phone = phone;
+        this.password = password;
+        this.fullname = fullname;
+        this.g_recaptcha_response = recaptcha;
+        this.verify_token = firebase_token;
+    }
 }
 
-export function createSignup(phone, password, name, province_id) {
-  return Object.freeze(new Signup(phone, password, name, province_id));
+class SignupByEmail {
+    constructor(email, password, fullname, recaptcha) {
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.g_recaptcha_response = recaptcha;
+    }
+}
+
+export function createSignupWithPhone(
+    phone,
+    password,
+    fullname,
+    recaptcha,
+    firebase_token
+) {
+    return Object.freeze(
+        new SignupByPhone(phone, password, fullname, recaptcha, firebase_token)
+    );
+}
+
+export function createSignupWithEmail(email, password, fullname, recaptcha) {
+    return Object.freeze(new SignupByEmail(email, password, fullname, recaptcha));
 }

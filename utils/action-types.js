@@ -14,7 +14,8 @@ export const AUTH = {
     SENDOTP: "sendotp",
     STATUS: "status",
     FORGOT_PASSWORD: "forgotPassword",
-    CHANGE_PASSWORD: "changePassword"
+    CHANGE_PASSWORD: "changePassword",
+    VERIFY_OTP: "verifiOtp"
 };
 
 export const SOCIAL_POST = {
@@ -81,15 +82,15 @@ export const ELEARNING = {
 };
 
 export const CREATING_ANSWER = {
-    LIST: 'creatingAnswerList',
-    ADD: 'creatingAnswerAdd',
-    EDIT: 'creatingAnswerEdit',
-    DELETE: 'creatingAnswerDelete',
-}
+    LIST: "creatingAnswerList",
+    ADD: "creatingAnswerAdd",
+    EDIT: "creatingAnswerEdit",
+    DELETE: "creatingAnswerDelete"
+};
 
 export const CREATING_CHAPTER = {
-    LIST: 'creatingChapterList',
-    ADD: 'creatingChapterAdd',
-    EDIT: 'creatingChapterEdit',
-    DELETE: 'creatingChapterDelete',
-}
+    LIST: "creatingChapterList",
+    ADD: "creatingChapterAdd",
+    EDIT: "creatingChapterEdit",
+    DELETE: "creatingChapterDelete"
+};
