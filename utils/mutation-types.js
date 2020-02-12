@@ -48,7 +48,8 @@ export const ELEARNING_SUMMARY = {
 
 export const ELEARNING = {
     SET_ELEARNING_INFO: 'setElearningInfo',
-    SET_ELEARNING_PROGRAM: 'setElearningProgram'
+    SET_ELEARNING_PROGRAM: 'setElearningProgram',
+    SET_ELEARNING_RELATED: 'setElearningRelated'
 }
 
 export const ELEARNING_CREATING_ANSWER = {

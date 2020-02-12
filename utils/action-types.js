@@ -85,7 +85,8 @@ export const ELEARNING_SUMMARY = {
 
 export const ELEARNING = {
     INFO: "elearningInfo",
-    PROGRAM: "elearningProgram"
+    PROGRAM: "elearningProgram",
+    RELATED: 'elearningPublicRelated'
 };
 
 export const ELEARNING_CREATING_ANSWER = {
