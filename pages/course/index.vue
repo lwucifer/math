@@ -7,7 +7,7 @@
           <app-button size="lg" color="white" square class="mr-5"
             >Kho nhập liệu</app-button
           >
-          <app-button size="lg" square>Tạo khóa học</app-button>
+          <app-button size="lg" square nuxt to="/course/create">Tạo khóa học</app-button>
         </div>
         <AsideBox
           title="Khóa học của tôi"
