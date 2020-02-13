@@ -4,8 +4,8 @@
     <div class="auth__main">
       <h3>Đăng ký</h3>
       <div class="auth__nav">
-        <a :class="byEmail ? '' : 'active'" @click="byEmail = false">Số điện thoại</a>
-        <a :class="byEmail ? 'active' : ''" @click="byEmail = true">Email</a>
+        <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+        <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
       </div>
       <div class="auth_content">
         <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email" />
@@ -34,7 +34,7 @@
     <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
       <h3 class="color-primary" slot="header">
         Xác thực tài khoản
-        <a class="btn-close" @click="$emit('click-close')">X</a>
+        <a class="btn-close" @click="showModalOTP = false">X</a>
       </h3>
 
       <div slot="content">
@@ -57,6 +57,7 @@ import {
   createSignupWithPhone,
   createSignupWithEmail
 } from "../../../models/auth/Signup";
+import { formatPhoneNumber } from "~/utils/validations";
 
 export default {
   components: {
@@ -107,7 +108,7 @@ export default {
         console.log("ReCaptcha token:", token);
         let registerModel = !this.byEmail
           ? createSignupWithPhone(
-              this.phone,
+              formatPhoneNumber(this.phone),
               this.password,
               this.fullname,
               token,
@@ -144,7 +145,7 @@ export default {
       if (this.phone != "" && this.password != "" && this.fullname != "") {
         const tokenCheckPhone = await this.$recaptcha.execute("status");
         const dataChecKPhone = {
-          phone: this.phone,
+          phone: formatPhoneNumber(this.phone),
           g_recaptcha_response: tokenCheckPhone
         };
         const doAdd = this.status(dataChecKPhone).then(result => {
@@ -152,7 +153,7 @@ export default {
           } else {
             this.showModalOTP = true;
             const data = {
-              phone: this.phone,
+              phone: formatPhoneNumber(this.phone),
               appVerifier: window.recaptchaVerifier
             };
             this.sendotp(data);
@@ -164,7 +165,15 @@ export default {
             // });
           }
         });
+      } else {
+        this.submitRegister();
       }
+    },
+    tabPhone() {
+      (this.byEmail = false), (this.password = ""), (this.fullname = "");
+    },
+    tabEmail() {
+      (this.byEmail = true), (this.password = ""), (this.fullname = "");
     }
   }
 };

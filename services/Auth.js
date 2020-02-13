@@ -7,7 +7,6 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.LOGIN](payload) {
-        // debugger;
         const { phone, email, password, g_recaptcha_response } = payload;
         const { data } = await this.$axios.post(`${APIs.LOGIN}`, {
             phone,
@@ -47,19 +46,20 @@ export default class Auth {
         return data;
     }
 
-    async [actionTypes.AUTH.FORGOT_PASSWORD](payload) {
-        // debugger;
-        const { firebase_token, password } = payload;
-        const { data } = await this.$axios.post(`${APIs.FORGOT_PASSWORD}`, {
-            firebase_token,
-            password
-        });
+    async [actionTypes.AUTH.RESET_PASSWORD_REQUEST](payload) {
+        const { data } = await this.$axios.post(
+            `${APIs.RESET_PASSWORD_REQUEST}`,
+            payload
+        );
+        return data;
+    }
 
+    async [actionTypes.AUTH.FORGOT_PASSWORD](payload) {
+        const { data } = await this.$axios.post(`${APIs.FORGOT_PASSWORD}`, payload);
         return data;
     }
 
     async [actionTypes.AUTH.CHANGE_PASSWORD](payload) {
-        // debugger;
         const { oldPass, newPass, verify_new_pass } = payload;
         const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, {
             oldPass,
