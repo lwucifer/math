@@ -71,6 +71,8 @@ import * as actionTypes from "~/utils/action-types";
 export default {
   name: "Course",
 
+  layout: "create",
+
   components: {
     CourseSide,
     IconListDark,
