@@ -1,23 +1,27 @@
 <template>
-  <div class="app-tag">
+  <span class="app-tag">
     <slot />
-    <i class="app-tag__close" @click="handleClose">
+    <i v-if="showClose" class="app-tag__close" @click="handleClose">
       <IconClose class="icon" />
     </i>
-  </div>
+  </span>
 </template>
 
 <script>
-import IconClose from "~/assets/svg/icons/close.svg?inline";
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   components: {
     IconClose
   },
 
+  props: {
+    showClose: Boolean
+  },
+
   methods: {
     handleClose() {
-      console.log('close')
+      this.$emit('close')
     }
   }
 };

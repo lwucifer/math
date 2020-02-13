@@ -2,7 +2,9 @@ export const BASE = {
     LIST: "list",
     ADD: "add",
     EDIT: "edit",
-    DELETE: "delete"
+    DELETE: "delete",
+    DETAIL: "detail",
+    EDIT_PAYLOAD: "editPayload"
 };
 
 export const AUTH = {
@@ -10,14 +12,11 @@ export const AUTH = {
     REGISTER: "register",
     LOGOUT: "logout",
     SENDOTP: "sendotp",
-    STATUS: "status"
-};
-
-export const AUTHEN_LDAP = {
-    LIST: "authenLdapList",
-    ADD: "authenLdapAdd",
-    EDIT: "authenLdapEdit",
-    DELETE: "authenLdapDelete"
+    STATUS: "status",
+    FORGOT_PASSWORD: "forgotPassword",
+    CHANGE_PASSWORD: "changePassword",
+    VERIFY_OTP: "verifiOtp",
+    RESET_PASSWORD_REQUEST: "resetPasswordRequest"
 };
 
 export const SOCIAL_POST = {
@@ -47,4 +46,75 @@ export const SOCIAL_MEDIAS = {
 
 export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications"
+};
+
+export const SOCIAL_CONFIG = {
+    LIST: "socialConfigList"
+};
+
+export const SOCIAL_FEEDS = {
+    LIST: "socialFeedsList"
+};
+
+export const ACCOUNT_PERSONAL = {
+    LIST: "accountPersonalList",
+    EDIT: "accountPersonalEdit",
+    EDIT_AVATAR: "accountPersonalEditAvatar",
+    EDIT_COVER: "accountPersonalEditCover",
+    EDIT_PHONE: "accountPersonalEditPhone"
+};
+
+export const ACCOUNT_LINK = {
+    LIST: "accountLinkList",
+    ADD: "accountLinkAdd"
+};
+
+export const ACCOUNT_TRANSACTIONS = {
+    LIST: "accountTransactionList"
+};
+
+export const ACCOUNT_REVENUE = {
+    LIST: "accountRevenueList"
+};
+
+export const ACCOUNT_EARNING = {
+    LIST: "accountEarningList"
+};
+
+export const ELEARNING_SUMMARY = {
+    LIST: "elearningSummaryList"
+};
+
+export const ELEARNING = {
+    INFO: "elearningInfo",
+    PROGRAM: "elearningProgram",
+    RELATED: "elearningPublicRelated",
+    SUBJECT: "elearningPublicSubject",
+};
+
+export const CREATING_ANSWER = {
+    LIST: "creatingAnswerList",
+    ADD: "creatingAnswerAdd",
+    EDIT: "creatingAnswerEdit",
+    DELETE: "creatingAnswerDelete"
+};
+
+export const CREATING_CHAPTER = {
+    LIST: "creatingChapterList",
+    ADD: "creatingChapterAdd",
+    EDIT: "creatingChapterEdit",
+    DELETE: "creatingChapterDelete"
+};
+export const ELEARNING_CREATING_ANSWER = {
+    LIST: "elearningCreatingAnswerList",
+    ADD: "elearningCreatingAnswerAdd",
+    EDIT: "elearningCreatingAnswerEdit",
+    DELETE: "elearningCreatingAnswerDelete"
+};
+
+export const ELEARNING_CREATING_CHAPTER = {
+    LIST: "elearningCreatingChapterList",
+    ADD: "elearningCreatingChapterAdd",
+    EDIT: "elearningCreatingChapterEdit",
+    DELETE: "elearningCreatingChapterDelete"
 };

@@ -35,17 +35,30 @@
 
 
 // Size of button
+.btn--size-xs {
+    height: 2.5rem;
+    font-size: 1.4rem;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0 1rem;
+}
+
 .btn--size-sm {
-    height: 3.5rem;
+    height: 3.2rem;
     font-size: 1.4rem;
 }
 
 .btn--size-md {
-    height: 3.8rem;
+    height: 4rem;
 }
 
 .btn--size-lg {
     height: 4.8rem;
+}
+
+.btn--size-xl {
+    height: 4.8rem;
+    padding: 0 5rem;
 }
 
 .btn--full-width {
@@ -84,16 +97,30 @@
     background-color: #fff;
     color: #999;
     border: 1px solid #ccc;
-    font-weight: normal;
+}
+
+.btn--color-default {
+    background: #F9F9F9;
+    border: 1px solid #EEEEEE;
+    color: #666;
+}
+
+.btn--color-secondary {
+    background: $color-red;
+    border: 1px solid $color-red;
+    color: #fff;
 }
 
 .btn--color-red {
     background-color: #fff;
     color: $color-red;
     border: 1px solid $color-red;
-    font-weight: normal;
 }
 
+// Font weight
+.btn--normal {
+    font-weight: normal;
+}
 
 // Border-radius
 .btn--square {

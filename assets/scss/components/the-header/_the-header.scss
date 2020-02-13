@@ -38,11 +38,11 @@
         color: $color-text;
         font-size: 1.6rem;
 
-        &:hover, &.active {
+        &:hover, &.active, &.nuxt-link-exact-active {
             color: $color-primary;
         }
 
-        &.active {
+        &.active, &.nuxt-link-exact-active {
             font-weight: 700;
         }
     }

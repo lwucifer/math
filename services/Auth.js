@@ -7,24 +7,19 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.LOGIN](payload) {
-        debugger;
-        const { phone, password, firebase_token } = payload;
+        const { phone, email, password, g_recaptcha_response } = payload;
         const { data } = await this.$axios.post(`${APIs.LOGIN}`, {
             phone,
+            email,
             password,
-            firebase_token
+            g_recaptcha_response
         });
 
         return data;
     }
 
     async [actionTypes.AUTH.REGISTER](payload) {
-        const { email, password } = payload;
-        const { data } = await this.$axios.post(`${APIs.REGISTER}`, {
-            email,
-            password
-        });
-
+        const { data } = await this.$axios.post(`${APIs.REGISTER}`, payload);
         return data;
     }
 
@@ -33,20 +28,43 @@ export default class Auth {
         return data;
     }
 
-    async [actionTypes.AUTH.SENDOTP](payload) {
-        const { phone } = payload;
-        const { data } = await this.$axios.post(`${APIs.SEND_OTP}`, {
-            phone
-        });
+    // async [actionTypes.AUTH.SENDOTP](payload) {
+    //     const { data } = await this.$axios.post(
+    //         `${APIs.REGISTER_VALIDATE}`,
+    //         payload
+    //     );
+
+    //     return data;
+    // }
+
+    async [actionTypes.AUTH.STATUS](payload) {
+        const { data } = await this.$axios.post(
+            `${APIs.REGISTER_VALIDATE}`,
+            payload
+        );
 
         return data;
     }
 
-    async [actionTypes.AUTH.STATUS](payload) {
-        debugger;
-        const { phone } = payload;
-        const { data } = await this.$axios.post(`${APIs.ACCOUNT_STATUS}`, {
-            phone
+    async [actionTypes.AUTH.RESET_PASSWORD_REQUEST](payload) {
+        const { data } = await this.$axios.post(
+            `${APIs.RESET_PASSWORD_REQUEST}`,
+            payload
+        );
+        return data;
+    }
+
+    async [actionTypes.AUTH.FORGOT_PASSWORD](payload) {
+        const { data } = await this.$axios.post(`${APIs.FORGOT_PASSWORD}`, payload);
+        return data;
+    }
+
+    async [actionTypes.AUTH.CHANGE_PASSWORD](payload) {
+        const { oldPass, newPass, verify_new_pass } = payload;
+        const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, {
+            oldPass,
+            newPass,
+            verify_new_pass
         });
 
         return data;

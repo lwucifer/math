@@ -22,7 +22,7 @@
         </a>
 
         <div class="post-detail__media">
-          <img :src="post.attachments[0].thumb" alt />
+          <img :src="post.files[0].link.high" alt />
         </div>
       </template>
     </div>
@@ -41,11 +41,11 @@
     <div class="post-detail__actions">
       <app-dropdown
         class="post-detail__actions-menu"
-        align-content="left"
+        position="left"
         open-on-click
         v-model="dropdownShow"
       >
-        <button slot="activator" type="button" class="post-detail__actions-btn">
+        <button slot="activator" slot-scope="{ on }" type="button" class="post-detail__actions-btn" v-on="on">
           <IconDots />
         </button>
 

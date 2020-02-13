@@ -1,6 +1,11 @@
 <template>
     <div class="course-folder__side">
-        <CourseTeacher :teacher="teacher"/>
+        <div class="course-teacher">
+            <app-avatar :src="teacher.avatar" :size="125"/>
+            <p class="course-teacher__name">{{teacher.name}}</p>
+            <p>Giảng viên</p>
+            <n-link square class="mt-3 btn btn--color-primary btn--square color-white" to="/course/create">Tạo khóa học</n-link>
+        </div>
         <div class="course-folder__side-links">
             <n-link class="link-gray" to>Khóa học</n-link>
             <n-link class="link-gray" to>Kho nhập liệu</n-link>
@@ -9,11 +14,8 @@
 </template>
 
 <script>
-    import CourseTeacher from "~/components/page/course/CourseTeacher";
-
     export default {
         components: {
-            CourseTeacher
         },
 
         data() {

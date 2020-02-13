@@ -102,26 +102,40 @@ export default {
     };
   },
   methods: {
-    ...mapActions("auth", ["login", "status"]),
+    ...mapActions("auth", ["login", "status", "forgotPassword"]),
     nextlogin() {
-      debugger;
       const that = this;
       if (that.step === 2 && that.password && that.phone) {
         let data = {
-          phone: that.phone,
+          phone_number: that.phone,
           password: that.password,
           firebase_token: ""
         };
-        that.login(data);
-      }
-      if (that.step === 1) {
+        const doAdd = that.login(data).then(result => {
+          if (result.success == 1) {
+            this.$emit("click-close");
+          } else {
+          }
+        });
+      } else if (that.step === 1) {
         if (that.phone.length > 10) {
           that.phoneError = true;
         } else {
           that.phoneError = false;
           that.step = that.phone ? 2 : 1;
-          that.status(that.phone);
+          // that.status({ phone: that.phone });
         }
+      } else {
+        let data = {
+          firebase_token: "",
+          password: that.newpassword
+        };
+        const doAdd = that.forgotPassword(data).then(result => {
+          if (result.success == 1) {
+            this.$emit("click-close");
+          } else {
+          }
+        });
       }
     },
     forgot() {
@@ -154,5 +168,6 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "~/assets/scss/components/auth/_auth-modal.scss";
 </style>

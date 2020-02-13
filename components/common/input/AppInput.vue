@@ -1,0 +1,153 @@
+<template>
+  <div class="app-input" :class="classSize">
+    <label v-if="label" :class="labelFixed ? 'label-fixed' : ''">{{label}}</label>
+    <!-- Date picker -->
+    <div class="app-input__input" v-if="type == 'date'">
+      <app-date-picker :value="value" @input="updateInput" />
+    </div>
+    
+    <!-- Select -->
+    <div class="app-input__select" v-else-if="type == 'select'">
+      <slot/>
+    </div>
+
+    <!-- Input upload -->
+    <div class="app-input-file-upload" v-else-if="type == 'file'">
+      <label class="app-input-file-upload__label">
+        {{placeholder}}
+        <input
+          type="file"
+          class="app-input-file-upload__input"
+          :value="value"
+          :disabled="disabled"
+          @input="updateInput"
+        />
+        <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+      </label>
+    </div>
+
+    <!-- Input text -->
+    <div class="app-input__input" v-else>
+      <textarea
+        v-if="textarea"
+        :rows="rows"
+        :type="type"
+        :value="value"
+        @input="updateInput"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+      />
+      <input
+        v-else
+        :type="type"
+        :value="value"
+        :disabled="disabled"
+        @input="updateInput"
+        :placeholder="placeholder"
+        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+      />
+      <div class="unit" v-if="validate == 1 || unit">
+        <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
+        <span>{{unit}}</span>
+      </div>
+      <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import IconSuccess from "~/assets/svg/icons/success.svg?inline";
+
+export default {
+  components: {
+    IconSuccess
+  },
+  model: {
+    prop: "value",
+    event: "input"
+  },
+
+  props: {
+    value: {
+      type: [String, Number],
+      required: false,
+      default: ""
+    },
+    validate: {
+      type: [String, Number],
+      required: false,
+      default: 0
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    type: {
+      type: String,
+      required: false,
+      default: "text"
+    },
+    size: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    message: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    label: String,
+    unit: String,
+    labelFixed: {
+      type: Boolean,
+      default: false
+    },
+    textarea: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    rows: {
+      type: [String, Number],
+      required: false,
+      default: 6
+    }
+  },
+
+  data() {
+    return {};
+  },
+
+  methods: {
+    updateInput: function(event) {
+      this.$emit("input", event.target.value);
+      console.log(event)
+    }
+  },
+
+  computed: {
+    classSize() {
+      const disableClass = {
+        "disabled":  this.disabled
+      };
+      const classSize = {
+        "input--size-xs": this.size === "xs",
+        "input--size-sm": this.size === "sm",
+        "input--size-md": this.size === "md" || !this.size,
+        "input--size-lg": this.size === "lg"
+      };
+      return {...classSize, ...disableClass};
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+@import "~/assets/scss/components/app/_app-input.scss";
+</style>

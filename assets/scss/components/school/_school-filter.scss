@@ -1,0 +1,51 @@
+.school-filter {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 1.4rem;
+
+    .school-filter__title h3 {
+        color: #333;
+        font-size: 2rem;
+    }
+
+    .school-filter__form {
+        $color-placeholder: #333333;
+        button,
+        .app-select {
+            margin: 0 10px;
+            &:last-child {
+                margin-right: 0;
+            }
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+        .school-filter__btn-submit {
+            border-radius: 10rem;
+            padding: .1rem 2.4rem; // 1/10rem & (7.7/2 + 20)/10rem
+            height: 3.2rem;
+        }
+        .app-select__selected {
+            border: 1px solid #eeeeee;
+            padding: .1rem 2.2rem; // 1/10rem & (42/2)/10rem
+            height: 3.2rem;
+        }
+        .school-filter__btn-submit span {
+            font-weight: normal;
+            font-size: 1.4rem;
+            line-height: 24px;
+            margin-left: 6.3px;
+        }
+        .app-select__placeholder {
+            color: $color-placeholder;
+            font-size: 1.4rem;
+            line-height: 19px;
+            letter-spacing: .01em;
+        }
+        .app-select__arrow svg {
+            fill: $color-placeholder;
+        }
+    }
+}

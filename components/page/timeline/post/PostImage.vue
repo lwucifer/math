@@ -15,10 +15,10 @@
       </a>
     </div>
 
-    <div v-else class="post-image-item">
+    <a v-else class="post-image-item" :href="`${location}/post?photo_id=${images[0].id}`" @click.prevent="handleClickImage(images[0])">
       <app-video v-if="images[0].object === 'video'" :posterSrc="images[0].thumb"></app-video>
       <img v-else :src="images[0].thumb" alt />
-    </div>
+    </a>
   </div>
 </template>
 

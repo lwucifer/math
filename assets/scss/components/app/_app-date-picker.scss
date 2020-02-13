@@ -1,5 +1,5 @@
 .mx-input {
-    height: 3.5rem;
+    height: 4rem;
     padding: 0 1rem;
     font-size: 1.4rem;
     line-height: 2.4rem;
@@ -13,12 +13,27 @@
 .mx-datepicker {
     width: 15.5rem;
 }
-label {
-    margin-right: 0.3rem;
-}
 .app-date-picker {
     display: inline-block;
     + .app-date-picker {
         margin-left: 2.6rem;
+    }
+    label {
+        margin-right: 0.3rem;
+    }
+    &.size-sm .mx-input {
+        height: 3.2rem;
+    }
+    &.size-xs .mx-input {
+        height: 2.5rem;
+        font-size: 1.2rem;
+    }
+    &.size-lg .mx-input {
+        height: 4.8rem;
+    }
+    &.square {
+        .mx-input {
+            border-radius: 0;
+        }
     }
 }

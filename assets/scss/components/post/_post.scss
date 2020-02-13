@@ -16,7 +16,6 @@
 .post__title-row {
     display: flex;
     align-items: center;
-    margin-bottom: 3px;
 }
 
 .post__name {
@@ -30,17 +29,22 @@
 }
 
 .post__share-for {
-    margin-left: 1rem;
+    margin-left: 5px;
 
     svg {
-        display: block;
+        font-size: 1.2rem;
+    }
+
+    img {
+        width: 12px;
     }
 }
 
 .post__time {
     text-decoration: none;
     color: $color-text-sub;
-    font-style: italic;
+    // font-style: italic;
+    font-size: 1.2rem;
 
     &:any-link {
         color: $color-text-sub;
@@ -76,6 +80,7 @@
     color: $color-text-gray;
 
     svg {
+        font-size: 2rem;
         margin-right: .9rem;
         fill: $color-text-gray;
     }
@@ -197,6 +202,7 @@
         background-color: $color-border;
         border-color: transparent;
         color: $color-text-gray;
+        height: 2.4rem;
     }
 
     .app-select__arrow svg {
@@ -215,4 +221,41 @@
     font-weight: 700;
     margin-bottom: 1.5rem;
     display: inline-block;
+}
+
+.post__menu-dropdown {
+    margin-left: auto;
+    align-self: flex-start;
+
+    .app-dropdown__content {
+        box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.post__menu-dropdown__btn {
+    svg {
+        display: block;
+        font-size: 1.8rem;
+        fill: #111111;
+    }
+}
+
+.post__menu-dropdown__list {
+    list-style-type: none;
+
+    a {
+        display: inline-block;
+        text-decoration: none;
+        color: $color-text-gray;
+        font-size: 1.6rem;
+        line-height: (22/16);
+        width: 17.3rem;
+        padding: 1rem 2rem;
+    }
+    
+    li {
+        &:not(:last-child) {
+            border-bottom: 1px solid $color-border;
+        }
+    }
 }

@@ -39,8 +39,17 @@ module.exports = {
         { src: "@/plugins/click-outside.js", ssr: false },
         { src: "@/plugins/global.js" },
         { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
-        { src: "@/plugins/textarea-autosize.js", ssr: false }
+        { src: "@/plugins/textarea-autosize.js", ssr: false },
+        { src: "@/plugins/vuelidate.js", ssr: true },
+        { src: "@/plugins/vue-moment.js" },
+        { src: "@/plugins/firebase-auth.js"},
     ],
+    /**
+     * Global middleware
+     */
+    router: {
+        middleware: ["check-auth"]
+    },
 
     /*
      ** modules
@@ -49,7 +58,8 @@ module.exports = {
         "@nuxtjs/axios",
         "@nuxtjs/style-resources",
         "@nuxtjs/svg",
-        "portal-vue/nuxt"
+        "portal-vue/nuxt",
+        "@nuxtjs/recaptcha"
     ],
 
     /*
@@ -67,6 +77,11 @@ module.exports = {
             retries: 3
         }, // interceptor retry time request
         debug: false // default false
+    },
+
+    recaptcha: {
+        siteKey: process.env.CAPTCHA_SITEKEY,
+        version: 3
     },
 
     styleResources: {
@@ -99,6 +114,14 @@ module.exports = {
          ** Run ESLint on save
          */
         extend(config, { isDev, isClient }) {
+            config.node = {
+                console: false,
+                fs: "empty",
+                net: "empty",
+                tls: "empty",
+                child_process: "empty",
+                module: "empty"
+            };
             if (isDev && isClient) {
                 // config.module.rules.push({
                 //   enforce: 'pre',
