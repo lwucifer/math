@@ -54,7 +54,7 @@ export default {
         console.log("ReCaptcha token:", token);
         let loginModel = !this.byEmail
           ? createSigninWithPhone(
-              formatPhoneNumber(this.phone),
+              `+${formatPhoneNumber(this.phone)}`,
               this.password,
               token
             )
