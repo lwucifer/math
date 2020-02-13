@@ -28,7 +28,7 @@ export default {
   props: {
     size: {
       type: Number,
-      default: 12
+      default: 12,
     },
     stars: {
       type: Number,
