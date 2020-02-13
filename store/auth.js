@@ -116,12 +116,8 @@ const actions = {
         return result;
     },
 
-    async [actionTypes.AUTH.CHANGE_PASSWORD]({ commit }, { oldPass, newPass, verify_new_pass }) {
-        const result = await new auth(this.$axios).changePassword({
-            oldPass,
-            newPass,
-            verify_new_pass
-        });
+    async [actionTypes.AUTH.CHANGE_PASSWORD]({ commit }, payload) {
+        const result = await new auth(this.$axios).changePassword(payload);
         return result;
     },
     async [actionTypes.AUTH.VERIFY_EMAIL]({ commit }, payload) {
