@@ -108,7 +108,7 @@ export default {
         console.log("ReCaptcha token:", token);
         let registerModel = !this.byEmail
           ? createSignupWithPhone(
-              formatPhoneNumber(this.phone),
+              `+${formatPhoneNumber(this.phone)}`,
               this.password,
               this.fullname,
               token,
@@ -120,7 +120,6 @@ export default {
               this.fullname,
               token
             );
-        debugger;
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
             this.$router.push("/auth/signin");
@@ -142,10 +141,15 @@ export default {
       });
     },
     async hanldeShowModalOTP() {
-      if (this.phone != "" && this.password != "" && this.fullname != "") {
+      if (
+        this.byEmail == false &&
+        this.phone != "" &&
+        this.password != "" &&
+        this.fullname != ""
+      ) {
         const tokenCheckPhone = await this.$recaptcha.execute("status");
         const dataChecKPhone = {
-          phone: formatPhoneNumber(this.phone),
+          phone: `+${formatPhoneNumber(this.phone)}`,
           g_recaptcha_response: tokenCheckPhone
         };
         const doAdd = this.status(dataChecKPhone).then(result => {
@@ -153,7 +157,7 @@ export default {
           } else {
             this.showModalOTP = true;
             const data = {
-              phone: formatPhoneNumber(this.phone),
+              phone: `+${formatPhoneNumber(this.phone)}`,
               appVerifier: window.recaptchaVerifier
             };
             this.sendotp(data);

@@ -17,6 +17,7 @@ export const ACCOUNT_PHONE = `/account/phone`;
 export const ACCOUNT_TRANSACTIONS = `/account/transactions`;
 export const ACCOUNT_REVENUE = `/account/revenue`;
 export const ACCOUNT_EARNING = `/account/earning`;
+export const VERIFY_EMAIL = `user/public/verify`;
 
 /**
  * SOCIALS

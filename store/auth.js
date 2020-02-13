@@ -123,6 +123,10 @@ const actions = {
             verify_new_pass
         });
         return result;
+    },
+    async [actionTypes.AUTH.VERIFY_EMAIL]({ commit }, payload) {
+        const result = await new auth(this.$axios).verifyEmail(payload);
+        return result;
     }
 };
 

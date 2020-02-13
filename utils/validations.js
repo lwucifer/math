@@ -73,5 +73,9 @@ export const validatePort = _port => {
  * @param {phoneNumber} _phoneNumber
  */
 export const formatPhoneNumber = _phoneNumber => {
-    return _phoneNumber.replace("0", "+84");
+    if (_phoneNumber.indexOf("0") == 0) {
+        return _phoneNumber.replace("0", "84");
+    } else {
+        return _phoneNumber;
+    }
 };
