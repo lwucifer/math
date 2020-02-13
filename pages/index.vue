@@ -17,7 +17,7 @@
               :key="post.post_id"
               :post="post"
               class="mb-4"
-              show-menu-dropdown
+              :show-menu-dropdown="post.author.id === userId"
               @delete="deletePost"
               @like="likePost"
             >
@@ -52,7 +52,7 @@
                   meta-footer="cellphones.com.vn"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST LINK -->
 
             <!-- DEMO FOR POST SLIDER -->
@@ -64,7 +64,7 @@
                   @click-item="handleClickImage"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST SLIDER -->
 
             <!-- DEMO FOR POST 1 IMAGE -->
@@ -76,7 +76,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST 1 IMAGE -->
 
             <!-- DEMO FOR POST 2 IMAGE -->
@@ -91,7 +91,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST 2 IMAGE -->
 
             <!-- DEMO FOR POST 3 IMAGE -->
@@ -107,7 +107,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST 3 IMAGE -->
 
             <!-- DEMO FOR POST 4 IMAGE -->
@@ -124,7 +124,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST 4 IMAGE -->
 
             <!-- DEMO FOR POST 5 IMAGE -->
@@ -142,7 +142,7 @@
                   @click-item="modalDetailShow = true"
                 />
               </template>
-            </Post> -->
+            </Post>-->
             <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
@@ -153,7 +153,14 @@
             :component-class="{ 'post-detail-modal': true }"
             @close="handleCloseModal"
           >
-            <PostDetail v-if="modalDetailShow" slot="content" :post="dataModalDetail" @click-close="handleCloseModal" @click-prev="handleClickPrev" @click-next="handleClickNext"/>
+            <PostDetail
+              v-if="modalDetailShow"
+              slot="content"
+              :post="dataModalDetail"
+              @click-close="handleCloseModal"
+              @click-prev="handleClickPrev"
+              @click-next="handleClickNext"
+            />
           </app-modal>
         </div>
 
@@ -250,11 +257,11 @@ export default {
     PostDetail,
     PostImage
   },
-  
+
   async fetch({ params, query, store }) {
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
-      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`),
+      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`)
     ]);
   },
 
@@ -368,7 +375,12 @@ export default {
 
   computed: {
     ...mapState("social", ["feeds"]),
-    ...mapGetters("social", ["configPrivacyLevels"])
+    ...mapGetters("social", ["configPrivacyLevels"]),
+
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    }
   },
 
   mounted() {
@@ -398,7 +410,7 @@ export default {
      */
     handleClickImage(imageObj, post) {
       if (typeof window.history.pushState != "undefined") {
-        console.log('handleClickImage', imageObj)
+        console.log("handleClickImage", imageObj);
         this.dataModalDetail = post;
         this.modalDetailShow = true;
 
@@ -408,7 +420,9 @@ export default {
           `${window.location.origin}/post?photo_id=${imageObj.id}`
         );
       } else {
-        this.$router.push(`${window.location.origin}/post?photo_id=${imageObj.id}`)
+        this.$router.push(
+          `${window.location.origin}/post?photo_id=${imageObj.id}`
+        );
       }
     },
 
@@ -451,14 +465,14 @@ export default {
      * on click prev arrow on modal post detail -> get prev image info
      */
     handleClickPrev() {
-      console.log("handleClickPrev")
+      console.log("handleClickPrev");
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
      */
     handleClickNext() {
-      console.log("handleClickNext")
+      console.log("handleClickNext");
     },
 
     /**
@@ -468,24 +482,34 @@ export default {
       const formData = new FormData();
       for (const key in data) {
         formData.append(key, data[key]);
-      };
-      console.log('formData after append', FormData);
-      const doAdd = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.ADD}`, formData);
-      console.log('doAdd result', doAdd);
+      }
+      console.log("formData after append", FormData);
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.ADD}`,
+        formData
+      );
+      console.log("doAdd result", doAdd);
     },
 
     /**
      * DELETE a post
      */
     async deletePost(id) {
-      const doDelete = await this.$store.dispatch(`social/${actionTypes.SOCIAL_POST.DELETE}`, id);
-      console.log('doDelete', doDelete)
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.DELETE}`,
+        id
+      );
+      console.log("doDelete", doDelete);
     },
 
-    async likePost(id) {
+    async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
       const doLike = await this.$store.dispatch(`social/${actionTypes.SOCIAL_LIKES.ADD}`, likeModel);
       console.log('likePost', doLike)
+      this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`)
+
+      // Have to run cb
+      cb();
     }
   }
 };
