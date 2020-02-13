@@ -1,13 +1,8 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="labelFixed ? 'label-fixed' : ''">{{label}}</label>
-    <!-- Date picker -->
-    <div class="app-input__input" v-if="type == 'date'">
-      <app-date-picker :value="value" @input="updateInput" />
-    </div>
-    
-    <!-- Select -->
-    <div class="app-input__select" v-else-if="type == 'select'">
+    <label v-if="label" :class="classLabel">{{label}}</label>
+    <!-- Slot -->
+    <div class="app-input__slot" v-if="type == 'slot'">
       <slot/>
     </div>
 
@@ -105,6 +100,10 @@ export default {
       type: Boolean,
       default: false
     },
+    labelBold: {
+      type: Boolean,
+      default: false
+    },
     textarea: {
       type: Boolean,
       default: false
@@ -127,7 +126,6 @@ export default {
   methods: {
     updateInput: function(event) {
       this.$emit("input", event.target.value);
-      console.log(event)
     }
   },
 
@@ -143,6 +141,16 @@ export default {
         "input--size-lg": this.size === "lg"
       };
       return {...classSize, ...disableClass};
+    },
+
+    classLabel() {
+      const labelBold = {
+        "label-bold":  this.labelBold
+      };
+      const labelFixed = {
+        "label-fixed":  this.labelFixed
+      };
+      return {...labelBold, ...labelFixed};
     }
   }
 };
