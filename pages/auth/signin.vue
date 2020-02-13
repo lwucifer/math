@@ -29,6 +29,7 @@ import {
   createSigninWithPhone,
   createSigninWithEmail
 } from "../../models/auth/Signin";
+import { formatPhoneNumber } from "~/utils/validations";
 
 export default {
   components: {},
@@ -52,7 +53,11 @@ export default {
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         let loginModel = !this.byEmail
-          ? createSigninWithPhone(this.phone, this.password, token)
+          ? createSigninWithPhone(
+              formatPhoneNumber(this.phone),
+              this.password,
+              token
+            )
           : createSigninWithEmail(this.email, this.password, token);
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {

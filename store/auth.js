@@ -65,9 +65,7 @@ const actions = {
             .then(function(confirmationResult) {
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
-                window.confirmationResult = confirmationResult ?
-                    confirmationResult :
-                    "";
+                window.confirmationResult = confirmationResult;
                 return confirmationResult;
             })
             .catch(function(error) {
@@ -77,14 +75,14 @@ const actions = {
     },
 
     [actionTypes.AUTH.VERIFY_OTP]({ dispatch, commit }, payload) {
-        if (confirmationResult) {
+        if (window.confirmationResult) {
             return confirmationResult
                 .confirm(payload)
                 .then(result => {
                     // User signed in successfully.
                     const user = result.user;
                     console.log("user", user);
-                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user.refreshToken);
+                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user.ma);
                     return result;
                     // ...
                 })
@@ -96,6 +94,11 @@ const actions = {
         }
     },
 
+    async [actionTypes.AUTH.RESET_PASSWORD_REQUEST]({ commit }, payload) {
+        const result = await new auth(this.$axios).resetPasswordRequest(payload);
+        return result;
+    },
+
     async [actionTypes.AUTH.LOGOUT]({ commit }) {
         const result = await auth(this.$axios).logout();
         if (result.success) {
@@ -104,19 +107,12 @@ const actions = {
     },
 
     async [actionTypes.AUTH.STATUS]({ commit }, payload) {
-        debugger;
         const result = await new auth(this.$axios).status(payload);
         return result;
     },
 
-    async [actionTypes.AUTH.FORGOT_PASSWORD]({ commit }, { firebase_token, password }) {
-        const result = await new auth(this.$axios).forgotPassword({
-            firebase_token,
-            password
-        });
-        if (result.success) {
-            commit(mutationTypes.AUTH.SET_ACCOUNT_STATUS, result.data);
-        }
+    async [actionTypes.AUTH.FORGOT_PASSWORD]({ commit }, payload) {
+        const result = await new auth(this.$axios).forgotPassword(payload);
         return result;
     },
 

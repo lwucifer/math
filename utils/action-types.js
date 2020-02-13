@@ -15,7 +15,8 @@ export const AUTH = {
     STATUS: "status",
     FORGOT_PASSWORD: "forgotPassword",
     CHANGE_PASSWORD: "changePassword",
-    VERIFY_OTP: "verifiOtp"
+    VERIFY_OTP: "verifiOtp",
+    RESET_PASSWORD_REQUEST: "resetPasswordRequest"
 };
 
 export const SOCIAL_POST = {
