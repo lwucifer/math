@@ -1,0 +1,12 @@
+.school-list-box {
+    .school-list-box__title {
+        font-size: 1.6rem;
+    }   
+    .school-list-box__title__name {
+        color: #333333;
+    }
+    .school-list-box__title__description {
+        color: $color-primary;
+        font-weight: normal;
+    }
+}

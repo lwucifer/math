@@ -84,7 +84,7 @@ export default {
   methods: {
     onPageChange(e) {
       const that = this;
-      that.pagination = {...that.pagination, page: e};
+      that.pagination = {...that.pagination, ...e};
       console.log(that.pagination)
     }
   },
