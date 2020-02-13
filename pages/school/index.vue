@@ -1,26 +1,24 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <school-filter
-          title="Danh sách trường học"
-          :provinces="provinces"
-          :districts="districts"
-          :villages="villages"
-          :school-types="schoolTypes"
-        >
+    <div>
+      <school-filter
+        title="Danh sách trường học"
+        :provinces="provinces"
+        :districts="districts"
+        :villages="villages"
+        :school-types="schoolTypes"
+      >
 
-        </school-filter>
-        <!--Detail school types-->
-        <div>
-          <school-list-box
-            :name="nurserySchools.name"
-            :description="nurserySchools.description"
-            :items="nurserySchools.list">
-          </school-list-box>
-        </div>
-
+      </school-filter>
+      <!--Detail school types-->
+      <div>
+        <school-list-box
+          :name="nurserySchools.name"
+          :description="nurserySchools.description"
+          :items="nurserySchools.list">
+        </school-list-box>
       </div>
+
     </div>
   </div>
 </template>
@@ -213,40 +211,40 @@ export default {
             image: 'https://picsum.photos/218/129',
             name: "Trường THCS Nguyễn Thị Thập",
             address: "Hà Đông, Hà Nội",
-            teachersCounter: 100,
-            studentsCounter: 1000,
+            teachers: 100,
+            students: 1000,
           },
           {
             id: 2,
             image: 'https://picsum.photos/218/129',
             name: "Trường THCS Nguyễn Thị Thập",
             address: "Hà Đông, Hà Nội",
-            teachersCounter: 100,
-            studentsCounter: 1000,
+            teachers: 100,
+            students: 1000,
           },
           {
             id: 3,
             image: 'https://picsum.photos/218/129',
             name: "Trường THCS Nguyễn Thị Thập",
             address: "Hà Đông, Hà Nội",
-            teachersCounter: 100,
-            studentsCounter: 1000,
+            teachers: 100,
+            students: 1000,
           },
           {
             id: 4,
             image: 'https://picsum.photos/218/129',
             name: "Trường THCS Nguyễn Thị Thập",
             address: "Hà Đông, Hà Nội",
-            teachersCounter: 100,
-            studentsCounter: 1000,
+            teachers: 100,
+            students: 1000,
           },
           {
             id: 5,
             image: 'https://picsum.photos/218/129',
             name: "Trường THCS Nguyễn Thị Thập",
             address: "Hà Đông, Hà Nội",
-            teachersCounter: 100,
-            studentsCounter: 1000,
+            teachers: 100,
+            students: 1000,
           },
         ]
       }

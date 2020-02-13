@@ -1,12 +1,36 @@
 .school-list-box {
+    margin-bottom: 4rem;
+
     .school-list-box__title {
         font-size: 1.6rem;
-    }   
-    .school-list-box__title__name {
-        color: #333333;
+        margin-bottom: 2.5rem;
+        line-height: 2.2rem;
+
+        &__name {
+            color: #333333;
+        }
+
+        &__description {
+            color: $color-primary;
+            font-weight: normal;
+        }
     }
-    .school-list-box__title__description {
-        color: $color-primary;
-        font-weight: normal;
+
+    .school-list-box__content {
+        margin-bottom: 1rem;
+        .row--school-list {
+            margin-left: -10px;
+            margin-right: -10px;
+            .custom-col-lg-5 {
+                padding: 0 10px;
+            }
+        }
+    }
+
+    .school-list-box__footer {
+        &__submit-btn {
+            font-size: 1.4rem;
+            padding: 1.45rem 8.25rem;
+        }
     }
 }

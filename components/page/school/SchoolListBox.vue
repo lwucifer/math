@@ -8,20 +8,22 @@
     </div>
     <!--List schools-->
     <div class="school-list-box__content">
-      <div class="container">
-        <div class="row">
-          <div
-            class="custom-col-lg-5 col-3 col-sm-6 col-xs-12"
-            v-for="(item, index) in items"
-            :key="index"
-          >
-            <school-item :item="item" />
-          </div>
+      <div class="row row--school-list">
+        <div
+          class="custom-col-lg-5 col-3 col-sm-6 col-xs-12"
+          v-for="(item, index) in items"
+          :key="index"
+        >
+          <school-item :item="item" />
         </div>
       </div>
     </div>
     <div class="school-list-box__footer">
-
+      <div class="text-center">
+        <app-button square class="mt-3 school-list-box__footer__submit-btn">
+          <span class="">Xem tất cả</span>
+        </app-button>
+      </div>
     </div>
   </div>
 </template>
@@ -46,11 +48,6 @@ export default {
   },
 
   props: {
-    // item: {
-    //   type: Object,
-    //   required: true,
-    //   default: () => {}
-    // },
     name: {
       type: String,
       required: true
