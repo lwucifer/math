@@ -97,14 +97,16 @@ export default {
     hanldeShowModalOTP() {
       if (!this.email.includes("@")) {
         const data = {
-          phone: formatPhoneNumber(this.email),
+          phone: `+${formatPhoneNumber(this.email)}`,
           appVerifier: window.recaptchaVerifier
         };
         this.sendotp(data).then(result => {
           console.log("result huydv", result);
           if (result) {
             console.log("result huydv11111", result);
-            this.$router.push("/auth/forgot/changepass");
+            this.$router.push(
+              `/auth/forgot/changepass?phone=${formatPhoneNumber(this.email)}`
+            );
           }
         });
       } else {

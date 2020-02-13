@@ -2,13 +2,17 @@
   <div class="post">
     <div class="post__top">
       <n-link to class="post__avatar-wrapper">
-        <app-avatar class="post__avatar" src="https://picsum.photos/64/64" size="lg"></app-avatar>
+        <app-avatar
+          class="post__avatar"
+          :src="post.author && post.author.avatar ? post.author.avatar.medium : null"
+          size="lg"
+        ></app-avatar>
       </n-link>
 
       <div class="post__title">
         <div class="post__title-row">
           <h5 class="post__name">
-            <n-link to>{{ post.author.fullname }}</n-link>
+            <n-link to>{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
           </h5>
         </div>
 
@@ -82,7 +86,12 @@
       <app-divider class="my-3" />
 
       <div class="post__actions">
-        <button class="post__button" :class="{ 'active': post.is_like }" @click="handleClickLike">
+        <button
+          class="post__button"
+          :class="{ 'active': post.is_like }"
+          :disabled="buttonLikeLoading"
+          @click="handleClickLike"
+        >
           <IconHeart class="icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
@@ -171,6 +180,7 @@ export default {
     return {
       edit: false,
       menuDropdown: false,
+      buttonLikeLoading: false,
       shareWith: 0,
       shareWithOpts: [
         { value: 0, text: "Công khai" },
@@ -186,7 +196,11 @@ export default {
     },
 
     handleClickLike() {
-      this.$emit("like", this.post.post_id)
+      const cb = () => {
+        this.buttonLikeLoading = false;
+      }
+      this.$emit("like", this.post.post_id, cb);
+      this.buttonLikeLoading = true;
     }
   }
 };
