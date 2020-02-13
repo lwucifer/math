@@ -69,4 +69,8 @@ export default class Auth {
 
         return data;
     }
+    async [actionTypes.AUTH.VERIFY_EMAIL](payload) {
+        const { data } = await this.$axios.post(`${APIs.VERIFY_EMAIL}`, payload);
+        return data;
+    }
 }

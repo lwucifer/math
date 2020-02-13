@@ -16,7 +16,8 @@ export const AUTH = {
     FORGOT_PASSWORD: "forgotPassword",
     CHANGE_PASSWORD: "changePassword",
     VERIFY_OTP: "verifiOtp",
-    RESET_PASSWORD_REQUEST: "resetPasswordRequest"
+    RESET_PASSWORD_REQUEST: "resetPasswordRequest",
+    VERIFY_EMAIL: "verifyEmail"
 };
 
 export const SOCIAL_POST = {
@@ -89,7 +90,7 @@ export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
     RELATED: "elearningPublicRelated",
-    SUBJECT: "elearningPublicSubject",
+    SUBJECT: "elearningPublicSubject"
 };
 
 export const CREATING_ANSWER = {

@@ -4,6 +4,7 @@
       <h3>Quên mật khẩu?</h3>
       <div class="auth_content mt-5">
         <app-input
+          v-if="!checkEmail"
           message="Tài khoản không tồn tại"
           type="text"
           v-model="otp"
@@ -56,11 +57,25 @@ export default {
       countDownDefault: 120,
       countDown: 120,
       email: "",
-      verify_token: ""
+      verify_token: "",
+      phone: "",
+      queryEmail: false,
+      code: ""
     };
   },
+  async asyncData({ store, query }) {
+    return { checkEmail: query.email ? true : false };
+  },
+
   async mounted() {
     await this.$recaptcha.init();
+    this.phone = this.$route.query.phone ? this.$route.query.phone : "";
+    this.email = this.$route.query.email ? this.$route.query.email : "";
+    this.code = this.$route.query.code ? this.$route.query.code : "";
+    console.log("huydv phone", this.phone);
+    // if (this.email != "") {
+    //   this.queryEmail = true;
+    // }
   },
 
   computed: {
@@ -70,57 +85,52 @@ export default {
   methods: {
     ...mapActions("auth", ["forgotPassword", "verifiOtp"]),
     async acceptResetPass() {
-      const token = await this.$recaptcha.execute("resetpass");
-      console.log("ReCaptcha token:", token);
-      if (this.otp != "") {
-        await this.verifiOtp(this.otp).then(result => {
-          console.log("result huydv", result);
-          if (result) {
-            this.verify_token = result.user.ma;
-            try {
+      try {
+        const token = await this.$recaptcha.execute("resetpass");
+        console.log("ReCaptcha token:", token);
+        if (!this.checkEmail) {
+          await this.verifiOtp(this.otp).then(result => {
+            console.log("result huydv", result);
+            if (result && result.user) {
+              this.verify_token = result.user.ma;
               debugger;
-              let resetPassModel = createResetPassWithPhone(
-                formatPhoneNumber(this.email),
+              const resetPassModelPhone = createResetPassWithPhone(
+                `+${formatPhoneNumber(this.phone)}`,
                 this.verify_token,
                 this.password,
                 token
               );
               // : createResetPassWithEmail(this.email, this.password, token);
-              const doAdd = this.forgotPassword(resetPassModel).then(result => {
-                if (result.success == true) {
-                  this.$router.push("/auth/signin");
-                } else {
+              const doAdd = this.forgotPassword(resetPassModelPhone).then(
+                result => {
+                  if (result.success == true) {
+                    this.$router.push("/auth/signin");
+                  } else {
+                  }
                 }
-              });
-            } catch (error) {
-              console.log("Login error:", error);
+              );
+              // console.log("result huydv11111", result);
             }
-            // console.log("result huydv11111", result);
-          }
-        });
+          });
+        } else {
+          const resetPassModelEmail = createResetPassWithEmail(
+            this.email,
+            this.code,
+            this.password,
+            token
+          );
+          const doAdd = this.forgotPassword(resetPassModelEmail).then(
+            result => {
+              if (result.success == true) {
+                this.$router.push("/auth/signin");
+              } else {
+              }
+            }
+          );
+        }
+      } catch (error) {
+        console.log("Login error:", error);
       }
-      // try {
-      //   debugger;
-      //   const token = await this.$recaptcha.execute("resetpass");
-      //   console.log("ReCaptcha token:", token);
-      //   const checkText = this.email.includes("@");
-      //   let resetPassModel = !checkText
-      //     ? createResetPassWithPhone(
-      //         formatPhoneNumber(this.email),
-      //         this.firebaseToken,
-      //         this.password,
-      //         token
-      //       )
-      //     : createResetPassWithEmail(this.email, this.password, token);
-      //   const doAdd = this.forgotPassword(resetPassModel).then(result => {
-      //     if (result.success == true) {
-      //       this.$router.push("/auth/signin");
-      //     } else {
-      //     }
-      //   });
-      // } catch (error) {
-      //   console.log("Login error:", error);
-      // }
     },
     sendOTP() {
       const that = this;
