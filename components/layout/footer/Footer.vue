@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="container">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 footer__col">
           <n-link to class="footer__logo mb-3">
             <LogoGradient />
           </n-link>
@@ -12,7 +12,7 @@
           <img src="~assets/images/footer/bo-cong-thuong.png" width="147" alt="Đã đăng ký bộ công thương">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 footer__col">
           <h2 class="footer__title">Về Schoolly</h2>
           <ul class="footer__menu">
             <li><a href="">Điều khoản sử dụng</a></li>
@@ -23,7 +23,7 @@
           </ul>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 footer__col">
           <h2 class="footer__title">Tải ngay App Schoolly</h2>
           <div class="footer__download">
             <span>
