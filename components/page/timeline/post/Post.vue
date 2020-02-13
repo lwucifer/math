@@ -12,7 +12,7 @@
       <div class="post__title">
         <div class="post__title-row">
           <h5 class="post__name">
-            <n-link to>{{ post.author.fullname }}</n-link>
+            <n-link to>{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
           </h5>
         </div>
 
