@@ -3,17 +3,19 @@
  */
 export const validateIpAddress = _ip => {
     console.log("[validations] validateIpAddress", _ip);
-    return (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(_ip))
-}
+    return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+        _ip
+    );
+};
 
 /**
  * validate MAC Address
- * @param {mac_address} _mac 
+ * @param {mac_address} _mac
  */
 export const validateMacAddress = _mac => {
     console.log("[validations] validateMacAddress", _mac);
-    return (/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(_mac))
-}
+    return /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(_mac);
+};
 
 /**
  * validate Address Range: ip_address/number
@@ -38,31 +40,38 @@ export const validateAddressRange = _addressRange => {
     if (parseInt(_number) < 0 || parseInt(_number) > 32) return false;
 
     return true;
-}
-
+};
 
 /**
  * validate username setting
- * @param {username} _username 
+ * @param {username} _username
  */
 export const validateUsername = _username => {
     console.log("[validations] validateUsername", _username);
-    return (/^([a-zA-Z0-9]+)$/.test(_username));
-}
+    return /^([a-zA-Z0-9]+)$/.test(_username);
+};
 
 /**
  * validate number
- * @param {number} _number 
+ * @param {number} _number
  */
 export const validateNumber = _number => {
-        console.log("[validations] validateNumber", _number);
-        return (/^([0-9]+)$/.test(_number));
-    }
-    /**
-     * validate port setting
-     * @param {port} _port 
-     */
+    console.log("[validations] validateNumber", _number);
+    return /^([0-9]+)$/.test(_number);
+};
+/**
+ * validate port setting
+ * @param {port} _port
+ */
 export const validatePort = _port => {
     if (parseFloat(_port) > 65535) return false;
     return true;
-}
+};
+
+/**
+ * format phone number
+ * @param {phoneNumber} _phoneNumber
+ */
+export const formatPhoneNumber = _phoneNumber => {
+    return _phoneNumber.replace("0", "+84");
+};

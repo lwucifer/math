@@ -9,6 +9,7 @@ export const AUTH_INFO = `/auth/info`;
 export const SEND_OTP = `/auth/otp`;
 export const CHECK_PHONE = `/user/public/validate`;
 export const FORGOT_PASSWORD = `/user/public/resetpwd`;
+export const RESET_PASSWORD_REQUEST = `/user/public/resetpwd/request`;
 export const CHANGE_PASSWORD = `/user/account/changepwd`;
 export const ACCOUNT_PERSONAL = `/social/api/user/profile`;
 export const ACCOUNT_LINK = `/account/link`;
