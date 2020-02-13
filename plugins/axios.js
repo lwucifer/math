@@ -1,4 +1,5 @@
-import { checkRequestAuthorize } from "~/utils/auth";
+import { checkRequestAuthorize, removeToken } from "~/utils/auth";
+
 export default function({ store, $axios, redirect }) {
     $axios.onRequest(config => {
         console.log("[onRequest]", config.url);
@@ -29,11 +30,11 @@ export default function({ store, $axios, redirect }) {
 
     $axios.onResponseError(error => {
         // console.log("[onResponseError]", error);
-        // const code = parseInt(error.response && error.response.status);
-        // if (code === 401) {
-        //   removeToken();
-        //   redirect("/login");
-        // }
+        const code = parseInt(error.response && error.response.status);
+        if (code === 401) {
+          removeToken();
+          redirect("/auth/signin");
+        }
     });
 
     $axios.onError(error => {
