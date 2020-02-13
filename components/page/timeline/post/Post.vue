@@ -4,7 +4,7 @@
       <n-link to class="post__avatar-wrapper">
         <app-avatar
           class="post__avatar"
-          :src="post.author.avatar && post.author.avatar.medium ? post.author.avatar.medium : null"
+          :src="post.author && post.author.avatar ? post.author.avatar.medium : null"
           size="lg"
         ></app-avatar>
       </n-link>
