@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Logo from "~/assets/svg/icons/schoolly.svg?inline";
+import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 
 import IconImage from "~/assets/svg/icons/image.svg?inline";
