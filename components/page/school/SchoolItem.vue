@@ -1,21 +1,28 @@
 <template>
   <div class="school-item">
     <div class="school-item__thumnail">
-      <img :src="item.image" alt />
+      <n-link :to="'/school/' + item.id">
+        <img :src="item.image" :alt="item.name" />
+      </n-link>
     </div>
     <div class="school-item__info">
-      <n-link class="school-item__info__title" v-if="item.name" to>{{item.name}}</n-link>
+      <n-link
+          v-if="item.name"
+          class="school-item__info__title"
+          :to="'/school/' + item.id">
+        {{ item.name }}
+      </n-link>
       <div class="school-item__info__statistic-item">
         <span> <IconLocation/> </span>
         <span class="value">{{ item.address }}</span>
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUser/></span>
-        <span class="value">{{ item.teachers }} giáo viên </span>
+        <span class="value">{{ item.teacherNum }} giáo viên </span>
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUserGroup/></span>
-        <span class="value">{{ item.students }} học sinh </span>
+        <span class="value">{{ item.studentNum }} học sinh </span>
       </div>
     </div>
   </div>
