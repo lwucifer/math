@@ -25,6 +25,7 @@
     <div class="app-input__input" v-else>
       <textarea
         v-if="textarea"
+        v-bind="$attrs"
         :rows="rows"
         :type="type"
         :value="value"
@@ -35,6 +36,7 @@
       />
       <input
         v-else
+        v-bind="$attrs"
         :type="type"
         :value="value"
         :disabled="disabled"
@@ -55,6 +57,8 @@
 import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 
 export default {
+  inheritAttrs: false,
+  
   components: {
     IconSuccess
   },

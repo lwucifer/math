@@ -1,11 +1,5 @@
 <template>
-  <app-modal
-    centered
-    :width="606"
-    :component-class="{ 'account-edit-modal': true }"
-    @close="$router.push('/')"
-    v-if="visible"
-  >
+  <app-modal centered :width="606" :component-class="{ 'account-edit-modal': true }" v-if="visible">
     <div slot="content">
       <div v-if="success" class="change-pass-success text-center">
         <h2 class="color-primary">Thành công</h2>
@@ -94,8 +88,8 @@ export default {
         that.coNewPassword.length < 8 || that.coNewPassword.length > 32;
       if (!that.error && !that.error2 && !that.error3) {
         let data = {
-          oldPass: that.oldPassword,
-          newPass: that.newPassword,
+          current_pwd: that.oldPassword,
+          new_pwd: that.newPassword,
           verify_new_pass: that.coNewPassword
         };
         const doAdd = that.changePassword(data).then(result => {

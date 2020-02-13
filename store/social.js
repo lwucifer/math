@@ -11,7 +11,7 @@ import Feeds from "~/services/social/feeds";
  * initial state
  */
 const state = () => ({
-  postsList: [],
+  posts: {},
   likesList: {},
   sharesList: {},
   commentsList: {},
@@ -35,7 +35,7 @@ const getters = {
 const actions = {
   async [actionTypes.SOCIAL_POST.LIST]({ commit }, payload) {
     try {
-      const { data: result = [] } = await new SocialPosts(this.$axios)[
+      const { data: result = {} } = await new SocialPosts(this.$axios)[
         actionTypes.BASE.LIST
       ](payload);
       console.log("[SocialPosts] list", result);
@@ -296,8 +296,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.SOCIAL.SET_POSTS_LIST](state, _postsList) {
-    state.postsList = _postsList;
+  [mutationTypes.SOCIAL.SET_POSTS_LIST](state, _posts) {
+    state.posts = _posts;
   },
 
   [mutationTypes.SOCIAL.SET_SOCIAL_LIKES_LIST](state, _likesList) {
