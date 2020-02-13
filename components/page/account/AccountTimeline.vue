@@ -8,28 +8,24 @@
 
     <template v-if="!loading">
       <Post
-      v-for="post in postsList"
+      v-for="post in posts.listPost"
       class="mb-4"
-      :key="post.label"
-      :fullname="post.creator && post.creator.fullname"
-      :updated="post.updated"
-      :likes="post.likes"
-      :comments="post.comments"
-      :content="post.content"
+      :key="post.post_id"
+      :post="post"
       >
-      <PostImage
-      v-if="post.attachments && post.attachments.length"
-      slot="media-content"
-      class="my-4"
-      :images="post.attachments"
-      @click-item="imageObj => handleClickImage(imageObj, post)"
-      />
+        <PostImage
+        v-if="post.attachments && post.attachments.length"
+        slot="media-content"
+        class="my-4"
+        :images="post.attachments"
+        @click-item="imageObj => handleClickImage(imageObj, post)"
+        />
       </Post>
     </template>
 
     <div class="">
       <!-- DEMO FOR POST LINK -->
-      <Post class="mb-4">
+      <!-- <Post class="mb-4">
         <template slot="media-content">
           <app-divider class="my-4"></app-divider>
           <app-content-box
@@ -44,11 +40,11 @@
           meta-footer="cellphones.com.vn"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST LINK -->
 
       <!-- DEMO FOR POST SLIDER -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostSlider
           :images="timelineSliderItems"
@@ -60,7 +56,7 @@
       <!-- END DEMO FOR POST SLIDER -->
 
       <!-- DEMO FOR POST 1 IMAGE -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostImage
           :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
@@ -68,11 +64,11 @@
           @click-item="modalDetailShow = true"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST 1 IMAGE -->
 
       <!-- DEMO FOR POST 2 IMAGE -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostImage
           :images="[
@@ -83,11 +79,11 @@
           @click-item="modalDetailShow = true"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST 2 IMAGE -->
 
       <!-- DEMO FOR POST 3 IMAGE -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostImage
           :images="[
@@ -99,11 +95,11 @@
           @click-item="modalDetailShow = true"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST 3 IMAGE -->
 
       <!-- DEMO FOR POST 4 IMAGE -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostImage
           :images="[
@@ -116,11 +112,11 @@
           @click-item="modalDetailShow = true"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST 4 IMAGE -->
 
       <!-- DEMO FOR POST 5 IMAGE -->
-      <Post>
+      <!-- <Post>
         <template slot="media-content">
           <PostImage
           :images="[
@@ -134,7 +130,7 @@
           @click-item="modalDetailShow = true"
           />
         </template>
-      </Post>
+      </Post> -->
       <!-- END DEMO FOR POST 5 IMAGE -->
     </div>
 
@@ -171,12 +167,12 @@
       PostImage
     },
     
-    async fetch({ params, query, store }) {
-      console.log("watchQuery");
-      await Promise.all([
-        store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
-        ]);
-    },
+    // async fetch({ params, query, store }) {
+    //   console.log("watchQuery");
+    //   await Promise.all([
+    //     store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
+    //     ]);
+    // },
 
     data() {
       return {
@@ -229,7 +225,7 @@
     },
 
     computed: {
-      ...mapState("social", ["postsList"])
+      ...mapState("social", ["posts"])
     },
 
     mounted() {

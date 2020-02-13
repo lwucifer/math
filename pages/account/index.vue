@@ -43,6 +43,13 @@ export default {
     AccountCover
   },
 
+  async fetch({ params, query, store }) {
+      console.log("watchQuery");
+      await Promise.all([
+        store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
+        ]);
+    },
+
   data() {
     return {
       account: {

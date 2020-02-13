@@ -17,7 +17,7 @@
               :key="post.post_id"
               :post="post"
               class="mb-4"
-              :show-menu-dropdown="post.author.id === userId"
+              :show-menu-dropdown="post.author && post.author.id === userId"
               @delete="deletePost"
               @like="likePost"
             >
