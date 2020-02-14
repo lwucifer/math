@@ -51,3 +51,4 @@ export const STUDY_ELEARNING = `/study/elearning`;
  * SCHOOL
  */
 export const SCHOOL_CLASSES = `/school/classes`;
+export const SCHOOL_PROFESSIONAL = `/school/professional`;
