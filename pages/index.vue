@@ -13,7 +13,7 @@
 
           <template v-show="!loading">
             <Post
-              v-for="post in feeds.listPost"
+              v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
               :post="post"
               class="mb-4"
