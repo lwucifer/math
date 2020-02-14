@@ -139,3 +139,36 @@ export const VILLAGES = [
         text: 'Xuân Trường'
     },
 ]
+
+export const SCHOOL_SUMMARY = {
+    id: "1",
+    name: "Đại học Đại Nam",
+    logo: "https://picsum.photos/171/171",
+    thumnail: "https://picsum.photos/280/168",
+    province: "Hà Nội",
+    district: "Hà Đông",
+    ward: "Phú Lãm",
+    address: "69 ",
+    intro: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum.",
+    description:
+        "<p><span>Địa chỉ:</span><b> 15 Xuân Diệu, Tây Hồ, Hà Nội</b></p>" +
+        "<p><span>Số điện thoại: </span></span><b> 0906771634</b></p>" +
+        "<p><span>Email:</span><b> Scholly@gmail.com</b></p>" +
+        "<p><span>Mã trường:</span><b> MHDUAA12</b></p>",
+    level: 1,
+    teachers: 500,
+    students: 1500,
+    lessons: 52,
+    courses: 13,
+    status: 1,
+    jobs: [
+        {
+            id: 1,
+            name: "Tuyển 01 giáo viên tiếng Anh"
+        },
+        {
+            id: 2,
+            name: "Tuyển 05 đầu bếp căng tin"
+        }
+    ]
+}
