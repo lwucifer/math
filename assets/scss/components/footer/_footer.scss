@@ -1,0 +1,97 @@
+.footer {
+    background-color: #fff;
+    padding-top: 2rem;
+}
+
+.footer__logo {
+    display: inline-block;
+
+    svg {
+        display: block;
+        width: auto;
+        height: 40px;
+    }
+}
+
+.footer__brand-desc {
+    line-height: (26/14);
+    margin-bottom: 1.6rem;
+}
+
+.footer__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: (22/16);
+    color: #1D243E;
+    margin-bottom: 2rem;
+}
+
+.footer__menu {
+    list-style-type: none;
+
+    li {
+        margin-bottom: 1.9rem;
+    }
+    
+    a {
+        line-height: (26/14);
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.footer__download {
+    display: flex;
+    align-items: center;
+
+    > span:first-child {
+        margin-right: 2.2rem;
+    }
+}
+
+.footer__copyright__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer__copyright__menu {
+    list-style-type: none;
+
+    li {
+        display: inline-block;
+
+        &:not(:last-child) {
+            margin-right: 3.6rem;
+        }
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.footer__copyright__text {
+    margin-bottom: 1rem;
+
+    @include media(">=md") {
+        margin-bottom: 0;
+    }
+}
+
+.footer__copyright {
+    padding-top: 1.225rem;
+    padding-bottom: 2rem;
+    border: 1px solid $color-border;
+    line-height: (26/14);
+}
+
+.footer__col {
+    margin-bottom: 2rem;
+
+    @include media(">=md") {
+        margin-bottom: 0;
+    }
+}
