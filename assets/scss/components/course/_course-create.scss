@@ -1,0 +1,29 @@
+.course-create-aside {
+    padding-bottom: 2rem;
+}
+
+.cca-checkbox-list {
+    list-style-type: none;
+    padding: 1.3rem 0;
+
+    li {
+        padding: .9rem 1.5rem;
+
+        &.active {
+            background-color: #F8F8F8;
+        }
+    }
+}
+
+.cca-action {
+    padding: 0 1.5rem;
+    
+    .btn {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+}
+
+.cca-sub-text {
+    font-size: 1.3rem
+}

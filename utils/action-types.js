@@ -119,3 +119,21 @@ export const ELEARNING_CREATING_CHAPTER = {
     EDIT: "elearningCreatingChapterEdit",
     DELETE: "elearningCreatingChapterDelete"
 };
+
+export const STUDY = {
+    ELEARNING: 'studyElearningList'
+}
+
+export const SCHOOL_CLASSES = {
+    LIST: 'schoolClassesList',
+    ADD: 'schoolClassesAdd',
+    EDIT: 'schoolClassesEdit',
+    DELETE: 'schoolClassesDelete',
+}
+
+export const SCHOOL_PROFESSIONAL = {
+    LIST: 'schoolProfessionalList',
+    ADD: 'schoolProfessionalAdd',
+    EDIT: 'schoolProfessionalEdit',
+    DELETE: 'schoolProfessionalDelete',
+}

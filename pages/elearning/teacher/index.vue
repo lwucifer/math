@@ -7,15 +7,21 @@
       <div class="col-md-9">
         <div class="elearning-account__main">
           <h3 class="color-primary mb-4">Thông tin tài khoản</h3>
+          <app-input labelBold labelFixed :value="name" label="Họ và tên" disabled />
+          <app-input labelBold labelFixed :value="school" label="Trường" disabled />
+          <app-input labelBold labelFixed :value="code" label="Mã giáo viên" disabled />
+          <app-input labelBold labelFixed :value="specialize" label="Tổ chuyên môn" disabled />
+          <app-input labelBold labelFixed :value="classPrimary" label="Lớp chủ nhiệm" disabled />
+          <app-input labelBold labelFixed :value="classSecondary" label="Các lớp giảng dạy" disabled />
 
-          <app-input labelFixed :value="name" label="Họ và tên" disabled />
-
-          <app-input labelFixed v-model="phone" label="Số điện thoại" />
-          <app-input labelFixed v-model="email" label="Email" />
+          <app-input labelBold labelFixed v-model="phone" label="Số điện thoại" />
+          <app-input labelBold labelFixed v-model="email" label="Email" />
           <div class="app-inputs-inline">
-            <app-input type="date" labelFixed v-model="birthday" label="Ngày sinh" />
-            <app-input label="Giới tính">
-                <app-select v-model="sex" :options="sexs" class="form-control" />
+            <app-input label="Giới tính" type="slot" labelBold labelFixed>
+              <app-date-picker v-model="birthday" />
+            </app-input>
+            <app-input label="Giới tính" type="slot" labelBold >
+              <app-select v-model="sex" :options="sexs" />
             </app-input>
           </div>
 
@@ -62,6 +68,14 @@ export default {
         name: "Savannah Mckinney",
         avatar: "https://picsum.photos/125/125"
       },
+      phone: "0988777999",
+      email: "hello@gmail.com",
+      name: "Trần Văn Nam",
+      classPrimary: "6A",
+      classSecondary: "6A, 6B, 7A",
+      specialize: "Toán",
+      code: "NMJAS12A",
+      school: "THCS Nguyễn Trãi",
       birthday: null,
       sex: "1",
       sexs: [

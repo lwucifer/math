@@ -1,58 +1,33 @@
 <template>
-  <div class="container">
+  <div class="container course-create">
     <div class="row">
       <div class="col-md-3">
-        <CourseSide />
-      </div>
-      <div class="col-md-9">
-        <div class="course-detail__main">
-          <div class="course-detail__toolbar">
-            <span class="h3">Tạo khóa học</span>
+        <aside class="course-create-aside bg-white">
+          <ul class="cca-checkbox-list">
+            <li class="active">
+              <app-checkbox>Thông tin chung</app-checkbox>
+            </li>
+            <li>
+              <app-checkbox>Nội dung học tập</app-checkbox>
+            </li>
+            <li>
+              <app-checkbox>Cài đặt</app-checkbox>
+            </li>
+            <li>
+              <app-checkbox>Bài tập <span class="cca-sub-text text-sub">(Tùy chọn)</span></app-checkbox>
+            </li>
+            <li>
+              <app-checkbox>Bài kiểm tra <span class="cca-sub-text text-sub">(Tùy chọn)</span></app-checkbox>
+            </li>
+          </ul>
+
+          <div class="cca-action">
+            <app-button square full-width>Gửi lên</app-button>
           </div>
-          <div class="course-detail__content pb-4">
-            <h3 class="title">Thông tin khóa học</h3>
-            <div class="content pb-0">
-              <app-input labelFixed type="text" v-model="name" label="Tên khóa học" />
-              <app-input
-                labelFixed
-                type="file"
-                v-model="desc"
-                label="Ảnh khóa học"
-                placeholder="Upload"
-              />
-              <app-input labelFixed type="text" v-model="desc" label="Mô tả ngắn" />
-              <div class="row">
-                <div class="col-6 app-input-secondary">
-                  <label class="label-fixed">Danh mục</label>
-                  <app-select v-model="cat" :options="catOpts" class="input" />
-                </div>
-                <div class="col-6 app-input-secondary">
-                  <label class="label-fixed">Danh mục con</label>
-                  <app-select v-model="cat" :options="catOpts" class="input" />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <app-input
-                    labelFixed
-                    type="text"
-                    v-model="price"
-                    unit="VNĐ"
-                    label="Giá khóa học"
-                  />
-                </div>
-                <div class="col-6">
-                  <app-input labelFixed type="text" v-model="off" unit="%" label="Giảm giá" />
-                </div>
-              </div>
-              <app-input labelFixed type="text" v-model="content" textarea label="Mô tả" rows="6" />
-            </div>
-          </div>
-        </div>
-        <div class="course-detail__toolbar-bottom mt-4">
-          <app-button color="primary" square class="ml-auto">Tiếp tục</app-button>
-        </div>
+        </aside>
       </div>
+
+      <div class="col-md-9"></div>
     </div>
   </div>
 </template>
@@ -70,6 +45,8 @@ import * as actionTypes from "~/utils/action-types";
 
 export default {
   name: "Course",
+
+  layout: "create",
 
   components: {
     CourseSide,
@@ -125,5 +102,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/course/_course-detail.scss";
+@import "~/assets/scss/components/course/_course-create.scss";
 </style>
