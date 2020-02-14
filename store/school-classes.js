@@ -39,7 +39,7 @@ const actions = {
       // set to mutation
       // commit(mutationTypes.SCHOOL_CLASSES.SET_SCHOOL_CLASSES_LIST, result);
     } catch (error) {
-      console.log("[School Classes] list.error", error);
+      console.log("[School Classes] add.error", error);
     }
   },
 
@@ -51,7 +51,7 @@ const actions = {
       // set to mutation
       // commit(mutationTypes.SCHOOL_CLASSES.SET_SCHOOL_CLASSES_LIST, result);
     } catch (error) {
-      console.log("[School Classes] list.error", error);
+      console.log("[School Classes] edit.error", error);
     }
   },
 
@@ -63,7 +63,7 @@ const actions = {
       // set to mutation
       // commit(mutationTypes.SCHOOL_CLASSES.SET_SCHOOL_CLASSES_LIST, result);
     } catch (error) {
-      console.log("[School Classes] list.error", error);
+      console.log("[School Classes] delete.error", error);
     }
   }
 };
