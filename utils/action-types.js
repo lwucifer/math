@@ -123,3 +123,10 @@ export const ELEARNING_CREATING_CHAPTER = {
 export const STUDY = {
     ELEARNING: 'studyElearningList'
 }
+
+export const SCHOOL_CLASSES = {
+    LIST: 'schoolClassesList',
+    ADD: 'schoolClassesAdd',
+    EDIT: 'schoolClassesEdit',
+    DELETE: 'schoolClassesDelete',
+}

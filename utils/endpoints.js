@@ -46,3 +46,8 @@ export const ELEARNING_PUBLIC_SUBJECT = "/elearning/public/subject";
  * STUDY
  */
 export const STUDY_ELEARNING = `/study/elearning`;
+
+/**
+ * SCHOOL
+ */
+export const SCHOOL_CLASSES = `/school/classes`;
