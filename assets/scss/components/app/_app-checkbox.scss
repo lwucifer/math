@@ -1,0 +1,35 @@
+.app-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.app-checkbox__checkmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    border-radius: 2px;
+    margin-right: 5px;
+    border: 1px solid $color-text;
+
+    svg {
+        display: none;
+        fill: $color-text;
+    }
+}
+
+.app-checkbox__input {
+    &:checked {
+        + .app-checkbox__checkmark {
+            border-color: $color-primary;
+
+            svg {
+                display: block;
+                fill: $color-primary;
+            }
+        }
+    }
+}
