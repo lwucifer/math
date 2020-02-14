@@ -3,7 +3,7 @@
     <label v-if="label" :class="classLabel">{{label}}</label>
     <!-- Slot -->
     <div class="app-input__slot" v-if="type == 'slot'">
-      <slot/>
+      <slot />
     </div>
 
     <!-- Input upload -->
@@ -48,7 +48,7 @@
         <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
         <span>{{unit}}</span>
       </div>
-      <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+      <p class="app-input__error" v-if="error">{{message}}</p>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 
 export default {
   inheritAttrs: false,
-  
+
   components: {
     IconSuccess
   },
@@ -120,6 +120,10 @@ export default {
       type: [String, Number],
       required: false,
       default: 6
+    },
+    error: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -136,7 +140,7 @@ export default {
   computed: {
     classSize() {
       const disableClass = {
-        "disabled":  this.disabled
+        disabled: this.disabled
       };
       const classSize = {
         "input--size-xs": this.size === "xs",
@@ -144,17 +148,17 @@ export default {
         "input--size-md": this.size === "md" || !this.size,
         "input--size-lg": this.size === "lg"
       };
-      return {...classSize, ...disableClass};
+      return { ...classSize, ...disableClass };
     },
 
     classLabel() {
       const labelBold = {
-        "label-bold":  this.labelBold
+        "label-bold": this.labelBold
       };
       const labelFixed = {
-        "label-fixed":  this.labelFixed
+        "label-fixed": this.labelFixed
       };
-      return {...labelBold, ...labelFixed};
+      return { ...labelBold, ...labelFixed };
     }
   }
 };
