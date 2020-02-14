@@ -34,7 +34,7 @@ export default {
     console.log("[mounted]");
     this.myPlayer = WowzaPlayer.create("playerElement", {
       license: "PLAY2-aRxvR-K3uah-PUcUm-vyQnf-WVuBp",
-      sourceURL: "http://10.56.77.116:1935/live/trungnqkey/playlist.m3u8",
+      sourceURL: "http://10.110.195.115:1935/live/trungnqkey/playlist.m3u8",
       autoPlay: true,
       debugLevel: 'DEBUG',
       mute: this.mute,
@@ -42,10 +42,12 @@ export default {
     });
 
     setTimeout(() => {
-        console.log("Timeout fire...")
+        // console.log("Timeout fire...")
       // this.myPlayer.destroy();
     //   this.mute = true;
     }, 10000);
+
+    this.myPlayer.onPlayheadTime(this.onPlayheadTimeCallback);
 
     this.myPlayer.onSeek(event => {
         console.log("[onSeek]", event);
@@ -59,7 +61,15 @@ export default {
         console.log("[onMetadata]", event);
     })
 
+  },
+
+  methods: {
+    onPlayheadTimeCallback(event){
+      console.log("[onPlayheadTimeCallback]", event)
+    }
   }
+
+
 };
 </script>
 
