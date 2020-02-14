@@ -94,6 +94,11 @@ export default {
     await store.dispatch(`course/${actionTypes.ELEARNING_SUMMARY.LIST}`)
   },
 
+  async fetch({ params, query, store }) {
+    console.log("get my course");
+    await store.dispatch(`study-elearning/${actionTypes.STUDY.ELEARNING}`)
+  },
+
   data() {
     return {
       banners: new Array(3).fill(BannerImage, 0),
@@ -111,56 +116,6 @@ export default {
         },
         showName: true
       },
-      myCourses: [
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70",
-          image: "https://picsum.photos/209/126"
-        },
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70",
-          image: "https://picsum.photos/209/126"
-        },
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "",
-          image: "https://picsum.photos/209/126"
-        },
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "0",
-          image: "https://picsum.photos/209/126"
-        },
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70",
-          image: "https://picsum.photos/209/126"
-        },
-        {
-          id: 1,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          tag: "Ngoại ngữ",
-          price: "219000",
-          off: "70",
-          image: "https://picsum.photos/209/126"
-        }
-      ],
       categories: [
         {
           id: 1,
@@ -193,6 +148,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("course", ["earningSummaryList"]),
+    ...mapState("study-elearning", ["myCourses"]),
     classes() {
       return {
         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
