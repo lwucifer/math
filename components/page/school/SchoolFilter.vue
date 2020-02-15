@@ -5,50 +5,84 @@
             <n-link v-if="link" :to="link || ''" class="aside-box__link">{{ linkText }}</n-link>
         </div>
         <div class="school-filter__form">
-            <app-button
-              color="primary"
-              @click="submit"
-              class="school-filter__btn-submit"
-            >
-                <IconFilter />
-                <span>Lọc kết quả</span>
-            </app-button>
-            <app-select
-              v-model="filter.province"
-              :options="provinces"
-              placeholder="Theo tỉnh thành"
-            >
-                <template slot="placeholder-icon" >
-                    <IconCaretDownThin />
-                </template>
-            </app-select>
-            <app-select
-              v-model="filter.district"
-              :options="districts"
-              placeholder="Theo quận huyện"
-            >
-                <template slot="placeholder-icon" >
-                    <IconCaretDownThin />
-                </template>
-            </app-select>
-            <app-select
-              v-model="filter.village"
-              :options="villages"
-              placeholder="Theo xã phường"
-            >
-                <template slot="placeholder-icon" >
-                    <IconCaretDownThin />
-                </template>
-            </app-select>
-            <app-select
-              v-model="filter.schoolType"
-              :options="schoolTypes"
-              placeholder="Theo cấp học"
-            >
-                <template slot="placeholder-icon" >
-                    <IconCaretDownThin />
-                </template>
-            </app-select>
+            <div class="school-filter__form__item">
+                <app-button
+                    color="primary"
+                    @click="submit"
+                    class="school-filter__btn-submit"
+                >
+                    <IconFilter />
+                    <span>Lọc kết quả</span>
+                </app-button>
+            </div>
+
+            <div class="school-filter__form__item">
+                <app-vue-select
+                    class="app-vue-select"
+                    v-model="filter.province"
+                    :options="provinces"
+                    :components="{OpenIndicator}"
+                    label="text"
+                    placeholder="Theo tỉnh thành"
+                    searchable
+                    clearable
+                    @input="handleChangedInput"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                >
+                </app-vue-select>
+            </div>
+
+            <div class="school-filter__form__item">
+                <app-vue-select
+                    class="app-vue-select"
+                    v-model="filter.district"
+                    :options="districts"
+                    :components="{OpenIndicator}"
+                    label="text"
+                    placeholder="Theo quận huyện"
+                    searchable
+                    clearable
+                    @input="handleChangedInput"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                >
+                </app-vue-select>
+            </div>
+
+            <div class="school-filter__form__item">
+                <app-vue-select
+                    class="app-vue-select"
+                    v-model="filter.village"
+                    :options="villages"
+                    :components="{OpenIndicator}"
+                    label="text"
+                    placeholder="Theo xã phường"
+                    searchable
+                    clearable
+                    @input="handleChangedInput"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                >
+                </app-vue-select>
+            </div>
+
+            <div class="school-filter__form__item">
+                <app-vue-select
+                    class="app-vue-select"
+                    v-model="filter.schoolType"
+                    :options="schoolTypes"
+                    :components="{OpenIndicator}"
+                    label="text"
+                    placeholder="Theo cấp học"
+                    searchable
+                    clearable
+                    @input="handleChangedInput"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                >
+                </app-vue-select>
+            </div>
         </div>
     </div>
 </template>
@@ -56,11 +90,12 @@
 <script>
     import IconFilter from "~/assets/svg/icons/filter.svg?inline"
     import IconCaretDownThin from "~/assets/svg/icons/caret-down-thin.svg?inline"
+    import vSelect from 'vue-select'
 
     export default {
         components: {
             IconFilter,
-            IconCaretDownThin
+            IconCaretDownThin,
         },
         props: {
             title: {
@@ -104,11 +139,24 @@
                     village: null,
                     schoolType: null
                 },
+                OpenIndicator: {
+                    render: createElement => createElement(IconCaretDownThin)
+                },
             }
         },
         methods: {
             submit() {
                 console.log('[Component] SchoolFilter: submitted')
+            },
+            handleChangedInput(val) {
+                if (val !== null) {} else {}
+                console.log('[Component] SchoolFilter: changing input...', val)
+            },
+            handleFocusSearchInput() {
+                console.log('[Component] SchoolFilter: focus searching ')
+            },
+            handleBlurSearchInput() {
+                console.log('[Component] SchoolFilter: blur searching ')
             }
         }
     }

@@ -16,6 +16,7 @@ import AppTag from "~/components/common/tag/AppTag";
 import AppStars from "~/components/common/stars/AppStars";
 import AppInput from "~/components/common/input/AppInput";
 import Pagination from "~/components/common/pagination/Pagination";
+import AppVueSelect from "~/components/common/select/AppVueSelect";
 import AppTable from "~/components/common/table/AppTable";
 import AppCheckbox from "~/components/common/checkbox/AppCheckbox";
 
@@ -35,5 +36,6 @@ Vue.component("app-tag", AppTag);
 Vue.component("app-stars", AppStars);
 Vue.component("app-input", AppInput);
 Vue.component("app-pagination", Pagination);
+Vue.component("app-vue-select", AppVueSelect);
 Vue.component("app-table", AppTable);
 Vue.component("app-checkbox", AppCheckbox);

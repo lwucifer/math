@@ -1,0 +1,112 @@
+.school-summary {
+    background-color: #fff;
+    padding: 2rem 2rem;
+
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+
+        [class*='col-'] {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+    .partial {
+        padding: 2rem 0;
+    }
+    .line {
+        border-bottom: 1px solid #eee;
+    }
+    .school-summary__thumnail {
+        padding-left: 10px;
+        width: 25%;
+    }
+
+    .school-summary__info {
+        padding-left: 2rem;
+        width: 25%;
+        &__title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            line-height: 27px;
+        }
+        &__contact {
+            p:not(:last-child) {
+                margin-bottom: 2rem;
+                font-size: 1.4rem;
+                line-height: 16px;
+            }
+            p span {
+                color: #999999;
+            }
+        }
+    }
+    .school-summary__figure {
+        padding-left: 2rem;
+        padding-right: 1rem;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: baseline;
+        align-content: stretch;
+        width: 50%;
+
+        &__item {
+            background: #fbfbfb;
+            border: 1px solid #eeeeee;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            min-width: 95px;
+            min-height: 95px;
+
+            span {
+                font-weight: bold;
+                font-size: 2.5rem;
+            }
+
+            p {
+                font-size: 1.4rem;
+            }
+
+        }
+
+        &__item {
+            margin-left: 9px;
+            margin-right: 9px;
+        }
+        //Except the first and last item
+        &__item:last-child {
+            margin-right: 0;
+        }
+        &__item:first-child {
+            margin-left: 0;
+        }
+
+    }
+
+    .school-summary__intro {
+        h4 {
+            font-size: 1.6rem;
+            line-height: 16px;
+            margin-bottom: 1rem;
+        }
+        p {
+            line-height: 24px;
+            font-size: 1.4rem;
+            color: #666666;
+        }
+    }
+
+}
+//.school-summary__thumnail {
+//    width: 30%;
+//}
+//.description {
+//    margin-top: .6rem;
+//    color: #666;
+//}
