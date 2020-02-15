@@ -7,13 +7,8 @@
         <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
         <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
       </div>
-      <div class="auth_content">
-        <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email" />
-        <app-input v-else type="text" v-model="phone" placeholder="Số điện thoại" />
-        <app-input type="password" v-model="password" placeholder="Mật khẩu" />
-        <app-input type="text" v-model="fullname" placeholder="Họ và tên" />
-      </div>
-      <app-button color="primary" square fullWidth @click="hanldeShowModalOTP">Đăng ký</app-button>
+      <SignupEmail v-show="byEmail" />
+      <SignupPhone v-show="!byEmail" />
       <hr class="mt-4 mb-4" />
       <div>
         <p>Đăng ký nhanh với</p>
@@ -31,19 +26,6 @@
         </div>
       </div>
     </div>
-    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="showModalOTP = false">X</a>
-      </h3>
-
-      <div slot="content">
-        <div class="form-group_border-bottom">
-          <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
-        </div>
-        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
-      </div>
-    </app-modal>
   </div>
 </template>
 
@@ -58,11 +40,15 @@ import {
   createSignupWithEmail
 } from "../../../models/auth/Signup";
 import { formatPhoneNumber } from "~/utils/validations";
+import SignupEmail from "~/components/page/auth/signup/SignupEmail";
+import SignupPhone from "~/components/page/auth/signup/SignupPhone";
 
 export default {
   components: {
     IconFacebook,
-    IconGoogle
+    IconGoogle,
+    SignupEmail,
+    SignupPhone
   },
 
   data() {
@@ -77,7 +63,9 @@ export default {
       showModalOTP: false,
       listQuery: {},
       otp: "",
-      verify_token: ""
+      verify_token: "",
+      modalConfirmEmail: "",
+      modalConfirmOTC: ""
     };
   },
   async mounted() {
@@ -121,24 +109,27 @@ export default {
               token
             );
         const doAdd = this.register(registerModel).then(result => {
-          if (result.success == true) {
-            this.$router.push("/auth/signin");
+          if (result.success == true && !this.byEmail) {
+            // this.$router.push("/auth/signin");
+          } else if (result.success == true && this.byEmail) {
+            this.modalConfirmEmail = true;
           } else {
+            this.modalConfirmOTC = true;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
       }
     },
-    acceptOTP() {
-      this.verifiOtp(this.otp).then(result => {
+    async acceptOTP() {
+      await this.verifiOtp(this.otp).then(result => {
         console.log("result huydv", result);
         if (result) {
-          this.verify_token = result.user.ma;
+          this.verify_token = result.user ? result.user.ma : "";
           console.log("result huydv11111", result);
-          this.submitRegister();
         }
       });
+      this.submitRegister();
     },
     async hanldeShowModalOTP() {
       if (
@@ -161,12 +152,6 @@ export default {
               appVerifier: window.recaptchaVerifier
             };
             this.sendotp(data);
-            // .then(result => {
-            //   console.log("result huydv", result);
-            //   if (result) {
-            //     console.log("result huydv11111", result);
-            //   }
-            // });
           }
         });
       } else {
@@ -178,6 +163,9 @@ export default {
     },
     tabEmail() {
       (this.byEmail = true), (this.password = ""), (this.fullname = "");
+    },
+    redirectSignin() {
+      this.$router.push("/auth/signin");
     }
   }
 };

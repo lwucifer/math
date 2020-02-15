@@ -85,3 +85,17 @@ export const ELEARNING_CREATING_CHAPTER = {
 export const STUDY = {
   SET_STUDY_ELEARNING_LIST: "setStudyElearningList"
 };
+
+export const SCHOOL_CLASSES = {
+  SET_SCHOOL_CLASSES_LIST: "setSchoolClassesList",
+  SET_SCHOOL_CLASSES_ADD: "setSchoolClassesAdd",
+  SET_SCHOOL_CLASSES_EDIT: "setSchoolClassesEdit",
+  SET_SCHOOL_CLASSES_DELETE: "setSchoolClassesDelete",
+};
+
+export const SCHOOL_PROFESSIONAL = {
+  SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
+  SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",
+  SET_SCHOOL_PROFESSIONAL_EDIT: "setSchoolProfessionalEdit",
+  SET_SCHOOL_PROFESSIONAL_DELETE: "setSchoolProfessionalDelete",
+};
