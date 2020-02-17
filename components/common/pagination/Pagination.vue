@@ -3,24 +3,24 @@
     <div class="app-pagination-2" v-if="type === 2">
       <div class="left">
         <span>Số dòng trên một trang</span>
-        <app-select v-model="pager" :options="opts"  class="select-pager"/>
+        <app-select v-model="pager" :options="opts" class="select-pager" @change="goTo(current)"/>
         <span>{{pages.first}}-{{pages.last}} của tổng số {{pages.totalElements}}</span>
       </div>
       <div class="right">
         <span>Đi đến trang</span>
-        <input type="text" class="current" :value="current" @change="(e) => goTo(e.target.value)"/>
+        <input type="text" class="current" :value="current" @change="(e) => goTo(parseInt(e.target.value))" />
         <ul>
-          <li @click="goTo(1)" :class="current == 1 ? 'disable' : ''">
-            <IconAngleDoubleLeft />
+          <li @click="goTo(1, current == 1)" :class="current == 1 ? 'disable' : ''">
+            <IconPrevious />
           </li>
-          <li @click="goTo(prev)" :class="current == 1 ? 'disable' : ''">
+          <li @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
             <IconAngleLeft />
           </li>
-          <li @click="goTo(next)" :class="current == total ? 'disable' : ''">
+          <li @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
             <IconAngleRight />
           </li>
-          <li @click="goTo(total)" :class="current == total ? 'disable' : ''">
-            <IconAngleDoubleRight />
+          <li @click="goTo(total, current == total)" :class="current == total ? 'disable' : ''">
+            <IconStepForward />
           </li>
         </ul>
       </div>
@@ -69,16 +69,15 @@
 <script>
 import IconAngleLeft from "~/assets/svg/design-icons/angle-left.svg?inline";
 import IconAngleRight from "~/assets/svg/design-icons/angle-right.svg?inline";
-import IconAngleDoubleRight from '~/assets/svg/design-icons/angle-double-right.svg?inline';
-import IconAngleDoubleLeft from '~/assets/svg/design-icons/angle-double-left.svg?inline';
-
+import IconPrevious from '~/assets/svg/design-icons/previous.svg?inline';
+import IconStepForward from '~/assets/svg/design-icons/step-forward.svg?inline';
 
 export default {
   components: {
-    IconAngleDoubleRight,
-    IconAngleDoubleLeft,
+    IconPrevious,
+    IconStepForward,
     IconAngleLeft,
-    IconAngleRight
+    IconAngleRight,
   },
 
   data() {
@@ -89,7 +88,7 @@ export default {
         { value: 20, text: "20" },
         { value: 30, text: "30" },
         { value: 50, text: "50" }
-      ],
+      ]
     };
   },
 
@@ -107,12 +106,14 @@ export default {
   },
 
   methods: {
-    goTo(e) {
-      this.$emit("pagechange", {page: e, pager: this.pager});
+    goTo(e, check = false) {
+      if (!check) {
+        this.$emit("pagechange", { page: e, pager: this.pager });
+      }
     }
   },
 
-  created () {
+  created() {
     this.opt = this.pagination.pager;
   },
 
@@ -134,7 +135,7 @@ export default {
         ? this.pagination.page + 1
         : null;
     }
-  },
+  }
 };
 </script>
 
