@@ -79,3 +79,12 @@ export const formatPhoneNumber = _phoneNumber => {
         return _phoneNumber;
     }
 };
+/**
+ * validate password
+ * @param {password} _password
+ */
+export const validatePassword = _password => {
+    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,32}$/;
+    console.log("aaa", _password, re.test(_password));
+    return re.test(_password);
+};
