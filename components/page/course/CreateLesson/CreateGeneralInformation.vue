@@ -95,8 +95,8 @@ export default {
   },
 
   methods: {
-    handleUploadChange(event) {
-      this.avatar = Array.from(event.target.files);
+    handleUploadChange(fileList, event) {
+      this.avatar = Array.from(fileList);
 
       getBase64(this.avatar[0], src => {
         this.avatarSrc = src;

@@ -28,20 +28,23 @@
       </div>
 
       <div class="col-md-9">
-        <CreateGeneralLessonInformation />
+        <LessonCreateGeneralInformation class="mb-5"/>
+        <LessonCreateLearningContent />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CreateGeneralLessonInformation from "~/components/page/course/CreateLesson/CreateGeneralInformation";
+import LessonCreateGeneralInformation from "~/components/page/course/CreateLesson/CreateGeneralInformation";
+import LessonCreateLearningContent from "~/components/page/course/CreateLesson/CreateLearningContent";
 
 export default {
   layout: "create",
 
   components: {
-    CreateGeneralLessonInformation
+    LessonCreateGeneralInformation,
+    LessonCreateLearningContent
   },
 
   data() {
