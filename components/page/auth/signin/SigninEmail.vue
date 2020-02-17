@@ -84,7 +84,6 @@ export default {
           this.password,
           token
         );
-        debugger;
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$router.push("/");
