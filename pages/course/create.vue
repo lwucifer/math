@@ -27,77 +27,27 @@
         </aside>
       </div>
 
-      <div class="col-md-9"></div>
+      <div class="col-md-9">
+        <CreateGeneralLessonInformation />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CourseSide from "~/components/page/course/CourseSide";
-import IconList from "~/assets/svg/icons/list.svg?inline";
-import IconListDark from "~/assets/svg/icons/list-dark.svg?inline";
-import IconPlus from "~/assets/svg/icons/plus.svg?inline";
-import IconUp from "~/assets/svg/icons/up.svg?inline";
-import IconClose from "~/assets/svg/icons/close.svg?inline";
-import IconTick from "~/assets/svg/icons/tick.svg?inline";
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
+import CreateGeneralLessonInformation from "~/components/page/course/CreateLesson/CreateGeneralInformation";
 
 export default {
-  name: "Course",
-
   layout: "create",
 
   components: {
-    CourseSide,
-    IconListDark,
-    IconList,
-    IconPlus,
-    IconUp,
-    IconClose,
-    IconTick
+    CreateGeneralLessonInformation
   },
 
   data() {
     return {
-      isAuthenticated: false,
-      file: null,
-      name: null,
-      catChild: null,
-      cat: null,
-      desc: null,
-      content: null,
-      price: null,
-      off: null,
-      active_el: 1,
-      catOpts: [
-        { value: 1, text: "Công khai" },
-        { value: 2, text: "Bạn bè" },
-        { value: 3, text: "Chỉ mình tôi" }
-      ]
     };
   },
-  computed: {
-    ...mapState("auth", ["loggedUser"])
-  },
-
-  watch: {},
-
-  methods: {
-    active(id) {
-      if (this.active_el == id) {
-        this.active_el = null;
-      } else {
-        this.active_el = id;
-      }
-    },
-    remove(id) {
-      const that = this;
-      that.chapters = _.filter(that.chapters, function(item) {
-        return item.id !== id;
-      });
-    }
-  }
 };
 </script>
 
