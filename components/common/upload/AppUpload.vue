@@ -11,7 +11,18 @@
         v-on="uploadListeners"
       />
       <slot>
-        <span>Click to upload File</span>
+        <div class="app-upload__default-slot">
+          <div class="app-upload__control">
+            <div class="app-upload__text">
+              <span class="app-upload__name-file" v-if="innerFileList.length">
+                <slot name="fileName" :innerFileList="innerFileList">{{ innerFileList[0] ? innerFileList[0].name : '' }}</slot>
+              </span>
+              <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
+            </div>
+            <app-button class="app-upload__btn-choose-file" square>Chọn file</app-button>
+          </div>
+          <slot name="hint"></slot>
+        </div>
       </slot>
     </span>
   </div>
@@ -26,12 +37,16 @@ export default {
     fileList: {
       type: Array,
       default: () => []
+    },
+    placeholder: {
+      type: String
     }
   },
 
   data() {
     return {
-      input: true
+      input: true,
+      innerFileList: []
     };
   },
 
@@ -48,7 +63,8 @@ export default {
         {
           // This ensures that the component works with v-model
           change: function(event) {
-            vm.$emit("change", event);
+            vm.innerFileList = event.target.files;
+            vm.$emit("change", event.target.files, event);
             vm.input = false;
             setTimeout(() => (vm.input = true));
           }

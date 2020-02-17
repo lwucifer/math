@@ -9,3 +9,32 @@
 .app-upload {
     cursor: pointer;
 }
+
+.app-upload__control {
+    display: flex;
+    align-items: center;
+}
+
+.app-upload__btn-choose-file {
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.app-upload__text {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.6rem;
+    letter-spacing: 0.01em;
+    border: 1px solid $color-border;
+    border-right: 0;
+}
+
+.app-upload__placeholder {
+    color: $color-disabled;
+}
+
+.app-upload__file-name {
+    color: $color-text-gray;
+}
