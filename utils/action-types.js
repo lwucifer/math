@@ -137,3 +137,17 @@ export const SCHOOL_PROFESSIONAL = {
     EDIT: 'schoolProfessionalEdit',
     DELETE: 'schoolProfessionalDelete',
 }
+
+export const SCHOOL_STUDENTS = {
+    LIST: 'schoolStudentsList',
+    ADD: 'schoolStudentsAdd',
+    EDIT: 'schoolStudentsEdit',
+    DELETE: 'schoolStudentsDelete',
+}
+
+export const SCHOOL_TEACHERS = {
+    LIST: 'schoolTeachersList',
+    ADD: 'schoolTeachersAdd',
+    EDIT: 'schoolTeachersEdit',
+    DELETE: 'schoolTeachersDelete',
+}

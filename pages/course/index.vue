@@ -92,9 +92,6 @@ export default {
   async fetch({ params, query, store }) {
     console.log("get earning summary");
     await store.dispatch(`course/${actionTypes.ELEARNING_SUMMARY.LIST}`)
-  },
-
-  async fetch({ params, query, store }) {
     console.log("get my course");
     await store.dispatch(`study-elearning/${actionTypes.STUDY.ELEARNING}`)
   },
