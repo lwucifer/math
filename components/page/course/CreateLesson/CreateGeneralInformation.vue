@@ -16,9 +16,14 @@
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
             <app-select
+              class="cgi-select"
               :options="[{ value: 0, text: 'Lớp A'}, { value: 1, text: 'Lớp B'}]"
               placeholder="Chọn lớp"
-            ></app-select>
+            >
+              <template slot="placeholder-icon">
+                <IconAngleDown class="icon" />
+              </template>
+            </app-select>
           </div>
         </div>
 
@@ -26,9 +31,14 @@
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
             <app-select
+              class="cgi-select"
               :options="[{ value: 0, text: 'Môn học 1'}, { value: 1, text: 'Môn học 2'}]"
               placeholder="Chọn môn học"
-            ></app-select>
+            >
+              <template slot="placeholder-icon">
+                <IconAngleDown class="icon" />
+              </template>
+            </app-select>
           </div>
         </div>
       </div>
@@ -79,12 +89,14 @@
 <script>
 import { getBase64 } from "~/utils/file";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   components: {
     IconCamera,
-    IconClose
+    IconClose,
+    IconAngleDown
   },
 
   data() {
