@@ -1,7 +1,7 @@
 import Vue from "vue"
 
 /**
- * 10000 => "10,000"
+ * 10000 => "10.000"
  * @param {number} num
  */
 function toThousandFilter(num, separator = '.') {
