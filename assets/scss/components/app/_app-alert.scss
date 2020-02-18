@@ -1,7 +1,8 @@
 .app-alert {
+    position: relative;
     display: flex;
     align-items: center;
-    padding: 1.2rem 1.5rem;
+    padding: 1.5rem;
 
     &__icon {
         margin-right: 0.5rem;
@@ -9,6 +10,19 @@
         svg {
             display: block;
             font-size: 2rem;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: .5rem;
+        
+        svg {
+            display: block;
+            font-size: 1.2rem;
+            fill: $color-disabled;
         }
     }
 }
@@ -22,4 +36,8 @@
             fill: $color;
         }
     }
+}
+
+.app-alert--has-close {
+    padding-right: 4rem;
 }
