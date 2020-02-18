@@ -89,6 +89,7 @@ const actions = {
                 .catch(error => {
                     // User couldn't sign in (bad verification code?)
                     // ...
+                    console.log("error", error);
                     return error;
                 });
         }
