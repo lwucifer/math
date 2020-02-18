@@ -1,37 +1,19 @@
 <template>
   <div class="app-input" :class="classSize">
     <label v-if="label" :class="classLabel">{{label}}</label>
-    <div class="app-input__input" v-else>
-      <!-- Textarea  -->
-      <textarea
-        v-if="textarea"
-        v-bind="$attrs"
-        :rows="rows"
-        :type="type"
-        :value="value"
-        @input="updateInput"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
-      />
-      <!-- Input Text  -->
-      <input
-        v-else
-        v-bind="$attrs"
-        :type="type"
-        :value="value"
-        :disabled="disabled"
-        @input="updateInput"
-        :placeholder="placeholder"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
-      />
-      <div class="unit" v-if="validate == 1 || hasUnitSlot">
-        <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
-        <slot name="unit"/>
-      </div>
-      <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+    <div class="app-input-file-upload" v-else-if="type == 'file'">
+      <label class="app-input-file-upload__label">
+        {{placeholder}}
+        <input
+          type="file"
+          class="app-input-file-upload__input"
+          :value="value"
+          :disabled="disabled"
+          @input="updateInput"
+        />
+        <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+      </label>
     </div>
-  </div>
 </template>
 
 <script>
@@ -54,26 +36,20 @@ export default {
       required: false,
       default: ""
     },
+    validate: {
+      type: [String, Number],
+      required: false,
+      default: 0
+    },
     placeholder: {
       type: String,
       required: false,
       default: ""
     },
-    type: {
-      type: String,
-      required: false,
-      default: "text"
-    },
     size: {
       type: String,
       required: false,
       default: ""
-    },
-    disabled: Boolean,
-    validate: {
-      type: [String, Number],
-      required: false,
-      default: 0
     },
     message: {
       type: String,
@@ -81,14 +57,22 @@ export default {
       default: ""
     },
     label: String,
-    labelFixed: Boolean,
-    labelBold: Boolean,
-    textarea: Boolean,
-    rows: {
-      type: [String, Number],
-      required: false,
-      default: 6
+    labelFixed: {
+      type: Boolean,
+      default: false
     },
+    labelBold: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -102,10 +86,6 @@ export default {
   },
 
   computed: {
-    hasUnitSlot() {
-      return !!this.$slots['unit'];
-    },
-    
     classSize() {
       const disableClass = {
         disabled: this.disabled

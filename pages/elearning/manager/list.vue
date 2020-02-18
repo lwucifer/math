@@ -6,68 +6,71 @@
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">
-          <h5 class="color-primary mb-3 elearning-history__title">Bài giảng và khóa học</h5>
-          <div class="elearning-manager__tab">
-              <div></div>
+          <div class="pl-4 pr-4">
+            <h5 class="color-primary mb-3">Bài giảng và khóa học</h5>
+            <div class="elearning-manager__tab">
+              <a @click="tab = 1" :class="tab == 1 ? 'active' : ''">Đã đăng</a>
+              <a @click="tab = 2" :class="tab == 2 ? 'active' : ''">Đang soạn</a>
+              <a @click="tab = 3" :class="tab == 3 ? 'active' : ''">Chờ duyệt</a>
+              <a @click="tab = 4" :class="tab == 4 ? 'active' : ''">Bị từ chối</a>
+            </div>
+            <div class="elearning-manager__serch">
+              <app-button rounded size="sm" class="mr-4" normal>
+                <IconFilter />Lọc kết quả
+              </app-button>
+              <app-checkbox label="Miễn phí" />
+              <app-select :options="opts1" v-model="opt1" size="sm" />
+              <app-select :options="opts2" v-model="opt2" size="sm" />
+              <app-input class="mb-0" size="sm" placeholder="Nhập để tìm kiếm...">
+                <a class="d-flex" slot="unit">
+                  <IconSearch width="17" height="17" />
+                </a>
+              </app-input>
+            </div>
+            <app-button color="secondary" square size="sm" normal class="mb-4">
+              <IconTrashAlt height="15" width="15" class="fill-white mr-2" />Xoá khỏi danh sách
+            </app-button>
           </div>
 
-          <div class="elearning-history__statistical">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="item">
-                  <p>Hôm nay</p>
-                  <strong>150.000 đ</strong>
+          <app-table
+            :heads="heads"
+            :pagination="pagination"
+            @pagechange="onPageChange"
+            @sort="sort"
+            :data="list"
+            :sortBy="list"
+            selectAll
+          >
+            <tr v-for="(item, index) in list" :key="index">
+              <td class="pr-0">
+                <app-checkbox />
+              </td>
+              <td>
+                <div class="d-flex">
+                  <div>
+                    <img :src="item.image" alt />
+                  </div>
+                  <div class="ml-3 max-w-100">
+                    <strong>{{item.name}}</strong>
+                    <div class="mt-3 color-666">{{item.desc}}</div>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-3">
-                <div class="item">
-                  <p>Tuần này</p>
-                  <strong>550.000 đ</strong>
+              </td>
+              <td v-html="item.price"></td>
+              <td>
+                <span v-if="item.type == 1" class="color-primary">Công khai</span>
+                <span v-else-if="item.type == 2" class="color-red">Riêng tư</span>
+                <span v-else>-</span>
+              </td>
+              <td v-html="item.name"></td>
+              <td>
+                <div class="text-desc">
+                  <p class="text-desc__text">{{item.content}}</p>
+                  <div class="text-desc__sub">{{item.content}}</div>
                 </div>
-              </div>
-              <div class="col-md-3">
-                <div class="item">
-                  <p>Tháng này</p>
-                  <strong>1.500.000 đ</strong>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="item">
-                  <p>Tháng trước</p>
-                  <strong>2.500.000 đ</strong>
-                </div>
-              </div>
-            </div>
-            <hr class="mt-4" />
-          </div>
-
-          <div class="elearning-history__table">
-            <div class="d-flex mb-3 pl-4 pr-4">
-              <n-link :to="'/elearning/revenue/'" class="bold text-decoration-none d-flex-center">
-                <IconArrowLeft class="fill-primary" />Quay lại
-              </n-link>
-              <p class="ml-auto">Chi tiết doanh số từ 01/10/2019 đến 01/11/2019</p>
-            </div>
-            <app-table
-              :heads="heads"
-              :pagination="pagination"
-              @pagechange="onPageChange"
-              @sort="sort"
-              :data="list"
-              :sortBy="list"
-            >
-                <tr v-for="(item, index) in list" :key="index">
-                    <td>
-                        <app-checkbox/>
-                    </td>
-                    <td v-html="item.time"></td>
-                    <td v-html="item.code"></td>
-                    <td v-html="item.customer"></td>
-                    <td v-html="item.name"></td>
-                    <td v-html="item.price"></td>
-                </tr>
-            </app-table>
-          </div>
+              </td>
+            </tr>
+          </app-table>
         </div>
       </div>
     </div>
@@ -76,7 +79,12 @@
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
-import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+import IconSearch from "~/assets/svg/icons/search.svg?inline";
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+
+// Import faked data
+import {} from "~/server/fakedata/elearning/test";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -86,41 +94,37 @@ export default {
 
   components: {
     ElearningManagerSide,
-    IconArrowLeft
+    IconSearch,
+    IconTrashAlt,
+    IconFilter
   },
 
   data() {
     return {
+      tab: 1,
       heads: [
         {
-          name: "",
-          text: "",
-          selectAll: true
-        },
-        {
-          name: "time",
-          text: "Thời gian",
-          sort: true
-        },
-        {
-          name: "code",
-          text: "Mã đơn hàng",
-          sort: true
-        },
-        {
-          name: "customer",
-          text: "Khách hàng",
-          sort: false
-        },
-        {
           name: "name",
-          text: "Nội dung",
+          text: "Bài giảng và khóa học",
           sort: true
         },
         {
           name: "price",
-          text: "Giá trị",
+          text: "Học phí",
           sort: true
+        },
+        {
+          name: "",
+          text: "Hiển thị"
+        },
+        {
+          name: "date",
+          text: "Ngày đăng",
+          sort: true
+        },
+        {
+          name: "content",
+          text: "Lý do bị từ chối"
         }
       ],
       isAuthenticated: true,
@@ -137,9 +141,15 @@ export default {
       time2: null,
       opt1: "",
       opts1: [
-        { value: "", text: "Loại giao dịch" },
+        { value: "", text: "Theo loại" },
         { value: "1", text: "Mua" },
         { value: "2", text: "Bán" }
+      ],
+      opt2: "",
+      opts2: [
+        { value: "", text: "Theo hiển thị" },
+        { value: "1", text: "Tăng dần" },
+        { value: "2", text: "Giảm dần" }
       ],
       teacher: {
         id: "1",
@@ -155,100 +165,113 @@ export default {
           code: "S88HKDKD",
           pay: 2,
           type: 2,
-          time: "16:50:30 19-11-2019"
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "9290000",
+          name: "Mua khóa học Đại số 11",
+          price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
           pay: 2,
           type: 2,
           time: "16:50:30 19-11-2019",
-          status: "<span>xxxx</span>"
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 22",
-          price: "7290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 44",
-          price: "3290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
+          name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          pay: 2,
+          type: 2,
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 25",
-          price: "1290000",
+          name: "Mua khóa học Đại số 11",
+          price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          pay: 2,
+          type: 2,
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "4290000",
+          name: "Mua khóa học Đại số 11",
+          price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          pay: 2,
+          type: 2,
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1590000",
+          name: "Mua khóa học Đại số 11",
+          price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          pay: 2,
+          type: 2,
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1660000",
+          name: "Mua khóa học Đại số 11",
+          price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          pay: 2,
+          type: 2,
+          time: "16:50:30 19-11-2019",
+          date: "19/11/2019",
+          image: "https://picsum.photos/103/61",
+          desc: "Mô tả khóa học",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         }
-      ],
-      active_el: 0
+      ]
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"]),
+    ...mapState("auth", ["loggedUser"])
   },
 
   methods: {
-    sort(e){
-        this.list = [...e];
+    sort(e) {
+      this.list = [...e];
     },
     onPageChange(e) {
       const that = this;
@@ -261,4 +284,5 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
+@import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
 </style>
