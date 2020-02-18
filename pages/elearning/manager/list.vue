@@ -6,21 +6,12 @@
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">
-          <div class="elearning-history__title">
-            <h5 class="color-primary mb-3">Doanh thu</h5>
-            <div class="d-flex-center">
-              <p>
-                <span>Số dư:</span>
-                <strong class="color-red h5">15.000.000 đ</strong>
-              </p>
-              <app-button color="secondary" size="sm" class="ml-4" square>Rút tiền</app-button>
-              <n-link class="ml-auto" :to="'/elearning/revenue/withdrawal'">Xem lịch sử rút tiền</n-link>
-            </div>
-            <hr class="mt-3" />
+          <h5 class="color-primary mb-3 elearning-history__title">Bài giảng và khóa học</h5>
+          <div class="elearning-manager__tab">
+              <div></div>
           </div>
 
           <div class="elearning-history__statistical">
-            <h5 class="mt-15 mb-3">Thống kê doanh thu</h5>
             <div class="row">
               <div class="col-md-3">
                 <div class="item">
@@ -57,7 +48,25 @@
               </n-link>
               <p class="ml-auto">Chi tiết doanh số từ 01/10/2019 đến 01/11/2019</p>
             </div>
-            <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>
+            <app-table
+              :heads="heads"
+              :pagination="pagination"
+              @pagechange="onPageChange"
+              @sort="sort"
+              :data="list"
+              :sortBy="list"
+            >
+                <tr v-for="(item, index) in list" :key="index">
+                    <td>
+                        <app-checkbox/>
+                    </td>
+                    <td v-html="item.time"></td>
+                    <td v-html="item.code"></td>
+                    <td v-html="item.customer"></td>
+                    <td v-html="item.name"></td>
+                    <td v-html="item.price"></td>
+                </tr>
+            </app-table>
           </div>
         </div>
       </div>
@@ -84,6 +93,11 @@ export default {
     return {
       heads: [
         {
+          name: "",
+          text: "",
+          selectAll: true
+        },
+        {
           name: "time",
           text: "Thời gian",
           sort: true
@@ -101,13 +115,13 @@ export default {
         {
           name: "name",
           text: "Nội dung",
-          sort: false
+          sort: true
         },
         {
           name: "price",
           text: "Giá trị",
           sort: true
-        },
+        }
       ],
       isAuthenticated: true,
       pagination: {
@@ -135,7 +149,7 @@ export default {
       list: [
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
+          name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
@@ -156,7 +170,7 @@ export default {
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
+          name: "Mua khóa học Đại số 22",
           price: "7290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
@@ -166,7 +180,7 @@ export default {
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
+          name: "Mua khóa học Đại số 44",
           price: "3290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
@@ -186,7 +200,7 @@ export default {
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 10",
+          name: "Mua khóa học Đại số 25",
           price: "1290000",
           customer: "Nguyễn Văn A",
           code: "S88HKDKD",
@@ -229,10 +243,13 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
   },
 
   methods: {
+    sort(e){
+        this.list = [...e];
+    },
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };

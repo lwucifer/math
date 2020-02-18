@@ -5,14 +5,23 @@
         <ElearningSide active="1" :teacher="teacher" />
       </div>
       <div class="col-md-9">
-        <div class="elearning-account__main">
-          <h3 class="color-primary mb-4">Thông tin tài khoản</h3>
+        <div class="elearning-account__main box">
+          <h5 class="color-primary mb-3 elearning-history__title">
+            Thông tin tài khoản
+            <hr class="mt-3" />
+          </h5>
           <app-input labelBold labelFixed :value="name" label="Họ và tên" disabled />
           <app-input labelBold labelFixed :value="school" label="Trường" disabled />
           <app-input labelBold labelFixed :value="code" label="Mã giáo viên" disabled />
           <app-input labelBold labelFixed :value="specialize" label="Tổ chuyên môn" disabled />
           <app-input labelBold labelFixed :value="classPrimary" label="Lớp chủ nhiệm" disabled />
-          <app-input labelBold labelFixed :value="classSecondary" label="Các lớp giảng dạy" disabled />
+          <app-input
+            labelBold
+            labelFixed
+            :value="classSecondary"
+            label="Các lớp giảng dạy"
+            disabled
+          />
 
           <app-input labelBold labelFixed v-model="phone" label="Số điện thoại" />
           <app-input labelBold labelFixed v-model="email" label="Email" />
@@ -20,7 +29,7 @@
             <app-input label="Giới tính" type="slot" labelBold labelFixed>
               <app-date-picker v-model="birthday" />
             </app-input>
-            <app-input label="Giới tính" type="slot" labelBold >
+            <app-input label="Giới tính" type="slot" labelBold>
               <app-select v-model="sex" :options="sexs" />
             </app-input>
           </div>
