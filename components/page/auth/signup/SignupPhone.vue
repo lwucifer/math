@@ -47,7 +47,13 @@
 
       <div slot="content">
         <div class="form-group_border-bottom">
-          <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
+          <input
+            type="text"
+            v-model="otp"
+            maxlength="6"
+            class="form-control ml-0"
+            placeholder="Nhập mã OTP"
+          />
         </div>
         <p class="color-red text-center full-width mt-2" v-if="errorOtp">{{messageErrorOtp}}</p>
         <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
@@ -176,7 +182,7 @@ export default {
     async acceptOTP() {
       await this.verifiOtp(this.otp).then(result => {
         console.log("result huydv", result);
-        if (!result.code) {
+        if (result && result.user) {
           this.verify_token = result.user ? result.user.ma : "";
           console.log("result huydv11111", result);
           this.submitRegister();

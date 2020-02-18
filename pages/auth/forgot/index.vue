@@ -33,6 +33,26 @@
         <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
       </div>
     </app-modal>
+    <app-modal
+      centered
+      :width="400"
+      :component-class="{ 'auth-modal': true }"
+      v-if="modalConfirmEmail"
+    >
+      <!-- <h3 class="color-primary" slot="header">Đăng ký thành công</h3> -->
+
+      <div slot="content">
+        <p class="line-height-2">
+          <br />Vui lòng xác thực tài khoản qua email
+          <br />
+          <span class="color-primary">{{this.email}}</span>
+        </p>
+        <n-link
+          :to="'/auth/signin'"
+          class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
+        >Xác thực tài khoản</n-link>
+      </div>
+    </app-modal>
   </div>
 </template>
 
@@ -56,7 +76,8 @@ export default {
       password: "",
       error: false,
       showModalOTP: false,
-      otp: ""
+      otp: "",
+      modalConfirmEmail: false
     };
   },
 
@@ -77,7 +98,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["resetPasswordRequest", "sendotp", "verifiOtp"]),
+    ...mapActions("auth", ["resetPasswordRequest", "sendotp"]),
     async resetPass() {
       try {
         const token = await this.$recaptcha.execute("login");
@@ -86,7 +107,7 @@ export default {
         let resetModel = createResetWithEmail(this.email, token);
         const doAdd = this.resetPasswordRequest(resetModel).then(result => {
           if (result.success == true) {
-            // this.$router.push("/auth/signin");
+            this.modalConfirmEmail = true;
           } else {
           }
         });
@@ -104,9 +125,7 @@ export default {
           console.log("result huydv", result);
           if (result) {
             console.log("result huydv11111", result);
-            this.$router.push(
-              `/auth/forgot/changepass?phone=${formatPhoneNumber(this.email)}`
-            );
+            this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
           }
         });
       } else {
