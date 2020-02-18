@@ -63,12 +63,11 @@ export default function({ store, $axios, redirect }) {
                     isAlreadyFetchingAccessToken = false;
                     if (result.success == true) {
                         onAccessTokenFetched(result.data.access_token);
+                    } else {
+                        // remove token and redirect to login
+                        store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
+                        redirect(`/auth/signin`);
                     }
-                    // else {
-                    //     // remove token and redirect to login
-                    //     store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
-                    //     redirect(`/auth/signin`);
-                    // }
                 });
             }
 
