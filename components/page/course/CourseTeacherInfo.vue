@@ -16,7 +16,7 @@
           Khóa học
         </div>
         <div>
-          <strong class="color-primary">2.254</strong>
+          <strong class="color-primary"> 2254 </strong>
           Học viên
         </div>
       </div>
