@@ -120,6 +120,41 @@ export const ELEARNING_CREATING_CHAPTER = {
     DELETE: "elearningCreatingChapterDelete"
 };
 
+export const ELEARNING_CREATING_DOC = {
+    LIST: "elearningCreatingDocList",
+    ADD: "elearningCreatingDocAdd",
+    EDIT: "elearningCreatingDocEdit",
+    DELETE: "elearningCreatingDocDelete"
+};
+
+export const ELEARNING_CREATING_EXERCISES = {
+    LIST: "elearningCreatingExercisesList",
+    ADD: "elearningCreatingExercisesAdd",
+    EDIT: "elearningCreatingExercisesEdit",
+    DELETE: "elearningCreatingExercisesDelete"
+};
+
+export const ELEARNING_CREATING_GENERAL = {
+    LIST: "elearningCreatingGeneralList",
+    ADD: "elearningCreatingGeneralAdd",
+    EDIT: "elearningCreatingGeneralEdit",
+    DELETE: "elearningCreatingGeneralDelete"
+};
+
+export const ELEARNING_CREATING_LESSONS = {
+    LIST: "elearningCreatingLessonsList",
+    ADD: "elearningCreatingLessonsAdd",
+    EDIT: "elearningCreatingLessonsEdit",
+    DELETE: "elearningCreatingLessonsDelete"
+};
+
+export const ELEARNING_CREATING_QUESTIONS = {
+    LIST: "elearningCreatingQuestionsList",
+    ADD: "elearningCreatingQuestionsAdd",
+    EDIT: "elearningCreatingQuestionsEdit",
+    DELETE: "elearningCreatingQuestionsDelete"
+};
+
 export const STUDY = {
     ELEARNING: 'studyElearningList'
 }
