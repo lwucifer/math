@@ -37,6 +37,7 @@ $colors: (
     success: lighten($color-green, 10),
     error: $color-red,
     warning: darken($color-yellow, 10),
+    disabled: $color-disabled
 ) !default;
 
 $text-colors: (

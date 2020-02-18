@@ -99,3 +99,17 @@ export const SCHOOL_PROFESSIONAL = {
   SET_SCHOOL_PROFESSIONAL_EDIT: "setSchoolProfessionalEdit",
   SET_SCHOOL_PROFESSIONAL_DELETE: "setSchoolProfessionalDelete",
 };
+
+export const SCHOOL_STUDENTS = {
+  SET_SCHOOL_STUDENTS_LIST: "setSchoolStudentsList",
+  SET_SCHOOL_STUDENTS_ADD: "setSchoolStudentsAdd",
+  SET_SCHOOL_STUDENTS_EDIT: "setSchoolStudentsEdit",
+  SET_SCHOOL_STUDENTS_DELETE: "setSchoolStudentsDelete",
+};
+
+export const SCHOOL_TEACHERS = {
+  SET_SCHOOL_TEACHERS_LIST: "setSchoolTeachersList",
+  SET_SCHOOL_TEACHERS_ADD: "setSchoolTeachersAdd",
+  SET_SCHOOL_TEACHERS_EDIT: "setSchoolTeachersEdit",
+  SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete",
+};

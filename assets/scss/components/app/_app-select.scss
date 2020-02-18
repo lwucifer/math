@@ -1,6 +1,12 @@
 .app-select {
     position: relative;
     display: inline-block;
+
+    &.active {
+        .app-select__selected {
+            border-color: $color-primary;
+        }
+    }
 }
 
 .app-select__selected {
@@ -18,6 +24,10 @@
         .app-select__clear {
             visibility: visible;
         }
+    }
+
+    &:focus {
+        outline: none;
     }
 }
 

@@ -98,7 +98,7 @@
         }
         input, textarea {
             &:focus {
-                border-color: #0070E0;
+                border-color: $color-primary;
             }
             &.disabled {
                 background-color: #eee;

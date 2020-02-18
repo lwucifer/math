@@ -18,7 +18,7 @@ export default {
     },
     color: {
       type: String,
-      default: "primary" // 'primary' | 'white'
+      default: "primary" // 'primary' | 'white', ...
     },
     to: {
       type: [String, Object] // Vue-router prop. Denotes the target route of the link.
@@ -50,6 +50,7 @@ export default {
         "btn--color-gray": this.color === "gray",
         "btn--color-red": this.color === "red",
         "btn--color-default": this.color === "default",
+        "btn--color-disabled": this.color === "disabled"
       };
 
       const outlineColorClasses = {

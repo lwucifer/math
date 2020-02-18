@@ -37,13 +37,13 @@
               <div class="col-md-3">
                 <div class="item">
                   <p>Tháng này</p>
-                  <strong>1500.000 đ</strong>
+                  <strong>1.500.000 đ</strong>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="item">
                   <p>Tháng trước</p>
-                  <strong>2500.000 đ</strong>
+                  <strong>2.500.000 đ</strong>
                 </div>
               </div>
             </div>
@@ -57,51 +57,6 @@
               </n-link>
               <p class="ml-auto">Chi tiết doanh số từ 01/10/2019 đến 01/11/2019</p>
             </div>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>
-                    Thời gian
-                    <hr />
-                  </th>
-                  <th>
-                    Mã đơn hàng
-                    <hr />
-                  </th>
-                  <th>
-                    Khách hàng
-                    <hr />
-                  </th>
-                  <th>
-                    Nội dung
-                    <hr />
-                  </th>
-                  <th>
-                    Giá trị
-                    <hr />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in list" :key="index">
-                  <td>{{ item.time }}</td>
-                  <td>{{ item.code }}</td>
-                  <td>{{ item.customer }}</td>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.price }} đ</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="pagination">
-              <hr />
-              <app-pagination
-                :type="2"
-                :pagination="pagination"
-                @pagechange="onPageChange"
-                class="mt-3"
-              />
-            </div>
-
             <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>
           </div>
         </div>
@@ -152,7 +107,7 @@ export default {
           name: "price",
           text: "Giá trị",
           sort: true
-        }
+        },
       ],
       isAuthenticated: true,
       pagination: {
@@ -196,7 +151,8 @@ export default {
           code: "S88HKDKD",
           pay: 2,
           type: 2,
-          time: "16:50:30 19-11-2019"
+          time: "16:50:30 19-11-2019",
+          status: "<span>xxxx</span>"
         },
         {
           id: 1,

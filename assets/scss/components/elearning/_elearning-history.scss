@@ -41,10 +41,6 @@
 	.elearning-history__title {
 		padding: 0 2rem;
 
-		h3 {
-			padding: 0;
-		}
-
 		a:any-link {
 			color: #333;
 
@@ -55,7 +51,7 @@
 	}
 
 	.dates,
-	h3 {
+	h5.elearning-history__title {
 		padding: 0 2rem;
 	}
 
