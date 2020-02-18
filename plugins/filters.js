@@ -5,14 +5,15 @@ import Vue from "vue"
  * @param {number} num
  */
 function toThousandFilter(num, separator = '.') {
+    console.log("[toThousandFilter]", num)
     return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, separator))
 }
 
-const FILTERS = {
-    toThousandFilter: toThousandFilter
+const filters = {
+    toThousandFilter,
 }
 
 // register global utility filters
-Object.keys(FILTERS).forEach(key => {
-    Vue.filter(key, FILTERS[key])
+export default Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
 })
