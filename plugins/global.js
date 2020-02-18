@@ -21,6 +21,7 @@ import AppTable from "~/components/common/table/AppTable";
 import AppCheckbox from "~/components/common/checkbox/AppCheckbox";
 import AppRadio from "~/components/common/radio/AppRadio";
 import AppUpload from "~/components/common/upload/AppUpload";
+import AppAlert from "~/components/common/alert/AppAlert";
 
 Vue.component("app-button", AppButton);
 Vue.component("app-divider", AppDivider);
@@ -43,3 +44,4 @@ Vue.component("app-table", AppTable);
 Vue.component("app-checkbox", AppCheckbox);
 Vue.component("app-radio", AppRadio);
 Vue.component("app-upload", AppUpload);
+Vue.component("app-alert", AppAlert);
