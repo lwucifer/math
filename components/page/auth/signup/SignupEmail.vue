@@ -45,6 +45,13 @@
 import * as actionTypes from "../../../../utils/action-types";
 import { mapState, mapActions } from "vuex";
 import { createSignupWithEmail } from "../../../../models/auth/Signup";
+import { ERRORS } from "../../../../utils/error-code";
+import {
+  required,
+  email,
+  minLength,
+  maxLength
+} from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -53,8 +60,22 @@ export default {
       password: "",
       fullname: "",
       error: "",
-      modalConfirmEmail: false
+      modalConfirmEmail: false,
+      errorMessage: {
+        email: "",
+        password: "",
+        fullname: ""
+      },
+      validateProps: { password: "", email: "", fullname: "" },
+      validate: { password: true },
+      errorRespon: false,
+      messageErrorLogin: ""
     };
+  },
+  validations: {
+    email: { required, minLength: minLength(10) },
+    password: { required },
+    fullname: { required, minLength: minLength(8), maxLength: maxLength(32) }
   },
   methods: {
     ...mapActions("auth", ["register"]),
