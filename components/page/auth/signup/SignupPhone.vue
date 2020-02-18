@@ -34,7 +34,6 @@
     </div>
     <app-button
       color="primary"
-      type="submit"
       square
       fullWidth
       :disabled="disabledBtnRegister"
@@ -50,6 +49,7 @@
         <div class="form-group_border-bottom">
           <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
         </div>
+        <p class="color-red text-center full-width mt-2" v-if="errorOtp">{{messageErrorOtp}}</p>
         <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
       </div>
     </app-modal>
@@ -103,7 +103,9 @@ export default {
       validateProps: { password: "", phone: "", fullname: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorRegister: ""
+      messageErrorRegister: "",
+      errorOtp: false,
+      messageErrorOtp: ""
     };
   },
   validations: {
@@ -133,6 +135,8 @@ export default {
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
             this.modalConfirmOTC = true;
+          } else {
+            this.showErrorWhenRegister(result);
           }
         });
       } catch (error) {
@@ -161,20 +165,30 @@ export default {
                   "Số điện thoại bạn nhập không chính xác";
               }
             });
-          } else {
-            this.errorRespon = true;
-            this.messageErrorRegister = "Số điện thoại bạn nhập đã đăng ký";
           }
+          // else {
+          //   this.errorRespon = true;
+          //   this.messageErrorRegister = "Số điện thoại bạn nhập đã đăng ký";
+          // }
         });
       }
     },
     async acceptOTP() {
       await this.verifiOtp(this.otp).then(result => {
         console.log("result huydv", result);
-        if (result) {
+        if (!result.code) {
           this.verify_token = result.user ? result.user.ma : "";
           console.log("result huydv11111", result);
           this.submitRegister();
+        } else {
+          this.errorOtp = true;
+          if (result.code == "auth/invalid-verification-code") {
+            this.messageErrorOtp = "Mã OTP bạn nhập không đúng";
+          } else if (result.code == "auth/code-expired") {
+            this.messageErrorOtp = "Mã OTP của bạn nhập đã hết hạn";
+          } else {
+            this.messageErrorOtp = "Có lỗi. Xin vui lòng thử lại";
+          }
         }
       });
     },
@@ -225,6 +239,27 @@ export default {
       } else {
         this.validateProps.fullname = 1;
       }
+    },
+    showErrorWhenRegister(error) {
+      this.errorRespon = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.REGISTER.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
+          break;
+        case ERRORS.REGISTER.EMAIL_PHONE_USED:
+          message = "Email or phone has been used";
+          break;
+        case ERRORS.REGISTER.PASSWORD_LEAST:
+          message =
+            "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
+          break;
+        default:
+          message = "Something went wrong. Please try again";
+          break;
+      }
+      this.messageErrorRegister = message;
     }
   }
 };
