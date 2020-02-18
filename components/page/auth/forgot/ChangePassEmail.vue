@@ -41,7 +41,7 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import { createResetPassWithEmail } from "../../../../models/auth/Forgot";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
-// import { ERRORS } from "../../../utils/error-code";
+import { ERRORS } from "~/utils/error-code";
 import {
   required,
   minLength,
@@ -104,6 +104,7 @@ export default {
           if (result.success == true) {
             this.$router.push("/auth/signin");
           } else {
+            this.showErrorChangePass(result);
           }
         });
       } catch (error) {
@@ -137,6 +138,24 @@ export default {
       } else {
         this.validateProps.coPassword = 1;
       }
+    },
+    showErrorChangePass(error) {
+      this.errorRespon = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.REGISTER.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
+          break;
+        case ERRORS.REGISTER.PASSWORD_LEAST:
+          message =
+            "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
+          break;
+        default:
+          message = "Something went wrong. Please try again";
+          break;
+      }
+      this.messageErrorChange = message;
     }
   }
 };

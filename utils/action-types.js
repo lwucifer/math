@@ -17,7 +17,8 @@ export const AUTH = {
     CHANGE_PASSWORD: "changePassword",
     VERIFY_OTP: "verifiOtp",
     RESET_PASSWORD_REQUEST: "resetPasswordRequest",
-    VERIFY_EMAIL: "verifyEmail"
+    VERIFY_EMAIL: "verifyEmail",
+    REFRESH_TOKEN: "refreshToken"
 };
 
 export const SOCIAL_POST = {
@@ -156,33 +157,33 @@ export const ELEARNING_CREATING_QUESTIONS = {
 };
 
 export const STUDY = {
-    ELEARNING: 'studyElearningList'
-}
+    ELEARNING: "studyElearningList"
+};
 
 export const SCHOOL_CLASSES = {
-    LIST: 'schoolClassesList',
-    ADD: 'schoolClassesAdd',
-    EDIT: 'schoolClassesEdit',
-    DELETE: 'schoolClassesDelete',
-}
+    LIST: "schoolClassesList",
+    ADD: "schoolClassesAdd",
+    EDIT: "schoolClassesEdit",
+    DELETE: "schoolClassesDelete"
+};
 
 export const SCHOOL_PROFESSIONAL = {
-    LIST: 'schoolProfessionalList',
-    ADD: 'schoolProfessionalAdd',
-    EDIT: 'schoolProfessionalEdit',
-    DELETE: 'schoolProfessionalDelete',
-}
+    LIST: "schoolProfessionalList",
+    ADD: "schoolProfessionalAdd",
+    EDIT: "schoolProfessionalEdit",
+    DELETE: "schoolProfessionalDelete"
+};
 
 export const SCHOOL_STUDENTS = {
-    LIST: 'schoolStudentsList',
-    ADD: 'schoolStudentsAdd',
-    EDIT: 'schoolStudentsEdit',
-    DELETE: 'schoolStudentsDelete',
-}
+    LIST: "schoolStudentsList",
+    ADD: "schoolStudentsAdd",
+    EDIT: "schoolStudentsEdit",
+    DELETE: "schoolStudentsDelete"
+};
 
 export const SCHOOL_TEACHERS = {
-    LIST: 'schoolTeachersList',
-    ADD: 'schoolTeachersAdd',
-    EDIT: 'schoolTeachersEdit',
-    DELETE: 'schoolTeachersDelete',
-}
+    LIST: "schoolTeachersList",
+    ADD: "schoolTeachersAdd",
+    EDIT: "schoolTeachersEdit",
+    DELETE: "schoolTeachersDelete"
+};
