@@ -252,6 +252,254 @@
         </div>
       </div>
     </div>
+
+    <div class="cc-panel bg-white mb-4">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
+      </div>
+
+      <div class="cc-panel__body">
+        <div class="cc-box">
+          <div class="cc-box__head">
+            <div class="cc-box__head-left">
+              <h2 class="cc-box__title heading-6">Bài giảng đại số lớp 10</h2>
+            </div>
+
+            <div class="cc-box__head-right">
+              <button class="cc-box__btn cc-box__btn-collapse">
+                <IconAngleDown class="icon" />
+              </button>
+            </div>
+          </div>
+
+          <div class="cc-box__body py-4">
+            <div class="clc-video">
+              <div class="clc-video__image">
+                <img src="https://picsum.photos/160/90" alt />
+              </div>
+              <div class="clc-video__right">
+                <h4 class="clc-video__name heading-6 mb-3">Tên video: Bài giảng đại số lớp 10a</h4>
+                <div class="clc-video__time text-gray mb-3">6:30</div>
+                <div class="clc-video__actions">
+                  <a href class="clc-video__btn-edit text-primary mr-5">
+                    <IconEditAlt class="icon" />Sửa nội dung
+                  </a>
+                  <a href class="clc-video__btn-delete text-secondary">
+                    <IconTrashAlt class="icon" />Xoá nội dung
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <app-divider class="my-4" />
+
+            <app-button size="sm" outline square class="font-weight-semi-bold clc-btn-add-docs">
+              <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
+            </app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-panel bg-white mb-4">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
+      </div>
+
+      <div class="cc-panel__body">
+        <div class="cc-box">
+          <div class="cc-box__head">
+            <div class="cc-box__head-left">
+              <h2 class="cc-box__title heading-6">Bài giảng đại số lớp 10</h2>
+            </div>
+
+            <div class="cc-box__head-right">
+              <button class="cc-box__btn cc-box__btn-collapse">
+                <IconAngleDown class="icon" />
+              </button>
+            </div>
+          </div>
+
+          <div class="cc-box__body py-4">
+            <div class="clc-video">
+              <div class="clc-video__image">
+                <img src="https://picsum.photos/160/90" alt />
+              </div>
+              <div class="clc-video__right">
+                <h4 class="clc-video__name heading-6 mb-3">Tên video: Bài giảng đại số lớp 10a</h4>
+                <div class="clc-video__time text-gray mb-3">6:30</div>
+                <div class="clc-video__actions">
+                  <a href class="clc-video__btn-edit text-primary mr-5">
+                    <IconEditAlt class="icon" />Sửa nội dung
+                  </a>
+                  <a href class="clc-video__btn-delete text-secondary">
+                    <IconTrashAlt class="icon" />Xoá nội dung
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <app-divider class="my-4" />
+
+            <div class="cc-box__bg-gray px-4 pt-3 pb-4">
+              <div class="d-flex justify-content-between">
+                <span>Thêm tài liệu bài giảng</span>
+                <a href>
+                  <IconClose class="icon fill-gray" />
+                </a>
+              </div>
+
+              <app-divider class="mt-3 mb-4" />
+
+              <div class="cc-tabs">
+                <a
+                  href
+                  class="cc-tab-item"
+                  :class="{ 'active': tabAddDocument === 'upload'}"
+                  @click.prevent="changeTabAddDocument('upload')"
+                >Upload tài liệu</a>
+
+                <a
+                  href
+                  class="cc-tab-item"
+                  :class="{ 'active': tabAddDocument === 'choose'}"
+                  @click.prevent="changeTabAddDocument('choose')"
+                >Chọn từ kho học liệu</a>
+              </div>
+
+              <div class="cc-tab-panel" v-if="tabAddDocument === 'upload'">
+                <app-upload class="clc-upload-video">
+                  <div slot="hint" class="mt-2 caption">
+                    <b class="text-gray">Lưu ý:</b>
+                    <span
+                      class="text-sub"
+                    >{{ `Upload tài liệu bổ trợ cho bài giảng của bạn, dung lượng không quá 1GB cho 1 file` }}</span>
+                  </div>
+                </app-upload>
+              </div>
+
+              <div class="cc-tab-panel" v-if="tabAddDocument === 'choose'">
+                <div class="d-flex justify-content-end">
+                  <app-input placeholder="Nhập để tìm kiếm..." style="width: 260px"></app-input>
+                </div>
+
+                <div class="clc-table-wrapper">
+                  <table class="clc-table">
+                    <thead>
+                      <tr>
+                        <th>Tên file</th>
+                        <th>Loại</th>
+                        <th>Ngày tháng</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>Tên tài liệu</td>
+                        <td>Tài liệu</td>
+                        <td>15/10/2019</td>
+                        <td>
+                          <a href class="clc-table-action mr-4">Chọn</a>
+                          <a href class="clc-table-action clc-table-action-delete">
+                            <IconTrashAlt class="icon" />
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Tên tài liệu</td>
+                        <td>Tài liệu</td>
+                        <td>15/10/2019</td>
+                        <td>
+                          <a href class="clc-table-action mr-4">Chọn</a>
+                          <a href class="clc-table-action clc-table-action-delete">
+                            <IconTrashAlt class="icon" />
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end mt-4">
+                <app-button
+                  class="clc-btn font-weight-semi-bold mr-4"
+                  size="sm"
+                  color="disabled"
+                  square
+                >Huỷ bỏ</app-button>
+                <app-button class="clc-btn font-weight-semi-bold" size="sm" square>Thêm nội dung</app-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-panel bg-white mb-4">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
+      </div>
+
+      <div class="cc-panel__body">
+        <div class="cc-box">
+          <div class="cc-box__head">
+            <div class="cc-box__head-left">
+              <h2 class="cc-box__title heading-6">Bài giảng đại số lớp 10</h2>
+            </div>
+
+            <div class="cc-box__head-right">
+              <button class="cc-box__btn cc-box__btn-collapse">
+                <IconAngleDown class="icon" />
+              </button>
+            </div>
+          </div>
+
+          <div class="cc-box__body py-4">
+            <div class="clc-video">
+              <div class="clc-video__image">
+                <img src="https://picsum.photos/160/90" alt />
+              </div>
+              <div class="clc-video__right">
+                <h4 class="clc-video__name heading-6 mb-3">Tên video: Bài giảng đại số lớp 10a</h4>
+                <div class="clc-video__time text-gray mb-3">6:30</div>
+                <div class="clc-video__actions">
+                  <a href class="clc-video__btn-edit text-primary mr-5">
+                    <IconEditAlt class="icon" />Sửa nội dung
+                  </a>
+                  <a href class="clc-video__btn-delete text-secondary">
+                    <IconTrashAlt class="icon" />Xoá nội dung
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <app-divider class="my-4" />
+
+            <div class="mb-3">Tài liệu giảng dạy</div>
+
+            <div
+              class="clc-choosen-doc-item d-flex align-items-center justify-content-between mb-3"
+            >
+              <span class="text-sub d-flex align-items-center">
+                <IconFileBlank class="icon body-1 mr-2" />tailieudaisolop10.docx (25.6kB)
+              </span>
+
+              <a href>
+                <IconTrashAlt class="icon subheading fill-secondary" />
+              </a>
+            </div>
+
+            <app-divider class="my-4" />
+
+            <app-button size="sm" outline square class="font-weight-semi-bold clc-btn-add-docs">
+              <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
+            </app-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -292,6 +540,7 @@ export default {
       tabType: "video",
       tabVideo: "upload",
       tabDocument: "typing",
+      tabAddDocument: "upload",
       editor: null
     };
   },
@@ -334,6 +583,10 @@ export default {
 
     changeTabDocument(type) {
       this.tabDocument = type;
+    },
+
+    changeTabAddDocument(type) {
+      this.tabAddDocument = type;
     }
   }
 };

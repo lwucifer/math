@@ -30,6 +30,7 @@
       <div class="col-md-9">
         <LessonCreateGeneralInformation class="mb-5"/>
         <LessonCreateLearningContent />
+        <LessonCreateSetting />
       </div>
     </div>
   </div>
@@ -38,13 +39,15 @@
 <script>
 import LessonCreateGeneralInformation from "~/components/page/course/CreateLesson/CreateGeneralInformation";
 import LessonCreateLearningContent from "~/components/page/course/CreateLesson/CreateLearningContent";
+import LessonCreateSetting from "~/components/page/course/CreateLesson/CreateSetting";
 
 export default {
   layout: "create",
 
   components: {
     LessonCreateGeneralInformation,
-    LessonCreateLearningContent
+    LessonCreateLearningContent,
+    LessonCreateSetting
   },
 
   data() {

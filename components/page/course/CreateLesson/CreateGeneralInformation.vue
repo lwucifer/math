@@ -16,7 +16,7 @@
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
             <app-select
-              class="cgi-select"
+              class="cc-select"
               :options="[{ value: 0, text: 'Lớp A'}, { value: 1, text: 'Lớp B'}]"
               placeholder="Chọn lớp"
             >
@@ -31,7 +31,7 @@
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
             <app-select
-              class="cgi-select"
+              class="cc-select"
               :options="[{ value: 0, text: 'Môn học 1'}, { value: 1, text: 'Môn học 2'}]"
               placeholder="Chọn môn học"
             >
