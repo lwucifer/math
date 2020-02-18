@@ -82,6 +82,41 @@ export const ELEARNING_CREATING_CHAPTER = {
   SET_ELEARNING_CREATING_CHAPTER_DELETE: "setElearningCreatingChapterDelete"
 };
 
+export const ELEARNING_CREATING_DOC = {
+  SET_ELEARNING_CREATING_DOC_LIST: "setElearningCreatingDocList",
+  SET_ELEARNING_CREATING_DOC_ADD: "setElearningCreatingDocAdd",
+  SET_ELEARNING_CREATING_DOC_EDIT: "setElearningCreatingDocEdit",
+  SET_ELEARNING_CREATING_DOC_DELETE: "setElearningCreatingDocDelete"
+};
+
+export const ELEARNING_CREATING_EXERCISES = {
+  SET_ELEARNING_CREATING_EXERCISES_LIST: "setElearningCreatingExercisesList",
+  SET_ELEARNING_CREATING_EXERCISES_ADD: "setElearningCreatingExercisesAdd",
+  SET_ELEARNING_CREATING_EXERCISES_EDIT: "setElearningCreatingExercisesEdit",
+  SET_ELEARNING_CREATING_EXERCISES_DELETE: "setElearningCreatingExercisesDelete"
+};
+
+export const ELEARNING_CREATING_GENERAL = {
+  SET_ELEARNING_CREATING_GENERAL_LIST: "setElearningCreatingGeneralList",
+  SET_ELEARNING_CREATING_GENERAL_ADD: "setElearningCreatingGeneralAdd",
+  SET_ELEARNING_CREATING_GENERAL_EDIT: "setElearningCreatingGeneralEdit",
+  SET_ELEARNING_CREATING_GENERAL_DELETE: "setElearningCreatingGeneralDelete"
+};
+
+export const ELEARNING_CREATING_LESSONS = {
+  SET_ELEARNING_CREATING_LESSONS_LIST: "setElearningCreatingLessonsList",
+  SET_ELEARNING_CREATING_LESSONS_ADD: "setElearningCreatingLessonsAdd",
+  SET_ELEARNING_CREATING_LESSONS_EDIT: "setElearningCreatingLessonsEdit",
+  SET_ELEARNING_CREATING_LESSONS_DELETE: "setElearningCreatingLessonsDelete"
+};
+
+export const ELEARNING_CREATING_QUESTIONS = {
+  SET_ELEARNING_CREATING_QUESTIONS_LIST: "setElearningCreatingQuestionsList",
+  SET_ELEARNING_CREATING_QUESTIONS_ADD: "setElearningCreatingQuestionsAdd",
+  SET_ELEARNING_CREATING_QUESTIONS_EDIT: "setElearningCreatingQuestionsEdit",
+  SET_ELEARNING_CREATING_QUESTIONS_DELETE: "setElearningCreatingQuestionsDelete"
+};
+
 export const STUDY = {
   SET_STUDY_ELEARNING_LIST: "setStudyElearningList"
 };
