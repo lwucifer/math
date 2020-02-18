@@ -34,7 +34,7 @@ export const SOCIAL_CONFIG = `/social/api/config`;
 /**
  * ELEARNING
  */
-export const ELEARNING_SUMMARY = `/elearning/public/summary`;
+export const ELEARNING_PUBLIC_SUMMARY = `/elearning/public/summary`;
 export const ELEARNING_INFO = `/elearning/info`;
 export const ELEARNING_PROGRAM = `/elearning/program`;
 export const ELEARNING_CREATING_ANSWERS = "/elearning/creating/answers";

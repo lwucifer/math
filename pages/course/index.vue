@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <course-slider-tab
-      :lessons="lessons"
+      :lessons="highlight"
       :sciences="sciences"
       :swiperOptions="sliderOptions"
       title="Nổi bật"
@@ -39,9 +39,10 @@ import CourseSliderTab from "~/components/page/course/CourseSliderTab";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
-
+import { get } from "lodash";
 // Import faked data
 import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
+
 export default {
   components: {
     CourseSliderTab
@@ -49,9 +50,9 @@ export default {
 
   async fetch({ params, query, store }) {
     console.log("get earning summary");
-    await store.dispatch(`course/${actionTypes.ELEARNING_SUMMARY.LIST}`);
-    console.log("get my course");
-    await store.dispatch(`study-elearning/${actionTypes.STUDY.ELEARNING}`);
+    await store.dispatch(
+      `elearning-public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
+    );
   },
 
   data() {
@@ -77,7 +78,11 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning-public-summary", ["elearningPublicSummary"]),
+    highlight() {
+      return get(this.elearningPublicSummary, "highlight", []);
+    }
   }
 };
 </script>
