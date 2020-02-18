@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="bottom">
-            <n-link class="title" v-if="item.name" to>{{item.name}}</n-link>
+            <n-link class="title" v-if="item.name" :to="'/course/' + item.id">{{item.name}}</n-link>
 
             <div class="course-item2_teacher">
                 <div>
