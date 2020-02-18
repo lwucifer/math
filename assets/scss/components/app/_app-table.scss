@@ -1,0 +1,96 @@
+.app-table {
+    table {
+        width: 100%;
+        border-spacing: 0;
+
+        .btn-sort {
+            vertical-align: middle;
+            display: inline-block;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            svg path {
+                fill: #999;
+            }
+        }
+        th {
+            color: #999;
+            text-align: left;
+            font-weight: normal;
+            padding: 1rem 0;
+            position: relative;
+            &:hover {
+                .btn-sort {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+
+            hr {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            &:first-child {
+                padding-left: 2rem;
+                hr {
+                    left: 2rem;
+                }
+            }
+
+            &:last-child {
+                padding-right: 2rem;
+                hr {
+                    right: 2rem;
+                }
+            }
+        }
+
+        tr {
+            >td {
+                padding: 1rem 0;
+
+                .status,
+                .status-2 {
+                    display: inline-block;
+                    min-width: 7.5rem;
+                    background-color: $color-primary;
+                    font-size: 11px;
+                    color: #fff;
+                    line-height: 2rem;
+                    text-align: center
+                }
+
+                .status-2 {
+                    background-color: #FFCA56;
+                }
+
+                &:first-child {
+                    padding-left: 2rem;
+                }
+
+                &:last-child {
+                    padding-right: 2rem;
+                }
+            }
+
+            &:nth-child(2n) {
+                >td {
+                    background-color: #f8f8f8;
+                }
+            }
+
+            &:hover {
+                >td {
+                    background-color: rgba($color: $color-primary, $alpha: 0.05);
+                }
+            }
+        }
+    }
+
+    .pagination {
+        margin: 0 2rem;
+    }
+}
