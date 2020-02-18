@@ -1,5 +1,5 @@
 <template>
-  <div class="course-rates-commnent">
+  <div class="course-rates-comment">
     <div class="left">
       <div class="auth">
         <app-avatar src="https://picsum.photos/40/40" :size="40" />

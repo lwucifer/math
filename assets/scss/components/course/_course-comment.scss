@@ -1,8 +1,8 @@
-.elearning-rates-comment {
+.course-rates-comment {
     display: flex;
     align-items: center;
     padding: 2rem 1.5rem;
-    + .elearning-rates-comment {
+    + .course-rates-comment {
         border-top: 1px solid $color-border;
     }
     .auth {
