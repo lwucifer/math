@@ -1,33 +1,8 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="labelFixed ? 'label-fixed' : ''">{{label}}</label>
-    <!-- Date picker -->
-    <div class="app-input__input" v-if="type == 'date'">
-      <app-date-picker :value="value" @input="updateInput" />
-    </div>
-    
-    <!-- Select -->
-    <div class="app-input__select" v-else-if="type == 'select'">
-      <slot/>
-    </div>
-
-    <!-- Input upload -->
-    <div class="app-input-file-upload" v-else-if="type == 'file'">
-      <label class="app-input-file-upload__label">
-        {{placeholder}}
-        <input
-          type="file"
-          class="app-input-file-upload__input"
-          :value="value"
-          :disabled="disabled"
-          @input="updateInput"
-        />
-        <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
-      </label>
-    </div>
-
-    <!-- Input text -->
+    <label v-if="label" :class="classLabel">{{label}}</label>
     <div class="app-input__input" v-else>
+      <!-- Textarea  -->
       <textarea
         v-if="textarea"
         v-bind="$attrs"
@@ -39,6 +14,7 @@
         :disabled="disabled"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
       />
+      <!-- Input Text  -->
       <input
         v-else
         v-bind="$attrs"
@@ -49,9 +25,9 @@
         :placeholder="placeholder"
         :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
       />
-      <div class="unit" v-if="validate == 1 || unit">
+      <div class="unit" v-if="validate == 1 || hasUnitSlot">
         <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
-        <span>{{unit}}</span>
+        <slot name="unit"/>
       </div>
       <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
     </div>
@@ -63,7 +39,7 @@ import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 
 export default {
   inheritAttrs: false,
-  
+
   components: {
     IconSuccess
   },
@@ -77,11 +53,6 @@ export default {
       type: [String, Number],
       required: false,
       default: ""
-    },
-    validate: {
-      type: [String, Number],
-      required: false,
-      default: 0
     },
     placeholder: {
       type: String,
@@ -98,30 +69,26 @@ export default {
       required: false,
       default: ""
     },
+    disabled: Boolean,
+    validate: {
+      type: [String, Number],
+      required: false,
+      default: 0
+    },
     message: {
       type: String,
       required: false,
       default: ""
     },
     label: String,
-    unit: String,
-    labelFixed: {
-      type: Boolean,
-      default: false
-    },
-    textarea: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
+    labelFixed: Boolean,
+    labelBold: Boolean,
+    textarea: Boolean,
     rows: {
       type: [String, Number],
       required: false,
       default: 6
-    }
+    },
   },
 
   data() {
@@ -131,14 +98,17 @@ export default {
   methods: {
     updateInput: function(event) {
       this.$emit("input", event.target.value);
-      console.log(event)
     }
   },
 
   computed: {
+    hasUnitSlot() {
+      return !!this.$slots['unit'];
+    },
+    
     classSize() {
       const disableClass = {
-        "disabled":  this.disabled
+        disabled: this.disabled
       };
       const classSize = {
         "input--size-xs": this.size === "xs",
@@ -146,7 +116,17 @@ export default {
         "input--size-md": this.size === "md" || !this.size,
         "input--size-lg": this.size === "lg"
       };
-      return {...classSize, ...disableClass};
+      return { ...classSize, ...disableClass };
+    },
+
+    classLabel() {
+      const labelBold = {
+        "label-bold": this.labelBold
+      };
+      const labelFixed = {
+        "label-fixed": this.labelFixed
+      };
+      return { ...labelBold, ...labelFixed };
     }
   }
 };

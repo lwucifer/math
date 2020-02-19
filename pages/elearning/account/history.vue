@@ -7,41 +7,17 @@
       <div class="col-md-9">
         <div class="elearning-history__main">
           <h3 class="color-primary mb-3">Lịch sử giao dịch</h3>
-          <hr>
+          <hr />
           <div class="dates d-flex mb-4 mt-4">
             <app-date-picker v-model="time1" label="From" square size="sm" class="ml-auto" />
             <app-date-picker v-model="time2" label="To" square size="sm" />
             <app-button size="sm" square normal class="ml-1">Tìm</app-button>
           </div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Thời gian</th>
-                <th>Mã đơn hàng</th>
-                <th>Nội dung</th>
-                <th>Giá trị</th>
-                <th v-if="isTeacher">Loại GD</th>
-                <th>Phương thức thanh toán</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in list" :key="index">
-                <td>{{ item.time }}</td>
-                <td>{{ item.code }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.price }} đ</td>
-                <td v-if="isTeacher && item.type === 1">Mua</td>
-                <td v-if="isTeacher && item.type === 2">Bán</td>
-                <td v-if="item.pay == 1">Chuyển khoản</td>
-                <td v-else>Thanh toán online</td>
-              </tr>
-            </tbody>
-          </table>
-          <app-pagination
-            :type="2"
+          <app-table
+            :heads="heads"
             :pagination="pagination"
             @pagechange="onPageChange"
-            class="mt-4 mb-3"
+            :data="list"
           />
         </div>
       </div>
@@ -50,15 +26,7 @@
 </template>
 
 <script>
-import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
 import ElearningSide from "~/components/page/elearning/ElearningSide";
-import IconExclamation from "~/assets/svg/icons/exclamation.svg?inline";
-import IconUser3 from "~/assets/svg/icons/user3.svg?inline";
-import IconHistory from "~/assets/svg/icons/history.svg?inline";
-import IconBell from "~/assets/svg/icons/bell.svg?inline";
-import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import IconSearch from "~/assets/svg/icons/search2.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -66,19 +34,38 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningSliderTab,
-    ElearningSide,
-    IconHistory,
-    IconBell,
-    IconUser3,
-    IconExclamation,
-    IconPhoto,
-    IconSearch,
-    IconFilter
+    ElearningSide
   },
 
   data() {
     return {
+      heads: [
+        {
+          name: "time",
+          text: "Thời gian",
+          sort: true
+        },
+        {
+          name: "code",
+          text: "Mã đơn hàng",
+          sort: true
+        },
+        {
+          name: "name",
+          text: "Nội dung",
+          sort: true
+        },
+        {
+          name: "price",
+          text: "Giá trị",
+          sort: true
+        },
+        {
+          name: "type",
+          text: "Phương thức thanh toán",
+          sort: true
+        },
+      ],
       isAuthenticated: true,
       pagination: {
         total: 15,
@@ -108,8 +95,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 2,
-          type: 2,
+          pay: "Mua",
+          type: "Thanh toán Online",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -117,8 +104,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 2,
-          type: 2,
+          pay: "Bán",
+          type: "Chuyển khoản",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -126,8 +113,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Mua",
+          type: "Thanh toán Online",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -135,8 +122,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 2,
+          pay: "Bán",
+          type: "Chuyển khoản",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -144,8 +131,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Mua",
+          type: "Thanh toán Online",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -153,8 +140,26 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Bán",
+          type: "Chuyển khoản",
+          time: "16:50:30 19-11-2019"
+        },
+        {
+          id: 1,
+          name: "Mua khóa học Đại số 10",
+          price: "9290000",
+          code: "S88HKDKD",
+          pay: "Mua",
+          type: "Thanh toán Online",
+          time: "16:50:30 19-11-2019"
+        },
+        {
+          id: 1,
+          name: "Mua khóa học Đại số 10",
+          price: "1590000",
+          code: "S88HKDKD",
+          pay: "Bán",
+          type: "Chuyển khoản",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -162,8 +167,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Mua",
+          type: "Thanh toán Online",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -171,8 +176,8 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Bán",
+          type: "Chuyển khoản",
           time: "16:50:30 19-11-2019"
         },
         {
@@ -180,10 +185,19 @@ export default {
           name: "Mua khóa học Đại số 10",
           price: "1290000",
           code: "S88HKDKD",
-          pay: 1,
-          type: 1,
+          pay: "Mua",
+          type: "Thanh toán Online",
           time: "16:50:30 19-11-2019"
-        }
+        },
+        {
+          id: 1,
+          name: "Mua khóa học Đại số 10",
+          price: "1290000",
+          code: "S88HKDKD",
+          pay: "Bán",
+          type: "Chuyển khoản",
+          time: "16:50:30 19-11-2019"
+        },
       ],
       active_el: 0
     };

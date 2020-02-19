@@ -17,7 +17,8 @@ export const AUTH = {
     CHANGE_PASSWORD: "changePassword",
     VERIFY_OTP: "verifiOtp",
     RESET_PASSWORD_REQUEST: "resetPasswordRequest",
-    VERIFY_EMAIL: "verifyEmail"
+    VERIFY_EMAIL: "verifyEmail",
+    REFRESH_TOKEN: "refreshToken"
 };
 
 export const SOCIAL_POST = {
@@ -82,8 +83,8 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
 
-export const ELEARNING_SUMMARY = {
-    LIST: "elearningSummaryList"
+export const ELEARNING_PUBLIC_SUMMARY = {
+    LIST: "elearningPublicSummaryList"
 };
 
 export const ELEARNING = {
@@ -118,4 +119,71 @@ export const ELEARNING_CREATING_CHAPTER = {
     ADD: "elearningCreatingChapterAdd",
     EDIT: "elearningCreatingChapterEdit",
     DELETE: "elearningCreatingChapterDelete"
+};
+
+export const ELEARNING_CREATING_DOC = {
+    LIST: "elearningCreatingDocList",
+    ADD: "elearningCreatingDocAdd",
+    EDIT: "elearningCreatingDocEdit",
+    DELETE: "elearningCreatingDocDelete"
+};
+
+export const ELEARNING_CREATING_EXERCISES = {
+    LIST: "elearningCreatingExercisesList",
+    ADD: "elearningCreatingExercisesAdd",
+    EDIT: "elearningCreatingExercisesEdit",
+    DELETE: "elearningCreatingExercisesDelete"
+};
+
+export const ELEARNING_CREATING_GENERAL = {
+    LIST: "elearningCreatingGeneralList",
+    ADD: "elearningCreatingGeneralAdd",
+    EDIT: "elearningCreatingGeneralEdit",
+    DELETE: "elearningCreatingGeneralDelete"
+};
+
+export const ELEARNING_CREATING_LESSONS = {
+    LIST: "elearningCreatingLessonsList",
+    ADD: "elearningCreatingLessonsAdd",
+    EDIT: "elearningCreatingLessonsEdit",
+    DELETE: "elearningCreatingLessonsDelete"
+};
+
+export const ELEARNING_CREATING_QUESTIONS = {
+    LIST: "elearningCreatingQuestionsList",
+    ADD: "elearningCreatingQuestionsAdd",
+    EDIT: "elearningCreatingQuestionsEdit",
+    DELETE: "elearningCreatingQuestionsDelete"
+};
+
+export const STUDY = {
+    ELEARNING: "studyElearningList"
+};
+
+export const SCHOOL_CLASSES = {
+    LIST: "schoolClassesList",
+    ADD: "schoolClassesAdd",
+    EDIT: "schoolClassesEdit",
+    DELETE: "schoolClassesDelete"
+};
+
+export const SCHOOL_PROFESSIONAL = {
+    LIST: "schoolProfessionalList",
+    ADD: "schoolProfessionalAdd",
+    EDIT: "schoolProfessionalEdit",
+    DELETE: "schoolProfessionalDelete"
+};
+
+export const SCHOOL_STUDENTS = {
+    LIST: "schoolStudentsList",
+    ADD: "schoolStudentsAdd",
+    EDIT: "schoolStudentsEdit",
+    DELETE: "schoolStudentsDelete"
+};
+
+export const SCHOOL_TEACHERS = {
+    LIST: "schoolTeachersList",
+    ADD: "schoolTeachersAdd",
+    EDIT: "schoolTeachersEdit",
+    DELETE: "schoolTeachersDelete"
 };

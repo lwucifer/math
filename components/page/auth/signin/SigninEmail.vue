@@ -1,0 +1,159 @@
+<template>
+  <div>
+    <div class="auth_content mb-4">
+      <app-input
+        type="text"
+        v-model="email"
+        placeholder="Email"
+        :error="$v.email.$invalid"
+        :message="errorMessage.email"
+        :validate="validateProps.email"
+        @input="handleEmail"
+      />
+      <app-input
+        type="text"
+        v-model="password"
+        placeholder="Mật khẩu"
+        class="mb-2"
+        :error="$v.password.$invalid || validate.password"
+        :message="errorMessage.password"
+        :validate="validateProps.password"
+        autocomplete="new-password"
+        @input="handlePassword"
+      />
+      <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorLogin}}</p>
+    </div>
+    <app-button
+      :disabled="disabledBtnLogin"
+      color="primary"
+      square
+      fullWidth
+      @click.prevent="SubmitLoginEmail"
+      class="mb-3"
+    >Đăng nhập</app-button>
+  </div>
+</template>
+
+<script>
+import * as actionTypes from "../../../../utils/action-types";
+import { mapState, mapActions } from "vuex";
+import { createSigninWithEmail } from "../../../../models/auth/Signin";
+import { validatePassword } from "../../../../utils/validations.js";
+import { ERRORS } from "../../../../utils/error-code";
+import {
+  required,
+  email,
+  minLength,
+  maxLength
+} from "vuelidate/lib/validators";
+
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+      error: "",
+      errorMessage: {
+        email: "",
+        password: ""
+      },
+      validateProps: { password: "", email: "" },
+      validate: { password: true },
+      errorRespon: false,
+      messageErrorLogin: ""
+    };
+  },
+  validations: {
+    email: { required, email },
+    password: { required }
+  },
+  computed: {
+    disabledBtnLogin() {
+      const btnDisabled = this.$v.$invalid || this.validate.password;
+      return btnDisabled;
+    }
+  },
+  methods: {
+    ...mapActions("auth", ["login"]),
+    async SubmitLoginEmail() {
+      try {
+        const token = await this.$recaptcha.execute("login");
+        console.log("ReCaptcha token:", token);
+        const loginModel = createSigninWithEmail(
+          this.email,
+          this.password,
+          token
+        );
+        const doAdd = this.login(loginModel).then(result => {
+          if (result.success == true) {
+            this.$router.push("/");
+          } else {
+            this.showErrorWhenLogin(result);
+          }
+        });
+      } catch (error) {
+        console.log("Login error:", error);
+      }
+    },
+    handleEmail() {
+      this.errorRespon = false;
+      this.validateProps.email = "";
+      if (!this.$v.email.required) {
+        this.validateProps.email = 2;
+        this.errorMessage.email = "Trường này là bắt buộc";
+      } else if (!this.$v.email.email) {
+        this.validateProps.email = 2;
+        this.errorMessage.email = "Email không hợp lệ";
+      } else {
+        this.validateProps.email = 1;
+      }
+    },
+    handlePassword(_password) {
+      this.errorRespon = false;
+      this.validate.password = true;
+      this.validateProps.password = "";
+      if (!this.$v.password.required) {
+        this.validateProps.password = 2;
+        this.errorMessage.password = "Trường này là bắt buộc";
+      } else if (validatePassword(_password)) {
+        this.validateProps.password = 1;
+        this.validate.password = false;
+      } else if (!validatePassword(_password)) {
+        this.validateProps.password = 2;
+        this.errorMessage.password =
+          "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái và 1 chữ số";
+      }
+    },
+    showErrorWhenLogin(error) {
+      this.errorRespon = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.LOGIN.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, password, g_recaptcha_response";
+          break;
+        case ERRORS.LOGIN.EMAIL_INVALID:
+          message = "Invalid username or password";
+          break;
+        case ERRORS.LOGIN.USER_LOCKED:
+          message = "User is locked";
+          break;
+        case ERRORS.LOGIN.BAD_CREDEN:
+          message = "Bad credentials";
+          break;
+        case ERRORS.LOGIN.EMAIL_LEFT:
+          message = "Email/phone or password is incorrect, 1 time left";
+          break;
+        default:
+          message = "Something went wrong. Please try again";
+          break;
+      }
+      this.messageErrorLogin = message;
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+@import "~/assets/scss/components/auth/_auth-modal.scss";
+</style>

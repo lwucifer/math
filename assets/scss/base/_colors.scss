@@ -1,6 +1,14 @@
 @each $name, $color in $text-colors {
     .text-#{$name} {
-        color: $color;
+        color: $color !important;
+    }
+
+    .fill-#{$name} {
+        fill: $color;
+
+        path {
+            fill: $color;
+        }
     }
 }
 

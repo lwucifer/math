@@ -48,10 +48,26 @@
         &.label-fixed {
             width: 11rem;
         }
+        &.label-bold {
+            font-weight: bold;
+            font-size: 1.4rem;
+            &.label-fixed {
+                width: 15rem;
+            }
+        }
     }
     .mx-input {
         height: 4rem;
         border-radius: 0;
+    }
+    .app-input__slot {
+        .app-select__selected {
+            border: 1px solid $color-border;
+            outline: none;
+            &:focus {
+                border-color: #0070E0;
+            }
+        }
     }
     .app-input__input {
         position: relative;
@@ -63,16 +79,26 @@
             padding: 0 1rem;
             background-color: #fff;
             width: 100%;
+            &:disabled {
+                background-color: #eee;
+                border-color: #ccc;
+                color: #999;
+            }
         }
         textarea {
             border: 1px solid #eee;
             padding: .5rem 1rem;
             background-color: #fff;
             width: 100%;
+            &:disabled {
+                background-color: #eee;
+                border-color: #ccc;
+                color: #999;
+            }
         }
         input, textarea {
             &:focus {
-                border-color: #0070E0;
+                border-color: $color-primary;
             }
             &.disabled {
                 background-color: #eee;

@@ -9,8 +9,8 @@
     <IconStarO class="star"
       :width="size"
       :height="size"
-      v-for="(i,index) in (5 - stars)"
-      :key="index"
+      v-for="(i,index) in unstart"
+      :key="index + 'unstart'"
     />
   </div>
 </template>
@@ -23,6 +23,12 @@ export default {
   components: {
     IconStar,
     IconStarO
+  },
+
+  computed: {
+    unstart: function() {
+      return 5 - (this.stars)
+    }
   },
 
   props: {

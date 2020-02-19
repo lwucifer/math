@@ -8,7 +8,7 @@
             :is="icon.icon.default"
             class="icon"
             fill="#000"
-            @click="handleClick(icon.path)"
+            @click="handleClick(icon.path, '~/assets/svg/icons')"
           />
         </div>
         <span class="caption">{{ icon.path }}</span>
@@ -23,7 +23,7 @@
             :is="icon.icon.default"
             class="icon"
             fill="#000"
-            @click="handleClick(icon.path)"
+            @click="handleClick(icon.path, '~/assets/svg/design-icons')"
           />
         </div>
         <span class="caption">{{ icon.path }}</span>
@@ -41,7 +41,7 @@
           <div v-text="`</template>`"></div>
           <br />
           <div v-text="`<script>`"></div>
-          <div>{{ `import ${convertIconComponentName(dataModal.path)} from '${convertIconPath(dataModal.path)}';` }}</div>
+          <div>{{ `import ${convertIconComponentName(dataModal.path)} from '${convertIconPath(dataModal)}';` }}</div>
           <br />
           <div>
             export default {
@@ -103,8 +103,8 @@ export default {
   },
 
   methods: {
-    handleClick(path) {
-      this.dataModal = { path };
+    handleClick(path, source) {
+      this.dataModal = { path, sourcePath: source };
       this.modal = true;
     },
 
@@ -124,9 +124,9 @@ export default {
       return `Icon${fileNameConverted}`;
     },
 
-    convertIconPath(path) {
+    convertIconPath({ path, sourcePath}) {
       const fileName = path.replace("./", "");
-      return `~/assets/svg/icons/${fileName}?inline`;
+      return `${sourcePath}/${fileName}?inline`;
     }
   }
 };
