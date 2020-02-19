@@ -139,3 +139,23 @@
         }
     }
 }
+
+.app-input__counter {
+    position: absolute;
+    top: .4rem;
+    right: .4rem;
+    bottom: .4rem;
+    color: #fff;
+    font-weight: 600;
+    background-color: $color-primary;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-input--has-counter {
+    .app-input__input input {
+        padding-right: 90px;
+    }
+}
