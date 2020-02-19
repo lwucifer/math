@@ -158,3 +158,10 @@
         }
     }
 }
+
+// Size
+.app-select--size-sm {
+    .app-select__selected {
+        height: 3.2rem;
+    }
+}

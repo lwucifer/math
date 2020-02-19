@@ -140,7 +140,11 @@ export default {
       default: "No option"
     },
     showClear: Boolean,
-    searchable: Boolean
+    searchable: Boolean,
+    size: {
+      type: String,
+      default: "md" // 'sm' | 'md'
+    }
   },
 
   data: () => ({
@@ -151,9 +155,10 @@ export default {
   computed: {
     classes() {
       return {
-        active: this.active,
+        'active': this.active,
         "app-select--tags": this.mode === "tags",
-        "app-select--searchable": this.searchable
+        "app-select--searchable": this.searchable,
+        "app-select--size-sm": this.size === "sm"
       };
     },
 
