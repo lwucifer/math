@@ -69,7 +69,7 @@ export default {
 
   computed: {
     original_price() {
-      return get(this.item, "price.original_price", "");
+      return get(this.item, "price.original_price", 0);
     },
     teacher() {
         return {
