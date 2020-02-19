@@ -1,0 +1,23 @@
+.course-right-side {
+    position: relative;
+    padding: 1rem;
+    background-color: #fff;
+    .price {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        background: #1481FE;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        font-weight: bold;
+    }
+    ul.info {
+        list-style: none;
+        color: #666;
+        margin-bottom: 1rem;
+        li {
+            display: flex;
+            padding: 1rem 0;
+        }
+    }
+}
