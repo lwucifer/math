@@ -12,7 +12,6 @@
         @input="updateInput"
         :placeholder="placeholder"
         :disabled="disabled"
-        :class="localValidate == VALIDATE_STATUS.ERROR ? 'border-red' : (localValidate == VALIDATE_STATUS.SUCCESS ? 'border-primary' : '')"
       />
       <!-- Input Text  -->
       <input
@@ -23,7 +22,6 @@
         :disabled="disabled"
         @input="updateInput"
         :placeholder="placeholder"
-        :class="localValidate == VALIDATE_STATUS.ERROR ? 'border-red' : (localValidate == VALIDATE_STATUS.SUCCESS ? 'border-primary' : '')"
       />
 
       <div class="unit" v-if="localValidate == VALIDATE_STATUS.SUCCESS || hasUnitSlot">
@@ -132,7 +130,9 @@ export default {
       return {
         ...classSize,
         ...disableClass,
-        "app-input--has-counter": !!this.counter
+        "app-input--has-counter": !!this.counter,
+        "app-input--error": this.localValidate === VALIDATE_STATUS.ERROR,
+        "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
       };
     },
 
