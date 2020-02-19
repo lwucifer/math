@@ -1,8 +1,8 @@
 <template>
   <div v-if="show" class="app-alert" :class="classes">
-    <div class="app-alert__icon" v-if="showIcon && !!icon">
+    <div class="app-alert__icon-wrapper" v-if="showIcon && !!icon">
       <slot name="icon">
-        <component :is="icon" class="icon" />
+        <component :is="icon" class="app-alert__icon icon" />
       </slot>
     </div>
     <div class="app-alert__content">
