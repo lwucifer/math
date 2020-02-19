@@ -21,7 +21,6 @@
                     class="app-vue-select"
                     v-model="filter.province"
                     :options="provinces"
-                    :components="{OpenIndicator}"
                     label="text"
                     placeholder="Theo tỉnh thành"
                     searchable
@@ -38,7 +37,6 @@
                     class="app-vue-select"
                     v-model="filter.district"
                     :options="districts"
-                    :components="{OpenIndicator}"
                     label="text"
                     placeholder="Theo quận huyện"
                     searchable
@@ -55,7 +53,6 @@
                     class="app-vue-select"
                     v-model="filter.village"
                     :options="villages"
-                    :components="{OpenIndicator}"
                     label="text"
                     placeholder="Theo xã phường"
                     searchable
@@ -72,7 +69,6 @@
                     class="app-vue-select"
                     v-model="filter.schoolType"
                     :options="schoolTypes"
-                    :components="{OpenIndicator}"
                     label="text"
                     placeholder="Theo cấp học"
                     searchable
@@ -89,13 +85,10 @@
 
 <script>
     import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-    import IconCaretDownThin from "~/assets/svg/icons/caret-down-thin.svg?inline"
-    import vSelect from 'vue-select'
 
     export default {
         components: {
             IconFilter,
-            IconCaretDownThin,
         },
         props: {
             title: {
@@ -138,9 +131,6 @@
                     district: null,
                     village: null,
                     schoolType: null
-                },
-                OpenIndicator: {
-                    render: createElement => createElement(IconCaretDownThin)
                 },
             }
         },
