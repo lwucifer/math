@@ -14,7 +14,7 @@
       class="mt-5"
     />
     <course-slider-tab
-      :lessons="sciences"
+      :lessons="recent"
       :swiperOptions="sliderOptions"
       title="Bài giảng mới nhất"
       class="mt-5"
@@ -71,6 +71,9 @@ export default {
     },
     suggestion() {
       return get(this.elearningPublicSummary, "suggestion", []);
+    },
+    recent() {
+      return get(this.elearningPublicSummary, "recent", []);
     }
   }
 };
