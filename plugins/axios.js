@@ -20,7 +20,7 @@ export default function({ store, $axios, redirect }) {
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
             config.headers.common["Authorization"] = `Bearer ${
-        config.url.includes("/refresh_token")
+        config.url.includes("/user/public/renew")
           ? store.state.auth.token.token
           : store.state.auth.access_token
       }`;
@@ -79,7 +79,7 @@ export default function({ store, $axios, redirect }) {
                 });
             });
             return retryOriginalRequest;
-        } else if (code === 422 || code === 403) {
+        } else if (code === 422 || code === 403 || code === 415) {
             store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
             redirect(`/auth/signin`);
         } else {
