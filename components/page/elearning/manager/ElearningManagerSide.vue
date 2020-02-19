@@ -6,7 +6,7 @@
     <n-link class="link-gray item" to :class="active == 2 ? 'active' : ''">
       <IconBook width="20" height="20" />Bài giảng và khóa học
     </n-link>
-    <n-link class="link-gray item" to :class="active == 3 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/test/'" :class="active == 3 ? 'active' : ''">
       <IconCalendar />Bài tập và bài kiểm tra
     </n-link>
     <n-link class="link-gray item" to :class="active == 4 ? 'active' : ''">
