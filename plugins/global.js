@@ -19,8 +19,10 @@ import Pagination from "~/components/common/pagination/Pagination";
 import AppVueSelect from "~/components/common/select/AppVueSelect";
 import AppTable from "~/components/common/table/AppTable";
 import AppCheckbox from "~/components/common/checkbox/AppCheckbox";
+import AppRadioGroup from "~/components/common/radio/AppRadioGroup";
 import AppRadio from "~/components/common/radio/AppRadio";
 import AppUpload from "~/components/common/upload/AppUpload";
+import AppAlert from "~/components/common/alert/AppAlert";
 
 Vue.component("app-button", AppButton);
 Vue.component("app-divider", AppDivider);
@@ -41,5 +43,7 @@ Vue.component("app-pagination", Pagination);
 Vue.component("app-vue-select", AppVueSelect);
 Vue.component("app-table", AppTable);
 Vue.component("app-checkbox", AppCheckbox);
+Vue.component("app-radio-group", AppRadioGroup);
 Vue.component("app-radio", AppRadio);
 Vue.component("app-upload", AppUpload);
+Vue.component("app-alert", AppAlert);

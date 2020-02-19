@@ -83,8 +83,8 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList"
 };
 
-export const ELEARNING_SUMMARY = {
-    LIST: "elearningSummaryList"
+export const ELEARNING_PUBLIC_SUMMARY = {
+    LIST: "elearningPublicSummaryList"
 };
 
 export const ELEARNING = {

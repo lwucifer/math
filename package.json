@@ -1,11 +1,11 @@
 {
-    "name": "Schoolly",
+    "name": "schoolly",
     "version": "1.0.0",
     "description": "Schoolly Enduser",
     "author": "Trung Nguyen <quangtrung.uet@gmail.com>",
     "private": true,
     "scripts": {
-        "dev": "nuxt",
+        "dev": "nuxt --open",
         "build": "nuxt build",
         "start": "nuxt start",
         "generate": "nuxt generate",

@@ -3,26 +3,29 @@
     <table>
       <thead>
         <tr>
+          <th v-if="selectAll" class="pr-0">
+            <app-checkbox @change="checkAll" />
+            <hr />
+          </th>
           <th v-for="(item, index) in heads" :key="index">
-            <div v-if="item.selectAll">
-              <app-checkbox />
-              <hr />
-            </div>
-            <div v-else>
-              {{item.text}}
-              <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
-                <IconDirection height="18" width="18" />
-              </span>
-              <hr />
-            </div>
+            {{item.text}}
+            <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
+              <IconDirection height="18" width="18" />
+            </span>
+            <hr />
           </th>
         </tr>
       </thead>
+      <!-- Use slot body -->
       <tbody v-if="hasDefaultSlot">
         <slot />
       </tbody>
+      <!-- Use data list -->
       <tbody v-else>
         <tr v-for="(cat, i) in sortedCats" :key="i">
+          <td v-if="selectAll" class="pr-0">
+            <app-checkbox @change="(e) => check(e, cat.id)" />
+          </td>
           <td v-for="(item, j) in heads" :key="j" v-html="cat[item.name]"></td>
         </tr>
       </tbody>
@@ -62,7 +65,8 @@ export default {
       type: Object,
       required: false,
       default: () => {}
-    }
+    },
+    selectAll: Boolean
   },
 
   data() {
@@ -75,6 +79,14 @@ export default {
   },
 
   methods: {
+    checkAll(e) {
+      this.$emit("checkAll", e);
+    },
+    
+    check(e) {
+      this.$emit("check", e);
+    },
+
     sort: function(sortBy) {
       if (sortBy === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";

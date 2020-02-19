@@ -133,3 +133,20 @@
         outline: none;
     }
 }
+
+.cc-select {
+    .app-select__selected {
+        border: 1px solid $color-border;
+    }
+
+    .app-select__placeholder {
+        color: $color-text;
+    }
+
+    .app-select__arrow {
+        svg {
+            font-size: 1.6rem;
+            fill: $color-text;
+        }
+    }
+}

@@ -14,7 +14,7 @@
 
             <div class="price color-red bold" v-if="lesson.price != 0">
                 <IconUsd class="mr-2" />
-                {{ lesson.price }} đ
+                {{ lesson.price | toThousandFilter() }} đ
             </div>
             <div class="price color-red bold" v-else>
                 <IconUsd class="mr-2" />Miễn phí
@@ -144,27 +144,27 @@
 
                     <div id="tab3" class="box">
                         <h5 class="mb-4">Thông tin giáo viên</h5>
-                        <CourseTeacherInfo :teacher="teacher" class="mb-4" />
+                        <course-teacher-info :teacher="teacher" class="mb-4" />
                         <hr />
                         <div id="tab4" class="pt-2">
                             <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
-                            <ElearningRates />
+                            <course-rates />
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <ElearningRightSide :data="{}" />
+                    <course-right-side :data="{}" />
                 </div>
             </div>
         </div>
 
-        <ElearningSliderTab
+        <course-slider-tab
             class="mt-4"
             :lessons="sciences"
             :swiperOptions="sliderOptions"
             title="Bài giảng cùng giáo viên"
         />
-        <ElearningSliderTab
+        <course-slider-tab
             :lessons="sciences"
             :swiperOptions="sliderOptions"
             title="Bài giảng liên quan"
@@ -174,24 +174,26 @@
 </template>
 
 <script>
-    import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
-    import IconEye from "~/assets/svg/icons/eye.svg?inline";
-    import IconUsd from "~/assets/svg/icons/usd.svg?inline";
-    import IconSuccess from "~/assets/svg/icons/success.svg?inline";
-    import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
-    import IconDownload from "~/assets/svg/icons/download.svg?inline";
-    import IconBooks from "~/assets/svg/icons/books.svg?inline";
-    import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
-    import ElearningRates from "~/components/page/elearning/ElearningRates";
-    import ElearningRightSide from "~/components/page/elearning/ElearningRightSide";
-    import { mapState } from "vuex";
-    import * as actionTypes from "~/utils/action-types";
+    import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo"
+    import IconEye from "~/assets/svg/icons/eye.svg?inline"
+    import IconUsd from "~/assets/svg/icons/usd.svg?inline"
+    import IconSuccess from "~/assets/svg/icons/success.svg?inline"
+    import IconPlayO from "~/assets/svg/icons/play-o.svg?inline"
+    import IconDownload from "~/assets/svg/icons/download.svg?inline"
+    import IconBooks from "~/assets/svg/icons/books.svg?inline"
+    import CourseSliderTab from "~/components/page/course/CourseSliderTab"
+    import CourseRates from "~/components/page/course/CourseRates"
+    import CourseRightSide from "~/components/page/course/CourseRightSide"
+    import { mapState } from "vuex"
+    import * as actionTypes from "~/utils/action-types"
+    // Import faked data
+    import { SCIENCES } from "~/server/fakedata/course/courses"
 
     export default {
         components: {
-            ElearningSliderTab,
-            ElearningRates,
-            ElearningRightSide,
+            CourseSliderTab,
+            CourseRates,
+            CourseRightSide,
             IconEye,
             IconUsd,
             IconSuccess,
@@ -213,100 +215,9 @@
                     views: 28751,
                     stars: 4.5,
                     rates: 469,
-                    price: 0
+                    price: 1201000
                 },
-                sciences: [
-                    {
-                        id: 1,
-                        name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    },
-                    {
-                        id: 2,
-                        name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    },
-                    {
-                        id: 3,
-                        name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    },
-                    {
-                        id: 4,
-                        name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    },
-                    {
-                        id: 5,
-                        name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    },
-                    {
-                        id: 6,
-                        name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-                        image: "https://picsum.photos/218/130",
-                        price: "219000",
-                        online: 0,
-                        onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-                        teacher: {
-                            id: 1,
-                            name: "Trần Văn A",
-                            avatar: "https://picsum.photos/20/20",
-                            star: 4,
-                            starAmount: 476
-                        }
-                    }
-                ],
+                sciences: SCIENCES,
                 sliderOptions: {
                     spaceBetween: 20,
                     slidesPerView: 5,

@@ -277,6 +277,14 @@ input:-webkit-autofill:active  {
         flex: 0 0 20%;
     }
 }
+.row.row-space-4 {
+    margin-left: -2rem;
+    margin-right: -2rem;
+    >div {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
 
 // Custom class
 .line-height-2 {
