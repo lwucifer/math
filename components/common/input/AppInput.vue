@@ -1,7 +1,10 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="classLabel">{{label}}</label>
+    <label v-if="label" :class="classLabel">{{ label }}</label>
+
     <div class="app-input__input" v-else>
+      <slot name="prepend-inner"></slot>
+
       <!-- Textarea  -->
       <textarea
         v-if="textarea"
@@ -24,9 +27,19 @@
         v-on="inputListeners"
       />
 
-      <div class="app-input__unit" v-if="localValidate == VALIDATE_STATUS.SUCCESS || hasUnitSlot">
-        <IconSuccess height="14" width="14" v-if="localValidate == VALIDATE_STATUS.SUCCESS" class="mr-1" />
-        <slot name="unit" />
+      <slot name="append-inner"></slot>
+
+      <div class="app-input__unit" v-if="$slots.unit">
+        <slot name="unit"></slot>
+      </div>
+
+      <div class="app-input__validate-status" v-if="localValidate">
+        <IconSuccess
+          height="14"
+          width="14"
+          v-if="localValidate == VALIDATE_STATUS.SUCCESS"
+          class="mr-1"
+        />
       </div>
 
       <div
