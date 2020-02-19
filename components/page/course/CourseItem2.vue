@@ -13,24 +13,24 @@
 
             <div class="course-item2_teacher">
                 <div>
-                    <app-avatar :src="item.teacher.avatar" :size="20"/>
-                    <span class="name">{{item.teacher.name}}</span>
+                    <app-avatar :src="item.avatar" :size="20"/>
+                    <span class="name">{{item.name}}</span>
                 </div>
                 <div>
                     <div class="stars">
-                        <app-stars :stars="3"/>
+                        <app-stars :stars="item.review_rate"/>
                     </div>
                     <span>
-                        <strong>{{item.teacher.star}}</strong>
-                        ({{item.teacher.starAmount}})
+                        <strong>{{item.review_rate}}</strong>
+                        ({{item.price.original_price}})
                     </span>
                 </div>
                 <div class="price-wrapper">
                     <span
-                        v-if="item.price > 0"
+                        v-if="item.price.original_price"
                         class="price"
                     >
-                        {{ item.price | toThousandFilter }}đ
+                        {{ item.price.original_price | toThousandFilter }}đ
                     </span>
                     <span
                         v-else

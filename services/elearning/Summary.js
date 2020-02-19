@@ -3,6 +3,6 @@ import BaseService from "../BaseService";
 
 export default class Summary extends BaseService {
     constructor($axios) {
-        super($axios, APIs.ELEARNING_SUMMARY);
+        super($axios, APIs.ELEARNING_PUBLIC_SUMMARY);
     }
 }
