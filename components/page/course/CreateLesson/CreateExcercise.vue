@@ -25,11 +25,7 @@
       <div class="cc-panel__body">
         <div class="mb-4">
           <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề bài tập</label>
-          <app-input id="title" :counter="100">
-            <template slot="unit">
-              Test unit
-            </template>
-          </app-input>
+          <app-input id="title" :counter="100" />
         </div>
 
         <div class="row align-items-center mb-4">
@@ -58,8 +54,15 @@
           </div>
 
           <div class="col-md-10">
-            <app-input type="number" class="mb-0" id="time" size="sm" style="width: 112px" :value="60">
-              <template slot="unit">Phút</template>
+            <app-input
+              type="number"
+              class="mb-0 ce-input-with-unit"
+              id="time"
+              size="sm"
+              style="width: 112px"
+              :value="60"
+            >
+              <div slot="unit">Phút</div>
             </app-input>
           </div>
         </div>
@@ -70,7 +73,17 @@
           </div>
 
           <div class="col-md-10">
-            <app-input type="number" class="mb-0" id="point" size="sm" style="width: 112px"></app-input>
+            <app-input
+              type="number"
+              min="0"
+              max="10"
+              class="mb-0 ce-input-with-unit"
+              id="point"
+              size="sm"
+              style="width: 102px"
+            >
+              <div slot="unit">/10</div>
+            </app-input>
           </div>
         </div>
 
@@ -80,7 +93,7 @@
           </div>
 
           <div class="col-md-10">
-            <app-input type="number" class="mb-0" id="count" size="sm" style="width: 112px"></app-input>
+            <app-input type="number" class="mb-0" id="count" size="sm" style="width: 49px"></app-input>
           </div>
         </div>
 
@@ -90,17 +103,55 @@
         </div>
       </div>
     </div>
+
+    <div class="cc-panel bg-white mb-4">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+      </div>
+
+      <div class="cc-panel__body">
+        <div class="ce-item d-flex align-items-center justify-content-between">
+          <div class="ce-item__left d-flex align-items-center">
+            <h3 class="body-2 mr-3">Bài tập 1</h3>
+            <a href="" class="ce-item__action edit mr-3">
+              <IconEditAlt class="icon d-block subheading fill-primary" />
+            </a>
+            <a href="" class="ce-item__action delete mr-3">
+              <IconTrashAlt class="icon d-block subheading fill-secondary" />
+            </a>
+          </div>
+
+          <div class="ce-item__right">
+            <a href="" class="text-secondary">Thêm câu hỏi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-panel bg-white mb-4">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+      </div>
+
+      <div class="cc-panel__body">
+        
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconEditAlt from '~/assets/svg/design-icons/edit-alt.svg?inline';
+import IconTrashAlt from '~/assets/svg/design-icons/trash-alt.svg?inline';
 
 export default {
   components: {
     IconInfoCircle,
-    IconAngleDown
+    IconAngleDown,
+    IconEditAlt,
+    IconTrashAlt
   }
 };
 </script>
