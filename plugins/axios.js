@@ -16,7 +16,6 @@ function addSubscriber(callback) {
 export default function({ store, $axios, redirect }) {
     $axios.onRequest(config => {
         console.log("[onRequest]", config.url);
-        console.log("[onRequest] store.state.auth.token.access_token", store.state.auth.token.access_token);
 
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
@@ -48,16 +47,16 @@ export default function({ store, $axios, redirect }) {
                             onAccessTokenFetched(result.data.access_token);
                         } else {
                             // remove token and redirect to login
-                            store.commit(`auth/${mutationType.ACCOUNT.REMOVE_TOKEN}`);
+                            store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
 
                             // console.log("[RENEW_TOKEN 1] /login")
                             redirect(`/login`);
                         }
                     })
                     .catch(err => {
-                        store.commit(`login/${mutationType.ACCOUNT.REMOVE_TOKEN}`);
+                        store.commit(`login/${MUTATION_AUTH.REMOVE_TOKEN}`);
                         // console.log("[RENEW_TOKEN 2] /login")
-                        redirect(`/${store.state.i18n.locale}/login`);
+                        redirect(`/login`);
                     });
             }
 
