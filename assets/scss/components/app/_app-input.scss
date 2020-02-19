@@ -158,4 +158,22 @@
     .app-input__input input {
         padding-right: 90px;
     }
+
+    &.app-input--error {
+        .app-input__counter {
+            background-color: $color-red;
+        }
+    }
+}
+
+.app-input--error {
+    .app-input__input input {
+        border-color: $color-red !important;
+    }
+}
+
+.app-input--success {
+    .app-input__input input {
+        border-color: $color-primary !important;
+    }
 }
