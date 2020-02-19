@@ -6,7 +6,10 @@
       </div>
       <div class="col-md-9">
         <div class="elearning-account__main">
-          <h3 class="color-primary mb-4">Thông tin tài khoản</h3>
+          <div class="elearning-history__title mb-3">
+            <h5 class="color-primary mb-3">Thông tin tài khoản</h5>
+            <hr />
+          </div>
 
           <div class="form-group">
             <label>Họ và tên</label>

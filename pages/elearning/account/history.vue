@@ -6,8 +6,10 @@
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">
-          <h3 class="color-primary mb-3">Lịch sử giao dịch</h3>
-          <hr />
+          <div class="elearning-history__title">
+            <h5 class="color-primary mb-3">Lịch sử giao dịch</h5>
+            <hr />
+          </div>
           <div class="dates d-flex mb-4 mt-4">
             <app-date-picker v-model="time1" label="From" square size="sm" class="ml-auto" />
             <app-date-picker v-model="time2" label="To" square size="sm" />
@@ -18,7 +20,11 @@
             :pagination="pagination"
             @pagechange="onPageChange"
             :data="list"
-          />
+          >
+            <tr v-for="(item , index) in list" :key="index">
+              <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
+            </tr>
+          </app-table>
         </div>
       </div>
     </div>
@@ -64,7 +70,7 @@ export default {
           name: "type",
           text: "Phương thức thanh toán",
           sort: true
-        },
+        }
       ],
       isAuthenticated: true,
       pagination: {
@@ -197,7 +203,7 @@ export default {
           pay: "Bán",
           type: "Chuyển khoản",
           time: "16:50:30 19-11-2019"
-        },
+        }
       ],
       active_el: 0
     };
