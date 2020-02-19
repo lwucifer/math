@@ -132,12 +132,12 @@ const actions = {
         console.log("payload", payload);
         try {
             const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
-            console.log("payload", payload);
+            // console.log("payload", payload);
             console.log("[REFRESH_TOKEN] response", data);
             if (data.success == true) {
                 // update rewnewToken
-                commit(mutationType.ACCOUNT.SET_ACCESS_TOKEN, data.data.access_token);
-                commit(mutationType.ACCOUNT.SET_TOKEN, data.data);
+                commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, data.data.access_token);
+                commit(mutationTypes.AUTH.SET_TOKEN, data.data);
             }
             return data;
         } catch (err) {

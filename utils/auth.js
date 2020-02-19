@@ -1,5 +1,5 @@
 import Cookie from "js-cookie";
-import { SCHOOLLY_ACCESS_TOKEN, TOKEN_USER_SCHOOLLY } from "./config";
+import { SCHOOLLY_ACCESS_TOKEN,TOKEN_USER_SCHOOLLY, UNAUTHORIZE_API } from "./config";
 
 /**
  * get access_token from local storage
@@ -78,19 +78,19 @@ export const getAccessTokenFromCookie = req => {
 };
 
 export const checkRequestAuthorize = _url => {
-    // const urls = _url.split('?');
+    const urls = _url.split('?');
     // console.log("urls", urls);
 
     // if url contain token=true => return true;
     if (_url.includes("token=true")) return true;
 
     // public api url
-    if (_url.includes("/login")) return false;
+    if (_url.includes("/public")) return false;
 
     // public api
-    // if (UNAUTHORIZE_API.includes(urls[0])) {
-    //   return false;
-    // }
+    if (UNAUTHORIZE_API.includes(urls[0])) {
+      return false;
+    }
 
     return true;
 };
