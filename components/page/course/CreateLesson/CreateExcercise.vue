@@ -25,7 +25,11 @@
       <div class="cc-panel__body">
         <div class="mb-4">
           <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề bài tập</label>
-          <app-input id="title" :counter="10" />
+          <app-input id="title" :counter="100">
+            <template slot="unit">
+              Test unit
+            </template>
+          </app-input>
         </div>
 
         <div class="row align-items-center mb-4">
@@ -54,7 +58,9 @@
           </div>
 
           <div class="col-md-10">
-            <app-input type="number" class="mb-0" id="time" size="sm" style="width: 112px"></app-input>
+            <app-input type="number" class="mb-0" id="time" size="sm" style="width: 112px" :value="60">
+              <template slot="unit">Phút</template>
+            </app-input>
           </div>
         </div>
 
