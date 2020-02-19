@@ -7,7 +7,7 @@
       title="Nổi bật"
     />
     <course-slider-tab
-      :lessons="lessons"
+      :lessons="suggestion"
       :sciences="sciences"
       :swiperOptions="sliderOptions"
       title="Gợi ý"
@@ -68,6 +68,9 @@ export default {
     ...mapState("elearning-public-summary", ["elearningPublicSummary"]),
     highlight() {
       return get(this.elearningPublicSummary, "highlight", []);
+    },
+    suggestion() {
+      return get(this.elearningPublicSummary, "suggestion", []);
     }
   }
 };
