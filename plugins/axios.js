@@ -21,7 +21,7 @@ export default function({ store, $axios, redirect }) {
             if (!store.getters["auth/token"]) return;
             config.headers.common["Authorization"] = `Bearer ${
         config.url.includes("/user/public/renew")
-          ? store.state.auth.token.token
+          ? store.state.auth.token.refresh_token
           : store.state.auth.access_token
       }`;
 
@@ -31,44 +31,37 @@ export default function({ store, $axios, redirect }) {
         }
     });
 
-    $axios.onResponse(
-        response => {
-            console.log("[onResponse]");
-        },
-        err => {
-            return Promise.reject(err.response);
-        }
-    );
-
-    $axios.onRequestError(err => {
-        console.log("[onRequestError]");
-        // console.log("onRequestError", err);
-    });
-
-    $axios.onResponseError(error => {
-        // console.log("[onResponseError]", error);
-        // const code = parseInt(error.response && error.response.status);
-        // if (code === 401) {
-        //     removeToken();
-        //     redirect("/auth/signin");
-        // }
-        console.log("[onResponseError]");
-        const code = parseInt(error.response && error.response.status);
-        const originalRequest = error.response && error.response.config;
-        if (code === 401) {
+    $axios.onResponse(response => {
+        console.log("[onResponse]", response);
+        const originalRequest = response.config;
+        const dataCode = response.data.code;
+        console.log("dataCode huydv", dataCode);
+        if (dataCode == "SCLCOM_0002") {
+            // expire token => renew
             if (!isAlreadyFetchingAccessToken) {
                 isAlreadyFetchingAccessToken = true;
+                const refreshToken = store.getters["auth/refreshToken"];
+                store
+                    .dispatch(`auth/${ACTION_AUTH.REFRESH_TOKEN}`, {
+                        refresh_token: refreshToken
+                    })
+                    .then(result => {
+                        isAlreadyFetchingAccessToken = false;
+                        if (result.success == true) {
+                            onAccessTokenFetched(result.data.access_token);
+                        } else {
+                            // remove token and redirect to login
+                            store.commit(`auth/${mutationType.ACCOUNT.REMOVE_TOKEN}`);
 
-                store.dispatch(`auth/${ACTION_AUTH.REFRESH_TOKEN}`).then(result => {
-                    isAlreadyFetchingAccessToken = false;
-                    if (result.success == true) {
-                        onAccessTokenFetched(result.data.access_token);
-                    } else {
-                        // remove token and redirect to login
-                        store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
-                        redirect(`/auth/signin`);
-                    }
-                });
+                            // console.log("[RENEW_TOKEN 1] /login")
+                            redirect(`/login`);
+                        }
+                    })
+                    .catch(err => {
+                        store.commit(`login/${mutationType.ACCOUNT.REMOVE_TOKEN}`);
+                        // console.log("[RENEW_TOKEN 2] /login")
+                        redirect(`/${store.state.i18n.locale}/login`);
+                    });
             }
 
             // resolve origin request
@@ -79,12 +72,22 @@ export default function({ store, $axios, redirect }) {
                 });
             });
             return retryOriginalRequest;
-        } else if (code === 422 || code === 403 || code === 415) {
-            store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
-            redirect(`/auth/signin`);
-        } else {
-            redirect("/404");
         }
+    });
+
+    $axios.onRequestError(err => {
+        console.log("[onRequestError]");
+        // console.log("onRequestError", err);
+    });
+
+    $axios.onResponseError(error => {
+        console.log("[onResponseError]", error);
+        const code = parseInt(error.response && error.response.status);
+        if (code === 401) {
+            removeToken();
+            redirect("/auth/signin");
+        }
+        console.log("[onResponseError]", error.response);
     });
 
     $axios.onError(error => {

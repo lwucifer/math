@@ -1,6 +1,7 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
+import * as APIs from "../utils/endpoints";
 import { setToken, setAccessToken, removeToken } from "../utils/auth";
 import { authFire } from "../services/firebase/FirebaseInit";
 
@@ -26,6 +27,13 @@ const getters = {
     },
     accessToken(state) {
         return state.access_token;
+    },
+    refreshToken(state) {
+        if (!state.token) return null;
+        if (typeof state.token == "string") {
+            return state.token ? JSON.parse(state.token).refresh_token : null;
+        }
+        return state.token.refresh_token;
     }
 };
 
@@ -50,11 +58,6 @@ const actions = {
 
     async [actionTypes.AUTH.REGISTER]({ commit }, payload) {
         const result = await new auth(this.$axios).register(payload);
-        // if (result.success) {
-        //     console.log("Login [REPONSE]", result);
-        //     commit(mutationTypes.AUTH.SET_TOKEN, result.data);
-        //     commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
-        // }
         return result;
     },
 
@@ -125,21 +128,20 @@ const actions = {
         const result = await new auth(this.$axios).verifyEmail(payload);
         return result;
     },
-    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit, state }, payload) {
+    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit }, payload) {
+        console.log("payload", payload);
         try {
-            const result = await new auth(this.$axios).refreshToken(payload);
-
-            console.log("[REFRESH_TOKEN] response", result);
-            if (result.success == true) {
-                commit(mutationTypes.AUTH.SET_TOKEN, {
-                    ...state.token,
-                    access_token: result.data.access_token
-                });
-                commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
+            const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
+            console.log("payload", payload);
+            console.log("[REFRESH_TOKEN] response", data);
+            if (data.success == true) {
+                // update rewnewToken
+                commit(mutationType.ACCOUNT.SET_ACCESS_TOKEN, data.data.access_token);
+                commit(mutationType.ACCOUNT.SET_TOKEN, data.data);
             }
-            return result;
+            return data;
         } catch (err) {
-            console.log("[SYSTEM ROLE] err", err);
+            console.log("[REFRESH_TOKEN] err", err);
             return err;
         }
     }
