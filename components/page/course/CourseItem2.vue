@@ -22,7 +22,7 @@
                     </div>
                     <span>
                         <strong>{{item.review_rate}}</strong>
-                        ({{item.price.original_price}})
+                        ({{item.review_count}})
                     </span>
                 </div>
                 <div class="price-wrapper">
