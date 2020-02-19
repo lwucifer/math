@@ -1,7 +1,7 @@
 <template>
     <div class="course-item2">
         <div class="course-item2__image">
-            <img :src="item.image" alt/>
+            <img :src="item.avatar" alt/>
             <div class="status-online" v-if="item.onlineStatus && item.online === 1">{{item.onlineStatus}}</div>
             <div class="online" v-if="item.online">Trực tiếp</div>
             <div class="video" v-if="item.video">
@@ -13,8 +13,8 @@
 
             <div class="course-item2_teacher">
                 <div>
-                    <app-avatar :src="item.avatar" :size="20"/>
-                    <span class="name">{{item.name}}</span>
+                    <app-avatar :src="item.teacher.avatar" :size="20"/>
+                    <span class="name">{{item.teacher.name}}</span>
                 </div>
                 <div>
                     <div class="stars">
