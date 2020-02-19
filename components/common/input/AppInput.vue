@@ -8,33 +8,44 @@
         v-bind="$attrs"
         :rows="rows"
         :type="type"
-        :value="value"
+        :value="localValue"
         @input="updateInput"
         :placeholder="placeholder"
         :disabled="disabled"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+        :class="localValidate == VALIDATE_STATUS.ERROR ? 'border-red' : (localValidate == VALIDATE_STATUS.SUCCESS ? 'border-primary' : '')"
       />
       <!-- Input Text  -->
       <input
         v-else
         v-bind="$attrs"
         :type="type"
-        :value="value"
+        :value="localValue"
         :disabled="disabled"
         @input="updateInput"
         :placeholder="placeholder"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+        :class="localValidate == VALIDATE_STATUS.ERROR ? 'border-red' : (localValidate == VALIDATE_STATUS.SUCCESS ? 'border-primary' : '')"
       />
-      <div class="unit" v-if="validate == 1 || hasUnitSlot">
-        <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
-        <slot name="unit"/>
+
+      <div class="unit" v-if="localValidate == VALIDATE_STATUS.SUCCESS || hasUnitSlot">
+        <IconSuccess height="14" width="14" v-if="localValidate == VALIDATE_STATUS.SUCCESS" class="mr-1" />
+        <slot name="unit" />
       </div>
-      <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+
+      <div
+        v-if="counter"
+        class="app-input__counter"
+      >{{ `${localValue.toString().length}/${counter}` }}</div>
+
+      <p
+        class="app-input__error"
+        v-if="message && localValidate == VALIDATE_STATUS.ERROR"
+      >{{message}}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 
 export default {
@@ -43,6 +54,7 @@ export default {
   components: {
     IconSuccess
   },
+
   model: {
     prop: "value",
     event: "input"
@@ -73,7 +85,7 @@ export default {
     validate: {
       type: [String, Number],
       required: false,
-      default: 0
+      default: VALIDATE_STATUS.DEFAULT
     },
     message: {
       type: String,
@@ -89,23 +101,24 @@ export default {
       required: false,
       default: 6
     },
+    counter: {
+      type: Number
+    }
   },
 
   data() {
-    return {};
-  },
-
-  methods: {
-    updateInput: function(event) {
-      this.$emit("input", event.target.value);
-    }
+    return {
+      VALIDATE_STATUS: Object.freeze(VALIDATE_STATUS),
+      localValue: this.value,
+      localValidate: this.validate
+    };
   },
 
   computed: {
     hasUnitSlot() {
-      return !!this.$slots['unit'];
+      return !!this.$slots["unit"];
     },
-    
+
     classSize() {
       const disableClass = {
         disabled: this.disabled
@@ -116,7 +129,11 @@ export default {
         "input--size-md": this.size === "md" || !this.size,
         "input--size-lg": this.size === "lg"
       };
-      return { ...classSize, ...disableClass };
+      return {
+        ...classSize,
+        ...disableClass,
+        "app-input--has-counter": !!this.counter
+      };
     },
 
     classLabel() {
@@ -127,6 +144,40 @@ export default {
         "label-fixed": this.labelFixed
       };
       return { ...labelBold, ...labelFixed };
+    }
+  },
+
+  watch: {
+    value(newValue) {
+      this.localValue = newValue;
+    },
+
+    localValue(newValue) {
+      if (this.counter) {
+        this.validateCounter();
+      }
+    },
+
+    validate(newValue) {
+      this.localValidate = newValue;
+    }
+  },
+
+  methods: {
+    updateInput: function(event) {
+      this.localValue = event.target.value;
+      this.$emit("input", event.target.value);
+    },
+
+    validateCounter() {
+      const { counter, localValue } = this;
+      const valueLength = localValue.toString().length;
+
+      if (valueLength > counter) {
+        this.localValidate = VALIDATE_STATUS.ERROR;
+      } else {
+        this.localValidate = VALIDATE_STATUS.DEFAULT;
+      }
     }
   }
 };
