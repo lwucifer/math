@@ -43,8 +43,8 @@ export const ACCOUNT_EARNING = {
   SET_ACCOUNT_EARNING_LIST: "setAccountEarningList"
 };
 
-export const ELEARNING_SUMMARY = {
-  SET_ELEARNING_SUMMARY_LIST: "setElearningSummaryList"
+export const ELEARNING_PUBLIC_SUMMARY = {
+  SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList"
 };
 
 export const ELEARNING = {

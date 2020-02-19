@@ -9,5 +9,8 @@ export const ERRORS = {
     REGISTER: {
         EMAIL_PHONE_USED: "SCLU_1000",
         PASSWORD_LEAST: "SCLU_1001"
+    },
+    FORGOT_PASSWORD: {
+        USER_NOT_FOUND: "SCLCOM_1001"
     }
 };
