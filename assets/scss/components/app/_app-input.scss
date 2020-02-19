@@ -1,141 +1,217 @@
+.app-input {
+    margin-bottom: 2rem;
+
+    .mx-input {
+        height: 4rem;
+        border-radius: 0;
+    }
+}
+
 .app-input__error {
     color: $color-red;
     font-size: 1.2rem;
     display: block;
     width: 100%;
-    margin-top: 0.9rem;
-    line-height: 0;
+    margin-top: 0.4rem;
+    line-height: (16/12);
 }
+
+.app-input__label {
+    font-size: 1.6rem;
+    text-align: left;
+    line-height: 4rem;
+    padding-right: 1rem;
+
+    &.app-input__label--fixed {
+        width: 11rem;
+    }
+
+    &.app-input__label--bold {
+        font-weight: bold;
+        font-size: 1.4rem;
+
+        &.label-fixed {
+            width: 15rem;
+        }
+    }
+}
+
+.app-input__slot {
+    .app-select__selected {
+        border: 1px solid $color-border;
+        outline: none;
+
+        &:focus {
+            border-color: #0070E0;
+        }
+    }
+}
+
+.app-input__input {
+    position: relative;
+    flex: 1;
+    font-size: 1.4rem;
+    border: 1px solid #eee;
+    background-color: #fff;
+    display: flex;
+
+    input {
+        border: 0;
+        height: 100%;
+        padding: 0 1rem;
+        background-color: transparent;
+        width: 100%;
+        flex-grow: 1;
+        font-size: inherit;
+
+        &:disabled {
+            background-color: #eee;
+            border-color: #ccc;
+            color: #999;
+        }
+    }
+
+    textarea {
+        border: 0;
+        padding: .5rem 1rem;
+        background-color: transparent;
+        width: 100%;
+        flex-grow: 1;
+        font-size: inherit;
+        
+        &:disabled {
+            background-color: #eee;
+            border-color: #ccc;
+            color: #999;
+        }
+    }
+
+    input, textarea {
+        &:focus {
+            border-color: $color-primary;
+        }
+
+        &.disabled {
+            background-color: #eee;
+            border-color: #ccc;
+        }
+    }
+}
+
+.app-input__unit,
+.app-input__validate-status {
+    height: 100%;
+    align-self: center;
+    color: #999;
+    background-color: #fff;
+    padding: 0 .8rem 0 .3rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.app-input-file-upload {
+    display: flex;
+    align-items: center;
+
+    label.app-input-file-upload__label {
+        background-color: $color-primary;
+        color: #fff;
+        height: 3rem;
+        font-size: 1.4rem;
+        padding: 0 2rem;
+        line-height: 3rem;
+        text-align: center;
+        display: inline-block;
+        cursor: pointer;
+    }
+    
+    .app-input-file-upload__input { 
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.app-input__counter {
+    color: #fff;
+    font-weight: 600;
+    background-color: $color-primary;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: .3rem;
+}
+
+
+
+// MODIFIERS
+.app-input--size-xs {
+    .app-input__input {
+        font-size: 1.2rem;
+        height: 2.5rem;
+    }
+}
+
+.app-input--size-sm {
+    .app-input__input {
+        height: 3.2rem;
+    }
+}
+
+.app-input--size-md {
+    .app-input__input {
+        height: 4rem;
+    }
+}
+
+.app-input--size-lg {
+    .app-input__input {
+        height: 4.8rem;
+    }
+}
+
+.app-input--has-counter {
+    .app-input__input input {
+        padding-right: 90px;
+    }
+
+    &.app-input--error {
+        .app-input__counter {
+            background-color: $color-red;
+        }
+    }
+}
+
+.app-input--error {
+    .app-input__input {
+        border-color: $color-red !important;
+    }
+}
+
+.app-input--success {
+    .app-input__input {
+        border-color: $color-primary !important;
+    }
+}
+
+.app-input--focused {
+    .app-input__input {
+        border-color: $color-primary;
+    }
+}
+
+
+
+// OTHERS
 .app-inputs-inline {
     display: flex;
+
     .app-input + .app-input {
         margin-left: 2rem;
     }
+
     &.space-between {
         justify-content: space-between;
-    }
-}
-.app-input {
-    margin-bottom: 2rem;
-    display: flex;
-    &.input--size-xs {
-        .app-input__input {
-            font-size: 1.2rem;
-            .mx-input,
-            input { height: 2.5rem; }
-            .unit { height: 2.1rem; line-height: 2.1rem;}
-        }
-    }
-    &.input--size-sm {
-        .app-input__input {
-            .mx-input,
-            input { height: 3.2rem; }
-            .unit { height: 2.8rem; line-height: 2.8rem;}
-        }
-    }
-    &.input--size-lg {
-        .app-input__input {
-            .mx-input,
-            input { height: 4.8rem; }
-            .unit { height: 4.4rem; line-height: 4.5rem;}
-        }
-    }
-    label {
-        font-size: 1.6rem;
-        text-align: left;
-        line-height: 4rem;
-        padding-right: 1rem;
-        &.label-fixed {
-            width: 11rem;
-        }
-        &.label-bold {
-            font-weight: bold;
-            font-size: 1.4rem;
-            &.label-fixed {
-                width: 15rem;
-            }
-        }
-    }
-    .mx-input {
-        height: 4rem;
-        border-radius: 0;
-    }
-    .app-input__slot {
-        .app-select__selected {
-            border: 1px solid $color-border;
-            outline: none;
-            &:focus {
-                border-color: #0070E0;
-            }
-        }
-    }
-    .app-input__input {
-        position: relative;
-        flex: 1;
-        font-size: 1.4rem;
-        input {
-            height: 4rem;
-            border: 1px solid #eee;
-            padding: 0 1rem;
-            background-color: #fff;
-            width: 100%;
-            &:disabled {
-                background-color: #eee;
-                border-color: #ccc;
-                color: #999;
-            }
-        }
-        textarea {
-            border: 1px solid #eee;
-            padding: .5rem 1rem;
-            background-color: #fff;
-            width: 100%;
-            &:disabled {
-                background-color: #eee;
-                border-color: #ccc;
-                color: #999;
-            }
-        }
-        input, textarea {
-            &:focus {
-                border-color: $color-primary;
-            }
-            &.disabled {
-                background-color: #eee;
-                border-color: #ccc;
-            }
-        }
-
-        .unit {
-            position: absolute;
-            right: 1px;
-            top: 2px;
-            height: 3.6rem;
-            line-height: 3.6rem;
-            color: #999;
-            background-color: #fff;
-            padding: 0 .8rem 0 .3rem;
-            display: flex;
-            align-items: center;
-        }
-    }
-    .app-input-file-upload {
-        display: flex;
-        align-items: center;
-        label.app-input-file-upload__label {
-            background-color: $color-primary;
-            color: #fff;
-            height: 3rem;
-            font-size: 1.4rem;
-            padding: 0 2rem;
-            line-height: 3rem;
-            text-align: center;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .app-input-file-upload__input { 
-            opacity: 0;
-            visibility: hidden;
-        }
     }
 }

@@ -7,14 +7,14 @@
       title="Nổi bật"
     />
     <course-slider-tab
-      :lessons="lessons"
+      :lessons="suggestion"
       :sciences="sciences"
       :swiperOptions="sliderOptions"
       title="Gợi ý"
       class="mt-5"
     />
     <course-slider-tab
-      :lessons="sciences"
+      :lessons="recent"
       :swiperOptions="sliderOptions"
       title="Bài giảng mới nhất"
       class="mt-5"
@@ -68,6 +68,12 @@ export default {
     ...mapState("elearning-public-summary", ["elearningPublicSummary"]),
     highlight() {
       return get(this.elearningPublicSummary, "highlight", []);
+    },
+    suggestion() {
+      return get(this.elearningPublicSummary, "suggestion", []);
+    },
+    recent() {
+      return get(this.elearningPublicSummary, "recent", []);
     }
   }
 };

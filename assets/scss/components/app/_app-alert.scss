@@ -3,14 +3,18 @@
     display: flex;
     align-items: center;
     padding: 1.5rem;
+    line-height: (22/14);
 
-    &__icon {
-        margin-right: 0.5rem;
+    &__icon-wrapper {
+        margin-right: 1.5rem;
 
         svg {
             display: block;
-            font-size: 2rem;
         }
+    }
+
+    &__icon {
+        font-size: 2rem;
     }
 
     &__close {
@@ -32,7 +36,7 @@
     .app-alert--#{$name} {
         background-color: rgba($color, .1);
 
-        .app-alert__icon svg {
+        .app-alert__icon {
             fill: $color;
         }
     }

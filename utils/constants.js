@@ -52,3 +52,9 @@ export const LIKE_TYPES = {
     HAPPY: 2,
     ANGRY: 3
 }
+
+export const APP_INPUT_VALIDATE_STATUS = {
+    DEFAULT: 0,
+    SUCCESS: 1,
+    ERROR: 2
+}
