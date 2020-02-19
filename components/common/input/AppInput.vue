@@ -1,68 +1,71 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="labelFixed ? 'label-fixed' : ''">{{label}}</label>
-    <!-- Date picker -->
-    <div class="app-input__input" v-if="type == 'date'">
-      <app-date-picker :value="value" @input="updateInput" />
-    </div>
-    
-    <!-- Select -->
-    <div class="app-input__select" v-else-if="type == 'select'">
-      <slot/>
-    </div>
+    <label v-if="label" :class="classLabel">{{ label }}</label>
 
-    <!-- Input upload -->
-    <div class="app-input-file-upload" v-else-if="type == 'file'">
-      <label class="app-input-file-upload__label">
-        {{placeholder}}
-        <input
-          type="file"
-          class="app-input-file-upload__input"
-          :value="value"
-          :disabled="disabled"
-          @input="updateInput"
-        />
-        <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
-      </label>
-    </div>
-
-    <!-- Input text -->
     <div class="app-input__input" v-else>
+      <slot name="prepend-inner"></slot>
+
+      <!-- Textarea  -->
       <textarea
         v-if="textarea"
+        v-bind="$attrs"
         :rows="rows"
         :type="type"
-        :value="value"
-        @input="updateInput"
+        :value="localValue"
         :placeholder="placeholder"
         :disabled="disabled"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+        v-on="inputListeners"
       />
+      <!-- Input Text  -->
       <input
         v-else
+        v-bind="$attrs"
         :type="type"
-        :value="value"
+        :value="localValue"
         :disabled="disabled"
-        @input="updateInput"
         :placeholder="placeholder"
-        :class="validate == 2 ? 'border-red' : (validate == 1 ? 'border-primary' : '')"
+        v-on="inputListeners"
       />
-      <div class="unit" v-if="validate == 1 || unit">
-        <IconSuccess height="14" width="14" v-if="validate == 1" class="mr-1" />
-        <span>{{unit}}</span>
+
+      <slot name="append-inner"></slot>
+
+      <div class="app-input__unit" v-if="$slots.unit">
+        <slot name="unit"></slot>
       </div>
-      <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
+
+      <div class="app-input__validate-status" v-if="localValidate">
+        <IconSuccess
+          height="14"
+          width="14"
+          v-if="localValidate == VALIDATE_STATUS.SUCCESS"
+          class="mr-1"
+        />
+      </div>
+
+      <div
+        v-if="counter"
+        class="app-input__counter"
+      >{{ `${localValue.toString().length}/${counter}` }}</div>
     </div>
+
+    <div
+      class="app-input__error"
+      v-if="message && localValidate == VALIDATE_STATUS.ERROR"
+    >{{message}}</div>
   </div>
 </template>
 
 <script>
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 
 export default {
+  inheritAttrs: false,
+
   components: {
     IconSuccess
   },
+
   model: {
     prop: "value",
     event: "input"
@@ -73,11 +76,6 @@ export default {
       type: [String, Number],
       required: false,
       default: ""
-    },
-    validate: {
-      type: [String, Number],
-      required: false,
-      default: 0
     },
     placeholder: {
       type: String,
@@ -94,55 +92,137 @@ export default {
       required: false,
       default: ""
     },
+    disabled: Boolean,
+    validate: {
+      type: [String, Number],
+      required: false,
+      default: VALIDATE_STATUS.DEFAULT
+    },
     message: {
       type: String,
       required: false,
       default: ""
     },
     label: String,
-    unit: String,
-    labelFixed: {
-      type: Boolean,
-      default: false
-    },
-    textarea: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
+    labelFixed: Boolean,
+    labelBold: Boolean,
+    textarea: Boolean,
     rows: {
       type: [String, Number],
       required: false,
       default: 6
+    },
+    counter: {
+      type: Number
     }
   },
 
   data() {
-    return {};
+    return {
+      VALIDATE_STATUS: Object.freeze(VALIDATE_STATUS),
+      localValue: this.value,
+      localValidate: this.validate,
+      isFocus: false
+    };
+  },
+
+  computed: {
+    hasUnitSlot() {
+      return !!this.$slots["unit"];
+    },
+
+    classSize() {
+      const disableClass = {
+        disabled: this.disabled
+      };
+      const classSize = {
+        "app-input--size-xs": this.size === "xs",
+        "app-input--size-sm": this.size === "sm",
+        "app-input--size-md": this.size === "md" || !this.size,
+        "app-input--size-lg": this.size === "lg"
+      };
+      return {
+        ...classSize,
+        ...disableClass,
+        "app-input--has-counter": !!this.counter,
+        "app-input--error": this.localValidate === VALIDATE_STATUS.ERROR,
+        "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
+        "app-input--focused": this.isFocus
+      };
+    },
+
+    classLabel() {
+      const labelBold = {
+        "app-input__label-bold": this.labelBold
+      };
+      const labelFixed = {
+        "app-input__label-fixed": this.labelFixed
+      };
+      return {
+        "app-input__label": true,
+        ...labelBold,
+        ...labelFixed
+      };
+    },
+
+    inputListeners: function() {
+      const vm = this;
+      // `Object.assign` merges objects together to form a new object
+      return Object.assign(
+        {},
+        // We add all the listeners from the parent
+        this.$listeners,
+        // Then we can add custom listeners or override the
+        // behavior of some listeners.
+        {
+          // This ensures that the component works with v-model
+          input: event => this.updateInput(event),
+          blur: event => this.handleBlur(event),
+          focus: event => this.handleFocus(event)
+        }
+      );
+    }
+  },
+
+  watch: {
+    value(newValue) {
+      this.localValue = newValue;
+    },
+
+    localValue(newValue) {
+      if (this.counter) {
+        this.validateCounter();
+      }
+    },
+
+    validate(newValue) {
+      this.localValidate = newValue;
+    }
   },
 
   methods: {
     updateInput: function(event) {
+      this.localValue = event.target.value;
       this.$emit("input", event.target.value);
-      console.log(event)
-    }
-  },
+    },
 
-  computed: {
-    classSize() {
-      const disableClass = {
-        "disabled":  this.disabled
-      };
-      const classSize = {
-        "input--size-xs": this.size === "xs",
-        "input--size-sm": this.size === "sm",
-        "input--size-md": this.size === "md" || !this.size,
-        "input--size-lg": this.size === "lg"
-      };
-      return {...classSize, ...disableClass};
+    handleFocus(event) {
+      this.isFocus = true;
+    },
+
+    handleBlur(event) {
+      this.isFocus = false;
+    },
+
+    validateCounter() {
+      const { counter, localValue } = this;
+      const valueLength = localValue.toString().length;
+
+      if (valueLength > counter) {
+        this.localValidate = VALIDATE_STATUS.ERROR;
+      } else {
+        this.localValidate = VALIDATE_STATUS.DEFAULT;
+      }
     }
   }
 };

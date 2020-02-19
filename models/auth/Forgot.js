@@ -22,8 +22,9 @@ class ResetPassWithPhone {
 }
 
 class ResetPassWithEmail {
-    constructor(email, password, recaptcha) {
+    constructor(email, code, password, recaptcha) {
         this.email = email;
+        this.verify_token = code;
         this.new_pwd = password;
         this.g_recaptcha_response = recaptcha;
     }
@@ -48,6 +49,8 @@ export function createResetPassWithPhone(
     );
 }
 
-export function createResetPassWithEmail(email, password, recaptcha) {
-    return Object.freeze(new createResetWithEmail(email, password, recaptcha));
+export function createResetPassWithEmail(email, code, password, recaptcha) {
+    return Object.freeze(
+        new ResetPassWithEmail(email, code, password, recaptcha)
+    );
 }

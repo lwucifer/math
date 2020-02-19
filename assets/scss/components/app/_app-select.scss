@@ -1,6 +1,12 @@
 .app-select {
     position: relative;
     display: inline-block;
+
+    &.active {
+        .app-select__selected {
+            border-color: $color-primary;
+        }
+    }
 }
 
 .app-select__selected {
@@ -18,6 +24,10 @@
         .app-select__clear {
             visibility: visible;
         }
+    }
+
+    &:focus {
+        outline: none;
     }
 }
 
@@ -146,5 +156,12 @@
         .app-select__selected-value {
             display: none;
         }
+    }
+}
+
+// Size
+.app-select--size-sm {
+    .app-select__selected {
+        height: 3.2rem;
     }
 }

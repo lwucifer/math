@@ -57,7 +57,7 @@ export default {
       style: typeof ctx.props.size === "number" ? `width: ${ctx.props.size}px; height: ${ctx.props.size}px` : '',
       on: ctx.$listeners
     },
-    [h('img', {
+    [ctx.props.src ? h('img', {
       attrs: {
         src: ctx.props.src,
         srcset: ctx.props.srcSet,
@@ -66,7 +66,7 @@ export default {
       on: {
         error: ctx.props.loadError
       }
-    })]
+    }) : null]
     );
   }
 };

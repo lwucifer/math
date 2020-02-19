@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import Logo from "~/assets/svg/icons/schoolly.svg?inline";
+import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";

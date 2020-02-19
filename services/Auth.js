@@ -60,13 +60,16 @@ export default class Auth {
     }
 
     async [actionTypes.AUTH.CHANGE_PASSWORD](payload) {
-        const { oldPass, newPass, verify_new_pass } = payload;
-        const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, {
-            oldPass,
-            newPass,
-            verify_new_pass
-        });
+        const { data } = await this.$axios.post(`${APIs.CHANGE_PASSWORD}`, payload);
 
         return data;
     }
+    async [actionTypes.AUTH.VERIFY_EMAIL](payload) {
+        const { data } = await this.$axios.post(`${APIs.VERIFY_EMAIL}`, payload);
+        return data;
+    }
+    // async [actionTypes.AUTH.REFRESH_TOKEN](payload) {
+    //     const { data } = await this.$axios.post(`${APIs.REFRESH_TOKEN}`, payload);
+    //     return data;
+    // }
 }

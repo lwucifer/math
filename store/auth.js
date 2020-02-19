@@ -1,7 +1,8 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
-import { setToken, setAccessToken } from "../utils/auth";
+import * as APIs from "../utils/endpoints";
+import { setToken, setAccessToken, removeToken } from "../utils/auth";
 import { authFire } from "../services/firebase/FirebaseInit";
 
 /**
@@ -26,6 +27,13 @@ const getters = {
     },
     accessToken(state) {
         return state.access_token;
+    },
+    refreshToken(state) {
+        if (!state.token) return null;
+        if (typeof state.token == "string") {
+            return state.token ? JSON.parse(state.token).refresh_token : null;
+        }
+        return state.token.refresh_token;
     }
 };
 
@@ -50,11 +58,6 @@ const actions = {
 
     async [actionTypes.AUTH.REGISTER]({ commit }, payload) {
         const result = await new auth(this.$axios).register(payload);
-        // if (result.success) {
-        //     console.log("Login [REPONSE]", result);
-        //     commit(mutationTypes.AUTH.SET_TOKEN, result.data);
-        //     commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
-        // }
         return result;
     },
 
@@ -89,6 +92,7 @@ const actions = {
                 .catch(error => {
                     // User couldn't sign in (bad verification code?)
                     // ...
+                    console.log("error", error);
                     return error;
                 });
         }
@@ -102,7 +106,7 @@ const actions = {
     async [actionTypes.AUTH.LOGOUT]({ commit }) {
         const result = await auth(this.$axios).logout();
         if (result.success) {
-            commit(mutationTypes.AUTH.SET_LOGIN, result.data);
+            commit(mutationTypes.AUTH.REMOVE_TOKEN);
         }
     },
 
@@ -116,13 +120,30 @@ const actions = {
         return result;
     },
 
-    async [actionTypes.AUTH.CHANGE_PASSWORD]({ commit }, { oldPass, newPass, verify_new_pass }) {
-        const result = await new auth(this.$axios).changePassword({
-            oldPass,
-            newPass,
-            verify_new_pass
-        });
+    async [actionTypes.AUTH.CHANGE_PASSWORD]({ commit }, payload) {
+        const result = await new auth(this.$axios).changePassword(payload);
         return result;
+    },
+    async [actionTypes.AUTH.VERIFY_EMAIL]({ commit }, payload) {
+        const result = await new auth(this.$axios).verifyEmail(payload);
+        return result;
+    },
+    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit }, payload) {
+        console.log("payload", payload);
+        try {
+            const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
+            console.log("payload", payload);
+            console.log("[REFRESH_TOKEN] response", data);
+            if (data.success == true) {
+                // update rewnewToken
+                commit(mutationType.ACCOUNT.SET_ACCESS_TOKEN, data.data.access_token);
+                commit(mutationType.ACCOUNT.SET_TOKEN, data.data);
+            }
+            return data;
+        } catch (err) {
+            console.log("[REFRESH_TOKEN] err", err);
+            return err;
+        }
     }
 };
 
@@ -141,8 +162,10 @@ const mutations = {
         setAccessToken(access_token);
     },
 
-    [mutationTypes.AUTH.SET_LOGOUT](state) {
-        state.loggedUser = null;
+    [mutationTypes.AUTH.REMOVE_TOKEN](state) {
+        state.token = null;
+        state.access_token = null;
+        removeToken();
     },
 
     [mutationTypes.AUTH.SET_ACCOUNT_STATUS](state, _status) {

@@ -5,11 +5,13 @@
       <h3>Quên mật khẩu?</h3>
       <div class="auth_content mt-5">
         <app-input
-          message="Tài khoản không tồn tại"
+          :message="messageErrorForgot"
+          :error="errorForgot"
           type="text"
           v-model="email"
           placeholder="Nhập số điện thoại hoặc email"
-          :validate="error ? 2 : 0"
+          :validate="validateForgot"
+          @input="hanldeEmail"
         />
         <app-button
           color="primary"
@@ -20,17 +22,24 @@
         >Khôi phục mật khẩu</app-button>
       </div>
     </div>
-    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="showModalOTP = false">X</a>
-      </h3>
+    <app-modal
+      centered
+      :width="400"
+      :component-class="{ 'auth-modal': true }"
+      v-if="modalConfirmEmail"
+    >
+      <!-- <h3 class="color-primary" slot="header">Đăng ký thành công</h3> -->
 
       <div slot="content">
-        <div class="form-group_border-bottom">
-          <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
-        </div>
-        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
+        <p class="line-height-2">
+          <br />Vui lòng xác thực tài khoản qua email
+          <br />
+          <span class="color-primary">{{this.email}}</span>
+        </p>
+        <n-link
+          :to="'/auth/signin'"
+          class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
+        >Xác thực tài khoản</n-link>
       </div>
     </app-modal>
   </div>
@@ -45,6 +54,7 @@ import {
 } from "../../../models/auth/Forgot";
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
+import { ERRORS } from "~/utils/error-code";
 
 export default {
   components: {},
@@ -56,7 +66,12 @@ export default {
       password: "",
       error: false,
       showModalOTP: false,
-      otp: ""
+      otp: "",
+      modalConfirmEmail: false,
+      errorRespon: false,
+      messageErrorForgot: "",
+      errorForgot: false,
+      validateForgot: ""
     };
   },
 
@@ -77,7 +92,12 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["resetPasswordRequest", "sendotp", "verifiOtp"]),
+    ...mapActions("auth", ["resetPasswordRequest", "sendotp"]),
+    hanldeEmail() {
+      this.errorForgot = false;
+      this.validateForgot = "";
+      this.messageErrorForgot = "";
+    },
     async resetPass() {
       try {
         const token = await this.$recaptcha.execute("login");
@@ -86,8 +106,9 @@ export default {
         let resetModel = createResetWithEmail(this.email, token);
         const doAdd = this.resetPasswordRequest(resetModel).then(result => {
           if (result.success == true) {
-            // this.$router.push("/auth/signin");
+            this.modalConfirmEmail = true;
           } else {
+            this.showErrorForgot(result);
           }
         });
       } catch (error) {
@@ -97,19 +118,43 @@ export default {
     hanldeShowModalOTP() {
       if (!this.email.includes("@")) {
         const data = {
-          phone: formatPhoneNumber(this.email),
+          phone: `+${formatPhoneNumber(this.email)}`,
           appVerifier: window.recaptchaVerifier
         };
         this.sendotp(data).then(result => {
           console.log("result huydv", result);
-          if (result) {
+          if (!result.code) {
             console.log("result huydv11111", result);
-            this.$router.push("/auth/forgot/changepass");
+            this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
+          } else {
+            this.errorForgot = true;
+            if (result && result.code == "auth/invalid-phone-number") {
+              this.messageErrorForgot = "Số điện thoại bạn nhập không đúng";
+            } else {
+              this.messageErrorForgot = "Có lỗi. Xin vui lòng thử lại";
+            }
           }
         });
       } else {
         this.resetPass();
       }
+    },
+    showErrorForgot(error) {
+      this.errorForgot = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.REGISTER.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
+          break;
+        case ERRORS.FORGOT_PASSWORD.USER_NOT_FOUND:
+          message = "User not found";
+          break;
+        default:
+          message = "Something went wrong. Please try again";
+          break;
+      }
+      this.messageErrorForgot = message;
     }
   }
 };

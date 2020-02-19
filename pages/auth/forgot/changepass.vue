@@ -1,37 +1,60 @@
 <template>
   <div class="auth auth-forgot">
-    <div class="auth__main">
+    <div id="label-verify-phone"></div>
+    <ChangePassEmail v-show="checkEmail" />
+    <ChangePassPhone v-show="!checkEmail" />
+    <!-- <div class="auth__main">
       <h3>Quên mật khẩu?</h3>
       <div class="auth_content mt-5">
         <app-input
-          message="Tài khoản không tồn tại"
+          v-if="!checkEmail"
+          maxlength="6"
           type="text"
           v-model="otp"
           placeholder="Nhập mã OTP"
-          :validate="error ? 2 : 0"
+          :error="$v.otp.$invalid"
+          :message="errorMessage.otp"
+          :validate="validateProps.otp"
+          @input="handleOtp"
         />
         <app-input
-          message="Tài khoản không tồn tại"
           type="password"
           v-model="password"
           placeholder="Nhập mật khẩu mới"
-          :validate="error ? 2 : 0"
+          :error="$v.password.$invalid || validate.password"
+          :message="errorMessage.password"
+          :validate="validateProps.password"
+          autocomplete="new-password"
+          @input="handlePassword"
         />
         <app-input
-          message="Tài khoản không tồn tại"
           type="password"
           v-model="coPassword"
           placeholder="Xác nhận mật khẩu"
-          :validate="error ? 2 : 0"
+          :error="$v.coPassword.$invalid || validate.coPassword"
+          :message="errorMessage.coPassword"
+          :validate="validateProps.coPassword"
+          autocomplete="new-password"
+          class="mb-2"
+          @input="handleCoPassword"
         />
-        <app-button color="primary" square fullWidth @click="acceptResetPass" class="mb-3">Xác nhận</app-button>
-        <!-- <a
+        <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorChange}}</p>
+        <app-button
+          color="primary"
+          square
+          fullWidth
+          @click="acceptResetPass"
+          class="mb-3 mt-4"
+          :disabled="disabledBtnForgot"
+        >Xác nhận</app-button>
+        <a
+          v-if="!checkEmail"
           @click="sendOTP"
           :class="countDown === 0 ? '' : 'disable'"
           class="btn-send-otp"
-        >Gửi lại mã xác thực ({{countDown}}s)</a>-->
-      </div>
-    </div>
+    >Gửi lại mã xác thực ({{countDown}}s)</a>-->
+    <!-- </div> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -42,106 +65,38 @@ import {
   createResetPassWithPhone,
   createResetPassWithEmail
 } from "../../../models/auth/Forgot";
-import { formatPhoneNumber } from "~/utils/validations";
+import { formatPhoneNumber, validatePassword } from "~/utils/validations";
+import { ERRORS } from "../../../utils/error-code";
+import firebase from "@/services/firebase/FirebaseInit";
+import ChangePassEmail from "~/components/page/auth/forgot/ChangePassEmail";
+import ChangePassPhone from "~/components/page/auth/forgot/ChangePassPhone";
 
 export default {
-  components: {},
+  components: {
+    ChangePassEmail,
+    ChangePassPhone
+  },
 
   data() {
-    return {
-      otp: "",
-      password: "",
-      coPassword: "",
-      error: false,
-      countDownDefault: 120,
-      countDown: 120,
-      email: "",
-      verify_token: ""
-    };
+    return {};
   },
+  async asyncData({ store, query }) {
+    return { checkEmail: query.email ? true : false };
+  },
+
   async mounted() {
     await this.$recaptcha.init();
-  },
 
-  computed: {
-    ...mapState("auth", ["firebaseToken"])
-  },
-
-  methods: {
-    ...mapActions("auth", ["forgotPassword", "verifiOtp"]),
-    async acceptResetPass() {
-      const token = await this.$recaptcha.execute("resetpass");
-      console.log("ReCaptcha token:", token);
-      if (this.otp != "") {
-        await this.verifiOtp(this.otp).then(result => {
-          console.log("result huydv", result);
-          if (result) {
-            this.verify_token = result.user.ma;
-            try {
-              debugger;
-              let resetPassModel = createResetPassWithPhone(
-                formatPhoneNumber(this.email),
-                this.verify_token,
-                this.password,
-                token
-              );
-              // : createResetPassWithEmail(this.email, this.password, token);
-              const doAdd = this.forgotPassword(resetPassModel).then(result => {
-                if (result.success == true) {
-                  this.$router.push("/auth/signin");
-                } else {
-                }
-              });
-            } catch (error) {
-              console.log("Login error:", error);
-            }
-            // console.log("result huydv11111", result);
-          }
-        });
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "label-verify-phone",
+      {
+        size: "invisible",
+        callback: () => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          console.log("RecaptchaVerifier resolved");
+        }
       }
-      // try {
-      //   debugger;
-      //   const token = await this.$recaptcha.execute("resetpass");
-      //   console.log("ReCaptcha token:", token);
-      //   const checkText = this.email.includes("@");
-      //   let resetPassModel = !checkText
-      //     ? createResetPassWithPhone(
-      //         formatPhoneNumber(this.email),
-      //         this.firebaseToken,
-      //         this.password,
-      //         token
-      //       )
-      //     : createResetPassWithEmail(this.email, this.password, token);
-      //   const doAdd = this.forgotPassword(resetPassModel).then(result => {
-      //     if (result.success == true) {
-      //       this.$router.push("/auth/signin");
-      //     } else {
-      //     }
-      //   });
-      // } catch (error) {
-      //   console.log("Login error:", error);
-      // }
-    },
-    sendOTP() {
-      const that = this;
-      if (that.countDown === 0) {
-        that.countDown = that.countDownDefault;
-        that.countDownTimer();
-      }
-    },
-    countDownTimer() {
-      const that = this;
-      if (that.countDown > 0) {
-        setTimeout(() => {
-          that.countDown -= 1;
-          that.countDownTimer();
-        }, 1000);
-      }
-    }
-  },
-
-  created() {
-    this.countDownTimer();
+    );
   }
 };
 </script>

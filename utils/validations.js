@@ -73,5 +73,18 @@ export const validatePort = _port => {
  * @param {phoneNumber} _phoneNumber
  */
 export const formatPhoneNumber = _phoneNumber => {
-    return _phoneNumber.replace("0", "+84");
+    if (_phoneNumber.indexOf("0") == 0) {
+        return _phoneNumber.replace("0", "84");
+    } else {
+        return _phoneNumber;
+    }
+};
+/**
+ * validate password
+ * @param {password} _password
+ */
+export const validatePassword = _password => {
+    let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,32}$/;
+    console.log("aaa", _password, re.test(_password));
+    return re.test(_password);
 };

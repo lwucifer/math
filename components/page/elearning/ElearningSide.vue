@@ -9,7 +9,10 @@
     <p class="elearning-side__name">{{teacher.name}}</p>
     <div class="elearning-side__links">
       <n-link class="link-gray" to :class="active == 1 ? 'active' : ''">
-        <IconUser3 />Thông tin tài khoản
+        <IconUser3 width="20" height="20"/>Thông tin tài khoản
+      </n-link>
+      <n-link class="link-gray" to :class="active == 5 ? 'active' : ''">
+        <IconDollarAlt width="20" height="20" />Thống kê doanh thu
       </n-link>
       <n-link class="link-gray" to :class="active == 2 ? 'active' : ''">
         <IconBell />Thông báo
@@ -32,6 +35,7 @@ import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconSearch from "~/assets/svg/icons/search2.svg?inline";
+import IconDollarAlt from '~/assets/svg/design-icons/dollar-alt.svg?inline';
 
 export default {
   name: "E-learning",
@@ -43,7 +47,8 @@ export default {
     IconExclamation,
     IconPhoto,
     IconSearch,
-    IconFilter
+    IconFilter,
+    IconDollarAlt
   },
 
   props: {
