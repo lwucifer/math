@@ -16,10 +16,20 @@ function addSubscriber(callback) {
 export default function({ store, $axios, redirect }) {
     $axios.onRequest(config => {
         console.log("[onRequest]", config.url);
+        console.log(
+            "[store.state.auth.access_token]",
+            store.state.auth.access_token
+        );
+        console.log(
+            "checkRequestAuthorize(config.url)",
+            checkRequestAuthorize(config.url)
+        );
 
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
-            config.headers.common["Authorization"] = `Bearer ${store.state.auth.token.access_token}`;
+            config.headers.common[
+                "Authorization"
+            ] = `Bearer ${store.state.auth.access_token}`;
 
             // config.headers.common["Authorization"] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo0LCJwaG9uZV9udW1iZXIiOiIwMzU2MjU3MzI1In0sImlhdCI6MTU3NTUzNDcxOSwiZXhwIjoxODM0NzM0NzE5fQ.w-oB2pH2aPiyzTXpSQumuShy5xQQEGfURDp1-KjzfkM`;
         } else {
@@ -37,26 +47,29 @@ export default function({ store, $axios, redirect }) {
             if (!isAlreadyFetchingAccessToken) {
                 isAlreadyFetchingAccessToken = true;
                 const refreshToken = store.getters["auth/refreshToken"];
+                console.log("refreshToken", refreshToken);
                 store
                     .dispatch(`auth/${ACTION_AUTH.REFRESH_TOKEN}`, {
                         refresh_token: refreshToken
                     })
                     .then(result => {
                         isAlreadyFetchingAccessToken = false;
+                        console.log("result huydv", result);
                         if (result.success == true) {
+                            console.log("onAccessTokenFetched", result.data.access_token);
                             onAccessTokenFetched(result.data.access_token);
                         } else {
                             // remove token and redirect to login
                             store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
 
                             // console.log("[RENEW_TOKEN 1] /login")
-                            redirect(`/login`);
+                            redirect(`/auth/signin`);
                         }
                     })
                     .catch(err => {
-                        store.commit(`login/${MUTATION_AUTH.REMOVE_TOKEN}`);
+                        store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
                         // console.log("[RENEW_TOKEN 2] /login")
-                        redirect(`/login`);
+                        redirect(`/auth/signin`);
                     });
             }
 

@@ -128,7 +128,7 @@ const actions = {
         const result = await new auth(this.$axios).verifyEmail(payload);
         return result;
     },
-    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit }, payload) {
+    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit, state }, payload) {
         console.log("payload", payload);
         try {
             const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
@@ -137,7 +137,11 @@ const actions = {
             if (data.success == true) {
                 // update rewnewToken
                 commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, data.data.access_token);
-                commit(mutationTypes.AUTH.SET_TOKEN, data.data);
+                commit(mutationTypes.AUTH.SET_TOKEN, {
+                    ...state.token,
+                    access_token: data.data.access_token,
+                    refresh_token: data.data.refresh_token
+                });
             }
             return data;
         } catch (err) {
@@ -152,8 +156,10 @@ const actions = {
  */
 const mutations = {
     [mutationTypes.AUTH.SET_TOKEN](state, token) {
+        console.log("huydv token renew", token);
         const renewToken = Object.assign({}, state.token, token);
         state.token = renewToken;
+        console.log("state.token huydv", renewToken);
         setToken(renewToken);
     },
 
