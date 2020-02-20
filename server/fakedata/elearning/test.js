@@ -1,3 +1,5 @@
+import { EXERCISES } from "./exercise"
+
 export const COURSES = [
     {
         id: "1",
@@ -48,3 +50,7 @@ export const COURSES = [
         off: "70"
     }
 ]
+
+export {
+    EXERCISES
+}
