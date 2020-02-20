@@ -14,24 +14,19 @@
               <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
             </div>
             <div class="elearning-lesson__main-content">
-              <div class="mb-4">
-                <strong>Phù hợp với</strong>
-                <p>Bất cứ ai muốn trở thành một Vlogger, tìm hiểu thêm về ngành làm vlog.</p>
+              <div class="d-flex-center">
+                <strong>154 bình luận</strong>
+                <div class="ml-auto d-flex">
+                  <app-input class="mr-3 mb-0" size="sm">
+                    <button slot="unit">
+                      <IconSearch class="fill-999" height="16" width="16" />
+                    </button>
+                  </app-input>
+                  <app-select v-model="opt" :options="opts" size="sm" />
+                </div>
               </div>
-              <div class="mb-4">
-                <strong>Mô tả</strong>
-                <p>"Trong khoá học này, người xem sẽ có cái nhìn rõ ràng hơn về nghề ""vlogger"", làm thế nào để trở thành một vlogger, làm thế nào để xây dựng channel thành công, làm thế nào để kiếm được tiền từ nghề và thật nhiều động lực, quyết tâm để có thể xây dựng nên channel của riêng mình. Tự tin là khoá học đầu tiên về Vlog, khoá học các bạn thực sự cần và chính là khoá học bạn đang tìm kiếm. Trong khoá học, các bạn sẽ không phải ""HỌC"", mà tất cả nội dung sẽ được giảng viên chia sẻ dưới hình thức VLOG, mang đến cho các bạn sự gần gũi, thân thuộc mà lại vô cùng hiệu quả. "</p>
-              </div>
-              <div>
-                <strong>Yêu cầu</strong>
-                <p>
-                  - Yêu cầu của khóa học.
-                  <br />- Thời gian.
-                  <br />- Đồ ăn, uống (để "tận hưởng" khoá học).
-                  <br />- Máy tính (để nghiên cứu, áp dụng).
-                  <br />- Máy ảnh hoặc điện thoại (thực hành).
-                </p>
-              </div>
+              <hr class="mt-4 mb-4" />
+              <ElearningCourseComment :data="comments" :auth="auth"/>
             </div>
           </div>
         </div>
@@ -44,7 +39,12 @@
 </template>
 
 <script>
+import ElearningCourseComment from "~/components/page/elearning/course/comment/ElearningCourseComment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
+import IconLike from "~/assets/svg/icons/like.svg?inline";
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -52,15 +52,54 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningCourseSide
+    ElearningCourseComment,
+    ElearningCourseSide,
+    IconSearch,
+    IconCamera
   },
 
   data() {
     return {
-      tab: 1,
+      tab: 2,
       isAuthenticated: true,
       teacher: {},
       title: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+      opt: "",
+      auth: {
+          id: 1,
+          avatar: "https://picsum.photos/50/50",
+          name: "Nguyễn Ngọc Quyên",
+      },
+      comments: [
+        {
+          id: 1,
+          avatar: "https://picsum.photos/50/50",
+          name: "Nguyễn Ngọc Quyên",
+          content: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+          time: "20/11/2022",
+          likes: 100,
+          liked: true,
+          parent: true,
+          parentId: "",
+        },
+        {
+          id: 2,
+          avatar: "https://picsum.photos/50/50",
+          name: "Nguyễn Ngọc Quyên",
+          content: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+          time: "20/11/2022",
+          likes: 100,
+          liked: true,
+          parent: true,
+          parentId: "",
+        },
+      ],
+      opts: [
+        { value: "", text: "Sắp xếp theo" },
+        { value: "1", text: "Nhiều thích nhất" },
+        { value: "2", text: "Mới nhất" },
+        { value: "3", text: "Cũ nhất" }
+      ],
       lesson: {
         avatar: "https://picsum.photos/32/32",
         author: "Nguyễn Ngọc Quyên",
@@ -75,12 +114,12 @@ export default {
         classes: [
           {
             id: 1,
-            name: 'Bài giảng online cho khoá học',
+            name: "Bài giảng online cho khoá học",
             done: false
           },
           {
             id: 2,
-            name: 'Bài giảng online cho khoá học',
+            name: "Bài giảng online cho khoá học",
             done: true
           }
         ],
@@ -109,7 +148,7 @@ export default {
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
                 done: true,
                 time: "1 giờ 30 phút"
-              },
+              }
             ]
           },
           {
@@ -136,7 +175,7 @@ export default {
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
                 done: true,
                 time: "1 giờ 30 phút"
-              },
+              }
             ]
           },
           {
@@ -163,11 +202,11 @@ export default {
                 done: true,
                 time: "1 giờ 30 phút",
                 wait: true
-              },
+              }
             ]
-          },
+          }
         ]
-      },
+      }
     };
   },
   computed: {

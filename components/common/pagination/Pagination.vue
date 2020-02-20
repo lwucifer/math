@@ -82,7 +82,7 @@ export default {
 
   data() {
     return {
-      pager: 10,
+      pager: this.pagination.pager,
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },
@@ -111,10 +111,6 @@ export default {
         this.$emit("pagechange", { page: e, pager: this.pager });
       }
     }
-  },
-
-  created() {
-    this.opt = this.pagination.pager;
   },
 
   computed: {
