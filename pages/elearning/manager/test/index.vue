@@ -17,7 +17,7 @@
 
           <div class="elearning-test__table">
             <keep-alive>
-              <component v-bind:is="currentTabComponent" class="tab"></component>
+              <component v-bind:is="currentTabComponent"></component>
             </keep-alive>
             <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>-->
           </div>
@@ -119,5 +119,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/_elearning-test.scss"
+@import "~/assets/scss/components/elearning/manager/_elearning-test.scss"
 </style>
