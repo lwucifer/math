@@ -31,7 +31,8 @@
         <!-- <LessonCreateGeneralInformation class="mb-5"/>
         <LessonCreateLearningContent />
         <LessonCreateSetting /> -->
-        <LessonCreateExcercise />
+        <!-- <LessonCreateExcercise /> -->
+        <LessonCreateExam />
       </div>
     </div>
   </div>
@@ -42,6 +43,7 @@ import LessonCreateGeneralInformation from "~/components/page/course/CreateLesso
 import LessonCreateLearningContent from "~/components/page/course/CreateLesson/CreateLearningContent";
 import LessonCreateSetting from "~/components/page/course/CreateLesson/CreateSetting";
 import LessonCreateExcercise from "~/components/page/course/CreateLesson/CreateExcercise";
+import LessonCreateExam from "~/components/page/course/CreateLesson/CreateExam";
 
 export default {
   layout: "create",
@@ -50,7 +52,8 @@ export default {
     LessonCreateGeneralInformation,
     LessonCreateLearningContent,
     LessonCreateSetting,
-    LessonCreateExcercise
+    LessonCreateExcercise,
+    LessonCreateExam
   },
 
   data() {
