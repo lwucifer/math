@@ -1,5 +1,9 @@
 import Cookie from "js-cookie";
-import { SCHOOLLY_ACCESS_TOKEN,TOKEN_USER_SCHOOLLY, UNAUTHORIZE_API } from "./config";
+import {
+    SCHOOLLY_ACCESS_TOKEN,
+    TOKEN_USER_SCHOOLLY,
+    UNAUTHORIZE_API
+} from "./config";
 
 /**
  * get access_token from local storage
@@ -22,6 +26,7 @@ export const getToken = () => {
  * set bearer token after login success
  */
 export const setAccessToken = accessToken => {
+    console.log("process.env", process.server);
     if (!accessToken) return;
     Cookie.set(SCHOOLLY_ACCESS_TOKEN, accessToken, {
         expires: parseInt(process.env.SESSION_EXPIRES)
@@ -31,6 +36,7 @@ export const setAccessToken = accessToken => {
 };
 
 export const setToken = _token => {
+    console.log("settoken huydv", _token);
     if (!_token) return;
     Cookie.set(TOKEN_USER_SCHOOLLY, _token, {
         expires: parseInt(process.env.SESSION_EXPIRES)
@@ -78,7 +84,7 @@ export const getAccessTokenFromCookie = req => {
 };
 
 export const checkRequestAuthorize = _url => {
-    const urls = _url.split('?');
+    const urls = _url.split("?");
     // console.log("urls", urls);
 
     // if url contain token=true => return true;
@@ -89,7 +95,7 @@ export const checkRequestAuthorize = _url => {
 
     // public api
     if (UNAUTHORIZE_API.includes(urls[0])) {
-      return false;
+        return false;
     }
 
     return true;
