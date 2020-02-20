@@ -1,6 +1,6 @@
 <template>
   <div class="container elearning-account">
-    <h1>Bài giảng và khóa học của tôi</h1>
+    <h3 class="mb-4">Bài giảng và khóa học của tôi</h3>
     <div class="elearning-account__categories mb-3">
       <a class="link-gray active">Tất cả (5)</a>
       <a class="link-gray">Bài giảng (3)</a>

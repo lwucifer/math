@@ -57,7 +57,11 @@
               </n-link>
               <p class="ml-auto">Chi tiết doanh số từ 01/10/2019 đến 01/11/2019</p>
             </div>
-            <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>
+            <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
+              <tr v-for="(item , index) in list" :key="index">
+                <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
+              </tr>
+            </app-table>
           </div>
         </div>
       </div>

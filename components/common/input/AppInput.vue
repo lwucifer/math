@@ -1,10 +1,8 @@
 <template>
   <div class="app-input" :class="classSize">
     <label v-if="label" :class="classLabel">{{ label }}</label>
-
-    <div class="app-input__input" v-else>
+    <div class="app-input__input">
       <slot name="prepend-inner"></slot>
-
       <!-- Textarea  -->
       <textarea
         v-if="textarea"
