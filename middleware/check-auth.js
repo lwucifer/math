@@ -9,6 +9,7 @@ import { AUTH } from "../utils/mutation-types";
 export default async function({ store, req, redirect, route }) {
     // If nuxt generate, pass this middleware
     // if (process.server && !req) return
+    console.log("check-auth");
     const loggedToken = process.server ? getTokenFromCookie(req) : getToken();
     const loggedAccessToken = process.server ?
         getAccessTokenFromCookie(req) :

@@ -132,6 +132,10 @@ module.exports = {
                 //   exclude: /(node_modules)/
                 // })
             }
+
+            if (isDev) {
+                config.devtool = isClient ? 'source-map' : 'inline-source-map'
+              }
         }
     }
 };
