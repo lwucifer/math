@@ -58,7 +58,7 @@
     input {
         border: 0;
         height: 100%;
-        padding: 0 1rem;
+        padding-left: 1rem;
         background-color: transparent;
         width: 100%;
         flex-grow: 1;
@@ -73,7 +73,7 @@
 
     textarea {
         border: 0;
-        padding: .5rem 1rem;
+        padding: .5rem 0 .5rem 1rem;
         background-color: transparent;
         width: 100%;
         flex-grow: 1;
@@ -172,10 +172,6 @@
 }
 
 .app-input--has-counter {
-    .app-input__input input {
-        padding-right: 90px;
-    }
-
     &.app-input--error {
         .app-input__counter {
             background-color: $color-red;
