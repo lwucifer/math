@@ -30,6 +30,7 @@
           <slot
             v-for="(item, j) in heads"
             :item="item"
+            :index="i"
             :row="cat"
             :name="'cell(' + item.name + ')'"
           >

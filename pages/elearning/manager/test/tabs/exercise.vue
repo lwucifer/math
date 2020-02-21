@@ -60,7 +60,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="'/elearning/manager/test/exercise/' + row.id">
+            :to="'/elearning/manager/test/' + row.id">
             <IconArrow />
           </n-link>
         </td>

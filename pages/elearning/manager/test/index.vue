@@ -15,7 +15,7 @@
             <hr class />
           </div>
 
-          <div class="elearning-manager-content__table">
+          <div class="elearning-manager-content__main">
             <keep-alive>
               <component v-bind:is="currentTabComponent"></component>
             </keep-alive>
@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/_elearning-manager-content.scss";
+@import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>

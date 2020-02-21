@@ -15,7 +15,7 @@
             <hr class />
           </div>
 
-          <div class="elearning-manager-content__table">
+          <div class="elearning-manager-content__main">
             <div class="elearning-">
               <!--Filter form-->
               <div class="filter-form">
@@ -92,14 +92,13 @@
                   <td>
                     <n-link
                       class
-                      :to="''">
+                      :to="'/elearning/manager/test/result/' + row.id">
                       Xem chi tiết
                     </n-link>
                   </td>
                 </template>
               </app-table><!--End table-->
             </div>
-            <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>-->
           </div>
         </div>
       </div>
@@ -225,11 +224,15 @@
             handleSearch() {
                 console.log('[Component] Elearning exercise: searching')
             }
+        },
+
+        created() {
+            const exerciseId = this.$route.params.id
         }
-    };
+    }
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-manager-content.scss";
+  @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
   @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>

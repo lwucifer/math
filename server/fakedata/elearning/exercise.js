@@ -44,7 +44,8 @@ const EXERCISE_DETAIL = [
         class: '10B',
         result: '6/20 (Đạt)',
         doNum: 2,
-        finishedAt: "10:20 AM 19/12/2019"
+        finishedAt: "10:20 AM 19/12/2019",
+        type: 'objective'
     },
     {
         id: 2,
@@ -52,7 +53,8 @@ const EXERCISE_DETAIL = [
         class: '11C',
         result: '9/10 (Đạt)',
         doNum: 1,
-        finishedAt: "10:20 AM 19/12/2019"
+        finishedAt: "10:20 AM 19/12/2019",
+        type: 'writing'
     },
     {
         id: 3,
@@ -60,7 +62,8 @@ const EXERCISE_DETAIL = [
         class: '10B',
         result: '4/10 (Không đạt)',
         doNum: 12,
-        finishedAt: "10:20 AM 19/12/2019"
+        finishedAt: "10:20 AM 19/12/2019",
+        type: 'writing'
     },
     {
         id: 4,
@@ -68,8 +71,32 @@ const EXERCISE_DETAIL = [
         class: 'Khác',
         result: '8/10 (Đạt)',
         doNum: 2,
-        finishedAt: "10:20 AM 19/12/2019"
+        finishedAt: "10:20 AM 19/12/2019",
+        type: 'objective'
     }
 ]
 
-export { EXERCISES, EXERCISE_DETAIL }
+const RESULTS = [
+    {
+        num: 1,
+        answer: "B",
+        key: "C"
+    },
+    {
+        num: 2,
+        answer: "A",
+        key: "D"
+    },
+    {
+        num: 3,
+        answer: "C",
+        key: "C"
+    },
+    {
+        num: 4,
+        answer: "B",
+        key: "A"
+    }
+]
+
+export { EXERCISES, EXERCISE_DETAIL, RESULTS }
