@@ -16,14 +16,6 @@ function addSubscriber(callback) {
 export default function({ store, $axios, redirect }) {
     $axios.onRequest(config => {
         console.log("[onRequest]", config.url);
-        console.log(
-            "[store.state.auth.access_token]",
-            store.state.auth.access_token
-        );
-        console.log(
-            "checkRequestAuthorize(config.url)",
-            checkRequestAuthorize(config.url)
-        );
 
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
@@ -41,25 +33,24 @@ export default function({ store, $axios, redirect }) {
         // console.log("[onResponse]", response);
         const originalRequest = response.config;
         const dataCode = response.data.code;
-        console.log("dataCode huydv", dataCode);
+        console.log("dataCode huydv", dataCode, response.config.url);
         if (dataCode == "SCLCOM_0002") {
             // expire token => renew
             if (!isAlreadyFetchingAccessToken) {
                 isAlreadyFetchingAccessToken = true;
                 const refreshToken = store.getters["auth/refreshToken"];
-                console.log("refreshToken", refreshToken);
                 store
                     .dispatch(`auth/${ACTION_AUTH.REFRESH_TOKEN}`, {
                         refresh_token: refreshToken
                     })
                     .then(result => {
                         isAlreadyFetchingAccessToken = false;
-                        console.log("result huydv", result);
                         if (result.success == true) {
                             console.log("onAccessTokenFetched", result.data.access_token);
                             onAccessTokenFetched(result.data.access_token);
                         } else {
                             // remove token and redirect to login
+                            console.log("[result] else", result);
                             store.commit(`auth/${MUTATION_AUTH.REMOVE_TOKEN}`);
 
                             // console.log("[RENEW_TOKEN 1] /login")
