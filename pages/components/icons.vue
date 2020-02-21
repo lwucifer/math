@@ -134,7 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 .icon {
-  font-size: 22px;
+  font-size: 3rem;
   cursor: pointer;
 }
 

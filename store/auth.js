@@ -137,11 +137,7 @@ const actions = {
             if (data.success == true) {
                 // update rewnewToken
                 commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, data.data.access_token);
-                commit(mutationTypes.AUTH.SET_TOKEN, {
-                    ...state.token,
-                    access_token: data.data.access_token,
-                    refresh_token: data.data.refresh_token
-                });
+                commit(mutationTypes.AUTH.SET_TOKEN, data.data);
             }
             return data;
         } catch (err) {
@@ -156,10 +152,10 @@ const actions = {
  */
 const mutations = {
     [mutationTypes.AUTH.SET_TOKEN](state, token) {
-        console.log("huydv token renew", token);
+        console.log("[SET_TOKEN] token", token);
         const renewToken = Object.assign({}, state.token, token);
         state.token = renewToken;
-        console.log("state.token huydv", renewToken);
+        console.log("[SET_TOKEN] renewToken", renewToken);
         setToken(renewToken);
     },
 

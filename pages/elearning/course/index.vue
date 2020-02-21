@@ -72,6 +72,18 @@ export default {
       data: {
         number: 9,
         times: "9 giờ 30 phút",
+        classes: [
+          {
+            id: 1,
+            name: 'Bài giảng online cho khoá học',
+            done: false
+          },
+          {
+            id: 2,
+            name: 'Bài giảng online cho khoá học',
+            done: true
+          }
+        ],
         list: [
           {
             id: 1,
@@ -82,68 +94,75 @@ export default {
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
+                time: "1 giờ 30 phút",
+                wait: false
+              },
+              {
+                id: 2,
+                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
+                done: false,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 3,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-            ]
-          },
-          {
-            id: 1,
-            name: "Chương 1: Các bài học chương 1",
-            lessons: [
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
               },
             ]
           },
           {
-            id: 1,
+            id: 2,
             name: "Chương 1: Các bài học chương 1",
+            status: "2/5",
+            times: "1 giờ 18 phút",
             lessons: [
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 2,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
+                done: false,
+                time: "1 giờ 30 phút",
+                wait: true
+              },
+              {
+                id: 3,
+                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
+                done: true,
                 time: "1 giờ 30 phút"
               },
+            ]
+          },
+          {
+            id: 3,
+            name: "Chương 1: Các bài học chương 1",
+            status: "2/5",
+            times: "1 giờ 18 phút",
+            lessons: [
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
+              },
+              {
+                id: 2,
+                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
+                done: false,
+                time: "1 giờ 30 phút"
+              },
+              {
+                id: 3,
+                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
+                done: true,
+                time: "1 giờ 30 phút",
+                wait: true
               },
             ]
           },

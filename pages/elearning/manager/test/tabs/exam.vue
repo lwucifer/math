@@ -1,187 +1,174 @@
 <template>
-  <div>
-    exam
-    <!--<div class="elearning-exercise__table">-->
-      <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>-->
-    <!--</div>-->
+  <div class="elearning-">
+    <!--Filter form-->
+    <div class="filter-form">
+      <div class="filter-form__item">
+        <app-button
+          color="primary"
+          class="filter-form__item__btn filter-form__item__btn--submit"
+          :size="'sm'"
+          @click="submit"
+        >
+          <IconFilter />
+          <span>Lọc kết quả</span>
+        </app-button>
+      </div>
+
+      <div class="filter-form__item">
+        <app-vue-select
+          class="app-vue-select filter-form__item__selection"
+          v-model="filter.province"
+          :options="types"
+          label="text"
+          placeholder="Theo thể loại"
+          searchable
+          clearable
+          @input="handleChangedInput"
+          @search:focus="handleFocusSearchInput"
+          @search:blur="handleBlurSearchInput"
+        >
+        </app-vue-select>
+      </div>
+
+      <!--Right form-->
+      <div class="filter-form__right">
+        <div class="filter-form__item filter-form__item--search">
+          <app-input
+            type="text"
+            v-model="filter.query"
+            placeholder="Nhập để tìm kiếm..."
+            :size="'sm'"
+            @input="handleSearch"
+          />
+          <button type="submit">
+            <IconSearch width="15" height="15" />
+          </button>
+        </div>
+      </div><!--End right form-->
+
+    </div><!--End filter form-->
+
+    <!--Table-->
+    <app-table
+      :heads="heads"
+      :pagination="pagination"
+      @pagechange="onPageChange"
+      :data="list"
+    /><!--End table-->
   </div>
 </template>
 
 <script>
-import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+    import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+    import IconSearch from "~/assets/svg/icons/search.svg?inline"
+    import { mapState } from "vuex"
+    import * as actionTypes from "~/utils/action-types"
+    // Import faked data
+    import { EXERCISES } from "~/server/fakedata/elearning/test"
 
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
+    export default {
 
-export default {
+        components: {
+            IconFilter,
+            IconSearch
+        },
 
-  components: {
-    // ElearningManagerSide,
-    IconArrowLeft
-  },
+        data() {
+            return {
+                tab: 1,
+                heads: [
+                    {
+                        name: "name",
+                        text: "Tiêu đề",
+                        sort: false
+                    },
+                    {
+                        name: "type",
+                        text: "Thể loại",
+                        sort: false
+                    },
+                    {
+                        name: "lesson",
+                        text: "Thuộc bài giảng",
+                        sort: false
+                    },
+                    {
+                        name: "course",
+                        text: "Thuộc khóa học",
+                        sort: false
+                    },
+                    {
+                        name: "studentNum",
+                        text: "Học sinh làm bài",
+                        sort: true
+                    },
+                    {
+                        name: "createdAt",
+                        text: "Ngày khởi tạo",
+                        sort: true
+                    },
+                    {
+                        name: "action",
+                        text: "",
+                        sort: false
+                    }
+                ],
+                filter: {
+                    type: null,
+                    query: null
+                },
+                types: [
+                    {
+                        value: 1,
+                        text: 'Trắc nghiệm'
+                    },
+                    {
+                        value: 2,
+                        text: 'Tự luận'
+                    },
+                ],
+                isAuthenticated: true,
+                pagination: {
+                    total: 15,
+                    page: 6,
+                    pager: 20,
+                    totalElements: 55,
+                    first: 1,
+                    last: 10
+                },
+                list: EXERCISES,
+            };
+        },
+        computed: {
+            ...mapState("auth", ["loggedUser"])
+        },
 
-  data() {
-    return {
-      tab: 1,
-      heads: [
-        {
-          name: "time",
-          text: "Thời gian test",
-          sort: true
-        },
-        {
-          name: "code",
-          text: "Mã đơn hàng",
-          sort: true
-        },
-        {
-          name: "customer",
-          text: "Khách hàng",
-          sort: false
-        },
-        {
-          name: "name",
-          text: "Nội dung",
-          sort: false
-        },
-        {
-          name: "price",
-          text: "Giá trị",
-          sort: true
-        },
-      ],
-      isAuthenticated: true,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
-      },
-      isTeacher: true,
-      time1: null,
-      time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Loại giao dịch" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
-      ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
-      },
-      list: [
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "9290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          status: "<span>xxxx</span>"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "7290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "3290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "4290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1590000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1660000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+        methods: {
+            onPageChange(e) {
+                const that = this;
+                that.pagination = { ...that.pagination, ...e };
+                console.log(that.pagination);
+            },
+            submit() {
+                console.log('[Component] Elearning exam: submitted')
+            },
+            handleChangedInput(val) {
+                if (val !== null) {} else {}
+                console.log('[Component] Elearning exam: changing input...', val)
+            },
+            handleFocusSearchInput() {
+                console.log('[Component] Elearning exam: focus searching ')
+            },
+            handleBlurSearchInput() {
+                console.log('[Component] Elearning exam: blur searching ')
+            },
+            handleSearch() {
+                console.log('[Component] Elearning exam: searching')
+            }
         }
-      ],
-      active_el: 0
     };
-  },
-  computed: {
-    ...mapState("auth", ["loggedUser"])
-  },
-
-  methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    }
-  }
-};
 </script>
 
 <style lang="scss">
+  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>
