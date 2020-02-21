@@ -17,7 +17,7 @@
       <div class="filter-form__item">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
-          v-model="filter.province"
+          v-model="filter.type"
           :options="types"
           label="text"
           placeholder="Theo thể loại"
@@ -59,7 +59,8 @@
         <td>
           <n-link
             class
-            :to="''">
+            title="Chi tiết"
+            :to="'/elearning/manager/test/exercise/' + row.id">
             <IconArrow />
           </n-link>
         </td>

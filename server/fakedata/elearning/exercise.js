@@ -37,4 +37,39 @@ const EXERCISES = [
     },
 ]
 
-export { EXERCISES }
+const EXERCISE_DETAIL = [
+    {
+        id: 1,
+        name: 'Trần Văn Nam',
+        class: '10B',
+        result: '6/20 (Đạt)',
+        doNum: 2,
+        finishedAt: "10:20 AM 19/12/2019"
+    },
+    {
+        id: 2,
+        name: 'Trần Văn Thắng',
+        class: '11C',
+        result: '9/10 (Đạt)',
+        doNum: 1,
+        finishedAt: "10:20 AM 19/12/2019"
+    },
+    {
+        id: 3,
+        name: 'Trần Văn Nam',
+        class: '10B',
+        result: '4/10 (Không đạt)',
+        doNum: 12,
+        finishedAt: "10:20 AM 19/12/2019"
+    },
+    {
+        id: 4,
+        name: 'Nguyễn Thị Đào',
+        class: 'Khác',
+        result: '8/10 (Đạt)',
+        doNum: 2,
+        finishedAt: "10:20 AM 19/12/2019"
+    }
+]
+
+export { EXERCISES, EXERCISE_DETAIL }
