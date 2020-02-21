@@ -76,9 +76,9 @@ module.exports = {
             404: "/404"
         },
         retry: {
-            retries: 3
+            retries: 0
         }, // interceptor retry time request
-        debug: false // default false
+        debug: true // default false
     },
 
     recaptcha: {
