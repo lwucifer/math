@@ -26,7 +26,15 @@
           <td v-if="selectAll" class="pr-0">
             <app-checkbox @change="(e) => check(e, cat.id)" />
           </td>
-          <td v-for="(item, j) in heads" :key="j" v-html="cat[item.name]"></td>
+          <!--Slot is named by column key-->
+          <slot
+            v-for="(item, j) in heads"
+            :item="item"
+            :row="cat"
+            :name="'cell(' + item.name + ')'"
+          >
+            <td v-html="cat[item.name]"></td>
+          </slot>
         </tr>
       </tbody>
     </table>
@@ -101,7 +109,10 @@ export default {
       const temp = array[i];
       array[i] = array[k];
       array[k] = temp;
-    }
+    },
+    hasSlot(nameColName) {
+        return !!this.$slots[nameColName]
+    },
   },
 
   computed: {
@@ -139,7 +150,7 @@ export default {
         }
       }
       return this.cats;
-    }
+    },
   },
 
   created() {
