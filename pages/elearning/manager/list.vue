@@ -43,7 +43,10 @@
           >
             <tr v-for="(item, index) in list" :key="index">
               <td class="pr-0">
-                <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect"/>
+                <label class="table-checkbox" :class="ids.includes(item.id) ? 'border-primary' : ''" >
+                  <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect"/>
+                  <IconTick v-if="ids.includes(item.id)" height="9" width="9"/>
+                </label>
               </td>
               <td>
                 <div class="d-flex">
@@ -82,6 +85,7 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconTick from '~/assets/svg/icons/tick.svg?inline';
 
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
@@ -96,7 +100,8 @@ export default {
     ElearningManagerSide,
     IconSearch,
     IconTrashAlt,
-    IconFilter
+    IconFilter,
+    IconTick
   },
 
   data() {

@@ -9,6 +9,9 @@
             cursor: pointer;
             opacity: 0;
             visibility: hidden;
+            //position: absolute;
+            //right: 1rem;
+            //top: calc(50% - 9px); // Align middle by vertical for sort icon
             svg path {
                 fill: #999;
             }

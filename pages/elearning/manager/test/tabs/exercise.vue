@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div class="elearning-">
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
         <app-button
           color="primary"
-          @click="submit"
           class="filter-form__item__btn filter-form__item__btn--submit"
+          :size="'sm'"
+          @click="submit"
         >
           <IconFilter />
           <span>Lọc kết quả</span>
@@ -15,7 +16,7 @@
 
       <div class="filter-form__item">
         <app-vue-select
-          class="filter-form__item__selection"
+          class="app-vue-select filter-form__item__selection"
           v-model="filter.province"
           :options="types"
           label="text"
@@ -28,6 +29,23 @@
         >
         </app-vue-select>
       </div>
+
+      <!--Right form-->
+      <div class="filter-form__right">
+        <div class="filter-form__item filter-form__item--search">
+          <app-input
+            type="text"
+            v-model="filter.query"
+            placeholder="Nhập để tìm kiếm..."
+            :size="'sm'"
+            @input="handleSearch"
+          />
+          <button type="submit">
+            <IconSearch width="15" height="15" />
+          </button>
+        </div>
+      </div><!--End right form-->
+
     </div><!--End filter form-->
 
     <!--Table-->
@@ -42,15 +60,17 @@
 
 <script>
 import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+import IconSearch from "~/assets/svg/icons/search.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
 // Import faked data
-import { EXERCISES } from "~/server/fakedata/elearning/test";
+import { EXERCISES } from "~/server/fakedata/elearning/test"
 
 export default {
 
   components: {
     IconFilter,
+    IconSearch
   },
 
   data() {
@@ -83,13 +103,19 @@ export default {
           sort: true
         },
         {
-            name: "createdAt",
-            text: "Ngày khởi tạo",
-            sort: true
+          name: "createdAt",
+          text: "Ngày khởi tạo",
+          sort: true
         },
+        {
+          name: "action",
+          text: "",
+          sort: false
+        }
       ],
       filter: {
           type: null,
+          query: null
       },
       types: [
         {
@@ -110,20 +136,6 @@ export default {
         first: 1,
         last: 10
       },
-      isTeacher: true,
-      time1: null,
-      time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Loại giao dịch" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
-      ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
-      },
       list: EXERCISES,
     };
   },
@@ -138,22 +150,26 @@ export default {
       console.log(that.pagination);
     },
     submit() {
-      console.log('[Component] SchoolFilter: submitted')
+      console.log('[Component] Elearning exercise: submitted')
     },
     handleChangedInput(val) {
       if (val !== null) {} else {}
-      console.log('[Component] SchoolFilter: changing input...', val)
+      console.log('[Component] Elearning exercise: changing input...', val)
     },
     handleFocusSearchInput() {
-      console.log('[Component] SchoolFilter: focus searching ')
+      console.log('[Component] Elearning exercise: focus searching ')
     },
     handleBlurSearchInput() {
-      console.log('[Component] SchoolFilter: blur searching ')
+      console.log('[Component] Elearning exercise: blur searching ')
+    },
+    handleSearch() {
+      console.log('[Component] Elearning exercise: searching')
     }
   }
 };
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss"
+  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+  /*@import "~/assets/scss/components/elearning/manager/_elearning-exercise.scss";*/
 </style>
