@@ -47,6 +47,10 @@ export const ELEARNING_PUBLIC_SUMMARY = {
   SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList"
 };
 
+export const ELEARNING_PUBLIC_INFO = {
+  SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
+};
+
 export const ELEARNING = {
   SET_ELEARNING_INFO: "setElearningInfo",
   SET_ELEARNING_PROGRAM: "setElearningProgram",
