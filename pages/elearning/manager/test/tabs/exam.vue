@@ -54,13 +54,24 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="list"
-    /><!--End table-->
+    >
+      <template v-slot:cell(action)="{row}">
+        <td>
+          <n-link
+            class
+            :to="''">
+            <IconArrow />
+          </n-link>
+        </td>
+      </template>
+    </app-table><!--End table-->
   </div>
 </template>
 
 <script>
     import IconFilter from "~/assets/svg/icons/filter.svg?inline"
     import IconSearch from "~/assets/svg/icons/search.svg?inline"
+    import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
     import { mapState } from "vuex"
     import * as actionTypes from "~/utils/action-types"
     // Import faked data
@@ -70,7 +81,8 @@
 
         components: {
             IconFilter,
-            IconSearch
+            IconSearch,
+            IconArrow
         },
 
         data() {
