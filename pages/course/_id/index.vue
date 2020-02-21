@@ -241,7 +241,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning-public-info/${actionTypes.ELEARNING.INFO}`,
+      `elearning-public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
       params.id
     );
   },
