@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/course/comment/ElearningCourseComment";
+import ElearningCourseComment from "~/components/page/elearning/course/comment/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
@@ -67,15 +67,15 @@ export default {
       opt: "",
       auth: {
           id: 1,
-          avatar: "https://picsum.photos/50/50",
-          name: "Nguyễn Ngọc Quyên",
+          avatar: "https://picsum.photos/51/51",
+          name: "Nguyễn Nguyên",
       },
       comments: [
         {
           id: 1,
-          avatar: "https://picsum.photos/50/50",
-          name: "Nguyễn Ngọc Quyên",
-          content: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+          avatar: "https://picsum.photos/60/60",
+          name: "Ngọc Quyên",
+          content: "Từ Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
           time: "20/11/2022",
           likes: 100,
           liked: true,
@@ -84,9 +84,9 @@ export default {
         },
         {
           id: 2,
-          avatar: "https://picsum.photos/50/50",
-          name: "Nguyễn Ngọc Quyên",
-          content: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+          avatar: "https://picsum.photos/55/55",
+          name: "Nguyễn Ngọc",
+          content: "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
           time: "20/11/2022",
           likes: 100,
           liked: true,
