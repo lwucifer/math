@@ -28,9 +28,9 @@
       </div>
 
       <div class="col-md-9">
-        <LessonCreateGeneralInformation class="mb-5"/>
+        <!-- <LessonCreateGeneralInformation class="mb-5"/>
         <LessonCreateLearningContent />
-        <LessonCreateSetting />
+        <LessonCreateSetting /> -->
         <LessonCreateExcercise />
       </div>
     </div>
