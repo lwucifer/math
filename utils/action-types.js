@@ -87,6 +87,10 @@ export const ELEARNING_PUBLIC_SUMMARY = {
     LIST: "elearningPublicSummaryList"
 };
 
+export const ELEARNING_PUBLIC_INFO = {
+    LIST: "elearningPublicInfoList"
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",

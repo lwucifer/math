@@ -28,10 +28,21 @@
       </div>
 
       <div class="col-md-9">
-        <LessonCreateGeneralInformation class="mb-5"/>
-        <LessonCreateLearningContent />
-        <LessonCreateSetting />
-        <LessonCreateExcercise />
+        <template v-if="createType === 'lesson'">
+          <LessonCreateGeneralInformation class="mb-5"/>
+          <LessonCreateLearningContent />
+          <LessonCreateSetting />
+          <LessonCreateExcercise />
+          <LessonCreateExam />
+        </template>
+
+        <template v-else>
+          <!-- <CourseCreateGeneralInformation class="mb-5"/> -->
+          <CourseCreateLearningContent />
+          <!-- <CourseCreateSetting />
+          <CourseCreateExcercise />
+          <CourseCreateExam /> -->
+        </template>
       </div>
     </div>
   </div>
@@ -42,6 +53,13 @@ import LessonCreateGeneralInformation from "~/components/page/course/CreateLesso
 import LessonCreateLearningContent from "~/components/page/course/CreateLesson/CreateLearningContent";
 import LessonCreateSetting from "~/components/page/course/CreateLesson/CreateSetting";
 import LessonCreateExcercise from "~/components/page/course/CreateLesson/CreateExcercise";
+import LessonCreateExam from "~/components/page/course/CreateLesson/CreateExam";
+
+import CourseCreateGeneralInformation from "~/components/page/course/CreateCourse/CreateGeneralInformation";
+import CourseCreateLearningContent from "~/components/page/course/CreateCourse/CreateLearningContent";
+import CourseCreateSetting from "~/components/page/course/CreateCourse/CreateSetting";
+import CourseCreateExcercise from "~/components/page/course/CreateCourse/CreateExcercise";
+import CourseCreateExam from "~/components/page/course/CreateCourse/CreateExam";
 
 export default {
   layout: "create",
@@ -50,11 +68,20 @@ export default {
     LessonCreateGeneralInformation,
     LessonCreateLearningContent,
     LessonCreateSetting,
-    LessonCreateExcercise
+    LessonCreateExcercise,
+    LessonCreateExam,
+
+    CourseCreateGeneralInformation,
+    CourseCreateLearningContent,
+    CourseCreateSetting,
+    CourseCreateExcercise,
+    CourseCreateExam
   },
 
   data() {
     return {
+      createType: 'course' // 'lesson' || 'course',
+      // createStep: ''
     };
   },
 };
