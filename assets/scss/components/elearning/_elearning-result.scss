@@ -1,0 +1,28 @@
+.elearning-manager-result {
+    &__mark {
+        padding: 0 2rem;
+        margin-bottom: 1rem;
+
+        h4 {
+            font-size: 1.4rem;
+            line-height: 1.9rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        &__detail {
+            padding: 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            line-height: 1.9rem;
+            background-color: rgba($color: $color-primary, $alpha: 0.1);
+            .item span:first-child {
+                color: #666;
+            }
+            .item span:nth-child(2) {
+                font-weight: bold;
+                color: $color-red;
+            }
+        }
+    }
+}

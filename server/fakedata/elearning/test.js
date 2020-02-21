@@ -1,4 +1,4 @@
-import { EXERCISES } from "./exercise"
+import { EXERCISES, EXERCISE_DETAIL, RESULTS } from "./exercise"
 
 export const COURSES = [
     {
@@ -52,5 +52,7 @@ export const COURSES = [
 ]
 
 export {
-    EXERCISES
+    EXERCISES,
+    EXERCISE_DETAIL,
+    RESULTS
 }

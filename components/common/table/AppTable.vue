@@ -13,8 +13,27 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <!-- Use slot body -->
+      <tbody v-if="hasDefaultSlot">
         <slot />
+      </tbody>
+      <!-- Use data list -->
+      <tbody v-else>
+        <tr v-for="(cat, i) in sortedCats" :key="i">
+          <td v-if="selectAll" class="pr-0">
+            <app-checkbox @change="(e) => check(e, cat.id)" />
+          </td>
+          <!--Slot is named by column key-->
+          <slot
+            v-for="(item, j) in heads"
+            :item="item"
+            :index="i"
+            :row="cat"
+            :name="'cell(' + item.name + ')'"
+          >
+            <td v-html="cat[item.name]"></td>
+          </slot>
+        </tr>
       </tbody>
     </table>
     <div class="pagination">
