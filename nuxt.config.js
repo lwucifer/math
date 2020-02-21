@@ -4,17 +4,17 @@ module.exports = {
     head: {
         title: "Schoolly",
         meta: [{
-                charset: "utf-8"
-            },
-            {
-                name: "viewport",
-                content: "width=device-width, initial-scale=1"
-            },
-            {
-                hid: "description",
-                name: "description",
-                content: "Nuxt full stack template for creating web app easily."
-            }
+            charset: "utf-8"
+        },
+        {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1"
+        },
+        {
+            hid: "description",
+            name: "description",
+            content: "Nuxt full stack template for creating web app easily."
+        }
         ],
         link: [{
             rel: "icon",
@@ -42,8 +42,8 @@ module.exports = {
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
         { src: "@/plugins/vue-moment.js" },
-        { src: "@/plugins/firebase-auth.js"},
-        { src: "@/plugins/vue-select.js"},
+        { src: "@/plugins/firebase-auth.js" },
+        { src: "@/plugins/vue-select.js" },
         { src: "@/plugins/filters.js", ssr: false },
     ],
     /**
@@ -70,7 +70,8 @@ module.exports = {
      */
     axios: {
         baseURL: process.env.BASE_URL_API, // Default: http://[HOST]:[PORT][PREFIX]
-        prefix: "/api",
+        proxy: true,
+        // prefix: "/api",
         redirectError: {
             401: "/login",
             404: "/404"
@@ -79,6 +80,10 @@ module.exports = {
             retries: 3
         }, // interceptor retry time request
         debug: false // default false
+    },
+
+    proxy: {
+        '/schoolly-api/': { target: 'https://api.schoolly.famtechvn.com/v1/', pathRewrite: { '^/schoolly-api/': '' }, changeOrigin: true }
     },
 
     recaptcha: {
@@ -135,7 +140,7 @@ module.exports = {
 
             if (isDev) {
                 config.devtool = isClient ? 'source-map' : 'inline-source-map'
-              }
+            }
         }
     }
 };
