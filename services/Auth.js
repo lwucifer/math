@@ -68,8 +68,8 @@ export default class Auth {
         const { data } = await this.$axios.post(`${APIs.VERIFY_EMAIL}`, payload);
         return data;
     }
-    async [actionTypes.AUTH.REFRESH_TOKEN](payload) {
-        const { data } = await this.$axios.post(`${APIs.REFRESH_TOKEN}`, payload);
-        return data;
-    }
+    // async [actionTypes.AUTH.REFRESH_TOKEN](payload) {
+    //     const { data } = await this.$axios.post(`${APIs.REFRESH_TOKEN}`, payload);
+    //     return data;
+    // }
 }

@@ -1,0 +1,77 @@
+.wrapTest{
+    background-color: #F5FBF9;
+    width: 750px;
+    min-height: 442px;
+}
+.titleChoiceTest{
+    display: flex;
+    flex: row;
+    justify-content: center;
+    align-items: center;
+    padding-top:20px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 27px;
+}
+.wrapbtnSummitTest{
+    position: absolute;
+    z-index:1;
+    right:25px;
+}
+.btnSummitTest__ElearningCourse{
+        width: 83px;
+        height: 32px;
+        background: #1481FE;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        position:relative;
+        color: #FFFFFF;
+    }
+.timetest_ElearningCourse{
+   display: flex;
+    flex: row;
+    justify-content: center;
+    margin:20px;
+    div :first-child{
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 19p;
+        color: #333333;
+    }
+    div :last-child{
+        color: #E9446A;
+        font-weight: bold;
+    } 
+}
+.titleQuestion__ElearningCourse{
+    align-items: center;
+    margin: 20px 0px 20px 0px;
+    .wrapselect__ElearningCourse{
+        width: 61px;
+        height: 32px;
+        margin-left: 8px;
+    }
+    div:first-child{
+        color: #666666;
+    }
+    div:last-child{
+        color: #32AF85;
+    }
+}
+.contentEssayQuestion{
+    background: #FFFFFF;
+    height: 39px;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    padding: 10px; 
+    color: #666666;
+}
+.answerEssayQuestion__ElearningCourse{
+    position: relative;
+    margin: 10px;
+}

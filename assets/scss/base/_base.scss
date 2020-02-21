@@ -132,9 +132,30 @@ h5, .h5 {
 h6, .h6 {
     font-size: 1.4rem;
 }
-.table {
+
+table, .table {
     border-spacing: 0;
+    .app-checkbox__checkmark {
+        margin-right: 0;
+    }
 }
+.table-checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    border-radius: 2px;
+    border: 1px solid #333333;
+    cursor: pointer;
+    >input {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+    }
+}
+
 // From
 input::-webkit-input-placeholder {
     font-size: 1.4rem;
@@ -359,6 +380,13 @@ input:-webkit-autofill:active  {
 }
 .fill-white path {
     fill: #fff !important;
+}
+.fill-yellow path {
+    fill: #FFCA56 !important;
+}
+
+.color-yellow {
+    color: #FFCA56 !important;
 }
 .color-primary {
     color: $color-primary !important;

@@ -4,16 +4,24 @@
       <div class="row">
         <div class="col-md-8">
           <div class="box11">
-            <div class="elearning-lesson_image">
+            <div class="elearning-lesson_image" v-if="tab!=3">
               <img src="https://picsum.photos/750/422" alt />
             </div>
-            <div class="elearning-lesson__main-nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Hỏi đáp</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Thông báo</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+            <div v-else>
+            <!-- Câu hỏi chắc nghiệm  -->
+              <ElearningChoiceQuestion />
+           
+            <!-- Câu hỏi tự luận 
+              <ElearningEssayQuestion />
+            --> 
             </div>
-            <div class="elearning-lesson__main-content">
+            <div class="elearning-lesson__main-nav">
+              <a href="#tab1" :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
+              <a href="#tab2" :class="tab == 2 ? 'active' : ''" @click="tab = 2">Hỏi đáp</a>
+              <a href="#tab3" :class="tab == 3 ? 'active' : ''" @click="tab = 3">Thông báo</a>
+              <a href="#tab4" :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+            </div>
+            <div class="elearning-lesson__main-content" id="tab1">
               <div class="mb-4">
                 <strong>Phù hợp với</strong>
                 <p>Bất cứ ai muốn trở thành một Vlogger, tìm hiểu thêm về ngành làm vlog.</p>
@@ -33,6 +41,13 @@
                 </p>
               </div>
             </div>
+            <div id="tab4">
+              <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
+              <ElearningRates />
+            </div>
+            <div id="tab2">
+              
+            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -45,6 +60,9 @@
 
 <script>
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningRates from "~/components/page/elearning/ElearningRates";
+import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion"
+import ElearningEssayQuestion from "~/components/page/elearning/course/ElearningEssayQuestion"
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -52,11 +70,15 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningCourseSide
+    ElearningCourseSide,
+    ElearningRates,
+    ElearningChoiceQuestion,
+    ElearningEssayQuestion,
   },
 
   data() {
     return {
+      
       tab: 1,
       isAuthenticated: true,
       teacher: {},
