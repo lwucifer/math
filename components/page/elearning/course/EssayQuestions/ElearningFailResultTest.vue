@@ -30,14 +30,18 @@
           </div>
       </div>
       <div class="d-flex justify-content-center">
-          <app-button square class="btnretest__ElearningCourse">Làm lại bài tập</app-button>
+          <button class="btnretest__ElearningCourse" v-on:click="changeStartQuestion">Làm lại bài tập</button>
       </div>
   </div>
 </template>
 
 <script>
 export default {
-
+    methods:{
+        changeStartQuestion(){
+            this.$emit('updateStartQuestion',false)
+        }
+    }
 }
 </script>
 

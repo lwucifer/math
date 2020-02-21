@@ -18,8 +18,8 @@
     z-index:1;
     right:25px;
 }
-.btnSummitTest__ElearningCourse{
-        width: 83px;
+.btnSummitEssayTest__ElearningCourse{
+        width: 104px;
         height: 32px;
         background: #1481FE;
         font-weight: 600;
@@ -27,6 +27,12 @@
         line-height: 16px;
         position:relative;
         color: #FFFFFF;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        :first-child{
+            margin-right: 5px;
+        }
     }
 .timetest_ElearningCourse{
    display: flex;
@@ -69,9 +75,23 @@
     display: flex;
     align-items: center;
     padding: 10px; 
+    border: 1px solid #EEEEEE;
     color: #666666;
 }
 .answerEssayQuestion__ElearningCourse{
     position: relative;
     margin: 10px;
+}
+.printQuestion__ElearningCourse{
+    fill: #32AF85;
+    margin-right: 6.26px;
+    size: 5px;
+    height: 16px;
+}
+.iconMargin{
+    margin-left:5px;
+}
+.iconMarginLeft{
+    margin-right:5px ;
+    margin-bottom: 5px;;
 }
