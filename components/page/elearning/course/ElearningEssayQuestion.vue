@@ -12,7 +12,7 @@
                   <ElearningPassResultTest/>
               </div>
               <div v-else>
-                  <ElearningFailResultTest/>
+                  <ElearningFailResultTest @updateStartQuestion="setStartQuestion"/>
               </div>
           </div>
       </div>

@@ -22,6 +22,7 @@
                     <span>Câu hỏi số</span>
                 </div>
                 <div class="col d-flex justify-content-end">
+                    <IconPrint class="printQuestion__ElearningCourse"/>
                     <span>In câu hỏi</span>
                 </div>
             </div>
@@ -32,8 +33,9 @@
                 <div class="d-flex flex-row align-items-center col" >
                     <span>Câu trả lời</span>
                 </div>
-                <div class="col d-flex justify-content-end">
+                <div class="col d-flex justify-content-end align-items-center">
                     <span>Soạn câu trả lời</span>
+                    <IconArrowUp class="iconMargin"/>
                 </div>
             </div>
             <div class="answerEssayQuestion__ElearningCourse">
@@ -41,10 +43,15 @@
             </div>
             <div class="d-flex flex-row groupbtnEssayTest__ElearningCourse">
                 <div class="col">
-                    <app-button square size="sm">Tải lên câu trả lời</app-button>
+                    <app-button square size="sm">
+                        <IconUpload class="iconMarginLeft"/>
+                        Tải lên câu trả lời
+                    </app-button>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <button class="btnSummitTest__ElearningCourse" v-on:click="changeDoneQuestion">Nộp bài</button>
+                    <button class="btnSummitEssayTest__ElearningCourse" v-on:click="changeDoneQuestion">
+                        <IconSend/>Nộp bài
+                    </button>
                 </div>
             </div>
         </div>
@@ -52,6 +59,10 @@
 </template>
 
 <script>
+import IconPrint from "~/assets/svg/design-icons/print.svg?inline"
+import IconSend from "~/assets/svg/icons/send.svg?inline"
+import IconArrowUp from "~/assets/svg/icons/up.svg?inline"
+import IconUpload from "~/assets/svg/icons/uploadfile.svg?inline"
 export default {
     data(){
         return{
@@ -62,6 +73,12 @@ export default {
         changeDoneQuestion(){
             this.$emit('updateDoneQuestion',true)
         }
+    },
+    components:{
+        IconPrint,
+        IconSend,
+        IconArrowUp,
+        IconUpload
     }
 }
 </script>
