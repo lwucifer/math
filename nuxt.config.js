@@ -70,7 +70,7 @@ module.exports = {
      */
     axios: {
         baseURL: process.env.BASE_URL_API, // Default: http://[HOST]:[PORT][PREFIX]
-        proxy: true,
+        proxy: false,
         // prefix: "/api",
         redirectError: {
             401: "/login",
@@ -82,9 +82,9 @@ module.exports = {
         debug: true // default false
     },
 
-    proxy: {
-        '/schoolly-api/': { target: 'https://api.schoolly.famtechvn.com/v1/', pathRewrite: { '^/schoolly-api/': '' }, changeOrigin: true }
-    },
+    // proxy: {
+    //     '/schoolly-api/': { target: 'https://api.schoolly.famtechvn.com/v1/', pathRewrite: { '^/schoolly-api/': '' }, changeOrigin: true }
+    // },
 
     recaptcha: {
         siteKey: process.env.CAPTCHA_SITEKEY,

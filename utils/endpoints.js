@@ -1,7 +1,7 @@
 /********************************
  * AUTH APIs
  *********************************/
-export const SCHOOLLY_ALIAS = `/schoolly-api`
+export const SCHOOLLY_ALIAS = ``
 export const LOGIN = `${SCHOOLLY_ALIAS}/user/public/login`;
 export const REGISTER = `${SCHOOLLY_ALIAS}/user/public/register`;
 export const REGISTER_VALIDATE = `${SCHOOLLY_ALIAS}/user/public/validate`;
