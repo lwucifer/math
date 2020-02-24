@@ -54,7 +54,7 @@
         </div>
 
         <div class="course-rates__commnents">
-            <course-rate-comment :review="review" v-for="(review, index) in  elearningInfo.reviews" :key="index"/>
+            <course-rate-comment :review="review" v-for="(review, index) in  elearningInfo.reviews.content" :key="index"/>
             <app-pagination :pagination="pagination" @pagechange="onPageChange" class="mt-4 mb-3"/>
         </div>
     </div>
