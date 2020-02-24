@@ -250,14 +250,16 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    await store.dispatch(
-      `elearning-public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
-      params.id
-    );
-    await store.dispatch(
-      `elearning-public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
-      params.id
-    );
+    await Promise.all([
+      store.dispatch(
+        `elearning-public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
+        params.id
+      ),
+      store.dispatch(
+        `elearning-public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
+        params.id
+      )
+    ]);
   },
 
   data() {
