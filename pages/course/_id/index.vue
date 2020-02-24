@@ -143,23 +143,33 @@
             <div class="info">
               <div class="info-item">
                 Thể loại:
-                <strong class="color-primary">Marketing</strong>
+                <strong class="color-primary">{{
+                  elearningProgram.subject
+                }}</strong>
               </div>
               <div class="info-item">
                 Trình độ:
-                <strong class="color-primary">Lớp 10</strong>
+                <strong class="color-primary">{{
+                  elearningProgram.level
+                }}</strong>
               </div>
               <div class="info-item">
                 Môn học:
-                <strong class="color-primary">Toán</strong>
+                <strong class="color-primary">{{
+                  elearningProgram.subject
+                }}</strong>
               </div>
               <div class="info-item">
                 Số bài giảng:
-                <strong class="color-primary">1</strong>
+                <strong class="color-primary">{{
+                  elearningProgram.lessons
+                }}</strong>
               </div>
               <div class="info-item">
                 Thời lượng:
-                <strong class="color-primary">23:50</strong>
+                <strong class="color-primary">{{
+                  elearningProgram.duration
+                }}</strong>
               </div>
             </div>
 
@@ -244,6 +254,10 @@ export default {
       `elearning-public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
       params.id
     );
+    await store.dispatch(
+      `elearning-public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
+      params.id
+    );
   },
 
   data() {
@@ -275,6 +289,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning-public-info", ["elearningInfo"]),
+    ...mapState("elearning-public-program", ["elearningProgram"]),
     teacher() {
       return {
         avatar: get(this.elearningInfo, "teacher.avatar", ""),
