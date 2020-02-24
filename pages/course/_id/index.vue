@@ -1,30 +1,48 @@
 <template>
   <div class="container course-view">
-    <h2>{{ elearningInfo.name }}</h2>
+    <h2>{{ $_.get(elearningInfo, "name", "") }}</h2>
     <div class="course-view__info">
       <div class="author">
-        <app-avatar :src="teacher.avatar" :size="32" />
-        <span class="name ml-2">{{ teacher.name }}</span>
+        <app-avatar
+          :src="$_.get(elearningInfo, 'teacher.avatar', '')"
+          :size="32"
+        />
+        <span class="name ml-2">{{
+          $_.get(elearningInfo, "teacher.name", "")
+        }}</span>
       </div>
 
       <div class="views">
         <IconEye />
-        <strong class="ml-2 mr-1">{{ elearningInfo.review_count }}</strong> lượt
-        xem
+        <strong class="ml-2 mr-1">{{
+          $_.get(elearningInfo, "review_count", 0)
+        }}</strong>
+        lượt xem
       </div>
 
-      <div class="price color-red bold" v-if="!elearningInfo.free">
+      <div
+        class="price color-red bold"
+        v-if="!$_.get(elearningInfo, 'free', false)"
+      >
         <IconUsd class="mr-2" />
-        {{ price.original_price | toThousandFilter() }} đ
+        {{
+          $_.get(elearningInfo, "price.original_price", 0) | toThousandFilter()
+        }}
+        đ
       </div>
       <div class="price color-red bold" v-else>
         <IconUsd class="mr-2" />Miễn phí
       </div>
 
       <div class="stars">
-        <app-stars :stars="Math.floor(lesson.stars)" :size="16" />
-        <strong class="ml-3">{{ lesson.stars }}</strong>
-        <span>({{ elearningInfo.review_rate }})</span>
+        <app-stars
+          :stars="Math.floor($_.get(elearningInfo, 'lesson.stars', 0))"
+          :size="16"
+        />
+        <strong class="ml-3">{{
+          $_.get(elearningInfo, "lesson.stars", 0)
+        }}</strong>
+        <span>({{ $_.get(elearningInfo, "review_rate", 0) }})</span>
       </div>
     </div>
 
@@ -32,7 +50,8 @@
       <div class="row">
         <div class="col-md-9">
           <div class="course-view__thumnail">
-            <app-video :poster-src="elearningInfo.avatar"> </app-video>
+            <app-video :poster-src="$_.get(elearningInfo, 'avatar', '')">
+            </app-video>
           </div>
 
           <div class="course-view__main-nav">
@@ -144,31 +163,31 @@
               <div class="info-item">
                 Thể loại:
                 <strong class="color-primary">{{
-                  elearningProgram.subject
+                  $_.get(elearningProgram, "subject", "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Trình độ:
                 <strong class="color-primary">{{
-                  elearningProgram.level
+                  $_.get(elearningProgram, "level", "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Môn học:
                 <strong class="color-primary">{{
-                  elearningProgram.subject
+                  ($_.get(elearningProgram, "subject"), "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Số bài giảng:
                 <strong class="color-primary">{{
-                  elearningProgram.lessons
+                  ($_.get(elearningProgram, "lessons"), "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Thời lượng:
                 <strong class="color-primary">{{
-                  elearningProgram.duration
+                  $_.get(elearningProgram, "duration", "")
                 }}</strong>
               </div>
             </div>
@@ -189,7 +208,10 @@
 
           <div id="tab3" class="box">
             <h5 class="mb-4">Thông tin giáo viên</h5>
-            <course-teacher-info :teacher="teacher" class="mb-4" />
+            <course-teacher-info
+              :teacher="$_.get(elearningInfo, 'teacher', {})"
+              class="mb-4"
+            />
             <hr />
             <div id="tab4" class="pt-2">
               <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
@@ -296,18 +318,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public-info", ["elearningInfo"]),
     ...mapState("elearning/public-program", ["elearningProgram"]),
-    ...mapState("elearning/public-related", ["elearningRelated"]),
-    teacher() {
-      return {
-        avatar: get(this.elearningInfo, "teacher.avatar", ""),
-        name: get(this.elearningInfo, "teacher.name", "")
-      };
-    },
-    price() {
-      return {
-        original_price: get(this.elearningInfo, "price.original_price", 0)
-      };
-    }
+    ...mapState("elearning/public-related", ["elearningRelated"])
   }
 };
 </script>
