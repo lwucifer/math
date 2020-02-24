@@ -210,7 +210,7 @@
       title="Bài giảng cùng giáo viên"
     />
     <course-slider-tab
-      :lessons="sciences"
+      :lessons="elearningRelated"
       :swiperOptions="sliderOptions"
       title="Bài giảng liên quan"
       class="mt-5"
@@ -258,6 +258,10 @@ export default {
       store.dispatch(
         `elearning/public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
         params.id
+      ),
+      store.dispatch(
+        `elearning/public-related/${actionTypes.ELEARNING_PUBLIC_RELATED.LIST}`,
+        params.id
       )
     ]);
   },
@@ -292,6 +296,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public-info", ["elearningInfo"]),
     ...mapState("elearning/public-program", ["elearningProgram"]),
+    ...mapState("elearning/public-related", ["elearningRelated"]),
     teacher() {
       return {
         avatar: get(this.elearningInfo, "teacher.avatar", ""),

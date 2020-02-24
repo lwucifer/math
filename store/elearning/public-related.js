@@ -27,7 +27,7 @@ const actions = {
       commit(
         mutationTypes.ELEARNING_PUBLIC_RELATED
           .SET_ELEARNING_PUBLIC_RELATED_LIST,
-        result
+        result.data
       );
     } catch (error) {
       console.log("[Elearning related] list.error", error);
