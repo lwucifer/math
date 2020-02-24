@@ -4,9 +4,9 @@
             <div class="row items-center">
                 <div class="col-md-6 col-sm-12">
                     <div class="text-center d-inline-block">
-                        <strong class="h1 color-primary">4.5</strong>
-                        <app-stars :stars="4" :size="16" class="mt-2 mb-2"/>
-                        <p class="color-999">(15 người đánh giá)</p>
+                        <strong class="h1 color-primary">{{ elearningInfo.review_rate }}</strong>
+                        <app-stars :stars="elearningInfo.review_rate" :size="16" class="mt-2 mb-2"/>
+                        <p class="color-999">({{ elearningInfo.review_count }} người đánh giá)</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
@@ -54,7 +54,7 @@
         </div>
 
         <div class="course-rates__commnents">
-            <course-rate-comment :data="{}" v-for="(item, index) in  5" :key="index"/>
+            <course-rate-comment :review="review" v-for="(review, index) in  elearningInfo.reviews" :key="index"/>
             <app-pagination :pagination="pagination" @pagechange="onPageChange" class="mt-4 mb-3"/>
         </div>
     </div>
@@ -70,7 +70,7 @@
         },
 
         props: {
-            rates: {
+            elearningInfo: {
                 type: Object,
                 default: () => {
                 }
