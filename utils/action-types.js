@@ -203,3 +203,14 @@ export const SCHOOL_TEACHERS = {
 export const ELEARNING_STURY = {
   LIST: "ElearningStudyList"
 };
+
+export const ELEARNING_STURY_FAVOURITE = {
+  LIST: "ElearningStudyFavouriteList",
+  ADD: "ElearningStudyFavouriteAdd",
+  DELETE: "ElearningStudyFavouriteDelete"
+};
+
+export const ELEARNING_STURY_VOTE = {
+  LIST: "ElearningStudyVoteList",
+  ADD: "ElearningStudyVoteAdd"
+};

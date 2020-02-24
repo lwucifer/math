@@ -162,5 +162,16 @@ export const SCHOOL_TEACHERS = {
 };
 
 export const ELEARNING_STUDY = {
-  SET_ELEARNING_STUDY: "setElearningStudy",
+  SET_ELEARNING_STUDY: "setElearningStudy"
+};
+
+export const ELEARNING_STUDY_FAVOURITE = {
+  SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
+  SET_ELEARNING_STUDY_FAVOURITE_ADD: "setElearningStudyFavouriteAdd",
+  SET_ELEARNING_STUDY_FAVOURITE_DELETE: "setElearningStudyFavouriteDelete"
+};
+
+export const ELEARNING_STUDY_VOTE = {
+  SET_ELEARNING_STUDY_VOTE_LIST: "setElearningStudyVoteList",
+  SET_ELEARNING_STUDY_VOTE_ADD: "setElearningStudyVoteAdd"
 };
