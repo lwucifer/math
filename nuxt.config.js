@@ -70,6 +70,7 @@ module.exports = {
      */
     axios: {
         baseURL: process.env.BASE_URL_API, // Default: http://[HOST]:[PORT][PREFIX]
+        // proxy: true,
         proxy: false,
         // prefix: "/api",
         redirectError: {

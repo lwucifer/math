@@ -160,3 +160,7 @@ export const SCHOOL_TEACHERS = {
   SET_SCHOOL_TEACHERS_EDIT: "setSchoolTeachersEdit",
   SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete"
 };
+
+export const ELEARNING_STUDY = {
+  SET_ELEARNING_STUDY: "setElearningStudy",
+};

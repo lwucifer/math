@@ -252,11 +252,11 @@ export default {
   async fetch({ params, query, store }) {
     await Promise.all([
       store.dispatch(
-        `elearning-public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
+        `elearning/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
         params.id
       ),
       store.dispatch(
-        `elearning-public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
+        `elearning/public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
         params.id
       )
     ]);
@@ -290,8 +290,8 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning-public-info", ["elearningInfo"]),
-    ...mapState("elearning-public-program", ["elearningProgram"]),
+    ...mapState("elearning/public-info", ["elearningInfo"]),
+    ...mapState("elearning/public-program", ["elearningProgram"]),
     teacher() {
       return {
         avatar: get(this.elearningInfo, "teacher.avatar", ""),
