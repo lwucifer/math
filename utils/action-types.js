@@ -91,6 +91,14 @@ export const ELEARNING_PUBLIC_INFO = {
     LIST: "elearningPublicInfoList"
 };
 
+export const ELEARNING_PUBLIC_PROGRAM = {
+    LIST: "elearningPublicProgramList"
+};
+
+export const ELEARNING_PUBLIC_RELATED = {
+    LIST: "elearningPublicRelatedList"
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",

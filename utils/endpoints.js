@@ -1,7 +1,7 @@
 /********************************
  * AUTH APIs
  *********************************/
-export const SCHOOLLY_ALIAS = `/schoolly-api`
+export const SCHOOLLY_ALIAS = ``
 export const LOGIN = `${SCHOOLLY_ALIAS}/user/public/login`;
 export const REGISTER = `${SCHOOLLY_ALIAS}/user/public/register`;
 export const REGISTER_VALIDATE = `${SCHOOLLY_ALIAS}/user/public/validate`;
@@ -37,8 +37,8 @@ export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
-export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/info`;
-export const ELEARNING_PROGRAM = `${SCHOOLLY_ALIAS}/elearning/program`;
+export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
+export const ELEARNING_PUBLIC_PROGRAM = `${SCHOOLLY_ALIAS}/elearning/public/program`;
 export const ELEARNING_CREATING_ANSWERS =  `${SCHOOLLY_ALIAS}/elearning/creating/answers`;
 export const ELEARNING_CREATING_CHAPTERS = `${SCHOOLLY_ALIAS}/elearning/creating/chapters`;
 export const ELEARNING_CREATING_DOCS = `${SCHOOLLY_ALIAS}/elearning/creating/docs`;

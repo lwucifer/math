@@ -1,53 +1,6 @@
 <template>
-  <div class="elearning-">
-    <!--Filter form-->
-    <div class="filter-form">
-      <div class="filter-form__item">
-        <app-button
-          color="primary"
-          class="filter-form__item__btn filter-form__item__btn--submit"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filter.province"
-          :options="types"
-          label="text"
-          placeholder="Theo thể loại"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
-      </div>
-
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div class="filter-form__item filter-form__item--search">
-          <app-input
-            type="text"
-            v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
-            :size="'sm'"
-            @input="handleSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15" />
-          </button>
-        </div>
-      </div><!--End right form-->
-
-    </div><!--End filter form-->
-
+  <div class="elearning-manager-result">
+    writing
     <!--Table-->
     <app-table
       :heads="heads"
@@ -163,25 +116,25 @@
                 console.log(that.pagination);
             },
             submit() {
-                console.log('[Component] Elearning exam: submitted')
+                console.log('[Component] Elearning exercise: submitted')
             },
             handleChangedInput(val) {
                 if (val !== null) {} else {}
-                console.log('[Component] Elearning exam: changing input...', val)
+                console.log('[Component] Elearning exercise: changing input...', val)
             },
             handleFocusSearchInput() {
-                console.log('[Component] Elearning exam: focus searching ')
+                console.log('[Component] Elearning exercise: focus searching ')
             },
             handleBlurSearchInput() {
-                console.log('[Component] Elearning exam: blur searching ')
+                console.log('[Component] Elearning exercise: blur searching ')
             },
             handleSearch() {
-                console.log('[Component] Elearning exam: searching')
+                console.log('[Component] Elearning exercise: searching')
             }
         }
     };
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+  /*@import "~/assets/scss/components/elearning/manager/_elearning-exercise.scss";*/
 </style>

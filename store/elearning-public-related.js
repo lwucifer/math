@@ -18,14 +18,17 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING.RELATED]({ commit }, params) {
+  async [actionTypes.ELEARNING_PUBLIC_RELATED.LIST]({ commit }, params) {
     try {
       const options = { params };
       const result = await new Related(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      // set to mutation
-      commit(mutationTypes.ELEARNING.SET_ELEARNING_RELATED, result);
+      commit(
+        mutationTypes.ELEARNING_PUBLIC_RELATED
+          .SET_ELEARNING_PUBLIC_RELATED_LIST,
+        result
+      );
     } catch (error) {
       console.log("[Elearning related] list.error", error);
     }
@@ -36,9 +39,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING.SET_ELEARNING_RELATED](state, elearningRelated) {
-    console.log("SET_ELEARNING_RELATED", elearningRelated);
-    state.elearningRelated = elearningRelated;
+  [mutationTypes.ELEARNING_PUBLIC_RELATED.SET_ELEARNING_PUBLIC_RELATED_LIST](
+    state,
+    _elearningRelated
+  ) {
+    state.elearningRelated = _elearningRelated;
   }
 };
 
