@@ -53,7 +53,11 @@
           </div>
         </div>
 
-        <app-button v-else outline square color="primary" @click="showLogin = true">Đăng nhập</app-button>
+        <div v-else class="d-flex">
+          <button @click="showLogin = true" class="mr-3 btn-login">Đăng nhập</button>
+          <n-link class="btn btn--size-md btn-outline btn-outline--color-primary btn--square" :to="'/auth/signup'">Đăng ký</n-link>
+        </div>
+
         <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
       </div>
     </div>
