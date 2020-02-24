@@ -20,7 +20,7 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING.INFO]({ commit }, elearning_id) {
+  async [actionTypes.ELEARNING_PUBLIC_INFO.LIST]({ commit }, elearning_id) {
     try {
       const payload = { params: { elearning_id } };
       const result = await new Info(this.$axios)[actionTypes.BASE.LIST](
@@ -28,7 +28,7 @@ const actions = {
       );
       console.log("[Elearning] info", result);
       // set to mutation
-      commit(mutationTypes.ELEARNING.SET_ELEARNING_INFO, result);
+      commit(mutationTypes.ELEARNING.SET_ELEARNING_PUBLIC_INFO, result);
     } catch (error) {
       console.log("[Elearning] info.error", error);
     }
@@ -52,8 +52,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING.SET_ELEARNING_INFO](state, _elearningInfo) {
-    console.log("SET_ELEARNING_INFO", _elearningInfo);
+  [mutationTypes.ELEARNING.SET_ELEARNING_PUBLIC_INFO](state, _elearningInfo) {
+    console.log("SET_ELEARNING_PUBLIC_INFO", _elearningInfo);
     state.elearningInfo = _elearningInfo;
   },
 

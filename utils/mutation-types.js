@@ -52,7 +52,7 @@ export const ELEARNING_PUBLIC_INFO = {
 };
 
 export const ELEARNING = {
-    SET_ELEARNING_INFO: "setElearningInfo",
+    SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
     SET_ELEARNING_PROGRAM: "setElearningProgram",
     SET_ELEARNING_RELATED: "setElearningRelated",
     SET_ELEARNING_SUBJECT: "setElearningSubject"
