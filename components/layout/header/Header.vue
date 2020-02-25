@@ -53,7 +53,14 @@
           </div>
         </div>
 
-        <app-button v-else outline square color="primary" @click.prevent="redirectSignin">Đăng nhập</app-button>
+        <div v-else class="d-flex">
+          <app-button outline square color="primary" @click.prevent="redirectSignin">Đăng nhập</app-button>
+          <n-link
+            class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
+            :to="'/auth/signup'"
+          >Đăng ký</n-link>
+        </div>
+
         <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
       </div>
     </div>
