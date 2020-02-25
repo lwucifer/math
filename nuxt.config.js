@@ -45,6 +45,7 @@ module.exports = {
         { src: "@/plugins/firebase-auth.js" },
         { src: "@/plugins/vue-select.js" },
         { src: "@/plugins/filters.js", ssr: false },
+        // { src: "@/plugins/tooltip.js", ssr: false },
     ],
     /**
      * Global middleware
