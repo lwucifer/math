@@ -18,7 +18,7 @@
           </tr>
           <tr>
             <td>Giới tính</td>
-            <td>{{personalList.sex == 1 ? "Nam" : "Nữ"}}</td>
+            <td>{{personalList.sex ? (personalList.sex == 1 ? "Nam" : "Nữ"): ""}}</td>
           </tr>
           <tr>
             <td>Địa chỉ</td>

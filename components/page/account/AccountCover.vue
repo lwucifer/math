@@ -92,7 +92,7 @@ import IconUserCross from "~/assets/svg/icons/user-cross.svg?inline";
 import IconUserTick from "~/assets/svg/icons/user-tick.svg?inline";
 import IconUserArrow from "~/assets/svg/icons/user-arrow.svg?inline";
 import { getBase64 } from "~/utils/file";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -123,7 +123,17 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("account", ["personalList"])
+  },
+  created() {
+    this.avatarSrc = this.personalList.avatar
+      ? this.personalList.avatar.low
+      : "https://picsum.photos/170/170";
+    this.coverSrc = this.personalList.cover
+      ? this.personalList.cover
+      : "https://picsum.photos/1170/400";
+  },
 
   methods: {
     ...mapActions("account", [
