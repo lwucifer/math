@@ -39,11 +39,14 @@
             @sort="sort"
             :data="list"
             :sortBy="list"
-            selectAll
+            @selectAll="selectAll"
           >
             <tr v-for="(item, index) in list" :key="index">
               <td class="pr-0">
-                <app-checkbox />
+                <label class="table-checkbox" :class="ids.includes(item.id) ? 'border-primary' : ''" >
+                  <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect"/>
+                  <IconTick v-if="ids.includes(item.id)" height="9" width="9"/>
+                </label>
               </td>
               <td>
                 <div class="d-flex">
@@ -82,6 +85,7 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconTick from '~/assets/svg/icons/tick.svg?inline';
 
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
@@ -96,13 +100,20 @@ export default {
     ElearningManagerSide,
     IconSearch,
     IconTrashAlt,
-    IconFilter
+    IconFilter,
+    IconTick
   },
 
   data() {
     return {
       tab: 1,
+      ids: [],
       heads: [
+        {
+          name: "",
+          text: "",
+          selectAll: true
+        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -173,7 +184,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 2,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -188,7 +199,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 3,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -203,7 +214,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 4,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -218,7 +229,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 5,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -233,7 +244,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 6,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -248,7 +259,7 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         },
         {
-          id: 1,
+          id: 7,
           name: "Mua khóa học Đại số 11",
           price: "5290000",
           customer: "Nguyễn Văn A",
@@ -270,6 +281,13 @@ export default {
   },
 
   methods: {
+    selectAll(e) {
+      this.ids = e;
+      console.log(this.ids);
+    },
+    changeSelect() {
+      console.log(this.ids);
+    },
     sort(e) {
       this.list = [...e];
     },

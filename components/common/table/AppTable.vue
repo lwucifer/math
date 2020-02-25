@@ -3,12 +3,9 @@
     <table>
       <thead>
         <tr>
-          <th v-if="selectAll" class="pr-0">
-            <app-checkbox @change="checkAll" />
-            <hr />
-          </th>
           <th v-for="(item, index) in heads" :key="index">
             {{item.text}}
+            <app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />
             <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
               <IconDirection height="18" width="18" />
             </span>
@@ -74,8 +71,7 @@ export default {
       type: Object,
       required: false,
       default: () => {}
-    },
-    selectAll: Boolean
+    }
   },
 
   data() {
@@ -83,19 +79,15 @@ export default {
       cats: [],
       listSortBy: [],
       currentSort: "name",
-      currentSortDir: "asc"
+      currentSortDir: "asc",
+      allSelected: false,
     };
   },
 
   methods: {
-    checkAll(e) {
-      this.$emit("checkAll", e);
+    changeSelect() {
+      this.$emit("selectAll", this.ids);
     },
-    
-    check(e) {
-      this.$emit("check", e);
-    },
-
     sort: function(sortBy) {
       if (sortBy === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
@@ -110,37 +102,29 @@ export default {
       const temp = array[i];
       array[i] = array[k];
       array[k] = temp;
-    },
-    hasSlot(nameColName) {
-        return !!this.$slots[nameColName]
-    },
+    }
   },
 
   computed: {
-    hasDefaultSlot() {
-      return !!this.$slots.default;
-    },
     sortedCats: function() {
-      for (let i = this.listSortBy.length - 1; i > 0; i--) {
+      for (let i = this.cats.length - 1; i > 0; i--) {
         let check = true;
         for (let k = 0; k < i; k++) {
           if (this.currentSortDir === "desc") {
             if (
-              this.listSortBy[k][this.currentSort] >
-              this.listSortBy[k + 1][this.currentSort]
+              this.cats[k][this.currentSort] >
+              this.cats[k + 1][this.currentSort]
             ) {
               this.swap(this.cats, k, k + 1);
-              this.swap(this.listSortBy, k, k + 1);
             }
             this.currentSortDir === "asc";
             check = false;
           } else {
             if (
-              this.listSortBy[k][this.currentSort] <
-              this.listSortBy[k + 1][this.currentSort]
+              this.cats[k][this.currentSort] <
+              this.cats[k + 1][this.currentSort]
             ) {
               this.swap(this.cats, k, k + 1);
-              this.swap(this.listSortBy, k, k + 1);
             }
             this.currentSortDir === "desc";
             check = false;
@@ -152,11 +136,20 @@ export default {
       }
       return this.cats;
     },
+    ids: function() {
+      const that = this;
+      let ids = [];
+      if (that.allSelected) {
+        that.cats.forEach(function(item) {
+          ids.push(item.id);
+        });
+      }
+      return ids;
+    },
   },
 
   created() {
     this.cats = [...this.data];
-    this.listSortBy = this.sortBy ? [...this.sortBy] : [...this.data];
   }
 };
 </script>

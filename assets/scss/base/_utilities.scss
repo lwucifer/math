@@ -14,6 +14,9 @@
         .flex-nowrap       { flex-wrap: nowrap !important; }
         .flex-wrap-reverse { flex-wrap: wrap-reverse !important; }
 
+        .flex-grow { flex-grow: 1 !important; }
+        .flex-shrink { flex-shrink: 1 !important; }
+
         .justify-content-start   { justify-content: flex-start !important; }
         .justify-content-end     { justify-content: flex-end !important; }
         .justify-content-center  { justify-content: center !important; }
@@ -69,6 +72,9 @@
             .flex-#{$key}-nowrap       { flex-wrap: nowrap !important; }
             .flex-#{$key}-wrap-reverse { flex-wrap: wrap-reverse !important; }
 
+            .flex-#{$key}-grow { flex-grow: 1 !important; }
+            .flex-#{$key}-shrink { flex-shrink: 1 !important; }
+
             .justify-content-#{$key}-start   { justify-content: flex-start !important; }
             .justify-content-#{$key}-end     { justify-content: flex-end !important; }
             .justify-content-#{$key}-center  { justify-content: center !important; }
@@ -115,28 +121,6 @@
             .text-#{$key}-right  { text-align: right !important; }
         }
     }
-}
-
-
-// Background
-.bg-white {
-    background: #fff;
-}
-
-// Box shadow
-.box-elevation {
-    background-color: #fff;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-// page spacer
-.section-last-of-page {
-    margin-bottom: (40px+70px) !important;
-}
-
-// icon utils
-.icon-play--transformed {
-    transform: translate(10%, 0);
 }
 
 // clearfix

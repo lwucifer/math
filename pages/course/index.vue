@@ -42,7 +42,7 @@ export default {
   async fetch({ params, query, store }) {
     console.log("get earning summary");
     await store.dispatch(
-      `elearning-public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
+      `elearning/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
@@ -65,7 +65,7 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning-public-summary", ["elearningPublicSummary"]),
+    ...mapState("elearning/public-summary", ["elearningPublicSummary"]),
     highlight() {
       return get(this.elearningPublicSummary, "highlight", []);
     },

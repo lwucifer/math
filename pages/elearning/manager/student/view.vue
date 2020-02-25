@@ -135,7 +135,7 @@ export default {
       student: {
         id: "1",
         name: "Trần Văn Nam",
-        percent: "50",
+        percent: "69",
         class: "10B",
       },
       list: [
