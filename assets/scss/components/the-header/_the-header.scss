@@ -1,6 +1,12 @@
 .the-header {
     background-color: #fff;
     padding: 1.5rem 0;
+    .btn-login {
+        font-weight: bold;
+        color: #999;
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+    }
 }
 
 .the-header__content {
