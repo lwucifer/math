@@ -79,21 +79,49 @@ const EXERCISE_DETAIL = [
 const RESULTS = [
     {
         num: 1,
+        question: 'Câu hỏi số 3 chương đại số lớp 10',
+        options: [
+          '5000',
+          '6000',
+          '7000',
+          '8000'
+        ],
         answer: "B",
         key: "C"
     },
     {
         num: 2,
+        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        options: [
+            '5000',
+            '6000',
+            '7000',
+            '8000'
+        ],
         answer: "A",
         key: "D"
     },
     {
         num: 3,
+        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        options: [
+            '5000',
+            '6000',
+            '7000',
+            '8000'
+        ],
         answer: "C",
         key: "C"
     },
     {
         num: 4,
+        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        options: [
+            '5000',
+            '6000',
+            '7000',
+            '8000'
+        ],
         answer: "B",
         key: "A"
     }
