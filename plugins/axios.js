@@ -46,7 +46,7 @@ export default function({ store, $axios, redirect }) {
                     .then(result => {
                         isAlreadyFetchingAccessToken = false;
                         if (result.success == true) {
-                            console.log("onAccessTokenFetched", result.data.access_token);
+                            // console.log("onAccessTokenFetched", result.data.access_token);
                             onAccessTokenFetched(result.data.access_token);
                         } else {
                             // remove token and redirect to login

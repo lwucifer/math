@@ -14,7 +14,8 @@ const state = () => ({
     personalList: {},
     transactionsList: {},
     revenueList: {},
-    earningList: {}
+    earningList: {},
+    linkList: {}
 });
 
 /**
@@ -211,6 +212,9 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_EARNING_LIST", _earningList);
         state.earningList = _earningList;
+    },
+    [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
+        state.linkList = _linkList;
     }
 };
 
