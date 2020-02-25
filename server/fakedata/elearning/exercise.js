@@ -79,7 +79,7 @@ const EXERCISE_DETAIL = [
 const RESULTS = [
     {
         num: 1,
-        question: 'Câu hỏi số 3 chương đại số lớp 10',
+        question: '<b style="color: #666666;">Câu hỏi số 1 chương đại số lớp 10</b>',
         options: [
           '5000',
           '6000',
@@ -91,7 +91,7 @@ const RESULTS = [
     },
     {
         num: 2,
-        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        question: "<b>Câu hỏi 2 what's going on?</b>",
         options: [
             '5000',
             '6000',
@@ -103,7 +103,7 @@ const RESULTS = [
     },
     {
         num: 3,
-        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        question: '<b>Câu hỏi số 3 chương đại số lớp 10,</b>',
         options: [
             '5000',
             '6000',
@@ -115,7 +115,7 @@ const RESULTS = [
     },
     {
         num: 4,
-        question: 'Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10 Câu hỏi số 3 chương đại số lớp 10',
+        question: '<b>Câu hỏi số 4 chương đại số lớp 10</b>',
         options: [
             '5000',
             '6000',
