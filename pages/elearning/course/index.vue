@@ -57,9 +57,7 @@
     </div>
   </div>
 </template>
-
 <script>
-import IconSend from "~/assets/svg/icons/send.svg?inline"
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import ElearningRates from "~/components/page/elearning/ElearningRates";
 import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion"
