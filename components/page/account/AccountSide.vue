@@ -10,7 +10,10 @@
           </tr>
           <tr>
             <td>Số điện thoại</td>
-            <td>{{personalList.phone_number}}</td>
+            <td v-if="personalList.phone_number">{{personalList.phone_number}}</td>
+            <td v-else>
+              <n-link to>Cập nhật số điện thoại</n-link>
+            </td>
           </tr>
           <tr>
             <td>Ngày sinh</td>
