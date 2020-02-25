@@ -71,20 +71,14 @@ module.exports = {
      */
     axios: {
         baseURL: process.env.BASE_URL_API, // Default: http://[HOST]:[PORT][PREFIX]
-        proxy: true,
-        // prefix: "/api",
         redirectError: {
             401: "/login",
             404: "/404"
         },
         retry: {
-            retries: 3
+            retries: 0
         }, // interceptor retry time request
-        debug: false // default false
-    },
-
-    proxy: {
-        '/schoolly-api/': { target: 'https://api.schoolly.famtechvn.com/v1/', pathRewrite: { '^/schoolly-api/': '' }, changeOrigin: true }
+        debug: true // default false
     },
 
     recaptcha: {

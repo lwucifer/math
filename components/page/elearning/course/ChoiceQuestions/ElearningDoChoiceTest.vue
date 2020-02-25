@@ -48,14 +48,17 @@
                     <button class="btncontinueChoiceTest__ElearningCouse">Tiếp tục</button>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <button class="btnSummitChoiceTest__ElearningCourse" v-on:click="changeDoneQuestion">Nộp Bài</button>
+                    <button class="btnSummitChoiceTest__ElearningCourse" v-on:click="changeDoneQuestion">
+                        <IconSend class="iconprint__ElearningCourse"/>
+                        <span>Nộp bài</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
+import IconSend from "~/assets/svg/icons/send.svg?inline"
 export default {
     data(){
         return{
@@ -68,6 +71,9 @@ export default {
             console.log('Hello')
             this.$emit('updateTestQuestion',true)
         }
+    },
+    components:{
+        IconSend
     }
 }
 </script>

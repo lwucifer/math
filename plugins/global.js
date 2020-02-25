@@ -23,6 +23,9 @@ import AppRadioGroup from "~/components/common/radio/AppRadioGroup";
 import AppRadio from "~/components/common/radio/AppRadio";
 import AppUpload from "~/components/common/upload/AppUpload";
 import AppAlert from "~/components/common/alert/AppAlert";
+import _ from "lodash";
+
+Object.defineProperty(Vue.prototype, "$_", { value: _ });
 
 Vue.component("app-button", AppButton);
 Vue.component("app-divider", AppDivider);

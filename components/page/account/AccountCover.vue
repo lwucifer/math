@@ -1,15 +1,23 @@
 <template>
   <div class="account__cover">
-    <img :src="account.cover" />
-    <a href class="change-cover">
-      <IconPhoto width="26" height="26" />
-    </a>
+    <img :src="coverSrc" />
+    <app-upload class="cgi-upload-avt change-cover" @change="handleUploadCover">
+      <template>
+        <div class="cgi-upload-avt-preview">
+          <IconPhoto width="26" height="26" />
+        </div>
+      </template>
+    </app-upload>
     <div class="account__avatar">
       <div class="avatar">
-        <app-avatar :src="account.avatar" :size="170" />
-        <a href class="change-avatar">
-          <IconPhoto width="22" height="22" />
-        </a>
+        <app-avatar :src="avatarSrc" :size="170" />
+        <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
+          <template>
+            <div class="cgi-upload-avt-preview">
+              <IconPhoto width="22" height="22" />
+            </div>
+          </template>
+        </app-upload>
       </div>
       <h3>{{account.name}}</h3>
     </div>
@@ -83,6 +91,8 @@ import IconMessenger from "~/assets/svg/icons/messenger.svg?inline";
 import IconUserCross from "~/assets/svg/icons/user-cross.svg?inline";
 import IconUserTick from "~/assets/svg/icons/user-tick.svg?inline";
 import IconUserArrow from "~/assets/svg/icons/user-arrow.svg?inline";
+import { getBase64 } from "~/utils/file";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -105,13 +115,54 @@ export default {
         name: "Dat Pham",
         avatar: "https://picsum.photos/170/170",
         cover: "https://picsum.photos/1170/400"
-      }
+      },
+      avatar: [],
+      avatarSrc: "https://picsum.photos/170/170",
+      cover: [],
+      coverSrc: "https://picsum.photos/1170/400"
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("account", ["personalList"])
+  },
+  created() {
+    this.avatarSrc = this.personalList.avatar
+      ? this.personalList.avatar.low
+      : "https://picsum.photos/170/170";
+    this.coverSrc = this.personalList.cover
+      ? this.personalList.cover
+      : "https://picsum.photos/1170/400";
+  },
 
-  methods: {}
+  methods: {
+    ...mapActions("account", [
+      "accountPersonalEditAvatar",
+      "accountPersonalEditCover"
+    ]),
+    async handleUploadChange(fileList, event) {
+      this.avatar = Array.from(fileList);
+
+      getBase64(this.avatar[0], src => {
+        this.avatarSrc = src;
+      });
+      const body = new FormData();
+      body.append("avatar_images", fileList[0]);
+      console.log("[avatar_images]", fileList[0]);
+      this.accountPersonalEditAvatar(body).then(result => {});
+    },
+    async handleUploadCover(fileList, event) {
+      this.cover = Array.from(fileList);
+
+      getBase64(this.cover[0], src => {
+        this.coverSrc = src;
+      });
+      const body = new FormData();
+      body.append("cover_images", fileList[0]);
+      console.log("[cover_images]", fileList[0]);
+      this.accountPersonalEditCover(body).then(result => {});
+    }
+  }
 };
 </script>
 

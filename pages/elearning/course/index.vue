@@ -8,12 +8,12 @@
               <img src="https://picsum.photos/750/422" alt />
             </div>
             <div v-else>
-            <!-- Câu hỏi chắc nghiệm  -->
+            <!-- Câu hỏi chắc nghiệm  
               <ElearningChoiceQuestion />
-           
-            <!-- Câu hỏi tự luận 
+           -->
+            <!-- Câu hỏi tự luận --> 
               <ElearningEssayQuestion />
-            --> 
+            
             </div>
             <div class="elearning-lesson__main-nav">
               <a href="#tab1" :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import IconSend from "~/assets/svg/icons/send.svg?inline"
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import ElearningRates from "~/components/page/elearning/ElearningRates";
 import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion"
