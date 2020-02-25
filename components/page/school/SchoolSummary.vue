@@ -4,7 +4,7 @@
       <div class="row">
         <!--Thumnail-->
         <div class="school-summary__thumnail">
-          <img :src="school.thumnail" alt />
+          <img :src="$_.get(school, 'avatar', '')" alt />
         </div>
         <!--End Thumnail-->
 
@@ -77,7 +77,7 @@
     <div class="partial">
       <div class="school-summary__intro">
         <h4>Giới thiệu</h4>
-        <p>{{ school.intro }}</p>
+        <p>{{ $_.get(school, "description", "") }}</p>
       </div>
     </div>
     <!--End intro-->
