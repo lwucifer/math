@@ -1,140 +1,94 @@
 <template>
   <div class="elearning-manager-result">
-    writing
-    <!--Table-->
-    <app-table
-      :heads="heads"
-      :pagination="pagination"
-      @pagechange="onPageChange"
-      :data="list"
-    >
-      <template v-slot:cell(action)="{row}">
-        <td>
-          <n-link
-            class
-            title="Chi tiết"
-            :to="'/elearning/manager/test/' + row.id">
-            <IconArrow />
-          </n-link>
-        </td>
-      </template>
-    </app-table><!--End table-->
+    <div class="elearning-manager-result__mark">
+      <h4>Kết quả bài làm</h4>
+      <div class="elearning-manager-result__mark__detail">
+        <div class="item">
+          <span>Thời gian làm bài: </span>
+          <span>20:30</span>
+        </div>
+        <div class="item">
+          <span>Kết quả: </span>
+          <span v-if="hasMark">6/10 (Đạt)</span>
+          <span v-else>Chưa chấm điểm</span>
+        </div>
+      </div>
+    </div>
+    <div class="py-3">
+      <div class="elearning-writting-test-result">
+        <div class="item">
+          <label class="title">Câu hỏi</label>
+          <div class="test_content" v-html="questionContent"></div>
+        </div>
+        <div class="item">
+          <label class="title">Câu trả lời</label>
+          <div class="test_content" v-html="answer"></div>
+        </div>
+      </div>
+
+      <!--Score form-->
+      <div class="writting-test-score" v-show="false">
+        <label class="title" for="">Chấm điểm</label>
+        <form
+          class="writting-test-score__form"
+          action=""
+        >
+          <app-input
+            class="d-inline-block"
+            v-model="score"
+          >
+          </app-input>
+          <div
+            class="text-center"
+          >
+            <app-button
+              class="btn--score"
+              size="xl"
+              square
+            >
+              Xác nhận
+            </app-button>
+          </div>
+        </form>
+      </div><!--Score form-->
+    </div>
   </div>
 </template>
 
 <script>
-    import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-    import IconSearch from "~/assets/svg/icons/search.svg?inline"
-    import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
-    import { mapState } from "vuex"
-    import * as actionTypes from "~/utils/action-types"
-    // Import faked data
-    import { EXERCISES } from "~/server/fakedata/elearning/test"
+  import {mapState} from "vuex"
+  import * as actionTypes from "~/utils/action-types"
+  // Import faked data
+  import {RESULTS} from "~/server/fakedata/elearning/test"
 
-    export default {
+  export default {
 
-        components: {
-            IconFilter,
-            IconSearch,
-            IconArrow
-        },
+    components: {},
 
-        data() {
-            return {
-                tab: 1,
-                heads: [
-                    {
-                        name: "name",
-                        text: "Tiêu đề",
-                        sort: false
-                    },
-                    {
-                        name: "type",
-                        text: "Thể loại",
-                        sort: false
-                    },
-                    {
-                        name: "lesson",
-                        text: "Thuộc bài giảng",
-                        sort: false
-                    },
-                    {
-                        name: "course",
-                        text: "Thuộc khóa học",
-                        sort: false
-                    },
-                    {
-                        name: "studentNum",
-                        text: "Học sinh làm bài",
-                        sort: true
-                    },
-                    {
-                        name: "createdAt",
-                        text: "Ngày khởi tạo",
-                        sort: true
-                    },
-                    {
-                        name: "action",
-                        text: "",
-                        sort: false
-                    }
-                ],
-                filter: {
-                    type: null,
-                    query: null
-                },
-                types: [
-                    {
-                        value: 1,
-                        text: 'Trắc nghiệm'
-                    },
-                    {
-                        value: 2,
-                        text: 'Tự luận'
-                    },
-                ],
-                isAuthenticated: true,
-                pagination: {
-                    total: 15,
-                    page: 6,
-                    pager: 20,
-                    totalElements: 55,
-                    first: 1,
-                    last: 10
-                },
-                list: EXERCISES,
-            };
-        },
-        computed: {
-            ...mapState("auth", ["loggedUser"])
-        },
+    data() {
+      return {
+        isAuthenticated: true,
+        questionContent: "Nội dung câu hỏi",
+        answer: "Nội dung câu trả lời",
+        score: null
+      }
+    },
+    computed: {
+      ...mapState("auth", ["loggedUser"]),
+      hasMark: function () {
+        return true
+      }
+    },
 
-        methods: {
-            onPageChange(e) {
-                const that = this;
-                that.pagination = { ...that.pagination, ...e };
-                console.log(that.pagination);
-            },
-            submit() {
-                console.log('[Component] Elearning exercise: submitted')
-            },
-            handleChangedInput(val) {
-                if (val !== null) {} else {}
-                console.log('[Component] Elearning exercise: changing input...', val)
-            },
-            handleFocusSearchInput() {
-                console.log('[Component] Elearning exercise: focus searching ')
-            },
-            handleBlurSearchInput() {
-                console.log('[Component] Elearning exercise: blur searching ')
-            },
-            handleSearch() {
-                console.log('[Component] Elearning exercise: searching')
-            }
-        }
-    };
+    methods: {},
+
+    created() {
+      const resultId = this.$route.params.id
+    }
+  };
 </script>
 
 <style lang="scss">
-  /*@import "~/assets/scss/components/elearning/manager/_elearning-exercise.scss";*/
+  @import "~/assets/scss/components/elearning/_elearning-result.scss";
+  @import "~/assets/scss/components/elearning/_elearning-writing-test-result.scss";
 </style>
