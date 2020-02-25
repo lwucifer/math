@@ -3,6 +3,7 @@ import Vue from "vue";
 const moment = require("moment");
 
 export const getDateBirthDay = _utcDate => {
+    if (!_utcDate) return;
     const ts = moment.utc(_utcDate);
     return ts.format(DATE_BIRTHDAY);
 };

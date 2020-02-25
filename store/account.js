@@ -5,6 +5,8 @@ import Link from "../services/account/Link";
 import Transactions from "../services/account/Transactions";
 import Revenue from "../services/account/Revenue";
 import Earning from "../services/account/Earning";
+import UpdateAvatar from "../services/account/UpdateAvatar";
+import UpdateCover from "../services/account/UpdateCover";
 /**
  * initial state
  */
@@ -53,10 +55,11 @@ const actions = {
     },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_AVATAR]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                payload
-            );
+            const result = await new UpdateAvatar(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
@@ -76,9 +79,9 @@ const actions = {
     },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_COVER]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                paload
-            );
+            const result = await new UpdateCover(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
             return result;
         } catch (err) {
