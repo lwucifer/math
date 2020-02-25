@@ -62,6 +62,7 @@ export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/study/votes`;
  * SCHOOL
  */
 export const SCHOOL_CLASSES = `${SCHOOLLY_ALIAS}/school/classes`;
+export const SCHOOL_INFO = `${SCHOOLLY_ALIAS}/elearning/school/info`;
 export const SCHOOL_PROFESSIONAL = `${SCHOOLLY_ALIAS}/school/professional`;
 export const SCHOOL_STUDENT = `${SCHOOLLY_ALIAS}/school/students`;
 export const SCHOOL_TEACHER = `${SCHOOLLY_ALIAS}/school/teachers`;

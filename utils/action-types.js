@@ -179,6 +179,10 @@ export const SCHOOL_CLASSES = {
   DELETE: "schoolClassesDelete"
 };
 
+export const SCHOOL_INFO = {
+  INFO: "schoolInfo"
+};
+
 export const SCHOOL_PROFESSIONAL = {
   LIST: "schoolProfessionalList",
   ADD: "schoolProfessionalAdd",
