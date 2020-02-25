@@ -21,7 +21,7 @@
           </tr>
           <tr>
             <td>Giới tính</td>
-            <td>{{personalList.sex == 1 ? "Nam" : "Nữ"}}</td>
+            <td>{{filterSex}}</td>
           </tr>
           <tr>
             <td>Địa chỉ</td>
@@ -155,7 +155,14 @@ export default {
     }
   }),
   computed: {
-    ...mapState("account", ["personalList"])
+    ...mapState("account", ["personalList"]),
+    filterSex() {
+      return this.personalList.sex
+        ? this.personalList.sex == 1
+          ? "Nam"
+          : "Nữ"
+        : "";
+    }
   }
 };
 </script>
