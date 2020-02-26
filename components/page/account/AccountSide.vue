@@ -32,13 +32,13 @@
 
       <app-button square fullWidth @click="showEdit = true">Chỉnh sửa thông tin</app-button>
       <AccountEditModal :visible="showEdit" @click-close="showEdit = false" :account="account" />
-
+<!-- 
       <app-button square fullWidth @click="showChangePass = true">Đổi mật khẩu</app-button>
       <AccountChangePasswordModal
         :visible="showChangePass"
         @click-close="showChangePass = false"
         :account="account"
-      />
+      /> -->
     </div>
 
     <div class="account__side-item photos">
