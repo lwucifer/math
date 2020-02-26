@@ -2,7 +2,7 @@
   <div>
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
       <div class="cc-panel__body">
@@ -13,39 +13,19 @@
           Bạn có thể tạo bài kiểm tra bắt buộc cho bài giảng, khóa học của bạn tại đây. Học sinh cần hoàn thành bài kiểm tra và đạt điểm để hoàn thành khóa học.
         </app-alert>
 
-        <app-button class="font-weight-semi-bold" color="secondary" size="sm" square>Tạo bài tập</app-button>
+        <app-button class="font-weight-semi-bold" color="secondary" size="sm" square>Tạo Bài kiểm tra</app-button>
       </div>
     </div>
 
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="mb-4">
-          <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề bài tập</label>
+          <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề Bài kiểm tra</label>
           <app-input id="title" :counter="100" />
-        </div>
-
-        <div class="row align-items-center mb-4">
-          <div class="col-md-2">
-            <label for="require" class="text-gray caption">Bài tập bắt buộc?</label>
-          </div>
-          <div class="col-md-10">
-            <app-select
-              class="cc-select"
-              id="require"
-              :options="[{ value: 1, text: 'Có'}, { value: 0, text: 'Không'}]"
-              placeholder="Bắt buộc"
-              size="sm"
-              style="width: 112px"
-            >
-              <template slot="placeholder-icon">
-                <IconAngleDown class="icon" />
-              </template>
-            </app-select>
-          </div>
         </div>
 
         <div class="row align-items-center mb-4">
@@ -99,20 +79,20 @@
 
         <div class="d-flex justify-content-end">
           <app-button size="sm" color="disabled" class="font-weight-semi-bold mr-4" square>Huỷ bỏ</app-button>
-          <app-button size="sm" color="primary" class="font-weight-semi-bold" square>Tạo bài tập</app-button>
+          <app-button size="sm" color="primary" class="font-weight-semi-bold" square>Tạo Bài kiểm tra</app-button>
         </div>
       </div>
     </div>
 
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="ce-item d-flex align-items-center justify-content-between">
           <div class="ce-item__left d-flex align-items-center">
-            <h3 class="body-2 mr-3">Bài tập 1</h3>
+            <h3 class="body-2 mr-3">Bài kiểm tra 1</h3>
             <a href class="ce-item__action edit mr-3">
               <IconEditAlt class="icon d-block subheading fill-primary" />
             </a>
@@ -130,14 +110,14 @@
 
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài tập 1</h2>
+              <h2 class="cc-box__title heading-6">Bài kiểm tra 1</h2>
               <button class="cc-box__btn cc-box__btn-edit">
                 <IconEditAlt class="icon" />
               </button>
@@ -241,14 +221,14 @@
 
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài tập 1</h2>
+              <h2 class="cc-box__title heading-6">Bài kiểm tra 1</h2>
               <button class="cc-box__btn cc-box__btn-edit">
                 <IconEditAlt class="icon" />
               </button>
