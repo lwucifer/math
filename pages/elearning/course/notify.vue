@@ -4,29 +4,12 @@
       <div class="row">
         <div class="col-md-8">
           <div class="box11">
-            <div class="elearning-lesson_image">
-              <img src="https://picsum.photos/750/422" alt />
-            </div>
+            <ElearningEssayQuestion />
             <div class="elearning-lesson__main-nav">
               <n-link :to="'/elearning/course'">Tổng quan</n-link>
-              <a class="active">Hỏi đáp</a>
-              <n-link :to="'/elearning/course/notify'">Thông báo</n-link>
+              <n-link :to="'/elearning/course/question'">Hỏi đáp</n-link>
+              <a class="active">Thông báo</a>
               <n-link :to="'/elearning/course/question'">Đánh giá</n-link>
-            </div>
-            <div class="elearning-lesson__main-content">
-              <div class="d-flex-center">
-                <strong>154 bình luận</strong>
-                <div class="ml-auto d-flex">
-                  <app-input class="mr-3 mb-0" size="sm">
-                    <button slot="unit">
-                      <IconSearch class="fill-999" height="16" width="16" />
-                    </button>
-                  </app-input>
-                  <app-select v-model="opt" :options="opts" size="sm" />
-                </div>
-              </div>
-              <hr class="mt-4 mb-4" />
-              <ElearningCourseComment :data="comments" :auth="auth" />
             </div>
           </div>
         </div>
@@ -39,8 +22,9 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/course/comment/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion"
+import ElearningEssayQuestion from "~/components/page/elearning/course/ElearningEssayQuestion"
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
@@ -52,7 +36,8 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningCourseComment,
+    ElearningChoiceQuestion,
+    ElearningEssayQuestion,
     ElearningCourseSide,
     IconSearch,
     IconCamera

@@ -221,3 +221,11 @@ export const ELEARNING_STURY_VOTE = {
     LIST: "ElearningStudyVoteList",
     ADD: "ElearningStudyVoteAdd"
 };
+
+export const ELEARNING_SCHOOL_SUMMARY = {
+    LIST: "ElearningSchoolSummaryList"
+};
+
+export const ELEARNING_SCHOOL_SEARCH = {
+    LIST: "ElearningSchoolSearchList"
+};

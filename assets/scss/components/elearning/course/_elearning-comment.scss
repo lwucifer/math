@@ -2,7 +2,7 @@
     display: flex;
     margin-bottom: 1.8rem;
     .content {
-        margin-left: .5rem;
+        margin-left: 1rem;
         width: 100%;
     }
 }
@@ -54,4 +54,7 @@
         float: none;
         color: #ccc;
     }
+}
+.app-input__input textarea {
+    height: auto;
 }
