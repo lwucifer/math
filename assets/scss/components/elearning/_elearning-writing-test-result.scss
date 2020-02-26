@@ -1,0 +1,49 @@
+.elearning-writting-test-result {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  
+  .item {
+    margin-bottom: 2rem;
+    
+    .title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      line-height: 1.9rem;
+      color: #666666;
+      display: block;
+      margin-bottom: 1rem;
+    }
+    .test_content {
+      border: 1px solid #EEEEEE;
+      min-height: 11rem;
+      padding: 1rem
+    }
+  }
+}
+
+.writting-test-score {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  
+  .title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 1.9rem;
+    color: #666666;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  &__form {
+    .app-input {
+      min-width: 21.3rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .btn--score {
+      font-size: 1.4rem;
+      height: 4rem;
+      padding: 0 5.25rem;
+    }
+  }
+}

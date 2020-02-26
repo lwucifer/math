@@ -140,6 +140,10 @@ export const SCHOOL_CLASSES = {
   SET_SCHOOL_CLASSES_DELETE: "setSchoolClassesDelete"
 };
 
+export const SCHOOL_INFO = {
+  SET_SCHOOL_INFO: "setSchoolInfo"
+};
+
 export const SCHOOL_PROFESSIONAL = {
   SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
   SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",

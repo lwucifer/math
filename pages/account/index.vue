@@ -44,11 +44,13 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-      console.log("watchQuery");
-      await Promise.all([
-        store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`)
-        ]);
-    },
+    console.log("watchQuery");
+    const userId = store.state.auth.token.id;
+    await Promise.all([
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+    ]);
+  },
 
   data() {
     return {
