@@ -222,3 +222,7 @@ export const ELEARNING_STURY_VOTE = {
 export const ELEARNING_SCHOOL_SUMMARY = {
   LIST: "ElearningSchoolSummaryList"
 };
+
+export const ELEARNING_SCHOOL_SEARCH = {
+  LIST: "ElearningSchoolSearchList"
+};
