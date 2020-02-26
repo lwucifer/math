@@ -71,7 +71,8 @@ export default {
       type: Object,
       required: false,
       default: () => {}
-    }
+    },
+    selectAll: Boolean
   },
 
   data() {
@@ -106,6 +107,9 @@ export default {
   },
 
   computed: {
+    hasDefaultSlot() {
+      return !!this.$slots.default;
+    },
     sortedCats: function() {
       for (let i = this.cats.length - 1; i > 0; i--) {
         let check = true;
