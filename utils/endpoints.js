@@ -23,6 +23,9 @@ export const VERIFY_EMAIL = `${SCHOOLLY_ALIAS}user/public/verify`;
 export const REFRESH_TOKEN = `${SCHOOLLY_ALIAS}user/public/renew`;
 export const UPDATE_AVATAR = `${SCHOOLLY_ALIAS}/social/api/user/updateAvatar`;
 export const UPDATE_COVER = `${SCHOOLLY_ALIAS}/social/api/user/updateCover`;
+export const CHECK_EMAIL = `${SCHOOLLY_ALIAS}/social/api/user/checkEmail`;
+export const VERIFY_OTP_EMAIL = `${SCHOOLLY_ALIAS}/social/api/user/verifyOtp`;
+export const UPDATE_PHONE = `${SCHOOLLY_ALIAS}/social/api/user/updatePhone`;
 
 /**
  * SOCIALS

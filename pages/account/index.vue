@@ -3,7 +3,7 @@
     <AccountCover />
     <div class="row">
       <div class="col-md-4">
-        <AccountSide account="account" />
+        <AccountSide />
       </div>
       <div class="col-md-8">
         <div class="account__main">
@@ -32,7 +32,6 @@
 import AccountCover from "~/components/page/account/AccountCover";
 import AccountSide from "~/components/page/account/AccountSide";
 import AccountTimeline from "~/components/page/account/AccountTimeline";
-
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -45,7 +44,7 @@ export default {
 
   async fetch({ params, query, store }) {
     console.log("watchQuery");
-    const userId = store.state.auth.token.id;
+    const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
@@ -62,6 +61,7 @@ export default {
       }
     };
   },
+  mounted() {},
 
   computed: {},
 
