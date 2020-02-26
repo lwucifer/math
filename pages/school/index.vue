@@ -52,7 +52,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/school-summary/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`
+      `elearning/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
   },
 
@@ -69,7 +69,7 @@ export default {
 
   computed: {
     // ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/school-summary", ["elearningSchoolSummary"]),
+    ...mapState("elearning/school-search", ["elearningSchoolSearch"]),
     // classes() {
     //     return {
     //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
@@ -79,7 +79,7 @@ export default {
   },
 
   created() {
-    console.log(this.elearningSchoolSummary)
+    console.log(this.elearningSchoolSearch)
   },
 
   watch: {},
