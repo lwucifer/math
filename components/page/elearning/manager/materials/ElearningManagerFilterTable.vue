@@ -37,7 +37,7 @@
                     </app-vue-select>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-6 d-flex justify-content-end">
                 <div class="wrapSearchForm___ElearningManagerFilterTable">
                     <app-input
                         type="text"
@@ -45,6 +45,8 @@
                         placeholder="Nhập để tìm kiếm..."
                         :size="'sm'"
                         @input="handleSearch"
+                        class="inputSearch"
+                       
                     />
                     <button type="submit">
                         <IconSearch width="15" height="15" />
@@ -93,7 +95,6 @@ export default {
     },
     data() {
             return {
-                selectAll:true,
                 heads: [
                     {
                         name:"action",

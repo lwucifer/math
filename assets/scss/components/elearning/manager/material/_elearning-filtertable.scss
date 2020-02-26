@@ -29,20 +29,13 @@
     width: 155px;
     height: 32px;
 }
-.wrapSearchForm___ElearningManagerFilterTable{
-    display: flex;
-    flex: row;
-    justify-content: flex-end;
-    button{
-        height: 32px;
-        padding:0px 7px;
-    }
-}
+
 .bntRemoveList__ElearningManagerFilterTable{
     width: 183px;
     height: 32px;
     background: #E9446A;
     border-radius: 0px;
+    margin-top: 24px;
     display: flex;
     flex: row;
     justify-content: center;
@@ -60,6 +53,24 @@
 }
 .wrapTable__ElearningManagerFilterTable{
     padding-top:20px;
+}
+.wrapSearchForm___ElearningManagerFilterTable{
+    display: flex;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    border: 1px solid #EEEEEE;
+    height: 32px;
+    width: 289px;
+    .app-input__input{
+        height: 30px;
+        border: none;
+        width: 257px;
+    }
+    button{
+        height: 32px;
+        padding:0px 7px;
+        border-left: none;
+    }
 }
 .tableUploadFile__ElearningManagerFilterTable{
     .app-checkbox{
