@@ -78,6 +78,7 @@
         width: 100%;
         flex-grow: 1;
         font-size: inherit;
+        height: auto;
         
         &:disabled {
             background-color: #eee;
