@@ -183,3 +183,7 @@ export const ELEARNING_STUDY_VOTE = {
 export const ELEARNING_SCHOOL_SUMMARY = {
   SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
+
+export const ELEARNING_SCHOOL_SEARCH = {
+  SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList",
+};
