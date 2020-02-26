@@ -9,13 +9,13 @@
     <n-link class="link-gray item" :to="'/elearning/manager/test/'" :class="active == 3 ? 'active' : ''">
       <IconCalendar />Bài tập và bài kiểm tra
     </n-link>
-    <n-link class="link-gray item" to :class="active == 4 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/materials/'" :class="active == 4 ? 'active' : ''">
       <IconBooks />Kho học liệu
     </n-link>
     <n-link class="link-gray item" to :class="active == 5 ? 'active' : ''">
       <IconFolderCheck />Phòng học online
     </n-link>
-    <n-link class="link-gray item" to :class="active == 6 ? 'active' : ''">
+    <n-link class="link-gray item" :to ="'/elearning/manager/interactive'" :class="active == 6 ? 'active' : ''">
       <IconChatUser />Tương tác với học sinh
     </n-link>
     <n-link class="link-gray item" :to="'/elearning/manager/revenue'" :class="active == 7 ? 'active' : ''">

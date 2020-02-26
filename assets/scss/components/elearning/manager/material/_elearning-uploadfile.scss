@@ -1,0 +1,82 @@
+.wrapStorage__ElearningManager{
+    color: #333333;
+    font-size: 14px;
+    :first-child span:last-child{
+        color: #1481FE;
+        font-weight: bold;
+    }
+    div:first-child{
+        letter-spacing: 0.03em;
+        margin-bottom: 15px;
+    }
+ }
+ .wrapProcessbarStorage__ElearningManager{
+     span{
+         color: #1481FE;
+         padding-left:5px;
+         font-weight: bold;
+         font-size: 12px;
+         line-height: 16px;
+     }
+ }
+ .processStorage__ElearningManager{
+     width: 190px;
+     height: 10px;
+     background: #EEEEEE;
+     border-radius: 20px;
+ }
+ .barStorage_ElearningManager{
+     width: 79%;
+     height: 10px;
+     background: #1481FE;
+     border-radius: 20px;
+ }
+ .titleUpload__ElearningManager{
+     font-weight: bold;
+     font-size: 14px;
+     line-height: 24px;
+ 
+ }
+ .wrapUploadFile__ElearningManager{
+     height: 100px;
+     border: 1px solid #CCCCCC;
+     box-sizing: border-box;
+     text-align: center;
+ 
+ }
+ .titleFormatFile__ElearningManager{
+     height: 50px;
+     width: 100%;
+     span{
+         margin-top:20px;
+         display:inline-block;
+         color: #999999;
+         font-size: 14px;
+         line-height: 24px;
+     }
+ }
+ .wrapBtnUploadFile__ElearningManager{
+     height: 50px;
+     display: flex;
+     flex: row;
+     justify-content: center;
+ }
+ .btnUploadFile__ElearningManager{
+     background: #32AF85;
+     width: 139px;
+     height: 32px;
+     color: #FBFBFB; 
+     font-weight: 600;
+     font-size: 14px;
+     line-height: 24px;
+     text-transform: uppercase;
+     display: flex;
+     flex: row;
+     align-items: center;
+     justify-content: center;
+ }
+ .iconUploadFile__ElearningManager{
+     height: 14px;
+     fill: #FFFFFF;
+     
+ }
