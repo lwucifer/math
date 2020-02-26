@@ -4,24 +4,16 @@
       <div class="row">
         <div class="col-md-8">
           <div class="box11">
-            <div class="elearning-lesson_image" v-if="tab!=3">
+            <div class="elearning-lesson_image">
               <img src="https://picsum.photos/750/422" alt />
             </div>
-            <div v-else>
-            <!-- Câu hỏi chắc nghiệm  
-              <ElearningChoiceQuestion />
-           -->
-            <!-- Câu hỏi tự luận --> 
-              <ElearningEssayQuestion />
-            
-            </div>
             <div class="elearning-lesson__main-nav">
-              <a href="#tab1" :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
-              <a href="#tab2" :class="tab == 2 ? 'active' : ''" @click="tab = 2">Hỏi đáp</a>
-              <a href="#tab3" :class="tab == 3 ? 'active' : ''" @click="tab = 3">Thông báo</a>
-              <a href="#tab4" :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+              <a class="active">Tổng quan</a>
+              <n-link :to="'/elearning/course/question'">Hỏi đáp</n-link>
+              <n-link :to="'/elearning/course/notify'">Thông báo</n-link>
+              <n-link :to="'/elearning/course/question'">Đánh giá</n-link>
             </div>
-            <div class="elearning-lesson__main-content" id="tab1">
+            <div class="elearning-lesson__main-content">
               <div class="mb-4">
                 <strong>Phù hợp với</strong>
                 <p>Bất cứ ai muốn trở thành một Vlogger, tìm hiểu thêm về ngành làm vlog.</p>
@@ -41,13 +33,6 @@
                 </p>
               </div>
             </div>
-            <div id="tab4">
-              <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
-              <ElearningRates />
-            </div>
-            <div id="tab2">
-              
-            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -59,11 +44,12 @@
 </template>
 
 <script>
-import IconSend from "~/assets/svg/icons/send.svg?inline"
+import ElearningCourseComment from "~/components/page/elearning/course/comment/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
-import ElearningRates from "~/components/page/elearning/ElearningRates";
-import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion"
-import ElearningEssayQuestion from "~/components/page/elearning/course/ElearningEssayQuestion"
+import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
+import IconLike from "~/assets/svg/icons/like.svg?inline";
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -71,19 +57,56 @@ export default {
   name: "E-learning",
 
   components: {
+    ElearningCourseComment,
     ElearningCourseSide,
-    ElearningRates,
-    ElearningChoiceQuestion,
-    ElearningEssayQuestion,
+    IconSearch,
+    IconCamera
   },
 
   data() {
     return {
-      
-      tab: 1,
+      tab: 2,
       isAuthenticated: true,
       teacher: {},
       title: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
+      opt: "",
+      auth: {
+        id: 1,
+        avatar: "https://picsum.photos/51/51",
+        name: "Nguyễn Nguyên"
+      },
+      comments: [
+        {
+          id: 1,
+          avatar: "https://picsum.photos/60/60",
+          name: "Ngọc Quyên",
+          content:
+            "Từ Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+          time: "20/11/2022",
+          likes: 100,
+          liked: true,
+          parent: true,
+          parentId: ""
+        },
+        {
+          id: 2,
+          avatar: "https://picsum.photos/55/55",
+          name: "Nguyễn Ngọc",
+          content:
+            "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+          time: "20/11/2022",
+          likes: 100,
+          liked: true,
+          parent: true,
+          parentId: ""
+        }
+      ],
+      opts: [
+        { value: "", text: "Sắp xếp theo" },
+        { value: "1", text: "Nhiều thích nhất" },
+        { value: "2", text: "Mới nhất" },
+        { value: "3", text: "Cũ nhất" }
+      ],
       lesson: {
         avatar: "https://picsum.photos/32/32",
         author: "Nguyễn Ngọc Quyên",
@@ -95,6 +118,18 @@ export default {
       data: {
         number: 9,
         times: "9 giờ 30 phút",
+        classes: [
+          {
+            id: 1,
+            name: "Bài giảng online cho khoá học",
+            done: false
+          },
+          {
+            id: 2,
+            name: "Bài giảng online cho khoá học",
+            done: true
+          }
+        ],
         list: [
           {
             id: 1,
@@ -105,73 +140,80 @@ export default {
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
+                time: "1 giờ 30 phút",
+                wait: false
+              },
+              {
+                id: 2,
+                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
+                done: false,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 3,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
+                done: true,
                 time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
+              }
             ]
           },
           {
-            id: 1,
+            id: 2,
             name: "Chương 1: Các bài học chương 1",
+            status: "2/5",
+            times: "1 giờ 18 phút",
             lessons: [
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 2,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
+                done: false,
+                time: "1 giờ 30 phút",
+                wait: true
               },
               {
-                id: 1,
+                id: 3,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
-              },
+              }
             ]
           },
           {
-            id: 1,
+            id: 3,
             name: "Chương 1: Các bài học chương 1",
+            status: "2/5",
+            times: "1 giờ 18 phút",
             lessons: [
               {
                 id: 1,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
+                done: true,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 2,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
+                done: false,
                 time: "1 giờ 30 phút"
               },
               {
-                id: 1,
+                id: 3,
                 name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
+                done: true,
+                time: "1 giờ 30 phút",
+                wait: true
+              }
             ]
-          },
+          }
         ]
-      },
+      }
     };
   },
   computed: {

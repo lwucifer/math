@@ -9,15 +9,19 @@
             <td>{{personalList.email}}</td>
           </tr>
           <tr>
-            <td>Số điện thoại</td>
-            <td v-if="personalList.phone_number">{{personalList.phone_number}}</td>
+            <td :class="validatePhone ? 'color-red' : ''">Số điện thoại</td>
+            <td v-if="!personalList.phone_number">{{personalList.phone_number}}</td>
             <td v-else>
-              <n-link to>Cập nhật số điện thoại</n-link>
+              <div v-if="showUpdatePhone" class="form-update-phone">
+                <input type="text" v-model="phone" :class="validatePhone ? 'color-red' : ''"/>
+                <app-button color="white" square size=xs @click="savePhone">Lưu</app-button>
+              </div>
+              <a class="update-phone" @click="showUpdatePhone = true" v-else>Cập nhật số điện thoại</a>
             </td>
           </tr>
           <tr>
-            <td>Ngày sinh</td>
-            <td>{{personalList.bithday | getDateBirthDay}}</td>
+            <td :class="validatePhone ? 'border-red' : ''">Ngày sinh</td>
+            <td :class="validatePhone ? 'border-red' : ''">{{personalList.bithday | getDateBirthDay}}</td>
           </tr>
           <tr>
             <td>Giới tính</td>
@@ -30,15 +34,15 @@
         </tbody>
       </table>
 
-      <app-button square fullWidth @click="showEdit = true">Chỉnh sửa thông tin</app-button>
+      <app-button class="mt-3" square fullWidth @click="showEdit = true">Chỉnh sửa thông tin</app-button>
       <AccountEditModal :visible="showEdit" @click-close="showEdit = false" :account="account" />
-
+<!-- 
       <app-button square fullWidth @click="showChangePass = true">Đổi mật khẩu</app-button>
       <AccountChangePasswordModal
         :visible="showChangePass"
         @click-close="showChangePass = false"
         :account="account"
-      />
+      /> -->
     </div>
 
     <div class="account__side-item photos">
@@ -144,6 +148,9 @@ export default {
   data: () => ({
     showEdit: false,
     showChangePass: false,
+    showUpdatePhone: false,
+    validatePhone: false,
+    phone:'',
     account: {
       id: "1",
       name: "Master King",
@@ -154,6 +161,13 @@ export default {
       birthday: "06/09/1996"
     }
   }),
+
+  methods: {
+    savePhone() {
+      this.showUpdatePhone = false;
+    }
+  },
+  
   computed: {
     ...mapState("account", ["personalList"]),
     filterSex() {

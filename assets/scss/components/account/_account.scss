@@ -5,6 +5,21 @@
 		padding: 1rem 2rem 2rem;
 		margin-bottom: 2rem;
 	}
+	.form-update-phone {
+		display: flex;
+		align-items: center;
+		input {
+			border: 0;
+			width: 9rem;
+			margin-right: 1rem;
+			margin-left: auto;
+		}
+	}
+	.update-phone {
+		color: $color-primary;
+		text-decoration: underline;
+		cursor: pointer;
+	}
 }
 .account__side-item {
 	.row >.p-0 {
@@ -22,7 +37,6 @@
 	}
 	.btn {
 		color: #fff;
-		margin-top: 1rem;
 		&:hover {
 			color: #fff;
 		}

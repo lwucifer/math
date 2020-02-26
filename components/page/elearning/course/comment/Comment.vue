@@ -1,7 +1,10 @@
 <template>
   <div>
-    <CommentInput :data="auth" />
-    <CommentItem :auth="auth" :data="item" v-for="(item, index) in data" :key="index"/> 
+    <div class="d-flex">
+      <app-avatar :src="auth.avatar" :size="50" />
+      <app-input textarea v-model="comment" placeholder="Bình luận" class="ml-3 w-100" />
+    </div>
+    <CommentItem :auth="auth" :data="item" v-for="(item, index) in data" :key="index" />
   </div>
 </template>
 <script>
@@ -30,6 +33,7 @@ export default {
 
   data() {
     return {
+      comment: "",
       reply: false
     };
   },
