@@ -8,10 +8,10 @@
               <img src="https://picsum.photos/750/422" alt />
             </div>
             <div class="elearning-lesson__main-nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Hỏi đáp</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Thông báo</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+              <n-link :to="'/elearning/course'">Tổng quan</n-link>
+              <a class="active">Hỏi đáp</a>
+              <n-link :to="'/elearning/course/notify'">Thông báo</n-link>
+              <n-link :to="'/elearning/course/question'">Đánh giá</n-link>
             </div>
             <div class="elearning-lesson__main-content">
               <div class="d-flex-center">
@@ -26,7 +26,7 @@
                 </div>
               </div>
               <hr class="mt-4 mb-4" />
-              <ElearningCourseComment :data="comments" :auth="auth"/>
+              <ElearningCourseComment :data="comments" :auth="auth" />
             </div>
           </div>
         </div>
@@ -66,33 +66,35 @@ export default {
       title: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
       opt: "",
       auth: {
-          id: 1,
-          avatar: "https://picsum.photos/51/51",
-          name: "Nguyễn Nguyên",
+        id: 1,
+        avatar: "https://picsum.photos/51/51",
+        name: "Nguyễn Nguyên"
       },
       comments: [
         {
           id: 1,
           avatar: "https://picsum.photos/60/60",
           name: "Ngọc Quyên",
-          content: "Từ Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+          content:
+            "Từ Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
           time: "20/11/2022",
           likes: 100,
           liked: true,
           parent: true,
-          parentId: "",
+          parentId: ""
         },
         {
           id: 2,
           avatar: "https://picsum.photos/55/55",
           name: "Nguyễn Ngọc",
-          content: "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+          content:
+            "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
           time: "20/11/2022",
           likes: 100,
           liked: true,
           parent: true,
-          parentId: "",
-        },
+          parentId: ""
+        }
       ],
       opts: [
         { value: "", text: "Sắp xếp theo" },

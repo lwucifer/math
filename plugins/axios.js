@@ -46,7 +46,7 @@ export default function({ store, $axios, redirect }) {
                     .then(result => {
                         isAlreadyFetchingAccessToken = false;
                         if (result.success == true) {
-                            console.log("onAccessTokenFetched", result.data.access_token);
+                            // console.log("onAccessTokenFetched", result.data.access_token);
                             onAccessTokenFetched(result.data.access_token);
                         } else {
                             // remove token and redirect to login
@@ -81,17 +81,17 @@ export default function({ store, $axios, redirect }) {
     });
 
     $axios.onResponseError(error => {
-        console.log("[onResponseError]", error);
+        // console.log("[onResponseError]", error);
         const code = parseInt(error.response && error.response.status);
         if (code === 401) {
             removeToken();
             redirect("/auth/signin");
         }
-        console.log("[onResponseError]", error.response);
+        // console.log("[onResponseError]", error.response);
     });
 
     $axios.onError(error => {
-        console.log("[onError]", error);
+        // console.log("[onError]", error);
         // const code = parseInt(error.response && error.response.status);
         // if (code === 400) {
         //   redirect("/400");

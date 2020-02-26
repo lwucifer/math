@@ -39,15 +39,15 @@ export const setAccessToken = accessToken => {
 };
 
 export const setToken = _token => {
-    console.log("[setToken]", _token);
+    // console.log("[setToken]", _token);
     if (!_token) return;
-    console.log("[setToken] Cookie", _token, Cookie);
+    // console.log("[setToken] Cookie", _token, Cookie);
     Cookie.set(TOKEN_USER_SCHOOLLY, _token, {
         expires: parseInt(process.env.SESSION_EXPIRES)
     });
-    console.log("[setToken] process", process.server);
+    // console.log("[setToken] process", process.server);
     if (process.server) return;
-    console.log("[setToken] localStorage", _token);
+    // console.log("[setToken] localStorage", _token);
     window.localStorage.setItem(TOKEN_USER_SCHOOLLY, JSON.stringify(_token));
 };
 
