@@ -6,7 +6,14 @@
       <app-input disabled labelBold labelFixed type="text" :value="email" label="Email" />
       <div class="row">
         <div class="col-6">
-          <app-input disabled labelBold labelFixed type="text" :value="phone_number" label="Số điện thoại" />
+          <app-input
+            disabled
+            labelBold
+            labelFixed
+            type="text"
+            :value="phone_number"
+            label="Số điện thoại"
+          />
         </div>
         <div class="col-6">
           <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
@@ -40,22 +47,26 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      sex: "",
+      email: "",
+      phone_number: "",
+      address: "",
+      birthday: ""
+    };
   },
   methods: {
     ...mapActions("account", ["accountPersonalEdit"]),
     save() {
       console.log(this.sex);
       const data = {
-        email: this.email,
         sex: this.sex,
-        phone_number: this.phone_number,
         address: this.address,
         birthday: this.birthday
       };
       this.accountPersonalEdit(data).then(result => {
+        console.log("huydv", result);
         if (result.success == true) {
-          console.log("huydv");
         }
       });
     }
@@ -81,11 +92,11 @@ export default {
   },
 
   created() {
-    this.sex = this.personalList.sex;
-    this.email = this.personalList.email;
-    this.phone_number = this.personalList.phone_number;
-    this.address = this.personalList.address;
-    this.birthday = getDateBirthDay(this.personalList.bithday);
+    this.sex = this.personalList.sex || "";
+    this.email = this.personalList.email || "";
+    this.phone_number = this.personalList.phone_number || "";
+    this.address = this.personalList.address || "";
+    this.birthday = getDateBirthDay(this.personalList.bithday) || "";
   }
 };
 </script>

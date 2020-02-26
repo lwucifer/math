@@ -49,6 +49,7 @@ const actions = {
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
