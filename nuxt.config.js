@@ -4,17 +4,17 @@ module.exports = {
     head: {
         title: "Schoolly",
         meta: [{
-                charset: "utf-8"
-            },
-            {
-                name: "viewport",
-                content: "width=device-width, initial-scale=1"
-            },
-            {
-                hid: "description",
-                name: "description",
-                content: "Nuxt full stack template for creating web app easily."
-            }
+            charset: "utf-8"
+        },
+        {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1"
+        },
+        {
+            hid: "description",
+            name: "description",
+            content: "Nuxt full stack template for creating web app easily."
+        }
         ],
         link: [{
             rel: "icon",
@@ -42,9 +42,10 @@ module.exports = {
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
         { src: "@/plugins/vue-moment.js" },
-        { src: "@/plugins/firebase-auth.js"},
-        { src: "@/plugins/vue-select.js"},
+        { src: "@/plugins/firebase-auth.js" },
+        { src: "@/plugins/vue-select.js" },
         { src: "@/plugins/filters.js", ssr: false },
+        // { src: "@/plugins/tooltip.js", ssr: false },
     ],
     /**
      * Global middleware
@@ -70,15 +71,14 @@ module.exports = {
      */
     axios: {
         baseURL: process.env.BASE_URL_API, // Default: http://[HOST]:[PORT][PREFIX]
-        prefix: "/api",
         redirectError: {
             401: "/login",
             404: "/404"
         },
         retry: {
-            retries: 3
+            retries: 0
         }, // interceptor retry time request
-        debug: false // default false
+        debug: true // default false
     },
 
     recaptcha: {
@@ -131,6 +131,10 @@ module.exports = {
                 //   loader: 'eslint-loader',
                 //   exclude: /(node_modules)/
                 // })
+            }
+
+            if (isDev) {
+                config.devtool = isClient ? 'source-map' : 'inline-source-map'
             }
         }
     }

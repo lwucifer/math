@@ -53,7 +53,14 @@
           </div>
         </div>
 
-        <app-button v-else outline square color="primary" @click="showLogin = true">Đăng nhập</app-button>
+        <div v-else class="d-flex">
+          <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
+          <n-link
+            class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
+            :to="'/auth/signup'"
+          >Đăng ký</n-link>
+        </div>
+
         <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
       </div>
     </div>
@@ -82,6 +89,11 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
+    }
+  },
+  methods: {
+    redirectSignin() {
+      this.$router.push("/auth/signin");
     }
   }
 };

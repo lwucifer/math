@@ -10,7 +10,10 @@
           </tr>
           <tr>
             <td>Số điện thoại</td>
-            <td>{{personalList.phone_number}}</td>
+            <td v-if="personalList.phone_number">{{personalList.phone_number}}</td>
+            <td v-else>
+              <n-link to>Cập nhật số điện thoại</n-link>
+            </td>
           </tr>
           <tr>
             <td>Ngày sinh</td>
@@ -18,7 +21,7 @@
           </tr>
           <tr>
             <td>Giới tính</td>
-            <td>{{personalList.sex == 1 ? "Nam" : "Nữ"}}</td>
+            <td>{{filterSex}}</td>
           </tr>
           <tr>
             <td>Địa chỉ</td>
@@ -152,7 +155,14 @@ export default {
     }
   }),
   computed: {
-    ...mapState("account", ["personalList"])
+    ...mapState("account", ["personalList"]),
+    filterSex() {
+      return this.personalList.sex
+        ? this.personalList.sex == 1
+          ? "Nam"
+          : "Nữ"
+        : "";
+    }
   }
 };
 </script>

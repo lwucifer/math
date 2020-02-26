@@ -17,7 +17,7 @@
       <div class="filter-form__item">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
-          v-model="filter.province"
+          v-model="filter.type"
           :options="types"
           label="text"
           placeholder="Theo thể loại"
@@ -54,13 +54,25 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="list"
-    /><!--End table-->
+    >
+      <template v-slot:cell(action)="{row}">
+        <td>
+          <n-link
+            class
+            title="Chi tiết"
+            :to="'/elearning/manager/test/' + row.id">
+            <IconArrow />
+          </n-link>
+        </td>
+      </template>
+    </app-table><!--End table-->
   </div>
 </template>
 
 <script>
 import IconFilter from "~/assets/svg/icons/filter.svg?inline"
 import IconSearch from "~/assets/svg/icons/search.svg?inline"
+import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
 // Import faked data
@@ -70,7 +82,8 @@ export default {
 
   components: {
     IconFilter,
-    IconSearch
+    IconSearch,
+    IconArrow
   },
 
   data() {

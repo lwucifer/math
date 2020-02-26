@@ -3,16 +3,16 @@
     <!-- @close="$router.push('/')" -->
     <div slot="content">
       <h3>Chỉnh sửa thông tin</h3>
-      <app-input labelFixed type="text" v-model="email" label="Email" />
+      <app-input disabled labelBold labelFixed type="text" :value="email" label="Email" />
       <div class="row">
         <div class="col-6">
-          <app-input labelFixed type="text" v-model="phone_number" label="Số điện thoại" />
+          <app-input disabled labelBold labelFixed type="text" :value="phone_number" label="Số điện thoại" />
         </div>
         <div class="col-6">
-          <app-input labelFixed type="date" v-model="birthday" label="Ngày sinh" />
+          <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
         </div>
       </div>
-      <app-input labelFixed type="text" v-model="address" label="Địa chỉ" />
+      <app-input labelBold labelFixed type="text" v-model="address" label="Địa chỉ" />
       <div class="form-group">
         <label>Giới tính</label>
         <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />

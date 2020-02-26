@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <AccountCover />
+    <!-- <AccountCover /> -->
     <div class="row">
       <div class="col-md-3">
         <AsideBox title="Cài đặt chung" class="side-links">
