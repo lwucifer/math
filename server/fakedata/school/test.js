@@ -60,34 +60,22 @@ export const SCHOOL_TYPE_DETAILS = [
     {
         id: 1,
         name: 'Mầm non',
-        schoolNum: 50,
-        teacherNum: 100,
-        studentNum: 1000,
-        list: SCHOOLS
+        type: 'NURSERY'
     },
     {
         id: 2,
         name: 'Tiểu học cơ sở',
-        schoolNum: 50,
-        teacherNum: 100,
-        studentNum: 1000,
-        list: SCHOOLS
+        type: 'PRIMARY'
     },
     {
         id: 3,
         name: 'Trung học cơ sở',
-        schoolNum: 50,
-        teacherNum: 100,
-        studentNum: 1000,
-        list: SCHOOLS
+        type: 'JUNIOR'
     },
     {
         id: 4,
         name: 'Trung học phổ thông',
-        schoolNum: 50,
-        teacherNum: 100,
-        studentNum: 1000,
-        list: SCHOOLS
+        type: 'HIGH'
     }
 ]
 
