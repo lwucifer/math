@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-history-side">
+  <div class="manager-side">
     <n-link class="link-gray item" :to="'/elearning/manager/'" :class="active == 1 ? 'active' : ''">
       <IconDashboard width="20" height="20" />Tổng quan
     </n-link>
@@ -55,5 +55,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/manager/_elearning-manager-side.scss";
+@import "~/assets/scss/components/elearning/manager/_manager-side.scss";
 </style>
