@@ -7,20 +7,25 @@
           <div class="col-md-6 wrapStorage__ElearningManager ">
               <div class="d-flex justify-content-end">
                   <span>Dung lượng đã sử dụng:</span>
-                  <span> 1/50GB</span>
+                  <span> {{(memoryused*50)/100}}/50GB</span>
               </div>
               <div class="wrapProcessbarStorage__ElearningManager d-flex justify-content-end">
                   <div class="processStorage__ElearningManager">
-                      <div class="barStorage_ElearningManager"></div>
+                      <div class="barStorage_ElearningManager" v-bind:style="{width: memoryused +'%'}"></div>
                   </div>
-                  <span>5%</span>
+                  <span>{{memoryused}}%</span>
               </div>
           </div>
       </div>
       <div class="wrapUploadFile__ElearningManager">
           <div class="titleFormatFile__ElearningManager">
-              <span v-if="innerFileList.length">
-                <slot name="fileName" :innerFileList="innerFileList">{{ innerFileList[0] ? innerFileList[0].name : '' }}</slot>
+              <span v-if="innerFileList.length" class="d-flex flex-row justify-content-center namefiles">
+                <div v-for="item in innerFileList" :key="item.id">
+                  <slot>{{item.name}}, </slot>
+                  <!--
+                  <slot name="fileName" :innerFileList="innerFileList">{{ innerFileList[0] ? innerFileList[0].name : '' }}</slot>
+                  -->
+                </div>
               </span>
               <span v-else>Các định dạng file hỗ trợ .mp4,pxdf, docx, .doc, .xls, ppt.</span>
           </div>
@@ -49,6 +54,7 @@ export default {
         return{
             innerFileList: [],
             input: true,
+            memoryused:20,
         }
     },
     props: {

@@ -12,7 +12,7 @@
         <div class="wrapSlider__ProfileStudent">
             <ProfileSliderTab
                 :items="lessons"
-                :name="'Bài học và khóa giảng'"
+                :name="'Bài học và khóa giảng đã tham gia'"
             />
         </div>
     </div>

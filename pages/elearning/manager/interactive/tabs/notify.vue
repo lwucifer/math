@@ -50,7 +50,7 @@ import IconFilter from "~/assets/svg/icons/filter.svg?inline"
 import IconSearch from "~/assets/svg/icons/search.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
-import { EXERCISES } from "~/server/fakedata/elearning/test"
+import { NOTIFIES } from "~/server/fakedata/elearning/materials"
 export default {
     components: {
             IconFilter,
@@ -61,12 +61,12 @@ export default {
                 tab: 1,
                 heads: [
                     {
-                        name: "name",
+                        name: "title",
                         text: "Tiêu đề",
                         sort: false
                     },
                     {
-                        name: "type",
+                        name: "content",
                         text: "Nội dung thông báo",
                         sort: false
                     },
@@ -76,7 +76,7 @@ export default {
                         sort: false
                     },
                     {
-                        name: "course",
+                        name: "time",
                         text: "Thời gian",
                         sort: false
                     },
@@ -119,7 +119,7 @@ export default {
                     first: 1,
                     last: 10
                 },
-                list: EXERCISES,
+                list: NOTIFIES,
             };
         },
         computed: {

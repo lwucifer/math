@@ -87,7 +87,7 @@ import IconFilter from "~/assets/svg/icons/filter.svg?inline"
 import IconSearch from "~/assets/svg/icons/search.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
-import { EXERCISES } from "~/server/fakedata/elearning/test"
+import { QUESTIONS } from "~/server/fakedata/elearning/materials"
 export default {
     components: {
             IconFilter,
@@ -98,27 +98,27 @@ export default {
                 tab: 1,
                 heads: [
                     {
-                        name: "name",
+                        name: "question",
                         text: "Câu hỏi",
                         sort: false
                     },
                     {
-                        name: "type",
+                        name: "lesson",
                         text: "Bài giảng khóa học",
                         sort: false
                     },
                     {
-                        name: "lesson",
+                        name: "student",
                         text: "Người hỏi",
                         sort: false
                     },
                     {
-                        name: "course",
+                        name: "class",
                         text: "Lớp",
                         sort: false
                     },
                     {
-                        name: "studentNum",
+                        name: "status",
                         text: "Trạng thái",
                         sort: true
                     },
@@ -161,7 +161,7 @@ export default {
                     first: 1,
                     last: 10
                 },
-                list: EXERCISES,
+                list: QUESTIONS,
             };
         },
         computed: {
@@ -195,9 +195,7 @@ export default {
 </script>
 
 <style lang="scss">
-.wrap-filter-form__ElearningManagerInteractive{
-  
-}
+
 .filter-form__ElearninManagerInteractive{
     display: flex;
   .filter-item{
