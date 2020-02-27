@@ -12,7 +12,7 @@
     <n-link class="link-gray item" :to="'/elearning/manager/materials/'" :class="active == 4 ? 'active' : ''">
       <IconBooks />Kho học liệu
     </n-link>
-    <n-link class="link-gray item" to :class="active == 5 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/classroom'" :class="active == 5 ? 'active' : ''">
       <IconFolderCheck />Phòng học online
     </n-link>
     <n-link class="link-gray item" :to ="'/elearning/manager/interactive'" :class="active == 6 ? 'active' : ''">

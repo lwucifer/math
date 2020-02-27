@@ -12,13 +12,9 @@
       <!--Detail school types-->
       <div v-for="(item, index) in list" :key="index">
         <school-list-box
-          :id="item.id"
-          :name="item.name"
-          :school-num="item.schoolNum"
-          :teacher-num="item.teacherNum"
-          :student-num="item.studentNum"
-          :items="item.list"
+          :item="item"
           @showAll="showAll"
+          :elearningSchoolSummary="elearningSchoolSummary"
         >
         </school-list-box>
       </div>
@@ -52,7 +48,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
+      `elearning/school-summary/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`
     );
   },
 
@@ -69,7 +65,7 @@ export default {
 
   computed: {
     // ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/school-search", ["elearningSchoolSearch"]),
+    ...mapState("elearning/school-summary", ["elearningSchoolSummary"]),
     // classes() {
     //     return {
     //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
@@ -79,7 +75,7 @@ export default {
   },
 
   created() {
-    console.log(this.elearningSchoolSearch)
+    console.log(this.elearningSchoolSummary)
   },
 
   watch: {},
