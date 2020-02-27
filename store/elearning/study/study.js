@@ -1,5 +1,5 @@
-import * as actionTypes from "../../utils/action-types";
-import * as mutationTypes from "../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Study from "~/services/elearning/study/Study";
 
 /**
