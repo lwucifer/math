@@ -11,6 +11,7 @@
               v-model="allSelected"
               title="Chọn tất cả"
             />
+            <hr />
           </th>
           <th v-for="(item, index) in heads" :key="index">
             {{item.text}}
