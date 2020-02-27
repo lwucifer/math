@@ -26,15 +26,15 @@ export const getToken = () => {
  * set bearer token after login success
  */
 export const setAccessToken = accessToken => {
-    console.log("[setAccessToken]", accessToken);
+    // console.log("[setAccessToken]", accessToken);
     if (!accessToken) return;
-    console.log("[setAccessToken] Cookie", accessToken);
+    // console.log("[setAccessToken] Cookie", accessToken);
     Cookie.set(SCHOOLLY_ACCESS_TOKEN, accessToken, {
         expires: parseInt(process.env.SESSION_EXPIRES)
     });
-    console.log("[setAccessToken] process", accessToken);
+    // console.log("[setAccessToken] process", accessToken);
     if (process.server) return;
-    console.log("[setAccessToken] localStorage", accessToken);
+    // console.log("[setAccessToken] localStorage", accessToken);
     window.localStorage.setItem(SCHOOLLY_ACCESS_TOKEN, accessToken);
 };
 

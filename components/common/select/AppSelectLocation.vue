@@ -53,8 +53,8 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 
 export default {
-  async fetch({ params, query, store }) {
-    await store.dispatch(
+  created() {
+    this.$store.dispatch(
       `elearning/public/public-place/${actionTypes.ELEARNING_PUBLIC_PLACE.PROVINCE}`
     );
   },

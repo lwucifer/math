@@ -3,11 +3,10 @@
     <div>
       <school-filter
         title="Danh sách trường học"
-        :provinces="provinces"
-        :districts="districts"
-        :villages="villages"
-        :school-types="schoolTypes"
+        :schoolTypes="schoolTypes"
         @handleChangeProvince="handleChangeProvince"
+        @handleChangedDistrict="handleChangedDistrict"
+        @handleChangedWard="handleChangedWard"
       >
       </school-filter>
       <!--Detail school types-->
@@ -36,6 +35,7 @@ import {
   SCHOOL_TYPE_DETAILS
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   name: "School",
@@ -51,43 +51,54 @@ export default {
     await store.dispatch(
       `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
-    await store.dispatch(
-      `elearning/public/public-place/${actionTypes.ELEARNING_PUBLIC_PLACE.PROVINCE}`
-    );
   },
 
   data() {
     return {
       isAuthenticated: true,
-      // provinces: PROVINCES,
-      districts: DISTRICTS,
-      villages: VILLAGES,
       schoolTypes: SCHOOL_TYPES,
-      list: SCHOOL_TYPE_DETAILS
+      list: SCHOOL_TYPE_DETAILS,
+      province_id: "",
+      district_id: "",
+      ward_id: ""
     };
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", ["elearningSchoolSearch"]),
-    ...mapState("elearning/public/public-place", ["provinces"])
+    ...mapState("elearning/school/school-search", ["elearningSchoolSearch"])
   },
 
-  created() {
-    // console.log(this.provinces);
+  watch: {
+    province_id() {
+      this.handleGetSchoolsByLocation();
+    },
+    district_id() {
+      this.handleGetSchoolsByLocation();
+    },
+    ward_id() {
+      this.handleGetSchoolsByLocation();
+    }
   },
-
-  watch: {},
 
   methods: {
     showAll(id) {
       console.log("[Page School] show all a type of school: ", id);
     },
-    handleChangeProvince(province_id) {
-      const options = {
-        params: {
-          province_id
-        }
-      };
+    handleChangeProvince(province) {
+      this.province_id = get(province, "id", "");
+    },
+    handleChangedDistrict(district) {
+      this.district_id = get(district, "id", "");
+    },
+    handleChangedWard(ward) {
+      this.ward_id = get(ward, "id", "");
+    },
+    handleGetSchoolsByLocation() {
+      let params = {};
+      if (this.province_id) params.province_id = this.province_id;
+      if (this.district_id) params.district_id = this.district_id;
+      if (this.ward_id) params.ward_id = this.ward_id;
+      const options = { params };
       this.$store.dispatch(
         `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
         options

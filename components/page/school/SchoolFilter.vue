@@ -18,7 +18,11 @@
         </app-button>
       </div>
 
-      <app-select-location />
+      <app-select-location
+        @handleChangeProvince="handleChangeProvince"
+        @handleChangedDistrict="handleChangedDistrict"
+        @handleChangedWard="handleChangedWard"
+      />
 
       <div class="school-filter__form__item">
         <app-vue-select
@@ -58,21 +62,21 @@ export default {
     linkText: {
       type: String
     },
-    provinces: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    districts: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    villages: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
+    // provinces: {
+    //   type: Array,
+    //   required: true,
+    //   default: () => []
+    // },
+    // districts: {
+    //   type: Array,
+    //   required: true,
+    //   default: () => []
+    // },
+    // villages: {
+    //   type: Array,
+    //   required: true,
+    //   default: () => []
+    // },
     schoolTypes: {
       type: Array,
       required: true,
@@ -94,8 +98,14 @@ export default {
     submit() {
       console.log("[Component] SchoolFilter: submitted");
     },
-    handleChangeProvince(province_id) {
-      this.$emit("handleChangeProvince", province_id);
+    handleChangeProvince(province) {
+      this.$emit("handleChangeProvince", province);
+    },
+    handleChangedDistrict(district) {
+      this.$emit("handleChangedDistrict", district);
+    },
+    handleChangedWard(ward) {
+      this.$emit("handleChangedWard", ward);
     },
     handleChangedInput(val) {
       // if (val !== null) {
