@@ -6,7 +6,13 @@
         padding: 2rem 0;
 
         .app-table table th {
-            white-space: nowrap;
+            .btn-sort {
+                height: 18px;
+                width: 18px;
+                position: absolute;
+                right: 0;
+                top: calc(50% - 9px);
+            }
         }
     }
 
