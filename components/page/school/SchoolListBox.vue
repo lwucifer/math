@@ -2,11 +2,11 @@
   <div class="school-list-box">
     <div class="school-list-box__title">
       <h4>
-        <span class="school-list-box__title__name">{{ name }}</span>
+        <span class="school-list-box__title__name">{{ item.name }}</span>
         <span class="school-list-box__title__description">
           (
           {{ schoolNum }} trường học - {{ teacherNum }} giáo viên -
-          {{ studentNum }} học sinh
+          {{ studentNum }} học sinh )
         </span>
       </h4>
     </div>
@@ -18,7 +18,7 @@
           v-for="(school, index) in schools"
           :key="index"
         >
-          <school-item :item="school" />
+          <school-item :school="school" />
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
 <script>
 import SchoolItem from "~/components/page/school/SchoolItem";
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 
 export default {
   components: {
@@ -50,59 +50,40 @@ export default {
       type: Object,
       required: true
     },
-    // name: {
-    //   type: String,
-    //   required: true
-    // },
-    // schoolNum: {
-    //   type: Number,
-    //   required: true
-    // },
-    // teacherNum: {
-    //   type: Number,
-    //   required: true
-    // },
-    // studentNum: {
-    //   type: Number,
-    //   required: true
-    // },
-    // items: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
     elearningSchoolSummary: {
       type: Object,
       default: () => {}
     }
   },
 
-  created() {
-    console.log(this.name);
-  },
-
   computed: {
     schoolNum() {
-      if (this.item.id === 1)
+      if (toNumber(get(this, "item.id", 0)) === 1)
         return get(this, "elearningSchoolSummary.data.total_nursery_school", 0);
-      if (this.item.id === 2)
+      if (toNumber(get(this, "item.id", 0)) === 2)
         return get(this, "elearningSchoolSummary.data.total_primary_school", 0);
-      if (this.item.id === 3)
+      if (toNumber(get(this, "item.id", 0)) === 3)
         return get(this, "elearningSchoolSummary.data.total_junior_school", 0);
-      if (this.item.id === 4)
+      if (toNumber(get(this, "item.id", 0)) === 4)
         return get(this, "elearningSchoolSummary.data.total_high_school", 0);
       return 0;
     },
     schools() {
-      if (this.item.id === 1)
+      if (toNumber(get(this, "item.id", 0)) === 1)
         return get(this, "elearningSchoolSummary.data.nursery_schools", []);
-      if (this.item.id === 2)
+      if (toNumber(get(this, "item.id", 0)) === 2)
         return get(this, "elearningSchoolSummary.data.primary_schools", []);
-      if (this.item.id === 3)
+      if (toNumber(get(this, "item.id", 0)) === 3)
         return get(this, "elearningSchoolSummary.data.junior_schools", []);
-      if (this.item.id === 4)
+      if (toNumber(get(this, "item.id", 0)) === 4)
         return get(this, "elearningSchoolSummary.data.high_schools", []);
       return [];
+    },
+    studentNum() {
+      return 0;
+    },
+    teacherNum() {
+      return 0;
     }
   },
 

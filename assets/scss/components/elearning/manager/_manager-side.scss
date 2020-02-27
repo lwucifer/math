@@ -1,0 +1,24 @@
+.manager-side {
+    padding: 1rem 3rem;
+    background-color: #fff;
+    .item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        svg {margin-right: .8rem;}
+        svg path {
+            fill: #666;
+        }
+        &:hover {
+            svg path {
+                fill: $color-primary;
+            }
+        }
+        &.active {
+            font-weight: bold;
+            svg path {
+                fill: $color-primary;
+            }
+        }
+    }
+}
