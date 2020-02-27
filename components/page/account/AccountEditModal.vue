@@ -17,17 +17,26 @@
         </div>
         <div class="col-6">
           <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
-          {{birthday}}
         </div>
       </div>
-      <app-input labelBold labelFixed type="text" v-model="address" label="Địa chỉ" />
+      <app-input
+        labelBold
+        labelFixed
+        type="text"
+        v-model="address"
+        label="Địa chỉ"
+        :error="error"
+        :message="messageError"
+        :validate="validate"
+        @input="hanldeAddress"
+      />
       <div class="form-group">
         <label>Giới tính</label>
         <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
       </div>
 
       <div class="text-center">
-        <app-button size="lg" color="info" class="mr-3" square @click="$emit('click-close')">Hủy bỏ</app-button>
+        <app-button size="lg" color="info" class="mr-3" square @click="closeModal">Hủy bỏ</app-button>
         <app-button size="lg" square @click="save()">Cập nhật thông tin</app-button>
       </div>
     </div>
@@ -36,7 +45,13 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { getDateBirthDay, getDateUpdateProfile } from "../../../utils/moment";
+import {
+  getDateBirthDay,
+  getDateUpdateProfile,
+  getDateFormat
+} from "../../../utils/moment";
+import { ERRORS } from "~/utils/error-code";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 export default {
   components: {},
   props: {
@@ -48,7 +63,10 @@ export default {
       email: "",
       phone_number: "",
       address: "",
-      birthday: ""
+      birthday: "",
+      error: false,
+      messageError: "",
+      validate: ""
     };
   },
   methods: {
@@ -58,35 +76,47 @@ export default {
       const data = {
         sex: this.sex,
         address: this.address,
-        birthday: getDateUpdateProfile(this.birthday)
+        birthday: getDateFormat(this.birthday)
       };
       this.accountPersonalEdit(data).then(result => {
         console.log("huydv", result);
         if (result.success == true) {
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
+        } else {
+          this.validate = VALIDATE_STATUS.ERROR;
+          this.showErrorUpdate(result);
         }
       });
+    },
+    showErrorUpdate(error) {
+      this.error = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.UPDATE_PROFILE.ADDRESS_REQUIRED:
+          message = "Địa chỉ không được để trống";
+          break;
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
+          break;
+      }
+      this.messageError = message;
+    },
+    hanldeAddress() {
+      this.reset();
+    },
+    closeModal() {
+      this.$emit("click-close");
+      this.reset();
+    },
+    reset() {
+      this.error = false;
+      this.messageError = "";
+      this.validate = VALIDATE_STATUS.DEFAULT;
     }
   },
 
   computed: {
     ...mapState("account", ["personalList"])
-    // sex() {
-    //   return this.personalList ? this.personalList.sex : "";
-    // },
-    // email() {
-    //   return this.personalList ? this.personalList.email : "";
-    // },
-    // phone() {
-    //   return this.personalList ? this.personalList.phone : "";
-    // },
-    // address() {
-    //   return this.personalList ? this.personalList.address : "";
-    // },
-    // birthday() {
-    //   return this.personalList ? this.personalList.birthday : "";
-    // }
   },
 
   created() {
@@ -94,7 +124,7 @@ export default {
     this.email = this.personalList.email || "";
     this.phone_number = this.personalList.phone_number || "";
     this.address = this.personalList.address || "";
-    this.birthday = this.personalList.birthday;
+    this.birthday = getDateFormat(this.personalList.birthday);
   }
 };
 </script>

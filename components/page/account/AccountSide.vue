@@ -26,7 +26,12 @@
             <td v-if="personalList.phone_number">{{personalList.phone_number}}</td>
             <td v-else>
               <div v-if="showUpdatePhone" class="form-update-phone">
-                <input type="text" v-model="phone" :class="validatePhone ? 'color-red' : ''" />
+                <input
+                  type="text"
+                  v-model="phone"
+                  :class="validatePhone ? 'color-red' : ''"
+                  @input="hanldePhone"
+                />
                 <app-button color="white" square size="xs" @click="savePhone">Lưu</app-button>
               </div>
               <a class="update-phone" @click="showUpdatePhone = true" v-else>Cập nhật số điện thoại</a>
@@ -139,7 +144,7 @@
     <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
       <h3 class="color-primary" slot="header">
         Xác thực tài khoản
-        <a class="btn-close" @click="showModalOTP = false">X</a>
+        <a class="btn-close" @click="closeModalOTP">X</a>
       </h3>
 
       <div slot="content">
@@ -165,7 +170,7 @@
     >
       <h3 class="color-primary" slot="header">
         Xác thực tài khoản
-        <a class="btn-close" @click="showModalOtpPhone = false">X</a>
+        <a class="btn-close" @click="closeModalOtpPhone">X</a>
       </h3>
 
       <div slot="content">
@@ -208,7 +213,7 @@
           <br />Bạn đã thêm thành công
           <br />
         </p>
-        <app-button color="primary" square fullWidth @click="modalConfirmEmail = false">Xác nhận</app-button>
+        <app-button color="primary" square fullWidth @click="closeModalConfirm">Xác nhận</app-button>
       </div>
     </app-modal>
   </div>
@@ -316,6 +321,8 @@ export default {
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
         } else {
+          this.validatePhone = true;
+          this.showErrorUpdatePhone(result);
         }
       });
     },
@@ -356,16 +363,31 @@ export default {
         }
       });
     },
+    showErrorUpdatePhone(error) {},
     hanldeEmail() {
       this.validateEmail = false;
     },
+    hanldePhone() {
+      this.validatePhone = false;
+    },
     hanldeOtpPhone() {
       this.errorOtpPhone = false;
-      this.messageErrorOtp = "";
+      this.messageErrorPhone = "";
     },
     hanldeOtp() {
       this.errorOtp = false;
-      this.messageErrorPhone = "";
+      this.messageErrorOtp = "";
+    },
+    closeModalOtpPhone() {
+      this.showModalOtpPhone = false;
+      this.otpPhone = "";
+    },
+    closeModalOTP() {
+      this.showModalOTP = false;
+      this.otp = "";
+    },
+    closeModalConfirm() {
+      this.modalSuccess = false;
     }
   },
 
