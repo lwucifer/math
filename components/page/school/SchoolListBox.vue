@@ -50,7 +50,7 @@ export default {
       type: Object,
       required: true
     },
-    elearningSchoolSummary: {
+    elearningSchoolSearch: {
       type: Object,
       default: () => {}
     }
@@ -58,32 +58,20 @@ export default {
 
   computed: {
     schoolNum() {
-      if (toNumber(get(this, "item.id", 0)) === 1)
-        return get(this, "elearningSchoolSummary.data.total_nursery_school", 0);
-      if (toNumber(get(this, "item.id", 0)) === 2)
-        return get(this, "elearningSchoolSummary.data.total_primary_school", 0);
-      if (toNumber(get(this, "item.id", 0)) === 3)
-        return get(this, "elearningSchoolSummary.data.total_junior_school", 0);
-      if (toNumber(get(this, "item.id", 0)) === 4)
-        return get(this, "elearningSchoolSummary.data.total_high_school", 0);
-      return 0;
-    },
-    schools() {
-      if (toNumber(get(this, "item.id", 0)) === 1)
-        return get(this, "elearningSchoolSummary.data.nursery_schools", []);
-      if (toNumber(get(this, "item.id", 0)) === 2)
-        return get(this, "elearningSchoolSummary.data.primary_schools", []);
-      if (toNumber(get(this, "item.id", 0)) === 3)
-        return get(this, "elearningSchoolSummary.data.junior_schools", []);
-      if (toNumber(get(this, "item.id", 0)) === 4)
-        return get(this, "elearningSchoolSummary.data.high_schools", []);
-      return [];
+      const schoolNumKey = get(this, "item.schoolNumKey", "");
+      return get(this, `elearningSchoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
-      return 0;
+      const studentNumKey = get(this, "item.studentNumKey", "");
+      return get(this, `elearningSchoolSearch.data.${studentNumKey}`, 0);
     },
     teacherNum() {
-      return 0;
+      const teacherNumKey = get(this, "item.teacherNumKey", "");
+      return get(this, `elearningSchoolSearch.data.${teacherNumKey}`, 0);
+    },
+    schools() {
+      const schoolsKey = get(this, "item.schoolsKey", "");
+      return get(this, `elearningSchoolSearch.data.${schoolsKey}`, []);
     }
   },
 
