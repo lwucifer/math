@@ -1,0 +1,167 @@
+<template>
+  <div class="container">
+      <div class="row wrap-filter-form__ElearningManagerInteractive">
+        <div class="col-6">
+          <app-button square size="sm" class="btnCreate-notify__ElearningManagerInteractive">
+            <n-link :to="'/elearning/manager/interactive/createnotify'" class="n-link__ElearningManagerInteractive">Tạo thông báo</n-link>
+          </app-button>
+        </div> 
+        <div class="col-6 d-flex justify-content-end" >
+              <div class="wrapSearchForm___ElearningManagerFilterTable">
+                    <app-input
+                        type="text"
+                        v-model="filter.query"
+                        placeholder="Nhập để tìm kiếm..."
+                        :size="'sm'"
+                        @input="handleSearch"
+                        class="inputSearch"
+                       
+                    />
+                    <button type="submit">
+                        <IconSearch width="15" height="15" />
+                    </button>
+                </div>
+        </div>
+      </div>
+      <div class="wrapTable__ElearningManagerInteractive">
+        <app-table
+          :heads="heads"
+          :pagination="pagination"
+          @pagechange="onPageChange"
+          :data="list"
+        >
+          <template v-slot:cell(action)="{row}">
+            <td>
+              <n-link
+                class
+                title="Chi tiết"
+                :to="'/elearning/manager/test/' + row.id">
+                Xem chi tiết
+              </n-link>
+            </td>
+          </template>
+        </app-table>
+      </div>
+  </div>
+</template>
+
+<script>
+import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+import IconSearch from "~/assets/svg/icons/search.svg?inline"
+import { mapState } from "vuex"
+import * as actionTypes from "~/utils/action-types"
+import { EXERCISES } from "~/server/fakedata/elearning/test"
+export default {
+    components: {
+            IconFilter,
+            IconSearch,
+        },
+    data() {
+            return {
+                tab: 1,
+                heads: [
+                    {
+                        name: "name",
+                        text: "Tiêu đề",
+                        sort: false
+                    },
+                    {
+                        name: "type",
+                        text: "Nội dung thông báo",
+                        sort: false
+                    },
+                    {
+                        name: "lesson",
+                        text: "Bài giảng khoa học",
+                        sort: false
+                    },
+                    {
+                        name: "course",
+                        text: "Thời gian",
+                        sort: false
+                    },
+                    {
+                        name: "action",
+                        text: "",
+                        sort: false
+                    }
+                ],
+                filter: {
+                    type: null,
+                    query: null
+                },
+                classes: [
+                    {
+                        value: 1,
+                        text: '11A'
+                    },
+                    {
+                        value: 2,
+                        text: '10A'
+                    },
+                ],
+                results:[
+                    {
+                      value:1,
+                      text:'Đạt'
+                    },
+                    {
+                      value:2,
+                      text:'Chưa đạt'
+                    }
+                ],
+                isAuthenticated: true,
+                pagination: {
+                    total: 15,
+                    page: 6,
+                    pager: 20,
+                    totalElements: 55,
+                    first: 1,
+                    last: 10
+                },
+                list: EXERCISES,
+            };
+        },
+        computed: {
+            ...mapState("auth", ["loggedUser"])
+        },
+
+        methods: {
+            onPageChange(e) {
+                const that = this;
+                that.pagination = { ...that.pagination, ...e };
+                console.log(that.pagination);
+            },
+            submit() {
+                console.log('[Component] Elearning exam: submitted')
+            },
+            handleChangedInput(val) {
+                if (val !== null) {} else {}
+                console.log('[Component] Elearning exam: changing input...', val)
+            },
+            handleFocusSearchInput() {
+                console.log('[Component] Elearning exam: focus searching ')
+            },
+            handleBlurSearchInput() {
+                console.log('[Component] Elearning exam: blur searching ')
+            },
+            handleSearch() {
+                console.log('[Component] Elearning exam: searching')
+            }
+        }
+}
+</script>
+
+<style lang="scss">
+.btnFilterSummit__ElearningManagerInteractive{
+  border-radius: 100px;
+}
+
+.btnCreate-notify__ElearningManagerInteractive{
+  background: #E9446A;
+  :first-child{
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+</style>

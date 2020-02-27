@@ -2,7 +2,7 @@
   <div class="container">
       <div class="row">
           <div class="col-md-3">
-              <ElearningManagerSide  active="4"/>
+              <ElearningManagerSide  active="8"/>
           </div>
           <div class="col-md-9 wrapContent__ElearningManagerRC">
               <div class="titleRateComment__ElearningManagerRC">

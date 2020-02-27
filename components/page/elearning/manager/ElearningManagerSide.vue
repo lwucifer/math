@@ -21,6 +21,9 @@
     <n-link class="link-gray item" :to="'/elearning/manager/revenue'" :class="active == 7 ? 'active' : ''">
       <IconDollarO />Thống kê doanh thu
     </n-link>
+    <n-link class="link-gray item" :to="'/elearning/manager/ratecomment'" :class="active == 8 ? 'active' : ''">
+      <IconStar />Đánh giá và bình luận
+    </n-link>
   </div>
 </template>
 
@@ -32,6 +35,7 @@ import IconDollarO from "~/assets/svg/icons/dollar-o.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
 import IconChatUser from "~/assets/svg/icons/chat-user.svg?inline";
+import IconStar from "~/assets/svg/design-icons/star-alt.svg?inline";
 
 export default {
   name: "E-learning",
@@ -43,7 +47,8 @@ export default {
     IconDollarO,
     IconBooks,
     IconBook,
-    IconChatUser
+    IconChatUser,
+    IconStar
   },
 
   props: {
