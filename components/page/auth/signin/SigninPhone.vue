@@ -142,7 +142,7 @@ export default {
           message = "Email/phone or password is incorrect, 1 time left";
           break;
         default:
-          message = "Something went wrong. Please try again";
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
           break;
       }
       this.messageErrorLogin = message;

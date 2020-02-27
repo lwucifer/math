@@ -92,11 +92,14 @@ export default {
       this.validateLink = VALIDATE_STATUS.ERROR;
       let message = "";
       switch (error.code) {
-        case ERRORS.LOGIN.REQUIRED:
-          message = "User not found";
+        case ERRORS.SETTING_LINK.ALREADY_ACCOUNT_LINKED:
+          message = "Already have an account linked";
+          break;
+        case ERRORS.SETTING_LINK.CODE_NOT_FOUND:
+          message = "Code not found";
           break;
         default:
-          message = "Something went wrong. Please try again";
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
           break;
       }
       this.messageErrorLink = message;

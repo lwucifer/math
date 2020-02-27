@@ -274,15 +274,15 @@ export default {
   async fetch({ params, query, store }) {
     await Promise.all([
       store.dispatch(
-        `elearning/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
+        `elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
         params.id
       ),
       store.dispatch(
-        `elearning/public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
+        `elearning/public/public-program/${actionTypes.ELEARNING_PUBLIC_PROGRAM.LIST}`,
         params.id
       ),
       store.dispatch(
-        `elearning/public-related/${actionTypes.ELEARNING_PUBLIC_RELATED.LIST}`,
+        `elearning/public/public-related/${actionTypes.ELEARNING_PUBLIC_RELATED.LIST}`,
         params.id
       )
     ]);
@@ -316,9 +316,9 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/public-info", ["elearningInfo"]),
-    ...mapState("elearning/public-program", ["elearningProgram"]),
-    ...mapState("elearning/public-related", ["elearningRelated"])
+    ...mapState("elearning/public/public-info", ["elearningInfo"]),
+    ...mapState("elearning/public/public-program", ["elearningProgram"]),
+    ...mapState("elearning/public/public-related", ["elearningRelated"])
   }
 };
 </script>

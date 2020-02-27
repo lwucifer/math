@@ -1,5 +1,6 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
+import * as APIs from "../utils/endpoints";
 import Personal from "../services/account/Personal";
 import Link from "../services/account/Link";
 import Transactions from "../services/account/Transactions";
@@ -49,8 +50,36 @@ const actions = {
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.EDIT_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.CHECK_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.VERIFY_OTP_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.VERIFY_OTP_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.UPDATE_PHONE]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.put(APIs.UPDATE_PHONE, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
             return err;
         }
     },

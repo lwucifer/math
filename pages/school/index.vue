@@ -12,13 +12,9 @@
       <!--Detail school types-->
       <div v-for="(item, index) in list" :key="index">
         <school-list-box
-          :id="item.id"
-          :name="item.name"
-          :school-num="item.schoolNum"
-          :teacher-num="item.teacherNum"
-          :student-num="item.studentNum"
-          :items="item.list"
+          :item="item"
           @showAll="showAll"
+          :elearningSchoolSearch="elearningSchoolSearch"
         >
         </school-list-box>
       </div>
@@ -40,6 +36,8 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 
+const elearningSchoolSummaryStorePath = "elearning/school/school-search";
+
 export default {
   name: "School",
 
@@ -52,7 +50,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
+      `${elearningSchoolSummaryStorePath}/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
   },
 
@@ -69,7 +67,7 @@ export default {
 
   computed: {
     // ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/school-search", ["elearningSchoolSearch"]),
+    ...mapState(elearningSchoolSummaryStorePath, ["elearningSchoolSearch"])
     // classes() {
     //     return {
     //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
@@ -79,7 +77,7 @@ export default {
   },
 
   created() {
-    console.log(this.elearningSchoolSearch)
+    console.log(this.elearningSchoolSearch);
   },
 
   watch: {},

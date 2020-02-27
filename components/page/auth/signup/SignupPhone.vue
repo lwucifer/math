@@ -63,7 +63,7 @@
       centered
       :width="400"
       :component-class="{ 'auth-modal': true }"
-      v-if="modalConfirmOTC"
+      v-if="modalConfirmOTP"
     >
       <div slot="content">
         <div class="auth_content text-center mb-4">
@@ -99,7 +99,7 @@ export default {
       fullname: "",
       error: "",
       showModalOTP: false,
-      modalConfirmOTC: "",
+      modalConfirmOTP: "",
       otp: "",
       errorMessage: {
         phone: "",
@@ -140,7 +140,7 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
-            this.modalConfirmOTC = true;
+            this.modalConfirmOTP = true;
           } else {
             this.showErrorWhenRegister(result);
           }
@@ -262,7 +262,7 @@ export default {
             "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
           break;
         default:
-          message = "Something went wrong. Please try again";
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
           break;
       }
       this.messageErrorRegister = message;

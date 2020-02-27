@@ -37,6 +37,8 @@ import {
   COURSES
 } from "~/server/fakedata/school/test";
 
+const elearningSchoolInfoStorePath = 'elearning/school/school-info'
+
 export default {
   watchQuery: ["school_id"],
 
@@ -49,7 +51,7 @@ export default {
   async fetch({ params, query, store }) {
     const data = { school_id: "e698a8ea-4e12-11ea-b77f-2e728ce88125" };
     await store.dispatch(
-      `elearning/school-info/${actionTypes.SCHOOL_INFO.INFO}`,
+      `${elearningSchoolInfoStorePath}/${actionTypes.SCHOOL_INFO.INFO}`,
       data
     );
   },
@@ -78,12 +80,7 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/school-info", ["schoolInfo"]),
-  },
-
-  created() {
-    console.log('created')
-    console.log(this.schoolInfo)
+    ...mapState(elearningSchoolInfoStorePath, ["schoolInfo"]),
   },
 
   watch: {},
