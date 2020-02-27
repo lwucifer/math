@@ -34,9 +34,9 @@
   import * as actionTypes from "~/utils/action-types"
 
   const PublishedTab = () => import("./tabs/published")
-  const EditingTab = () => import("./tabs/exam")
-  const PendingTab = () => import("./tabs/exam")
-  const DeniedTab = () => import("./tabs/exam")
+  const EditingTab = () => import("./tabs/editting")
+  const PendingTab = () => import("./tabs/pending")
+  const DeniedTab = () => import("./tabs/denied")
 
   export default {
 

@@ -107,16 +107,6 @@
       multiple-selection
       @selectionChange="selectRow"
     >
-      <template v-slot:cell(room)="{row}">
-        <td class="appended-col">
-          <p>
-            {{ row.room }}
-          </p>
-          <p class="text-description" :title="row.description">
-            {{ row.description }}
-          </p>
-        </td>
-      </template>
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
           <n-link
@@ -262,17 +252,4 @@
 
 <style lang="scss" scoped>
   @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-  .appended-col {
-    p {
-      max-width: 15rem;
-    }
-    .text-description {
-      color: #999;
-      font-size: 1.2rem;
-      line-height: 1.6rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
 </style>

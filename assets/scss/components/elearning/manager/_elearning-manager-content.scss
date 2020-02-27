@@ -5,8 +5,25 @@
     .elearning-manager-content__main {
         padding: 2rem 0;
 
-        .app-table table th {
-            white-space: nowrap;
+        .app-table table {
+            th {
+                .btn-sort {
+                    height: 18px;
+                    width: 18px;
+                    position: absolute;
+                    right: 0;
+                    top: calc(50% - 9px);
+                }
+            }
+            .app-checkbox {
+                &__checkmark {
+                    border: 1px solid #CCCCCC !important;
+                }
+                
+                &__input:checked + .app-checkbox__checkmark {
+                    border: 2px solid $color-primary;
+                }
+            }
         }
     }
 
