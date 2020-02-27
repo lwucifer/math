@@ -7,6 +7,7 @@
         :districts="districts"
         :villages="villages"
         :school-types="schoolTypes"
+        @handleChangeProvince="handleChangeProvince"
       >
       </school-filter>
       <!--Detail school types-->
@@ -36,8 +37,6 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 
-const elearningSchoolSummaryStorePath = "elearning/school/school-search";
-
 export default {
   name: "School",
 
@@ -50,14 +49,17 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `${elearningSchoolSummaryStorePath}/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
+      `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
+    );
+    await store.dispatch(
+      `elearning/public/public-place/${actionTypes.ELEARNING_PUBLIC_PLACE.PROVINCE}`
     );
   },
 
   data() {
     return {
       isAuthenticated: true,
-      provinces: PROVINCES,
+      // provinces: PROVINCES,
       districts: DISTRICTS,
       villages: VILLAGES,
       schoolTypes: SCHOOL_TYPES,
@@ -66,18 +68,12 @@ export default {
   },
 
   computed: {
-    // ...mapState("auth", ["loggedUser"]),
-    ...mapState(elearningSchoolSummaryStorePath, ["elearningSchoolSearch"])
-    // classes() {
-    //     return {
-    //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
-    //         "col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4": this.isAuthenticated
-    //     };
-    // }
+    ...mapState("elearning/school/school-search", ["elearningSchoolSearch"]),
+    ...mapState("elearning/public/public-place", ["provinces"])
   },
 
   created() {
-    console.log(this.elearningSchoolSearch);
+    // console.log(this.provinces);
   },
 
   watch: {},
@@ -85,6 +81,17 @@ export default {
   methods: {
     showAll(id) {
       console.log("[Page School] show all a type of school: ", id);
+    },
+    handleChangeProvince(province_id) {
+      const options = {
+        params: {
+          province_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
+        options
+      );
     }
   }
 };

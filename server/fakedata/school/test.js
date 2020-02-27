@@ -115,20 +115,20 @@ export const SCHOOL_TYPE_DETAILS = [
 
 export const PROVINCES = [
   {
-    value: 1,
-    text: "Hà Nội"
+    id: 1,
+    name: "Hà Nội"
   },
   {
-    value: 2,
-    text: "Hải Phòng"
+    id: 2,
+    name: "Hải Phòng"
   },
   {
-    value: 3,
-    text: "Nam Định"
+    id: 3,
+    name: "Nam Định"
   },
   {
-    value: 4,
-    text: "Hải Dương"
+    id: 4,
+    name: "Hải Dương"
   }
 ];
 
