@@ -62,5 +62,68 @@ const USERRATE =[
         time:"10:00 AM 10/10/1010"
     }
 ]
-
-export {MATERIALS,USERRATE}
+const QUESTIONS=[
+    {
+        id:"1",
+        question:"Nhện có bao nhiêu mắt",
+        lesson:"Sinh học lớp 10",
+        student:"Nguyen Van A",
+        class:"10A",
+        status:"Chưa trả lời",
+    },
+    {
+        id:"1",
+        question:"Nhện có bao nhiêu mắt",
+        lesson:"Sinh học lớp 10",
+        student:"Nguyen Van C",
+        class:"10A",
+        status:"Chưa trả lời",
+    },
+    {
+        id:"1",
+        question:"Nhện có bao nhiêu mắt",
+        lesson:"Sinh học lớp 10",
+        student:"Nguyen Van A",
+        class:"10A",
+        status:"Chưa trả lời",
+    },
+    {
+        id:"1",
+        question:"Nhện có bao nhiêu mắt",
+        lesson:"Sinh học lớp 10",
+        student:"Nguyen Van A",
+        class:"10A",
+        status:"Chưa trả lời",
+    }
+]
+const NOTIFIES=[
+    {
+        id:"1",
+        title:"Gửi học sinh lớp 10A",
+        content:"Các em được nghỉ học blablaabaa",
+        lesson:"Sinh học lớp 10",
+        time:"20/02/2020"
+    },
+    {
+        id:"1",
+        title:"Gửi học sinh lớp 10A",
+        content:"Các em được nghỉ học blablaabaa",
+        lesson:"Sinh học lớp 10",
+        time:"20/02/2020"
+    },
+    {
+        id:"1",
+        title:"Gửi học sinh lớp 10A",
+        content:"Các em được nghỉ học blablaabaa",
+        lesson:"Sinh học lớp 10",
+        time:"20/02/2020"
+    },
+    {
+        id:"1",
+        title:"Gửi học sinh lớp 10A",
+        content:"Các em được nghỉ học blablaabaa",
+        lesson:"Sinh học lớp 10",
+        time:"20/02/2020"
+    }
+]
+export {MATERIALS,USERRATE,QUESTIONS,NOTIFIES}
