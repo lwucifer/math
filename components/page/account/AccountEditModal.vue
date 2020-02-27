@@ -6,20 +6,37 @@
       <app-input disabled labelBold labelFixed type="text" :value="email" label="Email" />
       <div class="row">
         <div class="col-6">
-          <app-input disabled labelBold labelFixed type="text" :value="phone_number" label="Số điện thoại" />
+          <app-input
+            disabled
+            labelBold
+            labelFixed
+            type="text"
+            :value="phone_number"
+            label="Số điện thoại"
+          />
         </div>
         <div class="col-6">
           <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
         </div>
       </div>
-      <app-input labelBold labelFixed type="text" v-model="address" label="Địa chỉ" />
+      <app-input
+        labelBold
+        labelFixed
+        type="text"
+        v-model="address"
+        label="Địa chỉ"
+        :error="error"
+        :message="messageError"
+        :validate="validate"
+        @input="hanldeAddress"
+      />
       <div class="form-group">
         <label>Giới tính</label>
         <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
       </div>
 
       <div class="text-center">
-        <app-button size="lg" color="info" class="mr-3" square @click="$emit('click-close')">Hủy bỏ</app-button>
+        <app-button size="lg" color="info" class="mr-3" square @click="closeModal">Hủy bỏ</app-button>
         <app-button size="lg" square @click="save()">Cập nhật thông tin</app-button>
       </div>
     </div>
@@ -28,64 +45,86 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { getDateBirthDay } from "../../../utils/moment";
+import {
+  getDateBirthDay,
+  getDateUpdateProfile,
+  getDateFormat
+} from "../../../utils/moment";
+import { ERRORS } from "~/utils/error-code";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 export default {
   components: {},
   props: {
-    visible: Boolean,
-    account: {
-      type: Object,
-      required: true,
-      default: () => {}
-    }
+    visible: Boolean
   },
   data() {
-    return {};
+    return {
+      sex: "",
+      email: "",
+      phone_number: "",
+      address: "",
+      birthday: "",
+      error: false,
+      messageError: "",
+      validate: ""
+    };
   },
   methods: {
-    ...mapActions("account", ["accountPersonalEdit"]),
+    ...mapActions("account", ["accountPersonalEdit", "accountPersonalList"]),
     save() {
       console.log(this.sex);
       const data = {
-        email: this.email,
         sex: this.sex,
-        phone_number: this.phone_number,
         address: this.address,
-        birthday: this.birthday
+        birthday: getDateFormat(this.birthday)
       };
       this.accountPersonalEdit(data).then(result => {
+        console.log("huydv", result);
         if (result.success == true) {
-          console.log("huydv");
+          const userId = this.personalList.id;
+          this.accountPersonalList(userId);
+        } else {
+          this.validate = VALIDATE_STATUS.ERROR;
+          this.showErrorUpdate(result);
         }
       });
+    },
+    showErrorUpdate(error) {
+      this.error = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.UPDATE_PROFILE.ADDRESS_REQUIRED:
+          message = "Địa chỉ không được để trống";
+          break;
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
+          break;
+      }
+      this.messageError = message;
+    },
+    hanldeAddress() {
+      this.reset();
+    },
+    closeModal() {
+      this.$emit("click-close");
+      this.reset();
+    },
+    reset() {
+      this.error = false;
+      this.messageError = "";
+      this.validate = VALIDATE_STATUS.DEFAULT;
     }
   },
 
   computed: {
     ...mapState("account", ["personalList"])
-    // sex() {
-    //   return this.personalList ? this.personalList.sex : "";
-    // },
-    // email() {
-    //   return this.personalList ? this.personalList.email : "";
-    // },
-    // phone() {
-    //   return this.personalList ? this.personalList.phone : "";
-    // },
-    // address() {
-    //   return this.personalList ? this.personalList.address : "";
-    // },
-    // birthday() {
-    //   return this.personalList ? this.personalList.birthday : "";
-    // }
   },
 
   created() {
     this.sex = this.personalList.sex;
-    this.email = this.personalList.email;
-    this.phone_number = this.personalList.phone_number;
-    this.address = this.personalList.address;
-    this.birthday = getDateBirthDay(this.personalList.bithday);
+    this.email = this.personalList.email || "";
+    this.phone_number = this.personalList.phone_number || "";
+    this.address = this.personalList.address || "";
+    this.birthday = getDateFormat(this.personalList.birthday);
   }
 };
 </script>

@@ -2,88 +2,51 @@
   <div class="container course-create">
     <div class="row">
       <div class="col-md-3">
-        <aside class="course-create-aside bg-white">
-          <ul class="cca-checkbox-list">
-            <li class="active">
-              <app-checkbox>Thông tin chung</app-checkbox>
-            </li>
-            <li>
-              <app-checkbox>Nội dung học tập</app-checkbox>
-            </li>
-            <li>
-              <app-checkbox>Cài đặt</app-checkbox>
-            </li>
-            <li>
-              <app-checkbox>Bài tập <span class="cca-sub-text text-sub">(Tùy chọn)</span></app-checkbox>
-            </li>
-            <li>
-              <app-checkbox>Bài kiểm tra <span class="cca-sub-text text-sub">(Tùy chọn)</span></app-checkbox>
-            </li>
-          </ul>
-
-          <div class="cca-action">
-            <app-button square full-width>Gửi lên</app-button>
-          </div>
-        </aside>
+        <CreateAside :active="formActive" @click-item="setFormActive" />
       </div>
 
       <div class="col-md-9">
-        <template v-if="createType === 'lesson'">
-          <LessonCreateGeneralInformation class="mb-5"/>
-          <LessonCreateLearningContent />
-          <LessonCreateSetting />
-          <LessonCreateExcercise />
-          <LessonCreateExam />
-        </template>
-
-        <template v-else>
-          <!-- <CourseCreateGeneralInformation class="mb-5"/> -->
-          <CourseCreateLearningContent />
-          <!-- <CourseCreateSetting />
-          <CourseCreateExcercise />
-          <CourseCreateExam /> -->
-        </template>
+        <CreateGeneralInformation v-show="formActive === 'general'" class="mb-5" />
+        <CreateLearningContent v-show="formActive === 'content'" />
+        <CreateSetting v-show="formActive === 'settings'" />
+        <CreateExcercise v-show="formActive === 'exercise'" />
+        <CreateExam v-show="formActive === 'exam'" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LessonCreateGeneralInformation from "~/components/page/course/CreateLesson/CreateGeneralInformation";
-import LessonCreateLearningContent from "~/components/page/course/CreateLesson/CreateLearningContent";
-import LessonCreateSetting from "~/components/page/course/CreateLesson/CreateSetting";
-import LessonCreateExcercise from "~/components/page/course/CreateLesson/CreateExcercise";
-import LessonCreateExam from "~/components/page/course/CreateLesson/CreateExam";
-
-import CourseCreateGeneralInformation from "~/components/page/course/CreateCourse/CreateGeneralInformation";
-import CourseCreateLearningContent from "~/components/page/course/CreateCourse/CreateLearningContent";
-import CourseCreateSetting from "~/components/page/course/CreateCourse/CreateSetting";
-import CourseCreateExcercise from "~/components/page/course/CreateCourse/CreateExcercise";
-import CourseCreateExam from "~/components/page/course/CreateCourse/CreateExam";
+import CreateAside from "~/components/page/course/create/CreateAside";
+import CreateGeneralInformation from "~/components/page/course/create/CreateGeneralInformation";
+import CreateLearningContent from "~/components/page/course/create/CreateLearningContent";
+import CreateSetting from "~/components/page/course/create/CreateSetting";
+import CreateExcercise from "~/components/page/course/create/CreateExcercise";
+import CreateExam from "~/components/page/course/create/CreateExam";
 
 export default {
   layout: "create",
 
   components: {
-    LessonCreateGeneralInformation,
-    LessonCreateLearningContent,
-    LessonCreateSetting,
-    LessonCreateExcercise,
-    LessonCreateExam,
-
-    CourseCreateGeneralInformation,
-    CourseCreateLearningContent,
-    CourseCreateSetting,
-    CourseCreateExcercise,
-    CourseCreateExam
+    CreateAside,
+    CreateGeneralInformation,
+    CreateLearningContent,
+    CreateSetting,
+    CreateExcercise,
+    CreateExam
   },
 
   data() {
     return {
-      createType: 'course' // 'lesson' || 'course',
-      // createStep: ''
+      formActive: "general"
     };
   },
+
+  methods: {
+    setFormActive(key) {
+      this.formActive = key;
+    }
+  }
 };
 </script>
 

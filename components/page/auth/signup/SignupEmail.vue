@@ -193,7 +193,7 @@ export default {
             "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
           break;
         default:
-          message = "Something went wrong. Please try again";
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
           break;
       }
       this.messageErrorRegister = message;

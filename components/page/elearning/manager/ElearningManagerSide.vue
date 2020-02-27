@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-history-side">
+  <div class="manager-side">
     <n-link class="link-gray item" :to="'/elearning/manager/'" :class="active == 1 ? 'active' : ''">
       <IconDashboard width="20" height="20" />Tổng quan
     </n-link>
@@ -12,7 +12,7 @@
     <n-link class="link-gray item" :to="'/elearning/manager/materials/'" :class="active == 4 ? 'active' : ''">
       <IconBooks />Kho học liệu
     </n-link>
-    <n-link class="link-gray item" to :class="active == 5 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/classroom'" :class="active == 5 ? 'active' : ''">
       <IconFolderCheck />Phòng học online
     </n-link>
     <n-link class="link-gray item" :to ="'/elearning/manager/interactive'" :class="active == 6 ? 'active' : ''">
@@ -60,5 +60,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/manager/_elearning-manager-side.scss";
+@import "~/assets/scss/components/elearning/manager/_manager-side.scss";
 </style>

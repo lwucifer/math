@@ -34,6 +34,8 @@ import { get } from "lodash";
 // Import faked data
 import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
 
+const elearningPublicSummaryStorePath = 'elearning/public/public-summary'
+
 export default {
   components: {
     CourseSliderTab
@@ -42,7 +44,7 @@ export default {
   async fetch({ params, query, store }) {
     console.log("get earning summary");
     await store.dispatch(
-      `elearning/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
+      `${elearningPublicSummaryStorePath}/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
@@ -65,7 +67,7 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/public-summary", ["elearningPublicSummary"]),
+    ...mapState(elearningPublicSummaryStorePath, ["elearningPublicSummary"]),
     highlight() {
       return get(this.elearningPublicSummary, "highlight", []);
     },
