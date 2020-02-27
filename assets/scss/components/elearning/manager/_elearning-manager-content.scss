@@ -17,10 +17,10 @@
             }
             .app-checkbox {
                 &__checkmark {
-                    border: 1px solid #CCCCCC;
+                    border: 1px solid #CCCCCC !important;
                 }
                 
-                &__input:checked + &__checkmark {
+                &__input:checked + .app-checkbox__checkmark {
                     border: 2px solid $color-primary;
                 }
             }

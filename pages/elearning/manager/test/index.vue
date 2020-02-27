@@ -68,6 +68,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>
