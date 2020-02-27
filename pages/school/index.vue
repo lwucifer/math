@@ -14,7 +14,7 @@
         <school-list-box
           :item="item"
           @showAll="showAll"
-          :elearningSchoolSummary="elearningSchoolSummary"
+          :elearningSchoolSearch="elearningSchoolSearch"
         >
         </school-list-box>
       </div>
@@ -36,7 +36,7 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 
-const elearningSchoolSummaryStorePath = "elearning/school/school-summary";
+const elearningSchoolSummaryStorePath = "elearning/school/school-search";
 
 export default {
   name: "School",
@@ -50,7 +50,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `${elearningSchoolSummaryStorePath}/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`
+      `${elearningSchoolSummaryStorePath}/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
   },
 
@@ -67,7 +67,7 @@ export default {
 
   computed: {
     // ...mapState("auth", ["loggedUser"]),
-    ...mapState(elearningSchoolSummaryStorePath, ["elearningSchoolSummary"])
+    ...mapState(elearningSchoolSummaryStorePath, ["elearningSchoolSearch"])
     // classes() {
     //     return {
     //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
@@ -77,7 +77,7 @@ export default {
   },
 
   created() {
-    console.log(this.elearningSchoolSummary);
+    console.log(this.elearningSchoolSearch);
   },
 
   watch: {},
