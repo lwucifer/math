@@ -44,7 +44,12 @@
             :row="cat"
             :name="'cell(' + item.name + ')'"
           >
-            <td v-html="cat[item.name]"></td>
+            <td
+              v-html="cat[item.name]"
+              v-bind:style="cat[item.css] ? cat[item.css] : ''"
+            >
+
+            </td>
           </slot>
         </tr>
       </tbody>
@@ -105,7 +110,7 @@ export default {
   },
   watch: {
     selectedIds: function (oldVal, newVal) {
-      this.$emit("selection-change", this.selectedRows);
+      this.$emit("selectionChange", this.selectedRows);
     }
   },
   methods: {
