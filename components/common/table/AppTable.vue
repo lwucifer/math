@@ -3,9 +3,18 @@
     <table>
       <thead>
         <tr>
+          <th
+            v-if="multipleSelection"
+          >
+            <app-checkbox
+              @change="changeSelect"
+              v-model="allSelected"
+              title="Chọn tất cả"
+            />
+          </th>
           <th v-for="(item, index) in heads" :key="index">
             {{item.text}}
-            <app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />
+            <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
             <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
               <IconDirection height="18" width="18" />
             </span>
@@ -20,8 +29,11 @@
       <!-- Use data list -->
       <tbody v-else>
         <tr v-for="(cat, i) in sortedCats" :key="i">
-          <td v-if="selectAll" class="pr-0">
-            <app-checkbox @change="(e) => check(e, cat.id)" />
+          <td v-if="multipleSelection || selectAll" class="pr-0">
+            <app-checkbox
+              @change="check($event, i)"
+              :checked="selectedIds.includes(i)"
+            />
           </td>
           <!--Slot is named by column key-->
           <slot
@@ -72,7 +84,12 @@ export default {
       required: false,
       default: () => {}
     },
-    selectAll: Boolean
+    selectAll: Boolean,
+    multipleSelection: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
   },
 
   data() {
@@ -82,13 +99,53 @@ export default {
       currentSort: "name",
       currentSortDir: "asc",
       allSelected: false,
+      selectedIds: [], // An array of indexes of selected row (0, 1, 2, ...)
     };
   },
-
+  watch: {
+    selectedIds: function (oldVal, newVal) {
+      this.$emit("selection-change", this.selectedRows);
+    }
+  },
   methods: {
-    changeSelect() {
+    check(checked, index) {
+      if (checked) {
+        this.pushSelectedIndexes(index);
+      } else {
+        this.popSelectedIndexes(index);
+      }
+      this.$emit("check", this.data[index]);
+    },
+
+    popSelectedIndexes(index) {
+      if (this.selectedIds.includes(index)) {
+        this.selectedIds.forEach((item, i) => {
+          if(item == index) {
+            this.selectedIds.splice(i, 1);
+          }
+        });
+      }
+    },
+
+    pushSelectedIndexes(index) {
+      if (!this.selectedIds.includes(index)) {
+        this.selectedIds.push(index);
+      }
+    },
+
+    changeSelect(checked) {
+      if (checked) {
+        let tmp = [];
+        this.data.forEach((item, i) => {
+          tmp[i] = i;
+        });
+        this.selectedIds = tmp;
+      } else {
+        this.selectedIds = [];
+      }
       this.$emit("selectAll", this.ids);
     },
+
     sort: function(sortBy) {
       if (sortBy === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
@@ -107,6 +164,9 @@ export default {
   },
 
   computed: {
+    hasDefaultSlot() {
+      return !!this.$slots.default;
+    },
     sortedCats: function() {
       for (let i = this.cats.length - 1; i > 0; i--) {
         let check = true;
@@ -147,6 +207,13 @@ export default {
       }
       return ids;
     },
+    selectedRows: function() {
+      const data = [];
+      this.selectedIds.forEach(value => {
+        data.push(this.data[value]);
+      });
+      return data;
+    }
   },
 
   created() {
