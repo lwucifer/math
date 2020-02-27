@@ -4,7 +4,7 @@
     <date-picker
       v-model="text"
       @change="change()"
-      valuetype="format"
+      valueType="format"
       format="DD/MM/YYYY"
       :placeholder="placeholder"
     >

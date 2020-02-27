@@ -152,10 +152,10 @@ const actions = {
  */
 const mutations = {
     [mutationTypes.AUTH.SET_TOKEN](state, token) {
-        console.log("[SET_TOKEN] token", token);
+        // console.log("[SET_TOKEN] token", token);
         const renewToken = Object.assign({}, state.token, token);
         state.token = renewToken;
-        console.log("[SET_TOKEN] renewToken", renewToken);
+        // console.log("[SET_TOKEN] renewToken", renewToken);
         setToken(renewToken);
     },
 

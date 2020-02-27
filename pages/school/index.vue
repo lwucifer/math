@@ -3,10 +3,10 @@
     <div>
       <school-filter
         title="Danh sách trường học"
-        :provinces="provinces"
-        :districts="districts"
-        :villages="villages"
-        :school-types="schoolTypes"
+        :schoolTypes="schoolTypes"
+        @handleChangeProvince="handleChangeProvince"
+        @handleChangedDistrict="handleChangedDistrict"
+        @handleChangedWard="handleChangedWard"
       >
       </school-filter>
       <!--Detail school types-->
@@ -14,7 +14,7 @@
         <school-list-box
           :item="item"
           @showAll="showAll"
-          :elearningSchoolSummary="elearningSchoolSummary"
+          :elearningSchoolSearch="elearningSchoolSearch"
         >
         </school-list-box>
       </div>
@@ -35,8 +35,7 @@ import {
   SCHOOL_TYPE_DETAILS
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
-
-const elearningSchoolSummaryStorePath = "elearning/school/school-summary";
+import { get } from "lodash";
 
 export default {
   name: "School",
@@ -50,41 +49,60 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `${elearningSchoolSummaryStorePath}/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`
+      `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
   },
 
   data() {
     return {
       isAuthenticated: true,
-      provinces: PROVINCES,
-      districts: DISTRICTS,
-      villages: VILLAGES,
       schoolTypes: SCHOOL_TYPES,
-      list: SCHOOL_TYPE_DETAILS
+      list: SCHOOL_TYPE_DETAILS,
+      province_id: "",
+      district_id: "",
+      ward_id: ""
     };
   },
 
   computed: {
-    // ...mapState("auth", ["loggedUser"]),
-    ...mapState(elearningSchoolSummaryStorePath, ["elearningSchoolSummary"])
-    // classes() {
-    //     return {
-    //         "col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4": !this.isAuthenticated,
-    //         "col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4": this.isAuthenticated
-    //     };
-    // }
+    ...mapState("elearning/school/school-search", ["elearningSchoolSearch"])
   },
 
-  created() {
-    console.log(this.elearningSchoolSummary);
+  watch: {
+    province_id() {
+      this.handleGetSchoolsByLocation();
+    },
+    district_id() {
+      this.handleGetSchoolsByLocation();
+    },
+    ward_id() {
+      this.handleGetSchoolsByLocation();
+    }
   },
-
-  watch: {},
 
   methods: {
     showAll(id) {
       console.log("[Page School] show all a type of school: ", id);
+    },
+    handleChangedWard(ward) {
+      this.ward_id = get(ward, "id", "");
+    },
+    handleChangedDistrict(district) {
+      this.district_id = get(district, "id", "");
+    },
+    handleChangeProvince(province) {
+      this.province_id = get(province, "id", "");
+    },
+    handleGetSchoolsByLocation() {
+      let params = {};
+      if (this.province_id) params.province_id = this.province_id;
+      if (this.district_id) params.district_id = this.district_id;
+      if (this.ward_id) params.ward_id = this.ward_id;
+      const options = { params };
+      this.$store.dispatch(
+        `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
+        options
+      );
     }
   }
 };
