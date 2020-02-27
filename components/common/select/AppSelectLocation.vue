@@ -84,9 +84,7 @@ export default {
     }
   },
   watch: {
-    province() {
-      this.district = null;
-      this.ward = null;
+    async province() {
       const province_id = get(this, "province.id", "");
       this.$emit("handleChangeProvince", this.province);
       const options = {
@@ -94,13 +92,14 @@ export default {
           province_id
         }
       };
-      this.$store.dispatch(
+      await this.$store.dispatch(
         `elearning/public/public-place/${actionTypes.ELEARNING_PUBLIC_PLACE.DISTRICT}`,
         options
       );
-    },
-    district() {
+      this.district = null;
       this.ward = null;
+    },
+    async district() {
       const district_id = get(this, "district.id", "");
       this.$emit("handleChangedDistrict", this.district);
       const options = {
@@ -108,10 +107,11 @@ export default {
           district_id
         }
       };
-      this.$store.dispatch(
+      await this.$store.dispatch(
         `elearning/public/public-place/${actionTypes.ELEARNING_PUBLIC_PLACE.WARD}`,
         options
       );
+      this.ward = null;
     },
     ward() {
       this.$emit("handleChangedWard", this.ward);
