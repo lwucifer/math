@@ -48,7 +48,7 @@
           Tên khoá học
           <span class="caption text-sub">(Tối đa 60 ký tự)</span>
         </h2>
-        <app-input />
+        <app-input :counter="60" />
       </div>
 
       <div class="cgi-form-group mb-4">
