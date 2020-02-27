@@ -18,9 +18,11 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_SCHOOL_SEARCH.LIST]({ commit }) {
+  async [actionTypes.ELEARNING_SCHOOL_SEARCH.LIST]({ commit }, options) {
     try {
-      const result = await new Search(this.$axios)[actionTypes.BASE.LIST]();
+      const result = await new Search(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
       commit(
         mutationTypes.ELEARNING_SCHOOL_SEARCH.SET_ELEARNING_SCHOOL_SEARCH_LIST,
         result
