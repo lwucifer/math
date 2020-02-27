@@ -84,14 +84,14 @@ export default {
     showAll(id) {
       console.log("[Page School] show all a type of school: ", id);
     },
-    handleChangeProvince(province) {
-      this.province_id = get(province, "id", "");
+    handleChangedWard(ward) {
+      this.ward_id = get(ward, "id", "");
     },
     handleChangedDistrict(district) {
       this.district_id = get(district, "id", "");
     },
-    handleChangedWard(ward) {
-      this.ward_id = get(ward, "id", "");
+    handleChangeProvince(province) {
+      this.province_id = get(province, "id", "");
     },
     handleGetSchoolsByLocation() {
       let params = {};
