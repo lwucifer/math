@@ -51,6 +51,9 @@ export default {
     await store.dispatch(
       `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
+    await store.dispatch(
+      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+    );
   },
 
   data() {
@@ -66,7 +69,8 @@ export default {
 
   computed: {
     ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch"
+      schoolSearch: "elearningSchoolSearch",
+      categories: "categories",
     })
   },
 

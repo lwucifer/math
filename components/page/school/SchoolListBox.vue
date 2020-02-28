@@ -39,6 +39,7 @@
 <script>
 import SchoolItem from "~/components/page/school/SchoolItem";
 import { get, toNumber } from "lodash";
+import { SCHOOL_TYPE } from "~/server/fakedata/school/test";
 
 export default {
   components: {
@@ -58,19 +59,23 @@ export default {
 
   computed: {
     schoolNum() {
-      const schoolNumKey = get(this, "item.schoolNumKey", "");
+      const type = get(this, "item.type", "");
+      const schoolNumKey = get(SCHOOL_TYPE[type], "schoolNumKey", "");
       return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
-      const studentNumKey = get(this, "item.studentNumKey", "");
+      const type = get(this, "item.type", "");
+      const studentNumKey = get(SCHOOL_TYPE[type], "studentNumKey", "");
       return get(this, `schoolSearch.data.${studentNumKey}`, 0);
     },
     teacherNum() {
-      const teacherNumKey = get(this, "item.teacherNumKey", "");
+      const type = get(this, "item.type", "");
+      const teacherNumKey = get(SCHOOL_TYPE[type], "teacherNumKey", "");
       return get(this, `schoolSearch.data.${teacherNumKey}`, 0);
     },
     schools() {
-      const schoolsKey = get(this, "item.schoolsKey", "");
+      const type = get(this, "item.type", "");
+      const schoolsKey = get(SCHOOL_TYPE[type], "schoolsKey", "");
       return get(this, `schoolSearch.data.${schoolsKey}`, []);
     }
   },

@@ -7,7 +7,7 @@ import { get } from "lodash";
  * initial state
  */
 const state = () => ({
-  elearningPublicCategory: []
+  categories: []
 });
 
 /**
@@ -29,7 +29,7 @@ const actions = {
       commit(
         mutationTypes.ELEARNING_PUBLIC_CATEGORY
           .SET_ELEARNING_PUBLIC_CATEGORY_LIST,
-        result
+        result.data
       );
     } catch (error) {
       console.log("[Elearning Summary] list.error", error);
@@ -43,9 +43,9 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_PUBLIC_CATEGORY.SET_ELEARNING_PUBLIC_CATEGORY_LIST](
     state,
-    elearningPublicCategory
+    categories
   ) {
-    state.elearningPublicCategory = get(elearningPublicCategory, "data", []);
+    state.categories = get(categories, "data", []);
   }
 };
 
