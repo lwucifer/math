@@ -10,9 +10,9 @@
       >
       </school-filter>
       <!--Detail school types-->
-      <div v-for="(item, index) in list" :key="index">
+      <div v-for="(category, index) in categories" :key="index">
         <school-list-box
-          :item="item"
+          :category="category"
           @showAll="showAll"
           :schoolSearch="schoolSearch"
         >
@@ -51,13 +51,16 @@ export default {
     await store.dispatch(
       `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
     );
+    await store.dispatch(
+      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+    );
   },
 
   data() {
     return {
       isAuthenticated: true,
       schoolTypes: SCHOOL_TYPES,
-      list: SCHOOL_TYPE_DETAILS,
+      // list: SCHOOL_TYPE_DETAILS,
       province_id: "",
       district_id: "",
       ward_id: ""
@@ -67,6 +70,9 @@ export default {
   computed: {
     ...mapState("elearning/school/school-search", {
       schoolSearch: "elearningSchoolSearch"
+    }),
+    ...mapState("elearning/public/public-category", {
+      categories: "categories"
     })
   },
 

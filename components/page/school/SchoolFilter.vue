@@ -7,7 +7,7 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <div class="school-filter__form__item">
+      <!-- <div class="school-filter__form__item">
         <app-button
           color="primary"
           @click="submit"
@@ -16,7 +16,7 @@
           <IconFilter />
           <span>Lọc kết quả</span>
         </app-button>
-      </div>
+      </div> -->
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
@@ -24,20 +24,19 @@
         @handleChangedWard="handleChangedWard"
       />
 
-      <div class="school-filter__form__item">
-        <app-vue-select
-          class="app-vue-select"
-          v-model="filter.schoolType"
-          :options="schoolTypes"
-          label="text"
-          placeholder="Theo cấp học"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
+      <div class="school-filter__form--right">
+        <div class="school-filter__form__item school-filter__form__item--search">
+          <app-search
+            class=""
+            :placeholder="'Nhập để tìm kiếm...'"
+            :counter="11"
+            v-model="filter.query"
+            :size="'sm'"
+            @submit="handleChangedInput"
+            @input="handleChangedInput"
+          >
+          </app-search>
+        </div>
       </div>
     </div>
   </div>
@@ -90,7 +89,8 @@ export default {
         province: null,
         district: null,
         village: null,
-        schoolType: null
+        schoolType: null,
+        query: null
       }
     };
   },
