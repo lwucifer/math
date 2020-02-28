@@ -90,6 +90,10 @@ export const ELEARNING_PUBLIC_SUMMARY = {
   LIST: "elearningPublicSummaryList"
 };
 
+export const ELEARNING_PUBLIC_CATEGORY = {
+  LIST: "elearningPublicCategoryList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
 };
@@ -214,24 +218,24 @@ export const SCHOOL_TEACHERS = {
 };
 
 export const ELEARNING_STURY = {
-  LIST: "ElearningStudyList"
+  LIST: "elearningStudyList"
 };
 
 export const ELEARNING_STURY_FAVOURITE = {
-  LIST: "ElearningStudyFavouriteList",
-  ADD: "ElearningStudyFavouriteAdd",
-  DELETE: "ElearningStudyFavouriteDelete"
+  LIST: "elearningStudyFavouriteList",
+  ADD: "elearningStudyFavouriteAdd",
+  DELETE: "elearningStudyFavouriteDelete"
 };
 
 export const ELEARNING_STURY_VOTE = {
-  LIST: "ElearningStudyVoteList",
-  ADD: "ElearningStudyVoteAdd"
+  LIST: "elearningStudyVoteList",
+  ADD: "elearningStudyVoteAdd"
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
-  LIST: "ElearningSchoolSummaryList"
+  LIST: "elearningSchoolSummaryList"
 };
 
 export const ELEARNING_SCHOOL_SEARCH = {
-  LIST: "ElearningSchoolSearchList"
+  LIST: "elearningSchoolSearchList"
 };

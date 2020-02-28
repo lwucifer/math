@@ -7,7 +7,7 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <div class="school-filter__form__item">
+      <!-- <div class="school-filter__form__item">
         <app-button
           color="primary"
           @click="submit"
@@ -16,7 +16,7 @@
           <IconFilter />
           <span>Lọc kết quả</span>
         </app-button>
-      </div>
+      </div> -->
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"

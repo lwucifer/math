@@ -46,7 +46,8 @@
                  v-on:mouseover="clickQuestion({row, index})"
                  v-on:mouseleave="closeDetail()"
             >
-              <span>{{row.content}}</span>
+              <span v-if="row.content.length>200">{{row.content.slice(0,200)}}...</span>
+              <span v-if="row.content.length<=200">{{row.content}}</span>
               <div class="content-detail__notify" v-if="(currentQuestionIndex >=0) && (index == currentQuestionIndex)">
                 <span>{{row.content}}</span>
               </div>

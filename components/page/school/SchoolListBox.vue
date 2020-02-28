@@ -2,7 +2,7 @@
   <div class="school-list-box">
     <div class="school-list-box__title">
       <h4>
-        <span class="school-list-box__title__name">{{ item.name }}</span>
+        <span class="school-list-box__title__name">{{ category.name }}</span>
         <span class="school-list-box__title__description">
           (
           {{ schoolNum }} trường học - {{ teacherNum }} giáo viên -
@@ -39,6 +39,7 @@
 <script>
 import SchoolItem from "~/components/page/school/SchoolItem";
 import { get, toNumber } from "lodash";
+import { SCHOOL_TYPE } from "~/server/fakedata/school/test";
 
 export default {
   components: {
@@ -46,11 +47,11 @@ export default {
   },
 
   props: {
-    item: {
+    category: {
       type: Object,
       required: true
     },
-    elearningSchoolSearch: {
+    schoolSearch: {
       type: Object,
       default: () => {}
     }
@@ -58,26 +59,29 @@ export default {
 
   computed: {
     schoolNum() {
-      const schoolNumKey = get(this, "item.schoolNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${schoolNumKey}`, 0);
+      const type = get(this, "category.type", "");
+      const schoolNumKey = get(SCHOOL_TYPE[type], "schoolNumKey", "");
+      return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
-      const studentNumKey = get(this, "item.studentNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${studentNumKey}`, 0);
+      const type = get(this, "category.type", "");
+      const studentNumKey = get(SCHOOL_TYPE[type], "studentNumKey", "");
+      return get(this, `schoolSearch.data.${studentNumKey}`, 0);
     },
     teacherNum() {
-      const teacherNumKey = get(this, "item.teacherNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${teacherNumKey}`, 0);
+      const type = get(this, "category.type", "");
+      const teacherNumKey = get(SCHOOL_TYPE[type], "teacherNumKey", "");
+      return get(this, `schoolSearch.data.${teacherNumKey}`, 0);
     },
     schools() {
-      const schoolsKey = get(this, "item.schoolsKey", "");
-      return get(this, `elearningSchoolSearch.data.${schoolsKey}`, []);
+      const type = get(this, "category.type", "");
+      const schoolsKey = get(SCHOOL_TYPE[type], "schoolsKey", "");
+      return get(this, `schoolSearch.data.${schoolsKey}`, []);
     }
   },
 
   methods: {
     showAll() {
-      console.log("[Component] SchoolListBox: Click `Xem tat ca`");
       this.$emit("showAll", this.id);
     }
   }

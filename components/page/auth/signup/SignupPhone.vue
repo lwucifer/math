@@ -39,26 +39,14 @@
       :disabled="disabledBtnRegister"
       @click.prevent="hanldeShowModalOTP"
     >Đăng ký</app-button>
-    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="showModalOTP = false">X</a>
-      </h3>
-
-      <div slot="content">
-        <div class="form-group_border-bottom">
-          <input
-            type="text"
-            v-model="otp"
-            maxlength="6"
-            class="form-control ml-0"
-            placeholder="Nhập mã OTP"
-          />
-        </div>
-        <p class="color-red text-center full-width mt-2" v-if="errorOtp">{{messageErrorOtp}}</p>
-        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
-      </div>
-    </app-modal>
+    <app-modal-otp
+      :visible="modalOtp.showModalOTP"
+      :error="modalOtp.errorOtp"
+      :message="modalOtp.messageErrorOtp"
+      @submit="submitOtp"
+      @change="hanldeOtp"
+      @close="closeModalOtp"
+    />
     <app-modal
       centered
       :width="400"
@@ -98,9 +86,13 @@ export default {
       password: "",
       fullname: "",
       error: "",
-      showModalOTP: false,
       modalConfirmOTP: "",
       otp: "",
+      modalOtp: {
+        showModalOTP: false,
+        errorOtp: false,
+        messageErrorOtp: ""
+      },
       errorMessage: {
         phone: "",
         password: "",
@@ -109,9 +101,7 @@ export default {
       validateProps: { password: "", phone: "", fullname: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorRegister: "",
-      errorOtp: false,
-      messageErrorOtp: ""
+      messageErrorRegister: ""
     };
   },
   validations: {
@@ -164,7 +154,7 @@ export default {
             };
             this.sendotp(data).then(result => {
               if (!result.code) {
-                this.showModalOTP = true;
+                this.modalOtp.showModalOTP = true;
               } else {
                 this.errorRespon = true;
                 this.messageErrorRegister =
@@ -187,16 +177,24 @@ export default {
           console.log("result huydv11111", result);
           this.submitRegister();
         } else {
-          this.errorOtp = true;
-          if (result.code == "auth/invalid-verification-code") {
-            this.messageErrorOtp = "Mã OTP bạn nhập không đúng";
-          } else if (result.code == "auth/code-expired") {
-            this.messageErrorOtp = "Mã OTP của bạn nhập đã hết hạn";
-          } else {
-            this.messageErrorOtp = "Có lỗi. Xin vui lòng thử lại";
-          }
+          this.showErrorOtp(result);
         }
       });
+    },
+    submitOtp(_otp) {
+      console.log("otp", _otp);
+      this.otp = _otp;
+      this.acceptOTP();
+    },
+    showErrorOtp(error) {
+      this.modalOtp.errorOtp = true;
+      if (error.code == "auth/invalid-verification-code") {
+        this.modalOtp.messageErrorOtp = "Mã OTP bạn nhập không đúng";
+      } else if (error.code == "auth/code-expired") {
+        this.modalOtp.messageErrorOtp = "Mã OTP của bạn nhập đã hết hạn";
+      } else {
+        this.modalOtp.messageErrorOtp = "Có lỗi. Xin vui lòng thử lại";
+      }
     },
     handlePhone() {
       this.errorRespon = false;
@@ -245,6 +243,15 @@ export default {
       } else {
         this.validateProps.fullname = 1;
       }
+    },
+    hanldeOtp() {
+      this.modalOtp.errorOtp = false;
+      this.modalOtp.messageErrorOtp = "";
+    },
+    closeModalOtp() {
+      this.modalOtp.showModalOTP = false;
+      this.otp = "";
+      this.modalOtp.messageErrorOtp = "";
     },
     showErrorWhenRegister(error) {
       this.errorRespon = true;

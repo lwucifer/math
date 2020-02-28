@@ -141,53 +141,21 @@
         :to="'/account/friends'"
       >Tất cả bạn bè</n-link>
     </div>
-    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="closeModalOTP">X</a>
-      </h3>
-
-      <div slot="content">
-        <div class="form-group_border-bottom">
-          <input
-            type="text"
-            v-model="otp"
-            maxlength="6"
-            class="form-control ml-0"
-            placeholder="Nhập mã OTP"
-            @input="hanldeOtp"
-          />
-        </div>
-        <p class="color-red text-center full-width mt-2" v-if="errorOtp">{{messageErrorOtp}}</p>
-        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
-      </div>
-    </app-modal>
-    <app-modal
-      centered
-      :width="306"
-      :component-class="{ 'auth-modal': true }"
-      v-if="showModalOtpPhone"
-    >
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="closeModalOtpPhone">X</a>
-      </h3>
-
-      <div slot="content">
-        <div class="form-group_border-bottom">
-          <input
-            type="text"
-            v-model="otpPhone"
-            maxlength="6"
-            class="form-control ml-0"
-            placeholder="Nhập mã OTP"
-            @input="hanldeOtpPhone"
-          />
-        </div>
-        <p class="color-red text-center full-width mt-2" v-if="errorOtpPhone">{{messageErrorPhone}}</p>
-        <app-button color="primary" square fullWidth @click="acceptOtpPhone">Xác nhận</app-button>
-      </div>
-    </app-modal>
+    <app-modal-otp
+      :visible="modalOtp.showModalOTP"
+      :error="modalOtp.errorOtp"
+      :message="modalOtp.messageErrorOtp"
+      @submit="submitOtp"
+      @change="hanldeOtp"
+      @close="closeModalOtp"
+    />
+    <app-modal-otp
+      :visible="modalOtpPhone.showModalOtpPhone"
+      :error="modalOtpPhone.errorOtpPhone"
+      :message="modalOtpPhone.messageErrorPhone"
+      @submit="submitOtpPhone"
+      @close="closeModalOtpPhone"
+    />
     <app-modal
       centered
       :width="400"
@@ -225,6 +193,7 @@ import AccountChangePasswordModal from "~/components/page/account/AccountChangeP
 import { mapState, mapActions } from "vuex";
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
+import { ERRORS } from "~/utils/error-code";
 
 export default {
   name: "E-learning",
@@ -245,14 +214,18 @@ export default {
     showUpdateEmail: false,
     validateEmail: false,
     email: "",
-    showModalOTP: false,
-    errorOtp: false,
-    messageErrorOtp: "",
-    showModalOtpPhone: false,
-    errorOtpPhone: false,
-    messageErrorPhone: "",
     otpPhone: "",
+    modalOtpPhone: {
+      showModalOtpPhone: false,
+      errorOtpPhone: false,
+      messageErrorPhone: ""
+    },
     otp: "",
+    modalOtp: {
+      showModalOTP: false,
+      errorOtp: false,
+      messageErrorOtp: ""
+    },
     modalConfirmEmail: false,
     modalSuccess: false,
     verify_token: ""
@@ -285,10 +258,10 @@ export default {
       };
       this.sendotp(data).then(result => {
         if (!result.code) {
-          this.showModalOtpPhone = true;
+          this.modalOtpPhone.showModalOtpPhone = true;
         } else {
-          // this.errorOtpPhone = true;
-          // this.messageErrorPhone = "Số điện thoại bạn nhập không chính xác";
+          // this.modalOtpPhone.errorOtpPhone = true;
+          // this.modalOtpPhone.messageErrorPhone = "Số điện thoại bạn nhập không chính xác";
         }
       });
     },
@@ -299,14 +272,7 @@ export default {
           this.verify_token = result.user ? result.user.ma : "";
           this.updatePhone();
         } else {
-          this.errorOtpPhone = true;
-          if (result.code == "auth/invalid-verification-code") {
-            this.messageErrorPhone = "Mã OTP bạn nhập không đúng";
-          } else if (result.code == "auth/code-expired") {
-            this.messageErrorPhone = "Mã OTP của bạn nhập đã hết hạn";
-          } else {
-            this.messageErrorPhone = "Có lỗi. Xin vui lòng thử lại";
-          }
+          this.showErrorOtp(result);
         }
       });
     },
@@ -316,7 +282,7 @@ export default {
       }).then(result => {
         console.log("[result]", result);
         if (result.success == true) {
-          this.showModalOtpPhone = false;
+          this.modalOtpPhone.showModalOtpPhone = false;
           this.modalSuccess = true;
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
@@ -331,15 +297,14 @@ export default {
         email: this.email
       }).then(result => {
         if (result.success == true) {
-          this.showModalOTP = true;
           this.modalConfirmEmail = true;
+          this.modalOtp.showModalOTP = true;
         } else {
           this.validateEmail = true;
         }
       });
-      // this.showUpdateEmail = false;
     },
-    async acceptOTP() {
+    async acceptOtpEmail() {
       const data = {
         email: this.email,
         otp_code: this.otp
@@ -347,23 +312,54 @@ export default {
       await this.verifyOtpEmail(data).then(result => {
         console.log("[verifyOtpEmail] huydv", result);
         if (result.success == true) {
-          this.showModalOTP = false;
+          this.modalOtp.showModalOTP = false;
           this.modalSuccess = true;
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
         } else {
-          this.errorOtp = true;
-          if (result.code == "2") {
-            this.messageErrorOtp = "Mã OTP bạn nhập không đúng";
-          } else if (result.code == "1") {
-            this.messageErrorOtp = "Mã OTP của bạn nhập đã hết hạn";
-          } else {
-            this.messageErrorOtp = "Có lỗi. Xin vui lòng thử lại";
-          }
+          this.showErrorUpdateEmail(result);
         }
       });
     },
     showErrorUpdatePhone(error) {},
+    showErrorUpdateEmail(error) {
+      this.modalOtp.errorOtp = true;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.REGISTER.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
+          break;
+        case ERRORS.REGISTER.PASSWORD_LEAST:
+          message =
+            "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
+          break;
+        default:
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
+          break;
+      }
+      this.modalOtp.messageErrorOtp = message;
+    },
+    showErrorOtp(error) {
+      this.modalOtpPhone.errorOtpPhone = true;
+      if (error.code == "auth/invalid-verification-code") {
+        this.modalOtpPhone.messageErrorPhone = "Mã OTP bạn nhập không đúng";
+      } else if (error.code == "auth/code-expired") {
+        this.modalOtpPhone.messageErrorPhone = "Mã OTP của bạn nhập đã hết hạn";
+      } else {
+        this.modalOtpPhone.messageErrorPhone = "Có lỗi. Xin vui lòng thử lại";
+      }
+    },
+    submitOtp(_otp) {
+      console.log("otp", _otp);
+      this.otp = _otp;
+      this.acceptOtpEmail();
+    },
+    submitOtpPhone(_otpPhone) {
+      console.log("otpPhone", _otpPhone);
+      this.otpPhone = _otpPhone;
+      this.acceptOtpPhone();
+    },
     hanldeEmail() {
       this.validateEmail = false;
     },
@@ -371,20 +367,22 @@ export default {
       this.validatePhone = false;
     },
     hanldeOtpPhone() {
-      this.errorOtpPhone = false;
-      this.messageErrorPhone = "";
+      this.modalOtpPhone.errorOtpPhone = false;
+      this.modalOtpPhone.messageErrorPhone = "";
     },
     hanldeOtp() {
-      this.errorOtp = false;
-      this.messageErrorOtp = "";
+      this.modalOtp.errorOtp = false;
+      this.modalOtp.messageErrorOtp = "";
     },
     closeModalOtpPhone() {
-      this.showModalOtpPhone = false;
+      this.modalOtpPhone.showModalOtpPhone = false;
       this.otpPhone = "";
+      this.modalOtpPhone.messageErrorPhone = "";
     },
-    closeModalOTP() {
-      this.showModalOTP = false;
+    closeModalOtp() {
+      this.modalOtp.showModalOTP = false;
       this.otp = "";
+      this.modalOtp.messageErrorOtp = "";
     },
     closeModalConfirm() {
       this.modalSuccess = false;

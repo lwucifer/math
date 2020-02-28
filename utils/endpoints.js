@@ -43,6 +43,7 @@ export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
+export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
 export const ELEARNING_PUBLIC_PLACE_DISTRICTS = `${SCHOOLLY_ALIAS}/elearning/public/place/districts`;
 export const ELEARNING_PUBLIC_PLACE_PROVINCES = `${SCHOOLLY_ALIAS}/elearning/public/place/provinces`;
