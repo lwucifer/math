@@ -23,9 +23,10 @@ import AppRadioGroup from "~/components/common/radio/AppRadioGroup";
 import AppRadio from "~/components/common/radio/AppRadio";
 import AppUpload from "~/components/common/upload/AppUpload";
 import AppAlert from "~/components/common/alert/AppAlert";
-import AppSelectLocation from '~/components/common/select/AppSelectLocation'
+import AppSelectLocation from "~/components/common/select/AppSelectLocation";
 import _ from "lodash";
-import { Plugin } from 'vue-fragment';
+import { Plugin } from "vue-fragment";
+import AppModalOtp from "~/components/common/modal/AppModalOtp";
 
 Vue.use(Plugin);
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
@@ -54,3 +55,4 @@ Vue.component("app-radio-group", AppRadioGroup);
 Vue.component("app-radio", AppRadio);
 Vue.component("app-upload", AppUpload);
 Vue.component("app-alert", AppAlert);
+Vue.component("app-modal-otp", AppModalOtp);
