@@ -2,7 +2,7 @@
   <div class="school-list-box">
     <div class="school-list-box__title">
       <h4>
-        <span class="school-list-box__title__name">{{ item.name }}</span>
+        <span class="school-list-box__title__name">{{ category.name }}</span>
         <span class="school-list-box__title__description">
           (
           {{ schoolNum }} trường học - {{ teacherNum }} giáo viên -
@@ -47,7 +47,7 @@ export default {
   },
 
   props: {
-    item: {
+    category: {
       type: Object,
       required: true
     },
@@ -59,22 +59,22 @@ export default {
 
   computed: {
     schoolNum() {
-      const type = get(this, "item.type", "");
+      const type = get(this, "category.type", "");
       const schoolNumKey = get(SCHOOL_TYPE[type], "schoolNumKey", "");
       return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
-      const type = get(this, "item.type", "");
+      const type = get(this, "category.type", "");
       const studentNumKey = get(SCHOOL_TYPE[type], "studentNumKey", "");
       return get(this, `schoolSearch.data.${studentNumKey}`, 0);
     },
     teacherNum() {
-      const type = get(this, "item.type", "");
+      const type = get(this, "category.type", "");
       const teacherNumKey = get(SCHOOL_TYPE[type], "teacherNumKey", "");
       return get(this, `schoolSearch.data.${teacherNumKey}`, 0);
     },
     schools() {
-      const type = get(this, "item.type", "");
+      const type = get(this, "category.type", "");
       const schoolsKey = get(SCHOOL_TYPE[type], "schoolsKey", "");
       return get(this, `schoolSearch.data.${schoolsKey}`, []);
     }
@@ -82,7 +82,6 @@ export default {
 
   methods: {
     showAll() {
-      console.log("[Component] SchoolListBox: Click `Xem tat ca`");
       this.$emit("showAll", this.id);
     }
   }

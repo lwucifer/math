@@ -45,7 +45,7 @@ const mutations = {
     state,
     categories
   ) {
-    state.categories = get(categories, "data", []);
+    state.categories = categories;
   }
 };
 
