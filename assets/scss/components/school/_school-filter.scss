@@ -1,17 +1,21 @@
 .school-filter {
-    display: flex;
-    justify-content: space-between;
     padding: 1rem 0;
     border-bottom: 1px solid #eeeeee;
     margin-bottom: 1.4rem;
 
-    .school-filter__title h3 {
-        color: #333;
-        font-size: 2rem;
+    .school-filter__title {
+        margin-bottom: 2rem;
+        h3 {
+            color: #333;
+            font-size: 2rem;
+        }
     }
 
     .school-filter__form {
         $color-placeholder: #333333;
+
+        display: flex;
+        margin-bottom: 1rem;
 
         &__item {
             display: inline-block;
@@ -30,6 +34,7 @@
         &__item:first-child {
             min-width: unset;
         }
+
         .school-filter__btn-submit {
             border-radius: 10rem;
             padding: .1rem 1.6rem; // 1/10rem & (7.7/2 + 20)/10rem
@@ -41,6 +46,13 @@
             font-size: 1.4rem;
             line-height: 24px;
             margin-left: 6.3px;
+        }
+    }
+
+    .school-filter__form--right {
+        margin-left: auto;
+        .school-filter__form__item--search {
+            min-width: 33.5rem;
         }
     }
 }
