@@ -240,7 +240,8 @@ export default {
     this.editor = new Editor({
       extensions: [
         new Placeholder({
-          showOnlyCurrent: false,
+          showOnlyCurrent: true,
+          showOnlyWhenEditable: true,
           emptyNodeText: "Đăng bài viết..."
         })
       ]
