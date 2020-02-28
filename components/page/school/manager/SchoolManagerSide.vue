@@ -13,27 +13,27 @@
     >
       <IconCalendar />Quản lý tổ chuyên môn
     </n-link>
-    <div class="item" :class="active == 42 || active == 41? 'active' : ''">
-      <div>
+    <div class="item" :class="active == 4? 'active' : ''">
+      <div class="d-flex w-100">
         <IconBooks />Quản lý giáo viên
-        <button @click="tab = 1">
-          <IconAngleDown />
-          <IconAngleUp />
+        <button @click="subMenu = !subMenu" class="ml-auto">
+          <IconAngleDown v-if="subMenu" height="16" width="16"/>
+          <IconAngleUp v-else height="16" width="16"/>
         </button>
       </div>
-      <ul v-if="tab == 1">
+      <ul v-if="subMenu">
         <li>
           <n-link
             class="link-gray"
             :to="'/school/manager/teacher/'"
-            :class="active == 4 ? 'active' : ''"
+            :class="active == 41 ? 'active' : ''"
           >Hồ sơ giáo viên</n-link>
         </li>
         <li>
           <n-link
             class="link-gray"
             :to="'/school/manager/teacher/'"
-            :class="active == 4 ? 'active' : ''"
+            :class="active == 42 ? 'active' : ''"
           >Phân công giảng dạy</n-link>
         </li>
       </ul>
@@ -79,7 +79,13 @@ export default {
     active: {
       type: [String, Number]
     }
-  }
+  },
+
+  data() {
+    return {
+      subMenu: false
+    }
+  },
 };
 </script>
 
