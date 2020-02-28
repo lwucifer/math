@@ -1,4 +1,13 @@
-const SCHOOLS = [
+export const SCHOOL = {
+    id: "1",
+    name: "Đại học Đại Nam",
+    avatar: "https://picsum.photos/150/150",
+    desc:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum.",
+    code: "MHDUAA12"
+}
+
+export const SCHOOLS = [
     {
         id: 1,
         image: 'https://picsum.photos/218/129',
