@@ -1,5 +1,6 @@
 import _ from "lodash";
 import Vue from "vue";
+import { Plugin } from 'vue-fragment';
 
 import AppButton from "~/components/common/button/AppButton";
 import AppDivider from "~/components/common/divider/AppDivider";
@@ -26,8 +27,6 @@ import AppUpload from "~/components/common/upload/AppUpload";
 import AppAlert from "~/components/common/alert/AppAlert";
 import AppEditor from "~/components/common/input/AppEditor";
 import AppSelectLocation from '~/components/common/select/AppSelectLocation'
-import _ from "lodash";
-import { Plugin } from 'vue-fragment';
 
 Vue.use(Plugin);
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
