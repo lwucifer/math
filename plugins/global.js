@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Vue from "vue";
 
 import AppButton from "~/components/common/button/AppButton";
@@ -23,7 +24,7 @@ import AppRadioGroup from "~/components/common/radio/AppRadioGroup";
 import AppRadio from "~/components/common/radio/AppRadio";
 import AppUpload from "~/components/common/upload/AppUpload";
 import AppAlert from "~/components/common/alert/AppAlert";
-import _ from "lodash";
+import AppEditor from "~/components/common/input/AppEditor";
 
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
 
@@ -50,3 +51,4 @@ Vue.component("app-radio-group", AppRadioGroup);
 Vue.component("app-radio", AppRadio);
 Vue.component("app-upload", AppUpload);
 Vue.component("app-alert", AppAlert);
+Vue.component("app-editor", AppEditor);

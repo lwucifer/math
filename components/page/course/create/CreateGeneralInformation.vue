@@ -53,7 +53,7 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
-        <app-input textarea class="mb-2" />
+        <app-editor />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
