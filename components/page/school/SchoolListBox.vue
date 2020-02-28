@@ -50,7 +50,7 @@ export default {
       type: Object,
       required: true
     },
-    elearningSchoolSearch: {
+    schoolSearch: {
       type: Object,
       default: () => {}
     }
@@ -59,19 +59,19 @@ export default {
   computed: {
     schoolNum() {
       const schoolNumKey = get(this, "item.schoolNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${schoolNumKey}`, 0);
+      return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
       const studentNumKey = get(this, "item.studentNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${studentNumKey}`, 0);
+      return get(this, `schoolSearch.data.${studentNumKey}`, 0);
     },
     teacherNum() {
       const teacherNumKey = get(this, "item.teacherNumKey", "");
-      return get(this, `elearningSchoolSearch.data.${teacherNumKey}`, 0);
+      return get(this, `schoolSearch.data.${teacherNumKey}`, 0);
     },
     schools() {
       const schoolsKey = get(this, "item.schoolsKey", "");
-      return get(this, `elearningSchoolSearch.data.${schoolsKey}`, []);
+      return get(this, `schoolSearch.data.${schoolsKey}`, []);
     }
   },
 

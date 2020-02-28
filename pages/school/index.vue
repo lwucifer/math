@@ -14,7 +14,7 @@
         <school-list-box
           :item="item"
           @showAll="showAll"
-          :elearningSchoolSearch="elearningSchoolSearch"
+          :schoolSearch="schoolSearch"
         >
         </school-list-box>
       </div>
@@ -65,7 +65,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", ["elearningSchoolSearch"])
+    ...mapState("elearning/school/school-search", {
+      schoolSearch: "elearningSchoolSearch"
+    })
   },
 
   watch: {

@@ -90,6 +90,10 @@ export const ELEARNING_PUBLIC_SUMMARY = {
   LIST: "elearningPublicSummaryList"
 };
 
+export const ELEARNING_PUBLIC_CATEGORY = {
+  LIST: "elearningPublicCategoryList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
 };
