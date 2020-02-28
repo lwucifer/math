@@ -26,7 +26,7 @@
      border-radius: 20px;
  }
  .barStorage_ElearningManager{
-     width: 79%;
+     
      height: 10px;
      background: #1481FE;
      border-radius: 20px;
@@ -54,12 +54,26 @@
          font-size: 14px;
          line-height: 24px;
      }
+     .namefiles{
+        margin:0px;
+         padding: 15px;
+     }
  }
  .wrapBtnUploadFile__ElearningManager{
      height: 50px;
      display: flex;
      flex: row;
      justify-content: center;
+     position: relative;
+    overflow: hidden;
+    display: inline-block;
+    input[type=file]{
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
  }
  .btnUploadFile__ElearningManager{
      background: #32AF85;

@@ -12,5 +12,11 @@ export const ERRORS = {
     },
     FORGOT_PASSWORD: {
         USER_NOT_FOUND: "SCLCOM_1001"
+    },
+    UPDATE_PROFILE: { ADDRESS_REQUIRED: "SCLS_00063" },
+
+    SETTING_LINK: {
+        ALREADY_ACCOUNT_LINKED: "SCLU_1007",
+        CODE_NOT_FOUND: "SCLU_1008"
     }
 };
