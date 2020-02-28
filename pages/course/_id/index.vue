@@ -1,32 +1,32 @@
 <template>
   <div class="container course-view">
-    <h2>{{ $_.get(elearningInfo, "name", "") }}</h2>
+    <h2>{{ get(elearningInfo, "name", "") }}</h2>
     <div class="course-view__info">
       <div class="author">
         <app-avatar
-          :src="$_.get(elearningInfo, 'teacher.avatar', '')"
+          :src="get(elearningInfo, 'teacher.avatar', '')"
           :size="32"
         />
         <span class="name ml-2">{{
-          $_.get(elearningInfo, "teacher.name", "")
+          get(elearningInfo, "teacher.name", "")
         }}</span>
       </div>
 
       <div class="views">
         <IconEye />
         <strong class="ml-2 mr-1">{{
-          $_.get(elearningInfo, "review_count", 0)
+          get(elearningInfo, "review_count", 0)
         }}</strong>
         lượt xem
       </div>
 
       <div
         class="price color-red bold"
-        v-if="!$_.get(elearningInfo, 'free', false)"
+        v-if="!get(elearningInfo, 'free', false)"
       >
         <IconUsd class="mr-2" />
         {{
-          $_.get(elearningInfo, "price.original_price", 0) | toThousandFilter()
+          get(elearningInfo, "price.original_price", 0) | toThousandFilter()
         }}
         đ
       </div>
@@ -36,13 +36,13 @@
 
       <div class="stars">
         <app-stars
-          :stars="Math.floor($_.get(elearningInfo, 'lesson.stars', 0))"
+          :stars="Math.floor(get(elearningInfo, 'lesson.stars', 0))"
           :size="16"
         />
         <strong class="ml-3">{{
-          $_.get(elearningInfo, "lesson.stars", 0)
+          get(elearningInfo, "lesson.stars", 0)
         }}</strong>
-        <span>({{ $_.get(elearningInfo, "review_rate", 0) }})</span>
+        <span>({{ get(elearningInfo, "review_rate", 0) }})</span>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
       <div class="row">
         <div class="col-md-9">
           <div class="course-view__thumnail">
-            <app-video :poster-src="$_.get(elearningInfo, 'avatar', '')">
+            <app-video :poster-src="get(elearningInfo, 'avatar', '')">
             </app-video>
           </div>
 
@@ -163,31 +163,31 @@
               <div class="info-item">
                 Thể loại:
                 <strong class="color-primary">{{
-                  $_.get(elearningProgram, "subject", "")
+                  get(elearningProgram, "subject", "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Trình độ:
                 <strong class="color-primary">{{
-                  $_.get(elearningProgram, "level", "")
+                  get(elearningProgram, "level", "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Môn học:
                 <strong class="color-primary">{{
-                  ($_.get(elearningProgram, "subject"), "")
+                  (get(elearningProgram, "subject"), "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Số bài giảng:
                 <strong class="color-primary">{{
-                  ($_.get(elearningProgram, "lessons"), "")
+                  (get(elearningProgram, "lessons"), "")
                 }}</strong>
               </div>
               <div class="info-item">
                 Thời lượng:
                 <strong class="color-primary">{{
-                  $_.get(elearningProgram, "duration", "")
+                  get(elearningProgram, "duration", "")
                 }}</strong>
               </div>
             </div>
@@ -209,7 +209,7 @@
           <div id="tab3" class="box">
             <h5 class="mb-4">Thông tin giáo viên</h5>
             <course-teacher-info
-              :teacher="$_.get(elearningInfo, 'teacher', {})"
+              :teacher="get(elearningInfo, 'teacher', {})"
               class="mb-4"
             />
             <hr />
@@ -319,6 +319,9 @@ export default {
     ...mapState("elearning/public/public-info", ["elearningInfo"]),
     ...mapState("elearning/public/public-program", ["elearningProgram"]),
     ...mapState("elearning/public/public-related", ["elearningRelated"])
+  },
+  methods: {
+    get
   }
 };
 </script>
