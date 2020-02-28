@@ -58,7 +58,7 @@
     input {
         border: 0;
         height: 100%;
-        padding-left: 1rem;
+        padding-left: 1.5rem;
         background-color: transparent;
         width: 100%;
         flex-grow: 1;
@@ -73,7 +73,7 @@
 
     textarea {
         border: 0;
-        padding: .5rem 0 .5rem 1rem;
+        padding: 1rem 0 1rem 1.5rem;
         background-color: transparent;
         width: 100%;
         flex-grow: 1;
@@ -195,6 +195,15 @@
 .app-input--focused {
     .app-input__input {
         border-color: $color-primary;
+    }
+}
+
+
+
+// TEXTAREA
+.app-input--textarea {
+    .app-input__input {
+        height: auto !important;
     }
 }
 

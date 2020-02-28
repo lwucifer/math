@@ -1,55 +1,52 @@
 <template>
-  <div class="elearning-">
-    <!--Filter form-->
-    <div class="filter-form">
-      <div class="filter-form__item">
-        <app-button
-          color="primary"
-          class="filter-form__item__btn filter-form__item__btn--submit"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filter.province"
-          :options="types"
-          label="text"
-          placeholder="Theo thể loại"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
-      </div>
-
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div class="filter-form__item filter-form__item--search">
-          <app-input
-            type="text"
-            v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
+  <div>
+      <div class="filter-form">
+        <div class="filter-form__item">
+            <app-button
+            color="primary"
+            class="filter-form__item__btn filter-form__item__btn--submit"
             :size="'sm'"
-            @input="handleSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15" />
-          </button>
+            @click="submit"
+            >
+            <IconFilter />
+            <span>Lọc kết quả</span>
+            </app-button>
         </div>
-      </div><!--End right form-->
 
-    </div><!--End filter form-->
+        <div class="filter-form__item">
+            <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            v-model="filter.province"
+            :options="types"
+            label="text"
+            placeholder="Theo lớp"
+            searchable
+            clearable
+            @input="handleChangedInput"
+            @search:focus="handleFocusSearchInput"
+            @search:blur="handleBlurSearchInput"
+            >
+            </app-vue-select>
+        </div>
 
-    <!--Table-->
-    <app-table
+        <!--Right form-->
+        <div class="filter-form__right">
+            <div class="filter-form__item filter-form__item--search">
+            <app-input
+                type="text"
+                v-model="filter.query"
+                placeholder="Nhập để tìm kiếm..."
+                :size="'sm'"
+                @input="handleSearch"
+            />
+            <button type="submit">
+                <IconSearch width="15" height="15" />
+            </button>
+            </div>
+        </div><!--End right form-->
+
+        </div>
+        <app-table
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -65,12 +62,12 @@
           </n-link>
         </td>
       </template>
-    </app-table><!--End table-->
+    </app-table>
   </div>
 </template>
 
 <script>
-    import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+import IconFilter from "~/assets/svg/icons/filter.svg?inline"
     import IconSearch from "~/assets/svg/icons/search.svg?inline"
     import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
     import { mapState } from "vuex"
@@ -92,39 +89,25 @@
                 heads: [
                     {
                         name: "name",
-                        text: "Tiêu đề",
+                        text: "Họ và tên",
                         sort: false
                     },
                     {
                         name: "type",
-                        text: "Thể loại",
+                        text: "Lớp",
                         sort: false
                     },
                     {
                         name: "lesson",
-                        text: "Thuộc bài giảng",
-                        sort: false
+                        text: "Tỷ lệ tham gia các các bài giảng và khóa học",
+                        sort: true
                     },
                     {
                         name: "course",
-                        text: "Thuộc khóa học",
+                        text: "Tỉ lệ hoàn thành các bài giảng và khóa học",
                         sort: false
                     },
-                    {
-                        name: "studentNum",
-                        text: "Học sinh làm bài",
-                        sort: true
-                    },
-                    {
-                        name: "createdAt",
-                        text: "Ngày khởi tạo",
-                        sort: true
-                    },
-                    {
-                        name: "action",
-                        text: "",
-                        sort: false
-                    }
+                    
                 ],
                 filter: {
                     type: null,
@@ -183,5 +166,5 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+ @import "~/assets/scss/components/manager/_manager-filter-table.scss";
 </style>
