@@ -91,7 +91,7 @@ import IconMessenger from "~/assets/svg/icons/messenger.svg?inline";
 import IconUserCross from "~/assets/svg/icons/user-cross.svg?inline";
 import IconUserTick from "~/assets/svg/icons/user-tick.svg?inline";
 import IconUserArrow from "~/assets/svg/icons/user-arrow.svg?inline";
-import { getBase64 } from "~/utils/file";
+import { getBase64 } from "~/utils/common";
 import { mapActions, mapState } from "vuex";
 
 export default {

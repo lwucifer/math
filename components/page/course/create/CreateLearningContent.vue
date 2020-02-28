@@ -507,7 +507,7 @@
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
-import { getBase64 } from "~/utils/file";
+import { getBase64 } from "~/utils/common";
 
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";

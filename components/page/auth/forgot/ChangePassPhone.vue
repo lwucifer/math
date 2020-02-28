@@ -116,12 +116,10 @@ export default {
       try {
         const token = await this.$recaptcha.execute("resetpass");
         console.log("ReCaptcha token:", token);
-        debugger;
         await this.verifiOtp(this.otp).then(result => {
           console.log("result huydv", result);
           if (result && result.user) {
             this.verify_token = result.user.ma;
-            debugger;
             const resetPassModelPhone = createResetPassWithPhone(
               `+${formatPhoneNumber(this.phone)}`,
               this.verify_token,
@@ -136,18 +134,21 @@ export default {
               }
             });
           } else {
-            this.errorRespon = true;
-            if (result && result.code == "auth/invalid-verification-code") {
-              this.messageErrorChange = "Mã OTP bạn nhập không đúng";
-            } else if (result && result.code == "auth/code-expired") {
-              this.messageErrorChange = "Mã OTP của bạn nhập đã hết hạn";
-            } else {
-              this.messageErrorChange = "Có lỗi. Xin vui lòng thử lại";
-            }
+            this.showErrorOtp(result);
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+      }
+    },
+    showErrorOtp(error) {
+      this.errorRespon = true;
+      if (error.code == "auth/invalid-verification-code") {
+        this.messageErrorChange = "Mã OTP bạn nhập không đúng";
+      } else if (error.code == "auth/code-expired") {
+        this.messageErrorChange = "Mã OTP của bạn nhập đã hết hạn";
+      } else {
+        this.messageErrorChange = "Có lỗi. Xin vui lòng thử lại";
       }
     },
     handleOtp() {
