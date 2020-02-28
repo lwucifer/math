@@ -53,13 +53,13 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
-        <app-editor v-model="benefit" />
+        <app-editor v-model="benefit" class="bg-input-gray mb-3"/>
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
-        <app-input textarea class="mb-2" />
+        <app-editor class="bg-input-gray mb-3"/>
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 

@@ -173,17 +173,12 @@
         <app-button color="primary" square fullWidth @click="modalConfirmEmail = false">Xác nhận</app-button>
       </div>
     </app-modal>
-    <app-modal centered :width="400" :component-class="{ 'auth-modal': true }" v-if="modalSuccess">
-      <h3 class="color-primary" slot="header"></h3>
-
-      <div slot="content">
-        <p class="line-height-2">
-          <br />Bạn đã thêm thành công
-          <br />
-        </p>
-        <app-button color="primary" square fullWidth @click="closeModalConfirm">Xác nhận</app-button>
-      </div>
-    </app-modal>
+    <app-notify-modal
+      :show="notify.showNotify"
+      :message="notify.message"
+      :link="notify.redirectLink"
+      @close="closeNotify"
+    />
   </div>
 </template>
 
@@ -227,8 +222,12 @@ export default {
       messageErrorOtp: ""
     },
     modalConfirmEmail: false,
-    modalSuccess: false,
-    verify_token: ""
+    verify_token: "",
+    notify: {
+      redirectLink: "",
+      message: "",
+      showNotify: false
+    }
   }),
   mounted() {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
@@ -283,7 +282,11 @@ export default {
         console.log("[result]", result);
         if (result.success == true) {
           this.modalOtpPhone.showModalOtpPhone = false;
-          this.modalSuccess = true;
+          this.notify = {
+            redirectLink: "",
+            message: "Bạn đã cập nhật thành công",
+            showNotify: true
+          };
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
         } else {
@@ -384,8 +387,8 @@ export default {
       this.otp = "";
       this.modalOtp.messageErrorOtp = "";
     },
-    closeModalConfirm() {
-      this.modalSuccess = false;
+    closeNotify() {
+      this.notify.showNotify = false;
     }
   },
 

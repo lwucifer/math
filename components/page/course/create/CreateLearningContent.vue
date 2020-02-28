@@ -179,9 +179,7 @@
                 </div>
 
                 <div class="cc-tab-panel" v-if="tabDocument === 'typing'">
-                  <client-only>
-                    <editor-content :editor="editor" class="editor cc-editor" />
-                  </client-only>
+                  <app-editor class="bg-white" />
                 </div>
 
                 <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
@@ -504,9 +502,6 @@
 </template>
 
 <script>
-import { Editor, EditorContent } from "tiptap";
-import { Placeholder } from "tiptap-extensions";
-
 import { getBase64 } from "~/utils/common";
 
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
@@ -530,7 +525,6 @@ export default {
     IconVideo,
     IconFileBlank,
     IconTrashAlt,
-    EditorContent
   },
 
   data() {
@@ -541,23 +535,7 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      editor: null
     };
-  },
-
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        new Placeholder({
-          showOnlyCurrent: false,
-          emptyNodeText: "Nhập nội dung..."
-        })
-      ]
-    });
-  },
-
-  beforeDestroy() {
-    this.editor.destroy();
   },
 
   methods: {
