@@ -145,7 +145,8 @@ export default {
         "app-input--has-counter": !!this.counter,
         "app-input--error": this.localValidate === VALIDATE_STATUS.ERROR,
         "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
-        "app-input--focused": this.isFocus
+        "app-input--focused": this.isFocus,
+        "app-input--textarea": this.textarea
       };
     },
 

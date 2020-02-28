@@ -100,121 +100,6 @@ export default {
   data() {
     return {
       isAuthenticated: true,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
-      },
-      isTeacher: true,
-      time1: null,
-      time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Loại giao dịch" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
-      ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
-      },
-      list: [
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        }
-      ],
-      active_el: 0
     };
   },
   computed: {
@@ -222,11 +107,6 @@ export default {
   },
 
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    }
   }
 };
 </script>
