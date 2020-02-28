@@ -47,23 +47,12 @@
       @change="hanldeOtp"
       @close="closeModalOtp"
     />
-    <app-modal
-      centered
-      :width="400"
-      :component-class="{ 'auth-modal': true }"
-      v-if="modalConfirmOTP"
-    >
-      <div slot="content">
-        <div class="auth_content text-center mb-4">
-          <IconSucessGreen class="mt-3 mb-3" />
-          <p class="h3">Xác thực tài khoản thành công</p>
-        </div>
-        <n-link
-          :to="'/auth/signin'"
-          class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
-        >Đóng</n-link>
-      </div>
-    </app-modal>
+    <app-notify-modal
+      :show="notify.showNotify"
+      :message="notify.message"
+      :link="notify.redirectLink"
+      @close="closeNotify"
+    />
   </div>
 </template>
 
@@ -72,21 +61,16 @@ import * as actionTypes from "../../../../utils/action-types";
 import { mapState, mapActions } from "vuex";
 import { createSignupWithPhone } from "../../../../models/auth/Signup";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
-import IconSucessGreen from "~/assets/svg/icons/sucess-green.svg?inline";
 import { ERRORS } from "../../../../utils/error-code";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
-  components: {
-    IconSucessGreen
-  },
   data() {
     return {
       phone: "",
       password: "",
       fullname: "",
       error: "",
-      modalConfirmOTP: "",
       otp: "",
       modalOtp: {
         showModalOTP: false,
@@ -101,7 +85,12 @@ export default {
       validateProps: { password: "", phone: "", fullname: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorRegister: ""
+      messageErrorRegister: "",
+      notify: {
+        redirectLink: "",
+        message: "",
+        showNotify: false
+      }
     };
   },
   validations: {
@@ -130,7 +119,11 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
-            this.modalConfirmOTP = true;
+            this.notify = {
+              redirectLink: "/auth/signin",
+              message: "Đăng kí tài khoản thành công",
+              showNotify: true
+            };
           } else {
             this.showErrorWhenRegister(result);
           }
@@ -252,6 +245,9 @@ export default {
       this.modalOtp.showModalOTP = false;
       this.otp = "";
       this.modalOtp.messageErrorOtp = "";
+    },
+    closeNotify() {
+      this.notify.showNotify = false;
     },
     showErrorWhenRegister(error) {
       this.errorRespon = true;
