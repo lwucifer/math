@@ -1,18 +1,18 @@
 <template>
-  <div class="editor">
+  <div class="app-editor" :class="classes">
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="menubar">
-        <div class="toolbar">
-          <button class="menubar__button" @click="commands.undo">
+      <div class="app-editor__menubar">
+        <div class="app-editor__menubar__toolbar">
+          <button class="app-editor__menubar__button" @click="commands.undo">
             <IconUndo class="icon" />
           </button>
 
-          <button class="menubar__button" @click="commands.redo">
+          <button class="app-editor__menubar__button" @click="commands.redo">
             <IconRedo class="icon" />
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.bold() }"
             @click="commands.bold"
           >
@@ -20,7 +20,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.italic() }"
             @click="commands.italic"
           >
@@ -28,7 +28,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.strike() }"
             @click="commands.strike"
           >
@@ -36,7 +36,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.underline() }"
             @click="commands.underline"
           >
@@ -44,7 +44,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.code() }"
             @click="commands.code"
           >
@@ -52,7 +52,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.paragraph() }"
             @click="commands.paragraph"
           >
@@ -60,25 +60,25 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 1 }) }"
             @click="commands.heading({ level: 1 })"
           >H1</button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
           >H2</button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 3 }) }"
             @click="commands.heading({ level: 3 })"
           >H3</button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.bullet_list() }"
             @click="commands.bullet_list"
           >
@@ -86,7 +86,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.ordered_list() }"
             @click="commands.ordered_list"
           >
@@ -94,7 +94,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.blockquote() }"
             @click="commands.blockquote"
           >
@@ -102,7 +102,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.code_block() }"
             @click="commands.code_block"
           >
@@ -110,44 +110,50 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="app-editor__menubar__button"
             @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
           >
             <IconTable class="icon" />
           </button>
 
-          <span v-if="isActive.table()">
-            <button class="menubar__button" @click="commands.deleteTable">
+          <template v-if="isActive.table()">
+            <button class="app-editor__menubar__button" @click="commands.deleteTable">
               <icon name="delete_table" />
               <IconTableDelete class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.addColumnBefore">
+            <button class="app-editor__menubar__button" @click="commands.addColumnBefore">
               <IconTableAddColBefore class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.addColumnAfter">
+            <button class="app-editor__menubar__button" @click="commands.addColumnAfter">
               <IconTableAddColAfter class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.deleteColumn">
+            <button class="app-editor__menubar__button" @click="commands.deleteColumn">
               <IconTableDeleteCol class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.addRowBefore">
+            <button class="app-editor__menubar__button" @click="commands.addRowBefore">
               <IconTableAddRowBefore class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.addRowAfter">
+            <button class="app-editor__menubar__button" @click="commands.addRowAfter">
               <IconTableAddRowAfter class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.deleteRow">
+            <button class="app-editor__menubar__button" @click="commands.deleteRow">
               <IconTableDeleteRow class="icon" />
             </button>
-            <button class="menubar__button" @click="commands.toggleCellMerge">
+            <button class="app-editor__menubar__button" @click="commands.toggleCellMerge">
               <IconTableCombineCells class="icon" />
             </button>
-          </span>
+          </template>
         </div>
       </div>
     </editor-menu-bar>
 
-    <editor-content class="editor__content" :editor="editor" />
+    <div
+      class="app-editor__content-wrapper"
+      :style="contentWrapperStyles"
+      @click.self="editor && editor.focus()"
+    >
+      <editor-content class="app-editor__content" :editor="editor" />
+    </div>
   </div>
 </template>
 
@@ -222,10 +228,44 @@ export default {
     IconTableCombineCells
   },
 
+  model: {
+    event: "input",
+    prop: "value"
+  },
+
+  props: {
+    value: {
+      type: [String, Object],
+      default: null
+    },
+    minHeight: {
+      type: [String, Number]
+    }
+  },
+
   data() {
     return {
-      editor: null
+      editor: null,
+      isEditorFocused: false
     };
+  },
+
+  computed: {
+    classes() {
+      return {
+        "app-editor--is-focused": this.isEditorFocused
+      };
+    },
+
+    contentWrapperStyles() {
+      return {
+        "min-height": this.minHeight
+          ? typeof this.minHeight === "number"
+            ? this.minHeight + "px"
+            : this.minHeight
+          : null
+      };
+    }
   },
 
   mounted() {
@@ -254,29 +294,16 @@ export default {
         new TableCell(),
         new TableRow()
       ],
-      content: `
-            <h2>
-              Tables
-            </h2>
-            <p>
-              Tables come with some useful commands like adding, removing or merging rows and columns. Navigate with <code>tab</code> or arrow keys. Resizing is also supported.
-            </p>
-            <table>
-              <tr>
-                <th colspan="3" data-colwidth="100,0,0">Wide header</th>
-              </tr>
-              <tr>
-                <td>One</td>
-                <td>Two</td>
-                <td>Three</td>
-              </tr>
-              <tr>
-                <td>Four</td>
-                <td>Five</td>
-                <td>Six</td>
-              </tr>
-            </table>
-          `
+      content: this.value,
+      onUpdate: ({ getHTML }) => {
+        this.$emit("input", getHTML());
+      },
+      onFocus: () => {
+        this.isEditorFocused = true;
+      },
+      onBlur: () => {
+        this.isEditorFocused = false;
+      }
     });
   },
 
@@ -285,3 +312,7 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/app/_app-editor.scss";
+</style>

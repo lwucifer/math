@@ -53,7 +53,7 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
-        <app-editor />
+        <app-editor v-model="benefit" />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { getBase64 } from "~/utils/file";
+import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
@@ -102,7 +102,8 @@ export default {
   data() {
     return {
       avatar: [],
-      avatarSrc: null
+      avatarSrc: null,
+      benefit: ''
     };
   },
 

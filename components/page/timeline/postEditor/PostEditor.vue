@@ -129,7 +129,7 @@
 <script>
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
-import { getBase64 } from "~/utils/file";
+import { getBase64 } from "~/utils/common";
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
