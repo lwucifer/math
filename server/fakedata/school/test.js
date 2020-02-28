@@ -1,54 +1,54 @@
 export const SCHOOL = {
-    id: "1",
-    name: "Đại học Đại Nam",
-    avatar: "https://picsum.photos/150/150",
-    desc:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum.",
-    code: "MHDUAA12"
-}
+  id: "1",
+  name: "Đại học Đại Nam",
+  avatar: "https://picsum.photos/150/150",
+  desc:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum.",
+  code: "MHDUAA12"
+};
 
 export const SCHOOLS = [
-    {
-        id: 1,
-        image: 'https://picsum.photos/218/129',
-        name: "Trường THCS Nguyễn Thị Thập",
-        address: "Hà Đông, Hà Nội",
-        teacherNum: 100,
-        studentNum: 1000,
-    },
-    {
-        id: 2,
-        image: 'https://picsum.photos/218/129',
-        name: "Trường THCS Nguyễn Thị Thập",
-        address: "Hà Đông, Hà Nội",
-        teacherNum: 100,
-        studentNum: 1000,
-    },
-    {
-        id: 3,
-        image: 'https://picsum.photos/218/129',
-        name: "Trường THCS Nguyễn Thị Thập",
-        address: "Hà Đông, Hà Nội",
-        teacherNum: 100,
-        studentNum: 1000,
-    },
-    {
-        id: 4,
-        image: 'https://picsum.photos/218/129',
-        name: "Trường THCS Nguyễn Thị Thập",
-        address: "Hà Đông, Hà Nội",
-        teacherNum: 100,
-        studentNum: 1000,
-    },
-    {
-        id: 5,
-        image: 'https://picsum.photos/218/129',
-        name: "Trường THCS Nguyễn Thị Thập",
-        address: "Hà Đông, Hà Nội",
-        teacherNum: 100,
-        studentNum: 1000,
-    },
-]
+  {
+    id: 1,
+    image: "https://picsum.photos/218/129",
+    name: "Trường THCS Nguyễn Thị Thập",
+    address: "Hà Đông, Hà Nội",
+    teacherNum: 100,
+    studentNum: 1000
+  },
+  {
+    id: 2,
+    image: "https://picsum.photos/218/129",
+    name: "Trường THCS Nguyễn Thị Thập",
+    address: "Hà Đông, Hà Nội",
+    teacherNum: 100,
+    studentNum: 1000
+  },
+  {
+    id: 3,
+    image: "https://picsum.photos/218/129",
+    name: "Trường THCS Nguyễn Thị Thập",
+    address: "Hà Đông, Hà Nội",
+    teacherNum: 100,
+    studentNum: 1000
+  },
+  {
+    id: 4,
+    image: "https://picsum.photos/218/129",
+    name: "Trường THCS Nguyễn Thị Thập",
+    address: "Hà Đông, Hà Nội",
+    teacherNum: 100,
+    studentNum: 1000
+  },
+  {
+    id: 5,
+    image: "https://picsum.photos/218/129",
+    name: "Trường THCS Nguyễn Thị Thập",
+    address: "Hà Đông, Hà Nội",
+    teacherNum: 100,
+    studentNum: 1000
+  }
+];
 
 export const SCHOOL_TYPES = [
   {
@@ -64,6 +64,45 @@ export const SCHOOL_TYPES = [
     text: "Cấp 3"
   }
 ];
+
+export const SCHOOL_TYPE = {
+  NURSERY: {
+    schoolNumKey: "total_nursery_school",
+    studentNumKey: "total_student_nursery",
+    teacherNumKey: "total_teacher_nursery",
+    schoolsKey: "nursery_schools"
+  },
+  PRIMARY: {
+    schoolNumKey: "total_primary_school",
+    studentNumKey: "total_student_primary",
+    teacherNumKey: "total_teacher_primary",
+    schoolsKey: "primary_schools"
+  },
+  JUNIOR: {
+    schoolNumKey: "total_junior_school",
+    studentNumKey: "total_student_junior",
+    teacherNumKey: "total_teacher_junior",
+    schoolsKey: "junior_schools"
+  },
+  HIGH: {
+    schoolNumKey: "total_high_school",
+    studentNumKey: "total_student_high",
+    teacherNumKey: "total_teacher_high",
+    schoolsKey: "high_schools"
+  },
+  COLLEGE: {
+    schoolNumKey: "total_college_school",
+    studentNumKey: "total_student_college",
+    teacherNumKey: "total_teacher_college",
+    schoolsKey: "college_schools"
+  },
+  UNIVERSITY: {
+    schoolNumKey: "total_university_school",
+    studentNumKey: "total_student_university",
+    teacherNumKey: "total_teacher_university",
+    schoolsKey: "university_schools"
+  }
+};
 
 export const SCHOOL_TYPE_DETAILS = [
   {
