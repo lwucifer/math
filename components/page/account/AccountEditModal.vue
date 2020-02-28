@@ -1,46 +1,74 @@
 <template>
-  <app-modal centered :width="606" :component-class="{ 'account-edit-modal': true }" v-if="visible">
-    <!-- @close="$router.push('/')" -->
-    <div slot="content">
-      <h3>Chỉnh sửa thông tin</h3>
-      <app-input disabled labelBold labelFixed type="text" :value="email" label="Email" />
-      <div class="row">
-        <div class="col-6">
-          <app-input
-            disabled
-            labelBold
-            labelFixed
-            type="text"
-            :value="phone_number"
-            label="Số điện thoại"
-          />
+  <div>
+    <app-modal
+      centered
+      :width="606"
+      :component-class="{ 'account-edit-modal': true }"
+      v-if="visible"
+    >
+      <!-- @close="$router.push('/')" -->
+      <div slot="content">
+        <h3>Chỉnh sửa thông tin</h3>
+        <app-input disabled labelBold labelFixed type="text" :value="email" label="Email" />
+        <div class="row">
+          <div class="col-6">
+            <app-input
+              disabled
+              labelBold
+              labelFixed
+              type="text"
+              :value="phone_number"
+              label="Số điện thoại"
+            />
+          </div>
+          <div class="col-6">
+            <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
+          </div>
         </div>
-        <div class="col-6">
-          <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
+        <app-input
+          labelBold
+          labelFixed
+          type="text"
+          v-model="address"
+          label="Địa chỉ"
+          :error="error"
+          :message="messageError"
+          :validate="validate"
+          @input="hanldeAddress"
+        />
+        <div class="form-group">
+          <label>Giới tính</label>
+          <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
         </div>
-      </div>
-      <app-input
-        labelBold
-        labelFixed
-        type="text"
-        v-model="address"
-        label="Địa chỉ"
-        :error="error"
-        :message="messageError"
-        :validate="validate"
-        @input="hanldeAddress"
-      />
-      <div class="form-group">
-        <label>Giới tính</label>
-        <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
-      </div>
 
-      <div class="text-center">
-        <app-button size="lg" color="info" class="mr-3" square @click="closeModal">Hủy bỏ</app-button>
-        <app-button size="lg" square @click="save()">Cập nhật thông tin</app-button>
+        <div class="text-center">
+          <app-button size="lg" color="info" class="mr-3" square @click="closeModal">Hủy bỏ</app-button>
+          <app-button size="lg" square @click="save()">Cập nhật thông tin</app-button>
+        </div>
       </div>
-    </div>
-  </app-modal>
+    </app-modal>
+    <app-modal
+      centered
+      :width="400"
+      :component-class="{ 'auth-modal': true }"
+      v-if="modalSuccessUpdate"
+    >
+      <h3 class="color-primary" slot="header"></h3>
+
+      <div slot="content">
+        <p class="line-height-2">
+          <br />Bạn đã update thành công
+          <br />
+        </p>
+        <app-button
+          color="primary"
+          square
+          fullWidth
+          @click.prevent="modalSuccessUpdate = false"
+        >Xác nhận</app-button>
+      </div>
+    </app-modal>
+  </div>
 </template>
 
 <script>
@@ -66,7 +94,8 @@ export default {
       birthday: "",
       error: false,
       messageError: "",
-      validate: ""
+      validate: "",
+      modalSuccessUpdate: ""
     };
   },
   methods: {
@@ -79,10 +108,12 @@ export default {
         birthday: getDateFormat(this.birthday)
       };
       this.accountPersonalEdit(data).then(result => {
-        console.log("huydv", result);
+        console.log("[accountPersonalEdit]", result);
         if (result.success == true) {
+          this.$emit("click-close");
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
+          this.modalSuccessUpdate = true;
         } else {
           this.validate = VALIDATE_STATUS.ERROR;
           this.showErrorUpdate(result);
