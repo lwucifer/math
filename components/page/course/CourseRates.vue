@@ -5,7 +5,7 @@
         <div class="col-md-6 col-sm-12">
           <div class="text-center d-inline-block">
             <strong class="h1 color-primary">{{
-              $_.get(elearningInfo, "review_rate", 0)
+              get(elearningInfo, "review_rate", 0)
             }}</strong>
             <app-stars
               :stars="elearningInfo.review_rate"
@@ -13,7 +13,7 @@
               class="mt-2 mb-2"
             />
             <p class="color-999">
-              ({{ $_.get(elearningInfo, "review_count", 0) }} người đánh giá)
+              ({{ get(elearningInfo, "review_count", 0) }} người đánh giá)
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@
     <div class="course-rates__commnents">
       <course-rate-comment
         :review="review"
-        v-for="(review, index) in $_.get(elearningInfo, 'reviews.content', [])"
+        v-for="(review, index) in get(elearningInfo, 'reviews.content', [])"
         :key="index"
       />
       <app-pagination
@@ -90,6 +90,7 @@
 <script>
 import CourseStars from "~/components/page/course/CourseStars";
 import CourseRateComment from "~/components/page/course/CourseRateComment";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -120,7 +121,8 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
-    }
+    },
+    get
   }
 };
 </script>
