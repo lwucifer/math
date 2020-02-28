@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { getBase64 } from "~/utils/file";
+import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
