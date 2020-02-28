@@ -66,13 +66,10 @@
             :pagination="pagination"
             @pagechange="onPageChange"
             :data="list"
+            multiple-selection
+            @selectionChange="selectRow"
             class="tableUploadFile__ElearningManagerFilterTable"
             >
-                <template v-slot:cell(action)="{row}">
-                    <td>
-                        <app-checkbox></app-checkbox>
-                    </td>
-                </template>
             </app-table>
         </div>
     </div>
@@ -96,35 +93,22 @@ export default {
     data() {
             return {
                 heads: [
-                    {
-                        name:"action",
-                        text:"",
-                        sort:false,
-                        selectAll:true
-                    },
+    
                     {
                         name: "name",
                         text: "Tên file",
-                        sort: false,
-                        selectAll:false,
                     },
                     {
                         name: "type",
                         text: "Loại",
-                        sort: false,
-                        selectAll:false,
                     },
                     {
                         name: "lesson",
                         text: "Sử dụng",
-                        sort: false,
-                        selectAll:false,
                     },
                     {
                         name: "dateUpload",
                         text: "Ngày tải lên",
-                        sort: true,
-                        selectAll:false,
                     },
                     
                 ],
@@ -180,6 +164,9 @@ export default {
             },
             handleSearch() {
                 console.log('[Component] Elearning exam: searching')
+            },
+            selectRow(data) {
+                console.log('change row: ', data)
             }
         }
        

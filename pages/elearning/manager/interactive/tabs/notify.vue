@@ -40,6 +40,18 @@
               </n-link>
             </td>
           </template>
+          <template v-slot:cell(content)={row,index}>
+            <td title="Chi tiết"
+                class="table-notify__ElearningManagerInteractive" 
+                 v-on:mouseover="clickQuestion({row, index})"
+                 v-on:mouseleave="closeDetail()"
+            >
+              <span>{{row.content}}</span>
+              <div class="content-detail__notify" v-if="(currentQuestionIndex >=0) && (index == currentQuestionIndex)">
+                <span>{{row.content}}</span>
+              </div>
+            </td>
+          </template>
         </app-table>
       </div>
   </div>
@@ -58,6 +70,7 @@ export default {
         },
     data() {
             return {
+                currentQuestionIndex:null,
                 tab: 1,
                 heads: [
                     {
@@ -147,21 +160,19 @@ export default {
             },
             handleSearch() {
                 console.log('[Component] Elearning exam: searching')
+            },
+            clickQuestion({row, index}) {
+              console.log('click question')
+              this.currentQuestionIndex = index
+            },
+            closeDetail() {
+              console.log('close')
+              this.currentQuestionIndex = null
             }
         }
 }
 </script>
 
 <style lang="scss">
-.btnFilterSummit__ElearningManagerInteractive{
-  border-radius: 100px;
-}
-
-.btnCreate-notify__ElearningManagerInteractive{
-  background: #E9446A;
-  :first-child{
-    color: #ffffff;
-    text-decoration: none;
-  }
-}
+@import "~/assets/scss/components/elearning/manager/_elearning-interactive.scss";
 </style>

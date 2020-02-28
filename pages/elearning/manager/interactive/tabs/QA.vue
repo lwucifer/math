@@ -195,23 +195,5 @@ export default {
 </script>
 
 <style lang="scss">
-
-.filter-form__ElearninManagerInteractive{
-    display: flex;
-  .filter-item{
-   &:nth-child(2){
-      margin:0px 20px;
-    }
-    &:last-child{
-      min-width: 139px;
-  }    
-  }
-  
-}
-.btnFilterSummit__ElearningManagerInteractive{
-  border-radius: 100px;
-}
-.wrapTable__ElearningManagerInteractive{
-  padding-top:30px;
-}
+@import "~/assets/scss/components/elearning/manager/_elearning-interactive.scss";
 </style>

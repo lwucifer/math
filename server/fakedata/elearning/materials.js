@@ -105,14 +105,14 @@ const NOTIFIES=[
         time:"20/02/2020"
     },
     {
-        id:"1",
+        id:"2",
         title:"Gửi học sinh lớp 10A",
         content:"Các em được nghỉ học blablaabaa",
         lesson:"Sinh học lớp 10",
         time:"20/02/2020"
     },
     {
-        id:"1",
+        id:"3",
         title:"Gửi học sinh lớp 10A",
         content:"Các em được nghỉ học blablaabaa",
         lesson:"Sinh học lớp 10",
