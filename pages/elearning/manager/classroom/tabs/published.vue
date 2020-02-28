@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-">
+  <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
@@ -31,7 +31,7 @@
         </app-button>
       </div>
 
-      <div class="filter-form__item">
+      <div class="filter-form__item" style="min-width: 15rem">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filter.course"
@@ -47,7 +47,7 @@
         </app-vue-select>
       </div>
 
-      <div class="filter-form__item">
+      <div class="filter-form__item" style="min-width: 15rem">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filter.status"
@@ -81,20 +81,49 @@
 
     </div><!--End filter form-->
 
+    <!--Options group-->
+    <div
+      class="filter-form mb-0"
+    >
+      <div class="filter-form__item">
+        <app-button
+          color="secondary"
+          class="filter-form__item__btn"
+          square
+          :size="'sm'"
+        >
+          <IconTrash/>
+          <span class="ml-3">Hủy lớp</span>
+        </app-button>
+      </div>
+    </div> <!--Options group-->
+
     <!--Table-->
     <app-table
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="list"
+      multiple-selection
+      @selectionChange="selectRow"
     >
+      <template v-slot:cell(room)="{row}">
+        <td class="appended-col">
+          <p>
+            {{ row.room }}
+          </p>
+          <p class="text-description" :title="row.description">
+            {{ row.description }}
+          </p>
+        </td>
+      </template>
       <template v-slot:cell(action)="{row}">
-        <td>
+        <td class="nowrap">
           <n-link
             class
-            title="Chi tiết"
-            :to="'/elearning/manager/test/' + row.id">
-            <IconArrow/>
+            to
+          >
+            Chi tiết
           </n-link>
         </td>
       </template>
@@ -107,10 +136,11 @@
   import IconSearch from "~/assets/svg/icons/search.svg?inline"
   import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
   import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline"
+  import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline"
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"
   // Import faked data
-  import {EXERCISES} from "~/server/fakedata/elearning/test"
+  import { SCHEDULES } from "~/server/fakedata/elearning/test"
 
   export default {
 
@@ -118,7 +148,8 @@
       IconFilter,
       IconSearch,
       IconArrow,
-      IconCalendar
+      IconCalendar,
+      IconTrash
     },
 
     data() {
@@ -126,39 +157,35 @@
         tab: 1,
         heads: [
           {
-            name: "name",
-            text: "Tiêu đề",
-            sort: false
-          },
-          {
-            name: "type",
-            text: "Thể loại",
-            sort: false
-          },
-          {
-            name: "lesson",
-            text: "Thuộc bài giảng",
-            sort: false
+            name: "room",
+            text: "Phòng học",
           },
           {
             name: "course",
             text: "Thuộc khóa học",
-            sort: false
           },
           {
-            name: "studentNum",
-            text: "Học sinh làm bài",
+            name: "visibility",
+            text: "Hiển thị",
+          },
+          {
+            name: "time",
+            text: "Thời gian",
             sort: true
           },
           {
-            name: "createdAt",
-            text: "Ngày khởi tạo",
+            name: "view",
+            text: "Lượt xem",
+            sort: true
+          },
+          {
+            name: "studentNum",
+            text: "Số học sinh tham gia",
             sort: true
           },
           {
             name: "action",
             text: "",
-            sort: false
           }
         ],
         filter: {
@@ -195,7 +222,7 @@
           first: 1,
           last: 10
         },
-        list: EXERCISES,
+        list: SCHEDULES,
       };
     },
     computed: {
@@ -209,22 +236,25 @@
         console.log(that.pagination);
       },
       submit() {
-        console.log('[Component] Elearning exam: submitted')
+        console.log('[Component] Elearning classroom: submitted')
       },
       handleChangedInput(val) {
         if (val !== null) {
         } else {
         }
-        console.log('[Component] Elearning exam: changing input...', val)
+        console.log('[Component] Elearning classroom: changing input...', val)
       },
       handleFocusSearchInput() {
-        console.log('[Component] Elearning exam: focus searching ')
+        console.log('[Component] Elearning classroom: focus searching ')
       },
       handleBlurSearchInput() {
         console.log('[Component] Elearning exam: blur searching ')
       },
       handleSearch() {
         console.log('[Component] Elearning exam: searching')
+      },
+      selectRow(data) {
+        console.log('change row: ', data)
       }
     }
   };
@@ -232,4 +262,17 @@
 
 <style lang="scss" scoped>
   @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+  .appended-col {
+    p {
+      max-width: 15rem;
+    }
+    .text-description {
+      color: #999;
+      font-size: 1.2rem;
+      line-height: 1.6rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 </style>

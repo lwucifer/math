@@ -1,4 +1,5 @@
 import { EXERCISES, EXERCISE_DETAIL, RESULTS } from "./exercise"
+import { SCHEDULES } from "./classroom"
 
 
 export const LESSON = {
@@ -274,5 +275,6 @@ export const COURSES = [
 export {
     EXERCISES,
     EXERCISE_DETAIL,
-    RESULTS
+    RESULTS,
+    SCHEDULES
 }

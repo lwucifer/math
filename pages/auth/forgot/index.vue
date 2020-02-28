@@ -151,7 +151,7 @@ export default {
           message = "User not found";
           break;
         default:
-          message = "Something went wrong. Please try again";
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
           break;
       }
       this.messageErrorForgot = message;

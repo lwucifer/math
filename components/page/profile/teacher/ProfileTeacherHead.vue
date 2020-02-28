@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
       <div class="row">
         <div class="col-6 d-flex">
             <div>
@@ -44,50 +44,5 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapInfoTeach__Profile{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    div:first-child span{
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 16px;
-    }
-    div:nth-child(2) span{
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        color: #666666;
-        margin: 14px 0px 22px 0px;
-        display:inline-block;
-    }
-    div:last-child{
-        strong{
-            margin-left:20px;
-        }
-    }
-}
-.wrapCourse__Profile{
-    display: flex;
-    justify-content: flex-end;
-    > div{
-        background:#EBF7F3;
-        border: 1px solid #EEEEEE;
-        box-sizing: border-box;
-        width: 100px;
-        height: 100px;
-        margin: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    div span:first-child{
-            font-weight: bold;
-            font-size: 30px;
-            line-height: 41px;
-            color: #32AF85;
-        }
-}
+@import "~/assets/scss/components/profile/_profile-teacher-head.scss";
 </style>

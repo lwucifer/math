@@ -7,43 +7,103 @@
             <span v-html="infoTeacher"></span>
         </div>
          <hr/>
+        <div class="wrapSlider__ProfileTeacher">
+            <ProfileSliderTab
+                :items="lessons"
+                :name="'Bài học và khóa giảng'"
+            />
+        </div>
     </div>
 </div>
 </template>
 
 <script>
-import ProfileTeacherHead from "~/components/page/profile/teacher/ProfileTeacherHead"
+import ProfileTeacherHead from "~/components/page/profile/teacher/ProfileTeacherHead";
+import ProfileSliderTab from "~/components/page/profile/ProfileSliderTab";
 export default {
     data(){
         return{
             infoTeacher:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum",
+            sliderOptions: {
+                spaceBetween: 20,
+                slidesPerView: 5,
+                setWrapperSize: true,
+                autoHeight: true,
+                watchOverflow: true,
+                showName: true
+            },
+            lessons: [
+        {
+          id: 1,
+          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
+          image: "https://picsum.photos/218/130",
+          price: "219000",
+          online: 1,
+          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
+          teacher: {
+            id: 1,
+            name: "Trần Văn A",
+            avatar: "https://picsum.photos/20/20",
+            star: 4,
+            starAmount: 476
+          }
+        },
+        {
+          id: 2,
+          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
+          image: "https://picsum.photos/218/130",
+          price: "219000",
+          online: 1,
+          onlineStatus: "Lớp học đang diễn ra",
+          teacher: {
+            id: 1,
+            name: "Trần Văn A",
+            avatar: "https://picsum.photos/20/20",
+            star: 4,
+            starAmount: 476
+          }
+        },
+        {
+          id: 3,
+          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
+          image: "https://picsum.photos/218/130",
+          price: "219000",
+          online: 0,
+          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
+          teacher: {
+            id: 1,
+            name: "Trần Văn A",
+            avatar: "https://picsum.photos/20/20",
+            star: 4,
+            starAmount: 476
+          }
+        },
+        {
+          id: 8,
+          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
+          image: "https://picsum.photos/218/130",
+          price: "219000",
+          online: 0,
+          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
+          teacher: {
+            id: 1,
+            name: "Trần Văn A",
+            avatar: "https://picsum.photos/20/20",
+            star: 4,
+            starAmount: 476
+          }
         }
+      ],
+
+       }
     },
     components:{
-        ProfileTeacherHead
+        ProfileTeacherHead,
+        ProfileSliderTab
     }
 }
 </script>
 
 <style lang="scss">
-    .wrapProfileTeacher{
-        background: #FFFFFF;
-        padding: 20px;
-    }
-    .wrapInfoTeacher{
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        strong{
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 22px;
-            padding-bottom: 10px;
-        }
-        span{
-            font-size: 14px;
-            line-height: 19px;
-            color: #666666;
-        }
-    }
+    @import "~/assets/scss/components/profile/_profile-teacher.scss";
 </style>

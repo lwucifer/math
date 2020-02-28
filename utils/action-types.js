@@ -63,7 +63,10 @@ export const ACCOUNT_PERSONAL = {
   EDIT: "accountPersonalEdit",
   EDIT_AVATAR: "accountPersonalEditAvatar",
   EDIT_COVER: "accountPersonalEditCover",
-  EDIT_PHONE: "accountPersonalEditPhone"
+  EDIT_PHONE: "accountPersonalEditPhone",
+  EDIT_EMAIL: "accountPersonalEditEmail",
+  VERIFY_OTP_EMAIL: "verifyOtpEmail",
+  UPDATE_PHONE: "accountPersonalUpdatePhone"
 };
 
 export const ACCOUNT_LINK = {
@@ -89,6 +92,12 @@ export const ELEARNING_PUBLIC_SUMMARY = {
 
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
+};
+
+export const ELEARNING_PUBLIC_PLACE = {
+  PROVINCE: "elearningPublicPlaceProvince",
+  DISTRICT: "elearningPublicPlaceDistrict",
+  WARD: "elearningPublicPlaceWard"
 };
 
 export const ELEARNING_PUBLIC_PROGRAM = {
