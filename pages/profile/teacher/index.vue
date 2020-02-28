@@ -4,7 +4,11 @@
         <ProfileTeacherHead/>
         <div class="wrapInfoTeacher">
             <strong>Thông tin giáo viên</strong>
-            <span v-html="infoTeacher"></span>
+            <div>
+              <span v-if="!readMoreActivated">{{infoTeacher.slice(0,200)}}</span>
+              <a v-if="!readMoreActivated" href="#" v-on:click="activeReadMore">Xem thêm</a>
+              <span v-if="readMoreActivated" v-html="infoTeacher"></span>
+            </div>
         </div>
          <hr/>
         <div class="wrapSlider__ProfileTeacher">
@@ -24,6 +28,7 @@ export default {
     data(){
         return{
             infoTeacher:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum",
+            readMoreActivated:false,
             sliderOptions: {
                 spaceBetween: 20,
                 slidesPerView: 5,
@@ -100,6 +105,11 @@ export default {
     components:{
         ProfileTeacherHead,
         ProfileSliderTab
+    },
+    methods:{
+      activeReadMore(){
+        this.readMoreActivated= true;
+      }
     }
 }
 </script>
