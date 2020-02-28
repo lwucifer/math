@@ -13,8 +13,6 @@ const requireComponent = require.context(
     /[\w-]+\.vue$/
 )
 
-console.log("requireComponent", requireComponent.keys())
-
 // For each matching file name...
 requireComponent.keys().forEach((fileName) => {
     // Get the component config
@@ -36,7 +34,6 @@ requireComponent.keys().forEach((fileName) => {
         // Concatenated
         .join('')
 
-    console.log("componentName", componentName);
     // Globally register the component
     Vue.component(componentName, componentConfig.default || componentConfig)
 })
