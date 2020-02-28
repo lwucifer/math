@@ -151,10 +151,10 @@ export default {
 
     classLabel() {
       const labelBold = {
-        "app-input__label-bold": this.labelBold
+        "app-input__label--bold": this.labelBold
       };
       const labelFixed = {
-        "app-input__label-fixed": this.labelFixed
+        "app-input__label--fixed": this.labelFixed
       };
       return {
         "app-input__label": true,
