@@ -22,6 +22,11 @@
     line-height: 4rem;
     padding-right: 1rem;
 
+    .label--sub {
+        font-size: 85%;
+        color: #999;
+    }
+
     &.app-input__label--fixed {
         width: 11rem;
     }

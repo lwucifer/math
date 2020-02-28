@@ -1,6 +1,9 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="classLabel">{{ label }}</label>
+    <label v-if="label" :class="classLabel">
+      {{ label }}
+      <span class="label--sub" v-if="subLabel">{{ subLabel }}</span>
+    </label>
     <div class="app-input__input">
       <slot name="prepend-inner"></slot>
       <!-- Textarea  -->
@@ -112,7 +115,8 @@ export default {
     },
     counter: {
       type: Number
-    }
+    },
+    subLabel: String
   },
 
   data() {
