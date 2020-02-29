@@ -1,13 +1,13 @@
 <template>
-  <div class="elearning-content-box">
-    <div class="elearning-content-box__title">
+  <div class="create-content-box">
+    <div class="create-content-box__title">
       <slot name="head">
-        <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
+        <h5 class="color-primary mb-3">{{ title }}</h5>
       </slot>
       <hr class/>
     </div>
 
-    <div class="elearning-content-box__main">
+    <div class="create-content-box__main">
       <slot name="content"></slot>
     </div>
   </div>
@@ -26,5 +26,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~/assets/scss/components/elearning/_elearning-content-box.scss";
+  @import "~/assets/scss/components/classroom/create/_create-content-box.scss";
 </style>

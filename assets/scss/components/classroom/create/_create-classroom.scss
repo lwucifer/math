@@ -1,0 +1,16 @@
+.creation-form {
+  .group-form {
+
+  }
+
+  .creation-form__item {
+    margin-bottom: 1.5rem;
+
+    &__label {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #333;
+      line-height: 4rem;
+    }
+  }
+}
