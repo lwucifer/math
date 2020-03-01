@@ -168,13 +168,7 @@
               <div v-if="createType === 'choice'">
                 <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
 
-                <client-only>
-                  <editor-content
-                    :editor="editor"
-                    class="editor cc-editor mb-4"
-                    id="question-editor"
-                  />
-                </client-only>
+                <app-editor class="mb-4" id="question-editor" />
 
                 <div class="row mb-4">
                   <div class="col-md-3">
@@ -188,13 +182,7 @@
                     <label class="d-inline-block mb-3" for="answer-editor">Nội dung đáp án</label>
                     <div class="d-flex align-items-start">
                       <div class="flex-grow mr-4">
-                        <client-only>
-                          <editor-content
-                            :editor="answerEditor"
-                            class="editor cc-editor"
-                            id="answer-editor"
-                          />
-                        </client-only>
+                        <app-editor id="answer-editor" />
                       </div>
 
                       <div>
@@ -210,16 +198,26 @@
               <div v-if="createType === 'essay'">
                 <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
 
-                <client-only>
-                  <editor-content
-                    :editor="editor"
-                    class="editor cc-editor mb-4"
-                    id="question-editor"
-                  />
-                </client-only>
+                <app-editor />
               </div>
 
-              <div class="d-flex justify-content-end">
+              <div>
+                <label class="d-inline-block mb-3">Bài giảng liên quan</label>
+                <div>
+                  <app-select
+                    :options="[{ value: 0, text: 'Bài giảng 1'}, { value: 1, text: 'Bài giảng 2'}]"
+                    placeholder="Chọn bài giảng"
+                    size="sm"
+                  >
+                    <template slot="placeholder-icon">
+                      <IconAngleDown class="icon" />
+                    </template>
+                  </app-select>
+                </div>
+                <span class="d-inline-block mt-2 caption text-sub">Chọn bài giảng liên quan để giúp học sinh trả lời câu hỏi một cách chính xác nhất</span>
+              </div>
+
+              <div class="d-flex justify-content-end mt-5">
                 <app-button
                   color="disabled"
                   class="font-weight-semi-bold mr-4"
@@ -327,9 +325,6 @@
 </template>
 
 <script>
-import { Editor, EditorContent } from "tiptap";
-import { Placeholder } from "tiptap-extensions";
-
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
@@ -346,40 +341,13 @@ export default {
     IconTrashAlt,
     IconAlignCenterAlt,
     IconFileCheck,
-    IconClipboardNotes,
-    EditorContent
+    IconClipboardNotes
   },
 
   data() {
     return {
-      editor: null,
-      answerEditor: null,
       createType: "choice" // 'choice' | 'essay'
     };
-  },
-
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        new Placeholder({
-          showOnlyCurrent: false,
-          emptyNodeText: "Khung Soạn thảo"
-        })
-      ]
-    });
-
-    this.answerEditor = new Editor({
-      extensions: [
-        new Placeholder({
-          showOnlyCurrent: false,
-          emptyNodeText: "Nội dung đáp án"
-        })
-      ]
-    });
-  },
-
-  beforeDestroy() {
-    this.editor.destroy();
   }
 };
 </script>
