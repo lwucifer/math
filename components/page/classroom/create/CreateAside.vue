@@ -3,11 +3,47 @@
     <div class="manager-side--creation__checklist">
       <div
         class="link-gray item"
+        :class="active == 'general' ? 'active' : ''"
+        @click="selectMenu({name: 'general'})"
+      >
+        <app-checkbox
+          :checked="active == 'general'"
+        >
+          Thông tin chung
+        </app-checkbox>
+      </div>
+
+      <div
+        class="link-gray item"
+        :class="active == 'content' ? 'active' : ''"
+        @click="selectMenu({name: 'content'})"
+      >
+        <app-checkbox
+          :checked="active == 'content'"
+        >
+          Nội dung học tập
+        </app-checkbox>
+      </div>
+
+      <div
+        class="link-gray item"
+        :class="active == 'setting' ? 'active' : ''"
+        @click="selectMenu({name: 'setting'})"
+      >
+        <app-checkbox
+          :checked="active == 'setting'"
+        >
+          Cài đặt
+        </app-checkbox>
+      </div>
+
+      <div
+        class="link-gray item"
         :class="active == 'classroom' ? 'active' : ''"
         @click="selectMenu({name: 'classroom'})"
       >
         <app-checkbox
-          :checked="active == 1"
+          :checked="active == 'classroom'"
         >
           Tạo phòng học online
         </app-checkbox>
@@ -19,7 +55,7 @@
         @click="selectMenu({name: 'exercise'})"
       >
         <app-checkbox
-          :checked="active == 2"
+          :checked="active == 'exercise'"
         >
           Bài tập
           <span class="cca-sub-text text-sub">(Tùy chọn)</span>
@@ -32,7 +68,7 @@
         @click="selectMenu({name: 'exam'})"
       >
         <app-checkbox
-          :checked="active == 3"
+          :checked="active == 'exam'"
         >
           Bài kiểm tra
           <span class="cca-sub-text text-sub"> (Tùy chọn)</span>
@@ -63,7 +99,7 @@
       active: {
         type: String,
         default: 'classroom',
-        validator: value => ['classroom', 'exercise', 'exam'].includes(value)
+        validator: value => ['classroom', 'exercise', 'exam', 'setting', 'general', 'content'].includes(value)
       }
     },
     methods: {

@@ -79,13 +79,15 @@
 
           <div class="form-block">
             <div class="creation-form__item">
-              <app-input
-                labelBold
-                textarea
-                :placeholder="'Mô tả'"
-                :label="'Mô tả tổng quát'"
+              <label
+                for=""
+                class="creation-form__item__label"
               >
-              </app-input>
+                Mô tả tổng quát
+              </label>
+              <div>
+                <textarea name="" id="" rows="10" placeholder="Mô tả" style="background: #FBFBFB; width: 100%; border: 1px solid #EEEEEE; padding: 12px 16px;"></textarea>
+              </div>
             </div>
           </div>
 
@@ -143,7 +145,7 @@
                     placeholder="DD/MM/YYYY"
                   >
                     <template v-slot:icon-calendar>
-                      <IconCalendar />
+                      <IconCalendar/>
                     </template>
                   </app-date-picker>
                 </div>
@@ -158,7 +160,7 @@
                     placeholder="HH:MM A"
                   >
                     <template v-slot:icon-calendar>
-                      <IconCalendar />
+                      <IconCalendar/>
                     </template>
                   </app-date-picker>
                 </div>
@@ -173,7 +175,7 @@
                     placeholder="HH:MM A"
                   >
                     <template v-slot:icon-calendar>
-                      <IconCalendar />
+                      <IconCalendar/>
                     </template>
                   </app-date-picker>
                 </div>
@@ -209,6 +211,9 @@
 </template>
 
 <script>
+  // import {Editor, EditorContent} from "tiptap"
+  // import {Placeholder} from "tiptap-extensions"
+
   import CreateContentBox from "~/components/page/classroom/create/CreateContentBox"
   import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline"
 
@@ -216,10 +221,12 @@
     name: "CreateClassroom",
     components: {
       CreateContentBox,
-      IconCalendar
+      IconCalendar,
+      // EditorContent
     },
     data() {
       return {
+        // description: null,
         levels: [
           {
             value: 1,
@@ -230,7 +237,7 @@
             text: "Lớp 11"
           },
         ],
-        subjects:[
+        subjects: [
           {
             value: 1,
             text: "Toán"
@@ -240,7 +247,7 @@
             text: "Lý"
           },
         ],
-        courses:[
+        courses: [
           {
             value: 1,
             text: "Khóa học 1"
@@ -262,6 +269,16 @@
         ],
         info: {}
       }
+    },
+    mounted() {
+      // this.description = new Editor({
+      //   extensions: [
+      //     new Placeholder({
+      //       showOnlyCurrent: false,
+      //       emptyNodeText: "Mô tả"
+      //     })
+      //   ]
+      // });
     }
   }
 </script>

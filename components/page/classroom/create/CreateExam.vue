@@ -1,7 +1,7 @@
 <template>
   <div>
     <create-content-box
-      title="Bài tập"
+      title="Bài kiểm tra"
     >
       <template v-slot:content>
         <div class="cc-panel__body">
@@ -25,33 +25,69 @@
     </create-content-box>
 
     <create-content-box
-      title="Bài tập"
+      title="Bài kiểm tra"
     >
       <template v-slot:content>
         <div class="cc-panel__body">
           <div class="mb-4">
             <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề bài tập</label>
-            <app-input id="title" :counter="100"/>
+            <app-input id="title" :counter="100" />
           </div>
 
-          <div class="d-md-flex align-items-center mb-4">
-            <div class="">
-              <label for="require" class="text-gray caption">Bài tập bắt buộc?</label>
+          <div class="row align-items-center mb-4">
+            <div class="col-md-2">
+              <label for="time" class="text-gray">Thời gian làm bài</label>
             </div>
-            &nbsp;
-            <div class="">
-              <app-select
-                class="cc-select"
-                id="require"
-                :options="[{ value: 1, text: 'Có'}, { value: 0, text: 'Không'}]"
-                placeholder="Chọn yêu cầu"
-                size="sm"
-                style="width: 143px; color: #333;"
+
+            <div class="col-md-10">
+              <app-input
+                type="number"
+                class="mb-0 ce-input-with-unit"
+                id="time"
+                size="md"
+                style="width: 123px"
+                :value="60"
               >
-                <template slot="placeholder-icon">
-                  <IconAngleDown class="icon" />
-                </template>
-              </app-select>
+                <div slot="unit">Phút</div>
+              </app-input>
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-4">
+            <div class="col-md-2">
+              <label for="point" class="text-gray">Điểm đạt</label>
+            </div>
+
+            <div class="col-md-10">
+              <app-input
+                type="number"
+                min="0"
+                max="100"
+                class="mb-0 ce-input-with-unit"
+                id="point"
+                size="md"
+                style="width: 123px"
+              >
+                <div slot="unit">%</div>
+              </app-input>
+            </div>
+          </div>
+
+          <div class="row align-items-center mb-4">
+            <div class="col-md-2">
+              <label for="count" class="text-gray">Số lần làm bài</label>
+            </div>
+
+            <div class="col-md-10">
+              <app-input
+                type="number"
+                class="mb-0"
+                id="count"
+                size="md"
+                style="width: 123px"
+              >
+
+              </app-input>
             </div>
           </div>
 
@@ -68,10 +104,11 @@
             <app-button
               size="sm"
               color="primary"
+              class=""
               square
               normal
             >
-              Tạo bài tập
+              Tạo bài kiểm tra
             </app-button>
           </div>
         </div>
@@ -302,5 +339,5 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/classroom/create/_create-exercise.scss";
+  @import "~/assets/scss/components/classroom/create/_create-exam.scss";
 </style>

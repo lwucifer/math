@@ -11,8 +11,7 @@
         <div class="manager-content">
           <create-classroom v-if="actived == 'classroom'"></create-classroom>
           <create-exercise v-if="actived == 'exercise'"></create-exercise>
-<!--          <create-classroom v-if="actived == 'classroom'"></create-classroom>-->
-<!--          <create-classroom v-if="actived == 'classroom'"></create-classroom>-->
+          <create-exam v-if="actived == 'exam'"></create-exam>
         </div>
       </div>
     </div>
@@ -23,6 +22,7 @@
   import CreateAside from "~/components/page/classroom/create/CreateAside"
   import CreateClassroom from "~/components/page/classroom/create/CreateClassroom"
   import CreateExercise from "~/components/page/classroom/create/CreateExercise"
+  import CreateExam from "~/components/page/classroom/create/CreateExam"
 
   import {mapState} from "vuex";
   import * as actionTypes from "~/utils/action-types";
@@ -33,11 +33,12 @@
       CreateAside,
       CreateClassroom,
       CreateExercise,
+      CreateExam
     },
 
     data() {
       return {
-        actived: 'exercise'
+        actived: 'classroom'
       }
     },
     computed: {
