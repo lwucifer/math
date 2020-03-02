@@ -5,26 +5,89 @@
         <SchoolManagerSide active="4" />
       </div>
       <div class="col-md-9">
-        <div class="school-account__main box">
-          <div class="d-flex">
-            <h6 class="color-red">Thêm mới giáo viên</h6>
-            <n-link :to="'/school/manager/teacher'" class="ml-auto">
-              <IconClose class="fill-999" width="13" height="13" />
-            </n-link>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <app-input :value="name" label="Tên trường" disabled />
-              <app-input v-model="address" label="Địa chỉ" />
-              <app-input v-model="email" label="Email" />
+        <div class="box">
+          <div class="school-manager__box">
+            <div class="d-flex mb-3">
+              <h6 class="color-red">Thêm mới giáo viên</h6>
+              <n-link :to="'/school/manager/teacher'" class="ml-auto">
+                <IconClose class="fill-999" width="13" height="13" />
+              </n-link>
             </div>
-            <div class="col-md-6">
-              <app-input :value="code" label="Mã trường" disabled />
-              <app-input v-model="phone" label="Số điện thoại" />
+            <div class="row school-manager__from">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>
+                    Mã giáo viên
+                    <span class="color-red">*</span>
+                  </label>
+                  <input type="text" :value="code" disabled class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label>
+                    Họ và tên
+                    <span class="color-red">*</span>
+                  </label>
+                  <input type="text" :value="name" class="form-control" />
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>
+                        Ngày sinh
+                        <span class="color-red">*</span>
+                      </label>
+                      <app-date-picker class="form-control" v-model="birthday" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>
+                        Giới tính
+                        <span class="color-red">*</span>
+                      </label>
+                      <app-select-sex v-model="sex" :sex="sex" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>
+                    Tổ chuyên môn
+                    <span class="color-red">*</span>
+                  </label>
+                  <app-vue-select
+                    class="app-vue-select"
+                    v-model="filter.course"
+                    :options="courses"
+                    label="text"
+                    placeholder="Lựa chọn"
+                    searchable
+                    clearable
+                    @input="handleChangedInput"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                  ></app-vue-select>
+                </div>
+                <div class="form-group">
+                  <label>
+                    Số điện thoại
+                    <span class="color-red">*</span>
+                  </label>
+                  <input type="text" :value="phone" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label>
+                    Email
+                    <span class="color-red">*</span>
+                  </label>
+                  <input type="text" :value="email" class="form-control" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="text-center mt-4">
-            <app-button size="sm" normal square>Hoàn thành</app-button>
+            <div class="text-center mt-4">
+              <app-button size="sm" normal square>Hoàn thành</app-button>
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +115,23 @@ export default {
       isAuthenticated: true,
       school: SCHOOL,
       avatar: [],
-      avatarSrc: "https://picsum.photos/170/170"
+      sex: "nam",
+      avatarSrc: "https://picsum.photos/170/170",
+      filter: {
+        course: null,
+        status: null,
+        time: null
+      },
+      courses: [
+        {
+          value: 1,
+          text: "Khóa học 1"
+        },
+        {
+          value: 2,
+          text: "Khóa học 2"
+        }
+      ]
     };
   },
 
