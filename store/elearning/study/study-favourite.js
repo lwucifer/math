@@ -30,9 +30,9 @@ const actions = {
       console.log(error);
     }
   },
-  async [actionTypes.ELEARNING_STURY_FAVOURITE.ADD]({ commit }) {
+  async [actionTypes.ELEARNING_STURY_FAVOURITE.ADD]({ commit }, options) {
     try {
-      const result = await new Favourite(this.$axios)[actionTypes.BASE.ADD]();
+      const result = await new Favourite(this.$axios)[actionTypes.BASE.ADD](options);
       commit(
         mutationTypes.ELEARNING_STUDY_FAVOURITE
           .SET_ELEARNING_STUDY_FAVOURITE_ADD,
