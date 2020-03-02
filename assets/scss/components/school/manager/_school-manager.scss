@@ -9,3 +9,37 @@
         padding: 2rem;
     }
 }
+.school-manager__content {
+    background-color: #fff;
+}
+.school-manager__nav {
+    >a {
+        display: inline-block;
+        padding: .7rem 0;
+        color: #666;
+        cursor: pointer;
+        + a {
+            margin-left: 4rem;
+        }
+        &:hover {
+            color: #333;
+        }
+        &.active {
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid $color-primary;
+        }
+    }
+}
+.filter-form {
+    align-items: center;
+}
+.p-4 {
+    padding: 2rem;
+}
+.p-3 {
+    padding: 1rem;
+}
+.bg-white {
+    background-color: #fff;
+}
