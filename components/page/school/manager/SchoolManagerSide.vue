@@ -13,7 +13,7 @@
     >
       <IconCalendar />Quản lý tổ chuyên môn
     </n-link>
-    <div class="item" :class="active == 41 || active == 42? 'active' : ''">
+    <div class="item" :class="active == 4? 'active' : ''">
       <div class="d-flex w-100">
         <IconBooks />Quản lý giáo viên
         <button @click="subMenu = !subMenu" class="ml-auto">
@@ -26,14 +26,12 @@
           <n-link
             class="link-gray"
             :to="'/school/manager/teacher/'"
-            :class="active == 41 ? 'active' : ''"
           >Hồ sơ giáo viên</n-link>
         </li>
         <li>
           <n-link
             class="link-gray"
             :to="'/school/manager/teacher/'"
-            :class="active == 42 ? 'active' : ''"
           >Phân công giảng dạy</n-link>
         </li>
       </ul>
@@ -83,7 +81,7 @@ export default {
 
   data() {
     return {
-      subMenu: false
+      subMenu: this.active == 4 ? true : false
     }
   },
 };
