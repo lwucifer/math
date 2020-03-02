@@ -47,27 +47,12 @@
         </div>
       </div>
     </app-modal>
-    <app-modal
-      centered
-      :width="400"
-      :component-class="{ 'auth-modal': true }"
-      v-if="modalSuccessUpdate"
-    >
-      <h3 class="color-primary" slot="header"></h3>
-
-      <div slot="content">
-        <p class="line-height-2">
-          <br />Bạn đã update thành công
-          <br />
-        </p>
-        <app-button
-          color="primary"
-          square
-          fullWidth
-          @click.prevent="modalSuccessUpdate = false"
-        >Xác nhận</app-button>
-      </div>
-    </app-modal>
+    <app-notify-modal
+      :show="notify.showNotify"
+      :message="notify.message"
+      :link="notify.redirectLink"
+      @close="closeNotify"
+    />
   </div>
 </template>
 
@@ -95,7 +80,12 @@ export default {
       error: false,
       messageError: "",
       validate: "",
-      modalSuccessUpdate: ""
+      modalSuccessUpdate: "",
+      notify: {
+        redirectLink: "",
+        message: "",
+        showNotify: false
+      }
     };
   },
   methods: {
@@ -113,7 +103,11 @@ export default {
           this.$emit("click-close");
           const userId = this.personalList.id;
           this.accountPersonalList(userId);
-          this.modalSuccessUpdate = true;
+          this.notify = {
+            redirectLink: "",
+            message: "Bạn đã cập nhật thành công",
+            showNotify: true
+          };
         } else {
           this.validate = VALIDATE_STATUS.ERROR;
           this.showErrorUpdate(result);
@@ -137,12 +131,15 @@ export default {
     },
     closeModal() {
       this.$emit("click-close");
-      this.reset();
+      // this.reset();
     },
     reset() {
       this.error = false;
       this.messageError = "";
       this.validate = VALIDATE_STATUS.DEFAULT;
+    },
+    closeNotify() {
+      this.notify.showNotify = false;
     }
   },
 

@@ -65,7 +65,8 @@ export default {
       content: "",
       extensions: [
         new Placeholder({
-          showOnlyCurrent: false,
+          showOnlyCurrent: true,
+          showOnlyWhenEditable: true,
           emptyNodeText: "Viết bình luận"
         })
       ]

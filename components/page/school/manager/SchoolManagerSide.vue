@@ -13,12 +13,12 @@
     >
       <IconCalendar />Quản lý tổ chuyên môn
     </n-link>
-    <div class="item" :class="active == 4? 'active' : ''">
+    <div class="item" :class="active == 41 || active == 42? 'active' : ''">
       <div class="d-flex w-100">
         <IconBooks />Quản lý giáo viên
         <button @click="subMenu = !subMenu" class="ml-auto">
-          <IconAngleDown v-if="subMenu" height="16" width="16"/>
-          <IconAngleUp v-else height="16" width="16"/>
+          <IconAngleDown v-if="subMenu" height="18" width="18"/>
+          <IconAngleUp v-else height="18" width="18"/>
         </button>
       </div>
       <ul v-if="subMenu">
