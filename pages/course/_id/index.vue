@@ -25,9 +25,7 @@
         v-if="!get(elearningInfo, 'free', false)"
       >
         <IconUsd class="mr-2" />
-        {{
-          get(elearningInfo, "price.original_price", 0) | toThousandFilter()
-        }}
+        {{ get(elearningInfo, "price.original_price", 0) | toThousandFilter() }}
         đ
       </div>
       <div class="price color-red bold" v-else>
@@ -175,7 +173,7 @@
               <div class="info-item">
                 Môn học:
                 <strong class="color-primary">{{
-                  (get(elearningProgram, "subject"), "")
+                  get(elearningProgram, "subject", "")
                 }}</strong>
               </div>
               <div class="info-item">

@@ -5,7 +5,8 @@
       v-model="text"
       @change="change()"
       valueType="format"
-      format="DD/MM/YYYY"
+      :format="valueFormat"
+      :type="type"
       :placeholder="placeholder"
     >
       <template v-slot:icon-calendar>
@@ -41,6 +42,15 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    valueFormat: {
+      type: String,
+      default: 'DD/MM/YYYY'
+    },
+    type: {
+      type: String,
+      default: 'date',
+      validator: value => ['date', 'datetime', 'year', 'month', 'time', 'week'].includes(value)
     }
   },
 
