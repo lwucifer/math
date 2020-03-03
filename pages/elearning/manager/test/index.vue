@@ -8,10 +8,10 @@
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
             <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <div class="elearning-manager-content__title__nav">
-                <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Bài tập</a>
-                <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>
-            </div>
+              <div class="elearning-manager-content__title__nav">
+                  <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Bài tập</a>
+                  <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>
+              </div>
             <hr class />
           </div>
 
