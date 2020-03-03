@@ -2,22 +2,54 @@
    <div class="department-side">
        <div>
            <div class="editavatar__Department">
-               <app-avatar src="https://picsum.photos/150/150" :size="125"/>
-               <div class="btn-camera">
+               <app-avatar :src="department.avatar" :size="125" class="change-avatar"/>
+               <app-upload class="btn-camera">
                    <IconCamera/>
-               </div>
+               </app-upload>
            </div>
-           <strong style="border:1px solid red;">Phòng GDĐT Huyện Mê Linh</strong>
+           <p class="department__name">{{department.name}}</p>
+           <div class="department-side-link">
+               <n-link class="link-gray" to :class="active == 1 ? 'active' : ''">
+                    <IconUser3 width="20" height="20"/>Thông tin tài khoản
+                </n-link>
+                <n-link class="link-gray" to :class="active == 2 ? 'active' : ''">
+                    <IconBell />Thông báo
+                </n-link>
+                <n-link class="link-gray" to :class="active == 3 ? 'active' : ''">
+                    <IconHistory />Lịch sử giao dịch
+                </n-link>
+                <n-link class="link-gray" to :class="active == 4 ? 'active' : ''">
+                    <IconExclamation />Trợ giúp
+                </n-link>
+           </div>
        </div>
    </div>
  </template>
  
  <script>
- import IconCamera from "~/assets/svg/icons/camera.svg?inline"
+import IconExclamation from "~/assets/svg/icons/exclamation.svg?inline";
+import IconUser3 from "~/assets/svg/icons/user3.svg?inline";
+import IconHistory from "~/assets/svg/icons/history.svg?inline";
+import IconBell from "~/assets/svg/icons/bell.svg?inline";
+import IconCamera from "~/assets/svg/icons/camera.svg?inline"
  export default {
      components:{
-         IconCamera
-     }
+         IconCamera,
+         IconExclamation,
+         IconUser3,
+         IconHistory,
+         IconBell
+     },
+     props: {
+        department: {
+        type: Object,
+        required: true,
+        default: () => {}
+        },
+        active: {
+        type: [String, Number]
+        }
+    }
  }
  </script>
  
