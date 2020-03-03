@@ -24,21 +24,6 @@
         @handleChangedWard="handleChangedWard"
       />
 
-      <div class="school-filter__form__item">
-        <app-vue-select
-          class="app-vue-select"
-          :v-model="filter.level"
-          :options="[{ name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 }]"
-          label="name"
-          :reduce="value => value"
-          placeholder="Theo cấp học"
-          searchable
-          clearable
-          @input="handleChangedLevel"
-        >
-        </app-vue-select>
-      </div>
-
       <div class="school-filter__form--right">
         <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
           <app-search
