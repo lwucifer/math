@@ -66,7 +66,7 @@ export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subj
  */
 export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
 export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
-export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/study/favourite`;
+export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/study/votes`;
 
 /**
