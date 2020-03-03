@@ -45,5 +45,5 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 4. Tail log
     - view logs: pm2 logs
-    - monitor app: pm2 monit.
+    - monitor app: pm2 monit
 
