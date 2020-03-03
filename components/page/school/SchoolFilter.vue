@@ -7,7 +7,7 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <!-- <div class="school-filter__form__item">
+      <div class="school-filter__form__item">
         <app-button
           color="primary"
           @click="submit"
@@ -16,7 +16,7 @@
           <IconFilter />
           <span>Lọc kết quả</span>
         </app-button>
-      </div> -->
+      </div>
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
@@ -25,7 +25,7 @@
       />
 
       <div class="school-filter__form--right">
-        <div class="school-filter__form__item school-filter__form__item--search">
+        <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
           <app-search
             class=""
             :placeholder="'Nhập để tìm kiếm...'"
@@ -64,6 +64,14 @@ export default {
       type: Array,
       required: true,
       default: () => []
+    },
+    hasSearch: {
+      type: Boolean,
+      default: true
+    },
+    hasSchoolLevel: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -93,6 +101,9 @@ export default {
     },
     handleChangeSearch(val) {
       this.$emit('handleChangeSearch', val)
+    },
+    handleChangedLevel(level) {
+      this.$emit("handleChangedLevel", level);
     },
     handleFocusSearchInput() {
       // console.log("[Component] SchoolFilter: focus searching ");
