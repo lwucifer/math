@@ -61,11 +61,13 @@
             {{ option.text }}
           </div>
 
-          <infinite-loading
-            slot="options-append"
-            :identifier="friendsInfiniteId"
-            @infinite="friendsInfiniteHandler"
-          />
+          <client-only>
+            <infinite-loading
+              slot="options-append"
+              :identifier="friendsInfiniteId"
+              @infinite="friendsInfiniteHandler"
+            />
+          </client-only>
         </app-select>
         <app-divider class="ma-0" />
       </div>
