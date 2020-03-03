@@ -7,11 +7,9 @@
         <div class="col-md-8">
           <PostEditor @submit="handlePostEditorSubmit" />
 
-          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
+          <VclFacebook v-if="loading" class="bg-white" />
 
-          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
-
-          <template v-show="!loading">
+          <template v-else>
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
@@ -234,7 +232,13 @@ import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
-import { MESSAGES, COURSES_LIST, TIMELINE_SLIDER_ITEMS } from "~/server/fakedata/timeline";
+import { createPost } from "~/models/post/Post";
+import {
+  MESSAGES,
+  COURSES_LIST,
+  TIMELINE_SLIDER_ITEMS
+} from "~/server/fakedata/timeline";
+import { VclFacebook } from "vue-content-loading";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -256,13 +260,14 @@ export default {
     Post,
     PostSlider,
     PostDetail,
-    PostImage
+    PostImage,
+    VclFacebook
   },
 
   async fetch({ params, query, store }) {
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
-      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_LABEL.LIST}`)
     ]);
   },
 
@@ -302,11 +307,13 @@ export default {
     }
   },
 
-  mounted() {
-    setTimeout(() => {
+  created() {
+    this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`).then(() => {
       this.loading = false;
-    }, 500);
+    });
+  },
 
+  mounted() {
     if (process.browser) {
       window.addEventListener("popstate", event =>
         setTimeout(() => this.handlePopstate(event))
@@ -399,10 +406,12 @@ export default {
      */
     async handlePostEditorSubmit(data) {
       const formData = new FormData();
-      for (const key in data) {
+      const dataWithModel = createPost(data);
+
+      for (const key in dataWithModel) {
+        console.log('key', key)
         formData.append(key, data[key]);
       }
-      console.log("formData after append", FormData);
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL_POST.ADD}`,
         formData

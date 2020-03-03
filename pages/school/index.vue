@@ -7,6 +7,7 @@
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
+        @handleChangeSearch="handleChangeSearch"
       >
       </school-filter>
       <!--Detail school types-->
@@ -63,7 +64,8 @@ export default {
       // list: SCHOOL_TYPE_DETAILS,
       province_id: "",
       district_id: "",
-      ward_id: ""
+      ward_id: "",
+      keyword: ""
     };
   },
 
@@ -85,6 +87,9 @@ export default {
     },
     ward_id() {
       this.handleGetSchoolsByLocation();
+    },
+    keyword() {
+      this.handleGetSchoolsByLocation();
     }
   },
 
@@ -101,11 +106,15 @@ export default {
     handleChangeProvince(province) {
       this.province_id = get(province, "id", "");
     },
+    handleChangeSearch(keyword) {
+      this.keyword = keyword;
+    },
     handleGetSchoolsByLocation() {
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;
       if (this.ward_id) params.ward_id = this.ward_id;
+      if (this.keyword) params.keyword = this.keyword;
       const options = { params };
       this.$store.dispatch(
         `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,

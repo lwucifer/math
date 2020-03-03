@@ -25,9 +25,7 @@
         v-if="!get(elearningInfo, 'free', false)"
       >
         <IconUsd class="mr-2" />
-        {{
-          get(elearningInfo, "price.original_price", 0) | toThousandFilter()
-        }}
+        {{ get(elearningInfo, "price.original_price", 0) | toThousandFilter() }}
         đ
       </div>
       <div class="price color-red bold" v-else>
@@ -72,85 +70,12 @@
             >
           </div>
 
-          <div class="box" id="tab1">
-            <h5 class="mb-4">Lợi ích từ bài giảng</h5>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span>Bạn sẽ biết, học được các cách</span>
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Có được Nguồn hàng kinh doanh khi liên hệ trực tiếp với người
-                  bán, nhà cung cấp</span
-                >
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Cách nghiên cứu, theo dõi và học hỏi từ chính Đối thủ cạnh
-                  tranh của bạn qua các công cụ Miễn phí</span
-                >
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Nhận diện chân dung khách hàng Tiềm năng của mình, cách xây
-                  dựng chính sách chăm sóc khách hàn</span
-                >
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Nhận diện chân dung khách hàng Tiềm năng của mình, cách xây
-                  dựng chính sách chăm sóc khách hàn</span
-                >
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Tự tin xây dựng đồng bộ các kênh Marketing (Facebook,
-                  Instagram, Zalo, Youtube, Email Marketing,...) qua từng bước
-                  chia sẻ chi tiết</span
-                >
-              </div>
-            </div>
-          </div>
+          <cource-general />
 
           <div class="box">
             <h5 class="mb-4">Mô tả tổng quát</h5>
             <div>
-              {{ elearningInfo.description }}
-              <!-- <p>
-                - Bạn đang mong muốn xây dựng một Hệ thống Kinh doanh Online Bài
-                Bản cho riêng mình mà vẫn chưa tìm được hướng đi rõ ràng từ việc
-                xác định sản phẩm kinh doanh - mô hình kinh doanh phù hợp, cách
-                để liên hệ nhà cung cấp để đàm phán nhập hàng, cách nghiên cứu
-                khách hàng, đối thủ, quảng cáo và tối ưu...... ?
-              </p>
-              <p>
-                - Bạn đã có kinh nghiệm Kinh doanh online, và đang mong muốn mở
-                rộng Hệ Thống Online Đa Kênh ngoài kênh truyền thống sang
-                Facebook, Instagram, Zalo, Youtube, Email Marketing, Website,
-                SMS...?
-              </p> -->
+              {{ get(elearningInfo, "description", "") }}
             </div>
             <div class="text-center mt-3 mb-3">
               <a class="btn-load-more">Xem thêm</a>
@@ -159,51 +84,11 @@
 
           <div id="tab2" class="box course-view__content">
             <h5>Nội dung bài giảng</h5>
-            <div class="info">
-              <div class="info-item">
-                Thể loại:
-                <strong class="color-primary">{{
-                  get(elearningProgram, "subject", "")
-                }}</strong>
-              </div>
-              <div class="info-item">
-                Trình độ:
-                <strong class="color-primary">{{
-                  get(elearningProgram, "level", "")
-                }}</strong>
-              </div>
-              <div class="info-item">
-                Môn học:
-                <strong class="color-primary">{{
-                  (get(elearningProgram, "subject"), "")
-                }}</strong>
-              </div>
-              <div class="info-item">
-                Số bài giảng:
-                <strong class="color-primary">{{
-                  (get(elearningProgram, "lessons"), "")
-                }}</strong>
-              </div>
-              <div class="info-item">
-                Thời lượng:
-                <strong class="color-primary">{{
-                  get(elearningProgram, "duration", "")
-                }}</strong>
-              </div>
-            </div>
-
-            <div class="content-item">
-              <IconPlayO class="mr-3" />Bài 1: Tạo và tối ưu tài khoản Instagram
-              trên máy tính
-              <span class="ml-auto">23:50</span>
-            </div>
-            <div class="content-item">
-              <IconBooks class="fill-primary mr-3" />Tài liệu đính kèm
-              <strong class="ml-auto color-primary d-flex-center">
-                Tải về
-                <IconDownload class="ml-2" />
-              </strong>
-            </div>
+            <cource-program
+              :program="program"
+              v-for="program in get(elearningProgram, 'programs', [])"
+              :key="get(program, 'id', '')"
+            />
           </div>
 
           <div id="tab3" class="box">
@@ -242,6 +127,8 @@
 
 <script>
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
+import CourceGeneral from "~/components/page/course/CourceGeneral";
+import CourceProgram from "~/components/page/course/CourceProgram";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconUsd from "~/assets/svg/icons/usd.svg?inline";
 import IconSuccess from "~/assets/svg/icons/success.svg?inline";
@@ -268,7 +155,9 @@ export default {
     IconPlayO,
     IconBooks,
     IconDownload,
-    CourseTeacherInfo
+    CourseTeacherInfo,
+    CourceProgram,
+    CourceGeneral
   },
 
   async fetch({ params, query, store }) {

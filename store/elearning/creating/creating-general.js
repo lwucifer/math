@@ -6,7 +6,7 @@ import General from "~/services/elearning/creating/General";
  * initial state
  */
 const state = () => ({
-  general: []
+  general: null
 });
 
 /**
@@ -18,13 +18,16 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, options) {
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
-      // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_GENERAL.SET_ELEARNING_CREATING_GENERAL_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_GENERAL
+          .SET_ELEARNING_CREATING_GENERAL_LIST,
+        result.data
+      );
     } catch (error) {
       console.log("[Creating general] list.error", error);
     }
@@ -53,7 +56,7 @@ const actions = {
       console.log("[Creating general] edit.error", error);
     }
   },
-  
+
   async [actionTypes.ELEARNING_CREATING_GENERAL.DELETE]({ commit }, payload) {
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.DELETE](
@@ -71,8 +74,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_GENERAL.SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
-    console.log("SET_ELEARNING_CREATING_GENERAL_LIST", general);
+  [mutationTypes.ELEARNING_CREATING_GENERAL
+    .SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
     state.general = general;
   }
 };
