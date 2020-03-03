@@ -70,72 +70,12 @@
             >
           </div>
 
-          <div class="box" id="tab1">
-            <h5 class="mb-4">Lợi ích từ bài giảng</h5>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span>Bạn sẽ biết, học được các cách</span>
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Có được Nguồn hàng kinh doanh khi liên hệ trực tiếp với người
-                  bán, nhà cung cấp</span
-                >
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Cách nghiên cứu, theo dõi và học hỏi từ chính Đối thủ cạnh
-                  tranh của bạn qua các công cụ Miễn phí</span
-                >
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Nhận diện chân dung khách hàng Tiềm năng của mình, cách xây
-                  dựng chính sách chăm sóc khách hàn</span
-                >
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Nhận diện chân dung khách hàng Tiềm năng của mình, cách xây
-                  dựng chính sách chăm sóc khách hàn</span
-                >
-              </div>
-              <div class="col-md-6 d-flex mb-15">
-                <div class="icon mr-2">
-                  <IconSuccess width="16" height="16" />
-                </div>
-                <span
-                  >Tự tin xây dựng đồng bộ các kênh Marketing (Facebook,
-                  Instagram, Zalo, Youtube, Email Marketing,...) qua từng bước
-                  chia sẻ chi tiết</span
-                >
-              </div>
-            </div>
-          </div>
+          <cource-general />
 
           <div class="box">
             <h5 class="mb-4">Mô tả tổng quát</h5>
             <div>
-              {{ elearningInfo.description }}
+              {{ get(elearningInfo, "description", "") }}
             </div>
             <div class="text-center mt-3 mb-3">
               <a class="btn-load-more">Xem thêm</a>
@@ -187,6 +127,7 @@
 
 <script>
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
+import CourceGeneral from "~/components/page/course/CourceGeneral";
 import CourceProgram from "~/components/page/course/CourceProgram";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconUsd from "~/assets/svg/icons/usd.svg?inline";
@@ -215,7 +156,8 @@ export default {
     IconBooks,
     IconDownload,
     CourseTeacherInfo,
-    CourceProgram
+    CourceProgram,
+    CourceGeneral
   },
 
   async fetch({ params, query, store }) {
