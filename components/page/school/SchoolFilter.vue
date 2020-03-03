@@ -7,7 +7,7 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <!-- <div class="school-filter__form__item">
+      <div class="school-filter__form__item">
         <app-button
           color="primary"
           @click="submit"
@@ -16,7 +16,7 @@
           <IconFilter />
           <span>Lọc kết quả</span>
         </app-button>
-      </div> -->
+      </div>
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
@@ -24,8 +24,23 @@
         @handleChangedWard="handleChangedWard"
       />
 
+      <div class="school-filter__form__item">
+        <app-vue-select
+          class="app-vue-select"
+          :v-model="filter.level"
+          :options="[{ name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 }]"
+          label="name"
+          :reduce="value => value"
+          placeholder="Theo cấp học"
+          searchable
+          clearable
+          @input="handleChangedLevel"
+        >
+        </app-vue-select>
+      </div>
+
       <div class="school-filter__form--right">
-        <div class="school-filter__form__item school-filter__form__item--search">
+        <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
           <app-search
             class=""
             :placeholder="'Nhập để tìm kiếm...'"
@@ -80,6 +95,14 @@ export default {
       type: Array,
       required: true,
       default: () => []
+    },
+    hasSearch: {
+      type: Boolean,
+      default: true
+    },
+    hasSchoolLevel: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -106,6 +129,9 @@ export default {
     },
     handleChangedWard(ward) {
       this.$emit("handleChangedWard", ward);
+    },
+    handleChangedLevel(level) {
+      this.$emit("handleChangedLevel", level);
     },
     handleChangedInput(val) {
       // if (val !== null) {
