@@ -38,6 +38,8 @@ export const COMMENTS = `${SCHOOLLY_ALIAS}/social/comments`;
 export const MEDIAS = `${SCHOOLLY_ALIAS}/social/medias`;
 export const NOTIFICATIONS = `${SCHOOLLY_ALIAS}/social/notifications`;
 export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
+export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
+export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
 
 /**
  * ELEARNING
