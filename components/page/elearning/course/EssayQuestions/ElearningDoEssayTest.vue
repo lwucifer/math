@@ -21,9 +21,11 @@
                 <div class="d-flex flex-row align-items-center col" >
                     <span>Câu hỏi số</span>
                 </div>
-                <div class="col d-flex justify-content-end">
-                    <IconPrint class="printQuestion__ElearningCourse"/>
-                    <span>In câu hỏi</span>
+                <div class="col d-flex justify-content-end ">
+                    <button class="elearning-course-btn-print d-flex align-items-center">
+                        <IconPrint class="printQuestion__ElearningCourse"/>
+                        <span>In câu hỏi</span>
+                    </button>
                 </div>
             </div>
             <div class="contentEssayQuestion">
@@ -43,10 +45,11 @@
             </div>
             <div class="d-flex flex-row groupbtnEssayTest__ElearningCourse">
                 <div class="col">
-                    <app-button square size="sm">
+                    <app-button square size="sm" class="elearning-course-uploadfile">
                         <IconUpload class="iconMarginLeft"/>
                         Tải lên câu trả lời
-                    </app-button>
+                         <input type="file"/>
+                    </app-button>  
                 </div>
                 <div class="col d-flex justify-content-end">
                     <button class="btnSummitEssayTest__ElearningCourse" v-on:click="changeDoneQuestion">
