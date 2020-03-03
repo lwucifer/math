@@ -101,8 +101,10 @@ export default {
     },
 
     handleClickOutside() {
-      this.isActive = false;
-      this.$emit("visible-change", false);
+      if (this.isActive) {
+        this.isActive = false;
+        this.$emit("visible-change", false);
+      }
     }
   }
 };

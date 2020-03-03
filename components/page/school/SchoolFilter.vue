@@ -32,8 +32,7 @@
             :counter="11"
             v-model="filter.query"
             :size="'sm'"
-            @submit="handleChangedInput"
-            @input="handleChangedInput"
+            @input="handleChangeSearch"
           >
           </app-search>
         </div>
@@ -61,21 +60,6 @@ export default {
     linkText: {
       type: String
     },
-    // provinces: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
-    // districts: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
-    // villages: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
     schoolTypes: {
       type: Array,
       required: true,
@@ -107,11 +91,8 @@ export default {
     handleChangedWard(ward) {
       this.$emit("handleChangedWard", ward);
     },
-    handleChangedInput(val) {
-      // if (val !== null) {
-      // } else {
-      // }
-      // console.log("[Component] SchoolFilter: changing input...", val);
+    handleChangeSearch(val) {
+      this.$emit('handleChangeSearch', val)
     },
     handleFocusSearchInput() {
       // console.log("[Component] SchoolFilter: focus searching ");

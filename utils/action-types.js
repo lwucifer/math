@@ -58,6 +58,10 @@ export const SOCIAL_FEEDS = {
   LIST: "socialFeedsList"
 };
 
+export const SOCIAL_LABEL = {
+  LIST: "socialLabelList"
+};
+
 export const ACCOUNT_PERSONAL = {
   LIST: "accountPersonalList",
   EDIT: "accountPersonalEdit",
