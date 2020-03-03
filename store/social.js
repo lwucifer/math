@@ -64,12 +64,22 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_POST.DELETE]({ commit }, payload) {
+  async [actionTypes.SOCIAL_POST.DELETE]({ commit, state }, payload) {
     try {
-      const { data: result = {} } = await new SocialPosts(this.$axios)[
+      const result = await new SocialPosts(this.$axios)[
         actionTypes.BASE.DELETE
       ](payload);
-      console.log("[SocialPosts] delete", result);
+
+      if (result.success) {
+        const { feeds } = state;
+        const newlistPost = feeds.listPost
+          ? feeds.listPost.filter(item => item.post_id !== payload)
+          : [];
+        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
+          ...feeds,
+          listPost: newlistPost
+        });
+      }
       return result;
     } catch (err) {
       console.log("[SocialPosts] delete.err", err);
@@ -301,7 +311,10 @@ const actions = {
       console.log("[SocialLabel] list", result);
 
       // set to mutation
-      commit(mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST, result.list_icon || []);
+      commit(
+        mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST,
+        result.list_icon || []
+      );
       return result;
     } catch (err) {
       console.log("[SocialLabel] list.err", err);
@@ -348,10 +361,10 @@ const mutations = {
   [mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST](state, _feeds) {
     state.feeds = _feeds;
   },
-  
+
   [mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST](state, labels) {
     state.labels = labels;
-  },
+  }
 };
 
 export default {
