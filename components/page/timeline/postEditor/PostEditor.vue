@@ -45,16 +45,29 @@
       <div v-show="showTags">
         <app-select
           mode="tags"
-          :options="tagOptions"
-          v-model="tag"
           class="post-editor__select"
           placeholder="Cùng với ai?"
           style="width: 100%"
+          :options="tagOptions"
+          v-model="tag"
+          @visible-change="handleFriendsVisibleChange"
         >
           <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-            <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+            <app-avatar
+              :src="option.avatar && option.avatar.low ? option.avatar.low : null"
+              size="sm"
+              class="mr-3"
+            ></app-avatar>
             {{ option.text }}
           </div>
+
+          <client-only>
+            <infinite-loading
+              slot="options-append"
+              :identifier="friendsInfiniteId"
+              @infinite="friendsInfiniteHandler"
+            />
+          </client-only>
         </app-select>
         <app-divider class="ma-0" />
       </div>
@@ -139,6 +152,8 @@ import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
 import { getBase64 } from "~/utils/common";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import FriendService from "~/services/social/friend";
 
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
@@ -171,16 +186,11 @@ export default {
       labelDropdrown: false,
       shareWith: 0,
       active: false,
-      tagOptions: [
-        { value: 0, text: "Nguyen Tien Dat" },
-        { value: 1, text: "Nguyen Van A" },
-        { value: 2, text: "Nguyen Van B" },
-        { value: 3, text: "Nguyen Van C" },
-        { value: 4, text: "Nguyen Van D" },
-        { value: 5, text: "Nguyen Van E" },
-        { value: 6, text: "Nguyen Van F" },
-        { value: 7, text: "Nguyen Van G" }
-      ],
+      friendsInfiniteId: +new Date(),
+      friendsListQuery: {
+        page: 1
+      },
+      friendsList: [],
       checkinOptions: [
         { value: 0, text: "Hà Nội" },
         { value: 1, text: "Saudi Arabia" },
@@ -218,6 +228,14 @@ export default {
         item => item.value === this.checkin
       );
       return result.text;
+    },
+
+    tagOptions() {
+      return this.friendsList.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.fullname
+      }));
     }
   },
 
@@ -279,6 +297,33 @@ export default {
       this.labelDropdrown = false;
     },
 
+    async friendsInfiniteHandler($state) {
+      const { data = {} } = await new FriendService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.friendsListQuery
+      });
+
+      if (data.listFriend && data.listFriend.length) {
+        this.friendsListQuery.page += 1;
+        this.friendsList = this.friendsList.concat(data.listFriend);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+
+    handleFriendsVisibleChange(isVisible) {
+      console.log("handleFriendsVisibleChange", isVisible);
+
+      if (isVisible) {
+        this.friendsInfiniteId += 1;
+      } else {
+        this.friendsList = [];
+        this.friendsListQuery.page = 1;
+      }
+    },
+
     submit() {
       console.log("submit", this.editor.getHTML());
 
@@ -291,7 +336,7 @@ export default {
         privacy: 8,
         label_id: null
       });
-    }
+    },
   }
 };
 </script>

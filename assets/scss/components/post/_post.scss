@@ -1,6 +1,7 @@
 .post {
     background-color: #fff;
-    padding: 2rem;
+    padding: 2rem 2rem 0 2rem;
+    overflow: hidden;
 }
 
 .post__top {
@@ -104,6 +105,7 @@
 
 .post__comment-list {
     margin-top: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .post .post-slider {
