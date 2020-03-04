@@ -94,7 +94,7 @@
           <div id="tab3" class="box">
             <h5 class="mb-4">Thông tin giáo viên</h5>
             <course-teacher-info
-              :teacher="get(elearningInfo, 'teacher', {})"
+              :teacher="get(elearningInfo, 'teacher', null)"
               class="mb-4"
             />
             <hr />
@@ -211,6 +211,9 @@ export default {
   },
   methods: {
     get
+  },
+  created() {
+    console.log(this.elearningInfo)
   }
 };
 </script>
