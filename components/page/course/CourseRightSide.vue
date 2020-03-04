@@ -77,22 +77,23 @@ export default {
   },
 
   created() {
-    const elearning_id = get(this, "$route.params.id", "");
-    const options = {
-      params: {
-        elearning_id
-      }
-    };
-    this.$store.dispatch(
-      `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
-      options
-    );
+    this.fetchStudyFavourite();
   },
 
   computed: {
     ...mapState("elearning/study/study-favourite", {
       favourites: "favourites"
     })
+  },
+
+  watch: {
+    "$route.params.id": {
+      handler: function() {
+        this.fetchStudyFavourite();
+      },
+      deep: true,
+      immediate: false
+    }
   },
 
   data() {
@@ -114,7 +115,19 @@ export default {
       this.$toasted.show("success");
     },
     get,
-    numeral
+    numeral,
+    fetchStudyFavourite() {
+      const elearning_id = get(this, "$route.params.id", "");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
+        options
+      );
+    }
   }
 };
 </script>

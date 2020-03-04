@@ -61,15 +61,13 @@ export default {
   },
 
   created() {
-    const options = {
-      params: {
-        id: get(this, "teacher.id", "")
-      }
-    };
-    this.$store.dispatch(
-      `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,
-      options
-    );
+    this.fetchTeacherInfo();
+  },
+
+  watch: {
+    "teacher.id": function(id) {
+      this.fetchTeacherInfo();
+    }
   },
 
   computed: {
@@ -79,7 +77,18 @@ export default {
   },
 
   methods: {
-    get
+    get,
+    fetchTeacherInfo() {
+      const options = {
+        params: {
+          id: get(this, "teacher.id", "")
+        }
+      };
+      this.$store.dispatch(
+        `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,
+        options
+      );
+    }
   }
 };
 </script>
