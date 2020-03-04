@@ -105,7 +105,7 @@
           </div>
         </div>
         <div class="col-md-3">
-          <course-right-side :data="{}" />
+          <course-right-side />
         </div>
       </div>
     </div>
