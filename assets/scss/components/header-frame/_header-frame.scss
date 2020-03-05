@@ -1,0 +1,59 @@
+.the-header {
+  background-color: #fff;
+  padding: 2rem .5rem;
+  .btn-login {
+    font-weight: bold;
+    color: #999;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.the-header__content {
+  display: flex;
+  align-items: center;
+}
+
+.the-header__logo {
+  flex-shrink: 0;
+  margin-right: 7px;
+
+  svg {
+    display: block;
+    width: 130px;
+    //height: 40px;
+  }
+}
+
+.the-header__right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.header-exercise__user {
+  display: flex;
+  align-items: center;
+}
+
+.the-header__function-menu {
+  margin-left: auto;
+}
+
+.the-header__user-avt {
+  margin-left: 4rem;
+}
+
+.btn-primary-header {
+  color: #FBFBFB !important;
+  background-color: $color-primary;
+}
+
+.btn-secondary-header {
+  color: #fff;
+  background-color: #ccc;
+}
+
+.app-noti-header {
+  margin-left: 3rem;
+}

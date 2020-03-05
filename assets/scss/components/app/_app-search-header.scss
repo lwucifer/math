@@ -1,0 +1,30 @@
+.app-search {
+  margin: 0 2rem;
+  &__input {
+    border: 1px solid $color-primary;
+
+    input {
+      width: 45.5rem;
+      height: 3.8rem;
+      background-color: #F8F8F8;
+      padding: 0 13px;
+      &::placeholder {
+        font-size: 1.4rem;
+        color: #BDBDBD;
+      }
+    }
+    .submit-btn {
+      height: 3.8rem;
+      width: 4rem;
+      text-align: center;
+      background-color: $color-primary;
+      svg path {
+        fill: #fff;
+      }
+    }
+  }
+}
+
+.app-search__input {
+
+}
