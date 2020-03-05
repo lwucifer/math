@@ -204,6 +204,10 @@ export const SCHOOL_INFO = {
   INFO: "schoolInfo"
 };
 
+export const SCHOOL_ELEARNING = {
+  LIST: "schoolElearning"
+};
+
 export const SCHOOL_PROFESSIONAL = {
   LIST: "schoolProfessionalList",
   ADD: "schoolProfessionalAdd",

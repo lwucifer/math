@@ -77,6 +77,7 @@ export const SCHOOL_CLASSES = `${SCHOOLLY_ALIAS}/elearning/school/admin/classes`
 export const SCHOOL_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/school/summary`;
 export const SCHOOL_SEARCH = `${SCHOOLLY_ALIAS}/elearning/school/search`;
 export const SCHOOL_INFO = `${SCHOOLLY_ALIAS}/elearning/school/info`;
+export const SCHOOL_ELEARNING = `${SCHOOLLY_ALIAS}/elearning/school/elearnings`;
 export const SCHOOL_PROFESSIONAL = `${SCHOOLLY_ALIAS}/elearning/school/admin/professional`;
 export const SCHOOL_STUDENT = `${SCHOOLLY_ALIAS}/elearning/school/admin/students`;
 export const SCHOOL_TEACHER = `${SCHOOLLY_ALIAS}/elearning/school/admin/teachers`;
