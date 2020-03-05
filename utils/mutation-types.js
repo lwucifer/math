@@ -52,6 +52,10 @@ export const ELEARNING_PUBLIC_CATEGORY = {
   SET_ELEARNING_PUBLIC_CATEGORY_LIST: "setElearningPublicCategoryList"
 };
 
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
 };

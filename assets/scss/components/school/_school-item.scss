@@ -6,6 +6,10 @@
 
     .school-item__thumnail {
         text-align: center;
+        img {
+            width: 100%;
+            height: auto;
+        }
     }
 
     .school-item__info {
@@ -19,7 +23,7 @@
         font-weight: bold;
         font-size: 1.4rem;
         color: #333333;
-        margin: .75rem 0;
+        margin: 0 0 .75rem 0;
     }
 
     .school-item__info__statistic-item {

@@ -1,7 +1,7 @@
 <template>
   <fragment v-if="get(lesson, 'format', '') === 'VIDEO'">
     <IconPlayO class="mr-3" />{{ get(lesson, "name", "") }}
-    <span class="ml-auto">23:50</span>
+    <span class="ml-auto">{{ get(lesson, "duration", "") }}</span>
   </fragment>
 </template>
 

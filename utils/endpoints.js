@@ -45,6 +45,7 @@ export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = `${SCHOOLLY_ALIAS}/elearning/public/elearning/teacher`;
 export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
 export const ELEARNING_PUBLIC_PLACE_DISTRICTS = `${SCHOOLLY_ALIAS}/elearning/public/place/districts`;

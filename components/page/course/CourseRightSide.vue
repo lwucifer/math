@@ -1,8 +1,10 @@
 <template>
   <div class="course-right-side">
-    <img :src="banner" alt />
+    <img :src="get(favourites, 'content.0.avatar', '')" alt />
     <div class="price">
-      Miễn phí
+      {{
+        numeral(get(favourites, "content.0.price.original_price", 0)).format()
+      }}
     </div>
     <app-button
       color="secondary"
@@ -12,10 +14,22 @@
       >Tham gia học</app-button
     >
     <ul class="info">
-      <li><IconBook class="mr-2" />Trình độ: Lớp 10</li>
-      <li><IconSubject class="mr-2" />Môn học: Toán</li>
-      <li><IconLessons class="mr-2" />Số bài giảng: 1 bài</li>
-      <li><IconClock class="mr-2" />Thời lượng: 15 phút</li>
+      <li>
+        <IconBook class="mr-2" />Trình độ:
+        {{ get(favourites, "content.0.level", 0) }}
+      </li>
+      <li>
+        <IconSubject class="mr-2" />Môn học:
+        {{ get(favourites, "content.0.subject", "") }}
+      </li>
+      <li>
+        <IconLessons class="mr-2" />Số bài giảng:
+        {{ get(favourites, "content.0.learning.total_lesson", 0) }}
+      </li>
+      <li>
+        <IconClock class="mr-2" />Thời lượng:
+        {{ get(favourites, "content.0.duration", 0) }}
+      </li>
       <li>
         <IconEye class="mr-2" />Xem được trên máy tính, điện thoại, tablet
       </li>
@@ -42,6 +56,8 @@ import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import { get } from "lodash";
 import * as actionTypes from "../../../utils/action-types";
+import { mapState } from "vuex";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -57,6 +73,26 @@ export default {
     date: {
       type: Object,
       default: () => {}
+    }
+  },
+
+  created() {
+    this.fetchStudyFavourite();
+  },
+
+  computed: {
+    ...mapState("elearning/study/study-favourite", {
+      favourites: "favourites"
+    })
+  },
+
+  watch: {
+    "$route.params.id": {
+      handler: function() {
+        this.fetchStudyFavourite();
+      },
+      deep: true,
+      immediate: false
     }
   },
 
@@ -77,6 +113,20 @@ export default {
         options
       );
       this.$toasted.show("success");
+    },
+    get,
+    numeral,
+    fetchStudyFavourite() {
+      const elearning_id = get(this, "$route.params.id", "");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
+        options
+      );
     }
   }
 };

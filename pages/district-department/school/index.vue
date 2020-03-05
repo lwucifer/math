@@ -14,8 +14,20 @@
         @handleChangedWard="handleChangedWard"
         :has-school-level=true
         :has-search=false
+        has-sort
       >
       </school-filter>
+
+      <!--Search-->
+      <search-results
+        v-if="searchResults.length"
+        :list="searchResults"
+        :search-query="'trường học'"
+        :pagination="pagination"
+        @changedSearchPage="changedSearchPage"
+      >
+      </search-results><!--Search-->
+
       <!--Detail school types-->
       <div v-for="(category, index) in categories" :key="index">
         <school-list-box
@@ -30,8 +42,12 @@
 </template>
 
 <script>
-  import SchoolFilter from "~/components/page/school/SchoolFilter";
-  import SchoolListBox from "~/components/page/school/SchoolListBox";
+  import SchoolFilter from "~/components/page/school/SchoolFilter"
+  import SchoolListBox from "~/components/page/school/SchoolListBox"
+  import SearchResults from "~/components/page/district-department/school/SearchResults"
+  // Import faked data
+  import { SCHOOLS } from "~/server/fakedata/school/test"
+
   import { mapState } from "vuex";
   // Import faked data
   import {
@@ -51,7 +67,8 @@
 
     components: {
       SchoolFilter,
-      SchoolListBox
+      SchoolListBox,
+      SearchResults
     },
 
     async fetch({ params, query, store }) {
@@ -70,7 +87,73 @@
         // list: SCHOOL_TYPE_DETAILS,
         province_id: "",
         district_id: "",
-        ward_id: ""
+        ward_id: "",
+        searchResults: [
+          {
+            id: 1,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 2,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 3,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 4,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 5,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 6,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          },
+          {
+            id: 7,
+            avatar: "https://picsum.photos/218/129",
+            name: "Trường THCS Nguyễn Thị Thập",
+            province: "Hà Đông, Hà Nội",
+            teachers: 100,
+            students: 1000
+          }
+        ],
+        pagination: {
+          total: 15,
+          page: 6,
+          pager: 20,
+          totalElements: 55,
+          first: 1,
+          last: 10
+        },
       };
     },
 
@@ -118,6 +201,9 @@
             `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
             options
         );
+      },
+      changedSearchPage(e) {
+
       }
     }
   };
