@@ -17,9 +17,17 @@
         display: flex;
         margin-bottom: 1rem;
 
+        &__item__title {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-right: 1rem;
+        }
+
         &__item {
-            display: inline-block;
+            display: flex;
             margin: 0 5px;
+            align-items: center;
 
             &:last-child {
                 margin-right: 0;
@@ -51,8 +59,12 @@
 
     .school-filter__form--right {
         margin-left: auto;
+        display: flex;
         .school-filter__form__item--search {
             min-width: 33.5rem;
+            .app-search {
+                width: 100%;
+            }
         }
     }
 }

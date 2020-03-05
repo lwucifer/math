@@ -99,6 +99,10 @@ export const ELEARNING_PUBLIC_CATEGORY = {
   LIST: "elearningPublicCategoryList"
 };
 
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  LIST: "elearningPublicElearningTeacherList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
 };

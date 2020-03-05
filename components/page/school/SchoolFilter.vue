@@ -24,6 +24,21 @@
         @handleChangedWard="handleChangedWard"
       />
 
+      <div class="school-filter__form__item" v-if="hasSchoolLevel">
+        <app-vue-select
+          class="app-vue-select"
+          :v-model="filter.level"
+          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
+          label="name"
+          placeholder="Theo cấp học"
+          :reduce="value => value"
+          searchable
+          clearable
+          @input="handleChangedLevel"
+        >
+        </app-vue-select>
+      </div>
+
       <div class="school-filter__form--right">
         <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
           <app-search
@@ -35,6 +50,22 @@
             @input="handleChangeSearch"
           >
           </app-search>
+        </div>
+
+        <div class="school-filter__form__item" v-if="hasSort">
+          <label class="school-filter__form__item__title" for="">Sắp xếp</label>
+          <app-vue-select
+            class="app-vue-select"
+            :v-model="filter.order"
+            :options="[ { name: 'Số học sinh', value: 0 }, { name: 'Số giáo viên', value: 1 } ]"
+            label="name"
+            placeholder="Sắp xếp theo"
+            :reduce="value => value"
+            searchable
+            clearable
+            @input="handleChangedOrder"
+          >
+          </app-vue-select>
         </div>
       </div>
     </div>
@@ -72,6 +103,10 @@ export default {
     hasSchoolLevel: {
       type: Boolean,
       default: false
+    },
+    hasSort: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -104,6 +139,9 @@ export default {
     },
     handleChangedLevel(level) {
       this.$emit("handleChangedLevel", level);
+    },
+    handleChangedOrder(order) {
+      this.$emit("handleChangedOrder", order);
     },
     handleFocusSearchInput() {
       // console.log("[Component] SchoolFilter: focus searching ");
