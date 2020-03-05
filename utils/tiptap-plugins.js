@@ -1,7 +1,5 @@
 import { Extension, Plugin } from "tiptap";
 
-console.log('dattest Extension', Extension)
-
 export class EnterHandler extends Extension {
   get name() {
     return "enter_handler";
@@ -23,7 +21,7 @@ export class EnterHandler extends Extension {
             if (event.key === "Enter" && !event.shiftKey) {
               onEnter && onEnter();
 
-              return preventDefault;
+              return !preventDefault;
             }
 
             return preventDefault;

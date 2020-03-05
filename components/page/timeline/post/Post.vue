@@ -145,7 +145,7 @@
           >Bài viết chưa có bình luận.</div>
         </div>
 
-        <CommentEditor class="post__comment-editor" />
+        <CommentEditor class="post__comment-editor" @submit="postComment" />
       </template>
 
       <div class="text-center" v-if="btnCommentLoading">
@@ -158,6 +158,7 @@
 <script>
 import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { createComment } from "~/models/social/Comment";
 
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
@@ -236,11 +237,7 @@ export default {
 
   computed: {
     listParentComments() {
-      if ("listParentComments" in this.parentCommentData) {
-        return this.parentCommentData.listParentComments;
-      } else {
-        return [];
-      }
+      return this.parentCommentData.listParentComments || [];
     },
 
     numOfViewMoreParentComment() {
@@ -296,6 +293,25 @@ export default {
 
       this.btnCommentLoading = false;
       this.isCommentFetched = true;
+    },
+
+    async postComment(content) {
+      const commentModel = createComment(this.post.post_id, null, content);
+      const doPostComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.ADD
+      ](commentModel);
+
+      if (doPostComment.success) {
+        if ("listParentComments" in this.parentCommentData) {
+          this.parentCommentData.listParentComments.push(doPostComment.data);
+        } else {
+          this.parentCommentData = {
+            listParentComments: [doPostComment.data]
+          };
+        }
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
     }
   }
 };

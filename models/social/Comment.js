@@ -1,17 +1,17 @@
 class CreateComment {
   constructor(
+    source_id,
+    parent_comment_id,
     comment_content,
     comment_link,
-    source_id,
     list_tag,
-    parent_comment_id,
     comment_images,
   ) {
+    this.source_id = source_id;
+    this.parent_comment_id = parent_comment_id;
     this.comment_content = comment_content;
     this.comment_link = comment_link;
-    this.source_id = source_id;
     this.list_tag = list_tag;
-    this.parent_comment_id = parent_comment_id;
     this.comment_images = comment_images;
   }
 }
