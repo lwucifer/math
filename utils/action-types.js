@@ -39,7 +39,8 @@ export const SOCIAL_SHARES = {
 };
 
 export const SOCIAL_COMMENTS = {
-  LIST: "socialCommentsList"
+  LIST: "socialCommentsList",
+  LIST_CHILDREN: "socialCommentListChildren"
 };
 
 export const SOCIAL_MEDIAS = {

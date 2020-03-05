@@ -29,6 +29,8 @@ import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 import EmojiButton from "@joeattardi/emoji-button";
 
+import { EnterHandler } from '~/utils/tiptap-plugins';
+
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 
@@ -63,11 +65,15 @@ export default {
     // Init editor
     this.editor = new Editor({
       content: "",
+      autoFocus: true,
       extensions: [
         new Placeholder({
           showOnlyCurrent: true,
           showOnlyWhenEditable: true,
           emptyNodeText: "Viết bình luận"
+        }),
+        new EnterHandler({
+          onEnter: this.submit
         })
       ]
     });
@@ -100,6 +106,10 @@ export default {
       emojiPicker.pickerVisible
         ? emojiPicker.hidePicker()
         : emojiPicker.showPicker(button);
+    },
+
+    submit() {
+      console.log('dattest submit')
     }
   }
 };

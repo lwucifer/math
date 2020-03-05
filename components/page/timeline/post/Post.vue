@@ -128,12 +128,7 @@
         </div>-->
 
         <div class="post__comment-list">
-          <CommentItem v-for="item in listParentComments" :key="item.id" :data="item">
-            <CommentItemReplied
-              v-if="item.childrent && item.childrent.list.length"
-              :data="item.childrent"
-            />
-          </CommentItem>
+          <CommentItem v-for="item in listParentComments" :key="item.id" :data="item" />
 
           <div class="text-center">
             <a
@@ -149,20 +144,20 @@
             class="post__comment-empty text-center text-sub"
           >Bài viết chưa có bình luận.</div>
         </div>
+
+        <CommentEditor class="post__comment-editor" />
       </template>
 
       <div class="text-center" v-if="btnCommentLoading">
         <app-spin />
       </div>
-
-      <!-- <CommentEditor class="post__comment-editor" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import CommentService from "~/services/social/comments";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
@@ -234,7 +229,8 @@ export default {
         limit: 10,
         source_id: this.post.post_id
       },
-      parentCommentData: {}
+      parentCommentData: {},
+      childrenCommentData: {}
     };
   },
 
