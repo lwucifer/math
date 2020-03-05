@@ -1,13 +1,13 @@
 <template>
-  <div class="the-header-department" >
-    <div class="the-header-department__content">
-      <div class="the-header-department__logo">
+  <div class="the-header-client" >
+    <div class="the-header-client__content">
+      <div class="the-header-client__logo">
         <n-link to="/">
           <Logo />
         </n-link>
       </div>
 
-      <div class="the-header-department__left">
+      <div class="the-header-client__left">
           <form class="the-header__search" @submit.prevent>
             <app-input placeholder="Tìm kiếm"/>
             <button type="submit">
@@ -15,16 +15,16 @@
             </button>
         </form>
       </div>
-      <div class="the-header-department__middle-menu">
-          <ul>
+      <div >
+          <ul class="the-header-client__middle-menu">
               <li>
                   <a href="">Dòng thời gian</a>
               </li>
               <li>
-                  <a href="">Elearning</a>
+                  <a href="">E-learning</a>
               </li>
               <li>
-                  <a href="">Giáo viên</a>
+                  <a href="">Trường học</a>
               </li>
           </ul>
       </div>
@@ -35,10 +35,16 @@
           </n-link>
       </div>
       <div class="the-header__right">
-        <ul class="the-header-department__right-menu">
+        <ul class="the-header-client__right-menu">
           <li>
             <a href class="the-header-notify">
               <IconMessager />
+              <span class="text-white">12</span>
+            </a>
+          </li>
+          <li>
+            <a href class="the-header-notify">
+              <IconCart />
               <span class="text-white">12</span>
             </a>
           </li>
@@ -50,15 +56,9 @@
           </li>
         </ul>
         <div v-if="isAuthenticated" class="the-header__user">
-            <div class="the-header-menu-dropdown-department">
+            <div class="the-header-menu-dropdown-client">
                 <app-avatar class="the-header__user-avt" src="https://picsum.photos/60/60" :size="44"></app-avatar>
                 <div class="dropdown-content">
-                    <n-link class="item" to :class="active == 1 ? 'active' : ''">
-                        <IconBuilding width="20" height="20"/>Quản lí
-                    </n-link>
-                    <n-link class="item" to :class="active == 1 ? 'active' : ''">
-                        <IconCoin width="20" height="20"/>Thống kê
-                    </n-link>
                     <n-link class="item" to :class="active == 1 ? 'active' : ''">
                         <IconUser3 width="20" height="20"/>Thông tin tài khoản
                     </n-link>
@@ -110,6 +110,7 @@ import IconBuilding from "~/assets/svg/design-icons/building.svg?inline";
 import IconCoin from "~/assets/svg/design-icons/dollar-alt.svg?inline";
 import IconSupport from "~/assets/svg/design-icons/comment-info.svg?inline";
 import IconLogout from "~/assets/svg/design-icons/exit.svg?inline";
+import IconCart from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 
 export default {
   components: {
@@ -123,7 +124,8 @@ export default {
     IconHistory,
     IconExclamation,
     IconBuilding,
-    IconCoin,IconSupport,IconLogout
+    IconCoin,IconSupport,IconLogout,
+    IconCart
   },
 
   data: () => ({
@@ -144,19 +146,18 @@ export default {
 </script>
 
 <style lang="scss">
-.the-header-department{
+.the-header-client{
     background: linear-gradient(0deg, #FFFFFF, #FFFFFF);
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
     display: inline;
 }
-.the-header-department__content{
+.the-header-client__content{
     display: flex;
     align-items: center;
     height: 80px;
     justify-content: center;
-    .the-header-department__logo{
+    .the-header-client__logo{
         flex-shrink: 0;
-        margin-left: 20px;
         margin-right: 5.4rem;
 
         svg {
@@ -166,7 +167,7 @@ export default {
         }
     }
 }
-.the-header-department__left{
+.the-header-client__left{
     width: 30%;
     box-sizing: border-box;
     margin-right: 20px;
@@ -186,12 +187,13 @@ export default {
         }
     }
 }
-.the-header-department__middle-menu{
+.the-header-client__middle-menu{
     list-style-type: none;
+    display: flex;
+    flex-direction: row;
     li {
         display: inline-block;
         >a{
-            padding-top:30px;
             display: flex;
             flex: row;
             align-items: center;
@@ -228,9 +230,10 @@ export default {
                 opacity: 0.32;   
             }
         }
-    }   
+    }
+   
 }
-.the-header-department__right-menu{
+.the-header-client__right-menu{
     list-style-type: none;
     margin-right: 2rem;
 
@@ -242,6 +245,9 @@ export default {
     position: relative;
     display: inline-block;
     margin-left: 18px;
+    svg{
+        path{fill: #666666;}
+    }
     .text-white{
         background: #E9446A;
         border-radius: 12px;
@@ -259,10 +265,10 @@ export default {
     }
 }
 .the-header-menu-dropdown-course{
-    margin-left:20px;
     a{
       text-decoration: none;
       color: #666666;
+      box-sizing: border-box;
       svg{
         path{fill:#32AF85}
       }
@@ -271,7 +277,7 @@ export default {
       }
     }
 }
-.the-header-menu-dropdown-department{
+.the-header-menu-dropdown-client{
     display: flex;
     flex: row;
     position: relative;
