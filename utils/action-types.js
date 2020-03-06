@@ -107,6 +107,10 @@ export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
 };
 
+export const ELEARNING_PUBLIC_VOTE = {
+  LIST: "elearningPublicVoteList"
+};
+
 export const ELEARNING_PUBLIC_PLACE = {
   PROVINCE: "elearningPublicPlaceProvince",
   DISTRICT: "elearningPublicPlaceDistrict",

@@ -2,7 +2,7 @@
   <div class="container school-manager">
     <div class="row">
       <div class="col-md-3">
-        <SchoolManagerSide active="4" />
+        <SchoolManagerSide active="5" />
       </div>
       <div class="col-md-9">
         <div class="bg-white">
