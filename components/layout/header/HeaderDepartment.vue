@@ -257,6 +257,11 @@ export default {
         justify-content: center;
         align-items: center;
     }
+    &:hover{
+      svg{
+        path{fill:#32AF85}
+      }
+    }
 }
 .the-header-menu-dropdown-course{
     margin-left:20px;
