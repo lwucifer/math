@@ -71,6 +71,7 @@ export default {
       this.params.page = page;
     },
     handleFilterRate(rate) {
+      this.params.page = 1
       this.params.rate = get(rate, "rate", "");
     }
   }
