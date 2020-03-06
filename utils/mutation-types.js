@@ -159,6 +159,11 @@ export const SCHOOL_INFO = {
   SET_SCHOOL_INFO: "setSchoolInfo"
 };
 
+export const SCHOOL_ELEARNING = {
+  SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
+  SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture"
+};
+
 export const SCHOOL_PROFESSIONAL = {
   SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
   SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",
