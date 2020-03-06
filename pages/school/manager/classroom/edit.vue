@@ -2,45 +2,55 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolManagerSide active="4" />
+        <SchoolManagerSide active="5" />
       </div>
       <div class="col-md-9">
         <div class="box">
           <div class="school-manager__box">
             <div class="d-flex mb-4">
-              <h6 class="color-red">Sửa tổ chuyên môn</h6>
-              <n-link :to="'/school/manager/group'" class="ml-auto">
+              <h6 class="color-red">Chỉnh sửa lớp học</h6>
+              <n-link :to="'/school/manager/classroom'" class="ml-auto">
                 <IconClose class="fill-999" width="13" height="13" />
               </n-link>
             </div>
-            <div class="school-manager__from">
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Tổ chuyên môn</label>
-                </div>
-                <div class="col-md-12">
-                  <app-input v-model="name"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Giáo viên trong tổ</label>
-                </div>
-                <div class="col-md-12">
-                  <div>
-                    <app-select
-                      mode="tags"
-                      :options="tagOptions"
-                      v-model="tag"
-                      placeholder="Nhập họ tên hoặc mã giáo viên"
-                      style="width: 100%"
-                    >
-                      <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-                        <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
-                        {{ option.text }}
-                      </div>
-                    </app-select>
-                    <app-divider class="ma-0" />
+            <div class="row">
+              <div class="col-md-7 col-sm-12">
+                <div class="school-manager__from">
+                  <div class="row form-group">
+                    <div class="col-md-12">
+                      <label>Năm học</label>
+                    </div>
+                    <div class="col-md-12">
+                      <app-input :vlaue="year" class="mb-0"/>
+                    </div>
+                  </div>
+                  <div class="row form-group">
+                    <div class="col-md-12">
+                      <label>Khối</label>
+                    </div>
+                    <div class="col-md-12">
+                      <app-vue-select
+                        class="form-control"
+                        v-model="filter.course"
+                        :options="courses"
+                        label="text"
+                        placeholder="Lựa chọn"
+                        searchable
+                        clearable
+                        @input="handleChangedInput"
+                        @search:focus="handleFocusSearchInput"
+                        @search:blur="handleBlurSearchInput"
+                      ></app-vue-select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Lớp</label>
+                    </div>
+                    <div class="col-md-12">
+                      <app-input v-model="classroom" class="mb-3"/>
+                      <i class="color-666" >Có thể thêm nhiều lớp cách nhau bởi dấu phẩy. Ví dụ 6A, 6B, ...</i>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -77,6 +87,7 @@ export default {
       avatar: [],
       sex: "nam",
       avatarSrc: "https://picsum.photos/170/170",
+      year: "2018 - 2019",
       filter: {
         course: null,
         status: null,

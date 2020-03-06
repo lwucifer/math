@@ -1,12 +1,12 @@
 export function getBase64(img, callback) {
   const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
+  reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(img);
 }
 
 export function remove_unicode(str) {
-  if(!tr) return '';
-  
+  if (!tr) return "";
+
   str = str.toLowerCase();
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
   str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -15,10 +15,21 @@ export function remove_unicode(str) {
   str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
   str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
   str = str.replace(/đ/g, "d");
-  str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g, "-");
+  str = str.replace(
+    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g,
+    "-"
+  );
 
-  str = str.replace(/-+-/g, "-"); //thay thế 2- thành 1- 
+  str = str.replace(/-+-/g, "-"); //thay thế 2- thành 1-
   str = str.replace(/^\-+|\-+$/g, "");
 
   return str;
-} 
+}
+
+export function useEffect(that, watcher, props) {
+  watcher();
+  const iterator = function(prop) {
+    that.$watch(prop, watcher);
+  };
+  props.forEach(iterator, that);
+}

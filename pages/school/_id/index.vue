@@ -10,13 +10,13 @@
       <school-summary :school="schoolInfo" />
 
       <school-lesson-slider
-        :items="lessons"
+        :lessons="get(lessons, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Bài giảng của trường"
       />
 
       <school-course-slider
-        :items="courses"
+        :cources="get(courses, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Khóa học của trường"
       />
@@ -36,8 +36,9 @@ import {
   LESSONS,
   COURSES
 } from "~/server/fakedata/school/test";
+import { get } from "lodash";
 
-const elearningSchoolInfoStorePath = 'elearning/school/school-info'
+const elearningSchoolInfoStorePath = "elearning/school/school-info";
 
 export default {
   watchQuery: ["school_id"],
@@ -49,10 +50,33 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    const data = { school_id: "e698a8ea-4e12-11ea-b77f-2e728ce88125" };
+    const school_id = "e698a8ea-4e12-11ea-b77f-2e728ce88125";
+    const data = { school_id };
     await store.dispatch(
       `${elearningSchoolInfoStorePath}/${actionTypes.SCHOOL_INFO.INFO}`,
       data
+    );
+    const options_sources = {
+      params: {
+        school_id,
+        elearning_type: "COURCE",
+        size: 5
+      }
+    };
+    await store.dispatch(
+      `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
+      options_sources
+    );
+    const options_lecture = {
+      params: {
+        school_id,
+        elearning_type: "LECTURE",
+        size: 5
+      }
+    };
+    await store.dispatch(
+      `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
+      options_lecture
     );
   },
 
@@ -73,19 +97,25 @@ export default {
         // },
         pagination: false,
         showName: true
-      },
-      lessons: LESSONS,
-      courses: COURSES
+      }
+      // lessons: LESSONS,
+      // courses: COURSES
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(elearningSchoolInfoStorePath, ["schoolInfo"]),
+    ...mapState(`elearning/school/school-elearning`, {
+      courses: "source",
+      lessons: "lecture"
+    })
   },
 
   watch: {},
 
-  methods: {}
+  methods: {
+    get
+  }
 };
 </script>
 

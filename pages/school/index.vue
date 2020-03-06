@@ -37,6 +37,7 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   name: "School",
@@ -49,9 +50,6 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    await store.dispatch(
-      `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
-    );
     await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );
@@ -78,19 +76,13 @@ export default {
     })
   },
 
-  watch: {
-    province_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    district_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    ward_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    keyword() {
-      this.handleGetSchoolsByLocation();
-    }
+  created() {
+    useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
+      "province_id",
+      "district_id",
+      "ward_id",
+      "keyword"
+    ]);
   },
 
   methods: {

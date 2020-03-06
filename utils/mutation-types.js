@@ -60,6 +60,10 @@ export const ELEARNING_PUBLIC_INFO = {
   SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
 };
 
+export const ELEARNING_PUBLIC_VOTE = {
+  SET_ELEARNING_PUBLIC_VOTE_LIST: "setElearningPublicVoteList"
+};
+
 export const ELEARNING_PUBLIC_PLACE = {
   SET_ELEARNING_PUBLIC_PLACE_PROVINCE: "setElearningPublicPlaceProvince",
   SET_ELEARNING_PUBLIC_PLACE_DISTRICT: "setElearningPublicPlaceDistrict",
@@ -157,6 +161,11 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
   SET_SCHOOL_INFO: "setSchoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
+  SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture"
 };
 
 export const SCHOOL_PROFESSIONAL = {

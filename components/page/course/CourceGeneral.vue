@@ -70,18 +70,6 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 
 export default {
-  created() {
-    const elearning_id = get(this, "$route.params.id", "");
-    const options = {
-      params: {
-        elearning_id
-      }
-    };
-    this.$store.dispatch(
-      `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-      options
-    );
-  },
   components: {
     IconSuccess
   },

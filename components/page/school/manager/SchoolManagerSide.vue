@@ -3,45 +3,49 @@
     <n-link class="link-gray item" :to="'/school/manager/'" :class="active == 1 ? 'active' : ''">
       <IconDashboard width="20" height="20" />Tổng quan
     </n-link>
-    <n-link class="link-gray item" to :class="active == 2 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/school/manager/course/'"
+      :class="active == 2 ? 'active' : ''"
+    >
       <IconBook width="20" height="20" />Bài giảng và khóa học
     </n-link>
     <n-link
       class="link-gray item"
-      :to="'/school/manager/test/'"
+      :to="'/school/manager/group/'"
       :class="active == 3 ? 'active' : ''"
     >
       <IconCalendar />Quản lý tổ chuyên môn
     </n-link>
     <div class="item" :class="active == 4? 'active' : ''">
       <div class="d-flex w-100">
-        <IconBooks />Quản lý giáo viên
+        <n-link class="link-gray d-flex-center lv-0" :to="'/school/manager/teacher'">
+          <IconBooks />Quản lý giáo viên
+        </n-link>
         <button @click="subMenu = !subMenu" class="ml-auto">
-          <IconAngleDown v-if="subMenu" height="18" width="18"/>
-          <IconAngleUp v-else height="18" width="18"/>
+          <IconAngleDown v-if="subMenu" height="18" width="18" />
+          <IconAngleUp v-else height="18" width="18" />
         </button>
       </div>
       <ul v-if="subMenu">
         <li>
-          <n-link
-            class="link-gray"
-            :to="'/school/manager/teacher/'"
-          >Hồ sơ giáo viên</n-link>
+          <n-link class="link-gray" :to="'/school/manager/teacher/'">Hồ sơ giáo viên</n-link>
         </li>
         <li>
-          <n-link
-            class="link-gray"
-            :to="'/school/manager/teacher/'"
-          >Phân công giảng dạy</n-link>
+          <n-link class="link-gray" :to="'/school/manager/teacher/assigned'">Phân công giảng dạy</n-link>
         </li>
       </ul>
     </div>
-    <n-link class="link-gray item" to :class="active == 5 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/school/manager/classroom'"
+      :class="active == 5 ? 'active' : ''"
+    >
       <IconFolderCheck />Quản lý lớp học
     </n-link>
     <n-link
       class="link-gray item"
-      :to="'/school/manager/interactive'"
+      :to="'/school/manager/student'"
       :class="active == 6 ? 'active' : ''"
     >
       <IconChatUser />Quản lý học sinh
@@ -82,8 +86,8 @@ export default {
   data() {
     return {
       subMenu: this.active == 4 ? true : false
-    }
-  },
+    };
+  }
 };
 </script>
 
