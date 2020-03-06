@@ -6,7 +6,7 @@
       :key="index"
     />
     <app-pagination
-      :pagination="pagination"
+      :pagination="page"
       @pagechange="onPageChange"
       class="mt-4 mb-3"
     />
@@ -40,12 +40,7 @@ export default {
 
   data() {
     return {
-      active: 0,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 10
-      }
+      active: 0
     };
   },
 
@@ -53,7 +48,18 @@ export default {
     get,
     onPageChange(e) {
       this.pagination = { ...this.pagination, ...e };
-      console.log(this.pagination);
+      const elearning_id = get(this, "$route.params.id", "");
+      const options = {
+        params: {
+          elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189",
+          page: get(this, "pagination.page", 1),
+          size: 10
+        }
+      };
+      this.$store.dispatch(
+        `elearning/public/public-vote/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`,
+        options
+      );
     }
   }
 };
