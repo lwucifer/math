@@ -21,13 +21,44 @@
         <a href class="comment-item__action" @click.prevent>Reply</a>
       </div>
 
-      <slot />
+      <CommentItemReplied
+        v-if="data.childrent && data.childrent.list.length && !listComments.length"
+        :data="data.childrent"
+        @click="getChildrenComment(data.id)"
+      />
+
+      <CommentItem v-for="item in listComments" :key="item.id" :level="2" :data="item" />
+
+      <div class="text-center">
+        <a
+          v-if="childrenCommentData.page && !childrenCommentData.page.last"
+          href
+          class="post__comment-more"
+          @click.prevent="getChildrenComment(data.id)"
+        >Xem thêm {{ numOfViewMoreChildrenComment }} bình luận ...</a>
+      </div>
+
+      <div class="text-center" v-if="isFetchingComment">
+        <app-spin />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import CommentService from "~/services/social/comments";
+import { SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS } from "~/utils/action-types";
+
+const CommentItemReplied = () =>
+  import("~/components/page/timeline/comment/CommentItemReplied");
+
 export default {
+  name: "CommentItem",
+
+  components: {
+    CommentItemReplied
+  },
+
   props: {
     level: {
       type: Number,
@@ -43,12 +74,72 @@ export default {
     }
   },
 
+  data() {
+    return {
+      childrenCommentParams: {
+        page: 1,
+        limit: 10,
+        parent_comment_id: this.data.id
+      },
+      childrenCommentData: {},
+      isFetchingComment: false
+    };
+  },
+
   computed: {
     classes() {
       const levelClasses = {
         "comment-item--level-2": this.level === 2
       };
       return { ...levelClasses };
+    },
+
+    listComments() {
+      if ("listComments" in this.childrenCommentData) {
+        return this.childrenCommentData.listComments;
+      } else {
+        return [];
+      }
+    },
+
+    numOfViewMoreChildrenComment() {
+      const { page } = this.childrenCommentData;
+      return page.totalPages - page.number === 1
+        ? page.totalElements % page.size
+        : page.size;
+    }
+  },
+
+  methods: {
+    async getChildrenComment(id) {
+      console.log("getChildrenComment", id);
+      this.isFetchingComment = true;
+
+      const getComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_SOCIAL_COMMENTS.LIST_CHILDREN
+      ]({
+        params: this.childrenCommentParams
+      });
+
+      if (getComment.success) {
+        // Set to parent comment data
+        const { listComments, page } = this.childrenCommentData;
+        if (listComments && page) {
+          this.childrenCommentData = {
+            listComments: [...listComments, ...getComment.data.listComments],
+            page: getComment.data.page
+          };
+        } else {
+          this.childrenCommentData = getComment.data;
+        }
+
+        // Set page param for the next request
+        this.childrenCommentParams.page += 1;
+      } else {
+        this.$toasted.error(getComment.message);
+      }
+
+      this.isFetchingComment = false;
     }
   }
 };

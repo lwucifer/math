@@ -52,6 +52,10 @@ export const ELEARNING_PUBLIC_CATEGORY = {
   SET_ELEARNING_PUBLIC_CATEGORY_LIST: "setElearningPublicCategoryList"
 };
 
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
 };
@@ -153,6 +157,11 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
   SET_SCHOOL_INFO: "setSchoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
+  SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture"
 };
 
 export const SCHOOL_PROFESSIONAL = {

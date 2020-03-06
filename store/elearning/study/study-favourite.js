@@ -6,7 +6,7 @@ import Favourite from "~/services/elearning/study/Favourite";
  * initial state
  */
 const state = () => ({
-  elearningStudyFavourite: []
+  favourites: []
 });
 
 /**
@@ -18,13 +18,15 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_STURY_FAVOURITE.LIST]({ commit }) {
+  async [actionTypes.ELEARNING_STURY_FAVOURITE.LIST]({ commit }, options) {
     try {
-      const result = await new Favourite(this.$axios)[actionTypes.BASE.LIST]();
+      const result = await new Favourite(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
       commit(
         mutationTypes.ELEARNING_STUDY_FAVOURITE
           .SET_ELEARNING_STUDY_FAVOURITE_LIST,
-        result
+        result.data
       );
     } catch (error) {
       console.log(error);
@@ -32,7 +34,9 @@ const actions = {
   },
   async [actionTypes.ELEARNING_STURY_FAVOURITE.ADD]({ commit }, options) {
     try {
-      const result = await new Favourite(this.$axios)[actionTypes.BASE.ADD](options);
+      const result = await new Favourite(this.$axios)[actionTypes.BASE.ADD](
+        options
+      );
       commit(
         mutationTypes.ELEARNING_STUDY_FAVOURITE
           .SET_ELEARNING_STUDY_FAVOURITE_ADD,
@@ -64,9 +68,9 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_STUDY_FAVOURITE.SET_ELEARNING_STUDY_FAVOURITE_LIST](
     state,
-    elearningStudyFavourite
+    favourites
   ) {
-    state.elearningStudyFavourite = elearningStudyFavourite;
+    state.favourites = favourites;
   }
 };
 

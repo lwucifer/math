@@ -128,12 +128,7 @@
         </div>-->
 
         <div class="post__comment-list">
-          <CommentItem v-for="item in listParentComments" :key="item.id" :data="item">
-            <CommentItemReplied
-              v-if="item.childrent && item.childrent.list.length"
-              :data="item.childrent"
-            />
-          </CommentItem>
+          <CommentItem v-for="item in listParentComments" :key="item.id" :data="item" />
 
           <div class="text-center">
             <a
@@ -149,20 +144,21 @@
             class="post__comment-empty text-center text-sub"
           >Bài viết chưa có bình luận.</div>
         </div>
+
+        <CommentEditor class="post__comment-editor" @submit="postComment" />
       </template>
 
       <div class="text-center" v-if="btnCommentLoading">
         <app-spin />
       </div>
-
-      <!-- <CommentEditor class="post__comment-editor" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import CommentService from "~/services/social/comments";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { createComment } from "~/models/social/Comment";
 
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
@@ -234,17 +230,14 @@ export default {
         limit: 10,
         source_id: this.post.post_id
       },
-      parentCommentData: {}
+      parentCommentData: {},
+      childrenCommentData: {}
     };
   },
 
   computed: {
     listParentComments() {
-      if ("listParentComments" in this.parentCommentData) {
-        return this.parentCommentData.listParentComments;
-      } else {
-        return [];
-      }
+      return this.parentCommentData.listParentComments || [];
     },
 
     numOfViewMoreParentComment() {
@@ -300,6 +293,25 @@ export default {
 
       this.btnCommentLoading = false;
       this.isCommentFetched = true;
+    },
+
+    async postComment(content) {
+      const commentModel = createComment(this.post.post_id, null, content);
+      const doPostComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.ADD
+      ](commentModel);
+
+      if (doPostComment.success) {
+        if ("listParentComments" in this.parentCommentData) {
+          this.parentCommentData.listParentComments.push(doPostComment.data);
+        } else {
+          this.parentCommentData = {
+            listParentComments: [doPostComment.data]
+          };
+        }
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
     }
   }
 };

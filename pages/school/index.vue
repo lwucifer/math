@@ -37,6 +37,7 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   name: "School",
@@ -78,19 +79,13 @@ export default {
     })
   },
 
-  watch: {
-    province_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    district_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    ward_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    keyword() {
-      this.handleGetSchoolsByLocation();
-    }
+  created() {
+    useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
+      "province_id",
+      "district_id",
+      "ward_id",
+      "keyword"
+    ]);
   },
 
   methods: {
