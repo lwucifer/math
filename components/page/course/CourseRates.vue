@@ -5,20 +5,20 @@
         <div class="col-md-6 col-sm-12">
           <div class="text-center d-inline-block">
             <strong class="h1 color-primary">{{
-              get(elearningInfo, "review_rate", 0)
+              get(votes, "reviews.averageRate", 0)
             }}</strong>
             <app-stars
-              :stars="elearningInfo.review_rate"
+              :stars="Math.floor(get(votes, 'reviews.averageRate', 0))"
               :size="16"
               class="mt-2 mb-2"
             />
             <p class="color-999">
-              ({{ get(elearningInfo, "review_count", 0) }} người đánh giá)
+              ({{ get(votes, "reviews.totalReview", 0) }} người đánh giá)
             </p>
           </div>
         </div>
         <div class="col-md-6 col-sm-12">
-          <course-stars :five="50" :four="30" :three="10" :two="10" :one="0" />
+          <course-stars :rates="get(votes, 'reviews.rates', 0)" />
         </div>
       </div>
     </div>
@@ -93,6 +93,7 @@ import CourseRateComment from "~/components/page/course/CourseRateComment";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect } from "~/utils/common";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -112,6 +113,12 @@ export default {
     useEffect(this, this.getElearningPublicVotes.bind(this), [
       "$route.params.id"
     ]);
+  },
+
+  computed: {
+    ...mapState("elearning/public/public-vote", {
+      votes: "votes"
+    })
   },
 
   data() {
@@ -136,7 +143,9 @@ export default {
       const elearning_id = get(this, "$route.params.id", "");
       const options = {
         params: {
-          elearning_id
+          elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189",
+          page: 1,
+          size: 10
         }
       };
       this.$store.dispatch(
