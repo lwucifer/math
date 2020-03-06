@@ -45,6 +45,7 @@ export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = `${SCHOOLLY_ALIAS}/elearning/public/elearning/teacher`;
 export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
 export const ELEARNING_PUBLIC_PLACE_DISTRICTS = `${SCHOOLLY_ALIAS}/elearning/public/place/districts`;
@@ -72,10 +73,11 @@ export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/study/votes`;
 /**
  * SCHOOL
  */
-export const SCHOOL_CLASSES = `${SCHOOLLY_ALIAS}/elearning/school/classes`;
+export const SCHOOL_CLASSES = `${SCHOOLLY_ALIAS}/elearning/school/admin/classes`;
 export const SCHOOL_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/school/summary`;
 export const SCHOOL_SEARCH = `${SCHOOLLY_ALIAS}/elearning/school/search`;
 export const SCHOOL_INFO = `${SCHOOLLY_ALIAS}/elearning/school/info`;
-export const SCHOOL_PROFESSIONAL = `${SCHOOLLY_ALIAS}/elearning/school/professional`;
-export const SCHOOL_STUDENT = `${SCHOOLLY_ALIAS}/elearning/school/students`;
-export const SCHOOL_TEACHER = `${SCHOOLLY_ALIAS}/elearning/school/teachers`;
+export const SCHOOL_ELEARNING = `${SCHOOLLY_ALIAS}/elearning/school/elearnings`;
+export const SCHOOL_PROFESSIONAL = `${SCHOOLLY_ALIAS}/elearning/school/admin/professional`;
+export const SCHOOL_STUDENT = `${SCHOOLLY_ALIAS}/elearning/school/admin/students`;
+export const SCHOOL_TEACHER = `${SCHOOLLY_ALIAS}/elearning/school/admin/teachers`;
