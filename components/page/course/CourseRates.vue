@@ -1,21 +1,11 @@
 <template>
   <div class="course-rates">
     <course-stars :reviews="get(votes, 'reviews', null)" />
-
     <course-rates-filter :rates="get(votes, 'reviews.rates', [])" />
-
-    <div class="course-rates__commnents">
-      <course-rate-comment
-        :review="review"
-        v-for="(review, index) in get(elearningInfo, 'reviews.content', [])"
-        :key="index"
-      />
-      <app-pagination
-        :pagination="pagination"
-        @pagechange="onPageChange"
-        class="mt-4 mb-3"
-      />
-    </div>
+    <course-reviews
+      :reviews="get(votes, 'content', [])"
+      :page="get(votes, 'page', null)"
+    />
   </div>
 </template>
 <script>
@@ -26,19 +16,14 @@ import * as actionTypes from "~/utils/action-types";
 import { useEffect } from "~/utils/common";
 import { mapState } from "vuex";
 import CourseRatesFilter from "~/components/page/course/CourseRatesFilter";
+import CourseReviews from "~/components/page/course/CourseReviews";
 
 export default {
   components: {
     CourseStars,
     CourseRateComment,
-    CourseRatesFilter
-  },
-
-  props: {
-    elearningInfo: {
-      type: Object,
-      default: () => {}
-    }
+    CourseRatesFilter,
+    CourseReviews
   },
 
   created() {
@@ -54,23 +39,7 @@ export default {
     })
   },
 
-  data() {
-    return {
-      active: 0,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 10
-      }
-    };
-  },
-
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    },
     get,
     getElearningPublicVotes() {
       const elearning_id = get(this, "$route.params.id", "");

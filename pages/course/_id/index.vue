@@ -100,7 +100,7 @@
             <hr />
             <div id="tab4" class="pt-2">
               <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
-              <course-rates :elearningInfo="elearningInfo" />
+              <course-rates />
             </div>
           </div>
         </div>
