@@ -51,6 +51,7 @@ export default {
     get,
     handleClick(rate) {
       this.active = get(rate, "rate", 0);
+      this.$emit("handleFilterRate", rate);
     }
   }
 };

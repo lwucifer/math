@@ -1,10 +1,14 @@
 <template>
   <div class="course-rates">
     <course-stars :reviews="get(votes, 'reviews', null)" />
-    <course-rates-filter :rates="get(votes, 'reviews.rates', [])" />
+    <course-rates-filter
+      :rates="get(votes, 'reviews.rates', [])"
+      @handleFilterRate="handleFilterRate"
+    />
     <course-reviews
       :reviews="get(votes, 'content', [])"
       :page="get(votes, 'page', null)"
+      @onPageChange="onPageChange"
     />
   </div>
 </template>
@@ -27,9 +31,10 @@ export default {
   },
 
   created() {
-    this.getElearningPublicVotes();
     useEffect(this, this.getElearningPublicVotes.bind(this), [
-      "$route.params.id"
+      "$route.params.id",
+      "params.page",
+      "params.rate"
     ]);
   },
 
@@ -39,21 +44,34 @@ export default {
     })
   },
 
+  data() {
+    return {
+      params: {
+        page: 1,
+        // elearning_id: get(this, "$route.params.id", ""),
+        elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189",
+        size: 10,
+        rate: ""
+      }
+    };
+  },
+
   methods: {
     get,
     getElearningPublicVotes() {
-      const elearning_id = get(this, "$route.params.id", "");
       const options = {
-        params: {
-          elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189",
-          page: 1,
-          size: 10
-        }
+        params: this.params
       };
       this.$store.dispatch(
         `elearning/public/public-vote/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`,
         options
       );
+    },
+    onPageChange(page) {
+      this.params.page = page;
+    },
+    handleFilterRate(rate) {
+      this.params.rate = get(rate, "rate", "");
     }
   }
 };
