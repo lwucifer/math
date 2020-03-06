@@ -173,6 +173,14 @@ export default {
       store.dispatch(
         `elearning/public/public-related/${actionTypes.ELEARNING_PUBLIC_RELATED.LIST}`,
         params.id
+      ),
+      store.dispatch(
+        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+        {
+          params: {
+            elearning_id: params.id
+          }
+        }
       )
     ]);
   },
@@ -213,7 +221,7 @@ export default {
     get
   },
   created() {
-    console.log(this.elearningInfo)
+    console.log(this.elearningInfo);
   }
 };
 </script>
