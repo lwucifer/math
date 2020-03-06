@@ -119,10 +119,34 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_LIKES.ADD]({ commit}, payload ) {
+  async [actionTypes.SOCIAL_LIKES.LIKE_POST]({ commit, state }, payload) {
     try {
-      const { data = {} } = await new Likes(this.$axios)[actionTypes.BASE.ADD](payload);
-      console.log("[SocialLikes] add data", data);
+      const result = await new Likes(this.$axios)[actionTypes.BASE.ADD](
+        payload
+      );
+      const { data = {} } = result;
+      const { feeds } = state;
+
+      if (result.success) {
+        const newFeeds =
+          feeds.listPost &&
+          feeds.listPost.map(item => {
+            if (item.post_id === payload.source_id) {
+              return {
+                ...item,
+                type_like: data.type_like,
+                is_like: !!data.type_like
+              };
+            }
+            return item;
+          });
+
+        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
+          ...feeds,
+          listPost: newFeeds
+        });
+      }
+
       return data;
     } catch (err) {
       console.log("[SocialLikes] add.err", err);

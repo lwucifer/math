@@ -31,7 +31,8 @@ export const SOCIAL_POST = {
 export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
-  DELETE: "socialLikesDelete"
+  DELETE: "socialLikesDelete",
+  LIKE_POST: 'socialLikesLikePost'
 };
 
 export const SOCIAL_SHARES = {
