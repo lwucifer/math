@@ -1,77 +1,8 @@
 <template>
   <div class="course-rates">
-    <div class="course-rates__top">
-      <div class="row items-center">
-        <div class="col-md-6 col-sm-12">
-          <div class="text-center d-inline-block">
-            <strong class="h1 color-primary">{{
-              get(votes, "reviews.averageRate", 0)
-            }}</strong>
-            <app-stars
-              :stars="Math.floor(get(votes, 'reviews.averageRate', 0))"
-              :size="16"
-              class="mt-2 mb-2"
-            />
-            <p class="color-999">
-              ({{ get(votes, "reviews.totalReview", 0) }} người đánh giá)
-            </p>
-          </div>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <course-stars :rates="get(votes, 'reviews.rates', 0)" />
-        </div>
-      </div>
-    </div>
+    <course-stars :reviews="get(votes, 'reviews', null)" />
 
-    <div class="course-rates__nav">
-      <app-button
-        square
-        normal
-        :color="active == 0 ? 'primary' : 'gray'"
-        @click="active = 0"
-        >Tất cả
-      </app-button>
-
-      <app-button
-        square
-        normal
-        :color="active == 5 ? 'primary' : 'gray'"
-        @click="active = 5"
-        >5 sao (500)
-      </app-button>
-
-      <app-button
-        square
-        normal
-        :color="active == 4 ? 'primary' : 'gray'"
-        @click="active = 4"
-        >4 sao (400)
-      </app-button>
-
-      <app-button
-        square
-        normal
-        :color="active == 3 ? 'primary' : 'gray'"
-        @click="active = 3"
-        >3 sao (10)
-      </app-button>
-
-      <app-button
-        square
-        normal
-        :color="active == 2 ? 'primary' : 'gray'"
-        @click="active = 2"
-        >2 sao (2)
-      </app-button>
-
-      <app-button
-        square
-        normal
-        :color="active == 1 ? 'primary' : 'gray'"
-        @click="active = 1"
-        >1 sao (0)
-      </app-button>
-    </div>
+    <course-rates-filter :rates="get(votes, 'reviews.rates', [])" />
 
     <div class="course-rates__commnents">
       <course-rate-comment
@@ -94,11 +25,13 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect } from "~/utils/common";
 import { mapState } from "vuex";
+import CourseRatesFilter from "~/components/page/course/CourseRatesFilter";
 
 export default {
   components: {
     CourseStars,
-    CourseRateComment
+    CourseRateComment,
+    CourseRatesFilter
   },
 
   props: {
