@@ -4,7 +4,7 @@
       square
       normal
       :color="active == 0 ? 'primary' : 'gray'"
-      @click="active = 0"
+      @click="handleClick({ rate: '' })"
       >Tất cả
     </app-button>
 
