@@ -82,7 +82,7 @@ export default {
 
   data() {
     return {
-      pager: this.pagination.pager,
+      pager: this.pagination.size,
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },
@@ -108,7 +108,7 @@ export default {
   methods: {
     goTo(e, check = false) {
       if (!check) {
-        this.$emit("pagechange", { page: e, pager: this.pager });
+        this.$emit("pagechange", { number: e, size: this.pager });
       }
     }
   },
@@ -118,17 +118,17 @@ export default {
       return this.pagination;
     },
     current() {
-      return this.pagination.page;
+      return this.pagination.number;
     },
     total() {
-      return this.pagination.total;
+      return this.pagination.totalPages;
     },
     prev() {
-      return this.pagination.page > 1 ? this.pagination.page - 1 : null;
+      return this.pagination.number > 1 ? this.pagination.number - 1 : null;
     },
     next() {
-      return this.pagination.page < this.pagination.total
-        ? this.pagination.page + 1
+      return this.pagination.number < this.pagination.totalPages
+        ? this.pagination.number + 1
         : null;
     }
   }
