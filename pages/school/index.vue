@@ -51,9 +51,6 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
-    );
-    await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );
   },

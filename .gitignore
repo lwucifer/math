@@ -16,3 +16,4 @@ package-lock.json
 .
 deploy.sh
 merge.sh
+push.sh

@@ -3,23 +3,48 @@
     <div class="app-pagination-2" v-if="type === 2">
       <div class="left">
         <span>Số dòng trên một trang</span>
-        <app-select v-model="pager" :options="opts" class="select-pager" @change="goTo(current)"/>
-        <span>{{pages.first}}-{{pages.last}} của tổng số {{pages.totalElements}}</span>
+        <app-select
+          v-model="pager"
+          :options="opts"
+          class="select-pager"
+          @change="goTo(current)"
+        />
+        <span
+          >{{ pages.first }}-{{ pages.last }} của tổng số
+          {{ pages.totalElements }}</span
+        >
       </div>
       <div class="right">
         <span>Đi đến trang</span>
-        <input type="text" class="current" :value="current" @change="(e) => goTo(parseInt(e.target.value))" />
+        <input
+          type="text"
+          class="current"
+          :value="current"
+          @change="e => goTo(parseInt(e.target.value))"
+        />
         <ul>
-          <li @click="goTo(1, current == 1)" :class="current == 1 ? 'disable' : ''">
+          <li
+            @click="goTo(1, current == 1)"
+            :class="current == 1 ? 'disable' : ''"
+          >
             <IconPrevious />
           </li>
-          <li @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
+          <li
+            @click="goTo(prev, current == 1)"
+            :class="current == 1 ? 'disable' : ''"
+          >
             <IconAngleLeft />
           </li>
-          <li @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
+          <li
+            @click="goTo(next, current == total)"
+            :class="current == total ? 'disable' : ''"
+          >
             <IconAngleRight />
           </li>
-          <li @click="goTo(total, current == total)" :class="current == total ? 'disable' : ''">
+          <li
+            @click="goTo(total, current == total)"
+            :class="current == total ? 'disable' : ''"
+          >
             <IconStepForward />
           </li>
         </ul>
@@ -28,7 +53,12 @@
 
     <ul class="app-pagination" v-else-if="total < 8">
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
-        <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{i}}</a>
+        <a
+          class="link"
+          :class="i == current ? 'active' : ''"
+          @click="goTo(i)"
+          >{{ i }}</a
+        >
       </li>
     </ul>
 
@@ -37,7 +67,7 @@
         <a class="link" @click="goTo(1)">1</a>
       </li>
       <li v-if="current > 3 && total > 4">
-        <a class="link" @click="goTo(4)" v-if="current == 4  || total == 5">2</a>
+        <a class="link" @click="goTo(4)" v-if="current == 4 || total == 5">2</a>
         <a class="link bold disable" v-else>...</a>
       </li>
       <li v-if="total == current && total > 3">
@@ -56,7 +86,12 @@
         <a class="link" @click="goTo(3)">3</a>
       </li>
       <li v-if="total - current > 2 && total > 4">
-        <a class="link" @click="goTo(4)" v-if="total - current == 3 || total == 5">{{total - 1}}</a>
+        <a
+          class="link"
+          @click="goTo(4)"
+          v-if="total - current == 3 || total == 5"
+          >{{ total - 1 }}</a
+        >
         <a class="link bold disable" v-else>...</a>
       </li>
       <li v-if="total - current > 1">
@@ -69,20 +104,21 @@
 <script>
 import IconAngleLeft from "~/assets/svg/design-icons/angle-left.svg?inline";
 import IconAngleRight from "~/assets/svg/design-icons/angle-right.svg?inline";
-import IconPrevious from '~/assets/svg/design-icons/previous.svg?inline';
-import IconStepForward from '~/assets/svg/design-icons/step-forward.svg?inline';
+import IconPrevious from "~/assets/svg/design-icons/previous.svg?inline";
+import IconStepForward from "~/assets/svg/design-icons/step-forward.svg?inline";
+import { toNumber, get } from "lodash";
 
 export default {
   components: {
     IconPrevious,
     IconStepForward,
     IconAngleLeft,
-    IconAngleRight,
+    IconAngleRight
   },
 
   data() {
     return {
-      pager: this.pagination.size,
+      pager: toNumber(get(this, 'pagination.size', 0)),
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },
@@ -118,18 +154,16 @@ export default {
       return this.pagination;
     },
     current() {
-      return this.pagination.number;
+      return toNumber(get(this, 'pagination.number', 0)) + 1;
     },
     total() {
-      return this.pagination.totalPages;
+      return toNumber(get(this, 'pagination.totalPages', 0));
     },
     prev() {
-      return this.pagination.number > 1 ? this.pagination.number - 1 : null;
+      return this.current > 1 ? this.current - 1 : null;
     },
     next() {
-      return this.pagination.number < this.pagination.totalPages
-        ? this.pagination.number + 1
-        : null;
+      return this.current < this.total ? this.current + 1 : null;
     }
   }
 };

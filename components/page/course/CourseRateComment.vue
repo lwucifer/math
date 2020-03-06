@@ -2,23 +2,29 @@
   <div class="course-rates-comment">
     <div class="left">
       <div class="auth">
-        <app-avatar src="https://picsum.photos/40/40" :size="40" />
-        <strong class="ml-2">{{ review.username }}</strong>
+        <app-avatar :src="get(review, 'creator.avatar.low', '')" :size="40" />
+        <strong class="ml-2">{{ get(review, "creator.name", "") }}</strong>
       </div>
-      <app-stars :stars="review.rate" :size="16" class="mt-4 mb-3"/>
-      <p class="color-666">{{ review.comment }}</p>
+      <app-stars
+        :stars="Math.floor(get(review, 'vote', 0))"
+        :size="16"
+        class="mt-4 mb-3"
+      />
+      <p class="color-666">{{ get(review, "content", "") }}</p>
     </div>
     <div class="ml-auto d-flex-center color-666">
-        <IconClock width="14" height="14" class="mr-2"/> 16:48 20/08/2019
+      <IconClock width="14" height="14" class="mr-2" />
+      {{ get(review, "timestamp", "") }}
     </div>
   </div>
 </template>
 <script>
-import IconClock from '~/assets/svg/icons/clock.svg?inline';
+import IconClock from "~/assets/svg/icons/clock.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
-      IconClock
+    IconClock
   },
 
   props: {
@@ -26,6 +32,10 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+
+  methods: {
+    get
   }
 };
 </script>
