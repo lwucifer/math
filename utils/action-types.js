@@ -39,7 +39,8 @@ export const SOCIAL_SHARES = {
 };
 
 export const SOCIAL_COMMENTS = {
-  LIST: "socialCommentsList"
+  LIST: "socialCommentsList",
+  LIST_CHILDREN: "socialCommentListChildren"
 };
 
 export const SOCIAL_MEDIAS = {
@@ -202,6 +203,10 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
   INFO: "schoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  LIST: "schoolElearning"
 };
 
 export const SCHOOL_PROFESSIONAL = {

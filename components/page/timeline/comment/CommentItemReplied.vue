@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-item-replied">
+  <div class="comment-item-replied" v-on="$listeners">
     <app-avatar
       :src="data.list[0].avatar ? data.list[0].avatar.low : null"
       size="xs"
