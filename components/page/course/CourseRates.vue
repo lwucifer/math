@@ -91,6 +91,8 @@
 import CourseStars from "~/components/page/course/CourseStars";
 import CourseRateComment from "~/components/page/course/CourseRateComment";
 import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -103,6 +105,13 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+
+  created() {
+    this.getElearningPublicVotes();
+    useEffect(this, this.getElearningPublicVotes.bind(this), [
+      "$route.params.id"
+    ]);
   },
 
   data() {
@@ -122,7 +131,19 @@ export default {
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
     },
-    get
+    get,
+    getElearningPublicVotes() {
+      const elearning_id = get(this, "$route.params.id", "");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/public/public-vote/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`,
+        options
+      );
+    }
   }
 };
 </script>
