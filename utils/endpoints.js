@@ -48,6 +48,7 @@ export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summ
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = `${SCHOOLLY_ALIAS}/elearning/public/elearning/teacher`;
 export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
+export const ELEARNING_PUBLIC_VOTE = `${SCHOOLLY_ALIAS}/elearning/public/votes`;
 export const ELEARNING_PUBLIC_PLACE_DISTRICTS = `${SCHOOLLY_ALIAS}/elearning/public/place/districts`;
 export const ELEARNING_PUBLIC_PLACE_PROVINCES = `${SCHOOLLY_ALIAS}/elearning/public/place/provinces`;
 export const ELEARNING_PUBLIC_PLACE_WARDS = `${SCHOOLLY_ALIAS}/elearning/public/place/wards`;
