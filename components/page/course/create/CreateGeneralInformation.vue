@@ -8,10 +8,10 @@
     <div class="cc-panel__body">
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
-        <app-radio name="type" value="0" v-model="payload.type" class="mr-6"
+        <app-radio name="type" value="LECTURE" v-model="payload.type" checked class="mr-6"
           >Bài giảng</app-radio
         >
-        <app-radio name="type" value="1" v-model="payload.type"
+        <app-radio name="type" value="COURSE" v-model="payload.type"
           >Khoá học</app-radio
         >
       </div>
@@ -132,12 +132,12 @@ export default {
         avatar: "",
         benefit: "",
         description: "",
-        discount: "",
-        fee: "",
-        level: "0",
+        discount: 0,
+        fee: 0,
+        level: "Level 1",
         name: "",
-        subject: "0",
-        type: "1"
+        subject: "MATH",
+        type: "LECTURE"
       }
     };
   },
