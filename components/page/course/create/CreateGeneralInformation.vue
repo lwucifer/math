@@ -8,7 +8,12 @@
     <div class="cc-panel__body">
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
-        <app-radio name="type" value="LECTURE" v-model="payload.type" checked class="mr-6"
+        <app-radio
+          name="type"
+          value="LECTURE"
+          v-model="payload.type"
+          checked
+          class="mr-6"
           >Bài giảng</app-radio
         >
         <app-radio name="type" value="COURSE" v-model="payload.type"
@@ -134,7 +139,7 @@ export default {
         description: "",
         discount: 0,
         fee: 0,
-        level: "Level 1",
+        level: 1,
         name: "",
         subject: "MATH",
         type: "LECTURE"
