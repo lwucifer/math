@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolManagerSide active="4" />
+        <SchoolManagerSide active="5" />
       </div>
       <div class="col-md-9">
         <div class="box">
@@ -14,22 +14,15 @@
               </n-link>
             </div>
             <div class="row">
-              <div class="cl-mf-6">
+              <div class="col-md-7 col-sm-12">
                 <div class="school-manager__from">
                   <div class="row form-group">
                     <div class="col-md-12">
                       <label>Năm học</label>
                     </div>
                     <div class="col-md-12">
-                      <app-input :vlaue="year" />
+                      <app-input :vlaue="year" class="mb-0"/>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Họ và tên
-                      <span class="color-red">*</span>
-                    </label>
-                    <input type="text" :value="name" class="form-control" />
                   </div>
                   <div class="row form-group">
                     <div class="col-md-12">
@@ -37,7 +30,7 @@
                     </div>
                     <div class="col-md-12">
                       <app-vue-select
-                        class="form-control"
+                        class="app-vue-select"
                         v-model="filter.course"
                         :options="courses"
                         label="text"
@@ -55,18 +48,8 @@
                       <label>Lớp</label>
                     </div>
                     <div class="col-md-12">
-                      <app-vue-select
-                        class="form-control"
-                        v-model="filter.course"
-                        :options="courses"
-                        label="text"
-                        placeholder="Lựa chọn"
-                        searchable
-                        clearable
-                        @input="handleChangedInput"
-                        @search:focus="handleFocusSearchInput"
-                        @search:blur="handleBlurSearchInput"
-                      ></app-vue-select>
+                      <app-input v-model="classroom" class="mb-3"/>
+                      <i class="color-666" >Có thể thêm nhiều lớp cách nhau bởi dấu phẩy. Ví dụ 6A, 6B, ...</i>
                     </div>
                   </div>
                 </div>

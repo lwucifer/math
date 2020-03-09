@@ -2,17 +2,17 @@
   <div class="container school-manager">
     <div class="row">
       <div class="col-md-3">
-        <SchoolManagerSide active="3" />
+        <SchoolManagerSide active="6" />
       </div>
       <div class="col-md-9">
         <div class="bg-white">
           <div class="d-flex-center box12">
-            <h5 class="color-primary">Quản lý tổ chuyên môn</h5>
+            <h5 class="color-primary">Danh sách học sinh (Năm học 2018-2019)</h5>
             <n-link
-              :to="'/school/manager/group/create'"
+              :to="'/school/manager/student/create'"
               class="ml-auto btn btn--size-sm btn--color-white btn--square btn--normal"
             >
-              Thêm mới tổ chuyên môn
+              Thêm mới học sinh
               <IconPlusCircle class="fill-primary ml-2" width="13" height="13" />
             </n-link>
           </div>
@@ -20,9 +20,40 @@
           <div>
             <div class="filter-form mt-4">
               <div class="filter-form__item">
-                <app-button color="secondary" square :size="'sm'" normal>
-                  <IconTrash class="fill-white mr-2" width="13" height="13" />Xoá khỏi danh sách
+                <app-button :size="'sm'" normal rounded>
+                  <IconFilter />
+                  <span>Lọc kết quả</span>
                 </app-button>
+              </div>
+
+              <div class="filter-form__item" style="min-width: 19rem">
+                <app-vue-select
+                  class="app-vue-select filter-form__item__selection"
+                  v-model="filter.course"
+                  :options="courses"
+                  label="text"
+                  placeholder="Theo tổ chuyên môn"
+                  searchable
+                  clearable
+                  @input="handleChangedInput"
+                  @search:focus="handleFocusSearchInput"
+                  @search:blur="handleBlurSearchInput"
+                ></app-vue-select>
+              </div>
+
+              <div class="filter-form__item" style="min-width: 14rem">
+                <app-vue-select
+                  class="app-vue-select filter-form__item__selection"
+                  v-model="filter.status"
+                  :options="statuses"
+                  label="text"
+                  placeholder="Theo giới tính"
+                  searchable
+                  clearable
+                  @input="handleChangedInput"
+                  @search:focus="handleFocusSearchInput"
+                  @search:blur="handleBlurSearchInput"
+                ></app-vue-select>
               </div>
 
               <!--Right form-->
@@ -44,6 +75,14 @@
             </div>
             <!--End filter form-->
 
+            <!--Options group-->
+            <div class="filter-form mt-3 mb-4">
+              <app-button color="secondary" square :size="'sm'" normal>
+                <IconTrash class="fill-white mr-2" width="13" height="13" />Xoá khỏi danh sách
+              </app-button>
+            </div>
+            <!--Options group-->
+
             <!--Table-->
             <app-table
               :heads="heads"
@@ -53,18 +92,30 @@
               multiple-selection
               @selectionChange="selectRow"
             >
-              <template v-slot:cell(teachers)="{row}">
-                <td>
-                  <label class="toggle-tool">
-                    <span v-if="show.includes(row.id)">Thu gọn danh sách</span>
-                    <span v-else>Xem danh sách</span>
-                    <input type="checkbox" v-model="show" :value="row.id" />
-                  </label>
-                  <ul class="school-manager__table-tags" v-if="show.includes(row.id)">
-                    <li v-for="(teacher, i) in  row.teachers" :key="i">
-                      {{teacher.name}}
-                    </li>
-                  </ul>
+              <template v-slot:cell(teacher)="{row}">
+                <td class="school-manager__table-tooltip">
+                  <span class="text">{{row.teacher.name}}</span>
+                  <div class="box-tooltip">
+                    <h3>{{row.teacher.name}}</h3>
+                    <div class="row">
+                      <div class="col-md-6 mt-2">
+                        <span>Số bài giảng: </span>
+                        {{row.teacher.lessons}}
+                      </div>
+                      <div class="col-md-6 mt-2">
+                        <span>Số bài tập: </span>
+                        {{row.teacher.exercises}}
+                      </div>
+                      <div class="col-md-6 mt-2">
+                        <span>Số học sinh: </span>
+                        {{row.teacher.students}}
+                      </div>
+                      <div class="col-md-6 mt-2">
+                        <span>Điểm đánh giá: </span>
+                        {{row.teacher.rate}}
+                      </div>
+                    </div>
+                  </div>
                 </td>
               </template>
             </app-table>
@@ -90,7 +141,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
 
 // Import faked data
-import { SCHOOL, TEACHERS, GROUPS } from "~/server/fakedata/school/test";
+import { SCHOOL, STUDENTS } from "~/server/fakedata/school/test";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -115,16 +166,39 @@ export default {
   data() {
     return {
       school: SCHOOL,
-      show: [],
       heads: [
         {
           name: "name",
-          text: "Tổ chuyên môn"
+          text: "Họ và tên"
         },
         {
-          name: "teachers",
-          text: "Danh sách giáo viên tổ chuyên môn"
-        }
+          name: "code",
+          text: "Mã học sinh"
+        },
+        {
+          name: "birthday",
+          text: "Ngày sinh"
+        },
+        {
+          name: "sex",
+          text: "Giới tính"
+        },
+        {
+          name: "grade",
+          text: "Khối"
+        },
+        {
+          name: "class",
+          text: "Lớp"
+        },
+        {
+          name: "phone",
+          text: "Số điện thoại"
+        },
+        {
+          name: "email",
+          text: "Email"
+        },
       ],
       filter: {
         course: null,
@@ -160,7 +234,7 @@ export default {
         first: 1,
         last: 10
       },
-      list: GROUPS
+      list: STUDENTS
     };
   },
   computed: {

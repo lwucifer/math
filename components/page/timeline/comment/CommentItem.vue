@@ -18,7 +18,7 @@
 
         <a href class="comment-item__action" @click.prevent>Like</a>
 
-        <a href class="comment-item__action" @click.prevent>Reply</a>
+        <a href class="comment-item__action" @click.prevent="handleClickReply">Reply</a>
       </div>
 
       <CommentItemReplied
@@ -27,7 +27,13 @@
         @click="getChildrenComment(data.id)"
       />
 
-      <CommentItem v-for="item in listComments" :key="item.id" :level="2" :data="item" />
+      <CommentItem
+        v-for="item in listComments"
+        :key="item.id"
+        :level="2"
+        :post="post"
+        :data="item"
+      />
 
       <div class="text-center">
         <a
@@ -41,28 +47,42 @@
       <div class="text-center" v-if="isFetchingComment">
         <app-spin />
       </div>
+
+      <CommentEditor reply v-if="showReply" @submit="postComment" />
     </div>
   </div>
 </template>
 
 <script>
 import CommentService from "~/services/social/comments";
-import { SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS } from "~/utils/action-types";
+import {
+  SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
+  BASE as ACTION_TYPE_BASE
+} from "~/utils/action-types";
+import { createComment } from "~/models/social/Comment";
 
 const CommentItemReplied = () =>
   import("~/components/page/timeline/comment/CommentItemReplied");
+const CommentEditor = () =>
+  import("~/components/page/timeline/comment/CommentEditor");
 
 export default {
   name: "CommentItem",
 
   components: {
-    CommentItemReplied
+    CommentItemReplied,
+    CommentEditor
   },
 
   props: {
     level: {
       type: Number,
       default: 1 // 1 | 2
+    },
+    post: {
+      type: Object,
+      default: () => {},
+      validator: value => ["post_id"].every(key => key in value)
     },
     data: {
       type: Object,
@@ -82,7 +102,8 @@ export default {
         parent_comment_id: this.data.id
       },
       childrenCommentData: {},
-      isFetchingComment: false
+      isFetchingComment: false,
+      showReply: false
     };
   },
 
@@ -140,6 +161,41 @@ export default {
       }
 
       this.isFetchingComment = false;
+    },
+
+    handleClickReply() {
+      if (this.level === 2) {
+        this.$emit("click-reply");
+      } else {
+        this.showReply = true;
+      }
+    },
+
+    async postComment(content) {
+      const commentModel = createComment(
+        this.post.post_id,
+        this.data.id,
+        content
+      );
+      const doPostComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.ADD
+      ](commentModel);
+
+      if (doPostComment.success) {
+        if ("listComments" in this.childrenCommentData) {
+          const { listComments } = this.childrenCommentData;
+          this.childrenCommentData.listComments = [
+            doPostComment.data,
+            ...listComments
+          ];
+        } else {
+          this.childrenCommentData = {
+            listComments: [doPostComment.data]
+          };
+        }
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
     }
   }
 };

@@ -128,7 +128,12 @@
         </div>-->
 
         <div class="post__comment-list">
-          <CommentItem v-for="item in listParentComments" :key="item.id" :data="item" />
+          <CommentItem
+            v-for="item in listParentComments"
+            :key="item.id"
+            :post="post"
+            :data="item"
+          />
 
           <div class="text-center">
             <a
@@ -303,7 +308,11 @@ export default {
 
       if (doPostComment.success) {
         if ("listParentComments" in this.parentCommentData) {
-          this.parentCommentData.listParentComments.push(doPostComment.data);
+          const { listParentComments } = this.parentCommentData;
+          this.parentCommentData.listParentComments = [
+            doPostComment.data,
+            ...listParentComments
+          ];
         } else {
           this.parentCommentData = {
             listParentComments: [doPostComment.data]

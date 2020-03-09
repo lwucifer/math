@@ -433,11 +433,9 @@ export default {
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
       const doLike = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_LIKES.ADD}`,
+        `social/${actionTypes.SOCIAL_LIKES.LIKE_POST}`,
         likeModel
       );
-      console.log("likePost", doLike);
-      this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`);
 
       // Have to run cb
       cb();

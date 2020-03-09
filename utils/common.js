@@ -27,6 +27,7 @@ export function remove_unicode(str) {
 }
 
 export function useEffect(that, watcher, props) {
+  watcher();
   const iterator = function(prop) {
     that.$watch(prop, watcher);
   };
