@@ -31,7 +31,8 @@ export const SOCIAL_POST = {
 export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
-  DELETE: "socialLikesDelete"
+  DELETE: "socialLikesDelete",
+  LIKE_POST: 'socialLikesLikePost'
 };
 
 export const SOCIAL_SHARES = {
@@ -105,6 +106,10 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
 
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
+};
+
+export const ELEARNING_PUBLIC_VOTE = {
+  LIST: "elearningPublicVoteList"
 };
 
 export const ELEARNING_PUBLIC_PLACE = {

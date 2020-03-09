@@ -60,6 +60,10 @@ export const ELEARNING_PUBLIC_INFO = {
   SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
 };
 
+export const ELEARNING_PUBLIC_VOTE = {
+  SET_ELEARNING_PUBLIC_VOTE_LIST: "setElearningPublicVoteList"
+};
+
 export const ELEARNING_PUBLIC_PLACE = {
   SET_ELEARNING_PUBLIC_PLACE_PROVINCE: "setElearningPublicPlaceProvince",
   SET_ELEARNING_PUBLIC_PLACE_DISTRICT: "setElearningPublicPlaceDistrict",
