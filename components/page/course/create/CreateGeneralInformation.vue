@@ -114,6 +114,7 @@ import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/CreateAction";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -156,7 +157,10 @@ export default {
     },
 
     handleCLickSave() {
-      console.log(this.payload);
+      this.$store.dispatch(
+        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
+        this.payload
+      );
     }
   }
 };
