@@ -1,0 +1,23 @@
+<template>
+  <div class="page-wrap layout-create">
+    <nuxt class="page-content"/>
+
+    <Footer />
+
+    <portal-target name="modal" slim></portal-target>
+  </div>
+</template>
+
+<script>
+  import Footer from "~/components/layout/footer/Footer"
+
+  export default {
+    components: {
+      Footer
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "~/assets/scss/layouts/_create.scss";
+</style>

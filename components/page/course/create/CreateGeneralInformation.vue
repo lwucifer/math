@@ -1,5 +1,6 @@
 <template>
   <div class="cc-panel bg-white">
+    <create-action />
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
     </div>
@@ -90,13 +91,15 @@
 import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import CreateAction from "~/components/page/course/create/CreateAction";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   components: {
     IconCamera,
     IconClose,
-    IconAngleDown
+    IconAngleDown,
+    CreateAction
   },
 
   data() {

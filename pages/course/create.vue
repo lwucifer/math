@@ -25,7 +25,7 @@ import CreateExcercise from "~/components/page/course/create/CreateExcercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
 
 export default {
-  layout: "create",
+  layout: "no-header",
 
   components: {
     CreateAside,

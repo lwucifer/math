@@ -1,21 +1,18 @@
 <template>
   <div class="container">
     <course-slider-tab
-      :lessons="highlight"
-      :sciences="sciences"
+      :elearnings="get(elearnings, 'highlight', null)"
       :swiperOptions="sliderOptions"
       title="Nổi bật"
     />
     <course-slider-tab
-      :lessons="suggestion"
-      :sciences="sciences"
+      :elearnings="get(elearnings, 'suggestion', [])"
       :swiperOptions="sliderOptions"
       title="Gợi ý"
       class="mt-5"
     />
     <course-slider-tab
-      :lessons="recent"
-      :swiperOptions="sliderOptions"
+      :elearnings="get(elearnings, 'recent', [])"
       title="Bài giảng mới nhất"
       class="mt-5"
     />
@@ -34,17 +31,14 @@ import { get } from "lodash";
 // Import faked data
 import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
 
-const elearningPublicSummaryStorePath = 'elearning/public/public-summary'
-
 export default {
   components: {
     CourseSliderTab
   },
 
   async fetch({ params, query, store }) {
-    console.log("get earning summary");
     await store.dispatch(
-      `${elearningPublicSummaryStorePath}/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
+      `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
@@ -67,16 +61,13 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState(elearningPublicSummaryStorePath, ["elearningPublicSummary"]),
-    highlight() {
-      return get(this.elearningPublicSummary, "highlight", []);
-    },
-    suggestion() {
-      return get(this.elearningPublicSummary, "suggestion", []);
-    },
-    recent() {
-      return get(this.elearningPublicSummary, "recent", []);
-    }
+    ...mapState("elearning/public/public-summary", {
+      elearnings: "elearningPublicSummary"
+    })
+  },
+
+  methods: {
+    get
   }
 };
 </script>
