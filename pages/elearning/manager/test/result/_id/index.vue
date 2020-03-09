@@ -35,7 +35,7 @@
     import { EXERCISE_DETAIL } from "~/server/fakedata/elearning/test"
 
     export default {
-
+        layout: "exercise",
         components: {
             ElearningManagerSide,
             ObjectiveTest,

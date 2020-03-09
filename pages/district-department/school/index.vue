@@ -63,6 +63,8 @@
   export default {
     name: "School",
 
+    layout: 'manage',
+
     watchQuery: ["school_id"],
 
     components: {

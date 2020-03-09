@@ -30,7 +30,7 @@
 
   export default {
     name: "SchoolDetail",
-
+    layout: "manage",
     components: {
       MenuAside,
       Overview: () => import('~/components/page/district-department/school/Overview'),
