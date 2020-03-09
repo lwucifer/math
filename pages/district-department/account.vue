@@ -28,6 +28,8 @@
   import { SCHOOL } from "~/server/fakedata/school/test";
 
   export default {
+    layout: 'manage',
+
     components: {
       MenuAside,
       Profile: () => import('~/components/page/district-department/account/Profile'),
