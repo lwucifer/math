@@ -32,19 +32,7 @@
         <div class="col-md-3">
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
-            <app-select
-              class="cc-select"
-              :options="[
-                { value: '0', text: 'Môn học 1' },
-                { value: '1', text: 'Môn học 2' }
-              ]"
-              placeholder="Chọn môn học"
-              v-model="payload.subject"
-            >
-              <template slot="placeholder-icon">
-                <IconAngleDown class="icon" />
-              </template>
-            </app-select>
+            <CourseSelectSubject @handleChangeSubject="handleChangeSubject" />
           </div>
         </div>
       </div>
@@ -109,6 +97,7 @@ import CreateAction from "~/components/page/course/create/CreateAction";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import * as actionTypes from "~/utils/action-types";
 import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
+import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
 import { toNumber, get } from "lodash";
 
 export default {
@@ -117,7 +106,8 @@ export default {
     IconClose,
     IconAngleDown,
     CreateAction,
-    CourseSelectLevel
+    CourseSelectLevel,
+    CourseSelectSubject
   },
 
   data() {
@@ -132,7 +122,7 @@ export default {
         fee: 0,
         level: 0,
         name: "",
-        subject: "MATH",
+        subject: "",
         type: "LECTURE"
       }
     };
@@ -149,6 +139,10 @@ export default {
 
     handleChangeLevel(level) {
       this.payload.level = toNumber(get(level, "id", 0));
+    },
+
+    handleChangeSubject(subject) {
+      this.payload.subject = get(subject, "code", "");
     },
 
     removeAvatar() {
