@@ -57,63 +57,31 @@
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
-      <div class="cgi-form-group">
-        <h2 class="cgi-form-title heading-6 mb-4">
-          Hình đại diện (Kích thước 500x300)
-        </h2>
-        <app-upload
-          :fileList="avatar"
-          class="cgi-upload-avt"
-          @change="handleUploadChange"
-        >
-          <template v-if="avatar.length">
-            <div class="cgi-upload-avt-preview">
-              <img :src="avatarSrc" alt />
-              <span
-                class="cgi-upload-avt-close-preview"
-                @click.stop="removeAvatar"
-              >
-                <IconClose />
-              </span>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="cgi-upload-avt-icon-wrapper">
-              <IconCamera class="icon" />
-            </div>
-          </template>
-        </app-upload>
-      </div>
+      <CourseSelectAvatar @handleSelectAvatar="handleSelectAvatar" />
     </div>
   </div>
 </template>
 
 <script>
-import { getBase64 } from "~/utils/common";
-import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/CreateAction";
-const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import * as actionTypes from "~/utils/action-types";
 import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
+import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
 import { toNumber, get } from "lodash";
 
 export default {
   components: {
-    IconCamera,
-    IconClose,
     IconAngleDown,
     CreateAction,
     CourseSelectLevel,
-    CourseSelectSubject
+    CourseSelectSubject,
+    CourseSelectAvatar
   },
 
   data() {
     return {
-      avatar: [],
-      avatarSrc: null,
       payload: {
         avatar: "",
         benefit: "",
@@ -129,25 +97,16 @@ export default {
   },
 
   methods: {
-    handleUploadChange(fileList, event) {
-      this.payload.avatar = fileList[0];
-      this.avatar = Array.from(fileList);
-      getBase64(this.avatar[0], src => {
-        this.avatarSrc = src;
-      });
-    },
-
     handleChangeLevel(level) {
       this.payload.level = toNumber(get(level, "id", 0));
     },
 
+    handleSelectAvatar(avatar) {
+      this.payload.avatar = avatar;
+    },
+    
     handleChangeSubject(subject) {
       this.payload.subject = get(subject, "code", "");
-    },
-
-    removeAvatar() {
-      this.avatar = [];
-      this.payload.avatar = "";
     },
 
     handleCLickSave() {
