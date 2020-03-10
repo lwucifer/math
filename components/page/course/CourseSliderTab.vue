@@ -6,7 +6,6 @@
         @click="changeTab(1)"
         :color="tab === 1 ? 'primary' : 'info'"
         square
-        v-if="sciences.length > 0"
       >
         <IconNote />
         Bài giảng
@@ -15,7 +14,6 @@
         @click="changeTab(2)"
         :color="tab === 2 ? 'primary' : 'info'"
         square
-        v-if="sciences.length > 0"
       >
         <IconBooks />
         Khóa học
@@ -59,6 +57,7 @@ import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -70,20 +69,16 @@ export default {
   },
 
   props: {
-    lessons: {
-      type: Array,
-      default: () => []
-    },
-
-    sciences: {
-      type: Array,
-      default: () => []
+    elearnings: {
+      type: Object,
+      default: null
     },
 
     swiperOptions: {
       type: Object,
       default: () => {}
     },
+
     title: { type: String }
   },
 
@@ -110,12 +105,12 @@ export default {
   methods: {
     changeTab(tab) {
       this.tab = tab;
-      this.list = tab === 1 ? [...this.lessons] : [...this.sciences];
+      this.list = tab === 1 ? get(this, "elearnings.lectures", []) : get(this, "elearnings.courses", []);
     }
   },
 
   created() {
-    this.list = this.lessons;
+    this.list = get(this, "elearnings.lectures", []);
   }
 };
 </script>

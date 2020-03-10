@@ -62,6 +62,7 @@ export const ELEARNING_CREATING_LESSONS = `${SCHOOLLY_ALIAS}/elearning/creating/
 export const ELEARNING_CREATING_QUESTIONS = `${SCHOOLLY_ALIAS}/elearning/creating/questions`;
 export const ELEARNING_PUBLIC_RELATED = `${SCHOOLLY_ALIAS}/elearning/public/related`;
 export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subject`;
+export const ELEARNING_PUBLIC_LEVEL = `${SCHOOLLY_ALIAS}/elearning/public/levels`;
 
 /**
  * STUDY

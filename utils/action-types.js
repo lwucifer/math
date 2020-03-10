@@ -32,7 +32,7 @@ export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
   DELETE: "socialLikesDelete",
-  LIKE_POST: 'socialLikesLikePost'
+  LIKE_POST: "socialLikesLikePost"
 };
 
 export const SOCIAL_SHARES = {
@@ -130,7 +130,8 @@ export const ELEARNING = {
   INFO: "elearningInfo",
   PROGRAM: "elearningProgram",
   RELATED: "elearningPublicRelated",
-  SUBJECT: "elearningPublicSubject"
+  SUBJECT: "elearningPublicSubject",
+  LEVEL: "elearningPublicLevel"
 };
 
 export const CREATING_ANSWER = {

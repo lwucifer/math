@@ -144,7 +144,7 @@ export default {
   methods: {
     goTo(e, check = false) {
       if (!check) {
-        this.$emit("pagechange", { page: e, pager: this.pager });
+        this.$emit("pagechange", { number: e, size: this.pager });
       }
     }
   },

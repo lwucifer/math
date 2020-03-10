@@ -1,5 +1,6 @@
 <template>
   <div>
+    <create-action />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
@@ -333,6 +334,8 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 
+import CreateAction from "~/components/page/course/create/CreateAction";
+
 export default {
   components: {
     IconInfoCircle,
@@ -341,7 +344,8 @@ export default {
     IconTrashAlt,
     IconAlignCenterAlt,
     IconFileCheck,
-    IconClipboardNotes
+    IconClipboardNotes,
+    CreateAction
   },
 
   data() {

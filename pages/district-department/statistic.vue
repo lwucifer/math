@@ -26,6 +26,8 @@
   import { SCHOOL_RANK } from "~/server/fakedata/district-department/school-rank";
 
   export default {
+    layout: 'manage',
+
     components: {
       FilterForm,
       StatisticFigure,

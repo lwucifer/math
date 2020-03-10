@@ -117,8 +117,8 @@
     import { EXERCISE_DETAIL } from "~/server/fakedata/elearning/test"
 
     export default {
-
-        components: {
+      layout: "exercise",
+      components: {
             ElearningManagerSide,
             IconFilter,
             IconSearch,
