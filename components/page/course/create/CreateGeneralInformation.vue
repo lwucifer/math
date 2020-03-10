@@ -103,8 +103,17 @@ import numeral from "numeral";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import { mapState } from "vuex";
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   avatar: yup.string().required(),
+  benefit: yup.string().required(),
+  description: yup.string().required(),
+  level: yup.string().required(),
+  name: yup.string().required(),
+  subject: yup.string().required(),
+  type: yup.string().required()
+});
+
+const schema_update = yup.object().shape({
   benefit: yup.string().required(),
   description: yup.string().required(),
   level: yup.string().required(),
@@ -152,9 +161,7 @@ export default {
       "payload.type"
     ]);
 
-    useEffect(this, this.handleChangeElearningId.bind(this), [
-      "$route.query.elearning_id"
-    ]);
+    this.handleFetchElearningGeneral();
 
     useEffect(this, this.handleChangeGeneral.bind(this), [
       "general.benefit",
@@ -184,12 +191,14 @@ export default {
       this.payload.subject = get(this, "general.subject", "");
       this.payload.level = get(this, "general.level", "");
       this.payload.type = get(this, "general.type", "LECTURE");
+      if (get(this, "general.id", "")) {
+        this.payload.elearning_id = get(this, "general.id", "");
+      }
     },
 
-    handleChangeElearningId() {
+    handleFetchElearningGeneral() {
       const elearning_id = get(this, "$route.query.elearning_id", "");
       if (elearning_id) {
-        this.payload.elearning_id = elearning_id;
         const options = {
           params: {
             elearning_id
@@ -212,11 +221,16 @@ export default {
 
     handleChangePayload() {
       let that = this;
-      if (this.$route.query.elearning_id) {
-        this.isSubmit = true;
+      const payload = createPayloadAddCourse(this.payload);
+      const elearning_id = get(that, "$route.query.elearning_id", "");
+
+      if (elearning_id) {
+        schema_update.isValid(payload).then(function(valid) {
+          that.isSubmit = valid;
+        });
         return;
       }
-      const payload = createPayloadAddCourse(this.payload);
+
       schema.isValid(payload).then(function(valid) {
         that.isSubmit = valid;
       });
