@@ -46,6 +46,20 @@
       </div>
 
       <div class="cgi-form-group mb-4">
+        <h2 class="cgi-form-title heading-6 mb-3">
+          Học phí
+        </h2>
+        <app-input :value="fee" @input="handleChangeFee" />
+      </div>
+
+      <div class="cgi-form-group mb-4">
+        <h2 class="cgi-form-title heading-6 mb-3">
+          Giảm giá
+        </h2>
+        <app-input :value="discount" @input="handleChangeDiscount" />
+      </div>
+
+      <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
         <app-editor v-model="payload.benefit" class="bg-input-gray mb-3" />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
@@ -72,6 +86,8 @@ import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
 import { toNumber, get } from "lodash";
 import { useEffect } from "~/utils/common";
 import * as yup from "yup";
+import numeral from "numeral";
+import { createPayloadAddCourse } from "~/models/course/AddCourse";
 
 let schema = yup.object().shape({
   avatar: yup.string().required(),
@@ -99,8 +115,8 @@ export default {
         avatar: "",
         benefit: "",
         description: "",
-        discount: 0,
-        fee: 0,
+        discount: "",
+        fee: "",
         level: "",
         name: "",
         subject: "",
@@ -124,17 +140,24 @@ export default {
   },
 
   methods: {
+    handleChangeDiscount(discount) {
+      this.payload.discount = discount;
+    },
+
+    handleChangeFee(fee) {
+      this.payload.fee = fee;
+    },
+
     handleChangePayload() {
       let that = this;
-      schema.isValid(this.payload).then(function(valid) {
+      const payload = createPayloadAddCourse(this.payload);
+      schema.isValid(payload).then(function(valid) {
         that.isSubmit = valid;
       });
     },
 
     handleChangeLevel(level) {
-      this.payload.level = get(level, "id", "")
-        ? toNumber(get(level, "id", ""))
-        : "";
+      this.payload.level = get(level, "id", "");
     },
 
     handleSelectType(e) {
@@ -150,10 +173,24 @@ export default {
     },
 
     handleCLickSave() {
+      const payload = createPayloadAddCourse(this.payload);
       this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
-        this.payload
+        payload
       );
+    },
+
+    numeral
+  },
+
+  computed: {
+    discount() {
+      const discount = this.payload.discount;
+      return discount ? numeral(discount).format() : "";
+    },
+    fee() {
+      const fee = this.payload.fee;
+      return fee ? numeral(fee).format() : "";
     }
   }
 };
