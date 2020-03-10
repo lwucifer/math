@@ -11,12 +11,12 @@
         <app-radio
           name="type"
           value="LECTURE"
-          v-model="payload.type"
-          checked
+          @click="handleSelectType"
+          :checked="true"
           class="mr-6"
           >Bài giảng</app-radio
         >
-        <app-radio name="type" value="COURSE" v-model="payload.type"
+        <app-radio name="type" @click="handleSelectType" value="COURSE"
           >Khoá học</app-radio
         >
       </div>
@@ -101,10 +101,14 @@ export default {
       this.payload.level = toNumber(get(level, "id", 0));
     },
 
+    handleSelectType(e) {
+      this.payload.type = e.target.value;
+    },
+
     handleSelectAvatar(avatar) {
       this.payload.avatar = avatar;
     },
-    
+
     handleChangeSubject(subject) {
       this.payload.subject = get(subject, "code", "");
     },
