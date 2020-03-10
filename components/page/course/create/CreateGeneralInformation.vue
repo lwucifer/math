@@ -25,19 +25,7 @@
         <div class="col-md-3">
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
-            <app-select
-              class="cc-select"
-              :options="[
-                { value: '0', text: 'Lớp A' },
-                { value: '1', text: 'Lớp B' }
-              ]"
-              placeholder="Chọn lớp"
-              v-model="payload.level"
-            >
-              <template slot="placeholder-icon">
-                <IconAngleDown class="icon" />
-              </template>
-            </app-select>
+            <CourseSelectLevel @handleChangeLevel="handleChangeLevel" />
           </div>
         </div>
 
@@ -120,13 +108,16 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/CreateAction";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import * as actionTypes from "~/utils/action-types";
+import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
+import { toNumber, get } from "lodash";
 
 export default {
   components: {
     IconCamera,
     IconClose,
     IconAngleDown,
-    CreateAction
+    CreateAction,
+    CourseSelectLevel
   },
 
   data() {
@@ -139,7 +130,7 @@ export default {
         description: "",
         discount: 0,
         fee: 0,
-        level: 1,
+        level: 0,
         name: "",
         subject: "MATH",
         type: "LECTURE"
@@ -154,6 +145,10 @@ export default {
       getBase64(this.avatar[0], src => {
         this.avatarSrc = src;
       });
+    },
+
+    handleChangeLevel(level) {
+      this.payload.level = toNumber(get(level, "id", 0));
     },
 
     removeAvatar() {
