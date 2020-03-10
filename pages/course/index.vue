@@ -13,6 +13,7 @@
     />
     <course-slider-tab
       :elearnings="get(elearnings, 'recent', [])"
+      :swiperOptions="sliderOptions"
       title="Bài giảng mới nhất"
       class="mt-5"
     />

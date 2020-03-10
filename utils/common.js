@@ -1,3 +1,5 @@
+import { forEach } from "lodash";
+
 export function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -32,4 +34,18 @@ export function useEffect(that, watcher, props) {
     that.$watch(prop, watcher);
   };
   props.forEach(iterator, that);
+}
+
+export function redirectWithParams(params = {}) {
+  let currentUrlParams = new URLSearchParams(window.location.search);
+
+  forEach(params, function(value, key) {
+    currentUrlParams.set(key, value);
+  });
+
+  window.history.pushState(
+    {},
+    "",
+    window.location.pathname + "?" + currentUrlParams.toString()
+  );
 }

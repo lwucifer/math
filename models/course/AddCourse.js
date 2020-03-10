@@ -12,6 +12,9 @@ class AddCourse {
     this.name = payload.name;
     this.subject = payload.subject;
     this.type = payload.type;
+    if (payload.elearning_id) {
+      this.elearning_id = payload.elearning_id;
+    }
   }
 }
 
