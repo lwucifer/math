@@ -1,9 +1,9 @@
 <template>
   <app-vue-select
     class="cc-select"
-    :options="levels"
-    placeholder="Chọn lớp"
-    @input="handleChangeLevel"
+    :options="subjects"
+    placeholder="Chọn môn học"
+    @input="handleChangeSubject"
     label="name"
   >
     <template slot="placeholder-icon">
@@ -25,20 +25,20 @@ export default {
 
   created() {
     this.$store.dispatch(
-      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
+      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
     );
   },
 
   computed: {
-    ...mapState("elearning/public/public-levels", {
-      levels: "levels"
+    ...mapState("elearning/public/public-subject", {
+      subjects: "subjects"
     })
   },
 
   methods: {
     get,
-    handleChangeLevel(level) {
-      this.$emit("handleChangeLevel", level);
+    handleChangeSubject(subject) {
+      this.$emit("handleChangeSubject", subject);
     }
   }
 };

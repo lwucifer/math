@@ -1,23 +1,28 @@
 <template>
   <div class="container">
       <div class="row">
-        <div class="col-md-3">
-            <DepartmentAccountSide :department="department" :active="1"/>
+        <div class="col-md-3 ">
+            <AccountClientSide :client="client" active="1"/>
         </div>
         <div class="col-md-9">
-            <div class="wrap-account__Department">
+            <div class="wrap-account-client">
                 <h5 class="color-primary">Thông tin tài khoản</h5>
                 <hr class="mt-3 mb-3"/>
                 <div class="row">
                     <div class="col-md-5">
-                        <app-input :value="department.name" label="Tên sở giáo dục" disabled/>
-                        <app-input :value="department.address" label="Địa chỉ"/>
-                        <app-input :value="department.email" label="Email"/>
+                        <app-input :value="client.name" label="Họ và tên"/>
+                        <app-input :value="client.email" label="Email"/>
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-5">
-                        <app-input :value="department.code" label="Mã sở giáo dục" disabled/>
-                        <app-input :value="department.phone" label="Số điện thoại"/>
+                        <app-input :value="client.phone" label="Số điện thoại"/>
+                        <div class="account-client-date-picker">
+                            <app-date-picker square label="Ngày sinh"/>
+                            <div class="account-client-sex-select">
+                                <label>Giới tính</label>
+                                <app-select :options="sexOptions" value="client.sex"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <app-button color="red" square>
@@ -33,19 +38,21 @@
 </template>
 
 <script>
-import DepartmentAccountSide from "~/components/page/department/DepartmentAccountSide"
-import {DEPARTMENT} from "~/server/fakedata/department/test"
+import {SEX,CLIENT} from "~/server/fakedata/account/client.js"
+import AccountClientSide from "~/components/page/account/AccountClientSide"
 export default {
-    layout:'backhome',
+    layout:"client",
     components:{
-        DepartmentAccountSide
+        AccountClientSide
     },
     data() {
         return {
         isAuthenticated: true,
-        department: DEPARTMENT,
+        sexOptions:SEX,
+        client: CLIENT,
         avatar: [],
-        avatarSrc: "https://picsum.photos/170/170"
+        avatarSrc: "https://picsum.photos/170/170",
+        defaultSelect:1
         };
     },
 
@@ -66,6 +73,6 @@ export default {
 }
 </script>
 
-<style>
-@import "~/assets/scss/components/department/_department-account-side.scss";
+<style lang="scss">
+@import "~/assets/scss/components/account/_account-client.scss";
 </style>
