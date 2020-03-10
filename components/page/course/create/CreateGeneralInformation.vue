@@ -81,7 +81,10 @@
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
-      <CourseSelectAvatar @handleSelectAvatar="handleSelectAvatar" />
+      <CourseSelectAvatar
+        :defaultAvatar="get(general, 'avatar.medium', '')"
+        @handleSelectAvatar="handleSelectAvatar"
+      />
     </div>
   </div>
 </template>
@@ -186,6 +189,7 @@ export default {
     handleChangeElearningId() {
       const elearning_id = get(this, "$route.query.elearning_id", "");
       if (elearning_id) {
+        this.payload.elearning_id = elearning_id;
         const options = {
           params: {
             elearning_id
@@ -208,6 +212,10 @@ export default {
 
     handleChangePayload() {
       let that = this;
+      if (this.$route.query.elearning_id) {
+        this.isSubmit = true;
+        return;
+      }
       const payload = createPayloadAddCourse(this.payload);
       schema.isValid(payload).then(function(valid) {
         that.isSubmit = valid;
@@ -231,7 +239,7 @@ export default {
     },
 
     handleCLickSave() {
-      const payload = createPayloadAddCourse(this.payload);
+      let payload = createPayloadAddCourse(this.payload);
       this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
@@ -239,7 +247,8 @@ export default {
       this.isSubmit = false;
     },
 
-    numeral
+    numeral,
+    get
   }
 };
 </script>
