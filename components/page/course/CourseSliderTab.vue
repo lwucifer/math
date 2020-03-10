@@ -19,34 +19,38 @@
         Khóa học
       </app-button>
     </div>
-    <div
-      v-swiper:mySwiper="currentSwiperOptions"
-      class="post-slider course-slider"
-      v-on="$listeners"
-    >
-      <div class="swiper-wrapper">
-        <div
-          class="swiper-slide course-slider-tab-container"
-          v-for="(item, index) in list"
-          :key="index"
-        >
-          <div class="slider-item" @click="$emit('click-item', item, index)">
-            <course-item2 :item="item" />
+    <div style="position: relative;">
+      <div
+        ref="swiper"
+        v-swiper="currentSwiperOptions"
+        v-on="$listeners"
+        :instanceName="sliderName"
+      >
+        <div class="swiper-wrapper">
+          <div
+            class="swiper-slide"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <course-item2 :item="item"
+            />
           </div>
         </div>
+
+        <div
+          class="swiper-pagination"
+          v-if="currentSwiperOptions.pagination"
+        ></div>
       </div>
 
-      <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
+      <div class="swiper-button-custom swiper-button-prev--circle" v-if="currentSwiperOptions.navigation" slot="button-prev" @click="swiper.slidePrev()">
         <IconChevronLeft />
       </div>
-      <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
+      <div class="swiper-button-custom swiper-button-next--circle" v-if="currentSwiperOptions.navigation" slot="button-next" @click="swiper.slideNext()">
         <IconChevronRight />
       </div>
-      <div
-        class="swiper-pagination"
-        v-if="currentSwiperOptions.pagination"
-      ></div>
     </div>
+
   </div>
 </template>
 
@@ -82,16 +86,51 @@ export default {
     title: { type: String }
   },
 
+  computed: {
+    sliderName() {
+      return 'slider-' + new Date().getTime();
+    },
+    swiper: {
+      get() {
+        return this.$refs.swiper.swiper;
+      },
+      set() {}
+    }
+  },
+
   data() {
     const defaultSwiperOptions = {
       slidesPerView: "auto",
       spaceBetween: 4,
       navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
+      //   nextEl: ".swiper-button-next--circle",
+      //   prevEl: ".swiper-button-prev--circle",
       },
       pagination: false,
-      showName: false
+      showName: false,
+      loop: true,
+      breakpoints: {
+        1366: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        }
+      }
     };
 
     return {
@@ -118,3 +157,5 @@ export default {
 <style lang="scss">
 @import "~/assets/scss/components/course/_course-slider-tab.scss";
 </style>
+
+<style src="swiper/dist/css/swiper.css" scoped></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="course-item2">
     <div class="course-item2__image">
-      <img :src="item.avatar" alt />
+      <img :src="item.avatar" alt class="w-100" />
       <div class="status-online" v-if="item.onlineStatus && item.online === 1">
         {{ item.onlineStatus }}
       </div>
