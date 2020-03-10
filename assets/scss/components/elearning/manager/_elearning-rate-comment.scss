@@ -1,0 +1,24 @@
+.wrapFilterBar__ElearningManagerRC{
+    display: flex;
+    flex: row;
+    align-items: center;
+    > div{
+        margin-right:20px;
+    }
+}
+.selectComment__ElearningManagerRC{
+    width: 156px;
+    height: 32px;
+}
+.selectClass__ElearningManagerRC{
+    min-width: 77px;
+    height: 32px;
+}
+.wrapTable__ElearningManagerRC{
+    padding-top:22px;
+}
+.table__ElearningManagerRC{
+    th{
+        width: 25%;
+    }
+}

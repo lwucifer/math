@@ -4,7 +4,7 @@ export const AUTH = {
   SET_LOGOUT: "setLogout",
   SET_TOKEN: "setToken",
   SET_ACCESS_TOKEN: "setAccessToken",
-  SET_OTP: "setAccessToken",
+  // SET_OTP: "setAccessToken",
   REMOVE_TOKEN: "removeToken",
   SET_ACCOUNT_STATUS: "setAccountStatus",
   SET_FIREBASE_TOKEN: "setFirebaseToken"
@@ -20,7 +20,8 @@ export const SOCIAL = {
   SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
   SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
   SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
-  SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList"
+  SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList",
+  SET_SOCIAL_LABEL_LIST: "setSocialLabelList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -47,11 +48,42 @@ export const ELEARNING_PUBLIC_SUMMARY = {
   SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList"
 };
 
+export const ELEARNING_PUBLIC_CATEGORY = {
+  SET_ELEARNING_PUBLIC_CATEGORY_LIST: "setElearningPublicCategoryList"
+};
+
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList"
+};
+
+export const ELEARNING_PUBLIC_INFO = {
+  SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
+};
+
+export const ELEARNING_PUBLIC_VOTE = {
+  SET_ELEARNING_PUBLIC_VOTE_LIST: "setElearningPublicVoteList"
+};
+
+export const ELEARNING_PUBLIC_PLACE = {
+  SET_ELEARNING_PUBLIC_PLACE_PROVINCE: "setElearningPublicPlaceProvince",
+  SET_ELEARNING_PUBLIC_PLACE_DISTRICT: "setElearningPublicPlaceDistrict",
+  SET_ELEARNING_PUBLIC_PLACE_WARD: "setElearningPublicPlaceWard"
+};
+
+export const ELEARNING_PUBLIC_PROGRAM = {
+  SET_ELEARNING_PUBLIC_PROGRAM_LIST: "setElearningPublicProgramList"
+};
+
+export const ELEARNING_PUBLIC_RELATED = {
+  SET_ELEARNING_PUBLIC_RELATED_LIST: "setElearningPublicRelatedList"
+};
+
 export const ELEARNING = {
-  SET_ELEARNING_INFO: "setElearningInfo",
+  SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
   SET_ELEARNING_PROGRAM: "setElearningProgram",
   SET_ELEARNING_RELATED: "setElearningRelated",
-  SET_ELEARNING_SUBJECT: "setElearningSubject"
+  SET_ELEARNING_SUBJECT: "setElearningSubject",
+  SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel",
 };
 
 export const CREATING_ANSWER = {
@@ -125,26 +157,58 @@ export const SCHOOL_CLASSES = {
   SET_SCHOOL_CLASSES_LIST: "setSchoolClassesList",
   SET_SCHOOL_CLASSES_ADD: "setSchoolClassesAdd",
   SET_SCHOOL_CLASSES_EDIT: "setSchoolClassesEdit",
-  SET_SCHOOL_CLASSES_DELETE: "setSchoolClassesDelete",
+  SET_SCHOOL_CLASSES_DELETE: "setSchoolClassesDelete"
+};
+
+export const SCHOOL_INFO = {
+  SET_SCHOOL_INFO: "setSchoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
+  SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture"
 };
 
 export const SCHOOL_PROFESSIONAL = {
   SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
   SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",
   SET_SCHOOL_PROFESSIONAL_EDIT: "setSchoolProfessionalEdit",
-  SET_SCHOOL_PROFESSIONAL_DELETE: "setSchoolProfessionalDelete",
+  SET_SCHOOL_PROFESSIONAL_DELETE: "setSchoolProfessionalDelete"
 };
 
 export const SCHOOL_STUDENTS = {
   SET_SCHOOL_STUDENTS_LIST: "setSchoolStudentsList",
   SET_SCHOOL_STUDENTS_ADD: "setSchoolStudentsAdd",
   SET_SCHOOL_STUDENTS_EDIT: "setSchoolStudentsEdit",
-  SET_SCHOOL_STUDENTS_DELETE: "setSchoolStudentsDelete",
+  SET_SCHOOL_STUDENTS_DELETE: "setSchoolStudentsDelete"
 };
 
 export const SCHOOL_TEACHERS = {
   SET_SCHOOL_TEACHERS_LIST: "setSchoolTeachersList",
   SET_SCHOOL_TEACHERS_ADD: "setSchoolTeachersAdd",
   SET_SCHOOL_TEACHERS_EDIT: "setSchoolTeachersEdit",
-  SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete",
+  SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete"
+};
+
+export const ELEARNING_STUDY = {
+  SET_ELEARNING_STUDY: "setElearningStudy"
+};
+
+export const ELEARNING_STUDY_FAVOURITE = {
+  SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
+  SET_ELEARNING_STUDY_FAVOURITE_ADD: "setElearningStudyFavouriteAdd",
+  SET_ELEARNING_STUDY_FAVOURITE_DELETE: "setElearningStudyFavouriteDelete"
+};
+
+export const ELEARNING_STUDY_VOTE = {
+  SET_ELEARNING_STUDY_VOTE_LIST: "setElearningStudyVoteList",
+  SET_ELEARNING_STUDY_VOTE_ADD: "setElearningStudyVoteAdd"
+};
+
+export const ELEARNING_SCHOOL_SUMMARY = {
+  SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList"
+};
+
+export const ELEARNING_SCHOOL_SEARCH = {
+  SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList"
 };

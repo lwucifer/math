@@ -1,5 +1,27 @@
 .account-edit-modal .app-modal-content {
 	padding: 2rem;
+	.app-input {
+		display: flex;
+		.app-input__label {
+			white-space: nowrap;
+		}
+		.app-input__label-fixed {
+			width: 12rem;
+		}
+		.app-input__label-bold {
+			font-weight: bold;
+		}
+	}
+	.form-group {
+		label {
+			font-weight: bold;
+			font-size: 16px;
+			width: 12rem;
+			white-space: nowrap;
+			margin-right: 0;
+			padding-right: 1rem;
+		}
+	}
 }
 .account-edit-modal .app-modal-content h3 {
 	font-size: 2rem;

@@ -14,6 +14,7 @@
         <p class="app-input__error" v-if="message && validate == 2">{{message}}</p>
       </label>
     </div>
+  </div>
 </template>
 
 <script>

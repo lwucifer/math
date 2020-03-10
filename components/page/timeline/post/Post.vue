@@ -83,19 +83,23 @@
         <span>{{ post.total_comment }} bình luận</span>
       </div>
 
-      <app-divider class="my-3" />
+      <app-divider class="mt-3 mb-0" />
 
-      <div class="post__actions">
+      <div class="post__actions my-3">
         <button
           class="post__button"
           :class="{ 'active': post.is_like }"
-          :disabled="buttonLikeLoading"
+          :disabled="btnLikeLoading"
           @click="handleClickLike"
         >
           <IconHeart class="icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
-        <button class="post__button">
+        <button
+          class="post__button"
+          :disabled="btnCommentLoading"
+          @click="!isCommentFetched && getParentComment()"
+        >
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
@@ -104,33 +108,69 @@
         </button>
       </div>
 
-      <app-divider class="my-3" />
+      <template v-if="isCommentFetched">
+        <app-divider class="mt-0 mb-3" />
 
-      <div class="post__comment-list d-none">
-        <CommentItem>
-          <CommentItemReplied />
-        </CommentItem>
+        <!-- <div class="post__comment-list">
+          <CommentItem>
+            <CommentItemReplied />
+          </CommentItem>
 
-        <CommentItem>
-          <CommentItem :level="2" />
+          <CommentItem>
+            <CommentItem :level="2" />
+
+            <div class="text-center">
+              <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
+            </div>
+
+            <CommentEditor reply />
+          </CommentItem>
+        </div>-->
+
+        <div class="post__comment-list">
+          <CommentItem
+            v-for="item in listParentComments"
+            :key="item.id"
+            :post="post"
+            :data="item"
+          />
 
           <div class="text-center">
-            <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
+            <a
+              v-if="parentCommentData.page && !parentCommentData.page.last"
+              href
+              class="post__comment-more"
+              @click.prevent="getParentComment"
+            >Xem thêm {{ numOfViewMoreParentComment }} bình luận ...</a>
           </div>
 
-          <CommentEditor reply />
-        </CommentItem>
-      </div>
+          <div
+            v-if="!listParentComments.length"
+            class="post__comment-empty text-center text-sub"
+          >Bài viết chưa có bình luận.</div>
+        </div>
 
-      <CommentEditor class="post__comment-editor" />
+        <CommentEditor class="post__comment-editor" @submit="postComment" />
+      </template>
+
+      <div class="text-center" v-if="btnCommentLoading">
+        <app-spin />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentItem from "~/components/page/timeline/comment/CommentItem";
-import CommentItemReplied from "~/components/page/timeline/comment/CommentItemReplied";
-import CommentEditor from "~/components/page/timeline/comment/CommentEditor";
+import CommentService from "~/services/social/comments";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { createComment } from "~/models/social/Comment";
+
+const CommentItem = () =>
+  import("~/components/page/timeline/comment/CommentItem");
+const CommentItemReplied = () =>
+  import("~/components/page/timeline/comment/CommentItemReplied");
+const CommentEditor = () =>
+  import("~/components/page/timeline/comment/CommentEditor");
 
 import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
@@ -166,6 +206,7 @@ export default {
       default: () => {},
       validator: value =>
         [
+          "post_id",
           "author",
           "created_at",
           "total_like",
@@ -180,14 +221,36 @@ export default {
     return {
       edit: false,
       menuDropdown: false,
-      buttonLikeLoading: false,
+      btnLikeLoading: false,
+      btnCommentLoading: false,
+      isCommentFetched: false,
       shareWith: 0,
       shareWithOpts: [
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
-      ]
+      ],
+      parentCommentParams: {
+        page: 1,
+        limit: 10,
+        source_id: this.post.post_id
+      },
+      parentCommentData: {},
+      childrenCommentData: {}
     };
+  },
+
+  computed: {
+    listParentComments() {
+      return this.parentCommentData.listParentComments || [];
+    },
+
+    numOfViewMoreParentComment() {
+      const { page } = this.parentCommentData;
+      return page.totalPages - page.number === 1
+        ? page.totalElements % page.size
+        : page.size;
+    }
   },
 
   methods: {
@@ -197,10 +260,67 @@ export default {
 
     handleClickLike() {
       const cb = () => {
-        this.buttonLikeLoading = false;
-      }
+        this.btnLikeLoading = false;
+      };
       this.$emit("like", this.post.post_id, cb);
-      this.buttonLikeLoading = true;
+      this.btnLikeLoading = true;
+    },
+
+    async getParentComment() {
+      this.btnCommentLoading = true;
+
+      const getComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.parentCommentParams
+      });
+
+      if (getComment.success) {
+        // Set to parent comment data
+        const { listParentComments, page } = this.parentCommentData;
+        if (listParentComments && page) {
+          this.parentCommentData = {
+            listParentComments: [
+              ...listParentComments,
+              ...getComment.data.listParentComments
+            ],
+            page: getComment.data.page
+          };
+        } else {
+          this.parentCommentData = getComment.data;
+        }
+
+        // Set page param for the next request
+        this.parentCommentParams.page += 1;
+      } else {
+        this.$toasted.error(getComment.message);
+      }
+
+      this.btnCommentLoading = false;
+      this.isCommentFetched = true;
+    },
+
+    async postComment(content) {
+      const commentModel = createComment(this.post.post_id, null, content);
+      const doPostComment = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.ADD
+      ](commentModel);
+
+      if (doPostComment.success) {
+        if ("listParentComments" in this.parentCommentData) {
+          const { listParentComments } = this.parentCommentData;
+          this.parentCommentData.listParentComments = [
+            doPostComment.data,
+            ...listParentComments
+          ];
+        } else {
+          this.parentCommentData = {
+            listParentComments: [doPostComment.data]
+          };
+        }
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
     }
   }
 };

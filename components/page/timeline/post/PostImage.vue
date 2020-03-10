@@ -2,7 +2,7 @@
   <div class="post-image" :class="classes">
     <div v-if="images.length > 1" class="post-image-grid">
       <a
-        v-for="item in images"
+        v-for="item in images.slice(0, 5)"
         :key="item.id"
         :href="`${location}/post?photo_id=${item.id}`"
         class="post-image-item"

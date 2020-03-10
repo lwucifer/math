@@ -1,49 +1,30 @@
 <template>
-  <div class="chart-stars">
-    <div class="star">
-      <strong class="mr-2">5</strong>
-      <IconStarO v-if="five < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + five + '%'"></div>
+  <div class="course-rates__top">
+    <div class="row items-center">
+      <div class="col-md-6 col-sm-12">
+        <div class="text-center d-inline-block">
+          <strong class="h1 color-primary">{{
+            get(reviews, "averageRate", 0)
+          }}</strong>
+          <app-stars
+            :stars="Math.floor(get(reviews, 'averageRate', 0))"
+            :size="16"
+            class="mt-2 mb-2"
+          />
+          <p class="color-999">
+            ({{ get(reviews, "totalReview", 0) }} người đánh giá)
+          </p>
+        </div>
       </div>
-      <span>{{five}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">4</strong>
-      <IconStarO v-if="four < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + four + '%'"></div>
+      <div class="col-md-6 col-sm-12">
+        <div class="chart-stars">
+          <course-star-item
+            v-for="(rate, index) in get(reviews, 'rates', [])"
+            :rate="rate"
+            :key="index"
+          />
+        </div>
       </div>
-      <span>{{four}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">3</strong>
-      <IconStarO v-if="three < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + three + '%'"></div>
-      </div>
-      <span>{{three}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">2</strong>
-      <IconStarO v-if="two < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + two + '%'"></div>
-      </div>
-      <span>{{two}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">1</strong>
-      <IconStarO v-if="one < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + one + '%'"></div>
-      </div>
-      <span>{{one}} %</span>
     </div>
   </div>
 </template>
@@ -51,38 +32,25 @@
 <script>
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
+import CourseStarItem from "~/components/page/course/CourseStarItem";
+import { get } from "lodash";
 
 export default {
   components: {
     IconStar,
-    IconStarO
+    IconStarO,
+    CourseStarItem
   },
 
   props: {
-    five: {
-      type: Number,
-      default: 0
-    },
-    four: {
-      type: Number,
-      default: 0
-    },
-    three: {
-      type: Number,
-      default: 0
-    },
-    two: {
-      type: Number,
-      default: 0
-    },
-    one: {
-      type: Number,
-      default: 0
+    reviews: {
+      type: Object,
+      default: null
     }
   },
 
-  data() {
-    return {};
+  methods: {
+    get
   }
 };
 </script>

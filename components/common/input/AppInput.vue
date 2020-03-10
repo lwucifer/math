@@ -1,10 +1,11 @@
 <template>
   <div class="app-input" :class="classSize">
-    <label v-if="label" :class="classLabel">{{ label }}</label>
-
-    <div class="app-input__input" v-else>
+    <label v-if="label" :class="classLabel">
+      {{ label }}
+      <span class="label--sub" v-if="subLabel">{{ subLabel }}</span>
+    </label>
+    <div class="app-input__input">
       <slot name="prepend-inner"></slot>
-
       <!-- Textarea  -->
       <textarea
         v-if="textarea"
@@ -114,7 +115,8 @@ export default {
     },
     counter: {
       type: Number
-    }
+    },
+    subLabel: String
   },
 
   data() {
@@ -147,16 +149,17 @@ export default {
         "app-input--has-counter": !!this.counter,
         "app-input--error": this.localValidate === VALIDATE_STATUS.ERROR,
         "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
-        "app-input--focused": this.isFocus
+        "app-input--focused": this.isFocus,
+        "app-input--textarea": this.textarea
       };
     },
 
     classLabel() {
       const labelBold = {
-        "app-input__label-bold": this.labelBold
+        "app-input__label--bold": this.labelBold
       };
       const labelFixed = {
-        "app-input__label-fixed": this.labelFixed
+        "app-input__label--fixed": this.labelFixed
       };
       return {
         "app-input__label": true,

@@ -1,10 +1,13 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
+import * as APIs from "../utils/endpoints";
 import Personal from "../services/account/Personal";
 import Link from "../services/account/Link";
 import Transactions from "../services/account/Transactions";
 import Revenue from "../services/account/Revenue";
 import Earning from "../services/account/Earning";
+import UpdateAvatar from "../services/account/UpdateAvatar";
+import UpdateCover from "../services/account/UpdateCover";
 /**
  * initial state
  */
@@ -12,7 +15,8 @@ const state = () => ({
     personalList: {},
     transactionsList: {},
     revenueList: {},
-    earningList: {}
+    earningList: {},
+    linkList: {}
 });
 
 /**
@@ -46,17 +50,46 @@ const actions = {
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_PERSONAL.EDIT_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.CHECK_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.VERIFY_OTP_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.VERIFY_OTP_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.UPDATE_PHONE]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.put(APIs.UPDATE_PHONE, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_AVATAR]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                payload
-            );
+            const result = await new UpdateAvatar(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
@@ -76,9 +109,9 @@ const actions = {
     },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_COVER]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                paload
-            );
+            const result = await new UpdateCover(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
             return result;
         } catch (err) {
@@ -208,6 +241,9 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_EARNING_LIST", _earningList);
         state.earningList = _earningList;
+    },
+    [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
+        state.linkList = _linkList;
     }
 };
 

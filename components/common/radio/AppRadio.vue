@@ -6,7 +6,7 @@
       v-bind="$attrs"
       :value="value"
       :name="name"
-      :checked="localChecked === value"
+      :checked="localChecked || localChecked === value"
       v-on="inputListeners"
     />
     <span class="app-radio__decor">
@@ -37,7 +37,7 @@ export default {
   props: {
     checked: {
       // v-model
-      // type: [String, Number, Boolean, Object],
+      type: [String, Number, Boolean, Object],
       default: null
     },
     value: {},

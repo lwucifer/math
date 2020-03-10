@@ -120,20 +120,6 @@
     }
 }
 
-.cc-editor {
-    width: 100%;
-
-    .ProseMirror {
-        background-color: #fff;
-        padding: 1.2rem 1.6rem;
-        min-height: 13rem;
-    }
-
-    .ProseMirror-focused {
-        outline: none;
-    }
-}
-
 .cc-select {
     .app-select__selected {
         border: 1px solid $color-border;

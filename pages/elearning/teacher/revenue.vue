@@ -28,7 +28,11 @@
             :pagination="pagination"
             @pagechange="onPageChange"
             :data="list"
-          />
+          >
+            <tr v-for="(item , index) in list" :key="index">
+              <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
+            </tr>
+          </app-table>
         </div>
       </div>
     </div>

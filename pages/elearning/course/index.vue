@@ -8,10 +8,10 @@
               <img src="https://picsum.photos/750/422" alt />
             </div>
             <div class="elearning-lesson__main-nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Tổng quan</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Hỏi đáp</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Thông báo</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+              <a class="active">Tổng quan</a>
+              <n-link :to="'/elearning/course/question'">Hỏi đáp</n-link>
+              <n-link :to="'/elearning/course/notify'">Thông báo</n-link>
+              <n-link :to="'/elearning/course/question'">Đánh giá</n-link>
             </div>
             <div class="elearning-lesson__main-content">
               <div class="mb-4">
@@ -44,7 +44,13 @@
 </template>
 
 <script>
+import ElearningCourseComment from "~/components/page/elearning/course/comment/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
+import IconLike from "~/assets/svg/icons/like.svg?inline";
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+// Import faked data
+import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -52,103 +58,31 @@ export default {
   name: "E-learning",
 
   components: {
-    ElearningCourseSide
+    ElearningCourseComment,
+    ElearningCourseSide,
+    IconSearch,
+    IconCamera
   },
 
   data() {
     return {
-      tab: 1,
-      isAuthenticated: true,
-      teacher: {},
-      title: "Làm chủ 6 công cụ Marketing online HOT NHẤT hiện nay",
-      lesson: {
-        avatar: "https://picsum.photos/32/32",
-        author: "Nguyễn Ngọc Quyên",
-        views: 28751,
-        stars: 4.5,
-        rates: 469,
-        price: 0
-      },
       data: {
         number: 9,
         times: "9 giờ 30 phút",
-        list: [
+        classes: [
           {
             id: 1,
-            name: "Chương 1: Các bài học chương 1",
-            status: "2/5",
-            times: "1 giờ 18 phút",
-            lessons: [
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-            ]
+            name: "Bài giảng online cho khoá học",
+            done: false
           },
           {
-            id: 1,
-            name: "Chương 1: Các bài học chương 1",
-            lessons: [
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-            ]
-          },
-          {
-            id: 1,
-            name: "Chương 1: Các bài học chương 1",
-            lessons: [
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: false,
-                time: "1 giờ 30 phút"
-              },
-              {
-                id: 1,
-                name: "LÀM THẾ NÀO ĐỂ TRỞ THÀNH MỘT VLOGGER YOUTUBER",
-                status: true,
-                time: "1 giờ 30 phút"
-              },
-            ]
-          },
-        ]
-      },
+            id: 2,
+            name: "Bài giảng online cho khoá học",
+            done: true
+          }
+        ],
+        list: COURSE_LESSON
+      }
     };
   },
   computed: {
