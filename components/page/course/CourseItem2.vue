@@ -1,37 +1,46 @@
 <template>
   <div class="course-item2">
     <div class="course-item2__image">
-      <img :src="item.avatar" alt class="w-100" />
-      <div class="status-online" v-if="item.onlineStatus && item.online === 1">
-        {{ item.onlineStatus }}
+      <img :src="get(item, 'avatar.medium', '')" alt class="w-100" />
+      <div
+        class="status-online"
+        v-if="get(item, 'onlineStatus', '') && get(item, 'online', 0) === 1"
+      >
+        {{ get(item, "onlineStatus", "") }}
       </div>
-      <div class="online" v-if="item.online">Trực tiếp</div>
-      <div class="video" v-if="item.video">
+      <div class="online" v-if="get(item, 'online', 0)">Trực tiếp</div>
+      <div class="video" v-if="get(item, 'video', '')">
         <IconVideo3 />
       </div>
     </div>
     <div class="bottom">
-      <n-link class="title" v-if="item.name" :to="'/course/' + item.id">{{
-        item.name
-      }}</n-link>
+      <n-link
+        class="title"
+        v-if="get(item, 'name', '')"
+        :to="'/course/' + get(item, 'id', '')"
+        >{{ get(item, "name", "") }}</n-link
+      >
 
       <div class="course-item2_teacher">
         <div>
-          <app-avatar :src="teacher.avatar" :size="20" />
-          <span class="name">{{ teacher.name }}</span>
+          <app-avatar
+            :src="get(item, 'teacher.avatar.medium', '')"
+            :size="20"
+          />
+          <span class="name">{{ get(item, "teacher.name", "") }}</span>
         </div>
         <div>
           <div class="stars">
-            <app-stars :stars="item.review_rate" />
+            <app-stars :stars="get(item, 'review_rate', 0)" />
           </div>
           <span>
-            <strong>{{ item.review_rate }}</strong>
-            ({{ item.review_count }})
+            <strong>{{ get(item, "review_rate", 0) }}</strong>
+            ({{ get(item, "review_count", 0) }})
           </span>
         </div>
         <div class="price-wrapper">
-          <span v-if="original_price" class="price">
-            {{ original_price | toThousandFilter }}đ
+          <span v-if="get(item, 'price.original_price', 0)" class="price">
+            {{ numeral(get(item, "price.original_price", 0)).format() }}đ
           </span>
           <span v-else class="price price--free">
             Miễn phí
@@ -49,6 +58,7 @@ import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
 import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -67,16 +77,9 @@ export default {
     }
   },
 
-  computed: {
-    original_price() {
-      return get(this.item, "price.original_price", 0);
-    },
-    teacher() {
-        return {
-            avatar: get(this.item, 'teacher.avatar', ''),
-            name: get(this.item, 'teacher.name', '')
-        }
-    }
+  methods: {
+    get,
+    numeral
   }
 };
 </script>

@@ -1,0 +1,31 @@
+.wrap-account-client{
+    background: #FFFFFF;
+    padding: 11px 18px;
+    .app-input{
+        label{
+            color: #999999;
+        }
+    }
+    .account-client-date-picker{
+        display: flex;
+        label{
+            font-size: 1.6rem;
+            text-align: left;
+            line-height: 4rem;
+            padding-right: 1rem;
+            color: #999999;
+        }
+        .app-date-picker{
+            display: flex;
+            flex-direction: column;
+        }
+        .account-client-sex-select{
+            display: flex;
+            flex-direction: column;
+            margin-left:20px;
+            .app-select{
+                height: 40px;
+            }
+        }
+    }
+}

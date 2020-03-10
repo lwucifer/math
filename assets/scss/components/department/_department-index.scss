@@ -7,10 +7,12 @@
 .department-filter__btn-submit{
     border-radius: 100px;
     margin-right: 20px;
+    height: 32px;
 }
 .department-filter-select{
     width: 100%;
     display: flex;
+    background: #ffffff;
     >div{
         width: 161px;
         margin-right: 10px;

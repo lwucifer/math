@@ -33,6 +33,7 @@
 import DepartmentManagerSide from "~/components/page/department/DepartmentManagerSide"
 import {SCHOOL} from "~/server/fakedata/department/test"
 export default {
+    layout:'backhome',
     components:{
         DepartmentManagerSide
     },
