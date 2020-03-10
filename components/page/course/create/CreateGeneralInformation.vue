@@ -1,6 +1,6 @@
 <template>
   <div class="cc-panel bg-white">
-    <create-action @handleCLickSave="handleCLickSave" />
+    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit" />
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
     </div>
@@ -70,6 +70,18 @@ import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
 import { toNumber, get } from "lodash";
+import { useEffect } from "~/utils/common";
+import * as yup from "yup";
+
+let schema = yup.object().shape({
+  avatar: yup.string().required(),
+  benefit: yup.string().required(),
+  description: yup.string().required(),
+  level: yup.string().required(),
+  name: yup.string().required(),
+  subject: yup.string().required(),
+  type: yup.string().required()
+});
 
 export default {
   components: {
@@ -82,13 +94,14 @@ export default {
 
   data() {
     return {
+      isSubmit: false,
       payload: {
         avatar: "",
         benefit: "",
         description: "",
         discount: 0,
         fee: 0,
-        level: 0,
+        level: "",
         name: "",
         subject: "",
         type: "LECTURE"
@@ -96,9 +109,32 @@ export default {
     };
   },
 
+  created() {
+    useEffect(this, this.handleChangePayload.bind(this), [
+      "payload.avatar",
+      "payload.benefit",
+      "payload.description",
+      "payload.discount",
+      "payload.fee",
+      "payload.level",
+      "payload.name",
+      "payload.subject",
+      "payload.type"
+    ]);
+  },
+
   methods: {
+    handleChangePayload() {
+      let that = this;
+      schema.isValid(this.payload).then(function(valid) {
+        that.isSubmit = valid;
+      });
+    },
+
     handleChangeLevel(level) {
-      this.payload.level = toNumber(get(level, "id", 0));
+      this.payload.level = get(level, "id", "")
+        ? toNumber(get(level, "id", ""))
+        : "";
     },
 
     handleSelectType(e) {
