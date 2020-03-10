@@ -82,7 +82,8 @@ export const ELEARNING = {
   SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
   SET_ELEARNING_PROGRAM: "setElearningProgram",
   SET_ELEARNING_RELATED: "setElearningRelated",
-  SET_ELEARNING_SUBJECT: "setElearningSubject"
+  SET_ELEARNING_SUBJECT: "setElearningSubject",
+  SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel",
 };
 
 export const CREATING_ANSWER = {

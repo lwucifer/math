@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     handleCLickSave() {
-      console.log(123)
       this.$emit("handleCLickSave");
     }
   }
