@@ -49,14 +49,14 @@
         <h2 class="cgi-form-title heading-6 mb-3">
           Học phí
         </h2>
-        <app-input :value="fee" @input="handleChangeFee" />
+        <app-input :value="payload.fee" @input="handleChangeFee" />
       </div>
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
           Giảm giá
         </h2>
-        <app-input :value="discount" @input="handleChangeDiscount" />
+        <app-input :value="payload.discount" @input="handleChangeDiscount" />
       </div>
 
       <div class="cgi-form-group mb-4">
@@ -141,11 +141,11 @@ export default {
 
   methods: {
     handleChangeDiscount(discount) {
-      this.payload.discount = discount;
+      this.payload.discount = numeral(discount).format();
     },
 
     handleChangeFee(fee) {
-      this.payload.fee = fee;
+      this.payload.fee = numeral(fee).format();
     },
 
     handleChangePayload() {
@@ -181,17 +181,6 @@ export default {
     },
 
     numeral
-  },
-
-  computed: {
-    discount() {
-      const discount = this.payload.discount;
-      return discount ? numeral(discount).format() : "";
-    },
-    fee() {
-      const fee = this.payload.fee;
-      return fee ? numeral(fee).format() : "";
-    }
   }
 };
 </script>
