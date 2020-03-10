@@ -268,6 +268,12 @@ export default {
     }
   },
 
+  watch: {
+    value(newValue) {
+      this.editor.setContent(newValue)
+    }
+  },
+
   mounted() {
     this.editor = new Editor({
       extensions: [
