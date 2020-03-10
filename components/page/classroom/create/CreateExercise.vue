@@ -148,13 +148,7 @@
                 <div v-if="createType === 'choice'">
                   <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
 
-                  <client-only>
-                    <editor-content
-                      :editor="editor"
-                      class="editor cc-editor mb-4"
-                      id="question-editor"
-                    />
-                  </client-only>
+                  <app-editor id="question-editor" class="mb-4"/>
 
                   <div class="row mb-4">
                     <div class="col-md-3">
@@ -168,13 +162,7 @@
                       <label class="d-inline-block mb-3" for="answer-editor">Nội dung đáp án</label>
                       <div class="d-flex align-items-start">
                         <div class="flex-grow mr-4">
-                          <client-only>
-                            <editor-content
-                              :editor="answerEditor"
-                              class="editor cc-editor"
-                              id="answer-editor"
-                            />
-                          </client-only>
+                          <app-editor id="answer-editor" />
                         </div>
 
                         <div>
@@ -199,13 +187,7 @@
                 <div v-if="createType === 'essay'">
                   <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
 
-                  <client-only>
-                    <editor-content
-                      :editor="editor"
-                      class="editor cc-editor mb-4"
-                      id="question-editor"
-                    />
-                  </client-only>
+                    <app-editor class="mb-4" id="question-editor"/>
                 </div>
 
                 <div v-if="createType === 'upload'">
