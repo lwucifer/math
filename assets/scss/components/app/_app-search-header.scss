@@ -5,6 +5,11 @@
     border: 1px solid $color-primary;
 
     input {
+
+      @media (max-width: 1366px) {
+        width: 39.5rem;
+      }
+
       width: 45.5rem;
       height: 3.8rem;
       background-color: #F8F8F8;
