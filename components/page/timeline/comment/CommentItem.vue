@@ -22,8 +22,8 @@
       </div>
 
       <CommentItemReplied
-        v-if="data.childrent && data.childrent.list.length && !listComments.length"
-        :data="data.childrent"
+        v-if="data.children && data.children.list.length && !listComments.length"
+        :data="data.children"
         @click="getChildrenComment(data.id)"
       />
 

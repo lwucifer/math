@@ -15,6 +15,7 @@
           @click="handleCLickSave"
           class="header-create__btn mr-4"
           square
+          :disabled="!isSubmit"
           >Lưu</app-button
         >
         <app-button class="header-create__btn" color="secondary" square
@@ -32,6 +33,14 @@ export default {
   components: {
     IconArrowLeft
   },
+
+  props: {
+    isSubmit: {
+      type: Boolean,
+      default: true
+    }
+  },
+
   methods: {
     handleCLickSave() {
       this.$emit("handleCLickSave");
