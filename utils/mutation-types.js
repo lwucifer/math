@@ -20,7 +20,8 @@ export const SOCIAL = {
   SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
   SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
   SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
-  SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList"
+  SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList",
+  SET_SOCIAL_LABEL_LIST: "setSocialLabelList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -51,8 +52,16 @@ export const ELEARNING_PUBLIC_CATEGORY = {
   SET_ELEARNING_PUBLIC_CATEGORY_LIST: "setElearningPublicCategoryList"
 };
 
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList"
+};
+
+export const ELEARNING_PUBLIC_VOTE = {
+  SET_ELEARNING_PUBLIC_VOTE_LIST: "setElearningPublicVoteList"
 };
 
 export const ELEARNING_PUBLIC_PLACE = {
@@ -73,7 +82,8 @@ export const ELEARNING = {
   SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
   SET_ELEARNING_PROGRAM: "setElearningProgram",
   SET_ELEARNING_RELATED: "setElearningRelated",
-  SET_ELEARNING_SUBJECT: "setElearningSubject"
+  SET_ELEARNING_SUBJECT: "setElearningSubject",
+  SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel",
 };
 
 export const CREATING_ANSWER = {
@@ -152,6 +162,11 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
   SET_SCHOOL_INFO: "setSchoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
+  SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture"
 };
 
 export const SCHOOL_PROFESSIONAL = {

@@ -6,7 +6,7 @@ import Subject from "~/services/elearning/public/Subject";
  * initial state
  */
 const state = () => ({
-  elearningSubjects: []
+  subjects: []
 });
 
 /**
@@ -18,14 +18,12 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING.SUBJECT]({ commit }, params) {
+  async [actionTypes.ELEARNING.SUBJECT]({ commit }, options) {
     try {
-      const options = { params };
       const result = await new Subject(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      // set to mutation
-      commit(mutationTypes.ELEARNING.SET_ELEARNING_SUBJECT, result);
+      commit(mutationTypes.ELEARNING.SET_ELEARNING_SUBJECT, result.data);
     } catch (error) {
       console.log("[Elearning Subject] list.error", error);
     }
@@ -36,9 +34,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING.SET_ELEARNING_SUBJECT](state, elearningSubjects) {
-    console.log("SET_ELEARNING_SUBJECT", elearningSubjects);
-    state.elearningSubjects = elearningSubjects;
+  [mutationTypes.ELEARNING.SET_ELEARNING_SUBJECT](state, subjects) {
+    state.subjects = subjects;
   }
 };
 

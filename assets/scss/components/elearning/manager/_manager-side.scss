@@ -23,9 +23,16 @@
         fill: $color-primary;
       }
     }
+    .lv-0 {
+      font-weight: normal;
+    }
     &.active {
       font-weight: bold;
       color: $color-primary;
+      .lv-0 {
+        font-weight: bold;
+        color: $color-primary;
+      }
       svg path {
         fill: $color-primary;
       }
@@ -34,6 +41,7 @@
   ul {
     list-style-position: inside;
     padding-left: 2rem;
+    font-weight: normal;
     li {
       padding-top: 1rem;
       > a {

@@ -232,6 +232,7 @@ import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
+import { createPost } from "~/models/post/Post";
 import {
   MESSAGES,
   COURSES_LIST,
@@ -265,7 +266,8 @@ export default {
 
   async fetch({ params, query, store }) {
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
+      store.dispatch(`social/${actionTypes.SOCIAL_LABEL.LIST}`)
     ]);
   },
 
@@ -404,10 +406,12 @@ export default {
      */
     async handlePostEditorSubmit(data) {
       const formData = new FormData();
-      for (const key in data) {
+      const dataWithModel = createPost(data);
+
+      for (const key in dataWithModel) {
+        console.log('key', key)
         formData.append(key, data[key]);
       }
-      console.log("formData after append", FormData);
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL_POST.ADD}`,
         formData
@@ -429,11 +433,9 @@ export default {
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
       const doLike = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_LIKES.ADD}`,
+        `social/${actionTypes.SOCIAL_LIKES.LIKE_POST}`,
         likeModel
       );
-      console.log("likePost", doLike);
-      this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`);
 
       // Have to run cb
       cb();

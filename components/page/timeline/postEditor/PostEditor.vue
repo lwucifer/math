@@ -21,7 +21,10 @@
       />
 
       <div class="post-editor__tagger-summary">
-        <template v-if="label !== null">cảm thấy <b>{{ getLabelText() }}</b></template>
+        <template v-if="label !== null">
+          cảm thấy
+          <b>{{ getLabelText() }}</b>
+        </template>
         <template v-if="tag && tag.length">
           cùng với
           <b v-for="(item, index) in selectedTags" :key="item.value">
@@ -42,16 +45,29 @@
       <div v-show="showTags">
         <app-select
           mode="tags"
-          :options="tagOptions"
-          v-model="tag"
           class="post-editor__select"
           placeholder="Cùng với ai?"
           style="width: 100%"
+          :options="tagOptions"
+          v-model="tag"
+          @visible-change="handleFriendsVisibleChange"
         >
           <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-            <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
+            <app-avatar
+              :src="option.avatar && option.avatar.low ? option.avatar.low : null"
+              size="sm"
+              class="mr-3"
+            ></app-avatar>
             {{ option.text }}
           </div>
+
+          <client-only>
+            <infinite-loading
+              slot="options-append"
+              :identifier="friendsInfiniteId"
+              @infinite="friendsInfiniteHandler"
+            />
+          </client-only>
         </app-select>
         <app-divider class="ma-0" />
       </div>
@@ -116,7 +132,11 @@
 
       <div class="post-editor__privacy mt-3">
         <span class="mr-3">Chế độ đăng tin</span>
-        <app-select class="post-editor__select-private" :options="shareWithOpts" v-model="shareWith">
+        <app-select
+          class="post-editor__select-private"
+          :options="shareWithOpts"
+          v-model="shareWith"
+        >
           <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
         </app-select>
       </div>
@@ -127,9 +147,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
+
 import { getBase64 } from "~/utils/common";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import FriendService from "~/services/social/friend";
+
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
@@ -161,16 +186,11 @@ export default {
       labelDropdrown: false,
       shareWith: 0,
       active: false,
-      tagOptions: [
-        { value: 0, text: "Nguyen Tien Dat" },
-        { value: 1, text: "Nguyen Van A" },
-        { value: 2, text: "Nguyen Van B" },
-        { value: 3, text: "Nguyen Van C" },
-        { value: 4, text: "Nguyen Van D" },
-        { value: 5, text: "Nguyen Van E" },
-        { value: 6, text: "Nguyen Van F" },
-        { value: 7, text: "Nguyen Van G" }
-      ],
+      friendsInfiniteId: +new Date(),
+      friendsListQuery: {
+        page: 1
+      },
+      friendsList: [],
       checkinOptions: [
         { value: 0, text: "Hà Nội" },
         { value: 1, text: "Saudi Arabia" },
@@ -178,49 +198,24 @@ export default {
         { value: 3, text: "Mongolia" },
         { value: 4, text: "Republic of Kosovo" }
       ],
-      labelList: [
-        {
-          id: 1,
-          icon: "😄",
-          des: "vui vẻ"
-        },
-        {
-          id: 2,
-          icon: "😍",
-          des: "hạnh phúc"
-        },
-        {
-          id: 3,
-          icon: "😡",
-          des: "tức giận"
-        },
-        {
-          id: 4,
-          icon: "😞",
-          des: "thất vọng"
-        },
-        {
-          id: 5,
-          icon: "😞",
-          des: "suy ngẫm"
-        }
-      ],
       shareWithOpts: [
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
       ],
       // Form submit data
-      link: '',
+      link: "",
       post_image: [],
       list_tag: [],
       check_in: {},
       privacy: 8,
-      label_id: null 
+      label_id: null
     };
   },
 
   computed: {
+    ...mapState("social", { labelList: "labels" }),
+
     selectedTags() {
       return this.tag.map(item => {
         const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
@@ -233,6 +228,14 @@ export default {
         item => item.value === this.checkin
       );
       return result.text;
+    },
+
+    tagOptions() {
+      return this.friendsList.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.fullname
+      }));
     }
   },
 
@@ -294,10 +297,37 @@ export default {
       this.labelDropdrown = false;
     },
 
-    submit() {
-      console.log('submit', this.editor.getHTML());
+    async friendsInfiniteHandler($state) {
+      const { data = {} } = await new FriendService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.friendsListQuery
+      });
 
-      this.$emit('submit', {
+      if (data.listFriend && data.listFriend.length) {
+        this.friendsListQuery.page += 1;
+        this.friendsList = this.friendsList.concat(data.listFriend);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+
+    handleFriendsVisibleChange(isVisible) {
+      console.log("handleFriendsVisibleChange", isVisible);
+
+      if (isVisible) {
+        this.friendsInfiniteId += 1;
+      } else {
+        this.friendsList = [];
+        this.friendsListQuery.page = 1;
+      }
+    },
+
+    submit() {
+      console.log("submit", this.editor.getHTML());
+
+      this.$emit("submit", {
         content: this.editor.getHTML(),
         link: this.link,
         post_image: this.fileList[0],
@@ -306,7 +336,7 @@ export default {
         privacy: 8,
         label_id: null
       });
-    }
+    },
   }
 };
 </script>

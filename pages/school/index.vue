@@ -7,6 +7,7 @@
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
+        @handleChangeSearch="handleChangeSearch"
       >
       </school-filter>
       <!--Detail school types-->
@@ -36,6 +37,7 @@ import {
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   name: "School",
@@ -49,9 +51,6 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`
-    );
-    await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );
   },
@@ -63,7 +62,8 @@ export default {
       // list: SCHOOL_TYPE_DETAILS,
       province_id: "",
       district_id: "",
-      ward_id: ""
+      ward_id: "",
+      keyword: ""
     };
   },
 
@@ -76,16 +76,13 @@ export default {
     })
   },
 
-  watch: {
-    province_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    district_id() {
-      this.handleGetSchoolsByLocation();
-    },
-    ward_id() {
-      this.handleGetSchoolsByLocation();
-    }
+  created() {
+    useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
+      "province_id",
+      "district_id",
+      "ward_id",
+      "keyword"
+    ]);
   },
 
   methods: {
@@ -101,11 +98,15 @@ export default {
     handleChangeProvince(province) {
       this.province_id = get(province, "id", "");
     },
+    handleChangeSearch(keyword) {
+      this.keyword = keyword;
+    },
     handleGetSchoolsByLocation() {
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;
       if (this.ward_id) params.ward_id = this.ward_id;
+      if (this.keyword) params.keyword = this.keyword;
       const options = { params };
       this.$store.dispatch(
         `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,

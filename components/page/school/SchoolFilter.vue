@@ -7,7 +7,7 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <!-- <div class="school-filter__form__item">
+      <div class="school-filter__form__item">
         <app-button
           color="primary"
           @click="submit"
@@ -16,7 +16,7 @@
           <IconFilter />
           <span>Lọc kết quả</span>
         </app-button>
-      </div> -->
+      </div>
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
@@ -24,18 +24,48 @@
         @handleChangedWard="handleChangedWard"
       />
 
+      <div class="school-filter__form__item" v-if="hasSchoolLevel">
+        <app-vue-select
+          class="app-vue-select"
+          :v-model="filter.level"
+          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
+          label="name"
+          placeholder="Theo cấp học"
+          :reduce="value => value"
+          searchable
+          clearable
+          @input="handleChangedLevel"
+        >
+        </app-vue-select>
+      </div>
+
       <div class="school-filter__form--right">
-        <div class="school-filter__form__item school-filter__form__item--search">
+        <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
           <app-search
             class=""
             :placeholder="'Nhập để tìm kiếm...'"
             :counter="11"
             v-model="filter.query"
             :size="'sm'"
-            @submit="handleChangedInput"
-            @input="handleChangedInput"
+            @input="handleChangeSearch"
           >
           </app-search>
+        </div>
+
+        <div class="school-filter__form__item" v-if="hasSort">
+          <label class="school-filter__form__item__title" for="">Sắp xếp</label>
+          <app-vue-select
+            class="app-vue-select"
+            :v-model="filter.order"
+            :options="[ { name: 'Số học sinh', value: 0 }, { name: 'Số giáo viên', value: 1 } ]"
+            label="name"
+            placeholder="Sắp xếp theo"
+            :reduce="value => value"
+            searchable
+            clearable
+            @input="handleChangedOrder"
+          >
+          </app-vue-select>
         </div>
       </div>
     </div>
@@ -61,25 +91,22 @@ export default {
     linkText: {
       type: String
     },
-    // provinces: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
-    // districts: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
-    // villages: {
-    //   type: Array,
-    //   required: true,
-    //   default: () => []
-    // },
     schoolTypes: {
       type: Array,
       required: true,
       default: () => []
+    },
+    hasSearch: {
+      type: Boolean,
+      default: true
+    },
+    hasSchoolLevel: {
+      type: Boolean,
+      default: false
+    },
+    hasSort: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -107,11 +134,14 @@ export default {
     handleChangedWard(ward) {
       this.$emit("handleChangedWard", ward);
     },
-    handleChangedInput(val) {
-      // if (val !== null) {
-      // } else {
-      // }
-      // console.log("[Component] SchoolFilter: changing input...", val);
+    handleChangeSearch(val) {
+      this.$emit('handleChangeSearch', val)
+    },
+    handleChangedLevel(level) {
+      this.$emit("handleChangedLevel", level);
+    },
+    handleChangedOrder(order) {
+      this.$emit("handleChangedOrder", order);
     },
     handleFocusSearchInput() {
       // console.log("[Component] SchoolFilter: focus searching ");

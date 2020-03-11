@@ -31,7 +31,8 @@ export const SOCIAL_POST = {
 export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
-  DELETE: "socialLikesDelete"
+  DELETE: "socialLikesDelete",
+  LIKE_POST: "socialLikesLikePost"
 };
 
 export const SOCIAL_SHARES = {
@@ -39,7 +40,8 @@ export const SOCIAL_SHARES = {
 };
 
 export const SOCIAL_COMMENTS = {
-  LIST: "socialCommentsList"
+  LIST: "socialCommentsList",
+  LIST_CHILDREN: "socialCommentListChildren"
 };
 
 export const SOCIAL_MEDIAS = {
@@ -56,6 +58,10 @@ export const SOCIAL_CONFIG = {
 
 export const SOCIAL_FEEDS = {
   LIST: "socialFeedsList"
+};
+
+export const SOCIAL_LABEL = {
+  LIST: "socialLabelList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -94,8 +100,16 @@ export const ELEARNING_PUBLIC_CATEGORY = {
   LIST: "elearningPublicCategoryList"
 };
 
+export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
+  LIST: "elearningPublicElearningTeacherList"
+};
+
 export const ELEARNING_PUBLIC_INFO = {
   LIST: "elearningPublicInfoList"
+};
+
+export const ELEARNING_PUBLIC_VOTE = {
+  LIST: "elearningPublicVoteList"
 };
 
 export const ELEARNING_PUBLIC_PLACE = {
@@ -116,7 +130,8 @@ export const ELEARNING = {
   INFO: "elearningInfo",
   PROGRAM: "elearningProgram",
   RELATED: "elearningPublicRelated",
-  SUBJECT: "elearningPublicSubject"
+  SUBJECT: "elearningPublicSubject",
+  LEVEL: "elearningPublicLevel"
 };
 
 export const CREATING_ANSWER = {
@@ -194,6 +209,10 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
   INFO: "schoolInfo"
+};
+
+export const SCHOOL_ELEARNING = {
+  LIST: "schoolElearning"
 };
 
 export const SCHOOL_PROFESSIONAL = {

@@ -38,6 +38,8 @@
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
           <template v-else>{{ option.text }}</template>
         </div>
+
+        <slot name="options-append" />
       </div>
     </template>
     <!-- END TAGS MODE -->
@@ -100,6 +102,8 @@
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
           <template v-else>{{ option.text }}</template>
         </div>
+
+        <slot name="options-append" />
       </div>
     </template>
     <!-- END DEFAULT MODE -->
@@ -112,6 +116,12 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   inheritAttrs: false,
+
+  provide() {
+    return {
+      appSelect: this
+    }
+  },
   
   components: {
     IconCaretDown,
@@ -183,6 +193,12 @@ export default {
       return this.options.filter(
         option => this.value.findIndex(id => id === option.value) === -1
       );
+    }
+  },
+
+  watch: {
+    active(newValue) {
+      this.$emit("visible-change", newValue)
     }
   },
 

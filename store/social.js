@@ -6,6 +6,7 @@ import Shares from "~/services/social/shares";
 import Comments from "~/services/social/comments";
 import Config from "~/services/social/config";
 import Feeds from "~/services/social/feeds";
+import Label from "~/services/social/label";
 
 /**
  * initial state
@@ -18,7 +19,8 @@ const state = () => ({
   mediasList: {},
   notificationsList: {},
   configs: {},
-  feeds: {}
+  feeds: {},
+  labels: []
 });
 
 /**
@@ -62,12 +64,22 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_POST.DELETE]({ commit }, payload) {
+  async [actionTypes.SOCIAL_POST.DELETE]({ commit, state }, payload) {
     try {
-      const { data: result = {} } = await new SocialPosts(this.$axios)[
+      const result = await new SocialPosts(this.$axios)[
         actionTypes.BASE.DELETE
       ](payload);
-      console.log("[SocialPosts] delete", result);
+
+      if (result.success) {
+        const { feeds } = state;
+        const newlistPost = feeds.listPost
+          ? feeds.listPost.filter(item => item.post_id !== payload)
+          : [];
+        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
+          ...feeds,
+          listPost: newlistPost
+        });
+      }
       return result;
     } catch (err) {
       console.log("[SocialPosts] delete.err", err);
@@ -107,10 +119,34 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_LIKES.ADD]({ commit}, payload ) {
+  async [actionTypes.SOCIAL_LIKES.LIKE_POST]({ commit, state }, payload) {
     try {
-      const { data = {} } = await new Likes(this.$axios)[actionTypes.BASE.ADD](payload);
-      console.log("[SocialLikes] add data", data);
+      const result = await new Likes(this.$axios)[actionTypes.BASE.ADD](
+        payload
+      );
+      const { data = {} } = result;
+      const { feeds } = state;
+
+      if (result.success) {
+        const newFeeds =
+          feeds.listPost &&
+          feeds.listPost.map(item => {
+            if (item.post_id === payload.source_id) {
+              return {
+                ...item,
+                type_like: data.type_like,
+                is_like: !!data.type_like
+              };
+            }
+            return item;
+          });
+
+        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
+          ...feeds,
+          listPost: newFeeds
+        });
+      }
+
       return data;
     } catch (err) {
       console.log("[SocialLikes] add.err", err);
@@ -263,7 +299,7 @@ const actions = {
 
   async [actionTypes.SOCIAL_CONFIG.LIST]({ commit }, payload) {
     try {
-      const { data: result = [] } = await new Config(this.$axios)[
+      const { data: result = {} } = await new Config(this.$axios)[
         actionTypes.BASE.LIST
       ](payload);
       console.log("[SocialConfig] list", result);
@@ -278,7 +314,7 @@ const actions = {
 
   async [actionTypes.SOCIAL_FEEDS.LIST]({ commit }, payload) {
     try {
-      const { data: result = [] } = await new Feeds(this.$axios)[
+      const { data: result = {} } = await new Feeds(this.$axios)[
         actionTypes.BASE.LIST
       ](payload);
       console.log("[SocialFeed] list", result);
@@ -290,6 +326,25 @@ const actions = {
       return err;
     }
   },
+
+  async [actionTypes.SOCIAL_LABEL.LIST]({ commit }, payload) {
+    try {
+      const { data: result = {} } = await new Label(this.$axios)[
+        actionTypes.BASE.LIST
+      ](payload);
+      console.log("[SocialLabel] list", result);
+
+      // set to mutation
+      commit(
+        mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST,
+        result.list_icon || []
+      );
+      return result;
+    } catch (err) {
+      console.log("[SocialLabel] list.err", err);
+      return err;
+    }
+  }
 };
 
 /**
@@ -330,6 +385,10 @@ const mutations = {
   [mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST](state, _feeds) {
     state.feeds = _feeds;
   },
+
+  [mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST](state, labels) {
+    state.labels = labels;
+  }
 };
 
 export default {

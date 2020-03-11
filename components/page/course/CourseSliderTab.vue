@@ -6,7 +6,6 @@
         @click="changeTab(1)"
         :color="tab === 1 ? 'primary' : 'info'"
         square
-        v-if="sciences.length > 0"
       >
         <IconNote />
         Bài giảng
@@ -15,40 +14,43 @@
         @click="changeTab(2)"
         :color="tab === 2 ? 'primary' : 'info'"
         square
-        v-if="sciences.length > 0"
       >
         <IconBooks />
         Khóa học
       </app-button>
     </div>
-    <div
-      v-swiper:mySwiper="currentSwiperOptions"
-      class="post-slider course-slider"
-      v-on="$listeners"
-    >
-      <div class="swiper-wrapper">
-        <div
-          class="swiper-slide course-slider-tab-container"
-          v-for="(item, index) in list"
-          :key="index"
-        >
-          <div class="slider-item" @click="$emit('click-item', item, index)">
-            <course-item2 :item="item" />
+    <div style="position: relative;">
+      <div
+        ref="swiper"
+        v-swiper="currentSwiperOptions"
+        v-on="$listeners"
+        :instanceName="sliderName"
+      >
+        <div class="swiper-wrapper">
+          <div
+            class="swiper-slide"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <course-item2 :item="item"
+            />
           </div>
         </div>
+
+        <div
+          class="swiper-pagination"
+          v-if="currentSwiperOptions.pagination"
+        ></div>
       </div>
 
-      <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
+      <div class="swiper-button-custom swiper-button-prev--circle" v-if="currentSwiperOptions.navigation" slot="button-prev" @click="swiper.slidePrev()">
         <IconChevronLeft />
       </div>
-      <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
+      <div class="swiper-button-custom swiper-button-next--circle" v-if="currentSwiperOptions.navigation" slot="button-next" @click="swiper.slideNext()">
         <IconChevronRight />
       </div>
-      <div
-        class="swiper-pagination"
-        v-if="currentSwiperOptions.pagination"
-      ></div>
     </div>
+
   </div>
 </template>
 
@@ -59,6 +61,7 @@ import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -70,21 +73,29 @@ export default {
   },
 
   props: {
-    lessons: {
-      type: Array,
-      default: () => []
-    },
-
-    sciences: {
-      type: Array,
-      default: () => []
+    elearnings: {
+      type: Object,
+      default: null
     },
 
     swiperOptions: {
       type: Object,
       default: () => {}
     },
+
     title: { type: String }
+  },
+
+  computed: {
+    sliderName() {
+      return 'slider-' + new Date().getTime();
+    },
+    swiper: {
+      get() {
+        return this.$refs.swiper.swiper;
+      },
+      set() {}
+    }
   },
 
   data() {
@@ -92,11 +103,34 @@ export default {
       slidesPerView: "auto",
       spaceBetween: 4,
       navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
+      //   nextEl: ".swiper-button-next--circle",
+      //   prevEl: ".swiper-button-prev--circle",
       },
       pagination: false,
-      showName: false
+      showName: false,
+      loop: true,
+      breakpoints: {
+        1366: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        }
+      }
     };
 
     return {
@@ -110,12 +144,12 @@ export default {
   methods: {
     changeTab(tab) {
       this.tab = tab;
-      this.list = tab === 1 ? [...this.lessons] : [...this.sciences];
+      this.list = tab === 1 ? get(this, "elearnings.lectures", []) : get(this, "elearnings.courses", []);
     }
   },
 
   created() {
-    this.list = this.lessons;
+    this.list = get(this, "elearnings.lectures", []);
   }
 };
 </script>
@@ -123,3 +157,5 @@ export default {
 <style lang="scss">
 @import "~/assets/scss/components/course/_course-slider-tab.scss";
 </style>
+
+<style src="swiper/dist/css/swiper.css" scoped></style>

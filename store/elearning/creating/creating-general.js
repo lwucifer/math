@@ -1,12 +1,14 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import General from "~/services/elearning/creating/General";
+import Vue from "vue";
+import { redirectWithParams } from "~/utils/common";
 
 /**
  * initial state
  */
 const state = () => ({
-  general: []
+  general: null
 });
 
 /**
@@ -18,13 +20,16 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, options) {
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
-      // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_GENERAL.SET_ELEARNING_CREATING_GENERAL_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_GENERAL
+          .SET_ELEARNING_CREATING_GENERAL_LIST,
+        result.data
+      );
     } catch (error) {
       console.log("[Creating general] list.error", error);
     }
@@ -32,11 +37,28 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_GENERAL.ADD]({ commit }, payload) {
     try {
-      const result = await new General(this.$axios)[actionTypes.BASE.ADD](
+      const result = await new General(this.$axios)["postWithFormData"](
         payload
       );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
+      const params = {
+        elearning_id: result.data.elearning_id
+      };
+
+      const options = {
+        params
+      };
+
+      const _result = await new General(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.ELEARNING_CREATING_GENERAL
+          .SET_ELEARNING_CREATING_GENERAL_LIST,
+        _result.data
+      );
+
+      redirectWithParams(params);
+
     } catch (error) {
       console.log("[Creating general] add.error", error);
     }
@@ -53,7 +75,7 @@ const actions = {
       console.log("[Creating general] edit.error", error);
     }
   },
-  
+
   async [actionTypes.ELEARNING_CREATING_GENERAL.DELETE]({ commit }, payload) {
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.DELETE](
@@ -71,8 +93,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_GENERAL.SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
-    console.log("SET_ELEARNING_CREATING_GENERAL_LIST", general);
+  [mutationTypes.ELEARNING_CREATING_GENERAL
+    .SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
     state.general = general;
   }
 };

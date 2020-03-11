@@ -1,5 +1,6 @@
 <template>
   <div class="cc-panel bg-white mb-4">
+    <create-action />
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
     </div>
@@ -71,10 +72,12 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import CreateAction from "~/components/page/course/create/CreateAction";
 
 export default {
   components: {
-    IconAngleDown
+    IconAngleDown,
+    CreateAction
   },
 
   data() {
