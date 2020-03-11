@@ -11,7 +11,7 @@
         @input="handleEmail"
       />
       <app-input
-        type="text"
+        type="password"
         v-model="password"
         placeholder="Mật khẩu"
         class="mb-2"
