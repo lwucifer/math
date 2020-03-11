@@ -12,11 +12,15 @@
           name="type"
           value="LECTURE"
           @click="handleSelectType"
-          :checked="true"
+          :checked="payload.type === 'LECTURE'"
           class="mr-6"
           >Bài giảng</app-radio
         >
-        <app-radio name="type" @click="handleSelectType" value="COURSE"
+        <app-radio
+          name="type"
+          @click="handleSelectType"
+          value="COURSE"
+          :checked="payload.type === 'COURSE'"
           >Khoá học</app-radio
         >
       </div>
@@ -25,14 +29,20 @@
         <div class="col-md-3">
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
-            <CourseSelectLevel @handleChangeLevel="handleChangeLevel" />
+            <CourseSelectLevel
+              :defaultValue="payload.level"
+              @handleChangeLevel="handleChangeLevel"
+            />
           </div>
         </div>
 
         <div class="col-md-3">
           <div class="cgi-form-group mb-4">
             <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
-            <CourseSelectSubject @handleChangeSubject="handleChangeSubject" />
+            <CourseSelectSubject
+              :defaultValue="payload.subject"
+              @handleChangeSubject="handleChangeSubject"
+            />
           </div>
         </div>
       </div>
@@ -71,7 +81,10 @@
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
-      <CourseSelectAvatar @handleSelectAvatar="handleSelectAvatar" />
+      <CourseSelectAvatar
+        :defaultAvatar="get(general, 'avatar.medium', '')"
+        @handleSelectAvatar="handleSelectAvatar"
+      />
     </div>
   </div>
 </template>
@@ -88,9 +101,19 @@ import { useEffect } from "~/utils/common";
 import * as yup from "yup";
 import numeral from "numeral";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   avatar: yup.string().required(),
+  benefit: yup.string().required(),
+  description: yup.string().required(),
+  level: yup.string().required(),
+  name: yup.string().required(),
+  subject: yup.string().required(),
+  type: yup.string().required()
+});
+
+const schema_update = yup.object().shape({
   benefit: yup.string().required(),
   description: yup.string().required(),
   level: yup.string().required(),
@@ -137,9 +160,57 @@ export default {
       "payload.subject",
       "payload.type"
     ]);
+
+    this.handleFetchElearningGeneral();
+
+    useEffect(this, this.handleChangeGeneral.bind(this), [
+      "general.benefit",
+      "general.description",
+      "general.discount",
+      "general.fee",
+      "general.level",
+      "general.name",
+      "general.subject",
+      "general.type"
+    ]);
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
+    })
   },
 
   methods: {
+    handleChangeGeneral() {
+      this.payload.benefit = get(this, "general.benefit", "");
+      this.payload.description = get(this, "general.description", "");
+      this.payload.discount = get(this, "general.discount", "");
+      this.payload.fee = get(this, "general.fee", "");
+      this.payload.name = get(this, "general.name", "");
+      this.payload.subject = get(this, "general.subject", "");
+      this.payload.level = get(this, "general.level", "");
+      this.payload.type = get(this, "general.type", "LECTURE");
+      if (get(this, "general.id", "")) {
+        this.payload.elearning_id = get(this, "general.id", "");
+      }
+    },
+
+    handleFetchElearningGeneral() {
+      const elearning_id = get(this, "$route.query.elearning_id", "");
+      if (elearning_id) {
+        const options = {
+          params: {
+            elearning_id
+          }
+        };
+        this.$store.dispatch(
+          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+          options
+        );
+      }
+    },
+
     handleChangeDiscount(discount) {
       this.payload.discount = numeral(discount).format();
     },
@@ -151,6 +222,15 @@ export default {
     handleChangePayload() {
       let that = this;
       const payload = createPayloadAddCourse(this.payload);
+      const elearning_id = get(that, "$route.query.elearning_id", "");
+
+      if (elearning_id) {
+        schema_update.isValid(payload).then(function(valid) {
+          that.isSubmit = valid;
+        });
+        return;
+      }
+
       schema.isValid(payload).then(function(valid) {
         that.isSubmit = valid;
       });
@@ -173,14 +253,16 @@ export default {
     },
 
     handleCLickSave() {
-      const payload = createPayloadAddCourse(this.payload);
+      let payload = createPayloadAddCourse(this.payload);
       this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
+      this.isSubmit = false;
     },
 
-    numeral
+    numeral,
+    get
   }
 };
 </script>

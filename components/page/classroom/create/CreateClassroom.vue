@@ -86,7 +86,7 @@
                 Mô tả tổng quát
               </label>
               <div>
-                <textarea name="" id="" rows="10" placeholder="Mô tả" style="background: #FBFBFB; width: 100%; border: 1px solid #EEEEEE; padding: 12px 16px;"></textarea>
+                <app-editor id="description"/>
               </div>
             </div>
           </div>
