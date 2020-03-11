@@ -1,4 +1,5 @@
 import * as actionTypes from "../utils/action-types";
+import { forEach } from "lodash";
 
 export default class BaseService {
   constructor($axios, $api) {
@@ -45,6 +46,20 @@ export default class BaseService {
   async [actionTypes.BASE.EDIT_PAYLOAD](payload) {
     // console.log("[BaseService] params", payload);
     const { data } = await this.$axios.put(this.$api, payload);
+
+    return data;
+  }
+
+  async postWithFormData(payload) {
+    let formData = new FormData();
+    forEach(payload, function(value, key) {
+      formData.append(key, value);
+    });
+    const { data } = await this.$axios.post(this.$api, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
 
     return data;
   }

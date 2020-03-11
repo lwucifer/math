@@ -28,7 +28,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 import { get } from "lodash";
 
 const menu = [
@@ -96,7 +96,7 @@ export default {
     },
 
     handleChangeGeneral() {
-      const elearning_id = get(this, "$route.query.elearning_id", "");
+      const elearning_id = getParamQuery("elearning_id");
       if (this.general && elearning_id) this.menu[0].checked = true;
     }
   }
