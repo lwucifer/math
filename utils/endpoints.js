@@ -83,3 +83,15 @@ export const SCHOOL_ELEARNING = `${SCHOOLLY_ALIAS}/elearning/school/elearnings`;
 export const SCHOOL_PROFESSIONAL = `${SCHOOLLY_ALIAS}/elearning/school/admin/professional`;
 export const SCHOOL_STUDENT = `${SCHOOLLY_ALIAS}/elearning/school/admin/students`;
 export const SCHOOL_TEACHER = `${SCHOOLLY_ALIAS}/elearning/school/admin/teachers`;
+
+/**
+ * MESSAGE
+ */
+export const GROUP_ADD_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/addMember`;
+export const GROUP_AVATAR = `${SCHOOLLY_ALIAS}/social/api/room/avatar`;
+export const GROUP_NAME = `${SCHOOLLY_ALIAS}/social/api/room/name`;
+export const GROUP = `${SCHOOLLY_ALIAS}/social/api/room`;
+export const GROUP_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/getMember`;
+export const GROUP_LEAVE = `${SCHOOLLY_ALIAS}/social/api/room/leaveGroup`;
+export const GROUP_REMOVE_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/removeMember`;
+export const GROUP_NOTIFICATION = `${SCHOOLLY_ALIAS}/social/api/room/settingNotification`;
