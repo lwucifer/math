@@ -65,17 +65,14 @@
 
       <!--Right form-->
       <div class="filter-form__right">
-        <div class="filter-form__item filter-form__item--search">
-          <app-input
-            type="text"
+        <div style="width: 31.8rem;">
+          <app-search
+            class=""
+            :placeholder="'Nhập để tìm kiếm...'"
             v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
             :size="'sm'"
-            @input="handleSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15"/>
-          </button>
+          >
+          </app-search>
         </div>
       </div><!--End right form-->
 
@@ -117,6 +114,15 @@
           </p>
         </td>
       </template>
+
+      <template v-slot:cell(visibility)="{row}">
+        <td class="nowrap">
+          <span :class="row.visibility.toLowerCase() == 'công khai' ? 'text-primary': 'text-secondary' ">
+            {{ row.visibility }}
+          </span>
+        </td>
+      </template>
+
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
           <n-link
@@ -216,13 +222,17 @@
         isAuthenticated: true,
         pagination: {
           total: 15,
-          page: 6,
-          pager: 20,
+          page: 1,
+          pager: 10,
           totalElements: 55,
           first: 1,
           last: 10
         },
         list: SCHEDULES,
+        visibilities: {
+          'cong khai': 'text-primary',
+          'rieng tu': 'text-secondary'
+        }
       };
     },
     computed: {
