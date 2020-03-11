@@ -21,3 +21,22 @@ class AddCourse {
 export function createPayloadAddCourse(payload) {
   return Object.freeze(new AddCourse(payload));
 }
+
+class AddContentCourse {
+  constructor(payload) {
+    this.elearning_id = payload.elearning_id;
+    this.index = payload.index;
+    if (payload.lesson) {
+      this.lesson = payload.lesson;
+    }
+    if (payload.url) {
+      this.url = payload.url;
+    }
+    this.name = payload.name;
+    this.type = payload.type;
+  }
+}
+
+export function createPayloadAddContentCourse(payload) {
+  return Object.freeze(new AddContentCourse(payload));
+}
