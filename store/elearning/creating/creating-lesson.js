@@ -1,5 +1,5 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Lesson from "~/services/elearning/creating/Lesson";
 
 /**
@@ -24,7 +24,11 @@ const actions = {
         payload
       );
       // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_LESSONS.SET_ELEARNING_CREATING_LESSONS_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_LESSONS
+          .SET_ELEARNING_CREATING_LESSONS_LIST,
+        result
+      );
     } catch (error) {
       console.log("[Creating Lesson] list.error", error);
     }
@@ -32,9 +36,7 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_LESSONS.ADD]({ commit }, payload) {
     try {
-      const result = await new Lesson(this.$axios)[actionTypes.BASE.ADD](
-        payload
-      );
+      const result = await new Lesson(this.$axios)["postWithFormData"](payload);
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
     } catch (error) {
@@ -53,7 +55,7 @@ const actions = {
       console.log("[Creating Lesson] edit.error", error);
     }
   },
-  
+
   async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, payload) {
     try {
       const result = await new Lesson(this.$axios)[actionTypes.BASE.DELETE](
@@ -71,7 +73,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_LESSONS.SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
+  [mutationTypes.ELEARNING_CREATING_LESSONS
+    .SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
     console.log("SET_ELEARNING_CREATING_LESSONS_LIST", lessons);
     state.lessons = lessons;
   }
