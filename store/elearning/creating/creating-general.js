@@ -2,6 +2,7 @@ import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import General from "~/services/elearning/creating/General";
 import Vue from "vue";
+import { redirectWithParams } from "~/utils/common";
 
 /**
  * initial state
@@ -39,10 +40,25 @@ const actions = {
       const result = await new General(this.$axios)["postWithFormData"](
         payload
       );
-      console.log(result);
-      Vue.toasted.show("Data is loaded!");
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
+      const params = {
+        elearning_id: result.data.elearning_id
+      };
+
+      const options = {
+        params
+      };
+
+      const _result = await new General(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.ELEARNING_CREATING_GENERAL
+          .SET_ELEARNING_CREATING_GENERAL_LIST,
+        _result.data
+      );
+
+      redirectWithParams(params);
+
     } catch (error) {
       console.log("[Creating general] add.error", error);
     }

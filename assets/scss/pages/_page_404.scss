@@ -1,0 +1,31 @@
+.wrap404page{
+    margin:auto;
+    width: 1170px;
+    height: 555px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p{
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 41px;
+        margin: 30px 0px 40px 0px;
+        color: #666666;
+    }
+    .btn{
+        a{
+            display: flex;
+            flex: row;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            svg path {
+                fill: $color-primary;
+                height: 16px;
+            }
+        }
+    }
+}

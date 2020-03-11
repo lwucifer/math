@@ -8,7 +8,7 @@
       class="cgi-upload-avt"
       @change="handleUploadChange"
     >
-      <template v-if="avatar.length">
+      <template v-if="avatarSrc">
         <div class="cgi-upload-avt-preview">
           <img :src="avatarSrc" alt />
           <span class="cgi-upload-avt-close-preview" @click.stop="removeAvatar">
@@ -44,9 +44,20 @@ export default {
     };
   },
 
+  props: {
+    defaultAvatar: ""
+  },
+
+  watch: {
+    defaultAvatar: function() {
+      this.avatarSrc = this.defaultAvatar;
+    }
+  },
+
   methods: {
     removeAvatar() {
       this.avatar = [];
+      this.avatarSrc = null;
       this.$emit("handleSelectAvatar", "");
     },
 
