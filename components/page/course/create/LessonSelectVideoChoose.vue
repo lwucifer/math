@@ -27,7 +27,7 @@
             <td>{{ get(file, "type", "") }}</td>
             <td>{{ get(file, "created_at", "") }}</td>
             <td>
-              <a @click="handleSelectUrl(file)" class="clc-table-action mr-4"
+              <a @click="handleSelectUrl(file, $event)" href="#" class="clc-table-action mr-4"
                 >Chọn</a
               >
               <a class="clc-table-action clc-table-action-delete">
@@ -80,9 +80,10 @@ export default {
   },
 
   methods: {
-    handleSelectUrl(file) {
+    handleSelectUrl(file, e) {
       this.file_select = file;
       this.$emit("handleSelectUrl", file);
+      e.preventDefault();
     },
 
     active(file) {

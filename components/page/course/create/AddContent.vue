@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
-    <app-input v-model="payload.name" />
+    <app-input v-model="payload.name" placeholder="Tên bài giảng" />
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <span>Chọn loại bài giảng</span>
 
