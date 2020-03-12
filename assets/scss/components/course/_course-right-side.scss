@@ -1,16 +1,23 @@
 .course-right-side {
-    position: relative;
-    padding: 1rem;
+    padding: 1.5rem 2rem 2rem 2rem;
     background-color: #fff;
+
     .price {
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-        background: #1481FE;
-        padding: 0.5rem 1rem;
-        color: #fff;
+        margin-bottom: 1.5rem;
+        line-height: 4.1rem;
+    }
+
+    .price--primary {
+        font-size: 3rem;
         font-weight: bold;
     }
+
+    .price--secondary {
+        font-size: 1.8rem;
+        text-decoration: line-through;
+        color: $color-text-gray-2;
+    }
+
     ul.info {
         list-style: none;
         color: #666;
