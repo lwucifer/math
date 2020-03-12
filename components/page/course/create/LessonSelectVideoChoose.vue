@@ -21,13 +21,16 @@
           <tr
             v-for="file in get(files, 'data.content', [])"
             :key="get(file, 'id', '')"
+            :style="active(file)"
           >
             <td>{{ get(file, "name", "") }}</td>
             <td>{{ get(file, "type", "") }}</td>
             <td>{{ get(file, "created_at", "") }}</td>
             <td>
-              <a href class="clc-table-action mr-4">Chọn</a>
-              <a href class="clc-table-action clc-table-action-delete">
+              <a @click="handleSelectUrl(file, $event)" href="#" class="clc-table-action mr-4"
+                >Chọn</a
+              >
+              <a class="clc-table-action clc-table-action-delete">
                 <IconTrashAlt class="icon" />
               </a>
             </td>
@@ -48,6 +51,12 @@ import { get } from "lodash";
 export default {
   components: {
     IconTrashAlt
+  },
+
+  data() {
+    return {
+      file_select: null
+    };
   },
 
   created() {
@@ -71,6 +80,18 @@ export default {
   },
 
   methods: {
+    handleSelectUrl(file, e) {
+      this.file_select = file;
+      this.$emit("handleSelectUrl", file);
+      e.preventDefault();
+    },
+
+    active(file) {
+      return get(this, "file_select.id", "") == get(file, "id", "-1")
+        ? "background: #ddd"
+        : "";
+    },
+
     get
   }
 };
