@@ -83,13 +83,13 @@
                         <li class="link--dropdown__content__item">
                           <n-link to="/" class="link-dark">
                             <IconTickGray />
-                            <span>Item 1</span>
+                            <span>Sửa tin nhắn</span>
                           </n-link>
                         </li>
                         <li class="link--dropdown__content__item">
                           <n-link to="/" class="link-dark">
                             <IconTickGray />
-                            <span>Item 2</span>
+                            <span>Xóa tin</span>
                           </n-link>
                         </li>
                       </ul>
@@ -122,13 +122,13 @@
                         <li class="link--dropdown__content__item">
                           <n-link to="/" class="link-dark">
                             <IconTickGray />
-                            <span>Item 1</span>
+                            <span>Sửa tin nhắn</span>
                           </n-link>
                         </li>
                         <li class="link--dropdown__content__item">
                           <n-link to="/" class="link-dark">
                             <IconTickGray />
-                            <span>Item 2</span>
+                            <span>Xóa tin</span>
                           </n-link>
                         </li>
                       </ul>
@@ -162,15 +162,38 @@
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
                 </div>
                 <div class="message-box__item__desc__actions">
-                  <button>
+                  <button title="Reply">
                     <IconReply />
                   </button>
-                  <button>
+                  <button title="Foward">
                     <IconUpload />
                   </button>
-                  <button>
-                    <IconDots />
-                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
                 </div>
               </div>
             </div>
@@ -199,15 +222,38 @@
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
                 </div>
                 <div class="message-box__item__desc__actions">
-                  <button>
+                  <button title="Reply">
                     <IconReply />
                   </button>
-                  <button>
+                  <button title="Foward">
                     <IconUpload />
                   </button>
-                  <button>
-                    <IconDots />
-                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
                 </div>
               </div>
               <div class="message-box__item__desc">
@@ -215,15 +261,38 @@
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
                 </div>
                 <div class="message-box__item__desc__actions">
-                  <button>
+                  <button title="Reply">
                     <IconReply />
                   </button>
-                  <button>
+                  <button title="Foward">
                     <IconUpload />
                   </button>
-                  <button>
-                    <IconDots />
-                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
                 </div>
               </div>
             </div>

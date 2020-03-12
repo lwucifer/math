@@ -51,9 +51,15 @@ export function redirectWithParams(params = {}) {
 }
 
 export function getParamQuery(name) {
-  if (process.client) {
+  let value = "";
+  try {
     let currentUrlParams = new URLSearchParams(window.location.search);
-    return currentUrlParams.get(name);
+    value = currentUrlParams.get(name);
+  } catch (erorr) {
+    value = "";
   }
-  return get(this, `$route.query.${name}`, "");
+  if (!value) {
+    value = get(this, `$route.query.${name}`, "");
+  }
+  return value;
 }

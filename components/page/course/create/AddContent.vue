@@ -98,8 +98,6 @@ export default {
   data() {
     return {
       tabType: "video",
-      isShowButtonAdd: true,
-      isShowFormAdd: false,
       payload: {
         elearning_id: getParamQuery("elearning_id"),
         index: 0,
