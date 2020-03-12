@@ -1,52 +1,55 @@
 <template>
   <div class="container course-view">
-    <h2>{{ get(elearningInfo, "name", "") }}</h2>
-    <div class="course-view__info">
-      <div class="author">
-        <app-avatar
-          :src="get(elearningInfo, 'teacher.avatar', '')"
-          :size="32"
-        />
-        <span class="name ml-2">{{
-          get(elearningInfo, "teacher.name", "")
-        }}</span>
-      </div>
 
-      <div class="views">
-        <IconEye />
-        <strong class="ml-2 mr-1">{{
-          get(elearningInfo, "review_count", 0)
-        }}</strong>
-        lượt xem
-      </div>
-
-      <div
-        class="price color-red bold"
-        v-if="!get(elearningInfo, 'free', false)"
-      >
-        <IconUsd class="mr-2" />
-        {{ get(elearningInfo, "price.original_price", 0) | toThousandFilter() }}
-        đ
-      </div>
-      <div class="price color-red bold" v-else>
-        <IconUsd class="mr-2" />Miễn phí
-      </div>
-
-      <div class="stars">
-        <app-stars
-          :stars="Math.floor(get(elearningInfo, 'lesson.stars', 0))"
-          :size="16"
-        />
-        <strong class="ml-3">{{
-          get(elearningInfo, "lesson.stars", 0)
-        }}</strong>
-        <span>({{ get(elearningInfo, "review_rate", 0) }})</span>
-      </div>
-    </div>
 
     <div class="course-view__main">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
+
+          <h2>{{ get(elearningInfo, "name", "") }}</h2>
+          <div class="course-view__info">
+            <div class="author">
+              <app-avatar
+                :src="get(elearningInfo, 'teacher.avatar', '')"
+                :size="32"
+              />
+              <span class="name ml-2">{{
+          get(elearningInfo, "teacher.name", "")
+        }}</span>
+            </div>
+
+            <div class="views">
+              <IconEye />
+              <strong class="ml-2 mr-1">{{
+                get(elearningInfo, "review_count", 0)
+                }}</strong>
+              lượt xem
+            </div>
+
+            <div
+              class="price color-red bold"
+              v-if="!get(elearningInfo, 'free', false)"
+            >
+              <IconUsd class="mr-2" />
+              {{ get(elearningInfo, "price.original_price", 0) | toThousandFilter() }}
+              đ
+            </div>
+            <div class="price color-red bold" v-else>
+              <IconUsd class="mr-2" />Miễn phí
+            </div>
+
+            <div class="stars">
+              <app-stars
+                :stars="Math.floor(get(elearningInfo, 'lesson.stars', 0))"
+                :size="16"
+              />
+              <strong class="ml-3">{{
+                get(elearningInfo, "lesson.stars", 0)
+                }}</strong>
+              <span>({{ get(elearningInfo, "review_rate", 0) }})</span>
+            </div>
+          </div>
+
           <div class="course-view__thumnail">
             <app-video :poster-src="get(elearningInfo, 'avatar', '')">
             </app-video>
@@ -104,8 +107,26 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <course-right-side />
+        <div class="col-md-4">
+          <course-right-side
+            @joinCourse="joinCourse"
+            @startLearn="startLearn"
+            @buy="buyCourse"
+            :is-joined="isJoined"
+            :is-done="isDone"
+            :is-buyed="isBuyed"
+          >
+
+            <template slot="tooltip" v-if="isBuyed">
+              <app-alert type="warning" class="mb-4 font-size-12">
+                <template slot="icon">
+                  <IconInfoCircle/>
+                </template>
+                Bạn đã mua bài giảng này vào ngày 20/10/2019
+              </app-alert>
+            </template>
+
+          </course-right-side>
         </div>
       </div>
     </div>
@@ -116,6 +137,7 @@
       :swiperOptions="sliderOptions"
       title="Bài giảng cùng giáo viên"
     />
+
     <course-slider-tab
       :lessons="elearningRelated"
       :swiperOptions="sliderOptions"
@@ -135,6 +157,7 @@ import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
 import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
+import IconInfoCircle from "~/assets/svg/icons/info.svg?inline";
 import CourseSliderTab from "~/components/page/course/CourseSliderTab";
 import CourseRates from "~/components/page/course/CourseRates";
 import CourseRightSide from "~/components/page/course/CourseRightSide";
@@ -155,6 +178,7 @@ export default {
     IconPlayO,
     IconBooks,
     IconDownload,
+    IconInfoCircle,
     CourseTeacherInfo,
     CourceProgram,
     CourceGeneral
@@ -208,16 +232,28 @@ export default {
         watchOverflow: true,
         showName: true
       },
-      active_el: 0
+      active_el: 0,
+      isJoined: false,
+      isDone: false,
+      isBuyed: false
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public/public-info", ["elearningInfo"]),
     ...mapState("elearning/public/public-program", ["elearningProgram"]),
-    ...mapState("elearning/public/public-related", ["elearningRelated"])
+    ...mapState("elearning/public/public-related", ["elearningRelated"]),
   },
   methods: {
+    joinCourse() {
+      console.log('joint course')
+    },
+    startLearn() {
+      console.log('start learn')
+    },
+    buyCourse() {
+      console.log('buy')
+    },
     get
   },
   created() {
