@@ -624,8 +624,8 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowButtonAdd: true,
-      isShowFormAdd: false
+      isShowButtonAdd: false,
+      isShowFormAdd: true
     };
   },
 
