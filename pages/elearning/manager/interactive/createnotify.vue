@@ -8,15 +8,15 @@
           <div class="col-md-9 wrap-content__ElearningManagerInteractive">
               <div class="wrap-content-create-notify__ElearningManagerInteractive">
                   <h5>Tạo thông báo</h5>
-                  <div>
+                  <div class="d-flex flex-column">
                       <span>Chọn bài giảng/ khóa học liên quan</span>
-                      <app-vue-select
+                      <app-select
                             label="text"
                             placeholder="Theo kết quả"
                             searchable
                             clearable
                             class="content-select__ElearningManagerInteractive"
-                      ></app-vue-select>
+                      ></app-select>
                   </div>
                   <div>
                       <span>Tiêu đề thông báo</span>
