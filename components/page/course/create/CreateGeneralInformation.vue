@@ -97,7 +97,7 @@ import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
 import { toNumber, get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 import * as yup from "yup";
 import numeral from "numeral";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
@@ -197,7 +197,7 @@ export default {
     },
 
     handleFetchElearningGeneral() {
-      const elearning_id = get(this, "$route.query.elearning_id", "");
+      const elearning_id = getParamQuery("elearning_id");
       if (elearning_id) {
         const options = {
           params: {

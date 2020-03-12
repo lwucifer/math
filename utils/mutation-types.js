@@ -53,7 +53,8 @@ export const ELEARNING_PUBLIC_CATEGORY = {
 };
 
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
-  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList"
+  SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST:
+    "setElearningPublicElearningTeacherList"
 };
 
 export const ELEARNING_PUBLIC_INFO = {
@@ -83,7 +84,7 @@ export const ELEARNING = {
   SET_ELEARNING_PROGRAM: "setElearningProgram",
   SET_ELEARNING_RELATED: "setElearningRelated",
   SET_ELEARNING_SUBJECT: "setElearningSubject",
-  SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel",
+  SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel"
 };
 
 export const CREATING_ANSWER = {
@@ -119,6 +120,10 @@ export const ELEARNING_CREATING_DOC = {
   SET_ELEARNING_CREATING_DOC_ADD: "setElearningCreatingDocAdd",
   SET_ELEARNING_CREATING_DOC_EDIT: "setElearningCreatingDocEdit",
   SET_ELEARNING_CREATING_DOC_DELETE: "setElearningCreatingDocDelete"
+};
+
+export const ELEARNING_TEACHING_REPOSITORY_FILE = {
+  SET_TEACHING_REPOSITORY_FILE_LIST: "setElearningTeachingRespositoryFileList"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -211,4 +216,9 @@ export const ELEARNING_SCHOOL_SUMMARY = {
 
 export const ELEARNING_SCHOOL_SEARCH = {
   SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList"
+};
+
+export const MESSAGE_GROUP = {
+  SET_MEMBER_LIST: "setMemberList",
+  SET_GROUP_LIST: "setGroupList"
 };

@@ -1,3 +1,5 @@
+import { GROUP_MEMBER } from "./endpoints";
+
 export const BASE = {
   LIST: "list",
   ADD: "add",
@@ -168,6 +170,10 @@ export const ELEARNING_CREATING_DOC = {
   DELETE: "elearningCreatingDocDelete"
 };
 
+export const ELEARNING_TEACHING_REPOSITORY_FILE = {
+  LIST: "elearningTeachingRespositoryFileList"
+};
+
 export const ELEARNING_CREATING_EXERCISES = {
   LIST: "elearningCreatingExercisesList",
   ADD: "elearningCreatingExercisesAdd",
@@ -257,4 +263,16 @@ export const ELEARNING_SCHOOL_SUMMARY = {
 
 export const ELEARNING_SCHOOL_SEARCH = {
   LIST: "elearningSchoolSearchList"
+};
+
+export const MESSAGE_GROUP = {
+  ADD_MEMBER: "addMember",
+  EDIT_AVATAR: "editAvatar",
+  EDIT_NAME: "editName",
+  CREATE_GROUP: "createGroup",
+  MEMBER_LIST: "memberList",
+  GROUP_LIST: "groupList",
+  GROUP_LEAVE: "groupLeave",
+  GROUP_REMOVE_MEMBER: "groupRemoveMember",
+  GROUP_NOTIFICATION: "groupNotification"
 };

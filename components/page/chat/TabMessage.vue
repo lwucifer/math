@@ -59,10 +59,82 @@
                 </div>
               </div>
               <div class="message-box__item__desc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <div class="message-box__item__desc__text">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Reply">
+                    <IconReply />
+                  </button>
+                  <button title="Foward">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
               </div>
               <div class="message-box__item__desc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                <div class="message-box__item__desc__text">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Reply">
+                    <IconReply />
+                  </button>
+                  <button title="Foward">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
               </div>
             </div>
           </div>
@@ -86,7 +158,43 @@
                 </div>
               </div>
               <div class="message-box__item__desc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                <div class="message-box__item__desc__text">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Reply">
+                    <IconReply />
+                  </button>
+                  <button title="Foward">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
               </div>
             </div>
           </div>
@@ -110,10 +218,82 @@
                 </div>
               </div>
               <div class="message-box__item__desc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <div class="message-box__item__desc__text">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Reply">
+                    <IconReply />
+                  </button>
+                  <button title="Foward">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
               </div>
               <div class="message-box__item__desc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                <div class="message-box__item__desc__text">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Reply">
+                    <IconReply />
+                  </button>
+                  <button title="Foward">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="right"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Sửa tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <IconTickGray />
+                            <span>Xóa tin</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
               </div>
             </div>
           </div>
@@ -205,14 +385,26 @@ import IconVideo from "~/assets/svg/icons/video-green.svg?inline";
 import IconAddUser from "~/assets/svg/icons/add-user-green.svg?inline";
 import IconSmile from "~/assets/svg/icons/smile.svg?inline";
 import IconImage from "~/assets/svg/icons/image.svg?inline";
+import IconUpload from "~/assets/svg/icons/upload.svg?inline";
+import IconReply from "~/assets/svg/icons/reply.svg?inline";
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 export default {
-    components: {
-        IconPhone,
-        IconVideo,
-        IconAddUser,
-        IconSmile,
-        IconImage
+  components: {
+    IconPhone,
+    IconVideo,
+    IconAddUser,
+    IconSmile,
+    IconImage,
+    IconReply,
+    IconUpload,
+    IconDots
+  },
+
+  data() {
+    return {
+      dropdownShow: false
     }
-}
+  },
+};
 </script>

@@ -65,17 +65,14 @@
 
       <!--Right form-->
       <div class="filter-form__right">
-        <div class="filter-form__item filter-form__item--search">
-          <app-input
-            type="text"
+        <div style="width: 31.8rem;">
+          <app-search
+            class=""
+            :placeholder="'Nhập để tìm kiếm...'"
             v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
             :size="'sm'"
-            @input="handleSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15"/>
-          </button>
+          >
+          </app-search>
         </div>
       </div><!--End right form-->
 
