@@ -1,21 +1,21 @@
 <template>
-<div class="page-message">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3 col-sidebar">
-        <TabContact :contacts="contactList"/>
-      </div>
-      <div class="col-md-9 col-content">
-        <div class="box">
-          <div class="row">
-          <TabMessage />
-          <TabInfo :fileshare="fileShareList" :imageshare="imageShareList"/>
+  <div class="page-message">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 col-sidebar">
+          <TabContact :contacts="contactList" />
+        </div>
+        <div class="col-md-9 col-content">
+          <div class="box">
+            <div class="row">
+              <TabMessage />
+              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -38,155 +38,207 @@ export default {
     TabInfo
   },
 
-  data(){
+  data() {
     return {
       contactList: [
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         },
         {
-          image:'https://picsum.photos/40/40',
-          title:'Arlene Henry',
-          desc:'Lorem ipsum dolor sit amet'
+          image: "https://picsum.photos/40/40",
+          title: "Arlene Henry",
+          desc: "Lorem ipsum dolor sit amet"
         }
       ],
-      fileShareList:[
+      fileShareList: [
         {
-          link: '#',
-          title: 'IrmaRussell_1.zip'
+          link: "#",
+          title: "IrmaRussell_1.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         },
         {
-          link: '#',
-          title: 'IrmaRussell.zip'
+          link: "#",
+          title: "IrmaRussell.zip"
         }
       ],
-      imageShareList:[
+      imageShareList: [
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
         },
         {
-          link:'#',
-          image: 'https://i.picsum.photos/id/13/80/80.jpg'
+          link: "#",
+          image: "https://i.picsum.photos/id/13/80/80.jpg"
+        }
+      ],
+      friends: [
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
         },
       ]
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">

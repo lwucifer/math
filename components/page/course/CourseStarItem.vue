@@ -6,7 +6,7 @@
     <div class="chart">
       <div :style="'width: ' + get(rate, 'percent', 0) + '%'"></div>
     </div>
-    <span>{{ get(rate, "percent", 0) }} %</span>
+    <div class="ml-2 text-center" style="min-width: 60px;">{{ get(rate, "percent", 0) }}%</div>
   </div>
 </template>
 

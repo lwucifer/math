@@ -43,7 +43,7 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    console.log("watchQuery");
+    console.log(store.state.auth.access_token);
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),

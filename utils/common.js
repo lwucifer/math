@@ -1,4 +1,4 @@
-import { forEach } from "lodash";
+import { forEach, get } from "lodash";
 
 export function getBase64(img, callback) {
   const reader = new FileReader();
@@ -48,4 +48,18 @@ export function redirectWithParams(params = {}) {
     "",
     window.location.pathname + "?" + currentUrlParams.toString()
   );
+}
+
+export function getParamQuery(name) {
+  let value = "";
+  try {
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    value = currentUrlParams.get(name);
+  } catch (erorr) {
+    value = "";
+  }
+  if (!value) {
+    value = get(this, `$route.query.${name}`, "");
+  }
+  return value;
 }

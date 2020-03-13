@@ -7,7 +7,7 @@
     />
     <course-reviews
       :reviews="get(votes, 'content', [])"
-      :page="get(votes, 'page', null)"
+      :page="get(votes, 'page', {})"
       @onPageChange="onPageChange"
     />
   </div>

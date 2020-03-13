@@ -102,10 +102,7 @@ export default {
     const defaultSwiperOptions = {
       slidesPerView: "auto",
       spaceBetween: 4,
-      navigation: {
-      //   nextEl: ".swiper-button-next--circle",
-      //   prevEl: ".swiper-button-prev--circle",
-      },
+      navigation: true,
       pagination: false,
       showName: false,
       loop: true,

@@ -69,7 +69,7 @@ const QUESTIONS=[
         lesson:"Sinh học lớp 10",
         student:"Nguyen Van A",
         class:"10A",
-        status:"Chưa trả lời",
+        status:"1",
     },
     {
         id:"1",
@@ -77,7 +77,7 @@ const QUESTIONS=[
         lesson:"Sinh học lớp 10",
         student:"Nguyen Van C",
         class:"10A",
-        status:"Chưa trả lời",
+        status:"0",
     },
     {
         id:"1",
@@ -85,7 +85,7 @@ const QUESTIONS=[
         lesson:"Sinh học lớp 10",
         student:"Nguyen Van A",
         class:"10A",
-        status:"Chưa trả lời",
+        status:"1",
     },
     {
         id:"1",
@@ -93,7 +93,7 @@ const QUESTIONS=[
         lesson:"Sinh học lớp 10",
         student:"Nguyen Van A",
         class:"10A",
-        status:"Chưa trả lời",
+        status:"0",
     }
 ]
 const NOTIFIES=[

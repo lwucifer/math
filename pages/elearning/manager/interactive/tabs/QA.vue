@@ -1,7 +1,7 @@
 <template>
   <div class="container">
       <div class="row wrap-filter-form__ElearningManagerInteractive">
-        <div  class="filter-form__ElearninManagerInteractive col-6">
+        <div  class="filter-form__ElearninManagerInteractive">
           <div class="filter-item">
             <app-button
               color="primary"
@@ -43,7 +43,7 @@
             </app-vue-select>
           </div>
         </div>
-        <div class="col-6 d-flex justify-content-end" >
+        <div class="filter-form__right" >
               <div class="wrapSearchForm___ElearningManagerFilterTable">
                     <app-input
                         type="text"
@@ -57,7 +57,7 @@
                     <button type="submit">
                         <IconSearch width="15" height="15" />
                     </button>
-                </div>
+              </div>
         </div>
       </div>
       <div class="wrapTable__ElearningManagerInteractive">
@@ -75,6 +75,14 @@
                 :to="'/elearning/manager/test/' + row.id">
                 Xem chi tiết
               </n-link>
+            </td>
+          </template>
+          <template v-slot:cell(status)="{row}">
+            <td v-if="row.status=='1'">
+              Đã trả lời
+            </td>
+            <td v-else class="status-not-reply">
+              Chưa trả lời
             </td>
           </template>
         </app-table>
