@@ -16,17 +16,6 @@
                 </div>
             </div>
         </div>
-        <div class="school-list-box__footer">
-            <div class="text-center">
-                <app-button
-                    square
-                    class="mt-3 school-list-box__footer__submit-btn"
-                    @click="showAll"
-                >
-                    <span class="">Xem tất cả</span>
-                </app-button>
-            </div>
-        </div>
   </div>
 </template>
 

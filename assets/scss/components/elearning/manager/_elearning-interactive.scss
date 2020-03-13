@@ -62,3 +62,41 @@
   .status-not-reply{
     color: #E9446A;
   }
+  .wrap-content__ElearningManagerInteractive{
+    background: #ffffff;
+    padding: 20px;
+}
+.wrap-content-create-notify__ElearningManagerInteractive{
+    background: #FBFBFB;
+    padding: 10px;
+    position: relative;
+    h5{
+        color: #E9446A;
+        margin-bottom: 20px;
+    }
+    >div{
+        margin-bottom: 20px;
+    }
+    span{
+        margin-bottom:10px;
+        display: inline-block;
+    }
+}
+.content-select__ElearningManagerInteractive{
+    background: #ffffff;
+    
+}
+.textArea__ElearningManagerInteractive{
+    .app-input__input{
+        height: 110px;
+    }
+}
+.btn-close__ElearningManagerInteractive{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    svg path{
+        fill: #666666;
+        height: 20px;
+    }
+}

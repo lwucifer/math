@@ -29,7 +29,7 @@
 
         <app-dropdown
           class="link-dark link--dropdown mr-0"
-          position="left"
+          position="right"
           v-model="dropdownShow"
           :content-width="'230px'"
         >
