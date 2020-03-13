@@ -1,6 +1,6 @@
 <template>
   <div>
-    <create-action />
+    <!-- <create-action /> -->
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
@@ -38,6 +38,9 @@
             </app-button>
 
             <AddContent v-if="isShowFormAdd" />
+
+            <CourseContentDetail />
+
           </div>
         </div>
       </div>
@@ -600,6 +603,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import CreateAction from "~/components/page/course/create/CreateAction";
 import AddContent from "~/components/page/course/create/AddContent";
+import CourseContentDetail from "~/components/page/course/create/CourseContentDetail";
 
 export default {
   components: {
@@ -612,7 +616,8 @@ export default {
     IconFileBlank,
     IconTrashAlt,
     CreateAction,
-    AddContent
+    AddContent,
+    CourseContentDetail
   },
 
   data() {

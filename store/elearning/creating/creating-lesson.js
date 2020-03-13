@@ -18,10 +18,10 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_LESSONS.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_LESSONS.LIST]({ commit }, options) {
     try {
       const result = await new Lesson(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
       // set to mutation
       commit(

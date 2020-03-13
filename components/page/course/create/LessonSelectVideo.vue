@@ -23,9 +23,10 @@
       v-if="tabVideo === 'upload'"
     />
 
-    <LessonSelectVideoChoose
+    <LessonSelect
       @handleSelectUrl="handleSelectUrl"
       v-if="tabVideo === 'choose'"
+      type="VIDEO"
     />
   </div>
 </template>
@@ -34,13 +35,13 @@
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import LessonSelectVideoUpload from "~/components/page/course/create/LessonSelectVideoUpload";
-import LessonSelectVideoChoose from "~/components/page/course/create/LessonSelectVideoChoose";
+import LessonSelect from "~/components/page/course/create/LessonSelect";
 
 export default {
   components: {
     IconTrashAlt,
     LessonSelectVideoUpload,
-    LessonSelectVideoChoose
+    LessonSelect
   },
 
   data() {
