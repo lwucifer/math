@@ -35,6 +35,9 @@
                   <div class="d-flex justify-content-center">
                       <app-button square size="sm">Hoàn thành</app-button>
                   </div>
+                  <button class="btn-close__ElearningManagerInteractive">
+                      <IconClose/>
+                  </button>
               </div>
           </div>
       </div>
@@ -42,12 +45,13 @@
 </template>
 
 <script>
+import IconClose from "~/assets/svg/design-icons/multiply.svg?inline"
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 export default {
     components:{
-        ElearningManagerSide,
+        ElearningManagerSide,IconClose
     },
     data() {
     return {
@@ -70,31 +74,5 @@ export default {
 </script>
 
 <style lang="scss">
-.wrap-content__ElearningManagerInteractive{
-    background: #ffffff;
-    padding: 20px;
-}
-.wrap-content-create-notify__ElearningManagerInteractive{
-    background: #FBFBFB;
-    padding: 10px;
-    h5{
-        color: #E9446A;
-        margin-bottom: 20px;
-    }
-    >div{
-        margin-bottom: 20px;
-    }
-    span{
-        margin-bottom:10px;
-        display: inline-block;
-    }
-}
-.content-select__ElearningManagerInteractive{
-    background: #ffffff;
-}
-.textArea__ElearningManagerInteractive{
-    .app-input__input{
-        height: 110px;
-    }
-}
+@import "~/assets/scss/components/elearning/manager/_elearning-interactive.scss";
 </style>
