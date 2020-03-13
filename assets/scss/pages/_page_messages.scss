@@ -427,6 +427,12 @@
 }
 
 .message-box__item {
+  .app-dropdown__content{
+    display: none;
+  }
+  &:hover .app-dropdown__content{
+    display: block;
+  }
   .message-box__item__desc {
     display: flex;
     margin-top: 1rem;

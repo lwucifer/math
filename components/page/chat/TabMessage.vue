@@ -124,7 +124,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -157,7 +157,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -234,7 +234,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -311,7 +311,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -529,6 +529,7 @@ export default {
   data() {
     return {
       dropdownShow: false,
+      dropdownEdit: false,
       textChat: "",
       isReply: false,
       tag: [],
