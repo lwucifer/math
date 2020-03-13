@@ -23,7 +23,10 @@
       v-if="tabVideo === 'upload'"
     />
 
-    <LessonSelectVideoChoose v-if="tabVideo === 'choose'" />
+    <LessonSelectVideoChoose
+      @handleSelectUrl="handleSelectUrl"
+      v-if="tabVideo === 'choose'"
+    />
   </div>
 </template>
 
@@ -53,6 +56,10 @@ export default {
 
     handleSelectFile(data) {
       this.$emit("handleSelectFile", data);
+    },
+
+    handleSelectUrl(file) {
+      this.$emit("handleSelectUrl", file);
     }
   }
 };

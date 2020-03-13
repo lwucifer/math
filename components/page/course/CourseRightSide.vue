@@ -1,18 +1,70 @@
 <template>
   <div class="course-right-side">
-    <img :src="get(favourites, 'content.0.avatar', '')" alt />
-    <div class="price">
-      {{
-        numeral(get(favourites, "content.0.price.original_price", 0)).format()
-      }}
+    <div>
+      <img :src="get(favourites, 'content.0.avatar', 'https://picsum.photos/330/204')" alt class="w-100" />
     </div>
-    <app-button
-      color="secondary"
-      fullWidth
-      square
-      class="text-uppercase mt-3 mb-3"
-      >Tham gia học</app-button
-    >
+    <div class="price">
+      <div class="d-flex justify-content-around" v-if="showPaiedPrice">
+        <span class="text-secondary price--primary">
+          {{ numeral(get(favourites, "content.0.price.original_price", 0)).format() | toThousandFilter }}đ
+        </span>
+        <span class="price--secondary">
+          {{ numeral(get(favourites, "content.0.price.original_price", 0)).format() | toThousandFilter }}đ
+        </span>
+      </div>
+      <div v-if="showFreePrice">
+        <span class="text-secondary price--primary"> Miễn phí </span>
+      </div>
+    </div>
+
+    <slot name="btnJoin">
+      <app-button
+        v-if="showBtnBuy"
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        @click="buy"
+      >
+        Mua ngay
+      </app-button>
+
+      <app-button
+        v-if="showBtnJoin"
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        @click="join"
+      >
+        Tham gia học
+      </app-button>
+
+      <app-button
+        v-if="showBtnStartLearning"
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        @click="learn"
+      >
+        Vào học ngay
+      </app-button>
+
+      <app-button
+        v-if="showBtnDone"
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+      >
+        <IconTickCircle /> &nbsp;
+        BÀI GIẢNG ĐÃ HOÀN THÀNH
+      </app-button>
+    </slot>
+
+    <slot name="tooltip"></slot>
+
     <ul class="info">
       <li>
         <IconBook class="mr-2" />Trình độ:
@@ -54,25 +106,41 @@ import IconSubject from "~/assets/svg/icons/subject.svg?inline";
 import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
+import IconTickCircle from "~/assets/svg/icons/tick-circle.svg?inline";
 import { get } from "lodash";
 import * as actionTypes from "../../../utils/action-types";
 import { mapState } from "vuex";
 import numeral from "numeral";
+import AppButton from "../../common/button/AppButton";
 
 export default {
   components: {
+    AppButton,
     IconShare,
     IconHeart,
     IconEye,
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook
+    IconBook,
+    IconTickCircle
   },
   props: {
     date: {
       type: Object,
       default: () => {}
+    },
+    isJoined: {
+      type: Boolean,
+      default: false
+    },
+    isDone: {
+      type: Boolean,
+      default: false
+    },
+    isBuyed: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -83,7 +151,29 @@ export default {
   computed: {
     ...mapState("elearning/study/study-favourite", {
       favourites: "favourites"
-    })
+    }),
+    isFree: function() {
+      return numeral(get(this.favourites, 'content.0.price.original_price', 0)).format() == 0
+    },
+    showFreePrice: function() {
+      return this.isFree && !this.isJoined
+    },
+    showPaiedPrice: function() {
+      let checked = (!this.isFree) && !this.isDone
+      return checked
+    },
+    showBtnJoin: function() {
+      return !this.isJoined
+    },
+    showBtnStartLearning: function() {
+      return this.isJoined && !this.isDone
+    },
+    showBtnDone: function() {
+      return this.isDone
+    },
+    showBtnBuy: function() {
+      return (!this.isBuyed) && (!this.isFree)
+    }
   },
 
   watch: {
@@ -98,7 +188,7 @@ export default {
 
   data() {
     return {
-      banner: BannerImage
+      banner: BannerImage,
     };
   },
 
@@ -127,6 +217,15 @@ export default {
         `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
         options
       );
+    },
+    join() {
+      this.$emit('joinCourse')
+    },
+    learn() {
+      this.$emit('startLearn')
+    },
+    buy() {
+      this.$emit('buy')
     }
   }
 };

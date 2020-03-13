@@ -1,6 +1,7 @@
 <template>
   <fragment>
-    <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3>
+    <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
+    <app-input v-model="payload.name" placeholder="Tên bài giảng" />
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <span>Chọn loại bài giảng</span>
 
@@ -36,6 +37,7 @@
 
       <LessonSelectVideo
         @handleSelectFile="handleSelectFile"
+        @handleSelectUrl="handleSelectUrl"
         v-if="tabType === 'video'"
       />
 
@@ -102,7 +104,7 @@ export default {
         elearning_id: getParamQuery("elearning_id"),
         index: 0,
         lesson: "",
-        name: "Bài giảng đại số lớp 10",
+        name: "",
         type: "VIDEO",
         url: ""
       }
@@ -118,6 +120,12 @@ export default {
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.url = "";
+    },
+
+    handleSelectUrl(file) {
+      this.payload.type = file.type;
+      this.payload.lesson = "";
+      this.payload.url = file.url;
     },
 
     handleAddContent() {

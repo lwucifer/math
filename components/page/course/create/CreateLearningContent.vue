@@ -19,7 +19,7 @@
             </div>
 
             <div class="cc-box__head-right">
-              <a href>Thêm nội dung bài giảng</a>
+              <a @click="handleAddLesson($event)" href>Thêm nội dung bài giảng</a>
               <button class="cc-box__btn cc-box__btn-collapse">
                 <IconAngleDown class="icon" />
               </button>
@@ -33,7 +33,6 @@
               square
               class="font-weight-semi-bold clc-btn-add-docs"
               v-if="isShowButtonAdd"
-              @click="handleAddContent"
             >
               <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
             </app-button>
@@ -294,9 +293,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
           Nội dung học tập
@@ -351,9 +350,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
           Nội dung học tập
@@ -508,9 +507,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
           Nội dung học tập
@@ -600,7 +599,7 @@ const IconFileBlank = () =>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import CreateAction from "~/components/page/course/create/CreateAction";
-import AddContent from "~/components/page/course/create/AddContent"
+import AddContent from "~/components/page/course/create/AddContent";
 
 export default {
   components: {
@@ -625,7 +624,7 @@ export default {
       tabDocument: "typing",
       tabAddDocument: "upload",
       isShowButtonAdd: false,
-      isShowFormAdd: true
+      isShowFormAdd: false
     };
   },
 
@@ -658,9 +657,10 @@ export default {
       this.tabAddDocument = type;
     },
 
-    handleAddContent() {
+    handleAddLesson(e) {
       this.isShowButtonAdd = false;
-      this.isShowFormAdd = true;
+      this.isShowFormAdd = !this.isShowFormAdd;
+      e.preventDefault();
     }
   }
 };
