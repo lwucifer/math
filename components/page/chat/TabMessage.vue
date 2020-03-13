@@ -46,7 +46,7 @@
               <div class="message-box__item__meta">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -93,7 +93,7 @@
                     <IconUpload />
                   </button>
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -130,7 +130,7 @@
                     <IconUpload />
                   </button>
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -164,7 +164,7 @@
               <div class="message-box__item__meta">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
-                    position="left"
+                    position="right"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -211,7 +211,7 @@
                     <IconUpload />
                   </button>
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -245,7 +245,7 @@
               <div class="message-box__item__meta">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"
@@ -292,7 +292,7 @@
                     <IconUpload />
                   </button>
                   <app-dropdown
-                    position="right"
+                    position="left"
                     v-model="dropdownShow"
                     :content-width="'10rem'"
                     class="link--dropdown"

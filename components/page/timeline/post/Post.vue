@@ -32,7 +32,7 @@
       <app-dropdown
         v-if="showMenuDropdown"
         class="post__menu-dropdown"
-        position="left"
+        position="right"
         open-on-click
         v-model="menuDropdown"
       >

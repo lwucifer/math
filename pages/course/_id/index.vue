@@ -1,28 +1,25 @@
 <template>
   <div class="container course-view">
-
-
     <div class="course-view__main">
       <div class="row">
         <div class="col-md-8">
-
           <h2>{{ get(elearningInfo, "name", "") }}</h2>
           <div class="course-view__info">
             <div class="author">
               <app-avatar
-                :src="get(elearningInfo, 'teacher.avatar', '')"
+                :src="get(elearningInfo, 'teacher.avatar.medium', '')"
                 :size="32"
               />
               <span class="name ml-2">{{
-          get(elearningInfo, "teacher.name", "")
-        }}</span>
+                get(elearningInfo, "teacher.name", "")
+              }}</span>
             </div>
 
             <div class="views">
               <IconEye />
               <strong class="ml-2 mr-1">{{
                 get(elearningInfo, "review_count", 0)
-                }}</strong>
+              }}</strong>
               lượt xem
             </div>
 
@@ -31,7 +28,9 @@
               v-if="!get(elearningInfo, 'free', false)"
             >
               <IconUsd class="mr-2" />
-              {{ get(elearningInfo, "price.original_price", 0) | toThousandFilter() }}
+              {{
+                numeral(get(elearningInfo, "price.original_price", 0)).format()
+              }}
               đ
             </div>
             <div class="price color-red bold" v-else>
@@ -45,13 +44,13 @@
               />
               <strong class="ml-3">{{
                 get(elearningInfo, "lesson.stars", 0)
-                }}</strong>
+              }}</strong>
               <span>({{ get(elearningInfo, "review_rate", 0) }})</span>
             </div>
           </div>
 
           <div class="course-view__thumnail">
-            <app-video :poster-src="get(elearningInfo, 'avatar', '')">
+            <app-video :poster-src="get(elearningInfo, 'avatar.large', '')">
             </app-video>
           </div>
 
@@ -116,16 +115,14 @@
             :is-done="isDone"
             :is-buyed="isBuyed"
           >
-
             <template slot="tooltip" v-if="isBuyed">
               <app-alert type="warning" class="mb-4 font-size-12">
                 <template slot="icon">
-                  <IconInfoCircle/>
+                  <IconInfoCircle />
                 </template>
                 Bạn đã mua bài giảng này vào ngày 20/10/2019
               </app-alert>
             </template>
-
           </course-right-side>
         </div>
       </div>
@@ -166,6 +163,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 // Import faked data
 import { SCIENCES } from "~/server/fakedata/course/courses";
+import numeral from "numeral";
 
 export default {
   layout: 'school',
@@ -243,19 +241,20 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public/public-info", ["elearningInfo"]),
     ...mapState("elearning/public/public-program", ["elearningProgram"]),
-    ...mapState("elearning/public/public-related", ["elearningRelated"]),
+    ...mapState("elearning/public/public-related", ["elearningRelated"])
   },
   methods: {
     joinCourse() {
-      console.log('joint course')
+      console.log("joint course");
     },
     startLearn() {
-      console.log('start learn')
+      console.log("start learn");
     },
     buyCourse() {
-      console.log('buy')
+      console.log("buy");
     },
-    get
+    get,
+    numeral
   },
   created() {
     console.log(this.elearningInfo);
