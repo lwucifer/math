@@ -19,7 +19,6 @@ const state = () => ({
   mediasList: {},
   notificationsList: {},
   configs: {},
-  feeds: {},
   labels: []
 });
 
@@ -312,21 +311,6 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_FEEDS.LIST]({ commit }, payload) {
-    try {
-      const { data: result = {} } = await new Feeds(this.$axios)[
-        actionTypes.BASE.LIST
-      ](payload);
-      console.log("[SocialFeed] list", result);
-
-      // set to mutation
-      commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, result);
-    } catch (err) {
-      console.log("[SocialFeed] list.err", err);
-      return err;
-    }
-  },
-
   async [actionTypes.SOCIAL_LABEL.LIST]({ commit }, payload) {
     try {
       const { data: result = {} } = await new Label(this.$axios)[
@@ -380,10 +364,6 @@ const mutations = {
 
   [mutationTypes.SOCIAL.SET_SOCIAL_CONFIG_LIST](state, _configs) {
     state.configs = _configs;
-  },
-
-  [mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST](state, _feeds) {
-    state.feeds = _feeds;
   },
 
   [mutationTypes.SOCIAL.SET_SOCIAL_LABEL_LIST](state, labels) {
