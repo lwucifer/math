@@ -5,7 +5,6 @@ import Likes from "~/services/social/likes";
 import Shares from "~/services/social/shares";
 import Comments from "~/services/social/comments";
 import Config from "~/services/social/config";
-import Feeds from "~/services/social/feeds";
 import Label from "~/services/social/label";
 
 /**
@@ -63,29 +62,6 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL_POST.DELETE]({ commit, state }, payload) {
-    try {
-      const result = await new SocialPosts(this.$axios)[
-        actionTypes.BASE.DELETE
-      ](payload);
-
-      if (result.success) {
-        const { feeds } = state;
-        const newlistPost = feeds.listPost
-          ? feeds.listPost.filter(item => item.post_id !== payload)
-          : [];
-        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
-          ...feeds,
-          listPost: newlistPost
-        });
-      }
-      return result;
-    } catch (err) {
-      console.log("[SocialPosts] delete.err", err);
-      return err;
-    }
-  },
-
   async [actionTypes.SOCIAL_LIKES.LIST]({ commit }, payload) {
     try {
       // const result = await new Likes(this.$axios)[actionTypes.BASE.LIST](payload);
@@ -114,41 +90,6 @@ const actions = {
       commit(mutationTypes.SOCIAL.SET_SOCIAL_LIKES_LIST, result);
     } catch (err) {
       console.log("[Likes] list.err", err);
-      return err;
-    }
-  },
-
-  async [actionTypes.SOCIAL_LIKES.LIKE_POST]({ commit, state }, payload) {
-    try {
-      const result = await new Likes(this.$axios)[actionTypes.BASE.ADD](
-        payload
-      );
-      const { data = {} } = result;
-      const { feeds } = state;
-
-      if (result.success) {
-        const newFeeds =
-          feeds.listPost &&
-          feeds.listPost.map(item => {
-            if (item.post_id === payload.source_id) {
-              return {
-                ...item,
-                type_like: data.type_like,
-                is_like: !!data.type_like
-              };
-            }
-            return item;
-          });
-
-        commit(mutationTypes.SOCIAL.SET_SOCIAL_FEEDS_LIST, {
-          ...feeds,
-          listPost: newFeeds
-        });
-      }
-
-      return data;
-    } catch (err) {
-      console.log("[SocialLikes] add.err", err);
       return err;
     }
   },

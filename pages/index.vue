@@ -244,7 +244,9 @@ import {
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
 import { VclFacebook } from "vue-content-loading";
-import Feeds from "~/services/social/feeds";
+import FeedsService from "~/services/social/feeds";
+import SocialPostsService from "~/services/social/post";
+import LikesService from "~/services/social/likes";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -278,7 +280,7 @@ export default {
   },
 
   async asyncData({ $axios }) {
-    const { data: feeds = {} } = await new Feeds($axios)[
+    const { data: feeds = {} } = await new FeedsService($axios)[
       actionTypes.BASE.LIST
     ]();
 
@@ -431,26 +433,55 @@ export default {
      * DELETE a post
      */
     async deletePost(id) {
-      const doDelete = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.DELETE}`,
-        id
-      );
-      console.log("doDelete", doDelete);
+      const doDelete = await new SocialPostsService(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](id);
+
+      if (doDelete.success) {
+        const { feeds } = this;
+        const newListPost =
+          feeds && feeds.listPost
+            ? feeds.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.feeds = {
+          listPost: newListPost,
+          page: feeds.page || {}
+        };
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
     },
 
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-      const doLike = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_LIKES.LIKE_POST}`,
-        likeModel
-      );
+      const { success = false, data = {} } = await new LikesService(
+        this.$axios
+      )[actionTypes.BASE.ADD](likeModel);
+
+      if (success) {
+        const { feeds } = this;
+        const newListPost =
+          feeds && feeds.listPost
+            ? feeds.listPost.map(item => {
+                if (item.post_id === likeModel.source_id) {
+                  return {
+                    ...item,
+                    type_like: data.type_like,
+                    is_like: !!data.type_like
+                  };
+                }
+                return item;
+              })
+            : [];
+        this.feeds.listPost = newListPost;
+      }
 
       // Have to run cb
       cb();
     },
 
     async feedInfiniteHandler($state) {
-      const { data: feeds = {} } = await new Feeds(this.$axios)[
+      const { data: feeds = {} } = await new FeedsService(this.$axios)[
         actionTypes.BASE.LIST
       ]({
         params: {
