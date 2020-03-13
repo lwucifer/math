@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap layout-default">
+  <div class="page-wrap layout-exercise">
     <TheHeaderExercise />
 
     <nuxt class="page-content"/>
@@ -19,5 +19,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/layouts/_default.scss";
+  .layout-exercise {
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+
+    .page-content {
+      flex-grow: 1;
+    }
+  }
 </style>

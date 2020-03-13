@@ -45,6 +45,4 @@
 
 <style lang="scss" scoped>
   @import "~/assets/scss/components/header-frame/_header-frame.scss";
-
-  /*@import "~/assets/scss/components/the-header/_the-header.scss";*/
 </style>

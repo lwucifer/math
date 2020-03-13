@@ -166,6 +166,7 @@ import { SCIENCES } from "~/server/fakedata/course/courses";
 import numeral from "numeral";
 
 export default {
+  layout: 'school',
   components: {
     CourseSliderTab,
     CourseRates,
