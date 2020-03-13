@@ -168,6 +168,7 @@ import { get } from "lodash";
 import { SCIENCES } from "~/server/fakedata/course/courses";
 
 export default {
+  layout: 'school',
   components: {
     CourseSliderTab,
     CourseRates,
