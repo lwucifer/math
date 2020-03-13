@@ -8,7 +8,6 @@
         <n-link
           to="/"
           class="link-dark link--pure"
-          :class="{ 'link--actived': true }"
         >
           Dòng thời gian
         </n-link>
@@ -60,7 +59,22 @@
 
     <template v-slot:rightMenu>
       <div v-if="isAuthenticated">
-        <app-notification-header/>
+        <div class="app-noti-header">
+          <ul>
+            <li>
+              <a href class="app-noti-header__item">
+                <IconMessenger height="22" width="22"/>
+                <span class="text-white">12</span>
+              </a>
+            </li>
+            <li>
+              <a href class="app-noti-header__item">
+                <IconBell height="22" width="22"/>
+                <span class="text-white">2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div v-if="isAuthenticated">
@@ -96,6 +110,8 @@
   import UserHeader from "~/components/common/user-header/UserHeader";
   import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
   import IconTickGray from "~/assets/svg/icons/tick-gray.svg?inline";
+  import IconBell from "~/assets/svg/icons/bell.svg?inline";
+  import IconMessenger from "~/assets/svg/icons/messenger2.svg?inline";
 
   export default {
     components: {
@@ -103,7 +119,9 @@
       UserHeader,
       ModalSigninByPhone,
       IconCaretDown,
-      IconTickGray
+      IconTickGray,
+      IconBell,
+      IconMessenger
     },
 
     data: () => ({
@@ -125,87 +143,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .link--pure,
-  .link--dropdown {
-    margin: 0 1rem;
-    display: inline-block;
-    position: relative;
-
-    &:hover {
-      color: $color-primary;
-    }
-  }
-
-  .link--pure {
-    line-height: 4.7rem;
-  }
-
-  .link--dropdown {
-
-    &__title {
-      line-height: 4.7rem;
-
-      &:hover,
-      &:focus {
-        outline: none;
-        color: $color-primary;
-        text-stroke: .6px $color-primary; // alternative of font-weight bold https://dev.to/mingyena/fix-inline-elements-shifting-issue-in-bold-on-hover-4fb
-        -webkit-text-stroke: .6px $color-primary; //Firefox and Edge
-
-        svg path {
-          fill: $color-primary;
-        }
-      }
-    }
-
-    &__content {
-      width: 16rem;
-
-      &__item {
-        padding: 1rem 2rem;
-        border-bottom: 1px solid #eee;
-        svg {
-          margin-right: 1rem;
-        }
-
-        &:hover {
-          svg path {
-            fill: $color-primary;
-          }
-        }
-      }
-    }
-
-    &:before {
-      content: "";
-      position: absolute;
-      height: 24px;
-      width: 1px;
-      background-color: rgba($color-dark, .32);
-      left: -1rem;
-      top: calc(50% - 12px);
-    }
-
-    &__content {
-      ul {
-        list-style-type: none;
-      }
-    }
-  }
-
-  .link--actived {
-    font-weight: bold;
-    color: $color-primary;
-
-    &:after {
-      content: "";
-      position: absolute;
-      height: 3px;
-      background-color: $color-primary;
-      bottom: 0;
-      width: 4.4rem;
-      left: calc(50% - 2.2rem);
-      bottom: -2rem;
-    }
-  }
+@import "~/assets/scss/components/header-department/_header-department"
 </style>
