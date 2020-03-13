@@ -18,7 +18,7 @@
         <strong class="color-primary ml-2">{{data.status}}%</strong>
         <app-dropdown
           class="elearning-item__actions-menu ml-auto"
-          position="right"
+          position="left"
           open-on-click
           v-model="dropdownShow"
           content-width="230px"

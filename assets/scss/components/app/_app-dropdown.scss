@@ -9,16 +9,22 @@
     background-color: #fff;
     box-shadow: 0px 2px 16px rgba(29, 36, 62, 0.12);
     z-index: 9;
+    transition: visibility .3s, opacity .3s;
+    visibility: hidden;
+    opacity: 0;
 }
 
 
 // Active
 .app-dropdown-active {
-
+    .app-dropdown__content {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 // Modifier
-.app-dropdown--left {
+.app-dropdown--right {
     .app-dropdown__content {
         right: 0;
     }
@@ -31,14 +37,14 @@
     }
 }
 
-.app-dropdown--right {
+.app-dropdown--left {
     .app-dropdown__content {
         left: 0;
     }
 }
 
 
-.app-dropdown--top-left {
+.app-dropdown--top-right {
     .app-dropdown__content {
         left: auto;
         top: auto;
@@ -48,7 +54,7 @@
     }
 }
 
-.app-dropdown--top-right {
+.app-dropdown--top-left {
     .app-dropdown__content {
         right: auto;
         top: auto;
@@ -69,7 +75,7 @@
     }
 }
 
-.app-dropdown--bottom-left {
+.app-dropdown--bottom-right {
     .app-dropdown__content {
         left: auto;
         bottom: auto;
@@ -79,7 +85,7 @@
     }
 }
 
-.app-dropdown--bottom-right {
+.app-dropdown--bottom-left {
     .app-dropdown__content {
         left: 0;
         bottom: auto;
