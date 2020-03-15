@@ -48,7 +48,7 @@ module.exports = {
         { src: "@/plugins/vue-fragment.js", ssr: false },
         { src: "@/plugins/vue-toast.js", ssr: false },
         { src: "@/plugins/vue-infinite-loading.js", ssr: false },
-        // { src: "@/plugins/tooltip.js", ssr: false },
+        { src: "@/plugins/sticky.js", ssr: false },
     ],
     /**
      * Global middleware

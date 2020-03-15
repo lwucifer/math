@@ -1,7 +1,7 @@
 <template>
   <div class="container course-view">
     <div class="course-view__main">
-      <div class="row">
+      <div class="row" sticky-container>
         <div class="col-md-8">
           <h2>{{ get(elearningInfo, "name", "") }}</h2>
           <div class="course-view__info">
@@ -114,6 +114,8 @@
             :is-joined="isJoined"
             :is-done="isDone"
             :is-buyed="isBuyed"
+            v-sticky
+            sticky-offset="{ top: 110, bottom: 20 }"
           >
             <template slot="tooltip" v-if="isBuyed">
               <app-alert type="warning" class="mb-4 font-size-12">
