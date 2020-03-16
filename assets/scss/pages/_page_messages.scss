@@ -34,10 +34,26 @@
   .col-sidebar {
     .aside-box {
       background-color: #f8f8f8;
-
+      border-right: 1px solid $color-border;
       .aside-box__top {
-        padding: 15px;
-
+        padding: 1.5rem;
+        background-color: #fff;
+        .tool-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          button:hover svg path {
+            fill: $color-primary;
+          }
+          svg {
+            width: 2rem;
+            height: 2rem;
+            path {
+              fill: #999;
+            }
+          }
+        }
         .input-group {
           width: 100%;
           display: flex;
@@ -46,8 +62,8 @@
           background: #ffffff;
           border: 1px solid #eeeeee;
           box-sizing: border-box;
-          border-radius: 5px;
-
+          height: 4rem;
+          background: #fbfbfb;
           .input-group-addon {
             display: flex;
             padding: 12px;
@@ -56,6 +72,7 @@
           input {
             border: none;
             width: 100%;
+            background: transparent;
             // width: -moz-available;          /* WebKit-based browsers will ignore this. */
             // width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
             // width: fill-available;
@@ -67,6 +84,7 @@
         .nav-tabs {
           display: flex;
           border-bottom: 1px solid #eeeeee;
+          background-color: #fff;
           li {
             width: 50%;
             a {
@@ -409,6 +427,12 @@
 }
 
 .message-box__item {
+  .app-dropdown__content {
+    display: none;
+  }
+  &:hover .app-dropdown__content {
+    display: block;
+  }
   .message-box__item__desc {
     display: flex;
     margin-top: 1rem;
@@ -463,23 +487,6 @@
       }
     }
   }
-
-  .link--dropdown__content {
-    ul {
-      background-color: #fff;
-      list-style: none;
-      width: 10rem;
-      text-align: left;
-      li {
-        display: block;
-        white-space: nowrap;
-        padding: 0.7rem 1rem;
-        + li {
-          border-top: 1px solid $color-border;
-        }
-      }
-    }
-  }
 }
 .message-box__item__meta__image {
   .link--dropdown__content {
@@ -530,4 +537,78 @@
 .app-upload__button:focus {
   border: 0;
   outline: none;
+}
+a {
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
+
+.create-group-chat-modal {
+  .app-modal-content {
+    padding: 2rem;
+  }
+  .input-name-group {
+    border: 0;
+    border-bottom: 1px solid $color-border;
+    height: 3rem;
+    flex: 1;
+  }
+  .change-avatar-group {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    background: rgba(50, 175, 133, 0.1);
+    border: 1px dashed #32af85;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 1rem 0;
+    svg path {
+      fill: $color-primary;
+    }
+  }
+  .contact-list {
+    max-height: 40rem;
+    overflow: auto;
+    .item {
+      padding: 1rem 0;
+    }
+  }
+}
+
+.page-message {
+  .aside-box .link--dropdown__content ul {
+    width: 14rem;
+  }
+  .link--dropdown__content {
+    ul {
+      background-color: #fff;
+      list-style: none;
+      width: 10rem;
+      text-align: left;
+      li {
+        display: block;
+        white-space: nowrap;
+        padding: 0.7rem 1rem;
+        a {
+          display: flex;
+          align-items: center;
+        }
+        + li {
+          border-top: 1px solid $color-border;
+        }
+      }
+    }
+  }
+}
+button {
+  position: relative;
+  z-index: 0;
+  svg {
+    position: relative;
+    z-index: -1;
+  }
 }

@@ -1,7 +1,8 @@
 .cgi-upload-avt {
     .app-upload__button {
-        border: 2px solid $color-primary;
-        padding: 0.5rem;
+        // border: 2px solid $color-primary;
+        // padding: 0.5rem;
+        width: 100%;
     }
 }
 
@@ -20,10 +21,6 @@
 
 .cgi-upload-avt-preview {
     position: relative;
-
-    img {
-        display: block;
-    }
 }
 
 .cgi-upload-avt-close-preview {
@@ -37,6 +34,7 @@
     justify-content: center;
     background-color: rgba(#000, .2);
     z-index: 1;
+    cursor: pointer;
 
     svg {
         fill: #fff;

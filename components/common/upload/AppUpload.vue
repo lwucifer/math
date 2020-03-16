@@ -14,8 +14,8 @@
         <div class="app-upload__default-slot">
           <div class="app-upload__control">
             <div class="app-upload__text">
-              <span class="app-upload__name-file" v-if="innerFileList.length">
-                <slot name="fileName" :innerFileList="innerFileList">{{ innerFileList[0] ? innerFileList[0].name : '' }}</slot>
+              <span class="app-upload__name-file" v-if="localFileList.length">
+                <slot name="fileName" :localFileList="localFileList">{{ localFileList[0] ? localFileList[0].name : '' }}</slot>
               </span>
               <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
             </div>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       input: true,
-      innerFileList: []
+      localFileList: this.fileList
     };
   },
 
@@ -63,13 +63,19 @@ export default {
         {
           // This ensures that the component works with v-model
           change: function(event) {
-            vm.innerFileList = event.target.files;
+            vm.localFileList = event.target.files;
             vm.$emit("change", event.target.files, event);
             vm.input = false;
             setTimeout(() => (vm.input = true));
           }
         }
       );
+    }
+  },
+
+  watch: {
+    fileList(newValue) {
+      this.localFileList = this.fileList
     }
   },
 

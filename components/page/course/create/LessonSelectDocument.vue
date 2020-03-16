@@ -27,11 +27,11 @@
     </div>
 
     <div class="cc-tab-panel" v-if="tabDocument === 'typing'">
-      <app-editor class="bg-white" />
+      <app-editor class="bg-white" v-model="article_content" />
     </div>
 
     <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
-      <app-upload class="clc-upload-video">
+      <app-upload @change="handleSelectFile" class="clc-upload-video">
         <div slot="hint" class="mt-2 caption">
           <b class="text-gray">Lưu ý:</b>
           <span class="text-sub">{{ `...` }}</span>
@@ -39,68 +39,42 @@
       </app-upload>
     </div>
 
-    <div class="cc-tab-panel" v-if="tabDocument === 'choose'">
-      <div class="d-flex justify-content-end">
-        <app-input
-          placeholder="Nhập để tìm kiếm..."
-          style="width: 260px"
-        ></app-input>
-      </div>
-
-      <div class="clc-table-wrapper">
-        <table class="clc-table">
-          <thead>
-            <tr>
-              <th>Tên file</th>
-              <th>Loại</th>
-              <th>Ngày tháng</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>Tên tài liệu</td>
-              <td>Tài liệu</td>
-              <td>15/10/2019</td>
-              <td>
-                <a href class="clc-table-action mr-4">Chọn</a>
-                <a href class="clc-table-action clc-table-action-delete">
-                  <IconTrashAlt class="icon" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Tên tài liệu</td>
-              <td>Tài liệu</td>
-              <td>15/10/2019</td>
-              <td>
-                <a href class="clc-table-action mr-4">Chọn</a>
-                <a href class="clc-table-action clc-table-action-delete">
-                  <IconTrashAlt class="icon" />
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <LessonSelect
+      @handleSelectUrl="handleSelectUrl"
+      v-if="tabDocument === 'choose'"
+      type="DOCS"
+    />
   </div>
 </template>
 
 <script>
+import LessonSelect from "~/components/page/course/create/LessonSelect";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 
 export default {
   components: {
-    IconTrashAlt
+    IconTrashAlt,
+    LessonSelect
   },
 
   data() {
     return {
-      tabDocument: "typing"
+      tabDocument: "typing",
+      article_content: ""
     };
+  },
+
+  watch: {
+    article_content: function() {
+      this.$emit(
+        "handleSelectDocument",
+        "ARTICLE",
+        this.article_content,
+        "",
+        ""
+      );
+    }
   },
 
   methods: {
@@ -110,6 +84,14 @@ export default {
 
     changeTabAddDocument(type) {
       this.tabAddDocument = type;
+    },
+
+    handleSelectUrl(file) {
+      this.$emit("handleSelectDocument", "DOC", "", file.url, "");
+    },
+
+    handleSelectFile(files) {
+      this.$emit("handleSelectDocument", "DOC", "", "", files[0]);
     }
   }
 };

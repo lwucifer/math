@@ -25,7 +25,8 @@ export default {
     },
     exact: {
       type: Boolean // Vue-router prop. Exactly match the link. Without this, '/' will match every route.
-    }
+    },
+    loading: Boolean
   },
 
   computed: {
@@ -60,27 +61,28 @@ export default {
         "btn-outline--color-success": this.color === "success",
         "btn-outline--color-error": this.color === "error",
         "btn-outline--color-warning": this.color === "warning",
-        "btn-outline--color-white": this.color === "white",
+        "btn-outline--color-white": this.color === "white"
       };
 
-      const borderRadiusClasses = {
+      const otherClasses = {
+        // Border-radius
         "btn--square": this.square,
-        "btn--rouned": this.rounded
-      };
+        "btn--rouned": this.rounded,
 
-      const fontWeightClasses = {
+        // Font weight
         "btn--normal": this.normal,
+
+        // State
+        "btn--loading": this.loading
       };
 
-      if (this.flat) return { ...sizeClasses, "btn--flat": true };
-      if (this.outline)
-        return {
-          ...sizeClasses,
-          "btn-outline": true,
-          ...outlineColorClasses,
-          ...borderRadiusClasses
-        };
-      return { ...sizeClasses, ...colorClasses, ...borderRadiusClasses, ...fontWeightClasses };
+      return {
+        "btn--flat": this.flat,
+        "btn-outline": this.outline,
+        ...sizeClasses,
+        ...(this.outline ? outlineColorClasses : colorClasses),
+        ...otherClasses
+      };
     }
   },
 
@@ -99,7 +101,13 @@ export default {
         },
         on: this.$listeners
       },
-      this.$slots.default
+      [
+        this.loading &&
+          h("app-spin", {
+            class: "btn__spin"
+          }),
+        this.$slots.default
+      ]
     );
   }
 };

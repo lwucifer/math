@@ -1,7 +1,37 @@
 <template>
   <div class="col-md-8 message-chat__content">
     <div class="aside-box">
-      <div class="aside-box__top">
+      <div class="aside-box__top" v-if="isCreate">
+        <div class="aside-box__top__create d-flex-center w-100">
+          <span class="color-999 mr-2">Đến:</span>
+          <app-select
+            mode="tags"
+            placeholder="Gửi cho ai?"
+            style="flex: 1"
+            :options="tagOptions"
+            v-model="tag"
+            @visible-change="handleFriendsVisibleChange"
+          >
+            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+              <app-avatar
+                :src="option.avatar && option.avatar.low ? option.avatar.low : null"
+                size="sm"
+                class="mr-3"
+              ></app-avatar>
+              {{ option.text }}
+            </div>
+
+            <client-only>
+              <infinite-loading
+                slot="options-append"
+                :identifier="friendsInfiniteId"
+                @infinite="friendsInfiniteHandler"
+              />
+            </client-only>
+          </app-select>
+        </div>
+      </div>
+      <div class="aside-box__top" v-else>
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar src="https://picsum.photos/40/40" size="sm" class="comment-item__avatar" />
@@ -23,7 +53,7 @@
               </a>
             </li>
             <li>
-              <a href="#">
+              <a @click="visibleAddByPhone = true">
                 <IconAddUser width="15" height="15" />
               </a>
             </li>
@@ -94,7 +124,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -104,14 +134,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -131,7 +157,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -141,14 +167,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -212,7 +234,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -222,14 +244,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -293,7 +311,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -303,14 +321,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -352,7 +366,26 @@
       </div>
     </div>
 
-    <!-- Modal foward -->
+    <!-- Modal thêm bạn qua số điện thoại -->
+    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
+
+    <!-- Modal xóa tin nhắn -->
+    <app-modal
+      centered
+      :width="250"
+      :component-class="{ 'message-foward-tags-modal': true }"
+      v-if="visibleDelete"
+    >
+      <div slot="content" class="text-center">
+        <h5 class="mb-4">Bạn muốn gỡ tin nhắn?</h5>
+        <div class="text-center mt-4">
+          <app-button size="sm" color="info" class="mr-3" square @click="visibleDelete = false">Hủy</app-button>
+          <app-button size="sm" square>Xóa</app-button>
+        </div>
+      </div>
+    </app-modal>
+
+    <!-- Modal chuyển tiếp -->
     <app-modal
       centered
       :width="606"
@@ -404,6 +437,8 @@ import { getBase64 } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import FriendService from "~/services/social/friend";
 
+import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
+
 import IconPhone from "~/assets/svg/icons/phone-green.svg?inline";
 import IconVideo from "~/assets/svg/icons/video-green.svg?inline";
 import IconAddUser from "~/assets/svg/icons/add-user-green.svg?inline";
@@ -413,6 +448,7 @@ import IconUpload from "~/assets/svg/icons/upload.svg?inline";
 import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
   components: {
@@ -424,21 +460,85 @@ export default {
     IconReply,
     IconUpload,
     IconDots,
-    IconClose
+    IconClose,
+    IconCamera,
+    ModalAddFriend
   },
 
+  props: {
+    isCreate: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       dropdownShow: false,
+      dropdownEdit: false,
       textChat: "",
       isReply: false,
       tag: [],
       visible: false,
+      visibleDelete: false,
+      visibleAddByPhone: false,
+      visibleAddGroup: false,
       friendsInfiniteId: +new Date(),
       friendsListQuery: {
         page: 1
       },
-      friendsList: []
+      friendsList: [],
+      friends: [
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        }
+      ]
     };
   },
 

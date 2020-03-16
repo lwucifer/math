@@ -3,12 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sidebar">
-          <TabContact :contacts="contactList" />
+          <TabContact :contacts="contactList" :friends="friends" @addMessage="addMessage()"/>
         </div>
         <div class="col-md-9 col-content">
           <div class="box">
             <div class="row">
-              <TabMessage />
+              <TabMessage :isCreate="isCreate"/>
               <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" />
             </div>
           </div>
@@ -235,9 +235,16 @@ export default {
           name: "Nguyễn Hữu Nam",
           avatar: "https://picsum.photos/40/40"
         },
-      ]
+      ],
+      isCreate: false
     };
-  }
+  },
+
+  methods: {
+    addMessage() {
+      this.isCreate = !this.isCreate;
+    }
+  },
 };
 </script>
 
