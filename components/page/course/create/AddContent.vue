@@ -41,7 +41,10 @@
         v-if="tabType === 'video'"
       />
 
-      <LessonSelectDocument v-if="tabType === 'document'" />
+      <LessonSelectDocument
+        v-if="tabType === 'document'"
+        @handleSelectDocument="handleSelectDocument"
+      />
 
       <div class="d-flex justify-content-end mt-4">
         <app-button
@@ -105,8 +108,9 @@ export default {
         index: 0,
         lesson: "",
         name: "",
-        type: "VIDEO",
-        url: ""
+        type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
+        url: "",
+        article_content: ""
       }
     };
   },
@@ -134,6 +138,13 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+    },
+
+    handleSelectDocument(type, article_content, url, lesson) {
+      this.payload.type = type;
+      this.payload.lesson = lesson;
+      this.payload.url = url;
+      this.payload.article_content = article_content;
     }
   }
 };

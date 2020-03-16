@@ -27,11 +27,11 @@
     </div>
 
     <div class="cc-tab-panel" v-if="tabDocument === 'typing'">
-      <app-editor class="bg-white" />
+      <app-editor class="bg-white" v-model="article_content" />
     </div>
 
     <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
-      <app-upload class="clc-upload-video">
+      <app-upload @change="handleSelectFile" class="clc-upload-video">
         <div slot="hint" class="mt-2 caption">
           <b class="text-gray">Lưu ý:</b>
           <span class="text-sub">{{ `...` }}</span>
@@ -60,8 +60,21 @@ export default {
 
   data() {
     return {
-      tabDocument: "typing"
+      tabDocument: "typing",
+      article_content: ""
     };
+  },
+
+  watch: {
+    article_content: function() {
+      this.$emit(
+        "handleSelectDocument",
+        "ARTICLE",
+        this.article_content,
+        "",
+        ""
+      );
+    }
   },
 
   methods: {
@@ -71,6 +84,14 @@ export default {
 
     changeTabAddDocument(type) {
       this.tabAddDocument = type;
+    },
+
+    handleSelectUrl(file) {
+      this.$emit("handleSelectDocument", "DOC", "", file.url, "");
+    },
+
+    handleSelectFile(files) {
+      this.$emit("handleSelectDocument", "DOC", "", "", files[0]);
     }
   }
 };
