@@ -49,13 +49,16 @@
           >Crop Ảnh</app-button>
 
           <template v-else>
-            <app-upload :fileList="avatar" class="cgi-upload-avt mb-3" @change="handleUploadChange"></app-upload>
-            <div
-              v-show="false"
-              class="text-error caption"
-            >
-              <IconExclamationTriangle class="icon mr-1" />
-            Ảnh bản vừa tải lên có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là 750x422 px. Hãy tải ảnh khác có kích thước lớn hơn.</div>
+            <app-upload
+              accept=".jpg, .jpeg, .jpg, .bmp, .png"
+              :outputType="cropperOutputType"
+              :fileList="avatar"
+              class="cgi-upload-avt mb-3"
+              @change="handleUploadChange"
+            ></app-upload>
+            <div v-show="false" class="text-error caption">
+              <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là 750x422 px. Hãy tải ảnh khác có kích thước lớn hơn.
+            </div>
           </template>
         </div>
       </div>
@@ -66,12 +69,17 @@
 <script>
 import { getBase64 } from "~/utils/common";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
-const IconExclamationTriangle = () => import('~/assets/svg/design-icons/exclamation-triangle.svg?inline');
+const IconExclamationTriangle = () =>
+  import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
 
 export default {
   components: {
     IconClose,
     IconExclamationTriangle
+  },
+
+  props: {
+    defaultAvatar: {}
   },
 
   data() {
@@ -80,12 +88,9 @@ export default {
       avatarSrc: null,
       avatarChoosen: null,
       cropping: false,
-      savingCrop: false
+      savingCrop: false,
+      cropperOutputType: null
     };
-  },
-
-  props: {
-    defaultAvatar: ""
   },
 
   mounted() {
@@ -107,6 +112,7 @@ export default {
 
     handleUploadChange(fileList, event) {
       this.avatar = Array.from(fileList);
+      this.cropperOutputType = fileList[0].name.split(".").slice(-1)[0];
 
       getBase64(this.avatar[0], src => {
         this.avatarChoosen = src;
@@ -120,10 +126,13 @@ export default {
     saveCrop() {
       this.savingCrop = true;
       this.$refs.cropper.getCropData(data => {
-        this.$emit("handleSelectAvatar", data);
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
+      });
+
+      this.$refs.cropper.getCropBlob(data => {
+        this.$emit("handleSelectAvatar", data);
       });
     }
   }
