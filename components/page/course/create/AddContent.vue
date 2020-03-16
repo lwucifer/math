@@ -52,6 +52,7 @@
           size="sm"
           color="disabled"
           square
+          @click="handleCancel"
           >Huỷ bỏ</app-button
         >
         <app-button
@@ -138,7 +139,7 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
-      this.$emit('refreshLessons')
+      this.$emit("refreshLessons");
     },
 
     handleSelectDocument(type, article_content, url, lesson) {
@@ -146,6 +147,10 @@ export default {
       this.payload.lesson = lesson;
       this.payload.url = url;
       this.payload.article_content = article_content;
+    },
+
+    handleCancel() {
+      this.$emit("handleCancel");
     }
   }
 };

@@ -34,6 +34,7 @@
             <AddContent
               v-if="isShowFormAddLesson"
               @refreshLessons="refreshLessons"
+              @handleCancel="handleCancel"
             />
             <fragment v-if="isShowDetailLesson">
               <LessonDetail
@@ -660,7 +661,7 @@ export default {
 
   methods: {
     setInitData() {
-      if (get(this, "lessons.data.length", "")) {
+      if (get(this, "lessons.data.length", 0)) {
         this.isShowButtonAddLesson = false;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
@@ -724,6 +725,19 @@ export default {
       this.isShowButtonAdd = false;
       this.isShowFormAddLesson = !this.isShowFormAddLesson;
       e.preventDefault();
+    },
+
+    handleCancel() {
+      const elearning_id = getParamQuery("elearning_id");
+      if (elearning_id && get(this, "lessons.data.length", 0)) {
+        this.isShowButtonAddLesson = false;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = true;
+      } else {
+        this.isShowButtonAddLesson = true;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = false;
+      }
     },
 
     get
