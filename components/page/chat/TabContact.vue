@@ -3,32 +3,32 @@
     <div class="aside-box__top">
       <div class="tool-top mb-15">
         <app-dropdown
-            position="left"
-            v-model="dropdownEdit"
-            :content-width="'10rem'"
-            class="link--dropdown"
-          >
-            <button slot="activator" type="button" class="link--dropdown__button">
-              <IconDots />
-            </button>
-            <div class="link--dropdown__content">
-              <ul>
-                <li class="link--dropdown__content__item">
-                  <a @click="visibleAddByPhone = true"> 
-                    <IconUsersAlt class="mr-2"/>
-                    Thêm bạn
-                  </a>
-                </li>
-                <li class="link--dropdown__content__item">
-                  <a @click="visibleAddGroup = true">
-                    <IconUserPlus class="mr-2"/>
-                    Tạo nhóm
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </app-dropdown>
-        <button @click="create()" title="Viết tin nhắn mới"><IconEdit/></button>
+          position="left"
+          v-model="dropdownEdit"
+          :content-width="'10rem'"
+          class="link--dropdown"
+        >
+          <button slot="activator" type="button" class="link--dropdown__button">
+            <IconDots />
+          </button>
+          <div class="link--dropdown__content">
+            <ul>
+              <li class="link--dropdown__content__item">
+                <a @click="visibleAddByPhone = true">
+                  <IconUsersAlt class="mr-2" />Thêm bạn
+                </a>
+              </li>
+              <li class="link--dropdown__content__item">
+                <a @click="visibleAddGroup = true">
+                  <IconUserPlus class="mr-2" />Tạo nhóm
+                </a>
+              </li>
+            </ul>
+          </div>
+        </app-dropdown>
+        <button @click="create()" title="Viết tin nhắn mới">
+          <IconEdit />
+        </button>
       </div>
       <div class="search-nav">
         <div class="form-group">
@@ -112,13 +112,12 @@
         </li>
         <li>
           <a @click="isContact = false" :class="isContact ? '' : 'active'">
-            <IconChat width="25" height="23" :class="!isContact ? 'fill-primary' : 'fill-999'"/>
+            <IconChat width="25" height="23" :class="!isContact ? 'fill-primary' : 'fill-999'" />
             <p>Chat</p>
           </a>
         </li>
       </ul>
     </div>
-
 
     <!-- Modal tạo nhóm chát -->
     <app-modal
@@ -135,11 +134,16 @@
               <IconCamera width="20" height="20" />
             </template>
           </app-upload>
-          <input type="text" class="input-name-group" placeholder="Tên nhóm chat" />
+          <input
+            type="text"
+            class="input-name-group"
+            placeholder="Tên nhóm chat"
+            v-model="nameGroup"
+          />
         </div>
         <app-search class="mb-0" />
         <div class="contact-list">
-          <div class="item d-flex-center" v-for="(item, index) in friends" :key="index">
+          <div class="item d-flex-center" v-for="(item, index) in friendList" :key="index">
             <app-avatar :src="item.avatar" :size="30" class="mr-3" />
             <span>{{item.name}}</span>
             <app-checkbox class="ml-auto" />
@@ -153,7 +157,7 @@
             square
             @click="visibleAddGroup = false"
           >Hủy</app-button>
-          <app-button size="sm" square>Tạo</app-button>
+          <app-button size="sm" square @click.prevent="hanldeCreateGroup">Tạo</app-button>
         </div>
       </div>
     </app-modal>
@@ -184,14 +188,15 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from "vuex";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
-import IconEdit from '~/assets/svg/design-icons/edit.svg?inline';
-import IconDots from '~/assets/svg/icons/dots.svg?inline';
-import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
-import IconUserPlus from '~/assets/svg/design-icons/user-plus.svg?inline';
+import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
+import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
@@ -225,9 +230,15 @@ export default {
       isContact: false,
       visibleAddByPhone: false,
       visibleAddGroup: false,
+      nameGroup: "",
+      dropdownEdit: false
     };
   },
+  computed: {
+    ...mapState("social", ["friendList"])
+  },
   methods: {
+    ...mapActions("message", ["createGroup"]),
     create() {
       this.$emit("addMessage");
     },
@@ -243,6 +254,16 @@ export default {
       console.log("[avatar_images]", fileList[0]);
       this.accountPersonalEditAvatar(body).then(result => {});
     },
-  },
+    hanldeCreateGroup() {
+      const data = {
+        type: 1,
+        members: [24, 25],
+        name: this.nameGroup
+      };
+      this.createGroup(data).then(result => {
+        console.log("aaaaa");
+      });
+    }
+  }
 };
 </script>
