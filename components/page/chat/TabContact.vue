@@ -2,8 +2,33 @@
   <div class="aside-box">
     <div class="aside-box__top">
       <div class="tool-top mb-15">
-        <button><IconDots/></button>
-        <button @click="create()"><IconEdit/></button>
+        <app-dropdown
+            position="left"
+            v-model="dropdownEdit"
+            :content-width="'10rem'"
+            class="link--dropdown"
+          >
+            <button slot="activator" type="button" class="link--dropdown__button">
+              <IconDots />
+            </button>
+            <div class="link--dropdown__content">
+              <ul>
+                <li class="link--dropdown__content__item">
+                  <a @click="visibleAddByPhone = true"> 
+                    <IconUsersAlt class="mr-2"/>
+                    Thêm bạn
+                  </a>
+                </li>
+                <li class="link--dropdown__content__item">
+                  <a @click="visibleAddGroup = true">
+                    <IconUserPlus class="mr-2"/>
+                    Tạo nhóm
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </app-dropdown>
+        <button @click="create()" title="Viết tin nhắn mới"><IconEdit/></button>
       </div>
       <div class="search-nav">
         <div class="form-group">
@@ -93,6 +118,68 @@
         </li>
       </ul>
     </div>
+
+
+    <!-- Modal tạo nhóm chát -->
+    <app-modal
+      centered
+      :width="420"
+      :component-class="{ 'create-group-chat-modal': true }"
+      v-if="visibleAddGroup"
+    >
+      <div slot="content">
+        <h5>Tạo nhóm chat</h5>
+        <div class="d-flex-center">
+          <app-upload class="cgi-upload-avt change-avatar-group mr-3" @change="handleUploadChange">
+            <template>
+              <IconCamera width="20" height="20" />
+            </template>
+          </app-upload>
+          <input type="text" class="input-name-group" placeholder="Tên nhóm chat" />
+        </div>
+        <app-search class="mb-0" />
+        <div class="contact-list">
+          <div class="item d-flex-center" v-for="(item, index) in friends" :key="index">
+            <app-avatar :src="item.avatar" :size="30" class="mr-3" />
+            <span>{{item.name}}</span>
+            <app-checkbox class="ml-auto" />
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <app-button
+            size="sm"
+            color="info"
+            class="mr-3"
+            square
+            @click="visibleAddGroup = false"
+          >Hủy</app-button>
+          <app-button size="sm" square>Tạo</app-button>
+        </div>
+      </div>
+    </app-modal>
+
+    <!-- Modal thêm bạn qua số điện thoại -->
+    <app-modal
+      centered
+      :width="420"
+      :component-class="{ 'message-foward-tags-modal': true }"
+      v-if="visibleAddByPhone"
+    >
+      <div slot="content">
+        <h5 class="mb-3">Thêm bạn bằng số điện thoại</h5>
+        <app-input class="mb-0" />
+        <div class="text-right mt-3">
+          <app-button
+            size="sm"
+            color="info"
+            class="mr-3"
+            square
+            @click="visibleAddByPhone = false"
+          >Hủy</app-button>
+          <app-button size="sm" square>Tìm</app-button>
+        </div>
+      </div>
+    </app-modal>
   </div>
 </template>
 
@@ -103,6 +190,9 @@ import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
 import IconEdit from '~/assets/svg/design-icons/edit.svg?inline';
 import IconDots from '~/assets/svg/icons/dots.svg?inline';
+import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconUserPlus from '~/assets/svg/design-icons/user-plus.svg?inline';
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
   components: {
@@ -111,7 +201,10 @@ export default {
     IconUsers,
     IconChat,
     IconEdit,
-    IconDots
+    IconDots,
+    IconUsersAlt,
+    IconUserPlus,
+    IconCamera
   },
   props: {
     contacts: {
@@ -129,13 +222,27 @@ export default {
   data() {
     return {
       tab: 1,
-      isContact: false
+      isContact: false,
+      visibleAddByPhone: false,
+      visibleAddGroup: false,
     };
   },
   methods: {
     create() {
       this.$emit("addMessage");
-    }
+    },
+
+    async handleUploadChange(fileList, event) {
+      this.avatar = Array.from(fileList);
+
+      getBase64(this.avatar[0], src => {
+        this.avatarSrc = src;
+      });
+      const body = new FormData();
+      body.append("avatar_images", fileList[0]);
+      console.log("[avatar_images]", fileList[0]);
+      this.accountPersonalEditAvatar(body).then(result => {});
+    },
   },
 };
 </script>
