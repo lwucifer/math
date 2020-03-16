@@ -19,7 +19,9 @@
             </div>
 
             <div class="cc-box__head-right">
-              <a @click="handleAddLesson($event)" href>Thêm nội dung bài giảng</a>
+              <a @click="handleAddLesson($event)" href
+                >Thêm nội dung bài giảng</a
+              >
               <button class="cc-box__btn cc-box__btn-collapse">
                 <IconAngleDown class="icon" />
               </button>
@@ -39,8 +41,13 @@
 
             <AddContent v-if="isShowFormAdd" />
 
-            <CourseContentDetail />
-
+            <framge v-if="isShowLesson">
+              <LessonDetail
+                v-for="lesson in get(lessons, 'data', [])"
+                :key="lesson.id"
+                :lesson="lesson"
+              />
+            </framge>
           </div>
         </div>
       </div>
@@ -590,7 +597,6 @@
 
 <script>
 import { getBase64 } from "~/utils/common";
-
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -603,7 +609,11 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import CreateAction from "~/components/page/course/create/CreateAction";
 import AddContent from "~/components/page/course/create/AddContent";
-import CourseContentDetail from "~/components/page/course/create/CourseContentDetail";
+import LessonDetail from "~/components/page/course/create/LessonDetail";
+import { mapState } from "vuex";
+import { useEffect, getParamQuery } from "~/utils/common";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -617,7 +627,7 @@ export default {
     IconTrashAlt,
     CreateAction,
     AddContent,
-    CourseContentDetail
+    LessonDetail
   },
 
   data() {
@@ -629,11 +639,35 @@ export default {
       tabDocument: "typing",
       tabAddDocument: "upload",
       isShowButtonAdd: false,
-      isShowFormAdd: false
+      isShowFormAdd: false,
+      isShowLesson: false
     };
   },
 
+  created() {
+    useEffect(this, this.fetchLesson.bind(this), []);
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-lesson", {
+      lessons: "lessons"
+    })
+  },
+
   methods: {
+    fetchLesson() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+    },
+
     handleUploadChange(event) {
       this.avatar = Array.from(event.target.files);
 
@@ -666,7 +700,9 @@ export default {
       this.isShowButtonAdd = false;
       this.isShowFormAdd = !this.isShowFormAdd;
       e.preventDefault();
-    }
+    },
+
+    get
   }
 };
 </script>

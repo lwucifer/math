@@ -6,7 +6,7 @@
       </div>
       <div class="clc-video__right">
         <h4 class="clc-video__name heading-6 mb-3">
-          Tên video: Bài giảng đại số lớp 10a
+          {{ get(lesson, "name", "") }}
         </h4>
         <div class="clc-video__time text-gray mb-3">6:30</div>
         <div class="clc-video__actions">
@@ -40,6 +40,8 @@ const IconTrashAlt = () =>
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -48,23 +50,15 @@ export default {
     IconPlus
   },
 
-  created() {
-    useEffect(this, this.fetchLesson.bind(this), []);
+  props: {
+    lesson: {
+      type: Object,
+      default: null
+    }
   },
 
   methods: {
-    fetchLesson() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-    }
+    get
   }
 };
 </script>
