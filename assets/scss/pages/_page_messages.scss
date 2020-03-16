@@ -427,10 +427,10 @@
 }
 
 .message-box__item {
-  .app-dropdown__content{
+  .app-dropdown__content {
     display: none;
   }
-  &:hover .app-dropdown__content{
+  &:hover .app-dropdown__content {
     display: block;
   }
   .message-box__item__desc {
@@ -484,23 +484,6 @@
       }
       .message-box__item__meta {
         justify-content: flex-end;
-      }
-    }
-  }
-
-  .link--dropdown__content {
-    ul {
-      background-color: #fff;
-      list-style: none;
-      width: 10rem;
-      text-align: left;
-      li {
-        display: block;
-        white-space: nowrap;
-        padding: 0.7rem 1rem;
-        + li {
-          border-top: 1px solid $color-border;
-        }
       }
     }
   }
@@ -588,8 +571,36 @@ button:focus {
     }
   }
   .contact-list {
+    max-height: 40rem;
+    overflow: auto;
     .item {
       padding: 1rem 0;
+    }
+  }
+}
+
+.page-message {
+  .aside-box .link--dropdown__content ul {
+    width: 14rem;
+  }
+  .link--dropdown__content {
+    ul {
+      background-color: #fff;
+      list-style: none;
+      width: 10rem;
+      text-align: left;
+      li {
+        display: block;
+        white-space: nowrap;
+        padding: 0.7rem 1rem;
+        a {
+          display: flex;
+          align-items: center;
+        }
+        + li {
+          border-top: 1px solid $color-border;
+        }
+      }
     }
   }
 }
