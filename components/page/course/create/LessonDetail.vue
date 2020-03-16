@@ -10,10 +10,18 @@
         </h4>
         <div class="clc-video__time text-gray mb-3">6:30</div>
         <div class="clc-video__actions">
-          <a href class="clc-video__btn-edit text-primary mr-5">
+          <a
+            href
+            class="clc-video__btn-edit text-primary mr-5"
+            @click="handleEditLesson($event)"
+          >
             <IconEditAlt class="icon" />Sửa nội dung
           </a>
-          <a href class="clc-video__btn-delete text-secondary">
+          <a
+            href
+            class="clc-video__btn-delete text-secondary"
+            @click="handleDeleteLesson($event)"
+          >
             <IconTrashAlt class="icon" />Xoá nội dung
           </a>
         </div>
@@ -58,6 +66,25 @@ export default {
   },
 
   methods: {
+    handleEditLesson($event) {
+      this.$emit("handleEditLesson");
+      $event.preventDefault();
+    },
+
+    async handleDeleteLesson($event) {
+      $event.preventDefault();
+      const options = {
+        data: {
+          id: get(this, "lesson.id", "")
+        }
+      };
+      await this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
+        options
+      );
+      this.$emit("refreshLessons");
+    },
+
     get
   }
 };

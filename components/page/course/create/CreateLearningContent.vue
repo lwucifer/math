@@ -37,6 +37,8 @@
                 v-for="lesson in get(lessons, 'data', [])"
                 :key="lesson.id"
                 :lesson="lesson"
+                @handleEditLesson="handleEditLesson"
+                @refreshLessons="refreshLessons"
               />
             </fragment>
           </div>
@@ -655,7 +657,14 @@ export default {
         this.isShowAddLesson = false;
         this.isShowFormAdd = false;
         this.isShowLesson = true;
+      } else {
+        this.isShowAddLesson = true;
+        this.isShowFormAdd = false;
+        this.isShowLesson = false;
       }
+    },
+    refreshLessons() {
+      this.fetchLesson();
     },
     fetchLesson() {
       const elearning_id = getParamQuery("elearning_id");
@@ -668,6 +677,12 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
         options
       );
+    },
+
+    handleEditLesson() {
+      this.isShowAddLesson = false;
+      this.isShowFormAdd = true;
+      this.isShowLesson = false;
     },
 
     handleUploadChange(event) {
