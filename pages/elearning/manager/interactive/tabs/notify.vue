@@ -6,7 +6,7 @@
             <n-link :to="'/elearning/manager/interactive/createnotify'" class="n-link__ElearningManagerInteractive">Tạo thông báo</n-link>
           </app-button>
         </div> 
-        <div class="col-6 d-flex justify-content-end" >
+        <div class="filter-form__right" >
               <div class="wrapSearchForm___ElearningManagerFilterTable">
                     <app-input
                         type="text"

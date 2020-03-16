@@ -21,6 +21,7 @@
 <script>
 import ProfileSliderTab from "~/components/page/profile/ProfileSliderTab";
 export default {
+    layout:"backhome",
     components:{
         ProfileSliderTab
     },

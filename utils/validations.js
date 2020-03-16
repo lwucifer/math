@@ -88,3 +88,8 @@ export const validatePassword = _password => {
     console.log("aaa", _password, re.test(_password));
     return re.test(_password);
 };
+
+export const validateScriptTag = string => {
+    const regex = /<[^>]*script/g;
+    return regex.test(string);
+}

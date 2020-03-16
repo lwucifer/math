@@ -27,7 +27,7 @@
       </div>
 
       <!--Score form-->
-      <div class="writting-test-score" v-show="false">
+      <div class="writting-test-score" v-show="!hasMark">
         <label class="title" for="">Chấm điểm</label>
         <form
           class="writting-test-score__form"
@@ -36,15 +36,26 @@
           <app-input
             class="d-inline-block"
             v-model="score"
+            :disabled="isPass"
           >
           </app-input>
+          <div>
+            <app-checkbox
+              v-model="isPass"
+              label="Cho qua"
+            >
+            </app-checkbox>
+            <p class="form--note mt-2">
+              <i>*Học sinh này đã vượt quá số lần làm bài cho phép. Bạn có đồng ý cho phép học sinh này hoàn thành bài tập với số điểm tối thiểu?</i>
+            </p>
+          </div>
+
           <div
-            class="text-center"
+            class="text-center mt-4"
           >
             <app-button
-              class="btn--score"
-              size="xl"
               square
+              normal
             >
               Xác nhận
             </app-button>
@@ -60,23 +71,25 @@
   import * as actionTypes from "~/utils/action-types"
   // Import faked data
   import {RESULTS} from "~/server/fakedata/elearning/test"
+  import AppCheckbox from "../../../../../../components/common/checkbox/AppCheckbox";
 
   export default {
 
-    components: {},
+    components: {AppCheckbox},
 
     data() {
       return {
         isAuthenticated: true,
         questionContent: "Nội dung câu hỏi",
         answer: "Nội dung câu trả lời",
-        score: null
+        score: '5/10',
+        isPass: true
       }
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
       hasMark: function () {
-        return true
+        return false
       }
     },
 

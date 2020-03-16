@@ -1,10 +1,21 @@
 <template>
   <aside class="course-create-aside bg-white">
     <ul class="cca-checkbox-list">
-      <li v-for="item in menu" :key="item.key" :class="{ 'active': item.key === active }" @click="handleClickMenuItem(item)">
-        <app-checkbox :value="item.key">
+      <li
+        v-for="item in menu"
+        :key="item.key"
+        :class="{ active: item.key === active }"
+        @click="handleClickMenuItem(item)"
+      >
+        <app-checkbox
+          :value="item.key"
+          :checked="item.checked"
+          :disabled="true"
+        >
           {{ item.title }}
-          <span v-if="item.optional" class="cca-sub-text text-sub">(Tùy chọn)</span>
+          <span v-if="item.optional" class="cca-sub-text text-sub"
+            >(Tùy chọn)</span
+          >
         </app-checkbox>
       </li>
     </ul>
@@ -16,36 +27,40 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { useEffect, getParamQuery } from "~/utils/common";
+import { get } from "lodash";
+
 const menu = [
   {
-    key: 'general',
+    key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: true,
+    checked: false
   },
   {
-    key: 'content',
+    key: "content",
     title: "Nội dung học tập",
     optional: false,
-    checked: true,
+    checked: false
   },
   {
-    key: 'settings',
+    key: "settings",
     title: "Cài đặt",
     optional: false,
-    checked: true,
+    checked: false
   },
   {
-    key: 'exercise',
+    key: "exercise",
     title: "Bài tập",
     optional: true,
-    checked: true,
+    checked: false
   },
   {
-    key: 'exam',
+    key: "exam",
     title: "Bài kiểm tra",
     optional: true,
-    checked: true,
+    checked: false
   }
 ];
 
@@ -53,8 +68,9 @@ export default {
   props: {
     active: {
       type: String,
-      default: 'general',
-      validator: value => ['general', 'content', 'settings', 'exercise', 'exam'].includes(value)
+      default: "general",
+      validator: value =>
+        ["general", "content", "settings", "exercise", "exam"].includes(value)
     }
   },
 
@@ -64,13 +80,27 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
+    })
+  },
+
+  created() {
+    useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
+  },
+
   methods: {
     handleClickMenuItem({ key }) {
-      this.$emit('click-item', key)
+      this.$emit("click-item", key);
+    },
+
+    handleChangeGeneral() {
+      const elearning_id = getParamQuery("elearning_id");
+      if (this.general && elearning_id) this.menu[0].checked = true;
     }
   }
 };
 </script>
 
-<style>
-</style>
+<style></style>

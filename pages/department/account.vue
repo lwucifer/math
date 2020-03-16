@@ -1,10 +1,10 @@
 <template>
   <div class="container">
       <div class="row">
-        <div class="col-3">
+        <div class="col-md-3">
             <DepartmentAccountSide :department="department" :active="1"/>
         </div>
-        <div class="col-9">
+        <div class="col-md-9">
             <div class="wrap-account__Department">
                 <h5 class="color-primary">Thông tin tài khoản</h5>
                 <hr class="mt-3 mb-3"/>
@@ -36,6 +36,7 @@
 import DepartmentAccountSide from "~/components/page/department/DepartmentAccountSide"
 import {DEPARTMENT} from "~/server/fakedata/department/test"
 export default {
+    layout:'backhome',
     components:{
         DepartmentAccountSide
     },

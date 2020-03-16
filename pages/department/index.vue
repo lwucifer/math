@@ -54,6 +54,7 @@ import DepartmentListBox from "~/components/page/department/DepartmentListBox"
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 export default {
+    layout:"department",
     data(){
         return{
             isAuthenticated:true,

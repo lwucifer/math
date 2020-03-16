@@ -52,6 +52,7 @@ const SchoolTab = ()=> import("./tabs/school")
 const TeacherTab = ()=> import("./tabs/teacher")
 const DepartmentTab = ()=> import("./tabs/department")
 export default {
+    layout:'backhome',
     components:{
         FilterBar,
         TeacherTab,

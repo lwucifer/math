@@ -34,7 +34,7 @@ export default {
     },
     page: {
       types: Object,
-      default: null
+      default: () => {}
     }
   },
 
