@@ -637,7 +637,7 @@ export default {
 
   created() {
     useEffect(this, this.fetchLesson.bind(this), []);
-    useEffect(this, this.setInitData.bind(this), []);
+    useEffect(this, this.setInitData.bind(this), ["lessons.data"]);
   },
 
   computed: {
