@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrap layout-manage">
-    <TheHeaderManager />
+  <div class="page-wrap layout-school">
+    <TheHeaderSchool />
 
     <nuxt class="page-content"/>
 
@@ -9,17 +9,17 @@
 </template>
 
 <script>
-import TheHeaderManager from "~/components/layout/header/HeaderManager"
+import TheHeaderSchool from "~/components/layout/header/HeaderSchool"
 
 export default {
   components: {
-    TheHeaderManager,
+    TheHeaderSchool,
   }
 }
 </script>
 
 <style lang="scss">
-.layout-create {
+.layout-school {
   padding-top: 80px;
   display: flex;
   flex-direction: column;

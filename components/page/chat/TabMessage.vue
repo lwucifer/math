@@ -1,7 +1,37 @@
 <template>
   <div class="col-md-8 message-chat__content">
     <div class="aside-box">
-      <div class="aside-box__top">
+      <div class="aside-box__top" v-if="isCreate">
+        <div class="aside-box__top__create d-flex-center w-100">
+          <span class="color-999 mr-2">Đến:</span>
+          <app-select
+            mode="tags"
+            placeholder="Gửi cho ai?"
+            style="flex: 1"
+            :options="tagOptions"
+            v-model="tag"
+            @visible-change="handleFriendsVisibleChange"
+          >
+            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+              <app-avatar
+                :src="option.avatar && option.avatar.low ? option.avatar.low : null"
+                size="sm"
+                class="mr-3"
+              ></app-avatar>
+              {{ option.text }}
+            </div>
+
+            <client-only>
+              <infinite-loading
+                slot="options-append"
+                :identifier="friendsInfiniteId"
+                @infinite="friendsInfiniteHandler"
+              />
+            </client-only>
+          </app-select>
+        </div>
+      </div>
+      <div class="aside-box__top" v-else>
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar src="https://picsum.photos/40/40" size="sm" class="comment-item__avatar" />
@@ -23,7 +53,7 @@
               </a>
             </li>
             <li>
-              <a href="#">
+              <a @click="visibleAddByPhone = true">
                 <IconAddUser width="15" height="15" />
               </a>
             </li>
@@ -94,7 +124,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -104,14 +134,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -131,7 +157,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -141,14 +167,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -212,7 +234,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -222,14 +244,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -293,7 +311,7 @@
                   </button>
                   <app-dropdown
                     position="left"
-                    v-model="dropdownShow"
+                    v-model="dropdownEdit"
                     :content-width="'10rem'"
                     class="link--dropdown"
                   >
@@ -303,14 +321,10 @@
                     <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Sửa tin nhắn</span>
-                          </n-link>
+                          <a>Sửa tin nhắn</a>
                         </li>
                         <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xóa tin</span>
-                          </n-link>
+                          <a @click="visibleDelete = true">Xóa tin</a>
                         </li>
                       </ul>
                     </div>
@@ -351,6 +365,83 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal tạo nhóm chát -->
+    <app-modal
+      centered
+      :width="420"
+      :component-class="{ 'create-group-chat-modal': true }"
+      v-if="visibleAddGroup"
+    >
+      <div slot="content">
+        <h5>Tạo nhóm chat</h5>
+        <div class="d-flex-center">
+          <app-upload class="cgi-upload-avt change-avatar-group mr-3" @change="handleUploadChange">
+            <template>
+              <IconCamera width="20" height="20" />
+            </template>
+          </app-upload>
+          <input type="text" class="input-name-group" placeholder="Tên nhóm chat" />
+        </div>
+        <app-search class="mb-0" />
+        <div class="contact-list">
+          <div class="item d-flex-center" v-for="(item, index) in friends" :key="index">
+            <app-avatar :src="item.avatar" :size="30" class="mr-3" />
+            <span>{{item.name}}</span>
+            <app-checkbox class="ml-auto" />
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <app-button
+            size="sm"
+            color="info"
+            class="mr-3"
+            square
+            @click="visibleAddGroup = false"
+          >Hủy</app-button>
+          <app-button size="sm" square>Tạo</app-button>
+        </div>
+      </div>
+    </app-modal>
+
+    <!-- Modal thêm bạn qua số điện thoại -->
+    <app-modal
+      centered
+      :width="420"
+      :component-class="{ 'message-foward-tags-modal': true }"
+      v-if="visibleAddByPhone"
+    >
+      <div slot="content">
+        <h5 class="mb-3">Thêm bạn bằng số điện thoại</h5>
+        <app-input class="mb-0" />
+        <div class="text-right mt-3">
+          <app-button
+            size="sm"
+            color="info"
+            class="mr-3"
+            square
+            @click="visibleAddByPhone = false"
+          >Hủy</app-button>
+          <app-button size="sm" square>Tìm</app-button>
+        </div>
+      </div>
+    </app-modal>
+
+    <!-- Modal xóa tin nhắn -->
+    <app-modal
+      centered
+      :width="250"
+      :component-class="{ 'message-foward-tags-modal': true }"
+      v-if="visibleDelete"
+    >
+      <div slot="content" class="text-center">
+        <h5 class="mb-4">Bạn muốn gỡ tin nhắn?</h5>
+        <div class="text-center mt-4">
+          <app-button size="sm" color="info" class="mr-3" square @click="visibleDelete = false">Hủy</app-button>
+          <app-button size="sm" square>Xóa</app-button>
+        </div>
+      </div>
+    </app-modal>
 
     <!-- Modal foward -->
     <app-modal
@@ -413,6 +504,7 @@ import IconUpload from "~/assets/svg/icons/upload.svg?inline";
 import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
   components: {
@@ -424,21 +516,84 @@ export default {
     IconReply,
     IconUpload,
     IconDots,
-    IconClose
+    IconClose,
+    IconCamera
   },
 
+  props: {
+    isCreate: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       dropdownShow: false,
+      dropdownEdit: false,
       textChat: "",
       isReply: false,
       tag: [],
       visible: false,
+      visibleDelete: false,
+      visibleAddByPhone: false,
+      visibleAddGroup: false,
       friendsInfiniteId: +new Date(),
       friendsListQuery: {
         page: 1
       },
-      friendsList: []
+      friendsList: [],
+      friends: [
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        },
+        {
+          id: "1",
+          name: "Nguyễn Hữu Nam",
+          avatar: "https://picsum.photos/40/40"
+        }
+      ]
     };
   },
 
