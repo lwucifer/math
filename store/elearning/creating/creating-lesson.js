@@ -64,6 +64,10 @@ const actions = {
     } catch (error) {
       console.log("[Creating Lesson] delete.error", error);
     }
+  },
+
+  [actionTypes.BASE.RESET]({ commit }) {
+    commit(mutationTypes.BASE.RESET);
   }
 };
 
@@ -75,6 +79,10 @@ const mutations = {
     .SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
     console.log("SET_ELEARNING_CREATING_LESSONS_LIST", lessons);
     state.lessons = lessons;
+  },
+
+  [mutationTypes.BASE.RESET]: function(state) {
+    this.lessons = [];
   }
 };
 

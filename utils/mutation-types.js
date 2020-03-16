@@ -10,6 +10,10 @@ export const AUTH = {
   SET_FIREBASE_TOKEN: "setFirebaseToken"
 };
 
+export const BASE = {
+  RESET: "resetData"
+};
+
 export const PUBLIC = {};
 
 export const SOCIAL = {
