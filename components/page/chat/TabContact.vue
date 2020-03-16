@@ -2,8 +2,33 @@
   <div class="aside-box">
     <div class="aside-box__top">
       <div class="tool-top mb-15">
-        <button><IconDots/></button>
-        <button @click="create()"><IconEdit/></button>
+        <app-dropdown
+            position="left"
+            v-model="dropdownEdit"
+            :content-width="'10rem'"
+            class="link--dropdown"
+          >
+            <button slot="activator" type="button" class="link--dropdown__button">
+              <IconDots />
+            </button>
+            <div class="link--dropdown__content">
+              <ul>
+                <li class="link--dropdown__content__item">
+                  <a @click="visibleAddByPhone = true"> 
+                    <IconUsersAlt class="mr-2"/>
+                    Thêm bạn
+                  </a>
+                </li>
+                <li class="link--dropdown__content__item">
+                  <a @click="visibleAddGroup = true">
+                    <IconUserPlus class="mr-2"/>
+                    Tạo nhóm
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </app-dropdown>
+        <button @click="create()" title="Viết tin nhắn mới"><IconEdit/></button>
       </div>
       <div class="search-nav">
         <div class="form-group">
@@ -93,16 +118,29 @@
         </li>
       </ul>
     </div>
+
+    <!-- Modal tạo nhóm chát -->
+    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friends"/>
+
+    <!-- Modal thêm bạn qua số điện thoại -->
+    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
+
   </div>
 </template>
 
 <script>
+import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
+import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
+
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
 import IconEdit from '~/assets/svg/design-icons/edit.svg?inline';
 import IconDots from '~/assets/svg/icons/dots.svg?inline';
+import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconUserPlus from '~/assets/svg/design-icons/user-plus.svg?inline';
+import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
   components: {
@@ -111,7 +149,12 @@ export default {
     IconUsers,
     IconChat,
     IconEdit,
-    IconDots
+    IconDots,
+    IconUsersAlt,
+    IconUserPlus,
+    IconCamera,
+    ModalAddFriend,
+    ModalAddGroup
   },
   props: {
     contacts: {
@@ -129,13 +172,27 @@ export default {
   data() {
     return {
       tab: 1,
-      isContact: false
+      isContact: false,
+      visibleAddByPhone: false,
+      visibleAddGroup: false,
     };
   },
   methods: {
     create() {
       this.$emit("addMessage");
-    }
+    },
+
+    async handleUploadChange(fileList, event) {
+      this.avatar = Array.from(fileList);
+
+      getBase64(this.avatar[0], src => {
+        this.avatarSrc = src;
+      });
+      const body = new FormData();
+      body.append("avatar_images", fileList[0]);
+      console.log("[avatar_images]", fileList[0]);
+      this.accountPersonalEditAvatar(body).then(result => {});
+    },
   },
 };
 </script>

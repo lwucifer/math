@@ -9,6 +9,7 @@
             <vueCropper
               ref="cropper"
               :img="avatarChoosen"
+              :outputType="cropperOutputType"
               :fixedNumber="[750, 422]"
               fixed
               autoCrop
@@ -51,7 +52,6 @@
           <template v-else>
             <app-upload
               accept=".jpg, .jpeg, .jpg, .bmp, .png"
-              :outputType="cropperOutputType"
               :fileList="avatar"
               class="cgi-upload-avt mb-3"
               @change="handleUploadChange"
