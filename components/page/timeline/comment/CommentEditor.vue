@@ -99,7 +99,6 @@ export default {
 
   methods: {
     hanleShowEmojiPicker(event) {
-      console.log("event", event);
       const { emojiPicker } = this;
       const button =
         event.target.tagName === "svg"

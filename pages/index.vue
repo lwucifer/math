@@ -7,9 +7,7 @@
         <div class="col-md-8">
           <PostEditor @submit="handlePostEditorSubmit" />
 
-          <VclFacebook v-if="loading" class="bg-white" />
-
-          <template v-else>
+          <template>
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
@@ -144,6 +142,13 @@
             <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
+          <client-only>
+            <infinite-loading @infinite="feedInfiniteHandler">
+              <VclFacebook slot="spinner" class="bg-white" />
+              <template slot="no-more">Không còn bài viết.</template>
+            </infinite-loading>
+          </client-only>
+
           <app-modal
             v-if="modalDetailShow"
             centered
@@ -239,6 +244,9 @@ import {
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
 import { VclFacebook } from "vue-content-loading";
+import FeedsService from "~/services/social/feeds";
+import SocialPostsService from "~/services/social/post";
+import LikesService from "~/services/social/likes";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -271,10 +279,20 @@ export default {
     ]);
   },
 
+  async asyncData({ $axios }) {
+    const { data: feeds = {} } = await new FeedsService($axios)[
+      actionTypes.BASE.LIST
+    ]();
+
+    return {
+      feeds
+    };
+  },
+
   data() {
     return {
       POST_TYPES: Object.freeze(POST_TYPES),
-      loading: true,
+      loading: false,
       banners: new Array(3).fill(BannerImage, 0),
       coursesTab: 0,
       modalDetailShow: false,
@@ -298,19 +316,12 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["feeds"]),
     ...mapGetters("social", ["configPrivacyLevels"]),
 
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     }
-  },
-
-  created() {
-    this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`).then(() => {
-      this.loading = false;
-    });
   },
 
   mounted() {
@@ -409,7 +420,6 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
-        console.log('key', key)
         formData.append(key, data[key]);
       }
       const doAdd = await this.$store.dispatch(
@@ -423,22 +433,71 @@ export default {
      * DELETE a post
      */
     async deletePost(id) {
-      const doDelete = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.DELETE}`,
-        id
-      );
-      console.log("doDelete", doDelete);
+      const doDelete = await new SocialPostsService(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](id);
+
+      if (doDelete.success) {
+        const { feeds } = this;
+        const newListPost =
+          feeds && feeds.listPost
+            ? feeds.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.feeds = {
+          listPost: newListPost,
+          page: feeds.page || {}
+        };
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
     },
 
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-      const doLike = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_LIKES.LIKE_POST}`,
-        likeModel
-      );
+      const { success = false, data = {} } = await new LikesService(
+        this.$axios
+      )[actionTypes.BASE.ADD](likeModel);
+
+      if (success) {
+        const { feeds } = this;
+        const newListPost =
+          feeds && feeds.listPost
+            ? feeds.listPost.map(item => {
+                if (item.post_id === likeModel.source_id) {
+                  return {
+                    ...item,
+                    type_like: data.type_like,
+                    is_like: !!data.type_like
+                  };
+                }
+                return item;
+              })
+            : [];
+        this.feeds.listPost = newListPost;
+      }
 
       // Have to run cb
       cb();
+    },
+
+    async feedInfiniteHandler($state) {
+      const { data: feeds = {} } = await new FeedsService(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: {
+          page: this.feeds.page.number + 1
+        }
+      });
+
+      if (feeds.listPost && feeds.listPost.length) {
+        this.feeds = {
+          listPost: this.feeds.listPost.concat(feeds.listPost),
+          page: feeds.page
+        };
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
     }
   }
 };

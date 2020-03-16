@@ -24,12 +24,12 @@
           to="/"
           class="link-dark link--pure"
         >
-          Giáo viên
+          Trường học
         </n-link>
 
         <app-dropdown
           class="link-dark link--dropdown mr-0"
-          position="right"
+          position="left"
           v-model="dropdownShow"
           :content-width="'230px'"
         >

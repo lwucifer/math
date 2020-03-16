@@ -49,6 +49,7 @@ module.exports = {
         { src: "@/plugins/vue-toast.js", ssr: false },
         { src: "@/plugins/vue-infinite-loading.js", ssr: false },
         // { src: "@/plugins/tooltip.js", ssr: false },
+        { src: '~/plugins/vue-cropper', ssr: false }
     ],
     /**
      * Global middleware

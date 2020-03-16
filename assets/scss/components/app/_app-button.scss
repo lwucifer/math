@@ -28,8 +28,9 @@
 
     &.disabled, &[disabled] {
         pointer-events: none;
-        background-color: $color-disabled;
-        color: #fff;
+        background-color: $color-disabled !important;
+        border-color: $color-disabled !important;
+        color: #fff !important;
     }
 }
 
@@ -151,4 +152,17 @@
     background-color: transparent;
     color: #fff !important;
     border-color: #fff;
+}
+
+
+// Loading state
+.btn--loading {
+    pointer-events: none;
+    opacity: .6;
+}
+
+
+// Components
+.btn__spin {
+    margin-right: 6px;
 }

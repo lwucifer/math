@@ -20,7 +20,6 @@ export const SOCIAL = {
   SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
   SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
   SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
-  SET_SOCIAL_FEEDS_LIST: "setSocialFeedsList",
   SET_SOCIAL_LABEL_LIST: "setSocialLabelList"
 };
 

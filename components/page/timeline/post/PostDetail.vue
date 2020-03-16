@@ -41,7 +41,7 @@
     <div class="post-detail__actions">
       <app-dropdown
         class="post-detail__actions-menu"
-        position="left"
+        position="right"
         open-on-click
         v-model="dropdownShow"
       >
