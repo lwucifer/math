@@ -21,23 +21,32 @@
 
         <div v-else class="cgi-upload-avt-preview">
           <img
-            :src="avatarSrc || require('~/assets/images/create-course/default-course-image.png')"
+            :src="
+              avatarSrc ||
+                require('~/assets/images/create-course/default-course-image.png')
+            "
             alt
             class="d-block w-100"
           />
-          <span v-if="avatarSrc" class="cgi-upload-avt-close-preview" @click.stop="removeAvatar">
+          <span
+            v-if="avatarSrc"
+            class="cgi-upload-avt-close-preview"
+            @click.stop="removeAvatar"
+          >
             <IconClose />
           </span>
         </div>
       </div>
 
       <div class="col csa-col csa-col--right mb-4">
-        <p
-          class="csa-desc caption text-gray"
-        >- Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là 750x422 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png</p>
-        <p
-          class="csa-desc caption text-gray"
-        >- Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện</p>
+        <p class="csa-desc caption text-gray">
+          - Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
+          750x422 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
+          .png
+        </p>
+        <p class="csa-desc caption text-gray">
+          - Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
+        </p>
 
         <div class="mt-4">
           <app-button
@@ -47,7 +56,8 @@
             size="sm"
             :loading="savingCrop"
             @click="saveCrop"
-          >Crop Ảnh</app-button>
+            >Crop Ảnh</app-button
+          >
 
           <template v-else>
             <app-upload
@@ -57,7 +67,9 @@
               @change="handleUploadChange"
             ></app-upload>
             <div v-show="false" class="text-error caption">
-              <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là 750x422 px. Hãy tải ảnh khác có kích thước lớn hơn.
+              <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên
+              có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là
+              750x422 px. Hãy tải ảnh khác có kích thước lớn hơn.
             </div>
           </template>
         </div>
@@ -89,7 +101,8 @@ export default {
       avatarChoosen: null,
       cropping: false,
       savingCrop: false,
-      cropperOutputType: null
+      cropperOutputType: null,
+      file: ""
     };
   },
 
@@ -108,11 +121,13 @@ export default {
       this.avatar = [];
       this.avatarSrc = null;
       this.$emit("handleSelectAvatar", "");
+      this.file = ""
     },
 
     handleUploadChange(fileList, event) {
       this.avatar = Array.from(fileList);
       this.cropperOutputType = fileList[0].name.split(".").slice(-1)[0];
+      this.file = fileList[0];
 
       getBase64(this.avatar[0], src => {
         this.avatarChoosen = src;
@@ -129,10 +144,7 @@ export default {
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
-      });
-
-      this.$refs.cropper.getCropBlob(data => {
-        this.$emit("handleSelectAvatar", data);
+        this.$emit("handleSelectAvatar", this.file)
       });
     }
   }

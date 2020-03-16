@@ -637,6 +637,7 @@ export default {
 
   created() {
     useEffect(this, this.fetchLesson.bind(this), []);
+    useEffect(this, this.setInitData.bind(this), []);
   },
 
   computed: {
@@ -648,17 +649,14 @@ export default {
     })
   },
 
-  watch: {
-    "lessons.data": function() {
+  methods: {
+    setInitData() {
       if (get(this, "lessons.data", []).length) {
         this.isShowAddLesson = false;
         this.isShowFormAdd = false;
         this.isShowLesson = true;
       }
-    }
-  },
-
-  methods: {
+    },
     fetchLesson() {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
