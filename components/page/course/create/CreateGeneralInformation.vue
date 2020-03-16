@@ -245,6 +245,7 @@ export default {
     },
 
     handleSelectAvatar(avatar) {
+      console.log(avatar)
       this.payload.avatar = avatar;
     },
 

@@ -117,11 +117,23 @@ export default {
   },
 
   methods: {
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+
     removeAvatar() {
       this.avatar = [];
       this.avatarSrc = null;
       this.$emit("handleSelectAvatar", "");
-      this.file = ""
+      this.file = "";
     },
 
     handleUploadChange(fileList, event) {
@@ -141,10 +153,11 @@ export default {
     saveCrop() {
       this.savingCrop = true;
       this.$refs.cropper.getCropData(data => {
+        const file = this.dataURLtoFile(data, this.file.name)
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
-        this.$emit("handleSelectAvatar", this.file)
+        this.$emit("handleSelectAvatar", file);
       });
     }
   }

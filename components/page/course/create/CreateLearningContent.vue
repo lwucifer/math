@@ -651,7 +651,7 @@ export default {
 
   methods: {
     setInitData() {
-      if (get(this, "lessons.data", []).length) {
+      if (get(this, "lessons.data.length", "")) {
         this.isShowAddLesson = false;
         this.isShowFormAdd = false;
         this.isShowLesson = true;
