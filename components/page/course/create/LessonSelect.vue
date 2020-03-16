@@ -27,7 +27,10 @@
             <td>{{ get(file, "type", "") }}</td>
             <td>{{ get(file, "created_at", "") }}</td>
             <td>
-              <a @click="handleSelectUrl(file, $event)" href="#" class="clc-table-action mr-4"
+              <a
+                @click="handleSelectUrl(file, $event)"
+                href="#"
+                class="clc-table-action mr-4"
                 >Chọn</a
               >
               <a class="clc-table-action clc-table-action-delete">
@@ -53,6 +56,13 @@ export default {
     IconTrashAlt
   },
 
+  props: {
+    type: {
+      type: String,
+      default: ""
+    }
+  },
+
   data() {
     return {
       file_select: null
@@ -62,7 +72,7 @@ export default {
   created() {
     const options = {
       params: {
-        type: "VIDEO",
+        type: this.type,
         page: 1,
         size: 10
       }
