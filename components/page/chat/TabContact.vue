@@ -85,19 +85,32 @@
             </div>
           </div>
           <div class="tabs-content" v-if="tab == 2">
-            <div class="align-item" v-for="(item, index) in contacts" :key="index">
+            <div
+              class="align-item"
+              v-for="(item, index) in groupsListTab ? groupsListTab : []"
+              :key="index"
+            >
               <div class="align-item__image">
                 <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
               </div>
               <div class="align-item__meta">
                 <h4 class="align-item__title">
-                  <n-link slot="title" to>{{ item.title }}</n-link>
+                  <n-link slot="title" to>{{ item.room_name }}</n-link>
                 </h4>
                 <div class="align-item__desc">
                   <p>{{ item.desc }}</p>
                 </div>
               </div>
             </div>
+            <client-only>
+              <infinite-loading
+                :identifier="infiniteId"
+                @infinite="groupsInfiniteHandler"
+                v-if="tab == 2"
+              >
+                <template slot="no-more">Không còn group.</template>
+              </infinite-loading>
+            </client-only>
           </div>
         </div>
       </div>
@@ -120,7 +133,7 @@
     </div>
 
     <!-- Modal tạo nhóm chát -->
-    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friends" />
+    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friendList" />
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
@@ -130,7 +143,7 @@
 <script>
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
-
+import { mapState, mapGetters, mapActions } from "vuex";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
@@ -139,7 +152,8 @@ import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
-import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import GroupService from "~/services/message/Group";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -151,7 +165,6 @@ export default {
     IconDots,
     IconUsersAlt,
     IconUserPlus,
-    IconCamera,
     ModalAddFriend,
     ModalAddGroup
   },
@@ -175,14 +188,19 @@ export default {
       visibleAddByPhone: false,
       visibleAddGroup: false,
       nameGroup: "",
-      dropdownEdit: false
+      dropdownEdit: false,
+      groupListQuery: {
+        page: 1
+      },
+      groupsListTab: [],
+      infiniteId: +new Date()
     };
   },
   computed: {
-    ...mapState("social", ["friendList"])
+    ...mapState("social", ["friendList"]),
+    ...mapState("message", ["groupList"])
   },
   methods: {
-    ...mapActions("message", ["createGroup"]),
     create() {
       this.$emit("addMessage");
     },
@@ -198,15 +216,32 @@ export default {
       console.log("[avatar_images]", fileList[0]);
       this.accountPersonalEditAvatar(body).then(result => {});
     },
-    hanldeCreateGroup() {
-      const data = {
-        type: 1,
-        members: [24, 25],
-        name: this.nameGroup
-      };
-      this.createGroup(data).then(result => {
-        console.log("aaaaa");
+
+    async groupsInfiniteHandler($state) {
+      const { data: getData = {} } = await new GroupService(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: this.groupListQuery
       });
+
+      if (getData.rooms && getData.rooms.length) {
+        this.groupListQuery.page += 1;
+        this.groupsListTab.push(...getData.rooms);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    }
+  },
+  watch: {
+    tab(_newval) {
+      console.log("_newval", _newval);
+      if (_newval == 1) {
+        this.infiniteId += 1;
+      } else {
+        this.groupsListTab = [];
+        this.groupListQuery.page = 1;
+      }
     }
   }
 };

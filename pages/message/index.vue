@@ -40,15 +40,21 @@ export default {
 
   async fetch({ params, query, store }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    let listQuery = {
-      page: 1,
-      perPage: 10,
-      user_id: 31
-    };
+    // let listQuery = {
+    //   page: 1,
+    //   perPage: 10,
+    //   user_id: 31
+    // };
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, listQuery)
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, {
+        params: {
+          user_id: userId
+        }
+      }),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`)
     ]);
   },
+
   data() {
     return {
       contactList: [
