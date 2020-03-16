@@ -119,71 +119,19 @@
       </ul>
     </div>
 
-
     <!-- Modal tạo nhóm chát -->
-    <app-modal
-      centered
-      :width="420"
-      :component-class="{ 'create-group-chat-modal': true }"
-      v-if="visibleAddGroup"
-    >
-      <div slot="content">
-        <h5>Tạo nhóm chat</h5>
-        <div class="d-flex-center">
-          <app-upload class="cgi-upload-avt change-avatar-group mr-3" @change="handleUploadChange">
-            <template>
-              <IconCamera width="20" height="20" />
-            </template>
-          </app-upload>
-          <input type="text" class="input-name-group" placeholder="Tên nhóm chat" />
-        </div>
-        <app-search class="mb-0" />
-        <div class="contact-list">
-          <div class="item d-flex-center" v-for="(item, index) in friends" :key="index">
-            <app-avatar :src="item.avatar" :size="30" class="mr-3" />
-            <span>{{item.name}}</span>
-            <app-checkbox class="ml-auto" />
-          </div>
-        </div>
-        <div class="text-center mt-4">
-          <app-button
-            size="sm"
-            color="info"
-            class="mr-3"
-            square
-            @click="visibleAddGroup = false"
-          >Hủy</app-button>
-          <app-button size="sm" square>Tạo</app-button>
-        </div>
-      </div>
-    </app-modal>
+    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friends"/>
 
     <!-- Modal thêm bạn qua số điện thoại -->
-    <app-modal
-      centered
-      :width="420"
-      :component-class="{ 'message-foward-tags-modal': true }"
-      v-if="visibleAddByPhone"
-    >
-      <div slot="content">
-        <h5 class="mb-3">Thêm bạn bằng số điện thoại</h5>
-        <app-input class="mb-0" />
-        <div class="text-right mt-3">
-          <app-button
-            size="sm"
-            color="info"
-            class="mr-3"
-            square
-            @click="visibleAddByPhone = false"
-          >Hủy</app-button>
-          <app-button size="sm" square>Tìm</app-button>
-        </div>
-      </div>
-    </app-modal>
+    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
+
   </div>
 </template>
 
 <script>
+import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
+import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
+
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
@@ -204,7 +152,9 @@ export default {
     IconDots,
     IconUsersAlt,
     IconUserPlus,
-    IconCamera
+    IconCamera,
+    ModalAddFriend,
+    ModalAddGroup
   },
   props: {
     contacts: {
