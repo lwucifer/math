@@ -56,16 +56,18 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, options) {
     try {
-      const result = await new Lesson(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
+      const result = await new Lesson(this.$axios)["deleteLesson"](options);
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
     } catch (error) {
       console.log("[Creating Lesson] delete.error", error);
     }
+  },
+
+  [actionTypes.BASE.RESET]({ commit }) {
+    commit(mutationTypes.BASE.RESET);
   }
 };
 
@@ -77,6 +79,10 @@ const mutations = {
     .SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
     console.log("SET_ELEARNING_CREATING_LESSONS_LIST", lessons);
     state.lessons = lessons;
+  },
+
+  [mutationTypes.BASE.RESET]: function(state) {
+    this.lessons = [];
   }
 };
 

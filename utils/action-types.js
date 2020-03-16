@@ -6,7 +6,8 @@ export const BASE = {
   EDIT: "edit",
   DELETE: "delete",
   DETAIL: "detail",
-  EDIT_PAYLOAD: "editPayload"
+  EDIT_PAYLOAD: "editPayload",
+  RESET: "reset"
 };
 
 export const AUTH = {
@@ -33,7 +34,7 @@ export const SOCIAL_POST = {
 export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
-  DELETE: "socialLikesDelete",
+  DELETE: "socialLikesDelete"
 };
 
 export const SOCIAL_SHARES = {

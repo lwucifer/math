@@ -149,6 +149,10 @@ export default {
   },
 
   created() {
+    this.$store.dispatch(
+      `elearning/creating/creating-general/${actionTypes.BASE.RESET}`
+    );
+
     useEffect(this, this.handleChangePayload.bind(this), [
       "payload.avatar",
       "payload.benefit",
