@@ -99,7 +99,21 @@ export default {
 
   methods: {
     handleClickMenuItem({ key }) {
-      this.$emit("click-item", key);
+      const elearning_id = getParamQuery("elearning_id");
+      if (key === "general") {
+        this.$emit("click-item", key);
+      }
+      if (get(this, "general", null) && elearning_id && key === "content") {
+        this.$emit("click-item", key);
+      }
+      if (
+        get(this, "general", null) &&
+        get(this, "lessons.data.length", 0) &&
+        elearning_id &&
+        key === "settings"
+      ) {
+        this.$emit("click-item", key);
+      }
     },
 
     handleChangeLesson() {
