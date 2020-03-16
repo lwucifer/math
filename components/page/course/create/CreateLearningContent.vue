@@ -20,7 +20,7 @@
               </button>
             </div>
 
-            <div class="cc-box__head-right" v-if="isShowAddLesson">
+            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
               <a @click="handleAddLesson($event)" href
                 >Thêm nội dung bài giảng</a
               >
@@ -31,8 +31,11 @@
           </div>
 
           <div class="cc-box__body">
-            <AddContent v-if="isShowFormAdd" />
-            <fragment v-if="isShowLesson">
+            <AddContent
+              v-if="isShowFormAddLesson"
+              @refreshLessons="refreshLessons"
+            />
+            <fragment v-if="isShowDetailLesson">
               <LessonDetail
                 v-for="lesson in get(lessons, 'data', [])"
                 :key="lesson.id"
@@ -631,9 +634,9 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowAddLesson: false,
-      isShowFormAdd: false,
-      isShowLesson: false
+      isShowButtonAddLesson: false,
+      isShowFormAddLesson: false,
+      isShowDetailLesson: false
     };
   },
 
@@ -654,13 +657,13 @@ export default {
   methods: {
     setInitData() {
       if (get(this, "lessons.data.length", "")) {
-        this.isShowAddLesson = false;
-        this.isShowFormAdd = false;
-        this.isShowLesson = true;
+        this.isShowButtonAddLesson = false;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = true;
       } else {
-        this.isShowAddLesson = true;
-        this.isShowFormAdd = false;
-        this.isShowLesson = false;
+        this.isShowButtonAddLesson = true;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = false;
       }
     },
     refreshLessons() {
@@ -680,9 +683,9 @@ export default {
     },
 
     handleEditLesson() {
-      this.isShowAddLesson = false;
-      this.isShowFormAdd = true;
-      this.isShowLesson = false;
+      this.isShowButtonAddLesson = false;
+      this.isShowFormAddLesson = true;
+      this.isShowDetailLesson = false;
     },
 
     handleUploadChange(event) {
@@ -715,7 +718,7 @@ export default {
 
     handleAddLesson(e) {
       this.isShowButtonAdd = false;
-      this.isShowFormAdd = !this.isShowFormAdd;
+      this.isShowFormAddLesson = !this.isShowFormAddLesson;
       e.preventDefault();
     },
 

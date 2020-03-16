@@ -132,12 +132,13 @@ export default {
       this.payload.url = file.url;
     },
 
-    handleAddContent() {
+    async handleAddContent() {
       const payload = createPayloadAddContentCourse(this.payload);
-      this.$store.dispatch(
+      await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+      this.$emit('refreshLessons')
     },
 
     handleSelectDocument(type, article_content, url, lesson) {
