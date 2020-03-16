@@ -28,7 +28,7 @@
               </ul>
             </div>
           </app-dropdown>
-        <button @click="create()"><IconEdit/></button>
+        <button @click="create()" title="Viết tin nhắn mới"><IconEdit/></button>
       </div>
       <div class="search-nav">
         <div class="form-group">

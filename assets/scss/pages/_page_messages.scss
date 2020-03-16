@@ -604,3 +604,11 @@ button:focus {
     }
   }
 }
+button {
+  position: relative;
+  z-index: 0;
+  svg {
+    position: relative;
+    z-index: -1;
+  }
+}
