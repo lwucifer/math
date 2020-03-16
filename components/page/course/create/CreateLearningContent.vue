@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <create-action /> -->
+    <create-action />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
@@ -12,13 +12,15 @@
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài giảng đại số lớp 10</h2>
+              <h2 class="cc-box__title heading-6">
+                {{ get(general, "name", "") }}
+              </h2>
               <button class="cc-box__btn cc-box__btn-edit">
                 <IconEditAlt class="icon" />
               </button>
             </div>
 
-            <div class="cc-box__head-right">
+            <div class="cc-box__head-right" v-if="isShowAddLesson">
               <a @click="handleAddLesson($event)" href
                 >Thêm nội dung bài giảng</a
               >
@@ -29,25 +31,14 @@
           </div>
 
           <div class="cc-box__body">
-            <app-button
-              size="sm"
-              outline
-              square
-              class="font-weight-semi-bold clc-btn-add-docs"
-              v-if="isShowButtonAdd"
-            >
-              <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
-            </app-button>
-
             <AddContent v-if="isShowFormAdd" />
-
-            <framge v-if="isShowLesson">
+            <fragment v-if="isShowLesson">
               <LessonDetail
                 v-for="lesson in get(lessons, 'data', [])"
                 :key="lesson.id"
                 :lesson="lesson"
               />
-            </framge>
+            </fragment>
           </div>
         </div>
       </div>
@@ -638,7 +629,7 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowButtonAdd: false,
+      isShowAddLesson: false,
       isShowFormAdd: false,
       isShowLesson: false
     };
@@ -651,7 +642,20 @@ export default {
   computed: {
     ...mapState("elearning/creating/creating-lesson", {
       lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
     })
+  },
+
+  watch: {
+    "lessons.data": function() {
+      if (get(this, "lessons.data", []).length) {
+        this.isShowAddLesson = false;
+        this.isShowFormAdd = false;
+        this.isShowLesson = true;
+      }
+    }
   },
 
   methods: {
