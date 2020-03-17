@@ -37,6 +37,7 @@ const actions = {
   async [actionTypes.ELEARNING_CREATING_LESSONS.ADD]({ commit }, payload) {
     try {
       const result = await new Lesson(this.$axios)["postWithFormData"](payload);
+      return result
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
     } catch (error) {

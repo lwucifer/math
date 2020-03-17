@@ -1,13 +1,8 @@
 <template>
   <app-modal centered :width="420" :component-class="{ 'create-group-chat-modal': true }">
     <div slot="content">
-      <h5>Tạo nhóm chat</h5>
+      <h5>Thêm bạn</h5>
       <div class="d-flex-center">
-        <app-upload class="cgi-upload-avt change-avatar-group mr-3" @change="handleUploadChange">
-          <template>
-            <IconCamera width="20" height="20" />
-          </template>
-        </app-upload>
         <input type="text" class="input-name-group" placeholder="Tên nhóm chat" v-model="name" />
       </div>
       <app-search class="mb-0" />
@@ -32,10 +27,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 export default {
-  components: { IconCamera },
+  components: { },
 
   props: {
     friends: {

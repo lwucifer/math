@@ -368,6 +368,9 @@
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
+    
+    <!-- Modal thêm bạn trong nhóm-->
+    <ModalAddFriendByGroup @close="visibleAddByGroup = false" v-if="visibleAddByGroup"/>
 
     <!-- Modal xóa tin nhắn -->
     <app-modal
@@ -438,6 +441,7 @@ import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import FriendService from "~/services/social/friend";
 
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
+import ModalAddFriendByGroup from "~/components/page/chat/ModalAddFriendByGroup";
 
 import IconPhone from "~/assets/svg/icons/phone-green.svg?inline";
 import IconVideo from "~/assets/svg/icons/video-green.svg?inline";
@@ -462,7 +466,8 @@ export default {
     IconDots,
     IconClose,
     IconCamera,
-    ModalAddFriend
+    ModalAddFriend,
+    ModalAddFriendByGroup
   },
 
   props: {
@@ -482,6 +487,7 @@ export default {
       visibleDelete: false,
       visibleAddByPhone: false,
       visibleAddGroup: false,
+      visibleAddByGroup: false,
       friendsInfiniteId: +new Date(),
       friendsListQuery: {
         page: 1
