@@ -135,11 +135,15 @@ export default {
 
     async handleAddContent() {
       const payload = createPayloadAddContentCourse(this.payload);
-      await this.$store.dispatch(
+      const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
-      this.$emit("refreshLessons");
+      if (result.success) {
+        this.$emit("refreshLessons");
+      } else {
+        this.$toasted.error(result.message)
+      }
     },
 
     handleSelectDocument(type, article_content, url, lesson) {

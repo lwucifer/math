@@ -9,6 +9,8 @@
 
     <app-divider class="mt-3 mb-4" />
 
+    <app-input v-model="payload.name" />
+
     <div class="cc-tabs">
       <a
         href
@@ -27,63 +29,12 @@
       >
     </div>
 
-    <div class="cc-tab-panel" v-if="tabAddDocument === 'upload'">
-      <app-upload class="clc-upload-video">
-        <div slot="hint" class="mt-2 caption">
-          <b class="text-gray">Lưu ý:</b>
-          <span class="text-sub">{{
-            `Upload tài liệu bổ trợ cho bài giảng của bạn, dung lượng không quá 1GB cho 1 file`
-          }}</span>
-        </div>
-      </app-upload>
-    </div>
+    <AddDocumentFile
+      @handleSelectFile="handleSelectFile"
+      v-if="tabAddDocument === 'upload'"
+    />
 
-    <div class="cc-tab-panel" v-if="tabAddDocument === 'choose'">
-      <div class="d-flex justify-content-end">
-        <app-input
-          placeholder="Nhập để tìm kiếm..."
-          style="width: 260px"
-        ></app-input>
-      </div>
-
-      <div class="clc-table-wrapper">
-        <table class="clc-table">
-          <thead>
-            <tr>
-              <th>Tên file</th>
-              <th>Loại</th>
-              <th>Ngày tháng</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>Tên tài liệu</td>
-              <td>Tài liệu</td>
-              <td>15/10/2019</td>
-              <td>
-                <a href class="clc-table-action mr-4">Chọn</a>
-                <a href class="clc-table-action clc-table-action-delete">
-                  <IconTrashAlt class="icon" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Tên tài liệu</td>
-              <td>Tài liệu</td>
-              <td>15/10/2019</td>
-              <td>
-                <a href class="clc-table-action mr-4">Chọn</a>
-                <a href class="clc-table-action clc-table-action-delete">
-                  <IconTrashAlt class="icon" />
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <AddDocumentChoose v-if="tabAddDocument === 'choose'" />
 
     <div class="d-flex justify-content-end mt-4">
       <app-button
@@ -93,7 +44,11 @@
         square
         >Huỷ bỏ</app-button
       >
-      <app-button class="clc-btn font-weight-semi-bold" size="sm" square
+      <app-button
+        class="clc-btn font-weight-semi-bold"
+        size="sm"
+        square
+        @click="handleAddDocument"
         >Thêm nội dung</app-button
       >
     </div>
@@ -102,21 +57,59 @@
 
 <script>
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+const IconTrashAlt = () =>
+  import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import AddDocumentFile from "~/components/page/course/create/AddDocumentFile";
+import AddDocumentChoose from "~/components/page/course/create/AddDocumentChoose";
+import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
-    IconClose
+    IconClose,
+    IconTrashAlt,
+    AddDocumentFile,
+    AddDocumentChoose
+  },
+
+  props: {
+    lesson: {
+      type: Object,
+      default: null
+    }
   },
 
   data() {
     return {
-      tabAddDocument: "upload"
+      tabAddDocument: "upload",
+      payload: {
+        doc: "",
+        lesson_id: get(this, "lesson.id", ""),
+        name: "",
+        format: "DOC"
+      }
     };
   },
 
   methods: {
     changeTabAddDocument(type) {
       this.tabAddDocument = type;
+    },
+
+    handleSelectFile(file) {
+      this.payload.doc = file;
+    },
+
+    async handleAddDocument() {
+      const result = await this.$store.dispatch(
+        `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.ADD}`,
+        this.payload
+      );
+      if (!result.success) {
+        this.$toasted.error(result.message);
+      } else {
+        this.$toasted.success("success");
+      }
     }
   }
 };

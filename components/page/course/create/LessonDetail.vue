@@ -30,7 +30,7 @@
 
     <app-divider class="my-4" />
 
-    <AddDocument v-if="isShowFormAddDocument" />
+    <AddDocument :lesson="lesson" v-if="isShowFormAddDocument" />
 
     <app-button
       size="sm"
