@@ -12,7 +12,11 @@
 .the-header__content {
   padding: 0 2rem;
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  >* {
+    display: flex;
+    align-items: center;
+  }
   .link--dropdown__content ul {
     list-style: none;
     width: 100%;
@@ -26,6 +30,7 @@
         font-weight: normal;
         color: #666;
         padding: 0;
+        text-decoration: none;
         &:hover {
           color: $color-primary;
         }
@@ -117,6 +122,10 @@
 
 .the-header__search {
   width: 100%;
+}
+.the-header__search__form {
+  width: 100%;
+  max-width: 50rem;
   height: 37px;
   position: relative;
   border: 1px solid $color-primary;
@@ -189,11 +198,13 @@
     display: flex;
     flex: 1;
     position: relative;
+    align-items: center;
     .number {
       position: absolute;
       right: 0;
-      top: 5px;
+      bottom: 50%;
       padding: 2px 5px;
+      margin-top: -2rem;
       min-width: 2.2rem;
       background: #e9446a;
       color: #fff;

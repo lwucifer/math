@@ -2,24 +2,28 @@
   <div class="page-wrap layout-manage">
     <TheHeaderManager />
 
-    <nuxt class="page-content"/>
+    <nuxt class="page-content" />
+
+    <Footer />
 
     <portal-target name="modal" slim></portal-target>
   </div>
 </template>
 
 <script>
-import TheHeaderManager from "~/components/layout/header/HeaderManager"
+import TheHeaderManager from "~/components/layout/header/HeaderManager";
+import Footer from "~/components/layout/footer/Footer";
 
 export default {
   components: {
     TheHeaderManager,
+    Footer
   }
-}
+};
 </script>
 
 <style lang="scss">
-.layout-create {
+.layout-manage {
   padding-top: 80px;
   display: flex;
   flex-direction: column;

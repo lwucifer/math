@@ -94,6 +94,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
+  layout: "manage",
   name: "E-learning",
 
   components: {
