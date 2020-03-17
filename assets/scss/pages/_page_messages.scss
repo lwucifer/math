@@ -115,9 +115,17 @@
             display: flex;
             background-color: #f8f8f8;
             cursor: pointer;
+            align-items: center;
+
+            .link--dropdown__content{
+              display: none;
+            }
 
             &:hover {
               background-color: #ffffff;
+              .link--dropdown__content {
+                display: block;
+              }
             }
             &.active {
               background-color: #ffffff;

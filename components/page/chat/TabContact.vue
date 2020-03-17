@@ -94,13 +94,13 @@
                 </div>
               </div>
               <app-dropdown
-                position="left"
+                position="right"
                 v-model="dropdownActions"
                 :content-width="'10rem'"
-                class="link--dropdown ml-auto"
+                class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
-                  <IconDots />
+                  <IconDots class="fill-999" width="16"/>
                 </button>
                 <div class="link--dropdown__content">
                   <ul>
@@ -126,7 +126,7 @@
           <div class="tabs-content" v-if="tab == 2">
             <div
               class="align-item"
-              v-for="(item, index) in groupsListTabGroup ? groupsListTabGroup : []"
+              v-for="(item, index) in contacts ? contacts : []"
               :key="index"
             >
               <div class="align-item__image">
@@ -141,13 +141,13 @@
                 </div>
               </div>
               <app-dropdown
-                position="left"
+                position="right"
                 v-model="dropdownActions"
                 :content-width="'10rem'"
-                class="link--dropdown ml-auto"
+                class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
-                  <IconDots />
+                  <IconDots class="fill-999" width="16" />
                 </button>
                 <div class="link--dropdown__content">
                   <ul>
