@@ -93,6 +93,29 @@
                   <p>{{ item.desc }}</p>
                 </div>
               </div>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'10rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16"/>
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Tắt thông báo</a>
+                    </li>
+                    <li>
+                      <a>Ẩn chat</a>
+                    </li>
+                    <li>
+                      <a @click="visibleLeaveGroup = true">Chặn tin nhắn</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </div>
             <client-only>
               <infinite-loading :identifier="infiniteIdChat" @infinite="chatsInfiniteHandler">
@@ -103,7 +126,7 @@
           <div class="tabs-content" v-if="tab == 2">
             <div
               class="align-item"
-              v-for="(item, index) in groupsListTabGroup ? groupsListTabGroup : []"
+              v-for="(item, index) in contacts ? contacts : []"
               :key="index"
             >
               <div class="align-item__image">
@@ -117,6 +140,29 @@
                   <p>{{ item.desc }}</p>
                 </div>
               </div>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'10rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16" />
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Tắt thông báo</a>
+                    </li>
+                    <li>
+                      <a>Ẩn nhóm</a>
+                    </li>
+                    <li>
+                      <a @click="visibleLeaveGroup = true">Rời khỏi nhóm</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </div>
             <client-only>
               <infinite-loading :identifier="infiniteId" @infinite="groupsInfiniteHandler">
@@ -149,12 +195,16 @@
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
+
+    <!-- Modal rồi nhớm -->
+    <ModalLeaveGroup @close="visibleLeaveGroup = false" v-if="visibleLeaveGroup" />
   </div>
 </template>
 
 <script>
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
+import ModalLeaveGroup from "~/components/page/chat/ModalLeaveGroup";
 import { mapState, mapGetters, mapActions } from "vuex";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
@@ -178,7 +228,8 @@ export default {
     IconUsersAlt,
     IconUserPlus,
     ModalAddFriend,
-    ModalAddGroup
+    ModalAddGroup,
+    ModalLeaveGroup
   },
   props: {
     contacts: {
@@ -199,8 +250,10 @@ export default {
       isContact: false,
       visibleAddByPhone: false,
       visibleAddGroup: false,
+      visibleLeaveGroup: false,
       nameGroup: "",
       dropdownEdit: false,
+      dropdownActions: false,
       groupListQuery: {
         page: 1
       },

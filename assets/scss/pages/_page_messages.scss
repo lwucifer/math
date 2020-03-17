@@ -115,9 +115,17 @@
             display: flex;
             background-color: #f8f8f8;
             cursor: pointer;
+            align-items: center;
+
+            .link--dropdown__content{
+              display: none;
+            }
 
             &:hover {
               background-color: #ffffff;
+              .link--dropdown__content {
+                display: block;
+              }
             }
             &.active {
               background-color: #ffffff;
@@ -387,6 +395,10 @@
             margin-bottom: 5px;
           }
           .message-info__box__content {
+            .members {
+              max-height: 30rem;
+              overflow: auto;
+            }
             &.attachment {
               ul li {
                 margin-top: 10px;
@@ -400,14 +412,13 @@
               ul {
                 display: flex;
                 flex-wrap: wrap;
-                margin-right: 5px;
+                margin-right: -3px;
+                margin-left: -3px;
                 li {
-                  flex: 23%;
-                  margin-right: 5px;
-                  max-width: 23%;
-                  &:last-child {
-                    margin-right: 0px;
-                  }
+                  flex: 25%;
+                  max-width: 25%;
+                  padding-right: 3px;
+                  padding-left: 3px;
                   img {
                     flex: 25%;
                   }
@@ -611,4 +622,12 @@ button {
     position: relative;
     z-index: -1;
   }
+}
+
+.message-modal .app-modal-content {
+  padding: 2rem;
+}
+
+ul {
+  list-style: none;
 }

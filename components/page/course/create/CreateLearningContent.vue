@@ -36,6 +36,7 @@
               @refreshLessons="refreshLessons"
               @handleCancel="handleCancel"
             />
+
             <fragment v-if="isShowDetailLesson">
               <LessonDetail
                 v-for="lesson in get(lessons, 'data', [])"
@@ -45,6 +46,7 @@
                 @refreshLessons="refreshLessons"
               />
             </fragment>
+
           </div>
         </div>
       </div>
