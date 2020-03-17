@@ -47,14 +47,7 @@
 
 <script>
 import SchoolManagerSide from "~/components/page/school/manager/SchoolManagerSide";
-import IconCalendar from "~/assets/svg/icons/calendar.svg?inline";
-import IconBook from "~/assets/svg/icons/book.svg?inline";
-import IconDollarAlt from "~/assets/svg/design-icons/dollar-alt.svg?inline";
-import IconChartLine from "~/assets/svg/design-icons/chart-line.svg?inline";
-import IconUserUser from "~/assets/svg/icons/user-user.svg?inline";
 
-// Import faked data
-import { SCHOOL } from "~/server/fakedata/school/test";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -65,19 +58,10 @@ export default {
 
   components: {
     SchoolManagerSide,
-    IconUserUser,
-    IconBook,
-    IconCalendar,
-    IconDollarAlt,
-    IconChartLine,
-  },
-
-  async asyncData ({ params }) {
-    console.log('params: ', params);
   },
 
   async fetch({ params, query, store }) {
-    const school_id = "e698a8ea-4e12-11ea-b77f-2e728ce88125";
+    const school_id = params.id;
     const data = { school_id };
     await store.dispatch(
         `${elearningSchoolInfoStorePath}/${actionTypes.SCHOOL_INFO.INFO}`,
@@ -87,7 +71,6 @@ export default {
 
   data() {
     return {
-      school: SCHOOL
     };
   },
   computed: {
