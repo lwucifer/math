@@ -10,7 +10,7 @@
         Quay lại
       </app-button>
 
-      <div class="header-create__right">
+      <div class="header-create__right" v-if="type !== 'add_contents'">
         <app-button
           @click="handleCLickSave"
           class="header-create__btn mr-4"
@@ -28,6 +28,7 @@
 
 <script>
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -38,13 +39,18 @@ export default {
     isSubmit: {
       type: Boolean,
       default: true
+    },
+    type: {
+      type: String
     }
   },
 
   methods: {
     handleCLickSave() {
       this.$emit("handleCLickSave");
-    }
+    },
+
+    get
   }
 };
 </script>
