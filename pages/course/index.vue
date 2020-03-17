@@ -33,7 +33,6 @@ import { get } from "lodash";
 import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
 
 export default {
-  layout: 'school',
   components: {
     CourseSliderTab
   },

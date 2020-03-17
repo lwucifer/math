@@ -6,7 +6,8 @@
 
     input {
 
-      width: 45.5rem;
+      //width: 44.5rem;
+      width: 40rem;
       height: 3.8rem;
       background-color: #F8F8F8;
       padding: 0 13px;
@@ -17,6 +18,15 @@
 
       @media (max-width: 1366px) {
         width: 35rem;
+      }
+      
+      @media (max-width: 1200px ) {
+        width: 32rem;
+      }
+
+      /* Medium devices (desktops, 992px and up) */
+      @media (max-width: 992px) {
+        width: 30rem;
       }
     }
     .submit-btn {
