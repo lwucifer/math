@@ -151,8 +151,9 @@ import { mapState } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
-import { getBase64 } from "~/utils/common";
+import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { PasteHandler } from "~/utils/tiptap-plugins";
 import FriendService from "~/services/social/friend";
 
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
@@ -246,6 +247,9 @@ export default {
           showOnlyCurrent: true,
           showOnlyWhenEditable: true,
           emptyNodeText: "Đăng bài viết..."
+        }),
+        new PasteHandler({
+          onPaste: this.handleEditorPaste
         })
       ]
     });
@@ -337,6 +341,37 @@ export default {
         label_id: null
       });
     },
+
+    handleEditorPaste(view, event, slice) {
+      const { clipboardData } = event;
+
+      if (clipboardData.files && clipboardData.files.length) {
+        // Handle paste file here
+        return;
+      }
+
+      // Handle paste text
+      const text = clipboardData.getData("text");
+      const isUrl = isValidUrl(text);
+
+      // If paste text is a string url
+      if (isUrl) {
+        this.fetchLink(text);
+      }
+    },
+
+    fetchLink(url) {
+      const ogs = require("open-graph-scraper");
+      const options = { url, encoding: 'utf8' };
+      ogs(options, (error, results) => {
+        console.log("error:", error); // This is returns true or false. True if there was a error. The error it self is inside the results object.
+        console.log("results:", results);
+      });
+
+      // this.$axios.get(url).then(res => {
+      //   console.log(res)
+      // })
+    }
   }
 };
 </script>

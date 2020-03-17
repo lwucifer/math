@@ -9,7 +9,7 @@ export class EnterHandler extends Extension {
     return {
       preventDefault: false,
       onEnter: null
-    }
+    };
   }
 
   get plugins() {
@@ -25,6 +25,33 @@ export class EnterHandler extends Extension {
             }
 
             return preventDefault;
+          }
+        }
+      })
+    ];
+  }
+}
+
+export class PasteHandler extends Extension {
+  get name() {
+    return "paste_handler";
+  }
+
+  get defaultOptions() {
+    return {
+      onPaste: null
+    };
+  }
+
+  get plugins() {
+    return [
+      new Plugin({
+        props: {
+          handlePaste: (view, event, slice) => {
+            // console.log('event', event)
+            // console.log('slice', event)
+            const { onPaste } = this.options;
+            onPaste && onPaste(view, event, slice);
           }
         }
       })

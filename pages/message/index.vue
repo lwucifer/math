@@ -20,6 +20,8 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+// import socket from "~/plugins/socket.io.js";
+
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
@@ -257,10 +259,23 @@ export default {
     };
   },
 
+  mounted() {
+    // Connect socket
+    // if (!socket.connected) {
+    //   socket.connect();
+    // }
+    // Emit socket event
+    // socket.emit("join_resource", { data: "I'm connected!" });
+  },
+
   methods: {
     addMessage() {
       this.isCreate = !this.isCreate;
     }
+  },
+
+  beforeDestroy() {
+    // socket.off('resource');
   }
 };
 </script>
