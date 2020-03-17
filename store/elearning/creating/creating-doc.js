@@ -1,7 +1,6 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Doc from "~/services/elearning/creating/Doc";
-import Vue from "vue";
 
 /**
  * initial state
@@ -19,9 +18,9 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_DOC.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_DOC.LIST]({ commit }, options) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.LIST](payload);
+      const result = await new Doc(this.$axios)[actionTypes.BASE.LIST](options);
       // set to mutation
       commit(
         mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST,
@@ -35,7 +34,7 @@ const actions = {
   async [actionTypes.ELEARNING_CREATING_DOC.ADD]({ commit }, payload) {
     try {
       const result = await new Doc(this.$axios)["postWithFormData"](payload);
-      return result
+      return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
     } catch (error) {
@@ -72,10 +71,9 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST](
     state,
-    _docs
+    docs
   ) {
-    console.log("SET_ELEARNING_CREATING_DOC_LIST", _docs);
-    state.docs = _docs;
+    state.docs = docs;
   }
 };
 

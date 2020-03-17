@@ -30,7 +30,11 @@
 
     <app-divider class="my-4" />
 
-    <DocumentDetail />
+    <DocumentDetail
+      v-for="doc in get(docs, 'data', [])"
+      :key="doc.id"
+      :doc="doc"
+    />
 
     <AddDocument
       :lesson="lesson"
@@ -82,6 +86,27 @@ export default {
       isShowFormAddDocument: false,
       isShowButtonAddDocument: true
     };
+  },
+
+  created() {
+    const lesson_id = get(this, "lesson.id", "");
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        lesson_id,
+        elearning_id
+      }
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.LIST}`,
+      options
+    );
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-doc", {
+      docs: "docs"
+    })
   },
 
   props: {
