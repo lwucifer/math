@@ -20,7 +20,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import socket from "~/plugins/socket.io.js";
+// import socket from "~/plugins/socket.io.js";
 
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
@@ -264,7 +264,6 @@ export default {
     // if (!socket.connected) {
     //   socket.connect();
     // }
-
     // Emit socket event
     // socket.emit("join_resource", { data: "I'm connected!" });
   },
