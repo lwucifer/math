@@ -97,7 +97,7 @@
                 position="left"
                 v-model="dropdownActions"
                 :content-width="'10rem'"
-                class="link--dropdown"
+                class="link--dropdown ml-auto"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
                   <IconDots />
@@ -144,7 +144,7 @@
                 position="left"
                 v-model="dropdownActions"
                 :content-width="'10rem'"
-                class="link--dropdown"
+                class="link--dropdown ml-auto"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
                   <IconDots />
