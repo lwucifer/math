@@ -34,12 +34,14 @@
       v-for="doc in get(docs, 'data', [])"
       :key="doc.id"
       :doc="doc"
+      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <AddDocument
       :lesson="lesson"
       v-if="isShowFormAddDocument"
       @handleCloseAdd="handleCloseAdd"
+      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <app-button
@@ -89,18 +91,7 @@ export default {
   },
 
   created() {
-    const lesson_id = get(this, "lesson.id", "");
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        lesson_id,
-        elearning_id
-      }
-    };
-    this.$store.dispatch(
-      `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.LIST}`,
-      options
-    );
+    this.handleGetDocs();
   },
 
   computed: {
@@ -117,6 +108,25 @@ export default {
   },
 
   methods: {
+    handleRefreshDocs() {
+      this.handleGetDocs();
+    },
+
+    handleGetDocs() {
+      const lesson_id = get(this, "lesson.id", "");
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          lesson_id,
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.LIST}`,
+        options
+      );
+    },
+
     handleCloseAdd() {
       this.isShowFormAddDocument = false;
       this.isShowButtonAddDocument = true;

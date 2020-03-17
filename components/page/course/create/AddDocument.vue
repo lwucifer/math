@@ -111,12 +111,13 @@ export default {
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.ADD}`,
         this.payload
       );
-      if (!result.success) {
-        this.$toasted.error(result.message);
-      } else {
-        this.$emit("handleCloseAdd");
-        this.$toasted.success("success");
+      if (!get(result, "success", false)) {
+        this.$toasted.error(get(result, "message", ""));
+        return;
       }
+      this.$emit("handleCloseAdd");
+      this.$emit("handleRefreshDocs");
+      this.$toasted.success(get(result, "message", ""));
     }
   }
 };

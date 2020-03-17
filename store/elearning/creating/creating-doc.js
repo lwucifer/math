@@ -52,13 +52,10 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_DOC.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_DOC.DELETE]({ commit }, options) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Doc(this.$axios)["deleteDoc"](options);
+      return result;
     } catch (error) {
       console.log("[Creating docs] delete.error", error);
     }
