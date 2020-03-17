@@ -7,12 +7,14 @@
         </n-link>
       </div>
 
-      <form class="the-header__search" @submit.prevent>
-        <input type="text" placeholder="Tìm kiếm" />
-        <button type="submit">
-          <IconSearch width="15" height="15" class="fill-white"/>
-        </button>
-      </form>
+      <div class="the-header__search">
+        <form class="the-header__search__form" @submit.prevent>
+          <input type="text" placeholder="Tìm kiếm" />
+          <button type="submit">
+            <IconSearch width="15" height="15" class="fill-white" />
+          </button>
+        </form>
+      </div>
 
       <ul class="the-header__menu">
         <li>
@@ -29,11 +31,11 @@
             position="left"
             v-model="dropdownCourse"
             :content-width="'20rem'"
-            class="link--dropdown-course"
+            class="link--dropdown link--dropdown-course"
           >
             <n-link slot="activator" to="/course">
               Bài giảng và khóa học
-              <IconCaretDown width="10" height="10" class="fill-primary"/>
+              <IconCaretDown width="10" height="10" class="fill-primary" />
             </n-link>
             <div class="link--dropdown__content">
               <ul>
@@ -49,53 +51,56 @@
         </li>
       </ul>
 
-      <div class="the-header__right">
-        <div v-if="isAuthenticated" class="the-header__user">
-          <button class="item">
-            <IconMessager/>
-            <span class="number">9</span>
-          </button>
-          <button class="item">
-            <IconShoppingCartAlt/>
-            <span class="number">9</span>
-          </button>
-          <button class="item">
-            <IconBell/>
-            <span class="number">9</span>
-          </button>
-          <app-dropdown
-            position="left"
-            v-model="dropdownAuth"
-            :content-width="'10rem'"
-            class="link--dropdown-auth item"
-          >
-            <app-avatar slot="activator" class="the-header__user-avt" src="https://picsum.photos/60/60" :size="44"></app-avatar>
-            <div class="link--dropdown__content">
-              <ul>
-                <li class="link--dropdown__content__item">
-                  <n-link to>Thông tin tài khoản</n-link>
-                </li>
-                <li class="link--dropdown__content__item">
-                  <n-link to>Cài đặt</n-link>
-                </li>
-                <li class="link--dropdown__content__item">
-                  <n-link to>Đăng xuất</n-link>
-                </li>
-              </ul>
-            </div>
-          </app-dropdown>
-        </div>
-
-        <div v-else class="d-flex">
-          <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
-          <n-link
-            class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
-            :to="'/auth/signup'"
-          >Đăng ký</n-link>
-        </div>
-
-        <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
+      <div v-if="isAuthenticated" class="the-header__user">
+        <button class="item">
+          <IconMessager />
+          <span class="number">9</span>
+        </button>
+        <button class="item">
+          <IconShoppingCartAlt />
+          <span class="number">9</span>
+        </button>
+        <button class="item">
+          <IconBell />
+          <span class="number">9</span>
+        </button>
+        <app-dropdown
+          position="right"
+          v-model="dropdownAuth"
+          :content-width="'15rem'"
+          class="link--dropdown link--dropdown-auth item"
+        >
+          <app-avatar
+            slot="activator"
+            class="the-header__user-avt"
+            src="https://picsum.photos/60/60"
+            :size="44"
+          ></app-avatar>
+          <div class="link--dropdown__content">
+            <ul>
+              <li>
+                <n-link to>Thông tin tài khoản</n-link>
+              </li>
+              <li>
+                <n-link to>Cài đặt</n-link>
+              </li>
+              <li>
+                <n-link to>Đăng xuất</n-link>
+              </li>
+            </ul>
+          </div>
+        </app-dropdown>
       </div>
+
+      <div v-else class="d-flex">
+        <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
+        <n-link
+          class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
+          :to="'/auth/signup'"
+        >Đăng ký</n-link>
+      </div>
+
+      <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
     </div>
   </div>
 </template>
@@ -125,7 +130,7 @@ export default {
   data: () => ({
     showLogin: false,
     dropdownAuth: false,
-    dropdownCourse: false,
+    dropdownCourse: false
   }),
   computed: {
     isAuthenticated() {

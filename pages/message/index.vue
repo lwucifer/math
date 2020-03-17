@@ -9,7 +9,7 @@
           <div class="box">
             <div class="row">
               <TabMessage :isCreate="isCreate" />
-              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" />
+              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" :members="friends"/>
             </div>
           </div>
         </div>
