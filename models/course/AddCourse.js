@@ -43,3 +43,23 @@ class AddContentCourse {
 export function createPayloadAddContentCourse(payload) {
   return Object.freeze(new AddContentCourse(payload));
 }
+
+class AddDocument {
+  constructor(payload) {
+    this.lesson_id = payload.lesson_id;
+    if (payload.doc) {
+      this.doc = payload.doc;
+    }
+    if (payload.url) {
+      this.url = payload.url;
+    }
+    if (payload.format) {
+      this.format = payload.format;
+    }
+    this.name = payload.name;
+  }
+}
+
+export function createPayloadAddDocument(payload) {
+  return Object.freeze(new AddDocument(payload));
+}

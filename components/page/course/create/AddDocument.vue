@@ -34,7 +34,12 @@
       v-if="tabAddDocument === 'upload'"
     />
 
-    <AddDocumentChoose v-if="tabAddDocument === 'choose'" />
+    <!-- <AddDocumentChoose v-if="tabAddDocument === 'choose'" /> -->
+
+    <LessonSelect
+      @handleSelectUrl="handleSelectUrl"
+      v-if="tabAddDocument === 'choose'"
+    />
 
     <div class="d-flex justify-content-end mt-4">
       <app-button
@@ -62,15 +67,18 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import AddDocumentFile from "~/components/page/course/create/AddDocumentFile";
 import AddDocumentChoose from "~/components/page/course/create/AddDocumentChoose";
+import LessonSelect from "~/components/page/course/create/LessonSelect";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import { createPayloadAddDocument } from "~/models/course/AddCourse";
 
 export default {
   components: {
     IconClose,
     IconTrashAlt,
     AddDocumentFile,
-    AddDocumentChoose
+    AddDocumentChoose,
+    LessonSelect
   },
 
   props: {
@@ -87,7 +95,8 @@ export default {
         doc: "",
         lesson_id: get(this, "lesson.id", ""),
         name: "",
-        format: "DOC"
+        format: "DOC",
+        url: ""
       }
     };
   },
@@ -104,12 +113,21 @@ export default {
 
     handleSelectFile(file) {
       this.payload.doc = file;
+      this.payload.url = "";
+      this.payload.format = "";
+    },
+
+    handleSelectUrl(file) {
+      this.payload.url = file.url;
+      this.payload.format = file.format;
+      this.payload.doc = "";
     },
 
     async handleAddDocument() {
+      const payload = createPayloadAddDocument(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.ADD}`,
-        this.payload
+        payload
       );
       if (!get(result, "success", false)) {
         this.$toasted.error(get(result, "message", ""));
