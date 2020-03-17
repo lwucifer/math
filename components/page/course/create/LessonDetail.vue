@@ -30,7 +30,13 @@
 
     <app-divider class="my-4" />
 
-    <AddDocument :lesson="lesson" v-if="isShowFormAddDocument" />
+    <DocumentDetail />
+
+    <AddDocument
+      :lesson="lesson"
+      v-if="isShowFormAddDocument"
+      @handleCloseAdd="handleCloseAdd"
+    />
 
     <app-button
       size="sm"
@@ -56,6 +62,9 @@ import { mapState } from "vuex";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import AddDocument from "~/components/page/course/create/AddDocument";
+import DocumentDetail from "~/components/page/course/create/DocumentDetail";
+const IconFileBlank = () =>
+  import("~/assets/svg/design-icons/file-blank.svg?inline");
 
 export default {
   components: {
@@ -63,7 +72,9 @@ export default {
     IconTrashAlt,
     IconPlus,
     IconClose,
-    AddDocument
+    AddDocument,
+    IconFileBlank,
+    DocumentDetail
   },
 
   data() {
@@ -81,6 +92,11 @@ export default {
   },
 
   methods: {
+    handleCloseAdd() {
+      this.isShowFormAddDocument = false;
+      this.isShowButtonAddDocument = true;
+    },
+
     handleAddDocument() {
       this.isShowFormAddDocument = true;
       this.isShowButtonAddDocument = false;

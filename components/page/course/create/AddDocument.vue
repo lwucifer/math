@@ -2,7 +2,7 @@
   <div class="cc-box__bg-gray px-4 pt-3 pb-4">
     <div class="d-flex justify-content-between">
       <span>Thêm tài liệu bài giảng</span>
-      <a href>
+      <a href @click="handleCloseAdd($event)">
         <IconClose class="icon fill-gray" />
       </a>
     </div>
@@ -42,6 +42,7 @@
         size="sm"
         color="disabled"
         square
+        @click="handleCloseAdd($event)"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -92,6 +93,11 @@ export default {
   },
 
   methods: {
+    handleCloseAdd(e) {
+      e.preventDefault();
+      this.$emit("handleCloseAdd");
+    },
+
     changeTabAddDocument(type) {
       this.tabAddDocument = type;
     },
@@ -108,6 +114,7 @@ export default {
       if (!result.success) {
         this.$toasted.error(result.message);
       } else {
+        this.$emit("handleCloseAdd");
         this.$toasted.success("success");
       }
     }
