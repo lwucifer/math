@@ -53,7 +53,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("message", ["createGroup"]),
+    ...mapActions("message", ["createGroup", "groupList"]),
     close() {
       this.$emit("close");
     },
@@ -86,7 +86,13 @@ export default {
         name: this.name
       };
       this.createGroup(data).then(result => {
-        console.log("aaaaa");
+        if (result.success == true) {
+          this.groupList();
+          this.$emit("close");
+          this.$toasted.show("success");
+        } else {
+          this.$toasted.error(result.message);
+        }
       });
     }
   },

@@ -242,6 +242,13 @@ export default {
         this.groupsListTab = [];
         this.groupListQuery.page = 1;
       }
+    },
+    groupList(_newval) {
+      if (_newval) {
+        this.infiniteId += 1;
+        this.groupListQuery.page = 1;
+        // this.groupsInfiniteHandler();
+      }
     }
   }
 };
