@@ -23,3 +23,21 @@ export const APP_INPUT_VALIDATE_STATUS = {
     SUCCESS: 1,
     ERROR: 2
 }
+
+export const SOCIAL_LINK_SCHEMA = {
+    type : '',
+    url : '',
+    image : '',
+    title : '',
+    description : '',
+    updatedTime : '',
+    imageWidth : '',
+    imageHeight : '',
+    videoUrl : '',
+    videoSecureUrl : '',
+    videoType : '',
+    videoWidth : '',
+    videoHeight : '',
+    videoTag : '',
+    siteName : '',
+}

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <create-action /> -->
+    <create-action type="add_contents" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
@@ -10,15 +10,24 @@
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div class="cc-box__head">
+          <div
+            class="cc-box__head"
+            @mouseover="handleShowEditNameCourse"
+            @mouseleave="handleHideEditNameCourse"
+          >
             <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài giảng đại số lớp 10</h2>
-              <button class="cc-box__btn cc-box__btn-edit">
+              <h2 class="cc-box__title heading-6">
+                {{ get(general, "name", "") }}
+              </h2>
+              <button
+                class="cc-box__btn cc-box__btn-edit"
+                v-if="isShowButtonEditNameCourse"
+              >
                 <IconEditAlt class="icon" />
               </button>
             </div>
 
-            <div class="cc-box__head-right">
+            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
               <a @click="handleAddLesson($event)" href
                 >Thêm nội dung bài giảng</a
               >
@@ -29,25 +38,22 @@
           </div>
 
           <div class="cc-box__body">
-            <app-button
-              size="sm"
-              outline
-              square
-              class="font-weight-semi-bold clc-btn-add-docs"
-              v-if="isShowButtonAdd"
-            >
-              <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
-            </app-button>
+            <AddContent
+              v-if="isShowFormAddLesson"
+              @refreshLessons="refreshLessons"
+              @handleCancel="handleCancel"
+              :lesson="lesson"
+            />
 
-            <AddContent v-if="isShowFormAdd" />
-
-            <framge v-if="isShowLesson">
+            <fragment v-if="isShowDetailLesson">
               <LessonDetail
                 v-for="lesson in get(lessons, 'data', [])"
                 :key="lesson.id"
                 :lesson="lesson"
+                @handleEditLesson="handleEditLesson"
+                @refreshLessons="refreshLessons"
               />
-            </framge>
+            </fragment>
           </div>
         </div>
       </div>
@@ -638,23 +644,57 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowButtonAdd: false,
-      isShowFormAdd: false,
-      isShowLesson: false
+      isShowButtonAddLesson: false,
+      isShowFormAddLesson: false,
+      isShowDetailLesson: false,
+      isShowButtonEditNameCourse: false,
+      lesson: null
     };
   },
 
   created() {
+    this.$store.dispatch(
+      `elearning/creating/creating-lesson/${actionTypes.BASE.RESET}`
+    );
+
     useEffect(this, this.fetchLesson.bind(this), []);
+    useEffect(this, this.setInitData.bind(this), ["lessons.data"]);
   },
 
   computed: {
     ...mapState("elearning/creating/creating-lesson", {
       lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
     })
   },
 
   methods: {
+    handleHideEditNameCourse() {
+      this.isShowButtonEditNameCourse = false;
+    },
+
+    handleShowEditNameCourse() {
+      this.isShowButtonEditNameCourse = true;
+    },
+
+    setInitData() {
+      if (get(this, "lessons.data.length", 0)) {
+        this.isShowButtonAddLesson = false;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = true;
+      } else {
+        this.isShowButtonAddLesson = true;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = false;
+      }
+    },
+
+    refreshLessons() {
+      this.fetchLesson();
+    },
+
     fetchLesson() {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
@@ -666,6 +706,13 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
         options
       );
+    },
+
+    handleEditLesson(lesson) {
+      this.isShowButtonAddLesson = false;
+      this.isShowFormAddLesson = true;
+      this.isShowDetailLesson = false;
+      this.lesson = lesson
     },
 
     handleUploadChange(event) {
@@ -698,8 +745,21 @@ export default {
 
     handleAddLesson(e) {
       this.isShowButtonAdd = false;
-      this.isShowFormAdd = !this.isShowFormAdd;
+      this.isShowFormAddLesson = !this.isShowFormAddLesson;
       e.preventDefault();
+    },
+
+    handleCancel() {
+      const elearning_id = getParamQuery("elearning_id");
+      if (elearning_id && get(this, "lessons.data.length", 0)) {
+        this.isShowButtonAddLesson = false;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = true;
+      } else {
+        this.isShowButtonAddLesson = true;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = false;
+      }
     },
 
     get

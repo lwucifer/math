@@ -3,32 +3,32 @@
     <div class="aside-box__top">
       <div class="tool-top mb-15">
         <app-dropdown
-            position="left"
-            v-model="dropdownEdit"
-            :content-width="'10rem'"
-            class="link--dropdown"
-          >
-            <button slot="activator" type="button" class="link--dropdown__button">
-              <IconDots />
-            </button>
-            <div class="link--dropdown__content">
-              <ul>
-                <li class="link--dropdown__content__item">
-                  <a @click="visibleAddByPhone = true"> 
-                    <IconUsersAlt class="mr-2"/>
-                    Thêm bạn
-                  </a>
-                </li>
-                <li class="link--dropdown__content__item">
-                  <a @click="visibleAddGroup = true">
-                    <IconUserPlus class="mr-2"/>
-                    Tạo nhóm
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </app-dropdown>
-        <button @click="create()" title="Viết tin nhắn mới"><IconEdit/></button>
+          position="left"
+          v-model="dropdownEdit"
+          :content-width="'10rem'"
+          class="link--dropdown"
+        >
+          <button slot="activator" type="button" class="link--dropdown__button">
+            <IconDots />
+          </button>
+          <div class="link--dropdown__content">
+            <ul>
+              <li class="link--dropdown__content__item">
+                <a @click="visibleAddByPhone = true">
+                  <IconUsersAlt class="mr-2" />Thêm bạn
+                </a>
+              </li>
+              <li class="link--dropdown__content__item">
+                <a @click="visibleAddGroup = true">
+                  <IconUserPlus class="mr-2" />Tạo nhóm
+                </a>
+              </li>
+            </ul>
+          </div>
+        </app-dropdown>
+        <button @click="create()" title="Viết tin nhắn mới">
+          <IconEdit />
+        </button>
       </div>
       <div class="search-nav">
         <div class="form-group">
@@ -70,34 +70,105 @@
         </div>
         <div v-else>
           <div class="tabs-content" v-if="tab == 1">
-            <div class="align-item" v-for="(item, index) in contacts" :key="index">
+            <div
+              class="align-item"
+              v-for="(item, index) in groupsListTabChat ? groupsListTabChat : []"
+              :key="index"
+            >
               <div class="align-item__image">
-                <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
+                <app-avatar
+                  :src="item.members[0].avatar && item.members[0].avatar.low ? item.members[0].avatar.low : ''"
+                  size="md"
+                  class="comment-item__avatar"
+                />
               </div>
               <div class="align-item__meta">
                 <h4 class="align-item__title">
-                  <n-link slot="title" to>{{ item.title }}</n-link>
+                  <n-link
+                    slot="title"
+                    to
+                  >{{ item.members[0] && item.members[0].fullname ? item.members[0].fullname : '' }}</n-link>
                 </h4>
                 <div class="align-item__desc">
                   <p>{{ item.desc }}</p>
                 </div>
               </div>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'10rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16"/>
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Tắt thông báo</a>
+                    </li>
+                    <li>
+                      <a>Ẩn chat</a>
+                    </li>
+                    <li>
+                      <a @click="visibleLeaveGroup = true">Chặn tin nhắn</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </div>
+            <client-only>
+              <infinite-loading :identifier="infiniteIdChat" @infinite="chatsInfiniteHandler">
+                <template slot="no-more">Không còn tin nhắn nào.</template>
+              </infinite-loading>
+            </client-only>
           </div>
           <div class="tabs-content" v-if="tab == 2">
-            <div class="align-item" v-for="(item, index) in contacts" :key="index">
+            <div
+              class="align-item"
+              v-for="(item, index) in contacts ? contacts : []"
+              :key="index"
+            >
               <div class="align-item__image">
                 <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
               </div>
               <div class="align-item__meta">
                 <h4 class="align-item__title">
-                  <n-link slot="title" to>{{ item.title }}</n-link>
+                  <n-link slot="title" to>{{ item.room_name }}</n-link>
                 </h4>
                 <div class="align-item__desc">
                   <p>{{ item.desc }}</p>
                 </div>
               </div>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'10rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16" />
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Tắt thông báo</a>
+                    </li>
+                    <li>
+                      <a>Ẩn nhóm</a>
+                    </li>
+                    <li>
+                      <a @click="visibleLeaveGroup = true">Rời khỏi nhóm</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </div>
+            <client-only>
+              <infinite-loading :identifier="infiniteId" @infinite="groupsInfiniteHandler">
+                <template slot="no-more">Không còn group.</template>
+              </infinite-loading>
+            </client-only>
           </div>
         </div>
       </div>
@@ -112,7 +183,7 @@
         </li>
         <li>
           <a @click="isContact = false" :class="isContact ? '' : 'active'">
-            <IconChat width="25" height="23" :class="!isContact ? 'fill-primary' : 'fill-999'"/>
+            <IconChat width="25" height="23" :class="!isContact ? 'fill-primary' : 'fill-999'" />
             <p>Chat</p>
           </a>
         </li>
@@ -120,27 +191,31 @@
     </div>
 
     <!-- Modal tạo nhóm chát -->
-    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friends"/>
+    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friendList" />
 
     <!-- Modal thêm bạn qua số điện thoại -->
-    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
+    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
 
+    <!-- Modal rồi nhớm -->
+    <ModalLeaveGroup @close="visibleLeaveGroup = false" v-if="visibleLeaveGroup" />
   </div>
 </template>
 
 <script>
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
-
+import ModalLeaveGroup from "~/components/page/chat/ModalLeaveGroup";
+import { mapState, mapGetters, mapActions } from "vuex";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
-import IconEdit from '~/assets/svg/design-icons/edit.svg?inline';
-import IconDots from '~/assets/svg/icons/dots.svg?inline';
-import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
-import IconUserPlus from '~/assets/svg/design-icons/user-plus.svg?inline';
-import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
+import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
+import GroupService from "~/services/message/Group";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -152,9 +227,9 @@ export default {
     IconDots,
     IconUsersAlt,
     IconUserPlus,
-    IconCamera,
     ModalAddFriend,
-    ModalAddGroup
+    ModalAddGroup,
+    ModalLeaveGroup
   },
   props: {
     contacts: {
@@ -175,7 +250,25 @@ export default {
       isContact: false,
       visibleAddByPhone: false,
       visibleAddGroup: false,
+      visibleLeaveGroup: false,
+      nameGroup: "",
+      dropdownEdit: false,
+      dropdownActions: false,
+      groupListQuery: {
+        page: 1
+      },
+      chatListQuery: {
+        page: 1
+      },
+      groupsListTabGroup: [],
+      groupsListTabChat: [],
+      infiniteId: +new Date(),
+      infiniteIdChat: +new Date()
     };
+  },
+  computed: {
+    ...mapState("social", ["friendList"]),
+    ...mapState("message", ["groupList"])
   },
   methods: {
     create() {
@@ -193,6 +286,64 @@ export default {
       console.log("[avatar_images]", fileList[0]);
       this.accountPersonalEditAvatar(body).then(result => {});
     },
+
+    async groupsInfiniteHandler($state) {
+      const { data: getData = {} } = await new GroupService(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: this.groupListQuery
+      });
+
+      if (getData.rooms && getData.rooms.length) {
+        this.groupListQuery.page += 1;
+        this.groupsListTabGroup.push(
+          ...getData.rooms.filter(item => item.type == 2)
+        );
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+    async chatsInfiniteHandler($state) {
+      const { data: getData = {} } = await new GroupService(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: this.chatListQuery
+      });
+
+      if (getData.rooms && getData.rooms.length) {
+        this.chatListQuery.page += 1;
+        this.groupsListTabChat.push(
+          ...getData.rooms.filter(item => item.type == 1)
+        );
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    }
   },
+  watch: {
+    tab(_newval) {
+      console.log("_newval", _newval);
+      if (_newval == 1) {
+        this.infiniteIdChat += 1;
+        // this.groupsListTabChat = [];
+        this.chatListQuery.page = 1;
+      } else {
+        this.infiniteId += 1;
+        // this.groupsListTabGroup = [];
+        this.groupListQuery.page = 1;
+      }
+    },
+    groupList(_newval) {
+      console.log("_newval", _newval);
+      if (_newval) {
+        this.infiniteId += 1;
+        this.infiniteIdChat += 1;
+        this.groupListQuery.page = 1;
+        // this.groupsInfiniteHandler();
+      }
+    }
+  }
 };
 </script>

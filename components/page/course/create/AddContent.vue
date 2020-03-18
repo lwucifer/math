@@ -2,6 +2,11 @@
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <app-input v-model="payload.name" placeholder="Tên bài giảng" />
+    <app-input
+      v-if="get(general, 'type', '') !== 'LECTURE'"
+      v-model="payload.index"
+      placeholder="Vị trí"
+    />
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <span>Chọn loại bài giảng</span>
 
@@ -52,6 +57,7 @@
           size="sm"
           color="disabled"
           square
+          @click="handleCancel"
           >Huỷ bỏ</app-button
         >
         <app-button
@@ -59,7 +65,7 @@
           class="clc-btn font-weight-semi-bold"
           size="sm"
           square
-          >Thêm nội dung</app-button
+          >{{ lesson ? "Sửa nội dung" : "Thêm nội dung" }}</app-button
         >
       </div>
     </div>
@@ -67,7 +73,7 @@
 </template>
 
 <script>
-import { getBase64, getParamQuery } from "~/utils/common";
+import { getBase64, getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
@@ -84,6 +90,7 @@ import LessonSelectVideo from "~/components/page/course/create/LessonSelectVideo
 import LessonSelectDocument from "~/components/page/course/create/LessonSelectDocument";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -100,22 +107,54 @@ export default {
     LessonSelectDocument
   },
 
+  props: {
+    lesson: {
+      type: Object,
+      default: null
+    }
+  },
+
   data() {
     return {
       tabType: "video",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
-        index: 0,
+        index: "",
         lesson: "",
         name: "",
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
         url: "",
-        article_content: ""
+        article_content: "",
+        id: ""
       }
     };
   },
 
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
+    })
+  },
+
+  created() {
+    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
+    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
+  },
+
   methods: {
+    handleChangeLesson() {
+      if (this.lesson) {
+        this.payload.name = get(this, "lesson.name", "");
+        this.payload.id = get(this, "lesson.id", "");
+      }
+    },
+
+    handleChangeGeneral() {
+      if (get(this, "general.type", "") === "LECTURE") {
+        this.payload.index = "";
+      }
+    },
+
     changeTabType(type) {
       this.tabType = type;
     },
@@ -132,12 +171,18 @@ export default {
       this.payload.url = file.url;
     },
 
-    handleAddContent() {
+    async handleAddContent() {
       const payload = createPayloadAddContentCourse(this.payload);
-      this.$store.dispatch(
+      const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+      if (get(result, "success", false)) {
+        this.$emit("refreshLessons");
+        this.$toasted.success(get(result, "message", ""));
+        return;
+      }
+      this.$toasted.error(get(result, "message", ""));
     },
 
     handleSelectDocument(type, article_content, url, lesson) {
@@ -145,7 +190,13 @@ export default {
       this.payload.lesson = lesson;
       this.payload.url = url;
       this.payload.article_content = article_content;
-    }
+    },
+
+    handleCancel() {
+      this.$emit("handleCancel");
+    },
+
+    get
   }
 };
 </script>

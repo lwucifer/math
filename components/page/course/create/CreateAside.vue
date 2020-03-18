@@ -83,21 +83,53 @@ export default {
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
+    }),
+    ...mapState("elearning/creating/creating-lesson", {
+      lessons: "lessons"
     })
   },
 
   created() {
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
+    useEffect(this, this.handleChangeLesson.bind(this), [
+      "general.id",
+      "lessons.data.length"
+    ]);
   },
 
   methods: {
     handleClickMenuItem({ key }) {
-      this.$emit("click-item", key);
+      const elearning_id = getParamQuery("elearning_id");
+      if (key === "general") {
+        this.$emit("click-item", key);
+      }
+      if (get(this, "general", null) && elearning_id && key === "content") {
+        this.$emit("click-item", key);
+      }
+      if (
+        get(this, "general", null) &&
+        get(this, "lessons.data.length", 0) &&
+        elearning_id &&
+        key === "settings"
+      ) {
+        this.$emit("click-item", key);
+      }
+    },
+
+    handleChangeLesson() {
+      if (get(this, "lessons.data.length", 0)) {
+        this.menu[1].checked = true;
+        return;
+      }
+      this.menu[1].checked = false;
     },
 
     handleChangeGeneral() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (this.general && elearning_id) this.menu[0].checked = true;
+      if (this.general) {
+        this.menu[0].checked = true;
+        return;
+      }
+      this.menu[0].checked = false;
     }
   }
 };

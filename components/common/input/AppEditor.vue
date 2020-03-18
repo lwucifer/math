@@ -246,7 +246,8 @@ export default {
   data() {
     return {
       editor: null,
-      isEditorFocused: false
+      isEditorFocused: false,
+      emitAfterOnUpdate: false
     };
   },
 
@@ -270,7 +271,12 @@ export default {
 
   watch: {
     value(newValue) {
-      this.editor.setContent(newValue)
+      if (this.emitAfterOnUpdate) {
+        this.emitAfterOnUpdate = false
+        return
+      }
+      
+      this.editor.setContent(newValue);
     }
   },
 
@@ -302,6 +308,7 @@ export default {
       ],
       content: this.value,
       onUpdate: ({ getHTML }) => {
+        this.emitAfterOnUpdate = true;
         this.$emit("input", getHTML());
       },
       onFocus: () => {

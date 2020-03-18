@@ -8,6 +8,7 @@
 
     .swiper-slide {
         transition-property: transform, opacity;
+        transition-duration: 1s;
         opacity: 0.2;
     }
 

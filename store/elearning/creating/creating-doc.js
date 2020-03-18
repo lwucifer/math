@@ -1,5 +1,5 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Doc from "~/services/elearning/creating/Doc";
 
 /**
@@ -18,13 +18,14 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_DOC.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_DOC.LIST]({ commit }, options) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.LIST](
-        payload
-      );
+      const result = await new Doc(this.$axios)[actionTypes.BASE.LIST](options);
       // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST,
+        result
+      );
     } catch (error) {
       console.log("[Creating docs] list.error", error);
     }
@@ -32,9 +33,8 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_DOC.ADD]({ commit }, payload) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.ADD](
-        payload
-      );
+      const result = await new Doc(this.$axios)["postWithFormData"](payload);
+      return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
     } catch (error) {
@@ -44,23 +44,18 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_DOC.EDIT]({ commit }, payload) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.EDIT](
-        payload
-      );
+      const result = await new Doc(this.$axios)[actionTypes.BASE.EDIT](payload);
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
     } catch (error) {
       console.log("[Creating docs] edit.error", error);
     }
   },
-  
-  async [actionTypes.ELEARNING_CREATING_DOC.DELETE]({ commit }, payload) {
+
+  async [actionTypes.ELEARNING_CREATING_DOC.DELETE]({ commit }, options) {
     try {
-      const result = await new Doc(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Doc(this.$axios)["deleteDoc"](options);
+      return result;
     } catch (error) {
       console.log("[Creating docs] delete.error", error);
     }
@@ -71,9 +66,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST](state, _docs) {
-    console.log("SET_ELEARNING_CREATING_DOC_LIST", _docs);
-    state.docs = _docs;
+  [mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST](
+    state,
+    docs
+  ) {
+    state.docs = docs;
   }
 };
 

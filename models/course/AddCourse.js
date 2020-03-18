@@ -29,11 +29,17 @@ class AddContentCourse {
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }
+    if (payload.index !== "") {
+      this.index = payload.index;
+    }
     if (payload.url) {
       this.url = payload.url;
     }
     if (payload.article_content) {
       this.article_content = payload.article_content;
+    }
+    if (payload.id) {
+      this.id = payload.id;
     }
     this.name = payload.name;
     this.type = payload.type;
@@ -42,4 +48,24 @@ class AddContentCourse {
 
 export function createPayloadAddContentCourse(payload) {
   return Object.freeze(new AddContentCourse(payload));
+}
+
+class AddDocument {
+  constructor(payload) {
+    this.lesson_id = payload.lesson_id;
+    if (payload.doc) {
+      this.doc = payload.doc;
+    }
+    if (payload.url) {
+      this.url = payload.url;
+    }
+    if (payload.format) {
+      this.format = payload.format;
+    }
+    this.name = payload.name;
+  }
+}
+
+export function createPayloadAddDocument(payload) {
+  return Object.freeze(new AddDocument(payload));
 }

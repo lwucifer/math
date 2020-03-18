@@ -55,7 +55,7 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <div class="cgi-form-group mb-4">
+      <!-- <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
           Học phí
         </h2>
@@ -67,7 +67,7 @@
           Giảm giá
         </h2>
         <app-input :value="payload.discount" @input="handleChangeDiscount" />
-      </div>
+      </div> -->
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
@@ -97,7 +97,7 @@ import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
 import { toNumber, get } from "lodash";
-import { useEffect, getParamQuery } from "~/utils/common";
+import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
 import * as yup from "yup";
 import numeral from "numeral";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
@@ -138,8 +138,8 @@ export default {
         avatar: "",
         benefit: "",
         description: "",
-        discount: "",
-        fee: "",
+        discount: 20000,
+        fee: 10000,
         level: "",
         name: "",
         subject: "",
@@ -149,6 +149,10 @@ export default {
   },
 
   created() {
+    this.$store.dispatch(
+      `elearning/creating/creating-general/${actionTypes.BASE.RESET}`
+    );
+
     useEffect(this, this.handleChangePayload.bind(this), [
       "payload.avatar",
       "payload.benefit",
@@ -185,8 +189,8 @@ export default {
     handleChangeGeneral() {
       this.payload.benefit = get(this, "general.benefit", "");
       this.payload.description = get(this, "general.description", "");
-      this.payload.discount = get(this, "general.discount", "");
-      this.payload.fee = get(this, "general.fee", "");
+      // this.payload.discount = get(this, "general.discount", "");
+      // this.payload.fee = get(this, "general.fee", "");
       this.payload.name = get(this, "general.name", "");
       this.payload.subject = get(this, "general.subject", "");
       this.payload.level = get(this, "general.level", "");
@@ -222,7 +226,7 @@ export default {
     handleChangePayload() {
       let that = this;
       const payload = createPayloadAddCourse(this.payload);
-      const elearning_id = get(that, "$route.query.elearning_id", "");
+      const elearning_id = getParamQuery("elearning_id");
 
       if (elearning_id) {
         schema_update.isValid(payload).then(function(valid) {
@@ -252,13 +256,30 @@ export default {
       this.payload.subject = get(subject, "code", "");
     },
 
-    handleCLickSave() {
+    async handleCLickSave() {
       let payload = createPayloadAddCourse(this.payload);
-      this.$store.dispatch(
+      const result = await this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
       this.isSubmit = false;
+
+      if (get(result, "success", false)) {
+        const params = {
+          elearning_id: get(result, "data.elearning_id", "")
+        };
+        const options = {
+          params
+        };
+        await this.$store.dispatch(
+          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+          options
+        );
+        redirectWithParams(params);
+        this.$toasted.success(get(result, "message", ""));
+        return;
+      }
+      this.$toasted.error(get(result, "message", ""));
     },
 
     numeral,
