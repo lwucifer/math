@@ -55,7 +55,7 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <div class="cgi-form-group mb-4">
+      <!-- <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
           Học phí
         </h2>
@@ -67,7 +67,7 @@
           Giảm giá
         </h2>
         <app-input :value="payload.discount" @input="handleChangeDiscount" />
-      </div>
+      </div> -->
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
@@ -138,8 +138,8 @@ export default {
         avatar: "",
         benefit: "",
         description: "",
-        discount: "",
-        fee: "",
+        // discount: "",
+        // fee: "",
         level: "",
         name: "",
         subject: "",
