@@ -12,10 +12,10 @@
               <a class="active">Timeline</a>
             </li>
             <li>
-              <n-link :to="'/account/friends'">Bạn bè</n-link>
+              <n-link :to="'/account/social/friends'">Bạn bè</n-link>
             </li>
             <li>
-              <n-link :to="'/account/photos'">Ảnh</n-link>
+              <n-link :to="'/account/social/photos'">Ảnh</n-link>
             </li>
           </ul>
 

@@ -15,7 +15,7 @@
               <a class="active">Bạn bè</a>
             </li>
             <li>
-              <n-link :to="'/account/photos'">Ảnh</n-link>
+              <n-link :to="'./photos'">Ảnh</n-link>
             </li>
           </ul>
 

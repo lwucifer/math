@@ -41,7 +41,7 @@
 import {SEX,CLIENT} from "~/server/fakedata/account/client.js"
 import AccountClientSide from "~/components/page/account/AccountClientSide"
 export default {
-    layout:"client",
+    layout:"account-info",
     components:{
         AccountClientSide
     },

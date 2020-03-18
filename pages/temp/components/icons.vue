@@ -110,19 +110,19 @@ export default {
   created() {
     // https://webpack.js.org/guides/dependency-management/#requirecontext
     const req = require.context(
-      "../../assets/svg/icons?inline",
+      "~/assets/svg/icons?inline",
       false,
       /.*\.svg$/
     );
 
     const req2 = require.context(
-      "../../assets/svg/design-icons?inline",
+      "~/assets/svg/design-icons?inline",
       false,
       /.*\.svg$/
     );
 
     const req3 = require.context(
-      "../../assets/svg/text-editor?inline",
+      "~/assets/svg/text-editor?inline",
       false,
       /.*\.svg$/
     );

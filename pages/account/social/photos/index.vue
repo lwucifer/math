@@ -12,7 +12,7 @@
               <n-link :to="'/account'">Timeline</n-link>
             </li>
             <li>
-              <n-link :to="'/account/friends'">Bạn bè</n-link>
+              <n-link :to="'./friends'">Bạn bè</n-link>
             </li>
             <li>
               <a class="active">Ảnh</a>
