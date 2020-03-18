@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import * as actionTypes from "../../../../utils/action-types";
+import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
-import { createSigninWithPhone } from "../../../../models/auth/Signin";
+import { createSigninWithPhone } from "~/models/auth/Signin";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
-import { ERRORS } from "../../../../utils/error-code";
+import { ERRORS } from "~/utils/error-code";
 import { required, minLength } from "vuelidate/lib/validators";
 
 export default {

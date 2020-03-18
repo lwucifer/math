@@ -38,7 +38,7 @@ import firebase from "@/services/firebase/FirebaseInit";
 import {
   createSignupWithPhone,
   createSignupWithEmail
-} from "../../../models/auth/Signup";
+} from "~/models/auth/Signup";
 import { formatPhoneNumber } from "~/utils/validations";
 import SignupEmail from "~/components/page/auth/signup/SignupEmail";
 import SignupPhone from "~/components/page/auth/signup/SignupPhone";
