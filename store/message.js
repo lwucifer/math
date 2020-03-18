@@ -8,13 +8,15 @@ import GroupMember from "~/services/message/GroupMember";
 import GroupLeave from "~/services/message/GroupLeave";
 import GroupRemoveMember from "~/services/message/GroupRemoveMember";
 import GroupNotification from "~/services/message/GroupNotification";
+import Message from "~/services/message/Message";
 
 /**
  * initial state
  */
 const state = () => ({
     memberList: {},
-    groupList: {}
+    groupList: {},
+    messageList: {}
 });
 
 /**
@@ -79,7 +81,7 @@ const actions = {
             const { data: result = {} } = await new Group(this.$axios)[
                 actionTypes.BASE.LIST
             ](payload);
-            console.log("[Group] list", result);
+            // console.log("[Group] list", result);
 
             // set to mutation
             commit(mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST, result);
@@ -94,7 +96,7 @@ const actions = {
             const { data: result = {} } = await new GroupMember(this.$axios)[
                 actionTypes.BASE.LIST
             ](payload);
-            console.log("[GroupMember] list", result);
+            // console.log("[GroupMember] list", result);
 
             // set to mutation
             commit(mutationTypes.MESSAGE_GROUP.SET_MEMBER_LIST, result);
@@ -109,7 +111,7 @@ const actions = {
             const result = await new GroupLeave(this.$axios)[
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
-            console.log("[GroupLeave] edit", result);
+            // console.log("[GroupLeave] edit", result);
             return result;
         } catch (err) {
             console.log("[GroupLeave] edit.err", err);
@@ -121,7 +123,7 @@ const actions = {
             const result = await new GroupRemoveMember(this.$axios)[
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
-            console.log("[GroupRemoveMember] edit", result);
+            // console.log("[GroupRemoveMember] edit", result);
             return result;
         } catch (err) {
             console.log("[GroupRemoveMember] edit.err", err);
@@ -133,10 +135,25 @@ const actions = {
             const result = await new GroupNotification(this.$axios)[
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
-            console.log("[GroupNotification] edit", result);
+            // console.log("[GroupNotification] edit", result);
             return result;
         } catch (err) {
             console.log("[GroupNotification] edit.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.MESSAGE_GROUP.MESSAGE_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Message(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Message] list", result);
+
+            // set to mutation
+            commit(mutationTypes.MESSAGE_GROUP.SET_MESSAGE_LIST, result);
+            return result;
+        } catch (err) {
+            console.log("[Message] list.err", err);
             return err;
         }
     }
@@ -151,6 +168,9 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST](state, _groupList) {
         state.groupList = _groupList;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_MESSAGE_LIST](state, _messageList) {
+        state.messageList = _messageList;
     }
 };
 

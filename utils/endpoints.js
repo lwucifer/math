@@ -96,3 +96,4 @@ export const GROUP_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/getMember`;
 export const GROUP_LEAVE = `${SCHOOLLY_ALIAS}/social/api/room/leaveGroup`;
 export const GROUP_REMOVE_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/removeMember`;
 export const GROUP_NOTIFICATION = `${SCHOOLLY_ALIAS}/social/api/room/settingNotification`;
+export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
