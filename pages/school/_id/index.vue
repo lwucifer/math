@@ -2,8 +2,10 @@
   <div class="container mb-6">
     <div>
       <div class="top" v-if="isDepartment">
-        <app-button square>
-          <span class>Quản lý trường học</span>
+        <app-button square class="btn_link_manager">
+          <n-link :to="'/school/manager'">
+            <span class>Quản lý trường học</span>
+          </n-link> 
         </app-button>
       </div>
 
@@ -19,6 +21,7 @@
         :cources="get(courses, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Khóa học của trường"
+        @showAll="showAll"
       />
     </div>
   </div>
@@ -50,7 +53,7 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    const school_id = "e698a8ea-4e12-11ea-b77f-2e728ce88125";
+    const school_id = params.id;
     const data = { school_id };
     await store.dispatch(
       `${elearningSchoolInfoStorePath}/${actionTypes.SCHOOL_INFO.INFO}`,
@@ -59,7 +62,7 @@ export default {
     const options_sources = {
       params: {
         school_id,
-        elearning_type: "COURCE",
+        elearning_type: "COURSE",
         size: 5
       }
     };
@@ -106,7 +109,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(elearningSchoolInfoStorePath, ["schoolInfo"]),
     ...mapState(`elearning/school/school-elearning`, {
-      courses: "source",
+      courses: "course",
       lessons: "lecture"
     })
   },
@@ -114,7 +117,20 @@ export default {
   watch: {},
 
   methods: {
-    get
+    get,
+    showAll(params){
+      const options_showAll = {
+      params: {
+        school_id:this.$route.params.id,
+        elearning_type: "COURSE",
+      }
+    };
+      this.$store.dispatch(
+      `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
+      options_showAll
+    )
+      
+    }
   }
 };
 </script>
@@ -129,5 +145,12 @@ export default {
     padding-right: 1.5rem;
     padding-left: 1.5rem;
   }
+}
+.btn_link_manager{
+  a{
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
 }
 </style>
