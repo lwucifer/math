@@ -226,7 +226,7 @@ export default {
     handleChangePayload() {
       let that = this;
       const payload = createPayloadAddCourse(this.payload);
-      const elearning_id = get(that, "$route.query.elearning_id", "");
+      const elearning_id = getParamQuery("elearning_id");
 
       if (elearning_id) {
         schema_update.isValid(payload).then(function(valid) {
