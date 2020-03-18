@@ -3,34 +3,40 @@
     <create-action type="add_contents" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">
-          Nội dung học tập
-        </h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div
-            class="cc-box__head"
-            @mouseover="handleShowEditNameCourse"
-            @mouseleave="handleHideEditNameCourse"
-          >
-            <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">
-                {{ get(general, "name", "") }}
-              </h2>
-              <button
-                class="cc-box__btn cc-box__btn-edit"
-                v-if="isShowButtonEditNameCourse"
-              >
+          <div class="cc-box__head">
+            <div class="cc-box__head-left flex-grow">
+              <!-- <input v-if="isEditCourseName" class="cc-box__input-title" type="text"> -->
+              <app-input
+                v-if="isEditCourseName"
+                v-model="courseNameModel"
+                ref="inputCourseName"
+                class="cc-box__input-title mb-0 w-100"
+                size="sm"
+                type="text"
+              />
+              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
+
+              <template v-if="isEditCourseName">
+                <button class="cc-box__btn mr-2 text-success">
+                  <IconCheck class="icon" />
+                </button>
+                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
+                  <IconTimes class="icon" />
+                </button>
+              </template>
+
+              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
                 <IconEditAlt class="icon" />
               </button>
             </div>
 
             <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <a @click="handleAddLesson($event)" href
-                >Thêm nội dung bài giảng</a
-              >
+              <a @click="handleAddLesson($event)" href>Thêm nội dung bài giảng</a>
               <button class="cc-box__btn cc-box__btn-collapse">
                 <IconAngleDown class="icon" />
               </button>
@@ -308,7 +314,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>-->
 
     <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
@@ -365,7 +371,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>-->
 
     <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
@@ -522,7 +528,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>-->
 
     <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
@@ -596,7 +602,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>-->
   </div>
 </template>
 
@@ -612,6 +618,8 @@ const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
+const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 import CreateAction from "~/components/page/course/create/CreateAction";
 import AddContent from "~/components/page/course/create/AddContent";
 import LessonDetail from "~/components/page/course/create/LessonDetail";
@@ -630,6 +638,8 @@ export default {
     IconVideo,
     IconFileBlank,
     IconTrashAlt,
+    IconCheck,
+    IconTimes,
     CreateAction,
     AddContent,
     LessonDetail
@@ -646,7 +656,8 @@ export default {
       isShowButtonAddLesson: false,
       isShowFormAddLesson: false,
       isShowDetailLesson: false,
-      isShowButtonEditNameCourse: false
+      isEditCourseName: false,
+      courseNameModel: ""
     };
   },
 
@@ -669,6 +680,8 @@ export default {
   },
 
   methods: {
+    get,
+
     handleHideEditNameCourse() {
       this.isShowButtonEditNameCourse = false;
     },
@@ -759,7 +772,18 @@ export default {
       }
     },
 
-    get
+    editCourseName() {
+      this.isEditCourseName = true;
+      this.courseNameModel = get(this.general, "name", "");
+      
+      setTimeout(() => {
+        this.$refs.inputCourseName.focus();
+      });
+    },
+
+    cancelEditCourseName() {
+      this.isEditCourseName = false;
+    }
   }
 };
 </script>
