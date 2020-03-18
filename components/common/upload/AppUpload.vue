@@ -14,8 +14,11 @@
         <div class="app-upload__default-slot">
           <div class="app-upload__control">
             <div class="app-upload__text">
-              <span class="app-upload__name-file" v-if="localFileList.length">
-                <slot name="fileName" :localFileList="localFileList">{{ localFileList[0] ? localFileList[0].name : '' }}</slot>
+              <span class="app-upload__file-name" v-if="localFileList.length">
+                <slot
+                  name="fileName"
+                  :localFileList="localFileList"
+                >{{ localFileList[0] ? localFileList[0].name : '' }}</slot>
               </span>
               <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
             </div>
@@ -75,7 +78,7 @@ export default {
 
   watch: {
     fileList(newValue) {
-      this.localFileList = this.fileList
+      this.localFileList = this.fileList;
     }
   },
 

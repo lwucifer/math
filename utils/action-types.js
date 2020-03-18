@@ -273,7 +273,8 @@ export const MESSAGE_GROUP = {
     GROUP_LIST: "groupList",
     GROUP_LEAVE: "groupLeave",
     GROUP_REMOVE_MEMBER: "groupRemoveMember",
-    GROUP_NOTIFICATION: "groupNotification"
+    GROUP_NOTIFICATION: "groupNotification",
+    MESSAGE_LIST: "messageList"
 };
 
 export const SOCIAL_FRIEND = {

@@ -50,6 +50,13 @@
     border-bottom: 1px solid $color-border;
     display: flex;
     justify-content: space-between;
+
+    &:hover {
+        .cc-box__btn-edit {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
 }
 
 .cc-box__head-left, .cc-box__head-right {
@@ -61,6 +68,10 @@
     margin-right: 1.2rem;
 }
 
+.cc-box__input-title {
+    margin-right: 1.2rem;
+}
+
 .cc-box__btn {
     svg {
         display: block;
@@ -69,6 +80,9 @@
 }
 
 .cc-box__btn-edit {
+    visibility: hidden;
+    opacity: 0;
+
     svg {
         fill: $color-primary;
     }

@@ -61,19 +61,24 @@
         </div>
       </div>
       <div class="aside-box__content">
+        <div class="message-box__time">
+          <div class="message-box__time__line"></div>
+          <div class="message-box__time__content">
+            <span>Thứ 5, Ngày 19/09/2019</span>
+          </div>
+        </div>
         <div class="message-box">
           <!-- message date -->
-          <div class="message-box__time">
-            <div class="message-box__time__line"></div>
-            <div class="message-box__time__content">
-              <span>Thứ 5, Ngày 19/09/2019</span>
-            </div>
-          </div>
           <!-- END / message date -->
           <!-- message box item -->
-          <div class="message-box__item item__0">
+          <div
+            class="message-box__item"
+            :class="item.user && item.user.id == 32 ? 'item__0' : 'item__1'"
+            v-for="(item, index) in messageList.messages ? messageList.messages : []"
+            :key="index"
+          >
             <div class="message-box__item__content">
-              <div class="message-box__item__meta">
+              <div class="message-box__item__meta" v-if="index == messageList.messages.length -1">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -83,12 +88,12 @@
                   >
                     <button slot="activator" type="button" class="link--dropdown__button">
                       <app-avatar
-                        src="https://picsum.photos/40/40"
+                        :src="item.user && item.user.avatar && item.user.avatar.low ? item.user.avatar.low : ''"
                         size="sm"
                         class="comment-item__avatar"
                       />
                     </button>
-                    <div class="link--dropdown__content">
+                    <!-- <div class="link--dropdown__content">
                       <ul>
                         <li class="link--dropdown__content__item">
                           <n-link to="/" class="link-dark">
@@ -101,19 +106,60 @@
                           </n-link>
                         </li>
                       </ul>
-                    </div>
+                    </div>-->
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
-                  <span>Đặng Duy Long</span>
+                  <span>{{item.user.fullname}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
-                  <span>3:21 PM</span>
+                  <span>{{item.created_at}}</span>
+                </div>
+              </div>
+              <div
+                class="message-box__item__meta"
+                v-else-if="index < messageList.messages.length - 1 && messageList.messages[index].user.id != messageList.messages[index+1].user.id"
+              >
+                <div class="message-box__item__meta__image">
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <app-avatar
+                        :src="item.user && item.user.avatar && item.user.avatar.low ? item.user.avatar.low : ''"
+                        size="sm"
+                        class="comment-item__avatar"
+                      />
+                    </button>
+                    <!-- <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <span>Gửi tin nhắn</span>
+                          </n-link>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <n-link to="/" class="link-dark">
+                            <span>Xem trang cá nhân</span>
+                          </n-link>
+                        </li>
+                      </ul>
+                    </div>-->
+                  </app-dropdown>
+                </div>
+                <div class="message-box__item__meta__desc">
+                  <span>{{item.user.fullname}}</span>
+                </div>
+                <div class="message-box__item__meta__time">
+                  <span>{{item.created_at}}</span>
                 </div>
               </div>
               <div class="message-box__item__desc">
                 <div class="message-box__item__desc__text">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                  <p>{{item.content}}</p>
                 </div>
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
@@ -144,7 +190,7 @@
                   </app-dropdown>
                 </div>
               </div>
-              <div class="message-box__item__desc">
+              <!-- <div class="message-box__item__desc">
                 <div class="message-box__item__desc__text">
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
                 </div>
@@ -176,12 +222,12 @@
                     </div>
                   </app-dropdown>
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
           <!-- message box item -->
           <!-- message box item -->
-          <div class="message-box__item item__1">
+          <!-- <div class="message-box__item item__1">
             <div class="message-box__item__content">
               <div class="message-box__item__meta">
                 <div class="message-box__item__meta__image">
@@ -255,10 +301,10 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
           <!-- message box item -->
           <!-- message box item -->
-          <div class="message-box__item item__0">
+          <!-- <div class="message-box__item item__0">
             <div class="message-box__item__content">
               <div class="message-box__item__meta">
                 <div class="message-box__item__meta__image">
@@ -332,7 +378,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
       <div class="aside-box__bottom">
@@ -367,10 +413,10 @@
     </div>
 
     <!-- Modal thêm bạn qua số điện thoại -->
-    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone"/>
-    
+    <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
+
     <!-- Modal thêm bạn trong nhóm-->
-    <ModalAddFriendByGroup @close="visibleAddByGroup = false" v-if="visibleAddByGroup"/>
+    <ModalAddFriendByGroup @close="visibleAddByGroup = false" v-if="visibleAddByGroup" />
 
     <!-- Modal xóa tin nhắn -->
     <app-modal
@@ -594,9 +640,13 @@ export default {
       }
     }
   },
+  created() {
+    console.log("messageList", this.messageList);
+  },
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
+    ...mapState("message", ["messageList"]),
 
     selectedTags() {
       return this.tag.map(item => {

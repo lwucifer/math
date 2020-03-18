@@ -10,6 +10,7 @@
       <textarea
         v-if="textarea"
         v-bind="$attrs"
+        ref="input"
         :rows="rows"
         :type="type"
         :value="localValue"
@@ -21,6 +22,7 @@
       <input
         v-else
         v-bind="$attrs"
+        ref="input"
         :type="type"
         :value="localValue"
         :disabled="disabled"
@@ -226,6 +228,10 @@ export default {
       } else {
         this.localValidate = VALIDATE_STATUS.DEFAULT;
       }
+    },
+
+    focus() {
+      this.$refs.input.focus();
     }
   }
 };

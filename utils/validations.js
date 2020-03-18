@@ -85,11 +85,10 @@ export const formatPhoneNumber = _phoneNumber => {
  */
 export const validatePassword = _password => {
     let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,32}$/;
-    console.log("aaa", _password, re.test(_password));
     return re.test(_password);
 };
 
 export const validateScriptTag = string => {
     const regex = /<[^>]*script/g;
     return regex.test(string);
-}
+};

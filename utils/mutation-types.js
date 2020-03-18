@@ -11,7 +11,7 @@ export const AUTH = {
 };
 
 export const BASE = {
-  RESET: "resetData"
+    RESET: "resetData"
 };
 
 export const PUBLIC = {};
@@ -223,5 +223,6 @@ export const ELEARNING_SCHOOL_SEARCH = {
 
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
-    SET_GROUP_LIST: "setGroupList"
+    SET_GROUP_LIST: "setGroupList",
+    SET_MESSAGE_LIST: "setMessageList"
 };
