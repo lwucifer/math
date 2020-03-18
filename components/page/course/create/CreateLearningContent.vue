@@ -1,6 +1,6 @@
 <template>
   <div>
-    <create-action />
+    <create-action type="add_contents" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">
@@ -10,12 +10,19 @@
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div class="cc-box__head">
+          <div
+            class="cc-box__head"
+            @mouseover="handleShowEditNameCourse"
+            @mouseleave="handleHideEditNameCourse"
+          >
             <div class="cc-box__head-left">
               <h2 class="cc-box__title heading-6">
                 {{ get(general, "name", "") }}
               </h2>
-              <button class="cc-box__btn cc-box__btn-edit">
+              <button
+                class="cc-box__btn cc-box__btn-edit"
+                v-if="isShowButtonEditNameCourse"
+              >
                 <IconEditAlt class="icon" />
               </button>
             </div>
@@ -46,7 +53,6 @@
                 @refreshLessons="refreshLessons"
               />
             </fragment>
-
           </div>
         </div>
       </div>
@@ -639,7 +645,8 @@ export default {
       tabAddDocument: "upload",
       isShowButtonAddLesson: false,
       isShowFormAddLesson: false,
-      isShowDetailLesson: false
+      isShowDetailLesson: false,
+      isShowButtonEditNameCourse: false
     };
   },
 
@@ -662,6 +669,14 @@ export default {
   },
 
   methods: {
+    handleHideEditNameCourse() {
+      this.isShowButtonEditNameCourse = false;
+    },
+
+    handleShowEditNameCourse() {
+      this.isShowButtonEditNameCourse = true;
+    },
+
     setInitData() {
       if (get(this, "lessons.data.length", 0)) {
         this.isShowButtonAddLesson = false;
@@ -673,9 +688,11 @@ export default {
         this.isShowDetailLesson = false;
       }
     },
+
     refreshLessons() {
       this.fetchLesson();
     },
+
     fetchLesson() {
       const elearning_id = getParamQuery("elearning_id");
       const options = {

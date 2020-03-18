@@ -111,28 +111,13 @@
       <template v-if="isCommentFetched">
         <app-divider class="mt-0 mb-3" />
 
-        <!-- <div class="post__comment-list">
-          <CommentItem>
-            <CommentItemReplied />
-          </CommentItem>
-
-          <CommentItem>
-            <CommentItem :level="2" />
-
-            <div class="text-center">
-              <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
-            </div>
-
-            <CommentEditor reply />
-          </CommentItem>
-        </div>-->
-
         <div class="post__comment-list">
           <CommentItem
             v-for="item in listParentComments"
             :key="item.id"
             :post="post"
             :data="item"
+            @deleted="handleDeleted"
           />
 
           <div class="text-center">
@@ -320,6 +305,14 @@ export default {
         }
       } else {
         this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    handleDeleted(id) {
+      if ("listParentComments" in this.parentCommentData) {
+        this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.filter(
+          comment => comment.id !== id
+        );
       }
     }
   }
