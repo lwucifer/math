@@ -117,21 +117,19 @@ export default {
     },
 
     handleChangeLesson() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (get(this, "lessons.data.length", 0) && elearning_id) {
+      if (get(this, "lessons.data.length", 0)) {
         this.menu[1].checked = true;
-      } else {
-        this.menu[1].checked = false;
+        return;
       }
+      this.menu[1].checked = false;
     },
 
     handleChangeGeneral() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (this.general && elearning_id) {
+      if (this.general) {
         this.menu[0].checked = true;
-      } else {
-        this.menu[0].checked = false;
+        return;
       }
+      this.menu[0].checked = false;
     }
   }
 };

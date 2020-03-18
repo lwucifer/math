@@ -68,6 +68,8 @@ export default {
     },
 
     contentStyles() {
+      if (!this.contentWidth) return;
+
       const isHasUnit = ["px", "rem", "%", "em"].findIndex(
         char => this.contentWidth.toString().indexOf(char) > -1
       );

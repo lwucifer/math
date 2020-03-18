@@ -138,7 +138,7 @@ export default {
     },
 
     handleEditLesson($event) {
-      this.$emit("handleEditLesson");
+      this.$emit("handleEditLesson", this.lesson);
       $event.preventDefault();
     },
 
