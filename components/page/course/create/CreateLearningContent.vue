@@ -42,6 +42,7 @@
               v-if="isShowFormAddLesson"
               @refreshLessons="refreshLessons"
               @handleCancel="handleCancel"
+              :lesson="lesson"
             />
 
             <fragment v-if="isShowDetailLesson">
@@ -646,7 +647,8 @@ export default {
       isShowButtonAddLesson: false,
       isShowFormAddLesson: false,
       isShowDetailLesson: false,
-      isShowButtonEditNameCourse: false
+      isShowButtonEditNameCourse: false,
+      lesson: null
     };
   },
 
@@ -706,10 +708,11 @@ export default {
       );
     },
 
-    handleEditLesson() {
+    handleEditLesson(lesson) {
       this.isShowButtonAddLesson = false;
       this.isShowFormAddLesson = true;
       this.isShowDetailLesson = false;
+      this.lesson = lesson
     },
 
     handleUploadChange(event) {
