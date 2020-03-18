@@ -39,6 +39,7 @@
     <LessonSelect
       @handleSelectUrl="handleSelectUrl"
       v-if="tabAddDocument === 'choose'"
+      type="DOCS"
     />
 
     <div class="d-flex justify-content-end mt-4">
