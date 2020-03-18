@@ -40,6 +40,7 @@ const actions = {
       const result = await new General(this.$axios)["postWithFormData"](
         payload
       );
+      return result;
       const params = {
         elearning_id: result.data.elearning_id
       };
