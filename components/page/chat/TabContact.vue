@@ -72,8 +72,9 @@
           <div class="tabs-content" v-if="tab == 1">
             <div
               class="align-item"
-              v-for="(item, index) in groupsListTabChat ? groupsListTabChat : []"
+              v-for="(item, index) in chatsListTab ? chatsListTab : []"
               :key="index"
+              @click="pushUrl(item.id)"
             >
               <div class="align-item__image">
                 <app-avatar
@@ -100,7 +101,7 @@
                 class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
-                  <IconDots class="fill-999" width="16"/>
+                  <IconDots class="fill-999" width="16" />
                 </button>
                 <div class="link--dropdown__content">
                   <ul>
@@ -126,7 +127,7 @@
           <div class="tabs-content" v-if="tab == 2">
             <div
               class="align-item"
-              v-for="(item, index) in contacts ? contacts : []"
+              v-for="(item, index) in groupsListTab ? groupsListTab : []"
               :key="index"
             >
               <div class="align-item__image">
@@ -260,10 +261,12 @@ export default {
       chatListQuery: {
         page: 1
       },
-      groupsListTabGroup: [],
-      groupsListTabChat: [],
+      groupsListTab: [],
+      chatsListTab: [],
       infiniteId: +new Date(),
-      infiniteIdChat: +new Date()
+      infiniteIdChat: +new Date(),
+      dataPushChat: [],
+      dataPushGroup: []
     };
   },
   computed: {
@@ -296,9 +299,10 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.groupListQuery.page += 1;
-        this.groupsListTabGroup.push(
+        this.dataPushGroup.push(
           ...getData.rooms.filter(item => item.type == 2)
         );
+        this.groupsListTab = this.dataPushGroup.map(item => item);
         $state.loaded();
       } else {
         $state.complete();
@@ -313,35 +317,27 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
-        this.groupsListTabChat.push(
-          ...getData.rooms.filter(item => item.type == 1)
-        );
+        this.dataPushChat.push(...getData.rooms.filter(item => item.type == 1));
+        this.chatsListTab = this.dataPushChat.map(item => item);
         $state.loaded();
       } else {
         $state.complete();
       }
+    },
+    pushUrl(_id) {
+      console.log("id", _id);
+      const url = `/message/${_id}`;
+      this.$router.push(url);
     }
   },
   watch: {
     tab(_newval) {
-      console.log("_newval", _newval);
       if (_newval == 1) {
         this.infiniteIdChat += 1;
-        // this.groupsListTabChat = [];
         this.chatListQuery.page = 1;
       } else {
         this.infiniteId += 1;
-        // this.groupsListTabGroup = [];
         this.groupListQuery.page = 1;
-      }
-    },
-    groupList(_newval) {
-      console.log("_newval", _newval);
-      if (_newval) {
-        this.infiniteId += 1;
-        this.infiniteIdChat += 1;
-        this.groupListQuery.page = 1;
-        // this.groupsInfiniteHandler();
       }
     }
   }

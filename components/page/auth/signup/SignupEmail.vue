@@ -65,11 +65,11 @@
 </template>
 
 <script>
-import * as actionTypes from "../../../../utils/action-types";
+import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
-import { createSignupWithEmail } from "../../../../models/auth/Signup";
+import { createSignupWithEmail } from "~/models/auth/Signup";
 import { validatePassword } from "~/utils/validations";
-import { ERRORS } from "../../../../utils/error-code";
+import { ERRORS } from "~/utils/error-code";
 import {
   required,
   email,

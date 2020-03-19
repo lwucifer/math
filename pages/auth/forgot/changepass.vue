@@ -64,9 +64,9 @@ import { mapState, mapActions } from "vuex";
 import {
   createResetPassWithPhone,
   createResetPassWithEmail
-} from "../../../models/auth/Forgot";
+} from "~/models/auth/Forgot";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
-import { ERRORS } from "../../../utils/error-code";
+import { ERRORS } from "~/utils/error-code";
 import firebase from "@/services/firebase/FirebaseInit";
 import ChangePassEmail from "~/components/page/auth/forgot/ChangePassEmail";
 import ChangePassPhone from "~/components/page/auth/forgot/ChangePassPhone";

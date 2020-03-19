@@ -51,7 +51,7 @@ import { mapState, mapActions } from "vuex";
 import {
   createResetWithPhone,
   createResetWithEmail
-} from "../../../models/auth/Forgot";
+} from "~/models/auth/Forgot";
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
