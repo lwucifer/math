@@ -15,14 +15,6 @@ class AddCourse {
       this.description = payload.description;
     }
 
-    if (payload.discount) {
-      this.discount = payload.discount ? numeral(payload.discount).value() : "";
-    }
-
-    if (payload.fee) {
-      this.fee = payload.fee ? numeral(payload.fee).value() : "";
-    }
-
     if (payload.level) {
       this.level = payload.level ? toNumber(payload.level) : "";
     }
