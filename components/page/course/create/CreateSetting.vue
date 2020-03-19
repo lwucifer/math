@@ -119,7 +119,7 @@ export default {
       payload: {
         comment_allow: 1,
         discount: 0,
-        elearning_id: getParamQuery("elearning_id"),
+        elearning_id: get(this, "general.id", ""),
         fee: 0,
         free: 1,
         passcode: "",
@@ -129,7 +129,7 @@ export default {
   },
 
   created() {
-    const elearning_id = getParamQuery("elearning_id");
+    const elearning_id = get(this, "general.id", "");
     const options = {
       params: {
         elearning_id
@@ -141,15 +141,23 @@ export default {
     );
 
     useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
+    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
   },
 
   computed: {
     ...mapState("elearning/creating/creating-setting", {
       setting: "setting"
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
     })
   },
 
   methods: {
+    handleChangeGeneral() {
+      this.payload.elearning_id = get(this, "general.id", "");
+    },
+
     handleChangeSetting() {
       const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
       this.payload.elearning_id = get(this, "setting.elearning_id", "");
