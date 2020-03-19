@@ -267,7 +267,7 @@
                         }
                     }
                     .message-box__item {
-                        padding-top: 15px;
+                        // padding-top: 8px;
                         padding-bottom: 15px;
                         .message-box__item__content {
                             display: flex;
@@ -420,7 +420,7 @@
     }
     .message-box__item__desc {
         display: flex;
-        margin-top: 1rem;
+        // margin-top: 1rem;
         .message-box__item__desc__text {
             background: #f7f6f9;
             border-radius: 5px;

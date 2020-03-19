@@ -270,16 +270,16 @@ export const ELEARNING_SCHOOL_SEARCH = {
 };
 
 export const MESSAGE_GROUP = {
-  ADD_MEMBER: "addMember",
-  EDIT_AVATAR: "editAvatar",
-  EDIT_NAME: "editName",
-  CREATE_GROUP: "createGroup",
-  MEMBER_LIST: "memberList",
-  GROUP_LIST: "groupList",
-  GROUP_LEAVE: "groupLeave",
-  GROUP_REMOVE_MEMBER: "groupRemoveMember",
-  GROUP_NOTIFICATION: "groupNotification",
-  MESSAGE_LIST: "messageList"
+    ADD_MEMBER: "addMember",
+    EDIT_AVATAR: "editAvatar",
+    EDIT_NAME: "editName",
+    CREATE_GROUP: "createGroup",
+    MEMBER_LIST: "getMemberList",
+    GROUP_LIST: "groupList",
+    GROUP_LEAVE: "groupLeave",
+    GROUP_REMOVE_MEMBER: "groupRemoveMember",
+    GROUP_NOTIFICATION: "groupNotification",
+    MESSAGE_LIST: "messageList"
 };
 
 export const SOCIAL_FRIEND = {
