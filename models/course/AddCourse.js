@@ -91,9 +91,9 @@ export function createPayloadAddDocument(payload) {
 
 class CourseSetting {
   constructor(payload) {
-    this.comment_allow = !!payload.comment_allow;
-    this.free = !!payload.free;
-    if (!payload.free) {
+    this.comment_allow = payload.comment_allow == 1 ? true : false;
+    this.free = payload.free == 1 ? true : false;
+    if (payload.free == 0) {
       this.discount = numeral(payload.discount).value();
       this.fee = numeral(payload.fee).value();
     }

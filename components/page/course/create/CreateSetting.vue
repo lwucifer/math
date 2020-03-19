@@ -37,8 +37,15 @@
         <div class="col-md-4">Cho phép bình luận tại bài giảng</div>
         <div class="col-md-8">
           <app-radio-group v-model="payload.comment_allow">
-            <app-radio value="1" class="mr-4" checked="true">Có</app-radio>
-            <app-radio value="0">Không</app-radio>
+            <app-radio
+              value="1"
+              class="mr-4"
+              :checked="payload.comment_allow == 1"
+              >Có</app-radio
+            >
+            <app-radio value="0" :checked="payload.comment_allow == 0"
+              >Không</app-radio
+            >
           </app-radio-group>
         </div>
       </div>
@@ -98,6 +105,7 @@ import { get, toNumber } from "lodash";
 import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -120,11 +128,41 @@ export default {
     };
   },
 
-  updated() {
-    console.log(this.payload);
+  created() {
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id
+      }
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
+      options
+    );
+
+    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-setting", {
+      setting: "setting"
+    })
   },
 
   methods: {
+    handleChangeSetting() {
+      const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
+      this.payload.elearning_id = get(this, "setting.elearning_id", "");
+      this.payload.comment_allow = comment_allow;
+      this.payload.discount = get(this, "setting.discount", 0);
+      this.payload.fee = get(this, "setting.fee", 0);
+      this.payload.privacy = get(this, "setting.privacy", "PUBLIC");
+      this.payload.free = get(this, "setting.free", false) ? 1 : 0;
+      const fee = toNumber(get(this, "setting.fee", 0));
+      const discount = toNumber(get(this, "setting.discount", 0));
+      this.fee_discount = fee - discount;
+    },
+
     handleChangePrivacy(privacy) {
       this.payload.privacy = privacy;
     },

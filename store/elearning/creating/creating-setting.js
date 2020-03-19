@@ -55,7 +55,7 @@ const actions = {
  */
 const mutations = {
   [mutationTypes.ELEARNING_CREATING_SETTING
-    .SET_ELEARNING_CREATING_SETTING_LIST](state, general) {
+    .SET_ELEARNING_CREATING_SETTING_LIST](state, setting) {
     state.setting = setting;
   },
 
