@@ -55,20 +55,6 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <!-- <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Học phí
-        </h2>
-        <app-input :value="payload.fee" @input="handleChangeFee" />
-      </div>
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Giảm giá
-        </h2>
-        <app-input :value="payload.discount" @input="handleChangeDiscount" />
-      </div> -->
-
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
         <app-editor v-model="payload.benefit" class="bg-input-gray mb-3" />
@@ -138,8 +124,6 @@ export default {
         avatar: "",
         benefit: "",
         description: "",
-        discount: 20000,
-        fee: 10000,
         level: "",
         name: "",
         subject: "",
@@ -157,8 +141,6 @@ export default {
       "payload.avatar",
       "payload.benefit",
       "payload.description",
-      "payload.discount",
-      "payload.fee",
       "payload.level",
       "payload.name",
       "payload.subject",
@@ -170,8 +152,6 @@ export default {
     useEffect(this, this.handleChangeGeneral.bind(this), [
       "general.benefit",
       "general.description",
-      "general.discount",
-      "general.fee",
       "general.level",
       "general.name",
       "general.subject",
@@ -189,8 +169,6 @@ export default {
     handleChangeGeneral() {
       this.payload.benefit = get(this, "general.benefit", "");
       this.payload.description = get(this, "general.description", "");
-      // this.payload.discount = get(this, "general.discount", "");
-      // this.payload.fee = get(this, "general.fee", "");
       this.payload.name = get(this, "general.name", "");
       this.payload.subject = get(this, "general.subject", "");
       this.payload.level = get(this, "general.level", "");
@@ -213,14 +191,6 @@ export default {
           options
         );
       }
-    },
-
-    handleChangeDiscount(discount) {
-      this.payload.discount = numeral(discount).format();
-    },
-
-    handleChangeFee(fee) {
-      this.payload.fee = numeral(fee).format();
     },
 
     handleChangePayload() {
