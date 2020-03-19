@@ -269,7 +269,7 @@ export const MESSAGE_GROUP = {
     EDIT_AVATAR: "editAvatar",
     EDIT_NAME: "editName",
     CREATE_GROUP: "createGroup",
-    MEMBER_LIST: "memberList",
+    MEMBER_LIST: "getMemberList",
     GROUP_LIST: "groupList",
     GROUP_LEAVE: "groupLeave",
     GROUP_REMOVE_MEMBER: "groupRemoveMember",

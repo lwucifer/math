@@ -52,7 +52,7 @@
       </ul>
 
       <div v-if="isAuthenticated" class="the-header__user">
-        <button class="item">
+        <button class="item" @click="redirectMessages">
           <IconMessager />
           <span class="number">9</span>
         </button>
@@ -140,6 +140,9 @@ export default {
   methods: {
     redirectSignin() {
       this.$router.push("/auth/signin");
+    },
+    redirectMessages() {
+      this.$router.push("/messages");
     }
   }
 };
