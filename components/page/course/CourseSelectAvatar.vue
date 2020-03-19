@@ -144,8 +144,9 @@ export default {
       getBase64(this.avatar[0], src => {
         this.avatarChoosen = src;
         this.cropping = true;
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           this.$refs.cropper.startCrop();
+          clearTimeout(timeout);
         });
       });
     },

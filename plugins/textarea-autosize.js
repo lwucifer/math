@@ -7,8 +7,9 @@ function resize(event) {
 }
 
 function delayResize(event) {
-  window.setTimeout(function() {
-    resize(event)
+  const timeout = window.setTimeout(() => {
+    resize(event);
+    clearTimeout(timeout);
   }, 0)
 }
 
