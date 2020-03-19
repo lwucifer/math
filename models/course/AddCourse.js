@@ -88,3 +88,23 @@ class AddDocument {
 export function createPayloadAddDocument(payload) {
   return Object.freeze(new AddDocument(payload));
 }
+
+class CourseSetting {
+  constructor(payload) {
+    this.comment_allow = !!payload.comment_allow;
+    this.free = !!payload.free;
+    if (!payload.free) {
+      this.discount = numeral(payload.discount).value();
+      this.fee = numeral(payload.fee).value();
+    }
+    this.elearning_id = payload.elearning_id;
+    this.privacy = payload.privacy;
+    if (payload.privacy === "PRIVATE") {
+      this.passcode = payload.passcode;
+    }
+  }
+}
+
+export function createPayloadCourseSetting(payload) {
+  return Object.freeze(new CourseSetting(payload));
+}
