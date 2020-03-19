@@ -62,7 +62,7 @@ import {
   getDateBirthDay,
   getDateUpdateProfile,
   getDateFormat
-} from "../../../utils/moment";
+} from "~/utils/moment";
 import { ERRORS } from "~/utils/error-code";
 import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 export default {

@@ -54,7 +54,7 @@
 <script>
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
-import { createResetPassWithPhone } from "../../../../models/auth/Forgot";
+import { createResetPassWithPhone } from "~/models/auth/Forgot";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
 import { ERRORS } from "~/utils/error-code";
 import {

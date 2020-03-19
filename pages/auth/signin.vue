@@ -19,7 +19,7 @@ import { mapState, mapActions } from "vuex";
 import {
   createSigninWithPhone,
   createSigninWithEmail
-} from "../../models/auth/Signin";
+} from "~/models/auth/Signin";
 import SigninEmail from "~/components/page/auth/signin/SigninEmail";
 import SigninPhone from "~/components/page/auth/signin/SigninPhone";
 

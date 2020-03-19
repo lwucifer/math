@@ -69,7 +69,7 @@
 <script>
 import IconPhone from "~/assets/svg/icons/phone.svg?inline";
 import IconLock from "~/assets/svg/icons/lock.svg?inline";
-import * as actionTypes from "../../../utils/action-types";
+import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 
 export default {

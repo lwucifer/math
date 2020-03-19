@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import * as actionTypes from "../../../utils/action-types";
+    import * as actionTypes from "~/utils/action-types";
     import {mapState, mapActions} from 'vuex';
 
     export default {
