@@ -86,13 +86,16 @@ export default {
     }),
     ...mapState("elearning/creating/creating-lesson", {
       lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-setting", {
+      setting: "setting"
     })
   },
 
   created() {
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
+    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
     useEffect(this, this.handleChangeLesson.bind(this), [
-      "general.id",
       "lessons.data.length"
     ]);
   },
@@ -103,17 +106,26 @@ export default {
       if (key === "general") {
         this.$emit("click-item", key);
       }
-      if (get(this, "general", null) && elearning_id && key === "content") {
+      if (get(this, "general", null) && key === "content") {
         this.$emit("click-item", key);
       }
-      if (
-        get(this, "general", null) &&
-        get(this, "lessons.data.length", 0) &&
-        elearning_id &&
-        key === "settings"
-      ) {
+      if (get(this, "lessons.data.length", 0) && key === "settings") {
         this.$emit("click-item", key);
       }
+      if (get(this, "setting", null) && key === "exercise") {
+        this.$emit("click-item", key);
+      }
+      if (get(this, "setting", null) && key === "exam") {
+        this.$emit("click-item", key);
+      }
+    },
+
+    handleChangeSetting() {
+      if (get(this, "setting", null)) {
+        this.menu[2].checked = true;
+        return;
+      }
+      this.menu[2].checked = false;
     },
 
     handleChangeLesson() {
