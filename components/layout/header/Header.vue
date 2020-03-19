@@ -79,10 +79,28 @@
           <div class="link--dropdown__content">
             <ul>
               <li>
-                <n-link to>Thông tin tài khoản</n-link>
+                <n-link to="/elearning/manager">Quản lý E-Learning</n-link>
+              </li>
+              <li>
+                <n-link to>Quản lý học sinh</n-link>
+              </li>
+              <li>
+                <n-link to="/account/info">Thông tin tài khoản</n-link>
+              </li>
+              <li>
+                <n-link to="/account/info/revenues">Thống kê doanh thu</n-link>
+              </li>
+              <li>
+                <n-link to="/account/info/transactions">Lịch sử giao dịch</n-link>
               </li>
               <li>
                 <n-link to>Cài đặt</n-link>
+              </li>
+              <li>
+                <n-link to>Thông báo</n-link>
+              </li>
+              <li>
+                <n-link to>Trợ giúp</n-link>
               </li>
               <li>
                 <n-link to>Đăng xuất</n-link>

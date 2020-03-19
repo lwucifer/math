@@ -326,17 +326,23 @@ export default {
 
   mounted() {
     if (process.browser) {
-      window.addEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.addEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout)
+        })
+      });
     }
   },
 
   beforeDestroy() {
     if (process.browser) {
-      window.removeEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.removeEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout)
+        })
+      });
     }
   },
 
