@@ -207,11 +207,11 @@ export default {
         this.isShowButtonAddLesson = false;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
-      } else {
-        this.isShowButtonAddLesson = true;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = false;
+        return;
       }
+      this.isShowButtonAddLesson = true;
+      this.isShowFormAddLesson = false;
+      this.isShowDetailLesson = false;
     },
 
     refreshLessons() {
