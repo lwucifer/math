@@ -288,9 +288,10 @@ export default {
     editCourseName() {
       this.isEditCourseName = true;
       this.courseNameModel = get(this.general, "name", "");
-
-      setTimeout(() => {
+      
+      const timeout = setTimeout(() => {
         this.$refs.inputCourseName.focus();
+        clearTimeout(timeout);
       });
     },
 

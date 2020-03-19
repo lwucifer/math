@@ -69,7 +69,10 @@ export default {
             vm.localFileList = event.target.files;
             vm.$emit("change", event.target.files, event);
             vm.input = false;
-            setTimeout(() => (vm.input = true));
+            const timeout = setTimeout(() => {
+              vm.input = true;
+              clearTimeout(timeout)
+            });
           }
         }
       );
