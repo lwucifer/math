@@ -50,6 +50,7 @@
     border-bottom: 1px solid $color-border;
     display: flex;
     justify-content: space-between;
+    margin-bottom: -1px;
 
     &:hover {
         .cc-box__btn-edit {
@@ -105,6 +106,10 @@
 
 .cc-box__bg-gray {
     background-color: #FBFBFB;
+}
+
+.cc-box__nested {
+    margin-left: 3rem;
 }
 
 .cc-tabs {
