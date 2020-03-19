@@ -3,15 +3,42 @@ import { toNumber } from "lodash";
 
 class AddCourse {
   constructor(payload) {
-    this.avatar = payload.avatar;
-    this.benefit = payload.benefit;
-    this.description = payload.description;
-    this.discount = payload.discount ? numeral(payload.discount).value() : "";
-    this.fee = payload.fee ? numeral(payload.fee).value() : "";
-    this.level = payload.level ? toNumber(payload.level) : "";
-    this.name = payload.name;
-    this.subject = payload.subject;
-    this.type = payload.type;
+    if (payload.avatar) {
+      this.avatar = payload.avatar;
+    }
+
+    if (payload.benefit) {
+      this.benefit = payload.benefit;
+    }
+
+    if (payload.description) {
+      this.description = payload.description;
+    }
+
+    if (payload.discount) {
+      this.discount = payload.discount ? numeral(payload.discount).value() : "";
+    }
+
+    if (payload.fee) {
+      this.fee = payload.fee ? numeral(payload.fee).value() : "";
+    }
+
+    if (payload.level) {
+      this.level = payload.level ? toNumber(payload.level) : "";
+    }
+
+    if (payload.name) {
+      this.name = payload.name;
+    }
+
+    if (payload.subject) {
+      this.subject = payload.subject;
+    }
+
+    if (payload.type) {
+      this.type = payload.type;
+    }
+
     if (payload.elearning_id) {
       this.elearning_id = payload.elearning_id;
     }
