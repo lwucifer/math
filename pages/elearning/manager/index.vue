@@ -10,7 +10,6 @@
             Tổng quan
             <hr class="mt-3" />
           </h5>
-
           <div class="elearning-manager__dashboard mt-15">
             <div class="row row-space-5">
               <div class="col-md-3">
@@ -101,66 +100,27 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+      `elearning/teaching/${actionTypes.ELEARNING_INFO.INFO}`
     );
   },
 
   data() {
     return {
       isAuthenticated: true,
-      province_id: "",
-      district_id: "",
-      ward_id: "",
-      keyword: ""
     };
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch"
-    }),
-    ...mapState("elearning/public/public-category", {
-      categories: "categories"
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/teaching/teaching-info", {
+      elearnings: "elearningInfo"
     })
   },
 
   created() {
-    useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
-      "province_id",
-      "district_id",
-      "ward_id",
-      "keyword"
-    ]);
   },
 
   methods: {
-    showAll(id) {
-      console.log("[Page School] show all a type of school: ", id);
-    },
-    handleChangedWard(ward) {
-      this.ward_id = get(ward, "id", "");
-    },
-    handleChangedDistrict(district) {
-      this.district_id = get(district, "id", "");
-    },
-    handleChangeProvince(province) {
-      this.province_id = get(province, "id", "");
-    },
-    handleChangeSearch(keyword) {
-      this.keyword = keyword;
-    },
-    handleGetSchoolsByLocation() {
-      let params = {};
-      if (this.province_id) params.province_id = this.province_id;
-      if (this.district_id) params.district_id = this.district_id;
-      if (this.ward_id) params.ward_id = this.ward_id;
-      if (this.keyword) params.keyword = this.keyword;
-      const options = { params };
-      this.$store.dispatch(
-        `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
-        options
-      );
-    }
   }
 };
 </script>

@@ -232,3 +232,7 @@ export const MESSAGE_GROUP = {
   SET_GROUP_LIST: "setGroupList",
   SET_MESSAGE_LIST: "setMessageList"
 };
+
+export const ELEARNING_INFO = {
+  SET_ELEARNING_INFO: "setElearningInfo"
+};
