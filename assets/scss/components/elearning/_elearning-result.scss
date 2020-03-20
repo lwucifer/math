@@ -1,32 +1,79 @@
 .elearning-manager-result {
-    &__mark {
-        padding: 0 2rem;
-        margin-bottom: 1rem;
+    &__section {
 
-        h4 {
+        h4.title {
             font-size: 1.4rem;
             line-height: 1.9rem;
             color: #333;
             margin-bottom: 1rem;
+            padding: 0 2rem;
         }
+    }
+
+    .mark-section {
+        padding: 0 2rem;
+        margin-bottom: 1rem;
+
         &__detail {
-            padding: 1rem;
+            padding: 1rem 0;
             font-size: 1.4rem;
             display: flex;
             justify-content: space-between;
             line-height: 1.9rem;
-            background-color: rgba($color: $color-primary, $alpha: 0.1);
-            .item span:first-child {
-                color: #666;
+
+            .score {
+                &__num {
+                    font-weight: bold;
+                    font-size: 2rem;
+                    margin-bottom: 1rem;
+                }
+
+                &__note {
+                    font-size: 1.4rem;
+                }
             }
-            .item span:nth-child(2) {
-                font-weight: bold;
-                color: $color-red;
+
+            .score--pass {
+                color: $color-primary;
             }
+
+            .score--fail {
+                color: $color-secondary;
+            }
+
+            .description {
+                background: #fbfbfb;
+                padding: 1rem 1.5rem;
+                .item {
+                    padding: .4rem 0;
+
+                    .label {
+                        color: #666;
+                    }
+
+                    .value {
+                        color: #1481FE;
+                    }
+                }
+            }
+
+            //.item span:first-child {
+            //    color: #666;
+            //}
+            //.item span:nth-child(2) {
+            //    font-weight: bold;
+            //    color: $color-red;
+            //}
         }
     }
 }
 
 .form--note {
     color: #999;
+}
+
+.form--score {
+    .btn--submit {
+        color: #fff;
+    }
 }

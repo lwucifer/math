@@ -41,24 +41,6 @@ const actions = {
         payload
       );
       return result;
-      const params = {
-        elearning_id: result.data.elearning_id
-      };
-
-      const options = {
-        params
-      };
-
-      const _result = await new General(this.$axios)[actionTypes.BASE.LIST](
-        options
-      );
-      commit(
-        mutationTypes.ELEARNING_CREATING_GENERAL
-          .SET_ELEARNING_CREATING_GENERAL_LIST,
-        _result.data
-      );
-
-      redirectWithParams(params);
     } catch (error) {
       console.log("[Creating general] add.error", error);
     }

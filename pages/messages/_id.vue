@@ -42,8 +42,9 @@ export default {
 
   async fetch({ params, query, store, route }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    const room_id = 18;
-    // route.params.id;
+    const room_id =
+      // 18;
+      route.params.id;
     // let listQuery = {
     //   page: 1,
     //   perPage: 10,
@@ -57,6 +58,11 @@ export default {
       }),
       store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
+        params: {
+          room_id: room_id
+        }
+      }),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
         params: {
           room_id: room_id
         }

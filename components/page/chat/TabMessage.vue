@@ -24,6 +24,7 @@
             <client-only>
               <infinite-loading
                 slot="options-append"
+                spinner="spiral"
                 :identifier="friendsInfiniteId"
                 @infinite="friendsInfiniteHandler"
               />
@@ -61,6 +62,11 @@
         </div>
       </div>
       <div class="aside-box__content">
+        <client-only>
+          <infinite-loading direction="top" @infinite="messageInfiniteHandler">
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>
         <div class="message-box__time">
           <div class="message-box__time__line"></div>
           <div class="message-box__time__content">
@@ -74,11 +80,11 @@
           <div
             class="message-box__item"
             :class="item.user && item.user.id == 32 ? 'item__0' : 'item__1'"
-            v-for="(item, index) in messageList.messages ? messageList.messages : []"
+            v-for="(item, index) in messagesList ? messagesList : []"
             :key="index"
           >
             <div class="message-box__item__content">
-              <div class="message-box__item__meta" v-if="index == messageList.messages.length -1">
+              <div class="message-box__item__meta" v-if="index == messagesList.length -1">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -118,7 +124,7 @@
               </div>
               <div
                 class="message-box__item__meta"
-                v-else-if="index < messageList.messages.length - 1 && messageList.messages[index].user.id != messageList.messages[index+1].user.id"
+                v-else-if="index < messagesList.length - 1 && messagesList[index].user.id != messagesList[index+1].user.id"
               >
                 <div class="message-box__item__meta__image">
                   <app-dropdown
@@ -499,6 +505,8 @@ import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import Message from "~/services/message/Message";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -535,10 +543,17 @@ export default {
       visibleAddGroup: false,
       visibleAddByGroup: false,
       friendsInfiniteId: +new Date(),
+      infiniteId: +new Date(),
       friendsListQuery: {
         page: 1
       },
+      messageListQuery: {
+        page: 1,
+        room_id: ""
+      },
       friendsList: [],
+      // dataPushMessage: [],
+      messagesList: [],
       friends: [
         {
           id: "1",
@@ -595,6 +610,21 @@ export default {
   },
 
   methods: {
+    async messageInfiniteHandler($state) {
+      this.messageListQuery.room_id = 18;
+      const { data: getData = {} } = await new Message(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: this.messageListQuery
+      });
+      if (getData.messages && getData.messages.length) {
+        this.messageListQuery.page += 1;
+        this.messagesList.push(...getData.messages);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
     reply() {
       this.isReply = true;
     },
@@ -641,7 +671,7 @@ export default {
     }
   },
   created() {
-    console.log("messageList", this.messageList);
+    // this.messageListQuery.room_id = this.$route.params.id;
   },
 
   computed: {
