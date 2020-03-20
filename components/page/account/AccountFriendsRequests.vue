@@ -6,7 +6,11 @@
     </div>
     <div class="account-friends__list">
       <div class="row">
-        <div class="col-md-6 col-xs-12" v-for="(item, index) in friends" :key="index">
+        <div
+          class="col-md-6 col-xs-12"
+          v-for="(item, index) in inviteList ? inviteList : []"
+          :key="index"
+        >
           <AccountFriendsRequestsItem :data="item" />
         </div>
       </div>
@@ -16,6 +20,7 @@
 
 <script>
 import AccountFriendsRequestsItem from "~/components/page/account/AccountFriendsRequestsItem";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -96,7 +101,9 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("social", ["inviteList"])
+  },
 
   methods: {}
 };

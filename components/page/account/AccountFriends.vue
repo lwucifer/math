@@ -3,7 +3,7 @@
     <div class="account-friends__title">
       <h3>Bạn bè</h3>
       <n-link
-        :to="'/account/friends/requests'"
+        :to="'/account/social/friends/requests'"
         class="btn btn--size-md btn--color-white btn--square btn--normal"
       >
         Lời mời kết bạn
@@ -20,7 +20,11 @@
     </div>
     <div class="account-friends__list">
       <div class="row">
-        <div class="col-md-6 col-xs-12" v-for="(item, index) in friends" :key="index">
+        <div
+          class="col-md-6 col-xs-12"
+          v-for="(item, index) in friendList ? friendList : []"
+          :key="index"
+        >
           <AccountFriendsItem :data="item" />
         </div>
       </div>
@@ -31,6 +35,7 @@
 <script>
 import AccountFriendsItem from "~/components/page/account/AccountFriendsItem";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -112,7 +117,9 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("social", ["friendList"])
+  },
 
   methods: {}
 };
