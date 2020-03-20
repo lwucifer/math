@@ -129,6 +129,7 @@
               class="align-item"
               v-for="(item, index) in groupsListTab ? groupsListTab : []"
               :key="index"
+              @click="pushUrl(item.id)"
             >
               <div class="align-item__image">
                 <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
@@ -299,10 +300,9 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.groupListQuery.page += 1;
-        this.dataPushGroup.push(
+        this.groupsListTab.push(
           ...getData.rooms.filter(item => item.type == 2)
         );
-        this.groupsListTab = this.dataPushGroup.map(item => item);
         $state.loaded();
       } else {
         $state.complete();
@@ -317,8 +317,7 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
-        this.dataPushChat.push(...getData.rooms.filter(item => item.type == 1));
-        this.chatsListTab = this.dataPushChat.map(item => item);
+        this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
         $state.loaded();
       } else {
         $state.complete();
@@ -326,18 +325,20 @@ export default {
     },
     pushUrl(_id) {
       console.log("id", _id);
-      const url = `/message/${_id}`;
+      const url = `/messages/${_id}`;
       this.$router.push(url);
     }
   },
   watch: {
     tab(_newval) {
       if (_newval == 1) {
-        this.infiniteIdChat += 1;
+        this.chatsListTab = [];
         this.chatListQuery.page = 1;
       } else {
-        this.infiniteId += 1;
+        this.groupsListTab = [];
         this.groupListQuery.page = 1;
+        this.infiniteId += 1;
+        // this.infiniteIdChat += 1;
       }
     }
   }
