@@ -47,6 +47,29 @@
                 class="mr-3"
               />
               <span>{{item.fullname}}</span>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'14rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16" />
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Nhắn tin</a>
+                    </li>
+                    <li>
+                      <a>Xem trang cá nhân</a>
+                    </li>
+                    <li>
+                      <a>Xoá khỏi nhóm</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </li>
             <client-only>
               <infinite-loading :identifier="infiniteId" @infinite="membersInfiniteHandler">
@@ -94,12 +117,16 @@ export default {
       type: Array,
       default: () => [],
       required: true
-    }
+    },
+    isGroup: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
   },
 
   data() {
     return {
-      isGroup: true,
       visibleAddMember: false,
       dropdownActions: false,
       memberListTab: [],

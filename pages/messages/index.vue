@@ -12,11 +12,8 @@ export default {
       `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
     );
     const dataRooms = data.rooms ? data.rooms : [];
-    const id =
-      dataRooms.length > 0 && dataRooms.filter(item => item.type == 1)[0].id;
-    if (id) {
-      redirect(`/messages/${id}`);
-    }
+    const id = dataRooms.filter(item => item.type == 1)[0].id;
+    redirect(`/messages/${id}`);
   }
 };
 </script>
