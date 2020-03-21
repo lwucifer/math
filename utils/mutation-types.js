@@ -236,3 +236,7 @@ export const MESSAGE_GROUP = {
 export const ELEARNING_INFO = {
   SET_ELEARNING_INFO: "setElearningInfo"
 };
+
+export const ELEARNING_COURSES = {
+    SET_COURSES_LIST: "setElearningCoursesList"
+};

@@ -104,3 +104,5 @@ export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
  * ELEARNING MANAGER
  */
 export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/teaching/info`;
+
+export const ELEARNING_COURSES_LIST = `${SCHOOLLY_ALIAS}/elearning/courses/list`;

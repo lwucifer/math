@@ -100,7 +100,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/teaching/${actionTypes.ELEARNING_INFO.INFO}`
+      `elearning/manager/teaching/${actionTypes.ELEARNING_INFO.INFO}`
     );
   },
 

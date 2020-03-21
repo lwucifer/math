@@ -288,5 +288,9 @@ export const SOCIAL_FRIEND = {
 };
 
 export const ELEARNING_INFO = {
-  INFO: "teachingInfo"
+    INFO: "teachingInfo"
+};
+
+export const ELEARNING_COURSES = {
+    LIST: "teachingCoursesList"
 };
