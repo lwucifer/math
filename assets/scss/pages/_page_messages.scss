@@ -267,8 +267,8 @@
                         }
                     }
                     .message-box__item {
-                        // padding-top: 8px;
-                        padding-bottom: 15px;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
                         .message-box__item__content {
                             display: flex;
                             flex-wrap: wrap;
@@ -372,6 +372,21 @@
                         .members {
                             max-height: 30rem;
                             overflow: auto;
+                            >li {
+                                .link--dropdown__button {
+                                    display: flex;
+                                    align-items: center;
+                                    padding: 0.5rem;
+                                }
+                                .app-dropdown__content{
+                                    opacity: 0;
+                                    visibility: hidden;
+                                }
+                                .link--dropdown:hover > .app-dropdown__content {
+                                    opacity: 1;
+                                    visibility: visible;
+                                }
+                            }
                         }
                         &.attachment {
                             ul li {
@@ -413,10 +428,13 @@
 
 .message-box__item {
     .app-dropdown__content {
-        display: none;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
     }
-    &:hover .app-dropdown__content {
-        display: block;
+    .app-dropdown:hover .app-dropdown__content {
+        opacity: 1;
+        visibility: visible;
     }
     .message-box__item__desc {
         display: flex;
@@ -451,6 +469,10 @@
         }
     }
     &.item__1 {
+        .app-dropdown__content{
+            left: auto;
+            right: 0;
+        }
         .message-box__item__desc {
             .message-box__item__desc__text {
                 flex: 1;
@@ -469,14 +491,6 @@
             .message-box__item__meta {
                 justify-content: flex-end;
             }
-        }
-    }
-}
-
-.message-box__item__meta__image {
-    .link--dropdown__content {
-        ul {
-            width: 14rem;
         }
     }
 }
@@ -514,7 +528,9 @@
         }
     }
 }
-
+.app-dropdown__content{
+    overflow: hidden;
+}
 .message-foward-tags-modal .app-modal-content {
     padding: 2rem 1.5rem;
 }
@@ -567,14 +583,10 @@ button:focus {
 }
 
 .page-message {
-    .aside-box .link--dropdown__content ul {
-        width: 14rem;
-    }
     .link--dropdown__content {
         ul {
             background-color: #fff;
             list-style: none;
-            width: 10rem;
             text-align: left;
             li {
                 display: block;

@@ -19,7 +19,7 @@
           </template>
         </app-upload>
       </div>
-      <h3>{{account.name}}</h3>
+      <h3>{{personalList.fullname}}</h3>
     </div>
 
     <!-- Not friend -->

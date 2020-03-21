@@ -50,10 +50,10 @@
       <div class="tabs">
         <ul class="nav-tabs list-unstyle" v-if="!isContact">
           <li>
-            <a @click="tab = 1" :class="tab == 1 ? 'active' : ''">Chat</a>
+            <a @click="tabClick(1)" :class="tab == 1 ? 'active' : ''">Chat</a>
           </li>
           <li>
-            <a @click="tab = 2" :class="tab == 2 ? 'active' : ''">Group</a>
+            <a @click="tabClick(2)" :class="tab == 2 ? 'active' : ''">Group</a>
           </li>
         </ul>
         <div class="tabs-content" v-if="isContact">
@@ -97,7 +97,7 @@
               <app-dropdown
                 position="right"
                 v-model="dropdownActions"
-                :content-width="'10rem'"
+                :content-width="'12rem'"
                 class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
@@ -145,7 +145,7 @@
               <app-dropdown
                 position="right"
                 v-model="dropdownActions"
-                :content-width="'10rem'"
+                :content-width="'12rem'"
                 class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
@@ -275,6 +275,11 @@ export default {
     ...mapState("message", ["groupList"])
   },
   methods: {
+    tabClick(e) {
+      this.tab = e;
+      this.$emit("clickTab");
+    },
+
     create() {
       this.$emit("addMessage");
     },
@@ -308,6 +313,7 @@ export default {
         $state.complete();
       }
     },
+
     async chatsInfiniteHandler($state) {
       const { data: getData = {} } = await new GroupService(this.$axios)[
         actionTypes.BASE.LIST
@@ -323,6 +329,7 @@ export default {
         $state.complete();
       }
     },
+
     pushUrl(_id) {
       console.log("id", _id);
       const url = `/messages/${_id}`;
