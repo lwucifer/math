@@ -148,7 +148,7 @@
     </editor-menu-bar>
 
     <div
-      class="app-editor__content-wrapper"
+      class="editor app-editor__content-wrapper"
       :style="contentWrapperStyles"
       @click.self="editor && editor.focus()"
     >
@@ -179,7 +179,8 @@ import {
   TableRow,
   Strike,
   Underline,
-  History
+  History,
+  Placeholder
 } from "tiptap-extensions";
 import IconUndo from "~/assets/svg/text-editor/undo.svg?inline";
 import IconRedo from "~/assets/svg/text-editor/redo.svg?inline";
@@ -240,6 +241,10 @@ export default {
     },
     minHeight: {
       type: [String, Number]
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
 
@@ -283,6 +288,11 @@ export default {
   mounted() {
     this.editor = new Editor({
       extensions: [
+        new Placeholder({
+          showOnlyCurrent: true,
+          showOnlyWhenEditable: true,
+          emptyNodeText: this.placeholder
+        }),
         new Blockquote(),
         new BulletList(),
         new CodeBlock(),
