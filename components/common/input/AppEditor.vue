@@ -1,7 +1,11 @@
 <template>
-  <div class="app-editor" :class="classes">
+  <div class="app-editor" :class="classes" sticky-container>
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="app-editor__menubar">
+      <div
+        class="app-editor__menubar"
+        v-sticky
+        :sticky-offset="stickyOffset"
+      >
         <div class="app-editor__menubar__toolbar">
           <button class="app-editor__menubar__button" @click="commands.undo">
             <IconUndo class="icon" />
@@ -158,7 +162,7 @@
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
 import {
   Blockquote,
   CodeBlock,
@@ -207,6 +211,7 @@ export default {
   components: {
     EditorContent,
     EditorMenuBar,
+    EditorMenuBubble,
     IconUndo,
     IconRedo,
     IconBold,
@@ -244,7 +249,11 @@ export default {
     },
     placeholder: {
       type: String,
-      default: ''
+      default: ""
+    },
+    stickyOffset: {
+      type: String,
+      default: "{ top: 0, bottom: 0 }"
     }
   },
 
@@ -252,7 +261,9 @@ export default {
     return {
       editor: null,
       isEditorFocused: false,
-      emitAfterOnUpdate: false
+      emitAfterOnUpdate: false,
+      linkUrl: null,
+      linkMenuIsActive: false
     };
   },
 
@@ -277,10 +288,10 @@ export default {
   watch: {
     value(newValue) {
       if (this.emitAfterOnUpdate) {
-        this.emitAfterOnUpdate = false
-        return
+        this.emitAfterOnUpdate = false;
+        return;
       }
-      
+
       this.editor.setContent(newValue);
     }
   },
@@ -332,6 +343,26 @@ export default {
 
   beforeDestroy() {
     this.editor.destroy();
+  },
+
+  methods: {
+    showLinkMenu(attrs) {
+      this.linkUrl = attrs.href;
+      this.linkMenuIsActive = true;
+      this.$nextTick(() => {
+        this.$refs.linkInput.focus();
+      });
+    },
+
+    hideLinkMenu() {
+      this.linkUrl = null;
+      this.linkMenuIsActive = false;
+    },
+
+    setLinkUrl(command, url) {
+      command({ href: url });
+      this.hideLinkMenu();
+    }
   }
 };
 </script>
