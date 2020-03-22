@@ -53,7 +53,6 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <!-- NEW -->
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
           Lợi ích từ khoá học
@@ -78,7 +77,7 @@
           </div>
         </div>
 
-        <div class="d-flex">
+        <div v-if="benefit.length < 10" class="d-flex">
           <app-editor-menu-bubble
             class="bg-input-gray mb-3 flex-grow"
             placeholder="Nhập lợi ích từ khoá học"
@@ -91,7 +90,6 @@
           >Thêm</app-button>
         </div>
       </div>
-      <!-- New -->
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
@@ -303,8 +301,10 @@ export default {
     },
 
     addBenefit(html) {
-      this.benefit.push(html);
-      this.benefitEditorValue = '';
+      if (this.benefit.length < 10) {
+        this.benefit.push(html);
+        this.benefitEditorValue = '';
+      }
     },
 
     removeBenefit(index) {
