@@ -1,11 +1,7 @@
 <template>
   <div class="app-editor" :class="classes" sticky-container>
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div
-        class="app-editor__menubar"
-        v-sticky
-        :sticky-offset="stickyOffset"
-      >
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
+      <div class="app-editor__menubar" v-sticky :sticky-offset="stickyOffset">
         <div class="app-editor__menubar__toolbar">
           <button class="app-editor__menubar__button" @click="commands.undo">
             <IconUndo class="icon" />
@@ -147,6 +143,44 @@
               <IconTableCombineCells class="icon" />
             </button>
           </template>
+          
+          <form
+            class="app-editor__menubar__form"
+            v-if="linkMenuIsActive"
+            @submit.prevent="setLinkUrl(commands.link, linkUrl)"
+          >
+            <input
+              class="app-editor__menubar__input"
+              type="text"
+              v-model="linkUrl"
+              placeholder="https://"
+              ref="linkInput"
+              @keydown.esc="hideLinkMenu"
+            />
+            <button
+              class="app-editor__menubar__button text-success"
+              @click="setLinkUrl(commands.link, linkUrl)"
+              type="submit"
+            >
+              <IconCheck class="icon" />
+            </button>
+            <button
+              class="app-editor__menubar__button"
+              @click="setLinkUrl(commands.link, null)"
+              type="button"
+            >
+              <IconTimes class="icon text-error" />
+            </button>
+          </form>
+
+          <button
+            v-else
+            class="app-editor__menubar__button app-editor__menubar__button--link"
+            :class="{ 'is-active': isActive.link() }"
+            @click="showLinkMenu(getMarkAttrs('link'))"
+          >
+            <IconLinkAlt class="icon" />
+          </button>
         </div>
       </div>
     </editor-menu-bar>
@@ -186,26 +220,40 @@ import {
   History,
   Placeholder
 } from "tiptap-extensions";
-import IconUndo from "~/assets/svg/text-editor/undo.svg?inline";
-import IconRedo from "~/assets/svg/text-editor/redo.svg?inline";
-import IconBold from "~/assets/svg/text-editor/bold.svg?inline";
-import IconItalic from "~/assets/svg/text-editor/italic.svg?inline";
-import IconStrike from "~/assets/svg/text-editor/strike.svg?inline";
-import IconUnderline from "~/assets/svg/text-editor/underline.svg?inline";
-import IconCode from "~/assets/svg/text-editor/code.svg?inline";
-import IconParagraph from "~/assets/svg/text-editor/paragraph.svg?inline";
-import IconBulletList from "~/assets/svg/text-editor/ul.svg?inline";
-import IconOrderList from "~/assets/svg/text-editor/ol.svg?inline";
-import IconQuote from "~/assets/svg/text-editor/quote.svg?inline";
-import IconTable from "~/assets/svg/text-editor/table.svg?inline";
-import IconTableDelete from "~/assets/svg/text-editor/delete-table.svg?inline";
-import IconTableAddColBefore from "~/assets/svg/text-editor/add-col-before.svg?inline";
-import IconTableAddColAfter from "~/assets/svg/text-editor/add-col-after.svg?inline";
-import IconTableDeleteCol from "~/assets/svg/text-editor/delete-col.svg?inline";
-import IconTableAddRowBefore from "~/assets/svg/text-editor/add-row-before.svg?inline";
-import IconTableAddRowAfter from "~/assets/svg/text-editor/add-row-after.svg?inline";
-import IconTableDeleteRow from "~/assets/svg/text-editor/delete-row.svg?inline";
-import IconTableCombineCells from "~/assets/svg/text-editor/combine-cells.svg?inline";
+const IconUndo = () => import("~/assets/svg/text-editor/undo.svg?inline");
+const IconRedo = () => import("~/assets/svg/text-editor/redo.svg?inline");
+const IconBold = () => import("~/assets/svg/text-editor/bold.svg?inline");
+const IconItalic = () => import("~/assets/svg/text-editor/italic.svg?inline");
+const IconStrike = () => import("~/assets/svg/text-editor/strike.svg?inline");
+const IconUnderline = () =>
+  import("~/assets/svg/text-editor/underline.svg?inline");
+const IconCode = () => import("~/assets/svg/text-editor/code.svg?inline");
+const IconParagraph = () =>
+  import("~/assets/svg/text-editor/paragraph.svg?inline");
+const IconBulletList = () => import("~/assets/svg/text-editor/ul.svg?inline");
+const IconOrderList = () => import("~/assets/svg/text-editor/ol.svg?inline");
+const IconQuote = () => import("~/assets/svg/text-editor/quote.svg?inline");
+const IconTable = () => import("~/assets/svg/text-editor/table.svg?inline");
+const IconTableDelete = () =>
+  import("~/assets/svg/text-editor/delete-table.svg?inline");
+const IconTableAddColBefore = () =>
+  import("~/assets/svg/text-editor/add-col-before.svg?inline");
+const IconTableAddColAfter = () =>
+  import("~/assets/svg/text-editor/add-col-after.svg?inline");
+const IconTableDeleteCol = () =>
+  import("~/assets/svg/text-editor/delete-col.svg?inline");
+const IconTableAddRowBefore = () =>
+  import("~/assets/svg/text-editor/add-row-before.svg?inline");
+const IconTableAddRowAfter = () =>
+  import("~/assets/svg/text-editor/add-row-after.svg?inline");
+const IconTableDeleteRow = () =>
+  import("~/assets/svg/text-editor/delete-row.svg?inline");
+const IconTableCombineCells = () =>
+  import("~/assets/svg/text-editor/combine-cells.svg?inline");
+const IconLinkAlt = () =>
+  import("~/assets/svg/design-icons/link-alt.svg?inline");
+const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
+const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 
 export default {
   components: {
@@ -231,7 +279,10 @@ export default {
     IconTableAddRowBefore,
     IconTableAddRowAfter,
     IconTableDeleteRow,
-    IconTableCombineCells
+    IconTableCombineCells,
+    IconLinkAlt,
+    IconTimes,
+    IconCheck
   },
 
   model: {
