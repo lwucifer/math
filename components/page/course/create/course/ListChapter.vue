@@ -1,10 +1,11 @@
 <template>
   <fragment>
     <ChapterItem
-      v-for="chapter in get(chapters, 'data', [])"
+      v-for="(chapter, index) in get(chapters, 'data', [])"
       :key="get(chapter, 'id', '')"
       :chapter="chapter"
       @handleRefreshChapters="handleRefreshChapters"
+      :index="index"
     />
   </fragment>
 </template>
