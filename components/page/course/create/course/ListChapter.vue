@@ -2,7 +2,7 @@
   <fragment>
     <ChapterItem
       v-for="chapter in get(chapters, 'data', [])"
-      :key="chapter.id"
+      :key="get(chapter, 'id', '')"
       :chapter="chapter"
       @handleRefreshChapters="handleRefreshChapters"
     />

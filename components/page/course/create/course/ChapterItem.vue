@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <!-- <fragment> -->
     <div class="ce-item d-flex align-items-center justify-content-between">
       <div class="ce-item__left d-flex align-items-center">
         <h3 class="body-2 mr-3">
@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <app-divider class="my-0" />
-  </fragment>
+    <!-- <app-divider class="my-0" /> -->
+  <!-- </fragment> -->
 </template>
 
 <script>
