@@ -9,7 +9,11 @@
         <a href class="ce-item__action edit mr-3">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </a>
-        <a href class="ce-item__action delete mr-3">
+        <a
+          href
+          class="ce-item__action delete mr-3"
+          @click.prevent="handleDeleteChapter"
+        >
           <IconTrashAlt class="icon d-block subheading fill-secondary" />
         </a>
       </div>
@@ -29,6 +33,7 @@ import { getParamQuery } from "~/utils/common";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -44,7 +49,25 @@ export default {
   },
 
   methods: {
-    get
+    get,
+
+    async handleDeleteChapter() {
+      const payload = {
+        data: {
+          id: get(this, "chapter.id", "")
+        }
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.DELETE}`,
+        payload
+      );
+      if (get(res, "success", false)) {
+        this.$emit("handleRefreshChapters");
+        this.$toasted.success(get(res, "message", "success"));
+        return;
+      }
+      this.$toasted.error(get(res, "message", "error"));
+    }
   }
 };
 </script>

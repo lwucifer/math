@@ -19,6 +19,11 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, options) {
+    commit(
+      mutationTypes.ELEARNING_CREATING_CHAPTER
+        .SET_ELEARNING_CREATING_CHAPTER_LIST,
+      []
+    );
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.LIST](
         options
@@ -56,13 +61,12 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_CHAPTER.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.DELETE]({ commit }, options) {
     try {
-      const result = await new Chapter(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Chapter(this.$axios)[
+        actionTypes.BASE.DELETE_PAYLOAD
+      ](options);
+      return result;
     } catch (error) {
       console.log("[Creating chapters] delete.error", error);
     }

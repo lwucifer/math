@@ -4,6 +4,7 @@
       v-for="chapter in get(chapters, 'data', [])"
       :key="chapter.id"
       :chapter="chapter"
+      @handleRefreshChapters="handleRefreshChapters"
     />
   </fragment>
 </template>
@@ -26,21 +27,7 @@ export default {
   },
 
   created() {
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        elearning_id
-      }
-    };
-    console.log('get list chapter')
-    this.$store.dispatch(
-      `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-      options
-    );
-  },
-
-  updated() {
-    console.log(this.chapters)
+    this.getChapters();
   },
 
   computed: {
@@ -50,7 +37,24 @@ export default {
   },
 
   methods: {
-    get
+    get,
+
+    getChapters() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
+        options
+      );
+    },
+
+    handleRefreshChapters(key) {
+      this.getChapters();
+    }
   }
 };
 </script>

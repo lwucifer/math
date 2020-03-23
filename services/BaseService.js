@@ -1,10 +1,15 @@
-import * as actionTypes from "../utils/action-types";
+import * as actionTypes from "~/utils/action-types";
 import { forEach } from "lodash";
 
 export default class BaseService {
   constructor($axios, $api) {
     this.$axios = $axios;
     this.$api = $api;
+  }
+
+  async [actionTypes.BASE.DELETE_PAYLOAD](payload) {
+    const { data } = await this.$axios.delete(this.$api, payload);
+    return data;
   }
 
   async [actionTypes.BASE.LIST](payload) {
