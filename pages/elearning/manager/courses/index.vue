@@ -43,9 +43,12 @@
           >
             <tr v-for="(item, index) in list" :key="index">
               <td class="pr-0">
-                <label class="table-checkbox" :class="ids.includes(item.id) ? 'border-primary' : ''" >
-                  <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect"/>
-                  <IconTick v-if="ids.includes(item.id)" height="9" width="9"/>
+                <label
+                  class="table-checkbox"
+                  :class="ids.includes(item.id) ? 'border-primary' : ''"
+                >
+                  <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect" />
+                  <IconTick v-if="ids.includes(item.id)" height="9" width="9" />
                 </label>
               </td>
               <td>
@@ -85,10 +88,12 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import IconTick from '~/assets/svg/icons/tick.svg?inline';
+import IconTick from "~/assets/svg/icons/tick.svg?inline";
 
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
+
+import CoursesService from "~/services/elearning/courses/list";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -104,6 +109,22 @@ export default {
     IconFilter,
     IconTick
   },
+
+  async fetch({ params, query, store }) {
+    await Promise.all([
+      store.dispatch(`elearning/manager/courses/teaching-courses-list/${actionTypes.ELEARNING_COURSES.LIST}`),
+    ]);
+  },
+
+  // async asyncData({ $axios }) {
+  //   const { data: courses = {} } = await new CoursesService($axios)[
+  //     actionTypes.BASE.LIST
+  //   ]();
+
+  //   return {
+  //     courses
+  //   };
+  // },
 
   data() {
     return {
@@ -296,7 +317,29 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
-    }
+    },
+     /**
+     * DELETE
+     */
+    async deletePost(id) {
+      const doDelete = await new CoursesService(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](id);
+
+      if (doDelete.success) {
+        const { courses } = this;
+        const newListPost =
+          courses && courses.listPost
+            ? courses.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.courses = {
+          listPost: newListPost,
+          page: courses.page || {}
+        };
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
   }
 };
 </script>
