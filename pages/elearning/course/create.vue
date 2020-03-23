@@ -23,6 +23,7 @@ import CreateLearningContentCourse from "~/components/page/course/create/CreateL
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExcercise from "~/components/page/course/create/CreateExcercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
+import CreateLearningContentLecture from "~/components/page/course/create/CreateLearningContentLecture";
 
 export default {
   layout: "no-header",
@@ -33,7 +34,8 @@ export default {
     CreateLearningContentCourse,
     CreateSetting,
     CreateExcercise,
-    CreateExam
+    CreateExam,
+    CreateLearningContentLecture
   },
 
   data() {

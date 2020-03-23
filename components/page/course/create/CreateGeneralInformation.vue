@@ -14,15 +14,13 @@
           @click="handleSelectType"
           :checked="payload.type === 'LECTURE'"
           class="mr-6"
-          >Bài giảng</app-radio
-        >
+        >Bài giảng</app-radio>
         <app-radio
           name="type"
           @click="handleSelectType"
           value="COURSE"
           :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio
-        >
+        >Khoá học</app-radio>
       </div>
 
       <div class="row">
@@ -49,21 +47,63 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
-          Tên khoá học
+          Tên {{ name }}
           <span class="caption text-sub">(Tối đa 60 ký tự)</span>
         </h2>
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
       <div class="cgi-form-group mb-4">
+        <h2 class="cgi-form-title heading-6 mb-3">
+          Lợi ích từ {{ name }}
+          <span
+            class="text-sub caption font-weight-normal"
+          >(Tối thiểu tổng 300 ký tự)</span>
+        </h2>
+
+        <div class="row">
+          <div v-for="(item, index) in benefit" class="col-md-6 mb-15" :key="index">
+            <div class="cgi-demo-benefit d-flex">
+              <IconCheckCircle class="icon body-1 mr-2" />
+              <p v-html="item" />
+              <a
+                href
+                class="text-decoration-none body-1 ml-2 text-error"
+                @click.prevent="removeBenefit(index)"
+              >
+                <IconTrashAlt class="icon" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="benefit.length < 10" class="d-flex">
+          <app-editor-menu-bubble
+            class="bg-input-gray mb-3 flex-grow"
+            placeholder="Nhập lợi ích từ khoá học"
+            v-model="benefitEditorValue"
+          />
+          <app-button
+            square
+            class="font-weight-normal body-2"
+            @click="addBenefit(benefitEditorValue)"
+          >Thêm</app-button>
+        </div>
+      </div>
+
+      <!-- <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
         <app-editor v-model="payload.benefit" class="bg-input-gray mb-3" />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
-      </div>
+      </div>-->
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
-        <app-editor class="bg-input-gray mb-3" v-model="payload.description" />
+        <app-editor
+          class="bg-input-gray mb-3"
+          :sticky-offset="`{ top: 70, bottom: 0 }`"
+          v-model="payload.description"
+        />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
@@ -76,18 +116,26 @@
 </template>
 
 <script>
-import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import CreateAction from "~/components/page/course/create/CreateAction";
+import * as yup from "yup";
+import numeral from "numeral";
+import { toNumber, get } from "lodash";
+import { mapState } from "vuex";
+
 import * as actionTypes from "~/utils/action-types";
+import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
+
+import { createPayloadAddCourse } from "~/models/course/AddCourse";
+
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+const IconCheckCircle = () =>
+  import("~/assets/svg/icons/check-circle.svg?inline");
+const IconTrashAlt = () =>
+  import("~/assets/svg/design-icons/trash-alt.svg?inline");
+
+import CreateAction from "~/components/page/course/create/CreateAction";
 import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
-import { toNumber, get } from "lodash";
-import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
-import * as yup from "yup";
-import numeral from "numeral";
-import { createPayloadAddCourse } from "~/models/course/AddCourse";
-import { mapState } from "vuex";
 
 const schema = yup.object().shape({
   avatar: yup.string().required(),
@@ -114,7 +162,9 @@ export default {
     CreateAction,
     CourseSelectLevel,
     CourseSelectSubject,
-    CourseSelectAvatar
+    CourseSelectAvatar,
+    IconCheckCircle,
+    IconTrashAlt
   },
 
   data() {
@@ -128,7 +178,9 @@ export default {
         name: "",
         subject: "",
         type: "LECTURE"
-      }
+      },
+      benefitEditorValue: "",
+      benefit: []
     };
   },
 
@@ -162,7 +214,10 @@ export default {
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
-    })
+    }),
+    name() {
+      return this.payload.type === 'COURSE' ? 'khoá học' : 'bài giảng'
+    }
   },
 
   methods: {
@@ -250,6 +305,17 @@ export default {
         return;
       }
       this.$toasted.error(get(result, "message", ""));
+    },
+
+    addBenefit(html) {
+      if (this.benefit.length < 10) {
+        this.benefit.push(html);
+        this.benefitEditorValue = "";
+      }
+    },
+
+    removeBenefit(index) {
+      this.benefit = this.benefit.filter((item, i) => i !== index);
     },
 
     numeral,

@@ -45,9 +45,28 @@
 .app-editor__menubar {
     padding: .5rem 1.5rem .5rem 1rem;
     border-bottom: 1px solid $color-border;
+    background: inherit;
 }
 
 .app-editor__menubar__toolbar {
     display: flex;
     flex-wrap: wrap;
+}
+
+
+.app-editor__menubar__form {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+
+    > .app-editor__menubar__button {
+        margin: 0;
+    }
+}
+
+.app-editor__menubar__input {
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    line-height: 2.4rem;
+    padding: 0 4px;
 }

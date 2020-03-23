@@ -17,7 +17,7 @@ body {
 // Text size
 @each $name, $font-size in $text-size {
     .#{$name} {
-        font-size: $font-size;
+        font-size: $font-size !important;
     }
 }
 
