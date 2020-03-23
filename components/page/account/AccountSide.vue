@@ -89,7 +89,7 @@
       </div>
       <n-link
         class="btn btn--size-md btn--full-width btn--color-primary btn--square"
-        :to="'/account/photos'"
+        :to="'/account/social/photos'"
       >Xem toàn bộ ảnh</n-link>
     </div>
 
@@ -99,46 +99,20 @@
         <span>268</span>
       </h3>
       <div class="row">
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
-          </n-link>
-        </div>
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
-          </n-link>
-        </div>
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
-          </n-link>
-        </div>
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
-          </n-link>
-        </div>
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
-          </n-link>
-        </div>
-        <div class="col-md-4 mb-3">
-          <n-link :to="'/account/1'">
-            <app-avatar src="https://picsum.photos/110/110" :size="100" />
-            <strong>Regina Edwards</strong>
+        <div
+          class="col-md-4 mb-3"
+          v-for="(item, index) in friendList ? friendList : []"
+          :key="index"
+        >
+          <n-link :to="`/account/${item.id}`">
+            <app-avatar :src="item.avatar && item.avatar.low ? item.avatar.low : ''" :size="100" />
+            <strong>{{item.fullname}}</strong>
           </n-link>
         </div>
       </div>
       <n-link
         class="mt-0 btn btn--size-md btn--full-width btn--color-primary btn--square"
-        :to="'/account/friends'"
+        :to="'/account/social/friends'"
       >Tất cả bạn bè</n-link>
     </div>
     <app-modal-otp
@@ -394,6 +368,7 @@ export default {
 
   computed: {
     ...mapState("account", ["personalList"]),
+    ...mapState("social", ["friendList"]),
     filterSex() {
       return this.personalList
         ? this.personalList.sex == 1

@@ -2,12 +2,13 @@
   <div class="container course-create">
     <div class="row">
       <div class="col-md-3">
-        <CreateAside :active="formActive" @click-item="setFormActive" />
+        <CreateAside @click-item="setFormActive" />
       </div>
 
       <div class="col-md-9">
         <CreateGeneralInformation v-show="formActive === 'general'" class="mb-5" />
-        <CreateLearningContentCourse v-show="formActive === 'content'" />
+        <CreateLearningContentCourse v-show="formActive === 'content-course'" />
+        <CreateLearningContentLecture v-show="formActive === 'content-lecture'" />
         <CreateSetting v-show="formActive === 'settings'" />
         <CreateExcercise v-show="formActive === 'exercise'" />
         <CreateExam v-show="formActive === 'exam'" />
@@ -23,6 +24,7 @@ import CreateLearningContentCourse from "~/components/page/course/create/CreateL
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExcercise from "~/components/page/course/create/CreateExcercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
+import CreateLearningContentLecture from "~/components/page/course/create/CreateLearningContentLecture";
 
 export default {
   layout: "no-header",
@@ -33,7 +35,8 @@ export default {
     CreateLearningContentCourse,
     CreateSetting,
     CreateExcercise,
-    CreateExam
+    CreateExam,
+    CreateLearningContentLecture
   },
 
   data() {

@@ -25,7 +25,8 @@ export const SOCIAL = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
     SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
     SET_SOCIAL_LABEL_LIST: "setSocialLabelList",
-    SET_SOCIAL_FRIEND_LIST: "setSocialFriendList"
+    SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
+    SET_SOCIAL_FRIEND_INVITE_LIST: "setSocialFriendInviteList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -143,6 +144,11 @@ export const ELEARNING_CREATING_GENERAL = {
     SET_ELEARNING_CREATING_GENERAL_DELETE: "setElearningCreatingGeneralDelete"
 };
 
+export const ELEARNING_CREATING_SETTING = {
+    SET_ELEARNING_CREATING_SETTING_LIST: "setElearningCreatingSettingList",
+    SET_ELEARNING_CREATING_SETTING_ADD: "setElearningCreatingSettingAdd"
+};
+
 export const ELEARNING_CREATING_LESSONS = {
     SET_ELEARNING_CREATING_LESSONS_LIST: "setElearningCreatingLessonsList",
     SET_ELEARNING_CREATING_LESSONS_ADD: "setElearningCreatingLessonsAdd",
@@ -224,5 +230,15 @@ export const ELEARNING_SCHOOL_SEARCH = {
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
     SET_GROUP_LIST: "setGroupList",
-    SET_MESSAGE_LIST: "setMessageList"
+    SET_MESSAGE_LIST: "setMessageList",
+    SET_GROUP_LIST_TYPE: "setGroupListType",
+    SET_CHAT_LIST_TYPE: "setChatListType"
+};
+
+export const ELEARNING_INFO = {
+    SET_ELEARNING_INFO: "setElearningInfo"
+};
+
+export const ELEARNING_COURSES = {
+    SET_COURSES_LIST: "setElearningCoursesList"
 };

@@ -2,9 +2,6 @@
   <app-modal centered :width="420" :component-class="{ 'create-group-chat-modal': true }">
     <div slot="content">
       <h5>Thêm bạn</h5>
-      <div class="d-flex-center">
-        <input type="text" class="input-name-group" placeholder="Tên nhóm chat" v-model="name" />
-      </div>
       <app-search class="mb-0" />
       <div class="contact-list">
         <div class="item d-flex-center" v-for="(item, index) in friendList" :key="index">
@@ -14,12 +11,13 @@
             class="mr-3"
           />
           <span>{{item.fullname}}</span>
-          <app-checkbox class="ml-auto" @change="handelCheckbox(item.id)" />
+          <span class="ml-auto" v-if="arrIdMember.includes(item.id)">Đã thêm</span>
+          <app-checkbox v-else class="ml-auto" @change="handelCheckbox(item.id)" />
         </div>
       </div>
       <div class="text-center mt-4">
         <app-button size="sm" color="info" class="mr-3" square @click="close()">Hủy</app-button>
-        <app-button size="sm" square @click="hanldeCreateGroup">Tạo</app-button>
+        <app-button size="sm" square @click="hanldeAddMember">Thêm</app-button>
       </div>
     </div>
   </app-modal>
@@ -32,11 +30,11 @@ export default {
   components: {},
 
   props: {
-    friends: {
-      type: Array,
-      default: () => [],
-      required: true
-    }
+    // friends: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // }
   },
 
   data() {
@@ -46,8 +44,20 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState("social", ["friendList"]),
+    ...mapState("message", ["memberList"]),
+    arrIdMember() {
+      const data = this.memberList.listMember ? this.memberList.listMember : [];
+      console.log(
+        "data",
+        data.map(item => item.id)
+      );
+      return data.map(item => item.id);
+    }
+  },
   methods: {
-    ...mapActions("message", ["createGroup", "getGroupList"]),
+    ...mapActions("message", ["addMember", "getMemberList"]),
     close() {
       this.$emit("close");
     },
@@ -62,26 +72,21 @@ export default {
       }
       console.log("arrayMember", this.arrMember);
     },
-    async handleUploadChange(fileList, event) {
-      this.avatar = Array.from(fileList);
-
-      getBase64(this.avatar[0], src => {
-        this.avatarSrc = src;
-      });
-      const body = new FormData();
-      body.append("avatar_images", fileList[0]);
-      console.log("[avatar_images]", fileList[0]);
-      this.accountPersonalEditAvatar(body).then(result => {});
-    },
-    hanldeCreateGroup(arrMember) {
+    hanldeAddMember() {
       const data = {
-        type: 2,
-        members: this.arrMember.toString(),
-        name: this.name
+        room_id: this.$route.params.id,
+        member_id: this.arrMember.toString()
       };
-      this.createGroup(data).then(result => {
+      // const params = {
+      //   room_id: this.$route.params.id
+      // };
+      this.addMember(data).then(result => {
         if (result.success == true) {
-          this.getGroupList();
+          this.getMemberList({
+            params: {
+              room_id: this.$route.params.id
+            }
+          });
           this.$emit("close");
           this.$toasted.show("success");
         } else {
@@ -89,10 +94,6 @@ export default {
         }
       });
     }
-  },
-
-  computed: {
-    ...mapState("social", ["friendList"])
   }
 };
 </script>

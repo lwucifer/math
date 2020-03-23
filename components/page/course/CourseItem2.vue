@@ -17,7 +17,7 @@
       <n-link
         class="title"
         v-if="get(item, 'name', '')"
-        :to="'/course/' + get(item, 'id', '')"
+        :to="'/elearning/' + get(item, 'id', '')"
         >{{ get(item, "name", "") }}</n-link
       >
 

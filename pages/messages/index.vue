@@ -1,19 +1,19 @@
-<template></template>
+<template>
+  <h1>Bạn hiện đang không có chat nào</h1>
+</template>
 
 <script>
 import * as actionTypes from "~/utils/action-types";
 import { redirectWithParams } from "../../utils/common";
 export default {
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`)
-    ]);
-  },
-  mounted() {
-    const dataRooms = this.$store.state.message.groupList.rooms;
+  middleware: "authenticated",
+  async fetch({ params, query, store, redirect }) {
+    const data = await store.dispatch(
+      `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
+    );
+    const dataRooms = data.rooms ? data.rooms : [];
     const id = dataRooms.filter(item => item.type == 1)[0].id;
-    const url = `/message/${id}`;
-    this.$router.push(url);
+    redirect(`/messages/${id}`);
   }
 };
 </script>

@@ -50,10 +50,10 @@
       <div class="tabs">
         <ul class="nav-tabs list-unstyle" v-if="!isContact">
           <li>
-            <a @click="tab = 1" :class="tab == 1 ? 'active' : ''">Chat</a>
+            <a @click="tabClick(1)" :class="tab == 1 ? 'active' : ''">Chat</a>
           </li>
           <li>
-            <a @click="tab = 2" :class="tab == 2 ? 'active' : ''">Group</a>
+            <a @click="tabClick(2)" :class="tab == 2 ? 'active' : ''">Group</a>
           </li>
         </ul>
         <div class="tabs-content" v-if="isContact">
@@ -97,7 +97,7 @@
               <app-dropdown
                 position="right"
                 v-model="dropdownActions"
-                :content-width="'10rem'"
+                :content-width="'12rem'"
                 class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
@@ -129,6 +129,7 @@
               class="align-item"
               v-for="(item, index) in groupsListTab ? groupsListTab : []"
               :key="index"
+              @click="pushUrl(item.id)"
             >
               <div class="align-item__image">
                 <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
@@ -144,7 +145,7 @@
               <app-dropdown
                 position="right"
                 v-model="dropdownActions"
-                :content-width="'10rem'"
+                :content-width="'12rem'"
                 class="link--dropdown ml-auto pl-2"
               >
                 <button slot="activator" type="button" class="link--dropdown__button">
@@ -159,7 +160,7 @@
                       <a>Ẩn nhóm</a>
                     </li>
                     <li>
-                      <a @click="visibleLeaveGroup = true">Rời khỏi nhóm</a>
+                      <a @click.prevent="leaveGroupModal(item)">Rời khỏi nhóm</a>
                     </li>
                   </ul>
                 </div>
@@ -198,7 +199,12 @@
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
 
     <!-- Modal rồi nhớm -->
-    <ModalLeaveGroup @close="visibleLeaveGroup = false" v-if="visibleLeaveGroup" />
+    <ModalLeaveGroup
+      @close="visibleLeaveGroup = false"
+      v-if="visibleLeaveGroup"
+      @accept="handleLeaveGroup"
+      :data="dataGroupLeave"
+    />
   </div>
 </template>
 
@@ -217,6 +223,7 @@ import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import GroupService from "~/services/message/Group";
 import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 
 export default {
   components: {
@@ -266,7 +273,8 @@ export default {
       infiniteId: +new Date(),
       infiniteIdChat: +new Date(),
       dataPushChat: [],
-      dataPushGroup: []
+      dataPushGroup: [],
+      dataGroupLeave: {}
     };
   },
   computed: {
@@ -274,6 +282,28 @@ export default {
     ...mapState("message", ["groupList"])
   },
   methods: {
+    ...mapActions("message", ["getGroupList", "groupLeave"]),
+
+    leaveGroupModal(_item) {
+      this.visibleLeaveGroup = true;
+      this.dataGroupLeave = _item;
+    },
+    handleLeaveGroup() {
+      const data = { room_id: this.dataGroupLeave.id };
+      this.groupLeave(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.visibleLeaveGroup = false;
+          this.groupListQuery.page = 1;
+          this.getGroupList({ params: this.groupListQuery });
+        }
+      });
+    },
+    tabClick(e) {
+      this.tab = e;
+      this.$emit("clickTab");
+    },
+
     create() {
       this.$emit("addMessage");
     },
@@ -299,15 +329,19 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.groupListQuery.page += 1;
-        this.dataPushGroup.push(
+        this.groupsListTab.push(
           ...getData.rooms.filter(item => item.type == 2)
         );
-        this.groupsListTab = this.dataPushGroup.map(item => item);
         $state.loaded();
+        // this.$store.commit(
+        //   `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
+        //   this.groupsListTab
+        // );
       } else {
         $state.complete();
       }
     },
+
     async chatsInfiniteHandler($state) {
       const { data: getData = {} } = await new GroupService(this.$axios)[
         actionTypes.BASE.LIST
@@ -317,27 +351,40 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
-        this.dataPushChat.push(...getData.rooms.filter(item => item.type == 1));
-        this.chatsListTab = this.dataPushChat.map(item => item);
+        this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        // this.$store.commit(
+        //   `message/${mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE}`,
+        //   this.chatsListTab
+        // );
         $state.loaded();
       } else {
         $state.complete();
       }
     },
+
     pushUrl(_id) {
       console.log("id", _id);
-      const url = `/message/${_id}`;
+      const url = `/messages/${_id}`;
       this.$router.push(url);
     }
   },
   watch: {
     tab(_newval) {
       if (_newval == 1) {
-        this.infiniteIdChat += 1;
+        this.chatsListTab = [];
         this.chatListQuery.page = 1;
+        // this.infiniteIdChat += 1;
       } else {
-        this.infiniteId += 1;
+        this.groupsListTab = [];
         this.groupListQuery.page = 1;
+        this.infiniteId += 1;
+      }
+    },
+    groupList(_newval) {
+      if (_newval) {
+        this.groupsListTab = [];
+        this.groupListQuery.page = 1;
+        this.infiniteId += 1;
       }
     }
   }

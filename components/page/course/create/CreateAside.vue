@@ -65,18 +65,19 @@ const menu = [
 ];
 
 export default {
-  props: {
-    active: {
-      type: String,
-      default: "general",
-      validator: value =>
-        ["general", "content", "settings", "exercise", "exam"].includes(value)
-    }
-  },
+  // props: {
+  //   active: {
+  //     type: String,
+  //     default: "general",
+  //     // validator: value =>
+  //     //   ["general", "content", "settings", "exercise", "exam"].includes(value)
+  //   }
+  // },
 
   data() {
     return {
-      menu
+      menu,
+      active: "general"
     };
   },
 
@@ -86,38 +87,73 @@ export default {
     }),
     ...mapState("elearning/creating/creating-lesson", {
       lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-setting", {
+      setting: "setting"
+    }),
+    ...mapState("elearning/creating/creating-chapter", {
+      chapters: "chapters"
     })
   },
 
   created() {
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
-    useEffect(this, this.handleChangeLesson.bind(this), [
-      "general.id",
-      "lessons.data.length"
+    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
+    useEffect(this, this.handleCheckedContent.bind(this), [
+      "lessons",
+      "chapters"
     ]);
   },
 
   methods: {
     handleClickMenuItem({ key }) {
+      this.active = key;
       const elearning_id = getParamQuery("elearning_id");
       if (key === "general") {
         this.$emit("click-item", key);
       }
-      if (get(this, "general", null) && elearning_id && key === "content") {
+      if (get(this, "general", null) && key === "content") {
+        this.active = "content";
+        if (get(this, "general.type", "") === "LECTURE") {
+          this.$emit("click-item", "content-lecture");
+          return;
+        }
+        if (get(this, "general.type", "") === "COURSE") {
+          this.$emit("click-item", "content-course");
+          return;
+        }
+      }
+      if (get(this, "lessons.data.length", 0) && key === "settings") {
         this.$emit("click-item", key);
       }
-      if (
-        get(this, "general", null) &&
-        get(this, "lessons.data.length", 0) &&
-        elearning_id &&
-        key === "settings"
-      ) {
+      if (get(this, "setting", null) && key === "exercise") {
+        this.$emit("click-item", key);
+      }
+      if (get(this, "setting", null) && key === "exam") {
         this.$emit("click-item", key);
       }
     },
 
-    handleChangeLesson() {
-      if (get(this, "lessons.data.length", 0)) {
+    handleChangeSetting() {
+      if (get(this, "setting", null)) {
+        this.menu[2].checked = true;
+        return;
+      }
+      this.menu[2].checked = false;
+    },
+
+    handleCheckedContent() {
+      if (
+        get(this, "lessons.data.length", 0) &&
+        get(this, "general.type", "") === "LECTURE"
+      ) {
+        this.menu[1].checked = true;
+        return;
+      }
+      if (
+        get(this, "chapters.data.length", 0) &&
+        get(this, "general.type", "") === "COURSE"
+      ) {
         this.menu[1].checked = true;
         return;
       }

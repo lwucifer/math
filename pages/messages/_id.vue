@@ -3,13 +3,13 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sidebar">
-          <TabContact :contacts="contactList" :friends="friends" @addMessage="addMessage()" />
+          <TabContact :contacts="contactList" :friends="friends" @addMessage="addMessage()" @clickTab="clickTab()"/>
         </div>
         <div class="col-md-9 col-content">
           <div class="box">
             <div class="row">
               <TabMessage :isCreate="isCreate" />
-              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" :members="friends" />
+              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" :members="friends" :isGroup="isGroup"/>
             </div>
           </div>
         </div>
@@ -42,8 +42,9 @@ export default {
 
   async fetch({ params, query, store, route }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    const room_id = 18;
-    // route.params.id;
+    const room_id =
+      // 18;
+      route.params.id;
     // let listQuery = {
     //   page: 1,
     //   perPage: 10,
@@ -60,12 +61,18 @@ export default {
         params: {
           room_id: room_id
         }
+      }),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
+        params: {
+          room_id: room_id
+        }
       })
     ]);
   },
 
   data() {
     return {
+      isGroup: false,
       contactList: [
         {
           image: "https://picsum.photos/40/40",
@@ -278,7 +285,11 @@ export default {
   methods: {
     addMessage() {
       this.isCreate = !this.isCreate;
-    }
+    },
+    
+    clickTab() {
+      this.isGroup = !this.isGroup;
+    },
   },
 
   beforeDestroy() {

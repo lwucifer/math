@@ -51,8 +51,8 @@ class AddContentCourse {
     if (payload.index !== "") {
       this.index = payload.index;
     }
-    if (payload.url) {
-      this.url = payload.url;
+    if (payload.repository_file_id) {
+      this.repository_file_id = payload.repository_file_id;
     }
     if (payload.article_content) {
       this.article_content = payload.article_content;
@@ -87,4 +87,24 @@ class AddDocument {
 
 export function createPayloadAddDocument(payload) {
   return Object.freeze(new AddDocument(payload));
+}
+
+class CourseSetting {
+  constructor(payload) {
+    this.comment_allow = payload.comment_allow == 1 ? true : false;
+    this.free = payload.free == 1 ? true : false;
+    if (payload.free == 0) {
+      this.discount = numeral(payload.discount).value();
+      this.fee = numeral(payload.fee).value();
+    }
+    this.elearning_id = payload.elearning_id;
+    this.privacy = payload.privacy;
+    if (payload.privacy === "PRIVATE") {
+      this.passcode = payload.passcode;
+    }
+  }
+}
+
+export function createPayloadCourseSetting(payload) {
+  return Object.freeze(new CourseSetting(payload));
 }

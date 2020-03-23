@@ -7,6 +7,7 @@ import Comments from "~/services/social/comments";
 import Config from "~/services/social/config";
 import Label from "~/services/social/label";
 import Friend from "~/services/social/friend";
+import FriendInvite from "~/services/social/Friendinvite";
 
 /**
  * initial state
@@ -20,7 +21,8 @@ const state = () => ({
     notificationsList: {},
     configs: {},
     labels: [],
-    friendList: {}
+    friendList: {},
+    inviteList: {}
 });
 
 /**
@@ -284,6 +286,24 @@ const actions = {
             console.log("[SocialFriend] list.err", err);
             return err;
         }
+    },
+    async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new FriendInvite(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[FriendInvite] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST,
+                result.listInvite || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[FriendInvite] list.err", err);
+            return err;
+        }
     }
 };
 
@@ -327,6 +347,9 @@ const mutations = {
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST](state, _friendList) {
         state.friendList = _friendList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST](state, _inviteList) {
+        state.inviteList = _inviteList;
     }
 };
 

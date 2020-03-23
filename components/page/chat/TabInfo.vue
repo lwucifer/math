@@ -40,10 +40,42 @@
             <IconPlus height="20" width="20" class="mr-3" />Thêm người
           </button>
           <ul class="members">
-            <li v-for="(item, index) in members" :key="index" class="d-flex-center mb-3">
-              <app-avatar :src="item.avatar" :size="30" class="mr-3" />
-              <span>{{item.name}}</span>
+            <li v-for="(item, index) in memberListTab" :key="index" class="d-flex-center mb-3">
+              <app-avatar
+                :src="item.avatar && item.avatar.low ? item.avatar.low : ''"
+                :size="30"
+                class="mr-3"
+              />
+              <span>{{item.fullname}}</span>
+              <app-dropdown
+                position="right"
+                v-model="dropdownActions"
+                :content-width="'14rem'"
+                class="link--dropdown ml-auto pl-2"
+              >
+                <button slot="activator" type="button" class="link--dropdown__button">
+                  <IconDots class="fill-999" width="16" />
+                </button>
+                <div class="link--dropdown__content">
+                  <ul>
+                    <li>
+                      <a>Nhắn tin</a>
+                    </li>
+                    <li>
+                      <a>Xem trang cá nhân</a>
+                    </li>
+                    <li @click.prevent="removeMember(item.id)">
+                      <a>Xoá khỏi nhóm</a>
+                    </li>
+                  </ul>
+                </div>
+              </app-dropdown>
             </li>
+            <client-only>
+              <infinite-loading :identifier="infiniteId" @infinite="membersInfiniteHandler">
+                <template slot="no-more">Không còn thành viên.</template>
+              </infinite-loading>
+            </client-only>
           </ul>
         </div>
       </div>
@@ -55,14 +87,21 @@
 </template>
 
 <script>
-import ModalAddMember from "~/components/page/chat/ModalAddMember";
-
+// import ModalAddMember from "~/components/page/chat/ModalAddMember";
+import ModalAddMember from "~/components/page/chat/ModalAddMemberByGroup";
+import * as actionTypes from "~/utils/action-types";
 import IconPlus from "~/assets/svg/icons/plus.svg?inline";
+import { mapState, mapGetters, mapActions } from "vuex";
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import GroupMember from "~/services/message/GroupMember";
+import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 
 export default {
   components: {
     IconPlus,
-    ModalAddMember
+    ModalAddMember,
+    IconDots,
+    IconPhoto
   },
 
   props: {
@@ -80,14 +119,73 @@ export default {
       type: Array,
       default: () => [],
       required: true
+    },
+    isGroup: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   },
 
   data() {
     return {
-      isGroup: true,
-      visibleAddMember: false
+      visibleAddMember: false,
+      dropdownActions: false,
+      memberListTab: [],
+      infiniteId: +new Date(),
+      memberListQuery: {
+        page: 1,
+        room_id: ""
+      }
     };
+  },
+  created() {},
+  computed: {
+    ...mapState("message", ["memberList"])
+  },
+  methods: {
+    ...mapActions("message", ["groupRemoveMember", "getMemberList"]),
+    async membersInfiniteHandler($state) {
+      this.memberListQuery.room_id = this.$route.params.id;
+      const { data: getData = {} } = await new GroupMember(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: this.memberListQuery
+      });
+      if (getData.listMember && getData.listMember.length) {
+        this.memberListQuery.page += 1;
+        this.memberListTab.push(...getData.listMember);
+        // this.groupsListTab = this.dataPushGroup.map(item => item);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+    removeMember(id) {
+      const data = {
+        room_id: this.$route.params.id,
+        member_id: id
+      };
+      this.groupRemoveMember(data).then(result => {
+        const query = {
+          room_id: this.$route.params.id,
+          page: 1
+        };
+        if (result.success == true) {
+          this.infiniteId += 1;
+          this.getMemberList({ params: query });
+        }
+      });
+    }
+  },
+  watch: {
+    memberList(_newval) {
+      if (_newval) {
+        this.memberListTab = [];
+        this.memberListQuery.page = 1;
+        this.infiniteId += 1;
+      }
+    }
   }
 };
 </script>

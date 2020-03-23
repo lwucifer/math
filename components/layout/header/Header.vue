@@ -52,7 +52,7 @@
       </ul>
 
       <div v-if="isAuthenticated" class="the-header__user">
-        <button class="item">
+        <button class="item" @click="redirectMessages">
           <IconMessager />
           <span class="number">9</span>
         </button>
@@ -111,14 +111,15 @@
       </div>
 
       <div v-else class="d-flex">
-        <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
+        <n-link
+          class="btn btn--size-md btn--color-primary btn--square mr-3"
+          :to="'/auth/signin'"
+        >Đăng nhập</n-link>
         <n-link
           class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
           :to="'/auth/signup'"
         >Đăng ký</n-link>
       </div>
-
-      <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
     </div>
   </div>
 </template>
@@ -128,7 +129,6 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
-import ModalSigninByPhone from "~/components/page/auth/ModalSigninByPhone";
 import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
@@ -139,7 +139,6 @@ export default {
     IconSearch,
     IconGlobeNoti,
     IconCaretDown,
-    ModalSigninByPhone,
     IconBell,
     IconShoppingCartAlt,
     IconMessager
@@ -158,6 +157,9 @@ export default {
   methods: {
     redirectSignin() {
       this.$router.push("/auth/signin");
+    },
+    redirectMessages() {
+      this.$router.push("/messages");
     }
   }
 };
