@@ -51,8 +51,8 @@ class AddContentCourse {
     if (payload.index !== "") {
       this.index = payload.index;
     }
-    if (payload.url) {
-      this.url = payload.url;
+    if (payload.repository_file_id) {
+      this.repository_file_id = payload.repository_file_id;
     }
     if (payload.article_content) {
       this.article_content = payload.article_content;

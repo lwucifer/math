@@ -1,108 +1,55 @@
 <template>
   <div>
     <create-action type="add_contents" />
-    <!-- <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
-
-              <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <a @click="handleAddLesson($event)" href>Thêm nội dung bài giảng</a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <AddContent
-              v-if="isShowFormAddLesson"
-              @refreshLessons="refreshLessons"
-              @handleCancel="handleCancel"
-              :lesson="lesson"
-            />
-
-            <fragment v-if="isShowDetailLesson">
-              <LessonDetail
-                v-for="lesson in get(lessons, 'data', [])"
-                :key="lesson.id"
-                :lesson="lesson"
-                @handleEditLesson="handleEditLesson"
-                @refreshLessons="refreshLessons"
-              />
-            </fragment>
-          </div>
-        </div>
-      </div>
-    </div>-->
 
     <!-- STEP 1 -->
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">
+          Nội dung học tập
+        </h1>
       </div>
 
       <div class="cc-panel__body">
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left flex-grow mr-4">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
+              <!-- <app-input
                 ref="inputCourseName"
                 class="cc-box__input-title mb-0 w-100"
                 size="sm"
                 type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
+              /> -->
+              <h2 class="cc-box__title heading-6">
+                {{ get(general, "name", "") }}
+              </h2>
 
-              <template v-if="isEditCourseName">
+              <!-- <template v-if="isEditCourseName">
                 <button class="cc-box__btn mr-2 text-success">
                   <IconCheck class="icon" />
                 </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
+                <button
+                  class="cc-box__btn text-error"
+                  @click="cancelEditCourseName"
+                >
                   <IconTimes class="icon" />
                 </button>
-              </template>
+              </template> -->
 
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
+              <!-- <button
+                v-else
+                class="cc-box__btn cc-box__btn-edit"
+                @click="editCourseName"
+              >
                 <IconEditAlt class="icon" />
-              </button>
+              </button> -->
             </div>
 
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
+            <div class="cc-box__head-right">
               <a
                 class="text-decoration-none d-inline-flex align-items-center"
                 href
-                @click.prevent="addChaper"
+                @click.prevent="handleShowAddChapter"
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
@@ -111,13 +58,21 @@
               </button>
             </div>
           </div>
+
+          <div class="cc-box__body">
+            <ListChapter />
+            <CreateChapter
+              v-if="isShowFormAddChapter"
+              @handleCancelAddChapter="handleCancelAddChapter"
+            />
+          </div>
         </div>
       </div>
     </div>
     <!-- END STEP 1 -->
 
     <!-- STEP 2 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -175,11 +130,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 2 -->
 
     <!-- STEP 3 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -269,11 +224,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 3 -->
 
     <!-- STEP 4 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -366,11 +321,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 4 -->
 
     <!-- STEP 5 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -475,11 +430,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 5 -->
 
     <!-- STEP 6 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -765,7 +720,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 6 -->
   </div>
 </template>
@@ -792,6 +747,8 @@ import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import CreateChapter from "~/components/page/course/create/course/CreateChapter";
+import ListChapter from "~/components/page/course/create/course/ListChapter";
 
 export default {
   components: {
@@ -808,33 +765,19 @@ export default {
     IconTimes,
     CreateAction,
     AddContent,
-    LessonDetail
+    LessonDetail,
+    CreateChapter,
+    ListChapter
   },
 
   data() {
     return {
-      avatar: [],
-      avatarSrc: null,
-      tabType: "video",
-      tabVideo: "upload",
-      tabDocument: "typing",
-      tabAddDocument: "upload",
-      isShowButtonAddLesson: false,
-      isShowFormAddLesson: false,
-      isShowDetailLesson: false,
-      isEditCourseName: false,
-      courseNameModel: "",
-      lesson: null
+      isShowFormAddChapter: false
     };
   },
 
   created() {
-    this.$store.dispatch(
-      `elearning/creating/creating-lesson/${actionTypes.BASE.RESET}`
-    );
-
-    useEffect(this, this.fetchLesson.bind(this), []);
-    useEffect(this, this.setInitData.bind(this), ["lessons.data"]);
+    //
   },
 
   computed: {
@@ -849,113 +792,12 @@ export default {
   methods: {
     get,
 
-    handleHideEditNameCourse() {
-      this.isShowButtonEditNameCourse = false;
+    handleShowAddChapter() {
+      this.isShowFormAddChapter = true;
     },
 
-    handleShowEditNameCourse() {
-      this.isShowButtonEditNameCourse = true;
-    },
-
-    setInitData() {
-      if (get(this, "lessons.data.length", 0)) {
-        this.isShowButtonAddLesson = false;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = true;
-      } else {
-        this.isShowButtonAddLesson = true;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = false;
-      }
-    },
-
-    refreshLessons() {
-      this.fetchLesson();
-    },
-
-    fetchLesson() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-    },
-
-    handleEditLesson(lesson) {
-      this.isShowButtonAddLesson = false;
-      this.isShowFormAddLesson = true;
-      this.isShowDetailLesson = false;
-      this.lesson = lesson;
-    },
-
-    handleUploadChange(event) {
-      this.avatar = Array.from(event.target.files);
-
-      getBase64(this.avatar[0], src => {
-        this.avatarSrc = src;
-      });
-    },
-
-    removeAvatar() {
-      this.avatar = [];
-    },
-
-    changeTabType(type) {
-      this.tabType = type;
-    },
-
-    changeTabVideo(type) {
-      this.tabVideo = type;
-    },
-
-    changeTabDocument(type) {
-      this.tabDocument = type;
-    },
-
-    changeTabAddDocument(type) {
-      this.tabAddDocument = type;
-    },
-
-    handleAddLesson(e) {
-      this.isShowButtonAdd = false;
-      this.isShowFormAddLesson = !this.isShowFormAddLesson;
-      e.preventDefault();
-    },
-
-    handleCancel() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id && get(this, "lessons.data.length", 0)) {
-        this.isShowButtonAddLesson = false;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = true;
-      } else {
-        this.isShowButtonAddLesson = true;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = false;
-      }
-    },
-
-    editCourseName() {
-      this.isEditCourseName = true;
-      this.courseNameModel = get(this.general, "name", "");
-
-      const timeout = setTimeout(() => {
-        this.$refs.inputCourseName.focus();
-        clearTimeout(timeout);
-      });
-    },
-
-    cancelEditCourseName() {
-      this.isEditCourseName = false;
-    },
-
-    addChaper() {
-      console.log("addChaper");
+    handleCancelAddChapter() {
+      this.isShowFormAddChapter = false;
     }
   }
 };

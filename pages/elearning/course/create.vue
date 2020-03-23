@@ -2,12 +2,13 @@
   <div class="container course-create">
     <div class="row">
       <div class="col-md-3">
-        <CreateAside :active="formActive" @click-item="setFormActive" />
+        <CreateAside @click-item="setFormActive" />
       </div>
 
       <div class="col-md-9">
         <CreateGeneralInformation v-show="formActive === 'general'" class="mb-5" />
-        <CreateLearningContentCourse v-show="formActive === 'content'" />
+        <CreateLearningContentCourse v-show="formActive === 'content-course'" />
+        <CreateLearningContentLecture v-show="formActive === 'content-lecture'" />
         <CreateSetting v-show="formActive === 'settings'" />
         <CreateExcercise v-show="formActive === 'exercise'" />
         <CreateExam v-show="formActive === 'exam'" />
