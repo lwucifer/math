@@ -228,13 +228,15 @@ export const ELEARNING_SCHOOL_SEARCH = {
 };
 
 export const MESSAGE_GROUP = {
-  SET_MEMBER_LIST: "setMemberList",
-  SET_GROUP_LIST: "setGroupList",
-  SET_MESSAGE_LIST: "setMessageList"
+    SET_MEMBER_LIST: "setMemberList",
+    SET_GROUP_LIST: "setGroupList",
+    SET_MESSAGE_LIST: "setMessageList",
+    SET_GROUP_LIST_TYPE: "setGroupListType",
+    SET_CHAT_LIST_TYPE: "setChatListType"
 };
 
 export const ELEARNING_INFO = {
-  SET_ELEARNING_INFO: "setElearningInfo"
+    SET_ELEARNING_INFO: "setElearningInfo"
 };
 
 export const ELEARNING_COURSES = {

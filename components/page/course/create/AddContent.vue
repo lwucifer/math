@@ -119,11 +119,11 @@ export default {
       tabType: "video",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
-        index: "",
+        index: 1,
         lesson: "",
         name: "",
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
-        url: "",
+        repository_file_id: "",
         article_content: "",
         id: ""
       }
@@ -162,13 +162,13 @@ export default {
     handleSelectFile(data) {
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
-      this.payload.url = "";
+      this.payload.repository_file_id = "";
     },
 
     handleSelectUrl(file) {
       this.payload.type = file.type;
       this.payload.lesson = "";
-      this.payload.url = file.url;
+      this.payload.repository_file_id = file.id;
     },
 
     async handleAddContent() {
@@ -185,10 +185,10 @@ export default {
       this.$toasted.error(get(result, "message", ""));
     },
 
-    handleSelectDocument(type, article_content, url, lesson) {
+    handleSelectDocument(type, article_content, file_id, lesson) {
       this.payload.type = type;
       this.payload.lesson = lesson;
-      this.payload.url = url;
+      this.payload.repository_file_id = file_id;
       this.payload.article_content = article_content;
     },
 

@@ -87,7 +87,7 @@ export default {
     },
 
     handleSelectUrl(file) {
-      this.$emit("handleSelectDocument", "DOC", "", file.url, "");
+      this.$emit("handleSelectDocument", "DOC", "", file.id, "");
     },
 
     handleSelectFile(files) {
