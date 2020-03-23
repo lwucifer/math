@@ -47,7 +47,7 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
-          Tên khoá học
+          Tên {{ name }}
           <span class="caption text-sub">(Tối đa 60 ký tự)</span>
         </h2>
         <app-input :counter="60" v-model="payload.name" />
@@ -55,7 +55,7 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
-          Lợi ích từ khoá học
+          Lợi ích từ {{ name }}
           <span
             class="text-sub caption font-weight-normal"
           >(Tối thiểu tổng 300 ký tự)</span>
@@ -214,7 +214,10 @@ export default {
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
-    })
+    }),
+    name() {
+      return this.payload.type === 'COURSE' ? 'khoá học' : 'bài giảng'
+    }
   },
 
   methods: {
