@@ -16,7 +16,9 @@ import Message from "~/services/message/Message";
 const state = () => ({
     memberList: {},
     groupList: {},
-    messageList: {}
+    messageList: {},
+    groupListType: [],
+    chatListType: []
 });
 
 /**
@@ -171,7 +173,13 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_MESSAGE_LIST](state, _messageList) {
         state.messageList = _messageList;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE](state, _groupListType) {
+        state.groupListType = _groupListType;
     }
+    // [mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE](state, _chatListType) {
+    //     state.chatListType = _chatListType;
+    // }
 };
 
 export default {

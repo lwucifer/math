@@ -23,32 +23,35 @@
         </div>
 
         <div class="elearning-view__main-nav" v-sticky>
-          <a href="#tab1" :class="tab == 1 ? 'active' : ''" @click="tab = 1">Giới thiệu</a>
-
-          <a href="#tab2" :class="tab == 2 ? 'active' : ''" @click="tab = 2">Nội dung bài giảng</a>
-
-          <a href="#tab3" :class="tab == 3 ? 'active' : ''" @click="tab = 3">Giáo viên</a>
-
-          <a href="#tab4" :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đánh giá</a>
+          <a class="scroll-link" href="#introduce" @click.prevent="scrollTo('introduce')">Giới thiệu</a>
+          <a
+            class="scroll-link"
+            href="#course-content"
+            @click.prevent="scrollTo('course-content')"
+          >Nội dung bài giảng</a>
+          <a class="scroll-link" href="#teacher" @click.prevent="scrollTo('teacher')">Giáo viên</a>
+          <a class="scroll-link" href="#review" @click.prevent="scrollTo('review')">Đánh giá</a>
         </div>
 
-        <div class="box" id="tab1">
-          <h5 class="mb-4">Lợi ích từ bài giảng</h5>
-          <div>{{ info.benefits }}</div>
-        </div>
-
-        <div class="box">
-          <h5 class="mb-4">Mô tả tổng quát</h5>
-          <div>
-            <p>- Bạn đang mong muốn xây dựng một Hệ thống Kinh doanh Online Bài Bản cho riêng mình mà vẫn chưa tìm được hướng đi rõ ràng từ việc xác định sản phẩm kinh doanh - mô hình kinh doanh phù hợp, cách để liên hệ nhà cung cấp để đàm phán nhập hàng, cách nghiên cứu khách hàng, đối thủ, quảng cáo và tối ưu...... ?</p>
-            <p>- Bạn đã có kinh nghiệm Kinh doanh online, và đang mong muốn mở rộng Hệ Thống Online Đa Kênh ngoài kênh truyền thống sang Facebook, Instagram, Zalo, Youtube, Email Marketing, Website, SMS...?</p>
+        <section class="scroll-target" id="introduce">
+          <div class="box">
+            <h5 class="mb-4">Lợi ích từ bài giảng</h5>
+            <div>{{ info.benefits }}</div>
           </div>
-          <div class="text-center mt-3 mb-3">
-            <a class="btn-load-more">Xem thêm</a>
-          </div>
-        </div>
 
-        <div id="tab2" class="box elearning-view__content">
+          <div class="box">
+            <h5 class="mb-4">Mô tả tổng quát</h5>
+            <div>
+              <p>- Bạn đang mong muốn xây dựng một Hệ thống Kinh doanh Online Bài Bản cho riêng mình mà vẫn chưa tìm được hướng đi rõ ràng từ việc xác định sản phẩm kinh doanh - mô hình kinh doanh phù hợp, cách để liên hệ nhà cung cấp để đàm phán nhập hàng, cách nghiên cứu khách hàng, đối thủ, quảng cáo và tối ưu...... ?</p>
+              <p>- Bạn đã có kinh nghiệm Kinh doanh online, và đang mong muốn mở rộng Hệ Thống Online Đa Kênh ngoài kênh truyền thống sang Facebook, Instagram, Zalo, Youtube, Email Marketing, Website, SMS...?</p>
+            </div>
+            <div class="text-center mt-3 mb-3">
+              <a class="btn-load-more">Xem thêm</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="box elearning-view__content scroll-target" id="course-content">
           <h5>Nội dung bài giảng</h5>
           <div class="info">
             <div class="info-item">
@@ -84,16 +87,20 @@
               <IconDownload class="ml-2" />
             </strong>
           </div>
-        </div>
+        </section>
 
-        <div id="tab3" class="box">
-          <h5 class="mb-4">Thông tin giáo viên</h5>
-          <CourseTeacherInfo :teacher="teacher" class="mb-4" />
+        <div class="box">
+          <section class="scroll-target" id="teacher">
+            <h5 class="mb-4">Thông tin giáo viên</h5>
+            <CourseTeacherInfo :teacher="teacher" class="mb-4" />
+          </section>
+
           <hr />
-          <div id="tab4" class="pt-2">
+
+          <section class="scroll-target pt-2" id="review">
             <h5 class="mt-3 mb-4">Đánh giá bài giảng</h5>
             <ElearningRates />
-          </div>
+          </section>
         </div>
       </div>
       <div class="col-md-4">
@@ -133,7 +140,7 @@ import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 
 export default {
-  name: "E-learning",
+  name: "E-learningDetail",
 
   components: {
     CourseTeacherInfo,
@@ -160,7 +167,6 @@ export default {
 
   data() {
     return {
-      tab: 1,
       isAuthenticated: true,
       teacher: {},
       lesson: {
@@ -271,12 +277,59 @@ export default {
         watchOverflow: true,
         showName: true
       },
-      active_el: 0
+      active_el: 0,
+      requestFrameId: null
     };
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"])
+  },
+
+  mounted() {
+    window.addEventListener("scroll", this.bindScrollStatus);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.bindScrollStatus);
+  },
+
+  methods: {
+    bindScrollStatus(event) {
+      const navLink = document.querySelector(".elearning-view__main-nav");
+      const link = document.querySelectorAll('.scroll-link[href^="#"]');
+      const target = document.getElementsByClassName("scroll-target");
+      const scrollDistance = window.scrollY + navLink.clientHeight;
+
+      for (const el of target) {
+        const react = el.getBoundingClientRect();
+
+        if (window.scrollY + react.top <= scrollDistance) {
+          Array.from(link).forEach(linkEl => {
+            const activeLink = document.querySelector(
+              `.scroll-link[href="#${el.id}"]`
+            );
+            linkEl.classList.remove("active");
+            activeLink.classList.add("active");
+          });
+        }
+      }
+    },
+
+    scrollTo(id) {
+      const target = document.getElementById(id);
+      const targetTop = target.getBoundingClientRect().top;
+      const scrollPosition = targetTop + window.scrollY;
+      const navLink = document.querySelector(".elearning-view__main-nav");
+      // this.requestFrameId && window.cancelAnimationFrame(this.requestFrameId);
+      // this.requestFrameId = window.requestAnimationFrame(() => {
+      window.scrollTo({
+        top: scrollPosition - navLink.clientHeight,
+        left: 0,
+        behavior: "smooth"
+      });
+      // })
+    }
   }
 };
 </script>
