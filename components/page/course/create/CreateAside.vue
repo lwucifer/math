@@ -144,7 +144,7 @@ export default {
 
     handleCheckedContent() {
       if (
-        get(this, "lessons", 0) &&
+        get(this, "lessons.data.length", 0) &&
         get(this, "general.type", "") === "LECTURE"
       ) {
         this.menu[1].checked = true;
