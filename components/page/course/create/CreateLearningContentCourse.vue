@@ -1,68 +1,6 @@
 <template>
   <div>
     <create-action type="add_contents" />
-    <!-- <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
-
-              <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <a @click="handleAddLesson($event)" href>Thêm nội dung bài giảng</a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <AddContent
-              v-if="isShowFormAddLesson"
-              @refreshLessons="refreshLessons"
-              @handleCancel="handleCancel"
-              :lesson="lesson"
-            />
-
-            <fragment v-if="isShowDetailLesson">
-              <LessonDetail
-                v-for="lesson in get(lessons, 'data', [])"
-                :key="lesson.id"
-                :lesson="lesson"
-                @handleEditLesson="handleEditLesson"
-                @refreshLessons="refreshLessons"
-              />
-            </fragment>
-          </div>
-        </div>
-      </div>
-    </div>-->
 
     <!-- STEP 1 -->
     <div class="cc-panel bg-white mb-4">
@@ -102,7 +40,7 @@
               <a
                 class="text-decoration-none d-inline-flex align-items-center"
                 href
-                @click.prevent="addChaper"
+                @click.prevent="handleShowAddChapter"
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
@@ -111,13 +49,17 @@
               </button>
             </div>
           </div>
+
+          <div class="cc-box__body">
+            <CreateChapter v-if="isShowFormAddChapter" />
+          </div>
         </div>
       </div>
     </div>
     <!-- END STEP 1 -->
 
     <!-- STEP 2 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -175,11 +117,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 2 -->
 
     <!-- STEP 3 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -269,11 +211,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 3 -->
 
     <!-- STEP 4 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -366,11 +308,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 4 -->
 
     <!-- STEP 5 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -475,11 +417,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 5 -->
 
     <!-- STEP 6 -->
-    <div class="cc-panel bg-white mb-4">
+    <!-- <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
       </div>
@@ -765,7 +707,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- END STEP 6 -->
   </div>
 </template>
@@ -792,6 +734,7 @@ import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import CreateChapter from '~/components/page/course/create/course/CreateChapter'
 
 export default {
   components: {
@@ -808,7 +751,8 @@ export default {
     IconTimes,
     CreateAction,
     AddContent,
-    LessonDetail
+    LessonDetail,
+    CreateChapter
   },
 
   data() {
@@ -824,7 +768,8 @@ export default {
       isShowDetailLesson: false,
       isEditCourseName: false,
       courseNameModel: "",
-      lesson: null
+      lesson: null,
+      isShowFormAddChapter: false
     };
   },
 
@@ -954,8 +899,8 @@ export default {
       this.isEditCourseName = false;
     },
 
-    addChaper() {
-      console.log("addChaper");
+    handleShowAddChapter() {
+      this.isShowFormAddChapter = true;
     }
   }
 };
