@@ -3,6 +3,6 @@ import BaseService from "../../BaseService";
 
 export default class Exercises extends BaseService {
     constructor($axios) {
-        super($axios, APIs.ELEARNING_CREATING_DOCS);
+        super($axios, APIs.ELEARNING_CREATING_EXERCISES);
     }
 }
