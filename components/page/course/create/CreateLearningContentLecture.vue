@@ -141,11 +141,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch(
-      `elearning/creating/creating-lesson/${actionTypes.BASE.RESET}`
-    );
-
-    useEffect(this, this.fetchLesson.bind(this), []);
+    this.fetchLesson();
     useEffect(this, this.setInitData.bind(this), ["lessons.data"]);
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
   },

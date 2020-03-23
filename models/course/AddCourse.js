@@ -44,7 +44,6 @@ export function createPayloadAddCourse(payload) {
 class AddContentCourse {
   constructor(payload) {
     this.elearning_id = payload.elearning_id;
-    this.index = payload.index;
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }

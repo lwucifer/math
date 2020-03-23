@@ -14,13 +14,15 @@
           @click="handleSelectType"
           :checked="payload.type === 'LECTURE'"
           class="mr-6"
-        >Bài giảng</app-radio>
+          >Bài giảng</app-radio
+        >
         <app-radio
           name="type"
           @click="handleSelectType"
           value="COURSE"
           :checked="payload.type === 'COURSE'"
-        >Khoá học</app-radio>
+          >Khoá học</app-radio
+        >
       </div>
 
       <div class="row">
@@ -56,13 +58,17 @@
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
           Lợi ích từ {{ name }}
-          <span
-            class="text-sub caption font-weight-normal"
-          >(Tối thiểu tổng 300 ký tự)</span>
+          <span class="text-sub caption font-weight-normal"
+            >(Tối thiểu tổng 300 ký tự)</span
+          >
         </h2>
 
         <div class="row">
-          <div v-for="(item, index) in benefit" class="col-md-6 mb-15" :key="index">
+          <div
+            v-for="(item, index) in benefit"
+            class="col-md-6 mb-15"
+            :key="index"
+          >
             <div class="cgi-demo-benefit d-flex">
               <IconCheckCircle class="icon body-1 mr-2" />
               <p v-html="item" />
@@ -87,7 +93,8 @@
             square
             class="font-weight-normal body-2"
             @click="addBenefit(benefitEditorValue)"
-          >Thêm</app-button>
+            >Thêm</app-button
+          >
         </div>
       </div>
 
@@ -185,10 +192,6 @@ export default {
   },
 
   created() {
-    this.$store.dispatch(
-      `elearning/creating/creating-general/${actionTypes.BASE.RESET}`
-    );
-
     useEffect(this, this.handleChangePayload.bind(this), [
       "payload.avatar",
       "payload.benefit",
@@ -216,7 +219,7 @@ export default {
       general: "general"
     }),
     name() {
-      return this.payload.type === 'COURSE' ? 'khoá học' : 'bài giảng'
+      return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     }
   },
 

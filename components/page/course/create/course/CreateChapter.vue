@@ -56,6 +56,11 @@ export default {
 
   methods: {
     async handleAddChapter() {
+      const index =
+        get(this, "chapters.data", 0)[
+          get(this, "chapters.data", []).length - 1
+        ]["index"] + 1;
+
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
@@ -63,14 +68,15 @@ export default {
         }
       };
       this.payload.elearning_id = elearning_id;
-      this.payload.index = get(this, "chapters.data.length", 0);
+      this.payload.index = index;
+
       const res = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.ADD}`,
         this.payload
       );
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.payload.name = ''
+        this.payload.name = "";
         this.$store.dispatch(
           `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
           options
