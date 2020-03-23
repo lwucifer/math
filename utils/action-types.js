@@ -171,7 +171,9 @@ export const ELEARNING_CREATING_DOC = {
 };
 
 export const ELEARNING_TEACHING_REPOSITORY_FILE = {
-  LIST: "elearningTeachingRespositoryFileList"
+    LIST: "elearningTeachingRespositoryFileList",
+    ADD: "elearningTeachingRespositoryFileAdd",
+    DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {

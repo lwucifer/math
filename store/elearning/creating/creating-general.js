@@ -21,6 +21,11 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, options) {
+    commit(
+      mutationTypes.ELEARNING_CREATING_GENERAL
+        .SET_ELEARNING_CREATING_GENERAL_LIST,
+      null
+    );
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.LIST](
         options
@@ -68,10 +73,6 @@ const actions = {
     } catch (error) {
       console.log("[Creating general] delete.error", error);
     }
-  },
-
-  [actionTypes.BASE.RESET]({ commit }) {
-    commit(mutationTypes.BASE.RESET);
   }
 };
 
@@ -82,10 +83,6 @@ const mutations = {
   [mutationTypes.ELEARNING_CREATING_GENERAL
     .SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
     state.general = general;
-  },
-
-  [mutationTypes.BASE.RESET]: function(state) {
-    this.general = null;
   }
 };
 

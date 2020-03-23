@@ -3,7 +3,7 @@
     <div class="ce-item d-flex align-items-center justify-content-between">
       <div class="ce-item__left d-flex align-items-center">
         <h3 class="body-2 mr-3">
-          Chương {{ get(chapter, "index", 0) + 1 }}:
+          Chương {{ index + 1 }}:
           <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
         </h3>
         <a href class="ce-item__action edit mr-3">
@@ -45,6 +45,10 @@ export default {
     chapter: {
       type: Object,
       default: null
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
 
