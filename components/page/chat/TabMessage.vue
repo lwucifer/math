@@ -38,7 +38,7 @@
             <app-avatar src="https://picsum.photos/40/40" size="sm" class="comment-item__avatar" />
           </div>
           <div class="message-decs__title">
-            <span>Đặng Duy Long</span>
+            <span>{{nameGroup ? nameGroup.room_name : ''}}</span>
           </div>
         </div>
         <div class="message-tool">
@@ -609,6 +609,55 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState("social", { labelList: "labels" }),
+    ...mapState("message", ["messageList", "groupListType", "chatListType"]),
+
+    selectedTags() {
+      return this.tag.map(item => {
+        const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
+        return resultItem;
+      });
+    },
+
+    selectedCheckin() {
+      const [result = {}] = this.checkinOptions.filter(
+        item => item.value === this.checkin
+      );
+      return result.text;
+    },
+
+    tagOptions() {
+      return this.friendsList.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.fullname
+      }));
+    },
+    nameGroup() {
+      const id = this.$route.params.id;
+      const [data] = this.groupListType
+        ? this.groupListType.filter(item => item.id.toString() == id)
+        : {};
+      return data;
+    }
+    // nameMessage() {
+    //   debugger;
+    //   const id = this.$route.params.id;
+    //   const userId = this.$store.state.auth.token
+    //     ? this.$store.state.auth.token.id
+    //     : "";
+    //   const [dataRoom] = this.chatListType
+    //     ? this.chatListType.filter(item => item.id.toString() == id)
+    //     : [];
+    //   console.log("dataRoom", dataRoom);
+    //   // const [dataMember] = dataRoom.members
+    //   //   ? dataRoom.members.filter(item => item.id != userId)
+    //   //   : {};
+    //   // return dataMember;
+    // }
+  },
+
   methods: {
     async messageInfiniteHandler($state) {
       this.messageListQuery.room_id = 18;
@@ -672,33 +721,6 @@ export default {
   },
   created() {
     // this.messageListQuery.room_id = this.$route.params.id;
-  },
-
-  computed: {
-    ...mapState("social", { labelList: "labels" }),
-    ...mapState("message", ["messageList"]),
-
-    selectedTags() {
-      return this.tag.map(item => {
-        const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
-        return resultItem;
-      });
-    },
-
-    selectedCheckin() {
-      const [result = {}] = this.checkinOptions.filter(
-        item => item.value === this.checkin
-      );
-      return result.text;
-    },
-
-    tagOptions() {
-      return this.friendsList.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.fullname
-      }));
-    }
   }
 };
 </script>

@@ -29,7 +29,7 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
-  components: { },
+  components: {},
 
   props: {
     friends: {
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("message", ["createGroup", "groupList"]),
+    ...mapActions("message", ["createGroup", "getGroupList"]),
     close() {
       this.$emit("close");
     },
@@ -81,7 +81,7 @@ export default {
       };
       this.createGroup(data).then(result => {
         if (result.success == true) {
-          this.groupList();
+          this.getGroupList();
           this.$emit("close");
           this.$toasted.show("success");
         } else {
