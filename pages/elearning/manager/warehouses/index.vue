@@ -11,7 +11,9 @@
                   </div>
                   <app-divider></app-divider>
                   <div>
-                      <ElearningManagerUploadFile/>
+                      <ElearningManagerUploadFile
+                        @done="handleDoneAddFile"
+                      />
                   </div>
                   <div>
                       <ElearningManagerFilterTable/>
@@ -26,11 +28,39 @@
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import ElearningManagerUploadFile from "~/components/page/elearning/manager/materials/ElearningManagerUploadFile";
 import ElearningManagerFilterTable from "~/components/page/elearning/manager/materials/ElearningManagerFilterTable";
+
+import { createPayloadAddRepository } from "~/models/elearning/Repository";
+import * as actionTypes from "~/utils/action-types";
+import * as yup from "yup";
+import {get} from "lodash";
+
+const schema = yup.object().shape({
+    name: yup.string().required(),
+    // file: yup.object().required()
+});
+
 export default {
     components:{
         ElearningManagerSide,
         ElearningManagerUploadFile,
         ElearningManagerFilterTable
+    },
+    data() {
+      return {
+
+      }
+    },
+    methods: {
+        handleUploadChange(fileList, event) {
+
+        },
+        handleDoneAddFile(data, event) {
+            if (get(data, "success", false)) {
+              this.$toasted.success(get(data, "message", ""));
+              return;
+            }
+            this.$toasted.error(get(data, "message", ""));
+        }
     }
 }
 </script>

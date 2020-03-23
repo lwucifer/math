@@ -118,7 +118,7 @@ export default {
 
   data() {
     return {
-      pager: toNumber(get(this, 'pagination.size', 0)),
+      pager: toNumber(get(this, 'pagination.size', 10)),
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },

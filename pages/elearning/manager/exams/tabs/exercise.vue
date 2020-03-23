@@ -10,7 +10,7 @@
           @click="submit"
         >
           <IconFilter />
-          <span>Lọc kết quả</span>
+          <span>Lọc kết quả bài tập</span>
         </app-button>
       </div>
 
@@ -75,6 +75,7 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline"
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
+import { useEffect, getParamQuery } from "~/utils/common";
 // Import faked data
 import { EXERCISES } from "~/server/fakedata/elearning/test"
 
@@ -149,9 +150,24 @@ export default {
         first: 1,
         last: 10
       },
+      listQuery: {
+        page: 1,
+        size: 10
+      },
+      total: 0,
       list: EXERCISES,
     };
   },
+
+  // async fetch({ params, query, store }) {
+    // await Promise.all([
+    //   store.dispatch(
+    //     `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
+    //     'e8acf86e-4782-43ac-92dd-1d9f40cd4094'
+    //   )
+    // ]);
+  // },
+
   computed: {
     ...mapState("auth", ["loggedUser"])
   },
@@ -177,7 +193,25 @@ export default {
     },
     handleSearch() {
       console.log('[Component] Elearning exercise: searching')
+    },
+    async getList() {
+      // 230291b7-e762-4da8-b411-77c313fee652
+      // this.listQuery.elearning_id = getParamQuery('elearning_id');
+      // const elearningId = getParamQuery('elearning_id');
+      const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
+      this.listQuery.elearning_id = elearningId;
+      let params = {
+        elearning_id: elearningId
+      }
+      params = {...this.listQuery};
+      this.$store.dispatch(
+        `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`, { params }
+      )
     }
+  },
+
+  created() {
+    this.getList();
   }
 };
 </script>
