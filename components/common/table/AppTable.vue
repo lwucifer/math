@@ -40,7 +40,7 @@
           <slot
             v-for="(item, j) in heads"
             :item="item"
-            :index="i"
+            :index="j"
             :row="cat"
             :name="'cell(' + item.name + ')'"
           >
@@ -100,7 +100,6 @@ export default {
 
   data() {
     return {
-      cats: [],
       listSortBy: [],
       currentSort: "name",
       currentSortDir: "asc",
@@ -219,11 +218,14 @@ export default {
         data.push(this.data[value]);
       });
       return data;
+    },
+    cats: function() {
+      return this.data;
     }
   },
 
   created() {
-    this.cats = [...this.data];
+    // this.cats = [...this.data];
   }
 };
 </script>
