@@ -4,6 +4,13 @@
       <div class="message-info__acc">
         <div class="message-info__acc__image">
           <app-avatar src="https://picsum.photos/40/40" size="md" class="comment-item__avatar" />
+          <app-upload class="cgi-upload-avt change-avatar">
+            <template>
+              <div class="cgi-upload-avt-preview">
+                <IconPhoto width="22" height="22" />
+              </div>
+            </template>
+          </app-upload>
         </div>
         <div class="message-info__acc__title">
           <span>
@@ -64,7 +71,7 @@
                     <li>
                       <a>Xem trang cá nhân</a>
                     </li>
-                    <li>
+                    <li @click.prevent="removeMember(item.id)">
                       <a>Xoá khỏi nhóm</a>
                     </li>
                   </ul>
@@ -94,12 +101,14 @@ import IconPlus from "~/assets/svg/icons/plus.svg?inline";
 import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
+import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 
 export default {
   components: {
     IconPlus,
     ModalAddMember,
-    IconDots
+    IconDots,
+    IconPhoto
   },
 
   props: {
@@ -122,7 +131,7 @@ export default {
       type: Boolean,
       default: false,
       required: true
-    },
+    }
   },
 
   data() {
@@ -142,6 +151,7 @@ export default {
     ...mapState("message", ["memberList"])
   },
   methods: {
+    ...mapActions("message", ["groupRemoveMember", "getMemberList"]),
     async membersInfiniteHandler($state) {
       this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new GroupMember(this.$axios)[
@@ -156,6 +166,31 @@ export default {
         $state.loaded();
       } else {
         $state.complete();
+      }
+    },
+    removeMember(id) {
+      const data = {
+        room_id: this.$route.params.id,
+        member_id: id
+      };
+      this.groupRemoveMember(data).then(result => {
+        const query = {
+          room_id: this.$route.params.id,
+          page: 1
+        };
+        if (result.success == true) {
+          this.infiniteId += 1;
+          this.getMemberList({ params: query });
+        }
+      });
+    }
+  },
+  watch: {
+    memberList(_newval) {
+      if (_newval) {
+        this.memberListTab = [];
+        this.memberListQuery.page = 1;
+        this.infiniteId += 1;
       }
     }
   }

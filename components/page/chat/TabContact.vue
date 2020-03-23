@@ -160,7 +160,7 @@
                       <a>Ẩn nhóm</a>
                     </li>
                     <li>
-                      <a @click="visibleLeaveGroup = true">Rời khỏi nhóm</a>
+                      <a @click.prevent="leaveGroupModal(item)">Rời khỏi nhóm</a>
                     </li>
                   </ul>
                 </div>
@@ -199,7 +199,12 @@
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
 
     <!-- Modal rồi nhớm -->
-    <ModalLeaveGroup @close="visibleLeaveGroup = false" v-if="visibleLeaveGroup" />
+    <ModalLeaveGroup
+      @close="visibleLeaveGroup = false"
+      v-if="visibleLeaveGroup"
+      @accept="handleLeaveGroup"
+      :data="dataGroupLeave"
+    />
   </div>
 </template>
 
@@ -218,6 +223,7 @@ import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import GroupService from "~/services/message/Group";
 import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 
 export default {
   components: {
@@ -267,7 +273,8 @@ export default {
       infiniteId: +new Date(),
       infiniteIdChat: +new Date(),
       dataPushChat: [],
-      dataPushGroup: []
+      dataPushGroup: [],
+      dataGroupLeave: {}
     };
   },
   computed: {
@@ -275,6 +282,23 @@ export default {
     ...mapState("message", ["groupList"])
   },
   methods: {
+    ...mapActions("message", ["getGroupList", "groupLeave"]),
+
+    leaveGroupModal(_item) {
+      this.visibleLeaveGroup = true;
+      this.dataGroupLeave = _item;
+    },
+    handleLeaveGroup() {
+      const data = { room_id: this.dataGroupLeave.id };
+      this.groupLeave(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.visibleLeaveGroup = false;
+          this.groupListQuery.page = 1;
+          this.getGroupList({ params: this.groupListQuery });
+        }
+      });
+    },
     tabClick(e) {
       this.tab = e;
       this.$emit("clickTab");
@@ -309,6 +333,10 @@ export default {
           ...getData.rooms.filter(item => item.type == 2)
         );
         $state.loaded();
+        this.$store.commit(
+          `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
+          this.groupsListTab
+        );
       } else {
         $state.complete();
       }
@@ -324,6 +352,10 @@ export default {
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
         this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        // this.$store.commit(
+        //   `message/${mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE}`,
+        //   this.chatsListTab
+        // );
         $state.loaded();
       } else {
         $state.complete();
@@ -341,11 +373,18 @@ export default {
       if (_newval == 1) {
         this.chatsListTab = [];
         this.chatListQuery.page = 1;
+        // this.infiniteIdChat += 1;
       } else {
         this.groupsListTab = [];
         this.groupListQuery.page = 1;
         this.infiniteId += 1;
-        // this.infiniteIdChat += 1;
+      }
+    },
+    groupList(_newval) {
+      if (_newval) {
+        this.groupsListTab = [];
+        this.groupListQuery.page = 1;
+        this.infiniteId += 1;
       }
     }
   }

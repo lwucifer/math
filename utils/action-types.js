@@ -275,7 +275,7 @@ export const MESSAGE_GROUP = {
     EDIT_NAME: "editName",
     CREATE_GROUP: "createGroup",
     MEMBER_LIST: "getMemberList",
-    GROUP_LIST: "groupList",
+    GROUP_LIST: "getGroupList",
     GROUP_LEAVE: "groupLeave",
     GROUP_REMOVE_MEMBER: "groupRemoveMember",
     GROUP_NOTIFICATION: "groupNotification",
