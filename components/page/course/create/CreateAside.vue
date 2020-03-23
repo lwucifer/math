@@ -69,8 +69,8 @@ export default {
     active: {
       type: String,
       default: "general",
-      validator: value =>
-        ["general", "content", "settings", "exercise", "exam"].includes(value)
+      // validator: value =>
+      //   ["general", "content", "settings", "exercise", "exam"].includes(value)
     }
   },
 
@@ -107,7 +107,14 @@ export default {
         this.$emit("click-item", key);
       }
       if (get(this, "general", null) && key === "content") {
-        this.$emit("click-item", key);
+        if (get(this, "general.type", "") === "LECTURE") {
+          this.$emit("click-item", 'content-lecture');
+          return;
+        }
+        if (get(this, "general.type", "") === "COURSE") {
+          this.$emit("click-item", 'content-course');
+          return;
+        }
       }
       if (get(this, "lessons.data.length", 0) && key === "settings") {
         this.$emit("click-item", key);
