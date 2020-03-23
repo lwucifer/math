@@ -108,29 +108,47 @@ export default {
   methods: {
     handleClickMenuItem({ key }) {
       this.active = key;
-      const elearning_id = getParamQuery("elearning_id");
+      
       if (key === "general") {
         this.$emit("click-item", key);
+        return;
       }
-      if (get(this, "general", null) && key === "content") {
-        this.active = "content";
-        if (get(this, "general.type", "") === "LECTURE") {
-          this.$emit("click-item", "content-lecture");
-          return;
+
+      if (get(this, "general", null)) {
+        if (key === "content") {
+          this.active = "content";
+          if (get(this, "general.type", "") === "LECTURE") {
+            this.$emit("click-item", "content-lecture");
+            return;
+          }
+          if (get(this, "general.type", "") === "COURSE") {
+            this.$emit("click-item", "content-course");
+            return;
+          }
         }
-        if (get(this, "general.type", "") === "COURSE") {
-          this.$emit("click-item", "content-course");
-          return;
+
+        if (key === "settings") {
+          if (get(this, "general.type", "") === "LECTURE") {
+            if (get(this, "lessons.data.length", 0) && key === "settings") {
+              this.$emit("click-item", key);
+              return;
+            }
+          }
+          if (get(this, "general.type", "") === "COURSE") {
+            if (get(this, "chapters.data.length", 0) && key === "settings") {
+              this.$emit("click-item", key);
+              return;
+            }
+          }
         }
-      }
-      if (get(this, "lessons.data.length", 0) && key === "settings") {
-        this.$emit("click-item", key);
-      }
-      if (get(this, "setting", null) && key === "exercise") {
-        this.$emit("click-item", key);
-      }
-      if (get(this, "setting", null) && key === "exam") {
-        this.$emit("click-item", key);
+
+        if (get(this, "setting", null) && key === "exercise") {
+          this.$emit("click-item", key);
+        }
+
+        if (get(this, "setting", null) && key === "exam") {
+          this.$emit("click-item", key);
+        }
       }
     },
 
