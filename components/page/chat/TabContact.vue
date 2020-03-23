@@ -333,10 +333,10 @@ export default {
           ...getData.rooms.filter(item => item.type == 2)
         );
         $state.loaded();
-        this.$store.commit(
-          `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
-          this.groupsListTab
-        );
+        // this.$store.commit(
+        //   `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
+        //   this.groupsListTab
+        // );
       } else {
         $state.complete();
       }

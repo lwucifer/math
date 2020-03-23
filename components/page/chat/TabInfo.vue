@@ -4,13 +4,6 @@
       <div class="message-info__acc">
         <div class="message-info__acc__image">
           <app-avatar src="https://picsum.photos/40/40" size="md" class="comment-item__avatar" />
-          <app-upload class="cgi-upload-avt change-avatar">
-            <template>
-              <div class="cgi-upload-avt-preview">
-                <IconPhoto width="22" height="22" />
-              </div>
-            </template>
-          </app-upload>
         </div>
         <div class="message-info__acc__title">
           <span>
