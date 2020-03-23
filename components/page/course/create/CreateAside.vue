@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       menu,
-      active: 'general'
+      active: "general"
     };
   },
 
@@ -90,32 +90,36 @@ export default {
     }),
     ...mapState("elearning/creating/creating-setting", {
       setting: "setting"
+    }),
+    ...mapState("elearning/creating/creating-chapter", {
+      chapters: "chapters"
     })
   },
 
   created() {
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
     useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
-    useEffect(this, this.handleChangeLesson.bind(this), [
-      "lessons"
+    useEffect(this, this.handleCheckedContent.bind(this), [
+      "lessons",
+      "chapters"
     ]);
   },
 
   methods: {
     handleClickMenuItem({ key }) {
-      this.active = key
+      this.active = key;
       const elearning_id = getParamQuery("elearning_id");
       if (key === "general") {
         this.$emit("click-item", key);
       }
       if (get(this, "general", null) && key === "content") {
-        this.active = 'content'
+        this.active = "content";
         if (get(this, "general.type", "") === "LECTURE") {
-          this.$emit("click-item", 'content-lecture');
+          this.$emit("click-item", "content-lecture");
           return;
         }
         if (get(this, "general.type", "") === "COURSE") {
-          this.$emit("click-item", 'content-course');
+          this.$emit("click-item", "content-course");
           return;
         }
       }
@@ -138,8 +142,18 @@ export default {
       this.menu[2].checked = false;
     },
 
-    handleChangeLesson() {
-      if (get(this, "lessons", 0)) {
+    handleCheckedContent() {
+      if (
+        get(this, "lessons", 0) &&
+        get(this, "general.type", "") === "LECTURE"
+      ) {
+        this.menu[1].checked = true;
+        return;
+      }
+      if (
+        get(this, "chapters.data.length", 0) &&
+        get(this, "general.type", "") === "COURSE"
+      ) {
         this.menu[1].checked = true;
         return;
       }
