@@ -2,7 +2,7 @@
   <div class="container course-create">
     <div class="row">
       <div class="col-md-3">
-        <CreateAside :active="formActive" @click-item="setFormActive" />
+        <CreateAside @click-item="setFormActive" />
       </div>
 
       <div class="col-md-9">

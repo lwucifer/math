@@ -65,18 +65,19 @@ const menu = [
 ];
 
 export default {
-  props: {
-    active: {
-      type: String,
-      default: "general",
-      // validator: value =>
-      //   ["general", "content", "settings", "exercise", "exam"].includes(value)
-    }
-  },
+  // props: {
+  //   active: {
+  //     type: String,
+  //     default: "general",
+  //     // validator: value =>
+  //     //   ["general", "content", "settings", "exercise", "exam"].includes(value)
+  //   }
+  // },
 
   data() {
     return {
-      menu
+      menu,
+      active: 'general'
     };
   },
 
@@ -96,17 +97,19 @@ export default {
     useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
     useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
     useEffect(this, this.handleChangeLesson.bind(this), [
-      "lessons.data.length"
+      "lessons"
     ]);
   },
 
   methods: {
     handleClickMenuItem({ key }) {
+      this.active = key
       const elearning_id = getParamQuery("elearning_id");
       if (key === "general") {
         this.$emit("click-item", key);
       }
       if (get(this, "general", null) && key === "content") {
+        this.active = 'content'
         if (get(this, "general.type", "") === "LECTURE") {
           this.$emit("click-item", 'content-lecture');
           return;
@@ -136,7 +139,7 @@ export default {
     },
 
     handleChangeLesson() {
-      if (get(this, "lessons.data.length", 0)) {
+      if (get(this, "lessons", 0)) {
         this.menu[1].checked = true;
         return;
       }

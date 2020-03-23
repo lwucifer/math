@@ -18,12 +18,11 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, options) {
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
-      // set to mutation
       commit(
         mutationTypes.ELEARNING_CREATING_CHAPTER
           .SET_ELEARNING_CREATING_CHAPTER_LIST,
@@ -75,9 +74,8 @@ const actions = {
  */
 const mutations = {
   [mutationTypes.ELEARNING_CREATING_CHAPTER
-    .SET_ELEARNING_CREATING_CHAPTER_LIST](state, _chapters) {
-    console.log("SET_CREATING_CHAPTER_LIST", _chapters);
-    state.chapters = _chapters;
+    .SET_ELEARNING_CREATING_CHAPTER_LIST](state, chapters) {
+    state.chapters = chapters;
   }
 };
 
