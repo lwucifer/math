@@ -6,6 +6,7 @@
       :chapter="chapter"
       @handleRefreshChapters="handleRefreshChapters"
       :index="index"
+      @handleAddLesson="handleAddLesson"
     />
   </fragment>
 </template>
@@ -39,6 +40,10 @@ export default {
 
   methods: {
     get,
+
+    handleAddLesson(chapter) {
+      this.$emit('handleAddLesson', chapter)
+    },
 
     getChapters() {
       const elearning_id = getParamQuery("elearning_id");

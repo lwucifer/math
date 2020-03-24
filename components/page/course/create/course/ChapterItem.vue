@@ -1,29 +1,29 @@
 <template>
   <!-- <fragment> -->
-    <div class="ce-item d-flex align-items-center justify-content-between">
-      <div class="ce-item__left d-flex align-items-center">
-        <h3 class="body-2 mr-3">
-          Chương {{ index + 1 }}:
-          <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
-        </h3>
-        <a href class="ce-item__action edit mr-3">
-          <IconEditAlt class="icon d-block subheading fill-primary" />
-        </a>
-        <a
-          href
-          class="ce-item__action delete mr-3"
-          @click.prevent="handleDeleteChapter"
-        >
-          <IconTrashAlt class="icon d-block subheading fill-secondary" />
-        </a>
-      </div>
-
-      <div class="ce-item__right">
-        <a href>Thêm bài giảng</a>
-      </div>
+  <div class="ce-item d-flex align-items-center justify-content-between">
+    <div class="ce-item__left d-flex align-items-center">
+      <h3 class="body-2 mr-3">
+        Chương {{ index + 1 }}:
+        <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
+      </h3>
+      <a href class="ce-item__action edit mr-3">
+        <IconEditAlt class="icon d-block subheading fill-primary" />
+      </a>
+      <a
+        href
+        class="ce-item__action delete mr-3"
+        @click.prevent="handleDeleteChapter"
+      >
+        <IconTrashAlt class="icon d-block subheading fill-secondary" />
+      </a>
     </div>
 
-    <!-- <app-divider class="my-0" /> -->
+    <div class="ce-item__right">
+      <a href @click.prevent="handleAddLesson">Thêm bài học</a>
+    </div>
+  </div>
+
+  <!-- <app-divider class="my-0" /> -->
   <!-- </fragment> -->
 </template>
 
@@ -54,6 +54,10 @@ export default {
 
   methods: {
     get,
+
+    handleAddLesson() {
+      this.$emit('handleAddLesson', this.chapter)
+    },
 
     async handleDeleteChapter() {
       const payload = {
