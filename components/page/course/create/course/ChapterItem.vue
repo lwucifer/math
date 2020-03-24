@@ -1,5 +1,5 @@
 <template>
-  <!-- <fragment> -->
+  <div>
     <div class="ce-item d-flex align-items-center justify-content-between">
       <div class="ce-item__left d-flex align-items-center">
         <h3 class="body-2 mr-3">
@@ -19,12 +19,18 @@
       </div>
 
       <div class="ce-item__right">
-        <a href>Thêm bài giảng</a>
+        <a href @click.prevent="handleAddLesson">Thêm bài học</a>
       </div>
     </div>
 
-    <!-- <app-divider class="my-0" /> -->
-  <!-- </fragment> -->
+    <CreateLessonOfChapter
+      v-if="isShowCreateLessonOfChapter"
+      :chapter="chapter"
+      @handleCancelAddLesson="handleCancelAddLesson"
+    />
+
+    <app-divider class="my-0" />
+  </div>
 </template>
 
 <script>
@@ -34,26 +40,42 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 
 export default {
   components: {
     IconEditAlt,
-    IconTrashAlt
+    IconTrashAlt,
+    CreateLessonOfChapter
+  },
+
+  data() {
+    return {
+      isShowCreateLessonOfChapter: false
+    };
   },
 
   props: {
-    chapter: {
-      type: Object,
-      default: null
-    },
     index: {
       type: Number,
       default: 0
+    },
+    chapter: {
+      type: Object,
+      default: null
     }
   },
 
   methods: {
     get,
+
+    handleCancelAddLesson() {
+      this.isShowCreateLessonOfChapter = false;
+    },
+
+    handleAddLesson() {
+      this.isShowCreateLessonOfChapter = true;
+    },
 
     async handleDeleteChapter() {
       const payload = {
