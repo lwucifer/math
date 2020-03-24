@@ -1,29 +1,30 @@
 <template>
   <div class="course-teacher-info">
     <div class="teacher-top">
-      <app-avatar
-        :src="get(_teacher, 'avatar', 'https://picsum.photos/125/125')"
-        :size="125"
-      />
+      <app-avatar :src="get(_teacher, 'avatar', 'https://picsum.photos/125/125')" :size="125" />
       <div class="info">
         <h4 class="name">{{ get(_teacher, "name", "") }}</h4>
-        <p>Giảng viên</p>
+        <p>{{ get(_teacher, "school_name", "") }}</p>
         <div class="stars">
-          <app-stars :stars="Math.floor(get(_teacher, 'rate', 0))" />
+          <app-stars :stars="Math.floor(get(_teacher, 'rate', 0))" :size="16" />
         </div>
       </div>
 
       <div class="right">
         <div>
-          <strong class="color-primary">{{
+          <strong class="color-primary">
+            {{
             get(_teacher, "elearning_total", 0)
-          }}</strong>
-          Khóa học
+            }}
+          </strong>
+          Bài giảng/khoá học
         </div>
         <div>
-          <strong class="color-primary">{{
+          <strong class="color-primary">
+            {{
             get(_teacher, "participant_total", 0)
-          }}</strong>
+            }}
+          </strong>
           Học viên
         </div>
       </div>
@@ -32,8 +33,8 @@
     <div class="mt-4 teacher-bottom">
       <h4 class="mb-3">Tiểu sử</h4>
       {{ get(_teacher, "description", "") }}
-      <div class="text-center mt-4 mb-3">
-        <a class="btn-load-more">Xem thêm</a>
+      <div class="text-center my-3">
+        <n-link class="text-decoration-none" to="">Xem thêm</n-link>
       </div>
     </div>
   </div>

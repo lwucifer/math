@@ -60,7 +60,8 @@
           </div>
 
           <div class="cc-box__body">
-            <ListChapter />
+            <ListChapter @handleAddLesson="handleAddLesson" />
+
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
@@ -69,260 +70,6 @@
         </div>
       </div>
     </div>
-    <!-- END STEP 1 -->
-
-    <!-- STEP 2 -->
-    <!-- <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow mr-4">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
-
-              <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <div class="cc-box__bg-gray px-4 pt-3 pb-4">
-              <h3 class="heading-6 mb-2 mt-3">Chương 1</h3>
-              <app-input :counter="80" placeholder="Tên chương" />
-
-              <div class="d-flex justify-content-end mt-4">
-                <app-button
-                  class="clc-btn font-weight-semi-bold mr-4"
-                  size="sm"
-                  color="disabled"
-                  square
-                >Huỷ bỏ</app-button>
-                <app-button class="clc-btn font-weight-semi-bold" size="sm" square>Tạo chương</app-button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- END STEP 2 -->
-
-    <!-- STEP 3 -->
-    <!-- <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow mr-4">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
-
-              <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <a
-                class="text-decoration-none d-inline-flex align-items-center"
-                href
-                @click.prevent="addChaper"
-              >
-                <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
-              </a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <div class="ce-item d-flex align-items-center justify-content-between">
-              <div class="ce-item__left d-flex align-items-center">
-                <h3 class="body-2 mr-3">
-                  Chương 1:
-                  <span class="font-weight-normal">Giới thiệu về toán lớp 11</span>
-                </h3>
-                <a href class="ce-item__action edit mr-3">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </a>
-                <a href class="ce-item__action delete mr-3">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </a>
-              </div>
-
-              <div class="ce-item__right">
-                <a href>Thêm bài giảng</a>
-              </div>
-            </div>
-
-            <app-divider class="my-0" />
-
-            <div class="ce-item d-flex align-items-center justify-content-between">
-              <div class="ce-item__left d-flex align-items-center">
-                <h3 class="body-2 mr-3">
-                  Chương 2:
-                  <span class="font-weight-normal">Chương 2 giảng dạy</span>
-                </h3>
-                <a href class="ce-item__action edit mr-3">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </a>
-                <a href class="ce-item__action delete mr-3">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </a>
-              </div>
-
-              <div class="ce-item__right">
-                <a href>Thêm bài giảng</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- END STEP 3 -->
-
-    <!-- STEP 4 -->
-    <!-- <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Nội dung học tập</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow mr-4">
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
-
-              <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
-              <a
-                class="text-decoration-none d-inline-flex align-items-center"
-                href
-                @click.prevent="addChaper"
-              >
-                <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
-              </a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <div class="ce-item d-flex align-items-center justify-content-between">
-              <div class="ce-item__left d-flex align-items-center">
-                <h3 class="body-2 mr-3">
-                  Chương 1:
-                  <span class="font-weight-normal">Giới thiệu về toán lớp 11</span>
-                </h3>
-              </div>
-            </div>
-
-            <div class="cc-box__bg-gray cc-box__nested px-4 pt-3 pb-4">
-              <h3 class="heading-6 mb-2 mt-3">Tên bài giảng</h3>
-              <app-input :counter="60" placeholder="Tên bài giảng" />
-
-              <div class="d-flex justify-content-end mt-4">
-                <app-button
-                  class="clc-btn font-weight-semi-bold mr-4"
-                  size="sm"
-                  color="disabled"
-                  square
-                >Huỷ bỏ</app-button>
-                <app-button class="clc-btn font-weight-semi-bold" size="sm" square>Thêm bài giảng</app-button>
-              </div>
-            </div>
-
-            <div class="ce-item d-flex align-items-center justify-content-between">
-              <div class="ce-item__left d-flex align-items-center">
-                <h3 class="body-2 mr-3">
-                  Chương 2:
-                  <span class="font-weight-normal">Chương 2 giảng dạy</span>
-                </h3>
-                <a href class="ce-item__action edit mr-3">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </a>
-                <a href class="ce-item__action delete mr-3">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </a>
-              </div>
-
-              <div class="ce-item__right">
-                <a href>Thêm bài giảng</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- END STEP 4 -->
 
     <!-- STEP 5 -->
     <!-- <div class="cc-panel bg-white mb-4">
@@ -335,34 +82,31 @@
           <div class="cc-box__head">
             <div class="cc-box__head-left flex-grow mr-4">
               <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
                 ref="inputCourseName"
                 class="cc-box__input-title mb-0 w-100"
                 size="sm"
                 type="text"
               />
-              <h2 v-else class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
+              <h2 class="cc-box__title heading-6">{{ get(general, "name", "") }}</h2>
 
-              <template v-if="isEditCourseName">
+              <template>
                 <button class="cc-box__btn mr-2 text-success">
                   <IconCheck class="icon" />
                 </button>
-                <button class="cc-box__btn text-error" @click="cancelEditCourseName">
+                <button class="cc-box__btn text-error">
                   <IconTimes class="icon" />
                 </button>
               </template>
 
-              <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
+              <button class="cc-box__btn cc-box__btn-edit">
                 <IconEditAlt class="icon" />
               </button>
             </div>
 
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
+            <div class="cc-box__head-right">
               <a
                 class="text-decoration-none d-inline-flex align-items-center"
                 href
-                @click.prevent="addChaper"
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
@@ -772,7 +516,7 @@ export default {
 
   data() {
     return {
-      isShowFormAddChapter: false
+      isShowFormAddChapter: false,
     };
   },
 
@@ -791,6 +535,16 @@ export default {
 
   methods: {
     get,
+
+    handleAddLesson(chapter) {
+      this.chapter = chapter;
+      this.isShowCreateLessonOfChapter = true;
+    },
+
+    handleCancelAddLesson() {
+      this.isShowCreateLessonOfChapter = false;
+      this.chapter = null;
+    },
 
     handleShowAddChapter() {
       this.isShowFormAddChapter = true;
