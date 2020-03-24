@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <ChapterItem
       v-for="(chapter, index) in get(chapters, 'data', [])"
       :key="get(chapter, 'id', '')"
@@ -8,7 +8,7 @@
       :index="index"
       @handleAddLesson="handleAddLesson"
     />
-  </fragment>
+  </div>
 </template>
 
 <script>
@@ -42,7 +42,7 @@ export default {
     get,
 
     handleAddLesson(chapter) {
-      this.$emit('handleAddLesson', chapter)
+      this.$emit("handleAddLesson", chapter);
     },
 
     getChapters() {
