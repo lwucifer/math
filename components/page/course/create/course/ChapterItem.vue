@@ -23,6 +23,14 @@
       </div>
     </div>
 
+    <LessonDetail
+      v-for="lesson in get(lessons, 'data', [])"
+      :key="lesson.id"
+      :lesson="lesson"
+      @handleEditLesson="handleEditLesson"
+      @refreshLessons="refreshLessons"
+    />
+
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
@@ -41,18 +49,32 @@ const IconTrashAlt = () =>
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import LessonDetail from "~/components/page/course/create/LessonDetail";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconEditAlt,
     IconTrashAlt,
-    CreateLessonOfChapter
+    CreateLessonOfChapter,
+    IconAngleDown,
+    LessonDetail
   },
 
   data() {
     return {
       isShowCreateLessonOfChapter: false
     };
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-lesson", {
+      lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
+    })
   },
 
   props: {
@@ -68,6 +90,14 @@ export default {
 
   methods: {
     get,
+
+    handleEditLesson() {
+      //
+    },
+
+    refreshLessons() {
+      //
+    },
 
     handleCancelAddLesson() {
       this.isShowCreateLessonOfChapter = false;
