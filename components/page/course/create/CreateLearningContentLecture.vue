@@ -216,15 +216,17 @@ export default {
 
     fetchLesson() {
       const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
+      if (elearning_id) {
+        const options = {
+          params: {
+            elearning_id
+          }
+        };
+        this.$store.dispatch(
+          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+          options
+        );
+      }
     },
 
     handleEditLesson(lesson) {
@@ -284,7 +286,7 @@ export default {
     editCourseName() {
       this.isEditCourseName = true;
       this.courseNameModel = get(this.general, "name", "");
-      
+
       const timeout = setTimeout(() => {
         this.$refs.inputCourseName.focus();
         clearTimeout(timeout);

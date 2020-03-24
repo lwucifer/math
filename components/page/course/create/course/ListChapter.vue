@@ -42,15 +42,17 @@ export default {
 
     getChapters() {
       const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-        options
-      );
+      if (elearning_id) {
+        const options = {
+          params: {
+            elearning_id
+          }
+        };
+        this.$store.dispatch(
+          `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
+          options
+        );
+      }
     },
 
     handleRefreshChapters(key) {
