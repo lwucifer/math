@@ -30,9 +30,6 @@ export default {
       "subjects",
       "defaultValue"
     ]);
-    this.$store.dispatch(
-      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
-    );
   },
 
   props: {

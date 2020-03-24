@@ -56,10 +56,13 @@ export default {
 
   methods: {
     async handleAddChapter() {
-      const index =
-        get(this, "chapters.data", 0)[
-          get(this, "chapters.data", []).length - 1
-        ]["index"] + 1;
+      let index = 0;
+      try {
+        index =
+          get(this, "chapters.data", 0)[
+            get(this, "chapters.data", []).length - 1
+          ]["index"] + 1;
+      } catch (error) {}
 
       const elearning_id = getParamQuery("elearning_id");
       const options = {
