@@ -132,7 +132,7 @@
               @click="pushUrl(item.id)"
             >
               <div class="align-item__image">
-                <app-avatar :src="item.image" size="md" class="comment-item__avatar" />
+                <app-avatar :src="item.room_avatar && item.room_avatar.low ? item.room_avatar.low : ''" size="md" class="comment-item__avatar" />
               </div>
               <div class="align-item__meta">
                 <h4 class="align-item__title">

@@ -387,6 +387,20 @@
                             right: 0;
                             top: 0;
                         }
+                        .btn-save-name {
+                            height: 2.4rem;
+                            margin-left: .5rem;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                        .btn-des-name {
+                            height: 2.4rem;
+                            margin-left: 1rem;
+                            // position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
                     }
                 }
                 .message-info__box {
@@ -411,11 +425,11 @@
                                     align-items: center;
                                     padding: 0.5rem;
                                 }
-                                .app-dropdown__content{
+                                .app-dropdown__content {
                                     opacity: 0;
                                     visibility: hidden;
                                 }
-                                .link--dropdown:hover > .app-dropdown__content {
+                                .link--dropdown:hover>.app-dropdown__content {
                                     opacity: 1;
                                     visibility: visible;
                                 }
@@ -502,7 +516,7 @@
         }
     }
     &.item__1 {
-        .app-dropdown__content{
+        .app-dropdown__content {
             left: auto;
             right: 0;
         }
@@ -561,9 +575,11 @@
         }
     }
 }
-.app-dropdown__content{
+
+.app-dropdown__content {
     overflow: hidden;
 }
+
 .message-foward-tags-modal .app-modal-content {
     padding: 2rem 1.5rem;
 }

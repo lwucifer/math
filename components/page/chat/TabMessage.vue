@@ -35,10 +35,10 @@
       <div class="aside-box__top" v-else>
         <div class="message-desc">
           <div class="message-decs__image">
-            <app-avatar src="https://picsum.photos/40/40" size="sm" class="comment-item__avatar" />
+            <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
           </div>
           <div class="message-decs__title">
-            <span>{{nameGroup ? nameGroup.room_name : ''}}</span>
+            <span>{{nameGroup}}</span>
           </div>
         </div>
         <div class="message-tool">
@@ -611,7 +611,7 @@ export default {
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
-    ...mapState("message", ["messageList", "groupListType", "chatListType"]),
+    ...mapState("message", ["messageList", "groupListDetail"]),
 
     selectedTags() {
       return this.tag.map(item => {
@@ -635,27 +635,17 @@ export default {
       }));
     },
     nameGroup() {
-      const id = this.$route.params.id;
-      const [data] = this.groupListType
-        ? this.groupListType.filter(item => item.id.toString() == id)
-        : {};
-      return data;
+      return this.groupListDetail.room && this.groupListDetail.room.room_name
+        ? this.groupListDetail.room.room_name
+        : "";
+    },
+    avatarSrc() {
+      return this.groupListDetail.room &&
+        this.groupListDetail.room.room_avatar &&
+        this.groupListDetail.room.room_avatar.low
+        ? this.groupListDetail.room.room_avatar.low
+        : "https://picsum.photos/40/40";
     }
-    // nameMessage() {
-    //   debugger;
-    //   const id = this.$route.params.id;
-    //   const userId = this.$store.state.auth.token
-    //     ? this.$store.state.auth.token.id
-    //     : "";
-    //   const [dataRoom] = this.chatListType
-    //     ? this.chatListType.filter(item => item.id.toString() == id)
-    //     : [];
-    //   console.log("dataRoom", dataRoom);
-    //   // const [dataMember] = dataRoom.members
-    //   //   ? dataRoom.members.filter(item => item.id != userId)
-    //   //   : {};
-    //   // return dataMember;
-    // }
   },
 
   methods: {
@@ -721,6 +711,12 @@ export default {
   },
   created() {
     // this.messageListQuery.room_id = this.$route.params.id;
+  },
+  watch: {
+    groupListDetail(_newVal) {
+      if (_newVal) {
+      }
+    }
   }
 };
 </script>
