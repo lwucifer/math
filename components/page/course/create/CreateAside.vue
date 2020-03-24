@@ -153,7 +153,7 @@ export default {
     },
 
     handleChangeSetting() {
-      if (get(this, "setting", null)) {
+      if (get(this, "setting.setting", null)) {
         this.menu[2].checked = true;
         return;
       }
