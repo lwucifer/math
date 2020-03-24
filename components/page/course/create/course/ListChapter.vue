@@ -1,13 +1,14 @@
 <template>
-  <fragment>
+  <div>
     <ChapterItem
       v-for="(chapter, index) in get(chapters, 'data', [])"
       :key="get(chapter, 'id', '')"
       :chapter="chapter"
       @handleRefreshChapters="handleRefreshChapters"
       :index="index"
+      @handleAddLesson="handleAddLesson"
     />
-  </fragment>
+  </div>
 </template>
 
 <script>
@@ -39,6 +40,10 @@ export default {
 
   methods: {
     get,
+
+    handleAddLesson(chapter) {
+      this.$emit("handleAddLesson", chapter);
+    },
 
     getChapters() {
       const elearning_id = getParamQuery("elearning_id");

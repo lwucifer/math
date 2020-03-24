@@ -6,7 +6,7 @@
         class="cc-tab-item"
         :class="{ active: tabVideo === 'upload' }"
         @click.prevent="changeTabVideo('upload')"
-        >Upload bài giảng</a
+        >Upload bài học</a
       >
 
       <a

@@ -14,7 +14,7 @@
         class="cc-tab-item"
         :class="{ active: tabDocument === 'upload' }"
         @click.prevent="changeTabDocument('upload')"
-        >Upload bài giảng</a
+        >Upload bài học</a
       >
 
       <a
