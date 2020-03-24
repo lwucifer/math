@@ -6,9 +6,14 @@
       </div>
 
       <div class="col-md-9">
-        <CreateGeneralInformation v-show="formActive === 'general'" class="mb-5" />
+        <CreateGeneralInformation
+          v-show="formActive === 'general'"
+          class="mb-5"
+        />
         <CreateLearningContentCourse v-show="formActive === 'content-course'" />
-        <CreateLearningContentLecture v-show="formActive === 'content-lecture'" />
+        <CreateLearningContentLecture
+          v-show="formActive === 'content-lecture'"
+        />
         <CreateSetting v-show="formActive === 'settings'" />
         <CreateExcercise v-show="formActive === 'exercise'" />
         <CreateExam v-show="formActive === 'exam'" />
@@ -25,6 +30,7 @@ import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExcercise from "~/components/page/course/create/CreateExcercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
 import CreateLearningContentLecture from "~/components/page/course/create/CreateLearningContentLecture";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   layout: "no-header",
@@ -37,6 +43,15 @@ export default {
     CreateExcercise,
     CreateExam,
     CreateLearningContentLecture
+  },
+
+  async fetch({ params, query, store }) {
+    await store.dispatch(
+      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
+    );
+    await store.dispatch(
+      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
+    );
   },
 
   data() {
