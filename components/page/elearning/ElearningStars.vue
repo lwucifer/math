@@ -7,7 +7,7 @@
       <div class="chart">
         <div :style="'width: ' + five + '%'"></div>
       </div>
-      <span>{{five}} %</span>
+      <span class="text-gray">{{five}} %</span>
     </div>
     <div class="star">
       <strong class="mr-2">4</strong>
@@ -16,7 +16,7 @@
       <div class="chart">
         <div :style="'width: ' + four + '%'"></div>
       </div>
-      <span>{{four}} %</span>
+      <span class="text-gray">{{four}} %</span>
     </div>
     <div class="star">
       <strong class="mr-2">3</strong>
@@ -25,7 +25,7 @@
       <div class="chart">
         <div :style="'width: ' + three + '%'"></div>
       </div>
-      <span>{{three}} %</span>
+      <span class="text-gray">{{three}} %</span>
     </div>
     <div class="star">
       <strong class="mr-2">2</strong>
@@ -34,7 +34,7 @@
       <div class="chart">
         <div :style="'width: ' + two + '%'"></div>
       </div>
-      <span>{{two}} %</span>
+      <span class="text-gray">{{two}} %</span>
     </div>
     <div class="star">
       <strong class="mr-2">1</strong>
@@ -43,7 +43,7 @@
       <div class="chart">
         <div :style="'width: ' + one + '%'"></div>
       </div>
-      <span>{{one}} %</span>
+      <span class="text-gray">{{one}} %</span>
     </div>
   </div>
 </template>

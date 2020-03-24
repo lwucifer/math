@@ -299,7 +299,10 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/courses/courses-list", {
+      courses: "list"
+    })
   },
 
   methods: {

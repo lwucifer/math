@@ -75,7 +75,7 @@
           </div>
         </section>
 
-        <section class="box elearning-view__content scroll-target" id="course-content">
+        <section class="box elearning-view__content scroll-target mb-4" id="course-content">
           <h5>Nội dung {{ typeText }}</h5>
           <div class="row flex-wrap info">
             <div class="col-auto">
@@ -184,14 +184,14 @@
         <div class="box">
           <section class="scroll-target" id="teacher">
             <h5 class="mb-4">Thông tin giáo viên</h5>
-            <CourseTeacherInfo :teacher="teacher" class="mb-4" />
+            <CourseTeacherInfo :teacher="info.teacher" class="mb-3" />
           </section>
 
-          <hr />
+          <hr class="mt-3 mb-4"/>
 
-          <section class="scroll-target pt-2" id="review">
-            <h5 class="mt-3 mb-4">Đánh giá {{ typeText }}</h5>
-            <ElearningRates />
+          <section class="scroll-target" id="review">
+            <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
+            <ElearningReview :reviews="info.reviews"/>
           </section>
         </div>
       </div>
@@ -226,7 +226,7 @@ import SubjectService from "~/services/elearning/public/Subject";
 
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
 import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
-import ElearningRates from "~/components/page/elearning/ElearningRates";
+import ElearningReview from "~/components/page/elearning/ElearningReview";
 import ElearningRightSide from "~/components/page/elearning/ElearningRightSide";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
@@ -247,7 +247,7 @@ export default {
   components: {
     CourseTeacherInfo,
     ElearningSliderTab,
-    ElearningRates,
+    ElearningReview,
     ElearningRightSide,
     IconEye,
     IconPlayO,

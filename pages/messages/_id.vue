@@ -3,13 +3,23 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sidebar">
-          <TabContact :contacts="contactList" :friends="friends" @addMessage="addMessage()" @clickTab="clickTab()"/>
+          <TabContact
+            :contacts="contactList"
+            :friends="friends"
+            @addMessage="addMessage()"
+            @clickTab="clickTab()"
+          />
         </div>
         <div class="col-md-9 col-content">
           <div class="box">
             <div class="row">
               <TabMessage :isCreate="isCreate" />
-              <TabInfo :fileshare="fileShareList" :imageshare="imageShareList" :members="friends" :isGroup="isGroup"/>
+              <TabInfo
+                :fileshare="fileShareList"
+                :imageshare="imageShareList"
+                :members="friends"
+                :isGroup="isGroup"
+              />
             </div>
           </div>
         </div>
@@ -63,6 +73,11 @@ export default {
         }
       }),
       store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
+        params: {
+          room_id: room_id
+        }
+      }),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
         params: {
           room_id: room_id
         }
@@ -286,10 +301,10 @@ export default {
     addMessage() {
       this.isCreate = !this.isCreate;
     },
-    
+
     clickTab() {
       this.isGroup = !this.isGroup;
-    },
+    }
   },
 
   beforeDestroy() {

@@ -1,5 +1,5 @@
 <template>
-  <!-- <fragment> -->
+  <div>
     <div class="ce-item d-flex align-items-center justify-content-between">
       <div class="ce-item__left d-flex align-items-center">
         <h3 class="body-2 mr-3">
@@ -19,12 +19,26 @@
       </div>
 
       <div class="ce-item__right">
-        <a href>Thêm bài giảng</a>
+        <a href @click.prevent="handleAddLesson">Thêm bài học</a>
       </div>
     </div>
 
-    <!-- <app-divider class="my-0" /> -->
-  <!-- </fragment> -->
+    <LessonDetail
+      v-for="lesson in get(lessons, 'data', [])"
+      :key="lesson.id"
+      :lesson="lesson"
+      @handleEditLesson="handleEditLesson"
+      @refreshLessons="refreshLessons"
+    />
+
+    <CreateLessonOfChapter
+      v-if="isShowCreateLessonOfChapter"
+      :chapter="chapter"
+      @handleCancelAddLesson="handleCancelAddLesson"
+    />
+
+    <app-divider class="my-0" />
+  </div>
 </template>
 
 <script>
@@ -34,26 +48,64 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import LessonDetail from "~/components/page/course/create/LessonDetail";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconEditAlt,
-    IconTrashAlt
+    IconTrashAlt,
+    CreateLessonOfChapter,
+    IconAngleDown,
+    LessonDetail
+  },
+
+  data() {
+    return {
+      isShowCreateLessonOfChapter: false
+    };
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-lesson", {
+      lessons: "lessons"
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general"
+    })
   },
 
   props: {
-    chapter: {
-      type: Object,
-      default: null
-    },
     index: {
       type: Number,
       default: 0
+    },
+    chapter: {
+      type: Object,
+      default: null
     }
   },
 
   methods: {
     get,
+
+    handleEditLesson() {
+      //
+    },
+
+    refreshLessons() {
+      //
+    },
+
+    handleCancelAddLesson() {
+      this.isShowCreateLessonOfChapter = false;
+    },
+
+    handleAddLesson() {
+      this.isShowCreateLessonOfChapter = true;
+    },
 
     async handleDeleteChapter() {
       const payload = {
