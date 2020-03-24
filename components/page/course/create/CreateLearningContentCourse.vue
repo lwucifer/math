@@ -62,12 +62,6 @@
           <div class="cc-box__body">
             <ListChapter @handleAddLesson="handleAddLesson" />
 
-            <CreateLessonOfChapter
-              v-if="isShowCreateLessonOfChapter"
-              @handleCancelAddLesson="handleCancelAddLesson"
-              :chapter="chapter"
-            />
-
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
@@ -499,7 +493,6 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import CreateChapter from "~/components/page/course/create/course/CreateChapter";
 import ListChapter from "~/components/page/course/create/course/ListChapter";
-import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 
 export default {
   components: {
@@ -518,15 +511,12 @@ export default {
     AddContent,
     LessonDetail,
     CreateChapter,
-    ListChapter,
-    CreateLessonOfChapter
+    ListChapter
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
-      isShowCreateLessonOfChapter: false,
-      chapter: null
     };
   },
 
