@@ -4,11 +4,22 @@
       <div class="message-info__acc">
         <div class="message-info__acc__image">
           <app-avatar src="https://picsum.photos/40/40" size="md" class="comment-item__avatar" />
+          <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
+            <template>
+              <div class="cgi-upload-avt-preview">
+                <IconPhoto width="16" height="16" />
+              </div>
+            </template>
+          </app-upload>
         </div>
         <div class="message-info__acc__title">
-          <span>
-            <a href="#">Đặng Duy Long</a>
+          <input v-if="changeName" type="text" v-model="name">
+          <span v-else>
+            <a href="#">{{name}}</a>
           </span>
+          <button v-show="changeName" @click="changeName = !changeName" class="btn-change-name">
+            <IconEditAlt width="20" height="20"/>
+          </button>
         </div>
       </div>
       <div class="message-info__box">
@@ -95,13 +106,15 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
+import IconEditAlt from '~/assets/svg/design-icons/edit-alt.svg?inline';
 
 export default {
   components: {
     IconPlus,
     ModalAddMember,
     IconDots,
-    IconPhoto
+    IconPhoto,
+    IconEditAlt
   },
 
   props: {
@@ -131,12 +144,14 @@ export default {
     return {
       visibleAddMember: false,
       dropdownActions: false,
+      changeName: false,
       memberListTab: [],
       infiniteId: +new Date(),
       memberListQuery: {
         page: 1,
         room_id: ""
-      }
+      },
+      name: "Đặng Duy Long"
     };
   },
   created() {},
@@ -176,7 +191,19 @@ export default {
           this.getMemberList({ params: query });
         }
       });
-    }
+    },
+
+    async handleUploadChange(fileList, event) {
+      this.avatar = Array.from(fileList);
+
+      getBase64(this.avatar[0], src => {
+        this.avatarSrc = src;
+      });
+      const body = new FormData();
+      body.append("avatar_images", fileList[0]);
+      console.log("[avatar_images]", fileList[0]);
+      this.accountPersonalEditAvatar(body).then(result => {});
+    },
   },
   watch: {
     memberList(_newval) {
