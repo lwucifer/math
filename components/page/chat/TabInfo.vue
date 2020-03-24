@@ -3,7 +3,7 @@
     <div class="message-info">
       <div class="message-info__acc">
         <div class="message-info__acc__image">
-          <app-avatar src="https://picsum.photos/40/40" size="md" class="comment-item__avatar" />
+          <app-avatar :src="avatarSrc" size="md" class="comment-item__avatar" />
           <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
             <template>
               <div class="cgi-upload-avt-preview">
@@ -13,12 +13,18 @@
           </app-upload>
         </div>
         <div class="message-info__acc__title">
-          <input v-if="changeName" type="text" v-model="name">
+          <input v-if="changeName" type="text" v-model="name" />
           <span v-else>
             <a href="#">{{name}}</a>
           </span>
-          <button v-show="changeName" @click="changeName = !changeName" class="btn-change-name">
-            <IconEditAlt width="20" height="20"/>
+          <button v-if="!changeName" @click="changeName = true" class="btn-change-name">
+            <IconEditAlt width="20" height="20" />
+          </button>
+          <button v-if="changeName" @click="changeName = false " class="btn-des-name">
+            <IconCloseOutline width="20" height="20" />
+          </button>
+          <button v-if="changeName" @click="saveNameGroup" class="btn-save-name">
+            <IconTick width="20" height="20" />
           </button>
         </div>
       </div>
@@ -32,13 +38,13 @@
           </ul>
         </div>
       </div>
-      <div class="message-info__box">
+      <div class="message-info__box" v-if="listImage.length > 0">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
         <div class="message-info__box__content images-attachment">
           <ul class="list-unstyle">
-            <li v-for="(item, index) in imageshare" :key="index">
+            <li v-for="(item, index) in listImage" :key="index">
               <n-link to>
-                <img :src="item.image" />
+                <img :src="item && item.low ? item.low : ''" />
               </n-link>
             </li>
           </ul>
@@ -106,7 +112,10 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconEditAlt from '~/assets/svg/design-icons/edit-alt.svg?inline';
+import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
+import IconTick from "~/assets/svg/icons/tick.svg?inline";
+import { getBase64 } from "~/utils/common";
 
 export default {
   components: {
@@ -114,7 +123,9 @@ export default {
     ModalAddMember,
     IconDots,
     IconPhoto,
-    IconEditAlt
+    IconEditAlt,
+    IconCloseOutline,
+    IconTick
   },
 
   props: {
@@ -151,15 +162,38 @@ export default {
         page: 1,
         room_id: ""
       },
-      name: "Đặng Duy Long"
+      name: "",
+      avatarSrc: ""
     };
   },
-  created() {},
+  created() {
+    this.name =
+      this.groupListDetail.room && this.groupListDetail.room.room_name
+        ? this.groupListDetail.room.room_name
+        : "";
+    this.avatarSrc =
+      this.groupListDetail.room &&
+      this.groupListDetail.room.room_avatar &&
+      this.groupListDetail.room.room_avatar.low
+        ? this.groupListDetail.room.room_avatar.low
+        : "https://picsum.photos/40/40";
+  },
   computed: {
-    ...mapState("message", ["memberList"])
+    ...mapState("message", ["memberList", "groupListDetail"]),
+    listImage() {
+      return this.groupListDetail && this.groupListDetail.listImage
+        ? this.groupListDetail.listImage
+        : [];
+    }
   },
   methods: {
-    ...mapActions("message", ["groupRemoveMember", "getMemberList"]),
+    ...mapActions("message", [
+      "groupRemoveMember",
+      "getMemberList",
+      "editName",
+      "getGroupListDetail",
+      "editAvatarGroup"
+    ]),
     async membersInfiniteHandler($state) {
       this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new GroupMember(this.$axios)[
@@ -193,6 +227,24 @@ export default {
       });
     },
 
+    saveNameGroup() {
+      const dataEdit = {
+        room_id: this.$route.params.id,
+        room_name: this.name
+      };
+      this.editName(dataEdit).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.changeName = false;
+          this.getGroupListDetail({
+            params: { room_id: this.$route.params.id }
+          });
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+
     async handleUploadChange(fileList, event) {
       this.avatar = Array.from(fileList);
 
@@ -200,10 +252,22 @@ export default {
         this.avatarSrc = src;
       });
       const body = new FormData();
-      body.append("avatar_images", fileList[0]);
-      console.log("[avatar_images]", fileList[0]);
-      this.accountPersonalEditAvatar(body).then(result => {});
-    },
+      body.append("room_avatar", fileList[0]);
+      body.append("room_id", this.$route.params.id);
+      console.log("[room_avatar]", fileList[0]);
+      this.editAvatarGroup(body).then(result => {
+        if (result.success == true) {
+          setTimeout(() => {
+            this.$toasted.show("success");
+            this.getGroupListDetail({
+              params: { room_id: this.$route.params.id }
+            });
+          }, 2500);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    }
   },
   watch: {
     memberList(_newval) {
