@@ -1,4 +1,7 @@
 .app-stars {
+    display: flex;
+    flex-wrap: wrap;
+    
     &.sm {
         margin-left: -.3rem;
         margin-right: -.3rem;

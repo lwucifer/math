@@ -5,7 +5,7 @@
         align-items: center;
         flex-wrap: nowrap;
         + .star {
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
         >span {
             width: 4rem;
@@ -17,10 +17,10 @@
         flex: 1;
         height: .6rem;
         background-color: #eee;
-        border-radius: 1rem;
+        border-radius: 5px;
         display: flex;
         align-items: center;
-        margin-left: .5rem;
+        margin-left: .7rem;
         >div {
             position: absolute;
             height: .6rem;
