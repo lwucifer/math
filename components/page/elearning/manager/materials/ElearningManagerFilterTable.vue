@@ -176,7 +176,7 @@
 
     computed: {
       ...mapState("auth", ["loggedUser"]),
-      ...mapState("elearning/teaching/repository-files", {
+      ...mapState(STORE_NAMESPACE, {
         detailInfo: 'files'
       }),
       additionalActions: function() {
