@@ -10,18 +10,18 @@
               :src="get(info, 'teacher.avatar.low', null)"
               :size="32"
             />
-            <span class="name ml-2">{{ get(info, 'teacher.name','') }}</span>
+            <span class="name ml-2">{{ get(info, 'teacher.name', '') }}</span>
           </div>
 
           <div class="views ml-auto">
             <IconEye />
-            <strong class="ml-2 mr-1">{{ info.total_view }}</strong> lượt xem
+            <strong class="ml-2 mr-1">{{ get(info, 'total_view', 0) }}</strong> lượt xem
           </div>
 
           <div class="stars">
-            <app-stars :stars="4" :size="16" />
-            <strong class="ml-3"></strong>&nbsp;
-            <span class="text-sub"></span>
+            <app-stars :stars="Math.floor(get(info, 'reviews.averageRate', 0))" :size="16" />
+            <strong class="ml-3">{{ get(info, 'reviews.averageRate', 0) }}</strong>&nbsp;
+            <span class="text-sub">({{ get(info, 'reviews.averageRate', 0) }})</span>
           </div>
         </div>
 
@@ -80,11 +80,11 @@
           <div class="row flex-wrap info">
             <div class="col-auto">
               Trình độ:
-              <strong class="color-primary">{{ levelText }}</strong>
+              <strong class="color-primary">{{ get(program, 'level', '') }}</strong>
             </div>
             <div class="col-auto">
               Môn học:
-              <strong class="color-primary">{{ subjectText }}</strong>
+              <strong class="color-primary">{{ get(program, 'subject', '') }}</strong>
             </div>
             <div class="col-auto">
               Số bài giảng:
@@ -195,8 +195,9 @@
           </section>
         </div>
       </div>
+
       <div class="col-md-4">
-        <ElearningRightSide :data="{}" v-sticky sticky-offset="top" />
+        <ElearningRightSide  v-sticky sticky-offset="top" v-bind="{ info, program }" />
       </div>
     </div>
 
@@ -224,6 +225,7 @@ import { ELEARNING_TYPES } from "~/utils/constants";
 import InfoService from "~/services/elearning/public/Info";
 import LevelService from "~/services/elearning/public/Level";
 import SubjectService from "~/services/elearning/public/Subject";
+import ProgramService from "~/services/elearning/public/Program";
 
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
 import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
@@ -270,17 +272,24 @@ export default {
     const getLevels = () => new LevelService($axios)[actionTypes.BASE.LIST]();
     const getSubjects = () =>
       new SubjectService($axios)[actionTypes.BASE.LIST]();
+    const getProgram = () => new ProgramService($axios)[actionTypes.BASE.LIST]({
+      params: {
+        elearning_id: params.id
+      }
+    });
 
     const [
       dataInfo = {},
       dataLevels = {},
-      dataSubjects = {}
-    ] = await Promise.all([getInfo(), getLevels(), getSubjects()]);
+      dataSubjects = {},
+      dataProgram = {}
+    ] = await Promise.all([getInfo(), getLevels(), getSubjects(), getProgram()]);
 
     return {
       info: dataInfo.data || {},
       levels: dataLevels.data || [],
-      subjects: dataSubjects.data || []
+      subjects: dataSubjects.data || [],
+      program: dataProgram.data || {}
     };
   },
 

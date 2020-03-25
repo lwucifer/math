@@ -13,11 +13,11 @@
       <app-spin v-if="loading"></app-spin>
 
       <template v-else>
-        <a href="" class="post-detail__prev" @click.prevent @click="handleClickPrev">
+        <a href class="post-detail__prev" @click.prevent @click="handleClickPrev">
           <IconChevronLeft />
         </a>
 
-        <a href="" class="post-detail__next" @click.prevent @click="handleClickNext">
+        <a href class="post-detail__next" @click.prevent @click="handleClickNext">
           <IconChevronRight />
         </a>
 
@@ -30,11 +30,10 @@
     <div class="post-detail__right">
       <Post
         show-edit
-        :fullname="post.creator && post.creator.fullname"
-        :updated="post.updated"
-        :likes="post.likes"
-        :comments="post.comments"
-        :content="post.content"
+        show-comment
+        :post="post"
+        @delete="deletePost"
+        @like="likePost"
       />
     </div>
 
@@ -45,7 +44,13 @@
         open-on-click
         v-model="dropdownShow"
       >
-        <button slot="activator" slot-scope="{ on }" type="button" class="post-detail__actions-btn" v-on="on">
+        <button
+          slot="activator"
+          slot-scope="{ on }"
+          type="button"
+          class="post-detail__actions-btn"
+          v-on="on"
+        >
           <IconDots />
         </button>
 
@@ -93,10 +98,16 @@ export default {
     post: {
       type: Object,
       validator: value =>
-        ["id", "creator", "updated", "likes", "comments", "content"].every(
-          key => key in value
-        )
-    },
+        [
+          "post_id",
+          "author",
+          "created_at",
+          "total_like",
+          "total_comment",
+          "content",
+          "privacy"
+        ].every(key => key in value)
+    }
   },
 
   data() {
@@ -105,13 +116,28 @@ export default {
     };
   },
 
+  computed: {
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    }
+  },
+
   methods: {
     handleClickPrev() {
-      this.$emit('click-prev')
+      this.$emit("click-prev");
     },
 
     handleClickNext() {
-      this.$emit('click-next')
+      this.$emit("click-next");
+    },
+
+    deletePost(...args) {
+      this.$emit('delete', args)
+    },
+
+    likePost(...args) {
+      this.$emit('like', args)
     }
   }
 };
