@@ -296,6 +296,18 @@ export default {
     // Emit socket event
     // socket.emit("join_resource", { data: "I'm connected!" });
   },
+  created() {
+    // debugger;
+    // this.socket.on("join_room", function() {
+    //   console.log("on join_room");
+    //   var params = {
+    //     room_id: this.$route.params.id
+    //   };
+    //   this.socket.emit("join_room", params, function() {
+    //     console.log("User has joined this channel");
+    //   });
+    // });
+  },
 
   methods: {
     addMessage() {
@@ -316,6 +328,22 @@ export default {
       if (!this.socket.connected) {
         this.socket.connect();
       }
+      console.log("this.socket", this.socket);
+      this.socket.on("join_room", () => {
+        console.log("on join_room");
+      });
+
+      const params = {
+        room_id: this.$route.params.id,
+        user: {
+          id: this.$store.state.auth.token.id,
+          fullname: this.$store.state.auth.token.fullname
+        }
+      };
+      console.log("[params]", params);
+      this.socket.emit("join_room", params, () => {
+        console.log("User has joined this channel");
+      });
     }
   },
 
