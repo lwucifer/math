@@ -23,6 +23,10 @@ module.exports = {
         }]
     },
 
+    env: {
+        SOCKET_URI: process.env.SOCKET_URI,
+    },
+
     /**
      * config local server|port
      */
