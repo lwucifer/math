@@ -52,7 +52,7 @@ class AddContentCourse {
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }
-    if (payload.index !== "") {
+    if (payload.index !== "" && !payload.id) {
       this.index = payload.index;
     }
     if (payload.repository_file_id) {

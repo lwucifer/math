@@ -1,5 +1,8 @@
 <template>
-  <div class="cc-box__bg-gray cc-box__nested px-4 pt-3 pb-4">
+  <div
+    class="cc-box__bg-gray cc-box__nested px-4 pt-3 pb-4"
+    id="create-lesson-of-chapter"
+  >
     <h3 class="heading-6 mb-2 mt-3">Tên bài học</h3>
     <app-input :counter="60" placeholder="Tên bài học" v-model="payload.name" />
 
@@ -52,7 +55,7 @@
         size="sm"
         color="disabled"
         square
-        @click="handleCancelAddLesson"
+        @click="handleCancel"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -60,7 +63,7 @@
         size="sm"
         square
         @click="handleAddContent"
-        >Thêm bài giảng</app-button
+        >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
     </div>
   </div>
@@ -105,6 +108,14 @@ export default {
     chapter: {
       type: Object,
       default: null
+    },
+    indexCreateLesson: {
+      type: Number,
+      default: 0
+    },
+    lesson: {
+      type: Object,
+      default: null
     }
   },
 
@@ -113,7 +124,7 @@ export default {
       tabType: "video",
       payload: {
         chapter_id: get(this, "chapter.id", ""),
-        index: 1,
+        index: this.indexCreateLesson,
         lesson: "",
         name: "",
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
@@ -124,9 +135,24 @@ export default {
     };
   },
 
+  created() {
+    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
+  },
+
+  computed: {
+    edit() {
+      return !!get(this, "lesson.id", "");
+    }
+  },
+
   methods: {
-    handleCancelAddLesson() {
-      this.$emit("handleCancelAddLesson");
+    handleChangeLesson() {
+      if (get(this, "lesson.name", "")) {
+        this.payload.name = get(this, "lesson.name", "");
+      }
+      if (get(this, "lesson.id", "")) {
+        this.payload.id = get(this, "lesson.id", "");
+      }
     },
 
     changeTabType(type) {
@@ -146,6 +172,9 @@ export default {
     },
 
     async handleAddContent() {
+      this.payload.index = this.indexCreateLesson;
+      this.payload.chapter_id = get(this, "chapter.id", "");
+      this.payload.id = get(this, "lesson.id", "");
       const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
