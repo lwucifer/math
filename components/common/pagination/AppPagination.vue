@@ -10,7 +10,7 @@
           @change="goTo(current)"
         />
         <span
-          >{{ pages.first }}-{{ pages.last }} của tổng số
+          >{{ from }}-{{ to }} của tổng số
           {{ pages.totalElements }}</span
         >
       </div>
@@ -20,7 +20,7 @@
           type="text"
           class="current"
           :value="current"
-          @change="e => goTo(parseInt(e.target.value))"
+          @change="e => goTo(parseInt(e.target.value ), e.target.value >  pagination.totalPages || e.target.value <= 0)"
         />
         <ul>
           <li
@@ -164,6 +164,12 @@ export default {
     },
     next() {
       return this.current < this.total ? this.current + 1 : null;
+    },
+    from() {
+      return this.pagination.number * this.pagination.size + 1
+    },
+    to() {
+      return this.pagination.number * this.pagination.size + this.pagination.numberOfElements
     }
   }
 };
