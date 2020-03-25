@@ -31,6 +31,7 @@
       @refreshLessons="refreshLessons"
     />
 
+    <div class="create-lesson"></div>
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
@@ -127,7 +128,7 @@ export default {
     },
 
     async refreshLessons() {
-      this.isShowCreateLessonOfChapter = false
+      this.isShowCreateLessonOfChapter = false;
       this.lessons = await this.getLessonsOfChapter();
       this.indexCreateLesson = this.setIndex(this.lessons);
     },
@@ -138,6 +139,8 @@ export default {
 
     handleAddLesson() {
       this.isShowCreateLessonOfChapter = true;
+      let el = this.$el.getElementsByClassName("create-lesson")[0];
+      el.scrollIntoView();
     },
 
     async handleDeleteChapter() {
