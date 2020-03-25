@@ -6,11 +6,11 @@
     <ul class="info">
       <li>
         <IconBook class="mr-2" />
-        Trình độ: {{ program.level }}
+        Trình độ: {{ program.level || '' }}
       </li>
       <li>
         <IconSubject class="mr-2" />
-        Môn học: {{ program.subject }}
+        Môn học: {{ program.subject || '' }}
       </li>
       <li>
         <IconLessons class="mr-2" />
