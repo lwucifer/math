@@ -1,50 +1,14 @@
 <template>
   <div>
-    <div class="wrapFilterBar__ElearningManagerRC">
-      <div>
-        <button class="btnFitlerSummit__ElearningManagerFilterTable" @click="submit">
-          <IconFilter/>
-          <span>Lọc kết quả</span>
-        </button>
-      </div>
-      <div>
-        <app-checkbox>Có bình luận</app-checkbox>
-      </div>
-      <div>
-        <app-vue-select
-          class="selectComment__ElearningManagerRC"
-          :options="status"
-          label="text"
-          placeholder="Theo bình chọn"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
-      </div>
-      <div>
-        <app-vue-select
-          class="selectClass__ElearningManagerRC"
-          :options="status"
-          label="text"
-          placeholder="Lớp"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
-      </div>
-    </div>
+    <elearning-manager-filter-form
+      @changedFilter="updateFilter"
+    />
     <div class="wrapTable__ElearningManagerRC">
       <app-table
         :heads="heads"
         :pagination="pagination"
+        :data.sync="list"
         @pagechange="onPageChange"
-        :data="list"
         class="table__ElearningManagerRC"
       >
         <template v-slot:cell(action)="{row}">
@@ -70,19 +34,14 @@
 </template>
 
 <script>
-  import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
-  import {mapState} from "vuex"
-  import { useEffect, getParamQuery } from "~/utils/common"
-  import * as actionTypes from "~/utils/action-types"
-  import { get } from "lodash"
+  import ElearningManagerFilterForm from "./ElearningManagerFilterForm"
 
-  const STORE_NAMESPACE = 'elearning/public/public-vote'
+  import {mapState} from "vuex"
+  import { get } from "lodash"
 
   export default {
     components: {
-      IconFilter,
-      IconArrow,
+      ElearningManagerFilterForm
     },
     data() {
       return {
@@ -109,79 +68,41 @@
           }
 
         ],
-        status: [
-          {
-            value: 1,
-            text: '10B'
-          },
-          {
-            value: 2,
-            text: '10A'
-          },
-        ],
-        pagination: {
-          total: 11,
-          size: 10,
-          page: 1,
-          totalElements: 0,
-          first: 1,
-          last: 1,
-          number: 0
-        },
-        params: {
-          page: 1,
-          size: 10,
-          elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
-        },
-        list: [],
       };
+    },
+    props: {
+      list: {
+        type: Array,
+        default: () => []
+      },
+      pagination: {
+        type: Object,
+        default: () => {
+          return {
+            total: 0,
+            size: 10,
+            page: 1,
+            totalElements: 0,
+            first: 1,
+            last: 1,
+            number: 0
+          }
+        }
+      }
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
-      ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'votes'
-      }),
     },
     methods: {
       onPageChange(e) {
-        this.params.size !== e.size ? this.params.page = 1 : this.params.page = e.number
-        this.params.size = e.size
+        this.$emit('changedPagination', e)
       },
-      submit() {
-        this.refreshData()
-      },
-      handleChangedInput(val) {
-        this.refreshData()
-      },
-      handleFocusSearchInput() {
-        console.log('[Component] Elearning exam: focus searching ')
-      },
-      handleBlurSearchInput() {
-        console.log('[Component] Elearning exam: blur searching ')
-      },
-      async getList() {
-        // this.params.elearning_id = getParamQuery('elearning_id')
-        let params = { ...this.params }
-
-        await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`, { params }
-        )
-        this.list = this.get(this.detailInfo, 'content', [])
-        this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
-      },
-      refreshData() {
-        this.params.page = 1
-        this.getList()
+      updateFilter(val) {
+        this.$emit('changedFilter', val)
       },
       get
     },
-    created() {
-      useEffect(this, this.getList.bind(this), [
-        "params.page",
-        "params.size",
-        "params.elearning_id"
-      ])
-    }
+
   }
 </script>
 
