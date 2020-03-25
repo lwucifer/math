@@ -33,7 +33,7 @@
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
 
-  const STORE_NAMESPACE = 'elearning/public/public-vote'
+  const STORE_NAMESPACE = 'elearning/study/study-vote'
 
   export default {
     components: {
@@ -63,7 +63,7 @@
     computed: {
       ...mapState("auth", ["loggedUser"]),
       ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'votes'
+        detailInfo: 'elearningStudyVotes'
       }),
     },
     methods: {
@@ -81,10 +81,10 @@
         let params = { ...this.params }
 
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`, { params }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STURY_VOTE.LIST}`, { params }
         )
-        this.list = this.get(this.detailInfo, 'content', [])
-        this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+        this.list = this.get(this.detailInfo, 'data.content', [])
+        this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
       },
       refreshData() {
         this.params.page = 1
