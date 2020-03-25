@@ -19,9 +19,9 @@
           </div>
 
           <div class="stars">
-            <app-stars :stars="Math.floor(get(info, 'reviews.averageRate', 0))" :size="16" />
-            <strong class="ml-3">{{ get(info, 'reviews.averageRate', 0) }}</strong>&nbsp;
-            <span class="text-sub">({{ get(info, 'reviews.averageRate', 0) }})</span>
+            <app-stars :stars="Math.floor(get(info, 'rates.averageRate', 0))" :size="16" />
+            <strong class="ml-3">{{ get(info, 'rates.averageRate', 0) }}</strong>&nbsp;
+            <span class="text-sub">({{ get(info, 'rates.totalReview', 0) }})</span>
           </div>
         </div>
 
@@ -191,7 +191,7 @@
 
           <section class="scroll-target" id="review">
             <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
-            <ElearningReview :reviews="info.reviews"/>
+            <ElearningReview :info="info" />
           </section>
         </div>
       </div>
