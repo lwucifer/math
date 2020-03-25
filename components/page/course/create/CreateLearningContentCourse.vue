@@ -14,35 +14,7 @@
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left flex-grow mr-4">
-              <!-- <app-input
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              /> -->
-              <h2 class="cc-box__title heading-6">
-                {{ get(general, "name", "") }}
-              </h2>
-
-              <!-- <template v-if="isEditCourseName">
-                <button class="cc-box__btn mr-2 text-success">
-                  <IconCheck class="icon" />
-                </button>
-                <button
-                  class="cc-box__btn text-error"
-                  @click="cancelEditCourseName"
-                >
-                  <IconTimes class="icon" />
-                </button>
-              </template> -->
-
-              <!-- <button
-                v-else
-                class="cc-box__btn cc-box__btn-edit"
-                @click="editCourseName"
-              >
-                <IconEditAlt class="icon" />
-              </button> -->
+              <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
 
             <div class="cc-box__head-right">
@@ -493,6 +465,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import CreateChapter from "~/components/page/course/create/course/CreateChapter";
 import ListChapter from "~/components/page/course/create/course/ListChapter";
+import EditCourseName from "~/components/page/course/create/EditCourseName";
 
 export default {
   components: {
@@ -511,12 +484,14 @@ export default {
     AddContent,
     LessonDetail,
     CreateChapter,
-    ListChapter
+    ListChapter,
+    EditCourseName
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
+      isShowEditCourse: false
     };
   },
 

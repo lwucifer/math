@@ -12,41 +12,7 @@
         <div class="cc-box">
           <div class="cc-box__head">
             <div class="cc-box__head-left flex-grow">
-              <!-- <input v-if="isEditCourseName" class="cc-box__input-title" type="text"> -->
-              <app-input
-                v-if="isEditCourseName"
-                v-model="courseNameModel"
-                ref="inputCourseName"
-                class="cc-box__input-title mb-0 w-100"
-                size="sm"
-                type="text"
-              />
-              <h2 v-else class="cc-box__title heading-6">
-                {{ courseNameModel }}
-              </h2>
-
-              <template v-if="isEditCourseName">
-                <button
-                  class="cc-box__btn mr-2 text-success"
-                  @click="handleSaveCourseName"
-                >
-                  <IconCheck class="icon" />
-                </button>
-                <button
-                  class="cc-box__btn text-error"
-                  @click="cancelEditCourseName"
-                >
-                  <IconTimes class="icon" />
-                </button>
-              </template>
-
-              <button
-                v-else
-                class="cc-box__btn cc-box__btn-edit"
-                @click="editCourseName"
-              >
-                <IconEditAlt class="icon" />
-              </button>
+              <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
 
             <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
@@ -104,7 +70,8 @@ import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { createPayloadAddCourse } from "../../../../models/course/AddCourse";
+import { createPayloadAddCourse } from "~/models/course/AddCourse";
+import EditCourseName from "~/components/page/course/create/EditCourseName";
 
 export default {
   components: {
@@ -120,7 +87,8 @@ export default {
     IconTimes,
     CreateAction,
     AddContent,
-    LessonDetail
+    LessonDetail,
+    EditCourseName
   },
 
   data() {
@@ -291,11 +259,11 @@ export default {
         this.$refs.inputCourseName.focus();
         clearTimeout(timeout);
       });
-    },
-
-    cancelEditCourseName() {
-      this.isEditCourseName = false;
     }
+
+    // cancelEditCourseName() {
+    //   this.isEditCourseName = false;
+    // }
   }
 };
 </script>

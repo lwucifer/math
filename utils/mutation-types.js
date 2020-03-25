@@ -232,7 +232,8 @@ export const MESSAGE_GROUP = {
     SET_GROUP_LIST: "setGroupList",
     SET_MESSAGE_LIST: "setMessageList",
     SET_GROUP_LIST_TYPE: "setGroupListType",
-    SET_CHAT_LIST_TYPE: "setChatListType"
+    SET_CHAT_LIST_TYPE: "setChatListType",
+    SET_GROUP_LIST_DETAIL: "setGroupListDetail"
 };
 
 export const ELEARNING_INFO = {
