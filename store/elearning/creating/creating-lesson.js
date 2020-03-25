@@ -69,8 +69,7 @@ const actions = {
   async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, options) {
     try {
       const result = await new Lesson(this.$axios)["deleteLesson"](options);
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      return result;
     } catch (error) {
       console.log("[Creating Lesson] delete.error", error);
     }

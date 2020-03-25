@@ -1,7 +1,7 @@
 <template>
   <div class="clc-video">
     <div class="clc-video__image">
-      <img src="https://picsum.photos/160/90" alt />
+      <img src="~/assets/images/create-course/default-course-image.png" alt />
     </div>
     <div class="clc-video__right">
       <h4 class="clc-video__name heading-6 mb-3">
@@ -63,11 +63,16 @@ export default {
           id: get(this, "lesson.id", "")
         }
       };
-      await this.$store.dispatch(
+      const res = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
         options
       );
-      this.$emit("refreshLessons");
+      if (get(res, "success", false)) {
+        this.$toasted.success("success");
+        this.$emit("refreshLessons");
+        return;
+      }
+      this.$toasted.error(get(res, "message", "delete lesson fail"));
     },
 
     get
