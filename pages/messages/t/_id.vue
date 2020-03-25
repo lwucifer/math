@@ -335,22 +335,22 @@ export default {
       const params = {
         room_id: this.$route.params.id,
         user: {
-          id: this.$store.state.auth.token.id,
-          fullname: this.$store.state.auth.token.fullname
+          id: this.userId,
+          fullname: this.fullName
         }
       };
       console.log("[params]", params);
       this.socket.emit("join", params, res => {
         console.log("[socket] User has joined this channel", res);
-        this.socket.on("join", data => {
-          console.log("[socket] [on join_room]", data);
-        });
       });
+      // this.socket.on("join", data => {
+      //   console.log("[socket] [on join_room]", data);
+      // });
     }
   },
 
   computed: {
-    ...mapGetters("auth", ["getSocketURIParam"])
+    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
   },
 
   beforeDestroy() {

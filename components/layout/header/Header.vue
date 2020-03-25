@@ -159,7 +159,7 @@ export default {
       this.$router.push("/auth/signin");
     },
     redirectMessages() {
-      this.$router.push("/messages");
+      this.$router.push("/messages/t");
     }
   }
 };
