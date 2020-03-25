@@ -127,12 +127,16 @@
           <div class="tabs-content" v-if="tab == 2">
             <div
               class="align-item"
-              v-for="(item, index) in groupsListTab ? groupsListTab : []"
+              v-for="(item, index) in mapGroupList ? mapGroupList : []"
               :key="index"
               @click="pushUrl(item.id)"
             >
               <div class="align-item__image">
-                <app-avatar :src="item.room_avatar && item.room_avatar.low ? item.room_avatar.low : ''" size="md" class="comment-item__avatar" />
+                <app-avatar
+                  :src="item.room_avatar && item.room_avatar.low ? item.room_avatar.low : ''"
+                  size="md"
+                  class="comment-item__avatar"
+                />
               </div>
               <div class="align-item__meta">
                 <h4 class="align-item__title">
@@ -153,8 +157,9 @@
                 </button>
                 <div class="link--dropdown__content">
                   <ul>
-                    <li>
-                      <a>Tắt thông báo</a>
+                    <li @click="handleNoti(item.allow_notication)">
+                      <a v-if="item.allow_notication">Tắt thông báo</a>
+                      <a v-else>Bật thông báo</a>
                     </li>
                     <li>
                       <a>Ẩn nhóm</a>
@@ -279,10 +284,29 @@ export default {
   },
   computed: {
     ...mapState("social", ["friendList"]),
-    ...mapState("message", ["groupList"])
+    ...mapState("message", ["groupList"]),
+    mapGroupList() {
+      const userId = this.$store.state.auth.token
+        ? this.$store.state.auth.token.id
+        : "";
+      const data = this.groupsListTab.map(item => {
+        const [dataNoti] = item.members.filter(item => item.id == userId);
+        return {
+          ...item,
+          allow_notication: dataNoti.allow_notication
+            ? dataNoti.allow_notication
+            : 0
+        };
+      });
+      return data;
+    }
   },
   methods: {
-    ...mapActions("message", ["getGroupList", "groupLeave"]),
+    ...mapActions("message", [
+      "getGroupList",
+      "groupLeave",
+      "groupNotification"
+    ]),
 
     leaveGroupModal(_item) {
       this.visibleLeaveGroup = true;
@@ -296,6 +320,23 @@ export default {
           this.visibleLeaveGroup = false;
           this.groupListQuery.page = 1;
           this.getGroupList({ params: this.groupListQuery });
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleNoti(noti) {
+      const data = {
+        room_id: this.$route.params.id,
+        notification: noti == 1 ? 0 : 1
+      };
+      this.groupNotification(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.groupListQuery.page = 1;
+          this.getGroupList({ params: this.groupListQuery });
+        } else {
+          this.$toasted.error(result.message);
         }
       });
     },
