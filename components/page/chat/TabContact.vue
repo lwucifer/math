@@ -185,7 +185,7 @@
         <li>
           <a @click="isContact = true" :class="isContact ? 'active' : ''">
             <IconUsers width="22" height="23" :class="isContact ? 'fill-primary' : 'fill-999'" />
-            <p>Contact {{mapGroupList}}</p>
+            <p>Contact</p>
           </a>
         </li>
         <li>
