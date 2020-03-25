@@ -54,7 +54,8 @@
         params: {
           page: 1,
           size: 10,
-          elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
+          // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
+          elearning_id: null
         },
         list: []
       }
@@ -76,7 +77,7 @@
         this.params.size = val.size
       },
       async getList() {
-        // this.params.elearning_id = getParamQuery('elearning_id')
+        this.params.elearning_id = getParamQuery('elearning_id')
         let params = { ...this.params }
 
         await this.$store.dispatch(
