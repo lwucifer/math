@@ -66,9 +66,9 @@ export default {
   data() {
     return {
       pagination: {
-        total: 15,
-        page: 6,
-        pager: 10
+        totalPages: 15,
+        number: 6,
+        size: 10
       },
       tabActive: "all"
     };
