@@ -7,21 +7,21 @@
         <div class="elearning-view__info">
           <div class="author">
             <app-avatar
-              :src="info.teacher && info.teacher.avatar ? info.teacher.avatar.low : null"
+              :src="get(info, 'teacher.avatar.low', null)"
               :size="32"
             />
-            <span class="name ml-2">{{ info.teacher ? info.teacher.name : '' }}</span>
+            <span class="name ml-2">{{ get(info, 'teacher.name','') }}</span>
           </div>
 
           <div class="views ml-auto">
             <IconEye />
-            <strong class="ml-2 mr-1">{{ lesson.views }}</strong> lượt xem
+            <strong class="ml-2 mr-1">{{ info.total_view }}</strong> lượt xem
           </div>
 
           <div class="stars">
-            <app-stars :stars="Math.floor(lesson.stars)" :size="16" />
-            <strong class="ml-3">{{ lesson.stars }}</strong>&nbsp;
-            <span class="text-sub">({{ lesson.rates }})</span>
+            <app-stars :stars="4" :size="16" />
+            <strong class="ml-3"></strong>&nbsp;
+            <span class="text-sub"></span>
           </div>
         </div>
 
@@ -216,6 +216,7 @@
 </template>
 
 <script>
+import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES } from "~/utils/constants";
@@ -285,16 +286,6 @@ export default {
 
   data() {
     return {
-      isAuthenticated: true,
-      teacher: {},
-      lesson: {
-        avatar: "https://picsum.photos/32/32",
-        author: "Nguyễn Ngọc Quyên",
-        views: 28751,
-        stars: 4.5,
-        rates: 469,
-        price: 0
-      },
       sciences: [
         {
           id: 1,
@@ -396,7 +387,6 @@ export default {
         showName: true
       },
       active_el: 0,
-      requestFrameId: null
     };
   },
 
@@ -447,6 +437,8 @@ export default {
   },
 
   methods: {
+    get,
+
     bindScrollStatus(event) {
       const navLink = document.querySelector(".elearning-view__main-nav");
       const link = document.querySelectorAll('.scroll-link[href^="#"]');
