@@ -54,11 +54,11 @@ import { mapState } from "vuex";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import AddDocument from "~/components/page/course/create/AddDocument";
-import DocumentDetail from "~/components/page/course/create/DocumentDetail";
+import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
-import LessonDetailInfo from "~/components/page/course/LessonDetailInfo";
+import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
 
 export default {
   components: {

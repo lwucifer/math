@@ -62,8 +62,7 @@ const IconTrashAlt = () =>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 import CreateAction from "~/components/page/course/create/CreateAction";
-import CreateLessonOfElearning from "~/components/page/course/create/CreateLessonOfElearning";
-import LessonDetail from "~/components/page/course/create/LessonDetail";
+import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
@@ -86,7 +85,6 @@ export default {
     IconCheck,
     IconTimes,
     CreateAction,
-    CreateLessonOfElearning,
     LessonDetail,
     CreateChapter,
     ListChapter,
