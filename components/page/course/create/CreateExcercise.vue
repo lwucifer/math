@@ -334,7 +334,7 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 
-import CreateAction from "~/components/page/course/create/CreateAction";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
 
 export default {
   components: {

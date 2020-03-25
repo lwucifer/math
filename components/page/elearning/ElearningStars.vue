@@ -1,61 +1,22 @@
 <template>
   <div class="chart-stars">
-    <div class="star">
-      <strong class="mr-2">5</strong>
-      <IconStarO v-if="five < 100" />
-      <IconStar v-else />
+    <div class="star" v-for="item in rates" :key="item.rate">
+      <strong class="mr-2">{{ item.rate }}</strong>
+      <IconStar />
       <div class="chart">
-        <div :style="'width: ' + five + '%'"></div>
+        <div :style="'width: ' + item.percent + '%'"></div>
       </div>
-      <span class="text-gray">{{five}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">4</strong>
-      <IconStarO v-if="four < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + four + '%'"></div>
-      </div>
-      <span class="text-gray">{{four}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">3</strong>
-      <IconStarO v-if="three < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + three + '%'"></div>
-      </div>
-      <span class="text-gray">{{three}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">2</strong>
-      <IconStarO v-if="two < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + two + '%'"></div>
-      </div>
-      <span class="text-gray">{{two}} %</span>
-    </div>
-    <div class="star">
-      <strong class="mr-2">1</strong>
-      <IconStarO v-if="one < 100" />
-      <IconStar v-else />
-      <div class="chart">
-        <div :style="'width: ' + one + '%'"></div>
-      </div>
-      <span class="text-gray">{{one}} %</span>
+      <span class="text-gray">{{ item.percent }} %</span>
     </div>
   </div>
 </template>
 
 <script>
 import IconStar from "~/assets/svg/icons/star.svg?inline";
-import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 
 export default {
   components: {
     IconStar,
-    IconStarO
   },
 
   props: {
@@ -78,6 +39,10 @@ export default {
     one: {
       type: Number,
       default: 0
+    },
+    rates: {
+      type: Array,
+      default: () => []
     }
   },
 

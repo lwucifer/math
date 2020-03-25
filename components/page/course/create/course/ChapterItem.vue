@@ -24,17 +24,19 @@
     </div>
 
     <LessonDetail
-      v-for="lesson in get(lessons, 'data', [])"
+      v-for="lesson in lessons"
       :key="lesson.id"
       :lesson="lesson"
-      @handleEditLesson="handleEditLesson"
       @refreshLessons="refreshLessons"
     />
 
+    <div class="create-lesson"></div>
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
-      @handleCancelAddLesson="handleCancelAddLesson"
+      @handleCancel="handleCancel"
+      :indexCreateLesson="indexCreateLesson"
+      @refreshLessons="refreshLessons"
     />
 
     <app-divider class="my-0" />
@@ -50,7 +52,7 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import LessonDetail from "~/components/page/course/create/LessonDetail";
+import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 
 export default {
@@ -64,17 +66,21 @@ export default {
 
   data() {
     return {
-      isShowCreateLessonOfChapter: false
+      isShowCreateLessonOfChapter: false,
+      lessons: [],
+      indexCreateLesson: 0
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
-    }),
     ...mapState("elearning/creating/creating-general", {
       general: "general"
     })
+  },
+
+  async created() {
+    this.lessons = await this.getLessonsOfChapter();
+    this.indexCreateLesson = this.setIndex(this.lessons);
   },
 
   props: {
@@ -91,20 +97,50 @@ export default {
   methods: {
     get,
 
-    handleEditLesson() {
-      //
+    async refreshLessons() {
+      this.lessons = await this.getLessonsOfChapter();
+      this.indexCreateLesson = this.setIndex(this.lessons);
     },
 
-    refreshLessons() {
-      //
+    async getLessonsOfChapter() {
+      const options = {
+        params: {
+          chapter_id: get(this, "chapter.id", "")
+        },
+        not_commit: true
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+      if (get(res, "success", false)) {
+        return get(res, "data", []);
+      }
+      return [];
     },
 
-    handleCancelAddLesson() {
+    setIndex(lessons) {
+      let index = 0;
+      try {
+        index = lessons[lessons.length - 1]["index"] + 1;
+      } catch (error) {}
+      return index;
+    },
+
+    async refreshLessons() {
+      this.isShowCreateLessonOfChapter = false;
+      this.lessons = await this.getLessonsOfChapter();
+      this.indexCreateLesson = this.setIndex(this.lessons);
+    },
+
+    handleCancel() {
       this.isShowCreateLessonOfChapter = false;
     },
 
     handleAddLesson() {
       this.isShowCreateLessonOfChapter = true;
+      let el = this.$el.getElementsByClassName("create-lesson")[0];
+      el.scrollIntoView();
     },
 
     async handleDeleteChapter() {

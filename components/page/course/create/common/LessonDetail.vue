@@ -1,43 +1,29 @@
 <template>
   <div class="cc-box__body py-4">
-    <div class="clc-video">
-      <div class="clc-video__image">
-        <img src="https://picsum.photos/160/90" alt />
-      </div>
-      <div class="clc-video__right">
-        <h4 class="clc-video__name heading-6 mb-3">
-          {{ get(lesson, "name", "") }}
-        </h4>
-        <div class="clc-video__time text-gray mb-3">6:30</div>
-        <div class="clc-video__actions">
-          <a
-            href
-            class="clc-video__btn-edit text-primary mr-5"
-            @click="handleEditLesson($event)"
-          >
-            <IconEditAlt class="icon" />Sửa nội dung
-          </a>
-          <a
-            href
-            class="clc-video__btn-delete text-secondary"
-            @click="handleDeleteLesson($event)"
-          >
-            <IconTrashAlt class="icon" />Xoá nội dung
-          </a>
-        </div>
-      </div>
-    </div>
+    <LessonDetailInfo
+      v-if="isShowDetailLesson"
+      @handleEditLesson="handleEditLesson"
+      @refreshLessons="refreshLessons"
+      :lesson="lesson"
+    />
+
+    <CreateLessonOfChapter
+      :lesson="lesson"
+      @handleCancel="handleCancel"
+      @refreshLessons="refreshLessons"
+      v-else
+    />
 
     <app-divider class="my-4" />
 
     <DocumentDetail
-      v-for="doc in get(docs, 'data', [])"
+      v-for="doc in docs"
       :key="doc.id"
       :doc="doc"
       @handleRefreshDocs="handleRefreshDocs"
     />
 
-    <AddDocument
+    <DocumentAdd
       :lesson="lesson"
       v-if="isShowFormAddDocument"
       @handleCloseAdd="handleCloseAdd"
@@ -67,10 +53,12 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
-import AddDocument from "~/components/page/course/create/AddDocument";
-import DocumentDetail from "~/components/page/course/create/DocumentDetail";
+import DocumentAdd from "~/components/page/course/create/common/DocumentAdd";
+import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
+import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
+import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
 
 export default {
   components: {
@@ -78,26 +66,24 @@ export default {
     IconTrashAlt,
     IconPlus,
     IconClose,
-    AddDocument,
+    DocumentAdd,
     IconFileBlank,
-    DocumentDetail
+    DocumentDetail,
+    CreateLessonOfChapter,
+    LessonDetailInfo
   },
 
   data() {
     return {
       isShowFormAddDocument: false,
-      isShowButtonAddDocument: true
+      isShowButtonAddDocument: true,
+      docs: [],
+      isShowDetailLesson: true
     };
   },
 
-  created() {
-    this.handleGetDocs();
-  },
-
-  computed: {
-    ...mapState("elearning/creating/creating-doc", {
-      docs: "docs"
-    })
+  async created() {
+    this.docs = await this.handleGetDocs();
   },
 
   props: {
@@ -108,23 +94,38 @@ export default {
   },
 
   methods: {
-    handleRefreshDocs() {
-      this.handleGetDocs();
+    async handleRefreshDocs() {
+      this.docs = await this.handleGetDocs();
     },
 
-    handleGetDocs() {
+    refreshLessons() {
+      this.$emit("refreshLessons");
+      this.isShowDetailLesson = true;
+    },
+
+    handleCancel() {
+      console.log(1);
+      this.isShowDetailLesson = true;
+    },
+
+    async handleGetDocs() {
       const lesson_id = get(this, "lesson.id", "");
-      const elearning_id = getParamQuery("elearning_id");
+      // const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          lesson_id,
-          elearning_id
-        }
+          lesson_id
+          // elearning_id
+        },
+        not_commit: true
       };
-      this.$store.dispatch(
+      const res = await this.$store.dispatch(
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.LIST}`,
         options
       );
+      if (get(res, "success", false)) {
+        return get(res, "data", []);
+      }
+      return [];
     },
 
     handleCloseAdd() {
@@ -137,23 +138,8 @@ export default {
       this.isShowButtonAddDocument = false;
     },
 
-    handleEditLesson($event) {
-      this.$emit("handleEditLesson", this.lesson);
-      $event.preventDefault();
-    },
-
-    async handleDeleteLesson($event) {
-      $event.preventDefault();
-      const options = {
-        data: {
-          id: get(this, "lesson.id", "")
-        }
-      };
-      await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
-        options
-      );
-      this.$emit("refreshLessons");
+    handleEditLesson() {
+      this.isShowDetailLesson = false;
     },
 
     get

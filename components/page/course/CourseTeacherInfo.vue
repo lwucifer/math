@@ -1,7 +1,7 @@
 <template>
   <div class="course-teacher-info">
     <div class="teacher-top">
-      <app-avatar :src="get(_teacher, 'avatar', 'https://picsum.photos/125/125')" :size="125" />
+      <app-avatar :src="get(_teacher, 'avatar.medium', 'https://picsum.photos/125/125')" :size="125" />
       <div class="info">
         <h4 class="name">{{ get(_teacher, "name", "") }}</h4>
         <p>{{ get(_teacher, "school_name", "") }}</p>
