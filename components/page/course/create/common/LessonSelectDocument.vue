@@ -39,7 +39,7 @@
       </app-upload>
     </div>
 
-    <LessonSelect
+    <DocumentSelectDoc
       @handleSelectUrl="handleSelectUrl"
       v-if="tabDocument === 'choose'"
       type="DOCS"
@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import LessonSelect from "~/components/page/course/create/LessonSelect";
+import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 
 export default {
   components: {
     IconTrashAlt,
-    LessonSelect
+    DocumentSelectDoc
   },
 
   data() {

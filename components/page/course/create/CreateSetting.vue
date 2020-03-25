@@ -99,7 +99,7 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import CreateAction from "~/components/page/course/create/CreateAction";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
 import { getParamQuery, useEffect } from "~/utils/common";
 import { get, toNumber } from "lodash";
 import numeral from "numeral";

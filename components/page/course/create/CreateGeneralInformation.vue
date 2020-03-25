@@ -139,10 +139,10 @@ const IconCheckCircle = () =>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 
-import CreateAction from "~/components/page/course/create/CreateAction";
-import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
-import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
-import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
+import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
+import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
+import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
 
 const schema = yup.object().shape({
   avatar: yup.string().required(),
