@@ -27,7 +27,6 @@
       v-for="lesson in lessons"
       :key="lesson.id"
       :lesson="lesson"
-      @handleEditLesson="handleEditLesson"
       @refreshLessons="refreshLessons"
     />
 
@@ -35,9 +34,8 @@
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
-      @handleCancelAddLesson="handleCancelAddLesson"
+      @handleCancel="handleCancel"
       :indexCreateLesson="indexCreateLesson"
-      @refreshLessons="refreshLessons"
     />
 
     <app-divider class="my-0" />
@@ -98,6 +96,11 @@ export default {
   methods: {
     get,
 
+    async refreshLessons() {
+      this.lessons = await this.getLessonsOfChapter();
+      this.indexCreateLesson = this.setIndex(this.lessons);
+    },
+
     async getLessonsOfChapter() {
       const options = {
         params: {
@@ -123,17 +126,13 @@ export default {
       return index;
     },
 
-    handleEditLesson() {
-      //
-    },
-
     async refreshLessons() {
       this.isShowCreateLessonOfChapter = false;
       this.lessons = await this.getLessonsOfChapter();
       this.indexCreateLesson = this.setIndex(this.lessons);
     },
 
-    handleCancelAddLesson() {
+    handleCancel() {
       this.isShowCreateLessonOfChapter = false;
     },
 

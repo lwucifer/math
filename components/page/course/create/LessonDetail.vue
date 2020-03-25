@@ -1,6 +1,6 @@
 <template>
   <div class="cc-box__body py-4">
-    <div class="clc-video">
+    <div class="clc-video" v-if="isShowDetailLesson">
       <div class="clc-video__image">
         <img src="https://picsum.photos/160/90" alt />
       </div>
@@ -27,6 +27,13 @@
         </div>
       </div>
     </div>
+
+    <CreateLessonOfChapter
+      :lesson="lesson"
+      @handleCancel="handleCancel"
+      @refreshLessons="refreshLessons"
+      v-else
+    />
 
     <app-divider class="my-4" />
 
@@ -69,6 +76,7 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import AddDocument from "~/components/page/course/create/AddDocument";
 import DocumentDetail from "~/components/page/course/create/DocumentDetail";
+import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 
@@ -80,14 +88,16 @@ export default {
     IconClose,
     AddDocument,
     IconFileBlank,
-    DocumentDetail
+    DocumentDetail,
+    CreateLessonOfChapter
   },
 
   data() {
     return {
       isShowFormAddDocument: false,
       isShowButtonAddDocument: true,
-      docs: []
+      docs: [],
+      isShowDetailLesson: true
     };
   },
 
@@ -105,6 +115,16 @@ export default {
   methods: {
     async handleRefreshDocs() {
       this.docs = await this.handleGetDocs();
+    },
+
+    refreshLessons() {
+      this.$emit('refreshLessons')
+      this.isShowDetailLesson = true;
+    },
+
+    handleCancel() {
+      console.log(1)
+      this.isShowDetailLesson = true;
     },
 
     async handleGetDocs() {
@@ -138,7 +158,7 @@ export default {
     },
 
     handleEditLesson($event) {
-      this.$emit("handleEditLesson", this.lesson);
+      this.isShowDetailLesson = false;
       $event.preventDefault();
     },
 
