@@ -103,7 +103,7 @@
         this.refreshData()
       },
       updatePagination(val) {
-        this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number
+        this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
         this.params.size = val.size
       },
       async deleteItems(items) {
