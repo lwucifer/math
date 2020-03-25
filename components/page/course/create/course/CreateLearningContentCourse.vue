@@ -61,7 +61,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
-import CreateAction from "~/components/page/course/create/CreateAction";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";

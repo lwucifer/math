@@ -23,7 +23,7 @@
       @handleRefreshDocs="handleRefreshDocs"
     />
 
-    <AddDocument
+    <DocumentAdd
       :lesson="lesson"
       v-if="isShowFormAddDocument"
       @handleCloseAdd="handleCloseAdd"
@@ -53,7 +53,7 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
-import AddDocument from "~/components/page/course/create/AddDocument";
+import DocumentAdd from "~/components/page/course/create/common/DocumentAdd";
 import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 const IconFileBlank = () =>
@@ -66,7 +66,7 @@ export default {
     IconTrashAlt,
     IconPlus,
     IconClose,
-    AddDocument,
+    DocumentAdd,
     IconFileBlank,
     DocumentDetail,
     CreateLessonOfChapter,
