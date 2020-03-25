@@ -6,7 +6,8 @@ export const BASE = {
     EDIT: "edit",
     DELETE: "delete",
     DETAIL: "detail",
-    EDIT_PAYLOAD: "editPayload"
+    EDIT_PAYLOAD: "editPayload",
+    DELETE_PAYLOAD: "deletePayload"
 };
 
 export const AUTH = {
@@ -170,7 +171,9 @@ export const ELEARNING_CREATING_DOC = {
 };
 
 export const ELEARNING_TEACHING_REPOSITORY_FILE = {
-    LIST: "elearningTeachingRespositoryFileList"
+    LIST: "elearningTeachingRespositoryFileList",
+    ADD: "elearningTeachingRespositoryFileAdd",
+    DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -271,15 +274,16 @@ export const ELEARNING_SCHOOL_SEARCH = {
 
 export const MESSAGE_GROUP = {
     ADD_MEMBER: "addMember",
-    EDIT_AVATAR: "editAvatar",
+    EDIT_AVATAR_GROUP: "editAvatarGroup",
     EDIT_NAME: "editName",
     CREATE_GROUP: "createGroup",
     MEMBER_LIST: "getMemberList",
-    GROUP_LIST: "groupList",
+    GROUP_LIST: "getGroupList",
     GROUP_LEAVE: "groupLeave",
     GROUP_REMOVE_MEMBER: "groupRemoveMember",
     GROUP_NOTIFICATION: "groupNotification",
-    MESSAGE_LIST: "messageList"
+    MESSAGE_LIST: "messageList",
+    GROUP_LIST_DETAIL: "getGroupListDetail"
 };
 
 export const SOCIAL_FRIEND = {
@@ -288,9 +292,9 @@ export const SOCIAL_FRIEND = {
 };
 
 export const ELEARNING_INFO = {
-    INFO: "teachingInfo"
+    INFO: "elearningInfo"
 };
 
 export const ELEARNING_COURSES = {
-    LIST: "teachingCoursesList"
+    LIST: "coursesList"
 };

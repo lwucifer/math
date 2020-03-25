@@ -41,3 +41,8 @@ export const SOCIAL_LINK_SCHEMA = {
     videoTag : '',
     siteName : '',
 }
+
+export const ELEARNING_TYPES = {
+    COURSE: "COURSE",
+    LECTURE: "LECTURE"
+}

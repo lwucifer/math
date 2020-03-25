@@ -339,20 +339,67 @@
                     padding: 15px;
                     text-align: center;
                     .message-info__acc__image {
-                        width: 100%;
                         display: inline-block;
+                        position: relative;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        line-height: 0;
                         .app-avatar {
                             max-width: 65px;
                             max-height: 65px;
                             float: none;
                         }
+                        &:hover {
+                            .change-avatar {
+                                bottom: 0;
+                            }
+                        }
+                        .change-avatar {
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: -2rem;
+                            background: rgba(51, 51, 51, 0.6);
+                            padding: .5rem;
+                            transition: all 300ms;
+                        }
                     }
                     .message-info__acc__title {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
                         span a {
                             text-decoration: none;
                             color: #333333;
                             font-size: 1.8rem;
                             font-weight: bold;
+                        }
+                        &:hover {
+                            .btn-change-name {
+                                display: inline-block !important;
+                            }
+                        }
+                        .btn-change-name {
+                            height: 2.4rem;
+                            margin-left: .5rem;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                        .btn-save-name {
+                            height: 2.4rem;
+                            margin-left: .5rem;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                        .btn-des-name {
+                            height: 2.4rem;
+                            margin-left: 1rem;
+                            // position: absolute;
+                            right: 0;
+                            top: 0;
                         }
                     }
                 }
@@ -378,11 +425,11 @@
                                     align-items: center;
                                     padding: 0.5rem;
                                 }
-                                .app-dropdown__content{
+                                .app-dropdown__content {
                                     opacity: 0;
                                     visibility: hidden;
                                 }
-                                .link--dropdown:hover > .app-dropdown__content {
+                                .link--dropdown:hover>.app-dropdown__content {
                                     opacity: 1;
                                     visibility: visible;
                                 }
@@ -469,7 +516,7 @@
         }
     }
     &.item__1 {
-        .app-dropdown__content{
+        .app-dropdown__content {
             left: auto;
             right: 0;
         }
@@ -528,9 +575,11 @@
         }
     }
 }
-.app-dropdown__content{
+
+.app-dropdown__content {
     overflow: hidden;
 }
+
 .message-foward-tags-modal .app-modal-content {
     padding: 2rem 1.5rem;
 }

@@ -118,7 +118,7 @@ export default {
 
   data() {
     return {
-      pager: toNumber(get(this, 'pagination.size', 0)),
+      pager: toNumber(get(this, 'pagination.size', 10)),
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },
@@ -144,7 +144,7 @@ export default {
   methods: {
     goTo(e, check = false) {
       if (!check) {
-        this.$emit("pagechange", { number: e, size: this.pager });
+        this.$emit("pagechange", { number: e - 1, size: this.pager });
       }
     }
   },

@@ -130,7 +130,7 @@ export default {
 
   created() {
     useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
-    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
+    this.fetchSetting();
   },
 
   computed: {
@@ -144,21 +144,18 @@ export default {
 
   methods: {
     fetchSetting() {
-      const elearning_id = get(this, "general.id", "");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
-        options
-      );
-    },
-
-    handleChangeGeneral() {
-      this.payload.elearning_id = get(this, "general.id", "");
-      if (this.general) this.fetchSetting();
+      const elearning_id = getParamQuery("elearning_id");
+      if (elearning_id) {
+        const options = {
+          params: {
+            elearning_id
+          }
+        };
+        this.$store.dispatch(
+          `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
+          options
+        );
+      }
     },
 
     handleChangeSetting() {

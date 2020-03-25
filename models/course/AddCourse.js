@@ -43,16 +43,20 @@ export function createPayloadAddCourse(payload) {
 
 class AddContentCourse {
   constructor(payload) {
-    this.elearning_id = payload.elearning_id;
-    this.index = payload.index;
+    if (payload.elearning_id) {
+      this.elearning_id = payload.elearning_id;
+    }
+    if (payload.chapter_id) {
+      this.chapter_id = payload.chapter_id;
+    }
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }
-    if (payload.index !== "") {
+    if (payload.index !== "" && !payload.id) {
       this.index = payload.index;
     }
-    if (payload.url) {
-      this.url = payload.url;
+    if (payload.repository_file_id) {
+      this.repository_file_id = payload.repository_file_id;
     }
     if (payload.article_content) {
       this.article_content = payload.article_content;

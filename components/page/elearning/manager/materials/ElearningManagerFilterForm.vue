@@ -1,0 +1,139 @@
+<template>
+  <div class="row">
+    <div class="col-6 wrapfilterform__ElearningManagerFilterTable">
+      <div>
+        <button class="btnFitlerSummit__ElearningManagerFilterTable" @click="submit">
+          <IconFilter/>
+          <span>Lọc kết quả</span>
+        </button>
+      </div>
+      <div>
+        <app-vue-select
+          class="selectTypes__ElearningManagerFilterTable"
+          :options="fileTypes"
+          :reduce="item => item.value"
+          v-model="filters.type"
+          label="text"
+          placeholder="Theo loại"
+          searchable
+          clearable
+          @input="handleChangedType"
+        >
+        </app-vue-select>
+      </div>
+      <div>
+        <app-vue-select
+          class="selectStatus__ElearningManagerFilterTable"
+          :options="statuses"
+          :reduce="item => item.value"
+          v-model="filters.used"
+          label="text"
+          placeholder="Theo tình trạng"
+          searchable
+          clearable
+          @input="handleChangedStatus"
+        >
+        </app-vue-select>
+      </div>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+      <div class="wrapSearchForm___ElearningManagerFilterTable">
+        <app-input
+          type="text"
+          v-model="filters.query"
+          placeholder="Nhập để tìm kiếm..."
+          :size="'sm'"
+          @input="handleChangedSearch"
+          class="inputSearch"
+        />
+        <button type="submit">
+          <IconSearch width="15" height="15"/>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+  import IconSearch from "~/assets/svg/icons/search.svg?inline"
+  import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
+
+  export default {
+    name: "ElearningManagerFilterForm",
+    components: {
+      IconFilter,
+      IconSearch,
+      IconArrow
+    },
+    data() {
+      return {
+        filters: {
+          type: null,
+          used: null,
+          query: ''
+        },
+        statuses: [
+          {
+            value: true,
+            text: 'Đã sử dụng'
+          },
+          {
+            value: false,
+            text: 'Chưa sử dụng'
+          },
+        ],
+        fileTypes: [
+          {
+            value: 'audio',
+            text: 'Audio'
+          },
+          {
+            value: 'video',
+            text: 'Video'
+          },
+          {
+            value: 'docs',
+            text: 'Văn bản'
+          },
+          {
+            value: 'image',
+            text: 'Hình ảnh'
+          },
+        ],
+      }
+    },
+    watch: {
+      filters: {
+        handler(val, old){
+          this.$emit("changedFilter", val)
+        },
+        deep: true
+      }
+    },
+    methods: {
+      submit() {
+        this.$emit('submit', this.filters)
+      },
+      handleFocusSearchInput() {
+        console.log('[Component] Elearning exam: focus searching ')
+      },
+      handleBlurSearchInput() {
+        console.log('[Component] Elearning exam: blur searching ')
+      },
+      handleChangedSearch(val) {
+        this.$emit('changedQuery', val)
+      },
+      handleChangedType(val) {
+        this.$emit('changedType', val)
+      },
+      handleChangedStatus(val) {
+        this.$emit('changedStatus', val)
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

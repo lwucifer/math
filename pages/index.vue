@@ -360,11 +360,11 @@ export default {
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
         );
       }
     },

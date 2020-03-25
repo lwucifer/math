@@ -1,40 +1,42 @@
 <template>
   <div class="elearning-right-side">
-    <img :src="banner" alt/>
-    <div class="price">
-        Miễn phí
-    </div>
+    <img :src="get(info, 'avatar.high', 'https://picsum.photos/330/204')" alt />
+    <div class="price">Miễn phí</div>
     <app-button color="secondary" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
     <ul class="info">
       <li>
-        <IconBook class="mr-2"/>Trình độ: Lớp 10
+        <IconBook class="mr-2" />
+        Trình độ: {{ program.level || '' }}
       </li>
       <li>
-        <IconSubject class="mr-2"/>Môn học: Toán
+        <IconSubject class="mr-2" />
+        Môn học: {{ program.subject || '' }}
       </li>
       <li>
-        <IconLessons class="mr-2"/>Số bài giảng: 1 bài
+        <IconLessons class="mr-2" />
+        Số bài giảng: {{ program.lessons || 0 }} bài
       </li>
       <li>
-        <IconClock class="mr-2"/>Thời lượng: 15 phút
+        <IconClock class="mr-2" />
+        Thời lượng: {{ program.duration || 0 }} phút
       </li>
       <li>
-        <IconEye class="mr-2"/>Xem được trên máy tính, điện thoại, tablet
+        <IconEye class="mr-2" />Xem được trên máy tính, điện thoại, tablet
       </li>
     </ul>
     <hr />
     <div class="mt-15 mb-3 d-flex">
       <a class="color-primary d-flex-center">
-        <IconShare class="fill-primary mr-2"/>Chia sẻ
+        <IconShare class="fill-primary mr-2" />Chia sẻ
       </a>
       <a class="color-red ml-auto d-flex-center">
-        <IconHeart class="fill-red mr-2"/>Yêu thích
+        <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
   </div>
 </template>
 <script>
-import BannerImage from "~/assets/images/tmp/money.png";
+import { get } from "lodash";
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -54,17 +56,26 @@ export default {
     IconBook
   },
   props: {
-    date: {
+    info: {
       type: Object,
-      default: () => {}
+      default: () => ({}),
+      validator: value => ["avatar"].every(key => key in value)
+    },
+    program: {
+      type: Object,
+      default: () => ({}),
+      validator: value =>
+        ["level", "subject", "lessons", "duration"].every(key => key in value)
     }
   },
 
   data() {
-      return {
-          banner: BannerImage
-      }
+    return {};
   },
+
+  methods: {
+    get
+  }
 };
 </script>
 

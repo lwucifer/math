@@ -9,6 +9,7 @@ import GroupLeave from "~/services/message/GroupLeave";
 import GroupRemoveMember from "~/services/message/GroupRemoveMember";
 import GroupNotification from "~/services/message/GroupNotification";
 import Message from "~/services/message/Message";
+import GroupDetail from "~/services/message/GroupDetail";
 
 /**
  * initial state
@@ -16,7 +17,8 @@ import Message from "~/services/message/Message";
 const state = () => ({
     memberList: {},
     groupList: {},
-    messageList: {}
+    messageList: {},
+    groupListDetail: {}
 });
 
 /**
@@ -40,7 +42,7 @@ const actions = {
             return err;
         }
     },
-    async [actionTypes.MESSAGE_GROUP.EDIT_AVATAR]({ commit }, payload) {
+    async [actionTypes.MESSAGE_GROUP.EDIT_AVATAR_GROUP]({ commit }, payload) {
         try {
             const result = await new GroupAvatar(this.$axios)[
                 actionTypes.BASE.EDIT_PAYLOAD
@@ -156,6 +158,21 @@ const actions = {
             console.log("[Message] list.err", err);
             return err;
         }
+    },
+    async [actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new GroupDetail(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[GroupDetail] list", result);
+
+            // set to mutation
+            commit(mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_DETAIL, result);
+            return result;
+        } catch (err) {
+            console.log("[GroupDetail] list.err", err);
+            return err;
+        }
     }
 };
 
@@ -171,6 +188,12 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_MESSAGE_LIST](state, _messageList) {
         state.messageList = _messageList;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE](state, _groupListType) {
+        state.groupListType = _groupListType;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_DETAIL](state, _groupListDetail) {
+        state.groupListDetail = _groupListDetail;
     }
 };
 

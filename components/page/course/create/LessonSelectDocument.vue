@@ -14,7 +14,7 @@
         class="cc-tab-item"
         :class="{ active: tabDocument === 'upload' }"
         @click.prevent="changeTabDocument('upload')"
-        >Upload bài giảng</a
+        >Upload bài học</a
       >
 
       <a
@@ -87,7 +87,7 @@ export default {
     },
 
     handleSelectUrl(file) {
-      this.$emit("handleSelectDocument", "DOC", "", file.url, "");
+      this.$emit("handleSelectDocument", "DOC", "", file.id, "");
     },
 
     handleSelectFile(files) {

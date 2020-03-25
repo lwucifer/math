@@ -1,0 +1,7 @@
+.elearning-review-comment {
+    padding: 2rem 0;
+
+    + .elearning-review-comment {
+        border-top: 1px solid $color-border;
+    }
+}

@@ -35,10 +35,10 @@
       <div class="aside-box__top" v-else>
         <div class="message-desc">
           <div class="message-decs__image">
-            <app-avatar src="https://picsum.photos/40/40" size="sm" class="comment-item__avatar" />
+            <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
           </div>
           <div class="message-decs__title">
-            <span>Đặng Duy Long</span>
+            <span>{{nameGroup}}</span>
           </div>
         </div>
         <div class="message-tool">
@@ -609,6 +609,45 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState("social", { labelList: "labels" }),
+    ...mapState("message", ["messageList", "groupListDetail"]),
+
+    selectedTags() {
+      return this.tag.map(item => {
+        const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
+        return resultItem;
+      });
+    },
+
+    selectedCheckin() {
+      const [result = {}] = this.checkinOptions.filter(
+        item => item.value === this.checkin
+      );
+      return result.text;
+    },
+
+    tagOptions() {
+      return this.friendsList.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.fullname
+      }));
+    },
+    nameGroup() {
+      return this.groupListDetail.room && this.groupListDetail.room.room_name
+        ? this.groupListDetail.room.room_name
+        : "";
+    },
+    avatarSrc() {
+      return this.groupListDetail.room &&
+        this.groupListDetail.room.room_avatar &&
+        this.groupListDetail.room.room_avatar.low
+        ? this.groupListDetail.room.room_avatar.low
+        : "https://picsum.photos/40/40";
+    }
+  },
+
   methods: {
     async messageInfiniteHandler($state) {
       this.messageListQuery.room_id = 18;
@@ -673,31 +712,10 @@ export default {
   created() {
     // this.messageListQuery.room_id = this.$route.params.id;
   },
-
-  computed: {
-    ...mapState("social", { labelList: "labels" }),
-    ...mapState("message", ["messageList"]),
-
-    selectedTags() {
-      return this.tag.map(item => {
-        const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
-        return resultItem;
-      });
-    },
-
-    selectedCheckin() {
-      const [result = {}] = this.checkinOptions.filter(
-        item => item.value === this.checkin
-      );
-      return result.text;
-    },
-
-    tagOptions() {
-      return this.friendsList.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.fullname
-      }));
+  watch: {
+    groupListDetail(_newVal) {
+      if (_newVal) {
+      }
     }
   }
 };

@@ -178,6 +178,7 @@ export default {
   props: {
     showEdit: Boolean,
     showMenuDropdown: Boolean,
+    showComment: Boolean,
     comments: {
       type: Number,
       default: 0
@@ -236,6 +237,10 @@ export default {
         ? page.totalElements % page.size
         : page.size;
     }
+  },
+
+  created() {
+    this.showComment && this.getParentComment()
   },
 
   methods: {

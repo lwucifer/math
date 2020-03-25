@@ -42,9 +42,6 @@ export default {
       "defaultValue",
       "levels"
     ]);
-    this.$store.dispatch(
-      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
-    );
   },
 
   computed: {

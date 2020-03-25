@@ -6,10 +6,10 @@
     <n-link class="link-gray item" :to="'/elearning/manager/courses/'" :class="active == 2 ? 'active' : ''">
       <IconBook width="20" height="20" />Bài giảng và khóa học
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/exams/'" :class="active == 3 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/exams'" :class="active == 3 ? 'active' : ''">
       <IconCalendar />Bài tập và bài kiểm tra
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/warehouses/'" :class="active == 4 ? 'active' : ''">
+    <n-link class="link-gray item" :to="'/elearning/manager/warehouses'" :class="active == 4 ? 'active' : ''">
       <IconBooks />Kho học liệu
     </n-link>
     <n-link class="link-gray item" :to="'/elearning/manager/online-courses'" :class="active == 5 ? 'active' : ''">
