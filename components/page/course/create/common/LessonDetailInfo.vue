@@ -7,7 +7,9 @@
       <h4 class="clc-video__name heading-6 mb-3">
         {{ get(lesson, "name", "") }}
       </h4>
-      <div class="clc-video__time text-gray mb-3">6:30</div>
+      <div class="clc-video__time text-gray mb-3">
+        {{ get(lesson, "duration", "") }}
+      </div>
       <div class="clc-video__actions">
         <a
           href

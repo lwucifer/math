@@ -36,6 +36,7 @@
       :chapter="chapter"
       @handleCancel="handleCancel"
       :indexCreateLesson="indexCreateLesson"
+      @refreshLessons="refreshLessons"
     />
 
     <app-divider class="my-0" />
