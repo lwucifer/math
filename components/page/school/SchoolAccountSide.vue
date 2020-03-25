@@ -1,7 +1,7 @@
 <template>
   <div class="school-side">
     <div class="school-side__avatar">
-      <app-avatar :src="personalList.avatar" :size="125" />
+      <app-avatar :src="personalList.avatar.low" :size="125" />
       <app-upload class="cgi-upload-avt change-avatar">
           <template>
             <div class="cgi-upload-avt-preview">
