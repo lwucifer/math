@@ -10,9 +10,39 @@
       </n-link>
 
       <div class="post__title">
-        <div class="post__title-row">
+        <div class="post__title-row mb-1">
           <h5 class="post__name">
-            <n-link to>{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+            <n-link
+              :to="`/account/${post.author.id}`"
+            >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+
+            <template v-if="post.tags && post.tags.length">
+              <span class="text-sub font-weight-normal">cùng với</span>
+
+              <n-link
+                :to="`/account/${post.tags[0].id}`"
+              >{{ post.tags[0].fullname }}</n-link>
+
+              <template v-if="post.tags.length > 1">
+                <span class="text-sub font-weight-normal">và</span>
+                <n-link
+                  v-if="post.tags.length === 2"
+                  :to="`/account/${post.tags[1].id}`"
+                >{{ post.tags[1].fullname }}</n-link>
+
+                <app-dropdown v-else>
+                  <span slot="activator">{{ post.tags.slice(1).length }} người khác.</span>
+                  <div
+                    v-for="item in post.tags.slice(1)"
+                    :key="item.id"
+                    class="px-3 py-2 body-2 font-weight-normal"
+                    style="white-space: nowrap;"
+                  >
+                    <n-link :to="`/account/${item.id}`">{{ item.fullname }}</n-link>
+                  </div>
+                </app-dropdown>
+              </template>
+            </template>
           </h5>
         </div>
 
@@ -240,7 +270,7 @@ export default {
   },
 
   created() {
-    this.showComment && this.getParentComment()
+    this.showComment && this.getParentComment();
   },
 
   methods: {
