@@ -105,6 +105,10 @@ export default {
     chapter: {
       type: Object,
       default: null
+    },
+    indexCreateLesson: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -113,7 +117,7 @@ export default {
       tabType: "video",
       payload: {
         chapter_id: get(this, "chapter.id", ""),
-        index: 1,
+        index: this.indexCreateLesson,
         lesson: "",
         name: "",
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
@@ -146,6 +150,8 @@ export default {
     },
 
     async handleAddContent() {
+      this.payload.index = this.indexCreateLesson;
+      this.payload.chapter_id = get(this, "chapter.id", "");
       const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,

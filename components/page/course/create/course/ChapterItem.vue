@@ -24,7 +24,7 @@
     </div>
 
     <LessonDetail
-      v-for="lesson in get(lessons, 'data', [])"
+      v-for="lesson in lessons"
       :key="lesson.id"
       :lesson="lesson"
       @handleEditLesson="handleEditLesson"
@@ -35,6 +35,8 @@
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
       @handleCancelAddLesson="handleCancelAddLesson"
+      :indexCreateLesson="indexCreateLesson"
+      @refreshLessons="refreshLessons"
     />
 
     <app-divider class="my-0" />
@@ -64,17 +66,21 @@ export default {
 
   data() {
     return {
-      isShowCreateLessonOfChapter: false
+      isShowCreateLessonOfChapter: false,
+      lessons: [],
+      indexCreateLesson: 0
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
-    }),
     ...mapState("elearning/creating/creating-general", {
       general: "general"
     })
+  },
+
+  async created() {
+    this.lessons = await this.getLessonsOfChapter();
+    this.indexCreateLesson = this.setIndex(this.lessons);
   },
 
   props: {
@@ -91,12 +97,39 @@ export default {
   methods: {
     get,
 
+    async getLessonsOfChapter() {
+      const options = {
+        params: {
+          chapter_id: get(this, "chapter.id", "")
+        },
+        not_commit: true
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+      if (get(res, "success", false)) {
+        return get(res, "data", []);
+      }
+      return [];
+    },
+
+    setIndex(lessons) {
+      let index = 0;
+      try {
+        index = lessons[lessons.length - 1]["index"] + 1;
+      } catch (error) {}
+      return index;
+    },
+
     handleEditLesson() {
       //
     },
 
-    refreshLessons() {
-      //
+    async refreshLessons() {
+      this.isShowCreateLessonOfChapter = false
+      this.lessons = await this.getLessonsOfChapter();
+      this.indexCreateLesson = this.setIndex(this.lessons);
     },
 
     handleCancelAddLesson() {
