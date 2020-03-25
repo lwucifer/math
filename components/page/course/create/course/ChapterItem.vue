@@ -36,6 +36,7 @@
       :chapter="chapter"
       @handleCancel="handleCancel"
       :indexCreateLesson="indexCreateLesson"
+      @refreshLessons="refreshLessons"
     />
 
     <app-divider class="my-0" />
@@ -51,7 +52,7 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import LessonDetail from "~/components/page/course/create/LessonDetail";
+import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 
 export default {

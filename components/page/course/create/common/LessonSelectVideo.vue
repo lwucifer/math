@@ -18,12 +18,12 @@
       >
     </div>
 
-    <LessonSelectVideoUpload
+    <LessonSelectFile
       @handleSelectFile="handleSelectFile"
       v-if="tabVideo === 'upload'"
     />
 
-    <LessonSelect
+    <DocumentSelectDoc
       @handleSelectUrl="handleSelectUrl"
       v-if="tabVideo === 'choose'"
       type="VIDEO"
@@ -34,14 +34,14 @@
 <script>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import LessonSelectVideoUpload from "~/components/page/course/create/LessonSelectVideoUpload";
-import LessonSelect from "~/components/page/course/create/LessonSelect";
+import LessonSelectFile from "~/components/page/course/create/common/LessonSelectFile";
+import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 
 export default {
   components: {
     IconTrashAlt,
-    LessonSelectVideoUpload,
-    LessonSelect
+    LessonSelectFile,
+    DocumentSelectDoc
   },
 
   data() {

@@ -85,9 +85,9 @@ const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import CreateAction from "~/components/page/course/create/CreateAction";
-import LessonSelectVideo from "~/components/page/course/create/LessonSelectVideo";
-import LessonSelectDocument from "~/components/page/course/create/LessonSelectDocument";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
+import LessonSelectVideo from "~/components/page/course/create/common/LessonSelectVideo";
+import LessonSelectDocument from "~/components/page/course/create/common/LessonSelectDocument";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";

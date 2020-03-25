@@ -29,14 +29,12 @@
       >
     </div>
 
-    <AddDocumentFile
+    <DocumentSelectFile
       @handleSelectFile="handleSelectFile"
       v-if="tabAddDocument === 'upload'"
     />
 
-    <!-- <AddDocumentChoose v-if="tabAddDocument === 'choose'" /> -->
-
-    <LessonSelect
+    <DocumentSelectDoc
       @handleSelectUrl="handleSelectUrl"
       v-if="tabAddDocument === 'choose'"
       type="DOCS"
@@ -66,9 +64,8 @@
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import AddDocumentFile from "~/components/page/course/create/AddDocumentFile";
-import AddDocumentChoose from "~/components/page/course/create/AddDocumentChoose";
-import LessonSelect from "~/components/page/course/create/LessonSelect";
+import DocumentSelectFile from "~/components/page/course/create/common/DocumentSelectFile";
+import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddDocument } from "~/models/course/AddCourse";
@@ -77,9 +74,8 @@ export default {
   components: {
     IconClose,
     IconTrashAlt,
-    AddDocumentFile,
-    AddDocumentChoose,
-    LessonSelect
+    DocumentSelectFile,
+    DocumentSelectDoc
   },
 
   props: {
