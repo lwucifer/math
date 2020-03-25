@@ -30,7 +30,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-// import socket from "~/plugins/socket.io.js";
 
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
@@ -39,6 +38,8 @@ import IconImage from "~/assets/svg/icons/image.svg?inline";
 import TabContact from "~/components/page/chat/TabContact";
 import TabMessage from "~/components/page/chat/TabMessage";
 import TabInfo from "~/components/page/chat/TabInfo";
+
+import io from "socket.io-client";
 
 export default {
   components: {
@@ -284,15 +285,14 @@ export default {
           avatar: "https://picsum.photos/40/40"
         }
       ],
-      isCreate: false
+      isCreate: false,
+      socket: null
     };
   },
 
   mounted() {
     // Connect socket
-    // if (!socket.connected) {
-    //   socket.connect();
-    // }
+    this.initSocket();
     // Emit socket event
     // socket.emit("join_resource", { data: "I'm connected!" });
   },
@@ -304,11 +304,27 @@ export default {
 
     clickTab() {
       this.isGroup = !this.isGroup;
+    },
+    async initSocket() {
+      // init socket
+      // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
+      let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
+      console.log("[uriParam]", uriParam);
+      this.socket = await io(`${uriParam}`);
+
+      // connect socket
+      if (!this.socket.connected) {
+        this.socket.connect();
+      }
     }
   },
 
+  computed: {
+    ...mapGetters("auth", ["getSocketURIParam"])
+  },
+
   beforeDestroy() {
-    // socket.off('resource');
+    // this.socket.off('resource');
   }
 };
 </script>
