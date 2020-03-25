@@ -4,13 +4,13 @@
       <div class="row items-center">
         <div class="col-md-6 col-sm-12">
           <div class="text-center d-inline-block">
-            <strong class="h1 color-primary">{{ get(reviews, 'reviews.averageRate', 0) }}</strong>
-            <app-stars :stars="Math.floor(get(reviews, 'reviews.averageRate', 0))" :size="16" class="mt-2 mb-3" />
-            <p class="color-999">({{ get(reviews, 'reviews.totalReview', 0) }} người đánh giá)</p>
+            <strong class="h1 color-primary">{{ get(info, 'rates.averageRate', 0) }}</strong>
+            <app-stars :stars="Math.floor(get(info, 'rates.averageRate', 0))" :size="16" class="mt-2 mb-3" />
+            <p class="color-999">({{ get(info, 'rates.totalReview', 0) }} người đánh giá)</p>
           </div>
         </div>
         <div class="col-md-6 col-sm-12">
-          <ElearningStars :rates="get(reviews, 'reviews.rates', [])" />
+          <ElearningStars :rates="get(info, 'rates.rates', [])" />
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
       >Tất cả</app-button>
 
       <app-button
-        v-for="rate in get(reviews, 'reviews.rates', [])"
+        v-for="rate in get(info, 'rates.rates', [])"
         class="mr-4"
         :color="tabActive === rate.rate ? 'primary' : 'gray'"
         normal
@@ -40,7 +40,7 @@
     </div>
 
     <div class="elearning-review__commnents">
-      <ElearningReviewComment :data="item" v-for="item in reviews.content || []" :key="item.id" />
+      <ElearningReviewComment :data="item" v-for="item in get(info, 'reviews.content', [])" :key="item.id" />
       <app-pagination :pagination="pagination" @pagechange="onPageChange" class="mt-4 mb-3" />
     </div>
   </div>
@@ -57,9 +57,9 @@ export default {
   },
 
   props: {
-    reviews: {
+    info: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
 
