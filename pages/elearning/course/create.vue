@@ -25,11 +25,11 @@
 <script>
 import CreateAside from "~/components/page/course/create/CreateAside";
 import CreateGeneralInformation from "~/components/page/course/create/CreateGeneralInformation";
-import CreateLearningContentCourse from "~/components/page/course/create/CreateLearningContentCourse";
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExcercise from "~/components/page/course/create/CreateExcercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
-import CreateLearningContentLecture from "~/components/page/course/create/CreateLearningContentLecture";
+import CreateLearningContentLecture from "~/components/page/course/create/lecture/CreateLearningContentLecture";
+import CreateLearningContentCourse from "~/components/page/course/create/course/CreateLearningContentCourse";
 import * as actionTypes from "~/utils/action-types";
 
 export default {

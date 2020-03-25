@@ -1,32 +1,11 @@
 <template>
   <div class="cc-box__body py-4">
-    <div class="clc-video" v-if="isShowDetailLesson">
-      <div class="clc-video__image">
-        <img src="https://picsum.photos/160/90" alt />
-      </div>
-      <div class="clc-video__right">
-        <h4 class="clc-video__name heading-6 mb-3">
-          {{ get(lesson, "name", "") }}
-        </h4>
-        <div class="clc-video__time text-gray mb-3">6:30</div>
-        <div class="clc-video__actions">
-          <a
-            href
-            class="clc-video__btn-edit text-primary mr-5"
-            @click="handleEditLesson($event)"
-          >
-            <IconEditAlt class="icon" />Sửa nội dung
-          </a>
-          <a
-            href
-            class="clc-video__btn-delete text-secondary"
-            @click="handleDeleteLesson($event)"
-          >
-            <IconTrashAlt class="icon" />Xoá nội dung
-          </a>
-        </div>
-      </div>
-    </div>
+    <LessonDetailInfo
+      v-if="isShowDetailLesson"
+      @handleEditLesson="handleEditLesson"
+      @refreshLessons="refreshLessons"
+      :lesson="lesson"
+    />
 
     <CreateLessonOfChapter
       :lesson="lesson"
@@ -79,6 +58,7 @@ import DocumentDetail from "~/components/page/course/create/DocumentDetail";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
+import LessonDetailInfo from "~/components/page/course/LessonDetailInfo";
 
 export default {
   components: {
@@ -89,7 +69,8 @@ export default {
     AddDocument,
     IconFileBlank,
     DocumentDetail,
-    CreateLessonOfChapter
+    CreateLessonOfChapter,
+    LessonDetailInfo
   },
 
   data() {
@@ -118,12 +99,12 @@ export default {
     },
 
     refreshLessons() {
-      this.$emit('refreshLessons')
+      this.$emit("refreshLessons");
       this.isShowDetailLesson = true;
     },
 
     handleCancel() {
-      console.log(1)
+      console.log(1);
       this.isShowDetailLesson = true;
     },
 
@@ -157,23 +138,8 @@ export default {
       this.isShowButtonAddDocument = false;
     },
 
-    handleEditLesson($event) {
+    handleEditLesson() {
       this.isShowDetailLesson = false;
-      $event.preventDefault();
-    },
-
-    async handleDeleteLesson($event) {
-      $event.preventDefault();
-      const options = {
-        data: {
-          id: get(this, "lesson.id", "")
-        }
-      };
-      await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
-        options
-      );
-      this.$emit("refreshLessons");
     },
 
     get
