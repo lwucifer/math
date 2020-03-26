@@ -18,7 +18,9 @@ const state = () => ({
     memberList: {},
     groupList: {},
     messageList: {},
-    groupListDetail: {}
+    groupListDetail: {},
+    messageEmit: {},
+    messageOn: {}
 });
 
 /**
@@ -194,6 +196,12 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_DETAIL](state, _groupListDetail) {
         state.groupListDetail = _groupListDetail;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_EMIT_MESSAGE](state, _messageEmit) {
+        state.messageEmit = _messageEmit;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_ON_MESSAGE](state, _messageOn) {
+        state.messageOn = _messageOn;
     }
 };
 
