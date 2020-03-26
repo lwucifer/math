@@ -159,12 +159,25 @@ export default {
     },
 
     handleChangeSetting() {
+      const elearning_id = getParamQuery("elearning_id");
+      if (elearning_id) {
+        this.payload.elearning_id = elearning_id;
+      }
+
       const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
-      this.payload.elearning_id = get(this, "setting.elearning_id", "");
       this.payload.comment_allow = comment_allow;
-      this.payload.discount = get(this, "setting.discount", 0);
-      this.payload.fee = get(this, "setting.fee", 0);
-      this.payload.privacy = get(this, "setting.privacy", "PUBLIC");
+
+      if (get(this, "setting.discount", 0)) {
+        this.payload.discount = get(this, "setting.discount", 0);
+      }
+
+      if (get(this, "setting.fee", 0)) {
+        this.payload.fee = get(this, "setting.fee", 0);
+      }
+
+      if (get(this, "setting.privacy", "")) {
+        this.payload.privacy = get(this, "setting.privacy", "");
+      }
       this.payload.free = get(this, "setting.free", false) ? 1 : 0;
       const fee = toNumber(get(this, "setting.fee", 0));
       const discount = toNumber(get(this, "setting.discount", 0));

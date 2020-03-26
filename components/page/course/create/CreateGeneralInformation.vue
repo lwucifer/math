@@ -55,54 +55,7 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Lợi ích từ {{ name }}
-          <span class="text-sub caption font-weight-normal"
-            >(Tối thiểu tổng 300 ký tự)</span
-          >
-        </h2>
-
-        <div class="row">
-          <div
-            v-for="(item, index) in benefit"
-            class="col-md-6 mb-15"
-            :key="index"
-          >
-            <div class="cgi-demo-benefit d-flex">
-              <IconCheckCircle class="icon body-1 mr-2" />
-              <p v-html="item" />
-              <a
-                href
-                class="text-decoration-none body-1 ml-2 text-error"
-                @click.prevent="removeBenefit(index)"
-              >
-                <IconTrashAlt class="icon" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="benefit.length < 10" class="d-flex">
-          <app-editor-menu-bubble
-            class="bg-input-gray mb-3 flex-grow"
-            placeholder="Nhập lợi ích từ khoá học"
-            v-model="benefitEditorValue"
-          />
-          <app-button
-            square
-            class="font-weight-normal body-2"
-            @click="addBenefit(benefitEditorValue)"
-            >Thêm</app-button
-          >
-        </div>
-      </div>
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
-        <app-editor v-model="payload.benefit" class="bg-input-gray mb-3" />
-        <span class="text-sub caption">Tối thiểu 300 ký tự</span>
-      </div>
+      <CourseBenefit :name="name" @handleChangeBenefit="handleChangeBenefit" />
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
@@ -127,22 +80,19 @@ import * as yup from "yup";
 import numeral from "numeral";
 import { toNumber, get } from "lodash";
 import { mapState } from "vuex";
-
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
-
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
-
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconCheckCircle = () =>
   import("~/assets/svg/icons/check-circle.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
+import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 
 const schema = yup.object().shape({
   avatar: yup.string().required(),
@@ -171,7 +121,8 @@ export default {
     CourseSelectSubject,
     CourseSelectAvatar,
     IconCheckCircle,
-    IconTrashAlt
+    IconTrashAlt,
+    CourseBenefit
   },
 
   data() {
@@ -185,9 +136,7 @@ export default {
         name: "",
         subject: "",
         type: "LECTURE"
-      },
-      benefitEditorValue: "",
-      benefit: []
+      }
     };
   },
 
@@ -224,6 +173,15 @@ export default {
   },
 
   methods: {
+    handleChangeBenefit(benefits) {
+      let data = [];
+      benefits.map(benefit => {
+        data.push({ benefit: benefit });
+      });
+      data = JSON.stringify(data);
+      this.payload.benefit = data;
+    },
+
     handleChangeGeneral() {
       this.payload.benefit = get(this, "general.benefit", "");
       this.payload.description = get(this, "general.description", "");
@@ -308,17 +266,6 @@ export default {
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    },
-
-    addBenefit(html) {
-      if (this.benefit.length < 10) {
-        this.benefit.push(html);
-        this.benefitEditorValue = "";
-      }
-    },
-
-    removeBenefit(index) {
-      this.benefit = this.benefit.filter((item, i) => i !== index);
     },
 
     numeral,

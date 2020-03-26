@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
@@ -39,9 +39,10 @@ import TabContact from "~/components/page/chat/TabContact";
 import TabMessage from "~/components/page/chat/TabMessage";
 import TabInfo from "~/components/page/chat/TabInfo";
 
-import * as constants from '~/utils/constants';
+import * as constants from "~/utils/constants";
 
 import io from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
@@ -84,7 +85,8 @@ export default {
         params: {
           room_id: room_id
         }
-      })
+      }),
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },
 
@@ -313,8 +315,13 @@ export default {
     //   });
     // });
   },
+  computed: {
+    ...mapState("message", ["messageEmit"]),
+    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
+  },
 
   methods: {
+    ...mapMutations("message", ["setOnMessage"]),
     addMessage() {
       this.isCreate = !this.isCreate;
     },
@@ -341,14 +348,15 @@ export default {
 
       // on handle message
       this.socket.on(constants.CHAT.MESSAGE, data => {
-        console.log("[socket]", data);
+        console.log("[socket] message", data);
+        this.setOnMessage(data);
       });
 
       // join room with id
       const params = {
-        room_id: 18,
+        room_id: this.$route.params.id,
         user: {
-          id: this.$route.params.id,
+          id: this.userId,
           fullname: this.fullName
         }
       };
@@ -356,16 +364,29 @@ export default {
       this.socket.emit(constants.CHAT.JOIN_ROOM, params, res => {
         console.log("[socket] User has joined this channel", res);
       });
-      
     }
-  },
-
-  computed: {
-    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
   },
 
   beforeDestroy() {
     // this.socket.off('join_room');
+  },
+  watch: {
+    messageEmit(_newVal) {
+      if (_newVal) {
+        const uuidV4 = uuidv4();
+        const paramsMessage = {
+          uuid: uuidV4,
+          user_id: this.userId,
+          room_id: this.$route.params.id,
+          content: _newVal,
+          img_url: ""
+        };
+        console.log("[socket] params emit message", paramsMessage);
+        this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
+          console.log("[socket] User has joined this channel", res);
+        });
+      }
+    }
   }
 };
 </script>
