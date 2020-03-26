@@ -3,7 +3,7 @@
     <div>
       <div class="top" v-if="isDepartment">
         <app-button square class="btn_link_manager">
-          <n-link :to="'/school/manager'">
+          <n-link :to="'/school/manager/'+ get(schoolInfo, 'id', '')">
             <span class>Quản lý trường học</span>
           </n-link> 
         </app-button>
@@ -74,7 +74,7 @@ export default {
       params: {
         school_id,
         elearning_type: "LECTURE",
-        size: 5
+        size: 5,
       }
     };
     await store.dispatch(

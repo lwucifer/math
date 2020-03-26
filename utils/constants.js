@@ -46,3 +46,12 @@ export const ELEARNING_TYPES = {
     COURSE: "COURSE",
     LECTURE: "LECTURE"
 }
+
+export const CHAT = {
+    JOIN_ROOM: 'join_room',
+    MESSAGE: 'message',
+    LEAVE_ROOM: 'leave_room',
+    STATUS_HANDLE: 'status_handle',
+    USER_TYPING: 'user_typing',
+    READ_MESSAGE: 'read_message',
+}
