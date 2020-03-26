@@ -55,3 +55,9 @@ export const CHAT = {
     USER_TYPING: 'user_typing',
     READ_MESSAGE: 'read_message',
 }
+
+export const SHARE_OPTS = {
+    TIMELINE: 0,
+    FRIEND: 1,
+    MESSAGE: 2
+}

@@ -55,11 +55,11 @@ const actions = {
 
     async [actionTypes.SOCIAL_POST.ADD]({ commit }, payload) {
         try {
-            const { data: result = {} } = await new SocialPosts(this.$axios)[
+            const data = await new SocialPosts(this.$axios)[
                 actionTypes.BASE.ADD
             ](payload);
-            console.log("[SocialPosts] add", result);
-            return result;
+            console.log("[SocialPosts] add", data);
+            return data;
         } catch (err) {
             console.log("[SocialPosts] add.err", err);
             return err;
