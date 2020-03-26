@@ -39,6 +39,8 @@ import TabContact from "~/components/page/chat/TabContact";
 import TabMessage from "~/components/page/chat/TabMessage";
 import TabInfo from "~/components/page/chat/TabInfo";
 
+import * as constants from '~/utils/constants';
+
 import io from "socket.io-client";
 
 export default {
@@ -332,20 +334,29 @@ export default {
         this.socket.connect();
       }
 
+      // on handle status message
+      this.socket.on(constants.CHAT.STATUS_HANDLE, data => {
+        console.log("[socket]", data);
+      });
+
+      // on handle message
+      this.socket.on(constants.CHAT.MESSAGE, data => {
+        console.log("[socket]", data);
+      });
+
+      // join room with id
       const params = {
-        room_id: this.$route.params.id,
+        room_id: 18,
         user: {
-          id: this.userId,
+          id: this.$route.params.id,
           fullname: this.fullName
         }
       };
       console.log("[params]", params);
-      this.socket.emit("join", params, res => {
+      this.socket.emit(constants.CHAT.JOIN_ROOM, params, res => {
         console.log("[socket] User has joined this channel", res);
       });
-      // this.socket.on("join", data => {
-      //   console.log("[socket] [on join_room]", data);
-      // });
+      
     }
   },
 
