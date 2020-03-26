@@ -63,15 +63,15 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
-import CreateAction from "~/components/page/course/create/CreateAction";
-import CreateLessonOfElearning from "~/components/page/course/create/CreateLessonOfElearning";
-import LessonDetail from "~/components/page/course/create/LessonDetail";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
+import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
-import EditCourseName from "~/components/page/course/create/EditCourseName";
+import EditCourseName from "~/components/page/course/create/common/EditCourseName";
 
 export default {
   components: {

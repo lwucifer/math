@@ -18,9 +18,9 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_STURY_VOTE.LIST]({ commit }) {
+  async [actionTypes.ELEARNING_STURY_VOTE.LIST]({ commit }, payload) {
     try {
-      const result = await new Vote(this.$axios)[actionTypes.BASE.LIST]();
+      const result = await new Vote(this.$axios)[actionTypes.BASE.LIST](payload);
       commit(
         mutationTypes.ELEARNING_STUDY_VOTE.SET_ELEARNING_STUDY_VOTE_LIST,
         result

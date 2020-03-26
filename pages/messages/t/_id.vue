@@ -293,8 +293,23 @@ export default {
   mounted() {
     // Connect socket
     this.initSocket();
-    // Emit socket event
-    // socket.emit("join_resource", { data: "I'm connected!" });
+
+    // listen socket channel
+    // this.socket.on("join_room", (data) => {
+    //   console.log("[on join_room]", data);
+    // });
+  },
+  created() {
+    // debugger;
+    // this.socket.on("join_room", function() {
+    //   console.log("on join_room");
+    //   var params = {
+    //     room_id: this.$route.params.id
+    //   };
+    //   this.socket.emit("join_room", params, function() {
+    //     console.log("User has joined this channel");
+    //   });
+    // });
   },
 
   methods: {
@@ -309,22 +324,37 @@ export default {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
       let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
-      console.log("[uriParam]", uriParam);
+      console.log("[socket] [uriParam]", uriParam);
       this.socket = await io(`${uriParam}`);
 
       // connect socket
       if (!this.socket.connected) {
         this.socket.connect();
       }
+
+      const params = {
+        room_id: this.$route.params.id,
+        user: {
+          id: this.userId,
+          fullname: this.fullName
+        }
+      };
+      console.log("[params]", params);
+      this.socket.emit("join", params, res => {
+        console.log("[socket] User has joined this channel", res);
+      });
+      // this.socket.on("join", data => {
+      //   console.log("[socket] [on join_room]", data);
+      // });
     }
   },
 
   computed: {
-    ...mapGetters("auth", ["getSocketURIParam"])
+    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
   },
 
   beforeDestroy() {
-    // this.socket.off('resource');
+    // this.socket.off('join_room');
   }
 };
 </script>
