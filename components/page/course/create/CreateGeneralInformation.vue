@@ -14,15 +14,13 @@
           @click="handleSelectType"
           :checked="payload.type === 'LECTURE'"
           class="mr-6"
-          >Bài giảng</app-radio
-        >
+        >Bài giảng</app-radio>
         <app-radio
           name="type"
           @click="handleSelectType"
           value="COURSE"
           :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio
-        >
+        >Khoá học</app-radio>
       </div>
 
       <div class="row">
@@ -77,6 +75,13 @@
         @handleSelectAvatar="handleSelectAvatar"
       />
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -141,7 +146,9 @@ export default {
         name: "",
         subject: "",
         type: "LECTURE"
-      }
+      },
+      showModalConfirm: true,
+      confirmLoading: false
     };
   },
 
@@ -275,6 +282,17 @@ export default {
       }
       this.$toasted.error(get(result, "message", ""));
     },
+
+    handleOk() {
+      this.confirmLoading = true;
+
+      const timeout = setTimeout(() => {
+        this.showModalConfirm = false;
+        clearTimeout(timeout)
+      }, 2000)
+    },
+
+    handleCancel() {},
 
     numeral,
     get
