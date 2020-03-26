@@ -80,6 +80,7 @@
           <div
             class="message-box__item"
             :class="item.user && item.user.id == userId ? 'item__0' : 'item__1'"
+            v-show="item.content || item.img_url && item.img_url.low"
             v-for="(item, index) in messagesList ? messagesList : []"
             :key="index"
           >
@@ -164,9 +165,13 @@
                 </div>
               </div>
               <div class="message-box__item__desc">
-                <div class="message-box__item__desc__text">
+                <div class="message-box__item__desc__text" v-if="item.content">
                   <p>{{item.content}}</p>
                 </div>
+                <img
+                  v-if="item.img_url && item.img_url.low"
+                  :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
+                />
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
                     <IconReply />
@@ -196,195 +201,8 @@
                   </app-dropdown>
                 </div>
               </div>
-              <!-- <div class="message-box__item__desc">
-                <div class="message-box__item__desc__text">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
             </div>
           </div>
-          <!-- message box item -->
-          <!-- message box item -->
-          <!-- <div class="message-box__item item__1">
-            <div class="message-box__item__content">
-              <div class="message-box__item__meta">
-                <div class="message-box__item__meta__image">
-                  <app-dropdown
-                    position="right"
-                    v-model="dropdownShow"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <app-avatar
-                        src="https://picsum.photos/40/40"
-                        size="sm"
-                        class="comment-item__avatar"
-                      />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Gửi tin nhắn</span>
-                          </n-link>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xem trang cá nhân</span>
-                          </n-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-                <div class="message-box__item__meta__desc">
-                  <span>Hanna</span>
-                </div>
-                <div class="message-box__item__meta__time">
-                  <span>3:21 PM</span>
-                </div>
-              </div>
-              <div class="message-box__item__desc">
-                <div class="message-box__item__desc__text">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>
-            </div>
-          </div>-->
-          <!-- message box item -->
-          <!-- message box item -->
-          <!-- <div class="message-box__item item__0">
-            <div class="message-box__item__content">
-              <div class="message-box__item__meta">
-                <div class="message-box__item__meta__image">
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownShow"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <app-avatar
-                        src="https://picsum.photos/40/40"
-                        size="sm"
-                        class="comment-item__avatar"
-                      />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Gửi tin nhắn</span>
-                          </n-link>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xem trang cá nhân</span>
-                          </n-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-                <div class="message-box__item__meta__desc">
-                  <span>Đặng Duy Long</span>
-                </div>
-                <div class="message-box__item__meta__time">
-                  <span>3:21 PM</span>
-                </div>
-              </div>
-              <div class="message-box__item__desc">
-                <div class="message-box__item__desc__text">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, quo nemo repellendus voluptas laudantium, dicta et, dolorum itaque quis omnis eveniet ex autem necessitatibus culpa.</p>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp" @click="visible = true">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>
-            </div>
-          </div>-->
         </div>
       </div>
       <div class="aside-box__bottom">
@@ -489,7 +307,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
@@ -610,7 +428,10 @@ export default {
           name: "Nguyễn Hữu Nam",
           avatar: "https://picsum.photos/40/40"
         }
-      ]
+      ],
+      imgSrc: "",
+      listImage: [],
+      urlEmitMessage: ""
     };
   },
 
@@ -655,6 +476,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("message", ["messageSendImg"]),
     ...mapMutations("message", ["setEmitMessage"]),
     async messageInfiniteHandler($state) {
       this.messageListQuery.room_id = this.$route.params.id;
@@ -678,15 +500,20 @@ export default {
     foward() {},
 
     async handleUploadChange(fileList, event) {
-      this.avatar = Array.from(fileList);
+      this.listImage = Array.from(fileList);
 
-      getBase64(this.avatar[0], src => {
-        this.avatarSrc = src;
+      getBase64(this.listImage[0], src => {
+        this.imgSrc = src;
       });
       const body = new FormData();
-      body.append("avatar_images", fileList[0]);
-      console.log("[avatar_images]", fileList[0]);
-      this.accountPersonalEditAvatar(body).then(result => {});
+      body.append("msg_image", fileList[0]);
+      body.append("room_id", this.$route.params.id);
+      console.log("[msg_image]", fileList[0]);
+      this.messageSendImg(body).then(result => {
+        console.log("[send img]", result);
+        this.urlEmitMessage =
+          result.data && result.data.low ? result.data.low : "";
+      });
     },
 
     async friendsInfiniteHandler($state) {
@@ -717,8 +544,13 @@ export default {
     },
     handleEmitMessage() {
       console.log("textchat", this.textChat);
-      if (this.textChat != "") {
-        this.setEmitMessage(this.textChat);
+      if (this.textChat != "" || this.urlEmitMessage != "") {
+        const dataEmit = {
+          content: this.textChat,
+          img_url: { low: this.urlEmitMessage }
+        };
+        this.setEmitMessage(dataEmit);
+      } else {
       }
       this.textChat = "";
     }
@@ -738,6 +570,7 @@ export default {
             fullname: this.personalList.fullname,
             id: _newVal.user_id
           }
+          // img_url: { low: _newVal.img_url }
         };
         console.log("data", data);
         this.messagesList.unshift(data);

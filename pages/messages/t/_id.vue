@@ -378,8 +378,8 @@ export default {
           uuid: uuidV4,
           user_id: this.userId,
           room_id: this.$route.params.id,
-          content: _newVal,
-          img_url: ""
+          content: _newVal.content ? _newVal.content : "",
+          img_url: _newVal.img_url ? _newVal.img_url : ""
         };
         console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
