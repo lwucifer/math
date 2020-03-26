@@ -55,7 +55,12 @@
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <CourseBenefit :name="name" @handleChangeBenefit="handleChangeBenefit" />
+      <CourseBenefit
+        :name="name"
+        :benefit="payload.benefit"
+        @removeBenefit="removeBenefit"
+        @addBenefit="addBenefit"
+      />
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
@@ -130,7 +135,7 @@ export default {
       isSubmit: false,
       payload: {
         avatar: "",
-        benefit: "",
+        benefit: [],
         description: "",
         level: "",
         name: "",
@@ -173,17 +178,18 @@ export default {
   },
 
   methods: {
-    handleChangeBenefit(benefits) {
-      let data = [];
-      benefits.map(benefit => {
-        data.push({ benefit: benefit });
-      });
-      data = JSON.stringify(data);
-      this.payload.benefit = data;
+    removeBenefit(index) {
+      this.payload.benefit = this.payload.benefit.filter(
+        (item, i) => i !== index
+      );
+    },
+
+    addBenefit(html) {
+      this.payload.benefit.push(html);
     },
 
     handleChangeGeneral() {
-      this.payload.benefit = get(this, "general.benefit", "");
+      this.payload.benefit = [...get(this, "general.benefit", [])];
       this.payload.description = get(this, "general.description", "");
       this.payload.name = get(this, "general.name", "");
       this.payload.subject = get(this, "general.subject", "");
@@ -243,12 +249,14 @@ export default {
     },
 
     async handleCLickSave() {
+      this.isSubmit = false;
       let payload = createPayloadAddCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
-      this.isSubmit = false;
+
+      this.isSubmit = true;
 
       if (get(result, "success", false)) {
         const params = {
