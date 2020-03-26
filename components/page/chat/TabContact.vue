@@ -285,12 +285,10 @@ export default {
   computed: {
     ...mapState("social", ["friendList"]),
     ...mapState("message", ["groupList"]),
+    ...mapGetters("auth", ["userId"]),
     mapGroupList() {
-      const userId = this.$store.state.auth.token
-        ? this.$store.state.auth.token.id
-        : "";
       const data = this.groupsListTab.map(item => {
-        const [dataNoti] = item.members.filter(item => item.id == userId);
+        const [dataNoti] = item.members.filter(item => item.id == this.userId);
         return {
           ...item,
           allow_notication: dataNoti.allow_notication
@@ -405,7 +403,7 @@ export default {
 
     pushUrl(_id) {
       console.log("id", _id);
-      const url = `/messages/${_id}`;
+      const url = `/messages/t/${_id}`;
       this.$router.push(url);
     }
   },

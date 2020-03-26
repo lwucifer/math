@@ -2,30 +2,35 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :school="school" :active="1" />
+        <SchoolAccountSide :school="school" :active="1"/>
       </div>
       <div class="col-md-9">
         <div class="school-account__main box">
           <h5 class="color-primary">Thông tin tài khoản</h5>
           <hr class="mt-3 mb-3" />
-          <div class="row">
-            <div class="col-md-5">
-              <app-input :value="name" label="Tên trường" disabled/>
-              <app-input v-model="address" label="Địa chỉ"/>
-              <app-input v-model="email" label="Email"/>
-            </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-5">
-              <app-input :value="code" label="Mã trường" disabled/>
+          <div class="wrapInfoAccount">
+              <h5>Thông tin cá nhân</h5>
+              <app-input labelFixed v-model="name" label="Họ và tên" disabled/>
               <app-input v-model="phone" label="Số điện thoại"/>
-            </div>
+              <app-input v-model="email" label="Email"/>
+              <div class="picker-group__infostudent">
+                <div class="form-group">
+                    <label>Giới tính</label>
+                    <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
+                </div>
+                <app-date-picker square label="Ngày sinh" v-model="birthday"/>
+              </div>
           </div>
-          <app-button color="red" square>
-            <IconLock2 />
+          <app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">
             <span class="ml-3">Thay đổi mật khẩu</span>
           </app-button>
+          <AccountChangePasswordModal
+            :visible="showChangePass"
+            @click-close="showChangePass = false"
+          />
+          <AccountInfoStudent :accounttype="accounttype"/>
           <div class="d-flex mt-4">
-            <app-button class="ml-auto" square>Lưu thay đổi</app-button>
+            <app-button class="ml-auto" square @click="save()">Lưu thay đổi</app-button>
           </div>
         </div>
       </div>
@@ -35,8 +40,14 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
+import AccountInfoStudent from "~/components/page/account/Info/AccountInfoStudent"
+import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
+import * as actionTypes from "~/utils/action-types";
+import { mapState, mapActions } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconLock2 from "~/assets/svg/icons/lock2.svg?inline";
+import firebase from "@/services/firebase/FirebaseInit";
+import { getDateBirthDay,getDateFormat } from "~/utils/moment";
 
 // Import faked data
 import { SCHOOL } from "~/server/fakedata/school/test";
@@ -45,24 +56,48 @@ export default {
   components: {
     IconPhoto,
     IconLock2,
-    SchoolAccountSide
+    SchoolAccountSide,
+    AccountInfoStudent,
+    AccountChangePasswordModal
   },
-
+  async fetch({ params, query, store }) {
+    console.log(store.state.auth.access_token);
+    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    await Promise.all([
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+    ]);
+  },
   data() {
     return {
       isAuthenticated: true,
       school: SCHOOL,
-      phone: '',
-      name: '',
-      email: '',
-      address: '',
-      code: '',
-      avatar: [],
-      avatarSrc: "https://picsum.photos/170/170"
+      name:"",
+      phone:"",
+      email:"",
+      sex:'',
+      birthday:'',
+      address:'',
+      accounttype:"TEACHER",
+      showChangePass:false
     };
   },
-
+  
   methods: {
+    ...mapActions("account", ["accountPersonalEdit", "accountPersonalList"]),
+    save(){
+      const data = {
+        sex: this.sex,
+        address: this.address,
+        birthday: getDateFormat(this.birthday)
+      }
+      this.accountPersonalEdit(data).then(result=>{
+        console.log("[accountPersonalEdit]", result);
+        if(result.success == true){
+          console.log('thanh cong')
+        }
+      })
+    }
+   
     // async handleUploadChange(fileList, event) {
     //   this.avatar = Array.from(fileList);
 
@@ -74,10 +109,62 @@ export default {
     //   console.log("[avatar_images]", fileList[0]);
     //   this.accountPersonalEditAvatar(body).then(result => {});
     // }
-  }
-};
+  },
+  computed:{
+    ...mapState("account", ["personalList"]),
+  },
+  created(){
+    this.name = this.personalList.fullname || "";
+    this.phone = this.personalList.phone_number || "";
+    this.email = this.personalList.email || "";
+    this.address= this.personalList.address || "";
+    this.sex = this.personalList.sex;
+    this.birthday = getDateBirthDay(this.personalList.birthday);
+  },
+}
 </script>
 
 <style lang="scss">
 @import "~/assets/scss/components/school/_school-account.scss";
+.wrapInfoAccount{
+    padding: 20px;
+    label{
+      color:#999999;
+    }
+    h5{
+        margin-bottom: 25px;
+    }
+    .app-input{
+        display: flex;
+        .app-input__label {
+            white-space: nowrap;
+            width: 15rem;
+		}
+    }
+    .form-group{
+        label{
+            width: 14rem;
+            white-space: nowrap;
+        }
+    }
+    .picker-group__infostudent{
+        display: flex;
+        .app-date-picker{
+            margin-left: 60px;
+          label{
+            margin-right: 20px;
+          }
+        }
+    }
+}
+.btnChangePassword{
+      margin-left: 14rem;
+    }
+.account-edit-modal .app-modal-content .app-input {
+    display: flex;
+    flex-wrap: wrap;
+    .app-input__error {
+      margin-left: 16.1rem;
+    }
+}
 </style>

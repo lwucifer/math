@@ -203,10 +203,6 @@ export default {
     }
   },
 
-  mounted() {
-    console.log(this);
-  },
-
   watch: {
     active(newValue) {
       this.$emit("visible-change", newValue);

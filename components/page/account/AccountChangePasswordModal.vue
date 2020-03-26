@@ -75,11 +75,13 @@ export default {
   },
   props: {
     visible: Boolean,
+    /*
     account: {
       type: Object,
       required: true,
       default: () => {}
     }
+    */
   },
   computed: {},
   data() {

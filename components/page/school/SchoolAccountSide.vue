@@ -1,7 +1,7 @@
 <template>
   <div class="school-side">
     <div class="school-side__avatar">
-      <app-avatar :src="school.avatar" :size="125" />
+      <app-avatar :src="personalList.avatar.low" :size="125" />
       <app-upload class="cgi-upload-avt change-avatar">
           <template>
             <div class="cgi-upload-avt-preview">
@@ -10,7 +10,7 @@
           </template>
         </app-upload>
     </div>
-    <p class="school-side__name mt-2">{{school.name}}</p>
+    <p class="school-side__name mt-2">{{personalList.fullname}}</p>
     <div class="school-side__links">
       <n-link class="link-gray" to='/account/info/' :class="active == 1 ? 'active' : ''">
         <IconUser3 width="20" height="20"/>Thông tin tài khoản
@@ -46,6 +46,7 @@ import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconSearch from "~/assets/svg/icons/search2.svg?inline";
 import IconDollarAlt from '~/assets/svg/design-icons/dollar-alt.svg?inline';
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -68,6 +69,9 @@ export default {
     active: {
       type: [String, Number]
     }
+  },
+  computed:{
+    ...mapState("account", ["personalList"]),
   }
 };
 </script>

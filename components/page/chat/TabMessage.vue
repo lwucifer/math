@@ -79,7 +79,7 @@
           <!-- message box item -->
           <div
             class="message-box__item"
-            :class="item.user && item.user.id == 32 ? 'item__0' : 'item__1'"
+            :class="item.user && item.user.id == userId ? 'item__0' : 'item__1'"
             v-for="(item, index) in messagesList ? messagesList : []"
             :key="index"
           >
@@ -397,7 +397,12 @@
           <IconClose @click="isReply = false" class="btn-close" />
         </div>
         <div class="input-group">
-          <input class="input-control" v-model="textChat" placeholder="Nhấp để chat" />
+          <input
+            class="input-control"
+            v-model="textChat"
+            v-on:keyup.enter="handleEmitMessage"
+            placeholder="Nhấp để chat"
+          />
           <div class="input-group_addon">
             <ul class="list-unstyle">
               <li>
@@ -484,7 +489,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
@@ -611,8 +616,9 @@ export default {
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
-    ...mapState("message", ["messageList", "groupListDetail"]),
-
+    ...mapState("message", ["messageList", "groupListDetail", "messageOn"]),
+    ...mapState("account", ["personalList"]),
+    ...mapGetters("auth", ["userId"]),
     selectedTags() {
       return this.tag.map(item => {
         const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
@@ -649,8 +655,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations("message", ["setEmitMessage"]),
     async messageInfiniteHandler($state) {
-      this.messageListQuery.room_id = 18;
+      this.messageListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new Message(this.$axios)[
         actionTypes.BASE.LIST
       ]({
@@ -707,14 +714,34 @@ export default {
         this.friendsList = [];
         this.friendsListQuery.page = 1;
       }
+    },
+    handleEmitMessage() {
+      console.log("textchat", this.textChat);
+      if (this.textChat != "") {
+        this.setEmitMessage(this.textChat);
+      }
+      this.textChat = "";
     }
   },
   created() {
     // this.messageListQuery.room_id = this.$route.params.id;
   },
   watch: {
-    groupListDetail(_newVal) {
+    messageOn(_newVal) {
       if (_newVal) {
+        console.log("[messageOn]", _newVal);
+
+        const data = {
+          ..._newVal,
+          user: {
+            avatar: this.personalList.avatar,
+            fullname: this.personalList.fullname,
+            id: _newVal.user_id
+          }
+        };
+        console.log("data", data);
+        this.messagesList.unshift(data);
+        console.log("[this.messagesList]", this.messagesList);
       }
     }
   }
