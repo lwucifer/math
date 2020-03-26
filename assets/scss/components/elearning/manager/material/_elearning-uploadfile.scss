@@ -11,6 +11,7 @@
     }
  }
  .wrapProcessbarStorage__ElearningManager{
+     align-items: center;
      span{
          color: #1481FE;
          padding-left:5px;
@@ -38,59 +39,159 @@
  
  }
  .wrapUploadFile__ElearningManager{
-     height: 100px;
-     border: 1px solid #CCCCCC;
+
      box-sizing: border-box;
-     text-align: center;
- 
  }
  .titleFormatFile__ElearningManager{
-     height: 50px;
-     width: 100%;
-     span{
-         margin-top:20px;
-         display:inline-block;
-         color: #999999;
-         font-size: 14px;
-         line-height: 24px;
-     }
-     .namefiles{
-        margin:0px;
-         padding: 15px;
+     margin-bottom: .5rem;
+     span {
+         color: $color-blue;
+         font-size: 1.4rem;
+         line-height: 1.9rem;
+         font-style: italic;
      }
  }
  .wrapBtnUploadFile__ElearningManager{
-     height: 50px;
-     display: flex;
-     flex: row;
-     justify-content: center;
-     position: relative;
-    overflow: hidden;
-    display: inline-block;
-    input[type=file]{
-        font-size: 100px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-    }
+     background: #FBFBFB;
+     border: 1px dashed $color-border;
+     padding: 2rem;
+
+     .file-name {
+         color: $color-dark;
+         font-size: 1.4rem;
+         line-height: 1.9rem;
+     }
+
+     .text-instruction {
+         color: $color-text-gray-2;
+     }
+
+     input[type=file] {
+      display: none;
+      z-index: -9999;
+     }
+
  }
+
+.icon-uploading-cancel {
+    position: absolute;
+    width: 1.6rem;
+    height: 1.6rem;
+    right: 0;
+    top: calc(50% - 0.8rem);
+    & path {
+        fill: $color-text-gray-2;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:hover path {
+        fill: $color-warning;
+    }
+}
+
+.process--upload {
+    background: #fff;
+    border: 1px solid $color-primary;
+
+    &__percentage {
+        height: 1.3rem;
+        background-color: lighten($color-primary, 0.8);
+    }
+
+    &__status {
+        color: $color-text-sub;
+        font-size: 1.2rem   ;
+    }
+}
+
+.upload-alert {
+    .btn--other-file {
+        //background-color: #fff;
+        color: $color-primary;
+        svg {
+            width: 1.6rem;
+            height: 1rem;
+            margin-right: .5rem;
+            path {
+                fill: $color-primary;
+            }
+        }
+    }
+}
+
+.upload-alert--error {
+    margin-bottom: 1rem;
+
+    &__info {
+        padding: 1rem 1.3rem;
+        background-color: #F8D7DA;
+        border: 1px solid #FFB6BC;
+        display: flex;
+        align-items: center;
+    }
+
+    .icon--close-alert {
+        height: 1.3rem;
+        width: 1.3rem;
+        margin-right: 1rem;
+        path {
+            fill: #721C24;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:hover path {
+            fill: lighten(#721C24, .8);
+        }
+    }
+    &__mess {
+        color: #721C24;
+    }
+
+    &__status {
+        font-style: italic;
+        font-size: 1.2rem;
+        color: #E9446A;
+    }
+}
+
+.upload-alert--success {
+    margin-bottom: 1rem;
+
+    &__title {
+        svg.icon {
+            margin-right: .4rem;
+        }
+
+        margin-bottom: 1rem;
+        color: $color-primary;
+        display: flex;
+        align-items: center;
+    }
+}
+
  .btnUploadFile__ElearningManager{
-     background: #32AF85;
-     width: 139px;
-     height: 32px;
-     color: #FBFBFB; 
-     font-weight: 600;
-     font-size: 14px;
-     line-height: 24px;
-     text-transform: uppercase;
-     display: flex;
-     flex: row;
-     align-items: center;
-     justify-content: center;
+
+     svg {
+         width: 100%;
+         height: 5.5rem;
+     }
+     &:hover {
+         outline: none;
+         svg path {
+            fill: $color-primary;
+         }
+     }
+
+     &:focus {
+         outline: none;
+     }
  }
  .iconUploadFile__ElearningManager{
      height: 14px;
      fill: #FFFFFF;
-     
  }

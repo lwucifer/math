@@ -36,11 +36,11 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD]({ commit }, payload) {
+  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD]({ commit }, { payload, config }) {
     try {
       const result = await new RepositoryFile(this.$axios)[
         actionTypes.BASE.ADD
-      ](payload);
+      ](payload, config);
       return result;
     } catch (error) {
       console.log("[Creating repository] add.error", error);

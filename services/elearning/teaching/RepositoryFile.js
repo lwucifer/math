@@ -11,4 +11,10 @@ export default class RepositoryFile extends BaseService {
     const { data } = await this.$axios.delete(this.$api, payload);
     return data;
   }
+
+  async [actionTypes.BASE.ADD](payload, config = {}) {
+    const { data } = await this.$axios.post(this.$api, payload, config);
+
+    return data;
+  }
 }

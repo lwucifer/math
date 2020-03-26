@@ -100,6 +100,7 @@ export const GROUP_REMOVE_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/removeMemb
 export const GROUP_NOTIFICATION = `${SCHOOLLY_ALIAS}/social/api/room/settingNotification`;
 export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
 export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
+export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
 
 /**
  * ELEARNING MANAGER

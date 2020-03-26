@@ -8,7 +8,7 @@ class AddCourse {
     }
 
     if (payload.benefit) {
-      this.benefit = payload.benefit;
+      this.benefit = JSON.stringify(payload.benefit);
     }
 
     if (payload.description) {

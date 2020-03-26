@@ -86,7 +86,15 @@ export default {
     IconSearch,
     IconArrow
   },
-
+  filters: {
+    exerciseType: function(val) {
+      const MATCHED_DATA = {
+        'choice': 'Trắc nghiệm',
+        'essay': 'Tự luận'
+      }
+      return MATCHED_DATA[val.toLowerCase()]
+    }
+  },
   data() {
     return {
       tab: 1,
