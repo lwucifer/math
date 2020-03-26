@@ -10,11 +10,9 @@
             <span>Danh sách bài giảng và khóa học</span>
           </div>
           <app-divider></app-divider>
-          <div>
-            <ElearningManagerUploadFile
-              @done="handleDoneAddFile"
-            />
-          </div>
+          <ElearningManagerUploadFile
+            :on-success="handleDoneAddFile"
+          />
           <div>
             <ElearningManagerFilterTable
               :list.sync="list"
@@ -41,6 +39,7 @@
   import { mapState } from "vuex"
   import { get } from "lodash";
   import { useEffect } from "~/utils/common"
+  import { MAX_UPLOADED_REPOSITORY_FILE_SIZE } from "~/utils/config"
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -82,10 +81,9 @@
     methods: {
       handleUploadChange(fileList, event) {
       },
-      async handleDoneAddFile(data, event) {
+      async handleDoneAddFile(data) {
         if (get(data, "success", false)) {
           await this.refreshData()
-          this.$toasted.success(get(data, "message", ""));
           return;
         }
         this.$toasted.error(get(data, "message", ""));
@@ -124,6 +122,17 @@
       refreshData() {
         this.params.page = 1
         this.getList()
+      },
+      validateFile(file) {
+
+      },
+      beforeUploadFile(file) {
+        const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE
+        if (isLtSize) {
+          return true
+        }
+        this.$toasted.error(`Please do not upload files larger than ${MAX_UPLOADED_REPOSITORY_FILE_SIZE}MB in size.`)
+        return false
       },
       get
     },
