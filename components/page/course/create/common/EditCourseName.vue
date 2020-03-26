@@ -1,11 +1,10 @@
 <template>
-  <div>
-    <app-input
+  <div class="d-flex align-items-center">
+    <input
       v-if="isEditCourseName"
       v-model="courseNameModel"
       ref="inputCourseName"
-      class="cc-box__input-title mb-0 w-100"
-      size="sm"
+      class="cc-box__input-title bg-input-gray mb-0"
       type="text"
     />
     <h2 v-else class="cc-box__title heading-6">
@@ -14,13 +13,13 @@
 
     <template v-if="isEditCourseName">
       <button
-        class="cc-box__btn mr-2 text-success"
+        class="cc-box__btn mr-3 text-success"
         @click="handleSaveCourseName"
       >
-        <IconCheck class="icon" />
+        Lưu
       </button>
-      <button class="cc-box__btn text-error" @click="cancelEditCourseName">
-        <IconTimes class="icon" />
+      <button class="cc-box__btn text-gray-2" @click="cancelEditCourseName">
+        Huỷ
       </button>
     </template>
 
