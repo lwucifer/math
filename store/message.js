@@ -11,6 +11,7 @@ import GroupNotification from "~/services/message/GroupNotification";
 import Message from "~/services/message/Message";
 import GroupDetail from "~/services/message/GroupDetail";
 import MessageSendImg from "~/services/message/MessageSendImg";
+import Personal from "../services/account/Personal";
 
 /**
  * initial state
@@ -186,6 +187,17 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[MessageSendImg] edit.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.LIST]({ commit }, payload) {
+        try {
+            const result = await new Personal(this.$axios)[actionTypes.BASE.DETAIL](
+                payload
+            );
+            return result;
+        } catch (err) {
+            console.log("[Personal Message] list.err", err);
             return err;
         }
     }
