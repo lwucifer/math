@@ -14,13 +14,15 @@
           @click="handleSelectType"
           :checked="payload.type === 'LECTURE'"
           class="mr-6"
-        >Bài giảng</app-radio>
+          >Bài giảng</app-radio
+        >
         <app-radio
           name="type"
           @click="handleSelectType"
           value="COURSE"
           :checked="payload.type === 'COURSE'"
-        >Khoá học</app-radio>
+          >Khoá học</app-radio
+        >
       </div>
 
       <div class="row">
@@ -145,9 +147,9 @@ export default {
         level: "",
         name: "",
         subject: "",
-        type: "LECTURE"
+        type: ""
       },
-      showModalConfirm: true,
+      showModalConfirm: false,
       confirmLoading: false
     };
   },
@@ -201,7 +203,7 @@ export default {
       this.payload.name = get(this, "general.name", "");
       this.payload.subject = get(this, "general.subject", "");
       this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "LECTURE");
+      this.payload.type = get(this, "general.type", "");
       if (get(this, "general.id", "")) {
         this.payload.elearning_id = get(this, "general.id", "");
       }
@@ -255,7 +257,12 @@ export default {
       this.payload.subject = get(subject, "code", "");
     },
 
-    async handleCLickSave() {
+    handleCLickSave() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       this.isSubmit = false;
       let payload = createPayloadAddCourse(this.payload);
       const result = await this.$store.dispatch(
@@ -264,6 +271,8 @@ export default {
       );
 
       this.isSubmit = true;
+      this.confirmLoading = false;
+      this.showModalConfirm = false;
 
       if (get(result, "success", false)) {
         const params = {
@@ -283,16 +292,9 @@ export default {
       this.$toasted.error(get(result, "message", ""));
     },
 
-    handleOk() {
-      this.confirmLoading = true;
-
-      const timeout = setTimeout(() => {
-        this.showModalConfirm = false;
-        clearTimeout(timeout)
-      }, 2000)
+    handleCancel() {
+      this.showModalConfirm = false;
     },
-
-    handleCancel() {},
 
     numeral,
     get
