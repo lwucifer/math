@@ -14,13 +14,15 @@
           @click="handleSelectType"
           :checked="payload.type === 'LECTURE'"
           class="mr-6"
-        >Bài giảng</app-radio>
+          >Bài giảng</app-radio
+        >
         <app-radio
           name="type"
           @click="handleSelectType"
           value="COURSE"
           :checked="payload.type === 'COURSE'"
-        >Khoá học</app-radio>
+          >Khoá học</app-radio
+        >
       </div>
 
       <div class="row">
@@ -145,34 +147,51 @@ export default {
         level: "",
         name: "",
         subject: "",
-        type: "LECTURE"
+        type: ""
       },
-      showModalConfirm: true,
+      showModalConfirm: false,
       confirmLoading: false
     };
   },
 
   created() {
-    useEffect(this, this.handleChangePayload.bind(this), [
-      "payload.avatar",
-      "payload.benefit",
-      "payload.description",
-      "payload.level",
-      "payload.name",
-      "payload.subject",
-      "payload.type"
-    ]);
-
     this.handleFetchElearningGeneral();
+  },
 
-    useEffect(this, this.handleChangeGeneral.bind(this), [
-      "general.benefit",
-      "general.description",
-      "general.level",
-      "general.name",
-      "general.subject",
-      "general.type"
-    ]);
+  watch: {
+    payload: {
+      handler: function() {
+        let that = this;
+        const payload = createPayloadAddCourse(this.payload);
+        const elearning_id = getParamQuery("elearning_id");
+
+        if (elearning_id) {
+          schema_update.isValid(payload).then(function(valid) {
+            that.isSubmit = valid;
+          });
+          return;
+        }
+
+        schema.isValid(payload).then(function(valid) {
+          that.isSubmit = valid;
+        });
+      },
+      deep: true
+    },
+    general: {
+      handler: function() {
+        this.payload.benefit = [...get(this, "general.benefit", [])];
+        this.payload.description = get(this, "general.description", "");
+        this.payload.name = get(this, "general.name", "");
+        this.payload.subject = get(this, "general.subject", "");
+        this.payload.level = get(this, "general.level", "");
+        this.payload.type = get(this, "general.type", "");
+        if (get(this, "general.id", "")) {
+          this.payload.elearning_id = get(this, "general.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -195,18 +214,6 @@ export default {
       this.payload.benefit.push(html);
     },
 
-    handleChangeGeneral() {
-      this.payload.benefit = [...get(this, "general.benefit", [])];
-      this.payload.description = get(this, "general.description", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "LECTURE");
-      if (get(this, "general.id", "")) {
-        this.payload.elearning_id = get(this, "general.id", "");
-      }
-    },
-
     handleFetchElearningGeneral() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id) {
@@ -220,23 +227,6 @@ export default {
           options
         );
       }
-    },
-
-    handleChangePayload() {
-      let that = this;
-      const payload = createPayloadAddCourse(this.payload);
-      const elearning_id = getParamQuery("elearning_id");
-
-      if (elearning_id) {
-        schema_update.isValid(payload).then(function(valid) {
-          that.isSubmit = valid;
-        });
-        return;
-      }
-
-      schema.isValid(payload).then(function(valid) {
-        that.isSubmit = valid;
-      });
     },
 
     handleChangeLevel(level) {
@@ -255,7 +245,12 @@ export default {
       this.payload.subject = get(subject, "code", "");
     },
 
-    async handleCLickSave() {
+    handleCLickSave() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       this.isSubmit = false;
       let payload = createPayloadAddCourse(this.payload);
       const result = await this.$store.dispatch(
@@ -264,6 +259,8 @@ export default {
       );
 
       this.isSubmit = true;
+      this.confirmLoading = false;
+      this.showModalConfirm = false;
 
       if (get(result, "success", false)) {
         const params = {
@@ -277,22 +274,29 @@ export default {
           options
         );
         redirectWithParams(params);
+        this.getProgress();
         this.$toasted.success(get(result, "message", ""));
         return;
       }
       this.$toasted.error(get(result, "message", ""));
     },
 
-    handleOk() {
-      this.confirmLoading = true;
-
-      const timeout = setTimeout(() => {
-        this.showModalConfirm = false;
-        clearTimeout(timeout)
-      }, 2000)
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
-    handleCancel() {},
+    handleCancel() {
+      this.showModalConfirm = false;
+    },
 
     numeral,
     get

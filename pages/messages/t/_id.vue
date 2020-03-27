@@ -85,8 +85,8 @@ export default {
         params: {
           room_id: room_id
         }
-      }),
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      })
+      // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },
 
@@ -342,13 +342,13 @@ export default {
       }
 
       // on handle status message
-      this.socket.on(constants.CHAT.STATUS_HANDLE, data => {
-        console.log("[socket]", data);
-      });
+      // this.socket.on(constants.CHAT.STATUS_HANDLE, data => {
+      //   console.log("[socket]", data);
+      // });
 
       // on handle message
       this.socket.on(constants.CHAT.MESSAGE, data => {
-        console.log("[socket] message", data);
+        console.log("[socket] messageOn", data);
         this.setOnMessage(data);
       });
 
@@ -368,7 +368,7 @@ export default {
   },
 
   beforeDestroy() {
-    // this.socket.off('join_room');
+    this.socket.off("join_room");
   },
   watch: {
     messageEmit(_newVal) {
@@ -377,9 +377,12 @@ export default {
         const paramsMessage = {
           uuid: uuidV4,
           user_id: this.userId,
-          room_id: this.$route.params.id,
+          room_id: _newVal.room_id,
           content: _newVal.content ? _newVal.content : "",
-          img_url: _newVal.img_url ? _newVal.img_url : ""
+          img_url: _newVal.img_url ? _newVal.img_url : "",
+          message_id: _newVal.message_id ? _newVal.message_id : "",
+          avatar: _newVal.avatar ? _newVal.avatar : "",
+          fullname: _newVal.fullname ? _newVal.fullname : ""
         };
         console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {

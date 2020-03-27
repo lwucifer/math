@@ -48,6 +48,9 @@ const getters = {
     },
     fullName(state) {
         return state.token.fullname ? state.token.fullname : "";
+    },
+    avatarUser(state) {
+        return state.token.avatar ? state.token.avatar : {};
     }
 };
 

@@ -16,33 +16,7 @@
               :to="`/account/${post.author.id}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
-            <template v-if="post.tags && post.tags.length">
-              <span class="text-sub font-weight-normal">cùng với</span>
-
-              <n-link
-                :to="`/account/${post.tags[0].id}`"
-              >{{ post.tags[0].fullname }}</n-link>
-
-              <template v-if="post.tags.length > 1">
-                <span class="text-sub font-weight-normal">và</span>
-                <n-link
-                  v-if="post.tags.length === 2"
-                  :to="`/account/${post.tags[1].id}`"
-                >{{ post.tags[1].fullname }}</n-link>
-
-                <app-dropdown v-else>
-                  <span slot="activator">{{ post.tags.slice(1).length }} người khác.</span>
-                  <div
-                    v-for="item in post.tags.slice(1)"
-                    :key="item.id"
-                    class="px-3 py-2 body-2 font-weight-normal"
-                    style="white-space: nowrap;"
-                  >
-                    <n-link :to="`/account/${item.id}`">{{ item.fullname }}</n-link>
-                  </div>
-                </app-dropdown>
-              </template>
-            </template>
+            <PostTags v-if="!showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
 
@@ -100,6 +74,8 @@
       <template v-else>
         <div class="post__post-desc" v-html="post.content"></div>
         <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
+
+        <PostTags v-if="showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
       </template>
 
       <slot name="media-content" />
@@ -165,7 +141,7 @@
           >Bài viết chưa có bình luận.</div>
         </div>
 
-        <CommentEditor class="post__comment-editor" @submit="postComment" />
+        <CommentEditor class="post__comment-editor mb-3" @submit="postComment" />
       </template>
 
       <div class="text-center" v-if="btnCommentLoading">
@@ -180,6 +156,7 @@ import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { createComment } from "~/models/social/Comment";
 
+const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
 const CommentItemReplied = () =>
@@ -195,6 +172,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 export default {
   components: {
+    PostTags,
     CommentItem,
     CommentItemReplied,
     CommentEditor,

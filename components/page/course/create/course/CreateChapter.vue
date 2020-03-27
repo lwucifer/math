@@ -28,6 +28,12 @@
         >
       </div>
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </fragment>
 </template>
 
@@ -44,7 +50,9 @@ export default {
         elearning_id: "",
         name: "",
         index: 0
-      }
+      },
+      showModalConfirm: false,
+      confirmLoading: false
     };
   },
 
@@ -56,6 +64,11 @@ export default {
 
   methods: {
     async handleAddChapter() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       let index = 0;
       try {
         index =
@@ -77,6 +90,9 @@ export default {
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.ADD}`,
         this.payload
       );
+
+      this.handleCancelModal();
+
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
         this.payload.name = "";
@@ -87,6 +103,11 @@ export default {
         return;
       }
       this.$toasted.error(get(res, "message", ""));
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     handleCancelAddChapter() {

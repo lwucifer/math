@@ -5,9 +5,15 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <PostEditor @submit="handlePostEditorSubmit" />
+          <PostEditor
+            @submit="handlePostEditorSubmit"
+            :active="postEditorActive"
+            @active-change="active => postEditorActive = active"
+          />
 
-          <template>
+          <VclFacebook v-if="postLoading" class="bg-white" />
+
+          <transition-group enter-active-class="animated faster fadeIn" leave-active-class="animated faster fadeOut">
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
@@ -29,7 +35,7 @@
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
             </Post>
-          </template>
+          </transition-group>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
@@ -148,7 +154,6 @@
               <template slot="no-more">Không còn bài viết.</template>
             </infinite-loading>
           </client-only>
-          
 
           <app-modal
             v-if="modalDetailShow"
@@ -311,6 +316,8 @@ export default {
           value: 1
         }
       ],
+      postEditorActive: false,
+      postLoading: false,
 
       //Fake data
       messages: MESSAGES,
@@ -333,8 +340,8 @@ export default {
       window.addEventListener("popstate", event => {
         const timeout = setTimeout(() => {
           this.handlePopstate(event);
-          clearTimeout(timeout)
-        })
+          clearTimeout(timeout);
+        });
       });
     }
   },
@@ -344,8 +351,8 @@ export default {
       window.removeEventListener("popstate", event => {
         const timeout = setTimeout(() => {
           this.handlePopstate(event);
-          clearTimeout(timeout)
-        })
+          clearTimeout(timeout);
+        });
       });
     }
   },
@@ -425,7 +432,9 @@ export default {
     /**
      * Submit POST a post
      */
-    async handlePostEditorSubmit(data) {
+    async handlePostEditorSubmit(data, cb) {
+      this.postLoading = true;
+
       const formData = new FormData();
       const dataWithModel = createPost(data);
 
@@ -433,12 +442,17 @@ export default {
         formData.append(key, data[key]);
       }
 
+      this.postEditorActive = false;
+
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL_POST.ADD}`,
         formData
       );
 
+      this.postLoading = false;
+
       if (doAdd.success) {
+        cb();
         this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
       } else {
         this.$toasted.error(doAdd.message);

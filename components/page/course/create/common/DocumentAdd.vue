@@ -57,6 +57,13 @@
         >Thêm nội dung</app-button
       >
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </div>
 </template>
 
@@ -66,7 +73,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import DocumentSelectFile from "~/components/page/course/create/common/DocumentSelectFile";
 import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddDocument } from "~/models/course/AddCourse";
 
@@ -88,6 +95,8 @@ export default {
   data() {
     return {
       tabAddDocument: "upload",
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         doc: "",
         lesson_id: get(this, "lesson.id", ""),
@@ -121,18 +130,35 @@ export default {
     },
 
     async handleAddDocument() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       const payload = createPayloadAddDocument(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.ADD}`,
         payload
       );
+
+      this.handleCancelModal();
+
       if (!get(result, "success", false)) {
-        this.$toasted.error(get(result, "message", ""));
+        this.$toasted.error(
+          defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+        );
         return;
       }
       this.$emit("handleCloseAdd");
       this.$emit("handleRefreshDocs");
-      this.$toasted.success(get(result, "message", ""));
+      this.$toasted.success(
+        defaultTo(get(result, "message", ""), "Thành công")
+      );
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     }
   }
 };

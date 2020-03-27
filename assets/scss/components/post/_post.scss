@@ -268,3 +268,15 @@
         }
     }
 }
+
+.post__tags {
+    display: inline-block;
+    
+    a {
+        text-decoration: none;
+    }
+}
+
+.post__post-desc {
+    display: inline-block;
+}

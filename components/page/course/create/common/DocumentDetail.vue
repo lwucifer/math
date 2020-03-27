@@ -10,6 +10,13 @@
     <a href @click="handleDeleteDoc($event)">
       <IconTrashAlt class="icon subheading fill-secondary" />
     </a>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </div>
 </template>
 
@@ -18,7 +25,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -33,9 +40,21 @@ export default {
     }
   },
 
+  data() {
+    return {
+      showModalConfirm: false,
+      confirmLoading: false
+    };
+  },
+
   methods: {
     async handleDeleteDoc(e) {
       e.preventDefault();
+      this.showModalConfirm = true
+    },
+
+    async handleOk() {
+      this.confirmLoading  =true
       const doc_id = get(this, "doc.id", "");
       const options = {
         data: {
@@ -46,12 +65,20 @@ export default {
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.DELETE}`,
         options
       );
+
+      this.handleCancelModal()
+
       if (get(result, "success", false)) {
-        this.$toasted.success(get(result, "message", ""));
+        this.$toasted.success(defaultTo(get(result, "message", ""), "Thành công"));
         this.$emit("handleRefreshDocs");
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(defaultTo(get(result, "message", ""), "Có lỗi xảy ra"));
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     get

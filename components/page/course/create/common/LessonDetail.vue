@@ -17,7 +17,7 @@
     <app-divider class="my-4" />
 
     <DocumentDetail
-      v-for="doc in docs"
+      v-for="doc in get(lesson, 'lessonDocs', [])"
       :key="doc.id"
       :doc="doc"
       @handleRefreshDocs="handleRefreshDocs"
@@ -77,13 +77,8 @@ export default {
     return {
       isShowFormAddDocument: false,
       isShowButtonAddDocument: true,
-      docs: [],
       isShowDetailLesson: true
     };
-  },
-
-  async created() {
-    this.docs = await this.handleGetDocs();
   },
 
   props: {
@@ -94,8 +89,8 @@ export default {
   },
 
   methods: {
-    async handleRefreshDocs() {
-      this.docs = await this.handleGetDocs();
+    handleRefreshDocs() {
+      this.$emit("refreshLessons");
     },
 
     refreshLessons() {
@@ -104,28 +99,7 @@ export default {
     },
 
     handleCancel() {
-      console.log(1);
       this.isShowDetailLesson = true;
-    },
-
-    async handleGetDocs() {
-      const lesson_id = get(this, "lesson.id", "");
-      // const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          lesson_id
-          // elearning_id
-        },
-        not_commit: true
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        return get(res, "data", []);
-      }
-      return [];
     },
 
     handleCloseAdd() {
