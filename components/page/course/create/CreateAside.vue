@@ -30,6 +30,7 @@
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 const menu = [
   {
@@ -65,15 +66,6 @@ const menu = [
 ];
 
 export default {
-  // props: {
-  //   active: {
-  //     type: String,
-  //     default: "general",
-  //     // validator: value =>
-  //     //   ["general", "content", "settings", "exercise", "exam"].includes(value)
-  //   }
-  // },
-
   data() {
     return {
       menu,
@@ -85,105 +77,70 @@ export default {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
     }),
-    ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
-    }),
-    ...mapState("elearning/creating/creating-setting", {
-      setting: "setting"
-    }),
-    ...mapState("elearning/creating/creating-chapter", {
-      chapters: "chapters"
+    ...mapState("elearning/creating/creating-progress", {
+      progress: "progress"
     })
   },
 
   created() {
-    useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
-    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
-    useEffect(this, this.handleCheckedContent.bind(this), [
-      "lessons",
-      "chapters"
-    ]);
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id
+      }
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+      options
+    );
+  },
+
+  watch: {
+    progress: {
+      handler: function() {
+        if (get(this, "progress.data.general_complete", false)) {
+          this.menu[0]["checked"] = true;
+        }
+        if (get(this, "progress.data.content_complete", false)) {
+          this.menu[1]["checked"] = true;
+        }
+        if (get(this, "progress.data.setting_complete", false)) {
+          this.menu[2]["checked"] = true;
+        }
+      },
+      deep: true
+    }
   },
 
   methods: {
     handleClickMenuItem({ key }) {
-      this.active = key;
-      
       if (key === "general") {
+        this.active = key;
         this.$emit("click-item", key);
         return;
       }
 
-      if (get(this, "general", null)) {
-        if (key === "content") {
-          this.active = "content";
-          if (get(this, "general.type", "") === "LECTURE") {
-            this.$emit("click-item", "content-lecture");
-            return;
-          }
-          if (get(this, "general.type", "") === "COURSE") {
-            this.$emit("click-item", "content-course");
-            return;
-          }
-        }
+      if (!get(this, "progress.data.general_complete", false)) return;
 
-        if (key === "settings") {
-          if (get(this, "general.type", "") === "LECTURE") {
-            if (get(this, "lessons.data.length", 0) && key === "settings") {
-              this.$emit("click-item", key);
-              return;
-            }
-          }
-          if (get(this, "general.type", "") === "COURSE") {
-            if (get(this, "chapters.data.length", 0) && key === "settings") {
-              this.$emit("click-item", key);
-              return;
-            }
-          }
+      if (key === "content") {
+        this.active = key;
+        if (get(this, "general.type", "") === "LECTURE") {
+          this.$emit("click-item", "content-lecture");
+          return;
         }
-
-        if (get(this, "setting", null) && key === "exercise") {
-          this.$emit("click-item", key);
+        if (get(this, "general.type", "") === "COURSE") {
+          this.$emit("click-item", "content-course");
+          return;
         }
-
-        if (get(this, "setting", null) && key === "exam") {
-          this.$emit("click-item", key);
-        }
-      }
-    },
-
-    handleChangeSetting() {
-      if (get(this, "setting.setting", null)) {
-        this.menu[2].checked = true;
         return;
       }
-      this.menu[2].checked = false;
-    },
 
-    handleCheckedContent() {
-      if (
-        get(this, "lessons.data.length", 0) &&
-        get(this, "general.type", "") === "LECTURE"
-      ) {
-        this.menu[1].checked = true;
-        return;
-      }
-      if (
-        get(this, "chapters.data.length", 0) &&
-        get(this, "general.type", "") === "COURSE"
-      ) {
-        this.menu[1].checked = true;
-        return;
-      }
-      this.menu[1].checked = false;
-    },
+      if (!get(this, "progress.data.content_complete", false)) return;
 
-    handleChangeGeneral() {
-      if (this.general) {
-        this.menu[0].checked = true;
-        return;
+      if (key === "settings") {
+        this.active = key;
+        this.$emit("click-item", key);
       }
-      this.menu[0].checked = false;
     }
   }
 };
