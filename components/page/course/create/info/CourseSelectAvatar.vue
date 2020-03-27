@@ -27,6 +27,7 @@
             "
             alt
             class="d-block w-100"
+            @error="handleError"
           />
           <span
             v-if="avatarSrc"
@@ -102,12 +103,9 @@ export default {
       cropping: false,
       savingCrop: false,
       cropperOutputType: null,
-      file: ""
+      file: "",
+      _avatarSrc: null
     };
-  },
-
-  mounted() {
-    console.log(this);
   },
 
   watch: {
@@ -117,6 +115,10 @@ export default {
   },
 
   methods: {
+    handleError() {
+      this.avatarSrc = this._avatarSrc;
+    },
+
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
@@ -156,6 +158,7 @@ export default {
       // console.log(this.$refs.cropper.cropW, this.$refs.cropper.cropH);
       this.$refs.cropper.getCropData(data => {
         const file = this.dataURLtoFile(data, this.file.name);
+        this._avatarSrc = data;
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
