@@ -144,8 +144,18 @@ export default {
     };
   },
 
-  created() {
-    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
+  watch: {
+    lesson: {
+      handler: function() {
+        if (get(this, "lesson.name", "")) {
+          this.payload.name = get(this, "lesson.name", "");
+        }
+        if (get(this, "lesson.id", "")) {
+          this.payload.id = get(this, "lesson.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -155,15 +165,6 @@ export default {
   },
 
   methods: {
-    handleChangeLesson() {
-      if (get(this, "lesson.name", "")) {
-        this.payload.name = get(this, "lesson.name", "");
-      }
-      if (get(this, "lesson.id", "")) {
-        this.payload.id = get(this, "lesson.id", "");
-      }
-    },
-
     changeTabType(type) {
       this.tabType = type;
     },

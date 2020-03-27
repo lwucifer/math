@@ -55,7 +55,7 @@ import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import { getParamQuery } from "~/utils/common";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -84,6 +84,10 @@ export default {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
     })
+  },
+
+  created() {
+    this.indexCreateLesson = this.setIndex(get(this, "chapter.lessons", []));
   },
 
   watch: {
@@ -140,10 +144,12 @@ export default {
 
     setIndex(lessons) {
       let index = 0;
-      try {
-        index = lessons[lessons.length - 1]["index"] + 1;
-      } catch (error) {}
-      return index;
+      lessons.map(lesson => {
+        if (toNumber(get(lesson, "index", 0)) > index) {
+          index = toNumber(get(lesson, "index", 0));
+        }
+      });
+      return index + 1;
     },
 
     handleCancel() {

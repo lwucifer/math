@@ -21,7 +21,7 @@
     </ul>
 
     <div class="cca-action">
-      <app-button square full-width>Gửi lên</app-button>
+      <app-button :disabled="!is_submit" square full-width>Gửi lên</app-button>
     </div>
   </aside>
 </template>
@@ -79,7 +79,14 @@ export default {
     }),
     ...mapState("elearning/creating/creating-progress", {
       progress: "progress"
-    })
+    }),
+    is_submit() {
+      return (
+        get(this, "progress.data.general_complete", false) &&
+        get(this, "progress.data.content_complete", false) &&
+        get(this, "progress.data.setting_complete", false)
+      );
+    }
   },
 
   created() {
@@ -140,7 +147,13 @@ export default {
       if (key === "settings") {
         this.active = key;
         this.$emit("click-item", key);
+        return;
       }
+
+      if (!get(this, "progress.data.setting_complete", false)) return;
+
+      this.active = key;
+      this.$emit("click-item", key);
     }
   }
 };
