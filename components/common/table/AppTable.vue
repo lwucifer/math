@@ -9,6 +9,7 @@
             <app-checkbox
               @change="changeSelect"
               v-model="allSelected"
+              :disabled="!hasData"
               title="Chọn tất cả"
             />
             <hr />
@@ -24,11 +25,11 @@
         </tr>
       </thead>
       <!-- Use slot body -->
-      <tbody v-if="hasDefaultSlot">
+      <tbody v-if="hasDefaultSlot && hasData">
         <slot />
       </tbody>
       <!-- Use data list -->
-      <tbody v-else>
+      <tbody v-if="(!hasDefaultSlot) && hasData">
         <tr v-for="(cat, i) in sortedCats" :key="i">
           <td v-if="multipleSelection || selectAll" class="pr-0">
             <app-checkbox
@@ -54,9 +55,12 @@
         </tr>
       </tbody>
     </table>
+    <div class="text-center w-100 py-5" v-if="!hasData">
+      {{ noDataTxt }}
+    </div>
     <div class="pagination">
       <hr />
-      <app-pagination :type="2" :pagination="pagination" @pagechange="onPageChange" class="mt-3" />
+      <app-pagination v-if="hasData" :type="2" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
     </div>
   </div>
 </template>
@@ -96,6 +100,21 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    opts: {
+      type: Array,
+      default: () => {
+        return [
+          { value: 10, text: "10" },
+          { value: 20, text: "20" },
+          { value: 30, text: "30" },
+          { value: 50, text: "50" }
+        ]
+      }
+    },
+    noDataTxt: {
+      type: String,
+      default: 'Không tìm thấy dữ liệu'
     }
   },
 
@@ -202,8 +221,11 @@ export default {
         return value
       },
       get() {
-        return isEqual(this.selectedItems, this.data)
+        return this.hasData && isEqual(this.selectedItems, this.data)
       }
+    },
+    hasData() {
+      return this.data.length > 0
     }
   },
 
