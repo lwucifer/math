@@ -155,26 +155,43 @@ export default {
   },
 
   created() {
-    useEffect(this, this.handleChangePayload.bind(this), [
-      "payload.avatar",
-      "payload.benefit",
-      "payload.description",
-      "payload.level",
-      "payload.name",
-      "payload.subject",
-      "payload.type"
-    ]);
-
     this.handleFetchElearningGeneral();
+  },
 
-    useEffect(this, this.handleChangeGeneral.bind(this), [
-      "general.benefit",
-      "general.description",
-      "general.level",
-      "general.name",
-      "general.subject",
-      "general.type"
-    ]);
+  watch: {
+    payload: {
+      handler: function() {
+        let that = this;
+        const payload = createPayloadAddCourse(this.payload);
+        const elearning_id = getParamQuery("elearning_id");
+
+        if (elearning_id) {
+          schema_update.isValid(payload).then(function(valid) {
+            that.isSubmit = valid;
+          });
+          return;
+        }
+
+        schema.isValid(payload).then(function(valid) {
+          that.isSubmit = valid;
+        });
+      },
+      deep: true
+    },
+    general: {
+      handler: function() {
+        this.payload.benefit = [...get(this, "general.benefit", [])];
+        this.payload.description = get(this, "general.description", "");
+        this.payload.name = get(this, "general.name", "");
+        this.payload.subject = get(this, "general.subject", "");
+        this.payload.level = get(this, "general.level", "");
+        this.payload.type = get(this, "general.type", "");
+        if (get(this, "general.id", "")) {
+          this.payload.elearning_id = get(this, "general.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -197,18 +214,6 @@ export default {
       this.payload.benefit.push(html);
     },
 
-    handleChangeGeneral() {
-      this.payload.benefit = [...get(this, "general.benefit", [])];
-      this.payload.description = get(this, "general.description", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "");
-      if (get(this, "general.id", "")) {
-        this.payload.elearning_id = get(this, "general.id", "");
-      }
-    },
-
     handleFetchElearningGeneral() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id) {
@@ -222,23 +227,6 @@ export default {
           options
         );
       }
-    },
-
-    handleChangePayload() {
-      let that = this;
-      const payload = createPayloadAddCourse(this.payload);
-      const elearning_id = getParamQuery("elearning_id");
-
-      if (elearning_id) {
-        schema_update.isValid(payload).then(function(valid) {
-          that.isSubmit = valid;
-        });
-        return;
-      }
-
-      schema.isValid(payload).then(function(valid) {
-        that.isSubmit = valid;
-      });
     },
 
     handleChangeLevel(level) {
