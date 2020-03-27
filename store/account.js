@@ -39,6 +39,7 @@ const actions = {
                 mutationTypes.ACCOUNT_PERSONAL.SET_ACCOUNT_PERSONAL_LIST,
                 result.data
             );
+            return result;
         } catch (err) {
             console.log("[Personal] list.err", err);
             return err;
