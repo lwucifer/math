@@ -10,6 +10,7 @@ import GroupRemoveMember from "~/services/message/GroupRemoveMember";
 import GroupNotification from "~/services/message/GroupNotification";
 import Message from "~/services/message/Message";
 import GroupDetail from "~/services/message/GroupDetail";
+import MessageSendImg from "~/services/message/MessageSendImg";
 
 /**
  * initial state
@@ -173,6 +174,18 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[GroupDetail] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.MESSAGE_GROUP.MESSAGE_SEND_IMG]({ commit }, payload) {
+        try {
+            const result = await new MessageSendImg(this.$axios)[
+                actionTypes.BASE.ADD
+            ](payload);
+            console.log("[MessageSendImg] post", result);
+            return result;
+        } catch (err) {
+            console.log("[MessageSendImg] edit.err", err);
             return err;
         }
     }

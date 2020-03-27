@@ -148,6 +148,7 @@
               <template slot="no-more">Không còn bài viết.</template>
             </infinite-loading>
           </client-only>
+          
 
           <app-modal
             v-if="modalDetailShow"
@@ -157,7 +158,6 @@
             @close="handleCloseModal"
           >
             <PostDetail
-              v-if="modalDetailShow"
               slot="content"
               :post="dataModalDetail"
               @click-close="handleCloseModal"
@@ -165,6 +165,8 @@
               @click-next="handleClickNext"
             />
           </app-modal>
+
+          <!-- <PostModalShare /> -->
         </div>
 
         <div class="col-md-4">
@@ -255,6 +257,7 @@ import Post from "~/components/page/timeline/post/Post";
 import PostSlider from "~/components/page/timeline/post/PostSlider";
 import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
+import PostModalShare from "~/components/page/timeline/post/PostModalShare";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -269,7 +272,8 @@ export default {
     PostSlider,
     PostDetail,
     PostImage,
-    VclFacebook
+    VclFacebook,
+    PostModalShare
   },
 
   async fetch({ params, query, store }) {
@@ -428,11 +432,17 @@ export default {
       for (const key in dataWithModel) {
         formData.append(key, data[key]);
       }
+
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL_POST.ADD}`,
         formData
       );
-      console.log("doAdd result", doAdd);
+
+      if (doAdd.success) {
+        this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
     },
 
     /**

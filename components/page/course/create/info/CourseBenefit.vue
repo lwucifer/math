@@ -56,32 +56,27 @@ export default {
     name: {
       type: String,
       default: ""
+    },
+    benefit: {
+      type: Array,
+      default: []
     }
   },
 
   data() {
     return {
-      benefitEditorValue: "",
-      benefit: []
+      benefitEditorValue: ""
     };
   },
 
-  created() {
-    useEffect(this, this.handleChangeBenefit.bind(this), ["benefit"]);
-  },
-
   methods: {
-    handleChangeBenefit() {
-      this.$emit("handleChangeBenefit", this.benefit);
-    },
-
     removeBenefit(index) {
-      this.benefit = this.benefit.filter((item, i) => i !== index);
+      this.$emit("removeBenefit", index);
     },
 
     addBenefit(html) {
-      if (this.benefit.length < 10) {
-        this.benefit.push(html);
+      if (this.benefit.length < 10 && this.benefitEditorValue) {
+        this.$emit("addBenefit", html);
         this.benefitEditorValue = "";
       }
     }
