@@ -1,6 +1,6 @@
 <template>
-  <div class="editor post-editor" :class="{ 'active': active }" @click="setActive(true)">
-    <div class="post-editor__overlay" @click.stop="active = false"></div>
+  <div class="editor post-editor" :class="{ 'active': localActive }" @click="setActive(true)">
+    <div class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
         <div class="post-editor__avatar">
@@ -171,7 +171,7 @@
         </app-select>
       </div>
 
-      <app-button full-width square class="post-editor__submit mt-4" @click="submit">Đăng tin</app-button>
+      <app-button full-width square class="post-editor__submit mt-4" @click.stop="submit">Đăng tin</app-button>
     </div>
   </div>
 </template>
@@ -199,7 +199,11 @@ export default {
     IconUserGroup,
     IconPinLocation,
     IconEmoji,
-    EditorContent,
+    EditorContent
+  },
+
+  props: {
+    active: Boolean
   },
 
   data() {
@@ -212,7 +216,7 @@ export default {
       previewList: [],
       label: null,
       labelDropdrown: false,
-      active: false,
+      localActive: false,
       friendsInfiniteId: +new Date(),
       friendsListQuery: {
         page: 1
@@ -281,9 +285,22 @@ export default {
     this.editor.destroy();
   },
 
+  watch: {
+    active(newValue) {
+      console.log("active change", newValue);
+      this.localActive = newValue;
+    },
+
+    localActive(newValue) {
+      console.log("emit active-change", newValue);
+      this.$emit("active-change", newValue);
+    }
+  },
+
   methods: {
     setActive(value) {
-      this.active = value;
+      console.log("setActive", value);
+      this.localActive = value;
     },
 
     getLabelText() {
@@ -351,8 +368,6 @@ export default {
     },
 
     submit() {
-      console.log("submit", this.editor.getHTML());
-
       this.$emit("submit", {
         content: this.editor.getHTML(),
         link: this.link,
@@ -361,7 +376,17 @@ export default {
         check_in: JSON.stringify(this.check_in),
         privacy: this.privacy,
         label_id: this.label_id
-      });
+      }, this.clear);
+    },
+
+    clear() {
+      this.editor.setContent("");
+      this.link = "";
+      this.post_image = [];
+      this.list_tag = [];
+      this.check_in = {};
+      this.privacy = 15;
+      this.label_id = null;
     },
 
     handleEditorPaste(view, event, slice) {
