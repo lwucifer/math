@@ -24,10 +24,10 @@
     </div>
 
     <LessonDetail
-      v-for="lesson in lessons"
+      v-for="lesson in get(chapter, 'lessons', [])"
       :key="lesson.id"
       :lesson="lesson"
-      @refreshLessons="refreshLessons"
+      @refreshLessons="$emit('handleRefreshChapters')"
     />
 
     <div class="create-lesson"></div>
@@ -36,7 +36,7 @@
       :chapter="chapter"
       @handleCancel="handleCancel"
       :indexCreateLesson="indexCreateLesson"
-      @refreshLessons="refreshLessons"
+      @refreshLessons="$emit('handleRefreshChapters')"
     />
 
     <app-modal-confirm
@@ -74,7 +74,6 @@ export default {
   data() {
     return {
       isShowCreateLessonOfChapter: false,
-      lessons: [],
       indexCreateLesson: 0,
       showModalConfirm: false,
       confirmLoading: false
@@ -87,9 +86,15 @@ export default {
     })
   },
 
-  async created() {
-    this.lessons = await this.getLessonsOfChapter();
-    this.indexCreateLesson = this.setIndex(this.lessons);
+  watch: {
+    chapter: {
+      handler: function() {
+        this.indexCreateLesson = this.setIndex(
+          get(this, "chapter.lessons", [])
+        );
+      },
+      deep: true
+    }
   },
 
   props: {
@@ -105,28 +110,6 @@ export default {
 
   methods: {
     get,
-
-    async refreshLessons() {
-      this.lessons = await this.getLessonsOfChapter();
-      this.indexCreateLesson = this.setIndex(this.lessons);
-    },
-
-    async getLessonsOfChapter() {
-      const options = {
-        params: {
-          chapter_id: get(this, "chapter.id", "")
-        },
-        not_commit: true
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        return get(res, "data", []);
-      }
-      return [];
-    },
 
     async handleOk() {
       this.confirmLoading = true;
@@ -161,12 +144,6 @@ export default {
         index = lessons[lessons.length - 1]["index"] + 1;
       } catch (error) {}
       return index;
-    },
-
-    async refreshLessons() {
-      this.isShowCreateLessonOfChapter = false;
-      this.lessons = await this.getLessonsOfChapter();
-      this.indexCreateLesson = this.setIndex(this.lessons);
     },
 
     handleCancel() {

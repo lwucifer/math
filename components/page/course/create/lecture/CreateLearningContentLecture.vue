@@ -180,6 +180,20 @@ export default {
 
     refreshLessons() {
       this.fetchLesson();
+      this.getProgress();
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
     fetchLesson() {

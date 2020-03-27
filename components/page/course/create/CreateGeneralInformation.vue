@@ -274,10 +274,24 @@ export default {
           options
         );
         redirectWithParams(params);
+        this.getProgress();
         this.$toasted.success(get(result, "message", ""));
         return;
       }
       this.$toasted.error(get(result, "message", ""));
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
     handleCancel() {
