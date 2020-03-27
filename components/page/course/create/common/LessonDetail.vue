@@ -104,7 +104,6 @@ export default {
     },
 
     handleCancel() {
-      console.log(1);
       this.isShowDetailLesson = true;
     },
 

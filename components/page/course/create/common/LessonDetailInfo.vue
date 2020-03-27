@@ -27,6 +27,12 @@
         </a>
       </div>
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </div>
 </template>
 
@@ -34,7 +40,7 @@
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -50,6 +56,13 @@ export default {
     }
   },
 
+  data() {
+    return {
+      showModalConfirm: false,
+      confirmLoading: false
+    };
+  },
+
   methods: {
     handleEditLesson($event) {
       $event.preventDefault();
@@ -58,6 +71,11 @@ export default {
 
     async handleDeleteLesson($event) {
       $event.preventDefault();
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       const options = {
         data: {
           id: get(this, "lesson.id", "")
@@ -67,12 +85,20 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
         options
       );
+
+      this.handleCancelModal();
+
       if (get(res, "success", false)) {
-        this.$toasted.success("success");
+        this.$toasted.success(defaultTo(get(res, "message", ""), "Thành công"));
         this.$emit("refreshLessons");
         return;
       }
-      this.$toasted.error(get(res, "message", "delete lesson fail"));
+      this.$toasted.error(defaultTo(get(res, "message", ""), "Có lỗi xảy ra"));
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     get

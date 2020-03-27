@@ -39,6 +39,13 @@
       @refreshLessons="refreshLessons"
     />
 
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
+
     <app-divider class="my-0" />
   </div>
 </template>
@@ -68,7 +75,9 @@ export default {
     return {
       isShowCreateLessonOfChapter: false,
       lessons: [],
-      indexCreateLesson: 0
+      indexCreateLesson: 0,
+      showModalConfirm: false,
+      confirmLoading: false
     };
   },
 
@@ -119,6 +128,33 @@ export default {
       return [];
     },
 
+    async handleOk() {
+      this.confirmLoading = true;
+      const payload = {
+        data: {
+          id: get(this, "chapter.id", "")
+        }
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.DELETE}`,
+        payload
+      );
+
+      this.handleCancelModal();
+
+      if (get(res, "success", false)) {
+        this.$emit("handleRefreshChapters");
+        this.$toasted.success(get(res, "message", "success"));
+        return;
+      }
+      this.$toasted.error(get(res, "message", "error"));
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     setIndex(lessons) {
       let index = 0;
       try {
@@ -144,21 +180,7 @@ export default {
     },
 
     async handleDeleteChapter() {
-      const payload = {
-        data: {
-          id: get(this, "chapter.id", "")
-        }
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.DELETE}`,
-        payload
-      );
-      if (get(res, "success", false)) {
-        this.$emit("handleRefreshChapters");
-        this.$toasted.success(get(res, "message", "success"));
-        return;
-      }
-      this.$toasted.error(get(res, "message", "error"));
+      this.showModalConfirm = true;
     }
   }
 };

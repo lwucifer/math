@@ -78,7 +78,7 @@
 
 <script>
 import { getBase64, getParamQuery, useEffect } from "~/utils/common";
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -200,10 +200,14 @@ export default {
 
       if (get(result, "success", false)) {
         this.$emit("refreshLessons");
-        this.$toasted.success(get(result, "message", ""));
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
     },
 
     handleCancelModal() {
