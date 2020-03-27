@@ -32,25 +32,25 @@
       >
 
         <!--Upload notification-->
-        <div class="upload-alert" v-show="false">
+        <div class="upload-alert" v-show="isSuccess || isError">
           <!--Upload fail-->
-          <div class="upload-alert--error">
+          <div class="upload-alert--error" v-if="isError">
             <div class="upload-alert--error__info mb-2">
               <div style="line-height: 100%;">
                 <IconClose class="icon icon--close-alert" />
               </div>
               <div>
-                <span class="upload-alert--error__mess">Tải lên không thành công</span>
+                <span class="upload-alert--error__mess">{{ get(error, 'message', '') }}</span>
               </div>
             </div>
 
             <div class="upload-alert--error__status">
-              Dung lượng vượt quá giới hạn
+              {{ get(error, 'reason', '') }}
             </div>
           </div>
 
           <!--Upload success-->
-          <div class="upload-alert--success">
+          <div class="upload-alert--success" v-if="isSuccess">
             <p class="upload-alert--success__title">
               <IconSuccess class="icon"/>
               <span>
@@ -59,20 +59,21 @@
             </p>
             <div class="">
               <div class="process--upload">
-                <div class="process--upload__percentage" v-bind:style="{width: memoryused +'%'}"></div>
+                <div class="process--upload__percentage" v-bind:style="{width: '100%'}"></div>
               </div>
               <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy"/>
             </div>
-            <p class="file-name mb-2">Tên file.mp4</p>
+            <p class="file-name mb-2">{{ currentFile.name }}</p>
           </div>
 
           <!--Button continue uploading-->
-          <div class="text-center" v-show="false">
+          <div class="text-center" v-show="isError || isSuccess">
             <app-button
               size="sm"
               square
               color="white"
               class="btn--other-file bg-white"
+              @click="uploadOther"
             >
               <IconUploadFile class=""/>
               Tải lên một file khác
@@ -81,21 +82,21 @@
         </div>
 
         <!--Uploading-->
-        <div class="py-3" v-show="false">
-          <p class="file-name mb-2"><b>Tên file.mp4</b></p>
+        <div class="py-3" v-if="isUploading">
+          <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
           <div class="mb-3" style="padding-right: 2.7rem; position: relative">
             <div class="process--upload">
-              <div class="process--upload__percentage" v-bind:style="{width: memoryused +'%'}"></div>
+              <div class="process--upload__percentage" v-bind:style="{width: uploadPercentage +'%'}"></div>
             </div>
-            <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy"/>
+            <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
           </div>
           <p class="process--upload__status">
-            <span>30</span>% - <span>544</span>KB/s (<span>20</span>MB)
+            <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
           </p>
         </div>
 
         <!--Drag & drop file-->
-        <div class="text-center" v-show="true">
+        <div class="text-center" v-if="isInitial">
           <div>
             <button
               class="btnUploadFile__ElearningManager"
@@ -124,6 +125,7 @@
   import IconSuccess from '~/assets/svg/icons/success.svg?inline'
   import {createPayloadAddRepository} from "~/models/elearning/Repository"
   import {get} from "lodash"
+  import { fileSizeFilter } from "~/plugins/filters";
   import * as yup from "yup"
   import * as actionTypes from "~/utils/action-types"
   import { MAX_UPLOADED_REPOSITORY_FILE_SIZE } from "~/utils/config"
@@ -133,6 +135,17 @@
     // file: yup.object().required()
   });
 
+  const STORE_NAMESPACE = 'elearning/teaching/repository-files'
+  const DEFAULT_ERROR_MESSAGE = 'Upload tài liệu không thành công'
+  const DEFAULT_ERROR_REASON = 'Xảy ra lỗi'
+
+  const STATUS = {
+    INITIAL: 0,
+    ERROR: 1,
+    SUCCESS: 2,
+    UPLOADING: 3
+  }
+
   export default {
     data() {
       return {
@@ -141,14 +154,18 @@
           file: '',
           name: ''
         },
-        loading: false,
-        notification: {
-          type: null,
+        error: {
           message: '',
           reason: ''
         },
-        recentFile: {},
-        uploadPercentage: 0
+        currentFile: {},
+        uploadPercentage: 0,
+        loadedPayload: 0,
+        uploadTimestamp: 0,
+        diffTimestamp: 1,
+        diffPayload: 0,
+        currentStatus: 0,
+        cancelUploadToken: null
       }
     },
     props: {
@@ -163,38 +180,76 @@
       IconSuccess
     },
     computed: {
+      showDragArea: function() {
+        return !this.loading && this.notification
+      },
+      showLoadingArea: function() {
+        return this.loading
+      },
+      uploadSpeed: function() {
+        return `${Number((this.diffPayload / this.diffTimestamp).toFixed(1))} KB/s`
+      },
+      isInitial: function () {
+        return this.currentStatus == STATUS['INITIAL']
+      },
+      isError: function () {
+        return this.currentStatus == STATUS['ERROR']
+      },
+      isSuccess: function () {
+        return this.currentStatus == STATUS['SUCCESS']
+      },
+      isUploading: function () {
+        return this.currentStatus == STATUS['UPLOADING']
+      }
     },
     watch: {
       uploadPercentage: function(newVal, oldVal) {
-        console.log('uploadPercentage change: ', newVal)
+      },
+      uploadTimestamp: function(newVal, oldVal) {
+        this.diffTimestamp = newVal - oldVal
+      },
+      loadedPayload: function(newVal, oldVal) {
+        this.diffPayload = newVal - oldVal
       }
     },
     methods: {
       async addFile(rawFile) {
-        this.payload.name = rawFile.name;
-        this.payload.file = rawFile;
-        const modelData = createPayloadAddRepository(this.payload);
+        console.log('rawFile:', rawFile)
+        this.payload.name = rawFile.name
+        this.payload.file = rawFile
+
+        this.currentFile.name = rawFile.name
+        this.currentFile.size = rawFile.size
+
+        const modelData = createPayloadAddRepository(this.payload)
 
         const payload = new FormData();
         for (const key in modelData) {
           payload.append(key, modelData[key]);
         }
 
+        const CancelToken = this.$axios.CancelToken;
+
         let config = {
           onUploadProgress: progressEvent => {
-            console.log('change upload status')
             this.uploadPercentage = Math.floor((progressEvent.loaded * 100) / progressEvent.total)
-          }
+            this.loadedPayload = progressEvent.loaded
+            this.uploadTimestamp = progressEvent.timeStamp
+          },
+          cancelToken: new CancelToken( cancel => {
+            this.cancelUploadToken = cancel
+          }),
         }
 
         const res = await this.$store.dispatch(
-          `elearning/teaching/repository-files/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD}`, { payload, config }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD}`,
+          { payload, config }
         );
         return res;
       },
       async validateAddFile(data) {
-        const isValid = await schema.isValid(data);
-        return isValid;
+        const isValid = await schema.isValid(data)
+        return isValid
       },
       handleDrop(e) {
         e.stopPropagation()
@@ -204,13 +259,12 @@
         const files = e.dataTransfer.files
 
         if (files.length !== 1) {
-          this.$toasted.error("Only support uploading one file!")
+          this.hasError(DEFAULT_ERROR_MESSAGE, 'Chỉ cho phép tải một file tại một thời điểm!')
           return
         }
 
         const rawFile = files[0] // only use files[0]
         if (!this.isValidFile(rawFile)) {
-          this.$toasted.error("Only supports upload .xlsx, .xls, .doc, .docx, .pdf, .mp4, .m4v suffix files")
           return false
         }
         this.upload(rawFile)
@@ -219,21 +273,27 @@
       },
 
       async upload(rawFile) {
+        this.currentStatus = STATUS['UPLOADING']
         this.$refs['upload-input'].value = null // fix can't select the same excel
 
         let res
 
         if (!this.beforeUpload) {
           res = await this.addFile(rawFile)
-          console.log('res after upload 1: ', res)
         } else {
           const before = this.beforeUpload(rawFile)
           if (before) {
             res = await this.addFile(rawFile)
-            console.log('res after upload 2: ', res)
           }
         }
-        this.onSuccess && this.onSuccess(res)
+        if (res && get(res, 'success', false)) {
+          this.currentStatus = STATUS['SUCCESS']
+          this.onSuccess && this.onSuccess(res)
+        } else {
+          let reason = res && get(data, "message", false) ? get(data, "message") : DEFAULT_ERROR_REASON
+          this.hasError(DEFAULT_ERROR_MESSAGE, reason)
+        }
+
       },
       handleDragover(e) {
         e.stopPropagation()
@@ -248,16 +308,21 @@
         const rawFile = files[0] // only use files[0]
         if (!rawFile) return
         if (!this.isValidFile(rawFile)) {
-          this.$toasted.error("Only supports upload .xlsx, .xls, .doc, .docx, .pdf, .mp4, .m4v suffix files")
           return
         }
         await this.upload(rawFile)
       },
       isValidFile(file) {
         if (!this.isValidType(file)) {
+          this.hasError(DEFAULT_ERROR_MESSAGE, 'Chỉ cho phép tải các file có phần mở rộng .doc, .docx, .pdf, .mp3, .mp4, .m4v, .png')
           return false
         }
         if (!this.isValidSize(file)) {
+          this.hasError(DEFAULT_ERROR_MESSAGE, `Dung lượng tài liệu vượt quá giới hạn > ${fileSizeFilter(MAX_UPLOADED_REPOSITORY_FILE_SIZE*1024*1024)}`)
+          return false
+        }
+        if (!this.isAvailableStorage()) {
+          this.hasError(DEFAULT_ERROR_MESSAGE, `Kho học liệu của bạn không đủ dung lượng trống để tải file`)
           return false
         }
         return true
@@ -268,7 +333,31 @@
       isValidSize(file) {
         const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE
         return isLtSize
-      }
+      },
+      isAvailableStorage() {
+        return true
+      },
+      cancelUpload() {
+        if (this.isUploading) {
+          this.cancelUploadToken('Cancel upload file')
+          this.resetUpload()
+        }
+      },
+      resetUpload() {
+        this.currentStatus = STATUS['INITIAL']
+        this.currentFile = {}
+      },
+      uploadOther() {
+        this.resetUpload()
+      },
+      hasError(message, reason) {
+        this.currentStatus = STATUS['ERROR']
+        this.error = {
+          message: message,
+          reason: reason
+        }
+      },
+      get
     }
   }
 </script>

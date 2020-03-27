@@ -15,7 +15,6 @@
     justify-content: center;
     span{
         color: #FBFBFB;
-        font-weight: 600;
         font-size: 14px;
         line-height: 24px;
     }
@@ -31,28 +30,27 @@
 }
 
 .bntRemoveList__ElearningManagerFilterTable{
-    width: 183px;
-    height: 32px;
-    background: #E9446A;
-    border-radius: 0px;
+    //height: 32px;
+    //background: #E9446A;
+    //border-radius: 0px;
     margin-top: 24px;
-    display: flex;
-    flex: row;
-    justify-content: center;
-    align-items: center;
+    //display: flex;
+    //flex: row;
+    //justify-content: center;
+    //align-items: center;
     svg{
         fill: #FFFFFF;
         height: 16px;
     }
     span{
-        font-weight: 600;
         font-size: 14px;
-        line-height: 24px;
         color: #FBFBFB;
     }
 }
 .wrapTable__ElearningManagerFilterTable{
     padding-top:20px;
+    margin-left: -2rem;
+    margin-right: -2rem;
 }
 .wrapSearchForm___ElearningManagerFilterTable{
     display: flex;
@@ -79,16 +77,16 @@
     .app-checkbox__checkmark{
         border: 1px solid #CCCCCC;
     }
-    th:first-child{
-       width: 18px;
-    }
-    th:nth-child(2){
-        width: 280px;
-    }
-    th:nth-child(3){
-        width: 150px;
-    }
-    th:nth-child(4){
-        width: 220px;
-    }
+    //th:first-child{
+       //width: 18px;
+    //}
+    //th:nth-child(2){
+    //    width: 280px;
+    //}
+    //th:nth-child(3){
+    //    width: 150px;
+    //}
+    //th:nth-child(4){
+    //    width: 220px;
+    //}
 }
