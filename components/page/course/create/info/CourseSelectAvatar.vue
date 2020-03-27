@@ -10,7 +10,7 @@
               ref="cropper"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
-              :fixedNumber="[750, 422]"
+              :fixedNumber="[750, 450]"
               fixed
               autoCrop
               full
@@ -153,8 +153,9 @@ export default {
 
     saveCrop() {
       this.savingCrop = true;
+      // console.log(this.$refs.cropper.cropW, this.$refs.cropper.cropH);
       this.$refs.cropper.getCropData(data => {
-        const file = this.dataURLtoFile(data, this.file.name)
+        const file = this.dataURLtoFile(data, this.file.name);
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
