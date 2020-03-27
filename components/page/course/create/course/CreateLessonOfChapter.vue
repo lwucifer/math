@@ -66,6 +66,13 @@
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </div>
 </template>
 
@@ -122,6 +129,8 @@ export default {
   data() {
     return {
       tabType: "video",
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
         index: this.indexCreateLesson,
@@ -171,7 +180,13 @@ export default {
       this.payload.repository_file_id = file.id;
     },
 
-    async handleAddContent() {
+    handleAddContent() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+
       this.payload.index = this.indexCreateLesson;
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
@@ -180,12 +195,20 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+
+      this.handleCancelModal();
+
       if (get(result, "success", false)) {
         this.$emit("refreshLessons");
         this.$toasted.success(get(result, "message", ""));
         return;
       }
       this.$toasted.error(get(result, "message", ""));
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {
