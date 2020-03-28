@@ -2,20 +2,35 @@
   <div>
     <div class="ce-item d-flex align-items-center justify-content-between">
       <div class="ce-item__left d-flex align-items-center">
-        <h3 class="body-2 mr-3">
+        <div class="mr-3">
           Chương {{ index + 1 }}:
-          <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
-        </h3>
-        <a href class="ce-item__action edit mr-3">
-          <IconEditAlt class="icon d-block subheading fill-primary" />
-        </a>
-        <a
-          href
-          class="ce-item__action delete mr-3"
-          @click.prevent="handleDeleteChapter"
-        >
-          <IconTrashAlt class="icon d-block subheading fill-secondary" />
-        </a>
+          <input
+            v-if="isEditChaperName"
+            v-model="chaperNameModel"
+            ref="inputChaperName"
+            class="cc-box__input-title bg-input-gray mb-0"
+            type="text"
+          />
+
+          <h3 v-else class="d-inline-block body-2 mr-3">
+            <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
+          </h3>
+        </div>
+
+        <template v-if="isEditChaperName">
+          <button class="cc-box__btn mr-3 text-success">Lưu</button>
+          <button class="cc-box__btn mr-3 text-gray-2" @click="cancelEditChaperName">Huỷ</button>
+        </template>
+
+        <template v-else>
+          <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
+            <IconEditAlt class="icon d-block subheading fill-primary" />
+          </a>
+
+          <a href class="ce-item__action delete mr-3" @click.prevent="handleDeleteChapter">
+            <IconTrashAlt class="icon d-block subheading fill-secondary" />
+          </a>
+        </template>
       </div>
 
       <div class="ce-item__right">
@@ -76,7 +91,9 @@ export default {
       isShowCreateLessonOfChapter: false,
       indexCreateLesson: 0,
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
+      chaperNameModel: get(this.chapter, "name", ""),
+      isEditChaperName: false
     };
   },
 
@@ -164,6 +181,18 @@ export default {
 
     async handleDeleteChapter() {
       this.showModalConfirm = true;
+    },
+
+    editChaperName() {
+      this.isEditChaperName = true;
+      const timeout = setTimeout(() => {
+        this.$refs.inputChaperName.focus();
+        clearTimeout(timeout);
+      });
+    },
+
+    cancelEditChaperName() {
+      this.isEditChaperName = false;
     }
   }
 };
