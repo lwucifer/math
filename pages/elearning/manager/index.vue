@@ -113,14 +113,12 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public/public-info", {
-      elearnings: "elearningInfo"
+      elearning: "elearningInfo"
     })
   },
 
-  created() {
-  },
-
   methods: {
+    get
   }
 };
 </script>

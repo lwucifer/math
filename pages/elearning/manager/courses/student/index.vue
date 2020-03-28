@@ -58,6 +58,8 @@ import IconFilter from '~/assets/svg/icons/filter.svg?inline';
 // Import faked data
 import {  } from "~/server/fakedata/elearning/test"
 
+import CoursesService from "~/services/elearning/courses/list";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -69,6 +71,12 @@ export default {
     IconSearch,
     IconTrashAlt,
     IconFilter
+  },
+
+  async fetch({ params, query, store }) {
+    await Promise.all([
+      store.dispatch(`elearning/courses/student/${actionTypes.ELEARNING_COURSES.LIST}`),
+    ]);
   },
 
   data() {
@@ -178,8 +186,12 @@ export default {
       ]
     };
   },
+
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/courses/student", {
+      student: "info"
+    })
   },
 
   methods: {
@@ -190,7 +202,29 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
-    }
+    },
+    /**
+     * DELETE
+     */
+    async deletePost(id) {
+      const doDelete = await new CoursesService(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](id);
+
+      if (doDelete.success) {
+        const { courses } = this;
+        const newListPost =
+          courses && courses.listPost
+            ? courses.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.courses = {
+          listPost: newListPost,
+          page: courses.page || {}
+        };
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
   }
 };
 </script>
