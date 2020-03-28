@@ -66,12 +66,19 @@
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </div>
 </template>
 
 <script>
 import { getBase64, getParamQuery, useEffect } from "~/utils/common";
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -122,6 +129,8 @@ export default {
   data() {
     return {
       tabType: "video",
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
         index: this.indexCreateLesson,
@@ -135,8 +144,18 @@ export default {
     };
   },
 
-  created() {
-    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
+  watch: {
+    lesson: {
+      handler: function() {
+        if (get(this, "lesson.name", "")) {
+          this.payload.name = get(this, "lesson.name", "");
+        }
+        if (get(this, "lesson.id", "")) {
+          this.payload.id = get(this, "lesson.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -146,15 +165,6 @@ export default {
   },
 
   methods: {
-    handleChangeLesson() {
-      if (get(this, "lesson.name", "")) {
-        this.payload.name = get(this, "lesson.name", "");
-      }
-      if (get(this, "lesson.id", "")) {
-        this.payload.id = get(this, "lesson.id", "");
-      }
-    },
-
     changeTabType(type) {
       this.tabType = type;
     },
@@ -171,7 +181,13 @@ export default {
       this.payload.repository_file_id = file.id;
     },
 
-    async handleAddContent() {
+    handleAddContent() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+
       this.payload.index = this.indexCreateLesson;
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
@@ -180,12 +196,24 @@ export default {
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+
+      this.handleCancelModal();
+
       if (get(result, "success", false)) {
         this.$emit("refreshLessons");
-        this.$toasted.success(get(result, "message", ""));
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {

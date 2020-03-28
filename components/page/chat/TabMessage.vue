@@ -120,7 +120,7 @@
                   <span>{{item.user.fullname}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
-                  <span>{{item.created_at}}</span>
+                  <span>{{item.created_at | moment("DD/MM/YYYY") }}</span>
                 </div>
               </div>
               <div
@@ -161,17 +161,58 @@
                   <span>{{item.user.fullname}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
-                  <span>{{item.created_at}}</span>
+                  <span>{{item.created_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
-              <div class="message-box__item__desc">
-                <div class="message-box__item__desc__text" v-if="item.content">
+              <div class="message-box__item__desc" v-if="item.content">
+                <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
                 </div>
-                <img
-                  v-if="item.img_url && item.img_url.low"
-                  :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
-                />
+                <!-- <div class="message" v-if="item.img_url">
+                  <img
+                    v-if="item.img_url && item.img_url.low"
+                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
+                  />
+                </div>-->
+                <div class="message-box__item__desc__actions">
+                  <button title="Trả lời" @click="reply()">
+                    <IconReply />
+                  </button>
+                  <button title="Chuyển tiếp">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownEdit"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <a>Sửa tin nhắn</a>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <a @click="visibleDelete = true">Xóa tin</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
+              </div>
+              <div class="message-box__item__desc" v-if="item.img_url && item.img_url.low">
+                <!-- <div class="message-box__item__desc__text">
+                  <p>{{item.content}}</p>
+                </div>-->
+                <div class="message-box__item__desc__image">
+                  <img
+                    v-if="item.img_url && item.img_url.low"
+                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
+                  />
+                </div>
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
                     <IconReply />
@@ -431,15 +472,19 @@ export default {
       ],
       imgSrc: "",
       listImage: [],
-      urlEmitMessage: ""
+      urlEmitMessage: "",
+      messageId: "",
+      name: ""
+      // avatarUser: {},
+      // fullname: ""
     };
   },
 
   computed: {
-    ...mapState("social", { labelList: "labels" }),
+    ...mapState("social", [{ labelList: "labels" }, "friendList"]),
     ...mapState("message", ["messageList", "groupListDetail", "messageOn"]),
     ...mapState("account", ["personalList"]),
-    ...mapGetters("auth", ["userId"]),
+    ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
       return this.tag.map(item => {
         const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
@@ -455,10 +500,11 @@ export default {
     },
 
     tagOptions() {
-      return this.friendsList.map(item => ({
+      return this.friendList.map(item => ({
         ...item,
         value: item.id,
-        text: item.fullname
+        text: item.fullname,
+        avatar: item.avatar
       }));
     },
     nameGroup() {
@@ -476,7 +522,8 @@ export default {
   },
 
   methods: {
-    ...mapActions("message", ["messageSendImg"]),
+    ...mapActions("message", ["messageSendImg", "accountPersonalList"]),
+    ...mapActions("message", ["createGroup", "getGroupList"]),
     ...mapMutations("message", ["setEmitMessage"]),
     async messageInfiniteHandler($state) {
       this.messageListQuery.room_id = this.$route.params.id;
@@ -512,7 +559,13 @@ export default {
       this.messageSendImg(body).then(result => {
         console.log("[send img]", result);
         this.urlEmitMessage =
-          result.data && result.data.low ? result.data.low : "";
+          result.data &&
+          result.data.full_img_url &&
+          result.data.full_img_url.low
+            ? result.data.full_img_url.low
+            : "";
+        this.messageId =
+          result.data && result.data.message_id ? result.data.message_id : "";
       });
     },
 
@@ -543,16 +596,65 @@ export default {
       }
     },
     handleEmitMessage() {
-      console.log("textchat", this.textChat);
-      if (this.textChat != "" || this.urlEmitMessage != "") {
-        const dataEmit = {
-          content: this.textChat,
-          img_url: { low: this.urlEmitMessage }
+      if (this.tag.length == 0) {
+        if (
+          this.textChat != "" ||
+          (this.urlEmitMessage && this.urlEmitMessage.low != "")
+        ) {
+          const dataEmit = {
+            room_id: this.$route.params.id,
+            content: this.textChat,
+            img_url: { low: this.urlEmitMessage },
+            message_id: this.messageId,
+            avatar: this.avatarUser.low ? this.avatarUser.low : "",
+            fullname: this.fullName ? this.fullName : ""
+          };
+          console.log("[socket] dataEmit", dataEmit);
+          this.setEmitMessage(dataEmit);
+        } else {
+        }
+        this.textChat = "";
+      } else if (this.tag.length == 1) {
+        const data = {
+          type: 1,
+          members: this.tag.toString(),
+          name: this.name ? this.name : ""
         };
-        this.setEmitMessage(dataEmit);
+        this.createGroup(data).then(result => {
+          if (result.success == true) {
+            this.getGroupList();
+            this.$toasted.show("success");
+            this.$router.push(`/messages/t/${result.data.id}`);
+          } else {
+            this.$toasted.error(result.message);
+          }
+        });
       } else {
+        const data = {
+          type: 2,
+          members: this.tag.toString(),
+          name: this.name ? this.name : ""
+        };
+        this.createGroup(data).then(result => {
+          if (result.success == true) {
+            this.getGroupList();
+            this.$toasted.show("success");
+            this.$router.push(`/messages/t/${result.data.id}`);
+            const dataEmit = {
+              room_id: result.data.id,
+              content: this.textChat,
+              img_url: { low: this.urlEmitMessage },
+              message_id: this.messageId,
+              avatar: this.avatarUser.low ? this.avatarUser.low : "",
+              fullname: this.fullName ? this.fullName : ""
+            };
+            console.log("[socket] dataEmit", dataEmit);
+            this.setEmitMessage(dataEmit);
+          } else {
+            this.$toasted.error(result.message);
+          }
+        });
       }
-      this.textChat = "";
     }
   },
   created() {
@@ -562,19 +664,18 @@ export default {
     messageOn(_newVal) {
       if (_newVal) {
         console.log("[messageOn]", _newVal);
-
         const data = {
           ..._newVal,
           user: {
-            avatar: this.personalList.avatar,
-            fullname: this.personalList.fullname,
+            avatar: { low: _newVal.avatar },
+            fullname: _newVal.fullname,
             id: _newVal.user_id
           }
-          // img_url: { low: _newVal.img_url }
         };
         console.log("data", data);
         this.messagesList.unshift(data);
         console.log("[this.messagesList]", this.messagesList);
+        // img_url: { low: _newVal.img_url }
       }
     }
   }

@@ -94,6 +94,13 @@
         </div>
       </div>
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleSaveSetting"
+      @cancel="handleCancelSetting"
+    />
   </div>
 </template>
 
@@ -101,7 +108,7 @@
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import { getParamQuery, useEffect } from "~/utils/common";
-import { get, toNumber } from "lodash";
+import { get, toNumber, defaultTo } from "lodash";
 import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -116,6 +123,8 @@ export default {
   data() {
     return {
       fee_discount: 0,
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         comment_allow: 1,
         discount: 0,
@@ -129,8 +138,38 @@ export default {
   },
 
   created() {
-    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
     this.fetchSetting();
+  },
+
+  watch: {
+    setting: {
+      handler: function() {
+        const elearning_id = getParamQuery("elearning_id");
+        if (elearning_id) {
+          this.payload.elearning_id = elearning_id;
+        }
+
+        const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
+        this.payload.comment_allow = comment_allow;
+
+        if (get(this, "setting.discount", 0)) {
+          this.payload.discount = get(this, "setting.discount", 0);
+        }
+
+        if (get(this, "setting.fee", 0)) {
+          this.payload.fee = get(this, "setting.fee", 0);
+        }
+
+        if (get(this, "setting.privacy", "")) {
+          this.payload.privacy = get(this, "setting.privacy", "");
+        }
+        this.payload.free = get(this, "setting.free", false) ? 1 : 0;
+        const fee = toNumber(get(this, "setting.fee", 0));
+        const discount = toNumber(get(this, "setting.discount", 0));
+        this.fee_discount = fee - discount;
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -158,32 +197,6 @@ export default {
       }
     },
 
-    handleChangeSetting() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        this.payload.elearning_id = elearning_id;
-      }
-
-      const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
-      this.payload.comment_allow = comment_allow;
-
-      if (get(this, "setting.discount", 0)) {
-        this.payload.discount = get(this, "setting.discount", 0);
-      }
-
-      if (get(this, "setting.fee", 0)) {
-        this.payload.fee = get(this, "setting.fee", 0);
-      }
-
-      if (get(this, "setting.privacy", "")) {
-        this.payload.privacy = get(this, "setting.privacy", "");
-      }
-      this.payload.free = get(this, "setting.free", false) ? 1 : 0;
-      const fee = toNumber(get(this, "setting.fee", 0));
-      const discount = toNumber(get(this, "setting.discount", 0));
-      this.fee_discount = fee - discount;
-    },
-
     handleChangePrivacy(privacy) {
       this.payload.privacy = privacy;
     },
@@ -203,16 +216,47 @@ export default {
     },
 
     async handleCLickSave() {
+      this.showModalConfirm = true;
+    },
+
+    async handleSaveSetting() {
+      this.confirmLoading = true;
       const payload = createPayloadCourseSetting(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
         payload
       );
+
+      this.handleCancelSetting();
+
       if (get(result, "success", false)) {
-        this.$toasted.success(get(result, "message", ""));
+        this.getProgress();
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
+    },
+
+    handleCancelSetting() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
     numeral

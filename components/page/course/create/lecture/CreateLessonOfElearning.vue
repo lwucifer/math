@@ -1,14 +1,14 @@
 <template>
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
-    <app-input v-model="payload.name" placeholder="Tên bài giảng" />
+    <app-input v-model="payload.name" placeholder="Tên bài học" />
     <app-input
       v-if="get(general, 'type', '') !== 'LECTURE'"
       v-model="payload.index"
       placeholder="Vị trí"
     />
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
-      <span>Chọn loại bài giảng</span>
+      <span>Chọn loại bài học</span>
 
       <app-divider class="mt-3 mb-4" />
 
@@ -69,12 +69,18 @@
         >
       </div>
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
   </fragment>
 </template>
 
 <script>
 import { getBase64, getParamQuery, useEffect } from "~/utils/common";
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -117,6 +123,8 @@ export default {
   data() {
     return {
       tabType: "video",
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         elearning_id: getParamQuery("elearning_id"),
         index: 1,
@@ -172,17 +180,34 @@ export default {
     },
 
     async handleAddContent() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
       const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
       );
+
+      this.handleCancelModal();
+
       if (get(result, "success", false)) {
         this.$emit("refreshLessons");
-        this.$toasted.success(get(result, "message", ""));
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
+    },
+
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {

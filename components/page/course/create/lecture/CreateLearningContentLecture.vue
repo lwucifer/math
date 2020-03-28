@@ -110,8 +110,29 @@ export default {
 
   created() {
     this.fetchLesson();
-    useEffect(this, this.setInitData.bind(this), ["lessons.data"]);
-    useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
+  },
+
+  watch: {
+    lessons: {
+      handler: function() {
+        if (get(this, "lessons.data.length", 0)) {
+          this.isShowButtonAddLesson = false;
+          this.isShowFormAddLesson = false;
+          this.isShowDetailLesson = true;
+          return;
+        }
+        this.isShowButtonAddLesson = true;
+        this.isShowFormAddLesson = false;
+        this.isShowDetailLesson = false;
+      },
+      deep: true
+    },
+    general: {
+      handler: function() {
+        this.courseNameModel = get(this, "general.name", "");
+      },
+      deep: true
+    }
   },
 
   computed: {
@@ -125,10 +146,6 @@ export default {
 
   methods: {
     get,
-
-    handleChangeGeneral() {
-      this.courseNameModel = get(this, "general.name", "");
-    },
 
     async handleSaveCourseName() {
       const data = {
@@ -166,20 +183,22 @@ export default {
       this.isShowButtonEditNameCourse = true;
     },
 
-    setInitData() {
-      if (get(this, "lessons.data.length", 0)) {
-        this.isShowButtonAddLesson = false;
-        this.isShowFormAddLesson = false;
-        this.isShowDetailLesson = true;
-        return;
-      }
-      this.isShowButtonAddLesson = true;
-      this.isShowFormAddLesson = false;
-      this.isShowDetailLesson = false;
-    },
-
     refreshLessons() {
       this.fetchLesson();
+      this.getProgress();
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
     fetchLesson() {
@@ -260,10 +279,6 @@ export default {
         clearTimeout(timeout);
       });
     }
-
-    // cancelEditCourseName() {
-    //   this.isEditCourseName = false;
-    // }
   }
 };
 </script>

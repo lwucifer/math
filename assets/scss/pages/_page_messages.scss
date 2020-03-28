@@ -491,6 +491,10 @@
             border-radius: 5px;
             padding: 1rem 1.2rem;
         }
+        .message-box__item__desc__image {
+            border-radius: 5px;
+            padding: 1rem 0;
+        }
         .message-box__item__desc__actions {
             opacity: 0;
             visibility: hidden;
@@ -509,6 +513,11 @@
                 flex: 1;
                 order: 1;
             }
+            .message-box__item__desc__image {
+                color: #ffffff;
+                flex: 1;
+                order: 1;
+            }
             .message-box__item__desc__actions {
                 width: 17rem;
                 order: 2;
@@ -522,6 +531,10 @@
         }
         .message-box__item__desc {
             .message-box__item__desc__text {
+                flex: 1;
+                order: 2;
+            }
+            .message-box__item__desc__image {
                 flex: 1;
                 order: 2;
             }
