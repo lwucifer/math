@@ -34,7 +34,29 @@ const actions = {
     } catch (error) {
       console.log("[Creating docs] list.error", error);
     }
-  }
+  },
+
+  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD]({ commit }, { payload, config }) {
+    try {
+      const result = await new RepositoryFile(this.$axios)[
+        actionTypes.BASE.ADD
+      ](payload, config);
+      return result;
+    } catch (error) {
+      console.log("[Creating repository] add.error", error);
+    }
+  },
+
+  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE]({ commit }, payload) {
+    try {
+      const result = await new RepositoryFile(this.$axios)[
+        actionTypes.BASE.DELETE
+        ](payload);
+      return result;
+    } catch (error) {
+      console.log("[Deleting repository] delete.error", error);
+    }
+  },
 };
 
 /**

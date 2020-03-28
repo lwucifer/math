@@ -1,6 +1,6 @@
 <template>
-  <div class="editor post-editor" :class="{ 'active': active }" @click="setActive(true)">
-    <div class="post-editor__overlay" @click.stop="active = false"></div>
+  <div class="editor post-editor" :class="{ 'active': localActive }" @click="setActive(true)">
+    <div class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
         <div class="post-editor__avatar">
@@ -21,23 +21,52 @@
       />
 
       <div class="post-editor__tagger-summary">
+        <!-- LABEL -->
         <template v-if="label !== null">
           cảm thấy
           <b>{{ getLabelText() }}</b>
         </template>
-        <template v-if="tag && tag.length">
+        <!-- END LABEL -->
+
+        <!-- TAG -->
+        <template v-if="list_tag.length">
           cùng với
-          <b v-for="(item, index) in selectedTags" :key="item.value">
-            <n-link to>{{ item.text }}</n-link>
-            {{ index < (selectedTags.length - 1) ? ', ' : '' }}
-          </b>
+          <n-link
+            class="font-weight-bold"
+            :to="`/account/${list_tag[0].id}`"
+          >{{ selectedTags[0].text }}</n-link>
+
+          <template v-if="list_tag.length > 1">
+            và
+            <n-link
+              v-if="list_tag.length === 2"
+              class="font-weight-bold"
+              :to="`/account/${list_tag[1].id}`"
+            >{{ selectedTags[1].text }}</n-link>
+
+            <app-dropdown v-else>
+              <b slot="activator">{{ list_tag.slice(1).length }} người khác.</b>
+              <div
+                v-for="item in selectedTags.slice(1)"
+                :key="item.value"
+                class="px-3 py-2"
+                style="white-space: nowrap;"
+              >
+                <a :href="`/account/${item.id}`" target="_blank">{{ item.text }}</a>
+              </div>
+            </app-dropdown>
+          </template>
         </template>
+        <!-- END TAG -->
+
+        <!-- CHECK IN -->
         <template v-if="checkin !== null">
           tại
           <b>
             <n-link to>{{ selectedCheckin }}</n-link>
           </b>
         </template>
+        <!-- END CHECK IN -->
       </div>
 
       <app-divider class="mt-3 mb-0" />
@@ -49,7 +78,7 @@
           placeholder="Cùng với ai?"
           style="width: 100%"
           :options="tagOptions"
-          v-model="tag"
+          v-model="list_tag"
           @visible-change="handleFriendsVisibleChange"
         >
           <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
@@ -61,12 +90,8 @@
             {{ option.text }}
           </div>
 
-          <client-only>
-            <infinite-loading
-              slot="options-append"
-              :identifier="friendsInfiniteId"
-              @infinite="friendsInfiniteHandler"
-            />
+          <client-only slot="options-append">
+            <infinite-loading :identifier="friendsInfiniteId" @infinite="friendsInfiniteHandler" />
           </client-only>
         </app-select>
         <app-divider class="ma-0" />
@@ -134,25 +159,31 @@
         <span class="mr-3">Chế độ đăng tin</span>
         <app-select
           class="post-editor__select-private"
-          :options="shareWithOpts"
-          v-model="shareWith"
+          :options="configPrivacyLevels.map(item => ({
+            ...item,
+            text: item.name
+          }))"
+          v-model="privacy"
         >
-          <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
+          <template slot="prepend" slot-scope="{ selected }">
+            <img class="d-block" :src="selected.image" />
+          </template>
         </app-select>
       </div>
 
-      <app-button full-width square class="post-editor__submit mt-4" @click="submit">Đăng tin</app-button>
+      <app-button full-width square class="post-editor__submit mt-4" @click.stop="submit">Đăng tin</app-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
-import { getBase64 } from "~/utils/common";
+import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { PasteHandler } from "~/utils/tiptap-plugins";
 import FriendService from "~/services/social/friend";
 
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
@@ -160,7 +191,6 @@ import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
 import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
-import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 
 export default {
   components: {
@@ -169,8 +199,11 @@ export default {
     IconUserGroup,
     IconPinLocation,
     IconEmoji,
-    EditorContent,
-    IconGlobe
+    EditorContent
+  },
+
+  props: {
+    active: Boolean
   },
 
   data() {
@@ -178,14 +211,12 @@ export default {
       editor: null,
       showTags: false,
       showCheckin: false,
-      tag: [],
       checkin: null,
       fileList: [],
       previewList: [],
       label: null,
       labelDropdrown: false,
-      shareWith: 0,
-      active: false,
+      localActive: false,
       friendsInfiniteId: +new Date(),
       friendsListQuery: {
         page: 1
@@ -198,26 +229,22 @@ export default {
         { value: 3, text: "Mongolia" },
         { value: 4, text: "Republic of Kosovo" }
       ],
-      shareWithOpts: [
-        { value: 0, text: "Công khai" },
-        { value: 1, text: "Bạn bè" },
-        { value: 3, text: "Chỉ mình tôi" }
-      ],
       // Form submit data
       link: "",
       post_image: [],
       list_tag: [],
       check_in: {},
-      privacy: 8,
+      privacy: 15,
       label_id: null
     };
   },
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
+    ...mapGetters("social", ["configPrivacyLevels"]),
 
     selectedTags() {
-      return this.tag.map(item => {
+      return this.list_tag.map(item => {
         const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
         return resultItem;
       });
@@ -246,6 +273,9 @@ export default {
           showOnlyCurrent: true,
           showOnlyWhenEditable: true,
           emptyNodeText: "Đăng bài viết..."
+        }),
+        new PasteHandler({
+          onPaste: this.handleEditorPaste
         })
       ]
     });
@@ -255,9 +285,22 @@ export default {
     this.editor.destroy();
   },
 
+  watch: {
+    active(newValue) {
+      console.log("active change", newValue);
+      this.localActive = newValue;
+    },
+
+    localActive(newValue) {
+      console.log("emit active-change", newValue);
+      this.$emit("active-change", newValue);
+    }
+  },
+
   methods: {
     setActive(value) {
-      this.active = value;
+      console.log("setActive", value);
+      this.localActive = value;
     },
 
     getLabelText() {
@@ -317,26 +360,65 @@ export default {
       console.log("handleFriendsVisibleChange", isVisible);
 
       if (isVisible) {
+        this.friendsList = [];
         this.friendsInfiniteId += 1;
       } else {
-        this.friendsList = [];
         this.friendsListQuery.page = 1;
       }
     },
 
     submit() {
-      console.log("submit", this.editor.getHTML());
-
       this.$emit("submit", {
         content: this.editor.getHTML(),
         link: this.link,
         post_image: this.fileList[0],
-        list_tag: [],
-        check_in: {},
-        privacy: 8,
-        label_id: null
-      });
+        list_tag: JSON.stringify(this.list_tag),
+        check_in: JSON.stringify(this.check_in),
+        privacy: this.privacy,
+        label_id: this.label_id
+      }, this.clear);
     },
+
+    clear() {
+      this.editor.setContent("");
+      this.link = "";
+      this.post_image = [];
+      this.list_tag = [];
+      this.check_in = {};
+      this.privacy = 15;
+      this.label_id = null;
+    },
+
+    handleEditorPaste(view, event, slice) {
+      const { clipboardData } = event;
+
+      if (clipboardData.files && clipboardData.files.length) {
+        // Handle paste file here
+        return;
+      }
+
+      // Handle paste text
+      const text = clipboardData.getData("text");
+      const isUrl = isValidUrl(text);
+
+      // If paste text is a string url
+      if (isUrl) {
+        this.fetchLink(text);
+      }
+    },
+
+    fetchLink(url) {
+      const ogs = require("open-graph-scraper");
+      const options = { url, encoding: "utf8" };
+      ogs(options, (error, results) => {
+        console.log("error:", error); // This is returns true or false. True if there was a error. The error it self is inside the results object.
+        console.log("results:", results);
+      });
+
+      // this.$axios.get(url).then(res => {
+      //   console.log(res)
+      // })
+    }
   }
 };
 </script>

@@ -204,8 +204,13 @@
         fill: $color-text-gray;
     }
 
-    &__prepend {
+    .app-select__prepend {
         fill: $color-text-gray;
+
+        img {
+            max-width: 1.6rem;
+            max-height: 1.6rem;
+        }
     }
 }
 

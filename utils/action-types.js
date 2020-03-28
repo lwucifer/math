@@ -6,7 +6,8 @@ export const BASE = {
   EDIT: "edit",
   DELETE: "delete",
   DETAIL: "detail",
-  EDIT_PAYLOAD: "editPayload"
+  EDIT_PAYLOAD: "editPayload",
+  DELETE_PAYLOAD: "deletePayload"
 };
 
 export const AUTH = {
@@ -33,7 +34,7 @@ export const SOCIAL_POST = {
 export const SOCIAL_LIKES = {
   LIST: "socialLikesList",
   ADD: "socialLikesAdd",
-  DELETE: "socialLikesDelete",
+  DELETE: "socialLikesDelete"
 };
 
 export const SOCIAL_SHARES = {
@@ -148,12 +149,15 @@ export const CREATING_CHAPTER = {
   EDIT: "creatingChapterEdit",
   DELETE: "creatingChapterDelete"
 };
+
 export const ELEARNING_CREATING_ANSWER = {
   LIST: "elearningCreatingAnswerList",
   ADD: "elearningCreatingAnswerAdd",
   EDIT: "elearningCreatingAnswerEdit",
   DELETE: "elearningCreatingAnswerDelete"
 };
+
+export const ELEARNING_CREATING_PROGRESS = "ELEARNING_CREATING_PROGRESS";
 
 export const ELEARNING_CREATING_CHAPTER = {
   LIST: "elearningCreatingChapterList",
@@ -170,7 +174,9 @@ export const ELEARNING_CREATING_DOC = {
 };
 
 export const ELEARNING_TEACHING_REPOSITORY_FILE = {
-  LIST: "elearningTeachingRespositoryFileList"
+  LIST: "elearningTeachingRespositoryFileList",
+  ADD: "elearningTeachingRespositoryFileAdd",
+  DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -185,6 +191,11 @@ export const ELEARNING_CREATING_GENERAL = {
   ADD: "elearningCreatingGeneralAdd",
   EDIT: "elearningCreatingGeneralEdit",
   DELETE: "elearningCreatingGeneralDelete"
+};
+
+export const ELEARNING_CREATING_SETTING = {
+  LIST: "elearningCreatingSettingList",
+  ADD: "elearningCreatingSettingAdd"
 };
 
 export const ELEARNING_CREATING_LESSONS = {
@@ -266,12 +277,28 @@ export const ELEARNING_SCHOOL_SEARCH = {
 
 export const MESSAGE_GROUP = {
   ADD_MEMBER: "addMember",
-  EDIT_AVATAR: "editAvatar",
+  EDIT_AVATAR_GROUP: "editAvatarGroup",
   EDIT_NAME: "editName",
   CREATE_GROUP: "createGroup",
-  MEMBER_LIST: "memberList",
-  GROUP_LIST: "groupList",
+  MEMBER_LIST: "getMemberList",
+  GROUP_LIST: "getGroupList",
   GROUP_LEAVE: "groupLeave",
   GROUP_REMOVE_MEMBER: "groupRemoveMember",
-  GROUP_NOTIFICATION: "groupNotification"
+  GROUP_NOTIFICATION: "groupNotification",
+  MESSAGE_LIST: "messageList",
+  GROUP_LIST_DETAIL: "getGroupListDetail",
+  MESSAGE_SEND_IMG: "messageSendImg"
+};
+
+export const SOCIAL_FRIEND = {
+  LIST: "socialFriendList",
+  LIST: "socialFriendListInvite"
+};
+
+export const ELEARNING_INFO = {
+  INFO: "elearningInfo"
+};
+
+export const ELEARNING_COURSES = {
+  LIST: "coursesList"
 };

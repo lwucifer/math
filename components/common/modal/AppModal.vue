@@ -14,7 +14,10 @@
           <div
             class="app-modal"
             role="document"
-            :style="`width: ${typeof width === 'number' ? width + 'px' : width}`"
+            :style="{
+              width: typeof width === 'number' ? width + 'px' : width,
+              maxWidth: typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth,
+            }"
           >
             <div class="app-modal-content">
               <slot name="header" />
@@ -36,6 +39,9 @@ export default {
     width: {
       type: [Number, String],
       default: 520 // number in px or css value
+    },
+    maxWidth: {
+      type: [Number, String]
     },
     componentClass: {
       type: Object,

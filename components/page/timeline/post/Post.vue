@@ -10,9 +10,13 @@
       </n-link>
 
       <div class="post__title">
-        <div class="post__title-row">
+        <div class="post__title-row mb-1">
           <h5 class="post__name">
-            <n-link to>{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+            <n-link
+              :to="`/account/${post.author.id}`"
+            >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+
+            <PostTags v-if="!showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
 
@@ -70,6 +74,8 @@
       <template v-else>
         <div class="post__post-desc" v-html="post.content"></div>
         <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
+
+        <PostTags v-if="showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
       </template>
 
       <slot name="media-content" />
@@ -111,28 +117,13 @@
       <template v-if="isCommentFetched">
         <app-divider class="mt-0 mb-3" />
 
-        <!-- <div class="post__comment-list">
-          <CommentItem>
-            <CommentItemReplied />
-          </CommentItem>
-
-          <CommentItem>
-            <CommentItem :level="2" />
-
-            <div class="text-center">
-              <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
-            </div>
-
-            <CommentEditor reply />
-          </CommentItem>
-        </div>-->
-
         <div class="post__comment-list">
           <CommentItem
             v-for="item in listParentComments"
             :key="item.id"
             :post="post"
             :data="item"
+            @deleted="handleDeleted"
           />
 
           <div class="text-center">
@@ -150,7 +141,7 @@
           >Bài viết chưa có bình luận.</div>
         </div>
 
-        <CommentEditor class="post__comment-editor" @submit="postComment" />
+        <CommentEditor class="post__comment-editor mb-3" @submit="postComment" />
       </template>
 
       <div class="text-center" v-if="btnCommentLoading">
@@ -165,6 +156,7 @@ import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { createComment } from "~/models/social/Comment";
 
+const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
 const CommentItemReplied = () =>
@@ -180,6 +172,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 export default {
   components: {
+    PostTags,
     CommentItem,
     CommentItemReplied,
     CommentEditor,
@@ -193,6 +186,7 @@ export default {
   props: {
     showEdit: Boolean,
     showMenuDropdown: Boolean,
+    showComment: Boolean,
     comments: {
       type: Number,
       default: 0
@@ -251,6 +245,10 @@ export default {
         ? page.totalElements % page.size
         : page.size;
     }
+  },
+
+  created() {
+    this.showComment && this.getParentComment();
   },
 
   methods: {
@@ -320,6 +318,14 @@ export default {
         }
       } else {
         this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    handleDeleted(id) {
+      if ("listParentComments" in this.parentCommentData) {
+        this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.filter(
+          comment => comment.id !== id
+        );
       }
     }
   }

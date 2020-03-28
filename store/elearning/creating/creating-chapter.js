@@ -1,5 +1,5 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Chapter from "~/services/elearning/creating/Chapter";
 
 /**
@@ -18,13 +18,21 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.LIST]({ commit }, options) {
+    commit(
+      mutationTypes.ELEARNING_CREATING_CHAPTER
+        .SET_ELEARNING_CREATING_CHAPTER_LIST,
+      []
+    );
     try {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        options
       );
-      // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_CHAPTER.SET_ELEARNING_CREATING_CHAPTER_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_CHAPTER
+          .SET_ELEARNING_CREATING_CHAPTER_LIST,
+        result
+      );
     } catch (error) {
       console.log("[Creating chapters] list.error", error);
     }
@@ -35,8 +43,7 @@ const actions = {
       const result = await new Chapter(this.$axios)[actionTypes.BASE.ADD](
         payload
       );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
+      return result;
     } catch (error) {
       console.log("[Creating chapters] add.error", error);
     }
@@ -53,14 +60,13 @@ const actions = {
       console.log("[Creating chapters] edit.error", error);
     }
   },
-  
-  async [actionTypes.ELEARNING_CREATING_CHAPTER.DELETE]({ commit }, payload) {
+
+  async [actionTypes.ELEARNING_CREATING_CHAPTER.DELETE]({ commit }, options) {
     try {
-      const result = await new Chapter(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Chapter(this.$axios)[
+        actionTypes.BASE.DELETE_PAYLOAD
+      ](options);
+      return result;
     } catch (error) {
       console.log("[Creating chapters] delete.error", error);
     }
@@ -71,9 +77,9 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_CHAPTER.SET_ELEARNING_CREATING_CHAPTER_LIST](state, _chapters) {
-    console.log("SET_CREATING_CHAPTER_LIST", _chapters);
-    state.chapters = _chapters;
+  [mutationTypes.ELEARNING_CREATING_CHAPTER
+    .SET_ELEARNING_CREATING_CHAPTER_LIST](state, chapters) {
+    state.chapters = chapters;
   }
 };
 

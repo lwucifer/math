@@ -5,9 +5,15 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <PostEditor @submit="handlePostEditorSubmit" />
+          <PostEditor
+            @submit="handlePostEditorSubmit"
+            :active="postEditorActive"
+            @active-change="active => postEditorActive = active"
+          />
 
-          <template>
+          <VclFacebook v-if="postLoading" class="bg-white" />
+
+          <transition-group enter-active-class="animated faster fadeIn" leave-active-class="animated faster fadeOut">
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
@@ -29,7 +35,7 @@
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
             </Post>
-          </template>
+          </transition-group>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
@@ -157,7 +163,6 @@
             @close="handleCloseModal"
           >
             <PostDetail
-              v-if="modalDetailShow"
               slot="content"
               :post="dataModalDetail"
               @click-close="handleCloseModal"
@@ -165,6 +170,8 @@
               @click-next="handleClickNext"
             />
           </app-modal>
+
+          <!-- <PostModalShare /> -->
         </div>
 
         <div class="col-md-4">
@@ -255,6 +262,7 @@ import Post from "~/components/page/timeline/post/Post";
 import PostSlider from "~/components/page/timeline/post/PostSlider";
 import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
+import PostModalShare from "~/components/page/timeline/post/PostModalShare";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -269,7 +277,8 @@ export default {
     PostSlider,
     PostDetail,
     PostImage,
-    VclFacebook
+    VclFacebook,
+    PostModalShare
   },
 
   async fetch({ params, query, store }) {
@@ -307,6 +316,8 @@ export default {
           value: 1
         }
       ],
+      postEditorActive: false,
+      postLoading: false,
 
       //Fake data
       messages: MESSAGES,
@@ -326,17 +337,23 @@ export default {
 
   mounted() {
     if (process.browser) {
-      window.addEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.addEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout);
+        });
+      });
     }
   },
 
   beforeDestroy() {
     if (process.browser) {
-      window.removeEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.removeEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout);
+        });
+      });
     }
   },
 
@@ -354,11 +371,11 @@ export default {
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
         );
       }
     },
@@ -415,18 +432,31 @@ export default {
     /**
      * Submit POST a post
      */
-    async handlePostEditorSubmit(data) {
+    async handlePostEditorSubmit(data, cb) {
+      this.postLoading = true;
+
       const formData = new FormData();
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
         formData.append(key, data[key]);
       }
+
+      this.postEditorActive = false;
+
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL_POST.ADD}`,
         formData
       );
-      console.log("doAdd result", doAdd);
+
+      this.postLoading = false;
+
+      if (doAdd.success) {
+        cb();
+        this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
     },
 
     /**

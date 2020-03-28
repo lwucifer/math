@@ -7,7 +7,7 @@
 <script>
 export default {
   inject: {
-    appRadioGroup: {
+    appSelect: {
       default: null
     }
   },
@@ -18,8 +18,8 @@ export default {
 
   methods: {
     handleClick() {
-      if (!this.appRadioGroup) return;
-      const { mode, value, hideOptions } = this.appRadioGroup;
+      if (!this.appSelect) return;
+      const { mode, value, hideOptions } = this.appSelect;
 
       if (mode && mode === "tags") {
         this.$emit("change", [...value, this.value]);

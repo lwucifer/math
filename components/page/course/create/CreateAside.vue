@@ -21,7 +21,7 @@
     </ul>
 
     <div class="cca-action">
-      <app-button square full-width>Gửi lên</app-button>
+      <app-button :disabled="!is_submit" square full-width>Gửi lên</app-button>
     </div>
   </aside>
 </template>
@@ -30,6 +30,7 @@
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 const menu = [
   {
@@ -65,39 +66,94 @@ const menu = [
 ];
 
 export default {
-  props: {
-    active: {
-      type: String,
-      default: "general",
-      validator: value =>
-        ["general", "content", "settings", "exercise", "exam"].includes(value)
-    }
-  },
-
   data() {
     return {
-      menu
+      menu,
+      active: "general"
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
-    })
+    }),
+    ...mapState("elearning/creating/creating-progress", {
+      progress: "progress"
+    }),
+    is_submit() {
+      return (
+        get(this, "progress.data.general_complete", false) &&
+        get(this, "progress.data.content_complete", false) &&
+        get(this, "progress.data.setting_complete", false)
+      );
+    }
   },
 
   created() {
-    useEffect(this, this.handleChangeGeneral.bind(this), ["general.id"]);
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id
+      }
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+      options
+    );
+  },
+
+  watch: {
+    progress: {
+      handler: function() {
+        if (get(this, "progress.data.general_complete", false)) {
+          this.menu[0]["checked"] = true;
+        }
+        if (get(this, "progress.data.content_complete", false)) {
+          this.menu[1]["checked"] = true;
+        }
+        if (get(this, "progress.data.setting_complete", false)) {
+          this.menu[2]["checked"] = true;
+        }
+      },
+      deep: true
+    }
   },
 
   methods: {
     handleClickMenuItem({ key }) {
-      this.$emit("click-item", key);
-    },
+      if (key === "general") {
+        this.active = key;
+        this.$emit("click-item", key);
+        return;
+      }
 
-    handleChangeGeneral() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (this.general && elearning_id) this.menu[0].checked = true;
+      if (!get(this, "progress.data.general_complete", false)) return;
+
+      if (key === "content") {
+        this.active = key;
+        if (get(this, "general.type", "") === "LECTURE") {
+          this.$emit("click-item", "content-lecture");
+          return;
+        }
+        if (get(this, "general.type", "") === "COURSE") {
+          this.$emit("click-item", "content-course");
+          return;
+        }
+        return;
+      }
+
+      if (!get(this, "progress.data.content_complete", false)) return;
+
+      if (key === "settings") {
+        this.active = key;
+        this.$emit("click-item", key);
+        return;
+      }
+
+      if (!get(this, "progress.data.setting_complete", false)) return;
+
+      this.active = key;
+      this.$emit("click-item", key);
     }
   }
 };

@@ -10,6 +10,10 @@ export const AUTH = {
   SET_FIREBASE_TOKEN: "setFirebaseToken"
 };
 
+export const BASE = {
+  RESET: "resetData"
+};
+
 export const PUBLIC = {};
 
 export const SOCIAL = {
@@ -20,7 +24,9 @@ export const SOCIAL = {
   SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
   SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
   SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
-  SET_SOCIAL_LABEL_LIST: "setSocialLabelList"
+  SET_SOCIAL_LABEL_LIST: "setSocialLabelList",
+  SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
+  SET_SOCIAL_FRIEND_INVITE_LIST: "setSocialFriendInviteList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -107,6 +113,9 @@ export const ELEARNING_CREATING_ANSWER = {
   SET_ELEARNING_CREATING_ANSWER_DELETE: "setElearningCreatingAnswerDelete"
 };
 
+export const SET_ELEARNING_CREATING_PROGRESS =
+  "SET_ELEARNING_CREATING_PROGRESS";
+
 export const ELEARNING_CREATING_CHAPTER = {
   SET_ELEARNING_CREATING_CHAPTER_LIST: "setElearningCreatingChapterList",
   SET_ELEARNING_CREATING_CHAPTER_ADD: "setElearningCreatingChapterAdd",
@@ -137,6 +146,11 @@ export const ELEARNING_CREATING_GENERAL = {
   SET_ELEARNING_CREATING_GENERAL_ADD: "setElearningCreatingGeneralAdd",
   SET_ELEARNING_CREATING_GENERAL_EDIT: "setElearningCreatingGeneralEdit",
   SET_ELEARNING_CREATING_GENERAL_DELETE: "setElearningCreatingGeneralDelete"
+};
+
+export const ELEARNING_CREATING_SETTING = {
+  SET_ELEARNING_CREATING_SETTING_LIST: "setElearningCreatingSettingList",
+  SET_ELEARNING_CREATING_SETTING_ADD: "setElearningCreatingSettingAdd"
 };
 
 export const ELEARNING_CREATING_LESSONS = {
@@ -219,5 +233,19 @@ export const ELEARNING_SCHOOL_SEARCH = {
 
 export const MESSAGE_GROUP = {
   SET_MEMBER_LIST: "setMemberList",
-  SET_GROUP_LIST: "setGroupList"
+  SET_GROUP_LIST: "setGroupList",
+  SET_MESSAGE_LIST: "setMessageList",
+  SET_GROUP_LIST_TYPE: "setGroupListType",
+  SET_CHAT_LIST_TYPE: "setChatListType",
+  SET_GROUP_LIST_DETAIL: "setGroupListDetail",
+  SET_EMIT_MESSAGE: "setEmitMessage",
+  SET_ON_MESSAGE: "setOnMessage"
+};
+
+export const ELEARNING_INFO = {
+  SET_ELEARNING_INFO: "setElearningInfo"
+};
+
+export const ELEARNING_COURSES = {
+  SET_COURSES_LIST: "setElearningCoursesList"
 };

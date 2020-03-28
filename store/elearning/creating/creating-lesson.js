@@ -19,16 +19,25 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_LESSONS.LIST]({ commit }, options) {
+    if (!options.not_commit) {
+      commit(
+        mutationTypes.ELEARNING_CREATING_LESSONS
+          .SET_ELEARNING_CREATING_LESSONS_LIST,
+        []
+      );
+    }
     try {
       const result = await new Lesson(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      // set to mutation
-      commit(
-        mutationTypes.ELEARNING_CREATING_LESSONS
-          .SET_ELEARNING_CREATING_LESSONS_LIST,
-        result
-      );
+      if (!options.not_commit) {
+        commit(
+          mutationTypes.ELEARNING_CREATING_LESSONS
+            .SET_ELEARNING_CREATING_LESSONS_LIST,
+          result
+        );
+      }
+      return result;
     } catch (error) {
       console.log("[Creating Lesson] list.error", error);
     }
@@ -37,6 +46,7 @@ const actions = {
   async [actionTypes.ELEARNING_CREATING_LESSONS.ADD]({ commit }, payload) {
     try {
       const result = await new Lesson(this.$axios)["postWithFormData"](payload);
+      return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
     } catch (error) {
@@ -56,13 +66,10 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_LESSONS.DELETE]({ commit }, options) {
     try {
-      const result = await new Lesson(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Lesson(this.$axios)["deleteLesson"](options);
+      return result;
     } catch (error) {
       console.log("[Creating Lesson] delete.error", error);
     }
@@ -75,7 +82,7 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_CREATING_LESSONS
     .SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
-    console.log("SET_ELEARNING_CREATING_LESSONS_LIST", lessons);
+    console.log("SET_ELEARNING_CREATING_LESSONS_LIST");
     state.lessons = lessons;
   }
 };

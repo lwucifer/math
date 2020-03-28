@@ -1,0 +1,67 @@
+<template>
+  <div class="clc-type-tab-panel">
+    <div class="cc-tabs">
+      <a
+        href
+        class="cc-tab-item"
+        :class="{ active: tabVideo === 'upload' }"
+        @click.prevent="changeTabVideo('upload')"
+        >Upload bài học</a
+      >
+
+      <a
+        href
+        class="cc-tab-item"
+        :class="{ active: tabVideo === 'choose' }"
+        @click.prevent="changeTabVideo('choose')"
+        >Chọn từ kho học liệu</a
+      >
+    </div>
+
+    <LessonSelectFile
+      @handleSelectFile="handleSelectFile"
+      v-if="tabVideo === 'upload'"
+    />
+
+    <DocumentSelectDoc
+      @handleSelectUrl="handleSelectUrl"
+      v-if="tabVideo === 'choose'"
+      type="VIDEO"
+    />
+  </div>
+</template>
+
+<script>
+const IconTrashAlt = () =>
+  import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import LessonSelectFile from "~/components/page/course/create/common/LessonSelectFile";
+import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
+
+export default {
+  components: {
+    IconTrashAlt,
+    LessonSelectFile,
+    DocumentSelectDoc
+  },
+
+  data() {
+    return {
+      tabVideo: "upload"
+    };
+  },
+
+  methods: {
+    changeTabVideo(type) {
+      this.tabVideo = type;
+    },
+
+    handleSelectFile(data) {
+      this.$emit("handleSelectFile", data);
+    },
+
+    handleSelectUrl(file) {
+      this.$emit("handleSelectUrl", file);
+    }
+  }
+};
+</script>

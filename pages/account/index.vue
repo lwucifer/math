@@ -12,10 +12,10 @@
               <a class="active">Timeline</a>
             </li>
             <li>
-              <n-link :to="'/account/friends'">Bạn bè</n-link>
+              <n-link :to="'/account/social/friends'">Bạn bè</n-link>
             </li>
             <li>
-              <n-link :to="'/account/photos'">Ảnh</n-link>
+              <n-link :to="'/account/social/photos'">Ảnh</n-link>
             </li>
           </ul>
 
@@ -47,7 +47,8 @@ export default {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId)
     ]);
   },
 

@@ -72,7 +72,10 @@ export default {
     handleChange(e) {
       this.$emit("change", e);
       this.input = false;
-      setTimeout(() => this.input = true);
+      const timeout = setTimeout(() => {
+        this.input = true;
+        clearTimeout(timeout)
+      });
     },
 
     handleClickControl() {

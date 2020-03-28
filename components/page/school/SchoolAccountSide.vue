@@ -1,8 +1,8 @@
 <template>
   <div class="school-side">
     <div class="school-side__avatar">
-      <app-avatar :src="school.avatar" :size="125" />
-      <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
+      <app-avatar :src="personalList.avatar.low" :size="125" />
+      <app-upload class="cgi-upload-avt change-avatar">
           <template>
             <div class="cgi-upload-avt-preview">
               <IconPhoto width="13" height="13" />
@@ -10,18 +10,27 @@
           </template>
         </app-upload>
     </div>
-    <p class="school-side__name mt-2">{{school.name}}</p>
+    <p class="school-side__name mt-2">{{personalList.fullname}}</p>
     <div class="school-side__links">
-      <n-link class="link-gray" to :class="active == 1 ? 'active' : ''">
+      <n-link class="link-gray" to='/account/info/' :class="active == 1 ? 'active' : ''">
         <IconUser3 width="20" height="20"/>Thông tin tài khoản
       </n-link>
-      <n-link class="link-gray" to :class="active == 2 ? 'active' : ''">
-        <IconBell />Thông báo
+      <n-link class="link-gray" to='/account/info/withdrawals' :class="active == 2 ? 'active' : ''">
+        <IconHistory />Lịch sửa rút tiền
       </n-link>
-      <n-link class="link-gray" to :class="active == 3 ? 'active' : ''">
+      <n-link class="link-gray" to='/account/info/revenues' :class="active == 3 ? 'active' : ''">
+        <IconHistory />Thống kê doanh thu
+      </n-link>
+      <n-link class="link-gray" to='/account/info/transactions' :class="active == 4 ? 'active' : ''">
         <IconHistory />Lịch sử giao dịch
       </n-link>
-      <n-link class="link-gray" to :class="active == 4 ? 'active' : ''">
+      <n-link class="link-gray" to :class="active == 5 ? 'active' : ''">
+        <IconBell />Thông báo
+      </n-link>
+      <n-link class="link-gray" to :class="active == 6 ? 'active' : ''">
+        <IconBell />Cài đặt
+      </n-link>
+      <n-link class="link-gray" to :class="active == 7 ? 'active' : ''">
         <IconExclamation />Trợ giúp
       </n-link>
     </div>
@@ -37,6 +46,7 @@ import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconSearch from "~/assets/svg/icons/search2.svg?inline";
 import IconDollarAlt from '~/assets/svg/design-icons/dollar-alt.svg?inline';
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -59,6 +69,9 @@ export default {
     active: {
       type: [String, Number]
     }
+  },
+  computed:{
+    ...mapState("account", ["personalList"]),
   }
 };
 </script>

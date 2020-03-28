@@ -7,8 +7,34 @@
     />
 
     <div class="comment-item__right">
-      <div class="comment-item__name">
-        <n-link to>{{ data.fullname }}</n-link>
+      <div class="comment-item__right__top">
+        <n-link class="comment-item__name" to>{{ data.fullname }}</n-link>
+
+        <app-dropdown
+          v-if="userId === data.comment_user_id"
+          class="comment-item__menu-dropdown"
+          position="right"
+          open-on-click
+          v-model="menuDropdown"
+        >
+          <button
+            slot="activator"
+            slot-scope="{ on }"
+            v-on="on"
+            class="comment-item__menu-dropdown__btn"
+          >
+            <IconDots class="icon" />
+          </button>
+
+          <ul class="comment-item__menu-dropdown__list">
+            <li>
+              <a href="javasscript:;">Chỉnh sửa bình luận</a>
+            </li>
+            <li>
+              <a href="javasscript:;" @click.once="deleteComment">Xoá</a>
+            </li>
+          </ul>
+        </app-dropdown>
       </div>
 
       <div class="comment-item__content" v-html="data.comment_content"></div>
@@ -22,18 +48,24 @@
       </div>
 
       <CommentItemReplied
-        v-if="data.children && data.children.list.length && !listComments.length"
+        v-if="data.children && data.children.list && data.children.list.length && !listComments.length"
         :data="data.children"
         @click="getChildrenComment(data.id)"
       />
 
-      <CommentItem
-        v-for="item in listComments"
-        :key="item.id"
-        :level="2"
-        :post="post"
-        :data="item"
-      />
+      <transition-group
+        enter-active-class="animated faster fadeIn"
+        leave-active-class="animated faster fadeOut"
+      >
+        <CommentItem
+          v-for="item in listComments"
+          :key="item.id"
+          :level="2"
+          :post="post"
+          :data="item"
+          @deleted="handleDeleted"
+        />
+      </transition-group>
 
       <div class="text-center">
         <a
@@ -65,13 +97,15 @@ const CommentItemReplied = () =>
   import("~/components/page/timeline/comment/CommentItemReplied");
 const CommentEditor = () =>
   import("~/components/page/timeline/comment/CommentEditor");
+const IconDots = () => import("~/assets/svg/icons/dots.svg?inline");
 
 export default {
   name: "CommentItem",
 
   components: {
     CommentItemReplied,
-    CommentEditor
+    CommentEditor,
+    IconDots
   },
 
   props: {
@@ -88,9 +122,13 @@ export default {
       type: Object,
       default: () => ({}),
       validator: value =>
-        ["avatar", "fullname", "comment_content", "created_at"].every(
-          key => key in value
-        )
+        [
+          "avatar",
+          "fullname",
+          "comment_content",
+          "created_at",
+          "comment_user_id"
+        ].every(key => key in value)
     }
   },
 
@@ -103,7 +141,8 @@ export default {
       },
       childrenCommentData: {},
       isFetchingComment: false,
-      showReply: false
+      showReply: false,
+      menuDropdown: false
     };
   },
 
@@ -128,12 +167,16 @@ export default {
       return page.totalPages - page.number === 1
         ? page.totalElements % page.size
         : page.size;
+    },
+
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     }
   },
 
   methods: {
     async getChildrenComment(id) {
-      console.log("getChildrenComment", id);
       this.isFetchingComment = true;
 
       const getComment = await new CommentService(this.$axios)[
@@ -195,6 +238,28 @@ export default {
         }
       } else {
         this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    async deleteComment(event) {
+      event.preventDefault();
+
+      const doDelete = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.DELETE
+      ](this.data.id);
+
+      if (doDelete.success) {
+        this.$emit("deleted", this.data.id);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    handleDeleted(id) {
+      if ("listComments" in this.childrenCommentData) {
+        this.childrenCommentData.listComments = this.childrenCommentData.listComments.filter(
+          comment => comment.id !== id
+        );
       }
     }
   }

@@ -21,6 +21,11 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, options) {
+    commit(
+      mutationTypes.ELEARNING_CREATING_GENERAL
+        .SET_ELEARNING_CREATING_GENERAL_LIST,
+      null
+    );
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.LIST](
         options
@@ -40,25 +45,7 @@ const actions = {
       const result = await new General(this.$axios)["postWithFormData"](
         payload
       );
-      const params = {
-        elearning_id: result.data.elearning_id
-      };
-
-      const options = {
-        params
-      };
-
-      const _result = await new General(this.$axios)[actionTypes.BASE.LIST](
-        options
-      );
-      commit(
-        mutationTypes.ELEARNING_CREATING_GENERAL
-          .SET_ELEARNING_CREATING_GENERAL_LIST,
-        _result.data
-      );
-
-      redirectWithParams(params);
-
+      return result;
     } catch (error) {
       console.log("[Creating general] add.error", error);
     }

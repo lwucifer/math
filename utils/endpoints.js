@@ -40,6 +40,7 @@ export const NOTIFICATIONS = `${SCHOOLLY_ALIAS}/social/notifications`;
 export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
 export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
+export const SOCIAL_FRIEND_INVITE = `${SCHOOLLY_ALIAS}/social/api/friend/invite`;
 
 /**
  * ELEARNING
@@ -64,6 +65,8 @@ export const ELEARNING_PUBLIC_RELATED = `${SCHOOLLY_ALIAS}/elearning/public/rela
 export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subjects`;
 export const ELEARNING_PUBLIC_LEVEL = `${SCHOOLLY_ALIAS}/elearning/public/levels`;
 export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/teaching/repository/files`;
+export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/setting`;
+export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 
 /**
  * STUDY
@@ -71,7 +74,7 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/t
 export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
 export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
-export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/study/votes`;
+export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
 
 /**
  * SCHOOL
@@ -96,3 +99,13 @@ export const GROUP_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/getMember`;
 export const GROUP_LEAVE = `${SCHOOLLY_ALIAS}/social/api/room/leaveGroup`;
 export const GROUP_REMOVE_MEMBER = `${SCHOOLLY_ALIAS}/social/api/room/removeMember`;
 export const GROUP_NOTIFICATION = `${SCHOOLLY_ALIAS}/social/api/room/settingNotification`;
+export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
+export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
+export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
+
+/**
+ * ELEARNING MANAGER
+ */
+export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/teaching/info`;
+
+export const ELEARNING_COURSES_LIST = `${SCHOOLLY_ALIAS}/elearning/courses/list`;

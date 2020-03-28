@@ -108,7 +108,7 @@ import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconTickCircle from "~/assets/svg/icons/tick-circle.svg?inline";
 import { get } from "lodash";
-import * as actionTypes from "../../../utils/action-types";
+import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import numeral from "numeral";
 import AppButton from "../../common/button/AppButton";

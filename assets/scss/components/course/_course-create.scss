@@ -50,6 +50,14 @@
     border-bottom: 1px solid $color-border;
     display: flex;
     justify-content: space-between;
+    margin-bottom: -1px;
+
+    &:hover {
+        .cc-box__btn-edit {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
 }
 
 .cc-box__head-left, .cc-box__head-right {
@@ -61,6 +69,15 @@
     margin-right: 1.2rem;
 }
 
+.cc-box__input-title {
+    width: 30.3rem;
+    max-width: 100%;
+    margin-right: 1rem;
+    border: none;
+    line-height: 3.2rem;
+    padding: 0 1.6rem;
+}
+
 .cc-box__btn {
     svg {
         display: block;
@@ -69,6 +86,9 @@
 }
 
 .cc-box__btn-edit {
+    visibility: hidden;
+    opacity: 0;
+
     svg {
         fill: $color-primary;
     }
@@ -91,6 +111,10 @@
 
 .cc-box__bg-gray {
     background-color: #FBFBFB;
+}
+
+.cc-box__nested {
+    margin-left: 3rem;
 }
 
 .cc-tabs {

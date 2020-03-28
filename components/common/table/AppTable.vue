@@ -32,15 +32,15 @@
         <tr v-for="(cat, i) in sortedCats" :key="i">
           <td v-if="multipleSelection || selectAll" class="pr-0">
             <app-checkbox
-              @change="check($event, i)"
-              :checked="selectedIds.includes(i)"
+              @change="check($event, cat)"
+              :checked="selectedItems.includes(cat)"
             />
           </td>
           <!--Slot is named by column key-->
           <slot
             v-for="(item, j) in heads"
             :item="item"
-            :index="i"
+            :index="j"
             :row="cat"
             :name="'cell(' + item.name + ')'"
           >
@@ -65,6 +65,7 @@
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
+import { isEqual } from "lodash";
 
 export default {
   components: {
@@ -100,56 +101,46 @@ export default {
 
   data() {
     return {
-      cats: [],
       listSortBy: [],
       currentSort: "name",
       currentSortDir: "asc",
-      allSelected: false,
-      selectedIds: [], // An array of indexes of selected row (0, 1, 2, ...)
+      selectedItems: [], // An array of selected rows
     };
   },
   watch: {
-    selectedIds: function (oldVal, newVal) {
-      this.$emit("selectionChange", this.selectedRows);
+    selectedItems: function (oldVal, newVal) {
+      this.$emit("selectionChange", this.selectedItems);
     }
   },
   methods: {
-    check(checked, index) {
+    check(checked, item) {
       if (checked) {
-        this.pushSelectedIndexes(index);
+        this.pushSelectedIndexes(item);
       } else {
-        this.popSelectedIndexes(index);
+        this.popSelectedIndexes(item);
       }
-      this.$emit("check", this.data[index]);
+      this.$emit("check", item);
     },
 
-    popSelectedIndexes(index) {
-      if (this.selectedIds.includes(index)) {
-        this.selectedIds.forEach((item, i) => {
-          if(item == index) {
-            this.selectedIds.splice(i, 1);
-          }
-        });
+    popSelectedIndexes(item) {
+      if (_.some(this.selectedItems, item)) { // this.selectedItems include item
+        this.selectedItems = _.reject(this.selectedItems, ({id}) => id === item.id);
       }
     },
 
-    pushSelectedIndexes(index) {
-      if (!this.selectedIds.includes(index)) {
-        this.selectedIds.push(index);
+    pushSelectedIndexes(item) {
+      if (!(_.some(this.selectedItems, item))) { // this.selectedItems include item
+        this.selectedItems.push(item);
       }
     },
 
-    changeSelect(checked) {
+    changeSelect(checked) {// select all
       if (checked) {
-        let tmp = [];
-        this.data.forEach((item, i) => {
-          tmp[i] = i;
-        });
-        this.selectedIds = tmp;
+        this.selectedItems = this.data;
       } else {
-        this.selectedIds = [];
+        this.selectedItems = [];
       }
-      this.$emit("selectAll", this.ids);
+      this.$emit("selectAll", this.selectedItems);
     },
 
     sort: function(sortBy) {
@@ -203,27 +194,21 @@ export default {
       }
       return this.cats;
     },
-    ids: function() {
-      const that = this;
-      let ids = [];
-      if (that.allSelected) {
-        that.cats.forEach(function(item) {
-          ids.push(item.id);
-        });
-      }
-      return ids;
+    cats: function() {
+      return this.data;
     },
-    selectedRows: function() {
-      const data = [];
-      this.selectedIds.forEach(value => {
-        data.push(this.data[value]);
-      });
-      return data;
+    allSelected: {
+      set(value) {
+        return value
+      },
+      get() {
+        return isEqual(this.selectedItems, this.data)
+      }
     }
   },
 
   created() {
-    this.cats = [...this.data];
+    // this.cats = [...this.data];
   }
 };
 </script>

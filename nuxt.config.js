@@ -23,6 +23,10 @@ module.exports = {
         }]
     },
 
+    env: {
+        SOCKET_URI: process.env.SOCKET_URI,
+    },
+
     /**
      * config local server|port
      */
@@ -48,8 +52,8 @@ module.exports = {
         { src: "@/plugins/vue-fragment.js", ssr: false },
         { src: "@/plugins/vue-toast.js", ssr: false },
         { src: "@/plugins/vue-infinite-loading.js", ssr: false },
-        // { src: "@/plugins/tooltip.js", ssr: false },
-        { src: '~/plugins/vue-cropper', ssr: false }
+        { src: '~/plugins/vue-cropper', ssr: false },
+        { src: "@/plugins/sticky.js", ssr: false },
     ],
     /**
      * Global middleware

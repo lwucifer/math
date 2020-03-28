@@ -7,6 +7,7 @@
     z-index: map-get($z-index, modal);
     overflow: auto;
     outline: 0;
+    text-align: center;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -23,12 +24,13 @@
 
 .app-modal {
     position: relative;
+    display: inline-block;
     padding-bottom: 2.4rem;
-    margin: 0 auto;
     position: relative;
     top: 10rem;
     width: auto;
     max-width: calc(100% - 1.5rem);
+    text-align: left;
 }
 
 .app-modal-content {
@@ -38,7 +40,6 @@
 }
 
 .app-modal-centered {
-    text-align: center;
 
     &:before {
         content: '';
@@ -51,8 +52,6 @@
     .app-modal {
         top: 0;
         vertical-align: middle;
-        display: inline-block;
-        text-align: left;
     }
 }
 

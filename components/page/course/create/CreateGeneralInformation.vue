@@ -49,35 +49,26 @@
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">
-          Tên khoá học
+          Tên {{ name }}
           <span class="caption text-sub">(Tối đa 60 ký tự)</span>
         </h2>
         <app-input :counter="60" v-model="payload.name" />
       </div>
 
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Học phí
-        </h2>
-        <app-input :value="payload.fee" @input="handleChangeFee" />
-      </div>
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Giảm giá
-        </h2>
-        <app-input :value="payload.discount" @input="handleChangeDiscount" />
-      </div>
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Lợi ích từ khoá học</h2>
-        <app-editor v-model="payload.benefit" class="bg-input-gray mb-3" />
-        <span class="text-sub caption">Tối thiểu 300 ký tự</span>
-      </div>
+      <CourseBenefit
+        :name="name"
+        :benefit="payload.benefit"
+        @removeBenefit="removeBenefit"
+        @addBenefit="addBenefit"
+      />
 
       <div class="cgi-form-group mb-4">
         <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
-        <app-editor class="bg-input-gray mb-3" v-model="payload.description" />
+        <app-editor
+          class="bg-input-gray mb-3"
+          :sticky-offset="`{ top: 70, bottom: 0 }`"
+          v-model="payload.description"
+        />
         <span class="text-sub caption">Tối thiểu 300 ký tự</span>
       </div>
 
@@ -86,22 +77,34 @@
         @handleSelectAvatar="handleSelectAvatar"
       />
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
 <script>
-import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import CreateAction from "~/components/page/course/create/CreateAction";
-import * as actionTypes from "~/utils/action-types";
-import CourseSelectLevel from "~/components/page/course/CourseSelectLevel";
-import CourseSelectSubject from "~/components/page/course/CourseSelectSubject";
-import CourseSelectAvatar from "~/components/page/course/CourseSelectAvatar";
-import { toNumber, get } from "lodash";
-import { useEffect, getParamQuery } from "~/utils/common";
 import * as yup from "yup";
 import numeral from "numeral";
-import { createPayloadAddCourse } from "~/models/course/AddCourse";
+import { toNumber, get } from "lodash";
 import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
+import { createPayloadAddCourse } from "~/models/course/AddCourse";
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+const IconCheckCircle = () =>
+  import("~/assets/svg/icons/check-circle.svg?inline");
+const IconTrashAlt = () =>
+  import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import CreateAction from "~/components/page/course/create/common/CreateAction";
+import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
+import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
+import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
+import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 
 const schema = yup.object().shape({
   avatar: yup.string().required(),
@@ -128,7 +131,10 @@ export default {
     CreateAction,
     CourseSelectLevel,
     CourseSelectSubject,
-    CourseSelectAvatar
+    CourseSelectAvatar,
+    IconCheckCircle,
+    IconTrashAlt,
+    CourseBenefit
   },
 
   data() {
@@ -136,64 +142,76 @@ export default {
       isSubmit: false,
       payload: {
         avatar: "",
-        benefit: "",
+        benefit: [],
         description: "",
-        discount: "",
-        fee: "",
         level: "",
         name: "",
         subject: "",
-        type: "LECTURE"
-      }
+        type: ""
+      },
+      showModalConfirm: false,
+      confirmLoading: false
     };
   },
 
   created() {
-    useEffect(this, this.handleChangePayload.bind(this), [
-      "payload.avatar",
-      "payload.benefit",
-      "payload.description",
-      "payload.discount",
-      "payload.fee",
-      "payload.level",
-      "payload.name",
-      "payload.subject",
-      "payload.type"
-    ]);
-
     this.handleFetchElearningGeneral();
+  },
 
-    useEffect(this, this.handleChangeGeneral.bind(this), [
-      "general.benefit",
-      "general.description",
-      "general.discount",
-      "general.fee",
-      "general.level",
-      "general.name",
-      "general.subject",
-      "general.type"
-    ]);
+  watch: {
+    payload: {
+      handler: function() {
+        let that = this;
+        const payload = createPayloadAddCourse(this.payload);
+        const elearning_id = getParamQuery("elearning_id");
+
+        if (elearning_id) {
+          schema_update.isValid(payload).then(function(valid) {
+            that.isSubmit = valid;
+          });
+          return;
+        }
+
+        schema.isValid(payload).then(function(valid) {
+          that.isSubmit = valid;
+        });
+      },
+      deep: true
+    },
+    general: {
+      handler: function() {
+        this.payload.benefit = [...get(this, "general.benefit", [])];
+        this.payload.description = get(this, "general.description", "");
+        this.payload.name = get(this, "general.name", "");
+        this.payload.subject = get(this, "general.subject", "");
+        this.payload.level = get(this, "general.level", "");
+        this.payload.type = get(this, "general.type", "");
+        if (get(this, "general.id", "")) {
+          this.payload.elearning_id = get(this, "general.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general"
-    })
+    }),
+    name() {
+      return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
+    }
   },
 
   methods: {
-    handleChangeGeneral() {
-      this.payload.benefit = get(this, "general.benefit", "");
-      this.payload.description = get(this, "general.description", "");
-      this.payload.discount = get(this, "general.discount", "");
-      this.payload.fee = get(this, "general.fee", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "LECTURE");
-      if (get(this, "general.id", "")) {
-        this.payload.elearning_id = get(this, "general.id", "");
-      }
+    removeBenefit(index) {
+      this.payload.benefit = this.payload.benefit.filter(
+        (item, i) => i !== index
+      );
+    },
+
+    addBenefit(html) {
+      this.payload.benefit.push(html);
     },
 
     handleFetchElearningGeneral() {
@@ -209,31 +227,6 @@ export default {
           options
         );
       }
-    },
-
-    handleChangeDiscount(discount) {
-      this.payload.discount = numeral(discount).format();
-    },
-
-    handleChangeFee(fee) {
-      this.payload.fee = numeral(fee).format();
-    },
-
-    handleChangePayload() {
-      let that = this;
-      const payload = createPayloadAddCourse(this.payload);
-      const elearning_id = get(that, "$route.query.elearning_id", "");
-
-      if (elearning_id) {
-        schema_update.isValid(payload).then(function(valid) {
-          that.isSubmit = valid;
-        });
-        return;
-      }
-
-      schema.isValid(payload).then(function(valid) {
-        that.isSubmit = valid;
-      });
     },
 
     handleChangeLevel(level) {
@@ -253,12 +246,56 @@ export default {
     },
 
     handleCLickSave() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+      this.isSubmit = false;
       let payload = createPayloadAddCourse(this.payload);
-      this.$store.dispatch(
+      const result = await this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
-      this.isSubmit = false;
+
+      this.isSubmit = true;
+      this.confirmLoading = false;
+      this.showModalConfirm = false;
+
+      if (get(result, "success", false)) {
+        const params = {
+          elearning_id: get(result, "data.elearning_id", "")
+        };
+        const options = {
+          params
+        };
+        await this.$store.dispatch(
+          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+          options
+        );
+        redirectWithParams(params);
+        this.getProgress();
+        this.$toasted.success(get(result, "message", ""));
+        return;
+      }
+      this.$toasted.error(get(result, "message", ""));
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
     },
 
     numeral,

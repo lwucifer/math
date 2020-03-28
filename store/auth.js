@@ -5,6 +5,8 @@ import * as APIs from "../utils/endpoints";
 import { setToken, setAccessToken, removeToken } from "../utils/auth";
 import { authFire } from "../services/firebase/FirebaseInit";
 
+import { v4 as uuidv4 } from "uuid";
+
 /**
  * initial state
  */
@@ -34,6 +36,21 @@ const getters = {
             return state.token ? JSON.parse(state.token).refresh_token : null;
         }
         return state.token.refresh_token;
+    },
+    getSocketURIParam(state) {
+        const account = state.token;
+        const uuidV4 = uuidv4();
+
+        return `user_id=${account.id}&token=${account.access_token}&unique_id=${uuidV4}`;
+    },
+    userId(state) {
+        return state.token.id ? state.token.id : "";
+    },
+    fullName(state) {
+        return state.token.fullname ? state.token.fullname : "";
+    },
+    avatarUser(state) {
+        return state.token.avatar ? state.token.avatar : {};
     }
 };
 
