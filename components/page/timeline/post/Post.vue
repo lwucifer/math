@@ -16,6 +16,11 @@
               :to="`/account/${post.author.id}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
+            <span v-if="post.label" class="text-sub font-weight-normal">
+              cảm thấy {{ post.label.icon }}
+              <b class="text-base">{{ post.label.des }}</b>
+            </span>
+
             <PostTags v-if="post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
@@ -86,7 +91,7 @@
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
-        <button class="post__button">
+        <button class="post__button" @click="$emit('share', post)">
           <IconShare class="icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
