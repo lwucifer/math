@@ -109,3 +109,5 @@ export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`
 export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/teaching/info`;
 
 export const ELEARNING_COURSES_LIST = `${SCHOOLLY_ALIAS}/elearning/courses/list`;
+export const ELEARNING_COURSES_STUDENT = `${SCHOOLLY_ALIAS}/elearning/courses/student`;
+export const ELEARNING_COURSES_STUDENT_INFO = `${SCHOOLLY_ALIAS}/elearning/courses/student/info`;
