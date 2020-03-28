@@ -40,7 +40,7 @@
       <div class="wrapSearchForm___ElearningManagerFilterTable">
         <app-input
           type="text"
-          v-model="filters.query"
+          v-model="filters.name"
           placeholder="Nhập để tìm kiếm..."
           :size="'sm'"
           @input="handleChangedSearch"
@@ -71,7 +71,7 @@
         filters: {
           type: null,
           used: null,
-          query: ''
+          name: ''
         },
         statuses: [
           {

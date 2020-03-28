@@ -1,5 +1,5 @@
 <template>
-  <app-modal v-bind="{ width, centered }" :component-class="{'app-modal-confirm': true }">
+  <app-modal v-bind="{ width, centered }" :component-class="{'app-modal-confirm': true }" v-if="visible">
     <div slot="content" class="py-4 px-5">
       <div class="mb-3 text-center">
         <slot>{{ title }}</slot>

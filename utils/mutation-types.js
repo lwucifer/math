@@ -247,5 +247,7 @@ export const ELEARNING_INFO = {
 };
 
 export const ELEARNING_COURSES = {
-  SET_COURSES_LIST: "setElearningCoursesList"
+    SET_COURSES_LIST: "setElearningCoursesList",
+    SET_COURSES_STUDENT: "setElearningCoursesStudent",
+    SET_COURSES_STUDENT_INFO: "setElearningCoursesStudentInfo",
 };

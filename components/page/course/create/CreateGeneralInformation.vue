@@ -93,7 +93,12 @@ import numeral from "numeral";
 import { toNumber, get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { useEffect, getParamQuery, redirectWithParams } from "~/utils/common";
+import {
+  useEffect,
+  getParamQuery,
+  redirectWithParams,
+  image
+} from "~/utils/common";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconCheckCircle = () =>

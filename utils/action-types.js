@@ -300,5 +300,7 @@ export const ELEARNING_INFO = {
 };
 
 export const ELEARNING_COURSES = {
-  LIST: "coursesList"
+    LIST: "coursesList",
+    STUDENT: "coursesStudent",
+    STUDENT_INFO: "coursesStudentInfo",
 };

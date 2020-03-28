@@ -11,4 +11,4 @@ export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 
 export const UNAUTHORIZE_API = ["user/public/renew", "user/public/login"];
 
-export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 5; // MB
+export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 5120; // MB

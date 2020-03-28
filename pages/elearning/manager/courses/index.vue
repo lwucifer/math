@@ -112,19 +112,9 @@ export default {
 
   async fetch({ params, query, store }) {
     await Promise.all([
-      store.dispatch(`elearning/manager/courses/teaching-courses-list/${actionTypes.ELEARNING_COURSES.LIST}`),
+      store.dispatch(`elearning/courses/courses-list/${actionTypes.ELEARNING_COURSES.LIST}`),
     ]);
   },
-
-  // async asyncData({ $axios }) {
-  //   const { data: courses = {} } = await new CoursesService($axios)[
-  //     actionTypes.BASE.LIST
-  //   ]();
-
-  //   return {
-  //     courses
-  //   };
-  // },
 
   data() {
     return {
@@ -298,6 +288,7 @@ export default {
       ]
     };
   },
+
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/courses/courses-list", {
@@ -321,7 +312,7 @@ export default {
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
     },
-     /**
+    /**
      * DELETE
      */
     async deletePost(id) {
