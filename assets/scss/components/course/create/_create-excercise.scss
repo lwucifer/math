@@ -11,6 +11,18 @@
 
 .ce-item {
     padding: 1.3rem 1.5rem;
+
+    &__action {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    &:hover {
+        .ce-item__action {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
 }
 
 .ce-question-item {
