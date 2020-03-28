@@ -13,7 +13,10 @@
 
           <VclFacebook v-if="postLoading" class="bg-white" />
 
-          <transition-group enter-active-class="animated faster fadeIn" leave-active-class="animated faster fadeOut">
+          <transition-group
+            enter-active-class="animated faster fadeIn"
+            leave-active-class="animated faster fadeOut"
+          >
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
@@ -22,6 +25,7 @@
               :show-menu-dropdown="post.author && post.author.id === userId"
               @delete="deletePost"
               @like="likePost"
+              @edit="editPost"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -172,6 +176,20 @@
           </app-modal>
 
           <!-- <PostModalShare /> -->
+
+          <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
+            <PostEditor
+              slot="content"
+              class="mb-0"
+              :initialValues="editPostData"
+              prefetch
+              :show-overlay="false"
+            />
+            <div slot="footer" class="text-right px-4 pb-3">
+              <app-button class="mr-3" color="info" size="sm" square>Huỷ</app-button>
+              <app-button color="primary" size="sm" square>Lưu</app-button>
+            </div>
+          </app-modal>
         </div>
 
         <div class="col-md-4">
@@ -318,6 +336,8 @@ export default {
       ],
       postEditorActive: false,
       postLoading: false,
+      showModalEditPost: false,
+      editPostData: {},
 
       //Fake data
       messages: MESSAGES,
@@ -482,6 +502,9 @@ export default {
       }
     },
 
+    /**
+     * Like a POST
+     */
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
       const { success = false, data = {} } = await new LikesService(
@@ -510,6 +533,28 @@ export default {
       cb();
     },
 
+    editPost(post) {
+      this.editPostData = {
+        content: post.content,
+        link: post.link || "",
+        post_image: post.files || [],
+        list_tag:
+          post.tags && post.tags.length ? post.tags.map(item => item.id) : [],
+        check_in: {},
+        privacy: post.privacy ? post.privacy.value : null,
+        label_id: null
+      };
+      this.showModalEditPost = true;
+    },
+
+    closeModalEditPost() {
+      this.showModalEditPost = false;
+      this.editPostData = {};
+    },
+
+    /**
+     * Infinite scroll handler
+     */
     async feedInfiniteHandler($state) {
       const { data: feeds = {} } = await new FeedsService(this.$axios)[
         actionTypes.BASE.LIST

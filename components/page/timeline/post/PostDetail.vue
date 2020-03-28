@@ -28,7 +28,7 @@
     </div>
 
     <div class="post-detail__right">
-      <Post
+      <PostDetailPost
         show-edit
         show-comment
         :post="post"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Post from "./Post";
+import PostDetailPost from "./PostDetailPost";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
@@ -86,7 +86,7 @@ import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 
 export default {
   components: {
-    Post,
+    PostDetailPost,
     IconDots,
     IconClose,
     IconChevronLeft,

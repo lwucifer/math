@@ -1,6 +1,6 @@
 <template>
-  <div class="editor post-editor" :class="{ 'active': localActive }" @click="setActive(true)">
-    <div class="post-editor__overlay" @click.stop="localActive = false"></div>
+  <div class="editor post-editor" :class="classes" @click="showOverlay && setActive(true)">
+    <div v-if="showOverlay" class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
         <div class="post-editor__avatar">
@@ -203,7 +203,30 @@ export default {
   },
 
   props: {
-    active: Boolean
+    active: Boolean,
+    prefetch: Boolean,
+    showOverlay: {
+      type: Boolean,
+      default: true
+    },
+    initialValues: {
+      content: String,
+      link: String,
+      post_image: Array,
+      list_tag: Array,
+      check_in: Object,
+      privacy: Number,
+      label_id: Number,
+      default: () => ({
+        content: "",
+        link: "",
+        post_image: [],
+        list_tag: [],
+        check_in: {},
+        privacy: 15,
+        label_id: null
+      })
+    }
   },
 
   data() {
@@ -230,18 +253,26 @@ export default {
         { value: 4, text: "Republic of Kosovo" }
       ],
       // Form submit data
-      link: "",
-      post_image: [],
-      list_tag: [],
-      check_in: {},
-      privacy: 15,
-      label_id: null
+      content: this.initialValues.content,
+      link: this.initialValues.link,
+      post_image: this.initialValues.post_image,
+      list_tag: this.initialValues.list_tag,
+      check_in: this.initialValues.check_in,
+      privacy: this.initialValues.privacy,
+      label_id: this.initialValues.label_id
     };
   },
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
     ...mapGetters("social", ["configPrivacyLevels"]),
+
+    classes() {
+      return {
+        active: this.localActive,
+        "post-editor--has-overlay": this.showOverlay
+      };
+    },
 
     selectedTags() {
       return this.list_tag.map(item => {
@@ -266,8 +297,13 @@ export default {
     }
   },
 
+  created() {
+    this.prefetch && this.getFriends()
+  },
+
   mounted() {
     this.editor = new Editor({
+      content: this.content,
       extensions: [
         new Placeholder({
           showOnlyCurrent: true,
@@ -340,6 +376,21 @@ export default {
       this.labelDropdrown = false;
     },
 
+    async getFriends() {
+      const { data = {} } = await new FriendService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.friendsListQuery
+      });
+
+      if (data.listFriend && data.listFriend.length) {
+        this.friendsListQuery.page += 1;
+        this.friendsList = this.friendsList.concat(data.listFriend);
+      } else {
+        this.$toasted(data.message);
+      }
+    },
+
     async friendsInfiniteHandler($state) {
       const { data = {} } = await new FriendService(this.$axios)[
         ACTION_TYPE_BASE.LIST
@@ -360,7 +411,6 @@ export default {
       console.log("handleFriendsVisibleChange", isVisible);
 
       if (isVisible) {
-        this.friendsList = [];
         this.friendsInfiniteId += 1;
       } else {
         this.friendsListQuery.page = 1;
@@ -368,15 +418,19 @@ export default {
     },
 
     submit() {
-      this.$emit("submit", {
-        content: this.editor.getHTML(),
-        link: this.link,
-        post_image: this.fileList[0],
-        list_tag: JSON.stringify(this.list_tag),
-        check_in: JSON.stringify(this.check_in),
-        privacy: this.privacy,
-        label_id: this.label_id
-      }, this.clear);
+      this.$emit(
+        "submit",
+        {
+          content: this.editor.getHTML(),
+          link: this.link,
+          post_image: this.fileList[0],
+          list_tag: JSON.stringify(this.list_tag),
+          check_in: JSON.stringify(this.check_in),
+          privacy: this.privacy,
+          label_id: this.label_id
+        },
+        this.clear
+      );
     },
 
     clear() {

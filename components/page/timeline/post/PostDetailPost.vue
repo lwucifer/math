@@ -16,7 +16,7 @@
               :to="`/account/${post.author.id}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
-            <PostTags v-if="post.tags && post.tags.length" :tags="post.tags || []" />
+            <PostTags v-if="!showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
 
@@ -27,33 +27,35 @@
             <!-- <IconGlobe class="icon" /> -->
           </span>
         </div>
+
+        <template v-if="showEdit">
+          <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
+        </template>
       </div>
-
-      <app-dropdown
-        v-if="showMenuDropdown"
-        class="post__menu-dropdown"
-        position="right"
-        open-on-click
-        v-model="menuDropdown"
-      >
-        <button slot="activator" slot-scope="{ on }" v-on="on" class="post__menu-dropdown__btn">
-          <IconDots class="icon" />
-        </button>
-
-        <ul class="post__menu-dropdown__list">
-          <li>
-            <a href @click.prevent="$emit('edit', post)">Chỉnh sửa bài viết</a>
-          </li>
-          <li>
-            <a href @click.prevent="handleClickDelete">Xoá</a>
-          </li>
-        </ul>
-      </app-dropdown>
     </div>
 
     <div class="post__post">
-      <div class="post__post-desc" v-html="post.content"></div>
-      <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
+      <template v-if="edit">
+        <textarea rows="3" class="post__edit-desc" placeholder="Thêm mô tả" v-textarea-autosize>Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</textarea>
+        <input type="text" placeholder="Cùng với ai?" class="post__edit-tag" />
+        <input type="text" placeholder="Ở đâu?" class="post__edit-location" />
+
+        <div class="post__edit-actions">
+          <app-select class="post__edit-select" :options="shareWithOpts" v-model="shareWith">
+            <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
+          </app-select>
+
+          <button class="post__edit-btn post__edit-btn-cancel" @click="edit = false">Huỷ</button>
+          <button class="post__edit-btn post__edit-btn-done" @click="edit = false">Chỉnh sửa xong</button>
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="post__post-desc" v-html="post.content"></div>
+        <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
+
+        <PostTags v-if="showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
+      </template>
 
       <slot name="media-content" />
 
@@ -161,8 +163,7 @@ export default {
   },
 
   props: {
-    showMenuDropdown: Boolean,
-    showComment: Boolean,
+    showEdit: Boolean,
     comments: {
       type: Number,
       default: 0
@@ -189,6 +190,7 @@ export default {
 
   data() {
     return {
+      edit: false,
       menuDropdown: false,
       btnLikeLoading: false,
       btnCommentLoading: false,
@@ -223,7 +225,7 @@ export default {
   },
 
   created() {
-    this.showComment && this.getParentComment();
+    this.getParentComment();
   },
 
   methods: {
