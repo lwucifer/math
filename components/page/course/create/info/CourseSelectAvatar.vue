@@ -10,7 +10,7 @@
               ref="cropper"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
-              :fixedNumber="[750, 422]"
+              :fixedNumber="[750, 450]"
               fixed
               autoCrop
               full
@@ -27,6 +27,7 @@
             "
             alt
             class="d-block w-100"
+            @error="handleError"
           />
           <span
             v-if="avatarSrc"
@@ -102,12 +103,9 @@ export default {
       cropping: false,
       savingCrop: false,
       cropperOutputType: null,
-      file: ""
+      file: "",
+      _avatarSrc: null
     };
-  },
-
-  mounted() {
-    console.log(this);
   },
 
   watch: {
@@ -117,6 +115,10 @@ export default {
   },
 
   methods: {
+    handleError() {
+      this.avatarSrc = this._avatarSrc;
+    },
+
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
@@ -153,8 +155,10 @@ export default {
 
     saveCrop() {
       this.savingCrop = true;
+      // console.log(this.$refs.cropper.cropW, this.$refs.cropper.cropH);
       this.$refs.cropper.getCropData(data => {
-        const file = this.dataURLtoFile(data, this.file.name)
+        const file = this.dataURLtoFile(data, this.file.name);
+        this._avatarSrc = data;
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
