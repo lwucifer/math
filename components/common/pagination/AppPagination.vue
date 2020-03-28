@@ -119,12 +119,6 @@ export default {
   data() {
     return {
       pager: toNumber(get(this, 'pagination.size', 10)),
-      opts: [
-        { value: 10, text: "10" },
-        { value: 20, text: "20" },
-        { value: 30, text: "30" },
-        { value: 50, text: "50" }
-      ]
     };
   },
 
@@ -138,6 +132,17 @@ export default {
       type: Object,
       required: true,
       default: () => {}
+    },
+    opts: {
+      type: Array,
+      default: () => {
+        return [
+          { value: 10, text: "10" },
+          { value: 20, text: "20" },
+          { value: 30, text: "30" },
+          { value: 50, text: "50" }
+        ]
+      }
     }
   },
 

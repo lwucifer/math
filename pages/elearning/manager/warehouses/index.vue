@@ -33,18 +33,10 @@
   import ElearningManagerUploadFile from "~/components/page/elearning/manager/materials/ElearningManagerUploadFile"
   import ElearningManagerFilterTable from "~/components/page/elearning/manager/materials/ElearningManagerFilterTable"
 
-  import {createPayloadAddRepository} from "~/models/elearning/Repository"
   import * as actionTypes from "~/utils/action-types"
-  import * as yup from "yup"
   import { mapState } from "vuex"
   import { get } from "lodash";
   import { useEffect } from "~/utils/common"
-  import { MAX_UPLOADED_REPOSITORY_FILE_SIZE } from "~/utils/config"
-
-  const schema = yup.object().shape({
-    name: yup.string().required(),
-    // file: yup.object().required()
-  });
 
   const STORE_NAMESPACE = 'elearning/teaching/repository-files'
 
@@ -104,35 +96,24 @@
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
         this.params.size = val.size
       },
-      async deleteItems(items) {
-        const delIds = _.map(items, 'id')
-        let data = {
-          ids: delIds
-        }
-        const res = await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`, { data }
-        )
-        if (get(res, "success", false)) {
+      async deleteItems(data) {
+        // const delIds = _.map(items, 'id')
+        // let data = {
+        //   ids: delIds
+        // }
+        // const res = await this.$store.dispatch(
+        //   `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`, { data }
+        // )
+        if (get(data, "success", false)) {
           await this.refreshData()
-          this.$toasted.success(get(res, "message", ""))
+          this.$toasted.success(get(data, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"))
           return
         }
-        this.$toasted.error(get(res, "message", ""))
+        this.$toasted.error(get(data, "message", "Xóa tài liệu thành công"))
       },
       refreshData() {
         this.params.page = 1
         this.getList()
-      },
-      validateFile(file) {
-
-      },
-      beforeUploadFile(file) {
-        const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE
-        if (isLtSize) {
-          return true
-        }
-        this.$toasted.error(`Please do not upload files larger than ${MAX_UPLOADED_REPOSITORY_FILE_SIZE}MB in size.`)
-        return false
       },
       get
     },
