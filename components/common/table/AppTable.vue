@@ -172,7 +172,7 @@ export default {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = sortBy;
-      this.$emit("sort", this.sortedCats);
+      this.$emit("sort", { sortBy: this.currentSort, order: this.currentSortDir });
     },
     onPageChange(e) {
       this.$emit("pagechange", e);
