@@ -411,6 +411,7 @@ export default {
       console.log("handleFriendsVisibleChange", isVisible);
 
       if (isVisible) {
+        this.friendsList = [];
         this.friendsInfiniteId += 1;
       } else {
         this.friendsListQuery.page = 1;

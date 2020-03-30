@@ -15,7 +15,7 @@
             class="my-4"
             :images="post.files.map(item => ({
               id: item.post_id,
-              thumb: item.link.high,
+              thumb: item.img_url.high,
               object: 'image'
             }))"
             @click-item="imageObj => handleClickImage(imageObj, post)"

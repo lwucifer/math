@@ -26,6 +26,7 @@
               @delete="deletePost"
               @like="likePost"
               @edit="editPost"
+              @share="sharePost"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -175,7 +176,7 @@
             />
           </app-modal>
 
-          <!-- <PostModalShare /> -->
+          <PostModalShare v-if="showModalShare" :post="shareData" @cancel="cancelShare"/>
 
           <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
             <PostEditor
@@ -336,8 +337,12 @@ export default {
       ],
       postEditorActive: false,
       postLoading: false,
+      // Edit post
       showModalEditPost: false,
       editPostData: {},
+      // Share post
+      showModalShare: false,
+      shareData: {},
 
       //Fake data
       messages: MESSAGES,
@@ -550,6 +555,16 @@ export default {
     closeModalEditPost() {
       this.showModalEditPost = false;
       this.editPostData = {};
+    },
+
+    sharePost(post) {
+      this.showModalShare = true;
+      this.shareData = post;
+    },
+
+    cancelShare() {
+      this.showModalShare = false;
+      this.shareData = {};
     },
 
     /**

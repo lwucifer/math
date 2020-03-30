@@ -15,8 +15,6 @@
             <n-link
               :to="`/account/${post.author.id}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
-
-            <PostTags v-if="!showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
 
@@ -54,7 +52,14 @@
         <div class="post__post-desc" v-html="post.content"></div>
         <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
-        <PostTags v-if="showEdit && post.tags && post.tags.length" :tags="post.tags || []" />
+        <template v-if="post.label || (post.tags && post.tags.length)">—</template>
+
+        <span v-if="post.label" class="text-sub font-weight-normal">
+          cảm thấy {{ post.label.icon }}
+          <b class="text-base">{{ post.label.des }}</b>
+        </span>
+
+        <PostTags v-if="post.tags && post.tags.length" :tags="post.tags || []" />
       </template>
 
       <slot name="media-content" />
