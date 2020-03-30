@@ -52,7 +52,7 @@
     </div>
 
     <app-modal-confirm
-      :visible="visible.delete"
+      v-if="visible.delete"
       @cancel="cancelDel"
       @ok="confirmDel"
     >
