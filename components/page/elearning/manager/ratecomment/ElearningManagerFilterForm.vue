@@ -21,7 +21,7 @@
         v-model="filters.rate"
         :reduce="item => item.value"
         label="text"
-        placeholder="Theo bình chọn"
+        placeholder="Đánh giá"
         searchable
         clearable
         @input="handleChangedRate"
@@ -36,6 +36,21 @@
         :reduce="item => item.value"
         label="text"
         placeholder="Lớp"
+        searchable
+        clearable
+        @input="handleChangedClass"
+      >
+      </app-vue-select>
+    </div>
+    <div>
+      <app-vue-select
+        class="selectClass__ElearningManagerRC"
+        style="min-width: 170px"
+        :options="classes"
+        v-model="filters.class"
+        :reduce="item => item.value"
+        label="text"
+        placeholder="Bài giảng/khóa học"
         searchable
         clearable
         @input="handleChangedClass"
