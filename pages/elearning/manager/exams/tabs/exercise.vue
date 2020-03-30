@@ -170,7 +170,7 @@ export default {
   // async fetch({ params, query, store }) {
     // await Promise.all([
     //   store.dispatch(
-    //     `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
+    //     `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`,
     //     'e8acf86e-4782-43ac-92dd-1d9f40cd4094'
     //   )
     // ]);
@@ -213,7 +213,7 @@ export default {
       }
       params = {...this.listQuery};
       this.$store.dispatch(
-        `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`, { params }
+        `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`, { params }
       )
     }
   },
