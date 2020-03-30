@@ -7,7 +7,6 @@
     <div class="psc__content">
       <div class="psc__title font-weight-bold mb-2">
         <n-link
-          class="text-decoration-none"
           :to="`/account/${post.author.id}`"
         >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
