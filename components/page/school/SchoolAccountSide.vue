@@ -1,8 +1,8 @@
 <template>
   <div class="school-side">
     <div class="school-side__avatar">
-      <app-avatar :src="personalList.avatar.low" :size="125" />
-      <app-upload class="cgi-upload-avt change-avatar">
+      <app-avatar :src="avatarSrc" :size="125" />
+      <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadAvatar">
           <template>
             <div class="cgi-upload-avt-preview">
               <IconPhoto width="13" height="13" />
@@ -46,7 +46,8 @@ import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconSearch from "~/assets/svg/icons/search2.svg?inline";
 import IconDollarAlt from '~/assets/svg/design-icons/dollar-alt.svg?inline';
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+import { getBase64 } from "~/utils/common";
 
 export default {
   components: {
@@ -59,7 +60,12 @@ export default {
     IconFilter,
     IconDollarAlt
   },
-
+  data(){
+    return{
+      avatar: [],
+      avatarSrc: "https://picsum.photos/170/170",
+    }
+  },
   props: {
     school: {
       type: Object,
@@ -72,6 +78,29 @@ export default {
   },
   computed:{
     ...mapState("account", ["personalList"]),
+  },
+  methods:{
+    ...mapActions("account", [
+      "accountPersonalEditAvatar",
+      "accountPersonalList"
+    ]),
+    async handleUploadAvatar(fileList, event){
+      this.avatar = Array.from(fileList)
+      getBase64(this.avatar[0], src => {
+        this.avatarSrc = src;
+      })
+      const body = new FormData();
+      body.append("avatar_images", fileList[0]);
+      console.log("[avatar_images]", fileList[0]);
+      this.accountPersonalEditAvatar(body).then(result=>{
+
+      })
+    }
+  },
+  created(){
+    this.avatarSrc = this.personalList.avatar
+      ? this.personalList.avatar.low
+      : "https://picsum.photos/170/170";
   }
 };
 </script>
