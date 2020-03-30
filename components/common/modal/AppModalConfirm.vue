@@ -1,5 +1,5 @@
 <template>
-  <app-modal v-bind="{ width, centered }" :component-class="{'app-modal-confirm': true }" v-if="visible">
+  <app-modal v-bind="{ width, centered }" :component-class="{'app-modal-confirm': true }">
     <div slot="content" class="py-4 px-5">
       <div class="mb-3 text-center">
         <slot>{{ title }}</slot>
@@ -36,7 +36,6 @@
 export default {
   props: {
     centered: Boolean,
-    visible: Boolean,
 
     // This component props
     title: {

@@ -1,6 +1,6 @@
 <template>
   <div class="post__tags">
-    <span class="text-sub font-weight-normal">— cùng với</span>
+    <span class="text-sub font-weight-normal">cùng với</span>
 
     <n-link :to="`/account/${tags[0].id}`">{{ tags[0].fullname }}</n-link>
 

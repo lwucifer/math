@@ -1,7 +1,7 @@
 <template>
   <div>
-    <portal to="modal">
-      <div class="app-modal-root" id="modal-root">
+    <portal to="modal" :order="order">
+      <div class="app-modal-root">
         <div class="app-modal-overlay"></div>
         <div
           class="app-modal-wrapper"
@@ -46,6 +46,10 @@ export default {
     componentClass: {
       type: Object,
       default: () => {}
+    },
+    order: {
+      type: Number,
+      default: 1
     },
     centered: Boolean,
     visible: Boolean

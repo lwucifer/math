@@ -165,7 +165,9 @@ export default {
     return {
       active: false,
       search: "",
-      localValue: this.value || this.defaultValue
+      localValue: ["null", "undefined"].includes(typeof this.value)
+        ? this.defaultValue
+        : this.value
     };
   },
 
@@ -265,7 +267,7 @@ export default {
 
     handleClickClear() {
       if (this.mode === "tags") {
-        this.localValue = []
+        this.localValue = [];
       } else {
         this.localValue = null;
       }

@@ -4,7 +4,7 @@
 
     <nuxt class="page-content"/>
 
-    <portal-target name="modal" slim></portal-target>
+    <portal-target name="modal" multiple></portal-target>
   </div>
 </template>
 

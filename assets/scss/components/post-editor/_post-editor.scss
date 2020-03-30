@@ -3,21 +3,28 @@
     position: relative;
     z-index: 2;
 
-    &.active {
-        .post-editor__overlay {
-            visibility: visible;
-            opacity: 1;
-        }
-
+    &--has-overlay {
         .post-editor__privacy,
         .post-editor__submit {
-            display: flex;
+            display: none;
+        }
+        
+        &.active {
+            .post-editor__overlay {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .post-editor__privacy,
+            .post-editor__submit {
+                display: flex;
+            }
         }
     }
 }
 
 .post-editor__privacy {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: space-between;
 }
