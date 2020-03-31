@@ -52,9 +52,6 @@ class AddContentCourse {
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }
-    if (payload.index !== "" && !payload.id) {
-      this.index = payload.index;
-    }
     if (payload.repository_file_id) {
       this.repository_file_id = payload.repository_file_id;
     }
@@ -111,4 +108,40 @@ class CourseSetting {
 
 export function createPayloadCourseSetting(payload) {
   return Object.freeze(new CourseSetting(payload));
+}
+
+class Excercise {
+  constructor(payload) {
+    if (payload.id) {
+      this.id = payload.id;
+    }
+    if (payload.lesson_id) {
+      this.lesson_id = payload.lesson_id;
+    }
+    if (payload.required !== "") {
+      this.required = payload.required ? true : false;
+    }
+    if (payload.title) {
+      this.title = payload.title;
+    }
+    if (payload.type) {
+      this.type = payload.type;
+    }
+    if (payload.pass_score !== "") {
+      this.pass_score = payload.pass_score;
+    }
+    if (payload.reworks !== "") {
+      this.reworks = payload.reworks;
+    }
+    if (payload.duration !== "") {
+      this.duration = payload.duration;
+    }
+    if (payload.category) {
+      this.category = payload.category;
+    }
+  }
+}
+
+export function createPayloadExcercise(payload) {
+  return Object.freeze(new Excercise(payload));
 }

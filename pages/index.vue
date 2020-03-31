@@ -39,6 +39,20 @@
                 }))"
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
+
+              <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
+                <PostImage
+                  v-if="post.parent_post && post.parent_post.files && post.parent_post.files.length"
+                  slot="media-content"
+                  class="my-4"
+                  :images="post.parent_post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
+                  @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
+                />
+              </PostShareContent>
             </Post>
           </transition-group>
 
@@ -176,7 +190,7 @@
             />
           </app-modal>
 
-          <PostModalShare v-if="showModalShare" :post="shareData" @cancel="cancelShare"/>
+          <PostModalShare v-if="showModalShare" :post="shareData" @cancel="cancelShare" />
 
           <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
             <PostEditor
@@ -282,6 +296,7 @@ import PostSlider from "~/components/page/timeline/post/PostSlider";
 import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
 import PostModalShare from "~/components/page/timeline/post/PostModalShare";
+import PostShareContent from "~/components/page/timeline/post/PostShareContent";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -297,7 +312,8 @@ export default {
     PostDetail,
     PostImage,
     VclFacebook,
-    PostModalShare
+    PostModalShare,
+    PostShareContent
   },
 
   async fetch({ params, query, store }) {
@@ -308,12 +324,12 @@ export default {
   },
 
   async asyncData({ $axios }) {
-    const { data: feeds = {} } = await new FeedsService($axios)[
-      actionTypes.BASE.LIST
-    ]();
+    const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
+
+    const [{ data: dataFeeds = {} }] = await Promise.all([getFeeds()]);
 
     return {
-      feeds
+      feeds: dataFeeds
     };
   },
 

@@ -63,7 +63,8 @@ export default {
       params: {
         school_id,
         elearning_type: "COURSE",
-        size: 5
+        size: 5,
+        status: "ACCEPTED"
       }
     };
     await store.dispatch(
@@ -75,6 +76,7 @@ export default {
         school_id,
         elearning_type: "LECTURE",
         size: 5,
+        status: "ACCEPTED"
       }
     };
     await store.dispatch(
