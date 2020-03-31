@@ -48,7 +48,8 @@ export default {
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId)
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
     ]);
   },
 

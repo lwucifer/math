@@ -20,10 +20,11 @@
         v-if="isShowFormAdd"
         @handleCancel="handleCancelAddCreate"
         :lesson="lesson"
+        @handleRefreshExcercises="handleRefreshExcercises"
       />
 
       <ExcerciseItem
-        v-for="excercise in excercises"
+        v-for="excercise in get(lesson, 'exercises', [])"
         :key="excercise.id"
         :excercise="excercise"
       />
@@ -199,54 +200,46 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       lessons: [],
-      lesson: null,
-      excercises: []
+      lesson: null
     };
   },
 
   created() {
     this.getLessons();
-  },
-
-  watch: {
-    lesson: {
-      handler: function() {
-        this.getExcercises();
-      },
-      deep: true
-    }
+    this.getLesson();
   },
 
   methods: {
+    async getLesson(lesson_id) {
+      if (lesson_id) {
+        const res = await this.$store.dispatch(
+          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
+          lesson_id
+        );
+        if (get(res, "success", false)) {
+          this.lesson = get(res, "data", null);
+          return;
+        }
+      }
+      this.lesson = null
+    },
+
+    handleRefreshExcercises() {
+      this.getLesson(get(this, "lesson.id", ""));
+    },
+
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
     handleSelectLesson(lesson) {
-      this.lesson = lesson;
+      this.getLesson(get(lesson, "id", ""));
     },
 
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    async getExcercises() {
-      const lesson_id = get(this, "lesson.id", "");
-      if (!lesson_id) return;
-      const options = {
-        params: {
-          lesson_id
-        }
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        this.excercises = get(res, "data.content", []);
-      }
     },
 
     async getLessons() {
@@ -270,7 +263,9 @@ export default {
         });
         this.lessons = lessons;
       }
-    }
+    },
+
+    get
   }
 };
 </script>

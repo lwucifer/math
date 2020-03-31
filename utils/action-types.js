@@ -179,7 +179,7 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
-export const ELEARNING_CREATING_EXERCISES = {
+export const ELEARNING_CREATING_EXCERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",
     EDIT: "elearningCreatingExercisesEdit",
@@ -202,7 +202,8 @@ export const ELEARNING_CREATING_LESSONS = {
     LIST: "elearningCreatingLessonsList",
     ADD: "elearningCreatingLessonsAdd",
     EDIT: "elearningCreatingLessonsEdit",
-    DELETE: "elearningCreatingLessonsDelete"
+    DELETE: "elearningCreatingLessonsDelete",
+    DETAIL: "elearningCreatingLessonsDetail"
 };
 
 export const ELEARNING_CREATING_QUESTIONS = {
@@ -292,7 +293,10 @@ export const MESSAGE_GROUP = {
 
 export const SOCIAL_FRIEND = {
     LIST: "socialFriendList",
-    LIST: "socialFriendListInvite"
+    // LIST: "socialFriendListInvite",
+    INVITE_FRIEND: "inviteFriend",
+    LIST_INVITE: "getListInvite",
+    DELETE_FRIEND: "deleteFriend"
 };
 
 export const ELEARNING_INFO = {
