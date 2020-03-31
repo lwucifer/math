@@ -179,7 +179,7 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
-export const ELEARNING_CREATING_EXERCISES = {
+export const ELEARNING_CREATING_EXCERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",
     EDIT: "elearningCreatingExercisesEdit",
@@ -202,7 +202,8 @@ export const ELEARNING_CREATING_LESSONS = {
     LIST: "elearningCreatingLessonsList",
     ADD: "elearningCreatingLessonsAdd",
     EDIT: "elearningCreatingLessonsEdit",
-    DELETE: "elearningCreatingLessonsDelete"
+    DELETE: "elearningCreatingLessonsDelete",
+    DETAIL: "elearningCreatingLessonsDetail"
 };
 
 export const ELEARNING_CREATING_QUESTIONS = {

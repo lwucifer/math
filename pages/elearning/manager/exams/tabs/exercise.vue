@@ -87,7 +87,7 @@ export default {
         let params = { ...this.params }
 
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`, { params }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
         this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
