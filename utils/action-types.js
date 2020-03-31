@@ -292,7 +292,10 @@ export const MESSAGE_GROUP = {
 
 export const SOCIAL_FRIEND = {
     LIST: "socialFriendList",
-    LIST: "socialFriendListInvite"
+    // LIST: "socialFriendListInvite",
+    INVITE_FRIEND: "inviteFriend",
+    LIST_INVITE: "getListInvite",
+    DELETE_FRIEND: "deleteFriend"
 };
 
 export const ELEARNING_INFO = {
