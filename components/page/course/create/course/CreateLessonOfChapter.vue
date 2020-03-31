@@ -130,11 +130,11 @@ export default {
       payload: {
         chapter_id: get(this, "chapter.id", ""),
         lesson: "",
-        name: "",
+        name: get(this, "lesson.name", ""),
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
         repository_file_id: "",
         article_content: "",
-        id: ""
+        id: get(this, "lesson.id", "")
       }
     };
   },
