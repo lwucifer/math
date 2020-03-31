@@ -202,7 +202,8 @@ export const ELEARNING_CREATING_LESSONS = {
     LIST: "elearningCreatingLessonsList",
     ADD: "elearningCreatingLessonsAdd",
     EDIT: "elearningCreatingLessonsEdit",
-    DELETE: "elearningCreatingLessonsDelete"
+    DELETE: "elearningCreatingLessonsDelete",
+    DETAIL: "elearningCreatingLessonsDetail"
 };
 
 export const ELEARNING_CREATING_QUESTIONS = {
