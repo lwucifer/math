@@ -134,7 +134,7 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
   SET_TEACHING_REPOSITORY_FILE_LIST: "setElearningTeachingRespositoryFileList"
 };
 
-export const ELEARNING_CREATING_EXERCISES = {
+export const ELEARNING_CREATING_EXCERCISES = {
   SET_ELEARNING_CREATING_EXERCISES_LIST: "setElearningCreatingExercisesList",
   SET_ELEARNING_CREATING_EXERCISES_ADD: "setElearningCreatingExercisesAdd",
   SET_ELEARNING_CREATING_EXERCISES_EDIT: "setElearningCreatingExercisesEdit",

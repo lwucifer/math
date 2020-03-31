@@ -9,7 +9,7 @@
           <div class="titleMaterials__ElearningManager">
             <span>Danh sách bài giảng và khóa học</span>
           </div>
-          <app-divider></app-divider>
+          <app-divider />
           <ElearningManagerUploadFile
             :on-success="handleDoneAddFile"
           />
@@ -17,6 +17,7 @@
             <ElearningManagerFilterTable
               :list.sync="list"
               :pagination="pagination"
+              :loading="loading"
               @changedFilter="updateFilter"
               @changedPagination="updatePagination"
               @deletedItems="deleteItems"
@@ -61,7 +62,8 @@
           page: 1,
           size: 10,
         },
-        list: []
+        list: [],
+        loading: false
       }
     },
     computed: {
@@ -81,12 +83,20 @@
         this.$toasted.error(get(data, "message", ""));
       },
       async getList() {
-        let params = {...this.params}
-        await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`, {params}
-        )
-        this.list = this.get(this.detailInfo, 'data.content', [])
-        this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
+        try {
+          this.loading = true
+          let params = {...this.params}
+          await this.$store.dispatch(
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`, {params}
+          )
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
+        } catch (e) {
+
+        } finally {
+          this.loading = false
+        }
+
       },
       updateFilter(val) {
         this.params = { ...this.params, ...val }
