@@ -12,7 +12,9 @@
         </div>
 
         <div class="cc-box__head-right">
-          <a href class="text-secondary">Thêm câu hỏi</a>
+          <a href @click.prevent="handleAddQuestion" class="text-secondary"
+            >Thêm câu hỏi</a
+          >
           <button class="cc-box__btn cc-box__btn-collapse">
             <IconAngleDown class="icon" />
           </button>
@@ -20,6 +22,8 @@
       </div>
 
       <div class="cc-box__body">
+        <CreateQuestionChoice v-if="isAddQuestionForm" />
+
         <div class="ce-question-item d-flex align-items-center">
           <h3 class="body-2 mr-4">1. Đây là câu hỏi</h3>
           <span class="text-sub mr-4">Câu hỏi trắc nghiệm</span>
@@ -54,6 +58,8 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import { get } from "lodash";
+import CreateQuestionEssay from "~/components/page/course/create/excercise/CreateQuestionEssay";
+import CreateQuestionChoice from "~/components/page/course/create/excercise/CreateQuestionChoice";
 
 export default {
   components: {
@@ -63,7 +69,9 @@ export default {
     IconTrashAlt,
     IconAlignCenterAlt,
     IconFileCheck,
-    IconClipboardNotes
+    IconClipboardNotes,
+    CreateQuestionEssay,
+    CreateQuestionChoice
   },
 
   props: {
@@ -73,8 +81,18 @@ export default {
     }
   },
 
+  data() {
+    return {
+      isAddQuestionForm: false
+    };
+  },
+
   methods: {
-    get
+    get,
+
+    handleAddQuestion() {
+      this.isAddQuestionForm = !this.isAddQuestionForm;
+    }
   }
 };
 </script>
