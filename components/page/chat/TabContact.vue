@@ -288,13 +288,35 @@ export default {
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
       const data = this.groupsListTab.map(item => {
-        const [dataNoti] = item.members.filter(item => item.id == this.userId);
-        return {
-          ...item,
-          allow_notication: dataNoti.allow_notication
-            ? dataNoti.allow_notication
-            : 0
-        };
+        if (item.room_name) {
+          const [dataNoti] = item.members.filter(
+            item => item.id == this.userId
+          );
+          return {
+            ...item,
+            allow_notication: dataNoti.allow_notication
+              ? dataNoti.allow_notication
+              : 0
+          };
+        } else {
+          const [dataNoti] = item.members.filter(
+            item => item.id == this.userId
+          );
+          const dataRoomName =
+            (
+              item.members[0].fullname +
+              ", " +
+              item.members[1].fullname
+            ).substring(0, 15) + "...";
+          console.log("[dataRoomName]", dataRoomName);
+          return {
+            ...item,
+            room_name: dataRoomName,
+            allow_notication: dataNoti.allow_notication
+              ? dataNoti.allow_notication
+              : 0
+          };
+        }
       });
       return data;
     }
