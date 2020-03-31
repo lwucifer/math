@@ -1,90 +1,33 @@
 <template>
   <div class="elearning-">
     <!--Filter form-->
-    <div class="filter-form">
-      <div class="filter-form__item">
-        <app-button
-          color="primary"
-          class="filter-form__item__btn filter-form__item__btn--submit"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả bài tập</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filter.type"
-          :options="types"
-          label="text"
-          placeholder="Theo thể loại"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        >
-        </app-vue-select>
-      </div>
-
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div class="filter-form__item filter-form__item--search">
-          <app-input
-            type="text"
-            v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
-            :size="'sm'"
-            @input="handleSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15" />
-          </button>
-        </div>
-      </div><!--End right form-->
-
-    </div><!--End filter form-->
-
-    <!--Table-->
-    <app-table
-      :heads="heads"
+    <elearning-manager-filter-form
+      @changedFilter="updateFilter"
+      @submit="submitFilter"
+    />
+    <elearning-manager-filter-table
       :pagination="pagination"
-      @pagechange="onPageChange"
-      :data="list"
-    >
-      <template v-slot:cell(action)="{row}">
-        <td>
-          <n-link
-            class
-            title="Chi tiết"
-            :to="'/elearning/manager/exams/' + row.id">
-            <IconArrow />
-          </n-link>
-        </td>
-      </template>
-    </app-table><!--End table-->
+      :list="list"
+      :loading="loading"
+      @changedPagination="updatePagination"
+    />
   </div>
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-import IconSearch from "~/assets/svg/icons/search.svg?inline"
-import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
 import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
-import { useEffect, getParamQuery } from "~/utils/common";
-// Import faked data
-import { EXERCISES } from "~/server/fakedata/elearning/test"
+import { get } from "lodash"
+import { useEffect, getParamQuery } from "~/utils/common"
+import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/ElearningManagerFilterForm"
+import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/ElearningManagerFilterTable"
+
+const STORE_NAMESPACE = "elearning/creating/creating-exercises"
 
 export default {
-
   components: {
-    IconFilter,
-    IconSearch,
-    IconArrow
+    ElearningManagerFilterForm,
+    ElearningManagerFilterTable
   },
   filters: {
     exerciseType: function(val) {
@@ -97,129 +40,76 @@ export default {
   },
   data() {
     return {
-      tab: 1,
-      heads: [
-        {
-          name: "name",
-          text: "Tiêu đề",
-          sort: false
-        },
-        {
-          name: "type",
-          text: "Thể loại",
-          sort: false
-        },
-        {
-          name: "lesson",
-          text: "Thuộc bài giảng",
-          sort: false
-        },
-        {
-          name: "course",
-          text: "Thuộc khóa học",
-          sort: false
-        },
-        {
-          name: "studentNum",
-          text: "Học sinh làm bài",
-          sort: true
-        },
-        {
-          name: "createdAt",
-          text: "Ngày khởi tạo",
-          sort: true
-        },
-        {
-          name: "action",
-          text: "",
-          sort: false
-        }
-      ],
-      filter: {
-          type: null,
-          query: null
-      },
-      types: [
-        {
-            value: 1,
-            text: 'Trắc nghiệm'
-        },
-        {
-            value: 2,
-            text: 'Tự luận'
-        },
-      ],
-      isAuthenticated: true,
       pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
+        totalElements: 0,
+        last: false,
+        totalPages: 1,
+        size: 10,
+        number: 0,
+        first: true,
+        numberOfElements: 0
       },
-      listQuery: {
+      params: {
         page: 1,
-        size: 10
+        size: 10,
+        // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
+        elearning_id: null,
+        lesson_id: null
       },
-      total: 0,
-      list: EXERCISES,
+      list: [],
+      loading: false
     };
   },
 
-  // async fetch({ params, query, store }) {
-    // await Promise.all([
-    //   store.dispatch(
-    //     `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`,
-    //     'e8acf86e-4782-43ac-92dd-1d9f40cd4094'
-    //   )
-    // ]);
-  // },
-
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(STORE_NAMESPACE, {
+      detailInfo: 'exercises'
+    }),
   },
 
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
+    updateFilter(val) {
+      this.params = { ...this.params, ...val }
+      this.refreshData()
     },
-    submit() {
-      console.log('[Component] Elearning exercise: submitted')
+    submitFilter(val) {
+      this.updateFilter(val)
     },
-    handleChangedInput(val) {
-      if (val !== null) {} else {}
-      console.log('[Component] Elearning exercise: changing input...', val)
-    },
-    handleFocusSearchInput() {
-      console.log('[Component] Elearning exercise: focus searching ')
-    },
-    handleBlurSearchInput() {
-      console.log('[Component] Elearning exercise: blur searching ')
-    },
-    handleSearch() {
-      console.log('[Component] Elearning exercise: searching')
+    updatePagination(val) {
+      this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
+      this.params.size = val.size
     },
     async getList() {
-      // 230291b7-e762-4da8-b411-77c313fee652
-      // this.listQuery.elearning_id = getParamQuery('elearning_id');
-      // const elearningId = getParamQuery('elearning_id');
-      const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
-      this.listQuery.elearning_id = elearningId;
-      let params = {
-        elearning_id: elearningId
+      try {
+        this.loading = true
+        this.params.elearning_id = getParamQuery('elearning_id')
+        let params = { ...this.params }
+
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`, { params }
+        )
+        this.list = this.get(this.detailInfo, 'data.content', [])
+        this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+      } catch (e) {
+        console.log('Get list exercise ', e)
+      } finally {
+        this.loading = false
       }
-      params = {...this.listQuery};
-      this.$store.dispatch(
-        `elearning/creating/creating-exercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.LIST}`, { params }
-      )
-    }
+    },
+    refreshData() {
+      this.params.page = 1
+      this.getList()
+    },
+    get
   },
 
   created() {
-    this.getList();
+    useEffect(this, this.getList.bind(this), [
+      "params.page",
+      "params.size",
+      "params.elearning_id"
+    ])
   }
 };
 </script>

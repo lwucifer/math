@@ -32,6 +32,7 @@
         @pagechange="onPageChange"
         @selectionChange="selectRow"
         class="tableUploadFile__ElearningManagerFilterTable"
+        :loading="updating"
       >
         <template v-slot:cell(status)="{row}">
           <td>
@@ -52,7 +53,7 @@
     </div>
 
     <app-modal-confirm
-      :visible="visible.delete"
+      v-if="visible.delete"
       @cancel="cancelDel"
       @ok="confirmDel"
     >
@@ -95,6 +96,10 @@
             number: 0
           }
         }
+      },
+      loading: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -145,6 +150,9 @@
         }
         return data
       },
+      updating: function () {
+        return this.loading
+      }
     },
     methods: {
       onPageChange(e) {
