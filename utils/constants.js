@@ -61,3 +61,8 @@ export const SHARE_OPTS = {
     FRIEND: 1,
     MESSAGE: 2
 }
+
+export const EXERCISE_TYPES = {
+    CHOICE: "CHOICE",
+    ESSAY: "ESSAY"
+}

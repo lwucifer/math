@@ -505,16 +505,14 @@
             visibility: visible;
         }
     }
-    &.item__0 {
+    &.item__1 {
         .message-box__item__desc {
             .message-box__item__desc__text {
-                background-color: #32af85;
-                color: #ffffff;
                 flex: 1;
                 order: 1;
             }
             .message-box__item__desc__image {
-                color: #ffffff;
+                // color: #ffffff;
                 flex: 1;
                 order: 1;
             }
@@ -524,13 +522,15 @@
             }
         }
     }
-    &.item__1 {
+    &.item__0 {
         .app-dropdown__content {
             left: auto;
             right: 0;
         }
         .message-box__item__desc {
             .message-box__item__desc__text {
+                background-color: #32af85;
+                color: #ffffff;
                 flex: 1;
                 order: 2;
             }

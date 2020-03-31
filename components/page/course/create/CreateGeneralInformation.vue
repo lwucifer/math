@@ -301,6 +301,7 @@ export default {
 
     handleCancel() {
       this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     numeral,

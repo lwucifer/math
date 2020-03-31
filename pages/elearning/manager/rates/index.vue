@@ -15,6 +15,7 @@
           <ElearningManagerRateComment
             :list.sync="list"
             :pagination="pagination"
+            :loading="loading"
             @changedFilter="updateFilter"
             @changedPagination="updatePagination"
           />
@@ -57,7 +58,8 @@
           // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
           elearning_id: null
         },
-        list: []
+        list: [],
+        loading: false
       }
     },
     computed: {
@@ -77,14 +79,21 @@
         this.params.size = val.size
       },
       async getList() {
-        this.params.elearning_id = getParamQuery('elearning_id')
-        let params = { ...this.params }
+        try {
+          this.loading = true
+          this.params.elearning_id = getParamQuery('elearning_id')
+          let params = { ...this.params }
 
-        await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STURY_VOTE.LIST}`, { params }
-        )
-        this.list = this.get(this.detailInfo, 'data.content', [])
-        this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+          await this.$store.dispatch(
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STURY_VOTE.LIST}`, { params }
+          )
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+        } catch (e) {
+          console.log('Get votes ', e)
+        } finally {
+          this.loading = false
+        }
       },
       refreshData() {
         this.params.page = 1

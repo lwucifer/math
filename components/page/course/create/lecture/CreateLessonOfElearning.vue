@@ -2,11 +2,6 @@
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <app-input v-model="payload.name" placeholder="Tên bài học" />
-    <app-input
-      v-if="get(general, 'type', '') !== 'LECTURE'"
-      v-model="payload.index"
-      placeholder="Vị trí"
-    />
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <span>Chọn loại bài học</span>
 
@@ -127,7 +122,6 @@ export default {
       confirmLoading: false,
       payload: {
         elearning_id: getParamQuery("elearning_id"),
-        index: 1,
         lesson: "",
         name: "",
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
@@ -144,25 +138,19 @@ export default {
     })
   },
 
-  created() {
-    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
-    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
+  watch: {
+    lesson: {
+      handler: function() {
+        if (this.lesson) {
+          this.payload.name = get(this, "lesson.name", "");
+          this.payload.id = get(this, "lesson.id", "");
+        }
+      },
+      deep: true
+    }
   },
 
   methods: {
-    handleChangeLesson() {
-      if (this.lesson) {
-        this.payload.name = get(this, "lesson.name", "");
-        this.payload.id = get(this, "lesson.id", "");
-      }
-    },
-
-    handleChangeGeneral() {
-      if (get(this, "general.type", "") === "LECTURE") {
-        this.payload.index = "";
-      }
-    },
-
     changeTabType(type) {
       this.tabType = type;
     },

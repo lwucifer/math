@@ -12,7 +12,12 @@
             v-model="tag"
             @visible-change="handleFriendsVisibleChange"
           >
-            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+            <div
+              slot="option"
+              slot-scope="{ option }"
+              class="d-flex align-items-center"
+              @click.prevent="changeUserChat(option)"
+            >
               <app-avatar
                 :src="option.avatar && option.avatar.low ? option.avatar.low : null"
                 size="sm"
@@ -63,7 +68,11 @@
       </div>
       <div class="aside-box__content">
         <client-only>
-          <infinite-loading direction="top" @infinite="messageInfiniteHandler">
+          <infinite-loading
+            direction="top"
+            :identifier="infiniteId"
+            @infinite="messageInfiniteHandler"
+          >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
         </client-only>
@@ -474,7 +483,8 @@ export default {
       listImage: [],
       urlEmitMessage: "",
       messageId: "",
-      name: ""
+      name: "",
+      roomIdPush: ""
       // avatarUser: {},
       // fullname: ""
     };
@@ -522,11 +532,16 @@ export default {
   },
 
   methods: {
-    ...mapActions("message", ["messageSendImg", "accountPersonalList"]),
-    ...mapActions("message", ["createGroup", "getGroupList"]),
+    ...mapActions("message", [
+      "messageSendImg",
+      "accountPersonalList",
+      "createGroup",
+      "getGroupList",
+      "getMessageList"
+    ]),
     ...mapMutations("message", ["setEmitMessage"]),
     async messageInfiniteHandler($state) {
-      this.messageListQuery.room_id = this.$route.params.id;
+      // this.messageListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new Message(this.$axios)[
         actionTypes.BASE.LIST
       ]({
@@ -615,21 +630,18 @@ export default {
         }
         this.textChat = "";
       } else if (this.tag.length == 1) {
-        const data = {
-          type: 1,
-          members: this.tag.toString(),
-          name: this.name ? this.name : ""
+        this.$router.push(`/messages/t/${this.roomIdPush}`);
+        const dataEmit = {
+          room_id: this.roomIdPush,
+          content: this.textChat,
+          img_url: { low: this.urlEmitMessage },
+          message_id: this.messageId,
+          avatar: this.avatarUser.low ? this.avatarUser.low : "",
+          fullname: this.fullName ? this.fullName : ""
         };
-        this.createGroup(data).then(result => {
-          if (result.success == true) {
-            this.getGroupList();
-            this.$toasted.show("success");
-            this.$router.push(`/messages/t/${result.data.id}`);
-          } else {
-            this.$toasted.error(result.message);
-          }
-        });
-      } else {
+        console.log("[socket] dataEmit", dataEmit);
+        this.setEmitMessage(dataEmit);
+      } else if (this.tag.length > 1) {
         const data = {
           type: 2,
           members: this.tag.toString(),
@@ -655,10 +667,34 @@ export default {
           }
         });
       }
+    },
+    changeUserChat(option) {
+      console.log("[option]", option);
+      if (this.tag.length == 0) {
+        const data = {
+          type: 1,
+          members: option.id.toString(),
+          name: this.name ? this.name : ""
+        };
+        this.createGroup(data).then(result => {
+          if (result.success == true) {
+            console.log("[result]", result.data.id);
+            this.roomIdPush = result.data.id;
+            this.getMessageList({
+              params: {
+                room_id: result.data.id
+              }
+            });
+            // this.$router.push(`/messages/t/${result.data.id}`);
+          } else {
+            // this.$toasted.error(result.message);
+          }
+        });
+      }
     }
   },
   created() {
-    // this.messageListQuery.room_id = this.$route.params.id;
+    this.messageListQuery.room_id = this.$route.params.id;
   },
   watch: {
     messageOn(_newVal) {
@@ -676,6 +712,14 @@ export default {
         this.messagesList.unshift(data);
         console.log("[this.messagesList]", this.messagesList);
         // img_url: { low: _newVal.img_url }
+      }
+    },
+    messageList(_newVal) {
+      if (_newVal) {
+        this.messagesList = [];
+        this.messageListQuery.page = 1;
+        this.messageListQuery.room_id = this.roomIdPush;
+        this.infiniteId += 1;
       }
     }
   }

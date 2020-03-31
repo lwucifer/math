@@ -11,7 +11,7 @@
           <div class="wrapInfoAccount">
               <h5>Thông tin cá nhân</h5>
               <app-input labelFixed v-model="name" label="Họ và tên" disabled/>
-              <app-input v-model="phone" label="Số điện thoại"/>
+              <app-input v-model="phone" label="Số điện thoại" disabled/>
               <app-input v-model="email" label="Email"/>
               <div class="picker-group__infostudent">
                 <div class="form-group">
@@ -32,6 +32,12 @@
           <div class="d-flex mt-4">
             <app-button class="ml-auto" square @click="save()">Lưu thay đổi</app-button>
           </div>
+          <app-notify-modal
+            :show="notify.showNotify"
+            :message="notify.message"
+            :link="notify.redirectLink"
+            @close="closeNotify"
+          />
         </div>
       </div>
     </div>
@@ -77,8 +83,13 @@ export default {
       sex:'',
       birthday:'',
       address:'',
-      accounttype:"TEACHER",
-      showChangePass:false
+      accounttype:"USER",
+      showChangePass:false,
+      notify: {
+        redirectLink: "",
+        message: "",
+        showNotify: false
+      }
     };
   },
   
@@ -90,12 +101,20 @@ export default {
         address: this.address,
         birthday: getDateFormat(this.birthday)
       }
-      this.accountPersonalEdit(data).then(result=>{
+      this.$store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.EDIT}`,data).then(result=>{
         console.log("[accountPersonalEdit]", result);
         if(result.success == true){
           console.log('thanh cong')
+          this.notify = {
+            redirectLink: "",
+            message: "Bạn đã cập nhật thành công",
+            showNotify: true
+          };
         }
       })
+    },
+    closeNotify() {
+      this.notify.showNotify = false;
     }
    
     // async handleUploadChange(fileList, event) {
@@ -158,7 +177,8 @@ export default {
     }
 }
 .btnChangePassword{
-      margin-left: 14rem;
+      margin-left: 17rem;
+      margin-bottom: 30px;
     }
 .account-edit-modal .app-modal-content .app-input {
     display: flex;
