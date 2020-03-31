@@ -52,9 +52,6 @@ class AddContentCourse {
     if (payload.lesson) {
       this.lesson = payload.lesson;
     }
-    if (payload.index !== "" && !payload.id) {
-      this.index = payload.index;
-    }
     if (payload.repository_file_id) {
       this.repository_file_id = payload.repository_file_id;
     }
@@ -118,7 +115,6 @@ class Excercise {
     if (payload.id) {
       this.id = payload.id;
     }
-    this.index = payload.index
     if (payload.lesson_id) {
       this.lesson_id = payload.lesson_id;
     }
