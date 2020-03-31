@@ -16,6 +16,12 @@
     }
 }
 
+.pms-body {
+    .psc {
+        pointer-events: none;
+    }
+}
+
 .pms-footer {
     display: flex;
     align-items: center;
