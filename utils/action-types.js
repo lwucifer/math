@@ -179,7 +179,7 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
-export const ELEARNING_CREATING_EXCERCISES = {
+export const ELEARNING_CREATING_EXERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",
     EDIT: "elearningCreatingExercisesEdit",

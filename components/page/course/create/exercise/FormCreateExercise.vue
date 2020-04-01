@@ -121,7 +121,7 @@ import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
-import { createPayloadExcercise } from "~/models/course/AddCourse";
+import { createPayloadExercise } from "~/models/course/AddCourse";
 
 export default {
   components: {
@@ -161,9 +161,9 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       this.payload.lesson_id = get(this, "lesson.id", "");
-      const payload = createPayloadExcercise(this.payload);
+      const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXCERCISES.ADD}`,
+        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
         payload
       );
       this.handleCancel();
