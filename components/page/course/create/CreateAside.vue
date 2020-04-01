@@ -29,7 +29,7 @@
 <script>
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
-import { get } from "lodash";
+import { get, toBoolean } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 const menu = [
@@ -105,15 +105,12 @@ export default {
   watch: {
     progress: {
       handler: function() {
-        if (get(this, "progress.data.general_complete", false)) {
-          this.menu[0]["checked"] = true;
-        }
-        if (get(this, "progress.data.content_complete", false)) {
-          this.menu[1]["checked"] = true;
-        }
-        if (get(this, "progress.data.setting_complete", false)) {
-          this.menu[2]["checked"] = true;
-        }
+        let checked = get(this, "progress.data.general_complete", false);
+        this.menu[0]["checked"] = checked;
+        checked = get(this, "progress.data.content_complete", false);
+        this.menu[1]["checked"] = checked;
+        checked = get(this, "progress.data.setting_complete", false);
+        this.menu[2]["checked"] = checked;
       },
       deep: true
     }

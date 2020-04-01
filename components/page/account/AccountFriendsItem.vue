@@ -32,7 +32,7 @@
             <a>Hủy theo dõi</a>
           </li>
           <li>
-            <a>Hủy kết bạn</a>
+            <a @click.prevent="hanldeUnfriend(data.id)">Hủy kết bạn</a>
           </li>
         </ul>
       </app-dropdown>
@@ -42,7 +42,7 @@
 
 <script>
 import IconTickGray from "~/assets/svg/icons/tick-gray.svg?inline";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
@@ -67,7 +67,20 @@ export default {
     ...mapState("social", ["friendList"])
   },
 
-  methods: {}
+  methods: {
+    ...mapActions("social", ["deleteFriend", "socialFriendList"]),
+    hanldeUnfriend(_id) {
+      console.log("[hanldeUnfriend] id", _id);
+      this.deleteFriend(_id).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.socialFriendList();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    }
+  }
 };
 </script>
 

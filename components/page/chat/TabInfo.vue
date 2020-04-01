@@ -15,7 +15,8 @@
         <div class="message-info__acc__title">
           <input v-if="changeName" type="text" v-model="name" />
           <span v-else>
-            <a href="#">{{name}}</a>
+            <a href="#" v-if="name">{{name}}</a>
+            <span v-else>Đặt tên cho cuộc trò chuyện này</span>
           </span>
           <button v-if="!changeName" @click="changeName = true" class="btn-change-name">
             <IconEditAlt width="20" height="20" />
@@ -44,7 +45,7 @@
           <ul class="list-unstyle">
             <li v-for="(item, index) in listImage" :key="index">
               <n-link to>
-                <img :src="item && item.low ? item.low : ''" />
+                <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
               </n-link>
             </li>
           </ul>

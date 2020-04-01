@@ -116,10 +116,6 @@ export default {
       type: Object,
       default: null
     },
-    indexCreateLesson: {
-      type: Number,
-      default: 0
-    },
     lesson: {
       type: Object,
       default: null
@@ -133,13 +129,12 @@ export default {
       confirmLoading: false,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
-        index: this.indexCreateLesson,
         lesson: "",
-        name: "",
+        name: get(this, "lesson.name", ""),
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
         repository_file_id: "",
         article_content: "",
-        id: ""
+        id: get(this, "lesson.id", "")
       }
     };
   },
@@ -188,7 +183,6 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
 
-      this.payload.index = this.indexCreateLesson;
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
       const payload = createPayloadAddContentCourse(this.payload);

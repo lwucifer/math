@@ -13,7 +13,7 @@
         <CreateLearningContentCourse v-if="formActive === 'content-course'" />
         <CreateLearningContentLecture v-if="formActive === 'content-lecture'" />
         <CreateSetting v-if="formActive === 'settings'" />
-        <CreateExcercise v-if="formActive === 'exercise'" />
+        <CreateExercise v-if="formActive === 'exercise'" />
         <CreateExam v-if="formActive === 'exam'" />
       </div>
     </div>
@@ -24,7 +24,7 @@
 import CreateAside from "~/components/page/course/create/CreateAside";
 import CreateGeneralInformation from "~/components/page/course/create/CreateGeneralInformation";
 import CreateSetting from "~/components/page/course/create/CreateSetting";
-import CreateExcercise from "~/components/page/course/create/CreateExcercise";
+import CreateExercise from "~/components/page/course/create/CreateExercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
 import CreateLearningContentLecture from "~/components/page/course/create/lecture/CreateLearningContentLecture";
 import CreateLearningContentCourse from "~/components/page/course/create/course/CreateLearningContentCourse";
@@ -38,7 +38,7 @@ export default {
     CreateGeneralInformation,
     CreateLearningContentCourse,
     CreateSetting,
-    CreateExcercise,
+    CreateExercise,
     CreateExam,
     CreateLearningContentLecture
   },

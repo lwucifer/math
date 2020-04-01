@@ -26,7 +26,7 @@
               @delete="deletePost"
               @like="likePost"
               @edit="editPost"
-              @share="sharePost"
+              @share="openModalShare"
             >
               <PostImage
                 v-if="post.files && post.files.length"
@@ -39,6 +39,20 @@
                 }))"
                 @click-item="imageObj => handleClickImage(imageObj, post)"
               />
+
+              <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
+                <PostImage
+                  v-if="post.parent_post && post.parent_post.files && post.parent_post.files.length"
+                  slot="media-content"
+                  class="mt-4"
+                  :images="post.parent_post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
+                  @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
+                />
+              </PostShareContent>
             </Post>
           </transition-group>
 
@@ -176,7 +190,25 @@
             />
           </app-modal>
 
-          <PostModalShare v-if="showModalShare" :post="shareData" @cancel="cancelShare"/>
+          <PostModalShare
+            v-if="showModalShare"
+            :post="shareData"
+            @cancel="cancelShare"
+            @share="sharePost"
+          >
+            <PostShareContent slot="share-content" :post="shareData.parent_post">
+              <PostImage
+                v-if="shareData.parent_post && shareData.parent_post.files && shareData.parent_post.files.length"
+                slot="media-content"
+                class="my-4"
+                :images="shareData.parent_post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
+              />
+            </PostShareContent>
+          </PostModalShare>
 
           <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
             <PostEditor
@@ -263,6 +295,7 @@ import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
+import { createShare } from "~/models/social/Share";
 import { createPost } from "~/models/post/Post";
 import {
   MESSAGES,
@@ -273,6 +306,7 @@ import { VclFacebook } from "vue-content-loading";
 import FeedsService from "~/services/social/feeds";
 import SocialPostsService from "~/services/social/post";
 import LikesService from "~/services/social/likes";
+import ShareService from "~/services/social/shares";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -282,6 +316,7 @@ import PostSlider from "~/components/page/timeline/post/PostSlider";
 import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
 import PostModalShare from "~/components/page/timeline/post/PostModalShare";
+import PostShareContent from "~/components/page/timeline/post/PostShareContent";
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -297,7 +332,8 @@ export default {
     PostDetail,
     PostImage,
     VclFacebook,
-    PostModalShare
+    PostModalShare,
+    PostShareContent
   },
 
   async fetch({ params, query, store }) {
@@ -308,12 +344,12 @@ export default {
   },
 
   async asyncData({ $axios }) {
-    const { data: feeds = {} } = await new FeedsService($axios)[
-      actionTypes.BASE.LIST
-    ]();
+    const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
+
+    const [{ data: dataFeeds = {} }] = await Promise.all([getFeeds()]);
 
     return {
-      feeds
+      feeds: dataFeeds
     };
   },
 
@@ -557,9 +593,30 @@ export default {
       this.editPostData = {};
     },
 
-    sharePost(post) {
-      this.showModalShare = true;
+    openModalShare(post) {
       this.shareData = post;
+      const timeout = setTimeout(() => {
+        this.showModalShare = true;
+        clearTimeout(timeout);
+      });
+    },
+
+    async sharePost({ post_id, content, list_tag, label_id }, cb) {
+      const shareModel = createShare(post_id, content);
+      const doShare = await new ShareService(this.$axios)[actionTypes.BASE.ADD](
+        shareModel
+      );
+
+      if (doShare.success) {
+        this.feeds.listPost = [doShare.data, ...this.feeds.listPost];
+      } else {
+        this.$toasted.error(doShare.message);
+      }
+
+      const timeout = setTimeout(() => {
+        cb();
+        clearTimeout(timeout);
+      }, 500)
     },
 
     cancelShare() {

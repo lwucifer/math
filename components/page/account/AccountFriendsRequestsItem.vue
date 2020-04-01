@@ -11,13 +11,27 @@
     </div>
 
     <div class="account-friends-item__actions ml-auto">
-      <app-button square size="xs" class="d-block" fullWidth>Đồng ý</app-button>
-      <app-button square size="xs" color="default" class="d-block mt-3" fullWidth>Từ chối</app-button>
+      <app-button
+        square
+        size="xs"
+        class="d-block"
+        fullWidth
+        @click="hanldeInviteFriend(data.id)"
+      >Đồng ý</app-button>
+      <app-button
+        square
+        size="xs"
+        color="default"
+        class="d-block mt-3"
+        fullWidth
+        @click="handleDeleteFriend(data.id)"
+      >Từ chối</app-button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   components: {},
 
@@ -35,7 +49,37 @@ export default {
     };
   },
 
-  methods: {}
+  methods: {
+    ...mapActions("social", ["inviteFriend", "getListInvite", "deleteFriend"]),
+    hanldeInviteFriend(_id) {
+      console.log("_id", _id);
+      const data = {
+        friend_id: _id
+      };
+      this.inviteFriend(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.getListInvite();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleDeleteFriend(id) {
+      console.log("_id", id);
+      // const data = {
+      //   friend_id: id
+      // };
+      this.deleteFriend(id).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.getListInvite();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    }
+  }
 };
 </script>
 
