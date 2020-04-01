@@ -104,7 +104,10 @@ export default {
       [
         this.loading &&
           h("app-spin", {
-            class: "btn__spin"
+            class: "btn__spin",
+            props: {
+              color: ['primary'].includes(this.color) ? 'white' : ''
+            }
           }),
         this.$slots.default
       ]

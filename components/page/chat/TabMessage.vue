@@ -537,7 +537,8 @@ export default {
       "accountPersonalList",
       "createGroup",
       "getGroupList",
-      "getMessageList"
+      "getMessageList",
+      "getGroupListDetail"
     ]),
     ...mapMutations("message", ["setEmitMessage"]),
     async messageInfiniteHandler($state) {
@@ -626,6 +627,11 @@ export default {
           };
           console.log("[socket] dataEmit", dataEmit);
           this.setEmitMessage(dataEmit);
+          this.getGroupListDetail({
+            params: {
+              room_id: this.$route.params.id
+            }
+          });
         } else {
         }
         this.textChat = "";
