@@ -44,7 +44,12 @@ export default {
   async fetch({ params, query, store }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
+      store.dispatch(
+        `social/${actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST}`,
+        userId
+      )
     ]);
   },
 

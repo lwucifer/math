@@ -4,10 +4,10 @@
     <div class="row">
       <div class="col-md-3">
         <AsideBox title="Cài đặt chung" class="side-links">
-          <n-link :to="'/account/settings'">Liên kết thêm trường</n-link>
-          <n-link :to="'/account/settings/referral'">Referral</n-link>
+          <n-link :to="'/account/social/settings'">Liên kết thêm trường</n-link>
+          <n-link :to="'/account/social/settings/referral'">Referral</n-link>
           <n-link to class="active">Hướng dẫn sử dụng</n-link>
-          <n-link :to="'/account/settings/help'">Trợ giúp khách hàng</n-link>
+          <n-link :to="'/account/social/settings/help'">Trợ giúp khách hàng</n-link>
         </AsideBox>
       </div>
       <div class="col-md-9">

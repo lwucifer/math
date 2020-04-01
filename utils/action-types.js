@@ -299,6 +299,10 @@ export const SOCIAL_FRIEND = {
     DELETE_FRIEND: "deleteFriend"
 };
 
+export const SOCIAL_PHOTO = {
+    POST_PHOTO_LIST: "postPhotoList"
+};
+
 export const ELEARNING_INFO = {
     INFO: "elearningInfo"
 };

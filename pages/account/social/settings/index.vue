@@ -5,9 +5,9 @@
       <div class="col-md-3">
         <AsideBox title="Cài đặt chung" class="side-links">
           <n-link to class="active">Liên kết thêm trường</n-link>
-          <n-link :to="'/account/settings/referral'">Referral</n-link>
-          <n-link :to="'/account/settings/manual'">Hướng dẫn sử dụng</n-link>
-          <n-link :to="'/account/settings/help'">Trợ giúp khách hàng</n-link>
+          <n-link :to="'/account/social/settings/referral'">Referral</n-link>
+          <n-link :to="'/account/social/settings/manual'">Hướng dẫn sử dụng</n-link>
+          <n-link :to="'/account/social/settings/help'">Trợ giúp khách hàng</n-link>
         </AsideBox>
       </div>
       <div class="col-md-9">
@@ -30,7 +30,7 @@
             </div>
           </div>
 
-          <n-link :to="'/account/settings/manual'" class="account-settings__main-help">
+          <n-link :to="'/account/social/settings/manual'" class="account-settings__main-help">
             <IconExclamationO class="mr-2" />Hướng dẫn sử dụng
           </n-link>
         </div>
