@@ -131,7 +131,17 @@ export default {
     pagination: {
       type: Object,
       required: true,
-      default: () => {}
+      default: () => {
+        return {
+          total: 0,
+          size: 10,
+          page: 1,
+          totalElements: 0,
+          first: 1,
+          last: 1,
+          number: 0
+        }
+      }
     },
     opts: {
       type: Array,

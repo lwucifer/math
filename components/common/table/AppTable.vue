@@ -59,7 +59,7 @@
       {{ noDataTxt }}
     </div>
     <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
-    <div class="pagination">
+    <div v-if="needPagination" class="pagination">
       <hr />
       <app-pagination v-if="hasData && (!loading)" :type="2" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
     </div>
@@ -94,7 +94,17 @@ export default {
     pagination: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => {
+        return {
+          total: 0,
+          size: 10,
+          page: 1,
+          totalElements: 0,
+          first: 1,
+          last: 1,
+          number: 0
+        }
+      }
     },
     selectAll: Boolean,
     multipleSelection: {
@@ -120,6 +130,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    needPagination: {
+      type: Boolean,
+      default: true
     }
   },
 
