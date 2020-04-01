@@ -10,7 +10,7 @@
         Quay lại
       </app-button>
 
-      <div class="header-create__right" v-if="type !== 'add_contents'">
+      <div class="header-create__right" v-if="isShowAction">
         <app-button
           @click="handleCLickSave"
           class="header-create__btn mr-4"
@@ -40,8 +40,9 @@ export default {
       type: Boolean,
       default: true
     },
-    type: {
-      type: String
+    isShowAction: {
+      type: Boolean,
+      default: true
     }
   },
 

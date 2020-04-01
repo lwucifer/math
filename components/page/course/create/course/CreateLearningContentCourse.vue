@@ -1,6 +1,6 @@
 <template>
   <div>
-    <create-action type="add_contents" />
+    <create-action :isShowAction="false" />
 
     <!-- STEP 1 -->
     <div class="cc-panel bg-white mb-4">
