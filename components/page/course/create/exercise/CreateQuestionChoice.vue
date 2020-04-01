@@ -4,33 +4,16 @@
       >Nội dung câu hỏi</label
     >
 
-    <app-editor class="mb-4" id="question-editor" />
+    <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
 
-    <div class="row mb-4">
-      <div class="col-md-3">
-        <label class="d-inline-block mb-3" for="answer-a">Đáp án đúng</label>
-        <div>
-          <app-radio name="answer" value="a" id="answer-a">A</app-radio>
-        </div>
-      </div>
-
-      <div class="col-md-9">
-        <label class="d-inline-block mb-3" for="answer-editor"
-          >Nội dung đáp án</label
-        >
-        <div class="d-flex align-items-start">
-          <div class="flex-grow mr-4">
-            <app-editor id="answer-editor" />
-          </div>
-
-          <div>
-            <button>
-              <IconTrashAlt class="icon d-block subheading fill-secondary" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <CreateAnswerOfQuestion
+      v-for="(answer, index) in get(payload, 'questions', [])"
+      :key="index"
+      :answer="answer"
+      :index="index"
+      @handleSelectAnswerTrue="handleSelectAnswerTrue"
+      @handleChangeContent="handleChangeContentAnswer"
+    />
 
     <div class="d-flex justify-content-end mt-5">
       <app-button
@@ -49,10 +32,66 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
+import { get } from "lodash";
 
 export default {
   components: {
-    IconTrashAlt
+    IconTrashAlt,
+    CreateAnswerOfQuestion
+  },
+
+  props: {
+    exercise: {
+      type: Object,
+      default: null
+    }
+  },
+
+  data() {
+    return {
+      payload: {
+        exercise_id: get(this, "exercise.id", ""),
+        type: "CHOICE",
+        content: "",
+        questions: [
+          {
+            correct: false,
+            content: "",
+            index: "A"
+          },
+          {
+            correct: false,
+            content: "",
+            index: "B"
+          },
+          {
+            correct: false,
+            content: "",
+            index: "C"
+          },
+          {
+            correct: false,
+            content: "",
+            index: "D"
+          }
+        ]
+      }
+    };
+  },
+
+  methods: {
+    handleSelectAnswerTrue(index) {
+      this.payload.questions.map((answer, key) => {
+        this.payload.questions[key].correct = key === index;
+      });
+    },
+
+    handleChangeContentAnswer(index, value) {
+      this.payload.questions[index].content = value;
+    },
+
+    get
   }
 };
 </script>
