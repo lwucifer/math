@@ -56,19 +56,20 @@ export default {
   data() {
     return {
       isEditCourseName: false,
-      courseNameModel: ""
+      courseNameModel: get(this, "defaultName", "")
     };
   },
 
-  created() {
-    useEffect(this, this.handleChangeDefaultName.bind(this), ["defaultName"]);
+  watch: {
+    defaultName: {
+      handler: function() {
+        this.courseNameModel = this.defaultName;
+      },
+      deep: true
+    }
   },
 
   methods: {
-    handleChangeDefaultName() {
-      this.courseNameModel = this.defaultName;
-    },
-
     editCourseName() {
       this.isEditCourseName = true;
       const timeout = setTimeout(() => {
@@ -79,6 +80,7 @@ export default {
 
     cancelEditCourseName() {
       this.isEditCourseName = false;
+      this.courseNameModel = this.defaultName;
     },
 
     async handleSaveCourseName() {

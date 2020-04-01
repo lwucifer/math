@@ -42,9 +42,25 @@ export function fileSizeFilter(size) {
     return size.toFixed(2) + ' TB';
 }
 
+/**
+ * Truncate a string Filter
+ * @Param {string} str
+ * @Param {integer} charCounter
+ * @Param {boolean} useWordBoundary
+ * @return string
+ */
+export function truncStrFilter(str = '', charCounter = 0, useWordBoundary = false) {
+    if (str.length <= charCounter) { return str; }
+    var subString = str.substr(0, charCounter - 1);
+    return (useWordBoundary
+      ? subString.substr(0, subString.lastIndexOf(' '))
+      : subString) + " ...";
+}
+
 const filters = {
     toThousandFilter,
-    fileSizeFilter
+    fileSizeFilter,
+    truncStrFilter
 }
 
 // register global utility filters

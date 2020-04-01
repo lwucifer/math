@@ -337,5 +337,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/course/create/_create-excercise.scss";
+@import "~/assets/scss/components/course/create/_create-exercise.scss";
 </style>

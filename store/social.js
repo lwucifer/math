@@ -55,9 +55,9 @@ const actions = {
 
     async [actionTypes.SOCIAL_POST.ADD]({ commit }, payload) {
         try {
-            const data = await new SocialPosts(this.$axios)[
-                actionTypes.BASE.ADD
-            ](payload);
+            const data = await new SocialPosts(this.$axios)[actionTypes.BASE.ADD](
+                payload
+            );
             console.log("[SocialPosts] add", data);
             return data;
         } catch (err) {
@@ -302,6 +302,28 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[FriendInvite] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_FRIEND.INVITE_FRIEND]({ commit }, payload) {
+        try {
+            const data = await new Friend(this.$axios)[actionTypes.BASE.ADD](payload);
+            console.log("[Friend] add", data);
+            return data;
+        } catch (err) {
+            console.log("[Friend] add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_FRIEND.DELETE_FRIEND]({ commit }, payload) {
+        try {
+            const data = await new Friend(this.$axios)[actionTypes.BASE.DELETE](
+                payload
+            );
+            console.log("[Friend] add", data);
+            return data;
+        } catch (err) {
+            console.log("[Friend] add.err", err);
             return err;
         }
     }

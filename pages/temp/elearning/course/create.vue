@@ -15,7 +15,7 @@
           v-show="formActive === 'content-lecture'"
         /> -->
         <CreateSetting v-show="formActive === 'settings'" />
-        <CreateExcercise v-show="formActive === 'exercise'" />
+        <CreateExercise v-show="formActive === 'exercise'" />
         <CreateExam v-show="formActive === 'exam'" />
       </div>
     </div>
@@ -27,7 +27,7 @@ import CreateAside from "~/components/page/course/create/CreateAside";
 import CreateGeneralInformation from "~/components/page/course/create/CreateGeneralInformation";
 // import CreateLearningContentCourse from "~/components/page/course/create/CreateLearningContentCourse";
 import CreateSetting from "~/components/page/course/create/CreateSetting";
-import CreateExcercise from "~/components/page/course/create/CreateExcercise";
+import CreateExercise from "~/components/page/course/create/CreateExercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
 // import CreateLearningContentLecture from "~/components/page/course/create/CreateLearningContentLecture";
 import * as actionTypes from "~/utils/action-types";
@@ -40,7 +40,7 @@ export default {
     CreateGeneralInformation,
     // CreateLearningContentCourse,
     CreateSetting,
-    CreateExcercise,
+    CreateExercise,
     CreateExam,
     // CreateLearningContentLecture
   },

@@ -65,7 +65,7 @@ export const validateNumber = _number => {
  */
 export const validatePrice = _price =>{
     console.log("test",_price)
-    return /^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/.test(_price);
+    return /^(\d*([.,](?=\d{2}))?\d+)+((?!\2)[.,]\d\d)?$/.test(_price);
 }
 /**
  * validate port setting

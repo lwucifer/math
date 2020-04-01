@@ -48,8 +48,7 @@ export default {
     return {
       payload: {
         elearning_id: "",
-        name: "",
-        index: 0
+        name: ""
       },
       showModalConfirm: false,
       confirmLoading: false
@@ -69,14 +68,6 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
-      let index = 0;
-      try {
-        index =
-          get(this, "chapters.data", 0)[
-            get(this, "chapters.data", []).length - 1
-          ]["index"] + 1;
-      } catch (error) {}
-
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
@@ -84,8 +75,6 @@ export default {
         }
       };
       this.payload.elearning_id = elearning_id;
-      this.payload.index = index;
-
       const res = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.ADD}`,
         this.payload

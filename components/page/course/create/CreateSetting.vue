@@ -261,7 +261,6 @@ export default {
     },
 
     handleChangeFee(fee) {
-      this.payload.fee = fee;
       this.validate.fee = true;
       this.validateProps.fee= "";
       if(!this.payload.fee){
@@ -270,10 +269,12 @@ export default {
       }else if(validatePrice(fee)){
         this.validateProps.fee =1;
         this.validate.fee = false;
+        this.payload.fee = fee;
         }
       else if(!validatePrice(fee)){
         this.validateProps.fee =2;
-        this.errorMessage.fee = "Tham số không hợp lệ kết quả sẽ trả về ";
+        this.errorMessage.fee = "Tham số không hợp lệ";
+        this.isSubmit =false;
       }
     },
 
@@ -301,6 +302,7 @@ export default {
       else if(!validatePrice(fee_discount)){
         this.validateProps.fee_discount =2;
         this.errorMessage.fee_discount = "Tham số không hợp lệ";
+        this.isSubmit =false;
       }
     },
 

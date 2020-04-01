@@ -43,6 +43,18 @@ const actions = {
     }
   },
 
+  async [actionTypes.ELEARNING_CREATING_LESSONS.DETAIL]({ commit }, lesson_id) {
+    try {
+      const result = await new Lesson(this.$axios)[actionTypes.BASE.DETAIL](
+        lesson_id
+      );
+      return result;
+    } catch (error) {
+      //
+    }
+    return null;
+  },
+
   async [actionTypes.ELEARNING_CREATING_LESSONS.ADD]({ commit }, payload) {
     try {
       const result = await new Lesson(this.$axios)["postWithFormData"](payload);

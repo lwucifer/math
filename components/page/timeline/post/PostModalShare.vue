@@ -1,5 +1,5 @@
 <template>
-  <app-modal width="606px">
+  <app-modal width="606px" @close="$listeners.cancel ? $listeners.cancel() : null">
     <div class="pms-header" slot="header">
       <h2 class="pms-header__title">Chia sẻ</h2>
       <app-select v-model="share" class="my-3" :options="shareOpts" size="sm">
@@ -10,17 +10,7 @@
     <div slot="content" class="pms-body">
       <editor-content class="editor pms-editor" :editor="editor" />
 
-      <app-content-box
-        tag="a"
-        target="_blank"
-        href
-        class="mb-4"
-        size="md"
-        image="https://picsum.photos/150/150"
-        title="ĐỘT PHÁ THU NHẬP 06 KÊNH MARKETING ONLINE NGAY LẬP"
-        desc="Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định sản phẩm kinh doanh, tìm kiếm nguồn hàng kinh doanh, liên hệ nhà cung cấp, nghiên cứu khách hàng, đối thủ, xây dựng nội dung bán hàng..."
-        meta-footer="cellphones.com.vn"
-      />
+      <slot name="share-content"></slot>
     </div>
 
     <div slot="footer" class="pms-footer">
@@ -40,7 +30,7 @@
 
       <div class="pms-footer__right">
         <app-button class="pms-footer__btn mr-4" color="info" square @click="$emit('cancel')">Huỷ bỏ</app-button>
-        <app-button class="pms-footer__btn" color="primary" square>Chia sẻ</app-button>
+        <app-button class="pms-footer__btn" color="primary" :loading="btnSubmitLoading" square @click="submit">Chia sẻ</app-button>
       </div>
     </div>
   </app-modal>
@@ -72,7 +62,7 @@ export default {
   props: {
     post: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
       // validator: value =>
       //   [
       //     "post_id",
@@ -89,6 +79,7 @@ export default {
   data() {
     return {
       editor: null,
+      btnSubmitLoading: false,
       share: SHARE_OPTS.TIMELINE,
       shareOpts: [
         {
@@ -118,6 +109,25 @@ export default {
         })
       ]
     });
+  },
+
+  methods: {
+    submit() {
+      this.btnSubmitLoading = true;
+
+      const payload = {
+        post_id: this.post.post_id,
+        content: this.editor.getHTML(),
+        list_tag: null,
+        label_id: null
+      };
+
+      const cb = () => {
+        this.btnSubmitLoading = false;
+      }
+
+      this.$emit('share', payload, cb)
+    }
   }
 };
 </script>
