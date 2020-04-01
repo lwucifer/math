@@ -66,3 +66,11 @@ export const EXERCISE_TYPES = {
     CHOICE: "CHOICE",
     ESSAY: "ESSAY"
 }
+
+export const SUBMISSION_RESULTS = {
+  PASS: 1,
+  FAIL: -1,
+  NO_SCORE: 0
+}
+
+export const SCALE_MARK = 10

@@ -14,7 +14,7 @@
           </div>
 
           <div class="elearning-manager-content__main">
-            <component :is="currentComponent"></component>
+            <component :is="currentComponent" :detail="submission"></component>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
   import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
-  import { get } from "lodash"
+  import { get, isEmpty } from "lodash"
   import { EXERCISE_TYPES } from "~/utils/constants"
 
   const ChoiceSubmission = () => import('../choice')
@@ -63,14 +63,8 @@
           [EXERCISE_TYPES.CHOICE]: "ChoiceSubmission",
           [EXERCISE_TYPES.ESSAY]: "EssaySubmission",
         }
-        // let currentComponent
 
-        // if (typeof (MATCHED_COMPONENTS[this.detail.type]) !== "undefined") {
-        //     currentComponent = this.detail.type
-        // } else {
-        //     currentComponent = "objectiveTest"
-        // }
-        return MATCHED_COMPONENTS['CHOICE']
+        return MATCHED_COMPONENTS[get(this, 'exercise.type', EXERCISE_TYPES.CHOICE)]
       },
       breadcrumb: function() {
         let data = [
@@ -100,7 +94,7 @@
       },
       async getExerciseDetail() {
         const exerciseId = this.$route.params.id
-        if (_.isEmpty(this.exercise) || get(this, 'exercise.id') != exerciseId) {
+        if (isEmpty(this.exercise) || get(this, 'exercise.id') != exerciseId) {
           await this.$store.dispatch(
             `${EXERCISE_STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.DETAIL}`, exerciseId
           )

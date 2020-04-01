@@ -110,7 +110,7 @@ const actions = {
           student: 'Nguyễn Đức Anh',
           class: "6B",
           start_time: "2020-03-24 16:49:25",
-          duration: "3600",
+          duration: 3505,
           timestamp: "2020-03-24 18:49:25",
           questions: 50,
           corrects: 34,
@@ -121,9 +121,15 @@ const actions = {
           contents: [
             {
               question_id: "14525255252",                                    // mã câu hỏi
-              question_name: "Tên câu hỏi",                              // tên câu hỏi
+              question_name: "Tên câu hỏi 01",                              // tên câu hỏi
               student_answer: "Câu trả lời học sinh",                              // câu trả lời của học viên
               correct_answer: "Câu trả lời đúng",                               // câu trả lời đúng
+            },
+            {
+              question_id: "14525255253",                                    // mã câu hỏi
+              question_name: "Tên câu hỏi 02",                              // tên câu hỏi
+              student_answer: "Câu trả lời học sinh 02",                              // câu trả lời của học viên
+              correct_answer: "Câu trả lời đúng 02",                               // câu trả lời đúng
             }
           ]
         },
