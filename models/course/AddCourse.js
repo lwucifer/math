@@ -110,7 +110,7 @@ export function createPayloadCourseSetting(payload) {
   return Object.freeze(new CourseSetting(payload));
 }
 
-class Excercise {
+class Exercise {
   constructor(payload) {
     if (payload.id) {
       this.id = payload.id;
@@ -142,6 +142,6 @@ class Excercise {
   }
 }
 
-export function createPayloadExcercise(payload) {
-  return Object.freeze(new Excercise(payload));
+export function createPayloadExercise(payload) {
+  return Object.freeze(new Exercise(payload));
 }

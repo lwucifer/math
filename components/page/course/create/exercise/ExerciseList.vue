@@ -4,7 +4,7 @@
       <div class="cc-box__head">
         <div class="cc-box__head-left">
           <h2 class="cc-box__title heading-6">
-            {{ get(excercise, "title", "") }}
+            {{ get(exercise, "title", "") }}
           </h2>
           <button class="cc-box__btn cc-box__btn-edit">
             <IconEditAlt class="icon" />
@@ -12,7 +12,9 @@
         </div>
 
         <div class="cc-box__head-right">
-          <a href class="text-secondary">Thêm câu hỏi</a>
+          <a href @click.prevent="handleAddQuestion" class="text-secondary"
+            >Thêm câu hỏi</a
+          >
           <button class="cc-box__btn cc-box__btn-collapse">
             <IconAngleDown class="icon" />
           </button>
@@ -20,26 +22,8 @@
       </div>
 
       <div class="cc-box__body">
-        <div class="ce-question-item d-flex align-items-center">
-          <h3 class="body-2 mr-4">1. Đây là câu hỏi</h3>
-          <span class="text-sub mr-4">Câu hỏi trắc nghiệm</span>
-
-          <div
-            class="d-flex align-items-center ml-auto ce-question-item__actions"
-          >
-            <button class="mr-4">
-              <IconEditAlt class="icon d-block subheading fill-primary" />
-            </button>
-
-            <button class="mr-4">
-              <IconTrashAlt class="icon d-block subheading fill-secondary" />
-            </button>
-
-            <button>
-              <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-            </button>
-          </div>
-        </div>
+        <CreateQuestionChoice v-if="isAddQuestionForm" />
+        <ListQuestion />
       </div>
     </div>
   </div>
@@ -54,6 +38,9 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import { get } from "lodash";
+import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
+import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
+import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 
 export default {
   components: {
@@ -63,18 +50,31 @@ export default {
     IconTrashAlt,
     IconAlignCenterAlt,
     IconFileCheck,
-    IconClipboardNotes
+    IconClipboardNotes,
+    CreateQuestionEssay,
+    CreateQuestionChoice,
+    ListQuestion
   },
 
   props: {
-    excercise: {
+    exercise: {
       type: Object,
       default: null
     }
   },
 
+  data() {
+    return {
+      isAddQuestionForm: false
+    };
+  },
+
   methods: {
-    get
+    get,
+
+    handleAddQuestion() {
+      this.isAddQuestionForm = !this.isAddQuestionForm;
+    }
   }
 };
 </script>
