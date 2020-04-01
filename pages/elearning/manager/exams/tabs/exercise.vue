@@ -22,7 +22,7 @@ import { useEffect, getParamQuery } from "~/utils/common"
 import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/ElearningManagerFilterForm"
 import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/ElearningManagerFilterTable"
 
-const STORE_NAMESPACE = "elearning/creating/creating-exercises"
+const STORE_NAMESPACE = "elearning/teaching/exercise"
 
 export default {
   components: {
@@ -83,11 +83,12 @@ export default {
     async getList() {
       try {
         this.loading = true
-        this.params.elearning_id = getParamQuery('elearning_id')
+        // this.params.elearning_id = getParamQuery('elearning_id')
+        this.params.elearning_id = "230291b7-e762-4da8-b411-77c313fee652"
         let params = { ...this.params }
 
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`, { params }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
         this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
