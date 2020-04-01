@@ -32,13 +32,12 @@
           </div>
 
           <div class="cc-box__body">
-            <ListChapter @handleAddLesson="handleAddLesson" />
-
-            <div class="create-chapter"></div>
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
             />
+
+            <ListChapter @handleAddLesson="handleAddLesson" />
           </div>
         </div>
       </div>
@@ -125,9 +124,7 @@ export default {
     },
 
     handleShowAddChapter() {
-      this.isShowFormAddChapter = true;
-      let el = this.$el.getElementsByClassName("create-chapter")[0];
-      el.scrollIntoView();
+      this.isShowFormAddChapter = !this.isShowFormAddChapter;
     },
 
     handleCancelAddChapter() {

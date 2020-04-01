@@ -13,21 +13,36 @@
           />
 
           <h3 v-else class="d-inline-block body-2 mr-3">
-            <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
+            <span class="font-weight-normal">{{
+              get(chapter, "name", "")
+            }}</span>
           </h3>
         </div>
 
         <template v-if="isEditChaperName">
           <button class="cc-box__btn mr-3 text-success">Lưu</button>
-          <button class="cc-box__btn mr-3 text-gray-2" @click="cancelEditChaperName">Huỷ</button>
+          <button
+            class="cc-box__btn mr-3 text-gray-2"
+            @click="cancelEditChaperName"
+          >
+            Huỷ
+          </button>
         </template>
 
         <template v-else>
-          <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
+          <a
+            href
+            class="ce-item__action edit mr-3"
+            @click.prevent="editChaperName"
+          >
             <IconEditAlt class="icon d-block subheading fill-primary" />
           </a>
 
-          <a href class="ce-item__action delete mr-3" @click.prevent="handleDeleteChapter">
+          <a
+            href
+            class="ce-item__action delete mr-3"
+            @click.prevent="handleDeleteChapter"
+          >
             <IconTrashAlt class="icon d-block subheading fill-secondary" />
           </a>
         </template>
@@ -38,19 +53,18 @@
       </div>
     </div>
 
-    <LessonDetail
-      v-for="lesson in get(chapter, 'lessons', [])"
-      :key="lesson.id"
-      :lesson="lesson"
-      @refreshLessons="$emit('handleRefreshChapters')"
-    />
-
-    <div class="create-lesson"></div>
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
       @handleCancel="handleCancel"
       :indexCreateLesson="indexCreateLesson"
+      @refreshLessons="$emit('handleRefreshChapters')"
+    />
+
+    <LessonDetail
+      v-for="lesson in get(chapter, 'lessons', [])"
+      :key="lesson.id"
+      :lesson="lesson"
       @refreshLessons="$emit('handleRefreshChapters')"
     />
 
@@ -174,9 +188,7 @@ export default {
     },
 
     handleAddLesson() {
-      this.isShowCreateLessonOfChapter = true;
-      let el = this.$el.getElementsByClassName("create-lesson")[0];
-      el.scrollIntoView();
+      this.isShowCreateLessonOfChapter = !this.isShowCreateLessonOfChapter;
     },
 
     async handleDeleteChapter() {

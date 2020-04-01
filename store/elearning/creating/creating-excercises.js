@@ -1,6 +1,6 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import Excercise from "~/services/elearning/creating/Excercise";
+import Exercise from "~/services/elearning/creating/Exercise";
 
 /**
  * initial state
@@ -18,13 +18,13 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_EXCERCISES.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_EXERCISES.LIST]({ commit }, payload) {
     try {
-      const result = await new Excercise(this.$axios)[actionTypes.BASE.LIST](
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
       commit(
-        mutationTypes.ELEARNING_CREATING_EXCERCISES
+        mutationTypes.ELEARNING_CREATING_EXERCISES
           .SET_ELEARNING_CREATING_EXERCISES_LIST,
         result
       );
@@ -34,9 +34,9 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_EXCERCISES.ADD]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_EXERCISES.ADD]({ commit }, payload) {
     try {
-      const result = await new Excercise(this.$axios)[actionTypes.BASE.ADD](
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.ADD](
         payload
       );
       return result;
@@ -45,9 +45,9 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_EXCERCISES.EDIT]({ commit }, payload) {
+  async [actionTypes.ELEARNING_CREATING_EXERCISES.EDIT]({ commit }, payload) {
     try {
-      const result = await new Excercise(this.$axios)[actionTypes.BASE.EDIT](
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.EDIT](
         payload
       );
       // set to mutation
@@ -57,12 +57,12 @@ const actions = {
     }
   },
 
-  async [actionTypes.ELEARNING_CREATING_EXCERCISES.DELETE](
+  async [actionTypes.ELEARNING_CREATING_EXERCISES.DELETE](
     { commit },
     payload
   ) {
     try {
-      const result = await new Excercise(this.$axios)[actionTypes.BASE.DELETE](
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.DELETE](
         payload
       );
       // set to mutation
@@ -77,7 +77,7 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_EXCERCISES
+  [mutationTypes.ELEARNING_CREATING_EXERCISES
     .SET_ELEARNING_CREATING_EXERCISES_LIST](state, excercises) {
     state.excercises = excercises;
   }

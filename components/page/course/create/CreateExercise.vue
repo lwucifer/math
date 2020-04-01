@@ -11,22 +11,22 @@
         @handleSelectLesson="handleSelectLesson"
       />
 
-      <ButtonCreateExcercise
+      <ButtonCreateExercise
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
       />
 
-      <FormCreateExcercise
+      <FormCreateExercise
         v-if="isShowFormAdd"
         @handleCancel="handleCancelAddCreate"
         :lesson="lesson"
         @handleRefreshExcercises="handleRefreshExcercises"
       />
 
-      <ExcerciseItem
-        v-for="excercise in get(lesson, 'exercises', [])"
-        :key="excercise.id"
-        :excercise="excercise"
+      <ExerciseList
+        v-for="exercise in get(lesson, 'exercises', [])"
+        :key="exercise.id"
+        :exercise="exercise"
       />
     </div>
   </div>
@@ -40,10 +40,10 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
-import ButtonCreateExcercise from "~/components/page/course/create/excercise/ButtonCreateExcercise";
-import FormCreateExcercise from "~/components/page/course/create/excercise/FormCreateExcercise";
-import ExcerciseItem from "~/components/page/course/create/excercise/ExcerciseItem";
-import SelectLesson from "~/components/page/course/create/excercise/SelectLesson";
+import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
+import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
+import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
@@ -59,9 +59,9 @@ export default {
     IconFileCheck,
     IconClipboardNotes,
     CreateAction,
-    ButtonCreateExcercise,
-    FormCreateExcercise,
-    ExcerciseItem,
+    ButtonCreateExercise,
+    FormCreateExercise,
+    ExerciseList,
     SelectLesson
   },
 
@@ -142,5 +142,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/course/create/_create-excercise.scss";
+@import "~/assets/scss/components/course/create/_create-exercise.scss";
 </style>
