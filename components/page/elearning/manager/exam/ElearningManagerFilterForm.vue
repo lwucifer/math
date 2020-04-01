@@ -32,7 +32,7 @@
       <div class="filter-form__item filter-form__item--search">
         <app-input
           type="text"
-          v-model="filters.query"
+          v-model="filters.keyword"
           placeholder="Nhập để tìm kiếm..."
           :size="'sm'"
           @input="handleChangedSearch"
@@ -61,9 +61,8 @@
     data() {
       return {
         filters: {
-          category: null,
           type: null,
-          query: ''
+          keyword: ''
         },
         types: [
           {
