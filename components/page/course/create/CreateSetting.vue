@@ -1,6 +1,6 @@
 <template>
   <div class="cc-panel bg-white mb-4">
-    <create-action @handleCLickSave="handleCLickSave" />
+    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit"/>
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
     </div>
@@ -70,24 +70,28 @@
         </div>
       </div>
 
-      <div class="row align-items-center mb-4">
+      <div class="row align-items-center mb-4" v-if="!payload.free">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
           <app-input
             :value="numeral(payload.fee).format()"
             @input="handleChangeFee"
+            :message="errorMessage.fee"
+            :validate="validateProps.fee"
             type="text"
             class="mb-0"
           ></app-input>
         </div>
       </div>
 
-      <div class="row align-items-center mb-4">
+      <div class="row align-items-center mb-4" v-if="!payload.free">
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
             :value="numeral(fee_discount).format()"
             @input="handleChangeFeeDiscount"
+            :message="errorMessage.fee_discount"
+            :validate="validateProps.fee_discount"
             type="text"
             class="mb-0"
           ></app-input>
@@ -113,7 +117,25 @@ import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
-
+import { validatePrice } from "~/utils/validations";
+import { required} from "vuelidate/lib/validators";
+import * as yup from "yup";
+const schema = yup.object().shape({
+  comment_allow: yup.string().required(),
+  free: yup.string().required(),
+  elearning_id: yup.string().required(),
+  discount: yup.number().required().positive().integer(),
+  fee: yup.number().required().positive().integer(),
+  privacy: yup.string().required(),
+})
+const schema_update = yup.object().shape({
+  comment_allow: yup.string().required(),
+  free: yup.string().required(),
+  elearning_id: yup.string().required(),
+  discount: yup.number().required().positive().integer(),
+  fee: yup.number().required().positive().integer(),
+  privacy: yup.string().required(),
+})
 export default {
   components: {
     IconAngleDown,
@@ -133,10 +155,24 @@ export default {
         free: 1,
         passcode: "",
         privacy: "PUBLIC"
-      }
+      },
+      errorMessage:{
+        fee:"",
+        fee_discount:""
+      },
+      validateProps:{
+        fee:"",
+        fee_discount:""
+      },
+      isSubmit:false,
+      validate: { fee: true, fee_discount: true },
+
     };
   },
-
+  validations:{
+    fee:{required},
+    fee_discount:{required}
+  },
   created() {
     this.fetchSetting();
   },
@@ -167,6 +203,29 @@ export default {
         const fee = toNumber(get(this, "setting.fee", 0));
         const discount = toNumber(get(this, "setting.discount", 0));
         this.fee_discount = fee - discount;
+      },
+      deep: true
+    },
+    payload: {
+      handler: function() {
+        let that = this;
+        const payload = createPayloadCourseSetting(this.payload);
+        const elearning_id = getParamQuery("elearning_id");
+        if (elearning_id) {
+          if(!payload.free){
+            schema_update.isValid(payload).then(function(valid) {
+              that.isSubmit = valid;
+              console.log(payload)
+            });
+            return;
+          }
+          else{
+            console.log(that.isSubmit)
+            that.isSubmit = true;
+          }
+        }
+        
+       
       },
       deep: true
     }
@@ -203,6 +262,19 @@ export default {
 
     handleChangeFee(fee) {
       this.payload.fee = fee;
+      this.validate.fee = true;
+      this.validateProps.fee= "";
+      if(!this.payload.fee){
+        this.validateProps.fee =2;
+        this.errorMessage.fee = "Trường này là bắt buộc";
+      }else if(validatePrice(fee)){
+        this.validateProps.fee =1;
+        this.validate.fee = false;
+        }
+      else if(!validatePrice(fee)){
+        this.validateProps.fee =2;
+        this.errorMessage.fee = "Tham số không hợp lệ kết quả sẽ trả về ";
+      }
     },
 
     handleChangeFree(free) {
@@ -213,6 +285,23 @@ export default {
       this.fee_discount = fee_discount;
       this.payload.discount =
         numeral(this.payload.fee).value() - numeral(fee_discount).value();
+      this.validate.fee_discount = true;
+      this.validateProps.fee_discount= "";
+      if(validatePrice(fee_discount)){
+        if(numeral(this.fee_discount).value() <= numeral(this.payload.fee).value())
+        {
+          this.validateProps.fee_discount =1;
+          this.validate.fee_discount = false;
+        }
+        else{
+          this.validateProps.fee_discount =2;
+          this.errorMessage.fee_discount = "Giá khuyến mãi lớn hơn giá gốc";
+        }
+        }
+      else if(!validatePrice(fee_discount)){
+        this.validateProps.fee_discount =2;
+        this.errorMessage.fee_discount = "Tham số không hợp lệ";
+      }
     },
 
     async handleCLickSave() {
