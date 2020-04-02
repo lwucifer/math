@@ -142,6 +142,37 @@ const actions = {
     }
   },
   
+  async [actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK]({ commit }, payload) {
+    try {
+      // const result = await new Submission(this.$axios)[actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK](
+      //   payload
+      // );
+      
+      const result = {
+        code: "200",
+        success: true,
+        data: {
+          content: LIST,
+          page: {
+            totalElements: 4,
+            last: true,
+            totalPages: 1,
+            size: 10,
+            number: 0,
+            first: true,
+            numberOfElements: 4
+          }
+        },
+        message: "success"
+      }
+      return result
+      // set to mutation
+      // commit(mutationTypes.ELEARNING_TEACHING_SUBMISSION.SET_TEACHING_SUBMISSION_LIST, result);
+    } catch (error) {
+      console.log("[Teaching submission] list.error", error);
+    }
+  },
+  
   // async [actionTypes.ELEARNING_CREATING_EXERCISES.EDIT]({ commit }, payload) {
   //   try {
   //     const result = await new Exercise(this.$axios)[actionTypes.BASE.EDIT](
