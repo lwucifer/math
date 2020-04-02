@@ -15,14 +15,29 @@
     <div class="filter-form__item">
       <app-vue-select
         class="app-vue-select filter-form__item__selection"
-        v-model="filters.type"
-        :options="types"
+        v-model="filters.class"
+        :options="classes"
         :reduce="item => item.value"
         label="text"
-        placeholder="Theo thể loại"
+        placeholder="Theo lớp"
         searchable
         clearable
-        @input="handleChangedType"
+        @input="handleChangedClass"
+      >
+      </app-vue-select>
+    </div>
+
+    <div class="filter-form__item">
+      <app-vue-select
+        class="app-vue-select filter-form__item__selection"
+        v-model="filters.result"
+        :options="results"
+        :reduce="item => item.value"
+        label="text"
+        placeholder="Theo kết quả"
+        searchable
+        clearable
+        @input="handleChangedResult"
       >
       </app-vue-select>
     </div>
@@ -43,7 +58,7 @@
       </div>
     </div><!--End right form-->
 
-  </div><!--End filter form-->
+  </div>
 </template>
 
 <script>
@@ -61,8 +76,9 @@
     data() {
       return {
         filters: {
-          type: null,
-          keyword: ''
+          keyword: '',
+          class: null,
+          result: null
         },
         types: [
           {
@@ -72,6 +88,26 @@
           {
             value: 2,
             text: 'Tự luận'
+          },
+        ],
+        classes: [
+          {
+            value: 1,
+            text: '10B'
+          },
+          {
+            value: 2,
+            text: '11C'
+          },
+        ],
+        results: [
+          {
+            value: 1,
+            text: '4/10'
+          },
+          {
+            value: 2,
+            text: '9/10'
           },
         ],
       }
@@ -88,11 +124,14 @@
       submit() {
         this.$emit('submit', this.filters)
       },
-      handleChangedType(val) {
-        this.$emit('changedType', val)
+      handleChangedClass(val) {
+        this.$emit('changedClass', val)
       },
       handleChangedSearch(val) {
         this.$emit('changedQuery', val)
+      },
+      handleChangedResult(val) {
+        this.$emit('changedResult', val)
       },
     }
   }

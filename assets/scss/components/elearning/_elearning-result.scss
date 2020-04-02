@@ -40,6 +40,10 @@
             .score--fail {
                 color: $color-secondary;
             }
+            
+            .score--empty {
+                color: $color-warning;
+            }
 
             .description {
                 background: #fbfbfb;
