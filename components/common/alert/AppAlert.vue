@@ -8,7 +8,7 @@
     <div class="app-alert__content">
       <slot />
     </div>
-    
+
     <a v-if="showClose" href class="app-alert__close" @click.prevent="close">
       <IconClose class="icon" />
     </a>
@@ -16,8 +16,10 @@
 </template>
 
 <script>
-const IconExclamationTriangle = () => import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
-const IconInfoCircle = () => import("~/assets/svg/design-icons/info-circle.svg?inline");
+const IconExclamationTriangle = () =>
+  import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
+const IconInfoCircle = () =>
+  import("~/assets/svg/design-icons/info-circle.svg?inline");
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
@@ -33,7 +35,14 @@ export default {
     showClose: Boolean,
     type: {
       type: String,
-      default: "primary" // 'primary', 'secondary', 'success', 'danger', 'warning'
+      default: "primary",
+      validator: value =>
+        ["primary", "secondary", "success", "danger", "warning"].includes(value)
+    },
+    size: {
+      type: String,
+      default: "",
+      validator: value => ['', 'sm'].includes(value)
     }
   },
 
@@ -53,7 +62,8 @@ export default {
         "app-alert--light": this.type === "light",
         "app-alert--dark": this.type === "dark",
         // Options classes
-        "app-alert--has-close": this.showClose
+        "app-alert--has-close": this.showClose,
+        "app-alert--size-sm": this.size === "sm"
       };
     },
 
