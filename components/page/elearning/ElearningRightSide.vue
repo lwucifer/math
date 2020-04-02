@@ -13,16 +13,16 @@
         <template v-if="get(info, 'price.discount', 0)">
           <b
             class="elearning-right-side__price text-error"
-          >{{ get(info, 'price.discount', 0) | numberFormat }}đ</b>
+          >{{ get(info, 'price.discount', 0) | numeralFormat }}đ</b>
           <s
             class="heading-4 text-gray-2"
-          >{{ get(info, 'price.original_price', 0) | numberFormat }}đ</s>
+          >{{ get(info, 'price.original_price', 0) | numeralFormat }}đ</s>
         </template>
 
         <b
           v-else
           class="elearning-right-side__price text-error"
-        >{{ get(info, 'price.original_price', 0) | numberFormat }}đ</b>
+        >{{ get(info, 'price.original_price', 0) | numeralFormat }}đ</b>
       </div>
       <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Chọn mua</app-button>
       <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
