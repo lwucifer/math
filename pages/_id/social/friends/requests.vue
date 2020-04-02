@@ -15,12 +15,12 @@
               <a class="active">Bạn bè</a>
             </li>
             <li>
-              <n-link :to="'./photos'">Ảnh</n-link>
+              <n-link :to="'/account/social/photos'">Ảnh</n-link>
             </li>
           </ul>
 
           <div class="tab-content">
-            <AccountFriends />
+            <AccountFriendsRequests />
           </div>
         </div>
       </div>
@@ -29,23 +29,23 @@
 </template>
 
 <script>
-import AccountFriends from "~/components/page/account/AccountFriends";
+import AccountFriendsRequests from "~/components/page/account/AccountFriendsRequests";
 import AccountSide from "~/components/page/account/AccountSide";
 import AccountCover from "~/components/page/account/AccountCover";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
-    AccountFriends,
+    AccountFriendsRequests,
     AccountCover,
     AccountSide
   },
   async fetch({ params, query, store }) {
-    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    const userId = params.id;
     await Promise.all([
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId)
     ]);
   },
 
