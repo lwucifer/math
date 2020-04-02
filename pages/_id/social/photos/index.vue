@@ -3,24 +3,24 @@
     <AccountCover />
     <div class="row">
       <div class="col-md-4">
-        <AccountSide />
+        <AccountSide account="account" />
       </div>
       <div class="col-md-8">
         <div class="account__main">
           <ul class="account__tab-nav">
             <li>
-              <a class="active">Timeline</a>
+              <n-link :to="'/account'">Timeline</n-link>
             </li>
             <li>
-              <n-link :to="'/account/social/friends'">Bạn bè</n-link>
+              <n-link :to="'./friends'">Bạn bè</n-link>
             </li>
             <li>
-              <n-link :to="'/account/social/photos'">Ảnh</n-link>
+              <a class="active">Ảnh</a>
             </li>
           </ul>
 
           <div class="tab-content">
-            <AccountTimeline />
+            <AccountPhotos />
           </div>
         </div>
       </div>
@@ -31,25 +31,25 @@
 <script>
 import AccountCover from "~/components/page/account/AccountCover";
 import AccountSide from "~/components/page/account/AccountSide";
-import AccountTimeline from "~/components/page/account/AccountTimeline";
+import AccountPhotos from "~/components/page/account/AccountPhotos";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
     AccountSide,
-    AccountTimeline,
+    AccountPhotos,
     AccountCover
   },
-
   async fetch({ params, query, store }) {
-    console.log(store.state.auth.access_token);
-    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    const userId = params.id;
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
       store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
+      store.dispatch(
+        `social/${actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST}`,
+        userId
+      )
     ]);
   },
 
@@ -63,7 +63,6 @@ export default {
       }
     };
   },
-  mounted() {},
 
   computed: {},
 
