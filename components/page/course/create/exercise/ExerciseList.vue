@@ -22,7 +22,7 @@
       </div>
 
       <div class="cc-box__body">
-        <CreateQuestionChoice v-if="isAddQuestionForm" />
+        <CreateQuestionChoice v-if="isAddQuestionForm" :exercise="exercise" />
         <ListQuestion />
       </div>
     </div>

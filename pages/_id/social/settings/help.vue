@@ -4,9 +4,9 @@
     <div class="row">
       <div class="col-md-3">
         <AsideBox title="Cài đặt chung" class="side-links">
-          <n-link :to="'/account/settings'">Liên kết thêm trường</n-link>
-          <n-link :to="'/account/settings/referral'">Referral</n-link>
-          <n-link :to="'/account/settings/manual'">Hướng dẫn sử dụng</n-link>
+          <n-link :to="'/account/social/settings'">Liên kết thêm trường</n-link>
+          <n-link :to="'/account/social/settings/referral'">Referral</n-link>
+          <n-link :to="'/account/social/settings/manual'">Hướng dẫn sử dụng</n-link>
           <n-link to class="active">Trợ giúp khách hàng</n-link>
         </AsideBox>
       </div>

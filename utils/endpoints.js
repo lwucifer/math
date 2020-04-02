@@ -41,6 +41,7 @@ export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
 export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
 export const SOCIAL_FRIEND_INVITE = `${SCHOOLLY_ALIAS}/social/api/friend/invite`;
+export const SOCIAL_POST_PHOTO = `${SCHOOLLY_ALIAS}/social/api/post/photo`;
 
 /**
  * ELEARNING
@@ -65,6 +66,8 @@ export const ELEARNING_PUBLIC_RELATED = `${SCHOOLLY_ALIAS}/elearning/public/rela
 export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subjects`;
 export const ELEARNING_PUBLIC_LEVEL = `${SCHOOLLY_ALIAS}/elearning/public/levels`;
 export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/teaching/repository/files`;
+export const ELEARNING_TEACHING_EXERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/exercises`;
+export const ELEARNING_TEACHING_SUBMISSION = `${SCHOOLLY_ALIAS}/elearning/teaching/submissions`;
 export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/setting`;
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 

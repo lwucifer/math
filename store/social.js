@@ -8,6 +8,7 @@ import Config from "~/services/social/config";
 import Label from "~/services/social/label";
 import Friend from "~/services/social/friend";
 import FriendInvite from "~/services/social/Friendinvite";
+import Photos from "~/services/social/photos";
 
 /**
  * initial state
@@ -22,7 +23,8 @@ const state = () => ({
     configs: {},
     labels: [],
     friendList: {},
-    inviteList: {}
+    inviteList: {},
+    postPhotoList: {}
 });
 
 /**
@@ -277,10 +279,7 @@ const actions = {
             console.log("[SocialFriend] list", result);
 
             // set to mutation
-            commit(
-                mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST,
-                result.listFriend || []
-            );
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST, result || []);
             return result;
         } catch (err) {
             console.log("[SocialFriend] list.err", err);
@@ -295,10 +294,7 @@ const actions = {
             console.log("[FriendInvite] list", result);
 
             // set to mutation
-            commit(
-                mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST,
-                result.listInvite || []
-            );
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST, result || []);
             return result;
         } catch (err) {
             console.log("[FriendInvite] list.err", err);
@@ -324,6 +320,21 @@ const actions = {
             return data;
         } catch (err) {
             console.log("[Friend] add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Photos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Photos] list", result);
+
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_POST_PHOTO_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[Photos] list.err", err);
             return err;
         }
     }
@@ -372,6 +383,9 @@ const mutations = {
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST](state, _inviteList) {
         state.inviteList = _inviteList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_POST_PHOTO_LIST](state, _postPhotoList) {
+        state.postPhotoList = _postPhotoList;
     }
 };
 

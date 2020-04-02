@@ -51,9 +51,10 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_CHAPTER.EDIT]({ commit }, payload) {
     try {
-      const result = await new Chapter(this.$axios)[actionTypes.BASE.EDIT](
+      const result = await new Chapter(this.$axios)[actionTypes.BASE.EDIT_PAYLOAD](
         payload
       );
+        return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
     } catch (error) {

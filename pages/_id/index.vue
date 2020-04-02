@@ -3,24 +3,24 @@
     <AccountCover />
     <div class="row">
       <div class="col-md-4">
-        <AccountSide account="account" />
+        <AccountSide />
       </div>
       <div class="col-md-8">
         <div class="account__main">
           <ul class="account__tab-nav">
             <li>
-              <n-link :to="'/account'">Timeline</n-link>
+              <a class="active">Timeline</a>
             </li>
             <li>
-              <n-link :to="'./friends'">Bạn bè</n-link>
+              <n-link :to="'/account/social/friends'">Bạn bè</n-link>
             </li>
             <li>
-              <a class="active">Ảnh</a>
+              <n-link :to="'/account/social/photos'">Ảnh</n-link>
             </li>
           </ul>
 
           <div class="tab-content">
-            <AccountPhotos />
+            <AccountTimeline />
           </div>
         </div>
       </div>
@@ -31,20 +31,25 @@
 <script>
 import AccountCover from "~/components/page/account/AccountCover";
 import AccountSide from "~/components/page/account/AccountSide";
-import AccountPhotos from "~/components/page/account/AccountPhotos";
+import AccountTimeline from "~/components/page/account/AccountTimeline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
     AccountSide,
-    AccountPhotos,
+    AccountTimeline,
     AccountCover
   },
+
   async fetch({ params, query, store }) {
-    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    console.log("params", params);
+    const userId = params.id;
     await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
     ]);
   },
 
@@ -58,6 +63,7 @@ export default {
       }
     };
   },
+  mounted() {},
 
   computed: {},
 

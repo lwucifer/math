@@ -55,7 +55,7 @@ export default {
   },
 
   async fetch({ params, query, store, route }) {
-    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    const userId = params.id;
     const room_id =
       // 18;
       route.params.id;
