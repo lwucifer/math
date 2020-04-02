@@ -6,10 +6,7 @@
 
         <div class="elearning-view__info">
           <div class="author">
-            <app-avatar
-              :src="get(info, 'teacher.avatar.low', null)"
-              :size="32"
-            />
+            <app-avatar :src="get(info, 'teacher.avatar.low', null)" :size="32" />
             <span class="name ml-2">{{ get(info, 'teacher.name', '') }}</span>
           </div>
 
@@ -187,7 +184,7 @@
             <CourseTeacherInfo :teacher="info.teacher" class="mb-3" />
           </section>
 
-          <hr class="mt-3 mb-4"/>
+          <hr class="mt-3 mb-4" />
 
           <section class="scroll-target" id="review">
             <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
@@ -197,19 +194,19 @@
       </div>
 
       <div class="col-md-4">
-        <ElearningRightSide  v-sticky sticky-offset="top" v-bind="{ info, program }" />
+        <ElearningRightSide v-sticky sticky-offset="top" v-bind="{ info, program }" />
       </div>
     </div>
 
     <ElearningSliderTab
       class="mt-4"
-      :lessons="sciences"
+      :content="relatedCourses"
       :swiperOptions="sliderOptions"
       title="Bài giảng cùng giáo viên"
     />
-    
+
     <ElearningSliderTab
-      :lessons="sciences"
+      :content="relatedCourses"
       :swiperOptions="sliderOptions"
       title="Bài giảng liên quan"
       class="mt-5"
@@ -227,6 +224,7 @@ import InfoService from "~/services/elearning/public/Info";
 import LevelService from "~/services/elearning/public/Level";
 import SubjectService from "~/services/elearning/public/Subject";
 import ProgramService from "~/services/elearning/public/Program";
+import RelatedService from "~/services/elearning/public/Related";
 
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
 import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
@@ -273,130 +271,50 @@ export default {
     const getLevels = () => new LevelService($axios)[actionTypes.BASE.LIST]();
     const getSubjects = () =>
       new SubjectService($axios)[actionTypes.BASE.LIST]();
-    const getProgram = () => new ProgramService($axios)[actionTypes.BASE.LIST]({
-      params: {
-        elearning_id: params.id
-      }
-    });
+    const getProgram = () =>
+      new ProgramService($axios)[actionTypes.BASE.LIST]({
+        params: {
+          elearning_id: params.id
+        }
+      });
+    const getRelatedCourses = () =>
+      new RelatedService($axios)[actionTypes.BASE.LIST]({
+        params: {
+          elearning_id: params.id
+        }
+      });
 
     const [
       dataInfo = {},
       dataLevels = {},
       dataSubjects = {},
-      dataProgram = {}
-    ] = await Promise.all([getInfo(), getLevels(), getSubjects(), getProgram()]);
+      dataProgram = {},
+      dataRelatedCourses = {}
+    ] = await Promise.all([
+      getInfo(),
+      getLevels(),
+      getSubjects(),
+      getProgram(),
+      getRelatedCourses()
+    ]);
 
     return {
       info: dataInfo.data || {},
       levels: dataLevels.data || [],
       subjects: dataSubjects.data || [],
-      program: dataProgram.data || {}
+      program: dataProgram.data || {},
+      relatedCourses: dataRelatedCourses.data || []
     };
   },
 
   data() {
     return {
-      sciences: [
-        {
-          id: 1,
-          name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        },
-        {
-          id: 2,
-          name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        },
-        {
-          id: 3,
-          name: "2 Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        },
-        {
-          id: 4,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        },
-        {
-          id: 5,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        },
-        {
-          id: 6,
-          name: "Nền tảng tiếng Anh cho người mới bắt đầu",
-          image: "https://picsum.photos/218/130",
-          price: "219000",
-          online: 0,
-          onlineStatus: "Thời gian học kế tiếp 11:50 AM, 10/12/2019",
-          teacher: {
-            id: 1,
-            name: "Trần Văn A",
-            avatar: "https://picsum.photos/20/20",
-            star: 4,
-            starAmount: 476
-          }
-        }
-      ],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
         setWrapperSize: true,
-        autoHeight: true,
-        watchOverflow: true,
-        showName: true
-      },
-      active_el: 0,
+        watchOverflow: true
+      }
     };
   },
 

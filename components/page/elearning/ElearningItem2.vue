@@ -1,7 +1,8 @@
 <template>
   <div class="elearning-item2">
     <div class="elearning-item2__image">
-      <img :src="item.image" alt />
+      <!-- <img class="d-block w-100" :src="get(info, 'avatar.low', '')" alt /> -->
+      <img class="d-block w-100" :src="`https://picsum.photos/330/204`" alt />
       <div class="status-online" v-if="item.onlineStatus && item.online === 1">{{item.onlineStatus}}</div>
       <div class="online" v-if="item.online">Trực tiếp</div>
       <div class="video" v-if="item.video">
@@ -9,42 +10,38 @@
       </div>
     </div>
     <div class="bottom">
-      <n-link class="title" v-if="item.name" to>{{item.name}}</n-link>
+      <div class="elearning-item2__title">
+        <n-link :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+      </div>
 
       <div class="elearning-item2_teacher">
         <div>
-          <app-avatar :src="item.teacher.avatar" :size="20" />
-          <span class="name">{{item.teacher.name}}</span>
+          <app-avatar :src="get(item, 'teacher.avatar.low', '')" :size="20" />
+          <span class="name">{{ get(item, 'teacher.name', '') }}</span>
         </div>
         <div>
           <div class="stars">
-            <app-stars :stars="3"/>
+            <app-stars :stars="Math.floor(item.review_rate || 0)" />
           </div>
           <span>
-            <strong>{{item.teacher.star}}</strong>
-            ({{item.teacher.starAmount}})
+            <strong>{{ item.review_rate || 0}}</strong>
+            ({{ item.review_count || 0 }})
           </span>
         </div>
-        <div class="price">{{item.price}}đ</div>
+
+        <div v-if="item.free" class="text-sub justify-content-end">Miễn phí</div>
+        <div v-else class="price">{{ get(item, 'price.original_price', 0) }}đ</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { assignIn } from "lodash";
-import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
-import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
-import IconBooks from "~/assets/svg/icons/books.svg?inline";
-import IconNote from "~/assets/svg/icons/note.svg?inline";
+import { get } from "lodash";
 import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
 
 export default {
   components: {
-    IconChevronLeft,
-    IconChevronRight,
-    IconBooks,
-    IconNote,
     IconVideo3
   },
 
@@ -52,8 +49,12 @@ export default {
     item: {
       type: Object,
       required: true,
-      default: () => {}
+      default: () => ({})
     }
+  },
+
+  methods: {
+    get
   }
 };
 </script>

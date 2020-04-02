@@ -1,31 +1,46 @@
 <template>
   <div class="elearning-right-side">
-    <img :src="get(info, 'avatar.medium', 'https://picsum.photos/330/204')" alt />
-    <div class="price">Miễn phí</div>
-    <app-button color="secondary" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
+    <!-- <img :src="get(info, 'avatar.medium', 'https://picsum.photos/330/204')" alt /> -->
+    <img class="d-block w-100 mb-4" :src="`https://picsum.photos/330/204`" alt />
+
+    <template v-if="info.free">
+      <span v-if="info.free" class="elearning-right-side__price">Miễn phí</span>
+      <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Tham gia học</app-button>
+    </template>
+
+    <template v-else>
+      <div class="elearning-right-side__price-wrapper">
+        <b class="elearning-right-side__price text-error">{{ 150000 | numeralFormat }}đ</b>
+        <s class="heading-4 text-gray-2">450.000đ</s>
+      </div>
+      <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Chọn mua</app-button>
+      <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
+    </template>
+
+
     <ul class="info">
       <li>
-        <IconBook class="mr-2" />
+        <IconBook class="icon" />
         Trình độ: {{ program.level || '' }}
       </li>
       <li>
-        <IconSubject class="mr-2" />
+        <IconSubject class="icon" />
         Môn học: {{ program.subject || '' }}
       </li>
       <li>
-        <IconLessons class="mr-2" />
+        <IconLessons class="icon" />
         Số bài giảng: {{ program.lessons || 0 }} bài
       </li>
       <li>
-        <IconClock class="mr-2" />
+        <IconClock class="icon" />
         Thời lượng: {{ program.duration || 0 }} phút
       </li>
       <li>
-        <IconEye class="mr-2" />Xem được trên máy tính, điện thoại, tablet
+        <IconEye class="icon" />Xem được trên máy tính, điện thoại, tablet
       </li>
     </ul>
     <hr />
-    <div class="mt-15 mb-3 d-flex">
+    <div class="my-3 d-flex">
       <a class="color-primary d-flex-center">
         <IconShare class="fill-primary mr-2" />Chia sẻ
       </a>
