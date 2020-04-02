@@ -4,6 +4,7 @@
       <app-input
         placeholder="Nhập để tìm kiếm..."
         style="width: 260px"
+        @input="handleChangeSearch"
       ></app-input>
     </div>
 
@@ -33,13 +34,20 @@
                 class="clc-table-action mr-4"
                 >Chọn</a
               >
-              <a class="clc-table-action clc-table-action-delete">
+              <a class="clc-table-action clc-table-action-delete" @click="handleDeleteDocs(file, $event)" href="#">
                 <IconTrashAlt class="icon" />
               </a>
             </td>
+            
           </tr>
         </tbody>
       </table>
+      <app-modal-confirm
+                v-if="showModalConfirm"
+                :confirmLoading="confirmLoading"
+                @ok="handleOk"
+                @cancel="handleCancelModal"
+              />
     </div>
   </div>
 </template>
@@ -49,7 +57,8 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
-import { get } from "lodash";
+import { get, defaultTo } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -65,22 +74,16 @@ export default {
 
   data() {
     return {
-      file_select: null
+      file_select: null,
+      id_file:'',
+      showModalConfirm: false,
+      confirmLoading: false,
+      keyword:''
     };
   },
 
   created() {
-    const options = {
-      params: {
-        type: this.type,
-        page: 1,
-        size: 10
-      }
-    };
-    this.$store.dispatch(
-      `elearning/teaching/repository-files/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`,
-      options
-    );
+    useEffect(this, this.handleGetFile.bind(this),["keyword"])
   },
 
   computed: {
@@ -95,13 +98,58 @@ export default {
       this.$emit("handleSelectUrl", file);
       e.preventDefault();
     },
+    async handleDeleteDocs(file,e){
+      this.id_file = get(file, 'id', ''),
+      console.log(this.id_file)
+      this.showModalConfirm =true
+      e.preventDefault();
+    },
+    async handleOk(){
+      this.confirmLoading= true;
+      const options = {
+        data: {
+          ids: [this.id_file]
+        }
+      };
+      const result = await this.$store.dispatch(
+        `elearning/teaching/repository-files/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`,
+        options
+      );
 
+      this.handleCancelModal()
+
+      if (get(result, "success", false)) {
+        this.$toasted.success(defaultTo(get(result, "message", ""), "Thành công"));
+        this.handleGetFile()
+        return;
+      }
+      this.$toasted.error(defaultTo(get(result, "message", ""), "Có lỗi xảy ra"));
+    },
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
     active(file) {
       return get(this, "file_select.id", "") == get(file, "id", "-1")
         ? "background: #ddd"
         : "";
     },
-
+    handleChangeSearch(keyword){
+      this.keyword =keyword;
+    },
+    handleGetFile(){
+      let params= {
+        type: this.type,
+        page: 1,
+        size: 10
+      }
+      if(this.keyword) params.name = this.keyword
+      const options = {params}
+      this.$store.dispatch(
+        `elearning/teaching/repository-files/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`,
+        options
+      );
+    },
     get
   }
 };
