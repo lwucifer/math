@@ -207,6 +207,7 @@
       :swiperOptions="sliderOptions"
       title="Bài giảng cùng giáo viên"
     />
+    
     <ElearningSliderTab
       :lessons="sciences"
       :swiperOptions="sliderOptions"
