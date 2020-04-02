@@ -9,13 +9,13 @@
         <div class="account__main">
           <ul class="account__tab-nav">
             <li>
-              <n-link :to="'/account'">Timeline</n-link>
+              <n-link :to="`/${$route.params.id}`">Timeline</n-link>
             </li>
             <li>
               <a class="active">Bạn bè</a>
             </li>
             <li>
-              <n-link :to="'./photos'">Ảnh</n-link>
+              <n-link :to="`/${$route.params.id}/social/photos`">Ảnh</n-link>
             </li>
           </ul>
 

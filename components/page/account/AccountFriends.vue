@@ -3,7 +3,7 @@
     <div class="account-friends__title">
       <h3>Bạn bè</h3>
       <n-link
-        :to="'/account/social/friends/requests'"
+        :to="`/${$route.params.id}/social/friends/requests`"
         class="btn btn--size-md btn--color-white btn--square btn--normal"
       >
         Lời mời kết bạn
