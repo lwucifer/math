@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="elearning-manager-result__section">
+    <h4 class="content-title">{{ title }}</h4>
     <app-table
       class="table--objective-test"
       :heads="heads"
@@ -59,6 +60,10 @@
     },
 
     props: {
+      title: {
+        type: String,
+        default: 'Chi tiết kết quả'
+      },
       list: {
         type: Array,
         default: () => []

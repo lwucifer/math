@@ -187,6 +187,7 @@ export const ELEARNING_TEACHING_EXERCISE = {
 export const ELEARNING_TEACHING_SUBMISSION = {
   LIST: "elearningTeachingSubmissionList",
   DETAIL: "elearningTeachingSubmissionDetail",
+  MARK: "elearningTeachingSubmissionMark",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
