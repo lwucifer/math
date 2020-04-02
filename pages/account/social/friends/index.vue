@@ -44,7 +44,8 @@ export default {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId)
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
+      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
     ]);
   },
 

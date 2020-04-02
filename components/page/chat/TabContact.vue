@@ -198,7 +198,11 @@
     </div>
 
     <!-- Modal tạo nhóm chát -->
-    <ModalAddGroup @close="visibleAddGroup = false" v-if="visibleAddGroup" :friends="friendList" />
+    <ModalAddGroup
+      @close="visibleAddGroup = false"
+      v-if="visibleAddGroup"
+      :friends="friendList.listFriend ? friendList.listFriend : []"
+    />
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />

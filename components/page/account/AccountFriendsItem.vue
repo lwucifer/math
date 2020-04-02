@@ -7,7 +7,7 @@
         </n-link>
         <div>
           <n-link :to="'/account/1'" class="bold link-dark">{{ data.fullname }}</n-link>
-          <p>{{}} bạn chung</p>
+          <!-- <p>{{}} bạn chung</p> -->
         </div>
       </div>
 

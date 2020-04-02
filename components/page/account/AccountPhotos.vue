@@ -18,8 +18,12 @@
     <div class="account-photos__list">
       <!-- Content my photo -->
       <div class="row photos" v-if="tab == 1">
-        <div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="(item, index) in photos" :key="index">
-          <img :src="item.src" alt />
+        <div
+          class="col-md-3 col-sm-6 col-xs-12 photo"
+          v-for="(item, index) in filterPhotoList"
+          :key="index"
+        >
+          <img :src="item.link && item.link.low ? item.link.low : ''" alt />
         </div>
       </div>
 
@@ -44,6 +48,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   components: {},
 
@@ -74,7 +79,14 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("social", ["postPhotoList"]),
+    filterPhotoList() {
+      return this.postPhotoList && this.postPhotoList.listPhotos
+        ? this.postPhotoList.listPhotos
+        : [];
+    }
+  },
 
   methods: {}
 };
