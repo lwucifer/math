@@ -134,6 +134,16 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     SET_TEACHING_REPOSITORY_FILE_LIST: "setElearningTeachingRespositoryFileList"
 };
 
+export const ELEARNING_TEACHING_EXERCISE = {
+  SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
+  SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
+};
+
+export const ELEARNING_TEACHING_SUBMISSION = {
+  SET_TEACHING_SUBMISSION_LIST: "setElearningTeachingSubmissionList",
+  SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
+};
+
 export const ELEARNING_CREATING_EXERCISES = {
     SET_ELEARNING_CREATING_EXERCISES_LIST: "setElearningCreatingExercisesList",
     SET_ELEARNING_CREATING_EXERCISES_ADD: "setElearningCreatingExercisesAdd",

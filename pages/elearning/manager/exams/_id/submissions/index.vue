@@ -1,4 +1,5 @@
 <template>
+  <!--UI 1302-->
   <div class="container">
     <div class="row">
       <div class="col-md-3">
@@ -7,13 +8,10 @@
       <div class="col-md-9">
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <div class="elearning-manager-content__title__breadcrumb">
-              <n-link to>Bài tập</n-link>
-              <i> > </i>
-              <n-link to><b>Bài tập đại số lớp 10 (Bài giảng đại số lớp 10)</b></n-link>
-            </div>
-            <hr class/>
+            <header-breadcrumb
+              title="Bài tập và bài kiểm tra"
+              :breadcrumb="breadcrumb"
+            />
           </div>
 
           <div class="elearning-manager-content__main">
@@ -42,20 +40,23 @@
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import SubmissionFilterForm from "~/components/page/elearning/manager/exam/forms/ResultFilter"
   import SubmissionTable from "~/components/page/elearning/manager/exam/tables/Submission"
+  import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
 
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
-  import { useEffect } from "~/utils/common"
+  import { useEffect, getParamQuery } from "~/utils/common"
 
   const STORE_NAMESPACE = "elearning/teaching/submission"
+  const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
 
   export default {
     layout: "exercise",
     components: {
       ElearningManagerSide,
       SubmissionTable,
-      SubmissionFilterForm
+      SubmissionFilterForm,
+      HeaderBreadcrumb
     },
 
     data() {
@@ -83,12 +84,36 @@
       ...mapState(STORE_NAMESPACE, {
         detailInfo: 'submissions'
       }),
+      ...mapState(EXERCISE_STORE_NAMESPACE, {
+        exercise: 'currentExercise'
+      }),
+      breadcrumb: function() {
+        let data = [
+          {
+            text: 'Bài tập',
+            link: '/elearning/manager/exams'
+          },
+          {
+            text: get(this, 'exercise.title', ''),
+            link: '/elearning/manager/exams'
+          }
+        ]
+        return data
+      }
     },
 
     methods: {
+      async getExerciseDetail() {
+        const exerciseId = this.$route.params.id
+        await this.$store.dispatch(
+          `${EXERCISE_STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.DETAIL}`, exerciseId
+        )
+      },
       async getList() {
         try {
           this.loading = true
+          const exerciseId = this.$route.params.id
+          this.params.exercise_id = exerciseId
           let params = {...this.params}
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.LIST}`, {params}
@@ -126,6 +151,7 @@
         "params.class",
         "params.result",
       ])
+      this.getExerciseDetail()
     }
   }
 </script>

@@ -60,6 +60,14 @@ export const validateNumber = _number => {
     return /^([0-9]+)$/.test(_number);
 };
 /**
+ * validate number
+ * @param {price} _price
+ */
+export const validatePrice = _price =>{
+    console.log("test",_price)
+    return /^(\d*([.,](?=\d{2}))?\d+)+((?!\2)[.,]\d\d)?$/.test(_price);
+}
+/**
  * validate port setting
  * @param {port} _port
  */

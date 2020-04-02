@@ -179,6 +179,16 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     DELETE: "elearningTeachingRespositoryFileDelete"
 };
 
+export const ELEARNING_TEACHING_EXERCISE = {
+  LIST: "elearningTeachingExerciseList",
+  DETAIL: "elearningTeachingExerciseDetail",
+};
+
+export const ELEARNING_TEACHING_SUBMISSION = {
+  LIST: "elearningTeachingSubmissionList",
+  DETAIL: "elearningTeachingSubmissionDetail",
+};
+
 export const ELEARNING_CREATING_EXERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",

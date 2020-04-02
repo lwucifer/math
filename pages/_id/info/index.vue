@@ -101,19 +101,20 @@ export default {
         address: this.address,
         birthday: getDateFormat(this.birthday)
       };
-      this.$store
-        .dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.EDIT}`, data)
-        .then(result => {
-          console.log("[accountPersonalEdit]", result);
-          if (result.success == true) {
-            console.log("thanh cong");
-            this.notify = {
-              redirectLink: "",
-              message: "Bạn đã cập nhật thành công",
-              showNotify: true
-            };
-          }
-        });
+      Promise.all([
+        this.$store.dispatch(
+          `account/${actionTypes.ACCOUNT_PERSONAL.EDIT}`,
+          data
+        )
+      ]).then(result => {
+        console.log("[accountPersonalEdit]", result);
+        console.log("thanh cong");
+        this.notify = {
+          redirectLink: "",
+          message: "Bạn đã cập nhật thành công",
+          showNotify: true
+        };
+      });
     },
     closeNotify() {
       this.notify.showNotify = false;

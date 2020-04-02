@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-right-side">
-    <img :src="get(info, 'avatar.high', 'https://picsum.photos/330/204')" alt />
+    <img :src="get(info, 'avatar.medium', 'https://picsum.photos/330/204')" alt />
     <div class="price">Miễn phí</div>
     <app-button color="secondary" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
     <ul class="info">
@@ -35,6 +35,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { get } from "lodash";
 import IconShare from "~/assets/svg/icons/share.svg?inline";

@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <app-stars :stars="4" :size="16" class="mt-4 mb-3" />
+    <app-stars :stars="4" :size="16" class="my-3" />
     <p class="color-666">{{ data.comment }}</p>
   </div>
 </template>
@@ -39,10 +39,8 @@ export default {
       default: () => ({}),
       validator: value =>
         [
-          "id",
           "avatar",
           "fullname",
-          "username",
           "comment",
           "rate",
           "created"
