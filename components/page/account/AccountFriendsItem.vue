@@ -29,7 +29,7 @@
         </app-button>
         <ul class="account-friends-item__actions-list">
           <li>
-            <a>Hủy theo dõi</a>
+            <a @click.prevent="handleUnFollow(data.id)">Hủy theo dõi</a>
           </li>
           <li>
             <a @click.prevent="hanldeUnfriend(data.id)">Hủy kết bạn</a>
@@ -68,13 +68,44 @@ export default {
   },
 
   methods: {
-    ...mapActions("social", ["deleteFriend", "socialFriendList"]),
+    ...mapActions("social", [
+      "deleteFriend",
+      "socialFriendList",
+      "createFollow",
+      "deleteFollow"
+    ]),
     hanldeUnfriend(_id) {
       console.log("[hanldeUnfriend] id", _id);
       this.deleteFriend(_id).then(result => {
         if (result.success == true) {
           this.$toasted.show("success");
           this.socialFriendList();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleCreateFollow(id) {
+      const data = {
+        followed_user_id: id
+      };
+      this.createFollow(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(this.$route.params.id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleUnFollow(id) {
+      const data = {
+        followed_user_id: id
+      };
+      this.deleteFollow(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(id);
         } else {
           this.$toasted.error(result.message);
         }

@@ -42,6 +42,7 @@ export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
 export const SOCIAL_FRIEND_INVITE = `${SCHOOLLY_ALIAS}/social/api/friend/invite`;
 export const SOCIAL_POST_PHOTO = `${SCHOOLLY_ALIAS}/social/api/post/photo`;
+export const SOCIAL_FOLLOW = `${SCHOOLLY_ALIAS}/social/api/follow`;
 
 /**
  * ELEARNING

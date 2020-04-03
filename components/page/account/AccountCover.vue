@@ -97,7 +97,7 @@
         </app-button>
         <ul class="friend-actions-list">
           <li>
-            <a>Hủy theo dõi</a>
+            <a @click.prevent="handleUnFollow">Hủy theo dõi</a>
           </li>
           <li>
             <a @click.prevent="handleCancelInvite">Hủy kết bạn</a>
@@ -191,7 +191,13 @@ export default {
       "accountPersonalEditCover",
       "accountPersonalList"
     ]),
-    ...mapActions("social", ["inviteFriend", "getListInvite", "deleteFriend"]),
+    ...mapActions("social", [
+      "inviteFriend",
+      "getListInvite",
+      "deleteFriend",
+      "deleteFollow",
+      "createFollow"
+    ]),
     handleInviteFriendNone() {
       const data = {
         friend_id: this.$route.params.id
@@ -207,8 +213,34 @@ export default {
     },
     handleCancelInvite() {
       const id = this.$route.params.id;
-      console.log("_id", id);
+      // console.log("_id", id);
       this.deleteFriend(id).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleCreateFollow() {
+      const data = {
+        followed_user_id: this.$route.params.id
+      };
+      this.createFollow(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(this.$route.params.id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleUnFollow() {
+      const data = {
+        followed_user_id: this.$route.params.id
+      };
+      this.deleteFollow(data).then(result => {
         if (result.success == true) {
           this.$toasted.show("success");
           this.accountPersonalList(id);
