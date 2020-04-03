@@ -57,7 +57,7 @@
     </div>
 
     <div class="post__post">
-      <div class="post__post-desc" v-html="post.content"></div>
+      <div v-if="!checkEditorEmpty(post.content)" v-html="post.content" class="post__post-desc"></div>
       <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
       <slot name="media-content" />
@@ -136,6 +136,7 @@
 <script>
 import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { checkEditorEmpty } from "~/utils/validations";
 import { createComment } from "~/models/social/Comment";
 
 const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
@@ -232,6 +233,8 @@ export default {
   },
 
   methods: {
+    checkEditorEmpty,
+
     handleClickDelete() {
       this.$emit("delete", this.post.post_id);
     },
