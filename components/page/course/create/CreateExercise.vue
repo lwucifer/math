@@ -14,6 +14,7 @@
       <ButtonCreateExercise
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
+        :category="category"
       />
 
       <FormCreateExercise
@@ -21,6 +22,7 @@
         @handleCancel="handleCancelAddCreate"
         :lesson="lesson"
         @handleRefreshExcercises="handleRefreshExcercises"
+        :category="category"
       />
 
       <ExerciseList
@@ -71,7 +73,8 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       lessons: [],
-      lesson: null
+      lesson: null,
+      category: 'EXERCISE'
     };
   },
 

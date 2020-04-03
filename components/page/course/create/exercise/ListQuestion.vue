@@ -1,7 +1,7 @@
 <template>
   <div class="ce-question-item d-flex align-items-center">
-    <h3 class="body-2 mr-4">1. Đây là câu hỏi</h3>
-    <span class="text-sub mr-4">Câu hỏi trắc nghiệm</span>
+    <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
+    <span class="text-sub mr-4">{{ type }}</span>
 
     <div class="d-flex align-items-center ml-auto ce-question-item__actions">
       <button class="mr-4">
@@ -12,9 +12,9 @@
         <IconTrashAlt class="icon d-block subheading fill-secondary" />
       </button>
 
-      <button>
+      <!-- <button>
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -38,6 +38,23 @@ export default {
     IconAlignCenterAlt,
     IconFileCheck,
     IconClipboardNotes
+  },
+
+  props: {
+    question: {
+      type: Object,
+      default: null
+    }
+  },
+
+  computed: {
+    type() {
+      return get(this, 'question.type', '') === 'CHOICE' ? 'Câu hỏi trắc nghiệm' : 'Câu hỏi tự luận'
+    }
+  },
+
+  methods: {
+    get
   }
 };
 </script>

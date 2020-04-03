@@ -2,14 +2,14 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="text-sub mb-2 d-inline-block"
-        >Tiêu đề bài tập</label
+        >Tiêu đề {{ text }}</label
       >
       <app-input id="title" :counter="100" v-model="payload.title" />
     </div>
 
     <div class="row align-items-center mb-4">
       <div class="col-md-2">
-        <label for="require" class="text-gray caption">Loại bài tập</label>
+        <label for="require" class="text-gray caption">Loại {{ text }}</label>
       </div>
       <div class="col-md-10">
         <app-select
@@ -33,7 +33,9 @@
 
     <div class="row align-items-center mb-4">
       <div class="col-md-2">
-        <label for="require" class="text-gray caption">Bài tập bắt buộc?</label>
+        <label for="require" class="text-gray caption"
+          >{{ text }} bắt buộc?</label
+        >
       </div>
       <div class="col-md-10">
         <app-select
@@ -127,7 +129,7 @@
         class="font-weight-semi-bold"
         square
         @click="handleAddExcercise"
-        >Tạo bài tập</app-button
+        >Tạo {{ text }}</app-button
       >
     </div>
     <app-modal-confirm
@@ -156,6 +158,16 @@ export default {
     lesson: {
       type: Object,
       default: null
+    },
+    category: {
+      type: String,
+      default: ""
+    }
+  },
+
+  computed: {
+    text() {
+      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
     }
   },
 
@@ -170,7 +182,7 @@ export default {
         pass_score: 0,
         reworks: 0,
         duration: 0,
-        category: "EXERCISE"
+        category: this.category
       },
       showModalConfirm: false,
       confirmLoading: false
@@ -205,7 +217,9 @@ export default {
     handleCancel() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    }
+    },
+
+    get
   }
 };
 </script>

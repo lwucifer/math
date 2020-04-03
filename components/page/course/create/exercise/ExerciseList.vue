@@ -76,10 +76,6 @@ export default {
     }
   },
 
-  created() {
-    console.log(this.exercise);
-  },
-
   data() {
     return {
       isAddQuestionForm: false
