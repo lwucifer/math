@@ -7,7 +7,7 @@
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
 
     <CreateAnswerOfQuestion
-      v-for="(answer, index) in get(payload, 'questions', [])"
+      v-for="(answer, index) in get(payload, 'answers', [])"
       :key="index"
       :answer="answer"
       :index="index"
@@ -21,12 +21,24 @@
         class="font-weight-semi-bold mr-4"
         size="sm"
         square
+        @click="$emit('handleCancelAddQuestion')"
         >Huỷ bỏ</app-button
       >
-      <app-button color="primary" class="font-weight-semi-bold" size="sm" square
+      <app-button
+        color="primary"
+        class="font-weight-semi-bold"
+        size="sm"
+        square
+        @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -34,6 +46,7 @@
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -50,11 +63,13 @@ export default {
 
   data() {
     return {
+      showModalConfirm: false,
+      confirmLoading: false,
       payload: {
         exercise_id: get(this, "exercise.id", ""),
         type: "CHOICE",
         content: "",
-        questions: [
+        answers: [
           {
             correct: false,
             content: "",
@@ -81,14 +96,41 @@ export default {
   },
 
   methods: {
+    handleSubmitQuestion() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
+        this.payload
+      );
+
+      this.handleCancel()
+
+      if (get(res, "success", false)) {
+        this.$toasted.success("success");
+        this.$$emit('handleRefreshQuestion')
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     handleSelectAnswerTrue(index) {
-      this.payload.questions.map((answer, key) => {
-        this.payload.questions[key].correct = key === index;
+      this.payload.answers.map((answer, key) => {
+        this.payload.answers[key].correct = key === index;
       });
     },
 
     handleChangeContentAnswer(index, value) {
-      this.payload.questions[index].content = value;
+      this.payload.answers[index].content = value;
     },
 
     get

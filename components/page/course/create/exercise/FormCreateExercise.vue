@@ -160,18 +160,21 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
+
       this.payload.lesson_id = get(this, "lesson.id", "");
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
         payload
       );
+
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
         this.$emit("handleRefreshExcercises");
         return;
       }
+      
       this.$toasted.error(get(res, "message", ""));
     },
 

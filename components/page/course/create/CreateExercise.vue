@@ -27,6 +27,7 @@
         v-for="exercise in get(lesson, 'exercises', [])"
         :key="exercise.id"
         :exercise="exercise"
+        @handleRefreshQuestion="handleRefreshQuestion"
       />
     </div>
   </div>
@@ -81,6 +82,10 @@ export default {
   },
 
   methods: {
+    handleRefreshQuestion() {
+      this.getLesson(get(this, "lesson.id", ""));
+    },
+
     async getLesson(lesson_id) {
       if (lesson_id) {
         const res = await this.$store.dispatch(
@@ -97,6 +102,8 @@ export default {
 
     handleRefreshExcercises() {
       this.getLesson(get(this, "lesson.id", ""));
+      this.isShowFormAdd = false;
+      this.isShowButtonCreate = true;
     },
 
     handleShowFormAdd() {

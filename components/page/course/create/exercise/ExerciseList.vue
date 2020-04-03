@@ -22,8 +22,17 @@
       </div>
 
       <div class="cc-box__body">
-        <CreateQuestionChoice v-if="isAddQuestionForm" :exercise="exercise" />
-        <ListQuestion />
+        <CreateQuestionChoice
+          v-if="isAddQuestionForm"
+          :exercise="exercise"
+          @handleCancelAddQuestion="handleCancelAddQuestion"
+          @handleRefreshQuestion="handleRefreshQuestion"
+        />
+        <ListQuestion
+          v-for="question in get(exercise, 'questions', [])"
+          :key="question.id"
+          :question="question"
+        />
       </div>
     </div>
   </div>
@@ -70,6 +79,14 @@ export default {
   },
 
   methods: {
+    handleRefreshQuestion() {
+      this.$emit('handleRefreshQuestion')
+    },
+
+    handleCancelAddQuestion() {
+      this.isAddQuestionForm = false;
+    },
+
     get,
 
     handleAddQuestion() {
