@@ -112,7 +112,7 @@
       </div>
       <n-link
         class="mt-0 btn btn--size-md btn--full-width btn--color-primary btn--square"
-        :to="'/account/social/friends'"
+        :to="`/${$route.params.id}/social/friends`"
       >Tất cả bạn bè</n-link>
     </div>
     <app-modal-otp

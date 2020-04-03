@@ -4,16 +4,20 @@
 
     <nuxt class="page-content"/>
 
+    <Footer />
+
     <portal-target name="modal" multiple></portal-target>
   </div>
 </template>
 
 <script>
 import TheHeaderExercise from "~/components/layout/header/HeaderExercise"
+import Footer from "~/components/layout/footer/Footer"
 
 export default {
   components: {
     TheHeaderExercise,
+    Footer
   }
 }
 </script>

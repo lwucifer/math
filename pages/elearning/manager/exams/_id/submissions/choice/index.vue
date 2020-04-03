@@ -1,27 +1,24 @@
 <template>
   <div class="elearning-manager-result">
-    <div class="elearning-manager-result__section">
-      <h4 class="title">Kết quả bài làm</h4>
-      <mark-section
-        :is-pass="isPass"
-        :result="result"
-        :started-at="get(this, 'detail.start_time', '')"
-        :finished-at="get(this, 'detail.timestamp', '')"
-        :duration="get(this, 'detail.duration', 0)"
-        :question-num="get(this, 'detail.questions', 0)"
-        :correct-ans="get(this, 'detail.corrects', 0)"
-        :has-mark="hasMark"
-      />
-      <mark-form-section />
-    </div>
+    <mark-section
+      title="Kết quả bài làm"
+      :is-pass="isPass"
+      :result="result"
+      :started-at="get(this, 'detail.start_time', '')"
+      :finished-at="get(this, 'detail.timestamp', '')"
+      :duration="get(this, 'detail.duration', 0)"
+      :question-num="get(this, 'detail.questions', 0)"
+      :correct-ans="get(this, 'detail.corrects', 0)"
+      :has-mark="hasMark"
+    />
+    <!--Form-->
+    <mark-form-section />
 
-    <div class="py-3 elearning-manager-result__section">
-      <h4 class="title">Chi tiết kết quả</h4>
-      <!--Table-->
-      <result-table-section
-        :list.sync="list"
-      />
-    </div>
+    <!--Table-->
+    <result-table-section
+      class="py-3"
+      :list.sync="list"
+    />
   </div>
 </template>
 
