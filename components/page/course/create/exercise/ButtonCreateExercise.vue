@@ -15,17 +15,33 @@
       size="sm"
       square
       @click="$emit('handleClick')"
-      >Tạo bài tập</app-button
+      >{{ text }}</app-button
     >
   </div>
 </template>
 
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
     IconInfoCircle
+  },
+
+  props: {
+    category: {
+      type: String,
+      default: ""
+    }
+  },
+
+  computed: {
+    text() {
+      return get(this, "category", "") === "EXERCISE"
+        ? "Tạo bài tập"
+        : "Tạo bài kiểm tra";
+    }
   }
 };
 </script>
