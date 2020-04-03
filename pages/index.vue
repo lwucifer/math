@@ -500,7 +500,14 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
-        formData.append(key, data[key]);
+        if (key === 'post_image') {
+          const files = data[key];
+          for(let i = 0; i < files.length; i++) {
+            formData.append('post_image', files[i]);
+          }
+        } else {
+          formData.append(key, data[key]);
+        }
       }
 
       this.postEditorActive = false;
@@ -510,13 +517,16 @@ export default {
         formData
       );
 
-      this.postLoading = false;
-
       if (doAdd.success) {
         cb();
-        this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+        const timeout = setTimeout(() => {
+          this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+          this.postLoading = false;
+          clearTimeout(timeout);
+        }, data.post_image.length * 1000);
       } else {
         this.$toasted.error(doAdd.message);
+        this.postLoading = false;
       }
     },
 

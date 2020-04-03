@@ -424,7 +424,7 @@ export default {
         {
           content: this.editor.getHTML(),
           link: this.link,
-          post_image: this.fileList[0],
+          post_image: this.fileList,
           list_tag: JSON.stringify(this.list_tag),
           check_in: JSON.stringify(this.check_in),
           privacy: this.privacy,
