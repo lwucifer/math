@@ -68,7 +68,6 @@ export default {
 
   data() {
     return {
-      createType: "choice", // 'choice' | 'essay'
       isShowButtonCreate: true,
       isShowFormAdd: false,
       lessons: [],

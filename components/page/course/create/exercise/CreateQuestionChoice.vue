@@ -47,6 +47,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import { createPayloadQuestion } from "../../../../../models/course/AddCourse";
 
 export default {
   components: {
@@ -103,16 +104,17 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
 
+      const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
-        this.payload
+        payload
       );
 
-      this.handleCancel()
+      this.handleCancel();
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$$emit('handleRefreshQuestion')
+        this.$emit("handleRefreshQuestion");
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

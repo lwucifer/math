@@ -9,6 +9,30 @@
 
     <div class="row align-items-center mb-4">
       <div class="col-md-2">
+        <label for="require" class="text-gray caption">Loại bài tập</label>
+      </div>
+      <div class="col-md-10">
+        <app-select
+          class="cc-select"
+          id="require"
+          :options="[
+            { value: 'CHOICE', text: 'Trắc nghiệm' },
+            { value: 'ESSAY', text: 'Tự luận' }
+          ]"
+          placeholder="Bắt buộc"
+          size="sm"
+          style="width: 112px"
+          v-model="payload.type"
+        >
+          <template slot="placeholder-icon">
+            <IconAngleDown class="icon" />
+          </template>
+        </app-select>
+      </div>
+    </div>
+
+    <div class="row align-items-center mb-4">
+      <div class="col-md-2">
         <label for="require" class="text-gray caption">Bài tập bắt buộc?</label>
       </div>
       <div class="col-md-10">
@@ -174,7 +198,7 @@ export default {
         this.$emit("handleRefreshExcercises");
         return;
       }
-      
+
       this.$toasted.error(get(res, "message", ""));
     },
 
