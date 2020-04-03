@@ -2,14 +2,40 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="text-sub mb-2 d-inline-block"
-        >Tiêu đề bài tập</label
+        >Tiêu đề {{ text }}</label
       >
       <app-input id="title" :counter="100" v-model="payload.title" />
     </div>
 
     <div class="row align-items-center mb-4">
       <div class="col-md-2">
-        <label for="require" class="text-gray caption">Bài tập bắt buộc?</label>
+        <label for="require" class="text-gray caption">Loại {{ text }}</label>
+      </div>
+      <div class="col-md-10">
+        <app-select
+          class="cc-select"
+          id="require"
+          :options="[
+            { value: 'CHOICE', text: 'Trắc nghiệm' },
+            { value: 'ESSAY', text: 'Tự luận' }
+          ]"
+          placeholder="Bắt buộc"
+          size="sm"
+          style="width: 112px"
+          v-model="payload.type"
+        >
+          <template slot="placeholder-icon">
+            <IconAngleDown class="icon" />
+          </template>
+        </app-select>
+      </div>
+    </div>
+
+    <div class="row align-items-center mb-4">
+      <div class="col-md-2">
+        <label for="require" class="text-gray caption"
+          >{{ text }} bắt buộc?</label
+        >
       </div>
       <div class="col-md-10">
         <app-select
@@ -103,7 +129,7 @@
         class="font-weight-semi-bold"
         square
         @click="handleAddExcercise"
-        >Tạo bài tập</app-button
+        >Tạo {{ text }}</app-button
       >
     </div>
     <app-modal-confirm
@@ -132,6 +158,16 @@ export default {
     lesson: {
       type: Object,
       default: null
+    },
+    category: {
+      type: String,
+      default: ""
+    }
+  },
+
+  computed: {
+    text() {
+      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
     }
   },
 
@@ -146,7 +182,7 @@ export default {
         pass_score: 0,
         reworks: 0,
         duration: 0,
-        category: "EXERCISE"
+        category: this.category
       },
       showModalConfirm: false,
       confirmLoading: false
@@ -160,25 +196,30 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
+
       this.payload.lesson_id = get(this, "lesson.id", "");
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
         payload
       );
+
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
         this.$emit("handleRefreshExcercises");
         return;
       }
+
       this.$toasted.error(get(res, "message", ""));
     },
 
     handleCancel() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    }
+    },
+
+    get
   }
 };
 </script>

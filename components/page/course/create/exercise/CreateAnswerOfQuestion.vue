@@ -23,11 +23,11 @@
           <app-input @input="handleChangeContent" />
         </div>
 
-        <div>
+        <!-- <div>
           <button>
             <IconTrashAlt class="icon d-block subheading fill-secondary" />
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
