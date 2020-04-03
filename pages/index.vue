@@ -228,15 +228,13 @@
         <div class="col-md-4">
           <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
-              v-for="(item, index) in messages"
+              v-for="message in messagesConverted"
+              v-bind="message"
               class="mb-4"
               nuxt
-              to
               size="sm"
-              :key="index"
-              :image="item.image"
-              :title="item.title"
-              :desc="item.desc"
+              :key="message.id"
+              :to="`/messages/t/${message.id}`"
             />
           </AsideBox>
 
@@ -291,6 +289,7 @@
 </template>
 
 <script>
+import { get } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
@@ -298,7 +297,6 @@ import { createLike } from "~/models/social/Like";
 import { createShare } from "~/models/social/Share";
 import { createPost } from "~/models/post/Post";
 import {
-  MESSAGES,
   COURSES_LIST,
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
@@ -307,6 +305,7 @@ import FeedsService from "~/services/social/feeds";
 import SocialPostsService from "~/services/social/post";
 import LikesService from "~/services/social/likes";
 import ShareService from "~/services/social/shares";
+import LimitMessagesSerice from "~/services/message/LimitMessages";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -345,11 +344,17 @@ export default {
 
   async asyncData({ $axios }) {
     const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
+    const getMessages = () =>
+      new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
 
-    const [{ data: dataFeeds = {} }] = await Promise.all([getFeeds()]);
+    const [{ data: feeds = {} }, { data: messages = {} }] = await Promise.all([
+      getFeeds(),
+      getMessages()
+    ]);
 
     return {
-      feeds: dataFeeds
+      feeds,
+      messages
     };
   },
 
@@ -381,7 +386,6 @@ export default {
       shareData: {},
 
       //Fake data
-      messages: MESSAGES,
       coursesList: COURSES_LIST,
       timelineSliderItems: TIMELINE_SLIDER_ITEMS
     };
@@ -393,6 +397,20 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    messagesConverted() {
+      return this.messages.map(item => ({
+        id: item.room_id,
+        image:
+          item.type === 1
+            ? get(item, "user_avatar.low", null)
+            : get(item, "room_avatar.low", null),
+        title:
+          (item.type === 1 ? item.fullname : item.room_name) ||
+          "Không có tiêu đề",
+        desc: item.content
+      }));
     }
   },
 
@@ -419,6 +437,8 @@ export default {
   },
 
   methods: {
+    get,
+
     /**
      * Click image -> change url
      * @param { Object } imageObj - { type: image | video, post: post object }
@@ -500,10 +520,10 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
-        if (key === 'post_image') {
+        if (key === "post_image") {
           const files = data[key];
-          for(let i = 0; i < files.length; i++) {
-            formData.append('post_image', files[i]);
+          for (let i = 0; i < files.length; i++) {
+            formData.append("post_image", files[i]);
           }
         } else {
           formData.append(key, data[key]);
@@ -626,7 +646,7 @@ export default {
       const timeout = setTimeout(() => {
         cb();
         clearTimeout(timeout);
-      }, 500)
+      }, 500);
     },
 
     cancelShare() {
