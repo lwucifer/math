@@ -96,7 +96,20 @@ export const validatePassword = _password => {
     return re.test(_password);
 };
 
+/**
+ * Validate script tag
+ * @param {String} string 
+ */
 export const validateScriptTag = string => {
     const regex = /<[^>]*script/g;
     return regex.test(string);
 };
+
+/**
+ * Check editor empty ( match <p></p>, <p>  </p>)
+ * @param {String} content 
+ */
+export const checkEditorEmpty = content => {
+    const regex = /^<p>?\s{0,}<\/\p>/gm;
+    return !content || regex.test(content);
+}
