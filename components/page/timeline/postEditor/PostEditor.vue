@@ -3,9 +3,10 @@
     <div v-if="showOverlay" class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
-        <div class="post-editor__avatar">
-          <img src="https://picsum.photos/60/60" alt />
-        </div>
+        <app-avatar
+          class="post-editor__avatar"
+          :src="avatarUser && avatarUser.low ? avatarUser.low : null"
+        />
 
         <client-only>
           <editor-content :editor="editor" class="post-editor__editor" />
@@ -171,7 +172,13 @@
         </app-select>
       </div>
 
-      <app-button class="post-editor__submit mt-4" :disabled="!submitable" full-width square @click.stop="submit">Đăng tin</app-button>
+      <app-button
+        class="post-editor__submit mt-4"
+        :disabled="!submitable"
+        full-width
+        square
+        @click.stop="submit"
+      >Đăng tin</app-button>
     </div>
   </div>
 </template>
@@ -265,6 +272,7 @@ export default {
   computed: {
     ...mapState("social", { labelList: "labels" }),
     ...mapGetters("social", ["configPrivacyLevels"]),
+    ...mapGetters("auth", ["avatarUser"]),
 
     classes() {
       return {
@@ -325,7 +333,7 @@ export default {
       ],
       onUpdate: ({ getHTML }) => {
         this.content = getHTML();
-      },
+      }
     });
   },
 
