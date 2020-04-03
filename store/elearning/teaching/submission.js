@@ -50,6 +50,35 @@ const LIST = [
   },
 ]
 
+const DETAIL = {
+  id: "submitssione698a8ea-4e12-11ea-b77f-2e728ce88125",
+  student: 'Nguyễn Đức Anh',
+  class: "6B",
+  start_time: "2020-03-24 16:49:25",
+  duration: 3505,
+  timestamp: "2020-03-24 18:49:25",
+  questions: 50,
+  corrects: 34,
+  mark: 8.6,
+  note: "Bài làm tốt",
+  to_passed: false,
+  result: 1,
+  contents: [
+    {
+      question_id: "14525255252",                                    // mã câu hỏi
+      question_name: "Tên câu hỏi 01",                              // tên câu hỏi
+      student_answer: "Câu trả lời học sinh",                              // câu trả lời của học viên
+      correct_answer: "Câu trả lời đúng",                               // câu trả lời đúng
+    },
+    {
+      question_id: "14525255253",                                    // mã câu hỏi
+      question_name: "Tên câu hỏi 02",                              // tên câu hỏi
+      student_answer: "Câu trả lời học sinh 02",                              // câu trả lời của học viên
+      correct_answer: "Câu trả lời đúng 02",                               // câu trả lời đúng
+    }
+  ]
+}
+
 /**
  * initial state
  */
@@ -105,34 +134,7 @@ const actions = {
       const result = {
         code: "200",
         success: true,
-        data: {
-          id: "submitssione698a8ea-4e12-11ea-b77f-2e728ce88125",
-          student: 'Nguyễn Đức Anh',
-          class: "6B",
-          start_time: "2020-03-24 16:49:25",
-          duration: 3505,
-          timestamp: "2020-03-24 18:49:25",
-          questions: 50,
-          corrects: 34,
-          mark: 8.6,
-          note: "Bài làm tốt",
-          to_passed: false,
-          result: 1,
-          contents: [
-            {
-              question_id: "14525255252",                                    // mã câu hỏi
-              question_name: "Tên câu hỏi 01",                              // tên câu hỏi
-              student_answer: "Câu trả lời học sinh",                              // câu trả lời của học viên
-              correct_answer: "Câu trả lời đúng",                               // câu trả lời đúng
-            },
-            {
-              question_id: "14525255253",                                    // mã câu hỏi
-              question_name: "Tên câu hỏi 02",                              // tên câu hỏi
-              student_answer: "Câu trả lời học sinh 02",                              // câu trả lời của học viên
-              correct_answer: "Câu trả lời đúng 02",                               // câu trả lời đúng
-            }
-          ]
-        },
+        data: DETAIL,
         message: "success"
       }
       commit(mutationTypes.ELEARNING_TEACHING_SUBMISSION.SET_TEACHING_SUBMISSION_DETAIL, result.data);
@@ -144,32 +146,24 @@ const actions = {
   
   async [actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK]({ commit }, payload) {
     try {
-      // const result = await new Submission(this.$axios)[actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK](
+      // const result = await new Submission(this.$axios)['mark'](
       //   payload
       // );
+      DETAIL.mark = 9;
       
       const result = {
         code: "200",
         success: true,
         data: {
-          content: LIST,
-          page: {
-            totalElements: 4,
-            last: true,
-            totalPages: 1,
-            size: 10,
-            number: 0,
-            first: true,
-            numberOfElements: 4
-          }
+          success: true,
+          message: '',
+          code: 200
         },
         message: "success"
-      }
-      return result
-      // set to mutation
-      // commit(mutationTypes.ELEARNING_TEACHING_SUBMISSION.SET_TEACHING_SUBMISSION_LIST, result);
+      };
+      return result;
     } catch (error) {
-      console.log("[Teaching submission] list.error", error);
+      console.log("[Teaching submission] mark.error", error);
     }
   },
   
@@ -184,18 +178,6 @@ const actions = {
   //     console.log("[Teaching exercises] edit.error", error);
   //   }
   // },
-  
-  // async [actionTypes.ELEARNING_CREATING_EXERCISES.DELETE]({ commit }, payload) {
-  //   try {
-  //     const result = await new Exercise(this.$axios)[actionTypes.BASE.DELETE](
-  //       payload
-  //     );
-  //     // set to mutation
-  //     // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
-  //   } catch (error) {
-  //     console.log("[Teaching exercises] delete.error", error);
-  //   }
-  // }
 };
 
 /**
