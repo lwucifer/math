@@ -149,7 +149,6 @@ const actions = {
       // const result = await new Submission(this.$axios)['mark'](
       //   payload
       // );
-      DETAIL.mark = 9;
       
       const result = {
         code: "200",
