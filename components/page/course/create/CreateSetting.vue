@@ -216,6 +216,7 @@ export default {
         const elearning_id = getParamQuery("elearning_id");
         if (elearning_id) {
           if(!payload.free){
+            console.log(payload)
             if(payload.discount>payload.fee){
               this.validateProps.discount =2;
               this.errorMessage.discount = "Giá khuyến mại phải thấp hơn giá bán";
@@ -232,10 +233,11 @@ export default {
             }
           }
           else{
-            console.log(that.isSubmit)
             that.isSubmit = true;
+            console.log('hello')
           }
-        } 
+        }
+        
       },
       deep: true
     }
@@ -272,7 +274,7 @@ export default {
 
     handleChangeFee(fee) {
       this.validateProps.fee= "";
-      if(!this.payload.fee){
+      if(!fee){
         this.validateProps.fee =2;
         this.errorMessage.fee = "Trường này là bắt buộc";
         this.showPercent = false
@@ -294,7 +296,7 @@ export default {
 
     handleChangeDiscount(discount) {
       this.validateProps.discount= "";
-      if(!this.payload.discount){
+      if(!discount){
         this.validateProps.discount =2;
         this.errorMessage.discount = "Trường này là bắt buộc";
         this.showPercent = false
