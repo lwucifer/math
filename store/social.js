@@ -9,6 +9,7 @@ import Label from "~/services/social/label";
 import Friend from "~/services/social/friend";
 import FriendInvite from "~/services/social/Friendinvite";
 import Photos from "~/services/social/photos";
+import SocialFollow from "~/services/social/follow";
 
 /**
  * initial state
@@ -316,10 +317,10 @@ const actions = {
             const data = await new Friend(this.$axios)[actionTypes.BASE.DELETE](
                 payload
             );
-            console.log("[Friend] add", data);
+            console.log("[Friend] delete", data);
             return data;
         } catch (err) {
-            console.log("[Friend] add.err", err);
+            console.log("[Friend] delete.err", err);
             return err;
         }
     },
@@ -335,6 +336,30 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[Photos] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_FOLLOW.CREATE_FOLLOW]({ commit }, payload) {
+        try {
+            const data = await new SocialFollow(this.$axios)[actionTypes.BASE.ADD](
+                payload
+            );
+            console.log("[SocialFollow] add", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialFollow] add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_FOLLOW.DELETE_FOLLOW]({ commit }, payload) {
+        try {
+            const data = await new SocialFollow(this.$axios)[
+                actionTypes.BASE.DELETE_PAYLOAD
+            ](payload);
+            console.log("[SocialFollow] delete", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialFollow] delete.err", err);
             return err;
         }
     }

@@ -23,8 +23,8 @@
     </div>
 
     <!-- Not friend -->
-    <div class="actions" v-if="status == 1">
-      <app-button square class="mr-3">
+    <div class="actions" v-if="status == 'none'">
+      <app-button square class="mr-3" @click="handleInviteFriendNone">
         <IconUserCross class="mr-2" />Thêm bạn bè
       </app-button>
       <app-button square color="secondary">
@@ -33,7 +33,7 @@
     </div>
 
     <!-- Send request -->
-    <div class="actions" v-if="status == 2">
+    <div class="actions" v-if="status == 'pending'">
       <app-dropdown
         class="friend-actions mr-3"
         position="center"
@@ -46,7 +46,34 @@
         </app-button>
         <ul class="friend-actions-list">
           <li>
-            <a>Hủy lời mời kết bạn</a>
+            <a @click.prevent="handleCancelInvite">Hủy lời mời kết bạn</a>
+          </li>
+        </ul>
+      </app-dropdown>
+
+      <app-button square color="secondary">
+        <IconMessenger class="mr-2" />Nhắn tin
+      </app-button>
+    </div>
+
+    <!-- Send request -->
+    <div class="actions" v-if="status == 'inviting'">
+      <app-dropdown
+        class="friend-actions mr-3"
+        position="center"
+        open-on-click
+        v-model="dropdownShow"
+        content-width="150px"
+      >
+        <app-button slot="activator" slot-scope="{ on }" square v-on="on">
+          <IconUserArrow class="mr-2" />Trả lời lời mời kết bạn
+        </app-button>
+        <ul class="friend-actions-list">
+          <li>
+            <a @click.prevent="handleInviteFriendNone">Xác nhận</a>
+          </li>
+          <li>
+            <a @click.prevent="handleCancelInvite">Xóa yêu cầu</a>
           </li>
         </ul>
       </app-dropdown>
@@ -57,7 +84,7 @@
     </div>
 
     <!-- Friend -->
-    <div class="actions" v-if="status == 3">
+    <div class="actions" v-if="status == 'is_friend'">
       <app-dropdown
         class="friend-actions mr-3"
         position="center"
@@ -70,10 +97,10 @@
         </app-button>
         <ul class="friend-actions-list">
           <li>
-            <a>Hủy theo dõi</a>
+            <a @click.prevent="handleUnFollow">Hủy theo dõi</a>
           </li>
           <li>
-            <a>Hủy kết bạn</a>
+            <a @click.prevent="handleCancelInvite">Hủy kết bạn</a>
           </li>
         </ul>
       </app-dropdown>
@@ -103,9 +130,9 @@ export default {
     IconUserArrow
   },
 
-  props: {
-    status: [String, Number]
-  },
+  // props: {
+  //   status: [String, Number]
+  // },
 
   data() {
     return {
@@ -124,7 +151,30 @@ export default {
   },
 
   computed: {
-    ...mapState("account", ["personalList"])
+    ...mapState("account", ["personalList"]),
+    status() {
+      if (
+        this.personalList.friendship &&
+        this.personalList.friendship == "none"
+      ) {
+        return "none";
+      } else if (
+        this.personalList.friendship &&
+        this.personalList.friendship == "pending"
+      ) {
+        return "pending";
+      } else if (
+        this.personalList.friendship &&
+        this.personalList.friendship == "inviting"
+      ) {
+        return "inviting";
+      } else if (
+        this.personalList.friendship &&
+        this.personalList.friendship == "is_friend"
+      ) {
+        return "is_friend";
+      }
+    }
   },
   created() {
     this.avatarSrc = this.personalList.avatar
@@ -138,8 +188,67 @@ export default {
   methods: {
     ...mapActions("account", [
       "accountPersonalEditAvatar",
-      "accountPersonalEditCover"
+      "accountPersonalEditCover",
+      "accountPersonalList"
     ]),
+    ...mapActions("social", [
+      "inviteFriend",
+      "getListInvite",
+      "deleteFriend",
+      "deleteFollow",
+      "createFollow"
+    ]),
+    handleInviteFriendNone() {
+      const data = {
+        friend_id: this.$route.params.id
+      };
+      this.inviteFriend(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(this.$route.params.id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleCancelInvite() {
+      const id = this.$route.params.id;
+      // console.log("_id", id);
+      this.deleteFriend(id).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleCreateFollow() {
+      const data = {
+        followed_user_id: this.$route.params.id
+      };
+      this.createFollow(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(this.$route.params.id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+    handleUnFollow() {
+      const data = {
+        followed_user_id: this.$route.params.id
+      };
+      this.deleteFollow(data).then(result => {
+        if (result.success == true) {
+          this.$toasted.show("success");
+          this.accountPersonalList(id);
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
     async handleUploadChange(fileList, event) {
       this.avatar = Array.from(fileList);
 
