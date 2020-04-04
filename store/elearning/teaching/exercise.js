@@ -105,8 +105,8 @@ const actions = {
         success: true,
         data: {
           id: "e698a8ea-4e12-11ea-b77f-2e728ce88125",
-          // type: 'CHOICE',
-          type: 'ESSAY',
+          type: 'CHOICE',
+          // type: 'ESSAY',
           title: "Bài tập toán đại số lớp 11",
           lesson_id: 11,
           elearning_id: 10,
@@ -222,7 +222,7 @@ const mutations = {
     state.exercises = exercises;
   },
   [mutationTypes.ELEARNING_TEACHING_EXERCISE.SET_TEACHING_EXERCISE_DETAIL](state, exercise) {
-    console.log("SET_ELEARNING_TEACHING_EXERCISES_LIST", exercise);
+    console.log("SET_ELEARNING_TEACHING_EXERCISES_DETAIL", exercise);
     state.currentExercise = exercise;
   }
 };

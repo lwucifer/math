@@ -510,12 +510,15 @@ export default {
     },
 
     tagOptions() {
-      return this.friendList.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.fullname,
-        avatar: item.avatar
-      }));
+      return (
+        this.friendList.listFriend &&
+        this.friendList.listFriend.map(item => ({
+          ...item,
+          value: item.id,
+          text: item.fullname,
+          avatar: item.avatar
+        }))
+      );
     },
     nameGroup() {
       return this.groupListDetail.room && this.groupListDetail.room.room_name

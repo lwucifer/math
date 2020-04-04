@@ -17,7 +17,9 @@
         :contents="submissionContent"
       />
       <!--form-->
-      <mark-form-section />
+      <mark-form-section
+        @submit="mark"
+      />
     </div>
   </div>
 </template>
@@ -29,8 +31,10 @@
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
-
   import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
+  import { createPayloadMarkSubmission } from "~/models/elearning/Submission";
+  
+  const STORE_NAMESPACE = 'elearning/teaching/submission'
 
   export default {
 
@@ -71,7 +75,6 @@
       submissionContent: function() {
         let data = []
         const questionInfo = get(this, 'detail.contents', [])[0]
-        console.log('questionInfo: ', questionInfo)
         const question = {
           title: "Câu hỏi",
           content: get(questionInfo, 'question_name', '')
@@ -87,6 +90,23 @@
     },
 
     methods: {
+      async mark(content) {
+        const payload = { ...createPayloadMarkSubmission(content), ...{ submission_id: this.detail.id } }
+        const res = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK}`, payload
+        )
+        
+        if (get(res, "success", false)) {
+          this.$emit("refreshSubmission")
+          this.$toasted.success(
+            get(res, "message", "")
+          );
+          return
+        }
+        this.$toasted.error(
+          get(res, "message", "")
+        );
+      },
       get
     },
     created() {

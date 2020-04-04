@@ -7,7 +7,7 @@ export default class Submission extends BaseService {
         super($axios, APIs.ELEARNING_TEACHING_SUBMISSION);
     }
     
-    async [actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK](payload) {
+    async mark(payload) {
         const { data } = await this.$axios.post(this.$api, payload);
         
         return data;

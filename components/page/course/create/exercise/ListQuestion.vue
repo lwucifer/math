@@ -11,7 +11,7 @@
         <IconEditAlt class="icon d-block subheading fill-primary" />
       </button>
 
-      <button class="mr-4">
+      <button class="mr-4" @click="handleDeleteQuestion">
         <IconTrashAlt class="icon d-block subheading fill-secondary" />
       </button>
 
@@ -19,6 +19,12 @@
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
       </button> -->
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
   <EditQuestionChoice
     v-else
@@ -38,6 +44,7 @@ import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?in
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -65,7 +72,9 @@ export default {
 
   data() {
     return {
-      isShowEditQuestion: false
+      isShowEditQuestion: false,
+      showModalConfirm: false,
+      confirmLoading: false
     };
   },
 
@@ -78,6 +87,35 @@ export default {
   },
 
   methods: {
+    handleDeleteQuestion() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+      const payload = {
+        data: {
+          id: get(this, "question.id", "")
+        }
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
+        payload
+      );
+      this.handleCancel();
+      if (get(res, "success", false)) {
+        this.$toasted.success("success");
+        this.$emit("handleRefreshQuestion");
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     handleCancelAddQuestion() {
       this.isShowEditQuestion = false;
     },

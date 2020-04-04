@@ -59,11 +59,10 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE]({ commit }, payload) {
     try {
-      const result = await new Question(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Question(this.$axios)[
+        actionTypes.BASE.DELETE_PAYLOAD
+      ](payload);
+      return result;
     } catch (error) {
       console.log("[Creating Question] delete.error", error);
     }

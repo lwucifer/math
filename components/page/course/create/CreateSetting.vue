@@ -88,13 +88,16 @@
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
-            :value="numeral(fee_discount).format()"
-            @input="handleChangeFeeDiscount"
-            :message="errorMessage.fee_discount"
-            :validate="validateProps.fee_discount"
+            :value="numeral(payload.discount).format()"
+            @input="handleChangeDiscount"
+            :message="errorMessage.discount"
+            :validate="validateProps.discount"
             type="text"
             class="mb-0"
           ></app-input>
+        </div>
+        <div class="percent_discount__ElearningCreate" v-show="showPercent">
+          <span>{{percent_discount}}</span>
         </div>
       </div>
     </div>
@@ -144,7 +147,8 @@ export default {
 
   data() {
     return {
-      fee_discount: 0,
+      percent_discount:"",
+      showPercent:false,
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
@@ -158,20 +162,18 @@ export default {
       },
       errorMessage:{
         fee:"",
-        fee_discount:""
+        discount:""
       },
       validateProps:{
         fee:"",
-        fee_discount:""
+        discount:""
       },
       isSubmit:false,
-      validate: { fee: true, fee_discount: true },
-
     };
   },
   validations:{
     fee:{required},
-    fee_discount:{required}
+    discount:{required}
   },
   created() {
     this.fetchSetting();
@@ -202,7 +204,8 @@ export default {
         this.payload.free = get(this, "setting.free", false) ? 1 : 0;
         const fee = toNumber(get(this, "setting.fee", 0));
         const discount = toNumber(get(this, "setting.discount", 0));
-        this.fee_discount = fee - discount;
+        this.discount = discount;
+        this.percent_discount= numeral((discount-fee)/fee).format('0%')
       },
       deep: true
     },
@@ -213,19 +216,28 @@ export default {
         const elearning_id = getParamQuery("elearning_id");
         if (elearning_id) {
           if(!payload.free){
-            schema_update.isValid(payload).then(function(valid) {
-              that.isSubmit = valid;
-              console.log(payload)
-            });
-            return;
+            console.log(payload)
+            if(payload.discount>payload.fee){
+              this.validateProps.discount =2;
+              this.errorMessage.discount = "Giá khuyến mại phải thấp hơn giá bán";
+              that.showPercent = false
+              that.isSubmit = false
+            }
+            else{
+              that.percent_discount=numeral((payload.discount-payload.fee)/payload.fee).format('0%')
+              that.showPercent =true
+              schema_update.isValid(payload).then(function(valid) {
+                that.isSubmit = valid;
+              });
+              return;
+            }
           }
           else{
-            console.log(that.isSubmit)
             that.isSubmit = true;
+            console.log('hello')
           }
         }
         
-       
       },
       deep: true
     }
@@ -261,20 +273,20 @@ export default {
     },
 
     handleChangeFee(fee) {
-      this.validate.fee = true;
       this.validateProps.fee= "";
-      if(!this.payload.fee){
+      if(!fee){
         this.validateProps.fee =2;
         this.errorMessage.fee = "Trường này là bắt buộc";
+        this.showPercent = false
       }else if(validatePrice(fee)){
         this.validateProps.fee =1;
-        this.validate.fee = false;
         this.payload.fee = fee;
         }
       else if(!validatePrice(fee)){
         this.validateProps.fee =2;
         this.errorMessage.fee = "Tham số không hợp lệ";
         this.isSubmit =false;
+        this.showPercent = false
       }
     },
 
@@ -282,26 +294,20 @@ export default {
       this.payload.free = free;
     },
 
-    handleChangeFeeDiscount(fee_discount) {
-      this.fee_discount = fee_discount;
-      this.payload.discount =
-        numeral(this.payload.fee).value() - numeral(fee_discount).value();
-      this.validate.fee_discount = true;
-      this.validateProps.fee_discount= "";
-      if(validatePrice(fee_discount)){
-        if(numeral(this.fee_discount).value() <= numeral(this.payload.fee).value())
-        {
-          this.validateProps.fee_discount =1;
-          this.validate.fee_discount = false;
+    handleChangeDiscount(discount) {
+      this.validateProps.discount= "";
+      if(!discount){
+        this.validateProps.discount =2;
+        this.errorMessage.discount = "Trường này là bắt buộc";
+        this.showPercent = false
+      }else if(validatePrice(discount)){
+        this.payload.discount = discount;
+        this.validateProps.discount =1;
         }
-        else{
-          this.validateProps.fee_discount =2;
-          this.errorMessage.fee_discount = "Giá khuyến mãi lớn hơn giá gốc";
-        }
-        }
-      else if(!validatePrice(fee_discount)){
-        this.validateProps.fee_discount =2;
-        this.errorMessage.fee_discount = "Tham số không hợp lệ";
+      else if(!validatePrice(discount)){
+        this.validateProps.discount =2;
+        this.errorMessage.discount = "Tham số không hợp lệ";
+        this.showPercent = false
         this.isSubmit =false;
       }
     },
@@ -322,6 +328,7 @@ export default {
 
       if (get(result, "success", false)) {
         this.getProgress();
+        this.fetchSetting()
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -355,4 +362,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.percent_discount__ElearningCreate{
+  background: #32AF85;
+  span{
+    color: #ffffff;
+    display: block;
+    padding: 5px;
+  }
+}
+</style>

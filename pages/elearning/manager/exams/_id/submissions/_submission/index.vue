@@ -14,7 +14,12 @@
           </div>
 
           <div class="elearning-manager-content__main">
-            <component :is="currentComponent" :detail="submission"></component>
+            <component
+              :is="currentComponent"
+              :detail="submission"
+              @refreshSubmission="refreshData"
+            >
+            </component>
           </div>
         </div>
       </div>
