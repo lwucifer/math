@@ -3,9 +3,10 @@
     <div v-if="showOverlay" class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
       <div class="post-editor__top">
-        <div class="post-editor__avatar">
-          <img src="https://picsum.photos/60/60" alt />
-        </div>
+        <app-avatar
+          class="post-editor__avatar"
+          :src="avatarUser && avatarUser.low ? avatarUser.low : null"
+        />
 
         <client-only>
           <editor-content :editor="editor" class="post-editor__editor" />
@@ -29,23 +30,23 @@
         <!-- END LABEL -->
 
         <!-- TAG -->
-        <template v-if="list_tag.length">
+        <template v-if="listTag.length">
           cùng với
           <n-link
             class="font-weight-bold"
-            :to="`/account/${list_tag[0].id}`"
+            :to="`/account/${listTag[0].id}`"
           >{{ selectedTags[0].text }}</n-link>
 
-          <template v-if="list_tag.length > 1">
+          <template v-if="listTag.length > 1">
             và
             <n-link
-              v-if="list_tag.length === 2"
+              v-if="listTag.length === 2"
               class="font-weight-bold"
-              :to="`/account/${list_tag[1].id}`"
+              :to="`/account/${listTag[1].id}`"
             >{{ selectedTags[1].text }}</n-link>
 
             <app-dropdown v-else>
-              <b slot="activator">{{ list_tag.slice(1).length }} người khác.</b>
+              <b slot="activator">{{ listTag.slice(1).length }} người khác.</b>
               <div
                 v-for="item in selectedTags.slice(1)"
                 :key="item.value"
@@ -78,7 +79,7 @@
           placeholder="Cùng với ai?"
           style="width: 100%"
           :options="tagOptions"
-          v-model="list_tag"
+          v-model="listTag"
           @visible-change="handleFriendsVisibleChange"
         >
           <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
@@ -171,7 +172,13 @@
         </app-select>
       </div>
 
-      <app-button full-width square class="post-editor__submit mt-4" @click.stop="submit">Đăng tin</app-button>
+      <app-button
+        class="post-editor__submit mt-4"
+        :disabled="!submitable"
+        full-width
+        square
+        @click.stop="submit"
+      >Đăng tin</app-button>
     </div>
   </div>
 </template>
@@ -183,6 +190,7 @@ import { Placeholder } from "tiptap-extensions";
 
 import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { checkEditorEmpty } from "~/utils/validations";
 import { PasteHandler } from "~/utils/tiptap-plugins";
 import FriendService from "~/services/social/friend";
 
@@ -222,7 +230,7 @@ export default {
         link: "",
         post_image: [],
         list_tag: [],
-        check_in: {},
+        check_in: null,
         privacy: 15,
         label_id: null
       })
@@ -234,10 +242,8 @@ export default {
       editor: null,
       showTags: false,
       showCheckin: false,
-      checkin: null,
       fileList: [],
       previewList: [],
-      label: null,
       labelDropdrown: false,
       localActive: false,
       friendsInfiniteId: +new Date(),
@@ -256,16 +262,17 @@ export default {
       content: this.initialValues.content,
       link: this.initialValues.link,
       post_image: this.initialValues.post_image,
-      list_tag: this.initialValues.list_tag,
-      check_in: this.initialValues.check_in,
+      listTag: this.initialValues.list_tag,
+      checkin: this.initialValues.check_in,
       privacy: this.initialValues.privacy,
-      label_id: this.initialValues.label_id
+      label: this.initialValues.label_id
     };
   },
 
   computed: {
     ...mapState("social", { labelList: "labels" }),
     ...mapGetters("social", ["configPrivacyLevels"]),
+    ...mapGetters("auth", ["avatarUser"]),
 
     classes() {
       return {
@@ -275,7 +282,7 @@ export default {
     },
 
     selectedTags() {
-      return this.list_tag.map(item => {
+      return this.listTag.map(item => {
         const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
         return resultItem;
       });
@@ -294,11 +301,21 @@ export default {
         value: item.id,
         text: item.fullname
       }));
+    },
+
+    submitable() {
+      const conditions = [
+        !checkEditorEmpty(this.content),
+        this.fileList.length > 0,
+        this.label !== null,
+        this.checkin !== null
+      ];
+      return conditions.find(c => !!c) ? true : false;
     }
   },
 
   created() {
-    this.prefetch && this.getFriends()
+    this.prefetch && this.getFriends();
   },
 
   mounted() {
@@ -313,7 +330,10 @@ export default {
         new PasteHandler({
           onPaste: this.handleEditorPaste
         })
-      ]
+      ],
+      onUpdate: ({ getHTML }) => {
+        this.content = getHTML();
+      }
     });
   },
 
@@ -323,19 +343,16 @@ export default {
 
   watch: {
     active(newValue) {
-      console.log("active change", newValue);
       this.localActive = newValue;
     },
 
     localActive(newValue) {
-      console.log("emit active-change", newValue);
       this.$emit("active-change", newValue);
     }
   },
 
   methods: {
     setActive(value) {
-      console.log("setActive", value);
       this.localActive = value;
     },
 
@@ -408,8 +425,6 @@ export default {
     },
 
     handleFriendsVisibleChange(isVisible) {
-      console.log("handleFriendsVisibleChange", isVisible);
-
       if (isVisible) {
         this.friendsList = [];
         this.friendsInfiniteId += 1;
@@ -424,11 +439,11 @@ export default {
         {
           content: this.editor.getHTML(),
           link: this.link,
-          post_image: this.fileList[0],
-          list_tag: JSON.stringify(this.list_tag),
-          check_in: JSON.stringify(this.check_in),
+          post_image: this.fileList,
+          list_tag: JSON.stringify(this.listTag),
+          check_in: JSON.stringify(this.checkin),
           privacy: this.privacy,
-          label_id: this.label_id
+          label_id: this.label
         },
         this.clear
       );
@@ -437,11 +452,11 @@ export default {
     clear() {
       this.editor.setContent("");
       this.link = "";
-      this.post_image = [];
-      this.list_tag = [];
-      this.check_in = {};
+      this.fileList = [];
+      this.listTag = [];
+      this.checkin = null;
       this.privacy = 15;
-      this.label_id = null;
+      this.label = null;
     },
 
     handleEditorPaste(view, event, slice) {
