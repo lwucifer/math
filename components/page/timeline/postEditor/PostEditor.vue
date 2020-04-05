@@ -15,6 +15,7 @@
 
       <PostEditorUpload
         v-show="fileList.length"
+        :mode="mode"
         :fileList="fileList"
         :previewList="previewList"
         @remove-item="removeUploadItem"
@@ -217,7 +218,13 @@ export default {
       type: Boolean,
       default: true
     },
+    mode: {
+      type: String,
+      default: "add",
+      validator: value => ["add", "edit"].includes(value)
+    },
     initialValues: {
+      post_id: Number,
       content: String,
       link: String,
       post_image: Array,
@@ -226,12 +233,13 @@ export default {
       privacy: Number,
       label_id: Number,
       default: () => ({
+        post_id: null,
         content: "",
         link: "",
         post_image: [],
         list_tag: [],
         check_in: null,
-        privacy: 15,
+        privacy: 8,
         label_id: null
       })
     }
@@ -242,8 +250,9 @@ export default {
       editor: null,
       showTags: false,
       showCheckin: false,
-      fileList: [],
-      previewList: [],
+      previewList: this.initialValues.post_image.map(item =>
+        item.link && item.link.low ? item.link.low : null
+      ),
       labelDropdrown: false,
       localActive: false,
       friendsInfiniteId: +new Date(),
@@ -261,11 +270,13 @@ export default {
       // Form submit data
       content: this.initialValues.content,
       link: this.initialValues.link,
-      post_image: this.initialValues.post_image,
+      fileList: this.initialValues.post_image,
       listTag: this.initialValues.list_tag,
       checkin: this.initialValues.check_in,
       privacy: this.initialValues.privacy,
-      label: this.initialValues.label_id
+      label: this.initialValues.label_id,
+      // Submit edit data
+      deleteImgId: []
     };
   },
 
@@ -366,13 +377,21 @@ export default {
         : "";
     },
 
-    removeUploadItem(index) {
+    removeUploadItem(index, image) {
       this.fileList = this.fileList
         .slice(0, index)
         .concat(this.fileList.slice(index + 1, this.fileList.length));
       this.previewList = this.previewList
         .slice(0, index)
         .concat(this.previewList.slice(index + 1, this.previewList.length));
+
+      if (this.mode === "edit") {
+        const isInitialImage = ["file_id", "link", "post_id"].every(
+          key => key in image
+        );
+        isInitialImage &&
+          (this.deleteImgId = [...this.deleteImgId, image.post_id]);
+      }
     },
 
     handleUploadChange(event) {
@@ -434,19 +453,31 @@ export default {
     },
 
     submit() {
-      this.$emit(
-        "submit",
-        {
-          content: this.editor.getHTML(),
-          link: this.link,
-          post_image: this.fileList,
-          list_tag: JSON.stringify(this.listTag),
-          check_in: JSON.stringify(this.checkin),
-          privacy: this.privacy,
-          label_id: this.label
-        },
-        this.clear
-      );
+      const params = {
+        content: this.editor.getHTML(),
+        link: this.link,
+        post_image: this.fileList.filter(file =>
+          ["link", "post_id", "file_id"].every(key => key in file)
+            ? false
+            : true
+        ),
+        list_tag: this.listTag.filter(
+          item => !this.initialValues.list_tag.includes(item)
+        ),
+        check_in: this.checkin,
+        privacy: this.privacy,
+        label_id: this.label
+      };
+
+      if (this.mode === "edit") {
+        params.post_id = this.initialValues.post_id;
+        params.delete_img_id = this.deleteImgId;
+        params.list_tag_del = this.initialValues.list_tag.filter(
+          item => !this.listTag.includes(item)
+        );
+      }
+
+      this.$emit("submit", params, this.clear);
     },
 
     clear() {

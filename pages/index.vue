@@ -210,17 +210,34 @@
             </PostShareContent>
           </PostModalShare>
 
-          <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
+          <app-modal v-if="showModalEditPost" :width="770">
             <PostEditor
               slot="content"
+              ref="editEditor"
               class="mb-0"
+              mode="edit"
               :initialValues="editPostData"
               prefetch
               :show-overlay="false"
+              @submit="handleSubmitEditPost"
             />
             <div slot="footer" class="text-right px-4 pb-3">
-              <app-button class="mr-3" color="info" size="sm" square>Huỷ</app-button>
-              <app-button color="primary" size="sm" square>Lưu</app-button>
+              <app-button
+                class="mr-3"
+                color="info"
+                :disabled="modalEditPostLoading"
+                size="sm"
+                square
+                @click="closeModalEditPost"
+              >Huỷ</app-button>
+
+              <app-button
+                color="primary"
+                :loading="modalEditPostLoading"
+                size="sm"
+                square
+                @click="handleClickSaveEditPost"
+              >Lưu</app-button>
             </div>
           </app-modal>
         </div>
@@ -299,7 +316,7 @@ import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
 import { createShare } from "~/models/social/Share";
-import { createPost } from "~/models/post/Post";
+import { createPost, editPost } from "~/models/post/Post";
 import {
   COURSES_LIST,
   TIMELINE_SLIDER_ITEMS
@@ -311,6 +328,7 @@ import LikesService from "~/services/social/likes";
 import ShareService from "~/services/social/shares";
 import LimitMessagesSerice from "~/services/message/LimitMessages";
 import SearchService from "~/services/elearning/public/Search";
+import PostService from "~/services/social/post";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -404,6 +422,7 @@ export default {
       postLoading: false,
       // Edit post
       showModalEditPost: false,
+      modalEditPostLoading: false,
       editPostData: {},
       // Share post
       showModalShare: false,
@@ -544,13 +563,19 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
+        // Check whether field is an array
         if (key === "post_image") {
-          const files = data[key];
-          for (let i = 0; i < files.length; i++) {
-            formData.append("post_image", files[i]);
+          const values = data[key];
+          for (let i = 0; i < values.length; i++) {
+            formData.append(key, values[i]);
           }
         } else {
-          formData.append(key, data[key]);
+          formData.append(
+            key,
+            Array.isArray(dataWithModel[key])
+              ? JSON.stringify(data[key])
+              : data[key]
+          );
         }
       }
 
@@ -630,14 +655,15 @@ export default {
 
     editPost(post) {
       this.editPostData = {
+        post_id: post.post_id,
         content: post.content,
         link: post.link || "",
         post_image: post.files || [],
         list_tag:
           post.tags && post.tags.length ? post.tags.map(item => item.id) : [],
-        check_in: {},
-        privacy: post.privacy ? post.privacy.value : null,
-        label_id: null
+        check_in: null,
+        privacy: get(post, "privacy.value", null),
+        label_id: get(post, "label.id", null)
       };
       this.showModalEditPost = true;
     },
@@ -645,6 +671,64 @@ export default {
     closeModalEditPost() {
       this.showModalEditPost = false;
       this.editPostData = {};
+    },
+
+    handleClickSaveEditPost() {
+      this.$refs.editEditor && this.$refs.editEditor.submit();
+    },
+
+    getPost(id) {
+      return new PostService(this.$axios)[actionTypes.BASE.DETAIL](id);
+    },
+
+    async handleSubmitEditPost(data) {
+      this.modalEditPostLoading = true;
+
+      const formData = new FormData();
+      const dataWithModel = editPost(data);
+
+      for (const key in dataWithModel) {
+        // Check whether field is an array
+        if (key === "post_image") {
+          const values = data[key];
+          for (let i = 0; i < values.length; i++) {
+            formData.append(key, values[i]);
+          }
+        } else {
+          formData.append(
+            key,
+            Array.isArray(dataWithModel[key])
+              ? JSON.stringify(data[key])
+              : data[key]
+          );
+        }
+      }
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.EDIT}`,
+        formData
+      );
+
+      if (doEdit.success) {
+        const { success, data: newPost = {} } = await new PostService(
+          this.$axios
+        )[actionTypes.BASE.DETAIL](data.post_id);
+
+        if (success) {
+          const timeout = setTimeout(() => {
+            const postIndex = this.feeds.listPost.findIndex(
+              item => item.post_id === newPost.post_id
+            );
+            this.feeds.listPost[postIndex] = newPost;
+            this.modalEditPostLoading = false;
+            this.showModalEditPost = false;
+            clearTimeout(timeout);
+          }, data.post_image.length * 1000);
+        }
+      } else {
+        this.$toasted.error(doEdit.message);
+        this.modalEditPostLoading = false;
+      }
     },
 
     openModalShare(post) {

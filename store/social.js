@@ -69,6 +69,19 @@ const actions = {
         }
     },
 
+    async [actionTypes.SOCIAL_POST.EDIT]({ commit }, payload) {
+        try {
+            const data = await new SocialPosts(this.$axios)[actionTypes.BASE.EDIT_PAYLOAD](
+                payload
+            );
+            console.log("[SocialPosts] edit", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialPosts] edit.err", err);
+            return err;
+        }
+    },
+
     async [actionTypes.SOCIAL_LIKES.LIST]({ commit }, payload) {
         try {
             // const result = await new Likes(this.$axios)[actionTypes.BASE.LIST](payload);
@@ -272,6 +285,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.LIST]({ commit }, payload) {
         try {
             const { data: result = {} } = await new Friend(this.$axios)[
@@ -287,6 +301,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
         try {
             const { data: result = {} } = await new FriendInvite(this.$axios)[
@@ -302,6 +317,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.INVITE_FRIEND]({ commit }, payload) {
         try {
             const data = await new Friend(this.$axios)[actionTypes.BASE.ADD](payload);
@@ -312,6 +328,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.DELETE_FRIEND]({ commit }, payload) {
         try {
             const data = await new Friend(this.$axios)[actionTypes.BASE.DELETE](
@@ -324,6 +341,7 @@ const actions = {
             return err;
         }
     },
+    
     async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
         try {
             const { data: result = {} } = await new Photos(this.$axios)[
@@ -339,6 +357,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FOLLOW.CREATE_FOLLOW]({ commit }, payload) {
         try {
             const data = await new SocialFollow(this.$axios)[actionTypes.BASE.ADD](
@@ -351,6 +370,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FOLLOW.DELETE_FOLLOW]({ commit }, payload) {
         try {
             const data = await new SocialFollow(this.$axios)[
