@@ -14,6 +14,7 @@
       <ButtonCreateExercise
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
+        :category="category"
       />
 
       <FormCreateExercise
@@ -21,12 +22,15 @@
         @handleCancel="handleCancelAddCreate"
         :lesson="lesson"
         @handleRefreshExcercises="handleRefreshExcercises"
+        :category="category"
       />
 
       <ExerciseList
         v-for="exercise in get(lesson, 'exercises', [])"
         :key="exercise.id"
         :exercise="exercise"
+        @handleRefreshQuestion="handleRefreshQuestion"
+        @handleRefreshExcercises="handleRefreshExcercises"
       />
     </div>
   </div>
@@ -67,11 +71,11 @@ export default {
 
   data() {
     return {
-      createType: "choice", // 'choice' | 'essay'
       isShowButtonCreate: true,
       isShowFormAdd: false,
       lessons: [],
-      lesson: null
+      lesson: null,
+      category: 'EXERCISE'
     };
   },
 
@@ -81,6 +85,10 @@ export default {
   },
 
   methods: {
+    handleRefreshQuestion() {
+      this.getLesson(get(this, "lesson.id", ""));
+    },
+
     async getLesson(lesson_id) {
       if (lesson_id) {
         const res = await this.$store.dispatch(
@@ -97,6 +105,8 @@ export default {
 
     handleRefreshExcercises() {
       this.getLesson(get(this, "lesson.id", ""));
+      this.isShowFormAdd = false;
+      this.isShowButtonCreate = true;
     },
 
     handleShowFormAdd() {
