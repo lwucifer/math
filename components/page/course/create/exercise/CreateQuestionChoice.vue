@@ -52,14 +52,14 @@ import { createPayloadQuestion } from "../../../../../models/course/AddCourse";
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion
+    CreateAnswerOfQuestion,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
@@ -74,25 +74,21 @@ export default {
           {
             correct: false,
             content: "",
-            index: "A"
           },
           {
             correct: false,
             content: "",
-            index: "B"
           },
           {
             correct: false,
             content: "",
-            index: "C"
           },
           {
             correct: false,
             content: "",
-            index: "D"
-          }
-        ]
-      }
+          },
+        ],
+      },
     };
   },
 
@@ -135,7 +131,7 @@ export default {
       this.payload.answers[index].content = value;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

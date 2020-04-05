@@ -47,19 +47,19 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import { createPayloadQuestion } from "../../../../../models/course/AddCourse";
+import { createPayloadQuestion } from "~/models/course/AddCourse";
 
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion
+    CreateAnswerOfQuestion,
   },
 
   props: {
-    exercise: {
+    question: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
@@ -67,32 +67,10 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
-        exercise_id: get(this, "exercise.id", ""),
-        type: "CHOICE",
-        content: "",
-        answers: [
-          {
-            correct: false,
-            content: "",
-            index: "A"
-          },
-          {
-            correct: false,
-            content: "",
-            index: "B"
-          },
-          {
-            correct: false,
-            content: "",
-            index: "C"
-          },
-          {
-            correct: false,
-            content: "",
-            index: "D"
-          }
-        ]
-      }
+        id: get(this, "question.id", ""),
+        content: get(this, "question.content", ""),
+        answers: get(this, "question.answers", []),
+      },
     };
   },
 
@@ -106,7 +84,7 @@ export default {
 
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
-        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
+        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.EDIT}`,
         payload
       );
 
@@ -135,7 +113,7 @@ export default {
       this.payload.answers[index].content = value;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

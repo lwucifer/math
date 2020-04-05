@@ -6,7 +6,7 @@ import Question from "~/services/elearning/creating/Question";
  * initial state
  */
 const state = () => ({
-  questions: []
+  questions: [],
 });
 
 /**
@@ -47,11 +47,10 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_QUESTIONS.EDIT]({ commit }, payload) {
     try {
-      const result = await new Question(this.$axios)[actionTypes.BASE.EDIT](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
+      const result = await new Question(this.$axios)[
+        actionTypes.BASE.EDIT_PAYLOAD
+      ](payload);
+      return result;
     } catch (error) {
       console.log("[Creating Question] edit.error", error);
     }
@@ -66,7 +65,7 @@ const actions = {
     } catch (error) {
       console.log("[Creating Question] delete.error", error);
     }
-  }
+  },
 };
 
 /**
@@ -77,7 +76,7 @@ const mutations = {
     .SET_ELEARNING_CREATING_QUESTIONS_LIST](state, questions) {
     console.log("SET_ELEARNING_CREATING_QUESTIONS_LIST", questions);
     state.questions = questions;
-  }
+  },
 };
 
 export default {
@@ -85,5 +84,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
