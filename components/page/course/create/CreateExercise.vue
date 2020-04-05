@@ -30,6 +30,7 @@
         :key="exercise.id"
         :exercise="exercise"
         @handleRefreshQuestion="handleRefreshQuestion"
+        @handleRefreshExcercises="handleRefreshExcercises"
       />
     </div>
   </div>

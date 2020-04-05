@@ -3,12 +3,10 @@
     <div class="cc-box">
       <div class="cc-box__head">
         <div class="cc-box__head-left">
-          <h2 class="cc-box__title heading-6">
-            {{ get(exercise, "title", "") }}
-          </h2>
-          <button class="cc-box__btn cc-box__btn-edit">
-            <IconEditAlt class="icon" />
-          </button>
+          <EditExerciseName 
+          :exercise="get(this, 'exercise', {})"
+          @handleRefreshExcercises="handleRefreshExcercises"
+          />
         </div>
 
         <div class="cc-box__head-right">
@@ -55,6 +53,7 @@ import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
+import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName"
 
 export default {
   components: {
@@ -67,7 +66,8 @@ export default {
     IconClipboardNotes,
     CreateQuestionEssay,
     CreateQuestionChoice,
-    ListQuestion
+    ListQuestion,
+    EditExerciseName
   },
 
   props: {
@@ -97,6 +97,9 @@ export default {
 
     handleAddQuestion() {
       this.isAddQuestionForm = !this.isAddQuestionForm;
+    },
+    handleRefreshExcercises(){
+      this.$emit("handleRefreshExcercises");
     }
   }
 };
