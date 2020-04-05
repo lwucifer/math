@@ -57,6 +57,19 @@ const actions = {
     }
   },
 
+  async [actionTypes.ELEARNING_CREATING_EXERCISES.EDIT_PAYLOAD]({ commit }, payload) {
+    try {
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.EDIT_PAYLOAD](
+        payload
+      );
+      // set to mutation
+      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
+      return result
+    } catch (error) {
+      console.log("[Creating exercises] edit.error", error);
+    }
+  },
+
   async [actionTypes.ELEARNING_CREATING_EXERCISES.DELETE](
     { commit },
     payload

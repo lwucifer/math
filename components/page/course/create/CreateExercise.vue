@@ -27,6 +27,7 @@
         v-for="exercise in get(lesson, 'exercises', [])"
         :key="exercise.id"
         :exercise="exercise"
+        @handleRefreshExcercises="handleRefreshExcercises"
       />
     </div>
   </div>
