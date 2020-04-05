@@ -30,6 +30,7 @@
     v-else
     @handleCancelAddQuestion="handleCancelAddQuestion"
     @handleRefreshQuestion="handleRefreshQuestion"
+    :question="question"
   />
 </template>
 
