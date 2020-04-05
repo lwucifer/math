@@ -183,7 +183,8 @@
           >
             <PostDetail
               slot="content"
-              :post="dataModalDetail"
+              :parent-post="modalDetailDataParent"
+              :post="modalDetailDataPost"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
@@ -405,9 +406,22 @@ export default {
       POST_TYPES: Object.freeze(POST_TYPES),
       loading: false,
       banners: new Array(3).fill(BannerImage, 0),
-      coursesTab: 0,
+      postEditorActive: false,
+      postLoading: false,
+      // Modal post detail
       modalDetailShow: false,
-      dataModalDetail: {},
+      modalDetailDataParent: {},
+      modalDetailDataPost: {},
+      // Edit post
+      showModalEditPost: false,
+      modalEditPostLoading: false,
+      editPostData: {},
+      // Share post
+      showModalShare: false,
+      shareData: {},
+      // Course tabs
+      coursesTab: 0,
+
       coursesTabsList: [
         {
           text: "Miễn phí",
@@ -418,15 +432,6 @@ export default {
           value: 1
         }
       ],
-      postEditorActive: false,
-      postLoading: false,
-      // Edit post
-      showModalEditPost: false,
-      modalEditPostLoading: false,
-      editPostData: {},
-      // Share post
-      showModalShare: false,
-      shareData: {},
 
       //Fake data
       coursesList: COURSES_LIST,
@@ -484,24 +489,28 @@ export default {
 
     /**
      * Click image -> change url
-     * @param { Object } imageObj - { type: image | video, post: post object }
+     * @param { Object } imageObj - { id, thumb, object }
+     * @param { Object } post
      */
-    handleClickImage(imageObj, post) {
+    handleClickImage({ id }, post) {
+      // Change url
       if (typeof window.history.pushState != "undefined") {
-        console.log("handleClickImage", imageObj);
-        this.dataModalDetail = post;
+        this.modalDetailDataParent = post;
         this.modalDetailShow = true;
 
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       }
+
+      // get data
+      this.getDetailPost(id);
     },
 
     /**
@@ -536,21 +545,37 @@ export default {
       }
 
       this.modalDetailShow = false;
-      this.dataModalDetail = {};
+      this.modalDetailDataParent = {};
+      this.modalDetailDataPost = {};
     },
 
     /**
      * on click prev arrow on modal post detail -> get prev image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickPrev() {
-      console.log("handleClickPrev");
+    handleClickPrev(id, post) {
+      this.handleClickImage({ id }, post);
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickNext() {
-      console.log("handleClickNext");
+    handleClickNext(id, post) {
+      this.handleClickImage({ id }, post);
+    },
+
+    async getDetailPost(id) {
+      const getPost = await new PostService(this.$axios)[
+        actionTypes.BASE.DETAIL
+      ](id);
+      if (getPost.success) {
+        this.modalDetailDataPost = getPost.data;
+      } else {
+        this.$toasted.error(getPost.message);
+      }
     },
 
     /**
@@ -675,10 +700,6 @@ export default {
 
     handleClickSaveEditPost() {
       this.$refs.editEditor && this.$refs.editEditor.submit();
-    },
-
-    getPost(id) {
-      return new PostService(this.$axios)[actionTypes.BASE.DETAIL](id);
     },
 
     async handleSubmitEditPost(data) {

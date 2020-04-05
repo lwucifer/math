@@ -13,22 +13,27 @@
         <div class="post__title-row mb-1">
           <h5 class="post__name">
             <n-link
-              :to="`/account/${post.author.id}`"
-            >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+              :to="`/account/${get(post, 'author.id', null)}`"
+            >{{ get(post, 'author.fullname', '') }}</n-link>
           </h5>
         </div>
 
         <div class="post__title-row">
-          <n-link class="post__time" to>{{ post.created_at | moment('from') }}</n-link>
+          <n-link
+            v-if="post.created_at"
+            class="post__time"
+            to
+          >{{ post.created_at | moment('from') }}</n-link>
+
           <span class="post__share-for" :title="post.privacy ? post.privacy.desc : ''">
             <img :src="post.privacy ? post.privacy.image : ''" alt />
             <!-- <IconGlobe class="icon" /> -->
           </span>
         </div>
 
-        <template v-if="showEdit">
+        <!-- <template v-if="showEdit && userId === get(post, 'author.id', null)">
           <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
-        </template>
+        </template> -->
       </div>
     </div>
 
@@ -136,6 +141,7 @@
 </template>
 
 <script>
+import { get } from "lodash";
 import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { createComment } from "~/models/social/Comment";
@@ -179,17 +185,7 @@ export default {
     },
     post: {
       type: Object,
-      default: () => {},
-      validator: value =>
-        [
-          "post_id",
-          "author",
-          "created_at",
-          "total_like",
-          "total_comment",
-          "content",
-          "privacy"
-        ].every(key => key in value)
+      default: () => ({})
     }
   },
 
@@ -208,11 +204,9 @@ export default {
       ],
       parentCommentParams: {
         page: 1,
-        limit: 10,
-        source_id: this.post.post_id
+        limit: 10
       },
-      parentCommentData: {},
-      childrenCommentData: {}
+      parentCommentData: {}
     };
   },
 
@@ -226,14 +220,38 @@ export default {
       return page.totalPages - page.number === 1
         ? page.totalElements % page.size
         : page.size;
+    },
+
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     }
   },
 
-  created() {
-    this.getParentComment();
+  // created() {
+  //   this.getParentComment();
+  // },
+
+  watch: {
+    post(newValue) {
+      if ("post_id" in newValue) {
+        this.resetFetchCommentData();
+        this.getParentComment();
+      }
+    }
   },
 
   methods: {
+    get,
+
+    resetFetchCommentData() {
+      this.parentCommentData = {};
+      this.parentCommentParams = {
+        page: 1,
+        limit: 10
+      };
+    },
+
     handleClickDelete() {
       this.$emit("delete", this.post.post_id);
     },
@@ -252,7 +270,7 @@ export default {
       const getComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.LIST
       ]({
-        params: this.parentCommentParams
+        params: { ...this.parentCommentParams, source_id: this.post.post_id }
       });
 
       if (getComment.success) {

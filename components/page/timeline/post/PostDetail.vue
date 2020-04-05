@@ -13,28 +13,22 @@
       <app-spin v-if="loading"></app-spin>
 
       <template v-else>
-        <a href class="post-detail__prev" @click.prevent @click="handleClickPrev">
+        <a v-if="showPrevArrow" href class="post-detail__prev" @click.prevent="handleClickPrev">
           <IconChevronLeft />
         </a>
 
-        <a href class="post-detail__next" @click.prevent @click="handleClickNext">
+        <a v-if="showNextArrow" href class="post-detail__next" @click.prevent="handleClickNext">
           <IconChevronRight />
         </a>
 
         <div class="post-detail__media">
-          <img :src="post.files[0].link.high" alt />
+          <img class="d-block mx-auto" :src="post.link_image && post.link_image.high" alt />
         </div>
       </template>
     </div>
 
     <div class="post-detail__right">
-      <PostDetailPost
-        show-edit
-        show-comment
-        :post="post"
-        @delete="deletePost"
-        @like="likePost"
-      />
+      <PostDetailPost show-edit show-comment :post="post" @delete="deletePost" @like="likePost" />
     </div>
 
     <div class="post-detail__actions">
@@ -95,8 +89,9 @@ export default {
 
   props: {
     loading: Boolean,
-    post: {
+    parentPost: {
       type: Object,
+      default: () => ({}),
       validator: value =>
         [
           "post_id",
@@ -107,6 +102,10 @@ export default {
           "content",
           "privacy"
         ].every(key => key in value)
+    },
+    post: {
+      type: Object,
+      default: () => ({})
     }
   },
 
@@ -120,24 +119,58 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    showPrevArrow() {
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      return (
+        this.parentPost.files && this.parentPost.files.length && index !== 0
+      );
+    },
+
+    showNextArrow() {
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      return (
+        this.parentPost.files &&
+        this.parentPost.files.length &&
+        index !== this.parentPost.files.length - 1
+      );
     }
   },
 
   methods: {
     handleClickPrev() {
-      this.$emit("click-prev");
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      const prevPost = this.parentPost.files[index - 1];
+
+      if (prevPost) {
+        this.$emit("click-prev", prevPost.post_id, this.parentPost);
+      }
     },
 
     handleClickNext() {
-      this.$emit("click-next");
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      const nextPost = this.parentPost.files[index + 1];
+
+      if (nextPost) {
+        this.$emit("click-next", nextPost.post_id, this.parentPost);
+      }
     },
 
     deletePost(...args) {
-      this.$emit('delete', args)
+      this.$emit("delete", args);
     },
 
     likePost(...args) {
-      this.$emit('like', args)
+      this.$emit("like", args);
     }
   }
 };
