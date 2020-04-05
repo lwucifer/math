@@ -47,6 +47,11 @@ export default {
       type: Array,
       default: () => []
     },
+    mode: {
+      type: String,
+      default: 'add',
+      validator: value => ['add', 'edit'].includes(value)
+    },
   },
 
   data() {
@@ -84,7 +89,7 @@ export default {
     },
 
     handleClickClose(index) {
-      this.$emit("remove-item", index);
+      this.$emit("remove-item", index, this.fileList[index]);
     }
   }
 };
