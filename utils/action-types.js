@@ -180,14 +180,14 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
 };
 
 export const ELEARNING_TEACHING_EXERCISE = {
-  LIST: "elearningTeachingExerciseList",
-  DETAIL: "elearningTeachingExerciseDetail",
+    LIST: "elearningTeachingExerciseList",
+    DETAIL: "elearningTeachingExerciseDetail"
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {
-  LIST: "elearningTeachingSubmissionList",
-  DETAIL: "elearningTeachingSubmissionDetail",
-  MARK: "elearningTeachingSubmissionMark",
+    LIST: "elearningTeachingSubmissionList",
+    DETAIL: "elearningTeachingSubmissionDetail",
+    MARK: "elearningTeachingSubmissionMark"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -312,6 +312,11 @@ export const SOCIAL_FRIEND = {
 
 export const SOCIAL_PHOTO = {
     POST_PHOTO_LIST: "postPhotoList"
+};
+
+export const SOCIAL_FOLLOW = {
+    CREATE_FOLLOW: "createFollow",
+    DELETE_FOLLOW: "deleteFollow"
 };
 
 export const ELEARNING_INFO = {

@@ -11,6 +11,7 @@ a.app-content-box {
 .app-content-box__image {
     flex-shrink: 0;
     border-radius: $border-radius-common;
+    background-color: $color-image-placeholder;
     overflow: hidden;
     
     img {

@@ -1,21 +1,42 @@
 <template>
   <div class="post-image" :class="classes">
     <div v-if="images.length > 1" class="post-image-grid">
-      <a
-        v-for="item in images.slice(0, 5)"
-        :key="item.id"
-        :href="`${location}/post?photo_id=${item.id}`"
-        class="post-image-item"
-        @click.prevent="handleClickImage(item)"
-      >
-        <div class="post-image-item__container">
-          <app-video v-if="item.type === 'video'" :posterSrc="item.thumb"></app-video>
-          <img v-else :src="item.thumb" alt />
-        </div>
-      </a>
+      <template v-for="(item, index) in images.slice(0, 5)">
+        <a
+          v-if="images.length > 5 && index === 4"
+          class="post-image-item post-image-item--num"
+          :key="item.id"
+          :href="`${location}/post?photo_id=${item.id}`"
+          :data-rest="images.length > 5 ? `+${images.length - 5}` : 0"
+          @click.prevent="handleClickImage(item)"
+        >
+          <div class="post-image-item__container">
+            <app-video v-if="item.type === 'video'" :posterSrc="item.thumb"></app-video>
+            <img v-else :src="item.thumb" alt />
+          </div>
+        </a>
+
+        <a
+          v-else
+          class="post-image-item"
+          :key="item.id"
+          :href="`${location}/post?photo_id=${item.id}`"
+          @click.prevent="handleClickImage(item)"
+        >
+          <div class="post-image-item__container">
+            <app-video v-if="item.type === 'video'" :posterSrc="item.thumb"></app-video>
+            <img v-else :src="item.thumb" alt />
+          </div>
+        </a>
+      </template>
     </div>
 
-    <a v-else class="post-image-item" :href="`${location}/post?photo_id=${images[0].id}`" @click.prevent="handleClickImage(images[0])">
+    <a
+      v-else
+      class="post-image-item"
+      :href="`${location}/post?photo_id=${images[0].id}`"
+      @click.prevent="handleClickImage(images[0])"
+    >
       <app-video v-if="images[0].object === 'video'" :posterSrc="images[0].thumb"></app-video>
       <img v-else :src="images[0].thumb" alt />
     </a>
@@ -26,8 +47,8 @@
 export default {
   data() {
     return {
-      location: process.browser ? window.location.origin : ''
-    }
+      location: process.browser ? window.location.origin : ""
+    };
   },
 
   props: {
@@ -55,7 +76,7 @@ export default {
 
   methods: {
     handleClickImage(image) {
-      this.$emit('click-item', image)
+      this.$emit("click-item", image);
     }
   }
 };

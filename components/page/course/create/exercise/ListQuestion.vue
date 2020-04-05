@@ -1,22 +1,37 @@
 <template>
-  <div class="ce-question-item d-flex align-items-center">
-    <h3 class="body-2 mr-4">1. Đây là câu hỏi</h3>
-    <span class="text-sub mr-4">Câu hỏi trắc nghiệm</span>
+  <div
+    class="ce-question-item d-flex align-items-center"
+    v-if="!isShowEditQuestion"
+  >
+    <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
+    <span class="text-sub mr-4">{{ type }}</span>
 
     <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-      <button class="mr-4">
+      <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
         <IconEditAlt class="icon d-block subheading fill-primary" />
       </button>
 
-      <button class="mr-4">
+      <button class="mr-4" @click="handleDeleteQuestion">
         <IconTrashAlt class="icon d-block subheading fill-secondary" />
       </button>
 
-      <button>
+      <!-- <button>
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-      </button>
+      </button> -->
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
+  <EditQuestionChoice
+    v-else
+    @handleCancelAddQuestion="handleCancelAddQuestion"
+    @handleRefreshQuestion="handleRefreshQuestion"
+    :question="question"
+  />
 </template>
 
 <script>
@@ -28,6 +43,9 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import { get } from "lodash";
+import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
+import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -37,7 +55,77 @@ export default {
     IconTrashAlt,
     IconAlignCenterAlt,
     IconFileCheck,
-    IconClipboardNotes
+    IconClipboardNotes,
+    CreateQuestionEssay,
+    EditQuestionChoice
+  },
+
+  props: {
+    question: {
+      type: Object,
+      default: null
+    },
+    exercise: {
+      type: Object,
+      default: null
+    }
+  },
+
+  data() {
+    return {
+      isShowEditQuestion: false,
+      showModalConfirm: false,
+      confirmLoading: false
+    };
+  },
+
+  computed: {
+    type() {
+      return get(this, "question.type", "") === "CHOICE"
+        ? "Câu hỏi trắc nghiệm"
+        : "Câu hỏi tự luận";
+    }
+  },
+
+  methods: {
+    handleDeleteQuestion() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+      const payload = {
+        data: {
+          id: get(this, "question.id", "")
+        }
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
+        payload
+      );
+      this.handleCancel();
+      if (get(res, "success", false)) {
+        this.$toasted.success("success");
+        this.$emit("handleRefreshQuestion");
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
+    handleCancelAddQuestion() {
+      this.isShowEditQuestion = false;
+    },
+
+    handleRefreshQuestion() {
+      this.$emit("handleRefreshQuestion");
+    },
+
+    get
   }
 };
 </script>

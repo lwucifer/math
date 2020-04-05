@@ -6,9 +6,8 @@
         <app-radio
           @click="$emit('handleSelectAnswerTrue', index)"
           name="answer"
-          value="A"
-          id="answer-a"
-          >{{ get(answer, "index", "") }}</app-radio
+          :checked="get(answer, 'correct', false)"
+          >{{ text }}</app-radio
         >
       </div>
     </div>
@@ -20,14 +19,17 @@
       <div class="d-flex align-items-start">
         <div class="flex-grow mr-4">
           <!-- <app-editor id="answer-editor" /> -->
-          <app-input @input="handleChangeContent" />
+          <app-input
+            @input="handleChangeContent"
+            :value="get(answer, 'content', '')"
+          />
         </div>
 
-        <div>
+        <!-- <div>
           <button>
             <IconTrashAlt class="icon d-block subheading fill-secondary" />
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -39,18 +41,28 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconTrashAlt
+    IconTrashAlt,
   },
 
   props: {
     answer: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+  },
+
+  computed: {
+    text() {
+      if (get(this, "index", "") === 0) return "A";
+      if (get(this, "index", "") === 1) return "B";
+      if (get(this, "index", "") === 2) return "C";
+      if (get(this, "index", "") === 3) return "D";
+      return "";
+    },
   },
 
   methods: {
@@ -58,7 +70,7 @@ export default {
 
     handleChangeContent(value) {
       this.$emit("handleChangeContent", this.index, value);
-    }
-  }
+    },
+  },
 };
 </script>

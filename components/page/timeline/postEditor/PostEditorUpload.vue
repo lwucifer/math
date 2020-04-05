@@ -12,11 +12,12 @@
       <span role="button" tabindex="0" class="post-editor-upload__button">
         <input
           v-if="input"
+          v-bind="$attrs"
           ref="inputFile"
           type="file"
           accept="video/*,  video/x-m4v, video/webm, video/x-ms-wmv, video/x-msvideo, video/3gpp, video/flv, video/x-flv, video/mp4, video/quicktime, video/mpeg, video/ogv, .ts, .mkv, image/*, image/heic, image/heif"
           class="post-editor-upload__input"
-          v-bind="$attrs"
+          multiple
           @change="handleChange"
         />
       </span>

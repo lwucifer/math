@@ -20,8 +20,22 @@
       </div>
 
       <div class="cc-box__body">
-        <CreateQuestionChoice v-if="isAddQuestionForm" :exercise="exercise" />
-        <ListQuestion />
+        <CreateQuestionChoice
+          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
+          :exercise="exercise"
+          @handleCancelAddQuestion="handleCancelAddQuestion"
+          @handleRefreshQuestion="handleRefreshQuestion"
+        />
+        <CreateQuestionEssay
+          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
+          :exercise="exercise"
+        />
+        <ListQuestion
+          v-for="question in get(exercise, 'questions', [])"
+          :key="question.id"
+          :question="question"
+          @handleRefreshQuestion="handleRefreshQuestion"
+        />
       </div>
     </div>
   </div>
@@ -70,6 +84,15 @@ export default {
   },
 
   methods: {
+    handleRefreshQuestion() {
+      this.isAddQuestionForm = false;
+      this.$emit("handleRefreshQuestion");
+    },
+
+    handleCancelAddQuestion() {
+      this.isAddQuestionForm = false;
+    },
+
     get,
 
     handleAddQuestion() {

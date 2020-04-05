@@ -1,10 +1,15 @@
 <template>
   <div class="elearning-right-side">
-    <!-- <img :src="get(info, 'avatar.medium', 'https://picsum.photos/330/204')" alt /> -->
-    <img class="d-block w-100 mb-4" :src="`https://picsum.photos/330/204`" alt />
+    <img
+      class="d-block w-100 mb-4"
+      :src="get(info, 'avatar.medium', null)"
+      :alt="info.name"
+    />
 
     <template v-if="info.free">
-      <span v-if="info.free" class="elearning-right-side__price">Miễn phí</span>
+      <div class="elearning-right-side__price-wrapper">
+        <b v-if="info.free" class="elearning-right-side__price text-error">Miễn phí</b>
+      </div>
       <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Tham gia học</app-button>
     </template>
 

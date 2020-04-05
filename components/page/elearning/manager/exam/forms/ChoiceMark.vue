@@ -2,7 +2,7 @@
   <div class="px-4">
     <div class="form--score">
       <app-checkbox
-        v-model="isPass"
+        v-model="formData.to_passed"
         label="Cho qua"
       >
       </app-checkbox>
@@ -17,7 +17,8 @@
       <app-button
         square
         normal
-        color="disabled"
+        :color="formData.to_passed ? 'primary' : 'disabled'"
+        @click="submit"
       >
         Xác nhận
       </app-button>
@@ -35,7 +36,9 @@
     },
     data() {
       return {
-        isPass: false
+        formData: {
+          to_passed: false
+        },
       }
     },
     watch: {
@@ -44,16 +47,7 @@
     },
     methods: {
       submit() {
-        this.$emit('submit', this.filters)
-      },
-      handleChangedClass(val) {
-        this.$emit('changedClass', val)
-      },
-      handleChangedSearch(val) {
-        this.$emit('changedQuery', val)
-      },
-      handleChangedResult(val) {
-        this.$emit('changedResult', val)
+        this.$emit('submit', this.formData)
       },
     }
   }
