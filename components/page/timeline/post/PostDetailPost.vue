@@ -233,8 +233,8 @@ export default {
   // },
 
   watch: {
-    post(newValue) {
-      if ("post_id" in newValue) {
+    post(newValue, oldValue) {
+      if (newValue.post_id !== oldValue.post_id) {
         this.resetFetchCommentData();
         this.getParentComment();
       }

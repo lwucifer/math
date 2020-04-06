@@ -22,13 +22,13 @@
         </a>
 
         <div class="post-detail__media">
-          <img class="d-block mx-auto" :src="post.link_image && post.link_image.high" alt />
+          <img class="d-block mx-auto" :src="localPost.link_image && localPost.link_image.high" alt />
         </div>
       </template>
     </div>
 
     <div class="post-detail__right">
-      <PostDetailPost show-edit show-comment :post="post" @delete="deletePost" @like="likePost" />
+      <PostDetailPost show-edit show-comment :post="localPost" @delete="deletePost" @like="likePost" />
     </div>
 
     <div class="post-detail__actions">
@@ -72,6 +72,11 @@
 </template>
 
 <script>
+import { LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
+import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import { createLike } from "~/models/social/Like";
+import LikesService from "~/services/social/likes";
+
 import PostDetailPost from "./PostDetailPost";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
@@ -111,7 +116,8 @@ export default {
 
   data() {
     return {
-      dropdownShow: false
+      dropdownShow: false,
+      localPost: this.post
     };
   },
 
@@ -142,6 +148,12 @@ export default {
     }
   },
 
+  watch: {
+    post(newValue) {
+      this.localPost = newValue;
+    }
+  },
+
   methods: {
     handleClickPrev() {
       const index = this.parentPost.files.findIndex(
@@ -166,11 +178,28 @@ export default {
     },
 
     deletePost(...args) {
-      this.$emit("delete", args);
+      this.$emit("delete", ...args);
     },
 
-    likePost(...args) {
-      this.$emit("like", args);
+    /**
+     * Like a POST
+     */
+    async likePost(id, cb) {
+      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
+      const { success = false, data = {} } = await new LikesService(
+        this.$axios
+      )[ACTION_TYPE_BASE.ADD](likeModel);
+
+      if (success) {
+        this.localPost = {
+          ...this.localPost,
+          type_like: data.type_like,
+          is_like: !!data.type_like
+        };
+      }
+
+      // Have to run cb
+      cb();
     }
   }
 };
