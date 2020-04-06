@@ -183,7 +183,8 @@
           >
             <PostDetail
               slot="content"
-              :post="dataModalDetail"
+              :parent-post="modalDetailDataParent"
+              :post="modalDetailDataPost"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
@@ -358,9 +359,22 @@ export default {
       POST_TYPES: Object.freeze(POST_TYPES),
       loading: false,
       banners: new Array(3).fill(BannerImage, 0),
-      coursesTab: 0,
+      postEditorActive: false,
+      postLoading: false,
+      // Modal post detail
       modalDetailShow: false,
-      dataModalDetail: {},
+      modalDetailDataParent: {},
+      modalDetailDataPost: {},
+      // Edit post
+      showModalEditPost: false,
+      modalEditPostLoading: false,
+      editPostData: {},
+      // Share post
+      showModalShare: false,
+      shareData: {},
+      // Course tabs
+      coursesTab: 0,
+
       coursesTabsList: [
         {
           text: "Miễn phí",
@@ -421,24 +435,28 @@ export default {
   methods: {
     /**
      * Click image -> change url
-     * @param { Object } imageObj - { type: image | video, post: post object }
+     * @param { Object } imageObj - { id, thumb, object }
+     * @param { Object } post
      */
-    handleClickImage(imageObj, post) {
+    handleClickImage({ id }, post) {
+      // Change url
       if (typeof window.history.pushState != "undefined") {
-        console.log("handleClickImage", imageObj);
-        this.dataModalDetail = post;
+        this.modalDetailDataParent = post;
         this.modalDetailShow = true;
 
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       }
+
+      // get data
+      this.getDetailPost(id);
     },
 
     /**
@@ -473,21 +491,37 @@ export default {
       }
 
       this.modalDetailShow = false;
-      this.dataModalDetail = {};
+      this.modalDetailDataParent = {};
+      this.modalDetailDataPost = {};
     },
 
     /**
      * on click prev arrow on modal post detail -> get prev image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickPrev() {
-      console.log("handleClickPrev");
+    handleClickPrev(id, post) {
+      this.handleClickImage({ id }, post);
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickNext() {
-      console.log("handleClickNext");
+    handleClickNext(id, post) {
+      this.handleClickImage({ id }, post);
+    },
+
+    async getDetailPost(id) {
+      const getPost = await new PostService(this.$axios)[
+        actionTypes.BASE.DETAIL
+      ](id);
+      if (getPost.success) {
+        this.modalDetailDataPost = getPost.data;
+      } else {
+        this.$toasted.error(getPost.message);
+      }
     },
 
     /**
@@ -591,6 +625,60 @@ export default {
     closeModalEditPost() {
       this.showModalEditPost = false;
       this.editPostData = {};
+    },
+
+    handleClickSaveEditPost() {
+      this.$refs.editEditor && this.$refs.editEditor.submit();
+    },
+
+    async handleSubmitEditPost(data) {
+      this.modalEditPostLoading = true;
+
+      const formData = new FormData();
+      const dataWithModel = editPost(data);
+
+      for (const key in dataWithModel) {
+        // Check whether field is an array
+        if (key === "post_image") {
+          const values = data[key];
+          for (let i = 0; i < values.length; i++) {
+            formData.append(key, values[i]);
+          }
+        } else {
+          formData.append(
+            key,
+            Array.isArray(dataWithModel[key])
+              ? JSON.stringify(data[key])
+              : data[key]
+          );
+        }
+      }
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.EDIT}`,
+        formData
+      );
+
+      if (doEdit.success) {
+        const { success, data: newPost = {} } = await new PostService(
+          this.$axios
+        )[actionTypes.BASE.DETAIL](data.post_id);
+
+        if (success) {
+          const timeout = setTimeout(() => {
+            const postIndex = this.feeds.listPost.findIndex(
+              item => item.post_id === newPost.post_id
+            );
+            this.feeds.listPost[postIndex] = newPost;
+            this.modalEditPostLoading = false;
+            this.showModalEditPost = false;
+            clearTimeout(timeout);
+          }, data.post_image.length * 1000);
+        }
+      } else {
+        this.$toasted.error(doEdit.message);
+        this.modalEditPostLoading = false;
+      }
     },
 
     openModalShare(post) {
