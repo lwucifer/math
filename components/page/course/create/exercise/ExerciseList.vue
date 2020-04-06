@@ -13,13 +13,14 @@
           <a href @click.prevent="handleAddQuestion" class="text-secondary"
             >Thêm câu hỏi</a
           >
-          <button class="cc-box__btn cc-box__btn-collapse">
-            <IconAngleDown class="icon" />
+          <button class="cc-box__btn cc-box__btn-collapse" @click="isShowExercise=!isShowExercise">
+            <IconAngleDown class="icon" v-if="!isShowExercise"/>
+            <IconAngleUp class="icon" v-else/>
           </button>
         </div>
       </div>
 
-      <div class="cc-box__body">
+      <div class="cc-box__body" v-if="isShowExercise">
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
@@ -57,7 +58,7 @@ import CreateQuestionEssay from "~/components/page/course/create/exercise/Create
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
-
+import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 export default {
   components: {
     IconInfoCircle,
@@ -71,6 +72,7 @@ export default {
     CreateQuestionChoice,
     ListQuestion,
     EditExerciseName,
+    IconAngleUp
   },
 
   props: {
@@ -83,6 +85,7 @@ export default {
   data() {
     return {
       isAddQuestionForm: false,
+      isShowExercise:true
     };
   },
 
