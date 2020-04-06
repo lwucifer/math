@@ -280,9 +280,9 @@ export const ELEARNING_STURY_VOTE = {
 };
 
 export const ELEARNING_STURY_ARCHIVE = {
-  LIST: "elearningStudyArchiveList",
-  ADD: "elearningStudyArchiveAdd",
-  DELETE: "elearningStudyArchiveDelete"
+    LIST: "elearningStudyArchiveList",
+    ADD: "elearningStudyArchiveAdd",
+    DELETE: "elearningStudyArchiveDelete"
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
@@ -317,7 +317,8 @@ export const SOCIAL_FRIEND = {
 };
 
 export const SOCIAL_PHOTO = {
-    POST_PHOTO_LIST: "postPhotoList"
+    POST_PHOTO_LIST: "postPhotoList",
+    POST_TAG_PHOTO_LIST: "postTagPhotoList"
 };
 
 export const SOCIAL_FOLLOW = {

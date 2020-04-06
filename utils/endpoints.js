@@ -42,6 +42,7 @@ export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
 export const SOCIAL_FRIEND_INVITE = `${SCHOOLLY_ALIAS}/social/api/friend/invite`;
 export const SOCIAL_POST_PHOTO = `${SCHOOLLY_ALIAS}/social/api/post/photo`;
+export const SOCIAL_POST_TAG_PHOTO = `${SCHOOLLY_ALIAS}/social/aip/post/tagPhoto`;
 export const SOCIAL_FOLLOW = `${SCHOOLLY_ALIAS}/social/api/follow`;
 
 /**
@@ -80,7 +81,7 @@ export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
 export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
-export const STUDY_ARCHIVE= `${SCHOOLLY_ALIAS}/elearning/study/archive`;
+export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
 
 /**
  * SCHOOL

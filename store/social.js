@@ -10,6 +10,7 @@ import Friend from "~/services/social/friend";
 import FriendInvite from "~/services/social/Friendinvite";
 import Photos from "~/services/social/photos";
 import SocialFollow from "~/services/social/follow";
+import TagPhotos from "~/services/social/tagPhoto";
 
 /**
  * initial state
@@ -25,7 +26,8 @@ const state = () => ({
     labels: [],
     friendList: {},
     inviteList: {},
-    postPhotoList: {}
+    postPhotoList: {},
+    postTagPhotoList: {}
 });
 
 /**
@@ -358,6 +360,22 @@ const actions = {
         }
     },
 
+    async [actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new TagPhotos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[TagPhotos] list", result);
+
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_POST_TAG_PHOTO_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[TagPhotos] list.err", err);
+            return err;
+        }
+    },
+
     async [actionTypes.SOCIAL_FOLLOW.CREATE_FOLLOW]({ commit }, payload) {
         try {
             const data = await new SocialFollow(this.$axios)[actionTypes.BASE.ADD](
@@ -431,6 +449,12 @@ const mutations = {
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_POST_PHOTO_LIST](state, _postPhotoList) {
         state.postPhotoList = _postPhotoList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_POST_TAG_PHOTO_LIST](
+        state,
+        _postTagPhotoList
+    ) {
+        state.postTagPhotoList = _postTagPhotoList;
     }
 };
 
