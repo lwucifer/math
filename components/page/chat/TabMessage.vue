@@ -68,6 +68,18 @@
         </div>
       </div>
 
+      <div style="opacity: 0; height: 0; overflow: hidden">
+        <client-only>
+          <infinite-loading
+            direction="top"
+            :identifier="infiniteId"
+            @infinite="messageInfiniteHandler"
+          >
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>
+      </div>
+
       <div class="aside-box__content" v-if="messagesList.length > 0">
         <client-only>
           <infinite-loading
@@ -258,6 +270,7 @@
         </div>
       </div>
       <div class="aside-box__content" v-else></div>
+
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
           <p>
