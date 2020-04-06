@@ -17,10 +17,19 @@
         <button class="cc-box__btn mr-3 text-gray-2" @click="cancelEditExerciseName">Huỷ</button>
     </template>
     <template v-else>
-        <button class="cc-box__btn cc-box__btn-edit" @click="editExerciseName">
+        <button class="cc-box__btn cc-box__btn-edit mr-4" @click="editExerciseName">
             <IconEditAlt class="icon d-block subheading fill-primary"/>
         </button>
+        <button class="cc-box__btn cc-box__btn-edit" @click="handleDeleteExercise">
+            <IconTrashAlt class="icon d-block subheading fill-secondary"/>
+        </button>
     </template>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -46,7 +55,9 @@ export default {
     data(){
         return{
             isEditExerciseName: false,
-            exerciseNameModel:get(this, "exercise.title","")
+            exerciseNameModel:get(this, "exercise.title",""),
+            showModalConfirm: false,
+            confirmLoading: false
         }
     },
     watch: {
@@ -83,6 +94,32 @@ export default {
             if(get(result, "success", false)){
                 this.$toasted.success(get(result, "message", ""));
                 this.isEditExerciseName =false;
+                this.$emit("handleRefreshExcercises");
+                return
+            }
+            this.$toasted.error(get(result, "message", ""));
+        },
+        handleCancel() {
+            this.showModalConfirm = false;
+            this.confirmLoading = false;
+        },
+        handleDeleteExercise(){
+            this.showModalConfirm= true;
+        },
+        async handleOk(){
+            this.confirmLoading =true;
+            const payload = {
+                data:{
+                    id:get(this,"exercise.id","")
+                }
+            }
+            console.log(payload)
+            const result = await this.$store.dispatch(
+                `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
+                payload
+            )
+            if(get(result,"success",false)){
+                this.$toasted.success(get(result, "message", ""));
                 this.$emit("handleRefreshExcercises");
                 return
             }
