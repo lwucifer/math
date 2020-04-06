@@ -279,6 +279,12 @@ export const ELEARNING_STURY_VOTE = {
     ADD: "elearningStudyVoteAdd"
 };
 
+export const ELEARNING_STURY_ARCHIVE = {
+  LIST: "elearningStudyArchiveList",
+  ADD: "elearningStudyArchiveAdd",
+  DELETE: "elearningStudyArchiveDelete"
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList"
 };
