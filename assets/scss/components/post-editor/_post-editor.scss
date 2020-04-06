@@ -213,3 +213,30 @@
         top: calc(100% + 1.5rem);
     }
 }
+
+.post-editor__preview-link {
+    position: relative;
+
+    &__remove {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        z-index: 1;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        &:hover {
+            .icon {
+                color: $color-primary;
+            }
+        }
+    }
+}
