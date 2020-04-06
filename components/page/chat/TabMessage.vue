@@ -37,7 +37,8 @@
           </app-select>
         </div>
       </div>
-      <div class="aside-box__top" v-else>
+
+      <div class="aside-box__top" v-else-if="messagesList.length > 0">
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
@@ -66,7 +67,8 @@
           </ul>
         </div>
       </div>
-      <div class="aside-box__content">
+
+      <div class="aside-box__content" v-if="messagesList.length > 0">
         <client-only>
           <infinite-loading
             direction="top"
@@ -255,6 +257,7 @@
           </div>
         </div>
       </div>
+      <div class="aside-box__content" v-else></div>
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
           <p>
