@@ -1,37 +1,47 @@
 <template>
-  <div
-    class="ce-question-item d-flex align-items-center"
-    v-if="!isShowEditQuestion"
-  >
-    <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
-    <span class="text-sub mr-4">{{ type }}</span>
+  <fragment>
+    <div
+      class="ce-question-item d-flex align-items-center"
+      v-if="!isShowEditQuestion"
+    >
+      <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
+      <span class="text-sub mr-4">{{ type }}</span>
 
-    <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-      <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
-        <IconEditAlt class="icon d-block subheading fill-primary" />
-      </button>
+      <div class="d-flex align-items-center ml-auto ce-question-item__actions">
+        <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
+          <IconEditAlt class="icon d-block subheading fill-primary" />
+        </button>
 
-      <button class="mr-4" @click="handleDeleteQuestion">
-        <IconTrashAlt class="icon d-block subheading fill-secondary" />
-      </button>
+        <button class="mr-4" @click="handleDeleteQuestion">
+          <IconTrashAlt class="icon d-block subheading fill-secondary" />
+        </button>
 
-      <!-- <button>
+        <!-- <button>
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
       </button> -->
+      </div>
+      <app-modal-confirm
+        v-if="showModalConfirm"
+        :confirmLoading="confirmLoading"
+        @ok="handleOk"
+        @cancel="handleCancel"
+      />
     </div>
-    <app-modal-confirm
-      v-if="showModalConfirm"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
-      @cancel="handleCancel"
+    <EditQuestionChoice
+      v-if="isShowEditQuestion && get(question, 'type', '') === 'CHOICE'"
+      @handleCancelAddQuestion="handleCancelAddQuestion"
+      @handleRefreshQuestion="handleRefreshQuestion"
+      :question="question"
+      :exercise="exercise"
     />
-  </div>
-  <EditQuestionChoice
-    v-else
-    @handleCancelAddQuestion="handleCancelAddQuestion"
-    @handleRefreshQuestion="handleRefreshQuestion"
-    :question="question"
-  />
+    <EditQuestionEssay
+      v-if="isShowEditQuestion && get(question, 'type', '') === 'ESSAY'"
+      @handleCancelAddQuestion="handleCancelAddQuestion"
+      @handleRefreshQuestion="handleRefreshQuestion"
+      :question="question"
+      :exercise="exercise"
+    />
+  </fragment>
 </template>
 
 <script>
@@ -45,6 +55,7 @@ import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?in
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
+import EditQuestionEssay from "~/components/page/course/create/exercise/EditQuestionEssay";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -57,25 +68,26 @@ export default {
     IconFileCheck,
     IconClipboardNotes,
     CreateQuestionEssay,
-    EditQuestionChoice
+    EditQuestionChoice,
+    EditQuestionEssay,
   },
 
   props: {
     question: {
       type: Object,
-      default: null
+      default: null,
     },
     exercise: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
     return {
       isShowEditQuestion: false,
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -84,7 +96,7 @@ export default {
       return get(this, "question.type", "") === "CHOICE"
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
-    }
+    },
   },
 
   methods: {
@@ -96,8 +108,8 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "question.id", "")
-        }
+          id: get(this, "question.id", ""),
+        },
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
@@ -125,7 +137,7 @@ export default {
       this.$emit("handleRefreshQuestion");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

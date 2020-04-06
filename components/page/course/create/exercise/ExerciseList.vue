@@ -3,9 +3,9 @@
     <div class="cc-box">
       <div class="cc-box__head">
         <div class="cc-box__head-left">
-          <EditExerciseName 
-          :exercise="get(this, 'exercise', {})"
-          @handleRefreshExcercises="handleRefreshExcercises"
+          <EditExerciseName
+            :exercise="get(this, 'exercise', {})"
+            @handleRefreshExcercises="handleRefreshExcercises"
           />
         </div>
 
@@ -29,11 +29,14 @@
         <CreateQuestionEssay
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
           :exercise="exercise"
+          @handleRefreshQuestion="handleRefreshQuestion"
+          @handleCancelAddQuestion="handleCancelAddQuestion"
         />
         <ListQuestion
           v-for="question in get(exercise, 'questions', [])"
           :key="question.id"
           :question="question"
+          :exercise="exercise"
           @handleRefreshQuestion="handleRefreshQuestion"
         />
       </div>
@@ -53,7 +56,7 @@ import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
-import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName"
+import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
 
 export default {
   components: {
@@ -67,19 +70,19 @@ export default {
     CreateQuestionEssay,
     CreateQuestionChoice,
     ListQuestion,
-    EditExerciseName
+    EditExerciseName,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
+      default: null,
     }
   },
 
   data() {
     return {
-      isAddQuestionForm: false
+      isAddQuestionForm: false,
     };
   },
 
@@ -98,9 +101,9 @@ export default {
     handleAddQuestion() {
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
-    handleRefreshExcercises(){
+    handleRefreshExcercises() {
       this.$emit("handleRefreshExcercises");
-    }
-  }
+    },
+  },
 };
 </script>
