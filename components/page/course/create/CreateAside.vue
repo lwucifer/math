@@ -111,6 +111,10 @@ export default {
         this.menu[1]["checked"] = checked;
         checked = get(this, "progress.data.setting_complete", false);
         this.menu[2]["checked"] = checked;
+        checked = get(this, "progress.data.exercise_complete", false);
+        this.menu[3]["checked"] = checked;
+        checked = get(this, "progress.data.test_complete", false);
+        this.menu[4]["checked"] = checked;
       },
       deep: true
     }
