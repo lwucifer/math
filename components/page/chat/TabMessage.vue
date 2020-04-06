@@ -281,27 +281,36 @@
           <IconClose @click="isReply = false" class="btn-close" />
         </div>
         <div class="input-group">
-          <input
-            class="input-control"
-            v-model="textChat"
-            v-on:keyup.enter="handleEmitMessage"
-            placeholder="Nhấp để chat"
-          />
-          <div class="input-group_addon">
-            <ul class="list-unstyle">
-              <li>
-                <a href="#">
-                  <IconSmile width="15" height="15" />
-                </a>
-              </li>
-              <li>
-                <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
-                  <template>
-                    <IconImage width="15" height="15" />
-                  </template>
-                </app-upload>
-              </li>
-            </ul>
+          <div class="list-chat-img">
+            <div class="item" v-if="imgSrc">
+              <button class="btn-remove"><IconClose class="fill-white"/></button>
+              <img :src="imgSrc" />
+            </div>
+          </div>
+
+          <div class="input-chat">
+            <input
+              class="input-control"
+              v-model="textChat"
+              v-on:keyup.enter="handleEmitMessage"
+              placeholder="Nhấp để chat"
+            />
+            <div class="input-group_addon">
+              <ul class="list-unstyle">
+                <li>
+                  <a href="#">
+                    <IconSmile width="15" height="15" />
+                  </a>
+                </li>
+                <li>
+                  <app-upload class="cgi-upload-avt" @change="handleUploadChange">
+                    <template>
+                      <IconImage width="15" height="15" />
+                    </template>
+                  </app-upload>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -394,6 +403,7 @@ import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
 
@@ -587,10 +597,15 @@ export default {
       getBase64(this.listImage[0], src => {
         this.imgSrc = src;
       });
+      
+      this.fileList = fileList;
+    },
+
+    async sendImgChat(fileList) {
+      console.log("[msg_image]", fileList[0]);
       const body = new FormData();
       body.append("msg_image", fileList[0]);
       body.append("room_id", this.$route.params.id);
-      console.log("[msg_image]", fileList[0]);
       this.messageSendImg(body).then(result => {
         console.log("[send img]", result);
         this.urlEmitMessage =
@@ -631,6 +646,8 @@ export default {
       }
     },
     handleEmitMessage() {
+      this.sendImgChat(this.fileList);
+
       if (this.tag.length == 0) {
         if (
           this.textChat != "" ||
