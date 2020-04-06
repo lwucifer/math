@@ -4,6 +4,17 @@
   >
     <template v-slot:functionMenu>
       <div class="d-md-flex">
+        <app-button
+          size="sm"
+          square
+          normal
+          class="btn-primary-header"
+          nuxt
+          to="/elearning/manager/courses/create"
+        >
+          <IconPlus/> &nbsp;
+          Tạo bài giảng khóa học
+        </app-button>
 
         <app-button
           nuxt
@@ -11,7 +22,7 @@
           square
           normal
           class="ml-4 btn-secondary-header"
-          to="/"
+          to="../"
         >
           Quay lại trang chủ
         </app-button>
@@ -36,14 +47,14 @@
         </n-link>
       </div>
 
-      <div v-else class="d-flex">
+      <!-- <div v-else class="d-flex">
         <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
         <n-link
           class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
           :to="'/auth/signup'"
         >Đăng ký
         </n-link>
-      </div>
+      </div> -->
 
       <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false"/>
     </template>
