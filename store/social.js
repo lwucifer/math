@@ -71,9 +71,9 @@ const actions = {
 
     async [actionTypes.SOCIAL_POST.EDIT]({ commit }, payload) {
         try {
-            const data = await new SocialPosts(this.$axios)[actionTypes.BASE.EDIT_PAYLOAD](
-                payload
-            );
+            const data = await new SocialPosts(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[SocialPosts] edit", data);
             return data;
         } catch (err) {
@@ -341,7 +341,7 @@ const actions = {
             return err;
         }
     },
-    
+
     async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
         try {
             const { data: result = {} } = await new Photos(this.$axios)[
@@ -373,9 +373,9 @@ const actions = {
 
     async [actionTypes.SOCIAL_FOLLOW.DELETE_FOLLOW]({ commit }, payload) {
         try {
-            const data = await new SocialFollow(this.$axios)[
-                actionTypes.BASE.DELETE_PAYLOAD
-            ](payload);
+            const data = await new SocialFollow(this.$axios)[actionTypes.BASE.DELETE](
+                payload
+            );
             console.log("[SocialFollow] delete", data);
             return data;
         } catch (err) {

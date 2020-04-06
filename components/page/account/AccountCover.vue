@@ -96,8 +96,11 @@
           <IconUserTick class="mr-2" />Bạn bè
         </app-button>
         <ul class="friend-actions-list">
-          <li>
+          <li v-if="personalList.is_follow">
             <a @click.prevent="handleUnFollow">Hủy theo dõi</a>
+          </li>
+          <li v-else>
+            <a @click.prevent="handleCreateFollow">Theo dõi</a>
           </li>
           <li>
             <a @click.prevent="handleCancelInvite">Hủy kết bạn</a>
@@ -237,13 +240,11 @@ export default {
       });
     },
     handleUnFollow() {
-      const data = {
-        followed_user_id: this.$route.params.id
-      };
+      const data = this.$route.params.id;
       this.deleteFollow(data).then(result => {
         if (result.success == true) {
           this.$toasted.show("success");
-          this.accountPersonalList(id);
+          this.accountPersonalList(data);
         } else {
           this.$toasted.error(result.message);
         }
