@@ -234,6 +234,12 @@ export const ELEARNING_STUDY_VOTE = {
     SET_ELEARNING_STUDY_VOTE_ADD: "setElearningStudyVoteAdd"
 };
 
+export const ELEARNING_STUDY_ARCHIVE = {
+  SET_ELEARNING_STUDY_ARCHIVE_LIST: "setElearningStudyArchiveList",
+  SET_ELEARNING_STUDY_ARCHIVE_ADD: "setElearningStudyArchiveAdd",
+  SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete"
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList"
 };
