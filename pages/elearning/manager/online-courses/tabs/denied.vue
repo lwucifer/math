@@ -210,6 +210,10 @@
           last: 10
         },
         list: SCHEDULES,
+        listQuery: {
+          page: 1,
+          size: 10
+        },
       };
     },
     computed: {
@@ -242,7 +246,23 @@
       },
       selectRow(data) {
         console.log('change row: ', data)
-      }
+      },
+
+      async getList() {
+        const elearningType = "1";
+        this.listQuery.type = elearningType;
+        let params = {
+          type: elearningType
+        }
+        params = {...this.listQuery};
+        this.$store.dispatch(
+          `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
+        )
+      },
+    },
+
+    created() {
+      this.getList();
     }
   };
 </script>
