@@ -93,7 +93,7 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
 
-import CoursesService from "~/services/elearning/courses/list";
+import CoursesService from "~/services/elearning/study/Study";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -110,11 +110,11 @@ export default {
     IconTick
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`elearning/courses/courses-list/${actionTypes.ELEARNING_COURSES.LIST}`),
-    ]);
-  },
+  // async fetch({ params, query, store }) {
+  //   await Promise.all([
+  //     store.dispatch(`elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`),
+  //   ]);
+  // },
 
   data() {
     return {
@@ -285,15 +285,17 @@ export default {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
         }
-      ]
+      ],
+      listQuery: {
+        page: 1,
+        size: 10
+      },
     };
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/courses/courses-list", {
-      courses: "list"
-    })
+   
   },
 
   methods: {
@@ -334,6 +336,35 @@ export default {
         this.$toasted.error(doDelete.message);
       }
     },
+
+    async getList() {
+      const elearningType = "1";
+      this.listQuery.type = elearningType;
+      let params = {
+        type: elearningType
+      }
+      params = {...this.listQuery};
+      this.$store.dispatch(
+        `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
+      )
+    },
+    
+    async getList2() {
+      const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
+      this.listQuery.elearning_id = elearningId;
+      let params = {
+        elearning_id: elearningId
+      }
+      params = {...this.listQuery};
+      this.$store.dispatch(
+        `elearning/study/study-archive/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`, { params }
+      )
+    },
+  },
+
+  created() {
+    this.getList();
+    this.getList2();
   }
 };
 </script>

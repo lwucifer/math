@@ -48,6 +48,10 @@ import { createPayloadQuestion } from "~/models/course/AddCourse";
 
 export default {
   props: {
+    question: {
+      type: Object,
+      default: null,
+    },
     exercise: {
       type: Object,
       default: null,
@@ -55,19 +59,18 @@ export default {
   },
 
   data() {
-    console.log(this.exercise);
     return {
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
-        exercise_id: get(this, "exercise.id", ""),
+        id: get(this, "question.id", ""),
         type: "ESSAY",
-        content: "",
-        score: '',
+        content: get(this, "question.content", ""),
+        score: get(this, "question.score", ""),
         answers: [
           {
             correct: true,
-            content: "",
+            content: get(this, "question.answers[0].content", ""),
           },
         ],
       },
@@ -82,13 +85,13 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
 
-      if (get(this, 'exercise.category', '') === 'EXERCISE') {
-        this.payload.score = '';
+      if (get(this, "exercise.category", "") === "EXERCISE") {
+        this.payload.score = "";
       }
 
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
-        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
+        `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.EDIT}`,
         payload
       );
 
@@ -106,7 +109,7 @@ export default {
       (this.showModalConfirm = false), (this.confirmLoading = false);
     },
 
-    get
+    get,
   },
 };
 </script>

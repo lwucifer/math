@@ -64,11 +64,17 @@
     },
 
     methods: {
-      onPageChange(e) {
-        const that = this;
-        that.pagination = { ...that.pagination, ...e }
-        console.log(that.pagination);
-      }
+      async getList() {
+        const elearningType = "1";
+        this.listQuery.type = elearningType;
+        let params = {
+          type: elearningType
+        }
+        params = {...this.listQuery};
+        this.$store.dispatch(
+          `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
+        )
+      },
     }
   };
 </script>

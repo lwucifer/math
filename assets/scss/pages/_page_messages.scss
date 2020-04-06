@@ -303,6 +303,7 @@
                     .input-group {
                         display: flex;
                         justify-content: space-between;
+                        flex-wrap: wrap;
                         .input-control {
                             width: 100%;
                             line-height: 40px;
@@ -416,6 +417,7 @@
                         margin-bottom: 5px;
                     }
                     .message-info__box__content {
+                        min-height: 10rem;
                         .members {
                             max-height: 30rem;
                             overflow: auto;
@@ -661,6 +663,32 @@ button:focus {
                 +li {
                     border-top: 1px solid $color-border;
                 }
+            }
+        }
+    }
+}
+
+.aside-box__bottom{
+    .input-chat {
+        display: flex;
+        width: 100%;
+    }
+    .list-chat-img {
+        .item {
+            margin-bottom: 1rem;
+            height: 12rem;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-right: 1rem;
+            .btn-remove {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+            img {
+                width: auto;
+                height: 100%;
             }
         }
     }
