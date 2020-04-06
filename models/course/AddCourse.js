@@ -151,6 +151,12 @@ class Question {
     if (payload.exercise_id) {
       this.exercise_id = payload.exercise_id;
     }
+    if (payload.score) {
+      this.score = payload.score;
+    }
+    if (payload.exercise_id) {
+      this.exercise_id = payload.exercise_id;
+    }
     if (payload.id) {
       this.id = payload.id;
     }
