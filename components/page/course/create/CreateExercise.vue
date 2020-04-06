@@ -86,6 +86,7 @@ export default {
 
   methods: {
     handleRefreshQuestion() {
+      this.getProgress();
       this.getLesson(get(this, "lesson.id", ""));
     },
 
@@ -104,6 +105,7 @@ export default {
     },
 
     handleRefreshExcercises() {
+      this.getProgress()
       this.getLesson(get(this, "lesson.id", ""));
       this.isShowFormAdd = false;
       this.isShowButtonCreate = true;
@@ -144,6 +146,19 @@ export default {
         });
         this.lessons = lessons;
       }
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
     },
 
     get

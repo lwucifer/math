@@ -49,6 +49,10 @@ export default {
       store.dispatch(
         `social/${actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST}`,
         userId
+      ),
+      store.dispatch(
+        `social/${actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST}`,
+        userId
       )
     ]);
   },

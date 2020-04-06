@@ -75,9 +75,10 @@ const actions = {
     payload
   ) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.DELETE](
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.DELETE_PAYLOAD](
         payload
       );
+      return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
     } catch (error) {
