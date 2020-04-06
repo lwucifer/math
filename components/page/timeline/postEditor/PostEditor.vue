@@ -71,6 +71,28 @@
         <!-- END CHECK IN -->
       </div>
 
+      <div v-if="linkDataFetching" class="text-center text-sub caption py-5">
+        <template v-if="linkDataFetchError">Không thể tải bản xem trước.</template>
+        <template v-else>Đang tìm nạp bản xem trước</template>
+      </div>
+      <div v-else-if="!linkDataFetching && linkDataFetched" class="post-editor__preview-link">
+        <a href class="post-editor__preview-link__remove" @click.prevent="removePreviewLink">
+          <IconTimes class="icon" />
+        </a>
+
+        <app-content-box
+          tag="a"
+          target="_blank"
+          class="mb-4"
+          size="md"
+          :href="linkData.ogUrl"
+          :image="linkData.ogImage.url"
+          :title="linkData.ogTitle"
+          :desc="linkData.ogDescription"
+          :meta-footer="linkData.ogSiteName"
+        />
+      </div>
+
       <app-divider class="mt-3 mb-0" />
 
       <div v-show="showTags">
@@ -185,6 +207,7 @@
 </template>
 
 <script>
+import { isEmpty } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
@@ -194,12 +217,14 @@ import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { checkEditorEmpty } from "~/utils/validations";
 import { PasteHandler } from "~/utils/tiptap-plugins";
 import FriendService from "~/services/social/friend";
+import ScraperService from "~/services/social/scraper";
 
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
 import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
+import IconTimes from "~/assets/svg/design-icons/times.svg?inline";
 
 export default {
   components: {
@@ -208,6 +233,7 @@ export default {
     IconUserGroup,
     IconPinLocation,
     IconEmoji,
+    IconTimes,
     EditorContent
   },
 
@@ -267,6 +293,7 @@ export default {
         { value: 3, text: "Mongolia" },
         { value: 4, text: "Republic of Kosovo" }
       ],
+
       // Form submit data
       content: this.initialValues.content,
       link: this.initialValues.link,
@@ -275,8 +302,15 @@ export default {
       checkin: this.initialValues.check_in,
       privacy: this.initialValues.privacy,
       label: this.initialValues.label_id,
+
       // Submit edit data
-      deleteImgId: []
+      deleteImgId: [],
+
+      // Fetch link data
+      linkDataFetching: false,
+      linkDataFetched: false,
+      linkDataFetchError: false,
+      linkData: {}
     };
   },
 
@@ -395,6 +429,10 @@ export default {
     },
 
     handleUploadChange(event) {
+      // if is preview a link -> remove that. Post prefer image than link
+      !isEmpty(this.linkData) && this.removePreviewLink();
+
+      // push to list
       Array.from(event.target.files).forEach(file => {
         this.fileList.push(file);
         getBase64(file, fileSrc => {
@@ -504,21 +542,43 @@ export default {
 
       // If paste text is a string url
       if (isUrl) {
-        this.fetchLink(text);
+        // If no image in post and had not been fetched any link
+        !this.fileList.length && !this.linkDataFetched && this.fetchLink(text);
       }
     },
 
-    fetchLink(url) {
-      const ogs = require("open-graph-scraper");
-      const options = { url, encoding: "utf8" };
-      ogs(options, (error, results) => {
-        console.log("error:", error); // This is returns true or false. True if there was a error. The error it self is inside the results object.
-        console.log("results:", results);
-      });
+    async fetchLink(url) {
+      try {
+        this.linkDataFetching = true;
 
-      // this.$axios.get(url).then(res => {
-      //   console.log(res)
-      // })
+        const getInfo = await new ScraperService(this.$axios)[
+          ACTION_TYPE_BASE.ADD
+        ]({
+          link: url
+        });
+
+        this.linkDataFetching = false;
+        this.linkDataFetched = true;
+
+        console.log("getInfo", getInfo);
+
+        if (getInfo.success) {
+          if (getInfo.data && getInfo.data.success) {
+            this.linkData = getInfo.data.data;
+            this.link = url;
+          }
+        }
+      } catch (error) {
+        console.log("fetchLink error", error);
+        this.linkDataFetchError = true;
+      }
+    },
+
+    removePreviewLink() {
+      this.linkDataFetchError = false;
+      this.linkDataFetched = false;
+      this.linkData = {};
+      this.link = "";
     }
   }
 };
