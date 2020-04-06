@@ -27,7 +27,8 @@ export const SOCIAL = {
     SET_SOCIAL_LABEL_LIST: "setSocialLabelList",
     SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
     SET_SOCIAL_FRIEND_INVITE_LIST: "setSocialFriendInviteList",
-    SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList"
+    SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
+    SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -135,14 +136,14 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
 };
 
 export const ELEARNING_TEACHING_EXERCISE = {
-  SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
-  SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
+    SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
+    SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail"
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {
-  SET_TEACHING_SUBMISSION_LIST: "setElearningTeachingSubmissionList",
-  SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
-  SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark",
+    SET_TEACHING_SUBMISSION_LIST: "setElearningTeachingSubmissionList",
+    SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
+    SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark"
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -235,9 +236,9 @@ export const ELEARNING_STUDY_VOTE = {
 };
 
 export const ELEARNING_STUDY_ARCHIVE = {
-  SET_ELEARNING_STUDY_ARCHIVE_LIST: "setElearningStudyArchiveList",
-  SET_ELEARNING_STUDY_ARCHIVE_ADD: "setElearningStudyArchiveAdd",
-  SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete"
+    SET_ELEARNING_STUDY_ARCHIVE_LIST: "setElearningStudyArchiveList",
+    SET_ELEARNING_STUDY_ARCHIVE_ADD: "setElearningStudyArchiveAdd",
+    SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete"
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {

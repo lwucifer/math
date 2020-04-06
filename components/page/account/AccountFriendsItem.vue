@@ -28,9 +28,12 @@
           <IconTickGray class="mr-2" />Bạn bè
         </app-button>
         <ul class="account-friends-item__actions-list">
-          <li>
-            <a @click.prevent="handleUnFollow(data.id)">Hủy theo dõi</a>
+          <!-- <li v-if="data.is_follow">
+            <a @click.prevent="handleUnFollow(data.id)">Theo dõi</a>
           </li>
+          <li v-else>
+            <a @click.prevent="handleUnFollow(data.id)">Hủy theo dõi</a>
+          </li>-->
           <li>
             <a @click.prevent="hanldeUnfriend(data.id)">Hủy kết bạn</a>
           </li>

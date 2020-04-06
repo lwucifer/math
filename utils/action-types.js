@@ -321,7 +321,12 @@ export const SOCIAL_FRIEND = {
 };
 
 export const SOCIAL_PHOTO = {
+<<<<<<< HEAD
   POST_PHOTO_LIST: "postPhotoList",
+=======
+    POST_PHOTO_LIST: "postPhotoList",
+    POST_TAG_PHOTO_LIST: "postTagPhotoList"
+>>>>>>> origin/huydv
 };
 
 export const SOCIAL_FOLLOW = {

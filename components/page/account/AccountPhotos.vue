@@ -29,8 +29,12 @@
 
       <!-- Content photo tags-->
       <div class="row photos" v-if="tab == 2">
-        <div class="col-md-3 col-sm-6 col-xs-12 photo" v-for="(item, index) in photos" :key="index">
-          <img :src="item.src" alt />
+        <div
+          class="col-md-3 col-sm-6 col-xs-12 photo"
+          v-for="(item, index) in filterTagPhotoList"
+          :key="index"
+        >
+          <img :src="item.link && item.link.low ? item.link.low : ''" alt />
         </div>
       </div>
 
@@ -80,10 +84,15 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["postPhotoList"]),
+    ...mapState("social", ["postPhotoList", "postTagPhotoList"]),
     filterPhotoList() {
       return this.postPhotoList && this.postPhotoList.listPhotos
         ? this.postPhotoList.listPhotos
+        : [];
+    },
+    filterTagPhotoList() {
+      return this.postTagPhotoList && this.postTagPhotoList.listPhotos
+        ? this.postTagPhotoList.listPhotos
         : [];
     }
   },
