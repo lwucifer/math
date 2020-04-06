@@ -210,34 +210,17 @@
             </PostShareContent>
           </PostModalShare>
 
-          <app-modal v-if="showModalEditPost" :width="770">
+          <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
             <PostEditor
               slot="content"
-              ref="editEditor"
               class="mb-0"
-              mode="edit"
               :initialValues="editPostData"
               prefetch
               :show-overlay="false"
-              @submit="handleSubmitEditPost"
             />
             <div slot="footer" class="text-right px-4 pb-3">
-              <app-button
-                class="mr-3"
-                color="info"
-                :disabled="modalEditPostLoading"
-                size="sm"
-                square
-                @click="closeModalEditPost"
-              >Huỷ</app-button>
-
-              <app-button
-                color="primary"
-                :loading="modalEditPostLoading"
-                size="sm"
-                square
-                @click="handleClickSaveEditPost"
-              >Lưu</app-button>
+              <app-button class="mr-3" color="info" size="sm" square>Huỷ</app-button>
+              <app-button color="primary" size="sm" square>Lưu</app-button>
             </div>
           </app-modal>
         </div>
@@ -245,61 +228,59 @@
         <div class="col-md-4">
           <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
+              v-for="(item, index) in messages"
               class="mb-4"
               nuxt
+              to
               size="sm"
-              :key="message.id"
-              :to="`/messages/t/${message.id}`"
+              :key="index"
+              :image="item.image"
+              :title="item.title"
+              :desc="item.desc"
             />
           </AsideBox>
 
           <AsideBox title="Khóa học Online nổi bật">
             <div class="timeline-aside-tabs">
-              <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
-              <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
+              <a href class="active" @click.prevent>Miễn phí</a>
+              <a href @click.prevent>Trả phí</a>
             </div>
 
             <div class="time-aside-tabs-content">
-              <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
+              <div class="timeline-aside-tab-pane">
                 <app-content-box
-                  v-for="item in freeCourses"
-                  :key="item.id"
+                  v-for="(item, index) in coursesList"
                   class="align-items-center"
                   size="sm"
-                  :image="get(item, 'avatar.low', null)"
+                  :key="index"
+                  :image="item.image"
+                  :title="item.title"
+                  :desc="item.desc"
                 >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
+                  <n-link slot="image" to>
+                    <img :src="item.image" :alt="item.title" />
                   </n-link>
 
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+                  <n-link slot="title" to>{{ item.title }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  <n-link slot="desc" to>{{ item.desc }}</n-link>
                 </app-content-box>
               </div>
 
-              <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
+              <!-- <div class="timeline-aside-tab-pane">
                 <app-content-box
-                  v-for="item in privateCourses"
-                  :key="item.id"
-                  class="align-items-center"
+                  v-for="(item, index) in coursesList.reverse()"
+                  nuxt
                   size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
-
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
-              </div>
+                  :key="index"
+                  :image="item.image"
+                  :title="item.title"
+                  :desc="item.desc"
+                ></app-content-box>
+              </div>-->
 
               <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
+                <app-button class="timeline-aside-btn">Xem Tất Cả</app-button>
               </div>
             </div>
           </AsideBox>
@@ -310,14 +291,14 @@
 </template>
 
 <script>
-import { get } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
 import { createShare } from "~/models/social/Share";
-import { createPost, editPost } from "~/models/post/Post";
+import { createPost } from "~/models/post/Post";
 import {
+  MESSAGES,
   COURSES_LIST,
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
@@ -326,9 +307,6 @@ import FeedsService from "~/services/social/feeds";
 import SocialPostsService from "~/services/social/post";
 import LikesService from "~/services/social/likes";
 import ShareService from "~/services/social/shares";
-import LimitMessagesSerice from "~/services/message/LimitMessages";
-import SearchService from "~/services/elearning/public/Search";
-import PostService from "~/services/social/post";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -367,36 +345,11 @@ export default {
 
   async asyncData({ $axios }) {
     const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
-    const getMessages = () =>
-      new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
-    const getFreeCourse = () =>
-      new SearchService($axios)[actionTypes.BASE.ADD]({
-        free: true,
-        limit: 5
-      });
-    const getPrivateCourse = () =>
-      new SearchService($axios)[actionTypes.BASE.ADD]({
-        free: false,
-        limit: 5
-      });
 
-    const [
-      { data: feeds = {} },
-      { data: messages = [] },
-      { data: freeCourses = [] },
-      { data: privateCourses = [] }
-    ] = await Promise.all([
-      getFeeds(),
-      getMessages(),
-      getFreeCourse(),
-      getPrivateCourse()
-    ]);
+    const [{ data: dataFeeds = {} }] = await Promise.all([getFeeds()]);
 
     return {
-      feeds,
-      messages,
-      freeCourses: freeCourses.content || [],
-      privateCourses: privateCourses.content || []
+      feeds: dataFeeds
     };
   },
 
@@ -422,13 +375,13 @@ export default {
       postLoading: false,
       // Edit post
       showModalEditPost: false,
-      modalEditPostLoading: false,
       editPostData: {},
       // Share post
       showModalShare: false,
       shareData: {},
 
       //Fake data
+      messages: MESSAGES,
       coursesList: COURSES_LIST,
       timelineSliderItems: TIMELINE_SLIDER_ITEMS
     };
@@ -440,20 +393,6 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
-
-    messagesConverted() {
-      return this.messages.map(item => ({
-        id: item.room_id,
-        image:
-          item.type === 1
-            ? get(item, "user_avatar.low", null)
-            : get(item, "room_avatar.low", null),
-        title:
-          (item.type === 1 ? item.fullname : item.room_name) ||
-          "Không có tiêu đề",
-        desc: item.content
-      }));
     }
   },
 
@@ -480,8 +419,6 @@ export default {
   },
 
   methods: {
-    get,
-
     /**
      * Click image -> change url
      * @param { Object } imageObj - { type: image | video, post: post object }
@@ -563,20 +500,7 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
-        // Check whether field is an array
-        if (key === "post_image") {
-          const values = data[key];
-          for (let i = 0; i < values.length; i++) {
-            formData.append(key, values[i]);
-          }
-        } else {
-          formData.append(
-            key,
-            Array.isArray(dataWithModel[key])
-              ? JSON.stringify(data[key])
-              : data[key]
-          );
-        }
+        formData.append(key, data[key]);
       }
 
       this.postEditorActive = false;
@@ -586,16 +510,13 @@ export default {
         formData
       );
 
+      this.postLoading = false;
+
       if (doAdd.success) {
         cb();
-        const timeout = setTimeout(() => {
-          this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
-          this.postLoading = false;
-          clearTimeout(timeout);
-        }, data.post_image.length * 1000);
+        this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
       } else {
         this.$toasted.error(doAdd.message);
-        this.postLoading = false;
       }
     },
 
@@ -655,15 +576,14 @@ export default {
 
     editPost(post) {
       this.editPostData = {
-        post_id: post.post_id,
         content: post.content,
         link: post.link || "",
         post_image: post.files || [],
         list_tag:
           post.tags && post.tags.length ? post.tags.map(item => item.id) : [],
-        check_in: null,
-        privacy: get(post, "privacy.value", null),
-        label_id: get(post, "label.id", null)
+        check_in: {},
+        privacy: post.privacy ? post.privacy.value : null,
+        label_id: null
       };
       this.showModalEditPost = true;
     },
@@ -671,64 +591,6 @@ export default {
     closeModalEditPost() {
       this.showModalEditPost = false;
       this.editPostData = {};
-    },
-
-    handleClickSaveEditPost() {
-      this.$refs.editEditor && this.$refs.editEditor.submit();
-    },
-
-    getPost(id) {
-      return new PostService(this.$axios)[actionTypes.BASE.DETAIL](id);
-    },
-
-    async handleSubmitEditPost(data) {
-      this.modalEditPostLoading = true;
-
-      const formData = new FormData();
-      const dataWithModel = editPost(data);
-
-      for (const key in dataWithModel) {
-        // Check whether field is an array
-        if (key === "post_image") {
-          const values = data[key];
-          for (let i = 0; i < values.length; i++) {
-            formData.append(key, values[i]);
-          }
-        } else {
-          formData.append(
-            key,
-            Array.isArray(dataWithModel[key])
-              ? JSON.stringify(data[key])
-              : data[key]
-          );
-        }
-      }
-
-      const doEdit = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.EDIT}`,
-        formData
-      );
-
-      if (doEdit.success) {
-        const { success, data: newPost = {} } = await new PostService(
-          this.$axios
-        )[actionTypes.BASE.DETAIL](data.post_id);
-
-        if (success) {
-          const timeout = setTimeout(() => {
-            const postIndex = this.feeds.listPost.findIndex(
-              item => item.post_id === newPost.post_id
-            );
-            this.feeds.listPost[postIndex] = newPost;
-            this.modalEditPostLoading = false;
-            this.showModalEditPost = false;
-            clearTimeout(timeout);
-          }, data.post_image.length * 1000);
-        }
-      } else {
-        this.$toasted.error(doEdit.message);
-        this.modalEditPostLoading = false;
-      }
     },
 
     openModalShare(post) {
@@ -754,7 +616,7 @@ export default {
       const timeout = setTimeout(() => {
         cb();
         clearTimeout(timeout);
-      }, 500);
+      }, 500)
     },
 
     cancelShare() {
