@@ -65,6 +65,21 @@ export function getParamQuery(name) {
 }
 
 export function isValidUrl(str) {
-  const pattern = new RegExp(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,'gm');
+  const pattern = new RegExp(
+    /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+    "gm"
+  );
   return !!pattern.test(str);
+}
+
+export function testJSON(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  try {
+    JSON.parse(text);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }

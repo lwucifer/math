@@ -28,17 +28,33 @@
               @edit="editPost"
               @share="openModalShare"
             >
-              <PostImage
-                v-if="post.files && post.files.length"
-                slot="media-content"
-                class="my-4"
-                :images="post.files.map(item => ({
+              <template slot="media-content" slot-scope="{ link }">
+                <PostImage
+                  v-if="post.files && post.files.length"
+                  class="my-4"
+                  :images="post.files.map(item => ({
                   id: item.post_id,
                   thumb: item.link.high,
                   object: 'image'
                 }))"
-                @click-item="imageObj => handleClickImage(imageObj, post)"
-              />
+                  @click-item="imageObj => handleClickImage(imageObj, post)"
+                />
+
+                <template v-else-if="post.link">
+                  <app-divider class="my-4"></app-divider>
+                  <app-content-box
+                    tag="a"
+                    target="_blank"
+                    class="mb-4"
+                    size="md"
+                    :href="link.url"
+                    :image="link.image"
+                    :title="link.title"
+                    :desc="link.description"
+                    :meta-footer="link.siteName"
+                  />
+                </template>
+              </template>
 
               <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
                 <PostImage

@@ -51,7 +51,7 @@ export default {
 
       const sizeClasses = {
         "app-content-box--size-sm": this.size === "sm",
-        "app-content-box--size-md": this.size === "md",
+        "app-content-box--size-md": this.size === "md"
       };
 
       return {
@@ -64,14 +64,14 @@ export default {
   render: function(h) {
     const contentBoxTitle = h(
       this.titleTag,
-      { 
+      {
         class: "app-content-box__title"
       },
       [this.$slots.title ? this.$slots.title : this.title]
     );
 
     const contentBoxDesc = h(
-      'p',
+      "p",
       {
         class: "app-content-box__desc"
       },
@@ -79,11 +79,17 @@ export default {
     );
 
     const contentBoxMetaFooter = h(
-      'div',
+      "div",
       {
         class: "app-content-box__meta-footer"
       },
-      [[this.$slots['meta-footer'] ? this.$slots['meta-footer'] : this.metaFooter]]
+      [
+        [
+          this.$slots["meta-footer"]
+            ? this.$slots["meta-footer"]
+            : this.metaFooter
+        ]
+      ]
     );
 
     return h(
@@ -106,21 +112,20 @@ export default {
           {
             class: "app-content-box__image"
           },
-          [this.$slots.image
-            ? this.$slots.image
-            : h("img", { attrs: { src: this.image } })]
+          [
+            h("img", {
+              attrs: { src: this.image ? this.image : null },
+              slot: "image"
+            })
+          ]
         ),
 
         h(
           "div",
           {
-            class: "app-content-box__meta",
+            class: "app-content-box__meta"
           },
-          [
-            contentBoxTitle,
-            contentBoxDesc,
-            contentBoxMetaFooter
-          ]
+          [contentBoxTitle, contentBoxDesc, contentBoxMetaFooter]
         )
       ]
     );
