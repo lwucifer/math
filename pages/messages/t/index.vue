@@ -58,7 +58,7 @@ export default {
     );
     const dataRooms = data.rooms ? data.rooms : [];
     const id = dataRooms.filter(item => item.type == 1)[0].id;
-    //redirect(`/messages/t/${id}`);
+    redirect(`/messages/t/${id}`);
   }
 };
 </script>
