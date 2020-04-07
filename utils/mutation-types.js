@@ -135,6 +135,10 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     SET_TEACHING_REPOSITORY_FILE_LIST: "setElearningTeachingRespositoryFileList"
 };
 
+export const ELEARNING_TEACHING_REPOSITORY = {
+    SET_TEACHING_REPOSITORY_INFO: "setElearningTeachingRespositoryInfo"
+};
+
 export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
     SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail"
