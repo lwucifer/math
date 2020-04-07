@@ -710,3 +710,26 @@ button {
 ul {
     list-style: none;
 }
+
+.btn-create-chat {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #999;
+    margin: 1rem 1.5rem;
+    .btn-create-chat-icon {
+        background: #EEEEEE;
+        border: 1px dashed #CCCCCC;
+        box-sizing: border-box;
+        border-radius: 50%;
+        width: 4rem;
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        svg path {
+            fill: #999;
+        }
+    }
+}
