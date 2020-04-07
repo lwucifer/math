@@ -7,6 +7,31 @@
       :data="list"
       :loading="updating"
     >
+      <template v-slot:cell(mark)="{row}">
+        <td>
+          <v-popover
+            offset="10"
+            trigger="hover"
+          >
+            <span
+              class="font-weight-bold"
+              :class="{
+                'score--pass': (get(row, 'result') == SUBMISSION_RESULTS.PASS),
+                'score--fail': (get(row, 'result') == SUBMISSION_RESULTS.FAIL),
+                'score--empty': (get(row, 'result') == SUBMISSION_RESULTS.NO_SCORE),
+              }"
+            >
+            {{ get(row, 'mark', 'Chưa chấm điểm') }}
+          </span>
+    
+            <template slot="popover">
+              {{ get(row, 'result')  | submissionStatus }}
+            </template>
+  
+          </v-popover>
+          
+        </td>
+      </template>
       <template v-slot:cell(timestamp)="{row}">
         <td>
           {{ get(row, 'timestamp', '') | moment("hh:mm A DD/MM/YYYY") }}
@@ -26,6 +51,7 @@
 </template>
 
 <script>
+  import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
   import { get } from "lodash"
 
   export default {
@@ -58,7 +84,16 @@
     },
 
     filters: {
-
+      submissionStatus: function(val) {
+        if (val == SUBMISSION_RESULTS.NO_SCORE) {
+          return 'Chưa chấm điểm'
+        } else if (val == SUBMISSION_RESULTS.PASS) {
+           return 'Đạt'
+        } else if (val == SUBMISSION_RESULTS.FAIL) {
+          return 'Không đạt'
+        }
+        return ''
+      }
     },
 
     data() {
@@ -95,6 +130,7 @@
             sort: false
           },
         ],
+        SUBMISSION_RESULTS: SUBMISSION_RESULTS
       }
     },
 
@@ -113,5 +149,4 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/material/_elearning-filtertable.scss";
 </style>
