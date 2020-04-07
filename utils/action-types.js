@@ -330,12 +330,22 @@ export const SOCIAL_FOLLOW = {
   DELETE_FOLLOW: "deleteFollow",
 };
 
-export const ELEARNING_INFO = {
-  INFO: "elearningInfo",
+export const TEACHING_SUMMARY = {
+  INFO: "teachingSummary",
 };
-
-export const ELEARNING_COURSES = {
-  LIST: "coursesList",
-  STUDENT: "coursesStudent",
-  STUDENT_INFO: "coursesStudentInfo",
+export const TEACHING_ELEARNING = {
+  LIST: "teachingElearningList",
+  DELETE: "teachingElearningDelete",
+};
+export const TEACHING_ONLINE_CLASS = {
+  LIST: "teachingOnlineCLassList",
+  DELETE: "teachingOnlineCLassDelete",
+};
+export const TEACHING_INTERACTIVE = {
+  LIST: "teachingInteractiveList",
+  DELETE: "teachingInteractiveDelete",
+};
+export const TEACHING_STUDENTS = {
+  LIST: "teachingStudentsList",
+  DELETE: "teachingStudentsDelete",
 };

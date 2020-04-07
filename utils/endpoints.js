@@ -114,10 +114,14 @@ export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`
 export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
 
 /**
- * ELEARNING MANAGER
+ * TEACHING
  */
-export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/teaching/info`;
-
-export const ELEARNING_COURSES_LIST = `${SCHOOLLY_ALIAS}/elearning/courses/list`;
-export const ELEARNING_COURSES_STUDENT = `${SCHOOLLY_ALIAS}/elearning/courses/student`;
-export const ELEARNING_COURSES_STUDENT_INFO = `${SCHOOLLY_ALIAS}/elearning/courses/student/info`;
+export const TEACHING_SUMMARY= `${SCHOOLLY_ALIAS}/teaching/summary`;
+export const TEACHING_ELEARNING = `${SCHOOLLY_ALIAS}/teaching/elearnings`;
+export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/teaching/excercises`;
+export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/teaching/repository`;
+export const TEACHING_ONLINE_CLASS = `${SCHOOLLY_ALIAS}/teaching/olclass`;
+export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/teaching/interactive/questions`;
+export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/teaching/students`;
+export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/teaching/invites`;
+export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/teaching/votes`;

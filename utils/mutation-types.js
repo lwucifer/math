@@ -264,8 +264,22 @@ export const ELEARNING_INFO = {
     SET_ELEARNING_INFO: "setElearningInfo"
 };
 
-export const ELEARNING_COURSES = {
-    SET_COURSES_LIST: "setElearningCoursesList",
-    SET_COURSES_STUDENT: "setElearningCoursesStudent",
-    SET_COURSES_STUDENT_INFO: "setElearningCoursesStudentInfo"
+export const TEACHING_SUMMARY = {
+    SET_TEACHING_SUMMARY_INFO: "setTeachingSummaryInfo",
+};
+export const TEACHING_ELEARNING = {
+    SET_TEACHING_ELEARNING_LIST: "setTeachingElearningList",
+    SET_TEACHING_ELEARNING_DELETE: "setTeachingElearningDelete",
+};
+export const TEACHING_STUDENTS = {
+    SET_TEACHING_STUDENTS_LIST: "setTeachingStudentsList",
+    SET_TEACHING_STUDENTS_DELETE: "setTeachingStudentsDelete",
+};
+export const TEACHING_INTERACTIVE = {
+    SET_TEACHING_INTERACTIVE_LIST: "setTeachingStudentsList",
+    SET_TEACHING_INTERACTIVE_DELETE: "setTeachingStudentsDelete",
+};
+export const TEACHING_ONLINE_CLASS = {
+    SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
+    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
 };
