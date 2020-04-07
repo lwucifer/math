@@ -521,6 +521,7 @@ export default {
     clear() {
       this.editor.setContent("");
       this.link = {};
+      this.linkDataFetched = false;
       this.fileList = [];
       this.listTag = [];
       this.checkin = null;
