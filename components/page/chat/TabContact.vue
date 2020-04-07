@@ -118,7 +118,7 @@
                 </div>
               </app-dropdown>
             </div>
-            <client-only>
+            <client-only v-if="this.chatsListTab.length > 0">
               <infinite-loading :identifier="infiniteIdChat" @infinite="chatsInfiniteHandler">
                 <template slot="no-more">Không còn tin nhắn nào.</template>
               </infinite-loading>
@@ -171,7 +171,7 @@
                 </div>
               </app-dropdown>
             </div>
-            <client-only>
+            <client-only v-if="this.mapGroupList.length > 0">
               <infinite-loading :identifier="infiniteId" @infinite="groupsInfiniteHandler">
                 <template slot="no-more">Không còn group.</template>
               </infinite-loading>
@@ -394,9 +394,10 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.groupListQuery.page += 1;
-        this.groupsListTab.push(
-          ...getData.rooms.filter(item => item.type == 2)
-        );
+        // this.groupsListTab.push(
+        //   ...getData.rooms.filter(item => item.type == 2)
+        // );
+        this.groupsListTab = [];
         $state.loaded();
         // this.$store.commit(
         //   `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
@@ -416,7 +417,8 @@ export default {
 
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
-        this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        // this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        this.chatsListTab = [];
         // this.$store.commit(
         //   `message/${mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE}`,
         //   this.chatsListTab

@@ -11,38 +11,36 @@
         <td
           class="table--question-test__question-index"
           title="Chi tiết"
-          @click.self="clickQuestion({row, index})"
+          @click="clickQuestion({row, index})"
         >
-          <span>{{ index + 1 }}</span>
-          <div class="question-detail" v-if="index == currentQuestionIndex">
-            <div class="text-right">
-                <span
-                  class="icon-close"
-                  @click.stop="closeDetail"
-                  title="Đóng"
-                >
-                  <IconClose />
-                </span>
+          
+          
+          <v-popover
+            class="tooltip--question"
+            :open="index == currentQuestionIndex"
+            offset="10"
+          >
+            <div class="">
+              <span>{{ index + 1 }}</span>
             </div>
-            <div class="question" v-html="get(row, 'question_name', '')"></div>
-            <div class="options">
-              <p>Đáp án</p>
-              <div class="options__detail">
-                <!--<div>-->
-                  <!--<span>A</span>: <p class="answer-wrapper" v-html="row.options[0]"></p>-->
-                <!--</div>-->
-                <!--<div>-->
-                  <!--<span>B</span>: <p class="answer-wrapper" v-html="row.options[1]"></p>-->
-                <!--</div>-->
-                <!--<div>-->
-                  <!--<span>C</span>: <p class="answer-wrapper" v-html="row.options[2]"></p>-->
-                <!--</div>-->
-                <!--<div>-->
-                  <!--<span>D</span>: <p class="answer-wrapper" v-html="row.options[3]"></p>-->
-                <!--</div>-->
-              </div>
-            </div>
-          </div>
+            
+            <template slot="popover">
+              <span v-close-popover class="icon-close" title="Đóng">
+                <IconClose/>
+              </span>
+              <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
+              <app-spin v-if="loadingQuestion"></app-spin>
+              <choice-question-detail
+                v-else-if="selectedQuestion"
+                :name="selectedQuestion.name"
+                :content="selectedQuestion.content"
+                :options="[{ title: 'abc', content: 'options 1' }]"
+              />
+            </template>
+          
+          </v-popover>
+        
+        
         </td>
       </template>
     </app-table><!--End table-->
@@ -51,14 +49,16 @@
 
 <script>
   import IconClose from "~/assets/svg/icons/close2.svg?inline"
-
-  import { get } from "lodash"
-
+  import ChoiceQuestionDetail from "~/components/page/elearning/manager/exam/ChoiceQuestionDetail"
+  
+  import {get} from "lodash"
+  
   export default {
     components: {
-      IconClose
+      IconClose,
+      ChoiceQuestionDetail
     },
-
+    
     props: {
       title: {
         type: String,
@@ -73,11 +73,9 @@
         default: false
       }
     },
-
-    filters: {
-
-    },
-
+    
+    filters: {},
+    
     data() {
       return {
         heads: [
@@ -94,21 +92,39 @@
             text: "Đáp án đúng",
           },
         ],
-        currentQuestionIndex: null
+        currentQuestionIndex: null,
+        loadingQuestion: false,
+        selectedQuestion: null
       }
     },
-
+    
     computed: {
       updating: function () {
         return this.loading
-      }
+      },
     },
     methods: {
-      clickQuestion({ row, index }) {
+      clickQuestion({row, index}) {
+        console.log('click row: ', row, index)
         this.currentQuestionIndex = index
+        this.$nextTick(() => {
+          this.loadingQuestion = true
+          setTimeout(() => {
+            this.selectedQuestion = {
+              name: 'Tên câu hỏi',
+              content: 'Nội dung câu hỏi update'
+            }
+            this.loadingQuestion = false
+          }, 4999)
+        })
       },
       closeDetail() {
         this.currentQuestionIndex = null
+      },
+      renderQuestionDetail() {
+        setTimeout(() => {
+          return 'abc'
+        }, 4000)
       },
       get
     },
@@ -116,5 +132,5 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/material/_elearning-filtertable.scss";
+
 </style>

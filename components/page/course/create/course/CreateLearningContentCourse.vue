@@ -25,13 +25,14 @@
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
+              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowChapter=!isShowChapter">
+                <IconAngleDown class="icon" v-if="!isShowChapter"/>
+                <IconAngleUp class="icon" v-else/>
               </button>
             </div>
           </div>
 
-          <div class="cc-box__body">
+          <div class="cc-box__body" v-if="isShowChapter">
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
@@ -50,6 +51,7 @@ import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
@@ -87,13 +89,15 @@ export default {
     LessonDetail,
     CreateChapter,
     ListChapter,
-    EditCourseName
+    EditCourseName,
+    IconAngleUp
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
-      isShowEditCourse: false
+      isShowEditCourse: false,
+      isShowChapter:true
     };
   },
 

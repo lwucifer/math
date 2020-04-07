@@ -5,6 +5,8 @@
         class="header-create__btn header-create__btn-back"
         outline
         square
+        nuxt 
+        to="./"
       >
         <IconArrowLeft class="icon mr-2" />
         Quay lại
