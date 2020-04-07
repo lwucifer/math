@@ -85,11 +85,11 @@
           target="_blank"
           class="mb-4"
           size="md"
-          :href="linkData.ogUrl"
-          :image="linkData.ogImage.url"
-          :title="linkData.ogTitle"
-          :desc="linkData.ogDescription"
-          :meta-footer="linkData.ogSiteName"
+          :href="link.url"
+          :image="link.image"
+          :title="link.title"
+          :desc="link.description"
+          :meta-footer="link.siteName"
         />
       </div>
 
@@ -216,6 +216,7 @@ import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { checkEditorEmpty } from "~/utils/validations";
 import { PasteHandler } from "~/utils/tiptap-plugins";
+import { createPostLink } from "~/models/post/PostLink";
 import FriendService from "~/services/social/friend";
 import ScraperService from "~/services/social/scraper";
 
@@ -296,7 +297,7 @@ export default {
 
       // Form submit data
       content: this.initialValues.content,
-      link: this.initialValues.link,
+      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : {},
       fileList: this.initialValues.post_image,
       listTag: this.initialValues.list_tag,
       checkin: this.initialValues.check_in,
@@ -309,8 +310,7 @@ export default {
       // Fetch link data
       linkDataFetching: false,
       linkDataFetched: false,
-      linkDataFetchError: false,
-      linkData: {}
+      linkDataFetchError: false
     };
   },
 
@@ -430,7 +430,7 @@ export default {
 
     handleUploadChange(event) {
       // if is preview a link -> remove that. Post prefer image than link
-      !isEmpty(this.linkData) && this.removePreviewLink();
+      !isEmpty(this.link) && this.removePreviewLink();
 
       // push to list
       Array.from(event.target.files).forEach(file => {
@@ -493,7 +493,7 @@ export default {
     submit() {
       const params = {
         content: this.editor.getHTML(),
-        link: this.link,
+        link: JSON.stringify(this.link),
         post_image: this.fileList.filter(file =>
           ["link", "post_id", "file_id"].every(key => key in file)
             ? false
@@ -520,7 +520,7 @@ export default {
 
     clear() {
       this.editor.setContent("");
-      this.link = "";
+      this.link = {};
       this.fileList = [];
       this.listTag = [];
       this.checkin = null;
@@ -560,12 +560,35 @@ export default {
         this.linkDataFetching = false;
         this.linkDataFetched = true;
 
-        console.log("getInfo", getInfo);
-
         if (getInfo.success) {
           if (getInfo.data && getInfo.data.success) {
-            this.linkData = getInfo.data.data;
-            this.link = url;
+            const {
+              ogTitle,
+              ogType,
+              ogUrl,
+              ogSiteName,
+              ogDescription,
+              ogImage = {},
+              ogVideo = {}
+            } = getInfo.data.data;
+            const linkModel = createPostLink({
+              type: ogType,
+              url: ogUrl,
+              siteName: ogSiteName,
+              title: ogTitle,
+              description: ogDescription,
+              updatedTime: null,
+              image: ogImage.url,
+              imageWidth: ogImage.width,
+              imageHeight: ogImage.height,
+              videoUrl: ogVideo.url,
+              videoSecureUrl: ogVideo.secureUrl,
+              videoType: ogVideo.type,
+              videoWidth: ogVideo.width,
+              videoHeight: ogVideo.height,
+              videoTag: ogVideo.tag
+            });
+            this.link = linkModel;
           }
         }
       } catch (error) {
@@ -577,8 +600,7 @@ export default {
     removePreviewLink() {
       this.linkDataFetchError = false;
       this.linkDataFetched = false;
-      this.linkData = {};
-      this.link = "";
+      this.link = {};
     }
   }
 };
