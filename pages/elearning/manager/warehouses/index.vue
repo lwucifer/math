@@ -12,6 +12,8 @@
           <app-divider />
           <ElearningManagerUploadFile
             :on-success="handleDoneAddFile"
+            :max-capacity="get(capacityInfo, 'data.max_repository_capacity', 0)"
+            :used-capacity="get(capacityInfo, 'data.used_repository_capacity', 0)"
           />
           <div>
             <ElearningManagerFilterTable
@@ -40,6 +42,7 @@
   import { useEffect } from "~/utils/common"
 
   const STORE_NAMESPACE = 'elearning/teaching/repository-files'
+  const REPOSITORY_STORE_NAMESPACE = 'elearning/teaching/repository'
 
   export default {
     components: {
@@ -71,6 +74,9 @@
       ...mapState(STORE_NAMESPACE, {
         detailInfo: 'files'
       }),
+      ...mapState(REPOSITORY_STORE_NAMESPACE, {
+        capacityInfo: 'info'
+      }),
     },
     methods: {
       handleUploadChange(fileList, event) {
@@ -98,6 +104,15 @@
         }
 
       },
+      async getInfoCapacity() {
+        try {
+          await this.$store.dispatch(
+            `${REPOSITORY_STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY.INFO}`, {}
+          )
+        } catch (e) {
+        } finally {
+        }
+      },
       updateFilter(val) {
         this.params = { ...this.params, ...val }
         this.refreshData()
@@ -124,11 +139,20 @@
       refreshData() {
         this.params.page = 1
         this.getList()
+        this.getInfoCapacity()
       },
       get
     },
     created() {
       useEffect(this, this.getList.bind(this), [
+        "params.page",
+        "params.size",
+        "params.type",
+        "params.used",
+        "params.query",
+      ])
+  
+      useEffect(this, this.getInfoCapacity.bind(this), [
         "params.page",
         "params.size",
         "params.type",

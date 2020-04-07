@@ -6,14 +6,14 @@
       </div>
       <div class="col-md-6 wrapStorage__ElearningManager ">
         <div class="d-flex justify-content-end">
-          <span>Dung lượng đã sử dụng:</span>
-          <span> {{(memoryused*50)/100}}/50GB</span>
+          <span>Dung lượng đã sử dụng: </span>
+          <span> {{ usedCapacity*1024*1024 | fileSizeFilter }}/{{ maxCapacity*1024*1024 | fileSizeFilter }}</span>
         </div>
         <div class="wrapProcessbarStorage__ElearningManager d-flex justify-content-end">
           <div class="processStorage__ElearningManager mb-0">
-            <div class="barStorage_ElearningManager mb-0" v-bind:style="{width: memoryused +'%'}"></div>
+            <div class="barStorage_ElearningManager mb-0" v-bind:style="{width: capcityPercentage +'%'}"></div>
           </div>
-          <span>{{memoryused}}%</span>
+          <span v-if="capcityPercentage || capcityPercentage == 0">{{ capcityPercentage }}%</span>
         </div>
       </div>
     </div>
@@ -149,7 +149,6 @@
   export default {
     data() {
       return {
-        memoryused: 20,
         payload: {
           file: '',
           name: ''
@@ -171,7 +170,15 @@
     props: {
       multiple: Boolean,
       beforeUpload: Function, // eslint-disable-line
-      onSuccess: Function,// eslint-disable-line
+      onSuccess: Function,// eslint-disable-line,
+      maxCapacity: {
+        type: Number|String,
+        required: true
+      },
+      usedCapacity: {
+        type: Number|String,
+        required: true
+      }
     },
     components: {
       IconUploadFile,
@@ -180,11 +187,11 @@
       IconSuccess
     },
     computed: {
-      showDragArea: function() {
-        return !this.loading && this.notification
+      capcityPercentage() {
+        return Math.ceil((this.usedCapacity/this.maxCapacity)*100)
       },
-      showLoadingArea: function() {
-        return this.loading
+      availableCapcity() {
+        return this.maxCapacity - this.usedCapacity
       },
       uploadSpeed: function() {
         return `${Number((this.diffPayload / this.diffTimestamp).toFixed(1))} KB/s`
@@ -214,7 +221,6 @@
     },
     methods: {
       async addFile(rawFile) {
-        console.log('rawFile:', rawFile)
         this.payload.name = rawFile.name
         this.payload.file = rawFile
 
@@ -321,7 +327,7 @@
           this.hasError(DEFAULT_ERROR_MESSAGE, `Dung lượng tài liệu vượt quá giới hạn > ${fileSizeFilter(MAX_UPLOADED_REPOSITORY_FILE_SIZE*1024*1024)}`)
           return false
         }
-        if (!this.isAvailableStorage()) {
+        if (!this.isAvailableStorage(file)) {
           this.hasError(DEFAULT_ERROR_MESSAGE, `Kho học liệu của bạn không đủ dung lượng trống để tải file`)
           return false
         }
@@ -334,8 +340,9 @@
         const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE
         return isLtSize
       },
-      isAvailableStorage() {
-        return true
+      isAvailableStorage(file) {
+        const fileSize = file.size
+        return this.availableCapcity * 1024 * 1024 > fileSize
       },
       cancelUpload() {
         if (this.isUploading) {
