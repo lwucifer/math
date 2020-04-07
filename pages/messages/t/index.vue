@@ -3,20 +3,17 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sidebar">
-          <TabContact
-            :contacts="[]"
-            :friends="[]"
-          />
+          <TabContact :contacts="[]" :friends="[]" />
         </div>
         <div class="col-md-9 col-content">
           <div class="box">
             <div class="row">
-              <TabMessage :isCreate="isCreate" />
+              <TabMessage :isCreate="false" />
               <TabInfo
                 :fileshare="[]"
                 :imageshare="[]"
                 :members="[]"
-                :isGroup="[]"
+                :isGroup="false"
                 :noMessage="true"
               />
             </div>

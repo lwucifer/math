@@ -60,7 +60,7 @@
       <div v-if="!checkEditorEmpty(post.content)" v-html="post.content" class="post__post-desc"></div>
       <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
-      <slot name="media-content" />
+      <slot name="media-content" :link="testJSON(post.link)  ? JSON.parse(post.link) : {}" />
 
       <slot />
     </div>
@@ -137,6 +137,7 @@
 import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { checkEditorEmpty } from "~/utils/validations";
+import { testJSON } from "~/utils/common";
 import { createComment } from "~/models/social/Comment";
 
 const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
@@ -234,6 +235,7 @@ export default {
 
   methods: {
     checkEditorEmpty,
+    testJSON,
 
     handleClickDelete() {
       this.$emit("delete", this.post.post_id);

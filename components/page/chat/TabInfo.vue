@@ -40,7 +40,7 @@
           </ul>
         </div>
       </div>
-      <div class="message-info__box" >
+      <div class="message-info__box">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
         <div class="message-info__box__content images-attachment" v-if="listImage.length > 0">
           <ul class="list-unstyle">
@@ -53,9 +53,9 @@
         </div>
         <div class="message-info__box__content" v-else></div>
       </div>
-      <div class="message-info__box" v-if="isGroup & memberListTab.length > 0">
+      <div class="message-info__box" v-if="isGroup">
         <h5 class="message-info__box__title">Thành viên</h5>
-        <div class="message-info__box__content" >
+        <div class="message-info__box__content">
           <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
             <IconPlus height="20" width="20" class="mr-3" />Thêm người
           </button>
