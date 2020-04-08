@@ -17,7 +17,7 @@
     <app-divider class="my-4" />
 
     <DocumentDetail
-      v-for="doc in get(lesson, 'lessonDocs', [])"
+      v-for="doc in get(lesson, 'lesson_docs', [])"
       :key="doc.id"
       :doc="doc"
       @handleRefreshDocs="handleRefreshDocs"

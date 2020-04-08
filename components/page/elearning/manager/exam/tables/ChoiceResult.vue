@@ -14,7 +14,6 @@
           @click="clickQuestion({row, index})"
         >
           
-          
           <v-popover
             class="tooltip--question"
             :open="index == currentQuestionIndex"
@@ -29,7 +28,9 @@
                 <IconClose/>
               </span>
               <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
-              <app-spin v-if="loadingQuestion"></app-spin>
+              <div v-if="loadingQuestion" class="text-center">
+                <app-spin></app-spin>
+              </div>
               <choice-question-detail
                 v-else-if="selectedQuestion"
                 :name="selectedQuestion.name"

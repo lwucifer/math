@@ -130,5 +130,4 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/material/_elearning-filtertable.scss";
 </style>
