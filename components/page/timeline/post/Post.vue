@@ -60,7 +60,7 @@
       <div v-if="!checkEditorEmpty(post.content)" v-html="post.content" class="post__post-desc"></div>
       <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
-      <slot name="media-content" :link="testJSON(post.link)  ? JSON.parse(post.link) : {}" />
+      <slot name="media-content" :link="testJSON(post.link)  ? JSON.parse(post.link) : null" />
 
       <slot />
     </div>
