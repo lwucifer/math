@@ -98,6 +98,10 @@ class CourseSetting {
       this.discount = numeral(payload.discount).value();
       this.fee = numeral(payload.fee).value();
     }
+    if(payload.free == 1){
+      this.discount = 0;
+      this.fee = 0;
+    }
     this.elearning_id = payload.elearning_id;
     this.privacy = payload.privacy;
     if (payload.privacy === "PRIVATE") {
