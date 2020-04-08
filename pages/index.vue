@@ -103,84 +103,6 @@
               </template>
             </Post>-->
             <!-- END DEMO FOR POST SLIDER -->
-
-            <!-- DEMO FOR POST 1 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 1 IMAGE -->
-
-            <!-- DEMO FOR POST 2 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 2 IMAGE -->
-
-            <!-- DEMO FOR POST 3 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/546/362'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 3 IMAGE -->
-
-            <!-- DEMO FOR POST 4 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/555/555'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 4 IMAGE -->
-
-            <!-- DEMO FOR POST 5 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/729/437'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
           <client-only>
@@ -260,7 +182,7 @@
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
+          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
               v-for="message in messages"
               class="mb-4"
@@ -774,15 +696,22 @@ export default {
       );
 
       if (doShare.success) {
-        this.feeds.listPost = [doShare.data, ...this.feeds.listPost];
+        const { success, data: newPost = {} } = await new PostService(
+          this.$axios
+        )[actionTypes.BASE.DETAIL](doShare.data.post_id);
+
+        if (success) {
+          this.feeds.listPost = [newPost, ...this.feeds.listPost];
+        }
+
+        this.cancelShare();
+        const timeout = setTimeout(() => {
+          cb();
+          clearTimeout(timeout);
+        }, 500);
       } else {
         this.$toasted.error(doShare.message);
       }
-
-      const timeout = setTimeout(() => {
-        cb();
-        clearTimeout(timeout);
-      }, 500);
     },
 
     cancelShare() {
