@@ -6,7 +6,7 @@ import Lesson from "~/services/elearning/creating/Lesson";
  * initial state
  */
 const state = () => ({
-  lessons: []
+  lessons: [],
 });
 
 /**
@@ -19,24 +19,15 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_LESSONS.LIST]({ commit }, options) {
-    if (!options.not_commit) {
-      commit(
-        mutationTypes.ELEARNING_CREATING_LESSONS
-          .SET_ELEARNING_CREATING_LESSONS_LIST,
-        []
-      );
-    }
     try {
       const result = await new Lesson(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      if (!options.not_commit) {
-        commit(
-          mutationTypes.ELEARNING_CREATING_LESSONS
-            .SET_ELEARNING_CREATING_LESSONS_LIST,
-          result
-        );
-      }
+      commit(
+        mutationTypes.ELEARNING_CREATING_LESSONS
+          .SET_ELEARNING_CREATING_LESSONS_LIST,
+        result
+      );
       return result;
     } catch (error) {
       console.log("[Creating Lesson] list.error", error);
@@ -85,7 +76,7 @@ const actions = {
     } catch (error) {
       console.log("[Creating Lesson] delete.error", error);
     }
-  }
+  },
 };
 
 /**
@@ -96,7 +87,7 @@ const mutations = {
     .SET_ELEARNING_CREATING_LESSONS_LIST](state, lessons) {
     console.log("SET_ELEARNING_CREATING_LESSONS_LIST");
     state.lessons = lessons;
-  }
+  },
 };
 
 export default {
@@ -104,5 +95,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

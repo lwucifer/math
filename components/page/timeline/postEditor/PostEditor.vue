@@ -9,7 +9,29 @@
         />
 
         <client-only>
-          <editor-content :editor="editor" class="post-editor__editor" />
+          <div class="post-editor__editor">
+            <editor-content :editor="editor" />
+
+            <div class="suggestion-list" v-show="showSuggestions" ref="suggestions">
+              <template v-if="hasResults">
+                <div
+                  v-for="(user, index) in filteredUsers"
+                  :key="user.id"
+                  class="suggestion-list__item"
+                  :class="{ 'is-selected': navigatedUserIndex === index }"
+                  @click="selectUser(user)"
+                >
+                  <app-avatar
+                    class="mr-2"
+                    :size="32"
+                    :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
+                  />
+                  {{ user.fullname }}
+                </div>
+              </template>
+              <div v-else class="suggestion-list__item is-empty">No users found</div>
+            </div>
+          </div>
         </client-only>
       </div>
 
@@ -207,10 +229,12 @@
 </template>
 
 <script>
-import { isEmpty } from "lodash";
+import tippy from "tippy.js";
+import "tippy.js/themes/light.css";
+import { isEmpty, debounce } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import { Editor, EditorContent } from "tiptap";
-import { Placeholder } from "tiptap-extensions";
+import { Placeholder, Mention } from "tiptap-extensions";
 
 import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
@@ -297,7 +321,7 @@ export default {
 
       // Form submit data
       content: this.initialValues.content,
-      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : {},
+      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : null,
       fileList: this.initialValues.post_image,
       listTag: this.initialValues.list_tag,
       checkin: this.initialValues.check_in,
@@ -310,7 +334,15 @@ export default {
       // Fetch link data
       linkDataFetching: false,
       linkDataFetched: false,
-      linkDataFetchError: false
+      linkDataFetchError: false,
+
+      // Mention data
+      query: null,
+      filteredUsers: [],
+      suggestionRange: null,
+      insertMention: () => {},
+      navigatedUserIndex: 0,
+      popup: null
     };
   },
 
@@ -356,6 +388,15 @@ export default {
         this.checkin !== null
       ];
       return conditions.find(c => !!c) ? true : false;
+    },
+
+    hasResults() {
+      return this.filteredUsers && this.filteredUsers.length
+        ? this.filteredUsers.length
+        : 0;
+    },
+    showSuggestions() {
+      return this.query || this.hasResults;
     }
   },
 
@@ -364,6 +405,8 @@ export default {
   },
 
   mounted() {
+    if (process.server) return;
+
     this.editor = new Editor({
       content: this.content,
       extensions: [
@@ -374,6 +417,72 @@ export default {
         }),
         new PasteHandler({
           onPaste: this.handleEditorPaste
+        }),
+        new Mention({
+          // a list of all suggested items
+          items: this.friendsList,
+          // is called when a suggestion starts
+          onEnter: ({ items, query, range, command, virtualNode }) => {
+            this.query = query;
+            // this.filteredUsers = items;
+            this.suggestionRange = range;
+            this.renderPopup(virtualNode);
+            // we save the command for inserting a selected mention
+            // this allows us to call it inside of our custom popup
+            // via keyboard navigation and on click
+            this.insertMention = command;
+          },
+          // is called when a suggestion has changed
+          onChange: ({ items, query, range, virtualNode }) => {
+            this.query = query;
+            // this.filteredUsers = items;
+            this.suggestionRange = range;
+            this.navigatedUserIndex = 0;
+            this.renderPopup(virtualNode);
+          },
+          // is called when a suggestion is cancelled
+          onExit: () => {
+            // reset all saved values
+            this.query = null;
+            // this.filteredUsers = [];
+            this.friendsList = [];
+            this.friendsListQuery.page = 1;
+            //
+            this.suggestionRange = null;
+            this.navigatedUserIndex = 0;
+            this.destroyPopup();
+          },
+          // is called on every keyDown event while a suggestion is active
+          onKeyDown: ({ event }) => {
+            // pressing up arrow
+            if (event.key === "ArrowUp") {
+              this.upHandler();
+              return true;
+            }
+            // pressing down arrow
+            if (event.key === "ArrowDown") {
+              this.downHandler();
+              return true;
+            }
+            // pressing enter
+            if (event.key === "Enter") {
+              this.enterHandler();
+              return true;
+            }
+            return false;
+          },
+          // is called when a suggestion has changed
+          // this function is optional because there is basic filtering built-in
+          // you can overwrite it if you prefer your own filtering
+          // in this example we use fuse.js with support for fuzzy search
+          onFilter: (items, query) => {
+            console.log("filter", query);
+            // let result = [];
+            // this.getFriends(query).then(() => {
+            //   result = this.friendsList;
+            // })
+            // return result;
+          }
         })
       ],
       onUpdate: ({ getHTML }) => {
@@ -393,6 +502,16 @@ export default {
 
     localActive(newValue) {
       this.$emit("active-change", newValue);
+    },
+
+    query: debounce(function(newValue) {
+      this.friendsList = [];
+      this.friendsListQuery.page = 1;
+      this.getFriends(newValue);
+    }, 300),
+
+    friendsList(newValue) {
+      this.filteredUsers = newValue;
     }
   },
 
@@ -450,18 +569,21 @@ export default {
       this.labelDropdrown = false;
     },
 
-    async getFriends() {
+    async getFriends(name = "") {
       const { data = {} } = await new FriendService(this.$axios)[
         ACTION_TYPE_BASE.LIST
       ]({
-        params: this.friendsListQuery
+        params: {
+          ...this.friendsListQuery,
+          name
+        }
       });
 
       if (data.listFriend && data.listFriend.length) {
         this.friendsListQuery.page += 1;
         this.friendsList = this.friendsList.concat(data.listFriend);
       } else {
-        this.$toasted(data.message);
+        this.$toasted.error(data.message);
       }
     },
 
@@ -493,7 +615,7 @@ export default {
     submit() {
       const params = {
         content: this.editor.getHTML(),
-        link: JSON.stringify(this.link),
+        link: !isEmpty(this.link) ? JSON.stringify(this.link) : null,
         post_image: this.fileList.filter(file =>
           ["link", "post_id", "file_id"].every(key => key in file)
             ? false
@@ -520,7 +642,7 @@ export default {
 
     clear() {
       this.editor.setContent("");
-      this.link = {};
+      this.link = null;
       this.linkDataFetched = false;
       this.fileList = [];
       this.listTag = [];
@@ -601,7 +723,80 @@ export default {
     removePreviewLink() {
       this.linkDataFetchError = false;
       this.linkDataFetched = false;
-      this.link = {};
+      this.link = null;
+    },
+
+    // navigate to the previous item
+    // if it's the first item, navigate to the last one
+    upHandler() {
+      this.navigatedUserIndex =
+        (this.navigatedUserIndex + this.filteredUsers.length - 1) %
+        this.filteredUsers.length;
+    },
+    // navigate to the next item
+    // if it's the last item, navigate to the first one
+    downHandler() {
+      this.navigatedUserIndex =
+        (this.navigatedUserIndex + 1) % this.filteredUsers.length;
+    },
+    enterHandler() {
+      const user = this.filteredUsers[this.navigatedUserIndex];
+      if (user) {
+        this.selectUser(user);
+      }
+    },
+    // we have to replace our suggestion text with a mention
+    // so it's important to pass also the position of your suggestion text
+    selectUser(user) {
+      this.insertMention({
+        range: this.suggestionRange,
+        attrs: {
+          id: user.id,
+          label: user.fullname
+        }
+      });
+      this.editor.focus();
+    },
+
+    // renders a popup with suggestions
+    // tiptap provides a virtualNode object for using popper.js (or tippy.js) for popups
+    renderPopup(node) {
+      if (this.popup) {
+        return;
+      }
+      this.popup = tippy(node, {
+        content: this.$refs.suggestions,
+        trigger: "mouseenter",
+        interactive: true,
+        theme: "light",
+        placement: "bottom-start",
+        inertia: true,
+        duration: [400, 200],
+        showOnInit: true,
+        arrow: true
+        // arrowType: "round"
+      });
+      // we have to update tippy whenever the DOM is updated
+      if (MutationObserver) {
+        this.observer = new MutationObserver(() => {
+          this.popup.popperInstance.scheduleUpdate();
+        });
+        this.observer.observe(this.$refs.suggestions, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      }
+    },
+
+    destroyPopup() {
+      if (this.popup) {
+        this.popup.destroy();
+        this.popup = null;
+      }
+      if (this.observer) {
+        this.observer.disconnect();
+      }
     }
   }
 };
