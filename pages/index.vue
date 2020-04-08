@@ -40,7 +40,7 @@
                   @click-item="imageObj => handleClickImage(imageObj, post)"
                 />
 
-                <template v-else-if="post.link">
+                <template v-else-if="post.link && link">
                   <app-divider class="my-4"></app-divider>
                   <app-content-box
                     tag="a"
@@ -364,6 +364,8 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
+
+  middleware: "authenticated",
 
   components: {
     SliderBanner,
