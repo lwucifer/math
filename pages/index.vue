@@ -184,16 +184,13 @@
         <div class="col-md-4">
           <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
-              v-for="message in messages"
+              v-for="message in messagesConverted"
+              v-bind="message"
               class="mb-4"
               nuxt
               size="sm"
               :key="message.id"
               :to="`/messages/t/${message.id}`"
-              :id="message.room_id"
-              :image="get(message, 'img_url.low', null)"
-              :title="(message.type === 1 ? message.fullname : message.room_name) || 'Không có tiêu đề'"
-              :desc="message.content"
             />
           </AsideBox>
 
@@ -388,6 +385,20 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    messagesConverted() {
+      return this.messages.map(item => {
+        return {
+          id: item.room.id,
+          title: item.room.members
+            .filter(member => member.user_id !== this.userId)
+            .map(member => member.fullname)
+            .join(", "),
+          desc: item.message.content,
+          image: get(item, 'room.room_avatar.low', null)
+        };
+      });
     }
   },
 
