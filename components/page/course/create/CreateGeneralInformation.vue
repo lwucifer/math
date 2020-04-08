@@ -117,7 +117,7 @@ const schema = yup.object().shape({
   description: yup.string().required(),
   level: yup.string().required(),
   name: yup.string().required(),
-  subject: yup.string().required(),
+  subject: yup.number().required(),
   type: yup.string().required()
 });
 
@@ -126,7 +126,7 @@ const schema_update = yup.object().shape({
   description: yup.string().required(),
   level: yup.string().required(),
   name: yup.string().required(),
-  subject: yup.string().required(),
+  subject: yup.number().required(),
   type: yup.string().required()
 });
 
