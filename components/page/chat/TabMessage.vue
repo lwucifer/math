@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-8 message-chat__content">
     <div class="aside-box">
-      <div class="aside-box__top" v-if="isCreate">
+      <div class="aside-box__top" v-if="isCreated">
         <div class="aside-box__top__create d-flex-center w-100">
           <span class="color-999 mr-2">Đến:</span>
           <app-select
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="aside-box__top" v-else-if="messagesList.length > 0">
+      <div class="aside-box__top" v-if="messagesList.length > 0">
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
@@ -283,7 +283,9 @@
         <div class="input-group">
           <div class="list-chat-img">
             <div class="item" v-if="imgSrc">
-              <button class="btn-remove"><IconClose class="fill-white"/></button>
+              <button class="btn-remove" @click="removeImgSrc">
+                <IconClose class="fill-white" />
+              </button>
               <img :src="imgSrc" />
             </div>
           </div>
@@ -424,7 +426,11 @@ export default {
   },
 
   props: {
-    isCreate: {
+    isCreated: {
+      type: Boolean,
+      default: false
+    },
+    isGroup: {
       type: Boolean,
       default: false
     }
@@ -569,7 +575,7 @@ export default {
       "getMessageList",
       "getGroupListDetail"
     ]),
-    ...mapMutations("message", ["setEmitMessage"]),
+    ...mapMutations("message", ["setEmitMessage", "emitCloseFalse"]),
     async messageInfiniteHandler($state) {
       // this.messageListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new Message(this.$axios)[
@@ -597,16 +603,12 @@ export default {
       getBase64(this.listImage[0], src => {
         this.imgSrc = src;
       });
-      
-      this.fileList = fileList;
-    },
 
-    async sendImgChat(fileList) {
-      console.log("[msg_image]", fileList[0]);
+      this.fileList = fileList;
       const body = new FormData();
       body.append("msg_image", fileList[0]);
       body.append("room_id", this.$route.params.id);
-      this.messageSendImg(body).then(result => {
+      await this.messageSendImg(body).then(result => {
         console.log("[send img]", result);
         this.urlEmitMessage =
           result.data &&
@@ -618,6 +620,13 @@ export default {
           result.data && result.data.message_id ? result.data.message_id : "";
       });
     },
+
+    // async sendImgChat(fileList) {
+    //   console.log("[msg_image]", fileList);
+    //   debugger;
+    //   if (fileList.length > 0) {
+    //   }
+    // },
 
     async friendsInfiniteHandler($state) {
       const { data = {} } = await new FriendService(this.$axios)[
@@ -646,8 +655,7 @@ export default {
       }
     },
     handleEmitMessage() {
-      this.sendImgChat(this.fileList);
-
+      this.emitCloseFalse(false, this.isGroup);
       if (this.tag.length == 0) {
         if (
           this.textChat != "" ||
@@ -709,9 +717,10 @@ export default {
           }
         });
       }
+      this.removeImgSrc();
     },
     changeUserChat(option) {
-      console.log("[option]", option);
+      console.log("[option]", option, this.tag.length);
       if (this.tag.length == 0) {
         const data = {
           type: 1,
@@ -732,7 +741,15 @@ export default {
             // this.$toasted.error(result.message);
           }
         });
+      } else {
+        this.messagesList = [];
       }
+    },
+    removeImgSrc() {
+      this.imgSrc = "";
+      this.fileList = [];
+      this.urlEmitMessage = "";
+      this.message_id = "";
     }
   },
   created() {
@@ -760,7 +777,9 @@ export default {
       if (_newVal) {
         this.messagesList = [];
         this.messageListQuery.page = 1;
-        this.messageListQuery.room_id = this.roomIdPush;
+        this.messageListQuery.room_id = this.roomIdPush
+          ? this.roomIdPush
+          : this.$route.params.id;
         this.infiniteId += 1;
       }
     }
