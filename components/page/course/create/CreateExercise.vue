@@ -128,7 +128,6 @@ export default {
     async getLessons() {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
-        not_commit: true,
         params: {
           elearning_id
         }

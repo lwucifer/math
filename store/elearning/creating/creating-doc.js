@@ -21,12 +21,10 @@ const actions = {
   async [actionTypes.ELEARNING_CREATING_DOC.LIST]({ commit }, options) {
     try {
       const result = await new Doc(this.$axios)[actionTypes.BASE.LIST](options);
-      if (!options.not_commit) {
-        commit(
-          mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST,
-          result
-        );
-      }
+      commit(
+        mutationTypes.ELEARNING_CREATING_DOC.SET_ELEARNING_CREATING_DOC_LIST,
+        result
+      );
       return result;
     } catch (error) {
       console.log("[Creating docs] list.error", error);
