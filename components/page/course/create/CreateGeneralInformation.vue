@@ -247,7 +247,7 @@ export default {
     },
 
     handleChangeSubject(subject) {
-      this.payload.subject = get(subject, "code", "");
+      this.payload.subject = get(subject, "id", "");
     },
 
     handleCLickSave() {
