@@ -58,8 +58,6 @@ import IconFilter from '~/assets/svg/icons/filter.svg?inline';
 // Import faked data
 import {  } from "~/server/fakedata/elearning/test"
 
-import CoursesService from "~/services/elearning/courses/list";
-
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
