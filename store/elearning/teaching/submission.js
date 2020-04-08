@@ -24,7 +24,7 @@ const LIST = [
     questions: 30,
     corrects: 20,
     mark: 9.0,
-    result: 1
+    result: -1
   },
   {
     id: "2ce6bf40-25c7-46ad-a5f0-a73b6b5f3267",
@@ -46,7 +46,7 @@ const LIST = [
     questions: 30,
     corrects: 20,
     mark: 7.8,
-    result: 1
+    result: 0
   },
 ]
 
@@ -62,7 +62,7 @@ const DETAIL = {
   mark: 8.6,
   note: "Bài làm tốt",
   to_passed: false,
-  result: 1,
+  result: -1,
   contents: [
     {
       question_id: "14525255252",                                    // mã câu hỏi

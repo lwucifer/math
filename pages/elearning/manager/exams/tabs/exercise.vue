@@ -30,13 +30,6 @@ export default {
     ElearningManagerFilterTable
   },
   filters: {
-    exerciseType: function(val) {
-      const MATCHED_DATA = {
-        'choice': 'Trắc nghiệm',
-        'essay': 'Tự luận'
-      }
-      return MATCHED_DATA[val.toLowerCase()]
-    }
   },
   data() {
     return {
