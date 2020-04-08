@@ -32,13 +32,13 @@
       </div>
       <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
-        <div class="message-info__box__content attachment">
+        <!-- <div class="message-info__box__content attachment">
           <ul class="list-unstyle" v-for="(item, index) in fileshare" :key="index">
             <li>
               <a :href="item.link">{{ item.title }}</a>
             </li>
           </ul>
-        </div>
+        </div>-->
       </div>
       <div class="message-info__box">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
@@ -132,21 +132,21 @@ export default {
   },
 
   props: {
-    fileshare: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    members: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    imageshare: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
+    // fileshare: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
+    // members: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
+    // imageshare: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
     isGroup: {
       type: Boolean,
       default: false,
