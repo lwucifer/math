@@ -113,73 +113,72 @@
         //box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
     
-    $arrow-width: 6px;
 
     .tooltip-arrow {
         width: 0;
         height: 0;
         border-style: solid;
         position: absolute;
-        margin: $arrow-width;
+        margin: 6px;
         border-color: $color;
         z-index: 1;
     }
 
     &[x-placement^="top"] {
-        margin-bottom: $arrow-width;
+        margin-bottom: 6px;
 
         .tooltip-arrow {
-            border-width: $arrow-width $arrow-width 0 $arrow-width;
+            border-width: 6px 6px 0 6px;
             border-left-color: transparent !important;
             border-right-color: transparent !important;
             border-bottom-color: transparent !important;
             bottom: -5px;
-            left: calc(50% - $arrow-width);
+            left: calc(50% - 6px);
             margin-top: 0;
             margin-bottom: 0;
         }
     }
 
     &[x-placement^="bottom"] {
-        margin-top: $arrow-width;
+        margin-top: 6px;
 
         .tooltip-arrow {
-            border-width: 0 $arrow-width $arrow-width $arrow-width;
+            border-width: 0 6px 6px 6px;
             border-left-color: transparent !important;
             border-right-color: transparent !important;
             border-top-color: transparent !important;
             top: -5px;
-            left: calc(50% - $arrow-width);
+            left: calc(50% - 6px);
             margin-top: 0;
             margin-bottom: 0;
         }
     }
 
     &[x-placement^="right"] {
-        margin-left: $arrow-width;
+        margin-left: 6px;
 
         .tooltip-arrow {
-            border-width: $arrow-width $arrow-width $arrow-width 0;
+            border-width: 6px 6px 6px 0;
             border-left-color: transparent !important;
             border-top-color: transparent !important;
             border-bottom-color: transparent !important;
             left: -5px;
-            top: calc(50% - $arrow-width);
+            top: calc(50% - 6px);
             margin-left: 0;
             margin-right: 0;
         }
     }
 
     &[x-placement^="left"] {
-        margin-right: $arrow-width;
+        margin-right: 6px;
 
         .tooltip-arrow {
-            border-width: $arrow-width 0 $arrow-width $arrow-width;
+            border-width: 6px 0 6px 6px;
             border-top-color: transparent !important;
             border-right-color: transparent !important;
             border-bottom-color: transparent !important;
             right: 5px;
-            top: calc(50% - $arrow-width);
+            top: calc(50% - 6px);
             margin-left: 0;
             margin-right: 0;
         }
