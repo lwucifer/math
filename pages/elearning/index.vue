@@ -25,10 +25,11 @@
 
 <script>
 import CourseSliderTab from "~/components/page/course/CourseSliderTab";
+import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { get } from "lodash";
+
 // Import faked data
 import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
 

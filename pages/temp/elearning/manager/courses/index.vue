@@ -93,7 +93,7 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
 
-import CoursesService from "~/services/elearning/courses/list";
+import CoursesService from "~/services/elearning/teaching/Summary";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
