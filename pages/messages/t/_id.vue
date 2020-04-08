@@ -1,29 +1,8 @@
 <template>
-  <div class="page-message">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 col-sidebar">
-          <TabContact
-            :contacts="contactList"
-            :friends="friends"
-            @addMessage="addMessage()"
-            @clickTab="clickTab()"
-          />
-        </div>
-        <div class="col-md-9 col-content">
-          <div class="box">
-            <div class="row">
-              <TabMessage :isCreate="isCreate" />
-              <TabInfo
-                :fileshare="fileShareList"
-                :imageshare="imageShareList"
-                :members="friends"
-                :isGroup="isGroup"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="box">
+    <div class="row">
+      <TabMessage :isCreated="isCreate" :isGroup="isGroup" />
+      <TabInfo :isGroup="isGroup" />
     </div>
   </div>
 </template>
@@ -56,14 +35,7 @@ export default {
 
   async fetch({ params, query, store, route }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    const room_id =
-      // 18;
-      route.params.id;
-    // let listQuery = {
-    //   page: 1,
-    //   perPage: 10,
-    //   user_id: 31
-    // };
+    const room_id = route.params.id;
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, {
         params: {
@@ -89,207 +61,21 @@ export default {
       // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },
+  props: {
+    isCreate: {
+      type: Boolean,
+      default: false
+    },
+    isGroup: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   data() {
     return {
-      isGroup: false,
-      contactList: [
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        },
-        {
-          image: "https://picsum.photos/40/40",
-          title: "Arlene Henry",
-          desc: "Lorem ipsum dolor sit amet"
-        }
-      ],
-      fileShareList: [
-        {
-          link: "#",
-          title: "IrmaRussell_1.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        },
-        {
-          link: "#",
-          title: "IrmaRussell.zip"
-        }
-      ],
-      imageShareList: [
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        },
-        {
-          link: "#",
-          image: "https://i.picsum.photos/id/13/80/80.jpg"
-        }
-      ],
-      friends: [
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        },
-        {
-          id: "1",
-          name: "Nguyễn Hữu Nam",
-          avatar: "https://picsum.photos/40/40"
-        }
-      ],
-      isCreate: false,
+      // isGroup: false,
+      // isCreate: false,
       socket: null
     };
   },
@@ -322,13 +108,6 @@ export default {
 
   methods: {
     ...mapMutations("message", ["setOnMessage"]),
-    addMessage() {
-      this.isCreate = !this.isCreate;
-    },
-
-    clickTab() {
-      this.isGroup = !this.isGroup;
-    },
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx

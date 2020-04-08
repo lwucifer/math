@@ -1,27 +1,21 @@
 <template>
-  <div class="page-message">
+  <!-- <div class="page-message">
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sidebar">
           <TabContact :contacts="[]" :friends="[]" />
         </div>
-        <div class="col-md-9 col-content">
-          <div class="box">
-            <div class="row">
-              <TabMessage :isCreate="false" />
-              <TabInfo
-                :fileshare="[]"
-                :imageshare="[]"
-                :members="[]"
-                :isGroup="false"
-                :noMessage="true"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="col-md-9 col-content">-->
+  <div class="box">
+    <div class="row">
+      <TabMessage :isCreated="isCreate" />
+      <TabInfo :isGroup="isGroup" :noMessage="true" />
     </div>
   </div>
+  <!-- </div>
+      </div>
+    </div>
+  </div>-->
 </template>
 
 <script>
@@ -57,9 +51,26 @@ export default {
       `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
     );
     const dataRooms = data.rooms ? data.rooms : [];
-    const id = dataRooms.filter(item => item.type == 1)[0].id;
-    //redirect(`/messages/t/${id}`);
-  }
+    const id = dataRooms.filter(item => item.type == 1)[0]
+      ? dataRooms.filter(item => item.type == 1)[0].id
+      : "";
+    if (id) {
+      redirect(`/messages/t/${id}`);
+    } else {
+      return false;
+    }
+  },
+  props: {
+    isCreate: {
+      type: Boolean,
+      default: false
+    },
+    isGroup: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {}
 };
 </script>
 
