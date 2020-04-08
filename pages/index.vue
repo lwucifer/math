@@ -40,7 +40,7 @@
                   @click-item="imageObj => handleClickImage(imageObj, post)"
                 />
 
-                <template v-else-if="post.link">
+                <template v-else-if="post.link && link">
                   <app-divider class="my-4"></app-divider>
                   <app-content-box
                     tag="a"
@@ -262,13 +262,16 @@
         <div class="col-md-4">
           <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
+              v-for="message in messages"
               class="mb-4"
               nuxt
               size="sm"
               :key="message.id"
               :to="`/messages/t/${message.id}`"
+              :id="message.room_id"
+              :image="get(message, 'img_url.low', null)"
+              :title="(message.type === 1 ? message.fullname : message.room_name) || 'Không có tiêu đề'"
+              :desc="message.content"
             />
           </AsideBox>
 
@@ -361,6 +364,8 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
+
+  middleware: "authenticated",
 
   components: {
     SliderBanner,
@@ -461,20 +466,6 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
-
-    messagesConverted() {
-      return this.messages.map(item => ({
-        id: item.room_id,
-        image:
-          item.type === 1
-            ? get(item, "user_avatar.low", null)
-            : get(item, "room_avatar.low", null),
-        title:
-          (item.type === 1 ? item.fullname : item.room_name) ||
-          "Không có tiêu đề",
-        desc: item.content
-      }));
     }
   },
 
