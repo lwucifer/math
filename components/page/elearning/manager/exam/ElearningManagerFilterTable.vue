@@ -12,7 +12,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="'/elearning/manager/exams/' + row.id">
+            :to="`/elearning/manager/exams/${row.id}/submissions`">
             <IconArrow />
           </n-link>
         </td>
@@ -24,11 +24,11 @@
         </td>
       </template>
 
-      <!--<template v-slot:cell(created_at)="{row}">-->
-        <!--<td>-->
-          <!--{{ get(row, 'timestamp', '') | moment("hh:mm A DD/MM/YYYY") }}-->
-        <!--</td>-->
-      <!--</template>-->
+      <template v-slot:cell(created_at)="{row}">
+        <td>
+          {{ get(row, 'created_at', '') | moment("DD/MM/YYYY") }}
+        </td>
+      </template>
     </app-table><!--End table-->
   </div>
 </template>
@@ -87,37 +87,32 @@
           {
             name: "title",
             text: "Tiêu đề",
-            sort: false
           },
           {
             name: "type",
             text: "Thể loại",
-            sort: false
           },
           {
-            name: "lesson",
+            name: "lesson_name",
             text: "Thuộc bài giảng",
-            sort: false
           },
           {
-            name: "course",
+            name: "elearning_name",
             text: "Thuộc khóa học",
-            sort: false
           },
           {
-            name: "studentNum",
+            name: "participants",
             text: "Học sinh làm bài",
             sort: true
           },
           {
-            name: "createdAt",
+            name: "created_at",
             text: "Ngày khởi tạo",
             sort: true
           },
           {
             name: "action",
             text: "",
-            sort: false
           }
         ],
       }
@@ -135,5 +130,4 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/material/_elearning-filtertable.scss";
 </style>

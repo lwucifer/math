@@ -5,15 +5,15 @@
   .item {
     margin-bottom: 2rem;
     
-    .title {
+    .content-title {
       font-size: 1.4rem;
       font-weight: bold;
       line-height: 1.9rem;
-      color: #666666;
+      color: #333;
       display: block;
       margin-bottom: 1rem;
     }
-    .test_content {
+    .test-content {
       border: 1px solid #EEEEEE;
       min-height: 11rem;
       padding: 1rem
@@ -25,11 +25,11 @@
   padding-left: 2rem;
   padding-right: 2rem;
   
-  .title {
-    font-size: 1.4rem;
+  .content-title {
+    //font-size: 1.4rem;
     font-weight: bold;
     line-height: 1.9rem;
-    color: #666666;
+    //color: #666666;
     display: block;
     margin-bottom: 1rem;
   }

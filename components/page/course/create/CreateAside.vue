@@ -21,15 +21,27 @@
     </ul>
 
     <div class="cca-action">
-      <app-button :disabled="!is_submit" square full-width>Gửi lên</app-button>
+      <app-button
+        :disabled="!is_submit"
+        @click="handlePublishCourse"
+        square
+        full-width
+        >Gửi lên</app-button
+      >
     </div>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </aside>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
-import { get } from "lodash";
+import { get, toBoolean } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 const menu = [
@@ -37,48 +49,50 @@ const menu = [
     key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "content",
     title: "Nội dung học tập",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "settings",
     title: "Cài đặt",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "exercise",
     title: "Bài tập",
     optional: true,
-    checked: false
+    checked: false,
   },
   {
     key: "exam",
     title: "Bài kiểm tra",
     optional: true,
-    checked: false
-  }
+    checked: false,
+  },
 ];
 
 export default {
   data() {
     return {
       menu,
-      active: "general"
+      active: "general",
+      showModalConfirm: false,
+      confirmLoading: false,
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     ...mapState("elearning/creating/creating-progress", {
-      progress: "progress"
+      progress: "progress",
     }),
     is_submit() {
       return (
@@ -86,15 +100,15 @@ export default {
         get(this, "progress.data.content_complete", false) &&
         get(this, "progress.data.setting_complete", false)
       );
-    }
+    },
   },
 
   created() {
     const elearning_id = getParamQuery("elearning_id");
     const options = {
       params: {
-        elearning_id
-      }
+        elearning_id,
+      },
     };
     this.$store.dispatch(
       `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -104,22 +118,55 @@ export default {
 
   watch: {
     progress: {
-      handler: function() {
-        if (get(this, "progress.data.general_complete", false)) {
-          this.menu[0]["checked"] = true;
-        }
-        if (get(this, "progress.data.content_complete", false)) {
-          this.menu[1]["checked"] = true;
-        }
-        if (get(this, "progress.data.setting_complete", false)) {
-          this.menu[2]["checked"] = true;
-        }
+      handler: function () {
+        let checked = get(this, "progress.data.general_complete", false);
+        this.menu[0]["checked"] = checked;
+        checked = get(this, "progress.data.content_complete", false);
+        this.menu[1]["checked"] = checked;
+        checked = get(this, "progress.data.setting_complete", false);
+        this.menu[2]["checked"] = checked;
+        checked = get(this, "progress.data.exercise_complete", false);
+        this.menu[3]["checked"] = checked;
+        checked = get(this, "progress.data.test_complete", false);
+        this.menu[4]["checked"] = checked;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
+    handlePublishCourse() {
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+
+      const elearning_id = getParamQuery("elearning_id");
+      const params = {
+        elearning_id,
+      };
+
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-publish/${actionTypes.ELEARNING_CREATING_PUBLISH.POST}`,
+        params
+      );
+
+      this.handleCancel();
+
+      if (get(res, "success", false)) {
+        this.$toasted.success("success");
+        return;
+      }
+
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     handleClickMenuItem({ key }) {
       if (key === "general") {
         this.active = key;
@@ -154,8 +201,8 @@ export default {
 
       this.active = key;
       this.$emit("click-item", key);
-    }
-  }
+    },
+  },
 };
 </script>
 

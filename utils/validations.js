@@ -60,6 +60,13 @@ export const validateNumber = _number => {
     return /^([0-9]+)$/.test(_number);
 };
 /**
+ * validate number
+ * @param {price} _price
+ */
+export const validatePrice = _price =>{
+    return /^(\d*([.,](?=\d{2}))?\d+)+((?!\2)[.,]\d\d)?$/.test(_price);
+}
+/**
  * validate port setting
  * @param {port} _port
  */
@@ -88,7 +95,20 @@ export const validatePassword = _password => {
     return re.test(_password);
 };
 
+/**
+ * Validate script tag
+ * @param {String} string 
+ */
 export const validateScriptTag = string => {
     const regex = /<[^>]*script/g;
     return regex.test(string);
 };
+
+/**
+ * Check editor empty ( match <p></p>, <p>  </p>)
+ * @param {String} content 
+ */
+export const checkEditorEmpty = content => {
+    const regex = /^<p>?\s{0,}<\/\p>/gm;
+    return !content || regex.test(content);
+}

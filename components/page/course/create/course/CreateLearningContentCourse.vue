@@ -1,6 +1,6 @@
 <template>
   <div>
-    <create-action type="add_contents" />
+    <create-action :isShowAction="false" />
 
     <!-- STEP 1 -->
     <div class="cc-panel bg-white mb-4">
@@ -25,20 +25,24 @@
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
+              <button
+                class="cc-box__btn cc-box__btn-collapse"
+                @click="isShowChapter = !isShowChapter"
+              >
+                <IconAngleDown class="icon" v-if="!isShowChapter" />
+                <IconAngleUp class="icon" v-else />
               </button>
             </div>
           </div>
 
-          <div class="cc-box__body">
-            <ListChapter @handleAddLesson="handleAddLesson" />
-
-            <div class="create-chapter"></div>
+          <div class="cc-box__body" v-if="isShowChapter">
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
+              @handleCreateChapterSuccess="handleCreateChapterSuccess"
             />
+
+            <ListChapter @handleAddLesson="handleAddLesson" />
           </div>
         </div>
       </div>
@@ -51,6 +55,7 @@ import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
@@ -88,13 +93,15 @@ export default {
     LessonDetail,
     CreateChapter,
     ListChapter,
-    EditCourseName
+    EditCourseName,
+    IconAngleUp,
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
-      isShowEditCourse: false
+      isShowEditCourse: false,
+      isShowChapter: true,
     };
   },
 
@@ -104,15 +111,19 @@ export default {
 
   computed: {
     ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
+      lessons: "lessons",
     }),
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
+      general: "general",
+    }),
   },
 
   methods: {
     get,
+
+    handleCreateChapterSuccess() {
+      this.isShowFormAddChapter = false;
+    },
 
     handleAddLesson(chapter) {
       this.chapter = chapter;
@@ -125,15 +136,13 @@ export default {
     },
 
     handleShowAddChapter() {
-      this.isShowFormAddChapter = true;
-      let el = this.$el.getElementsByClassName("create-chapter")[0];
-      el.scrollIntoView();
+      this.isShowFormAddChapter = !this.isShowFormAddChapter;
     },
 
     handleCancelAddChapter() {
       this.isShowFormAddChapter = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

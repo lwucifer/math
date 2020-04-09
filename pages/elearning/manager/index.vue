@@ -100,7 +100,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`
+      `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`
     );
   },
 
@@ -112,14 +112,18 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/public/public-info", {
-      elearning: "elearningInfo"
+    ...mapState("elearning/study/study", {
+      elearning: "elearningStudy"
     })
   },
 
   methods: {
     get
-  }
+  },
+
+  created () {
+    console.log(this.elearning);
+  },
 };
 </script>
 

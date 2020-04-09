@@ -1,6 +1,6 @@
 <template>
   <div class="cc-panel bg-white mb-4">
-    <create-action @handleCLickSave="handleCLickSave" />
+    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit"/>
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
     </div>
@@ -70,27 +70,34 @@
         </div>
       </div>
 
-      <div class="row align-items-center mb-4">
+      <div class="row align-items-center mb-4" v-if="!payload.free">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
           <app-input
             :value="numeral(payload.fee).format()"
             @input="handleChangeFee"
+            :message="errorMessage.fee"
+            :validate="validateProps.fee"
             type="text"
             class="mb-0"
           ></app-input>
         </div>
       </div>
 
-      <div class="row align-items-center mb-4">
+      <div class="row align-items-center mb-4" v-if="!payload.free">
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
-            :value="numeral(fee_discount).format()"
-            @input="handleChangeFeeDiscount"
+            :value="numeral(payload.discount).format()"
+            @input="handleChangeDiscount"
+            :message="errorMessage.discount"
+            :validate="validateProps.discount"
             type="text"
             class="mb-0"
           ></app-input>
+        </div>
+        <div class="percent_discount__ElearningCreate" v-show="showPercent">
+          <span>{{percent_discount}}</span>
         </div>
       </div>
     </div>
@@ -113,7 +120,24 @@ import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
-
+import { validatePrice } from "~/utils/validations";
+import * as yup from "yup";
+const schema = yup.object().shape({
+  comment_allow: yup.string().required(),
+  free: yup.string().required(),
+  elearning_id: yup.string().required(),
+  discount: yup.number().required().positive().integer(),
+  fee: yup.number().required().positive().integer(),
+  privacy: yup.string().required(),
+})
+const schema_update = yup.object().shape({
+  comment_allow: yup.string().required(),
+  free: yup.string().required(),
+  elearning_id: yup.string().required(),
+  discount: yup.number().required().positive().integer(),
+  fee: yup.number().required().positive().integer(),
+  privacy: yup.string().required(),
+})
 export default {
   components: {
     IconAngleDown,
@@ -122,7 +146,8 @@ export default {
 
   data() {
     return {
-      fee_discount: 0,
+      percent_discount:"",
+      showPercent:false,
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
@@ -133,10 +158,18 @@ export default {
         free: 1,
         passcode: "",
         privacy: "PUBLIC"
-      }
+      },
+      errorMessage:{
+        fee:"",
+        discount:""
+      },
+      validateProps:{
+        fee:"",
+        discount:""
+      },
+      isSubmit:false,
     };
   },
-
   created() {
     this.fetchSetting();
   },
@@ -166,7 +199,39 @@ export default {
         this.payload.free = get(this, "setting.free", false) ? 1 : 0;
         const fee = toNumber(get(this, "setting.fee", 0));
         const discount = toNumber(get(this, "setting.discount", 0));
-        this.fee_discount = fee - discount;
+        this.discount = discount;
+        this.percent_discount= numeral((discount-fee)/fee).format('0%')
+      },
+      deep: true
+    },
+    payload: {
+      handler: function() {
+        let that = this;
+        const payload = createPayloadCourseSetting(this.payload);
+        const elearning_id = getParamQuery("elearning_id");
+        if (elearning_id) {
+          if(!payload.free){
+            console.log(payload)
+            if(payload.discount>payload.fee){
+              this.validateProps.discount =2;
+              this.errorMessage.discount = "Giá khuyến mại phải thấp hơn giá bán";
+              that.showPercent = false
+              that.isSubmit = false
+            }
+            else{
+              that.percent_discount=numeral((payload.discount-payload.fee)/payload.fee).format('0%')
+              that.showPercent =true
+              schema_update.isValid(payload).then(function(valid) {
+                that.isSubmit = valid;
+              });
+              return;
+            }
+          }
+          else{
+            that.isSubmit = true;
+          }
+        }
+        
       },
       deep: true
     }
@@ -202,17 +267,43 @@ export default {
     },
 
     handleChangeFee(fee) {
-      this.payload.fee = fee;
+      this.validateProps.fee= "";
+      if(!fee){
+        this.validateProps.fee =2;
+        this.errorMessage.fee = "Trường này là bắt buộc";
+        this.showPercent = false
+      }else if(validatePrice(fee)){
+        this.validateProps.fee =1;
+        this.payload.fee = fee;
+        }
+      else if(!validatePrice(fee)){
+        this.validateProps.fee =2;
+        this.errorMessage.fee = "Tham số không hợp lệ";
+        this.isSubmit =false;
+        this.showPercent = false
+      }
     },
 
     handleChangeFree(free) {
       this.payload.free = free;
     },
 
-    handleChangeFeeDiscount(fee_discount) {
-      this.fee_discount = fee_discount;
-      this.payload.discount =
-        numeral(this.payload.fee).value() - numeral(fee_discount).value();
+    handleChangeDiscount(discount) {
+      this.validateProps.discount= "";
+      if(!discount){
+        this.validateProps.discount =2;
+        this.errorMessage.discount = "Trường này là bắt buộc";
+        this.showPercent = false
+      }else if(validatePrice(discount)){
+        this.payload.discount = discount;
+        this.validateProps.discount =1;
+        }
+      else if(!validatePrice(discount)){
+        this.validateProps.discount =2;
+        this.errorMessage.discount = "Tham số không hợp lệ";
+        this.showPercent = false
+        this.isSubmit =false;
+      }
     },
 
     async handleCLickSave() {
@@ -231,6 +322,7 @@ export default {
 
       if (get(result, "success", false)) {
         this.getProgress();
+        this.fetchSetting()
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -264,4 +356,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.percent_discount__ElearningCreate{
+  background: #32AF85;
+  span{
+    color: #ffffff;
+    display: block;
+    padding: 5px;
+  }
+}
+</style>

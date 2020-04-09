@@ -1,4 +1,5 @@
 import Vue from "vue"
+import numeral from "numeral"
 
 /**
  * 10000 => "10.000"
@@ -8,6 +9,15 @@ import Vue from "vue"
 export function toThousandFilter(num, separator = '.') {
     // console.log("[toThousandFilter]", num)
     return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, separator))
+}
+
+/**
+ * 10000 => "10.000" by numeral
+ * @param {Number} num
+ * @param {String} format
+ */
+export function numeralFormat(num, format = '0,0') {
+    return numeral(num).format(format);
 }
 
 /**
@@ -59,6 +69,7 @@ export function truncStrFilter(str = '', charCounter = 0, useWordBoundary = fals
 
 const filters = {
     toThousandFilter,
+    numeralFormat,
     fileSizeFilter,
     truncStrFilter
 }

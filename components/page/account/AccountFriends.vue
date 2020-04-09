@@ -3,11 +3,11 @@
     <div class="account-friends__title">
       <h3>Bạn bè</h3>
       <n-link
-        :to="'/account/social/friends/requests'"
+        :to="`/${$route.params.id}/social/friends/requests`"
         class="btn btn--size-md btn--color-white btn--square btn--normal"
       >
         Lời mời kết bạn
-        <span>8</span>
+        <span>{{inviteList.totalInvite}}</span>
       </n-link>
     </div>
     <div class="account-friends__search form-group">
@@ -22,7 +22,7 @@
       <div class="row">
         <div
           class="col-md-6 col-xs-12"
-          v-for="(item, index) in friendList ? friendList : []"
+          v-for="(item, index) in friendList.listFriend ? friendList.listFriend : []"
           :key="index"
         >
           <AccountFriendsItem :data="item" />
@@ -118,7 +118,7 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["friendList"])
+    ...mapState("social", ["friendList", "inviteList"])
   },
 
   methods: {}

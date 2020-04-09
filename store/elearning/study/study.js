@@ -18,9 +18,9 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_STURY.LIST]({ commit }) {
+  async [actionTypes.ELEARNING_STURY.LIST]({ commit }, payload) {
     try {
-      const result = await new Study(this.$axios)[actionTypes.BASE.LIST]();
+      const result = await new Study(this.$axios)[actionTypes.BASE.LIST](payload);
       commit(mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY, result);
     } catch (error) {
       console.log("[Elearning study] list.error", error);

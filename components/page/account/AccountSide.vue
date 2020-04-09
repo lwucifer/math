@@ -96,12 +96,12 @@
     <div class="account__side-item friends">
       <h3>
         Bạn bè
-        <span>268</span>
+        <span>{{friendList.totalFriend || 0}}</span>
       </h3>
       <div class="row">
         <div
           class="col-md-4 mb-3"
-          v-for="(item, index) in friendList ? friendList : []"
+          v-for="(item, index) in friendList.listFriend ? friendList.listFriend : []"
           :key="index"
         >
           <n-link :to="`/account/${item.id}`">
@@ -112,7 +112,7 @@
       </div>
       <n-link
         class="mt-0 btn btn--size-md btn--full-width btn--color-primary btn--square"
-        :to="'/account/social/friends'"
+        :to="`/${$route.params.id}/social/friends`"
       >Tất cả bạn bè</n-link>
     </div>
     <app-modal-otp

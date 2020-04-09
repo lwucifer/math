@@ -8,6 +8,9 @@ import Config from "~/services/social/config";
 import Label from "~/services/social/label";
 import Friend from "~/services/social/friend";
 import FriendInvite from "~/services/social/Friendinvite";
+import Photos from "~/services/social/photos";
+import SocialFollow from "~/services/social/follow";
+import TagPhotos from "~/services/social/tagPhoto";
 
 /**
  * initial state
@@ -22,7 +25,9 @@ const state = () => ({
     configs: {},
     labels: [],
     friendList: {},
-    inviteList: {}
+    inviteList: {},
+    postPhotoList: {},
+    postTagPhotoList: {}
 });
 
 /**
@@ -62,6 +67,19 @@ const actions = {
             return data;
         } catch (err) {
             console.log("[SocialPosts] add.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_POST.EDIT]({ commit }, payload) {
+        try {
+            const data = await new SocialPosts(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
+            console.log("[SocialPosts] edit", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialPosts] edit.err", err);
             return err;
         }
     },
@@ -269,6 +287,7 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.LIST]({ commit }, payload) {
         try {
             const { data: result = {} } = await new Friend(this.$axios)[
@@ -277,16 +296,14 @@ const actions = {
             console.log("[SocialFriend] list", result);
 
             // set to mutation
-            commit(
-                mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST,
-                result.listFriend || []
-            );
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST, result || []);
             return result;
         } catch (err) {
             console.log("[SocialFriend] list.err", err);
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
         try {
             const { data: result = {} } = await new FriendInvite(this.$axios)[
@@ -295,16 +312,14 @@ const actions = {
             console.log("[FriendInvite] list", result);
 
             // set to mutation
-            commit(
-                mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST,
-                result.listInvite || []
-            );
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST, result || []);
             return result;
         } catch (err) {
             console.log("[FriendInvite] list.err", err);
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.INVITE_FRIEND]({ commit }, payload) {
         try {
             const data = await new Friend(this.$axios)[actionTypes.BASE.ADD](payload);
@@ -315,15 +330,74 @@ const actions = {
             return err;
         }
     },
+
     async [actionTypes.SOCIAL_FRIEND.DELETE_FRIEND]({ commit }, payload) {
         try {
             const data = await new Friend(this.$axios)[actionTypes.BASE.DELETE](
                 payload
             );
-            console.log("[Friend] add", data);
+            console.log("[Friend] delete", data);
             return data;
         } catch (err) {
-            console.log("[Friend] add.err", err);
+            console.log("[Friend] delete.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Photos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Photos] list", result);
+
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_POST_PHOTO_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[Photos] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new TagPhotos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[TagPhotos] list", result);
+
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_POST_TAG_PHOTO_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[TagPhotos] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_FOLLOW.CREATE_FOLLOW]({ commit }, payload) {
+        try {
+            const data = await new SocialFollow(this.$axios)[actionTypes.BASE.ADD](
+                payload
+            );
+            console.log("[SocialFollow] add", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialFollow] add.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_FOLLOW.DELETE_FOLLOW]({ commit }, payload) {
+        try {
+            const data = await new SocialFollow(this.$axios)[actionTypes.BASE.DELETE](
+                payload
+            );
+            console.log("[SocialFollow] delete", data);
+            return data;
+        } catch (err) {
+            console.log("[SocialFollow] delete.err", err);
             return err;
         }
     }
@@ -372,6 +446,15 @@ const mutations = {
     },
     [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST](state, _inviteList) {
         state.inviteList = _inviteList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_POST_PHOTO_LIST](state, _postPhotoList) {
+        state.postPhotoList = _postPhotoList;
+    },
+    [mutationTypes.SOCIAL.SET_SOCIAL_POST_TAG_PHOTO_LIST](
+        state,
+        _postTagPhotoList
+    ) {
+        state.postTagPhotoList = _postTagPhotoList;
     }
 };
 

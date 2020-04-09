@@ -1,7 +1,7 @@
 <template>
   <div class="header-create">
     <div class="header-create__content container">
-      <app-button class="header-create__btn header-create__btn-back" outline square>
+      <app-button class="header-create__btn header-create__btn-back" outline square nuxt to="../">
         <IconArrowLeft class="icon mr-2" />
         Quay lại
       </app-button>

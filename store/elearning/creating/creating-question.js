@@ -1,12 +1,12 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Question from "~/services/elearning/creating/Question";
 
 /**
  * initial state
  */
 const state = () => ({
-  questions: []
+  questions: [],
 });
 
 /**
@@ -24,7 +24,11 @@ const actions = {
         payload
       );
       // set to mutation
-      commit(mutationTypes.ELEARNING_CREATING_QUESTIONS.SET_ELEARNING_CREATING_QUESTIONS_LIST, result);
+      commit(
+        mutationTypes.ELEARNING_CREATING_QUESTIONS
+          .SET_ELEARNING_CREATING_QUESTIONS_LIST,
+        result
+      );
     } catch (error) {
       console.log("[Creating Question] list.error", error);
     }
@@ -35,8 +39,7 @@ const actions = {
       const result = await new Question(this.$axios)[actionTypes.BASE.ADD](
         payload
       );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
+      return result;
     } catch (error) {
       console.log("[Creating Question] add.error", error);
     }
@@ -44,37 +47,36 @@ const actions = {
 
   async [actionTypes.ELEARNING_CREATING_QUESTIONS.EDIT]({ commit }, payload) {
     try {
-      const result = await new Question(this.$axios)[actionTypes.BASE.EDIT](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
+      const result = await new Question(this.$axios)[
+        actionTypes.BASE.EDIT_PAYLOAD
+      ](payload);
+      return result;
     } catch (error) {
       console.log("[Creating Question] edit.error", error);
     }
   },
-  
+
   async [actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE]({ commit }, payload) {
     try {
-      const result = await new Question(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
+      const result = await new Question(this.$axios)[
+        actionTypes.BASE.DELETE_PAYLOAD
+      ](payload);
+      return result;
     } catch (error) {
       console.log("[Creating Question] delete.error", error);
     }
-  }
+  },
 };
 
 /**
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_CREATING_QUESTIONS.SET_ELEARNING_CREATING_QUESTIONS_LIST](state, questions) {
+  [mutationTypes.ELEARNING_CREATING_QUESTIONS
+    .SET_ELEARNING_CREATING_QUESTIONS_LIST](state, questions) {
     console.log("SET_ELEARNING_CREATING_QUESTIONS_LIST", questions);
     state.questions = questions;
-  }
+  },
 };
 
 export default {
@@ -82,5 +84,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

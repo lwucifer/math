@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-8 message-chat__content">
     <div class="aside-box">
-      <div class="aside-box__top" v-if="isCreate">
+      <div class="aside-box__top" v-if="isCreated">
         <div class="aside-box__top__create d-flex-center w-100">
           <span class="color-999 mr-2">Đến:</span>
           <app-select
@@ -37,7 +37,8 @@
           </app-select>
         </div>
       </div>
-      <div class="aside-box__top" v-else>
+
+      <div class="aside-box__top" v-if="messagesList.length > 0">
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
@@ -66,7 +67,20 @@
           </ul>
         </div>
       </div>
-      <div class="aside-box__content">
+
+      <div style="opacity: 0; height: 0; overflow: hidden">
+        <client-only>
+          <infinite-loading
+            direction="top"
+            :identifier="infiniteId"
+            @infinite="messageInfiniteHandler"
+          >
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>
+      </div>
+
+      <div class="aside-box__content" v-if="messagesList.length > 0">
         <client-only>
           <infinite-loading
             direction="top"
@@ -255,6 +269,8 @@
           </div>
         </div>
       </div>
+      <div class="aside-box__content" v-else></div>
+
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
           <p>
@@ -265,27 +281,38 @@
           <IconClose @click="isReply = false" class="btn-close" />
         </div>
         <div class="input-group">
-          <input
-            class="input-control"
-            v-model="textChat"
-            v-on:keyup.enter="handleEmitMessage"
-            placeholder="Nhấp để chat"
-          />
-          <div class="input-group_addon">
-            <ul class="list-unstyle">
-              <li>
-                <a href="#">
-                  <IconSmile width="15" height="15" />
-                </a>
-              </li>
-              <li>
-                <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
-                  <template>
-                    <IconImage width="15" height="15" />
-                  </template>
-                </app-upload>
-              </li>
-            </ul>
+          <div class="list-chat-img">
+            <div class="item" v-if="imgSrc">
+              <button class="btn-remove" @click="removeImgSrc">
+                <IconClose class="fill-white" />
+              </button>
+              <img :src="imgSrc" />
+            </div>
+          </div>
+
+          <div class="input-chat">
+            <input
+              class="input-control"
+              v-model="textChat"
+              v-on:keyup.enter="handleEmitMessage"
+              placeholder="Nhấp để chat"
+            />
+            <div class="input-group_addon">
+              <ul class="list-unstyle">
+                <li>
+                  <a href="#">
+                    <IconSmile width="15" height="15" />
+                  </a>
+                </li>
+                <li>
+                  <app-upload class="cgi-upload-avt" @change="handleUploadChange">
+                    <template>
+                      <IconImage width="15" height="15" />
+                    </template>
+                  </app-upload>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -378,6 +405,7 @@ import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
 
@@ -398,7 +426,11 @@ export default {
   },
 
   props: {
-    isCreate: {
+    isCreated: {
+      type: Boolean,
+      default: false
+    },
+    isGroup: {
       type: Boolean,
       default: false
     }
@@ -510,12 +542,15 @@ export default {
     },
 
     tagOptions() {
-      return this.friendList.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.fullname,
-        avatar: item.avatar
-      }));
+      return (
+        this.friendList.listFriend &&
+        this.friendList.listFriend.map(item => ({
+          ...item,
+          value: item.id,
+          text: item.fullname,
+          avatar: item.avatar
+        }))
+      );
     },
     nameGroup() {
       return this.groupListDetail.room && this.groupListDetail.room.room_name
@@ -540,7 +575,7 @@ export default {
       "getMessageList",
       "getGroupListDetail"
     ]),
-    ...mapMutations("message", ["setEmitMessage"]),
+    ...mapMutations("message", ["setEmitMessage", "emitCloseFalse"]),
     async messageInfiniteHandler($state) {
       // this.messageListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new Message(this.$axios)[
@@ -568,11 +603,12 @@ export default {
       getBase64(this.listImage[0], src => {
         this.imgSrc = src;
       });
+
+      this.fileList = fileList;
       const body = new FormData();
       body.append("msg_image", fileList[0]);
       body.append("room_id", this.$route.params.id);
-      console.log("[msg_image]", fileList[0]);
-      this.messageSendImg(body).then(result => {
+      await this.messageSendImg(body).then(result => {
         console.log("[send img]", result);
         this.urlEmitMessage =
           result.data &&
@@ -584,6 +620,13 @@ export default {
           result.data && result.data.message_id ? result.data.message_id : "";
       });
     },
+
+    // async sendImgChat(fileList) {
+    //   console.log("[msg_image]", fileList);
+    //   debugger;
+    //   if (fileList.length > 0) {
+    //   }
+    // },
 
     async friendsInfiniteHandler($state) {
       const { data = {} } = await new FriendService(this.$axios)[
@@ -612,6 +655,7 @@ export default {
       }
     },
     handleEmitMessage() {
+      this.emitCloseFalse(false, this.isGroup);
       if (this.tag.length == 0) {
         if (
           this.textChat != "" ||
@@ -673,9 +717,10 @@ export default {
           }
         });
       }
+      this.removeImgSrc();
     },
     changeUserChat(option) {
-      console.log("[option]", option);
+      console.log("[option]", option, this.tag.length);
       if (this.tag.length == 0) {
         const data = {
           type: 1,
@@ -696,7 +741,15 @@ export default {
             // this.$toasted.error(result.message);
           }
         });
+      } else {
+        this.messagesList = [];
       }
+    },
+    removeImgSrc() {
+      this.imgSrc = "";
+      this.fileList = [];
+      this.urlEmitMessage = "";
+      this.message_id = "";
     }
   },
   created() {
@@ -724,7 +777,9 @@ export default {
       if (_newVal) {
         this.messagesList = [];
         this.messageListQuery.page = 1;
-        this.messageListQuery.room_id = this.roomIdPush;
+        this.messageListQuery.room_id = this.roomIdPush
+          ? this.roomIdPush
+          : this.$route.params.id;
         this.infiniteId += 1;
       }
     }

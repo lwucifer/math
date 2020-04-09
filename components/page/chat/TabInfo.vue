@@ -2,7 +2,7 @@
   <div class="col-md-4 message-chat__info">
     <div class="message-info">
       <div class="message-info__acc">
-        <div class="message-info__acc__image">
+        <div class="message-info__acc__image" v-if="!noMessage">
           <app-avatar :src="avatarSrc" size="md" class="comment-item__avatar" />
           <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
             <template>
@@ -12,7 +12,7 @@
             </template>
           </app-upload>
         </div>
-        <div class="message-info__acc__title">
+        <div class="message-info__acc__title" v-if="!noMessage">
           <input v-if="changeName" type="text" v-model="name" />
           <span v-else>
             <a href="#" v-if="name">{{name}}</a>
@@ -28,20 +28,21 @@
             <IconTick width="20" height="20" />
           </button>
         </div>
+        <div v-else style="height: 10rem"></div>
       </div>
       <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
-        <div class="message-info__box__content attachment">
+        <!-- <div class="message-info__box__content attachment">
           <ul class="list-unstyle" v-for="(item, index) in fileshare" :key="index">
             <li>
               <a :href="item.link">{{ item.title }}</a>
             </li>
           </ul>
-        </div>
+        </div>-->
       </div>
-      <div class="message-info__box" v-if="listImage.length > 0">
+      <div class="message-info__box">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
-        <div class="message-info__box__content images-attachment">
+        <div class="message-info__box__content images-attachment" v-if="listImage.length > 0">
           <ul class="list-unstyle">
             <li v-for="(item, index) in listImage" :key="index">
               <n-link to>
@@ -50,6 +51,7 @@
             </li>
           </ul>
         </div>
+        <div class="message-info__box__content" v-else></div>
       </div>
       <div class="message-info__box" v-if="isGroup">
         <h5 class="message-info__box__title">Thành viên</h5>
@@ -130,25 +132,29 @@ export default {
   },
 
   props: {
-    fileshare: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    members: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    imageshare: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
+    // fileshare: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
+    // members: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
+    // imageshare: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
     isGroup: {
       type: Boolean,
       default: false,
       required: true
+    },
+    noMessage: {
+      type: Boolean,
+      default: false
     }
   },
 

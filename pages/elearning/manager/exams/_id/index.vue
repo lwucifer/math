@@ -2,102 +2,34 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <ElearningManagerSide active="3" />
+        <ElearningManagerSide active="3"/>
       </div>
       <div class="col-md-9">
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
             <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
             <div class="elearning-manager-content__title__breadcrumb">
-              <n-link to >Bài tập</n-link> <i> > </i>
-              <n-link to ><b>Bài tập đại số lớp 10 (Bài giảng đại số lớp 10)</b></n-link>
+              <n-link to>Bài tập</n-link>
+              <i> > </i>
+              <n-link to><b>Bài tập đại số lớp 10 (Bài giảng đại số lớp 10)</b></n-link>
             </div>
-            <hr class />
+            <hr class/>
           </div>
 
           <div class="elearning-manager-content__main">
             <div class="elearning-">
               <!--Filter form-->
-              <div class="filter-form">
-                <div class="filter-form__item">
-                  <app-button
-                    color="primary"
-                    class="filter-form__item__btn filter-form__item__btn--submit"
-                    :size="'sm'"
-                    @click="submit"
-                  >
-                    <IconFilter />
-                    <span>Lọc kết quả</span>
-                  </app-button>
-                </div>
-
-                <div class="filter-form__item">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filter.class"
-                    :options="classes"
-                    label="text"
-                    placeholder="Theo lớp"
-                    searchable
-                    clearable
-                    @input="handleChangedInput"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
-                  >
-                  </app-vue-select>
-                </div>
-
-                <div class="filter-form__item">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filter.result"
-                    :options="results"
-                    label="text"
-                    placeholder="Theo kết quả"
-                    searchable
-                    clearable
-                    @input="handleChangedInput"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
-                  >
-                  </app-vue-select>
-                </div>
-
-                <!--Right form-->
-                <div class="filter-form__right">
-                  <div class="filter-form__item filter-form__item--search">
-                    <app-input
-                      type="text"
-                      v-model="filter.query"
-                      placeholder="Nhập để tìm kiếm..."
-                      :size="'sm'"
-                      @input="handleSearch"
-                    />
-                    <button type="submit">
-                      <IconSearch width="15" height="15" />
-                    </button>
-                  </div>
-                </div><!--End right form-->
-
-              </div><!--End filter form-->
+              <submission-filter-form
+                @changedFilter="updateFilter"
+              />
 
               <!--Table-->
-              <app-table
-                :heads="heads"
+              <submission-table
+                :list.sync="list"
                 :pagination="pagination"
-                @pagechange="onPageChange"
-                :data="list"
-              >
-                <template v-slot:cell(action)="{row}">
-                  <td>
-                    <n-link
-                      class
-                      :to="'./result/' + row.id">
-                      Xem chi tiết
-                    </n-link>
-                  </td>
-                </template>
-              </app-table><!--End table-->
+                :loading="loading"
+                @changedPagination="updatePagination"
+              />
             </div>
           </div>
         </div>
@@ -107,129 +39,95 @@
 </template>
 
 <script>
-    import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
-    import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-    import IconSearch from "~/assets/svg/icons/search.svg?inline"
-    import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
-    import { mapState } from "vuex";
-    import * as actionTypes from "~/utils/action-types"
-    // Import faked data
-    import { EXERCISE_DETAIL } from "~/server/fakedata/elearning/test"
+  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+  import SubmissionFilterForm from "~/components/page/elearning/manager/exam/forms/ResultFilter"
+  import SubmissionTable from "~/components/page/elearning/manager/exam/tables/Submission"
 
-    export default {
-      layout: "exercise",
-      components: {
-            ElearningManagerSide,
-            IconFilter,
-            IconSearch,
-            IconArrow
-        },
+  import {mapState} from "vuex"
+  import * as actionTypes from "~/utils/action-types"
+  import { get } from "lodash"
+  import { useEffect } from "~/utils/common"
 
-        data() {
-            return {
-                tab: 1,
-                heads: [
-                    {
-                        name: "name",
-                        text: "Học sinh",
-                        sort: false
-                    },
-                    {
-                        name: "class",
-                        text: "Lớp",
-                        sort: false
-                    },
-                    {
-                        name: "result",
-                        text: "Kết quả",
-                        sort: false
-                    },
-                    {
-                        name: "doNum",
-                        text: "Số lần làm bài",
-                        sort: false
-                    },
-                    {
-                        name: "finishedAt",
-                        text: "Thời gian nộp bài",
-                        sort: false
-                    },
-                    {
-                        name: "action",
-                        text: "",
-                        sort: false
-                    },
-                ],
-                filter: {
-                    class: null,
-                    result: null,
-                    query: null
-                },
-                classes: [
-                    {
-                        value: 1,
-                        text: '10B'
-                    },
-                    {
-                        value: 2,
-                        text: '11C'
-                    },
-                ],
-                results: [
-                    {
-                        value: 1,
-                        text: '4/10'
-                    },
-                    {
-                        value: 2,
-                        text: '9/10'
-                    },
-                ],
-                isAuthenticated: true,
-                pagination: {
-                    total: 15,
-                    page: 6,
-                    pager: 20,
-                    totalElements: 55,
-                    first: 1,
-                    last: 10
-                },
-                isTeacher: true,
-                list: EXERCISE_DETAIL,
-            }
-        },
-        computed: {
-            ...mapState("auth", ["loggedUser"]),
-        },
+  const STORE_NAMESPACE = "elearning/teaching/submission"
 
-        methods: {
-            onPageChange(e) {
-                const that = this;
-                that.pagination = { ...that.pagination, ...e };
-                console.log(that.pagination);
-            },
-            submit() {
-                console.log('[Component] Elearning exercise: submitted')
-            },
-            handleChangedInput(val) {
-                if (val !== null) {} else {}
-                console.log('[Component] Elearning exercise: changing input...', val)
-            },
-            handleFocusSearchInput() {
-                console.log('[Component] Elearning exercise: focus searching ')
-            },
-            handleBlurSearchInput() {
-                console.log('[Component] Elearning exercise: blur searching ')
-            },
-            handleSearch() {
-                console.log('[Component] Elearning exercise: searching')
-            }
-        },
+  export default {
+    layout: "exercise",
+    components: {
+      ElearningManagerSide,
+      SubmissionTable,
+      SubmissionFilterForm
+    },
 
-        created() {
-            const exerciseId = this.$route.params.id
+    data() {
+      return {
+        pagination: {
+          totalElements: 0,
+          last: false,
+          totalPages: 1,
+          size: 10,
+          number: 0,
+          first: true,
+          numberOfElements: 0
+        },
+        params: {
+          page: 1,
+          size: 10,
+          exercise_id: ''
+        },
+        list: [],
+        loading: false,
+      }
+    },
+    computed: {
+      ...mapState("auth", ["loggedUser"]),
+      ...mapState(STORE_NAMESPACE, {
+        detailInfo: 'submissions'
+      }),
+    },
+
+    methods: {
+      async getList() {
+        try {
+          this.loading = true
+          let params = {...this.params}
+          await this.$store.dispatch(
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.LIST}`, {params}
+          )
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
+        } catch (e) {
+
+        } finally {
+          this.loading = false
         }
+
+      },
+      updateFilter(val) {
+        this.params = { ...this.params, ...val }
+        this.refreshData()
+      },
+      updatePagination(val) {
+        this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
+        this.params.size = val.size
+      },
+      refreshData() {
+        this.params.page = 1
+        this.getList()
+      },
+      get
+    },
+
+    created() {
+      useEffect(this, this.getList.bind(this), [
+        "params.page",
+        "params.size",
+        "params.exercise_id",
+        "params.keyword",
+        "params.class",
+        "params.result",
+      ])
     }
+  }
 </script>
 
 <style lang="scss">

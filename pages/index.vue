@@ -28,17 +28,33 @@
               @edit="editPost"
               @share="openModalShare"
             >
-              <PostImage
-                v-if="post.files && post.files.length"
-                slot="media-content"
-                class="my-4"
-                :images="post.files.map(item => ({
+              <template slot="media-content" slot-scope="{ link }">
+                <PostImage
+                  v-if="post.files && post.files.length"
+                  class="my-4"
+                  :images="post.files.map(item => ({
                   id: item.post_id,
                   thumb: item.link.high,
                   object: 'image'
                 }))"
-                @click-item="imageObj => handleClickImage(imageObj, post)"
-              />
+                  @click-item="imageObj => handleClickImage(imageObj, post)"
+                />
+
+                <template v-else-if="post.link && link">
+                  <app-divider class="my-4"></app-divider>
+                  <app-content-box
+                    tag="a"
+                    target="_blank"
+                    class="mb-4"
+                    size="md"
+                    :href="link.url"
+                    :image="link.image"
+                    :title="link.title"
+                    :desc="link.description"
+                    :meta-footer="link.siteName"
+                  />
+                </template>
+              </template>
 
               <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
                 <PostImage
@@ -87,84 +103,6 @@
               </template>
             </Post>-->
             <!-- END DEMO FOR POST SLIDER -->
-
-            <!-- DEMO FOR POST 1 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 1 IMAGE -->
-
-            <!-- DEMO FOR POST 2 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 2 IMAGE -->
-
-            <!-- DEMO FOR POST 3 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/546/362'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 3 IMAGE -->
-
-            <!-- DEMO FOR POST 4 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/555/555'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 4 IMAGE -->
-
-            <!-- DEMO FOR POST 5 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/729/437'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
 
           <client-only>
@@ -183,7 +121,8 @@
           >
             <PostDetail
               slot="content"
-              :post="dataModalDetail"
+              :parent-post="modalDetailDataParent"
+              :post="modalDetailDataPost"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
@@ -210,77 +149,96 @@
             </PostShareContent>
           </PostModalShare>
 
-          <app-modal v-if="showModalEditPost" :width="770" @close="closeModalEditPost">
+          <app-modal v-if="showModalEditPost" :width="770">
             <PostEditor
               slot="content"
+              ref="editEditor"
               class="mb-0"
+              mode="edit"
               :initialValues="editPostData"
               prefetch
               :show-overlay="false"
+              @submit="handleSubmitEditPost"
             />
             <div slot="footer" class="text-right px-4 pb-3">
-              <app-button class="mr-3" color="info" size="sm" square>Huỷ</app-button>
-              <app-button color="primary" size="sm" square>Lưu</app-button>
+              <app-button
+                class="mr-3"
+                color="info"
+                :disabled="modalEditPostLoading"
+                size="sm"
+                square
+                @click="closeModalEditPost"
+              >Huỷ</app-button>
+
+              <app-button
+                color="primary"
+                :loading="modalEditPostLoading"
+                size="sm"
+                square
+                @click="handleClickSaveEditPost"
+              >Lưu</app-button>
             </div>
           </app-modal>
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
+          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
             <app-content-box
-              v-for="(item, index) in messages"
+              v-for="message in messagesConverted"
+              v-bind="message"
               class="mb-4"
               nuxt
-              to
               size="sm"
-              :key="index"
-              :image="item.image"
-              :title="item.title"
-              :desc="item.desc"
+              :key="message.id"
+              :to="`/messages/t/${message.id}`"
             />
           </AsideBox>
 
           <AsideBox title="Khóa học Online nổi bật">
             <div class="timeline-aside-tabs">
-              <a href class="active" @click.prevent>Miễn phí</a>
-              <a href @click.prevent>Trả phí</a>
+              <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
+              <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
             </div>
 
             <div class="time-aside-tabs-content">
-              <div class="timeline-aside-tab-pane">
+              <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
                 <app-content-box
-                  v-for="(item, index) in coursesList"
+                  v-for="item in freeCourses"
+                  :key="item.id"
                   class="align-items-center"
                   size="sm"
-                  :key="index"
-                  :image="item.image"
-                  :title="item.title"
-                  :desc="item.desc"
+                  :image="get(item, 'avatar.low', null)"
                 >
-                  <n-link slot="image" to>
-                    <img :src="item.image" :alt="item.title" />
+                  <n-link slot="image" :to="`/elearning/${item.id}`">
+                    <img :src="item.image" :alt="item.name" />
                   </n-link>
 
-                  <n-link slot="title" to>{{ item.title }}</n-link>
+                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ item.desc }}</n-link>
+                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
                 </app-content-box>
               </div>
 
-              <!-- <div class="timeline-aside-tab-pane">
+              <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
                 <app-content-box
-                  v-for="(item, index) in coursesList.reverse()"
-                  nuxt
+                  v-for="item in privateCourses"
+                  :key="item.id"
+                  class="align-items-center"
                   size="sm"
-                  :key="index"
-                  :image="item.image"
-                  :title="item.title"
-                  :desc="item.desc"
-                ></app-content-box>
-              </div>-->
+                  :image="get(item, 'avatar.low', null)"
+                >
+                  <n-link slot="image" :to="`/elearning/${item.id}`">
+                    <img :src="item.image" :alt="item.name" />
+                  </n-link>
+
+                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                </app-content-box>
+              </div>
 
               <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn">Xem Tất Cả</app-button>
+                <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
               </div>
             </div>
           </AsideBox>
@@ -291,14 +249,14 @@
 </template>
 
 <script>
+import { get } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
 import { createShare } from "~/models/social/Share";
-import { createPost } from "~/models/post/Post";
+import { createPost, editPost } from "~/models/post/Post";
 import {
-  MESSAGES,
   COURSES_LIST,
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
@@ -307,6 +265,9 @@ import FeedsService from "~/services/social/feeds";
 import SocialPostsService from "~/services/social/post";
 import LikesService from "~/services/social/likes";
 import ShareService from "~/services/social/shares";
+import LimitMessagesSerice from "~/services/message/LimitMessages";
+import SearchService from "~/services/elearning/public/Search";
+import PostService from "~/services/social/post";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
@@ -322,6 +283,8 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
   watchQuery: ["post_id", "photo_id"],
+
+  middleware: "authenticated",
 
   components: {
     SliderBanner,
@@ -345,11 +308,36 @@ export default {
 
   async asyncData({ $axios }) {
     const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
+    const getMessages = () =>
+      new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
+    const getFreeCourse = () =>
+      new SearchService($axios)[actionTypes.BASE.ADD]({
+        free: true,
+        limit: 5
+      });
+    const getPrivateCourse = () =>
+      new SearchService($axios)[actionTypes.BASE.ADD]({
+        free: false,
+        limit: 5
+      });
 
-    const [{ data: dataFeeds = {} }] = await Promise.all([getFeeds()]);
+    const [
+      { data: feeds = {} },
+      { data: messages = [] },
+      { data: freeCourses = [] },
+      { data: privateCourses = [] }
+    ] = await Promise.all([
+      getFeeds(),
+      getMessages(),
+      getFreeCourse(),
+      getPrivateCourse()
+    ]);
 
     return {
-      feeds: dataFeeds
+      feeds,
+      messages,
+      freeCourses: freeCourses.content || [],
+      privateCourses: privateCourses.content || []
     };
   },
 
@@ -358,9 +346,22 @@ export default {
       POST_TYPES: Object.freeze(POST_TYPES),
       loading: false,
       banners: new Array(3).fill(BannerImage, 0),
-      coursesTab: 0,
+      postEditorActive: false,
+      postLoading: false,
+      // Modal post detail
       modalDetailShow: false,
-      dataModalDetail: {},
+      modalDetailDataParent: {},
+      modalDetailDataPost: {},
+      // Edit post
+      showModalEditPost: false,
+      modalEditPostLoading: false,
+      editPostData: {},
+      // Share post
+      showModalShare: false,
+      shareData: {},
+      // Course tabs
+      coursesTab: 0,
+
       coursesTabsList: [
         {
           text: "Miễn phí",
@@ -371,17 +372,8 @@ export default {
           value: 1
         }
       ],
-      postEditorActive: false,
-      postLoading: false,
-      // Edit post
-      showModalEditPost: false,
-      editPostData: {},
-      // Share post
-      showModalShare: false,
-      shareData: {},
 
       //Fake data
-      messages: MESSAGES,
       coursesList: COURSES_LIST,
       timelineSliderItems: TIMELINE_SLIDER_ITEMS
     };
@@ -393,6 +385,20 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    messagesConverted() {
+      return this.messages.map(item => {
+        return {
+          id: item.room.id,
+          title: item.room.members
+            .filter(member => member.user_id !== this.userId)
+            .map(member => member.fullname)
+            .join(", "),
+          desc: item.message.content,
+          image: get(item, 'room.room_avatar.low', null)
+        };
+      });
     }
   },
 
@@ -419,26 +425,32 @@ export default {
   },
 
   methods: {
+    get,
+
     /**
      * Click image -> change url
-     * @param { Object } imageObj - { type: image | video, post: post object }
+     * @param { Object } imageObj - { id, thumb, object }
+     * @param { Object } post
      */
-    handleClickImage(imageObj, post) {
+    handleClickImage({ id }, post) {
+      // Change url
       if (typeof window.history.pushState != "undefined") {
-        console.log("handleClickImage", imageObj);
-        this.dataModalDetail = post;
+        this.modalDetailDataParent = post;
         this.modalDetailShow = true;
 
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post/${post.post_id}?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       }
+
+      // get data
+      this.getDetailPost(id);
     },
 
     /**
@@ -473,21 +485,37 @@ export default {
       }
 
       this.modalDetailShow = false;
-      this.dataModalDetail = {};
+      this.modalDetailDataParent = {};
+      this.modalDetailDataPost = {};
     },
 
     /**
      * on click prev arrow on modal post detail -> get prev image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickPrev() {
-      console.log("handleClickPrev");
+    handleClickPrev(id, post) {
+      this.handleClickImage({ id }, post);
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickNext() {
-      console.log("handleClickNext");
+    handleClickNext(id, post) {
+      this.handleClickImage({ id }, post);
+    },
+
+    async getDetailPost(id) {
+      const getPost = await new PostService(this.$axios)[
+        actionTypes.BASE.DETAIL
+      ](id);
+      if (getPost.success) {
+        this.modalDetailDataPost = getPost.data;
+      } else {
+        this.$toasted.error(getPost.message);
+      }
     },
 
     /**
@@ -500,7 +528,20 @@ export default {
       const dataWithModel = createPost(data);
 
       for (const key in dataWithModel) {
-        formData.append(key, data[key]);
+        // Check whether field is an array
+        if (key === "post_image") {
+          const values = data[key];
+          for (let i = 0; i < values.length; i++) {
+            formData.append(key, values[i]);
+          }
+        } else {
+          formData.append(
+            key,
+            Array.isArray(dataWithModel[key])
+              ? JSON.stringify(data[key])
+              : data[key]
+          );
+        }
       }
 
       this.postEditorActive = false;
@@ -510,13 +551,16 @@ export default {
         formData
       );
 
-      this.postLoading = false;
-
       if (doAdd.success) {
         cb();
-        this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+        const timeout = setTimeout(() => {
+          this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
+          this.postLoading = false;
+          clearTimeout(timeout);
+        }, data.post_image.length * 1000);
       } else {
         this.$toasted.error(doAdd.message);
+        this.postLoading = false;
       }
     },
 
@@ -576,14 +620,15 @@ export default {
 
     editPost(post) {
       this.editPostData = {
+        post_id: post.post_id,
         content: post.content,
         link: post.link || "",
         post_image: post.files || [],
         list_tag:
           post.tags && post.tags.length ? post.tags.map(item => item.id) : [],
-        check_in: {},
-        privacy: post.privacy ? post.privacy.value : null,
-        label_id: null
+        check_in: null,
+        privacy: get(post, "privacy.value", null),
+        label_id: get(post, "label.id", null)
       };
       this.showModalEditPost = true;
     },
@@ -591,6 +636,60 @@ export default {
     closeModalEditPost() {
       this.showModalEditPost = false;
       this.editPostData = {};
+    },
+
+    handleClickSaveEditPost() {
+      this.$refs.editEditor && this.$refs.editEditor.submit();
+    },
+
+    async handleSubmitEditPost(data) {
+      this.modalEditPostLoading = true;
+
+      const formData = new FormData();
+      const dataWithModel = editPost(data);
+
+      for (const key in dataWithModel) {
+        // Check whether field is an array
+        if (key === "post_image") {
+          const values = data[key];
+          for (let i = 0; i < values.length; i++) {
+            formData.append(key, values[i]);
+          }
+        } else {
+          formData.append(
+            key,
+            Array.isArray(dataWithModel[key])
+              ? JSON.stringify(data[key])
+              : data[key]
+          );
+        }
+      }
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL_POST.EDIT}`,
+        formData
+      );
+
+      if (doEdit.success) {
+        const { success, data: newPost = {} } = await new PostService(
+          this.$axios
+        )[actionTypes.BASE.DETAIL](data.post_id);
+
+        if (success) {
+          const timeout = setTimeout(() => {
+            const postIndex = this.feeds.listPost.findIndex(
+              item => item.post_id === newPost.post_id
+            );
+            this.feeds.listPost[postIndex] = newPost;
+            this.modalEditPostLoading = false;
+            this.showModalEditPost = false;
+            clearTimeout(timeout);
+          }, data.post_image.length * 1000);
+        }
+      } else {
+        this.$toasted.error(doEdit.message);
+        this.modalEditPostLoading = false;
+      }
     },
 
     openModalShare(post) {
@@ -608,15 +707,22 @@ export default {
       );
 
       if (doShare.success) {
-        this.feeds.listPost = [doShare.data, ...this.feeds.listPost];
+        const { success, data: newPost = {} } = await new PostService(
+          this.$axios
+        )[actionTypes.BASE.DETAIL](doShare.data.post_id);
+
+        if (success) {
+          this.feeds.listPost = [newPost, ...this.feeds.listPost];
+        }
+
+        this.cancelShare();
+        const timeout = setTimeout(() => {
+          cb();
+          clearTimeout(timeout);
+        }, 500);
       } else {
         this.$toasted.error(doShare.message);
       }
-
-      const timeout = setTimeout(() => {
-        cb();
-        clearTimeout(timeout);
-      }, 500)
     },
 
     cancelShare() {

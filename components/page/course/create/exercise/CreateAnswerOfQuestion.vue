@@ -1,0 +1,76 @@
+<template>
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <label class="d-inline-block mb-3" for="answer-a">Đáp án đúng</label>
+      <div>
+        <app-radio
+          @click="$emit('handleSelectAnswerTrue', index)"
+          name="answer"
+          :checked="get(answer, 'correct', false)"
+          >{{ text }}</app-radio
+        >
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <label class="d-inline-block mb-3" for="answer-editor"
+        >Nội dung đáp án</label
+      >
+      <div class="d-flex align-items-start">
+        <div class="flex-grow mr-4">
+          <!-- <app-editor id="answer-editor" /> -->
+          <app-input
+            @input="handleChangeContent"
+            :value="get(answer, 'content', '')"
+          />
+        </div>
+
+        <!-- <div>
+          <button>
+            <IconTrashAlt class="icon d-block subheading fill-secondary" />
+          </button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import { get } from "lodash";
+
+export default {
+  components: {
+    IconTrashAlt,
+  },
+
+  props: {
+    answer: {
+      type: Object,
+      default: null,
+    },
+    index: {
+      type: Number,
+      default: 0,
+    },
+  },
+
+  computed: {
+    text() {
+      if (get(this, "index", "") === 0) return "A";
+      if (get(this, "index", "") === 1) return "B";
+      if (get(this, "index", "") === 2) return "C";
+      if (get(this, "index", "") === 3) return "D";
+      return "";
+    },
+  },
+
+  methods: {
+    get,
+
+    handleChangeContent(value) {
+      this.$emit("handleChangeContent", this.index, value);
+    },
+  },
+};
+</script>

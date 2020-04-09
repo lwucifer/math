@@ -1,306 +1,36 @@
 <template>
   <div>
-    <create-action />
+    <create-action :isShowAction="false" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
 
-      <div class="cc-panel__body">
-        <app-alert type="warning" class="mb-4" show-close>
-          <template slot="icon">
-            <IconInfoCircle class="icon ce-alert-icon heading-3 fill-sub" />
-          </template>
-          Bạn có thể tạo bài kiểm tra bắt buộc cho bài giảng, khóa học của bạn tại đây. Học sinh cần hoàn thành bài kiểm tra và đạt điểm để hoàn thành khóa học.
-        </app-alert>
+      <SelectLesson
+        :lessons="lessons"
+        @handleSelectLesson="handleSelectLesson"
+      />
 
-        <app-button class="font-weight-semi-bold" color="secondary" size="sm" square>Tạo Bài kiểm tra</app-button>
-      </div>
-    </div>
+      <ButtonCreateExercise
+        v-if="isShowButtonCreate"
+        @handleClick="handleShowFormAdd"
+        :category="category"
+      />
 
-    <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
-      </div>
+      <FormCreateExercise
+        v-if="isShowFormAdd"
+        @handleCancel="handleCancelAddCreate"
+        :lesson="lesson"
+        @handleRefreshExcercises="handleRefreshExcercises"
+        :category="category"
+      />
 
-      <div class="cc-panel__body">
-        <div class="mb-4">
-          <label for="title" class="text-sub mb-2 d-inline-block">Tiêu đề Bài kiểm tra</label>
-          <app-input id="title" :counter="100" />
-        </div>
-
-        <div class="row align-items-center mb-4">
-          <div class="col-md-2">
-            <label for="time" class="text-gray caption">Thời gian làm bài</label>
-          </div>
-
-          <div class="col-md-10">
-            <app-input
-              type="number"
-              class="mb-0 ce-input-with-unit"
-              id="time"
-              size="sm"
-              style="width: 112px"
-              :value="60"
-            >
-              <div slot="unit">Phút</div>
-            </app-input>
-          </div>
-        </div>
-
-        <div class="row align-items-center mb-4">
-          <div class="col-md-2">
-            <label for="point" class="text-gray caption">Điểm đạt</label>
-          </div>
-
-          <div class="col-md-10">
-            <app-input
-              type="number"
-              min="0"
-              max="10"
-              class="mb-0 ce-input-with-unit"
-              id="point"
-              size="sm"
-              style="width: 102px"
-            >
-              <div slot="unit">/10</div>
-            </app-input>
-          </div>
-        </div>
-
-        <div class="row align-items-center mb-4">
-          <div class="col-md-2">
-            <label for="count" class="text-gray caption">Số lần làm bài</label>
-          </div>
-
-          <div class="col-md-10">
-            <app-input type="number" class="mb-0" id="count" size="sm" style="width: 49px"></app-input>
-          </div>
-        </div>
-
-        <div class="d-flex justify-content-end">
-          <app-button size="sm" color="disabled" class="font-weight-semi-bold mr-4" square>Huỷ bỏ</app-button>
-          <app-button size="sm" color="primary" class="font-weight-semi-bold" square>Tạo Bài kiểm tra</app-button>
-        </div>
-      </div>
-    </div>
-
-    <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="ce-item d-flex align-items-center justify-content-between">
-          <div class="ce-item__left d-flex align-items-center">
-            <h3 class="body-2 mr-3">Bài kiểm tra 1</h3>
-            <a href class="ce-item__action edit mr-3">
-              <IconEditAlt class="icon d-block subheading fill-primary" />
-            </a>
-            <a href class="ce-item__action delete mr-3">
-              <IconTrashAlt class="icon d-block subheading fill-secondary" />
-            </a>
-          </div>
-
-          <div class="ce-item__right">
-            <a href class="text-secondary">Thêm câu hỏi</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài kiểm tra 1</h2>
-              <button class="cc-box__btn cc-box__btn-edit">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <div class="cc-box__bg-gray pa-4">
-              <div class="ce-question-type">
-                <a
-                  href
-                  :class="{ 'active': createType === 'choice' }"
-                  @click.prevent="createType = 'choice'"
-                >
-                  <IconFileCheck class="icon" />Câu hỏi trắc nghiệm
-                </a>
-                <a
-                  href
-                  :class="{ 'active': createType === 'essay' }"
-                  @click.prevent="createType = 'essay'"
-                >
-                  <IconClipboardNotes class="icon" />Tự luận
-                </a>
-              </div>
-
-              <app-divider class="my-4" />
-
-              <div v-if="createType === 'choice'">
-                <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
-
-                <app-editor class="mb-4" id="question-editor"></app-editor>
-
-                <div class="row mb-4">
-                  <div class="col-md-3">
-                    <label class="d-inline-block mb-3" for="answer-a">Đáp án đúng</label>
-                    <div>
-                      <app-radio name="answer" value="a" id="answer-a">A</app-radio>
-                    </div>
-                  </div>
-
-                  <div class="col-md-9">
-                    <label class="d-inline-block mb-3" for="answer-editor">Nội dung đáp án</label>
-                    <div class="d-flex align-items-start">
-                      <div class="flex-grow mr-4">
-                        <app-editor id="answer-editor"></app-editor>
-                      </div>
-
-                      <div>
-                        <button>
-                          <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="createType === 'essay'">
-                <label class="d-inline-block mb-3" for="question-editor">Nội dung câu hỏi</label>
-
-                <app-editor id="question-editor" />
-              </div>
-
-              <div>
-                <label class="d-inline-block mb-3">Bài giảng liên quan</label>
-                <div>
-                  <app-select
-                    :options="[{ value: 0, text: 'Bài giảng 1'}, { value: 1, text: 'Bài giảng 2'}]"
-                    placeholder="Chọn bài giảng"
-                    size="sm"
-                  >
-                    <template slot="placeholder-icon">
-                      <IconAngleDown class="icon" />
-                    </template>
-                  </app-select>
-                </div>
-                <span class="d-inline-block mt-2 caption text-sub">Chọn bài giảng liên quan để giúp học sinh trả lời câu hỏi một cách chính xác nhất</span>
-              </div>
-
-              <div class="d-flex justify-content-end mt-5">
-                <app-button
-                  color="disabled"
-                  class="font-weight-semi-bold mr-4"
-                  size="sm"
-                  square
-                >Huỷ bỏ</app-button>
-                <app-button
-                  color="primary"
-                  class="font-weight-semi-bold"
-                  size="sm"
-                  square
-                >Lưu câu hỏi</app-button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
-      </div>
-
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left">
-              <h2 class="cc-box__title heading-6">Bài kiểm tra 1</h2>
-              <button class="cc-box__btn cc-box__btn-edit">
-                <IconEditAlt class="icon" />
-              </button>
-            </div>
-
-            <div class="cc-box__head-right">
-              <a href class="text-secondary">Thêm câu hỏi</a>
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
-              </button>
-            </div>
-          </div>
-
-          <div class="cc-box__body">
-            <div class="ce-question-item d-flex align-items-center">
-              <h3 class="body-2 mr-4">1. Đây là câu hỏi</h3>
-              <span class="text-sub mr-4">Câu hỏi trắc nghiệm</span>
-
-              <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-                <button class="mr-4">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </button>
-
-                <button class="mr-4">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </button>
-
-                <button>
-                  <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-                </button>
-              </div>
-            </div>
-
-            <div class="ce-question-item d-flex align-items-center">
-              <h3 class="body-2 mr-4">2. Đây là câu hỏi</h3>
-              <span class="text-sub mr-4">Câu hỏi tự luận</span>
-
-              <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-                <button class="mr-4">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </button>
-
-                <button class="mr-4">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </button>
-
-                <button>
-                  <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-                </button>
-              </div>
-            </div>
-
-            <div class="ce-question-item d-flex align-items-center">
-              <h3 class="body-2 mr-4">3. Đây là câu hỏi</h3>
-              <span class="text-sub mr-4">Câu hỏi upload</span>
-
-              <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-                <button class="mr-4">
-                  <IconEditAlt class="icon d-block subheading fill-primary" />
-                </button>
-
-                <button class="mr-4">
-                  <IconTrashAlt class="icon d-block subheading fill-secondary" />
-                </button>
-
-                <button>
-                  <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ExerciseList
+        v-for="exercise in get(lesson, 'exerciseTests', [])"
+        :key="exercise.id"
+        :exercise="exercise"
+        @handleRefreshQuestion="handleRefreshQuestion"
+      />
     </div>
   </div>
 </template>
@@ -313,8 +43,14 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
-
+import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
+import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
+import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
+import * as actionTypes from "~/utils/action-types";
+import { getParamQuery } from "~/utils/common";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -325,17 +61,109 @@ export default {
     IconAlignCenterAlt,
     IconFileCheck,
     IconClipboardNotes,
-    CreateAction
+    CreateAction,
+    ButtonCreateExercise,
+    FormCreateExercise,
+    ExerciseList,
+    SelectLesson
   },
 
   data() {
     return {
-      createType: "choice" // 'choice' | 'essay'
+      isShowButtonCreate: true,
+      isShowFormAdd: false,
+      lessons: [],
+      lesson: null,
+      category: 'TEST'
     };
   },
+
+  created() {
+    this.getLessons();
+    this.getLesson();
+  },
+
+  methods: {
+    handleRefreshQuestion() {
+      this.getProgress();
+      this.getLesson(get(this, "lesson.id", ""));
+    },
+
+    async getLesson(lesson_id) {
+      if (lesson_id) {
+        const res = await this.$store.dispatch(
+          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
+          lesson_id
+        );
+        if (get(res, "success", false)) {
+          this.lesson = get(res, "data", null);
+          return;
+        }
+      }
+      this.lesson = null;
+    },
+
+    handleRefreshExcercises() {
+      this.getProgress();
+      this.getLesson(get(this, "lesson.id", ""));
+      this.isShowFormAdd = false;
+      this.isShowButtonCreate = true;
+    },
+
+    handleShowFormAdd() {
+      this.isShowButtonCreate = false;
+      this.isShowFormAdd = true;
+    },
+
+    handleSelectLesson(lesson) {
+      this.getLesson(get(lesson, "id", ""));
+    },
+
+    handleCancelAddCreate() {
+      this.isShowButtonCreate = true;
+      this.isShowFormAdd = false;
+    },
+
+    async getLessons() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+      if (get(res, "success", false)) {
+        let lessons = [];
+        get(res, "data", []).map(lesson => {
+          lesson.value = lesson.id;
+          lesson.text = lesson.name;
+          lessons.push(lesson);
+        });
+        this.lessons = lessons;
+      }
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id
+        }
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
+    },
+
+    get
+  }
 };
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/course/create/_create-excercise.scss";
+@import "~/assets/scss/components/course/create/_create-exercise.scss";
 </style>

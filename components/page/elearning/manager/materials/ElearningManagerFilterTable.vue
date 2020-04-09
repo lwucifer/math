@@ -2,20 +2,34 @@
   <div class="wrapfilterbar__ElearningManagerFilterTable">
     <elearning-manager-filter-form
       @changedFilter="updateFilter"
+      class="mb-4"
     />
     <div>
-      <app-button
-        size="sm"
-        square
-        normal
-        :disabled="!additionalActions.delete"
-        :color="additionalActions.delete ? 'secondary' : 'disabled'"
-        @click="visible.delete = true"
-        class="bntRemoveList__ElearningManagerFilterTable"
-      >
-        <IconTrashAlt/>
-        <span>Xóa tài liệu</span>
-      </app-button>
+      
+        <v-popover
+          :disabled="additionalActions.delete"
+          trigger="hover"
+          placement="top"
+          offset="5"
+        >
+          <app-button
+            size="sm"
+            square
+            normal
+            :disabled="!additionalActions.delete"
+            :color="additionalActions.delete ? 'secondary' : 'disabled'"
+            @click="visible.delete = true"
+            class="bntRemoveList__ElearningManagerFilterTable"
+          >
+            <IconTrashAlt/>
+            <span>Xóa tài liệu</span>
+          </app-button>
+  
+          <template slot="popover">
+            <span>Bạn vui lòng chọn tài liệu cần xóa</span>
+          </template>
+        </v-popover>
+        
     </div>
 
     <div class="wrapTable__ElearningManagerFilterTable">

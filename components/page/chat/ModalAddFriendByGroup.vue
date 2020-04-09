@@ -7,7 +7,11 @@
       </div>
       <app-search class="mb-0" />
       <div class="contact-list">
-        <div class="item d-flex-center" v-for="(item, index) in friendList" :key="index">
+        <div
+          class="item d-flex-center"
+          v-for="(item, index) in friendList.listFriend ? friendList.listFriend : []"
+          :key="index"
+        >
           <app-avatar
             :src="item.avatar && item.avatar.low ? item.avatar.low : ''"
             :size="30"

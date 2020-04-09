@@ -5,12 +5,14 @@
         class="header-create__btn header-create__btn-back"
         outline
         square
+        nuxt
+        to="./"
       >
         <IconArrowLeft class="icon mr-2" />
         Quay lại
       </app-button>
 
-      <div class="header-create__right" v-if="type !== 'add_contents'">
+      <div class="header-create__right" v-if="isShowAction">
         <app-button
           @click="handleCLickSave"
           class="header-create__btn mr-4"
@@ -18,7 +20,11 @@
           :disabled="!isSubmit"
           >Lưu</app-button
         >
-        <app-button class="header-create__btn" color="secondary" square
+        <app-button
+          class="header-create__btn"
+          color="secondary"
+          square
+          @click="$emit('handleDelete')"
           >Xoá</app-button
         >
       </div>
@@ -32,17 +38,18 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconArrowLeft
+    IconArrowLeft,
   },
 
   props: {
     isSubmit: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    type: {
-      type: String
-    }
+    isShowAction: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   methods: {
@@ -50,8 +57,8 @@ export default {
       this.$emit("handleCLickSave");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
 

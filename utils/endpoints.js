@@ -33,7 +33,7 @@ export const UPDATE_PHONE = `${SCHOOLLY_ALIAS}/social/api/user/updatePhone`;
 export const FEED = `${SCHOOLLY_ALIAS}/social/api/feed`;
 export const POSTS = `${SCHOOLLY_ALIAS}/social/api/post`;
 export const LIKES = `${SCHOOLLY_ALIAS}/social/api/like`;
-export const SHARES = `${SCHOOLLY_ALIAS}/social/share`;
+export const SHARES = `${SCHOOLLY_ALIAS}/social/api/share`;
 export const COMMENTS = `${SCHOOLLY_ALIAS}/social/api/comment`;
 export const MEDIAS = `${SCHOOLLY_ALIAS}/social/medias`;
 export const NOTIFICATIONS = `${SCHOOLLY_ALIAS}/social/notifications`;
@@ -41,6 +41,10 @@ export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
 export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
 export const SOCIAL_FRIEND_INVITE = `${SCHOOLLY_ALIAS}/social/api/friend/invite`;
+export const SOCIAL_POST_PHOTO = `${SCHOOLLY_ALIAS}/social/api/post/photo`;
+export const SOCIAL_POST_TAG_PHOTO = `${SCHOOLLY_ALIAS}/social/aip/post/tagPhoto`;
+export const SOCIAL_FOLLOW = `${SCHOOLLY_ALIAS}/social/api/follow`;
+export const SOCIAL_SCRAPER = `${SCHOOLLY_ALIAS}/social/api/openGraphScraper`;
 
 /**
  * ELEARNING
@@ -57,7 +61,7 @@ export const ELEARNING_PUBLIC_PROGRAM = `${SCHOOLLY_ALIAS}/elearning/public/prog
 export const ELEARNING_CREATING_ANSWERS = `${SCHOOLLY_ALIAS}/elearning/creating/answers`;
 export const ELEARNING_CREATING_CHAPTERS = `${SCHOOLLY_ALIAS}/elearning/creating/chapters`;
 export const ELEARNING_CREATING_DOCS = `${SCHOOLLY_ALIAS}/elearning/creating/docs`;
-export const ELEARNING_CREATING_EXCERCISES = `${SCHOOLLY_ALIAS}/elearning/creating/exercises`;
+export const ELEARNING_CREATING_EXERCISES = `${SCHOOLLY_ALIAS}/elearning/creating/exercises`;
 export const ELEARNING_CREATING_GENERAL = `${SCHOOLLY_ALIAS}/elearning/creating/general`;
 export const ELEARNING_CREATING_LESSONS = `${SCHOOLLY_ALIAS}/elearning/creating/lessons`;
 export const ELEARNING_CREATING_QUESTIONS = `${SCHOOLLY_ALIAS}/elearning/creating/questions`;
@@ -65,8 +69,13 @@ export const ELEARNING_PUBLIC_RELATED = `${SCHOOLLY_ALIAS}/elearning/public/rela
 export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subjects`;
 export const ELEARNING_PUBLIC_LEVEL = `${SCHOOLLY_ALIAS}/elearning/public/levels`;
 export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/teaching/repository/files`;
+export const ELEARNING_TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/elearning/teaching/repository`;
+export const ELEARNING_TEACHING_EXERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/exercises`;
+export const ELEARNING_TEACHING_SUBMISSION = `${SCHOOLLY_ALIAS}/elearning/teaching/submissions`;
 export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/setting`;
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
+export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
+export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
 /**
  * STUDY
@@ -75,6 +84,7 @@ export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
 export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
+export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
 
 /**
  * SCHOOL
@@ -102,12 +112,17 @@ export const GROUP_NOTIFICATION = `${SCHOOLLY_ALIAS}/social/api/room/settingNoti
 export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
 export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
 export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
+export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
 
 /**
- * ELEARNING MANAGER
+ * TEACHING
  */
-export const ELEARNING_INFO = `${SCHOOLLY_ALIAS}/elearning/teaching/info`;
-
-export const ELEARNING_COURSES_LIST = `${SCHOOLLY_ALIAS}/elearning/courses/list`;
-export const ELEARNING_COURSES_STUDENT = `${SCHOOLLY_ALIAS}/elearning/courses/student`;
-export const ELEARNING_COURSES_STUDENT_INFO = `${SCHOOLLY_ALIAS}/elearning/courses/student/info`;
+export const TEACHING_SUMMARY= `${SCHOOLLY_ALIAS}/teaching/summary`;
+export const TEACHING_ELEARNING = `${SCHOOLLY_ALIAS}/teaching/elearnings`;
+export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/teaching/excercises`;
+export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/teaching/repository`;
+export const TEACHING_ONLINE_CLASS = `${SCHOOLLY_ALIAS}/teaching/olclass`;
+export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/teaching/interactive/questions`;
+export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/teaching/students`;
+export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/teaching/invites`;
+export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/teaching/votes`;

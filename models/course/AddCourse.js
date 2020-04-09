@@ -98,6 +98,10 @@ class CourseSetting {
       this.discount = numeral(payload.discount).value();
       this.fee = numeral(payload.fee).value();
     }
+    if(payload.free == 1){
+      this.discount = 0;
+      this.fee = 0;
+    }
     this.elearning_id = payload.elearning_id;
     this.privacy = payload.privacy;
     if (payload.privacy === "PRIVATE") {
@@ -110,7 +114,7 @@ export function createPayloadCourseSetting(payload) {
   return Object.freeze(new CourseSetting(payload));
 }
 
-class Excercise {
+class Exercise {
   constructor(payload) {
     if (payload.id) {
       this.id = payload.id;
@@ -142,6 +146,42 @@ class Excercise {
   }
 }
 
-export function createPayloadExcercise(payload) {
-  return Object.freeze(new Excercise(payload));
+export function createPayloadExercise(payload) {
+  return Object.freeze(new Exercise(payload));
+}
+
+class Question {
+  constructor(payload) {
+    if (payload.exercise_id) {
+      this.exercise_id = payload.exercise_id;
+    }
+    if (payload.score) {
+      this.score = payload.score;
+    }
+    if (payload.exercise_id) {
+      this.exercise_id = payload.exercise_id;
+    }
+    if (payload.id) {
+      this.id = payload.id;
+    }
+    if (payload.type) {
+      this.type = payload.type;
+    }
+    if (payload.content) {
+      this.content = payload.content;
+    }
+    let answers = [];
+    payload.answers.map(answer => {
+      let item = {
+        correct: answer.correct,
+        content: answer.content
+      };
+      answers.push(item);
+    });
+    this.answers = answers;
+  }
+}
+
+export function createPayloadQuestion(payload) {
+  return Object.freeze(new Question(payload));
 }
