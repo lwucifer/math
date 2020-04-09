@@ -182,8 +182,12 @@ export default {
 
         if (get(this, "setting.fee", 0)) {
           this.payload.fee = get(this, "setting.fee", 0);
+          this.payload.free = 0
         }
-        
+        if (!get(this, "setting.fee", 0)) {
+          this.payload.fee = get(this, "setting.fee", 0);
+          this.payload.free = 1
+        }
         if (get(this, "setting.privacy", "")) {
           this.payload.privacy = get(this, "setting.privacy", "");
         }
