@@ -70,7 +70,7 @@
         </div>
         <div v-else>
           <div class="tabs-content" v-if="tab == 1">
-            <div class="btn-create-chat" v-if="chatsListTab.length == 0">
+            <div class="btn-create-chat" v-if="checkChatList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
               </div>Tạo chat mới
@@ -124,7 +124,7 @@
                   </div>
                 </app-dropdown>
               </div>
-              <client-only v-if="this.chatsListTab.length > 0">
+              <client-only>
                 <infinite-loading :identifier="infiniteIdChat" @infinite="chatsInfiniteHandler">
                   <template slot="no-more">Không còn tin nhắn nào.</template>
                 </infinite-loading>
@@ -132,7 +132,7 @@
             </template>
           </div>
           <div class="tabs-content" v-if="tab == 2">
-            <div class="btn-create-chat" v-if="chatsListTab.length == 0">
+            <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
               </div>Tạo chat mới
@@ -184,7 +184,7 @@
                   </div>
                 </app-dropdown>
               </div>
-              <client-only v-if="this.mapGroupList.length > 0">
+              <client-only>
                 <infinite-loading :identifier="infiniteId" @infinite="groupsInfiniteHandler">
                   <template slot="no-more">Không còn group.</template>
                 </infinite-loading>
@@ -266,16 +266,16 @@ export default {
     IconPlus
   },
   props: {
-    contacts: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    friends: {
-      type: Array,
-      default: () => [],
-      required: true
-    }
+    // contacts: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // },
+    // friends: {
+    //   type: Array,
+    //   default: () => [],
+    //   required: true
+    // }
   },
 
   data() {
@@ -298,9 +298,11 @@ export default {
       chatsListTab: [],
       infiniteId: +new Date(),
       infiniteIdChat: +new Date(),
-      dataPushChat: [],
-      dataPushGroup: [],
-      dataGroupLeave: {}
+      // dataPushChat: [],
+      // dataPushGroup: [],
+      dataGroupLeave: {},
+      checkChatList: false,
+      checkGroupList: false
     };
   },
   computed: {
@@ -408,19 +410,27 @@ export default {
       ]({
         params: this.groupListQuery
       });
-
+      console.log("getData", getData.length);
+      if (getData.length == 0 && this.groupsListTab.length == 0) {
+        this.checkGroupList = true;
+      }
       if (getData.rooms && getData.rooms.length) {
         this.groupListQuery.page += 1;
-        // this.groupsListTab.push(
-        //   ...getData.rooms.filter(item => item.type == 2)
-        // );
-        this.groupsListTab = [];
+        this.groupsListTab.push(
+          ...getData.rooms.filter(item => item.type == 2)
+        );
+        // this.groupsListTab = [];
+        // if (this.groupsListTab.length == 0) {
+        //   this.checkGroupList = true;
+        // }
+
         $state.loaded();
         // this.$store.commit(
         //   `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
         //   this.groupsListTab
         // );
       } else {
+        // this.checkGroupList = true;
         $state.complete();
       }
     },
@@ -431,11 +441,14 @@ export default {
       ]({
         params: this.chatListQuery
       });
-
+      if (getData.length == 0 && this.chatsListTab.length == 0) {
+        this.checkChatList = true;
+      }
       if (getData.rooms && getData.rooms.length) {
         this.chatListQuery.page += 1;
-        // this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
-        this.chatsListTab = [];
+        this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        // this.chatsListTab = [];
+
         // this.$store.commit(
         //   `message/${mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE}`,
         //   this.chatsListTab
