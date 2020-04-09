@@ -1,6 +1,10 @@
 <template>
   <div class="cc-panel bg-white">
-    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit" />
+    <create-action
+      @handleCLickSave="handleCLickSave"
+      :isSubmit="isSubmit"
+      @handleDelete="handleReset"
+    />
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
     </div>
@@ -97,7 +101,7 @@ import {
   useEffect,
   getParamQuery,
   redirectWithParams,
-  image
+  image,
 } from "~/utils/common";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -118,7 +122,7 @@ const schema = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 const schema_update = yup.object().shape({
@@ -127,7 +131,7 @@ const schema_update = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 export default {
@@ -139,7 +143,7 @@ export default {
     CourseSelectAvatar,
     IconCheckCircle,
     IconTrashAlt,
-    CourseBenefit
+    CourseBenefit,
   },
 
   data() {
@@ -152,10 +156,10 @@ export default {
         level: "",
         name: "",
         subject: "",
-        type: ""
+        type: "",
       },
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -181,7 +185,7 @@ export default {
           that.isSubmit = valid;
         });
       },
-      deep: true
+      deep: true,
     },
     general: {
       handler: function() {
@@ -195,20 +199,29 @@ export default {
           this.payload.elearning_id = get(this, "general.id", "");
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
-    }
+    },
   },
 
   methods: {
+    handleReset() {
+      this.payload.benefit = [...get(this, "general.benefit", [])];
+      this.payload.description = get(this, "general.description", "");
+      this.payload.name = get(this, "general.name", "");
+      this.payload.subject = get(this, "general.subject", "");
+      this.payload.level = get(this, "general.level", "");
+      this.payload.type = get(this, "general.type", "");
+    },
+
     removeBenefit(index) {
       this.payload.benefit = this.payload.benefit.filter(
         (item, i) => i !== index
@@ -224,8 +237,8 @@ export default {
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         };
         this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -269,10 +282,10 @@ export default {
 
       if (get(result, "success", false)) {
         const params = {
-          elearning_id: get(result, "data.elearning_id", "")
+          elearning_id: get(result, "data.elearning_id", ""),
         };
         const options = {
-          params
+          params,
         };
         await this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -290,8 +303,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -305,8 +318,8 @@ export default {
     },
 
     numeral,
-    get
-  }
+    get,
+  },
 };
 </script>
 
