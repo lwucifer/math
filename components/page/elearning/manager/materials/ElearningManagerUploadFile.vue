@@ -188,7 +188,7 @@
     },
     computed: {
       capcityPercentage() {
-        return Math.ceil((this.usedCapacity/this.maxCapacity)*100)
+        return parseFloat((this.usedCapacity/this.maxCapacity)*100).toFixed(2)
       },
       availableCapcity() {
         return this.maxCapacity - this.usedCapacity
