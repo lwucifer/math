@@ -12,24 +12,29 @@
           <div class="post-editor__editor">
             <editor-content :editor="editor" />
 
-            <div class="suggestion-list" v-show="showSuggestions" ref="suggestions">
-              <template v-if="hasResults">
+            <div class="suggestion-list" v-show="hasResults" ref="suggestions">
+              <div
+                v-for="(user, index) in mentionList"
+                :key="user.id"
+                class="suggestion-list__item"
+                :class="{ 'is-selected': mentionNavigatedIndex === index }"
+                @click="selectUser(user)"
+              >
+                <app-avatar
+                  class="mr-2"
+                  :size="32"
+                  :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
+                />
+                {{ user.fullname }}
+              </div>
+
+              <infinite-loading :identifier="mentionInfiniteId" @infinite="mentionInfiniteHandler">
+                <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
                 <div
-                  v-for="(user, index) in filteredUsers"
-                  :key="user.id"
-                  class="suggestion-list__item"
-                  :class="{ 'is-selected': navigatedUserIndex === index }"
-                  @click="selectUser(user)"
-                >
-                  <app-avatar
-                    class="mr-2"
-                    :size="32"
-                    :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
-                  />
-                  {{ user.fullname }}
-                </div>
-              </template>
-              <div v-else class="suggestion-list__item is-empty">No users found</div>
+                  slot="no-results"
+                  class="text-sub py-3"
+                >Không tìm thấy "{{ mentionQuery.name }}"</div>
+              </infinite-loading>
             </div>
           </div>
         </client-only>
@@ -344,12 +349,16 @@ export default {
       linkDataFetchError: false,
 
       // Mention data
-      query: null,
-      filteredUsers: [],
-      suggestionRange: null,
+      mentionQuery: {
+        page: 1,
+        name: null
+      },
+      mentionList: [],
+      mentionNavigatedIndex: 0,
+      mentionPopup: null,
+      mentionSuggestionRange: null,
       insertMention: () => {},
-      navigatedUserIndex: 0,
-      popup: null
+      mentionInfiniteId: +new Date() + 9999
     };
   },
 
@@ -400,14 +409,9 @@ export default {
     },
 
     hasResults() {
-      return false;
-      return this.filteredUsers && this.filteredUsers.length
-        ? this.filteredUsers.length
+      return this.mentionList && this.mentionList.length
+        ? this.mentionList.length
         : 0;
-    },
-
-    showSuggestions() {
-      return this.query || this.hasResults;
     }
   },
 
@@ -434,9 +438,9 @@ export default {
           items: this.friendsList,
           // is called when a suggestion starts
           onEnter: ({ items, query, range, command, virtualNode }) => {
-            this.query = query;
-            // this.filteredUsers = items;
-            this.suggestionRange = range;
+            console.log("onEnter");
+            this.mentionQuery.name = query;
+            this.mentionSuggestionRange = range;
             this.renderPopup(virtualNode);
             // we save the command for inserting a selected mention
             // this allows us to call it inside of our custom popup
@@ -445,26 +449,34 @@ export default {
           },
           // is called when a suggestion has changed
           onChange: ({ items, query, range, virtualNode }) => {
-            this.query = query;
-            // this.filteredUsers = items;
-            this.suggestionRange = range;
-            this.navigatedUserIndex = 0;
-            this.renderPopup(virtualNode);
+            console.log(
+              "onChange",
+              query,
+              range,
+              virtualNode.getBoundingClientRect()
+            );
+            this.mentionQuery.name = query;
+            this.mentionSuggestionRange = range;
+            this.mentionNavigatedIndex = 0;
+            !this.mentionPopup && this.renderPopup(virtualNode);
           },
           // is called when a suggestion is cancelled
           onExit: () => {
+            console.log("onExit");
             // reset all saved values
-            this.query = null;
-            // this.filteredUsers = [];
-            this.friendsList = [];
-            this.friendsListQuery.page = 1;
+            this.mentionQuery = {
+              page: 1,
+              name: null
+            };
+            this.mentionList = [];
             //
-            this.suggestionRange = null;
-            this.navigatedUserIndex = 0;
+            this.mentionSuggestionRange = null;
+            this.mentionNavigatedIndex = 0;
             this.destroyPopup();
           },
           // is called on every keyDown event while a suggestion is active
           onKeyDown: ({ event }) => {
+            console.log("event.key", event.key);
             // pressing up arrow
             if (event.key === "ArrowUp") {
               this.upHandler();
@@ -515,15 +527,23 @@ export default {
       this.$emit("active-change", newValue);
     },
 
-    query: debounce(function(newValue) {
-      this.friendsList = [];
-      this.friendsListQuery.page = 1;
-      this.getFriends(newValue);
-    }, 300),
+    "mentionQuery.name": debounce(async function(newValue) {
+      this.mentionList = [];
+      this.mentionQuery.page = 1;
 
-    friendsList(newValue) {
-      this.filteredUsers = newValue;
-    },
+      const { data = {} } = await new FriendService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.mentionQuery
+      });
+      if (data.listFriend && data.listFriend.length) {
+        newValue !== null && (this.mentionInfiniteId += 1);
+        this.mentionQuery.page += 1;
+        this.mentionList = this.mentionList.concat(data.listFriend);
+      } else {
+        this.$toasted.error(data.message);
+      }
+    }, 300),
 
     tagOptions(newValue) {
       if (!newValue.length) return;
@@ -761,20 +781,20 @@ export default {
     // navigate to the previous item
     // if it's the first item, navigate to the last one
     upHandler() {
-      this.navigatedUserIndex =
-        (this.navigatedUserIndex + this.filteredUsers.length - 1) %
-        this.filteredUsers.length;
+      this.mentionNavigatedIndex =
+        (this.mentionNavigatedIndex + this.mentionList.length - 1) %
+        this.mentionList.length;
     },
 
     // navigate to the next item
     // if it's the last item, navigate to the first one
     downHandler() {
-      this.navigatedUserIndex =
-        (this.navigatedUserIndex + 1) % this.filteredUsers.length;
+      this.mentionNavigatedIndex =
+        (this.mentionNavigatedIndex + 1) % this.mentionList.length;
     },
 
     enterHandler() {
-      const user = this.filteredUsers[this.navigatedUserIndex];
+      const user = this.mentionList[this.mentionNavigatedIndex];
       if (user) {
         this.selectUser(user);
       }
@@ -784,7 +804,7 @@ export default {
     // so it's important to pass also the position of your suggestion text
     selectUser(user) {
       this.insertMention({
-        range: this.suggestionRange,
+        range: this.mentionSuggestionRange,
         attrs: {
           id: user.id,
           label: user.fullname
@@ -796,10 +816,11 @@ export default {
     // renders a popup with suggestions
     // tiptap provides a virtualNode object for using popper.js (or tippy.js) for popups
     renderPopup(node) {
-      if (this.popup) {
+      console.log("renderPopup", node);
+      if (this.mentionPopup) {
         return;
       }
-      this.popup = tippy(node, {
+      this.mentionPopup = tippy(node, {
         content: this.$refs.suggestions,
         trigger: "mouseenter",
         interactive: true,
@@ -808,13 +829,16 @@ export default {
         inertia: true,
         duration: [400, 200],
         showOnInit: true,
-        arrow: true
-        // arrowType: "round"
+        arrow: true,
+        // arrowType: "round",
+        onHidden: instance => {
+          this.destroyPopup();
+        }
       });
       // we have to update tippy whenever the DOM is updated
       if (MutationObserver) {
         this.observer = new MutationObserver(() => {
-          this.popup.popperInstance.scheduleUpdate();
+          this.mentionPopup.popperInstance.scheduleUpdate();
         });
         this.observer.observe(this.$refs.suggestions, {
           childList: true,
@@ -825,12 +849,31 @@ export default {
     },
 
     destroyPopup() {
-      if (this.popup) {
-        this.popup.destroy();
-        this.popup = null;
+      if (this.mentionPopup) {
+        this.mentionPopup.destroy();
+        this.mentionPopup = null;
       }
       if (this.observer) {
         this.observer.disconnect();
+      }
+    },
+
+    async mentionInfiniteHandler($state) {
+      const { data = {} } = await new FriendService(this.$axios)[
+        ACTION_TYPE_BASE.LIST
+      ]({
+        params: this.mentionQuery
+      });
+
+      if (data.listFriend && data.listFriend.length) {
+        this.mentionQuery.page += 1;
+        this.mentionList = this.mentionList.concat(data.listFriend);
+        $state.loaded();
+      } else if (this.mentionList.length) {
+        $state.loaded();
+        $state.complete();
+      } else {
+        $state.complete();
       }
     }
   }
