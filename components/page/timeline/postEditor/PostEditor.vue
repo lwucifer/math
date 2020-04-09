@@ -395,6 +395,7 @@ export default {
         ? this.filteredUsers.length
         : 0;
     },
+    
     showSuggestions() {
       return this.query || this.hasResults;
     }
