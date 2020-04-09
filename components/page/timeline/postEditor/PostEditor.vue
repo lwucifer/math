@@ -123,9 +123,11 @@
           class="post-editor__select"
           placeholder="Cùng với ai?"
           style="width: 100%"
+          :emptyMessage="null"
           :options="tagOptions"
           v-model="listTag"
           @visible-change="handleFriendsVisibleChange"
+          @search="searchFriends"
         >
           <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
             <app-avatar
@@ -137,7 +139,9 @@
           </div>
 
           <client-only slot="options-append">
-            <infinite-loading :identifier="friendsInfiniteId" @infinite="friendsInfiniteHandler" />
+            <infinite-loading :identifier="friendsInfiniteId" @infinite="friendsInfiniteHandler">
+              <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
+            </infinite-loading>
           </client-only>
         </app-select>
         <app-divider class="ma-0" />
@@ -231,7 +235,7 @@
 <script>
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
-import { isEmpty, debounce } from "lodash";
+import { isEmpty, debounce, uniqWith } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder, Mention } from "tiptap-extensions";
@@ -311,6 +315,7 @@ export default {
         page: 1
       },
       friendsList: [],
+      tmpTagOptions: [],
       checkinOptions: [
         { value: 0, text: "Hà Nội" },
         { value: 1, text: "Saudi Arabia" },
@@ -321,7 +326,9 @@ export default {
 
       // Form submit data
       content: this.initialValues.content,
-      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : null,
+      link: this.initialValues.link
+        ? JSON.parse(this.initialValues.link)
+        : null,
       fileList: this.initialValues.post_image,
       listTag: this.initialValues.list_tag,
       checkin: this.initialValues.check_in,
@@ -360,7 +367,9 @@ export default {
 
     selectedTags() {
       return this.listTag.map(item => {
-        const [resultItem = {}] = this.tagOptions.filter(i => i.value === item);
+        const [resultItem = {}] = this.tmpTagOptions.filter(
+          i => i.value === item
+        );
         return resultItem;
       });
     },
@@ -396,7 +405,7 @@ export default {
         ? this.filteredUsers.length
         : 0;
     },
-    
+
     showSuggestions() {
       return this.query || this.hasResults;
     }
@@ -514,6 +523,12 @@ export default {
 
     friendsList(newValue) {
       this.filteredUsers = newValue;
+    },
+
+    tagOptions(newValue) {
+      if (!newValue.length) return;
+      const tmp = this.tmpTagOptions.concat(newValue);
+      this.tmpTagOptions = uniqWith(tmp, (a, b) => a.value === b.value);
     }
   },
 
@@ -605,6 +620,12 @@ export default {
       }
     },
 
+    searchFriends: debounce(async function(name) {
+      this.friendsList = [];
+      this.friendsListQuery.page = 1;
+      await this.getFriends(name);
+    }, 300),
+
     handleFriendsVisibleChange(isVisible) {
       if (isVisible) {
         this.friendsList = [];
@@ -614,6 +635,9 @@ export default {
       }
     },
 
+    /**
+     * Submit data
+     */
     submit() {
       const params = {
         content: this.editor.getHTML(),
@@ -642,6 +666,9 @@ export default {
       this.$emit("submit", params, this.clear);
     },
 
+    /**
+     * Clear editor data after emit 'submit' event
+     */
     clear() {
       this.editor.setContent("");
       this.link = null;
@@ -653,6 +680,9 @@ export default {
       this.label = null;
     },
 
+    /**
+     * Paste handler
+     */
     handleEditorPaste(view, event, slice) {
       const { clipboardData } = event;
 
@@ -735,18 +765,21 @@ export default {
         (this.navigatedUserIndex + this.filteredUsers.length - 1) %
         this.filteredUsers.length;
     },
+
     // navigate to the next item
     // if it's the last item, navigate to the first one
     downHandler() {
       this.navigatedUserIndex =
         (this.navigatedUserIndex + 1) % this.filteredUsers.length;
     },
+
     enterHandler() {
       const user = this.filteredUsers[this.navigatedUserIndex];
       if (user) {
         this.selectUser(user);
       }
     },
+
     // we have to replace our suggestion text with a mention
     // so it's important to pass also the position of your suggestion text
     selectUser(user) {
