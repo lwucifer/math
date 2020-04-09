@@ -1,0 +1,24 @@
+.create-action {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.create-action__right {
+    margin-left: auto;
+}
+
+.btn.create-action__btn {
+    font-weight: 600;
+    font-size: 1.4rem;
+
+    svg {
+        font-size: 1.6rem;
+    }
+}
+
+.btn.create-action__btn-back {
+    svg {
+        fill: $color-primary;
+    }
+}

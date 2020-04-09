@@ -31,7 +31,7 @@ import CreateLearningContentCourse from "~/components/page/course/create/course/
 import * as actionTypes from "~/utils/action-types";
 
 export default {
-  layout: "no-header",
+  layout: "exercise",
 
   components: {
     CreateAside,

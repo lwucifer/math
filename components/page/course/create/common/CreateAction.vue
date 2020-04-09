@@ -1,8 +1,7 @@
 <template>
-  <div class="header-create">
-    <div class="header-create__content container">
-      <app-button
-        class="header-create__btn header-create__btn-back"
+  <div class="create-action">
+    <!-- <app-button
+        class="create-action__btn create-action__btn-back"
         outline
         square
         nuxt 
@@ -10,20 +9,16 @@
       >
         <IconArrowLeft class="icon mr-2" />
         Quay lại
-      </app-button>
+    </app-button>-->
 
-      <div class="header-create__right" v-if="isShowAction">
-        <app-button
-          @click="handleCLickSave"
-          class="header-create__btn mr-4"
-          square
-          :disabled="!isSubmit"
-          >Lưu</app-button
-        >
-        <app-button class="header-create__btn" color="secondary" square
-          >Xoá</app-button
-        >
-      </div>
+    <div class="create-action__right" v-if="isShowAction">
+      <app-button
+        @click="handleCLickSave"
+        class="create-action__btn mr-4"
+        square
+        :disabled="!isSubmit"
+      >Lưu</app-button>
+      <app-button class="create-action__btn" color="secondary" square>Xoá</app-button>
     </div>
   </div>
 </template>
@@ -58,6 +53,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "~/assets/scss/components/header-create/_header-create.scss";
+<style lang="scss">
+@import "~/assets/scss/components/course/create/_create-action.scss";
 </style>

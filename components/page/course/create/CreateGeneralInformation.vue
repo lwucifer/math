@@ -1,89 +1,92 @@
 <template>
-  <div class="cc-panel bg-white">
-    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit" />
-    <div class="cc-panel__title">
-      <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
-    </div>
-
-    <div class="cc-panel__body">
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
-        <app-radio
-          name="type"
-          value="LECTURE"
-          @click="handleSelectType"
-          :checked="payload.type === 'LECTURE'"
-          class="mr-6"
-          >Bài giảng</app-radio
-        >
-        <app-radio
-          name="type"
-          @click="handleSelectType"
-          value="COURSE"
-          :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio
-        >
+  <div>
+    <div class="cc-panel bg-white">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
       </div>
 
-      <div class="row">
-        <div class="col-md-3">
-          <div class="cgi-form-group mb-4">
-            <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
-            <CourseSelectLevel
-              :defaultValue="payload.level"
-              @handleChangeLevel="handleChangeLevel"
-            />
+      <div class="cc-panel__body">
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
+          <app-radio
+            name="type"
+            value="LECTURE"
+            @click="handleSelectType"
+            :checked="payload.type === 'LECTURE'"
+            class="mr-6"
+            >Bài giảng</app-radio
+          >
+          <app-radio
+            name="type"
+            @click="handleSelectType"
+            value="COURSE"
+            :checked="payload.type === 'COURSE'"
+            >Khoá học</app-radio
+          >
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="cgi-form-group mb-4">
+              <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
+              <CourseSelectLevel
+                :defaultValue="payload.level"
+                @handleChangeLevel="handleChangeLevel"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="cgi-form-group mb-4">
+              <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
+              <CourseSelectSubject
+                :defaultValue="payload.subject"
+                @handleChangeSubject="handleChangeSubject"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="cgi-form-group mb-4">
-            <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
-            <CourseSelectSubject
-              :defaultValue="payload.subject"
-              @handleChangeSubject="handleChangeSubject"
-            />
-          </div>
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">
+            Tên {{ name }}
+            <span class="caption text-sub">(Tối đa 60 ký tự)</span>
+          </h2>
+          <app-input :counter="60" v-model="payload.name" />
         </div>
-      </div>
 
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Tên {{ name }}
-          <span class="caption text-sub">(Tối đa 60 ký tự)</span>
-        </h2>
-        <app-input :counter="60" v-model="payload.name" />
-      </div>
-
-      <CourseBenefit
-        :name="name"
-        :benefit="payload.benefit"
-        @removeBenefit="removeBenefit"
-        @addBenefit="addBenefit"
-      />
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
-        <app-editor
-          class="bg-input-gray mb-3"
-          :sticky-offset="`{ top: 70, bottom: 0 }`"
-          v-model="payload.description"
+        <CourseBenefit
+          :name="name"
+          :benefit="payload.benefit"
+          @removeBenefit="removeBenefit"
+          @addBenefit="addBenefit"
         />
-        <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
+          <app-editor
+            class="bg-input-gray mb-3"
+            :sticky-offset="`{ top: 70, bottom: 0 }`"
+            v-model="payload.description"
+          />
+          <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+        </div>
+
+        <CourseSelectAvatar
+          :defaultAvatar="get(general, 'avatar.medium', '')"
+          @handleSelectAvatar="handleSelectAvatar"
+        />
       </div>
 
-      <CourseSelectAvatar
-        :defaultAvatar="get(general, 'avatar.medium', '')"
-        @handleSelectAvatar="handleSelectAvatar"
+      <app-modal-confirm
+        v-if="showModalConfirm"
+        :confirmLoading="confirmLoading"
+        @ok="handleOk"
+        @cancel="handleCancel"
       />
     </div>
 
-    <app-modal-confirm
-      v-if="showModalConfirm"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
-      @cancel="handleCancel"
-    />
+    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit" />
   </div>
 </template>
 
