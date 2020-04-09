@@ -88,16 +88,16 @@
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
-            :value="numeral(payload.discount).format()"
-            @input="handleChangeDiscount"
-            :message="errorMessage.discount"
-            :validate="validateProps.discount"
+            :value="numeral(payload.price).format()"
+            @input="handleChangePrice"
+            :message="errorMessage.price"
+            :validate="validateProps.price"
             type="text"
             class="mb-0"
           ></app-input>
         </div>
-        <div class="percent_discount__ElearningCreate" v-show="showPercent">
-          <span>{{percent_discount}}</span>
+        <div class="percent_price__ElearningCreate" v-show="showPercent">
+          <span>{{percent_price}}</span>
         </div>
       </div>
     </div>
@@ -124,18 +124,9 @@ import { validatePrice } from "~/utils/validations";
 import * as yup from "yup";
 const schema = yup.object().shape({
   comment_allow: yup.string().required(),
-  free: yup.string().required(),
   elearning_id: yup.string().required(),
-  discount: yup.number().required().positive().integer(),
-  fee: yup.number().required().positive().integer(),
-  privacy: yup.string().required(),
-})
-const schema_update = yup.object().shape({
-  comment_allow: yup.string().required(),
-  free: yup.string().required(),
-  elearning_id: yup.string().required(),
-  discount: yup.number().required().positive().integer(),
-  fee: yup.number().required().positive().integer(),
+  price: yup.number().required(),
+  fee: yup.number().required(),
   privacy: yup.string().required(),
 })
 export default {
@@ -146,26 +137,26 @@ export default {
 
   data() {
     return {
-      percent_discount:"",
+      percent_price:"",
       showPercent:false,
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
-        comment_allow: 1,
-        discount: 0,
+        comment_allow: null,
+        price: null,
         elearning_id: get(this, "general.id", ""),
-        fee: 0,
-        free: 1,
+        fee: null,
+        free: null,
         passcode: "",
-        privacy: "PUBLIC"
+        privacy: null
       },
       errorMessage:{
         fee:"",
-        discount:""
+        price:""
       },
       validateProps:{
         fee:"",
-        discount:""
+        price:""
       },
       isSubmit:false,
     };
@@ -185,22 +176,20 @@ export default {
         const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
         this.payload.comment_allow = comment_allow;
 
-        if (get(this, "setting.discount", 0)) {
-          this.payload.discount = get(this, "setting.discount", 0);
+        if (get(this, "setting.price", 0)) {
+          this.payload.price = get(this, "setting.price", 0);
         }
 
         if (get(this, "setting.fee", 0)) {
           this.payload.fee = get(this, "setting.fee", 0);
         }
-
+        
         if (get(this, "setting.privacy", "")) {
           this.payload.privacy = get(this, "setting.privacy", "");
         }
-        this.payload.free = get(this, "setting.free", false) ? 1 : 0;
         const fee = toNumber(get(this, "setting.fee", 0));
-        const discount = toNumber(get(this, "setting.discount", 0));
-        this.discount = discount;
-        this.percent_discount= numeral((discount-fee)/fee).format('0%')
+        const price = toNumber(get(this, "setting.price", 0));
+        this.percent_price= numeral((price-fee)/fee).format('0%')
       },
       deep: true
     },
@@ -210,25 +199,12 @@ export default {
         const payload = createPayloadCourseSetting(this.payload);
         const elearning_id = getParamQuery("elearning_id");
         if (elearning_id) {
-          if(!payload.free){
-            console.log(payload)
-            if(payload.discount>payload.fee){
-              this.validateProps.discount =2;
-              this.errorMessage.discount = "Giá khuyến mại phải thấp hơn giá bán";
-              that.showPercent = false
-              that.isSubmit = false
-            }
-            else{
-              that.percent_discount=numeral((payload.discount-payload.fee)/payload.fee).format('0%')
-              that.showPercent =true
-              schema_update.isValid(payload).then(function(valid) {
-                that.isSubmit = valid;
-              });
-              return;
-            }
-          }
-          else{
-            that.isSubmit = true;
+          schema.isValid(payload).then(function(valid) {
+            that.isSubmit = valid;
+          });
+          
+          if(this.payload.free == 1){
+            console.log('hello')
           }
         }
         
@@ -288,19 +264,19 @@ export default {
       this.payload.free = free;
     },
 
-    handleChangeDiscount(discount) {
-      this.validateProps.discount= "";
-      if(!discount){
-        this.validateProps.discount =2;
-        this.errorMessage.discount = "Trường này là bắt buộc";
+    handleChangePrice(price) {
+      this.validateProps.price= "";
+      if(!price){
+        this.validateProps.price =2;
+        this.errorMessage.price = "Trường này là bắt buộc";
         this.showPercent = false
-      }else if(validatePrice(discount)){
-        this.payload.discount = discount;
-        this.validateProps.discount =1;
+      }else if(validatePrice(price)){
+        this.payload.price = price;
+        this.validateProps.price =1;
         }
-      else if(!validatePrice(discount)){
-        this.validateProps.discount =2;
-        this.errorMessage.discount = "Tham số không hợp lệ";
+      else if(!validatePrice(price)){
+        this.validateProps.price =2;
+        this.errorMessage.price = "Tham số không hợp lệ";
         this.showPercent = false
         this.isSubmit =false;
       }
@@ -357,7 +333,7 @@ export default {
 </script>
 
 <style lang="scss">
-.percent_discount__ElearningCreate{
+.percent_price__ElearningCreate{
   background: #32AF85;
   span{
     color: #ffffff;
