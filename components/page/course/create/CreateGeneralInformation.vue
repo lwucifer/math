@@ -1,89 +1,98 @@
 <template>
-  <div class="cc-panel bg-white">
-    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit" />
-    <div class="cc-panel__title">
-      <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
-    </div>
-
-    <div class="cc-panel__body">
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
-        <app-radio
-          name="type"
-          value="LECTURE"
-          @click="handleSelectType"
-          :checked="payload.type === 'LECTURE'"
-          class="mr-6"
-          >Bài giảng</app-radio
-        >
-        <app-radio
-          name="type"
-          @click="handleSelectType"
-          value="COURSE"
-          :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio
-        >
+  <div>
+    <div class="cc-panel bg-white">
+      <div class="cc-panel__title">
+        <h1 class="cc-panel__heading heading-5 text-primary">
+          Thông tin chung
+        </h1>
       </div>
 
-      <div class="row">
-        <div class="col-md-3">
-          <div class="cgi-form-group mb-4">
-            <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
-            <CourseSelectLevel
-              :defaultValue="payload.level"
-              @handleChangeLevel="handleChangeLevel"
-            />
+      <div class="cc-panel__body">
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">Loại hình học tập</h2>
+          <app-radio
+            name="type"
+            value="LECTURE"
+            @click="handleSelectType"
+            :checked="payload.type === 'LECTURE'"
+            class="mr-6"
+            >Bài giảng</app-radio
+          >
+          <app-radio
+            name="type"
+            @click="handleSelectType"
+            value="COURSE"
+            :checked="payload.type === 'COURSE'"
+            >Khoá học</app-radio
+          >
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="cgi-form-group mb-4">
+              <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
+              <CourseSelectLevel
+                :defaultValue="payload.level"
+                @handleChangeLevel="handleChangeLevel"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="cgi-form-group mb-4">
+              <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
+              <CourseSelectSubject
+                :defaultValue="payload.subject"
+                @handleChangeSubject="handleChangeSubject"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="cgi-form-group mb-4">
-            <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
-            <CourseSelectSubject
-              :defaultValue="payload.subject"
-              @handleChangeSubject="handleChangeSubject"
-            />
-          </div>
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">
+            Tên {{ name }}
+            <span class="caption text-sub">(Tối đa 60 ký tự)</span>
+          </h2>
+          <app-input :counter="60" v-model="payload.name" />
         </div>
-      </div>
 
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">
-          Tên {{ name }}
-          <span class="caption text-sub">(Tối đa 60 ký tự)</span>
-        </h2>
-        <app-input :counter="60" v-model="payload.name" />
-      </div>
-
-      <CourseBenefit
-        :name="name"
-        :benefit="payload.benefit"
-        @removeBenefit="removeBenefit"
-        @addBenefit="addBenefit"
-      />
-
-      <div class="cgi-form-group mb-4">
-        <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
-        <app-editor
-          class="bg-input-gray mb-3"
-          :sticky-offset="`{ top: 70, bottom: 0 }`"
-          v-model="payload.description"
+        <CourseBenefit
+          :name="name"
+          :benefit="payload.benefit"
+          @removeBenefit="removeBenefit"
+          @addBenefit="addBenefit"
         />
-        <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+
+        <div class="cgi-form-group mb-4">
+          <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
+          <app-editor
+            class="bg-input-gray mb-3"
+            :sticky-offset="`{ top: 70, bottom: 0 }`"
+            v-model="payload.description"
+          />
+          <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+        </div>
+
+        <CourseSelectAvatar
+          :defaultAvatar="get(general, 'avatar.medium', '')"
+          @handleSelectAvatar="handleSelectAvatar"
+        />
+
+        <create-action
+          @handleCLickSave="handleCLickSave"
+          :isSubmit="isSubmit"
+          @handleDelete="handleReset"
+        />
       </div>
 
-      <CourseSelectAvatar
-        :defaultAvatar="get(general, 'avatar.medium', '')"
-        @handleSelectAvatar="handleSelectAvatar"
+      <app-modal-confirm
+        v-if="showModalConfirm"
+        :confirmLoading="confirmLoading"
+        @ok="handleOk"
+        @cancel="handleCancel"
       />
     </div>
-
-    <app-modal-confirm
-      v-if="showModalConfirm"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
-      @cancel="handleCancel"
-    />
   </div>
 </template>
 
@@ -97,7 +106,7 @@ import {
   useEffect,
   getParamQuery,
   redirectWithParams,
-  image
+  image,
 } from "~/utils/common";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -118,7 +127,7 @@ const schema = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 const schema_update = yup.object().shape({
@@ -127,7 +136,7 @@ const schema_update = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 export default {
@@ -139,7 +148,7 @@ export default {
     CourseSelectAvatar,
     IconCheckCircle,
     IconTrashAlt,
-    CourseBenefit
+    CourseBenefit,
   },
 
   data() {
@@ -152,10 +161,10 @@ export default {
         level: "",
         name: "",
         subject: "",
-        type: ""
+        type: "",
       },
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -181,34 +190,43 @@ export default {
           that.isSubmit = valid;
         });
       },
-      deep: true
+      deep: true,
     },
     general: {
       handler: function() {
         this.payload.benefit = [...get(this, "general.benefit", [])];
         this.payload.description = get(this, "general.description", "");
         this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject", "");
+        this.payload.subject = get(this, "general.subject.id", "");
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {
           this.payload.elearning_id = get(this, "general.id", "");
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
-    }
+    },
   },
 
   methods: {
+    handleReset() {
+      this.payload.benefit = [...get(this, "general.benefit", [])];
+      this.payload.description = get(this, "general.description", "");
+      this.payload.name = get(this, "general.name", "");
+      this.payload.subject = get(this, "general.subject", "");
+      this.payload.level = get(this, "general.level", "");
+      this.payload.type = get(this, "general.type", "");
+    },
+
     removeBenefit(index) {
       this.payload.benefit = this.payload.benefit.filter(
         (item, i) => i !== index
@@ -224,8 +242,8 @@ export default {
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         };
         this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -269,10 +287,10 @@ export default {
 
       if (get(result, "success", false)) {
         const params = {
-          elearning_id: get(result, "data.elearning_id", "")
+          elearning_id: get(result, "data.elearning_id", ""),
         };
         const options = {
-          params
+          params,
         };
         await this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -290,8 +308,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -305,8 +323,8 @@ export default {
     },
 
     numeral,
-    get
-  }
+    get,
+  },
 };
 </script>
 

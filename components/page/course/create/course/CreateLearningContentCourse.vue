@@ -25,9 +25,12 @@
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
-              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowChapter=!isShowChapter">
-                <IconAngleDown class="icon" v-if="!isShowChapter"/>
-                <IconAngleUp class="icon" v-else/>
+              <button
+                class="cc-box__btn cc-box__btn-collapse"
+                @click="isShowChapter = !isShowChapter"
+              >
+                <IconAngleDown class="icon" v-if="!isShowChapter" />
+                <IconAngleUp class="icon" v-else />
               </button>
             </div>
           </div>
@@ -36,6 +39,7 @@
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
+              @handleCreateChapterSuccess="handleCreateChapterSuccess"
             />
 
             <ListChapter @handleAddLesson="handleAddLesson" />
@@ -90,14 +94,14 @@ export default {
     CreateChapter,
     ListChapter,
     EditCourseName,
-    IconAngleUp
+    IconAngleUp,
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
-      isShowChapter:true
+      isShowChapter: true,
     };
   },
 
@@ -107,15 +111,19 @@ export default {
 
   computed: {
     ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
+      lessons: "lessons",
     }),
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
+      general: "general",
+    }),
   },
 
   methods: {
     get,
+
+    handleCreateChapterSuccess() {
+      this.isShowFormAddChapter = false;
+    },
 
     handleAddLesson(chapter) {
       this.chapter = chapter;
@@ -133,8 +141,8 @@ export default {
 
     handleCancelAddChapter() {
       this.isShowFormAddChapter = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
