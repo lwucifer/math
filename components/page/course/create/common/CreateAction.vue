@@ -11,16 +11,16 @@
         Quay lại
     </app-button>-->
 
-      <div class="header-create__right" v-if="isShowAction">
+      <div class="create-action__right" v-if="isShowAction">
         <app-button
           @click="handleCLickSave"
-          class="header-create__btn mr-4"
+          class="create-action__btn mr-4"
           square
           :disabled="!isSubmit"
           >Lưu</app-button
         >
         <app-button
-          class="header-create__btn"
+          class="create-action__btn"
           color="secondary"
           square
           @click="$emit('handleDelete')"
