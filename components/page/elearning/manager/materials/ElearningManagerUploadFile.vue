@@ -21,7 +21,7 @@
     <div class="wrapUploadFile__ElearningManager">
       <div class="titleFormatFile__ElearningManager">
         <span>
-          *Các định dạng file hỗ trợ .mp4, .pdf, .docx, .doc, .xls, .xlsx, .ppt.
+          *Các định dạng file hỗ trợ .m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv.
         </span>
       </div>
       <div
@@ -109,7 +109,7 @@
           <input
             ref="upload-input"
             type="file"
-            accept=".xlsx, .xls, .doc, .docx, .pdf, .png, .mp4, .m4v, .ppt"
+            accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
             @change="handleClick"
           />
         </div>
@@ -296,7 +296,7 @@
           this.currentStatus = STATUS['SUCCESS']
           this.onSuccess && this.onSuccess(res)
         } else {
-          let reason = res && get(data, "message", false) ? get(data, "message") : DEFAULT_ERROR_REASON
+          let reason = res && get(res, "message", false) ? get(res, "message") : DEFAULT_ERROR_REASON
           this.hasError(DEFAULT_ERROR_MESSAGE, reason)
         }
 
@@ -320,7 +320,7 @@
       },
       isValidFile(file) {
         if (!this.isValidType(file)) {
-          this.hasError(DEFAULT_ERROR_MESSAGE, 'Chỉ cho phép tải các file có phần mở rộng .doc, .docx, .pdf, .mp3, .mp4, .m4v, .png')
+          this.hasError(DEFAULT_ERROR_MESSAGE, 'Chỉ cho phép tải các file có phần mở rộng .m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv')
           return false
         }
         if (!this.isValidSize(file)) {
@@ -334,7 +334,7 @@
         return true
       },
       isValidType(file) {
-        return /\.(png|pdf|mp4|mp3|m4v|doc|docx)$/.test(file.name.toLowerCase())
+        return /\.(m4a|mp3|jpeg|jpg|png|gif|bmp|docx|doc|ppt|pptx|pdf|txt|mp4|mov|f4v|m4v|mp4a|mp4v|3gp|3g2|smil|flv)$/.test(file.name.toLowerCase())
       },
       isValidSize(file) {
         const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE
