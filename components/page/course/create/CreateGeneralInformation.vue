@@ -2,7 +2,9 @@
   <div>
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">
+          Thông tin chung
+        </h1>
       </div>
 
       <div class="cc-panel__body">
@@ -14,13 +16,15 @@
             @click="handleSelectType"
             :checked="payload.type === 'LECTURE'"
             class="mr-6"
-          >Bài giảng</app-radio>
+            >Bài giảng</app-radio
+          >
           <app-radio
             name="type"
             @click="handleSelectType"
             value="COURSE"
             :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio>
+            >Khoá học</app-radio
+          >
         </div>
 
         <div class="row">
@@ -74,6 +78,12 @@
           :defaultAvatar="get(general, 'avatar.medium', '')"
           @handleSelectAvatar="handleSelectAvatar"
         />
+
+        <create-action
+          @handleCLickSave="handleCLickSave"
+          :isSubmit="isSubmit"
+          @handleDelete="handleReset"
+        />
       </div>
 
       <app-modal-confirm
@@ -83,12 +93,6 @@
         @cancel="handleCancel"
       />
     </div>
-
-    <create-action
-      @handleCLickSave="handleCLickSave"
-      :isSubmit="isSubmit"
-      @handleDelete="handleReset"
-    />
   </div>
 </template>
 
@@ -102,7 +106,7 @@ import {
   useEffect,
   getParamQuery,
   redirectWithParams,
-  image
+  image,
 } from "~/utils/common";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -123,7 +127,7 @@ const schema = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 const schema_update = yup.object().shape({
@@ -132,7 +136,7 @@ const schema_update = yup.object().shape({
   level: yup.string().required(),
   name: yup.string().required(),
   subject: yup.string().required(),
-  type: yup.string().required()
+  type: yup.string().required(),
 });
 
 export default {
@@ -144,7 +148,7 @@ export default {
     CourseSelectAvatar,
     IconCheckCircle,
     IconTrashAlt,
-    CourseBenefit
+    CourseBenefit,
   },
 
   data() {
@@ -157,10 +161,10 @@ export default {
         level: "",
         name: "",
         subject: "",
-        type: ""
+        type: "",
       },
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -186,31 +190,31 @@ export default {
           that.isSubmit = valid;
         });
       },
-      deep: true
+      deep: true,
     },
     general: {
       handler: function() {
         this.payload.benefit = [...get(this, "general.benefit", [])];
         this.payload.description = get(this, "general.description", "");
         this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject", "");
+        this.payload.subject = get(this, "general.subject.id", "");
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {
           this.payload.elearning_id = get(this, "general.id", "");
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
-    }
+    },
   },
 
   methods: {
@@ -238,8 +242,8 @@ export default {
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         };
         this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -283,10 +287,10 @@ export default {
 
       if (get(result, "success", false)) {
         const params = {
-          elearning_id: get(result, "data.elearning_id", "")
+          elearning_id: get(result, "data.elearning_id", ""),
         };
         const options = {
-          params
+          params,
         };
         await this.$store.dispatch(
           `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
@@ -304,8 +308,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -319,8 +323,8 @@ export default {
     },
 
     numeral,
-    get
-  }
+    get,
+  },
 };
 </script>
 
