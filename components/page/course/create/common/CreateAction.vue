@@ -4,21 +4,29 @@
         class="create-action__btn create-action__btn-back"
         outline
         square
-        nuxt 
+        nuxt
         to="./"
       >
         <IconArrowLeft class="icon mr-2" />
         Quay lại
     </app-button>-->
 
-    <div class="create-action__right" v-if="isShowAction">
-      <app-button
-        @click="handleCLickSave"
-        class="create-action__btn mr-4"
-        square
-        :disabled="!isSubmit"
-      >Lưu</app-button>
-      <app-button class="create-action__btn" color="secondary" square>Xoá</app-button>
+      <div class="header-create__right" v-if="isShowAction">
+        <app-button
+          @click="handleCLickSave"
+          class="header-create__btn mr-4"
+          square
+          :disabled="!isSubmit"
+          >Lưu</app-button
+        >
+        <app-button
+          class="header-create__btn"
+          color="secondary"
+          square
+          @click="$emit('handleDelete')"
+          >Xoá</app-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -29,18 +37,18 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconArrowLeft
+    IconArrowLeft,
   },
 
   props: {
     isSubmit: {
       type: Boolean,
-      default: true
+      default: true,
     },
     isShowAction: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   methods: {
@@ -48,8 +56,8 @@ export default {
       this.$emit("handleCLickSave");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
 

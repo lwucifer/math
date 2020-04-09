@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="ce-item d-flex align-items-center justify-content-between">
-      <EditChapterName :defaultName="get(this,'chapter',{})"
-                        @handleRefreshChapters="$emit('handleRefreshChapters')"
+      <EditChapterName
+        :defaultName="get(this, 'chapter', {})"
+        @handleRefreshChapters="$emit('handleRefreshChapters')"
       />
       <div class="ce-item__right">
         <a href @click.prevent="handleAddLesson">Thêm bài học</a>
@@ -36,7 +37,7 @@ const IconTrashAlt = () =>
 import { get, toNumber } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
-import EditChapterName from "~/components/page/course/create/course/EditChapterName"
+import EditChapterName from "~/components/page/course/create/course/EditChapterName";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
@@ -48,7 +49,7 @@ export default {
     CreateLessonOfChapter,
     IconAngleDown,
     LessonDetail,
-    EditChapterName
+    EditChapterName,
   },
 
   data() {
@@ -60,8 +61,8 @@ export default {
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
+      general: "general",
+    }),
   },
 
   created() {
@@ -75,19 +76,19 @@ export default {
           get(this, "chapter.lessons", [])
         );
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   props: {
     index: {
       type: Number,
-      default: 0
+      default: 0,
     },
     chapter: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   methods: {
@@ -95,7 +96,7 @@ export default {
 
     setIndex(lessons) {
       let index = 0;
-      lessons.map(lesson => {
+      lessons.map((lesson) => {
         if (toNumber(get(lesson, "index", 0)) > index) {
           index = toNumber(get(lesson, "index", 0));
         }
@@ -111,7 +112,7 @@ export default {
       this.isShowCreateLessonOfChapter = true;
       let el = this.$el.getElementsByClassName("create-lesson")[0];
       el.scrollIntoView();
-    }
-  }
+    },
+  },
 };
 </script>

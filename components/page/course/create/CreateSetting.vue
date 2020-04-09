@@ -121,7 +121,6 @@ import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { validatePrice } from "~/utils/validations";
-import { required} from "vuelidate/lib/validators";
 import * as yup from "yup";
 const schema = yup.object().shape({
   comment_allow: yup.string().required(),
@@ -170,10 +169,6 @@ export default {
       },
       isSubmit:false,
     };
-  },
-  validations:{
-    fee:{required},
-    discount:{required}
   },
   created() {
     this.fetchSetting();
@@ -234,7 +229,6 @@ export default {
           }
           else{
             that.isSubmit = true;
-            console.log('hello')
           }
         }
         

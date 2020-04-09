@@ -48,17 +48,17 @@ export default {
     return {
       payload: {
         elearning_id: "",
-        name: ""
+        name: "",
       },
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-chapter", {
-      chapters: "chapters"
-    })
+      chapters: "chapters",
+    }),
   },
 
   methods: {
@@ -71,8 +71,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.payload.elearning_id = elearning_id;
       const res = await this.$store.dispatch(
@@ -83,15 +83,16 @@ export default {
       this.handleCancelModal();
 
       if (get(res, "success", false)) {
-        this.$toasted.success(get(res, "message", ""));
+        this.$toasted.success(get(res, "message", "Thành công"));
         this.payload.name = "";
+        this.$emit("handleCreateChapterSuccess");
         this.$store.dispatch(
           `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
           options
         );
         return;
       }
-      this.$toasted.error(get(res, "message", ""));
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {
@@ -103,7 +104,7 @@ export default {
       this.$emit("handleCancelAddChapter");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
