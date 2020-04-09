@@ -1,5 +1,6 @@
 <template>
   <div class="elearning-wrapper">
+    {{classes}}xxxxxxxxxxxxxxxxxxx
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
@@ -219,18 +220,21 @@ export default {
       listQuery: {
         page: 1,
         size: 10
-      }
+      },
+      query_status: ['STARTING', 'ACTIVE', 'DRAFT', 'FINISHED']
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(actionTypes.CREATING_OLCLASSES, {
+      classes: 'Olclasses'
+    }),
   },
 
   methods: {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
     },
     submit() {
       console.log("[Component] Elearning classroom: submitted");
@@ -253,15 +257,15 @@ export default {
     selectRow(data) {
       console.log("change row: ", data);
     },
+
     async getList() {
-      const elearningType = "1";
-      this.listQuery.type = elearningType;
-      let params = {
-        type: elearningType
-      };
-      params = { ...this.listQuery };
+      this.listQuery.class_status = "FINISHED";
+      this.listQuery.search_type = "Course";
+      this.listQuery.query_date = "";
+      this.listQuery.query = "";
+      let params = { ...this.listQuery };
       this.$store.dispatch(
-        `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`,
+        `elearning/creating/creating-olclasses/${actionTypes.CREATING_OLCLASSES.LIST}`,
         { params }
       );
     }

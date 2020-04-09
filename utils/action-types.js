@@ -143,6 +143,13 @@ export const CREATING_ANSWER = {
   DELETE: "creatingAnswerDelete",
 };
 
+export const CREATING_OLCLASSES = {
+  LIST: "creatingOlclassesList",
+  ADD: "creatingOlclassesAdd",
+  EDIT: "creatingOlclassesEdit",
+  DELETE: "creatingOlclassesDelete",
+};
+
 export const CREATING_CHAPTER = {
   LIST: "creatingChapterList",
   ADD: "creatingChapterAdd",
