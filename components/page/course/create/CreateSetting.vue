@@ -67,12 +67,7 @@
       <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
-          <app-input
-            :value="payload.fee ? numeral(payload.fee).format() : ''"
-            @input="handleChangeFee"
-            type="text"
-            class="mb-0"
-          ></app-input>
+          <app-input v-model="payload.fee" type="text" class="mb-0"></app-input>
         </div>
       </div>
 
@@ -80,8 +75,7 @@
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
-            :value="payload.price ? numeral(payload.price).format() : ''"
-            @input="handleChangePrice"
+            v-model="payload.price"
             type="text"
             class="mb-0"
           ></app-input>
@@ -162,6 +156,18 @@ export default {
       },
       deep: true,
     },
+    "payload.price": {
+      handler: function() {
+        this.payload.price = numeral(this.payload.price).format();
+        this.handleSetPercent();
+      },
+    },
+    "payload.fee": {
+      handler: function() {
+        this.payload.fee = numeral(this.payload.fee).format();
+        this.handleSetPercent();
+      },
+    },
   },
 
   computed: {
@@ -193,11 +199,6 @@ export default {
       this.payload.privacy = privacy;
     },
 
-    handleChangeFee(fee) {
-      this.payload.fee = fee;
-      this.handleSetPercent();
-    },
-
     handleChangeFree(free) {
       this.free = free;
       if (free != 1) {
@@ -212,11 +213,6 @@ export default {
       if (_fee && _price) {
         this.percent_price = numeral((_price - _fee) / _fee).format("0%");
       }
-    },
-
-    handleChangePrice(price) {
-      this.payload.price = price;
-      this.handleSetPercent();
     },
 
     async handleCLickSave() {
