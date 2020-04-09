@@ -391,6 +391,7 @@ export default {
     },
 
     hasResults() {
+      return false;
       return this.filteredUsers && this.filteredUsers.length
         ? this.filteredUsers.length
         : 0;

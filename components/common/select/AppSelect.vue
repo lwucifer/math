@@ -114,6 +114,7 @@
 </template>
 
 <script>
+import { uniqWith } from "lodash";
 const IconCaretDown = () => import("~/assets/svg/icons/caret-down.svg?inline");
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
@@ -167,7 +168,8 @@ export default {
       search: "",
       localValue: ["null", "undefined"].includes(typeof this.value)
         ? this.defaultValue
-        : this.value
+        : this.value,
+      tmpOptions: this.options
     };
   },
 
@@ -216,6 +218,12 @@ export default {
 
     localValue(newValue) {
       this.$emit("change", newValue);
+    },
+
+    options(newValue) {
+      if (this.mode !== "tags" || !newValue.length) return;
+      const tmp = this.tmpOptions.concat(newValue);
+      this.tmpOptions = uniqWith(tmp, (a, b) => a.value === b.value);
     }
   },
 
