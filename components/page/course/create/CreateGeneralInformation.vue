@@ -193,7 +193,7 @@ export default {
         this.payload.benefit = [...get(this, "general.benefit", [])];
         this.payload.description = get(this, "general.description", "");
         this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject", "");
+        this.payload.subject = get(this, "general.subject.id", "");
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {
