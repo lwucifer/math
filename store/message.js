@@ -22,7 +22,9 @@ const state = () => ({
     messageList: {},
     groupListDetail: {},
     messageEmit: {},
-    messageOn: {}
+    messageOn: {},
+    closeCreate: true,
+    isGroupState: false,
 });
 
 /**
@@ -200,7 +202,7 @@ const actions = {
             console.log("[Personal Message] list.err", err);
             return err;
         }
-    }
+    },
 };
 
 /**
@@ -227,7 +229,11 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_ON_MESSAGE](state, _messageOn) {
         state.messageOn = _messageOn;
-    }
+    },
+    [mutationTypes.MESSAGE_GROUP.EMIT_CLOSE_FALSE](state, _close, _isGroup) {
+        state.closeCreate = _close;
+        state.closeCreate = _isGroup;
+    },
 };
 
 export default {
@@ -235,5 +241,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

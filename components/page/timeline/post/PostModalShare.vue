@@ -30,17 +30,24 @@
 
       <div class="pms-footer__right">
         <app-button class="pms-footer__btn mr-4" color="info" square @click="$emit('cancel')">Huỷ bỏ</app-button>
-        <app-button class="pms-footer__btn" color="primary" :loading="btnSubmitLoading" square @click="submit">Chia sẻ</app-button>
+        <app-button
+          class="pms-footer__btn"
+          color="primary"
+          :loading="btnSubmitLoading"
+          square
+          @click="submit"
+        >Chia sẻ</app-button>
       </div>
     </div>
   </app-modal>
 </template>
 
 <script>
+import { get } from "lodash";
 import { Editor, EditorContent } from "tiptap";
 import { Placeholder } from "tiptap-extensions";
 
-import { SHARE_OPTS } from "~/utils/constants";
+import { SHARE_OPTS, POST_TYPES } from "~/utils/constants";
 
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
@@ -116,7 +123,10 @@ export default {
       this.btnSubmitLoading = true;
 
       const payload = {
-        post_id: this.post.post_id,
+        post_id:
+          this.post.type === POST_TYPES.SHARE
+            ? get(this.post, "parent_post.post_id", null)
+            : this.post.post_id,
         content: this.editor.getHTML(),
         list_tag: null,
         label_id: null
@@ -124,9 +134,9 @@ export default {
 
       const cb = () => {
         this.btnSubmitLoading = false;
-      }
+      };
 
-      this.$emit('share', payload, cb)
+      this.$emit("share", payload, cb);
     }
   }
 };

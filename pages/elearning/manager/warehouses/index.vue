@@ -54,12 +54,12 @@
       return {
         pagination: {
           totalElements: 0,
-          last: false,
           totalPages: 1,
+          numberOfElements: 0,
+          last: false,
           size: 10,
           number: 0,
           first: true,
-          numberOfElements: 0
         },
         params: {
           page: 1,
@@ -96,7 +96,14 @@
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`, {params}
           )
           this.list = this.get(this.detailInfo, 'data.content', [])
-          this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
+          this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
+          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+          // this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
         } catch (e) {
 
         } finally {
@@ -118,6 +125,7 @@
         this.refreshData()
       },
       updatePagination(val) {
+        console.log('update pagination: ', val)
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
         this.params.size = val.size
       },
