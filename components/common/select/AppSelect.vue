@@ -12,7 +12,7 @@
           :key="item.value"
           class="ma-1"
           show-close
-          @close="handleCloseTag(item, index)"
+          @close.stop="handleCloseTag(item, index)"
         >{{ item.text }}</app-tag>
 
         <div class="app-select__field">
@@ -29,7 +29,10 @@
       </div>
 
       <div class="app-select__options" v-show="active">
-        <div v-if="!optionsVisible.length" class="app-select__option">{{ emptyMessage }}</div>
+        <div
+          v-if="!optionsVisible.length && emptyMessage"
+          class="app-select__option text-sub text-center"
+        >{{ emptyMessage }}</div>
 
         <div
           v-for="option in optionsVisible"
@@ -94,7 +97,10 @@
       </div>
 
       <div class="app-select__options" v-show="active">
-        <div v-if="!options.length" class="app-select__option">{{ emptyMessage }}</div>
+        <div
+          v-if="!options.length && emptyMessage"
+          class="app-select__option text-sub"
+        >{{ emptyMessage }}</div>
 
         <div
           v-for="option in options"
@@ -114,6 +120,7 @@
 </template>
 
 <script>
+import { uniqWith } from "lodash";
 const IconCaretDown = () => import("~/assets/svg/icons/caret-down.svg?inline");
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
@@ -167,7 +174,8 @@ export default {
       search: "",
       localValue: ["null", "undefined"].includes(typeof this.value)
         ? this.defaultValue
-        : this.value
+        : this.value,
+      tmpOptions: this.options
     };
   },
 
@@ -184,7 +192,7 @@ export default {
     selected() {
       if (this.mode === "tags") {
         return this.localValue.map(id => {
-          const [optionItem = {}] = this.options.filter(
+          const [optionItem = {}] = this.tmpOptions.filter(
             option => option.value === id
           );
           return optionItem;
@@ -215,7 +223,13 @@ export default {
     },
 
     localValue(newValue) {
-      this.$emit("change", newValue);
+      this.$emit("change", newValue, this.selected);
+    },
+
+    options(newValue) {
+      if (this.mode !== "tags" || !newValue.length) return;
+      const tmp = this.tmpOptions.concat(newValue);
+      this.tmpOptions = uniqWith(tmp, (a, b) => a.value === b.value);
     }
   },
 
