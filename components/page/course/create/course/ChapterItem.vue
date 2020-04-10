@@ -8,8 +8,8 @@
       <div class="ce-item__right d-flex">
         <a href @click.prevent="handleAddLesson">Thêm bài học</a>
         <button
-            class="cc-box__btn cc-box__btn-collapse"
-            @click="isShowLesson = !isShowLesson"
+          class="cc-box__btn cc-box__btn-collapse"
+          @click="isShowLesson = !isShowLesson"
         >
           <IconAngleDown class="icon" v-if="!isShowLesson" />
           <IconAngleUp class="icon" v-else />
@@ -17,24 +17,23 @@
       </div>
     </div>
 
-    <div v-if="isShowLesson">
-      <LessonDetail
-      v-for="(lesson, index) in get(chapter, 'lessons', [])"
-      :key="lesson.id"
-      :index="index"
-      :lesson="lesson"
-      @refreshLessons="$emit('handleRefreshChapters')"
-    />
-    </div>
-
-    <div class="create-lesson"></div>
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
       @handleCancel="handleCancel"
-      :indexCreateLesson="indexCreateLesson"
       @refreshLessons="$emit('handleRefreshChapters')"
     />
+
+    <div v-if="isShowLesson">
+      <LessonDetail
+        v-for="(lesson, index) in get(chapter, 'lessons', [])"
+        :key="lesson.id"
+        :index="index"
+        :lesson="lesson"
+        @refreshLessons="$emit('handleRefreshChapters')"
+      />
+    </div>
+
     <app-divider class="my-0" />
   </div>
 </template>
@@ -61,21 +60,21 @@ export default {
     IconAngleDown,
     IconAngleUp,
     LessonDetail,
-    EditChapterName,
+    EditChapterName
   },
 
   data() {
     return {
       isShowCreateLessonOfChapter: false,
       indexCreateLesson: 0,
-      isShowLesson:true
+      isShowLesson: true
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
+      general: "general"
+    })
   },
 
   created() {
@@ -89,19 +88,19 @@ export default {
           get(this, "chapter.lessons", [])
         );
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
 
   props: {
     index: {
       type: Number,
-      default: 0,
+      default: 0
     },
     chapter: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
 
   methods: {
@@ -109,7 +108,7 @@ export default {
 
     setIndex(lessons) {
       let index = 0;
-      lessons.map((lesson) => {
+      lessons.map(lesson => {
         if (toNumber(get(lesson, "index", 0)) > index) {
           index = toNumber(get(lesson, "index", 0));
         }
@@ -122,10 +121,8 @@ export default {
     },
 
     handleAddLesson() {
-      this.isShowCreateLessonOfChapter = true;
-      let el = this.$el.getElementsByClassName("create-lesson")[0];
-      el.scrollIntoView();
-    },
-  },
+      this.isShowCreateLessonOfChapter = !this.isShowCreateLessonOfChapter;
+    }
+  }
 };
 </script>
