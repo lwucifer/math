@@ -9,7 +9,8 @@
 
     <app-divider class="mt-3 mb-4" />
 
-    <app-input v-model="payload.name" placeholder="Điền tên tài liệu"/>
+    <h3 class="heading-6 mb-2 mt-3">Tên tài liệu</h3>
+    <app-input v-model="payload.name" placeholder="Điền tên tài liệu" />
 
     <div class="cc-tabs">
       <a
