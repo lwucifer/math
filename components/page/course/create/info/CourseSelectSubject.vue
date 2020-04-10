@@ -51,7 +51,7 @@ export default {
   methods: {
     handleChangeSubjects() {
       this.subject = this.subjects.filter(
-        subject => subject.name == this.defaultValue
+        subject => subject.id == this.defaultValue
       )[0];
     },
     get,

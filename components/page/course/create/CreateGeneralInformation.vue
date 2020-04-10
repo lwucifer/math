@@ -2,7 +2,9 @@
   <div>
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Thông tin chung</h1>
+        <h1 class="cc-panel__heading heading-5 text-primary">
+          Thông tin chung
+        </h1>
       </div>
 
       <div class="cc-panel__body">
@@ -14,13 +16,15 @@
             @click="handleSelectType"
             :checked="payload.type === 'LECTURE'"
             class="mr-6"
-          >Bài giảng</app-radio>
+            >Bài giảng</app-radio
+          >
           <app-radio
             name="type"
             @click="handleSelectType"
             value="COURSE"
             :checked="payload.type === 'COURSE'"
-          >Khoá học</app-radio>
+            >Khoá học</app-radio
+          >
         </div>
 
         <div class="row">
@@ -74,6 +78,12 @@
           :defaultAvatar="get(general, 'avatar.medium', '')"
           @handleSelectAvatar="handleSelectAvatar"
         />
+
+        <create-action
+          @handleCLickSave="handleCLickSave"
+          :isSubmit="isSubmit"
+          @handleDelete="handleReset"
+        />
       </div>
 
       <app-modal-confirm
@@ -83,12 +93,6 @@
         @cancel="handleCancel"
       />
     </div>
-
-    <create-action
-      @handleCLickSave="handleCLickSave"
-      :isSubmit="isSubmit"
-      @handleDelete="handleReset"
-    />
   </div>
 </template>
 
@@ -193,7 +197,7 @@ export default {
         this.payload.benefit = [...get(this, "general.benefit", [])];
         this.payload.description = get(this, "general.description", "");
         this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject", "");
+        this.payload.subject = get(this, "general.subject.id", "");
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {

@@ -54,35 +54,30 @@
 
 .comment-editor__button {
     padding: .65rem .75rem;
+    font-size: 2rem;
+    color: $color-text-gray-2;
 
-    svg {
+    .icon {
         display: block;
-        width: 2rem;
-        height: 2rem;
-        fill: $color-text-gray-2;
     }
 
-    &:nth-of-type(1) {
-        right: 1.1rem + 2rem + 1.4rem;
-    }
+    // &:nth-of-type(1) {
+    //     right: 1.1rem + 2rem + 1.4rem;
+    // }
 
-    &:nth-of-type(2) {
-        right: 1.1rem;
-    }
+    // &:nth-of-type(2) {
+    //     right: 1.1rem;
+    // }
 
     &.image {
         &:hover {
-            svg {
-                fill: $color-blue;
-            }
+            color: $color-blue;
         }
     }
 
     &.emoji {
         &:hover {
-            svg {
-                fill: $color-purple;
-            }
+            color: $color-purple;
         }
     }
 }

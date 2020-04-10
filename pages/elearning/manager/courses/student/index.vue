@@ -71,11 +71,11 @@ export default {
     IconFilter
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`elearning/courses/student/${actionTypes.ELEARNING_COURSES.LIST}`),
-    ]);
-  },
+  // async fetch({ params, query, store }) {
+  //   await Promise.all([
+  //     store.dispatch(`elearning/courses/student/${actionTypes.ELEARNING_COURSES.LIST}`),
+  //   ]);
+  // },
 
   data() {
     return {
@@ -187,9 +187,9 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/courses/student", {
-      student: "info"
-    })
+    // ...mapState("elearning/courses/student", {
+    //   student: "info"
+    // })
   },
 
   methods: {

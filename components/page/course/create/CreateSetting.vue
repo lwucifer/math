@@ -1,18 +1,10 @@
 <template>
   <div class="cc-panel bg-white mb-4">
-    <create-action @handleCLickSave="handleCLickSave" :isSubmit="isSubmit"/>
     <div class="cc-panel__title">
       <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
     </div>
 
     <div class="cc-panel__body">
-      <!-- <app-alert type="secondary" class="mb-4">
-        Vui lòng hoàn thành
-        <n-link to>
-          <b>hồ sơ cá nhân</b>
-        </n-link>&nbsp;trước khi cài đặt học phí cho bài giảng, khóa học của bạn
-      </app-alert> -->
-
       <div class="row align-items-center mb-4">
         <div class="col-md-3">Chế độ hiển thị</div>
         <div class="col-md-9">
@@ -21,8 +13,9 @@
             @change="handleChangePrivacy"
             :value="payload.privacy"
             :options="[
+              { value: '', text: 'Chọn chế độ hiển thị' },
               { value: 'PUBLIC', text: 'Công khai' },
-              { value: 'PRIVATE', text: 'Riêng tư' }
+              { value: 'PRIVATE', text: 'Riêng tư' },
             ]"
             placeholder="Chọn chế độ hiển thị"
           >
@@ -40,10 +33,10 @@
             <app-radio
               value="1"
               class="mr-4"
-              :checked="payload.comment_allow == 1"
+              :checked="payload.comment_allow === true"
               >Có</app-radio
             >
-            <app-radio value="0" :checked="payload.comment_allow == 0"
+            <app-radio value="0" :checked="payload.comment_allow === false"
               >Không</app-radio
             >
           </app-radio-group>
@@ -56,10 +49,11 @@
           <app-select
             class="cc-select"
             @change="handleChangeFree"
-            :value="payload.free"
+            :value="free"
             :options="[
-              { value: 0, text: 'Trả phí' },
-              { value: 1, text: 'Miễn phí' }
+              { value: '', text: 'Chọn học phí' },
+              { value: 1, text: 'Trả phí' },
+              { value: 2, text: 'Miễn phí' },
             ]"
             placeholder="Chọn học phí"
           >
@@ -70,36 +64,28 @@
         </div>
       </div>
 
-      <div class="row align-items-center mb-4" v-if="!payload.free">
+      <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
-          <app-input
-            :value="numeral(payload.fee).format()"
-            @input="handleChangeFee"
-            :message="errorMessage.fee"
-            :validate="validateProps.fee"
-            type="text"
-            class="mb-0"
-          ></app-input>
+          <app-input v-model="payload.fee" type="text" class="mb-0"></app-input>
         </div>
       </div>
 
-      <div class="row align-items-center mb-4" v-if="!payload.free">
+      <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
           <app-input
-            :value="numeral(payload.discount).format()"
-            @input="handleChangeDiscount"
-            :message="errorMessage.discount"
-            :validate="validateProps.discount"
+            v-model="payload.price"
             type="text"
             class="mb-0"
           ></app-input>
         </div>
-        <div class="percent_discount__ElearningCreate" v-show="showPercent">
-          <span>{{percent_discount}}</span>
+        <div class="percent_price__ElearningCreate" v-if="percent_price">
+          <span>{{ percent_price }}</span>
         </div>
       </div>
+
+      <create-action @handleCLickSave="handleCLickSave" />
     </div>
 
     <app-modal-confirm
@@ -122,52 +108,26 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { validatePrice } from "~/utils/validations";
 import * as yup from "yup";
-const schema = yup.object().shape({
-  comment_allow: yup.string().required(),
-  free: yup.string().required(),
-  elearning_id: yup.string().required(),
-  discount: yup.number().required().positive().integer(),
-  fee: yup.number().required().positive().integer(),
-  privacy: yup.string().required(),
-})
-const schema_update = yup.object().shape({
-  comment_allow: yup.string().required(),
-  free: yup.string().required(),
-  elearning_id: yup.string().required(),
-  discount: yup.number().required().positive().integer(),
-  fee: yup.number().required().positive().integer(),
-  privacy: yup.string().required(),
-})
+
 export default {
   components: {
     IconAngleDown,
-    CreateAction
+    CreateAction,
   },
 
   data() {
     return {
-      percent_discount:"",
-      showPercent:false,
+      percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
+      free: "",
       payload: {
-        comment_allow: 1,
-        discount: 0,
+        comment_allow: "",
+        price: "",
         elearning_id: get(this, "general.id", ""),
-        fee: 0,
-        free: 1,
-        passcode: "",
-        privacy: "PUBLIC"
+        fee: "",
+        privacy: "",
       },
-      errorMessage:{
-        fee:"",
-        discount:""
-      },
-      validateProps:{
-        fee:"",
-        discount:""
-      },
-      isSubmit:false,
     };
   },
   created() {
@@ -177,73 +137,46 @@ export default {
   watch: {
     setting: {
       handler: function() {
-        const elearning_id = getParamQuery("elearning_id");
-        if (elearning_id) {
-          this.payload.elearning_id = elearning_id;
+        this.payload.elearning_id = getParamQuery("elearning_id");
+        this.payload.comment_allow = get(this, "setting.comment_allow", "");
+        this.payload.price = get(this, "setting.price", "");
+        this.payload.fee = get(this, "setting.fee", "");
+        this.payload.privacy = get(this, "setting.privacy", "");
+        const fee = toNumber(get(this, "setting.fee", ""));
+        const price = toNumber(get(this, "setting.price", ""));
+        if (fee) {
+          this.percent_price = numeral((price - fee) / fee).format("0%");
         }
-
-        const comment_allow = get(this, "setting.comment_allow", false) ? 1 : 0;
-        this.payload.comment_allow = comment_allow;
-
-        if (get(this, "setting.discount", 0)) {
-          this.payload.discount = get(this, "setting.discount", 0);
+        if (fee > 0) {
+          this.free = 1;
         }
-
-        if (get(this, "setting.fee", 0)) {
-          this.payload.fee = get(this, "setting.fee", 0);
+        if (toNumber(get(this, "setting.fee", "-1")) === 0) {
+          this.free = 2;
         }
-
-        if (get(this, "setting.privacy", "")) {
-          this.payload.privacy = get(this, "setting.privacy", "");
-        }
-        this.payload.free = get(this, "setting.free", false) ? 1 : 0;
-        const fee = toNumber(get(this, "setting.fee", 0));
-        const discount = toNumber(get(this, "setting.discount", 0));
-        this.discount = discount;
-        this.percent_discount= numeral((discount-fee)/fee).format('0%')
       },
-      deep: true
+      deep: true,
     },
-    payload: {
+    "payload.price": {
       handler: function() {
-        let that = this;
-        const payload = createPayloadCourseSetting(this.payload);
-        const elearning_id = getParamQuery("elearning_id");
-        if (elearning_id) {
-          if(!payload.free){
-            console.log(payload)
-            if(payload.discount>payload.fee){
-              this.validateProps.discount =2;
-              this.errorMessage.discount = "Giá khuyến mại phải thấp hơn giá bán";
-              that.showPercent = false
-              that.isSubmit = false
-            }
-            else{
-              that.percent_discount=numeral((payload.discount-payload.fee)/payload.fee).format('0%')
-              that.showPercent =true
-              schema_update.isValid(payload).then(function(valid) {
-                that.isSubmit = valid;
-              });
-              return;
-            }
-          }
-          else{
-            that.isSubmit = true;
-          }
-        }
-        
+        this.payload.price = numeral(this.payload.price).format();
+        this.handleSetPercent();
       },
-      deep: true
-    }
+    },
+    "payload.fee": {
+      handler: function() {
+        this.payload.fee = numeral(this.payload.fee).format();
+        this.handleSetPercent();
+      },
+    },
   },
 
   computed: {
     ...mapState("elearning/creating/creating-setting", {
-      setting: "setting"
+      setting: "setting",
     }),
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
+      general: "general",
+    }),
   },
 
   methods: {
@@ -252,8 +185,8 @@ export default {
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         };
         this.$store.dispatch(
           `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
@@ -266,43 +199,19 @@ export default {
       this.payload.privacy = privacy;
     },
 
-    handleChangeFee(fee) {
-      this.validateProps.fee= "";
-      if(!fee){
-        this.validateProps.fee =2;
-        this.errorMessage.fee = "Trường này là bắt buộc";
-        this.showPercent = false
-      }else if(validatePrice(fee)){
-        this.validateProps.fee =1;
-        this.payload.fee = fee;
-        }
-      else if(!validatePrice(fee)){
-        this.validateProps.fee =2;
-        this.errorMessage.fee = "Tham số không hợp lệ";
-        this.isSubmit =false;
-        this.showPercent = false
+    handleChangeFree(free) {
+      this.free = free;
+      if (free != 1) {
+        this.payload.fee = 0;
+        this.payload.price = 0;
       }
     },
 
-    handleChangeFree(free) {
-      this.payload.free = free;
-    },
-
-    handleChangeDiscount(discount) {
-      this.validateProps.discount= "";
-      if(!discount){
-        this.validateProps.discount =2;
-        this.errorMessage.discount = "Trường này là bắt buộc";
-        this.showPercent = false
-      }else if(validatePrice(discount)){
-        this.payload.discount = discount;
-        this.validateProps.discount =1;
-        }
-      else if(!validatePrice(discount)){
-        this.validateProps.discount =2;
-        this.errorMessage.discount = "Tham số không hợp lệ";
-        this.showPercent = false
-        this.isSubmit =false;
+    handleSetPercent() {
+      const _fee = numeral(get(this, "payload.fee", 0)).value();
+      const _price = numeral(get(this, "payload.price", 0)).value();
+      if (_fee && _price) {
+        this.percent_price = numeral((_price - _fee) / _fee).format("0%");
       }
     },
 
@@ -322,7 +231,7 @@ export default {
 
       if (get(result, "success", false)) {
         this.getProgress();
-        this.fetchSetting()
+        this.fetchSetting();
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -342,8 +251,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -351,15 +260,15 @@ export default {
       );
     },
 
-    numeral
-  }
+    numeral,
+  },
 };
 </script>
 
 <style lang="scss">
-.percent_discount__ElearningCreate{
-  background: #32AF85;
-  span{
+.percent_price__ElearningCreate {
+  background: #32af85;
+  span {
     color: #ffffff;
     display: block;
     padding: 5px;

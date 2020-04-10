@@ -249,14 +249,13 @@
       },
 
       async getList() {
-        const elearningType = "1";
-        this.listQuery.type = elearningType;
-        let params = {
-          type: elearningType
-        }
+        this.listQuery.class_status = '1';
+        this.listQuery.search_type = '';
+        this.listQuery.query_date = '';
+        this.listQuery.query = '';
         params = {...this.listQuery};
         this.$store.dispatch(
-          `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
+          `elearning/creating/olclasses/${actionTypes.CREATING_OLCLASSES.LIST}`, { params }
         )
       },
     },

@@ -12,6 +12,7 @@ import Message from "~/services/message/Message";
 import GroupDetail from "~/services/message/GroupDetail";
 import MessageSendImg from "~/services/message/MessageSendImg";
 import Personal from "../services/account/Personal";
+import MessageType from "~/services/message/MessageType";
 
 /**
  * initial state
@@ -25,6 +26,7 @@ const state = () => ({
     messageOn: {},
     closeCreate: true,
     isGroupState: false,
+    listMessageType: {},
 });
 
 /**
@@ -203,6 +205,20 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE]({ commit }, payload) {
+        try {
+            const result = await new MessageType(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            // set to mutation
+            commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE, result);
+            console.log("[MessageType] post", result);
+            return result;
+        } catch (err) {
+            console.log("[MessageType] edit.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -233,6 +249,9 @@ const mutations = {
     [mutationTypes.MESSAGE_GROUP.EMIT_CLOSE_FALSE](state, _close, _isGroup) {
         state.closeCreate = _close;
         state.closeCreate = _isGroup;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE](state, _listMessageType) {
+        state.listMessageType = _listMessageType;
     },
 };
 

@@ -77,6 +77,8 @@ export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
+export const ELEARNING_CREATING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses`;
+
 /**
  * STUDY
  */
@@ -113,11 +115,11 @@ export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
 export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
 export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
 export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
-
+export const MESSAGE_TYPE = `${SCHOOLLY_ALIAS}/social/api/message/getViaRoomType`;
 /**
  * TEACHING
  */
-export const TEACHING_SUMMARY= `${SCHOOLLY_ALIAS}/teaching/summary`;
+export const TEACHING_SUMMARY = `${SCHOOLLY_ALIAS}/teaching/summary`;
 export const TEACHING_ELEARNING = `${SCHOOLLY_ALIAS}/teaching/elearnings`;
 export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/teaching/excercises`;
 export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/teaching/repository`;

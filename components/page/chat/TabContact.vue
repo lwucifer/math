@@ -78,26 +78,23 @@
             <template v-else>
               <div
                 class="align-item"
-                v-for="(item, index) in chatsListTab ? chatsListTab : []"
+                v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.id)"
+                @click="pushUrl(item.room_id)"
               >
                 <div class="align-item__image">
                   <app-avatar
-                    :src="item.members[0].avatar && item.members[0].avatar.low ? item.members[0].avatar.low : ''"
+                    :src=" item.room_avatar_member ? item.room_avatar_member : ''"
                     size="md"
                     class="comment-item__avatar"
                   />
                 </div>
                 <div class="align-item__meta">
                   <h4 class="align-item__title">
-                    <n-link
-                      slot="title"
-                      to
-                    >{{ item.members[0] && item.members[0].fullname ? item.members[0].fullname : '' }}</n-link>
+                    <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
                   </h4>
                   <div class="align-item__desc">
-                    <p>{{ item.desc }}</p>
+                    <p>{{ item.content }}</p>
                   </div>
                 </div>
                 <app-dropdown
@@ -142,7 +139,7 @@
                 class="align-item"
                 v-for="(item, index) in mapGroupList ? mapGroupList : []"
                 :key="index"
-                @click="pushUrl(item.id)"
+                @click="pushUrl(item.room_id)"
               >
                 <div class="align-item__image">
                   <app-avatar
@@ -156,7 +153,7 @@
                     <n-link slot="title" to>{{ item.room_name }}</n-link>
                   </h4>
                   <div class="align-item__desc">
-                    <p>{{ item.desc }}</p>
+                    <p>{{ item.content }}</p>
                   </div>
                 </div>
                 <app-dropdown
@@ -247,6 +244,7 @@ import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 
 import GroupService from "~/services/message/Group";
+import MessageType from "~/services/message/MessageType";
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 
@@ -289,10 +287,12 @@ export default {
       dropdownEdit: false,
       dropdownActions: false,
       groupListQuery: {
-        page: 1
+        page: 1,
+        room_type: 2
       },
       chatListQuery: {
-        page: 1
+        page: 1,
+        room_type: 1
       },
       groupsListTab: [],
       chatsListTab: [],
@@ -310,36 +310,53 @@ export default {
     ...mapState("message", ["groupList"]),
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
-      const data = this.groupsListTab.map(item => {
-        if (item.room_name) {
-          const [dataNoti] = item.members.filter(
-            item => item.id == this.userId
-          );
-          return {
-            ...item,
-            allow_notication: dataNoti.allow_notication
+      const dataMapGroup = this.groupsListTab.map(item => {
+        return {
+          ...item.message,
+          ...item.room,
+          ...item.sender,
+          message_id: item.message && item.message.id ? item.message.id : "",
+          room_id: item.room && item.room.id ? item.room.id : ""
+        };
+      });
+      const dataGroup = dataMapGroup.map(item => {
+        const [dataNoti] = item.members.filter(item => item.id == this.userId);
+        const dataRoomName =
+          (
+            item.members[0].fullname +
+            ", " +
+            item.members[1].fullname
+          ).substring(0, 15) + "...";
+        // console.log("[dataRoomName]", dataRoomName);
+        return {
+          ...item,
+          room_name: item.room_name ? item.room_name : dataRoomName,
+          allow_notication:
+            dataNoti && dataNoti.allow_notication
               ? dataNoti.allow_notication
               : 0
-          };
-        } else {
-          const [dataNoti] = item.members.filter(
-            item => item.id == this.userId
-          );
-          const dataRoomName =
-            (
-              item.members[0].fullname +
-              ", " +
-              item.members[1].fullname
-            ).substring(0, 15) + "...";
-          console.log("[dataRoomName]", dataRoomName);
-          return {
-            ...item,
-            room_name: dataRoomName,
-            allow_notication: dataNoti.allow_notication
-              ? dataNoti.allow_notication
-              : 0
-          };
-        }
+        };
+      });
+      return dataGroup;
+    },
+    mapChatList() {
+      const dataMap = this.chatsListTab.map(item => {
+        return {
+          ...item.message,
+          ...item.room,
+          ...item.sender,
+          message_id: item.message && item.message.id ? item.message.id : "",
+          room_id: item.room && item.room.id ? item.room.id : ""
+        };
+      });
+      const data = dataMap.map(item => {
+        const [dataName] = item.members.filter(item => item.id != this.userId);
+        return {
+          ...item,
+          name_sender: item.id == this.userId ? "Bạn" : item.fullname,
+          room_name_member: dataName.fullname ? dataName.fullname : "",
+          room_avatar_member: dataName.avatar.low ? dataName.avatar.low : ""
+        };
       });
       return data;
     }
@@ -405,20 +422,22 @@ export default {
     },
 
     async groupsInfiniteHandler($state) {
-      const { data: getData = {} } = await new GroupService(this.$axios)[
+      const { data: getData = {} } = await new MessageType(this.$axios)[
         actionTypes.BASE.LIST
       ]({
         params: this.groupListQuery
       });
-      console.log("getData", getData.length);
-      if (getData.length == 0 && this.groupsListTab.length == 0) {
+      console.log("getData_TYPE2", getData);
+      if (
+        getData.listMessage &&
+        getData.listMessage == 0 &&
+        this.groupsListTab.length == 0
+      ) {
         this.checkGroupList = true;
       }
-      if (getData.rooms && getData.rooms.length) {
+      if (getData.listMessage && getData.listMessage.length) {
         this.groupListQuery.page += 1;
-        this.groupsListTab.push(
-          ...getData.rooms.filter(item => item.type == 2)
-        );
+        this.groupsListTab.push(...getData.listMessage);
         // this.groupsListTab = [];
         // if (this.groupsListTab.length == 0) {
         //   this.checkGroupList = true;
@@ -436,17 +455,22 @@ export default {
     },
 
     async chatsInfiniteHandler($state) {
-      const { data: getData = {} } = await new GroupService(this.$axios)[
+      const { data: getData = {} } = await new MessageType(this.$axios)[
         actionTypes.BASE.LIST
       ]({
         params: this.chatListQuery
       });
-      if (getData.length == 0 && this.chatsListTab.length == 0) {
+      console.log("getData", getData);
+      if (
+        getData.listMessage &&
+        getData.listMessage == 0 &&
+        this.chatsListTab.length == 0
+      ) {
         this.checkChatList = true;
       }
-      if (getData.rooms && getData.rooms.length) {
+      if (getData.listMessage && getData.listMessage.length) {
         this.chatListQuery.page += 1;
-        this.chatsListTab.push(...getData.rooms.filter(item => item.type == 1));
+        this.chatsListTab.push(...getData.listMessage);
         // this.chatsListTab = [];
 
         // this.$store.commit(
@@ -476,14 +500,14 @@ export default {
         this.groupListQuery.page = 1;
         this.infiniteId += 1;
       }
-    },
-    groupList(_newval) {
-      if (_newval) {
-        this.groupsListTab = [];
-        this.groupListQuery.page = 1;
-        this.infiniteId += 1;
-      }
     }
+    // groupList(_newval) {
+    //   if (_newval) {
+    //     this.groupsListTab = [];
+    //     this.groupListQuery.page = 1;
+    //     this.infiniteId += 1;
+    //   }
+    // }
   }
 };
 </script>

@@ -93,10 +93,10 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 // Import faked data
 import {} from "~/server/fakedata/elearning/test";
 
-import CoursesService from "~/services/elearning/study/Study";
+//import CoursesService from "~/services/elearning/study/Study";
 
 import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
+//import * as actionTypes from "~/utils/action-types";
 
 export default {
   layout: "manage",
@@ -317,54 +317,54 @@ export default {
     /**
      * DELETE
      */
-    async deletePost(id) {
-      const doDelete = await new CoursesService(this.$axios)[
-        actionTypes.BASE.DELETE
-      ](id);
+    // async deletePost(id) {
+    //   const doDelete = await new CoursesService(this.$axios)[
+    //     actionTypes.BASE.DELETE
+    //   ](id);
 
-      if (doDelete.success) {
-        const { courses } = this;
-        const newListPost =
-          courses && courses.listPost
-            ? courses.listPost.filter(item => item.post_id !== id)
-            : [];
-        this.courses = {
-          listPost: newListPost,
-          page: courses.page || {}
-        };
-      } else {
-        this.$toasted.error(doDelete.message);
-      }
-    },
+    //   if (doDelete.success) {
+    //     const { courses } = this;
+    //     const newListPost =
+    //       courses && courses.listPost
+    //         ? courses.listPost.filter(item => item.post_id !== id)
+    //         : [];
+    //     this.courses = {
+    //       listPost: newListPost,
+    //       page: courses.page || {}
+    //     };
+    //   } else {
+    //     this.$toasted.error(doDelete.message);
+    //   }
+    // },
 
-    async getList() {
-      const elearningType = "1";
-      this.listQuery.type = elearningType;
-      let params = {
-        type: elearningType
-      }
-      params = {...this.listQuery};
-      this.$store.dispatch(
-        `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
-      )
-    },
+    // async getList() {
+    //   const elearningType = "1";
+    //   this.listQuery.type = elearningType;
+    //   let params = {
+    //     type: elearningType
+    //   }
+    //   params = {...this.listQuery};
+    //   this.$store.dispatch(
+    //     `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
+    //   )
+    // },
     
-    async getList2() {
-      const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
-      this.listQuery.elearning_id = elearningId;
-      let params = {
-        elearning_id: elearningId
-      }
-      params = {...this.listQuery};
-      this.$store.dispatch(
-        `elearning/study/study-archive/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`, { params }
-      )
-    },
+    // async getList2() {
+    //   const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
+    //   this.listQuery.elearning_id = elearningId;
+    //   let params = {
+    //     elearning_id: elearningId
+    //   }
+    //   params = {...this.listQuery};
+    //   this.$store.dispatch(
+    //     `elearning/study/study-archive/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`, { params }
+    //   )
+    // },
   },
 
   created() {
-    this.getList();
-    this.getList2();
+    // this.getList();
+    // this.getList2();
   }
 };
 </script>

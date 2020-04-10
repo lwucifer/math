@@ -5,7 +5,7 @@
     </div>
     <div class="clc-video__right">
       <h4 class="clc-video__name heading-6 mb-3">
-        {{ get(lesson, "name", "") }}
+        Bài học số {{ (index+1)+ ": " + get(lesson, "name", "") }}
       </h4>
       <div class="clc-video__time text-gray mb-3">
         {{ get(lesson, "duration", "") }}
@@ -52,6 +52,10 @@ export default {
   props: {
     lesson: {
       type: Object,
+      default: null
+    },
+    index:{
+      type: Number,
       default: null
     }
   },

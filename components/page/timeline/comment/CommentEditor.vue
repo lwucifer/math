@@ -13,11 +13,11 @@
 
       <div class="comment-editor__actions">
         <button type="button" class="comment-editor__button image">
-          <IconAddImage />
+          <IconAddImage class="icon" />
         </button>
 
         <button type="button" class="comment-editor__button emoji" @click="hanleShowEmojiPicker">
-          <IconEmoji />
+          <IconEmoji class="icon" />
         </button>
       </div>
     </div>

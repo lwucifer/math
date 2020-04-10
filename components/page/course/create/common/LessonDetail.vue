@@ -5,6 +5,7 @@
       @handleEditLesson="handleEditLesson"
       @refreshLessons="refreshLessons"
       :lesson="lesson"
+      :index="index"
     />
 
     <CreateLessonOfChapter
@@ -85,7 +86,11 @@ export default {
     lesson: {
       type: Object,
       default: null
-    }
+    },
+    index:{
+      type: Number,
+      default: null
+    },
   },
 
   methods: {
