@@ -1,13 +1,13 @@
 <template>
   <div class="row">
-    <div class="col-6 wrapfilterform__ElearningManagerFilterTable">
+    <div class="col-md-7 wrapfilterform__ElearningManagerFilterTable">
       <div>
         <button class="btnFitlerSummit__ElearningManagerFilterTable" @click="submit">
           <IconFilter/>
           <span>Lọc kết quả</span>
         </button>
       </div>
-      <div>
+      <div style="min-width: 15.5rem;">
         <app-vue-select
           class="selectTypes__ElearningManagerFilterTable"
           :options="fileTypes"
@@ -21,14 +21,14 @@
         >
         </app-vue-select>
       </div>
-      <div>
+      <div style="min-width: 15.5rem">
         <app-vue-select
           class="selectStatus__ElearningManagerFilterTable"
           :options="statuses"
           :reduce="item => item.value"
           v-model="filters.used"
           label="text"
-          placeholder="Theo tình trạng"
+          placeholder="Theo trạng thái"
           searchable
           clearable
           @input="handleChangedStatus"
@@ -36,7 +36,7 @@
         </app-vue-select>
       </div>
     </div>
-    <div class="col-6 d-flex justify-content-end">
+    <div class="col-md-5">
       <div class="wrapSearchForm___ElearningManagerFilterTable">
         <app-input
           type="text"
