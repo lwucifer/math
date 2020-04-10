@@ -13,7 +13,7 @@
         <app-dropdown
           v-if="userId === data.comment_user_id"
           class="comment-item__menu-dropdown"
-          position="right"
+          position="left"
           open-on-click
           v-model="menuDropdown"
         >
@@ -47,12 +47,6 @@
         <a href class="comment-item__action" @click.prevent="handleClickReply">Reply</a>
       </div>
 
-      <CommentItemReplied
-        v-if="data.children && data.children.list && data.children.list.length && !listComments.length"
-        :data="data.children"
-        @click="getChildrenComment(data.id)"
-      />
-
       <transition-group
         enter-active-class="animated faster fadeIn"
         leave-active-class="animated faster fadeOut"
@@ -67,25 +61,31 @@
         />
       </transition-group>
 
-      <div class="text-center">
+      <CommentItemReplied
+        v-if="data.children && data.children.list && data.children.list.length && !childrenCommentData.page"
+        :data="data.children"
+        @click="getChildrenComment(data.id)"
+      />
+
+      <div v-if="isFetchingComment" class="text-center">
+        <app-spin />
+      </div>
+
+      <div v-if="childrenCommentData.page && !childrenCommentData.page.last" class="text-center">
         <a
-          v-if="childrenCommentData.page && !childrenCommentData.page.last"
           href
           class="post__comment-more"
           @click.prevent="getChildrenComment(data.id)"
         >Xem thêm {{ numOfViewMoreChildrenComment }} bình luận ...</a>
       </div>
 
-      <div class="text-center" v-if="isFetchingComment">
-        <app-spin />
-      </div>
-
-      <CommentEditor reply v-if="showReply" @submit="postComment" />
+      <CommentEditor v-if="showReply" class="mt-3" reply @submit="postComment" />
     </div>
   </div>
 </template>
 
 <script>
+import { uniqWith } from "lodash";
 import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
@@ -165,7 +165,7 @@ export default {
     numOfViewMoreChildrenComment() {
       const { page } = this.childrenCommentData;
       return page.totalPages - page.number === 1
-        ? page.totalElements % page.size
+        ? page.totalElements - page.size * page.number
         : page.size;
     },
 
@@ -189,8 +189,12 @@ export default {
         // Set to parent comment data
         const { listComments, page } = this.childrenCommentData;
         if (listComments && page) {
+          const tmpListComments = [
+            ...listComments,
+            ...getComment.data.listComments
+          ];
           this.childrenCommentData = {
-            listComments: [...listComments, ...getComment.data.listComments],
+            listComments: uniqWith(tmpListComments, (a, b) => a.id === b.id),
             page: getComment.data.page
           };
         } else {
@@ -225,7 +229,9 @@ export default {
       ](commentModel);
 
       if (doPostComment.success) {
-        if ("listComments" in this.childrenCommentData) {
+        if (!this.childrenCommentData.page) {
+          await this.getChildrenComment(this.data.id);
+        } else if ("listComments" in this.childrenCommentData) {
           const { listComments } = this.childrenCommentData;
           this.childrenCommentData.listComments = [
             doPostComment.data,

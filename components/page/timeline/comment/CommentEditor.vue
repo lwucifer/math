@@ -2,7 +2,7 @@
   <div class="comment-editor" :class="classes">
     <app-avatar
       :size="reply ? 'xs' : 'sm'"
-      src="https://picsum.photos/40/40"
+      :src="$store.state.auth.avatarUser && $store.state.auth.avatarUser.low"
       class="comment-editor__avatar"
     />
 
