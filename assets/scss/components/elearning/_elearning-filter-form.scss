@@ -6,6 +6,8 @@
     &__item {
         margin: 0 1rem;
         display: inline-block;
+        display: flex;
+        align-items: center;
 
         &:last-child {
             margin-right: 0;

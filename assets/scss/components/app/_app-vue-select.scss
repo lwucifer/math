@@ -60,3 +60,7 @@ $vs-border-radius: 0 !default;
         padding: 4px 15px 0 3px;
     }
 }
+
+.vs__selected + .vs__search {
+    position: absolute;
+}

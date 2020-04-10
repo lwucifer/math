@@ -93,6 +93,13 @@ export const ELEARNING = {
     SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel",
 };
 
+export const CREATING_OLCLASSES = {
+    SET_CREATING_OLCLASSES_LIST: "setCreatingOlclassesList",
+    SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
+    SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
+    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete"
+};
+
 export const CREATING_ANSWER = {
     SET_CREATING_ANSWER_LIST: "setCreatingAnswerList",
     SET_CREATING_ANSWER_ADD: "setCreatingAnswerAdd",
