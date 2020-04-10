@@ -15,17 +15,18 @@
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
 
-            <div class="cc-box__head-right" v-if="isShowButtonAddLesson">
+            <div class="cc-box__head-right">
               <a @click="handleAddLesson($event)" href
                 >Thêm nội dung bài giảng</a
               >
-              <button class="cc-box__btn cc-box__btn-collapse">
-                <IconAngleDown class="icon" />
+              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowLesson = !isShowLesson">
+                <IconAngleDown class="icon" v-if="!isShowLesson"/>
+                <IconAngleUp class="icon" v-else/>
               </button>
             </div>
           </div>
 
-          <div class="cc-box__body">
+          <div class="cc-box__body" v-if="isShowLesson">
             <CreateLessonOfElearning
               v-if="isShowFormAddLesson"
               @refreshLessons="refreshLessons"
@@ -54,6 +55,7 @@ import { getBase64 } from "~/utils/common";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
@@ -88,7 +90,8 @@ export default {
     CreateAction,
     CreateLessonOfElearning,
     LessonDetail,
-    EditCourseName
+    EditCourseName,
+    IconAngleUp 
   },
 
   data() {
@@ -104,7 +107,8 @@ export default {
       isShowDetailLesson: false,
       isEditCourseName: false,
       courseNameModel: "",
-      lesson: null
+      lesson: null,
+      isShowLesson:true
     };
   },
 
