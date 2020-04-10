@@ -54,14 +54,14 @@ import { createPayloadQuestion } from "~/models/course/AddCourse";
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion,
+    CreateAnswerOfQuestion
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
 
   data() {
@@ -75,14 +75,14 @@ export default {
         answers: [
           {
             correct: false,
-            content: "",
+            content: ""
           },
           {
             correct: false,
-            content: "",
+            content: ""
           }
-        ],
-      },
+        ]
+      }
     };
   },
 
@@ -124,23 +124,24 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-    handleAddAnswer(index){
+
+    handleAddAnswer(index) {
       const answer = {
         correct: false,
-        content: "",
-      }
-      if(index == this.payload.answers.length && index<6){
-        this.payload.answers.push(answer)
-      }
-    },
-    handleDeleteAnswer(index){
-      if(this.payload.answers.length> 2){
-        this.payload.answers.splice(index,1)
-      }else{
-        this.$toasted.error("Tối thiểu là 2 đáp án")
+        content: ""
+      };
+      if (index == this.payload.answers.length && index < 6) {
+        this.payload.answers.push(answer);
       }
     },
-    get,
-  },
+
+    handleDeleteAnswer(index) {
+      if (this.payload.answers.length > 2) {
+        this.payload.answers.splice(index, 1);
+      }
+    },
+
+    get
+  }
 };
 </script>
