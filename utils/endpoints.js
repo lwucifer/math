@@ -113,11 +113,11 @@ export const MESSAGE = `${SCHOOLLY_ALIAS}/social/api/message`;
 export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
 export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
 export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
-
+export const MESSAGE_TYPE = `${SCHOOLLY_ALIAS}/social/api/message/getViaRoomType`;
 /**
  * TEACHING
  */
-export const TEACHING_SUMMARY= `${SCHOOLLY_ALIAS}/teaching/summary`;
+export const TEACHING_SUMMARY = `${SCHOOLLY_ALIAS}/teaching/summary`;
 export const TEACHING_ELEARNING = `${SCHOOLLY_ALIAS}/teaching/elearnings`;
 export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/teaching/excercises`;
 export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/teaching/repository`;

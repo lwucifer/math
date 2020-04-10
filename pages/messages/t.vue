@@ -53,21 +53,19 @@ export default {
     //   return false;
     // }
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    const room_id =
-      // 18;
-      route.params.id;
-    // let listQuery = {
-    //   page: 1,
-    //   perPage: 10,
-    //   user_id: 31
-    // };
+    const room_id = route.params.id;
     await Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, {
         params: {
           user_id: userId
         }
       }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`)
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
+        params: {
+          room_type: 1
+        }
+      })
       // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
       //   params: {
       //     room_id: room_id
