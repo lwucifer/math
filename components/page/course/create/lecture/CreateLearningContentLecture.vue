@@ -19,14 +19,14 @@
               <a @click="handleAddLesson($event)" href
                 >Thêm nội dung bài giảng</a
               >
-              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowLesson = !isShowLesson">
-                <IconAngleDown class="icon" v-if="!isShowLesson"/>
+              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowDetailLesson = !isShowDetailLesson">
+                <IconAngleDown class="icon" v-if="!isShowDetailLesson"/>
                 <IconAngleUp class="icon" v-else/>
               </button>
             </div>
           </div>
 
-          <div class="cc-box__body" v-if="isShowLesson">
+          <div class="cc-box__body">
             <CreateLessonOfElearning
               v-if="isShowFormAddLesson"
               @refreshLessons="refreshLessons"
@@ -108,7 +108,6 @@ export default {
       isEditCourseName: false,
       courseNameModel: "",
       lesson: null,
-      isShowLesson:true
     };
   },
 
