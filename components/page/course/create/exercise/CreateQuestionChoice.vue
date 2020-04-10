@@ -134,7 +134,6 @@ export default {
       }
     },
     handleDeleteAnswer(index){
-      console.log('delete',index)
       if(this.payload.answers.length> 2){
         this.payload.answers.splice(index,1)
       }else{
