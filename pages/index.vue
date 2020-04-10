@@ -334,8 +334,8 @@ export default {
     ]);
 
     return {
-      feeds,
-      messages,
+      feeds: feeds || [],
+      messages: messages || [],
       freeCourses: freeCourses.content || [],
       privateCourses: privateCourses.content || []
     };
