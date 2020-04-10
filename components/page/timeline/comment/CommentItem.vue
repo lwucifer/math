@@ -218,15 +218,30 @@ export default {
       }
     },
 
-    async postComment(content) {
-      const commentModel = createComment(
-        this.post.post_id,
-        this.data.id,
-        content
-      );
+    async postComment(content, listTags) {
+      const formData = new FormData();
+      const commentModel = createComment({
+        source_id: this.post.post_id,
+        parent_comment_id: this.data.id,
+        comment_content: content,
+        list_tag: listTags
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value)
+            ? JSON.stringify(value)
+            : value
+        );
+      }
+
       const doPostComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.ADD
-      ](commentModel);
+      ](formData);
 
       if (doPostComment.success) {
         if (!this.childrenCommentData.page) {

@@ -292,11 +292,29 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content) {
-      const commentModel = createComment(this.post.post_id, null, content);
+    async postComment(content, listTags) {
+      const formData = new FormData();
+      const commentModel = createComment({
+        source_id: this.post.post_id,
+        comment_content: content,
+        list_tag: listTags
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value)
+            ? JSON.stringify(value)
+            : value
+        );
+      }
+
       const doPostComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.ADD
-      ](commentModel);
+      ](formData);
 
       if (doPostComment.success) {
         if ("listParentComments" in this.parentCommentData) {
