@@ -270,6 +270,7 @@ export const MESSAGE_GROUP = {
     SET_EMIT_MESSAGE: "setEmitMessage",
     SET_ON_MESSAGE: "setOnMessage",
     EMIT_CLOSE_FALSE: "emitCloseFalse",
+    SET_LIST_MESSAGE_TYPE: "setListMessageType",
 };
 
 export const ELEARNING_INFO = {

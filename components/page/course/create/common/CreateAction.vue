@@ -1,26 +1,29 @@
 <template>
-  <div class="header-create">
-    <div class="header-create__content container">
-      <app-button
-        class="header-create__btn header-create__btn-back"
+  <div class="create-action">
+    <!-- <app-button
+        class="create-action__btn create-action__btn-back"
         outline
         square
-        nuxt 
+        nuxt
         to="./"
       >
         <IconArrowLeft class="icon mr-2" />
         Quay lại
-      </app-button>
+    </app-button>-->
 
-      <div class="header-create__right" v-if="isShowAction">
+      <div class="create-action__right" v-if="isShowAction">
         <app-button
           @click="handleCLickSave"
-          class="header-create__btn mr-4"
+          class="create-action__btn mr-4"
           square
           :disabled="!isSubmit"
           >Lưu</app-button
         >
-        <app-button class="header-create__btn" color="secondary" square
+        <app-button
+          class="create-action__btn"
+          color="secondary"
+          square
+          @click="$emit('handleDelete')"
           >Xoá</app-button
         >
       </div>
@@ -34,18 +37,18 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconArrowLeft
+    IconArrowLeft,
   },
 
   props: {
     isSubmit: {
       type: Boolean,
-      default: true
+      default: true,
     },
     isShowAction: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   methods: {
@@ -53,11 +56,11 @@ export default {
       this.$emit("handleCLickSave");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
 
-<style scoped>
-@import "~/assets/scss/components/header-create/_header-create.scss";
+<style lang="scss">
+@import "~/assets/scss/components/course/create/_create-action.scss";
 </style>

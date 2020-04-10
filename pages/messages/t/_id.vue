@@ -89,18 +89,6 @@ export default {
     //   console.log("[on join_room]", data);
     // });
   },
-  created() {
-    // debugger;
-    // this.socket.on("join_room", function() {
-    //   console.log("on join_room");
-    //   var params = {
-    //     room_id: this.$route.params.id
-    //   };
-    //   this.socket.emit("join_room", params, function() {
-    //     console.log("User has joined this channel");
-    //   });
-    // });
-  },
   computed: {
     ...mapState("message", ["messageEmit"]),
     ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
