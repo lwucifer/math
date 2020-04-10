@@ -21,7 +21,7 @@
                 @click="selectUser(user)"
               >
                 <app-avatar
-                  class="mr-2"
+                  class="mr-3"
                   :size="32"
                   :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
                 />
