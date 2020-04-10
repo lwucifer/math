@@ -13,6 +13,8 @@
       :index="index"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
+      @handleAddAnswer="handleAddAnswer"
+      @handleDeleteAnswer="handleDeleteAnswer"
     />
 
     <div class="d-flex justify-content-end mt-5">
@@ -78,15 +80,7 @@ export default {
           {
             correct: false,
             content: "",
-          },
-          {
-            correct: false,
-            content: "",
-          },
-          {
-            correct: false,
-            content: "",
-          },
+          }
         ],
       },
     };
@@ -130,7 +124,23 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-
+    handleAddAnswer(index){
+      const answer = {
+        correct: false,
+        content: "",
+      }
+      if(index == this.payload.answers.length && index<6){
+        this.payload.answers.push(answer)
+      }
+    },
+    handleDeleteAnswer(index){
+      console.log('delete',index)
+      if(this.payload.answers.length> 2){
+        this.payload.answers.splice(index,1)
+      }else{
+        this.$toasted.error("Tối thiểu là 2 đáp án")
+      }
+    },
     get,
   },
 };
