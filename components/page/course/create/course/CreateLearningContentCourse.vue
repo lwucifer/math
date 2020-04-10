@@ -25,17 +25,10 @@
               >
                 <IconPlusCircle class="icon subheading" />&nbsp;Thêm chương
               </a>
-              <button
-                class="cc-box__btn cc-box__btn-collapse"
-                @click="isShowChapter = !isShowChapter"
-              >
-                <IconAngleDown class="icon" v-if="!isShowChapter" />
-                <IconAngleUp class="icon" v-else />
-              </button>
             </div>
           </div>
 
-          <div class="cc-box__body" v-if="isShowChapter">
+          <div class="cc-box__body">
             <CreateChapter
               v-if="isShowFormAddChapter"
               @handleCancelAddChapter="handleCancelAddChapter"
@@ -101,7 +94,6 @@ export default {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
-      isShowChapter: true,
     };
   },
 

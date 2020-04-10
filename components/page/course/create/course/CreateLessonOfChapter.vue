@@ -3,7 +3,7 @@
     class="cc-box__bg-gray cc-box__nested px-4 pt-3 pb-4"
     id="create-lesson-of-chapter"
   >
-    <h3 class="heading-6 mb-2 mt-3">Tên bài học</h3>
+    <h3 class="heading-6 mb-2 mt-3">Tên bài học số {{noLesson + 1}}</h3>
     <app-input :counter="60" placeholder="Tên bài học" v-model="payload.name" />
 
     <span>Chọn loại bài học</span>
@@ -119,6 +119,10 @@ export default {
     lesson: {
       type: Object,
       default: null
+    },
+    index:{
+      type: Number,
+      default: null
     }
   },
 
@@ -127,6 +131,7 @@ export default {
       tabType: "video",
       showModalConfirm: false,
       confirmLoading: false,
+      noLesson: get(this, "chapter.lessons", "").length,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
         lesson: "",

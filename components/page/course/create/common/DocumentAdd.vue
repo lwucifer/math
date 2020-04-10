@@ -9,7 +9,7 @@
 
     <app-divider class="mt-3 mb-4" />
 
-    <app-input v-model="payload.name" />
+    <app-input v-model="payload.name" placeholder="Điền tên tài liệu"/>
 
     <div class="cc-tabs">
       <a
@@ -54,7 +54,7 @@
         size="sm"
         square
         @click="handleAddDocument"
-        >Thêm nội dung</app-button
+        >Thêm tài liệu</app-button
       >
     </div>
 
