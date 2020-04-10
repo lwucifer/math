@@ -7,8 +7,8 @@
       </app-button>
 
       <div class="header-create__right">
-        <app-button class="header-create__btn mr-4" square>Lưu</app-button>
-        <app-button class="header-create__btn" color="secondary" square>Xoá</app-button>
+        <app-button class="header-create__btn mr-4" square @click="fnSave">Lưu</app-button>
+        <app-button class="header-create__btn" color="secondary" square @click="fnDelete">Xoá</app-button>
       </div>
     </div>
   </div>
@@ -20,7 +20,16 @@ import IconArrowLeft from '~/assets/svg/design-icons/arrow-left.svg?inline';
 export default {
   components: {
     IconArrowLeft
-  }
+  },
+
+  methods: {
+    fnSave() {
+      this.$emit('clickSave');
+    },
+    fnDelete() {
+      this.$emit('clickDelete');
+    },
+  },
 }
 </script>
 

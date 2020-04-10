@@ -110,12 +110,6 @@ export default {
     IconTick
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`elearning/manager/courses/teaching-courses-list/${actionTypes.ELEARNING_COURSES.LIST}`),
-    ]);
-  },
-
   // async asyncData({ $axios }) {
   //   const { data: courses = {} } = await new CoursesService($axios)[
   //     actionTypes.BASE.LIST

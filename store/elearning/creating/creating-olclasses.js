@@ -1,6 +1,6 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import Olclasses from "~/services/elearning/creating/Olclasses";
+import Classes from "~/services/elearning/creating/Olclasses";
 
 /**
  * initial state
@@ -20,7 +20,7 @@ const getters = {};
 const actions = {
   async [actionTypes.CREATING_OLCLASSES.LIST]({ commit }, options) {
     try {
-      const result = await new Olclasses(this.$axios)[actionTypes.BASE.LIST](
+      const result = await new Classes(this.$axios)[actionTypes.BASE.LIST](
         options
       );
       commit(
@@ -36,7 +36,7 @@ const actions = {
 
   async [actionTypes.CREATING_OLCLASSES.DETAIL]({ commit }, Olclasses_id) {
     try {
-      const result = await new Olclasses(this.$axios)[actionTypes.BASE.DETAIL](
+      const result = await new Classes(this.$axios)[actionTypes.BASE.DETAIL](
         Olclasses_id
       );
       return result;
@@ -48,7 +48,7 @@ const actions = {
 
   async [actionTypes.CREATING_OLCLASSES.ADD]({ commit }, payload) {
     try {
-      const result = await new Olclasses(this.$axios)["postWithFormData"](payload);
+      const result = await new Classes(this.$axios)["postWithFormData"](payload);
       return result;
       // set to mutation
       // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_ADD, result);
@@ -59,7 +59,7 @@ const actions = {
 
   async [actionTypes.CREATING_OLCLASSES.EDIT]({ commit }, payload) {
     try {
-      const result = await new Olclasses(this.$axios)[actionTypes.BASE.EDIT](
+      const result = await new Classes(this.$axios)[actionTypes.BASE.EDIT](
         payload
       );
       // set to mutation
@@ -69,14 +69,17 @@ const actions = {
     }
   },
 
-  async [actionTypes.CREATING_OLCLASSES.DELETE]({ commit }, options) {
+  async [actionTypes.CREATING_OLCLASSES.DELETE]({ commit }, payload) {
     try {
-      const result = await new Olclasses(this.$axios)["deleteOlclasses"](options);
-      return result;
+      const result = await new Classes(this.$axios)[actionTypes.BASE.DELETE](
+        payload
+      );
+      // set to mutation
+      // commit(mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_LIST, result);
     } catch (error) {
-      console.log("[Creating Olclasses] delete.error", error);
+      console.log("[Creating Classes] delete.error", error);
     }
-  },
+  }
 };
 
 /**
@@ -84,9 +87,9 @@ const actions = {
  */
 const mutations = {
   [mutationTypes.CREATING_OLCLASSES
-    .SET_CREATING_OLCLASSES_LIST](state, Olclassess) {
+    .SET_CREATING_OLCLASSES_LIST](state, Olclasses) {
     console.log("SET_CREATING_OLCLASSES_LIST");
-    state.Olclassess = Olclassess;
+    state.Olclasses = Olclasses;
   },
 };
 

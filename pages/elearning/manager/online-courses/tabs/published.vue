@@ -1,24 +1,6 @@
 <template>
   <div class="elearning-wrapper">
-    {{classes}}xxxxxxxxxxxxxxxxxxx
     <!--Filter form-->
-    <div class="filter-form">
-      <div class="filter-form__item">
-        <label for>Chọn ngày</label>
-        <app-date-picker
-          class="ml-3"
-          v-model="filter.time"
-          square
-          size="sm"
-          placeholder="dd/mm/yyyy"
-        >
-          <template v-slot:icon-calendar>
-            <IconCalendar />
-          </template>
-        </app-date-picker>
-      </div>
-    </div>
-
     <div class="filter-form">
       <div class="filter-form__item">
         <app-button
@@ -32,39 +14,39 @@
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 15rem">
+      <div class="filter-form__item" style="min-width: 18rem">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
-          v-model="filter.course"
+          v-model="filterCourse"
           :options="courses"
           label="text"
-          placeholder="Theo khóa học"
+          placeholder="Theo bài giảng/khóa học"
           searchable
           clearable
-          @input="handleChangedInput"
+          @input="handleChangedCourse"
           @search:focus="handleFocusSearchInput"
           @search:blur="handleBlurSearchInput"
         ></app-vue-select>
       </div>
 
-      <div class="filter-form__item" style="min-width: 15rem">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filter.status"
-          :options="statuses"
-          label="text"
-          placeholder="Theo trạng thái"
-          searchable
-          clearable
-          @input="handleChangedInput"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        ></app-vue-select>
+      <div class="filter-form__item">
+        <label for>Chọn ngày</label>
+        <app-date-picker
+          class="ml-3"
+          v-model="filter.query_date"
+          square
+          size="sm"
+          placeholder="dd/mm/yyyy"
+        >
+          <template v-slot:icon-calendar>
+            <IconCalendar />
+          </template>
+        </app-date-picker>
       </div>
 
       <!--Right form-->
       <div class="filter-form__right">
-        <div style="width: 31.8rem;">
+        <div style="width: 23rem;">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
@@ -79,7 +61,7 @@
 
     <!--Options group-->
     <div class="filter-form mb-0">
-      <div class="filter-form__item">
+      <div class="filter-form__item" @click="deleteRows">
         <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
           <IconTrash />
           <span class="ml-3">Hủy lớp</span>
@@ -93,28 +75,21 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="list"
+      :data="classList"
       multiple-selection
       @selectionChange="selectRow"
     >
-      <template v-slot:cell(room)="{row}">
-        <td class="appended-col">
-          <p>{{ row.room }}</p>
-          <p class="text-description" :title="row.description">{{ row.description }}</p>
-        </td>
-      </template>
-
-      <template v-slot:cell(visibility)="{row}">
+      <template v-slot:cell(privacy)="{row}">
         <td class="nowrap">
           <span
-            :class="row.visibility.toLowerCase() == 'công khai' ? 'text-primary': 'text-secondary' "
-          >{{ row.visibility }}</span>
+            :class="row.privacy == 'PUBLIC' ? 'text-primary': 'text-secondary' "
+          >{{ row.privacy }}</span>
         </td>
       </template>
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link class to>Chi tiết</n-link>
+          <n-link class :to="row.online_class_id">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
@@ -128,10 +103,15 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-// Import faked data
-import { SCHEDULES } from "~/server/fakedata/elearning/test";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+
+const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+
+import OlclassesService from "~/services/elearning/creating/Olclasses";
 
 export default {
   components: {
@@ -147,16 +127,19 @@ export default {
       tab: 1,
       heads: [
         {
-          name: "room",
-          text: "Phòng học"
+          name: "online_class_name",
+          text: "Phòng học",
+          sort: true
         },
         {
-          name: "course",
-          text: "Thuộc khóa học"
+          name: "elearning_name",
+          text: "Thuộc khóa học",
+          sort: true
         },
         {
-          name: "visibility",
-          text: "Hiển thị"
+          name: "privacy",
+          text: "Hiển thị",
+          sort: true
         },
         {
           name: "time",
@@ -164,13 +147,8 @@ export default {
           sort: true
         },
         {
-          name: "view",
-          text: "Lượt xem",
-          sort: true
-        },
-        {
-          name: "studentNum",
-          text: "Số học sinh tham gia",
+          name: "num_invitation",
+          text: "Số học sinh đã mời",
           sort: true
         },
         {
@@ -179,9 +157,10 @@ export default {
         }
       ],
       filter: {
-        course: null,
+        query: null,
         status: null,
-        time: null
+        query_date: null,
+        search_type: null
       },
       courses: [
         {
@@ -193,6 +172,7 @@ export default {
           text: "Khóa học 2"
         }
       ],
+      filterCourse: null,
       statuses: [
         {
           value: 1,
@@ -212,23 +192,21 @@ export default {
         first: 1,
         last: 10
       },
-      list: SCHEDULES,
-      visibilities: {
-        "cong khai": "text-primary",
-        "rieng tu": "text-secondary"
-      },
-      listQuery: {
+      classList: [],
+      params: {
         page: 1,
-        size: 10
+        size: 10,
+        class_status: "FINISHED"
       },
-      query_status: ['STARTING', 'ACTIVE', 'DRAFT', 'FINISHED']
+      loading: false,
+      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState(actionTypes.CREATING_OLCLASSES, {
-      classes: 'Olclasses'
-    }),
+    ...mapState(STORE_NAMESPACE, {
+      classes: "Olclasses"
+    })
   },
 
   methods: {
@@ -237,38 +215,77 @@ export default {
       that.pagination = { ...that.pagination, ...e };
     },
     submit() {
-      console.log("[Component] Elearning classroom: submitted");
+      this.params = {...this.params, ...this.filter};
+      console.log(this.params);
+      this.getList();
     },
-    handleChangedInput(val) {
-      if (val !== null) {
-      } else {
-      }
-      console.log("[Component] Elearning classroom: changing input...", val);
+    handleChangedCourse(val) {
+      this.filter.course = this.filterCourse.value;
     },
     handleFocusSearchInput() {
-      console.log("[Component] Elearning classroom: focus searching ");
     },
     handleBlurSearchInput() {
-      console.log("[Component] Elearning exam: blur searching ");
     },
     handleSearch() {
-      console.log("[Component] Elearning exam: searching");
     },
     selectRow(data) {
-      console.log("change row: ", data);
+      this.ids = data.map((row, index, data) => {
+          return row.online_class_id
+      });
     },
 
     async getList() {
-      this.listQuery.class_status = "FINISHED";
-      this.listQuery.search_type = "Course";
-      this.listQuery.query_date = "";
-      this.listQuery.query = "";
-      let params = { ...this.listQuery };
-      this.$store.dispatch(
-        `elearning/creating/creating-olclasses/${actionTypes.CREATING_OLCLASSES.LIST}`,
-        { params }
-      );
-    }
+      try {
+        this.loading = true
+        let params = { ...this.params };
+        console.log(params)
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.LIST}`,
+          { params }
+        );
+        this.classList = this.get(this.classes, 'data.content', [])
+        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
+        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
+        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
+        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
+        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+      } catch (e) {
+
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async deleteRows() {
+      let ids = { online_class_ids: [...this.ids] };
+      ids = {
+        online_class_ids: '[1,2,3]'
+      }
+      console.log(ids);
+      const doDelete = await new OlclassesService(this.$axios)[
+        actionTypes.BASE.DELETE
+      ](ids);
+
+      // if (doDelete.success) {
+      //   const { courses } = this;
+      //   const newListPost =
+      //     courses && courses.listPost
+      //       ? courses.listPost.filter(item => item.post_id !== id)
+      //       : [];
+      //   this.classList = {
+      //     listPost: newListPost,
+      //     page: courses.page || {}
+      //   };
+
+      //   console.log(this.classList);
+      // } else {
+      //   this.$toasted.error(doDelete.message);
+      // }
+    },
+
+    get
   },
 
   created() {
