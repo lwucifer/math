@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-8">
       <label class="d-inline-block mb-3" for="answer-editor"
         >Nội dung đáp án</label
       >
@@ -22,7 +22,9 @@
           <app-input
             @input="handleChangeContent"
             :value="get(answer, 'content', '')"
+            @click="handleAddAnswer"
           />
+          
         </div>
 
         <!-- <div>
@@ -31,6 +33,11 @@
           </button>
         </div> -->
       </div>
+    </div>
+    <div class="d-flex align-items-center cc-box__head">
+      <button class="cc-box__btn cc-box__btn-edit" @click="handleDeleteAnswer">
+          <IconTrashAlt class="icon d-block subheading fill-secondary" />
+      </button>
     </div>
   </div>
 </template>
@@ -61,6 +68,8 @@ export default {
       if (get(this, "index", "") === 1) return "B";
       if (get(this, "index", "") === 2) return "C";
       if (get(this, "index", "") === 3) return "D";
+      if (get(this, "index", "") === 4) return "E";
+      if (get(this, "index", "") === 5) return "F";
       return "";
     },
   },
@@ -71,6 +80,12 @@ export default {
     handleChangeContent(value) {
       this.$emit("handleChangeContent", this.index, value);
     },
+    handleAddAnswer(){
+      this.$emit("handleAddAnswer",(this.index+1))
+    },
+    handleDeleteAnswer(){
+      this.$emit("handleDeleteAnswer",this.index)
+    }
   },
 };
 </script>
