@@ -105,8 +105,8 @@ const actions = {
         success: true,
         data: {
           id: "e698a8ea-4e12-11ea-b77f-2e728ce88125",
-          type: 'CHOICE',
-          // type: 'ESSAY',
+          // type: 'CHOICE',
+          type: 'ESSAY',
           title: "Bài tập toán đại số lớp 11",
           lesson_id: 11,
           elearning_id: 10,
