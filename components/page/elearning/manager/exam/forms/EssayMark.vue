@@ -6,25 +6,28 @@
         <label for="" class="content-title">Nhận xét chi biết bài làm của học sinh</label>
         <app-editor id="comment" v-model="$v.formData.note.$model"/>
       </div>
-      <app-input
-        class="d-inline-block"
-        type="number"
-        min="0"
-        max="10"
-        v-model="$v.formData.mark.$model"
-        :disabled="formData.to_passed"
-        :validate="getValidationCode('formData.mark')"
-        :message="''"
-        label="Chấm điểm"
-        labelBold
-      >
-      </app-input>
-      <div>
+      <div class="item">
+        <app-input
+          class="d-inline-block"
+          type="number"
+          min="0"
+          max="10"
+          v-model="$v.formData.mark.$model"
+          :disabled="formData.to_passed"
+          :validate="getValidationCode('formData.mark')"
+          :message="'Giá trị không hợp lệ'"
+          label="Chấm điểm"
+          labelBold
+        >
+        </app-input>
+      </div>
+      
+      <div class="item">
         <app-checkbox
           v-model="$v.formData.to_passed.$model"
           label="Cho qua"
           :disabled="formData.mark != ''"
-          :class="{ 'disabled': formData.mark != '' }"
+          :class="{ 'disabled': formData.mark != '', 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
         >
         </app-checkbox>
         <p class="form--note mt-2">
@@ -32,9 +35,7 @@
         </p>
       </div>
 
-      <div
-        class="text-center mt-4"
-      >
+      <div class="item text-center">
         <app-button
           square
           normal
@@ -82,7 +83,7 @@
       formData: {
         mark: {
           required: requiredIf(function (model) {
-            return (!model.to_passed) && (model.mark == '')
+            return (!model.to_passed) && (model.mark == '' || model.mark == null)
           }),
           decimal,
           maxValue: maxValue(10),
@@ -95,7 +96,7 @@
         },
         to_passed: {
           required: requiredIf(function (model) {
-            return (!model.to_passed) && (model.mark == '')
+            return (!model.to_passed) && (model.mark == '' || model.mark == null)
           }),
         }
       }
@@ -116,7 +117,8 @@
           return this.VALIDATE_STATUS_CODE.ERROR
         }
         return this.VALIDATE_STATUS_CODE.DEFAULT
-      }
+      },
+      get
     }
   }
 </script>
