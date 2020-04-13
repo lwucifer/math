@@ -1,6 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Classes from "~/services/elearning/creating/Olclasses";
+import Invitations from "~/services/elearning/creating/OlclassesInvitations";
 
 /**
  * initial state
@@ -41,7 +42,7 @@ const actions = {
       );
       return result;
     } catch (error) {
-      //
+      console.log("[Creating Olclasses] list.error", error);
     }
     return null;
   },
@@ -71,25 +72,47 @@ const actions = {
 
   async [actionTypes.CREATING_OLCLASSES.DELETE]({ commit }, payload) {
     try {
-      const result = await new Classes(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_LIST, result);
+      const result = await new Classes(this.$axios)[
+        "postWithFormData"
+      ](payload);
+      return result;
     } catch (error) {
       console.log("[Creating Classes] delete.error", error);
     }
-  }
+  },
+
+  async [actionTypes.CREATING_OLCLASSES.INVITATIONS]({ commit }, options) {
+    try {
+      const result = await new Invitations(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.CREATING_OLCLASSES
+          .SET_CREATING_OLCLASSES_INVITATIONS_LIST,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[Creating Olclasses] list.error", error);
+    }
+  },
 };
 
 /**
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.CREATING_OLCLASSES
-    .SET_CREATING_OLCLASSES_LIST](state, Olclasses) {
-    console.log("SET_CREATING_OLCLASSES_LIST");
-    state.Olclasses = Olclasses;
+  [mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_LIST](state, _Olclasses) {
+    state.Olclasses = _Olclasses;
+  },
+  [mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_DELETE](state, _Olclasses) {
+    state.Olclasses = _Olclasses;
+  },
+  [mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_ADD](state, _Olclasses) {
+    state.Olclasses = _Olclasses;
+  },
+  [mutationTypes.CREATING_OLCLASSES.SET_CREATING_OLCLASSES_INVITATIONS_LIST](state, _Olclasses) {
+    state.Olclasses = _Olclasses;
   },
 };
 

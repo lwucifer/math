@@ -97,7 +97,8 @@ export const CREATING_OLCLASSES = {
     SET_CREATING_OLCLASSES_LIST: "setCreatingOlclassesList",
     SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
     SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
-    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete"
+    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete",
+    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList",
 };
 
 export const CREATING_ANSWER = {
