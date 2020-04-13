@@ -9,6 +9,7 @@
           square
           normal
           class="btn-primary-header"
+          v-if="isShowCreateCouse"
         >
           <IconPlus/> &nbsp;
           Tạo bài giảng khóa học
@@ -80,6 +81,14 @@
       isAuthenticated() {
         return true;
         return this.$store.getters["auth/isAuthenticated"];
+      },
+      isShowCreateCouse(){
+        if(this.$route.path === "/elearning/manager/courses/create"){
+          return false
+        }
+        else{
+          return true
+        }
       }
     },
     methods: {

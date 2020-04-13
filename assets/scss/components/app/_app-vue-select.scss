@@ -64,3 +64,9 @@ $vs-border-radius: 0 !default;
 .vs__selected + .vs__search {
     position: absolute;
 }
+.app-vue-select .vs__dropdown-toggle {
+    height: 3.2rem;
+}
+.app-vue-select .vs__selected-options {
+    overflow: hidden;
+}

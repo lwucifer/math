@@ -20,7 +20,7 @@
                   <strong>Thuộc bài giảng/ khóa học</strong>
                 </label>
                 <app-vue-select
-                  style="width: 10rem"
+                  style="width: 17rem"
                   class="app-vue-select form-item__selection"
                   v-model="filterCourse"
                   :options="courses"
@@ -44,7 +44,7 @@
                   <strong>Chế độ hiển thị</strong>(Hiển thị theo thuộc tính của bài giảng /khóa học liên quan)
                 </label>
                 <app-vue-select
-                  style="width: 14rem"
+                  style="width: 17rem"
                   class="app-vue-select form-item__selection"
                   v-model="filterPrivacy"
                   :options="privacies"
@@ -73,19 +73,22 @@
               </div>
 
               <div class="form-item">
-                <button @click="showBonus = !showBonus" class="btn-toggle color-primary d-flex-center mb-4">
+                <button
+                  @click="showBonus = !showBonus"
+                  class="btn-toggle color-primary d-flex-center mb-15"
+                >
                   <strong>Thêm lịch học</strong>
-                  <IconAngleUp v-if="showBonus" class="fill-primary"/>
-                  <IconAngleDown v-else  class="fill-primary"/>
+                  <IconAngleUp v-if="showBonus" class="fill-primary" />
+                  <IconAngleDown v-else class="fill-primary" />
                 </button>
 
                 <div v-if="showBonus">
-                  <div class="form-item-box">
-                    <strong>Thời khóa biểu</strong>
-                    <div class="d-flex-center">
+                  <div class="form-item-box mb-4">
+                    <h6 class="mb-3">Thời khóa biểu</h6>
+                    <div class="d-flex-center mb-4">
                       <label class="mr-3">Bắt đầu vào lúc</label>
                       <app-vue-select
-                        style="width: 9rem"
+                        style="width: 11rem"
                         class="app-vue-select form-item__selection mr-3"
                         v-model="startTime.value"
                         :options="times"
@@ -95,7 +98,7 @@
                         @input="handleChangedTime"
                       ></app-vue-select>
                       <app-vue-select
-                        style="width: 8rem"
+                        style="width: 10rem"
                         class="app-vue-select form-item__selection"
                         v-model="startTime.type"
                         :options="timeTypes"
@@ -109,101 +112,103 @@
                       <label class="mr-3">Thời lượng</label>
                       <app-vue-select
                         style="width: 9rem"
-                        class="app-vue-select form-item__selection mr-3"
-                        v-model="startTime.value"
-                        :options="times"
+                        class="app-vue-select form-item__selection mr-2"
+                        v-model="startTime.hours"
+                        :options="hours"
                         label="text"
                         searchable
                         clearable
                         @input="handleChangedTime"
                       ></app-vue-select>
+                      <span>Giờ</span>
                       <app-vue-select
-                        style="width: 8rem"
-                        class="app-vue-select form-item__selection"
-                        v-model="startTime.type"
-                        :options="timeTypes"
+                        style="width: 9rem"
+                        class="app-vue-select form-item__selection ml-3 mr-2"
+                        v-model="startTime.minutes"
+                        :options="minutes"
                         label="text"
                         searchable
                         clearable
                         @input="handleChangedTimeType"
                       ></app-vue-select>
+                      <span>Phút</span>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div class="form-item">
-                <label>
-                  <strong>Ngày học trong tuần</strong>
-                </label>
-                <div class="d-flex-center">
-                  <app-checkbox
-                    @change="check($event, 2)"
-                    :checked="selectedItems.includes(2)"
-                    label="Thứ 2"
-                  ></app-checkbox>
-                  <app-checkbox
-                    @change="check($event, 3)"
-                    :checked="selectedItems.includes(3)"
-                    label="Thứ 3"
-                  />
-                  <app-checkbox
-                    @change="check($event, 4)"
-                    :checked="selectedItems.includes(4)"
-                    label="Thứ 4"
-                  />
-                  <app-checkbox
-                    @change="check($event, 5)"
-                    :checked="selectedItems.includes(5)"
-                    label="Thứ 5"
-                  />
-                  <app-checkbox
-                    @change="check($event, 6)"
-                    :checked="selectedItems.includes(6)"
-                    label="Thứ 6"
-                  />
-                  <app-checkbox
-                    @change="check($event, 7)"
-                    :checked="selectedItems.includes(7)"
-                    label="Thứ 7"
-                  />
-                  <app-checkbox
-                    @change="check($event, 8)"
-                    :checked="selectedItems.includes(8)"
-                    label="Chủ nhật"
-                  />
-                </div>
-              </div>
+                  <div class="form-item">
+                    <label>
+                      <strong>Ngày học trong tuần</strong>
+                    </label>
+                    <div class="d-flex-center">
+                      <app-checkbox
+                        @change="check($event, 2)"
+                        :checked="selectedItems.includes(2)"
+                        label="Thứ 2"
+                      ></app-checkbox>
+                      <app-checkbox
+                        @change="check($event, 3)"
+                        :checked="selectedItems.includes(3)"
+                        label="Thứ 3"
+                      />
+                      <app-checkbox
+                        @change="check($event, 4)"
+                        :checked="selectedItems.includes(4)"
+                        label="Thứ 4"
+                      />
+                      <app-checkbox
+                        @change="check($event, 5)"
+                        :checked="selectedItems.includes(5)"
+                        label="Thứ 5"
+                      />
+                      <app-checkbox
+                        @change="check($event, 6)"
+                        :checked="selectedItems.includes(6)"
+                        label="Thứ 6"
+                      />
+                      <app-checkbox
+                        @change="check($event, 7)"
+                        :checked="selectedItems.includes(7)"
+                        label="Thứ 7"
+                      />
+                      <app-checkbox
+                        @change="check($event, 8)"
+                        :checked="selectedItems.includes(8)"
+                        label="Chủ nhật"
+                      />
+                    </div>
+                  </div>
 
-              <div class="form-item">
-                <label>
-                  <strong>Thời gian áp dụng</strong>
-                </label>
-                <div>
-                  <app-date-picker
-                    class="ml-3"
-                    v-model="timeApply.start"
-                    square
-                    size="sm"
-                    label="Từ"
-                    placeholder="dd/mm/yyyy"
-                  >
-                    <template v-slot:icon-calendar>
-                      <IconCalendar />
-                    </template>
-                  </app-date-picker>
-                  <app-date-picker
-                    class="ml-3"
-                    v-model="timeApply.end"
-                    square
-                    size="sm"
-                    label="Đến"
-                    placeholder="dd/mm/yyyy"
-                  >
-                    <template v-slot:icon-calendar>
-                      <IconCalendar />
-                    </template>
-                  </app-date-picker>
+                  <div class="form-item">
+                    <label>
+                      <strong>Thời gian áp dụng</strong>
+                    </label>
+                    <div>
+                      <app-date-picker
+                        class="ml-3"
+                        v-model="timeApply.start"
+                        square
+                        size="sm"
+                        label="Từ"
+                        placeholder="dd/mm/yyyy"
+                      >
+                        <template v-slot:icon-calendar>
+                          <IconCalendar />
+                        </template>
+                      </app-date-picker>
+                      <app-date-picker
+                        class="ml-3"
+                        v-model="timeApply.end"
+                        square
+                        size="sm"
+                        label="Đến"
+                        placeholder="dd/mm/yyyy"
+                      >
+                        <template v-slot:icon-calendar>
+                          <IconCalendar />
+                        </template>
+                      </app-date-picker>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -230,6 +235,8 @@ import HeaderCreate from "~/components/layout/header/HeaderCreate";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import OlclassesService from "~/services/elearning/creating/Olclasses";
+import { createPayloadAddOlclass } from "~/models/elearning/Olclass";
+
 
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
 
@@ -247,7 +254,7 @@ export default {
   data() {
     return {
       tab: 1,
-      itemName: '',
+      itemName: "",
       sendMess: "0",
       downloadVideo: "0",
       showBonus: false,
@@ -263,6 +270,58 @@ export default {
       filter: [],
       filterCourse: null,
       filterPrivacy: null,
+      schedules: {
+        days_of_week: '',
+        duration: 0,
+        from_date: '',
+        schedule_id: '',
+        start_time: '',
+        to_date: ''
+      },
+      hours: [
+        {
+          value: "1",
+          text: "1"
+        },
+        {
+          value: "2",
+          text: "2"
+        },
+        {
+          value: "3",
+          text: "3"
+        },
+        {
+          value: "4",
+          text: "4"
+        },
+        {
+          value: "5",
+          text: "5"
+        },
+        {
+          value: "6",
+          text: "6"
+        }
+      ],
+      minutes: [
+        {
+          value: "0",
+          text: "00"
+        },
+        {
+          value: "15",
+          text: "15"
+        },
+        {
+          value: "30",
+          text: "30"
+        },
+        {
+          value: "45",
+          text: "45"
+        },
+      ],
       timeTypes: [
         {
           value: "AM",
@@ -396,7 +455,10 @@ export default {
         }
       ],
       selectedItems: [],
-      params: {}
+      params: {
+        elearning_id: 'xxxxxx',
+        enable: true
+      }
     };
   },
   computed: {
@@ -406,17 +468,17 @@ export default {
   methods: {
     async fnSave() {
       try {
-        this.loading = true
+        this.loading = true;
         let params = { ...this.params };
-        console.log(params)
+        const payload = createPayloadAddOlclass(this.params);
+        console.log(payload);
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.ADD}`,
-          { params }
+          { payload }
         );
       } catch (e) {
-
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
     fnDelete() {
