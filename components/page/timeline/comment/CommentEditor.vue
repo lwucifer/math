@@ -56,7 +56,7 @@ import { EnterHandler } from "~/utils/tiptap-plugins";
 import EmojiButton from "@joeattardi/emoji-button";
 
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
-import { checkEditorEmpty } from "~/utils/validations";
+import { clearEmptyTag } from "~/utils/validations";
 import FriendService from "~/services/social/friend";
 
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
@@ -190,10 +190,10 @@ export default {
     });
 
     this.emojiPicker.on("emoji", emoji => {
-      const currentContent = this.editor.getHTML();
-      console.log("currentContent", currentContent);
-      console.log("emoji", emoji);
-      this.editor.setContent(currentContent + emoji);
+      const { state, dispatch } = this.editor.view;
+      const { $from } = state.selection;
+      const { pos } = $from.pos;
+      dispatch(state.tr.insertText(`${emoji}`, pos));
     });
   },
 
@@ -250,9 +250,10 @@ export default {
 
     submit() {
       const html = this.editor.getHTML();
+      const clearedHtml = clearEmptyTag(html);
 
-      if (!checkEditorEmpty(html)) {
-        this.$emit("submit", html, this.getTagsFromHTML(html));
+      if (clearedHtml) {
+        this.$emit("submit", clearedHtml, this.getTagsFromHTML(clearedHtml));
         this.editor.setContent("");
       }
     },
