@@ -44,6 +44,7 @@
           placeholder="Nhập để tìm kiếm..."
           :size="'sm'"
           @input="handleChangedSearch"
+          @keyup.enter.native="handleSubmitSearch"
           class="inputSearch"
         />
         <button type="submit">
@@ -113,7 +114,7 @@
     },
     methods: {
       submit() {
-        this.$emit('submit', this.filters)
+        this.$emit('submitFilter', this.filters)
       },
       handleFocusSearchInput() {
         console.log('[Component] Elearning exam: focus searching ')
@@ -129,6 +130,9 @@
       },
       handleChangedStatus(val) {
         this.$emit('changedStatus', val)
+      },
+      handleSubmitSearch(e) {
+        this.$emit('submitSearch', e.target.value)
       }
     }
   }
