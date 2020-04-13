@@ -47,7 +47,7 @@
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
 
@@ -93,7 +93,7 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
-
+      this.handleCheckAnswers();
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
@@ -140,7 +140,17 @@ export default {
         this.payload.answers.splice(index, 1);
       }
     },
-
+    handleCheckAnswers(){
+      var lastanswer = this.payload.answers.slice(-1)[0];
+      const answer = {
+        correct: false,
+        content: ""
+      }
+      const check = _.isEqual(lastanswer, answer)
+      if(this.payload.answers.length > 2 && check){
+        this.payload.answers.pop()
+      }
+    },
     get
   }
 };
