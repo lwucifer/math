@@ -187,9 +187,9 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    // ...mapState("elearning/courses/student", {
-    //   student: "info"
-    // })
+    ...mapState("elearning/courses/student", {
+      student: "info"
+    })
   },
 
   methods: {
