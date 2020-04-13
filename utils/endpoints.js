@@ -78,6 +78,8 @@ export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/searc
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
 export const ELEARNING_CREATING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses`;
+export const ELEARNING_CREATING_OLCLASSES_INVITATIONS = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invitations`;
+export const ELEARNING_CREATING_OLCLASSES_INVITE = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invite`;
 
 /**
  * STUDY

@@ -148,6 +148,7 @@ export const CREATING_OLCLASSES = {
   ADD: "creatingOlclassesAdd",
   EDIT: "creatingOlclassesEdit",
   DELETE: "creatingOlclassesDelete",
+  INVITATIONS: "creatingOlclassesInvitations",
 };
 
 export const CREATING_CHAPTER = {
