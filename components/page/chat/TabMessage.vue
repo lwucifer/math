@@ -524,7 +524,12 @@ export default {
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }, "friendList"]),
-    ...mapState("message", ["messageList", "groupListDetail", "messageOn"]),
+    ...mapState("message", [
+      "messageList",
+      "groupListDetail",
+      "messageOn",
+      "memberList"
+    ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
@@ -553,16 +558,79 @@ export default {
       );
     },
     nameGroup() {
-      return this.groupListDetail.room && this.groupListDetail.room.room_name
-        ? this.groupListDetail.room.room_name
-        : "";
+      console.log("this.memberList", this.memberList);
+      const dataMember =
+        this.memberList && this.memberList.listMember
+          ? this.memberList.listMember
+          : [];
+      const dataTotal =
+        this.memberList &&
+        this.memberList.page &&
+        this.memberList.page.totalElements
+          ? this.memberList.page.totalElements
+          : "";
+      if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
+        const [dataFilterMember] = dataMember.filter(
+          item => item.id != this.userId
+        );
+        return dataFilterMember && dataFilterMember.fullname
+          ? dataFilterMember.fullname
+          : "";
+      } else if (
+        this.groupListDetail.room &&
+        this.groupListDetail.room.type == 2
+      ) {
+        const filterMemberUserId = dataMember.filter(
+          item => item.id != this.userId
+        );
+        let dataNameGroup = "";
+        if (filterMemberUserId.length < 4) {
+          dataNameGroup = filterMemberUserId
+            .reduce((acc, cor) => {
+              acc.push(cor.fullname);
+              return acc;
+            }, [])
+            .join(", ");
+        } else {
+          dataNameGroup =
+            filterMemberUserId[0].fullname +
+            ", " +
+            filterMemberUserId[1].fullname +
+            ", " +
+            filterMemberUserId[2].fullname +
+            " và " +
+            (dataTotal - 4).toString() +
+            " người khác";
+        }
+        return this.groupListDetail.room.room_name
+          ? this.groupListDetail.room.room_name
+          : dataNameGroup;
+      }
     },
     avatarSrc() {
-      return this.groupListDetail.room &&
+      const dataMember =
+        this.memberList && this.memberList.listMember
+          ? this.memberList.listMember
+          : [];
+      if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
+        const [dataFilterMember] = dataMember.filter(
+          item => item.id != this.userId
+        );
+        return dataFilterMember &&
+          dataFilterMember.avatar &&
+          dataFilterMember.avatar.low
+          ? dataFilterMember.avatar.low
+          : "";
+      } else if (
+        this.groupListDetail.room &&
+        this.groupListDetail.room.type == 2
+      ) {
+        return;
         this.groupListDetail.room.room_avatar &&
         this.groupListDetail.room.room_avatar.low
-        ? this.groupListDetail.room.room_avatar.low
-        : "https://picsum.photos/40/40";
+          ? this.groupListDetail.room.room_avatar.low
+          : "https://picsum.photos/40/40";
+      }
     }
   },
 
