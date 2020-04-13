@@ -158,6 +158,10 @@ export const ELEARNING_TEACHING_SUBMISSION = {
     SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark",
 };
 
+export const ELEARNING_TEACHING_VOTE = {
+    SET_TEACHING_VOTE_LIST: "setElearningTeachingVoteList",
+};
+
 export const ELEARNING_CREATING_EXERCISES = {
     SET_ELEARNING_CREATING_EXERCISES_LIST: "setElearningCreatingExercisesList",
     SET_ELEARNING_CREATING_EXERCISES_ADD: "setElearningCreatingExercisesAdd",

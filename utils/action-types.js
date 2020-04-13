@@ -206,6 +206,10 @@ export const ELEARNING_TEACHING_SUBMISSION = {
     MARK: "elearningTeachingSubmissionMark",
 };
 
+export const ELEARNING_TEACHING_VOTE = {
+    LIST: "elearningTeachingVoteList",
+};
+
 export const ELEARNING_CREATING_EXERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",

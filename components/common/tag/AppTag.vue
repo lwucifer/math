@@ -20,8 +20,8 @@ export default {
   },
 
   methods: {
-    handleClose() {
-      this.$emit('close')
+    handleClose(event) {
+      this.$emit('close', event)
     }
   }
 };

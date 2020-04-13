@@ -500,14 +500,14 @@ export default {
         this.groupListQuery.page = 1;
         this.infiniteId += 1;
       }
-    },
-    groupList(_newval) {
-      if (_newval) {
-        this.groupsListTab = [];
-        this.groupListQuery.page = 1;
-        this.infiniteId += 1;
-      }
     }
+    // groupList(_newval) {
+    //   if (_newval) {
+    //     this.groupsListTab = [];
+    //     this.groupListQuery.page = 1;
+    //     this.infiniteId += 1;
+    //   }
+    // }
   }
 };
 </script>

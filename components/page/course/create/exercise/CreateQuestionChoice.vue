@@ -13,6 +13,8 @@
       :index="index"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
+      @handleAddAnswer="handleAddAnswer"
+      @handleDeleteAnswer="handleDeleteAnswer"
     />
 
     <div class="d-flex justify-content-end mt-5">
@@ -52,14 +54,14 @@ import { createPayloadQuestion } from "~/models/course/AddCourse";
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion,
+    CreateAnswerOfQuestion
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
 
   data() {
@@ -73,22 +75,14 @@ export default {
         answers: [
           {
             correct: false,
-            content: "",
+            content: ""
           },
           {
             correct: false,
-            content: "",
-          },
-          {
-            correct: false,
-            content: "",
-          },
-          {
-            correct: false,
-            content: "",
-          },
-        ],
-      },
+            content: ""
+          }
+        ]
+      }
     };
   },
 
@@ -131,7 +125,23 @@ export default {
       this.payload.answers[index].content = value;
     },
 
-    get,
-  },
+    handleAddAnswer(index) {
+      const answer = {
+        correct: false,
+        content: ""
+      };
+      if (index == this.payload.answers.length && index < 6) {
+        this.payload.answers.push(answer);
+      }
+    },
+
+    handleDeleteAnswer(index) {
+      if (this.payload.answers.length > 2) {
+        this.payload.answers.splice(index, 1);
+      }
+    },
+
+    get
+  }
 };
 </script>

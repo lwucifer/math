@@ -1,12 +1,12 @@
 class CreateComment {
-  constructor(
-    source_id,
-    parent_comment_id,
-    comment_content,
-    comment_link,
-    list_tag,
-    comment_images,
-  ) {
+  constructor({
+    source_id = null,
+    parent_comment_id = null,
+    comment_content = '',
+    comment_link = '',
+    list_tag = null,
+    comment_images = null,
+  }) {
     this.source_id = source_id;
     this.parent_comment_id = parent_comment_id;
     this.comment_content = comment_content;
@@ -16,6 +16,6 @@ class CreateComment {
   }
 }
 
-export function createComment(...args) {
-  return Object.freeze(new CreateComment(...args));
+export function createComment(params) {
+  return Object.freeze(new CreateComment(params));
 }

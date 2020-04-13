@@ -16,6 +16,7 @@ a.comment-item__name {
     margin-left: 1.1rem;
     line-height: (17/14);
     flex-grow: 1;
+    max-width: calc(100% - 5.1rem);
 }
 
 .comment-item__right__top {
@@ -33,7 +34,6 @@ a.comment-item__name {
 
 .comment-item__actions {
     margin-top: 1rem;
-    margin-bottom: 1.6rem;
 
     a {
         text-decoration: none;
@@ -103,5 +103,6 @@ a.comment-item__name {
     
     .comment-item__right {
         margin-left: .8rem;
+        max-width: calc(100% - 2.8rem);
     }
 }
