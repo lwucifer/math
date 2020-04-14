@@ -70,14 +70,13 @@ const actions = {
     }
   },
 
-  async [actionTypes.CREATING_OLCLASSES.DELETE]({ commit }, payload) {
+  async [actionTypes.CREATING_OLCLASSES.DELETE]({ commit }, options) {
     try {
-      const result = await new Classes(this.$axios)[
-        "postWithFormData"
-      ](payload);
+      const result = await new Classes(this.$axios)["postWithFormData"](options);
+      //const result = await new Classes(this.$axios)[actionTypes.BASE.DELETE_PAYLOAD](options);
       return result;
     } catch (error) {
-      console.log("[Creating Classes] delete.error", error);
+      console.log("[Creating Olclasses] delete.error", error);
     }
   },
 

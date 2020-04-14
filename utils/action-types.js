@@ -128,6 +128,10 @@ export const ELEARNING_PUBLIC_RELATED = {
     LIST: "elearningPublicRelatedList",
 };
 
+export const ELEARNING_PUBLIC_SEARCH = {
+    DETAIL: "elearningPublicElearningDetail",
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
