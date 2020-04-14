@@ -43,6 +43,19 @@
         <img class="d-block" :src="data.comment_image.medium" alt />
       </div>
 
+      <app-content-box
+        v-if="!isEmpty(link)"
+        tag="a"
+        target="_blank"
+        class="mb-3"
+        size="sm"
+        :href="link.url"
+        :image="link.image"
+        :title="link.title"
+        :desc="link.description"
+        :meta-footer="link.siteName"
+      />
+
       <div class="comment-item__actions">
         <n-link to class="comment-item__time">{{ data.created_at | moment('from') }}</n-link>
 
@@ -91,7 +104,7 @@
 </template>
 
 <script>
-import { uniqWith } from "lodash";
+import { uniqWith, isEmpty } from "lodash";
 import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
@@ -133,7 +146,7 @@ export default {
           "fullname",
           "comment_content",
           "created_at",
-          "comment_user_id"
+          "comment_user_id",
         ].every(key => key in value)
     }
   },
@@ -178,10 +191,18 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    link() {
+      return this.data && this.data.comment_link
+        ? JSON.parse(this.data.comment_link)
+        : {};
     }
   },
 
   methods: {
+    isEmpty,
+
     async getChildrenComment(id) {
       this.isFetchingComment = true;
 
@@ -224,14 +245,15 @@ export default {
       }
     },
 
-    async postComment(content, listTags, image) {
+    async postComment(content, listTags, image, link) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         parent_comment_id: this.data.id,
         comment_content: content,
         list_tag: listTags,
-        comment_images: image
+        comment_images: image,
+        comment_link: link
       });
 
       for (const key in commentModel) {
