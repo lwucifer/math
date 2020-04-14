@@ -51,6 +51,10 @@ export const ACCOUNT_EARNING = {
     SET_ACCOUNT_EARNING_LIST: "setAccountEarningList"
 };
 
+export const ELEARNING_PUBLIC_SEARCH = {
+    SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList"
 };
