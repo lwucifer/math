@@ -39,6 +39,23 @@
 
       <div class="comment-item__content" v-html="data.comment_content"></div>
 
+      <div v-if="data.comment_image" class="comment-item__image">
+        <img class="d-block" :src="data.comment_image.medium" alt />
+      </div>
+
+      <app-content-box
+        v-if="!isEmpty(link)"
+        tag="a"
+        target="_blank"
+        class="mb-3"
+        size="sm"
+        :href="link.url"
+        :image="link.image"
+        :title="link.title"
+        :desc="link.description"
+        :meta-footer="link.siteName"
+      />
+
       <div class="comment-item__actions">
         <n-link to class="comment-item__time">{{ data.created_at | moment('from') }}</n-link>
 
@@ -80,12 +97,14 @@
       </div>
 
       <CommentEditor v-if="showReply" class="mt-3" reply @submit="postComment" />
+
+      <!-- <app-upload :fileList="fileList"></app-upload> -->
     </div>
   </div>
 </template>
 
 <script>
-import { uniqWith } from "lodash";
+import { uniqWith, isEmpty } from "lodash";
 import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
@@ -127,7 +146,7 @@ export default {
           "fullname",
           "comment_content",
           "created_at",
-          "comment_user_id"
+          "comment_user_id",
         ].every(key => key in value)
     }
   },
@@ -172,10 +191,18 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    link() {
+      return this.data && this.data.comment_link
+        ? JSON.parse(this.data.comment_link)
+        : {};
     }
   },
 
   methods: {
+    isEmpty,
+
     async getChildrenComment(id) {
       this.isFetchingComment = true;
 
@@ -218,13 +245,15 @@ export default {
       }
     },
 
-    async postComment(content, listTags) {
+    async postComment(content, listTags, image, link) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         parent_comment_id: this.data.id,
         comment_content: content,
-        list_tag: listTags
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
       });
 
       for (const key in commentModel) {
@@ -233,9 +262,7 @@ export default {
         // Check whether field is an array
         formData.append(
           key,
-          Array.isArray(value)
-            ? JSON.stringify(value)
-            : value
+          Array.isArray(value) ? JSON.stringify(value) : value
         );
       }
 
@@ -244,19 +271,25 @@ export default {
       ](formData);
 
       if (doPostComment.success) {
-        if (!this.childrenCommentData.page) {
-          await this.getChildrenComment(this.data.id);
-        } else if ("listComments" in this.childrenCommentData) {
-          const { listComments } = this.childrenCommentData;
-          this.childrenCommentData.listComments = [
-            doPostComment.data,
-            ...listComments
-          ];
-        } else {
-          this.childrenCommentData = {
-            listComments: [doPostComment.data]
-          };
-        }
+        const timeout = setTimeout(
+          async () => {
+            if (!this.childrenCommentData.page) {
+              await this.getChildrenComment(this.data.id);
+            } else if ("listComments" in this.childrenCommentData) {
+              const { listComments } = this.childrenCommentData;
+              this.childrenCommentData.listComments = [
+                doPostComment.data,
+                ...listComments
+              ];
+            } else {
+              this.childrenCommentData = {
+                listComments: [doPostComment.data]
+              };
+            }
+            clearTimeout(timeout);
+          },
+          image ? 1000 : 0
+        );
       } else {
         this.$toasted.error(doPostComment.message);
       }

@@ -106,10 +106,11 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 import OlclassesService from "~/services/elearning/creating/Olclasses";
 
@@ -193,6 +194,7 @@ export default {
         last: 10
       },
       classList: [],
+      lessonList: [],
       params: {
         page: 1,
         size: 10,
@@ -206,6 +208,9 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       classes: "Olclasses"
+    }),
+    ...mapState(STORE_PUBLIC_SEARCH, {
+      stateLessons: "Lessons"
     })
   },
 
@@ -213,57 +218,96 @@ export default {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
+      that.params.size = that.pagination.size;
+      that.params.page = that.pagination.page;
+      that.getList();
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
-      console.log(this.params);
+      this.params = { ...this.params, ...this.filter };
       this.getList();
     },
     handleChangedCourse(val) {
       this.filter.course = this.filterCourse.value;
     },
-    handleFocusSearchInput() {
-    },
-    handleBlurSearchInput() {
-    },
-    handleSearch() {
-    },
+    handleFocusSearchInput() {},
+    handleBlurSearchInput() {},
+    handleSearch() {},
     selectRow(data) {
       this.ids = data.map((row, index, data) => {
-          return row.online_class_id
+        return row.online_class_id;
       });
+    },
+
+    async getLessons() {
+      try {
+        let userId = this.$store.state.auth.token ? this.$store.state.auth.token.id : "";
+        await this.$store.dispatch(
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
+          { userId }
+        );
+        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let list = [];
+        this.lessonList.forEach(element => {
+          list.push(
+            {
+              value: element.id,
+              text: element.name,
+            }
+          )
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
+      }
     },
 
     async getList() {
       try {
-        this.loading = true
+        this.loading = true;
         let params = { ...this.params };
-        console.log(params)
+        console.log(params);
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.classes, 'data.content', [])
-        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        this.classList = this.get(this.classes, "data.content", []);
+        this.pagination.size = this.get(this.detailInfo, "data.page.size", 10);
+        this.pagination.first = this.get(this.detailInfo, "data.page.first", 1);
+        this.pagination.last = this.get(this.detailInfo, "data.page.last", 1);
+        this.pagination.number = this.get(
+          this.detailInfo,
+          "data.page.number",
+          0
+        );
+        this.pagination.totalPages = this.get(
+          this.detailInfo,
+          "data.page.total_pages",
+          0
+        );
+        this.pagination.totalElements = this.get(
+          this.detailInfo,
+          "data.page.total_elements",
+          0
+        );
+        this.pagination.numberOfElements = this.get(
+          this.detailInfo,
+          "data.page.number_of_elements",
+          0
+        );
       } catch (e) {
-
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
 
     async deleteRows() {
       let ids = { online_class_ids: [...this.ids] };
       console.log(ids);
-      const doDelete = await new OlclassesService(this.$axios)[
-        actionTypes.BASE.DELETE_PAYLOAD
-      ](JSON.stringify(ids));
+      let params = JSON.stringify(ids);
+      await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.DELETE}`,
+        { ids }
+      );
 
       // if (doDelete.success) {
       //   const { courses } = this;
@@ -287,6 +331,7 @@ export default {
 
   created() {
     this.getList();
+    this.getLessons();
   }
 };
 </script>
