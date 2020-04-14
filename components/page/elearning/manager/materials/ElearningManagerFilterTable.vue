@@ -2,6 +2,11 @@
   <div class="wrapfilterbar__ElearningManagerFilterTable">
     <elearning-manager-filter-form
       @changedFilter="updateFilter"
+      @submitFilter="submitFilter"
+      @changedType="handleChangedType"
+      @changedQuery="handleChangedSearch"
+      @changedStatus="handleChangedStatus"
+      @submitSearch="handleSubmitSearch"
       class="mb-4"
     />
     <div>
@@ -170,13 +175,29 @@
     },
     methods: {
       onPageChange(e) {
+        this.resetData()
         this.$emit('changedPagination', e)
       },
       selectRow(data) {
         this.selectedItems = data
       },
+      handleChangedSearch(val) {
+        this.$emit('changedQuery', val)
+      },
+      handleChangedType(val) {
+        this.$emit('changedType', val)
+      },
+      handleChangedStatus(val) {
+        this.$emit('changedStatus', val)
+      },
+      handleSubmitSearch(val) {
+        this.$emit('submitSearch', val)
+      },
       updateFilter(val) {
         this.$emit('changedFilter', val)
+      },
+      submitFilter(val) {
+        this.$emit('submitFilter', val)
       },
       async deleteItems(items) {
         const delIds = _.map(items, 'id')
@@ -187,12 +208,6 @@
           `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`, { data }
         )
         return res
-        // if (get(res, "success", false)) {
-        //   await this.refreshData()
-        //   this.$toasted.success(get(res, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"))
-        //   return
-        // }
-        // this.$toasted.error(get(res, "message", "Xóa tài liệu thành công"))
       },
       async confirmDel() {
         this.visible.delete = false
@@ -204,6 +219,9 @@
       },
       cancelDel() {
         this.visible.delete = false
+      },
+      resetData() {
+        this.selectedItems = []
       },
       get
     },

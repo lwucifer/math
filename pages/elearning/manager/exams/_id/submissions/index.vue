@@ -15,7 +15,7 @@
           </div>
 
           <div class="elearning-manager-content__main">
-            <div class="elearning-">
+            <div class="">
               <!--Filter form-->
               <submission-filter-form
                 @changedFilter="updateFilter"
