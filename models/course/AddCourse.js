@@ -92,7 +92,9 @@ export function createPayloadAddDocument(payload) {
 
 class CourseSetting {
   constructor(payload) {
-    this.comment_allow = payload.comment_allow == 1 ? true : false;
+    if (payload.comment_allow !== "") {
+      this.comment_allow = payload.comment_allow == 1 ? true : false;
+    }
     this.price = payload.price !== "" ? numeral(payload.price).value() : "";
     this.fee = payload.fee !== "" ? numeral(payload.fee).value() : "";
     this.elearning_id = payload.elearning_id;
@@ -161,10 +163,10 @@ class Question {
       this.content = payload.content;
     }
     let answers = [];
-    payload.answers.map((answer) => {
+    payload.answers.map(answer => {
       let item = {
         correct: answer.correct,
-        content: answer.content,
+        content: answer.content
       };
       answers.push(item);
     });
