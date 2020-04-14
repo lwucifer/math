@@ -292,12 +292,13 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content, listTags) {
+    async postComment(content, listTags, image) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         comment_content: content,
-        list_tag: listTags
+        list_tag: listTags,
+        comment_images: image
       });
 
       for (const key in commentModel) {
@@ -317,17 +318,20 @@ export default {
       ](formData);
 
       if (doPostComment.success) {
-        if ("listParentComments" in this.parentCommentData) {
-          const { listParentComments } = this.parentCommentData;
-          this.parentCommentData.listParentComments = [
-            doPostComment.data,
-            ...listParentComments
-          ];
-        } else {
-          this.parentCommentData = {
-            listParentComments: [doPostComment.data]
-          };
-        }
+        const timeout = setTimeout(() => {
+          if ("listParentComments" in this.parentCommentData) {
+            const { listParentComments } = this.parentCommentData;
+            this.parentCommentData.listParentComments = [
+              doPostComment.data,
+              ...listParentComments
+            ];
+          } else {
+            this.parentCommentData = {
+              listParentComments: [doPostComment.data]
+            };
+          }
+          clearTimeout(timeout);
+        }, image ? 1000 : 0);
       } else {
         this.$toasted.error(doPostComment.message);
       }

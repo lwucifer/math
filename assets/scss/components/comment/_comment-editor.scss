@@ -1,10 +1,14 @@
 .comment-editor {
-    @include clearfix;
+    display: flex;
+}
+
+.comment-editor__right {
+    flex-grow: 1;
+    max-width: calc(100% - 4rem - 8px);
 }
 
 .comment-editor__editor-wrapper {
     position: relative;
-    flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
@@ -39,7 +43,6 @@
 }
 
 .comment-editor__avatar {
-    float: left;
     margin-right: 8px;
     margin-top: -0.25rem;
 }
@@ -82,6 +85,41 @@
     }
 }
 
+// Upload
+.comment-editor__upload {
+    
+}
+
+.comment-editor__upload__preview {
+    position: relative;
+    display: inline-block;
+
+    img {
+        display: block;
+        max-width: 8.6rem;
+        max-height: 8.6rem;
+    }
+}
+
+.comment-editor__upload__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:hover {
+        color: $color-primary;
+    }
+}
+
 
 // MODIFIER
 .comment-editor--reply {
@@ -98,5 +136,9 @@
     .comment-editor__avatar {
         margin-top: .5rem;
         margin-right: 4px;
+    }
+
+    .comment-editor__right {
+        max-width: calc(100% - 2rem - 4px);
     }
 }
