@@ -6,41 +6,57 @@
       class="comment-editor__avatar"
     />
 
-    <div class="comment-editor__editor-wrapper">
-      <client-only>
-        <editor-content :editor="editor" class="editor comment-editor__editor" />
+    <div class="comment-editor__right">
+      <div class="comment-editor__editor-wrapper">
+        <client-only>
+          <editor-content :editor="editor" class="editor comment-editor__editor" />
 
-        <div class="suggestion-list" v-show="hasResults" ref="suggestions">
-          <div
-            v-for="(user, index) in mentionList"
-            :key="user.id"
-            class="suggestion-list__item"
-            :class="{ 'is-selected': mentionNavigatedIndex === index }"
-            @click="selectUser(user)"
-          >
-            <app-avatar
-              class="mr-3"
-              :size="32"
-              :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
-            />
-            {{ user.fullname }}
+          <div class="suggestion-list" v-show="hasResults" ref="suggestions">
+            <div
+              v-for="(user, index) in mentionList"
+              :key="user.id"
+              class="suggestion-list__item"
+              :class="{ 'is-selected': mentionNavigatedIndex === index }"
+              @click="selectUser(user)"
+            >
+              <app-avatar
+                class="mr-3"
+                :size="32"
+                :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
+              />
+              {{ user.fullname }}
+            </div>
+
+            <infinite-loading :identifier="mentionInfiniteId" @infinite="mentionInfiniteHandler">
+              <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
+              <div slot="no-results" class="text-sub py-3">Không tìm thấy "{{ mentionQuery.name }}"</div>
+            </infinite-loading>
           </div>
+        </client-only>
 
-          <infinite-loading :identifier="mentionInfiniteId" @infinite="mentionInfiniteHandler">
-            <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
-            <div slot="no-results" class="text-sub py-3">Không tìm thấy "{{ mentionQuery.name }}"</div>
-          </infinite-loading>
+        <div class="comment-editor__actions">
+          <app-upload
+            :fileList="uploadFileList"
+            accept="video/*, video/x-m4v, video/webm, video/x-ms-wmv, video/x-msvideo, video/3gpp, video/flv, video/x-flv, video/mp4, video/quicktime, video/mpeg, video/ogv, .ts, .mkv, image/*, image/heic, image/heif"
+            class="comment-editor__upload d-inline-block"
+            @change="handleUploadChange"
+          >
+            <button type="button" class="comment-editor__button image">
+              <IconAddImage class="icon" />
+            </button>
+          </app-upload>
+
+          <button type="button" class="comment-editor__button emoji" @click="hanleShowEmojiPicker">
+            <IconEmoji class="icon" />
+          </button>
         </div>
-      </client-only>
+      </div>
 
-      <div class="comment-editor__actions">
-        <button type="button" class="comment-editor__button image">
-          <IconAddImage class="icon" />
-        </button>
-
-        <button type="button" class="comment-editor__button emoji" @click="hanleShowEmojiPicker">
-          <IconEmoji class="icon" />
-        </button>
+      <div v-if="uploadImgSrc" class="comment-editor__upload__preview mt-3">
+        <img :src="uploadImgSrc" alt />
+        <span class="comment-editor__upload__close" @click.stop="removeImgUpload">
+          <IconClose class="icon" />
+        </span>
       </div>
     </div>
   </div>
@@ -55,18 +71,23 @@ import { Placeholder, HardBreak, Mention } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 import EmojiButton from "@joeattardi/emoji-button";
 
+import { getBase64 } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { clearEmptyTag } from "~/utils/validations";
 import FriendService from "~/services/social/friend";
 
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+const IconPlus = () => import("~/assets/svg/design-icons/plus.svg?inline");
 
 export default {
   components: {
     EditorContent,
     IconAddImage,
-    IconEmoji
+    IconEmoji,
+    IconClose,
+    IconPlus
   },
 
   props: {
@@ -88,7 +109,11 @@ export default {
       mentionPopup: null,
       mentionSuggestionRange: null,
       insertMention: () => {},
-      mentionInfiniteId: +new Date()
+      mentionInfiniteId: +new Date(),
+
+      // Image upload data
+      uploadFileList: [],
+      uploadImgSrc: null
     };
   },
 
@@ -222,6 +247,12 @@ export default {
   },
 
   methods: {
+    clear() {
+      this.editor.setContent("");
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+    },
+
     hanleShowEmojiPicker(event) {
       const { emojiPicker } = this;
       const button =
@@ -252,9 +283,14 @@ export default {
       const html = this.editor.getHTML();
       const clearedHtml = clearEmptyTag(html);
 
-      if (clearedHtml) {
-        this.$emit("submit", clearedHtml, this.getTagsFromHTML(clearedHtml));
-        this.editor.setContent("");
+      if (clearedHtml || this.uploadFileList.length) {
+        this.$emit(
+          "submit",
+          clearedHtml,
+          this.getTagsFromHTML(clearedHtml),
+          this.uploadFileList[0] || null
+        );
+        this.clear();
       }
     },
 
@@ -358,6 +394,21 @@ export default {
       } else {
         $state.complete();
       }
+    },
+
+    /**
+     * Remove image upload
+     */
+    removeImgUpload() {
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+    },
+
+    handleUploadChange(fileList, event) {
+      this.uploadFileList = Array.from(fileList);
+      getBase64(this.uploadFileList[0], src => {
+        this.uploadImgSrc = src;
+      });
     }
   }
 };
