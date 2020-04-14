@@ -53,7 +53,7 @@
         </div>
         <div class="message-info__box__content" v-else></div>
       </div>
-      <div class="message-info__box" v-if="isGroup">
+      <div class="message-info__box" v-if="!tabChat">
         <h5 class="message-info__box__title">Thành viên</h5>
         <div class="message-info__box__content">
           <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
@@ -186,7 +186,7 @@ export default {
         : "https://picsum.photos/40/40";
   },
   computed: {
-    ...mapState("message", ["memberList", "groupListDetail"]),
+    ...mapState("message", ["memberList", "groupListDetail", "tabChat"]),
     listImage() {
       return this.groupListDetail && this.groupListDetail.listImage
         ? this.groupListDetail.listImage
@@ -277,12 +277,10 @@ export default {
     }
   },
   watch: {
-    memberList(_newval) {
-      if (_newval) {
-        this.memberListTab = [];
-        this.memberListQuery.page = 1;
-        this.infiniteId += 1;
-      }
+    groupListDetail(_newval) {
+      this.memberListTab = [];
+      this.memberListQuery.page = 1;
+      this.infiniteId += 1;
     }
   }
 };

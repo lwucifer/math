@@ -119,6 +119,7 @@ export const GROUP_DETAIL = `${SCHOOLLY_ALIAS}/social/api/room/getDetail`;
 export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`;
 export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
 export const MESSAGE_TYPE = `${SCHOOLLY_ALIAS}/social/api/message/getViaRoomType`;
+export const MESSAGE_SEND_FILE = `${SCHOOLLY_ALIAS}/social/api/message/uploadFile`;
 /**
  * TEACHING
  */
