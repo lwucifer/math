@@ -120,6 +120,36 @@
     }
 }
 
+.comment-editor__preview-link {
+    position: relative;
+
+    $this: &;
+
+    &__remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        visibility: hidden;
+
+        .icon {
+            color: $color-text;
+            font-size: 2rem;
+        }
+
+        &:hover {
+            .icon {
+                color: $color-primary;
+            }
+        }
+    }
+
+    &:hover {
+        #{$this}__remove {
+            visibility: visible;
+        }
+    }
+}
 
 // MODIFIER
 .comment-editor--reply {

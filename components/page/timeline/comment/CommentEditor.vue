@@ -52,18 +52,45 @@
         </div>
       </div>
 
+      <!-- Upload Image -->
       <div v-if="uploadImgSrc" class="comment-editor__upload__preview mt-3">
         <img :src="uploadImgSrc" alt />
         <span class="comment-editor__upload__close" @click.stop="removeImgUpload">
           <IconClose class="icon" />
         </span>
       </div>
+      <!-- End Upload Image -->
+
+      <!-- Fetch Link -->
+      <div v-if="linkDataFetching" class="text-center text-sub caption mt-3">
+        <template v-if="linkDataFetchError">Không thể tải bản xem trước.</template>
+        <template v-else>Đang tìm nạp bản xem trước</template>
+      </div>
+
+      <div v-else-if="!linkDataFetching && linkDataFetched" class="comment-editor__preview-link mt-3">
+        <a href class="comment-editor__preview-link__remove" @click.prevent="removePreviewLink">
+          <IconTimes class="icon" />
+        </a>
+
+        <app-content-box
+          tag="a"
+          target="_blank"
+          class="mb-4"
+          size="sm"
+          :href="link.url"
+          :image="link.image"
+          :title="link.title"
+          :desc="link.description"
+          :meta-footer="link.siteName"
+        />
+      </div>
+      <!-- End Fetch Link -->
     </div>
   </div>
 </template>
 
 <script>
-import { debounce } from "lodash";
+import { debounce, isEmpty } from "lodash";
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
 import { Editor, EditorContent } from "tiptap";
@@ -74,12 +101,16 @@ import EmojiButton from "@joeattardi/emoji-button";
 import { getBase64 } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { clearEmptyTag } from "~/utils/validations";
+import { isValidUrl } from "~/utils/common";
+import { createPostLink } from "~/models/post/PostLink";
 import FriendService from "~/services/social/friend";
+import ScraperService from "~/services/social/scraper";
 
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconPlus = () => import("~/assets/svg/design-icons/plus.svg?inline");
+const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 
 export default {
   components: {
@@ -87,7 +118,8 @@ export default {
     IconAddImage,
     IconEmoji,
     IconClose,
-    IconPlus
+    IconPlus,
+    IconTimes
   },
 
   props: {
@@ -113,7 +145,13 @@ export default {
 
       // Image upload data
       uploadFileList: [],
-      uploadImgSrc: null
+      uploadImgSrc: null,
+
+      // Fetch link data
+      linkDataFetching: false,
+      linkDataFetched: false,
+      linkDataFetchError: false,
+      link: null
     };
   },
 
@@ -128,6 +166,15 @@ export default {
       return this.mentionList && this.mentionList.length
         ? this.mentionList.length
         : 0;
+    },
+
+    submitable() {
+      const conditions = [
+        this.uploadFileList.length,
+        !isEmpty(this.link)
+      ];
+
+      return conditions.some(condition => !!condition);
     }
   },
 
@@ -204,7 +251,8 @@ export default {
           // onFilter: (items, query) => {
           // }
         })
-      ]
+      ],
+      onPaste: this.handleEditorPaste
     });
 
     // Init emoji picker
@@ -249,8 +297,8 @@ export default {
   methods: {
     clear() {
       this.editor.setContent("");
-      this.uploadFileList = [];
-      this.uploadImgSrc = null;
+      this.removeImgUpload();
+      this.removePreviewLink();
     },
 
     hanleShowEmojiPicker(event) {
@@ -283,12 +331,13 @@ export default {
       const html = this.editor.getHTML();
       const clearedHtml = clearEmptyTag(html);
 
-      if (clearedHtml || this.uploadFileList.length) {
+      if (clearedHtml || this.submitable) {
         this.$emit(
           "submit",
           clearedHtml,
           this.getTagsFromHTML(clearedHtml),
-          this.uploadFileList[0] || null
+          this.uploadFileList[0] || null,
+          !isEmpty(this.link) ? JSON.stringify(this.link) : null
         );
         this.clear();
       }
@@ -405,10 +454,92 @@ export default {
     },
 
     handleUploadChange(fileList, event) {
+      // if is preview a link -> remove that. Post prefer image than link
+      !isEmpty(this.link) && this.removePreviewLink();
+
       this.uploadFileList = Array.from(fileList);
       getBase64(this.uploadFileList[0], src => {
         this.uploadImgSrc = src;
       });
+    },
+
+    /**
+     * Paste handler
+     */
+    handleEditorPaste(view, event, slice) {
+      const { clipboardData } = event;
+
+      if (clipboardData.files && clipboardData.files.length) {
+        // Handle paste file here
+        return;
+      }
+
+      // Handle paste text
+      const text = clipboardData.getData("text");
+      const isUrl = isValidUrl(text);
+
+      // If paste text is a string url
+      if (isUrl) {
+        // If no image in post and had not been fetched any link
+        !this.uploadFileList.length &&
+          !this.linkDataFetched &&
+          this.fetchLink(text);
+      }
+    },
+
+    async fetchLink(url) {
+      try {
+        this.linkDataFetching = true;
+
+        const getInfo = await new ScraperService(this.$axios)[
+          ACTION_TYPE_BASE.ADD
+        ]({
+          link: url
+        });
+
+        this.linkDataFetching = false;
+        this.linkDataFetched = true;
+
+        if (getInfo.success) {
+          if (getInfo.data && getInfo.data.success) {
+            const {
+              ogTitle,
+              ogType,
+              ogUrl,
+              ogSiteName,
+              ogDescription,
+              ogImage = {},
+              ogVideo = {}
+            } = getInfo.data.data;
+            const linkModel = createPostLink({
+              type: ogType,
+              url: ogUrl,
+              siteName: ogSiteName,
+              title: ogTitle,
+              description: ogDescription,
+              updatedTime: null,
+              image: ogImage.url,
+              imageWidth: ogImage.width,
+              imageHeight: ogImage.height,
+              videoUrl: ogVideo.url,
+              videoSecureUrl: ogVideo.secureUrl,
+              videoType: ogVideo.type,
+              videoWidth: ogVideo.width,
+              videoHeight: ogVideo.height,
+              videoTag: ogVideo.tag
+            });
+            this.link = linkModel;
+          }
+        }
+      } catch (error) {
+        this.linkDataFetchError = true;
+      }
+    },
+
+    removePreviewLink() {
+      this.linkDataFetchError = false;
+      this.linkDataFetched = false;
+      this.link = null;
     }
   }
 };

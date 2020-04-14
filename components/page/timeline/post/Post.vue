@@ -292,13 +292,14 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content, listTags, image) {
+    async postComment(content, listTags, image, link) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         comment_content: content,
         list_tag: listTags,
-        comment_images: image
+        comment_images: image,
+        comment_link: link
       });
 
       for (const key in commentModel) {
