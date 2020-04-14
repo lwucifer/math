@@ -1,0 +1,36 @@
+.setting-notify-content__account-info{
+    border: 1px solid #EEEEEE;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding:20px;
+    .btn-show-form__account-info{
+        svg path{ fill: #999999;}
+        margin-left: auto;
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+    div{
+        p:first-child{
+            font-size: 14px;
+            line-height: 19px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+        p{
+            color: #999999;
+            font-size: 12px;
+            line-height: 16px;
+            margin-bottom: 20px;
+        }
+    }
+    .icon-title__account-info{
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        color: #999999;
+        font-size: 14px;
+        margin: 10px;
+        svg path{ fill: #999999;}
+    }
+}

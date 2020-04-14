@@ -77,6 +77,10 @@ export const ACCOUNT_PERSONAL = {
     UPDATE_PHONE: "accountPersonalUpdatePhone",
 };
 
+export const ACCOUNT_PROFILE = {
+    LIST: "accountProfileList"
+};
+
 export const ACCOUNT_LINK = {
     LIST: "accountLinkList",
     ADD: "accountLinkAdd",

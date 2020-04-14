@@ -8,6 +8,7 @@ import Revenue from "../services/account/Revenue";
 import Earning from "../services/account/Earning";
 import UpdateAvatar from "../services/account/UpdateAvatar";
 import UpdateCover from "../services/account/UpdateCover";
+import Profile from "../services/account/Profile";
 /**
  * initial state
  */
@@ -16,7 +17,8 @@ const state = () => ({
     transactionsList: {},
     revenueList: {},
     earningList: {},
-    linkList: {}
+    linkList: {},
+    profileList: {}
 });
 
 /**
@@ -208,6 +210,15 @@ const actions = {
             console.log("[Earning] list.err", err);
             return err;
         }
+    },
+    async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
+        try {
+            const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](payload);
+            commit(mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST,result.data);
+        } catch (err) {
+            console.log("PROFILE add.err", err);
+            return err;
+        }
     }
 };
 
@@ -245,6 +256,10 @@ const mutations = {
     },
     [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
         state.linkList = _linkList;
+    },
+    [mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST](state, _profileList) {
+        console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
+        state.profileList = _profileList;
     }
 };
 
