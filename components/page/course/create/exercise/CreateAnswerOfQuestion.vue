@@ -24,7 +24,6 @@
             :value="get(answer, 'content', '')"
             @click="handleAddAnswer"
           />
-          
         </div>
 
         <!-- <div>
@@ -36,7 +35,7 @@
     </div>
     <div class="d-flex align-items-center cc-box__head">
       <button class="cc-box__btn cc-box__btn-edit" @click="handleDeleteAnswer">
-          <IconTrashAlt class="icon d-block subheading fill-secondary" />
+        <IconTrashAlt class="icon d-block subheading fill-secondary" />
       </button>
     </div>
   </div>
@@ -48,18 +47,18 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconTrashAlt,
+    IconTrashAlt
   },
 
   props: {
     answer: {
       type: Object,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
 
   computed: {
@@ -71,7 +70,7 @@ export default {
       if (get(this, "index", "") === 4) return "E";
       if (get(this, "index", "") === 5) return "F";
       return "";
-    },
+    }
   },
 
   methods: {
@@ -80,12 +79,12 @@ export default {
     handleChangeContent(value) {
       this.$emit("handleChangeContent", this.index, value);
     },
-    handleAddAnswer(){
-      this.$emit("handleAddAnswer",(this.index+1))
+    handleAddAnswer() {
+      this.$emit("handleAddAnswer", this.index + 1);
     },
-    handleDeleteAnswer(){
-      this.$emit("handleDeleteAnswer",this.index)
+    handleDeleteAnswer() {
+      this.$emit("handleDeleteAnswer", this.index);
     }
-  },
+  }
 };
 </script>

@@ -20,8 +20,11 @@
               :list.sync="list"
               :pagination="pagination"
               :loading="loading"
-              @changedFilter="updateFilter"
+              @submitFilter="submitFilter"
               @changedPagination="updatePagination"
+              @changedType="handleChangedType"
+              @changedStatus="handleChangedStatus"
+              @submitSearch="handleSubmitSearch"
               @deletedItems="deleteItems"
             />
           </div>
@@ -124,22 +127,27 @@
         this.params = { ...this.params, ...val }
         this.refreshData()
       },
+      handleChangedType(val) {
+        this.updateFilter({ type: val })
+      },
+      handleChangedStatus(val) {
+        this.updateFilter({ used: val })
+      },
+      handleSubmitSearch(val) {
+        this.updateFilter({ name: val })
+      },
+      submitFilter(val) {
+        this.updateFilter(val)
+      },
       updatePagination(val) {
-        console.log('update pagination: ', val)
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
         this.params.size = val.size
+        this.getList()
       },
       async deleteItems(data) {
-        // const delIds = _.map(items, 'id')
-        // let data = {
-        //   ids: delIds
-        // }
-        // const res = await this.$store.dispatch(
-        //   `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`, { data }
-        // )
         if (get(data, "success", false)) {
           await this.refreshData()
-          this.$toasted.success(get(data, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"))
+          this.$toasted.success(get(data, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"), { position: 'top-center'})
           return
         }
         this.$toasted.error(get(data, "message", "Xóa tài liệu thành công"))
@@ -152,21 +160,15 @@
       get
     },
     created() {
-      useEffect(this, this.getList.bind(this), [
-        "params.page",
-        "params.size",
-        "params.type",
-        "params.used",
-        "params.query",
-      ])
-  
-      useEffect(this, this.getInfoCapacity.bind(this), [
-        "params.page",
-        "params.size",
-        "params.type",
-        "params.used",
-        "params.query",
-      ])
+      this.getList()
+      this.getInfoCapacity()
+      // useEffect(this, this.getList.bind(this), [
+      //   "params.page",
+      //   "params.size",
+      //   "params.type",
+      //   "params.used",
+      //   "params.query",
+      // ])
     }
   }
 </script>

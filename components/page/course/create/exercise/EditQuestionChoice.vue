@@ -13,6 +13,8 @@
       :index="index"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
+      @handleAddAnswer="handleAddAnswer"
+      @handleDeleteAnswer="handleDeleteAnswer"
     />
 
     <div class="d-flex justify-content-end mt-5">
@@ -81,7 +83,7 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
-
+      this.handleCheckAnswers();
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.EDIT}`,
@@ -112,7 +114,33 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-
+    handleAddAnswer(index){
+      const answer = {
+        correct: false,
+        content: "",
+      }
+      if(index == this.payload.answers.length && index<6){
+        this.payload.answers.push(answer)
+      }
+    },
+    handleDeleteAnswer(index){
+      if(this.payload.answers.length> 2){
+        this.payload.answers.splice(index,1)
+      }else{
+        this.$toasted.error("Tối thiểu là 2 đáp án")
+      }
+    },
+    handleCheckAnswers(){
+      var lastanswer = this.payload.answers.slice(-1)[0];
+      const answer = {
+        correct: false,
+        content: ""
+      }
+      const check = _.isEqual(lastanswer, answer)
+      if(this.payload.answers.length > 2 && check){
+        this.payload.answers.pop()
+      }
+    },
     get,
   },
 };

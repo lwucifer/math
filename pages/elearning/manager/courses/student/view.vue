@@ -5,45 +5,20 @@
         <ElearningManagerSide active="7" />
       </div>
       <div class="col-md-9">
-        <div class="elearning-history__main">
-          <div class="pl-4 pr-4">
-            <h5 class="color-primary mb-15">Bài giảng và khóa học</h5>
-            <p>Danh sách bài giảng và khóa học  > <strong>Bài giảng đại số lớp 10</strong></p>
-            <hr class="mt-3 mb-3"/>
-
-            <h5 class="mb-3">Thông tin học sinh</h5>
-            <ElearningManagerStudent :data="student"/>
-
-            <div class="d-flex-center mt-5 mb-3">
-              <h5>Điểm đánh giá</h5>
-              <div class="ml-auto">
-                <app-button rounded size="sm" class="mr-4" normal>
-                  <IconFilter />Lọc kết quả
-                </app-button>
-                <app-select :options="opts1" v-model="opt1" size="sm" />
-              </div>
-            </div>
+        <div class="elearning-manager-content">
+          <div class="elearning-manager-content__title">
+            <header-breadcrumb
+              title="Bài giảng và khóa học"
+              :breadcrumb="breadcrumb"
+            />
           </div>
-
-          <app-table
-            :heads="heads"
-            :pagination="pagination"
-            @pagechange="onPageChange"
-            @sort="sort"
-            :data="list"
-            :sortBy="list"
-          >
-            <tr v-for="(item, index) in list" :key="index">
-              <td v-html="item.name"></td>
-              <td v-html="item.score" v-if="item.score" class="bold color-red"></td>
-              <td v-else>Chưa chấm điểm</td>
-              <td v-html="item.lesson"></td>
-              <td v-html="item.course"></td>
-              <td>
-                <n-link to>Xem chi tiết</n-link>
-              </td>
-            </tr>
-          </app-table>
+          
+          <div class="elearning-manager-content__main">
+            <elearning-manager-student :data="student"/>
+            <student-review-mark-table
+              :list.sync="list"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -53,9 +28,8 @@
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import ElearningManagerStudent from "~/components/page/elearning/manager/ElearningManagerStudent";
-import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
-import IconFilter from '~/assets/svg/icons/filter.svg?inline';
+import StudentReviewMarkTable from "~/components/page/elearning/manager/student/tables/Mark";
+import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
 
 // Import faked data
 import {  } from "~/server/fakedata/elearning/test"
@@ -69,9 +43,8 @@ export default {
   components: {
     ElearningManagerSide,
     ElearningManagerStudent,
-    IconSearch,
-    IconTrashAlt,
-    IconFilter
+    HeaderBreadcrumb,
+    StudentReviewMarkTable
   },
 
   data() {
@@ -141,49 +114,66 @@ export default {
       list: [
         {
           id: 1,
-          name: "Mua khóa học Đại số 11",
-          class: "10B",
-          question: "6",
-          percent: "50%",
-          date: "19/11/2019", 
+          name: "Bài tập 1",
+          points: "10",
+          mark: "6",
+          lesson: "Bài tập tích phân",
+          elearning: "Khóa học đại số lớp 10",
+          status: "0",
+          date: "19/11/2019",
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 11",
-          class: "10B",
-          question: "6",
-          percent: "50%",
-          date: "19/11/2019", 
+          name: "Bài tập 1",
+          points: "10",
+          mark: "6",
+          lesson: "Bài tập tích phân",
+          elearning: "Khóa học đại số lớp 10",
+          status: "-1",
+          date: "19/11/2019",
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 11",
-          class: "10B",
-          question: "6",
-          percent: "50%",
-          date: "19/11/2019", 
+          name: "Bài tập 1",
+          points: "10",
+          mark: "6",
+          lesson: "Bài tập tích phân",
+          elearning: "Khóa học đại số lớp 10",
+          status: "0",
+          date: "19/11/2019",
         },
         {
           id: 1,
-          name: "Mua khóa học Đại số 11",
-          class: "10B",
-          question: "6",
-          percent: "50%",
-          date: "19/11/2019", 
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 11",
-          class: "10B",
-          question: "6",
-          percent: "50%",
-          date: "19/11/2019", 
+          name: "Bài tập 1",
+          points: "10",
+          mark: "6",
+          lesson: "Bài tập tích phân",
+          elearning: "Khóa học đại số lớp 10",
+          status: "1",
+          date: "19/11/2019",
         },
       ]
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    breadcrumb: function() {
+      let data = [
+        {
+          text: 'Bài giảng và khóa học',
+          link: '/elearning/manager/exams'
+        },
+        {
+          text: 'Bài tập đại số lớp 10',
+          link: '/elearning/manager/exams'
+        },
+        {
+          text: 'Nguyễn Văn Nam',
+          link: '/'
+        }
+      ]
+      return data
+    }
   },
 
   methods: {
@@ -202,4 +192,5 @@ export default {
 <style lang="scss">
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
+@import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>

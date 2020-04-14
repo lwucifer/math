@@ -2,6 +2,7 @@
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <div class="cc-box__bg-gray px-5 pt-5 pb-5">
+      <h3 class="heading-6 mb-2 mt-3">Tên bài học</h3>
       <app-input v-model="payload.name" placeholder="Tên bài học" :counter="60"/>
       <span>Chọn loại bài học</span>
 

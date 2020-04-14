@@ -72,12 +72,15 @@ export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/t
 export const ELEARNING_TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/elearning/teaching/repository`;
 export const ELEARNING_TEACHING_EXERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/exercises`;
 export const ELEARNING_TEACHING_SUBMISSION = `${SCHOOLLY_ALIAS}/elearning/teaching/submissions`;
+export const ELEARNING_TEACHING_VOTE = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
 export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/setting`;
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
 export const ELEARNING_CREATING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses`;
+export const ELEARNING_CREATING_OLCLASSES_INVITATIONS = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invitations`;
+export const ELEARNING_CREATING_OLCLASSES_INVITE = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invite`;
 
 /**
  * STUDY

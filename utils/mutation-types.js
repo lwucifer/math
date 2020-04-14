@@ -97,7 +97,8 @@ export const CREATING_OLCLASSES = {
     SET_CREATING_OLCLASSES_LIST: "setCreatingOlclassesList",
     SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
     SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
-    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete"
+    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete",
+    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList",
 };
 
 export const CREATING_ANSWER = {
@@ -155,6 +156,10 @@ export const ELEARNING_TEACHING_SUBMISSION = {
     SET_TEACHING_SUBMISSION_LIST: "setElearningTeachingSubmissionList",
     SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
     SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark",
+};
+
+export const ELEARNING_TEACHING_VOTE = {
+    SET_TEACHING_VOTE_LIST: "setElearningTeachingVoteList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {

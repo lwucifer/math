@@ -148,6 +148,7 @@ export const CREATING_OLCLASSES = {
   ADD: "creatingOlclassesAdd",
   EDIT: "creatingOlclassesEdit",
   DELETE: "creatingOlclassesDelete",
+  INVITATIONS: "creatingOlclassesInvitations",
 };
 
 export const CREATING_CHAPTER = {
@@ -203,6 +204,10 @@ export const ELEARNING_TEACHING_SUBMISSION = {
     LIST: "elearningTeachingSubmissionList",
     DETAIL: "elearningTeachingSubmissionDetail",
     MARK: "elearningTeachingSubmissionMark",
+};
+
+export const ELEARNING_TEACHING_VOTE = {
+    LIST: "elearningTeachingVoteList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {

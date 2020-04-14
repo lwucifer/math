@@ -108,6 +108,10 @@
             @deleted="handleDeleted"
           />
 
+          <div class="text-center" v-if="btnCommentLoading">
+            <app-spin />
+          </div>
+
           <div class="text-center">
             <a
               v-if="parentCommentData.page && !parentCommentData.page.last"
@@ -123,10 +127,10 @@
           >Bài viết chưa có bình luận.</div>
         </div>
 
-        <CommentEditor class="post__comment-editor mb-3" @submit="postComment" />
+        <CommentEditor class="post__comment-editor my-3" @submit="postComment" />
       </template>
 
-      <div class="text-center" v-if="btnCommentLoading">
+      <div class="text-center" v-else-if="btnCommentLoading">
         <app-spin />
       </div>
     </div>
@@ -134,6 +138,7 @@
 </template>
 
 <script>
+import { uniqWith, isEmpty } from "lodash";
 import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { checkEditorEmpty } from "~/utils/validations";
@@ -224,7 +229,7 @@ export default {
     numOfViewMoreParentComment() {
       const { page } = this.parentCommentData;
       return page.totalPages - page.number === 1
-        ? page.totalElements % page.size
+        ? page.totalElements - page.size * page.number
         : page.size;
     }
   },
@@ -260,13 +265,17 @@ export default {
 
       if (getComment.success) {
         // Set to parent comment data
-        const { listParentComments, page } = this.parentCommentData;
-        if (listParentComments && page) {
+        const { listParentComments = [], page = {} } = this.parentCommentData;
+        if (listParentComments.length && !isEmpty(page)) {
+          const tmpListParentComments = [
+            ...listParentComments,
+            ...getComment.data.listParentComments
+          ];
           this.parentCommentData = {
-            listParentComments: [
-              ...listParentComments,
-              ...getComment.data.listParentComments
-            ],
+            listParentComments: uniqWith(
+              tmpListParentComments,
+              (a, b) => a.id === b.id
+            ),
             page: getComment.data.page
           };
         } else {
@@ -283,24 +292,46 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content) {
-      const commentModel = createComment(this.post.post_id, null, content);
+    async postComment(content, listTags, image) {
+      const formData = new FormData();
+      const commentModel = createComment({
+        source_id: this.post.post_id,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value)
+            ? JSON.stringify(value)
+            : value
+        );
+      }
+
       const doPostComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.ADD
-      ](commentModel);
+      ](formData);
 
       if (doPostComment.success) {
-        if ("listParentComments" in this.parentCommentData) {
-          const { listParentComments } = this.parentCommentData;
-          this.parentCommentData.listParentComments = [
-            doPostComment.data,
-            ...listParentComments
-          ];
-        } else {
-          this.parentCommentData = {
-            listParentComments: [doPostComment.data]
-          };
-        }
+        const timeout = setTimeout(() => {
+          if ("listParentComments" in this.parentCommentData) {
+            const { listParentComments } = this.parentCommentData;
+            this.parentCommentData.listParentComments = [
+              doPostComment.data,
+              ...listParentComments
+            ];
+          } else {
+            this.parentCommentData = {
+              listParentComments: [doPostComment.data]
+            };
+          }
+          clearTimeout(timeout);
+        }, image ? 1000 : 0);
       } else {
         this.$toasted.error(doPostComment.message);
       }

@@ -13,7 +13,7 @@
         <app-dropdown
           v-if="userId === data.comment_user_id"
           class="comment-item__menu-dropdown"
-          position="right"
+          position="left"
           open-on-click
           v-model="menuDropdown"
         >
@@ -39,6 +39,10 @@
 
       <div class="comment-item__content" v-html="data.comment_content"></div>
 
+      <div v-if="data.comment_image" class="comment-item__image">
+        <img class="d-block" :src="data.comment_image.medium" alt />
+      </div>
+
       <div class="comment-item__actions">
         <n-link to class="comment-item__time">{{ data.created_at | moment('from') }}</n-link>
 
@@ -46,12 +50,6 @@
 
         <a href class="comment-item__action" @click.prevent="handleClickReply">Reply</a>
       </div>
-
-      <CommentItemReplied
-        v-if="data.children && data.children.list && data.children.list.length && !listComments.length"
-        :data="data.children"
-        @click="getChildrenComment(data.id)"
-      />
 
       <transition-group
         enter-active-class="animated faster fadeIn"
@@ -67,25 +65,33 @@
         />
       </transition-group>
 
-      <div class="text-center">
+      <CommentItemReplied
+        v-if="data.children && data.children.list && data.children.list.length && !childrenCommentData.page"
+        :data="data.children"
+        @click="getChildrenComment(data.id)"
+      />
+
+      <div v-if="isFetchingComment" class="text-center">
+        <app-spin />
+      </div>
+
+      <div v-if="childrenCommentData.page && !childrenCommentData.page.last" class="text-center">
         <a
-          v-if="childrenCommentData.page && !childrenCommentData.page.last"
           href
           class="post__comment-more"
           @click.prevent="getChildrenComment(data.id)"
         >Xem thêm {{ numOfViewMoreChildrenComment }} bình luận ...</a>
       </div>
 
-      <div class="text-center" v-if="isFetchingComment">
-        <app-spin />
-      </div>
+      <CommentEditor v-if="showReply" class="mt-3" reply @submit="postComment" />
 
-      <CommentEditor reply v-if="showReply" @submit="postComment" />
+      <!-- <app-upload :fileList="fileList"></app-upload> -->
     </div>
   </div>
 </template>
 
 <script>
+import { uniqWith } from "lodash";
 import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
@@ -165,7 +171,7 @@ export default {
     numOfViewMoreChildrenComment() {
       const { page } = this.childrenCommentData;
       return page.totalPages - page.number === 1
-        ? page.totalElements % page.size
+        ? page.totalElements - page.size * page.number
         : page.size;
     },
 
@@ -189,8 +195,12 @@ export default {
         // Set to parent comment data
         const { listComments, page } = this.childrenCommentData;
         if (listComments && page) {
+          const tmpListComments = [
+            ...listComments,
+            ...getComment.data.listComments
+          ];
           this.childrenCommentData = {
-            listComments: [...listComments, ...getComment.data.listComments],
+            listComments: uniqWith(tmpListComments, (a, b) => a.id === b.id),
             page: getComment.data.page
           };
         } else {
@@ -214,28 +224,50 @@ export default {
       }
     },
 
-    async postComment(content) {
-      const commentModel = createComment(
-        this.post.post_id,
-        this.data.id,
-        content
-      );
+    async postComment(content, listTags, image) {
+      const formData = new FormData();
+      const commentModel = createComment({
+        source_id: this.post.post_id,
+        parent_comment_id: this.data.id,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value) ? JSON.stringify(value) : value
+        );
+      }
+
       const doPostComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.ADD
-      ](commentModel);
+      ](formData);
 
       if (doPostComment.success) {
-        if ("listComments" in this.childrenCommentData) {
-          const { listComments } = this.childrenCommentData;
-          this.childrenCommentData.listComments = [
-            doPostComment.data,
-            ...listComments
-          ];
-        } else {
-          this.childrenCommentData = {
-            listComments: [doPostComment.data]
-          };
-        }
+        const timeout = setTimeout(
+          async () => {
+            if (!this.childrenCommentData.page) {
+              await this.getChildrenComment(this.data.id);
+            } else if ("listComments" in this.childrenCommentData) {
+              const { listComments } = this.childrenCommentData;
+              this.childrenCommentData.listComments = [
+                doPostComment.data,
+                ...listComments
+              ];
+            } else {
+              this.childrenCommentData = {
+                listComments: [doPostComment.data]
+              };
+            }
+            clearTimeout(timeout);
+          },
+          image ? 1000 : 0
+        );
       } else {
         this.$toasted.error(doPostComment.message);
       }

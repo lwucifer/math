@@ -21,7 +21,7 @@
                 @click="selectUser(user)"
               >
                 <app-avatar
-                  class="mr-2"
+                  class="mr-3"
                   :size="32"
                   :src="(user.avatar && user.avatar.low) ? user.avatar.low : null"
                 />
@@ -438,7 +438,6 @@ export default {
           items: this.friendsList,
           // is called when a suggestion starts
           onEnter: ({ items, query, range, command, virtualNode }) => {
-            console.log("onEnter");
             this.mentionQuery.name = query;
             this.mentionSuggestionRange = range;
             this.renderPopup(virtualNode);
@@ -449,12 +448,6 @@ export default {
           },
           // is called when a suggestion has changed
           onChange: ({ items, query, range, virtualNode }) => {
-            console.log(
-              "onChange",
-              query,
-              range,
-              virtualNode.getBoundingClientRect()
-            );
             this.mentionQuery.name = query;
             this.mentionSuggestionRange = range;
             this.mentionNavigatedIndex = 0;
@@ -462,7 +455,6 @@ export default {
           },
           // is called when a suggestion is cancelled
           onExit: () => {
-            console.log("onExit");
             // reset all saved values
             this.mentionQuery = {
               page: 1,
@@ -476,7 +468,6 @@ export default {
           },
           // is called on every keyDown event while a suggestion is active
           onKeyDown: ({ event }) => {
-            console.log("event.key", event.key);
             // pressing up arrow
             if (event.key === "ArrowUp") {
               this.upHandler();
@@ -493,19 +484,12 @@ export default {
               return true;
             }
             return false;
-          },
+          }
           // is called when a suggestion has changed
           // this function is optional because there is basic filtering built-in
           // you can overwrite it if you prefer your own filtering
-          // in this example we use fuse.js with support for fuzzy search
-          onFilter: (items, query) => {
-            console.log("filter", query);
-            // let result = [];
-            // this.getFriends(query).then(() => {
-            //   result = this.friendsList;
-            // })
-            // return result;
-          }
+          // onFilter: (items, query) => {
+          // }
         })
       ],
       onUpdate: ({ getHTML }) => {
@@ -767,7 +751,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log("fetchLink error", error);
         this.linkDataFetchError = true;
       }
     },
@@ -816,7 +799,6 @@ export default {
     // renders a popup with suggestions
     // tiptap provides a virtualNode object for using popper.js (or tippy.js) for popups
     renderPopup(node) {
-      console.log("renderPopup", node);
       if (this.mentionPopup) {
         return;
       }
@@ -881,5 +863,6 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~/assets/scss/components/timeline/_suggestion-list.scss";
 @import "~/assets/scss/components/post-editor/_post-editor.scss";
 </style>

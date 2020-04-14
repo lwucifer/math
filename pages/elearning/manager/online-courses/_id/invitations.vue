@@ -7,20 +7,22 @@
       <div class="col-md-9">
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Lịch học online</h5>
-            <div class="elearning-manager-content__title__nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Đã đăng</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Đang soạn</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Chờ duyệt</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Bị từ chối</a>
+            <h5 class="color-primary mb-15">Phòng học online</h5>
+            <p>Phòng học online  >  Phòng học online số 1  >  <strong>Danh sách đã mời</strong></p>
+            <div class="elearning-manager-content__title__nav mt-15">
+              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Danh sách đã mời</a>
+              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Danh sách điểm danh</a>
             </div>
             <hr class />
           </div>
 
-          <div class="elearning-manager-content__main">
+          <div class="elearning-manager-content__main pt-3">
             <keep-alive>
               <component v-bind:is="currentTabComponent"></component>
             </keep-alive>
+            <div class="pl-4 pr-4 mt-4">
+              <i class="color-999">*Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia tất cả các phòng học online theo yêu cầu của giáo viên</i>
+            </div>
           </div>
         </div>
       </div>
@@ -33,19 +35,15 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
 
-  const PublishedTab = () => import("./tabs/published")
-  const EditingTab = () => import("./tabs/editting")
-  const PendingTab = () => import("./tabs/pending")
-  const DeniedTab = () => import("./tabs/denied")
+  const InvitedTab = () => import("./tabs/invited")
+  const MusterTab = () => import("./tabs/muster")
 
   export default {
 
     components: {
       ElearningManagerSide,
-      PublishedTab,
-      EditingTab,
-      PendingTab,
-      DeniedTab
+      InvitedTab,
+      MusterTab,
     },
 
     data() {
@@ -58,7 +56,7 @@
       ...mapState("auth", ["loggedUser"]),
       currentTabComponent: function() {
         // List of tabs
-        const MATCHED_TABS = ['PublishedTab', 'EditingTab', 'PendingTab', 'DeniedTab']
+        const MATCHED_TABS = ['InvitedTab', 'MusterTab']
         return (this.tab > 0) ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0]
       }
     },

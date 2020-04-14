@@ -47,21 +47,21 @@
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
 
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion,
+    CreateAnswerOfQuestion
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
 
   data() {
@@ -75,14 +75,14 @@ export default {
         answers: [
           {
             correct: false,
-            content: "",
+            content: ""
           },
           {
             correct: false,
-            content: "",
+            content: ""
           }
-        ],
-      },
+        ]
+      }
     };
   },
 
@@ -93,7 +93,7 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
-
+      this.handleCheckAnswers();
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.ADD}`,
@@ -124,24 +124,34 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-    handleAddAnswer(index){
+
+    handleAddAnswer(index) {
       const answer = {
         correct: false,
-        content: "",
-      }
-      if(index == this.payload.answers.length && index<6){
-        this.payload.answers.push(answer)
-      }
-    },
-    handleDeleteAnswer(index){
-      console.log('delete',index)
-      if(this.payload.answers.length> 2){
-        this.payload.answers.splice(index,1)
-      }else{
-        this.$toasted.error("Tối thiểu là 2 đáp án")
+        content: ""
+      };
+      if (index == this.payload.answers.length && index < 6) {
+        this.payload.answers.push(answer);
       }
     },
-    get,
-  },
+
+    handleDeleteAnswer(index) {
+      if (this.payload.answers.length > 2) {
+        this.payload.answers.splice(index, 1);
+      }
+    },
+    handleCheckAnswers(){
+      var lastanswer = this.payload.answers.slice(-1)[0];
+      const answer = {
+        correct: false,
+        content: ""
+      }
+      const check = _.isEqual(lastanswer, answer)
+      if(this.payload.answers.length > 2 && check){
+        this.payload.answers.pop()
+      }
+    },
+    get
+  }
 };
 </script>
