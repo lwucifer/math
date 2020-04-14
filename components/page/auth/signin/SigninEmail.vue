@@ -133,7 +133,7 @@ export default {
             "Invalid parameter. Required: email or phone, password, g_recaptcha_response";
           break;
         case ERRORS.LOGIN.EMAIL_INVALID:
-          message = "Invalid username or password";
+          message = "Tài khoản hoặc mật khẩu bạn nhập chưa đúng";
           break;
         case ERRORS.LOGIN.USER_LOCKED:
           message = "User is locked";
@@ -143,6 +143,9 @@ export default {
           break;
         case ERRORS.LOGIN.EMAIL_LEFT:
           message = "Email/phone or password is incorrect, 1 time left";
+          break;
+        case ERRORS.LOGIN.USER_INACTIVE:
+          message = "Tài khoản chưa được xác thực";
           break;
         default:
           message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";

@@ -7,13 +7,10 @@
       <div class="col-md-9">
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <div class="elearning-manager-content__title__breadcrumb">
-              <n-link to>Bài tập</n-link>
-              <i> > </i>
-              <n-link to><b>Bài tập đại số lớp 10 (Bài giảng đại số lớp 10)</b></n-link>
-            </div>
-            <hr class/>
+            <header-breadcrumb
+              title="Bài tập và bài kiểm tra"
+              :breadcrumb="breadcrumb"
+            />
           </div>
 
           <div class="elearning-manager-content__main">
@@ -40,6 +37,7 @@
 
 <script>
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+  import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
   import SubmissionFilterForm from "~/components/page/elearning/manager/exam/forms/ResultFilter"
   import SubmissionTable from "~/components/page/elearning/manager/exam/tables/Submission"
 
@@ -55,7 +53,8 @@
     components: {
       ElearningManagerSide,
       SubmissionTable,
-      SubmissionFilterForm
+      SubmissionFilterForm,
+      HeaderBreadcrumb
     },
 
     data() {
@@ -83,6 +82,23 @@
       ...mapState(STORE_NAMESPACE, {
         detailInfo: 'submissions'
       }),
+      breadcrumb: function() {
+        let data = [
+          {
+            text: 'Bài giảng và khóa học',
+            link: '/elearning/manager/exams'
+          },
+          {
+            text: 'Bài tập đại số lớp 10',
+            link: '/elearning/manager/exams'
+          },
+          {
+            text: 'Nguyễn Văn Nam',
+            link: '/'
+          }
+        ]
+        return data
+      }
     },
 
     methods: {

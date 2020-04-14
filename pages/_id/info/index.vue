@@ -67,10 +67,8 @@ export default {
     AccountChangePasswordModal
   },
   async fetch({ params, query, store }) {
-    console.log(store.state.auth.access_token);
-    const userId = params.id;
     await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`)
     ]);
   },
   data() {
@@ -133,15 +131,15 @@ export default {
     // }
   },
   computed: {
-    ...mapState("account", ["personalList"])
+    ...mapState("account", ["profileList"])
   },
   created() {
-    this.name = this.personalList.fullname || "";
-    this.phone = this.personalList.phone_number || "";
-    this.email = this.personalList.email || "";
-    this.address = this.personalList.address || "";
-    this.sex = this.personalList.sex;
-    this.birthday = getDateBirthDay(this.personalList.birthday);
+    this.name = this.profileList.fullname || "";
+    this.phone = this.profileList.phone || "";
+    this.email = this.profileList.email || "";
+    this.address = this.profileList.address || "";
+    this.sex = this.profileList.sex;
+    this.birthday = getDateBirthDay(this.profileList.birthday);
   }
 };
 </script>

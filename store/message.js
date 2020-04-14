@@ -13,6 +13,7 @@ import GroupDetail from "~/services/message/GroupDetail";
 import MessageSendImg from "~/services/message/MessageSendImg";
 import Personal from "../services/account/Personal";
 import MessageType from "~/services/message/MessageType";
+import MessageSendFile from "~/services/message/MessageSendFile";
 
 /**
  * initial state
@@ -27,6 +28,7 @@ const state = () => ({
     closeCreate: true,
     isGroupState: false,
     listMessageType: {},
+    tabChat: false
 });
 
 /**
@@ -176,6 +178,11 @@ const actions = {
 
             // set to mutation
             commit(mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_DETAIL, result);
+            if (result.room && result.room.type == 1) {
+                commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, true);
+            } else {
+                commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, false);
+            }
             return result;
         } catch (err) {
             console.log("[GroupDetail] list.err", err);
@@ -191,6 +198,18 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[MessageSendImg] edit.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.MESSAGE_GROUP.MESSAGE_SEND_FILE]({ commit }, payload) {
+        try {
+            const result = await new MessageSendFile(this.$axios)[
+                actionTypes.BASE.ADD
+            ](payload);
+            console.log("[MessageSendFile] post", result);
+            return result;
+        } catch (err) {
+            console.log("[MessageSendFile] edit.err", err);
             return err;
         }
     },
@@ -218,7 +237,7 @@ const actions = {
             console.log("[MessageType] edit.err", err);
             return err;
         }
-    },
+    }
 };
 
 /**
@@ -253,6 +272,10 @@ const mutations = {
     [mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE](state, _listMessageType) {
         state.listMessageType = _listMessageType;
     },
+    [mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT](state, _tabChat) {
+        console.log("tabChat", _tabChat);
+        state.tabChat = _tabChat;
+    }
 };
 
 export default {
@@ -260,5 +283,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
+    mutations
 };

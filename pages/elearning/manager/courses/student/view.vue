@@ -29,7 +29,7 @@
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import ElearningManagerStudent from "~/components/page/elearning/manager/ElearningManagerStudent";
 import StudentReviewMarkTable from "~/components/page/elearning/manager/student/tables/Mark";
-import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
+import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
 
 // Import faked data
 import {  } from "~/server/fakedata/elearning/test"

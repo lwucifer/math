@@ -102,11 +102,13 @@
             text: 'Hình ảnh'
           },
         ],
+        initStatus: true
       }
     },
     watch: {
       filters: {
         handler(val, old){
+          this.initStatus = false
           this.$emit("changedFilter", val)
         },
         deep: true
@@ -114,7 +116,9 @@
     },
     methods: {
       submit() {
-        this.$emit('submitFilter', this.filters)
+        if (!this.initStatus) {
+          this.$emit('submitFilter', this.filters)
+        }
       },
       handleFocusSearchInput() {
         console.log('[Component] Elearning exam: focus searching ')
