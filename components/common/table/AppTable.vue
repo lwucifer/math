@@ -15,7 +15,7 @@
             <hr />
           </th>
           <th v-for="(item, index) in heads" :key="index">
-            {{item.text}}
+            <div v-html="item.text"></div>
             <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
             <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
               <IconDirection height="18" width="18" />
