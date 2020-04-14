@@ -217,7 +217,10 @@ export default {
         source_id: this.post.post_id
       },
       parentCommentData: {},
-      childrenCommentData: {}
+      childrenCommentData: {},
+      // Edit comment data
+      isEdit: false,
+      editData: {},
     };
   },
 

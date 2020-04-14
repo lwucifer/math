@@ -67,7 +67,10 @@
         <template v-else>Đang tìm nạp bản xem trước</template>
       </div>
 
-      <div v-else-if="!linkDataFetching && linkDataFetched" class="comment-editor__preview-link mt-3">
+      <div
+        v-else-if="!linkDataFetching && linkDataFetched"
+        class="comment-editor__preview-link mt-3"
+      >
         <a href class="comment-editor__preview-link__remove" @click.prevent="removePreviewLink">
           <IconTimes class="icon" />
         </a>
@@ -123,7 +126,26 @@ export default {
   },
 
   props: {
-    reply: Boolean
+    reply: Boolean,
+    prefetch: Boolean,
+    initialValues: {
+      avatar: Object,
+      comment_content: String,
+      comment_image: Object,
+      comment_link: String,
+      is_like: Number,
+      type_like: String,
+      tags: Array,
+      default: () => ({
+        avatar: {},
+        comment_content: "",
+        comment_image: {},
+        comment_link: "",
+        is_like: 0,
+        type_like: null,
+        tags: []
+      })
+    }
   },
 
   data() {
@@ -151,7 +173,10 @@ export default {
       linkDataFetching: false,
       linkDataFetched: false,
       linkDataFetchError: false,
-      link: null
+
+      // Form submit data
+      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : null,
+
     };
   },
 
@@ -169,10 +194,7 @@ export default {
     },
 
     submitable() {
-      const conditions = [
-        this.uploadFileList.length,
-        !isEmpty(this.link)
-      ];
+      const conditions = [this.uploadFileList.length, !isEmpty(this.link)];
 
       return conditions.some(condition => !!condition);
     }
