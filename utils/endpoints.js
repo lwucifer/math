@@ -14,6 +14,7 @@ export const FORGOT_PASSWORD = `${SCHOOLLY_ALIAS}/user/public/resetpwd`;
 export const RESET_PASSWORD_REQUEST = `${SCHOOLLY_ALIAS}/user/public/resetpwd/request`;
 export const CHANGE_PASSWORD = `${SCHOOLLY_ALIAS}/user/account/changepwd`;
 export const ACCOUNT_PERSONAL = `${SCHOOLLY_ALIAS}/social/api/user/profile`;
+export const ACCOUNT_PROFILE = `${SCHOOLLY_ALIAS}/user/account/profile`;
 export const ACCOUNT_LINK = `${SCHOOLLY_ALIAS}/user/account/link`;
 export const ACCOUNT_PHONE = `${SCHOOLLY_ALIAS}/account/phone`;
 export const ACCOUNT_TRANSACTIONS = `${SCHOOLLY_ALIAS}/account/transactions`;

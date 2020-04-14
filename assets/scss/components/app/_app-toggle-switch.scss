@@ -1,0 +1,52 @@
+.app-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+      height: 19px;
+  }
+  
+  .app-switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .app-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 100px;
+  }
+  
+  .app-slider:before {
+    position: absolute;
+    content: "";
+    width: 17px;
+    height: 17px;
+    bottom: 1px;
+    left: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .app-slider {
+    background-color: #32AF85;
+  }
+  
+  input:focus + .app-slider {
+    box-shadow: 0 0 1px #32AF85;
+  }
+  
+  input:checked + .app-slider:before {
+    -webkit-transform: translateX(21px);
+    -ms-transform: translateX(21px);
+    transform: translateX(21px);
+  }

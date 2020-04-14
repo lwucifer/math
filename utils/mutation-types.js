@@ -35,6 +35,10 @@ export const ACCOUNT_PERSONAL = {
     SET_ACCOUNT_PERSONAL_LIST: "setAccountPersonalList"
 };
 
+export const ACCOUNT_PROFILE = {
+    SET_ACCOUNT_PROFILE_LIST: "setAccountProfileList",
+};
+
 export const ACCOUNT_LINK = {
     SET_ACCOUNT_LINK_LIST: "setAccountLinkList"
 };

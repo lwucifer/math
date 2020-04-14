@@ -12,22 +12,22 @@
     </div>
     <p class="school-side__name mt-2">{{personalList.fullname}}</p>
     <div class="school-side__links">
-      <n-link class="link-gray" to='/account/info/' :class="active == 1 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/' :class="active == 1 ? 'active' : ''">
         <IconUser3 width="20" height="20"/>Thông tin tài khoản
       </n-link>
-      <n-link class="link-gray" to='/account/info/withdrawals' :class="active == 2 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/withdrawals' :class="active == 2 ? 'active' : ''">
         <IconHistory />Lịch sửa rút tiền
       </n-link>
-      <n-link class="link-gray" to='/account/info/revenues' :class="active == 3 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/revenues' :class="active == 3 ? 'active' : ''">
         <IconHistory />Thống kê doanh thu
       </n-link>
-      <n-link class="link-gray" to='/account/info/transactions' :class="active == 4 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/transactions' :class="active == 4 ? 'active' : ''">
         <IconHistory />Lịch sử giao dịch
       </n-link>
       <n-link class="link-gray" to :class="active == 5 ? 'active' : ''">
         <IconBell />Thông báo
       </n-link>
-      <n-link class="link-gray" to :class="active == 6 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/setting' :class="active == 6 ? 'active' : ''">
         <IconBell />Cài đặt
       </n-link>
       <n-link class="link-gray" to :class="active == 7 ? 'active' : ''">
