@@ -80,7 +80,7 @@
         </client-only>
       </div>
 
-      <div class="aside-box__content" v-if="messagesList.length > 0">
+      <div class="aside-box__content">
         <client-only>
           <infinite-loading
             direction="top"
@@ -91,9 +91,9 @@
           </infinite-loading>
         </client-only>
         <div class="message-box__time">
-          <div class="message-box__time__line"></div>
+          <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">
-            <span>Thứ 5, Ngày 19/09/2019</span>
+            <!-- <span>Thứ 5, Ngày 19/09/2019</span> -->
           </div>
         </div>
         <div class="message-box">
@@ -269,7 +269,7 @@
           </div>
         </div>
       </div>
-      <div class="aside-box__content" v-else></div>
+      <!-- <div class="aside-box__content"></div> -->
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -666,6 +666,7 @@ export default {
     foward() {},
 
     async handleUploadChange(fileList, event) {
+      debugger;
       this.listImage = Array.from(fileList);
 
       getBase64(this.listImage[0], src => {
@@ -744,7 +745,6 @@ export default {
               room_id: this.$route.params.id
             }
           });
-        } else {
         }
         this.textChat = "";
       } else if (this.tag.length == 1) {

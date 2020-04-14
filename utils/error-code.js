@@ -4,7 +4,8 @@ export const ERRORS = {
         EMAIL_INVALID: "SCLU_1004",
         USER_LOCKED: "SCLU_1005",
         BAD_CREDEN: "SCLCOM_1000",
-        EMAIL_LEFT: "SCLU_1006"
+        EMAIL_LEFT: "SCLU_1006",
+        USER_INACTIVE: "SCLCOM_1003"
     },
     REGISTER: {
         EMAIL_PHONE_USED: "SCLU_1000",

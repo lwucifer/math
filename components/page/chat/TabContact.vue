@@ -50,10 +50,10 @@
       <div class="tabs">
         <ul class="nav-tabs list-unstyle" v-if="!isContact">
           <li>
-            <a @click="tabClick(1)" :class="tab == 1 ? 'active' : ''">Chat</a>
+            <a @click="tabClick(1)" :class="tabChat == true ? 'active' : ''">Chat</a>
           </li>
           <li>
-            <a @click="tabClick(2)" :class="tab == 2 ? 'active' : ''">Group</a>
+            <a @click="tabClick(2)" :class="tabChat == false ? 'active' : ''">Group</a>
           </li>
         </ul>
         <div class="tabs-content" v-if="isContact">
@@ -108,8 +108,9 @@
                   </button>
                   <div class="link--dropdown__content">
                     <ul>
-                      <li>
-                        <a>Tắt thông báo</a>
+                      <li @click="handleNoti(item.allow_notication, item.room_id, item)">
+                        <a v-if="item.allow_notication">Tắt thông báo</a>
+                        <a v-else>Bật thông báo</a>
                       </li>
                       <li>
                         <a>Ẩn chat</a>
@@ -167,7 +168,7 @@
                   </button>
                   <div class="link--dropdown__content">
                     <ul>
-                      <li @click="handleNoti(item.allow_notication)">
+                      <li @click="handleNoti(item.allow_notication, item.room_id, item)">
                         <a v-if="item.allow_notication">Tắt thông báo</a>
                         <a v-else>Bật thông báo</a>
                       </li>
@@ -232,7 +233,7 @@
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddGroup from "~/components/page/chat/ModalAddGroup";
 import ModalLeaveGroup from "~/components/page/chat/ModalLeaveGroup";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
@@ -307,7 +308,7 @@ export default {
   },
   computed: {
     ...mapState("social", ["friendList"]),
-    ...mapState("message", ["groupList"]),
+    ...mapState("message", ["groupList", "listMessageType", "tabChat"]),
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
       const dataMapGroup = this.groupsListTab.map(item => {
@@ -319,8 +320,12 @@ export default {
           room_id: item.room && item.room.id ? item.room.id : ""
         };
       });
+      // debugger;
       const dataGroup = dataMapGroup.map(item => {
-        const [dataNoti] = item.members.filter(item => item.id == this.userId);
+        const [dataNoti] = item.members.filter(
+          item => item.user_id == this.userId
+        );
+        // console.log("dataNoti", dataNoti);
         const dataRoomName =
           (
             item.members[0].fullname +
@@ -350,12 +355,21 @@ export default {
         };
       });
       const data = dataMap.map(item => {
-        const [dataName] = item.members.filter(item => item.id != this.userId);
+        const [dataName] = item.members.filter(
+          item => item.user_id != this.userId
+        );
+        const [dataNoti] = item.members.filter(
+          item => item.user_id == this.userId
+        );
         return {
           ...item,
           name_sender: item.id == this.userId ? "Bạn" : item.fullname,
           room_name_member: dataName.fullname ? dataName.fullname : "",
-          room_avatar_member: dataName.avatar.low ? dataName.avatar.low : ""
+          room_avatar_member: dataName.avatar.low ? dataName.avatar.low : "",
+          allow_notication:
+            dataNoti && dataNoti.allow_notication
+              ? dataNoti.allow_notication
+              : 0
         };
       });
       return data;
@@ -365,8 +379,10 @@ export default {
     ...mapActions("message", [
       "getGroupList",
       "groupLeave",
-      "groupNotification"
+      "groupNotification",
+      "getListMessageType"
     ]),
+    ...mapMutations("message", ["setTabChat"]),
 
     leaveGroupModal(_item) {
       this.visibleLeaveGroup = true;
@@ -385,16 +401,23 @@ export default {
         }
       });
     },
-    handleNoti(noti) {
+    handleNoti(noti, roomId, item) {
       const data = {
-        room_id: this.$route.params.id,
+        room_id: roomId,
         notification: noti == 1 ? 0 : 1
       };
       this.groupNotification(data).then(result => {
         if (result.success == true) {
           this.$toasted.show("success");
-          this.groupListQuery.page = 1;
-          this.getGroupList({ params: this.groupListQuery });
+          if (item.type == 2) {
+            this.groupsListTab = [];
+            this.groupListQuery.page = 1;
+            this.infiniteId += 1;
+          } else {
+            this.chatsListTab = [];
+            this.chatListQuery.page = 1;
+            this.infiniteIdChat += 1;
+          }
         } else {
           this.$toasted.error(result.message);
         }
@@ -403,6 +426,8 @@ export default {
     tabClick(e) {
       this.tab = e;
       this.$emit("clickTab");
+      const tabChat = e == 1 ? true : false;
+      this.setTabChat(tabChat);
     },
 
     create() {
@@ -501,7 +526,7 @@ export default {
         this.infiniteId += 1;
       }
     }
-    // groupList(_newval) {
+    // listMessageType(_newval) {
     //   if (_newval) {
     //     this.groupsListTab = [];
     //     this.groupListQuery.page = 1;
