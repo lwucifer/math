@@ -40,7 +40,7 @@
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import SubmissionFilterForm from "~/components/page/elearning/manager/exam/forms/ResultFilter"
   import SubmissionTable from "~/components/page/elearning/manager/exam/tables/Submission"
-  import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
+  import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
 
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
+    <h5 class="color-primary mb-3">{{ title }}</h5>
     <div class="elearning-manager-content__title__breadcrumb">
       <n-link
         v-for="(item, index) in breadcrumb"

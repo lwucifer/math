@@ -29,7 +29,7 @@
 
 <script>
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
-  import HeaderBreadcrumb from "~/components/page/elearning/manager/exam/Breadcrumb"
+  import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get, isEmpty } from "lodash"

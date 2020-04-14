@@ -7,19 +7,18 @@
       <div class="col-md-9">
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <div class="elearning-manager-content__title__nav">
-                <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Bài tập</a>
-                <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>
-            </div>
-            <hr class />
+            <head-tabs
+              :title="'Bài tập và bài kiểm tra'"
+              :tabs="tabs"
+              :active.sync="tab"
+              @selectedItem="changeTab"
+            />
           </div>
 
           <div class="elearning-manager-content__main">
             <keep-alive>
               <component v-bind:is="currentTabComponent"></component>
             </keep-alive>
-            <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"/>-->
           </div>
         </div>
       </div>
@@ -29,6 +28,7 @@
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
+import HeadTabs from "~/components/page/elearning/HeadTab";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
@@ -42,28 +42,39 @@ export default {
     ElearningManagerSide,
     ExerciseTab,
     ExamTab,
+    HeadTabs
   },
 
   data() {
     return {
-      tab: 1,
+      tab: 'exercise',
+      tabs: [
+        {
+          key: 'exercise',
+          text: 'Bài tập'
+        },
+        {
+          key: 'exam',
+          text: 'Bài kiểm tra'
+        },
+      ],
       isAuthenticated: true,
     }
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     currentTabComponent: function() {
-      // List of tabs
-      const MATCHED_TABS = ['ExerciseTab', 'ExamTab']
-      return (this.tab > 0) ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0]
+      const MATCHED_TABS = {
+        exercise: 'ExerciseTab',
+        exam: 'ExamTab'
+      }
+      return MATCHED_TABS[this.tab]
     }
   },
 
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
+    changeTab(key) {
+      this.tab = key
     }
   }
 };
