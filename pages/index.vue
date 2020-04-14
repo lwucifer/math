@@ -388,7 +388,7 @@ export default {
     },
 
     messagesConverted() {
-      return this.messages.map(item => {
+      return this.messages ? this.messages.map(item => {
         return {
           id: item.room.id,
           title: item.room.members
@@ -398,7 +398,7 @@ export default {
           desc: item.message.content,
           image: get(item, 'room.room_avatar.low', null)
         };
-      });
+      }) : [];
     }
   },
 
