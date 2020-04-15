@@ -674,16 +674,17 @@ button:focus {
         width: 100%;
     }
     .list-chat-img {
+        flex-wrap: wrap;
         .item {
             margin-bottom: 1rem;
-            height: 12rem;
+            height: 10rem;
             border-radius: 10px;
             position: relative;
             overflow: hidden;
             margin-right: 1rem;
             .btn-remove {
                 position: absolute;
-                top: 1rem;
+                top: 0.8rem;
                 right: 1rem;
             }
             img {
@@ -733,3 +734,29 @@ ul {
         }
     }
 }
+
+.app-files {
+    label {
+        cursor: pointer;
+    }
+    input {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+    }
+  }
+  .list-chat-img {
+    display: flex;
+    align-items: center;
+    .item {
+      .btn-remove {
+        width: 1.8rem;
+        height: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 2px;
+      }
+    }
+  }

@@ -237,7 +237,6 @@ import * as actionTypes from "~/utils/action-types";
 import OlclassesService from "~/services/elearning/creating/Olclasses";
 import { createPayloadAddOlclass } from "~/models/elearning/Olclass";
 
-
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
 
 export default {
@@ -271,12 +270,12 @@ export default {
       filterCourse: null,
       filterPrivacy: null,
       schedules: {
-        days_of_week: '',
+        days_of_week: "",
         duration: 0,
-        from_date: '',
-        schedule_id: '',
-        start_time: '',
-        to_date: ''
+        from_date: "",
+        schedule_id: "",
+        start_time: "",
+        to_date: ""
       },
       hours: [
         {
@@ -320,7 +319,7 @@ export default {
         {
           value: "45",
           text: "45"
-        },
+        }
       ],
       timeTypes: [
         {
@@ -456,7 +455,7 @@ export default {
       ],
       selectedItems: [],
       params: {
-        elearning_id: 'xxxxxx',
+        elearning_id: "xxxxxx",
         enable: true
       }
     };
@@ -471,10 +470,30 @@ export default {
         this.loading = true;
         let params = { ...this.params };
         const payload = createPayloadAddOlclass(this.params);
+        const para = {
+          dto: {
+            elearning_id: "string",
+            enable: true,
+            id: "string",
+            is_allow_download: true,
+            is_invite_all: true,
+            name: "string",
+            schedules: [
+              {
+                days_of_week: "string",
+                duration: 0,
+                from_date: "string",
+                schedule_id: "string",
+                start_time: "string",
+                to_date: "string"
+              }
+            ]
+          }
+        };
         console.log(payload);
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.ADD}`,
-          { payload }
+          { para }
         );
       } catch (e) {
       } finally {

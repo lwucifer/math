@@ -282,11 +282,11 @@
         </div>
         <div class="input-group">
           <div class="list-chat-img">
-            <div class="item" v-if="imgSrc">
-              <button class="btn-remove" @click="removeImgSrc">
+            <div class="item" v-for="(item, i) in listImgSrc" :key="i">
+              <button class="btn-remove" @click="removeImgSrc" title="Remove">
                 <IconClose class="fill-white" />
               </button>
-              <img :src="imgSrc" />
+              <img :src="item" />
             </div>
           </div>
 
@@ -305,11 +305,12 @@
                   </a>
                 </li>
                 <li>
-                  <app-upload class="cgi-upload-avt" @change="handleUploadChange">
-                    <template>
+                  <div class="app-files">
+                    <label for="files">
                       <IconImage width="15" height="15" />
-                    </template>
-                  </app-upload>
+                    </label>
+                    <input type="file" id="files" name="files" multiple @change="handleUploadChange2"/>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -457,6 +458,7 @@ export default {
         room_id: ""
       },
       friendsList: [],
+      listImgSrc: [],
       // dataPushMessage: [],
       messagesList: [],
       friends: [
@@ -665,8 +667,34 @@ export default {
 
     foward() {},
 
+    async handleUploadChange2(fileList, event) {
+      let listFile = fileList.target.files;
+      this.listImage = Array.from(listFile);
+      this.fileList = listFile;
+
+      this.listImage.forEach(element => {
+        getBase64(element, src => {
+          this.listImgSrc.push(src);
+        });
+      });
+
+      const body = new FormData();
+      body.append("msg_image", listFile);
+      body.append("room_id", this.$route.params.id);
+      await this.messageSendImg(body).then(result => {
+        console.log("[send img]", result);
+        this.urlEmitMessage =
+          result.data &&
+          result.data.full_img_url &&
+          result.data.full_img_url.low
+            ? result.data.full_img_url.low
+            : "";
+        this.messageId =
+          result.data && result.data.message_id ? result.data.message_id : "";
+      });
+    },
+
     async handleUploadChange(fileList, event) {
-      debugger;
       this.listImage = Array.from(fileList);
 
       getBase64(this.listImage[0], src => {
