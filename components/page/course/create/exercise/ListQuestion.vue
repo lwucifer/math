@@ -1,10 +1,11 @@
 <template>
-  <fragment>
+  <div>
     <div
       class="ce-question-item d-flex align-items-center"
       v-if="!isShowEditQuestion"
     >
-      <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
+      <h3 class="body-2 mr-1">Câu {{ index + 1 }}:</h3>
+      <p class="body-2 mr-4" v-html="get(question, 'content', '')"></p>
       <span class="text-sub mr-4">{{ type }}</span>
 
       <div class="d-flex align-items-center ml-auto ce-question-item__actions">
@@ -27,21 +28,23 @@
         @cancel="handleCancel"
       />
     </div>
-    <EditQuestionChoice
-      v-if="isShowEditQuestion && get(question, 'type', '') === 'CHOICE'"
-      @handleCancelAddQuestion="handleCancelAddQuestion"
-      @handleRefreshQuestion="handleRefreshQuestion"
-      :question="question"
-      :exercise="exercise"
-    />
-    <EditQuestionEssay
-      v-if="isShowEditQuestion && get(question, 'type', '') === 'ESSAY'"
-      @handleCancelAddQuestion="handleCancelAddQuestion"
-      @handleRefreshQuestion="handleRefreshQuestion"
-      :question="question"
-      :exercise="exercise"
-    />
-  </fragment>
+    <div v-else>
+      <EditQuestionChoice
+        v-if="get(question, 'type', '') === 'CHOICE'"
+        @handleCancelAddQuestion="handleCancelAddQuestion"
+        @handleRefreshQuestion="handleRefreshQuestion"
+        :question="question"
+        :exercise="exercise"
+      />
+      <EditQuestionEssay
+        v-else
+        @handleCancelAddQuestion="handleCancelAddQuestion"
+        @handleRefreshQuestion="handleRefreshQuestion"
+        :question="question"
+        :exercise="exercise"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -80,6 +83,10 @@ export default {
     exercise: {
       type: Object,
       default: null,
+    },
+    index: {
+      type: Number,
+      default: 0,
     },
   },
 

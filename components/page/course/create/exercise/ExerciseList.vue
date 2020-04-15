@@ -5,6 +5,7 @@
         <div class="cc-box__head-left">
           <EditExerciseName
             :exercise="get(this, 'exercise', {})"
+            :index="index"
             @handleRefreshExcercises="handleRefreshExcercises"
           />
         </div>
@@ -13,14 +14,17 @@
           <a href @click.prevent="handleAddQuestion" class="text-secondary"
             >Thêm câu hỏi</a
           >
-          <button class="cc-box__btn cc-box__btn-collapse" @click="isShowExercise=!isShowExercise">
-            <IconAngleDown class="icon" v-if="!isShowExercise"/>
-            <IconAngleUp class="icon" v-else/>
+          <button
+            class="cc-box__btn cc-box__btn-collapse"
+            @click="isShowExercise = !isShowExercise"
+          >
+            <IconAngleDown class="icon" v-if="!isShowExercise" />
+            <IconAngleUp class="icon" v-else />
           </button>
         </div>
       </div>
 
-      <div class="cc-box__body" v-if="isShowExercise">
+      <div class="cc-box__body">
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
@@ -33,13 +37,16 @@
           @handleRefreshQuestion="handleRefreshQuestion"
           @handleCancelAddQuestion="handleCancelAddQuestion"
         />
-        <ListQuestion
-          v-for="question in get(exercise, 'questions', [])"
-          :key="question.id"
-          :question="question"
-          :exercise="exercise"
-          @handleRefreshQuestion="handleRefreshQuestion"
-        />
+        <fragment v-if="isShowExercise">
+          <ListQuestion
+            v-for="(question, index) in get(exercise, 'questions', [])"
+            :key="question.id"
+            :index="index"
+            :question="question"
+            :exercise="exercise"
+            @handleRefreshQuestion="handleRefreshQuestion"
+          />
+        </fragment>
       </div>
     </div>
   </div>
@@ -59,6 +66,7 @@ import CreateQuestionChoice from "~/components/page/course/create/exercise/Creat
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
+
 export default {
   components: {
     IconInfoCircle,
@@ -78,14 +86,18 @@ export default {
   props: {
     exercise: {
       type: Object,
-      default: null,
+      default: null
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
 
   data() {
     return {
       isAddQuestionForm: false,
-      isShowExercise:true
+      isShowExercise: true
     };
   },
 
@@ -106,7 +118,7 @@ export default {
     },
     handleRefreshExcercises() {
       this.$emit("handleRefreshExcercises");
-    },
-  },
+    }
+  }
 };
 </script>
