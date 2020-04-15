@@ -49,32 +49,32 @@ const menu = [
     key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "content",
     title: "Nội dung học tập",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "settings",
     title: "Cài đặt",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "exercise",
     title: "Bài tập",
     optional: true,
-    checked: false
+    checked: false,
   },
   {
     key: "exam",
     title: "Bài kiểm tra",
     optional: true,
-    checked: false
-  }
+    checked: false,
+  },
 ];
 
 export default {
@@ -83,16 +83,16 @@ export default {
       menu,
       active: "general",
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     ...mapState("elearning/creating/creating-progress", {
-      progress: "progress"
+      progress: "progress",
     }),
     is_submit() {
       return (
@@ -100,7 +100,7 @@ export default {
         get(this, "progress.data.content_status", false) &&
         get(this, "progress.data.exercise_status", false)
       );
-    }
+    },
   },
 
   created() {
@@ -108,8 +108,8 @@ export default {
     if (elearning_id) {
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -132,8 +132,8 @@ export default {
         checked = get(this, "progress.data.test_status", false) == 1;
         this.menu[4]["checked"] = checked;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -146,7 +146,7 @@ export default {
 
       const elearning_id = getParamQuery("elearning_id");
       const params = {
-        elearning_id
+        elearning_id,
       };
 
       const res = await this.$store.dispatch(
@@ -201,8 +201,8 @@ export default {
 
       this.active = key;
       this.$emit("click-item", key);
-    }
-  }
+    },
+  },
 };
 </script>
 
