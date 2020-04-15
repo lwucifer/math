@@ -40,7 +40,7 @@ export default {
     CreateSetting,
     CreateExercise,
     CreateExam,
-    CreateLearningContentLecture
+    CreateLearningContentLecture,
   },
 
   async fetch({ params, query, store }) {
@@ -54,7 +54,7 @@ export default {
 
   data() {
     return {
-      formActive: "general"
+      formActive: "general",
     };
   },
 
@@ -66,11 +66,12 @@ export default {
     window.removeEventListener("beforeunload", this.preventNav);
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (!window.confirm("Leave without saving?")) {
-      return;
-    }
-    next();
+  watch: {
+    "$route.query.elearning_id": {
+      handler: function() {
+        window.location.reload();
+      },
+    },
   },
 
   methods: {
@@ -81,8 +82,8 @@ export default {
 
     setFormActive(key) {
       this.formActive = key;
-    }
-  }
+    },
+  },
 };
 </script>
 
