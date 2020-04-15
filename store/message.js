@@ -28,7 +28,7 @@ const state = () => ({
     closeCreate: true,
     isGroupState: false,
     listMessageType: {},
-    tabChat: false
+    tabChat: true
 });
 
 /**
@@ -178,10 +178,14 @@ const actions = {
 
             // set to mutation
             commit(mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_DETAIL, result);
-            if (result.room && result.room.type == 1) {
-                commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, true);
+            if (result.room) {
+                if (result.room.type == 1) {
+                    commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, true);
+                } else {
+                    commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, false);
+                }
             } else {
-                commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, false);
+                commit(mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT, true);
             }
             return result;
         } catch (err) {
