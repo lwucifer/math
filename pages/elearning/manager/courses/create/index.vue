@@ -66,6 +66,13 @@ export default {
     window.removeEventListener("beforeunload", this.preventNav);
   },
 
+  beforeRouteLeave(to, from, next) {
+    if (!window.confirm("Leave without saving?")) {
+      return;
+    }
+    next();
+  },
+
   methods: {
     preventNav(event) {
       event.preventDefault();
