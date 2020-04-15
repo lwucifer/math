@@ -1,5 +1,17 @@
 <template>
-  <div class="comment-item" :class="classes">
+  <div
+    v-if="isEdit"
+    :class="{ 'comment-item-edit': true, 'comment-item-edit--level-2': level === 2 }"
+  >
+    <CommentEditor mode="edit" :initialValues="data" :reply="level === 2" @submit="editComment" />
+    <a
+      class="caption text-sub comment-item-edit__cancel"
+      href="javascript:;"
+      @click.prevent="cancelEdit"
+    >Huỷ</a>
+  </div>
+
+  <div v-else class="comment-item" :class="classes">
     <app-avatar
       :src="data && data.avatar && data.avatar.low ? data.avatar.low : null"
       :size="level === 2 ? 'xs' : 'sm'"
@@ -28,7 +40,7 @@
 
           <ul class="comment-item__menu-dropdown__list">
             <li>
-              <a href="javasscript:;">Chỉnh sửa bình luận</a>
+              <a href="javasscript:;" @click="switchToEdit">Chỉnh sửa bình luận</a>
             </li>
             <li>
               <a href="javasscript:;" @click.once="deleteComment">Xoá</a>
@@ -39,7 +51,7 @@
 
       <div class="comment-item__content" v-html="data.comment_content"></div>
 
-      <div v-if="data.comment_image" class="comment-item__image">
+      <div v-if="data.comment_image && data.comment_image.medium" class="comment-item__image">
         <img class="d-block" :src="data.comment_image.medium" alt />
       </div>
 
@@ -74,6 +86,7 @@
           :level="2"
           :post="post"
           :data="item"
+          @edited="handleChildCommentEdited"
           @deleted="handleDeleted"
         />
       </transition-group>
@@ -97,8 +110,6 @@
       </div>
 
       <CommentEditor v-if="showReply" class="mt-3" reply @submit="postComment" />
-
-      <!-- <app-upload :fileList="fileList"></app-upload> -->
     </div>
   </div>
 </template>
@@ -110,7 +121,7 @@ import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
   BASE as ACTION_TYPE_BASE
 } from "~/utils/action-types";
-import { createComment } from "~/models/social/Comment";
+import { createComment, editComment } from "~/models/social/Comment";
 
 const CommentItemReplied = () =>
   import("~/components/page/timeline/comment/CommentItemReplied");
@@ -146,7 +157,7 @@ export default {
           "fullname",
           "comment_content",
           "created_at",
-          "comment_user_id",
+          "comment_user_id"
         ].every(key => key in value)
     }
   },
@@ -161,7 +172,10 @@ export default {
       childrenCommentData: {},
       isFetchingComment: false,
       showReply: false,
-      menuDropdown: false
+      menuDropdown: false,
+      // Edit comment data
+      isEdit: false,
+      editData: {}
     };
   },
 
@@ -245,7 +259,7 @@ export default {
       }
     },
 
-    async postComment(content, listTags, image, link) {
+    async postComment({ content, listTags, image, link }) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
@@ -295,6 +309,54 @@ export default {
       }
     },
 
+    async editComment({
+      content,
+      listTags,
+      image,
+      link,
+      isDeleteOldImg,
+      listTagsDel
+    }) {
+      const formData = new FormData();
+      const commentModel = editComment({
+        source_id: this.post.post_id,
+        // parent_comment_id: this.level === 2 ? this.data.id : null,
+        comment_id: this.data.id,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link,
+        delete_img: isDeleteOldImg,
+        list_tag_del: listTagsDel
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value) ? JSON.stringify(value) : value
+        );
+      }
+
+      const doEdit = await new CommentService(this.$axios)[
+        ACTION_TYPE_BASE.EDIT_PAYLOAD
+      ](formData);
+
+      if (doEdit.success) {
+        const timeout = setTimeout(
+          () => {
+            this.$emit("edited", doEdit.data, this.cancelEdit);
+            clearTimeout(timeout);
+          },
+          image ? 1000 : 0
+        );
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
     async deleteComment(event) {
       event.preventDefault();
 
@@ -315,6 +377,29 @@ export default {
           comment => comment.id !== id
         );
       }
+    },
+
+    switchToEdit() {
+      this.editData = this.post;
+      this.isEdit = true;
+    },
+
+    cancelEdit() {
+      this.isEdit = false;
+      this.editData = {};
+      this.menuDropdown = false;
+    },
+
+    handleChildCommentEdited(commentData, cancelEdit) {
+      this.childrenCommentData.listComments = this.childrenCommentData.listComments.map(
+        item => {
+          if (item.id === commentData.id) {
+            return commentData;
+          }
+          return item;
+        }
+      );
+      cancelEdit();
     }
   }
 };

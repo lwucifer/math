@@ -84,6 +84,17 @@ a.comment-item__name {
     }
 }
 
+.comment-item__image {
+    
+
+    img {
+        display: block;
+        max-width: 34.6rem;
+        max-height: 21.9rem;
+        object-fit: contain;
+    }
+}
+
 // HOVER
 .comment-item:hover {
     > .comment-item__right > .comment-item__right__top .comment-item__menu-dropdown__btn {
@@ -104,5 +115,27 @@ a.comment-item__name {
     .comment-item__right {
         margin-left: .8rem;
         max-width: calc(100% - 2.8rem);
+    }
+}
+
+
+// Edit mode
+.comment-item-edit {
+    margin-bottom: 2rem;
+
+    $this: &;
+
+    &__cancel {
+        text-decoration: none;
+        margin-left: 5.1rem;
+    }
+
+    &--level-2 {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+
+        #{$this}__cancel {
+            margin-left: calc(2rem + 4px);
+        }
     }
 }

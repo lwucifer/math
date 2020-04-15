@@ -76,9 +76,9 @@
         </a>
 
         <app-content-box
+          class="mb-0"
           tag="a"
           target="_blank"
-          class="mb-4"
           size="sm"
           :href="link.url"
           :image="link.image"
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { debounce, isEmpty } from "lodash";
+import { debounce, isEmpty, get, uniq } from "lodash";
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
 import { Editor, EditorContent } from "tiptap";
@@ -128,6 +128,11 @@ export default {
   props: {
     reply: Boolean,
     prefetch: Boolean,
+    mode: {
+      type: String,
+      default: "add",
+      validator: value => ["add", "edit"].includes(value)
+    },
     initialValues: {
       avatar: Object,
       comment_content: String,
@@ -166,17 +171,19 @@ export default {
       mentionInfiniteId: +new Date(),
 
       // Image upload data
-      uploadFileList: [],
-      uploadImgSrc: null,
+      uploadImgSrc: get(this.initialValues, "comment_image.low", null),
 
       // Fetch link data
       linkDataFetching: false,
-      linkDataFetched: false,
+      linkDataFetched: !!this.initialValues.comment_link,
       linkDataFetchError: false,
 
       // Form submit data
-      link: this.initialValues.link ? JSON.parse(this.initialValues.link) : null,
-
+      uploadFileList: [],
+      link: this.initialValues.comment_link
+        ? JSON.parse(this.initialValues.comment_link)
+        : null,
+      isDeleteOldImg: false
     };
   },
 
@@ -203,7 +210,7 @@ export default {
   mounted() {
     // Init editor
     this.editor = new Editor({
-      content: "",
+      content: this.initialValues.comment_content,
       autoFocus: true,
       extensions: [
         new Placeholder({
@@ -342,9 +349,10 @@ export default {
       const tagEls = el.querySelectorAll("[data-mention-id]");
 
       if (tagEls.length) {
-        return Array.from(tagEls).map(item =>
+        const list = Array.from(tagEls).map(item =>
           parseInt(item.getAttribute("data-mention-id"))
         );
+        return uniq(list);
       }
       return [];
     },
@@ -354,13 +362,28 @@ export default {
       const clearedHtml = clearEmptyTag(html);
 
       if (clearedHtml || this.submitable) {
-        this.$emit(
-          "submit",
-          clearedHtml,
-          this.getTagsFromHTML(clearedHtml),
-          this.uploadFileList[0] || null,
-          !isEmpty(this.link) ? JSON.stringify(this.link) : null
-        );
+        const initialTags = Array.isArray(this.initialValues.tags)
+          ? this.initialValues.tags.map(item => item.id)
+          : [];
+        const localTags = this.getTagsFromHTML(clearedHtml);
+        const params = {
+          content: clearedHtml,
+          listTags: localTags,
+          image: this.uploadFileList[0] || null,
+          link: !isEmpty(this.link) ? JSON.stringify(this.link) : null,
+          isDeleteOldImg: this.isDeleteOldImg
+        };
+
+        if (this.mode === "edit") {
+          params.listTags = localTags.filter(
+            item => !initialTags.includes(item)
+          );
+          params.listTagsDel = initialTags.filter(
+            item => !localTags.includes(item)
+          );
+        }
+
+        this.$emit("submit", params);
         this.clear();
       }
     },
@@ -473,6 +496,10 @@ export default {
     removeImgUpload() {
       this.uploadFileList = [];
       this.uploadImgSrc = null;
+
+      if (this.mode === "edit") {
+        this.isDeleteOldImg = true;
+      }
     },
 
     handleUploadChange(fileList, event) {
