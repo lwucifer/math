@@ -91,19 +91,28 @@ export function createPayloadAddDocument(payload) {
 }
 
 class CourseSetting {
-  constructor(payload) {
+  constructor(payload, free) {
     if (payload.comment_allow !== "") {
       this.comment_allow = payload.comment_allow == 1 ? true : false;
     }
-    this.price = payload.price !== "" ? numeral(payload.price).value() : "";
-    this.fee = payload.fee !== "" ? numeral(payload.fee).value() : "";
+
+    if (free == 1) {
+      this.price = numeral(payload.price).value();
+      this.fee = numeral(payload.fee).value();
+    }
+
+    if (free == 2) {
+      this.price = 0;
+      this.fee = 0;
+    }
+
     this.elearning_id = payload.elearning_id;
     this.privacy = payload.privacy;
   }
 }
 
-export function createPayloadCourseSetting(payload) {
-  return Object.freeze(new CourseSetting(payload));
+export function createPayloadCourseSetting(payload, free) {
+  return Object.freeze(new CourseSetting(payload, free));
 }
 
 class Exercise {

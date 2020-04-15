@@ -15,7 +15,7 @@
             :options="[
               { value: '', text: 'Chọn chế độ hiển thị' },
               { value: 'PUBLIC', text: 'Công khai' },
-              { value: 'PRIVATE', text: 'Riêng tư' },
+              { value: 'PRIVATE', text: 'Riêng tư' }
             ]"
             placeholder="Chọn chế độ hiển thị"
           >
@@ -53,7 +53,7 @@
             :options="[
               { value: '', text: 'Chọn học phí' },
               { value: 1, text: 'Trả phí' },
-              { value: 2, text: 'Miễn phí' },
+              { value: 2, text: 'Miễn phí' }
             ]"
             placeholder="Chọn học phí"
           >
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <create-action @handleCLickSave="handleCLickSave" />
+      <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" />
     </div>
 
     <app-modal-confirm
@@ -112,7 +112,7 @@ import * as yup from "yup";
 export default {
   components: {
     IconAngleDown,
-    CreateAction,
+    CreateAction
   },
 
   data() {
@@ -121,17 +121,19 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       free: "",
+      is_submit: false,
       payload: {
         comment_allow: "",
         price: "",
         elearning_id: get(this, "general.id", ""),
         fee: "",
-        privacy: "",
-      },
+        privacy: ""
+      }
     };
   },
   created() {
     this.fetchSetting();
+    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 
   watch: {
@@ -154,39 +156,56 @@ export default {
           this.free = 2;
         }
       },
-      deep: true,
+      deep: true
     },
     "payload.price": {
       handler: function() {
-        this.payload.price = numeral(this.payload.price).format();
+        const price = numeral(this.payload.price).format();
+        this.payload.price = this.payload.price ? price : "";
         this.handleSetPercent();
-      },
+      }
     },
     "payload.fee": {
       handler: function() {
-        this.payload.fee = numeral(this.payload.fee).format();
+        const fee = numeral(this.payload.fee).format();
+        this.payload.fee = this.payload.fee ? fee : "";
         this.handleSetPercent();
-      },
-    },
+      }
+    }
   },
 
   computed: {
     ...mapState("elearning/creating/creating-setting", {
-      setting: "setting",
+      setting: "setting"
     }),
     ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
+      general: "general"
+    })
   },
 
   methods: {
+    handleCheckSubmit() {
+      if (this.payload.comment_allow === "") return (this.is_submit = false);
+      if (this.payload.privacy === "") return (this.is_submit = false);
+      if (this.free === "") return (this.is_submit = false);
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return (this.is_submit = false);
+        }
+        if (!this.payload.price) {
+          return (this.is_submit = false);
+        }
+      }
+      this.is_submit = true;
+    },
+
     fetchSetting() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id,
-          },
+            elearning_id
+          }
         };
         this.$store.dispatch(
           `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
@@ -221,7 +240,7 @@ export default {
 
     async handleSaveSetting() {
       this.confirmLoading = true;
-      const payload = createPayloadCourseSetting(this.payload);
+      const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
         payload
@@ -251,8 +270,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id,
-        },
+          elearning_id
+        }
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -260,8 +279,8 @@ export default {
       );
     },
 
-    numeral,
-  },
+    numeral
+  }
 };
 </script>
 
