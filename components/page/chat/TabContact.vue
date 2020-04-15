@@ -453,11 +453,7 @@ export default {
         params: this.groupListQuery
       });
       console.log("getData_TYPE2", getData);
-      if (
-        getData.listMessage &&
-        getData.listMessage == 0 &&
-        this.groupsListTab.length == 0
-      ) {
+      if (getData && !getData.listMessage && this.groupsListTab.length == 0) {
         this.checkGroupList = true;
       }
       if (getData.listMessage && getData.listMessage.length) {
@@ -486,11 +482,7 @@ export default {
         params: this.chatListQuery
       });
       console.log("getData", getData);
-      if (
-        getData.listMessage &&
-        getData.listMessage == 0 &&
-        this.chatsListTab.length == 0
-      ) {
+      if (getData && !getData.listMessage && this.chatsListTab.length == 0) {
         this.checkChatList = true;
       }
       if (getData.listMessage && getData.listMessage.length) {
