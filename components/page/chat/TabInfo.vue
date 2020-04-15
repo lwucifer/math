@@ -55,7 +55,7 @@
       </div>
       <div class="message-info__box" v-if="!tabChat">
         <h5 class="message-info__box__title">Thành viên</h5>
-        <div class="message-info__box__content">
+        <div class="message-info__box__content" v-if="!checkMemberList">
           <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
             <IconPlus height="20" width="20" class="mr-3" />Thêm người
           </button>
@@ -170,7 +170,8 @@ export default {
         room_id: ""
       },
       name: "",
-      avatarSrc: ""
+      avatarSrc: "",
+      checkMemberList: false
     };
   },
   created() {
@@ -208,6 +209,9 @@ export default {
       ]({
         params: this.memberListQuery
       });
+      if (getData && !getData.listMember && this.memberListTab.length == 0) {
+        this.checkMemberList = true;
+      }
       if (getData.listMember && getData.listMember.length) {
         this.memberListQuery.page += 1;
         this.memberListTab.push(...getData.listMember);
