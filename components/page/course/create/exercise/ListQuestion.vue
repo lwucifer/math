@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <div
       class="ce-question-item d-flex align-items-center"
       v-if="!isShowEditQuestion"
@@ -28,21 +28,23 @@
         @cancel="handleCancel"
       />
     </div>
-    <EditQuestionChoice
-      v-if="isShowEditQuestion && get(question, 'type', '') === 'CHOICE'"
-      @handleCancelAddQuestion="handleCancelAddQuestion"
-      @handleRefreshQuestion="handleRefreshQuestion"
-      :question="question"
-      :exercise="exercise"
-    />
-    <EditQuestionEssay
-      v-if="isShowEditQuestion && get(question, 'type', '') === 'ESSAY'"
-      @handleCancelAddQuestion="handleCancelAddQuestion"
-      @handleRefreshQuestion="handleRefreshQuestion"
-      :question="question"
-      :exercise="exercise"
-    />
-  </fragment>
+    <div v-else>
+      <EditQuestionChoice
+        v-if="get(question, 'type', '') === 'CHOICE'"
+        @handleCancelAddQuestion="handleCancelAddQuestion"
+        @handleRefreshQuestion="handleRefreshQuestion"
+        :question="question"
+        :exercise="exercise"
+      />
+      <EditQuestionEssay
+        v-else
+        @handleCancelAddQuestion="handleCancelAddQuestion"
+        @handleRefreshQuestion="handleRefreshQuestion"
+        :question="question"
+        :exercise="exercise"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -70,29 +72,29 @@ export default {
     IconClipboardNotes,
     CreateQuestionEssay,
     EditQuestionChoice,
-    EditQuestionEssay
+    EditQuestionEssay,
   },
 
   props: {
     question: {
       type: Object,
-      default: null
+      default: null,
     },
     exercise: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
 
   data() {
     return {
       isShowEditQuestion: false,
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -101,7 +103,7 @@ export default {
       return get(this, "question.type", "") === "CHOICE"
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
-    }
+    },
   },
 
   methods: {
@@ -113,8 +115,8 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "question.id", "")
-        }
+          id: get(this, "question.id", ""),
+        },
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
@@ -142,7 +144,7 @@ export default {
       this.$emit("handleRefreshQuestion");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
