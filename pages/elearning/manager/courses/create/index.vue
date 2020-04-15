@@ -59,13 +59,19 @@ export default {
   },
 
   beforeMount() {
-    window.addEventListener("beforeunload", event => {
-      event.preventDefault();
-      event.returnValue = "";
-    });
+    window.addEventListener("beforeunload", this.preventNav);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("beforeunload", this.preventNav);
   },
 
   methods: {
+    preventNav(event) {
+      event.preventDefault();
+      event.returnValue = "";
+    },
+
     setFormActive(key) {
       this.formActive = key;
     }
