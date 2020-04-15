@@ -96,9 +96,9 @@ export default {
     }),
     is_submit() {
       return (
-        get(this, "progress.data.general_complete", false) &&
-        get(this, "progress.data.content_complete", false) &&
-        get(this, "progress.data.setting_complete", false)
+        get(this, "progress.data.general_status", false) &&
+        get(this, "progress.data.content_status", false) &&
+        get(this, "progress.data.exercise_status", false)
       );
     }
   },
@@ -121,15 +121,15 @@ export default {
   watch: {
     progress: {
       handler: function() {
-        let checked = get(this, "progress.data.general_complete", false);
+        let checked = get(this, "progress.data.general_status", false) == 1;
         this.menu[0]["checked"] = checked;
-        checked = get(this, "progress.data.content_complete", false);
+        checked = get(this, "progress.data.content_status", false) == 1;
         this.menu[1]["checked"] = checked;
-        checked = get(this, "progress.data.setting_complete", false);
+        checked = get(this, "progress.data.setting_status", false) == 1;
         this.menu[2]["checked"] = checked;
-        checked = get(this, "progress.data.exercise_complete", false);
+        checked = get(this, "progress.data.exercise_status", false) == 1;
         this.menu[3]["checked"] = checked;
-        checked = get(this, "progress.data.test_complete", false);
+        checked = get(this, "progress.data.test_status", false) == 1;
         this.menu[4]["checked"] = checked;
       },
       deep: true
@@ -176,7 +176,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.general_complete", false)) return;
+      if (!get(this, "progress.data.general_status", false) == 1) return;
 
       if (key === "content") {
         this.active = key;
@@ -191,15 +191,13 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.content_complete", false)) return;
+      if (!get(this, "progress.data.content_status", false) == 1) return;
 
       if (key === "settings") {
         this.active = key;
         this.$emit("click-item", key);
         return;
       }
-
-      if (!get(this, "progress.data.setting_complete", false)) return;
 
       this.active = key;
       this.$emit("click-item", key);

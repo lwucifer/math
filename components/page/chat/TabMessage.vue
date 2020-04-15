@@ -187,7 +187,49 @@
                   <span>{{item.created_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
-              <div class="message-box__item__desc" v-if="item.content">
+              <div
+                class="message-box__item__desc"
+                v-if="item.cotent && item.img_url && item.img_url.low"
+              >
+                <div class="message-box__item__desc__text">
+                  <p>{{item.content}}</p>
+                </div>
+                <div class="message-box__item__desc__image">
+                  <img
+                    v-if="item.img_url && item.img_url.low"
+                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
+                  />
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Trả lời" @click="reply()">
+                    <IconReply />
+                  </button>
+                  <button title="Chuyển tiếp">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownEdit"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <a>Sửa tin nhắn</a>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <a @click="visibleDelete = true">Xóa tin</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
+              </div>
+              <div class="message-box__item__desc" v-else-if="item.content">
                 <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
                 </div>
@@ -226,7 +268,7 @@
                   </app-dropdown>
                 </div>
               </div>
-              <div class="message-box__item__desc" v-if="item.img_url && item.img_url.low">
+              <div class="message-box__item__desc" v-else-if="item.img_url && item.img_url.low">
                 <!-- <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
                 </div>-->

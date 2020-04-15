@@ -16,12 +16,19 @@
             </div>
 
             <div class="cc-box__head-right">
-              <a @click="handleAddLesson($event)" href
+              <a
+                @click="handleAddLesson($event)"
+                href
+                v-if="!get(lessons, 'data.length', 0)"
                 >Thêm nội dung bài giảng</a
               >
-              <button class="cc-box__btn cc-box__btn-collapse" @click="isShowDetailLesson = !isShowDetailLesson">
-                <IconAngleDown class="icon" v-if="!isShowDetailLesson"/>
-                <IconAngleUp class="icon" v-else/>
+              <button
+                class="cc-box__btn cc-box__btn-collapse"
+                @click="isShowDetailLesson = !isShowDetailLesson"
+                v-if="get(lessons, 'data.length', 0)"
+              >
+                <IconAngleDown class="icon" v-if="!isShowDetailLesson" />
+                <IconAngleUp class="icon" v-else />
               </button>
             </div>
           </div>
@@ -91,7 +98,7 @@ export default {
     CreateLessonOfElearning,
     LessonDetail,
     EditCourseName,
-    IconAngleUp 
+    IconAngleUp
   },
 
   data() {
@@ -107,7 +114,7 @@ export default {
       isShowDetailLesson: false,
       isEditCourseName: false,
       courseNameModel: "",
-      lesson: null,
+      lesson: null
     };
   },
 
@@ -255,9 +262,8 @@ export default {
     },
 
     handleAddLesson(e) {
-      this.isShowButtonAdd = false;
-      this.isShowFormAddLesson = !this.isShowFormAddLesson;
       e.preventDefault();
+      this.isShowFormAddLesson = !this.isShowFormAddLesson;
     },
 
     handleCancel() {

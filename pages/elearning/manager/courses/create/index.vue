@@ -58,7 +58,27 @@ export default {
     };
   },
 
+  beforeMount() {
+    window.addEventListener("beforeunload", this.preventNav);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("beforeunload", this.preventNav);
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if (!window.confirm("Leave without saving?")) {
+      return;
+    }
+    next();
+  },
+
   methods: {
+    preventNav(event) {
+      event.preventDefault();
+      event.returnValue = "";
+    },
+
     setFormActive(key) {
       this.formActive = key;
     }
