@@ -578,7 +578,7 @@ export default {
         // if is preview a link -> remove that. Post prefer image than link
         !isEmpty(this.link) && this.removePreviewLink();
 
-        this.fileList.push(file);
+        this.fileList = [...this.fileList, file];
         getBase64(file, fileSrc => {
           this.previewList.push(fileSrc);
         });
