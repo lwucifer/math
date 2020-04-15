@@ -120,27 +120,35 @@ class Exercise {
     if (payload.id) {
       this.id = payload.id;
     }
+
     if (payload.lesson_id) {
       this.lesson_id = payload.lesson_id;
     }
+
     if (payload.required !== "") {
       this.required = payload.required ? true : false;
     }
+
+    if (payload.required == 1) {
+      if (payload.pass_score !== "") {
+        this.pass_score = payload.pass_score;
+      }
+      if (payload.reworks !== "") {
+        this.reworks = payload.reworks;
+      }
+      if (payload.duration !== "") {
+        this.duration = payload.duration;
+      }
+    }
+
     if (payload.title) {
       this.title = payload.title;
     }
+
     if (payload.type) {
       this.type = payload.type;
     }
-    if (payload.pass_score !== "") {
-      this.pass_score = payload.pass_score;
-    }
-    if (payload.reworks !== "") {
-      this.reworks = payload.reworks;
-    }
-    if (payload.duration !== "") {
-      this.duration = payload.duration;
-    }
+
     if (payload.category) {
       this.category = payload.category;
     }

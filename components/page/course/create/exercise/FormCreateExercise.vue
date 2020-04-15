@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-md-2">
         <label for="time" class="text-gray caption">Thời gian làm bài</label>
       </div>
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-md-2">
         <label for="point" class="text-gray caption">Điểm đạt</label>
       </div>
@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-md-2">
         <label for="count" class="text-gray caption">Số lần làm bài</label>
       </div>
@@ -167,7 +167,7 @@ export default {
 
   computed: {
     text() {
-      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
+      return get(this, "category", "") === "TEST" ? "Bài kiểm tra" : "Bài tập";
     }
   },
 
