@@ -361,8 +361,8 @@ export default {
       event.preventDefault();
 
       const doDelete = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.DELETE
-      ](this.data.id);
+        ACTION_TYPE_BASE.DELETE_PAYLOAD
+      ]({ params: { id: this.data.id } });
 
       if (doDelete.success) {
         this.$emit("deleted", this.data.id);
