@@ -325,10 +325,21 @@
         <div class="input-group">
           <div class="list-chat-img">
             <div class="item" v-for="(item, i) in listImgSrc" :key="i">
-              <button class="btn-remove" @click="removeImgSrc" title="Remove">
-                <IconClose class="fill-white" />
-              </button>
-              <img :src="item" />
+              <template v-if="item.image">
+                <button class="btn-remove" @click="removeImgSrc" title="Remove">
+                  <IconClose class="fill-white" />
+                </button>
+                <img :src="item.src" />
+              </template>
+              <div v-else class="item-file">
+                <button class="btn-remove" @click="removeImgSrc" title="Remove">
+                  <IconClose class="fill-666" />
+                </button>
+                <div class="icon">
+                  <IconFileAlt class="fill-primary" />
+                </div>
+                <span>{{item.src}}</span>
+              </div>
             </div>
           </div>
 
@@ -351,7 +362,13 @@
                     <label for="files">
                       <IconImage width="15" height="15" />
                     </label>
-                    <input type="file" id="files" name="files" multiple @change="handleUploadChange2"/>
+                    <input
+                      type="file"
+                      id="files"
+                      name="files"
+                      multiple
+                      @change="handleUploadChange2"
+                    />
                   </div>
                 </li>
               </ul>
@@ -448,6 +465,7 @@ import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
@@ -464,6 +482,7 @@ export default {
     IconDots,
     IconClose,
     IconCamera,
+    IconFileAlt,
     ModalAddFriend,
     ModalAddFriendByGroup
   },
@@ -716,7 +735,13 @@ export default {
 
       this.listImage.forEach(element => {
         getBase64(element, src => {
-          this.listImgSrc.push(src);
+          const fileType = element["type"];
+          const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+          const checkImage = validImageTypes.includes(fileType);
+          this.listImgSrc.push({
+            src: checkImage ? src : element.name,
+            image: checkImage
+          });
         });
       });
 
