@@ -26,9 +26,10 @@
       />
 
       <ExerciseList
-        v-for="exercise in get(lesson, 'exerciseTests', [])"
+        v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
         :key="exercise.id"
         :exercise="exercise"
+        :index="index"
         @handleRefreshQuestion="handleRefreshQuestion"
       />
     </div>
@@ -74,7 +75,7 @@ export default {
       isShowFormAdd: false,
       lessons: [],
       lesson: null,
-      category: 'TEST'
+      category: "TEST"
     };
   },
 

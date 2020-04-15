@@ -9,7 +9,8 @@
         type="text"
       />
       <h2 class="cc-box__title heading-6" v-else>
-        {{ exerciseNameModel }}
+        Bài {{ index + 1 }}:
+        <span style="font-weight: 400">{{ exerciseNameModel }}</span>
       </h2>
     </div>
     <template v-if="isEditExerciseName">
@@ -57,23 +58,28 @@ const IconTrashAlt = () =>
 import { getParamQuery } from "~/utils/common";
 import { createPayloadExercise } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
+
 export default {
   components: {
     IconEditAlt,
-    IconTrashAlt,
+    IconTrashAlt
   },
   props: {
     exercise: {
       type: Object,
-      default: null,
+      default: null
     },
+    index: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
       isEditExerciseName: false,
       exerciseNameModel: get(this, "exercise.title", ""),
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
   watch: {
@@ -81,8 +87,8 @@ export default {
       handler: function() {
         this.exerciseNameModel = this.exercise.title;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     get,
@@ -100,7 +106,7 @@ export default {
     async handleSaveExerciseName() {
       const data = {
         id: get(this, "exercise.id", ""),
-        title: this.exerciseNameModel,
+        title: this.exerciseNameModel
       };
       const payload = createPayloadExercise(data);
       const result = await this.$store.dispatch(
@@ -126,10 +132,9 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "exercise.id", ""),
-        },
+          id: get(this, "exercise.id", "")
+        }
       };
-      console.log(payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
         payload
@@ -140,8 +145,8 @@ export default {
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    },
-  },
+    }
+  }
 };
 </script>
 

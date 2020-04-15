@@ -26,8 +26,9 @@
       />
 
       <ExerciseList
-        v-for="exercise in get(lesson, 'exercises', [])"
+        v-for="(exercise, index) in get(lesson, 'exercises', [])"
         :key="exercise.id"
+        :index="index"
         :exercise="exercise"
         @handleRefreshQuestion="handleRefreshQuestion"
         @handleRefreshExcercises="handleRefreshExcercises"
@@ -75,7 +76,7 @@ export default {
       isShowFormAdd: false,
       lessons: [],
       lesson: null,
-      category: 'EXERCISE'
+      category: "EXERCISE"
     };
   },
 
@@ -105,7 +106,7 @@ export default {
     },
 
     handleRefreshExcercises() {
-      this.getProgress()
+      this.getProgress();
       this.getLesson(get(this, "lesson.id", ""));
       this.isShowFormAdd = false;
       this.isShowButtonCreate = true;

@@ -4,7 +4,8 @@
       class="ce-question-item d-flex align-items-center"
       v-if="!isShowEditQuestion"
     >
-      <h3 class="body-2 mr-4" v-html="get(question, 'content', '')"></h3>
+      <h3 class="body-2 mr-1">Câu {{ index + 1 }}:</h3>
+      <p class="body-2 mr-4" v-html="get(question, 'content', '')"></p>
       <span class="text-sub mr-4">{{ type }}</span>
 
       <div class="d-flex align-items-center ml-auto ce-question-item__actions">
@@ -69,25 +70,29 @@ export default {
     IconClipboardNotes,
     CreateQuestionEssay,
     EditQuestionChoice,
-    EditQuestionEssay,
+    EditQuestionEssay
   },
 
   props: {
     question: {
       type: Object,
-      default: null,
+      default: null
     },
     exercise: {
       type: Object,
-      default: null,
+      default: null
     },
+    index: {
+      type: Number,
+      default: 0
+    }
   },
 
   data() {
     return {
       isShowEditQuestion: false,
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
 
@@ -96,7 +101,7 @@ export default {
       return get(this, "question.type", "") === "CHOICE"
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
-    },
+    }
   },
 
   methods: {
@@ -108,8 +113,8 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "question.id", ""),
-        },
+          id: get(this, "question.id", "")
+        }
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
@@ -137,7 +142,7 @@ export default {
       this.$emit("handleRefreshQuestion");
     },
 
-    get,
-  },
+    get
+  }
 };
 </script>

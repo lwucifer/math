@@ -4,7 +4,7 @@
       <label for="title" class="text-sub mb-2 d-inline-block"
         >Tiêu đề {{ text }}</label
       >
-      <app-input id="title" :counter="100" v-model="payload.title" />
+      <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
     <div class="row align-items-center mb-4">
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="category === 'EXERCISE'">
       <div class="col-md-2">
         <label for="require" class="text-gray caption"
           >{{ text }} bắt buộc?</label
