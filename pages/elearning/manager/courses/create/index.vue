@@ -58,6 +58,13 @@ export default {
     };
   },
 
+  beforeMount() {
+    window.addEventListener("beforeunload", event => {
+      event.preventDefault();
+      event.returnValue = "";
+    });
+  },
+
   methods: {
     setFormActive(key) {
       this.formActive = key;
