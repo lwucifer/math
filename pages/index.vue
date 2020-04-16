@@ -33,10 +33,10 @@
                   v-if="post.files && post.files.length"
                   class="my-4"
                   :images="post.files.map(item => ({
-                  id: item.post_id,
-                  thumb: get(item, 'link.high', null),
-                  object: 'image'
-                }))"
+                    id: item.post_id,
+                    thumb: get(item, 'link.high', null),
+                    object: 'image'
+                  }))"
                   @click-item="imageObj => handleClickImage(imageObj, post)"
                 />
 
@@ -126,6 +126,7 @@
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
+              @parent-post-liked="handleParentPostLiked"
             />
           </app-modal>
 
@@ -191,7 +192,7 @@
               size="sm"
               :key="message.id"
               :to="`/messages/t/${message.id}`"
-            /> -->
+            />-->
           </AsideBox>
 
           <AsideBox title="Khóa học Online nổi bật">
@@ -385,7 +386,7 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    }
 
     // messagesConverted() {
     //   return this.messages && this.messsages.length ? this.messages.map(item => {
@@ -605,7 +606,10 @@ export default {
                   return {
                     ...item,
                     type_like: data.type_like,
-                    is_like: !!data.type_like
+                    is_like: !!data.type_like,
+                    total_like: !!data.type_like
+                      ? (item.total_like += 1)
+                      : (item.total_like -= 1)
                   };
                 }
                 return item;
@@ -738,7 +742,7 @@ export default {
         actionTypes.BASE.LIST
       ]({
         params: {
-          page: get(this, 'feeds.page.number', 1) + 1
+          page: get(this, "feeds.page.number", 1) + 1
         }
       });
 
@@ -751,6 +755,15 @@ export default {
       } else {
         $state.complete();
       }
+    },
+
+    /**
+     * Handle Post liked when Post in PostDetail === Post
+     */
+    handleParentPostLiked(newPost) {
+      this.feeds.listPost = this.feeds.listPost.map(item =>
+        newPost.post_id === item.post_id ? newPost : item
+      );
     }
   }
 };
