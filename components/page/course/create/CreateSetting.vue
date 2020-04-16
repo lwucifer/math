@@ -237,6 +237,7 @@ export default {
 
     async handleSaveSetting() {
       this.confirmLoading = true;
+      this.payload.elearning_id = getParamQuery("elearning_id");
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
