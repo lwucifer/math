@@ -8,30 +8,33 @@
 
       <SelectLesson
         :lessons="lessons"
+        v-if="get(general, 'type', '') === 'COURSE'"
         @handleSelectLesson="handleSelectLesson"
       />
+      
+      <div v-if="lesson">
+        <ButtonCreateExercise
+          v-if="isShowButtonCreate"
+          @handleClick="handleShowFormAdd"
+          :category="category"
+        />
 
-      <ButtonCreateExercise
-        v-if="isShowButtonCreate"
-        @handleClick="handleShowFormAdd"
-        :category="category"
-      />
+        <FormCreateExercise
+          v-if="isShowFormAdd"
+          @handleCancel="handleCancelAddCreate"
+          :lesson="lesson"
+          @handleRefreshExcercises="handleRefreshExcercises"
+          :category="category"
+        />
 
-      <FormCreateExercise
-        v-if="isShowFormAdd"
-        @handleCancel="handleCancelAddCreate"
-        :lesson="lesson"
-        @handleRefreshExcercises="handleRefreshExcercises"
-        :category="category"
-      />
-
-      <ExerciseList
-        v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
-        :key="exercise.id"
-        :exercise="exercise"
-        :index="index"
-        @handleRefreshQuestion="handleRefreshQuestion"
-      />
+        <ExerciseList
+          v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
+          :key="exercise.id"
+          :exercise="exercise"
+          :index="index"
+          @handleRefreshQuestion="handleRefreshQuestion"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -50,8 +53,9 @@ import ExerciseList from "~/components/page/course/create/exercise/ExerciseList"
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery } from "~/utils/common";
+import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -66,7 +70,7 @@ export default {
     ButtonCreateExercise,
     FormCreateExercise,
     ExerciseList,
-    SelectLesson
+    SelectLesson,
   },
 
   data() {
@@ -75,13 +79,18 @@ export default {
       isShowFormAdd: false,
       lessons: [],
       lesson: null,
-      category: "TEST"
+      category: "TEST",
     };
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
   },
 
   created() {
     this.getLessons();
-    this.getLesson();
   },
 
   methods: {
@@ -129,8 +138,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
@@ -138,12 +147,15 @@ export default {
       );
       if (get(res, "success", false)) {
         let lessons = [];
-        get(res, "data", []).map(lesson => {
+        get(res, "data", []).map((lesson) => {
           lesson.value = lesson.id;
           lesson.text = lesson.name;
           lessons.push(lesson);
         });
         this.lessons = lessons;
+        if (get(this, "general.type", "") === "LECTURE") {
+          this.lesson = lessons[0];
+        }
       }
     },
 
@@ -151,8 +163,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -160,8 +172,8 @@ export default {
       );
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
 

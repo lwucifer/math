@@ -9,7 +9,6 @@
       size="sm"
       style="width: 112px"
       @input="handleSelectLesson"
-      v-model="lesson"
     >
       <template slot="placeholder-icon">
         <IconAngleDown class="icon" />
@@ -30,22 +29,6 @@ export default {
     lessons: {
       type: Array,
       default: []
-    }
-  },
-
-  data() {
-    return {
-      lesson: null
-    };
-  },
-
-  watch: {
-    lessons: {
-      handler: function() {
-        this.lesson = this.lessons[0];
-        this.$emit("handleSelectLesson", this.lesson);
-      },
-      deep: true
     }
   },
 
