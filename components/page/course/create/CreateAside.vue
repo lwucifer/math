@@ -98,7 +98,7 @@ export default {
       return (
         get(this, "progress.data.general_status", false) &&
         get(this, "progress.data.content_status", false) &&
-        get(this, "progress.data.exercise_status", false)
+        get(this, "progress.data.setting_status", false)
       );
     },
   },
