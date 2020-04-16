@@ -15,7 +15,7 @@
             value="LECTURE"
             @click="handleSelectType"
             :checked="payload.type === 'LECTURE'"
-            class="mr-6"
+            :class="{ 'mr-6': true, 'disabled-input': disable_type }"
             :disabled="disable_type"
             >Bài giảng</app-radio
           >
@@ -23,12 +23,11 @@
             name="type"
             @click="handleSelectType"
             value="COURSE"
+            :class="{ 'disabled-input': disable_type }"
             :disabled="disable_type"
             :checked="payload.type === 'COURSE'"
             >Khoá học</app-radio
           >
-          <br />
-          <span class="text-sub caption">Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu</span>
         </div>
 
         <div class="row">
@@ -95,6 +94,7 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
+        title="Xác nhận? <br /> Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu"
       />
     </div>
   </div>
