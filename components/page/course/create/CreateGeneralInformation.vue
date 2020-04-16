@@ -94,7 +94,7 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
-        title="Xác nhận? <br /> Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu"
+        :title="title"
       />
     </div>
   </div>
@@ -159,6 +159,8 @@ export default {
     return {
       isSubmit: false,
       disable_type: false,
+      title:
+        "Xác nhận? <br /> Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu",
       payload: {
         avatar: "",
         benefit: [],
@@ -206,6 +208,7 @@ export default {
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {
+          this.title = "Xác nhận?";
           this.disable_type = true;
           this.payload.elearning_id = get(this, "general.id", "");
         }
