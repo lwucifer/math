@@ -8,6 +8,7 @@
       :format="valueFormat"
       :type="type"
       :placeholder="placeholder"
+      :disabled	="disabled"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -51,6 +52,11 @@ export default {
       type: String,
       default: 'date',
       validator: value => ['date', 'datetime', 'year', 'month', 'time', 'week'].includes(value)
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 

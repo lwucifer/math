@@ -15,7 +15,7 @@
             :options="[
               { value: '', text: 'Chọn chế độ hiển thị' },
               { value: 'PUBLIC', text: 'Công khai' },
-              { value: 'PRIVATE', text: 'Riêng tư' }
+              { value: 'PRIVATE', text: 'Riêng tư' },
             ]"
             placeholder="Chọn chế độ hiển thị"
           >
@@ -53,7 +53,7 @@
             :options="[
               { value: '', text: 'Chọn học phí' },
               { value: 1, text: 'Trả phí' },
-              { value: 2, text: 'Miễn phí' }
+              { value: 2, text: 'Miễn phí' },
             ]"
             placeholder="Chọn học phí"
           >
@@ -67,18 +67,28 @@
       <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
-          <app-input v-model="payload.fee" type="text" class="mb-0"></app-input>
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.fee" />
+            </div>
+          </div>
+          <!-- <app-input v-model="payload.fee" type="text" class="mb-0"></app-input> -->
         </div>
       </div>
 
       <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
-          <app-input
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.price" />
+            </div>
+          </div>
+          <!-- <app-input
             v-model="payload.price"
             type="text"
             class="mb-0"
-          ></app-input>
+          ></app-input> -->
         </div>
         <div class="percent_price__ElearningCreate" v-if="percent_price">
           <span>{{ percent_price }}</span>
@@ -112,7 +122,7 @@ import * as yup from "yup";
 export default {
   components: {
     IconAngleDown,
-    CreateAction
+    CreateAction,
   },
 
   data() {
@@ -127,8 +137,8 @@ export default {
         price: "",
         elearning_id: get(this, "general.id", ""),
         fee: "",
-        privacy: ""
-      }
+        privacy: "",
+      },
     };
   },
   created() {
@@ -156,35 +166,22 @@ export default {
           this.free = 2;
         }
       },
-      deep: true
+      deep: true,
     },
-    "payload.price": {
-      handler: function() {
-        const price = numeral(this.payload.price).format();
-        this.payload.price = this.payload.price ? price : "";
-        this.handleSetPercent();
-      }
-    },
-    "payload.fee": {
-      handler: function() {
-        const fee = numeral(this.payload.fee).format();
-        this.payload.fee = this.payload.fee ? fee : "";
-        this.handleSetPercent();
-      }
-    }
   },
 
   computed: {
     ...mapState("elearning/creating/creating-setting", {
-      setting: "setting"
+      setting: "setting",
     }),
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
+      general: "general",
+    }),
   },
 
   methods: {
     handleCheckSubmit() {
+      this.handleSetPercent();
       if (this.payload.comment_allow === "") return (this.is_submit = false);
       if (this.payload.privacy === "") return (this.is_submit = false);
       if (this.free === "") return (this.is_submit = false);
@@ -204,8 +201,8 @@ export default {
       if (elearning_id) {
         const options = {
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         };
         this.$store.dispatch(
           `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
@@ -240,6 +237,7 @@ export default {
 
     async handleSaveSetting() {
       this.confirmLoading = true;
+      this.payload.elearning_id = getParamQuery("elearning_id");
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
@@ -270,8 +268,8 @@ export default {
       const elearning_id = getParamQuery("elearning_id");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
@@ -279,8 +277,8 @@ export default {
       );
     },
 
-    numeral
-  }
+    numeral,
+  },
 };
 </script>
 

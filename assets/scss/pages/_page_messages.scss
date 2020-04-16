@@ -421,7 +421,7 @@
                         .members {
                             max-height: 30rem;
                             overflow: auto;
-                            > li {
+                            >li {
                                 .link--dropdown__button {
                                     display: flex;
                                     align-items: center;
@@ -431,7 +431,7 @@
                                     opacity: 0;
                                     visibility: hidden;
                                 }
-                                .link--dropdown:hover > .app-dropdown__content {
+                                .link--dropdown:hover>.app-dropdown__content {
                                     opacity: 1;
                                     visibility: visible;
                                 }
@@ -554,6 +554,36 @@
                 justify-content: flex-end;
             }
         }
+        .item-file {
+            order: 2;
+            height: 7rem;
+            width: 15rem;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            align-items: center;
+            border: 1px solid $color-border;
+            color: #666;
+            margin: 1.5rem 0;
+            .icon {
+                display: flex;
+                align-items: center;
+                height: 3rem;
+                width: 100%;
+                background-color: $color-border;
+                padding: 0 0.5rem;
+            }
+            .btn-remove {
+                background-color: transparent;
+                right: 0.5rem;
+                top: 0.5rem;
+            }
+            span {
+                display: block;
+                margin: 1rem 0.6rem;
+                overflow: hidden;
+            }
+        }
     }
 }
 
@@ -660,7 +690,7 @@ button:focus {
                     display: flex;
                     align-items: center;
                 }
-                + li {
+                +li {
                     border-top: 1px solid $color-border;
                 }
             }
@@ -746,6 +776,7 @@ ul {
         position: absolute;
     }
 }
+
 .list-chat-img {
     display: flex;
     align-items: center;

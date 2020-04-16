@@ -10,7 +10,7 @@
             class="app-vue-select filter-form__item__selection"
             style="width: 19rem"
             v-model="classSelected"
-            :options="classes"
+            :options="classList"
             label="text"
             placeholder="Chọn lớp"
             searchable
@@ -25,18 +25,18 @@
           <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
           <strong>Chọn tất cả danh sách</strong>
         </div>
-        <div
-          class="item"
-          v-for="(item, index) in studentList ? studentList : []"
-          :key="index"
-        >
-          <app-checkbox class="ml-auto" @change="handelCheckbox(item.id)" :checked="arrMember.includes(item.id)"/>
+        <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
+          <app-checkbox
+            class="ml-auto"
+            @change="handelCheckbox(item.id)"
+            :checked="arrMember.includes(item.id)"
+          />
           <span>{{item.name}}</span>
         </div>
       </div>
       <div class="text-center mt-4">
         <app-button size="sm" color="info" class="mr-3" square @click="close()">Hủy</app-button>
-        <app-button size="sm" square @click="hanldeCreateGroup">Mời</app-button>
+        <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
       </div>
     </div>
   </app-modal>
@@ -44,6 +44,13 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
+import { useEffect, getParamQuery } from "~/utils/common";
+
+const STORE_CREATING_OLCLASSES = "elearning/creating/creating-olclasses";
+const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
+const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
 
 export default {
   components: {},
@@ -52,52 +59,67 @@ export default {
     return {
       arrMember: [],
       name: "",
-      classSelected: {
-        value: "10B",
-        text: "Lớp 10B (50 học sinh)"
-      },
-      classes: [
-        {
-          value: "12B",
-          text: "Lớp 12B (68 học sinh)"
-        },
-        {
-          value: "10B",
-          text: "Lớp 10B (50 học sinh)"
-        }
-      ],
-      studentList: [
-        {
-          id: "10B",
-          name: "Lớp 10B (40 học sinh)"
-        },
-        {
-          id: "11B",
-          name: "Lớp 11B (50 học sinh)"
-        },
-        {
-          id: "12B",
-          name: "Lớp 12B (60 học sinh)"
-        },
-      ],
+      classSelected: {},
+      classList: [],
+      studentList: [],
+      invateStudent: {
+        invitation_ids: ["string"],
+        online_class_id: "string",
+        student_ids: ["string"]
+      }
     };
   },
 
   methods: {
-    ...mapActions("message", ["createGroup", "getGroupList"]),
     close() {
       this.$emit("close");
     },
-    handleChangedClass(val) {
-      
+
+    arrayToStringIds(data) {
+      return data.reduce((result, item) => {
+        const com = result ? ',' : '';
+        return result = result + com + item.id;
+      }, '')
     },
-    handelAllCheckbox(checked){
+
+    async hanldeInvate() {
+      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+      let params = {
+        online_class_id: online_class_id,
+        student_ids: [this.arrayToStringIds(this.studentList)]
+      };
+      try {
+        await this.$store.dispatch(
+          `${STORE_CREATING_OLCLASSES}/${actionTypes.CREATING_OLCLASSES.INVITE}`,
+          params
+        );
+      } catch (e) {
+      } finally {
+      }
+    },
+
+    async handleChangedClass() {
+      let params = {
+        class_id: this.classSelected.value,
+        size: 999
+      };
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
+          params
+        );
+        this.studentList = this.get(this.stateSchoolStudents, "data.content", []);
+      } catch (e) {
+      } finally {
+      }
+    },
+
+    handelAllCheckbox(checked) {
       if (checked) {
         this.arrMember = this.studentList.map(item => item.id);
       } else {
         this.arrMember = [];
       }
-      console.log("arrayMember", this.arrMember);
     },
     handelCheckbox(_id) {
       if (this.arrMember.includes(_id)) {
@@ -105,36 +127,63 @@ export default {
       } else {
         this.arrMember.push(_id);
       }
-      console.log("arrayMember", this.arrMember);
     },
-    getClassList() {
 
-    }
+    async getSchoolClasses() {
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+        );
+        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let list = [];
+        lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.classList = list;
+      } catch (e) {
+      } finally {
+      }
+    },
+
+    get
   },
 
   computed: {
+    ...mapState(STORE_SCHOOL_CLASSES, {
+      stateSchoolClasses: "schoolClasses"
+    }),
+    ...mapState(STORE_SCHOOL_STUDENT, {
+      stateSchoolStudents: "schoolStudents"
+    })
+  },
+
+  created() {
+    this.getSchoolClasses();
   }
 };
 </script>
 
 <style lang="scss">
-  .invite-student-modal .app-modal-content {
-    padding: 2rem 1.5rem;
-  }
-  .student-list {
-    background: #FBFBFB;
-    padding: 1.2rem 1.5rem;
-    margin-top: 2rem;
-    .item {
-      display: block;
-      margin-bottom: 1rem;
-      .app-checkbox {
-        display: inline-block;
-        vertical-align: middle;
-      }
-      span {
-        vertical-align: middle;
-      }
+.invite-student-modal .app-modal-content {
+  padding: 2rem 1.5rem;
+}
+.student-list {
+  background: #fbfbfb;
+  padding: 1.2rem 1.5rem;
+  margin-top: 2rem;
+  .item {
+    display: block;
+    margin-bottom: 1rem;
+    .app-checkbox {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    span {
+      vertical-align: middle;
     }
   }
+}
 </style>

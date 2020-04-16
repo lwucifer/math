@@ -3,7 +3,7 @@
     <app-upload @change="handleSelectFile" class="clc-upload-video">
       <div slot="hint" class="mt-2 caption">
         <b class="text-gray">Lưu ý:</b>
-        <span class="text-sub">{{
+        <span class="text-sub">dasda{{
           `Upload tài liệu bổ trợ cho bài giảng của bạn, dung lượng không quá 1GB cho 1 file`
         }}</span>
       </div>

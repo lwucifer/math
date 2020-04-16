@@ -34,7 +34,9 @@
       <app-upload @change="handleSelectFile" class="clc-upload-video">
         <div slot="hint" class="mt-2 caption">
           <b class="text-gray">Lưu ý:</b>
-          <span class="text-sub">{{ `...` }}</span>
+          <span class="text-sub">{{
+            `Dung lượng không quá 1GB cho 1 file, định dạng doc, docx, txt, ppt`
+          }}</span>
         </div>
       </app-upload>
     </div>
@@ -55,13 +57,13 @@ const IconTrashAlt = () =>
 export default {
   components: {
     IconTrashAlt,
-    DocumentSelectDoc
+    DocumentSelectDoc,
   },
 
   data() {
     return {
       tabDocument: "typing",
-      article_content: ""
+      article_content: "",
     };
   },
 
@@ -74,7 +76,7 @@ export default {
         "",
         ""
       );
-    }
+    },
   },
 
   methods: {
@@ -92,7 +94,7 @@ export default {
 
     handleSelectFile(files) {
       this.$emit("handleSelectDocument", "DOC", "", "", files[0]);
-    }
-  }
+    },
+  },
 };
 </script>

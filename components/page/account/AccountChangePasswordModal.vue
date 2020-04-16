@@ -129,6 +129,7 @@ export default {
           this.success = true;
           // this.$emit("click-close");
         } else {
+          this.$toasted.error(result.message)
         }
       });
     },

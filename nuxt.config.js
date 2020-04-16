@@ -55,6 +55,7 @@ module.exports = {
         { src: '~/plugins/vue-cropper', ssr: false },
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
+        { src: "@/plugins/vue-input-number.js" },
     ],
     /**
      * Global middleware
