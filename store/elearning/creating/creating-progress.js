@@ -6,7 +6,7 @@ import Progress from "~/services/elearning/creating/Progress";
  * initial state
  */
 const state = () => ({
-  progress: []
+  progress: [],
 });
 
 /**
@@ -25,9 +25,9 @@ const actions = {
       );
       commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, result);
     } catch (error) {
-      console.log("[Creating answers] list.error", error);
+      commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, []);
     }
-  }
+  },
 };
 
 /**
@@ -36,7 +36,7 @@ const actions = {
 const mutations = {
   [mutationTypes.SET_ELEARNING_CREATING_PROGRESS](state, progress) {
     state.progress = progress;
-  }
+  },
 };
 
 export default {
@@ -44,5 +44,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

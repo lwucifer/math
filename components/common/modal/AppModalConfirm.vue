@@ -1,9 +1,10 @@
 <template>
-  <app-modal v-bind="{ width, centered }" :component-class="{'app-modal-confirm': true }">
+  <app-modal
+    v-bind="{ width, centered }"
+    :component-class="{ 'app-modal-confirm': true }"
+  >
     <div slot="content" class="py-4 px-5">
-      <div class="mb-3 text-center">
-        <slot>{{ title }}</slot>
-      </div>
+      <div class="mb-3 text-center" v-html="title"></div>
 
       <div class="d-flex justify-content-center">
         <app-button
@@ -21,10 +22,15 @@
           color="primary"
           size="sm"
           square
-          :style="{ 'pointer-events': confirmLoading ? 'none' : ''}"
+          :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
           @click="$emit('ok')"
         >
-          <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
+          <app-spin
+            v-if="confirmLoading"
+            class="mr-3"
+            color="white"
+            size="small"
+          />
           <slot name="okText">{{ okText }}</slot>
         </app-button>
       </div>
@@ -40,22 +46,22 @@ export default {
     // This component props
     title: {
       type: String,
-      default: "Xác nhận?"
+      default: "Xác nhận?",
     },
     okText: {
       type: String,
-      default: "Xác nhận"
+      default: "Xác nhận",
     },
     cancelText: {
       type: String,
-      default: "Huỷ"
+      default: "Huỷ",
     },
     width: {
       type: [Number, String],
-      default: "auto" // number in px or css value
+      default: "auto", // number in px or css value
     },
-    confirmLoading: Boolean
-  }
+    confirmLoading: Boolean,
+  },
 };
 </script>
 
