@@ -156,7 +156,14 @@ export const CREATING_OLCLASSES = {
     ADD: "creatingOlclassesAdd",
     EDIT: "creatingOlclassesEdit",
     DELETE: "creatingOlclassesDelete",
-    INVITATIONS: "creatingOlclassesInvitations"
+    INVITATIONS: "creatingOlclassesInvitations",
+    INVITE: "creatingOlclassesInvite",
+    BLOCK: "creatingOlclassesBlock",
+    UNBLOCK: "creatingOlclassesUnBlock"
+};
+
+export const CREATING_OLCLASSES_LESSON = {
+    ATTENDANCES: "creatingOlclassesLessonAttendances"
 };
 
 export const CREATING_CHAPTER = {

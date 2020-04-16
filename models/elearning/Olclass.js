@@ -1,7 +1,7 @@
 import numeral from "numeral";
 import { toNumber } from "lodash";
 
-class OlClass {
+class dto {
   constructor(payload) {
     if (payload.elearning_id) {
       this.elearning_id = payload.elearning_id;
@@ -29,5 +29,5 @@ class OlClass {
 }
 
 export function createPayloadAddOlclass(payload) {
-  return Object.freeze(new OlClass(payload));
+  return Object.freeze(new dto(payload));
 }

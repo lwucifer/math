@@ -1,28 +1,5 @@
 <template>
   <div class="elearning-wrapper">
-    <!--Options group-->
-    <div class="filter-form mb-4">
-      <div class="filter-form__item ml-auto" @click="openModal = true">
-        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="fill-white" height="14" width="14"/>
-          <span class="ml-3">Mời thêm học sinh</span>
-        </app-button>
-      </div>
-    </div>
-    <!--Options group-->
-
-    <!--Info group-->
-    <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã mời: <span class="color-primary">50</span></strong>
-      <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">95%</strong></div>
-        <div class="item">Tỷ lệ vắng có mặt: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">1%</strong></div>
-      </div>
-    </div>
-    <!--end info group-->
-
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
@@ -43,7 +20,7 @@
           v-model="filterCourse"
           :options="courses"
           label="text"
-          placeholder="Theo lớp"
+          placeholder="Theo bài giảng/khóa học"
           searchable
           clearable
           @input="handleChangedCourse"
@@ -52,9 +29,24 @@
         ></app-vue-select>
       </div>
 
+      <div class="filter-form__item">
+        <label for>Chọn ngày</label>
+        <app-date-picker
+          class="ml-3"
+          v-model="filter.query_date"
+          square
+          size="sm"
+          placeholder="dd/mm/yyyy"
+        >
+          <template v-slot:icon-calendar>
+            <IconCalendar />
+          </template>
+        </app-date-picker>
+      </div>
+
       <!--Right form-->
       <div class="filter-form__right">
-        <div style="width: 28rem;">
+        <div style="width: 23rem;">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
@@ -67,27 +59,41 @@
     </div>
     <!--End filter form-->
 
+    <!--Options group-->
+    <div class="filter-form mb-3">
+      <div class="filter-form__item" @click="deleteRows">
+        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
+          <IconTrash />
+          <span class="ml-3">Hủy lớp</span>
+        </app-button>
+      </div>
+    </div>
+    <!--Options group-->
+
     <!--Table-->
     <app-table
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="classList"
+      multiple-selection
+      @selectionChange="selectRow"
     >
+      <template v-slot:cell(privacy)="{row}">
+        <td class="nowrap">
+          <span
+            :class="row.privacy == 'PUBLIC' ? 'text-primary': 'text-secondary' "
+          >{{ row.privacy }}</span>
+        </td>
+      </template>
+
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.id)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.block" width="16" height="16"/>
-            <IconLock2 v-else width="16" height="16"/>
-          </button>
+          <n-link class :to="row.online_class_id">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
     <!--End table-->
-
-    <!-- Modal invite students -->
-    <ModalInviteStudent @close="openModal = false" v-if="openModal"/>
-    <!-- End -->
   </div>
 </template>
 
@@ -97,17 +103,14 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
-import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
-import ModalInviteStudent from "~/components/page/elearning/manager/olclasses/ModalInviteStudent"
-import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
-import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 import OlclassesService from "~/services/elearning/creating/Olclasses";
 
@@ -117,36 +120,36 @@ export default {
     IconSearch,
     IconArrow,
     IconCalendar,
-    IconTrash,
-    IconPlusCircle,
-    IconLock2,
-    IconLockOpenAlt,
-    ModalInviteStudent
+    IconTrash
   },
 
   data() {
     return {
       tab: 1,
-      openModal: false,
       heads: [
         {
-          name: "student_name",
-          text: "Học sinh",
+          name: "online_class_name",
+          text: "Phòng học",
           sort: true
         },
         {
-          name: "class_name",
-          text: "Lớp",
+          name: "elearning_name",
+          text: "Thuộc khóa học",
           sort: true
         },
         {
-          name: "date_invite",
-          text: "Ngày tham gia",
+          name: "privacy",
+          text: "Hiển thị",
           sort: true
         },
         {
-          name: "point",
-          text: "Điểm chuyên cần",
+          name: "time",
+          text: "Thời gian",
+          sort: true
+        },
+        {
+          name: "num_invitation",
+          text: "Số học sinh đã mời",
           sort: true
         },
         {
@@ -191,18 +194,22 @@ export default {
         last: 10
       },
       classList: [],
+      lessonList: [],
       params: {
         page: 1,
         size: 10,
+        class_status: "STARTING"
       },
       loading: false,
-      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       classes: "Olclasses"
+    }),
+    ...mapState(STORE_PUBLIC_SEARCH, {
+      stateLessons: "Lessons"
     })
   },
 
@@ -210,54 +217,94 @@ export default {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
+      that.params.size = that.pagination.size;
+      that.params.page = that.pagination.page;
+      that.getList();
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
-      console.log(this.params);
+      this.params = { ...this.params, ...this.filter };
       this.getList();
     },
     handleChangedCourse(val) {
       this.filter.course = this.filterCourse.value;
     },
-    handleFocusSearchInput() {
-    },
-    handleBlurSearchInput() {
-    },
-    handleSearch() {
-    },
+    handleFocusSearchInput() {},
+    handleBlurSearchInput() {},
+    handleSearch() {},
     selectRow(data) {
       this.ids = data.map((row, index, data) => {
-          return row.online_class_id
+        return row.online_class_id;
       });
+    },
+
+    async getLessons() {
+      try {
+        let userId = this.$store.state.auth.token
+          ? this.$store.state.auth.token.id
+          : "";
+        await this.$store.dispatch(
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
+          { userId }
+        );
+        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let list = [];
+        this.lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
+      }
     },
 
     async getList() {
       try {
         this.loading = true;
-        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
-        this.params.online_class_id = online_class_id;
         let params = { ...this.params };
+        console.log(params);
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.INVITATIONS}`,
+          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.classes, 'data.content', [])
-        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        this.classList = this.get(this.classes, "data.content", []);
+        this.pagination.size = this.get(this.detailInfo, "data.page.size", 10);
+        this.pagination.first = this.get(this.detailInfo, "data.page.first", 1);
+        this.pagination.last = this.get(this.detailInfo, "data.page.last", 1);
+        this.pagination.number = this.get(this.detailInfo, "data.page.number", 0);
+        this.pagination.totalPages = this.get(this.detailInfo, "data.page.total_pages", 0);
+        this.pagination.totalElements = this.get(this.detailInfo, "data.page.total_elements", 0);
+        this.pagination.numberOfElements = this.get(this.detailInfo, "data.page.number_of_elements", 0);
       } catch (e) {
-
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
 
-    async inviteStudents() {
-      this.openModal = true;
+    async deleteRows() {
+      let ids = { online_class_ids: [...this.ids] };
+      const doDelete = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.DELETE}`,
+        JSON.stringify(ids)
+      );
+
+      if (doDelete.success) {
+        const { courses } = this;
+        const newListPost =
+          courses && courses.listPost
+            ? courses.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.classList = {
+          listPost: newListPost,
+          page: courses.page || {}
+        };
+
+        console.log(this.classList);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
     },
 
     get
@@ -265,23 +312,13 @@ export default {
 
   created() {
     this.getList();
+    this.getLessons();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-.class-info {
-  margin: 0 2rem;
-  padding: 1rem 1.5rem 1.5rem;
-  background: #f8f8f8;
-  .class-info-content {
-    display: table;
-    .item {
-      display: table-cell;
-    }
-  }
-}
 .appended-col {
   p {
     max-width: 15rem;
