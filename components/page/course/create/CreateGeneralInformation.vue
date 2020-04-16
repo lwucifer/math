@@ -16,15 +16,19 @@
             @click="handleSelectType"
             :checked="payload.type === 'LECTURE'"
             class="mr-6"
+            :disabled="disable_type"
             >Bài giảng</app-radio
           >
           <app-radio
             name="type"
             @click="handleSelectType"
             value="COURSE"
+            :disabled="disable_type"
             :checked="payload.type === 'COURSE'"
             >Khoá học</app-radio
           >
+          <br />
+          <span class="text-sub caption">Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu</span>
         </div>
 
         <div class="row">
@@ -154,6 +158,7 @@ export default {
   data() {
     return {
       isSubmit: false,
+      disable_type: false,
       payload: {
         avatar: "",
         benefit: [],
@@ -201,6 +206,7 @@ export default {
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
         if (get(this, "general.id", "")) {
+          this.disable_type = true;
           this.payload.elearning_id = get(this, "general.id", "");
         }
       },
