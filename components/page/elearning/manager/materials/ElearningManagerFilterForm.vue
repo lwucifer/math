@@ -1,57 +1,61 @@
 <template>
-  <div class="row">
-    <div class="col-md-7 wrapfilterform__ElearningManagerFilterTable">
-      <div>
-        <button class="btnFitlerSummit__ElearningManagerFilterTable" @click="submit">
-          <IconFilter/>
-          <span>Lọc kết quả</span>
-        </button>
-      </div>
-      <div style="min-width: 15.5rem;">
-        <app-vue-select
-          class="selectTypes__ElearningManagerFilterTable"
-          :options="fileTypes"
-          :reduce="item => item.value"
-          v-model="filters.type"
-          label="text"
-          placeholder="Theo loại"
-          searchable
-          clearable
-          @input="handleChangedType"
-        >
-        </app-vue-select>
-      </div>
-      <div style="min-width: 15.5rem">
-        <app-vue-select
-          class="selectStatus__ElearningManagerFilterTable"
-          :options="statuses"
-          :reduce="item => item.value"
-          v-model="filters.used"
-          label="text"
-          placeholder="Theo trạng thái"
-          searchable
-          clearable
-          @input="handleChangedStatus"
-        >
-        </app-vue-select>
-      </div>
+  <div class="filter-form">
+    <div class="filter-form__item">
+      <app-button
+        color="primary"
+        class="filter-form__item__btn filter-form__item__btn--submit"
+        :size="'sm'"
+        @click="submit"
+      >
+        <IconFilter/>
+        <span>Lọc kết quả</span>
+      </app-button>
     </div>
-    <div class="col-md-5">
-      <div class="wrapSearchForm___ElearningManagerFilterTable">
-        <app-input
-          type="text"
+    
+    <div class="filter-form__item" style="min-width: 15.5rem;">
+      <app-vue-select
+        class="app-vue-select filter-form__item__selection w-100"
+        :options="fileTypes"
+        :reduce="item => item.value"
+        v-model="filters.type"
+        label="text"
+        placeholder="Theo loại"
+        searchable
+        clearable
+        @input="handleChangedType"
+      >
+      </app-vue-select>
+    </div>
+    <div class="filter-form__item" style="min-width: 15.5rem">
+      <app-vue-select
+        class="app-vue-select filter-form__item__selection w-100"
+        :options="statuses"
+        :reduce="item => item.value"
+        v-model="filters.used"
+        label="text"
+        placeholder="Theo trạng thái"
+        searchable
+        clearable
+        @input="handleChangedStatus"
+      >
+      </app-vue-select>
+    </div>
+    
+    <!--Right form-->
+    <div class="filter-form__right">
+      <div class="filter-form__item filter-form__item--search border-0">
+        <app-search
+          class="w-100"
+          size="sm"
+          placeholder="Nhập để tìm kiếm"
           v-model="filters.name"
-          placeholder="Nhập để tìm kiếm..."
-          :size="'sm'"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
-          class="inputSearch"
-        />
-        <button type="submit">
-          <IconSearch width="15" height="15"/>
-        </button>
+          @submit="submit"
+        >
+        </app-search>
       </div>
-    </div>
+    </div><!--End right form-->
   </div>
 </template>
 
@@ -142,6 +146,6 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>

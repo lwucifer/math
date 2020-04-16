@@ -11,23 +11,22 @@
           </div>
           <app-divider />
           <ElearningManagerUploadFile
+            class="mb-4"
             :on-success="handleDoneAddFile"
             :max-capacity="get(capacityInfo, 'data.max_repository_capacity', 0)"
             :used-capacity="get(capacityInfo, 'data.used_repository_capacity', 0)"
           />
-          <div>
-            <ElearningManagerFilterTable
-              :list.sync="list"
-              :pagination="pagination"
-              :loading="loading"
-              @submitFilter="submitFilter"
-              @changedPagination="updatePagination"
-              @changedType="handleChangedType"
-              @changedStatus="handleChangedStatus"
-              @submitSearch="handleSubmitSearch"
-              @deletedItems="deleteItems"
-            />
-          </div>
+          <ElearningManagerFilterTable
+            :list.sync="list"
+            :pagination="pagination"
+            :loading="loading"
+            @submitFilter="submitFilter"
+            @changedPagination="updatePagination"
+            @changedType="handleChangedType"
+            @changedStatus="handleChangedStatus"
+            @submitSearch="handleSubmitSearch"
+            @deletedItems="deleteItems"
+          />
         </div>
       </div>
     </div>
