@@ -103,7 +103,7 @@
           <div
             class="message-box__item"
             :class="item.user && item.user.id == userId ? 'item__0' : 'item__1'"
-            v-show="item.content || item.img_url && item.img_url.low"
+            v-show="item.content || (item.img_url && item.img_url.low) || item.file_url"
             v-for="(item, index) in messagesList ? messagesList : []"
             :key="index"
           >
@@ -189,16 +189,13 @@
               </div>
               <div
                 class="message-box__item__desc"
-                v-if="item.cotent && item.img_url && item.img_url.low"
+                v-if="item.content && item.img_url && item.img_url.low"
               >
                 <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
                 </div>
                 <div class="message-box__item__desc__image">
-                  <img
-                    v-if="item.img_url && item.img_url.low"
-                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
-                  />
+                  <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
                 </div>
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
@@ -277,6 +274,45 @@
                     v-if="item.img_url && item.img_url.low"
                     :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
                   />
+                </div>
+                <div class="message-box__item__desc__actions">
+                  <button title="Trả lời" @click="reply()">
+                    <IconReply />
+                  </button>
+                  <button title="Chuyển tiếp">
+                    <IconUpload />
+                  </button>
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownEdit"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <IconDots />
+                    </button>
+                    <div class="link--dropdown__content">
+                      <ul>
+                        <li class="link--dropdown__content__item">
+                          <a>Sửa tin nhắn</a>
+                        </li>
+                        <li class="link--dropdown__content__item">
+                          <a @click="visibleDelete = true">Xóa tin</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </app-dropdown>
+                </div>
+              </div>
+              <div class="message-box__item__desc" v-else-if="item.file_url">
+                <!-- <div class="message-box__item__desc__text">
+                  <p>{{item.content}}</p>
+                </div>-->
+                <div class="item-file">
+                  <div class="icon">
+                    <IconFileAlt class="fill-primary" />
+                  </div>
+                  <span>{{item.file_name_upload}}</span>
                 </div>
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
@@ -577,9 +613,13 @@ export default {
       imgSrc: "",
       listImage: [],
       urlEmitMessage: "",
+      urlFileUpload: "",
+      urlFileNameUpload: "",
       messageId: "",
       name: "",
-      roomIdPush: ""
+      roomIdPush: "",
+      fileList: [],
+      dataCheck: false
       // avatarUser: {},
       // fullname: ""
     };
@@ -704,7 +744,8 @@ export default {
       "createGroup",
       "getGroupList",
       "getMessageList",
-      "getGroupListDetail"
+      "getGroupListDetail",
+      "messageSendFile"
     ]),
     ...mapMutations("message", ["setEmitMessage", "emitCloseFalse"]),
     async messageInfiniteHandler($state) {
@@ -728,37 +769,70 @@ export default {
 
     foward() {},
 
-    async handleUploadChange2(fileList, event) {
+    handleUploadChange2(fileList, event) {
+      this.urlFileNameUpload = "";
+      this.urlEmitMessage = "";
+      this.urlFileUpload = "";
       let listFile = fileList.target.files;
       this.listImage = Array.from(listFile);
+      // this.fileList = fileList;
+
+      // this.listImage.forEach(element => {
+      //   });
       this.fileList = listFile;
-
-      this.listImage.forEach(element => {
-        getBase64(element, src => {
-          const fileType = element["type"];
-          const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-          const checkImage = validImageTypes.includes(fileType);
-          this.listImgSrc.push({
-            src: checkImage ? src : element.name,
-            image: checkImage
-          });
+      if (this.listImage[0]) {
+        const fileType = this.listImage[0]["type"];
+        const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+        let checkImage = validImageTypes.includes(fileType);
+        getBase64(this.listImage[0], src => {
+          this.dataCheck = checkImage;
+          this.listImgSrc = [
+            {
+              src: checkImage ? src : this.listImage[0].name,
+              image: checkImage
+            }
+          ];
         });
-      });
-
-      const body = new FormData();
-      body.append("msg_image", listFile);
-      body.append("room_id", this.$route.params.id);
-      await this.messageSendImg(body).then(result => {
-        console.log("[send img]", result);
-        this.urlEmitMessage =
-          result.data &&
-          result.data.full_img_url &&
-          result.data.full_img_url.low
-            ? result.data.full_img_url.low
-            : "";
-        this.messageId =
-          result.data && result.data.message_id ? result.data.message_id : "";
-      });
+        console.log("listFile", listFile[0]);
+        const body = new FormData();
+        // this.fileList.forEach(item => {
+        //   console.log("item", item);
+        //   body.append("msg_image", item);
+        // });
+        if (checkImage) {
+          body.append("msg_image", this.fileList[0]);
+          body.append("room_id", this.$route.params.id);
+          this.messageSendImg(body).then(result => {
+            console.log("[sendFile]", result);
+            this.urlEmitMessage =
+              result.data &&
+              result.data.full_img_url &&
+              result.data.full_img_url.low
+                ? result.data.full_img_url.low
+                : "";
+            this.messageId =
+              result.data && result.data.message_id
+                ? result.data.message_id
+                : "";
+          });
+        } else {
+          body.append("file_upload", this.fileList[0]);
+          body.append("room_id", this.$route.params.id);
+          this.messageSendFile(body).then(result => {
+            console.log("[sendFile]", result);
+            this.urlFileUpload =
+              result.data && result.data.file_url ? result.data.file_url : "";
+            this.urlFileNameUpload =
+              result.data && result.data.file_name_upload
+                ? result.data.file_name_upload
+                : "";
+            this.messageId =
+              result.data && result.data.message_id
+                ? result.data.message_id
+                : "";
+          });
+        }
+      }
     },
 
     async handleUploadChange(fileList, event) {
@@ -818,17 +892,22 @@ export default {
         this.friendsListQuery.page = 1;
       }
     },
-    handleEmitMessage() {
+    async handleEmitMessage() {
+      // debugger;
+      // await this.uploadFile();
       this.emitCloseFalse(false, this.isGroup);
       if (this.tag.length == 0) {
         if (
           this.textChat != "" ||
-          (this.urlEmitMessage && this.urlEmitMessage.low != "")
+          (this.urlEmitMessage && this.urlEmitMessage.low != "") ||
+          (this.urlFileUpload && this.urlFileNameUpload)
         ) {
           const dataEmit = {
             room_id: this.$route.params.id,
             content: this.textChat,
             img_url: { low: this.urlEmitMessage },
+            file_url: this.urlFileUpload,
+            file_name_upload: this.urlFileNameUpload,
             message_id: this.messageId,
             avatar: this.avatarUser.low ? this.avatarUser.low : "",
             fullname: this.fullName ? this.fullName : ""
@@ -848,6 +927,8 @@ export default {
           room_id: this.roomIdPush,
           content: this.textChat,
           img_url: { low: this.urlEmitMessage },
+          file_url: this.urlFileUpload,
+          file_name_upload: this.urlFileNameUpload,
           message_id: this.messageId,
           avatar: this.avatarUser.low ? this.avatarUser.low : "",
           fullname: this.fullName ? this.fullName : ""
@@ -869,6 +950,8 @@ export default {
               room_id: result.data.id,
               content: this.textChat,
               img_url: { low: this.urlEmitMessage },
+              file_url: this.urlFileUpload,
+              file_name_upload: this.urlFileNameUpload,
               message_id: this.messageId,
               avatar: this.avatarUser.low ? this.avatarUser.low : "",
               fullname: this.fullName ? this.fullName : ""
@@ -913,7 +996,9 @@ export default {
       this.fileList = [];
       this.urlEmitMessage = "";
       this.message_id = "";
+      this.listImgSrc = [];
     }
+    // async uploadFile() {}
   },
   created() {
     this.messageListQuery.room_id = this.$route.params.id;

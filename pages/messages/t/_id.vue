@@ -149,7 +149,11 @@ export default {
           img_url: _newVal.img_url ? _newVal.img_url : "",
           message_id: _newVal.message_id ? _newVal.message_id : "",
           avatar: _newVal.avatar ? _newVal.avatar : "",
-          fullname: _newVal.fullname ? _newVal.fullname : ""
+          fullname: _newVal.fullname ? _newVal.fullname : "",
+          file_url: _newVal.file_url ? _newVal.file_url : "",
+          file_name_upload: _newVal.file_name_upload
+            ? _newVal.file_name_upload
+            : ""
         };
         console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
