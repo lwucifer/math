@@ -569,12 +569,16 @@ export default {
     },
 
     handleUploadChange(event) {
-      // if is preview a link -> remove that. Post prefer image than link
-      !isEmpty(this.link) && this.removePreviewLink();
-
       // push to list
       Array.from(event.target.files).forEach(file => {
-        this.fileList.push(file);
+        if (this.fileList.length >= 6) {
+          this.$toasted.error('1 bài viết chỉ cho phép tối đa 6 ảnh.')
+          return;
+        }
+        // if is preview a link -> remove that. Post prefer image than link
+        !isEmpty(this.link) && this.removePreviewLink();
+
+        this.fileList = [...this.fileList, file];
         getBase64(file, fileSrc => {
           this.previewList.push(fileSrc);
         });

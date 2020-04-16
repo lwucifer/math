@@ -98,24 +98,22 @@ export default {
       return (
         get(this, "progress.data.general_status", false) &&
         get(this, "progress.data.content_status", false) &&
-        get(this, "progress.data.exercise_status", false)
+        get(this, "progress.data.setting_status", false)
       );
     },
   },
 
   created() {
     const elearning_id = getParamQuery("elearning_id");
-    if (elearning_id) {
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    }
+    const options = {
+      params: {
+        elearning_id,
+      },
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+      options
+    );
   },
 
   watch: {
