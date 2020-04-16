@@ -78,7 +78,10 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4" v-show="payload.required">
+    <div
+      class="row align-items-center mb-4"
+      v-show="payload.required && payload.type === 'CHOICE'"
+    >
       <div class="col-md-2">
         <label for="point" class="text-gray caption">Điểm đạt</label>
       </div>
@@ -205,6 +208,8 @@ export default {
       this.confirmLoading = true;
 
       this.payload.lesson_id = get(this, "lesson.id", "");
+      if (this.payload.type === "ESSAY") this.payload.pass_score = 10;
+
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
