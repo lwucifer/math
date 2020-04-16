@@ -60,7 +60,7 @@
     <!--End filter form-->
 
     <!--Options group-->
-    <div class="filter-form mb-0">
+    <div class="filter-form mb-3">
       <div class="filter-form__item" @click="deleteRows">
         <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
           <IconTrash />
@@ -198,10 +198,9 @@ export default {
       params: {
         page: 1,
         size: 10,
-        class_status: "FINISHED"
+        class_status: "DRAFT"
       },
       loading: false,
-      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
     };
   },
   computed: {
@@ -240,7 +239,9 @@ export default {
 
     async getLessons() {
       try {
-        let userId = this.$store.state.auth.token ? this.$store.state.auth.token.id : "";
+        let userId = this.$store.state.auth.token
+          ? this.$store.state.auth.token.id
+          : "";
         await this.$store.dispatch(
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
           { userId }
@@ -248,12 +249,10 @@ export default {
         this.lessonList = this.get(this.stateLessons, "data.content", []);
         let list = [];
         this.lessonList.forEach(element => {
-          list.push(
-            {
-              value: element.id,
-              text: element.name,
-            }
-          )
+          list.push({
+            value: element.id,
+            text: element.name
+          });
         });
         this.courses = list;
       } catch (e) {
@@ -274,26 +273,10 @@ export default {
         this.pagination.size = this.get(this.detailInfo, "data.page.size", 10);
         this.pagination.first = this.get(this.detailInfo, "data.page.first", 1);
         this.pagination.last = this.get(this.detailInfo, "data.page.last", 1);
-        this.pagination.number = this.get(
-          this.detailInfo,
-          "data.page.number",
-          0
-        );
-        this.pagination.totalPages = this.get(
-          this.detailInfo,
-          "data.page.total_pages",
-          0
-        );
-        this.pagination.totalElements = this.get(
-          this.detailInfo,
-          "data.page.total_elements",
-          0
-        );
-        this.pagination.numberOfElements = this.get(
-          this.detailInfo,
-          "data.page.number_of_elements",
-          0
-        );
+        this.pagination.number = this.get(this.detailInfo, "data.page.number", 0);
+        this.pagination.totalPages = this.get(this.detailInfo, "data.page.total_pages", 0);
+        this.pagination.totalElements = this.get(this.detailInfo, "data.page.total_elements", 0);
+        this.pagination.numberOfElements = this.get(this.detailInfo, "data.page.number_of_elements", 0);
       } catch (e) {
       } finally {
         this.loading = false;
@@ -302,28 +285,26 @@ export default {
 
     async deleteRows() {
       let ids = { online_class_ids: [...this.ids] };
-      console.log(ids);
-      let params = JSON.stringify(ids);
-      await this.$store.dispatch(
+      const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.DELETE}`,
-        { ids }
+        JSON.stringify(ids)
       );
 
-      // if (doDelete.success) {
-      //   const { courses } = this;
-      //   const newListPost =
-      //     courses && courses.listPost
-      //       ? courses.listPost.filter(item => item.post_id !== id)
-      //       : [];
-      //   this.classList = {
-      //     listPost: newListPost,
-      //     page: courses.page || {}
-      //   };
+      if (doDelete.success) {
+        const { courses } = this;
+        const newListPost =
+          courses && courses.listPost
+            ? courses.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.classList = {
+          listPost: newListPost,
+          page: courses.page || {}
+        };
 
-      //   console.log(this.classList);
-      // } else {
-      //   this.$toasted.error(doDelete.message);
-      // }
+        console.log(this.classList);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
     },
 
     get

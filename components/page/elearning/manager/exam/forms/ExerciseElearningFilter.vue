@@ -7,40 +7,26 @@
         :size="'sm'"
         @click="submit"
       >
-        <IconFilter/>
+        <IconFilter />
         <span>Lọc kết quả</span>
       </app-button>
     </div>
-    
-    <div class="filter-form__item" style="min-width: 15.5rem;">
+
+    <div class="filter-form__item">
       <app-vue-select
-        class="app-vue-select filter-form__item__selection w-100"
-        :options="fileTypes"
-        :reduce="item => item.value"
+        class="app-vue-select filter-form__item__selection"
         v-model="filters.type"
+        :options="types"
+        :reduce="item => item.value"
         label="text"
-        placeholder="Theo loại"
+        placeholder="Theo thể loại"
         searchable
         clearable
         @input="handleChangedType"
       >
       </app-vue-select>
     </div>
-    <div class="filter-form__item" style="min-width: 15.5rem">
-      <app-vue-select
-        class="app-vue-select filter-form__item__selection w-100"
-        :options="statuses"
-        :reduce="item => item.value"
-        v-model="filters.used"
-        label="text"
-        placeholder="Theo trạng thái"
-        searchable
-        clearable
-        @input="handleChangedStatus"
-      >
-      </app-vue-select>
-    </div>
-    
+
     <!--Right form-->
     <div class="filter-form__right">
       <div class="filter-form__item filter-form__item--search border-0">
@@ -48,15 +34,26 @@
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.name"
+          v-model="filters.keyword"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
         >
         </app-search>
+        <!--<app-input-->
+          <!--type="text"-->
+          <!--v-model="filters.keyword"-->
+          <!--placeholder="Nhập để tìm kiếm..."-->
+          <!--:size="'sm'"-->
+          <!--@input="handleChangedSearch"-->
+        <!--/>-->
+        <!--<button type="submit">-->
+          <!--<IconSearch width="15" height="15" />-->
+        <!--</button>-->
       </div>
     </div><!--End right form-->
-  </div>
+
+  </div><!--End filter form-->
 </template>
 
 <script>
@@ -65,7 +62,6 @@
   import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
 
   export default {
-    name: "ElearningManagerFilterForm",
     components: {
       IconFilter,
       IconSearch,
@@ -75,35 +71,16 @@
       return {
         filters: {
           type: null,
-          used: null,
-          name: ''
+          keyword: ''
         },
-        statuses: [
+        types: [
           {
-            value: true,
-            text: 'Đã sử dụng'
+            value: 1,
+            text: 'Trắc nghiệm'
           },
           {
-            value: false,
-            text: 'Chưa sử dụng'
-          },
-        ],
-        fileTypes: [
-          {
-            value: 'audio',
-            text: 'Audio'
-          },
-          {
-            value: 'video',
-            text: 'Video'
-          },
-          {
-            value: 'docs',
-            text: 'Văn bản'
-          },
-          {
-            value: 'image',
-            text: 'Hình ảnh'
+            value: 2,
+            text: 'Tự luận'
           },
         ],
         initStatus: true
@@ -124,22 +101,15 @@
           this.$emit('submitFilter', this.filters)
         }
       },
-      handleFocusSearchInput() {
-        console.log('[Component] Elearning exam: focus searching ')
-      },
-      handleBlurSearchInput() {
-        console.log('[Component] Elearning exam: blur searching ')
-      },
-      handleChangedSearch(val) {
-        this.$emit('changedQuery', val)
-      },
       handleChangedType(val) {
         this.$emit('changedType', val)
       },
-      handleChangedStatus(val) {
-        this.$emit('changedStatus', val)
+      handleChangedSearch(val) {
+        console.log('change search', val)
+        this.$emit('changedQuery', val)
       },
       handleSubmitSearch(e) {
+        console.log('submit search')
         this.$emit('submitSearch', e.target.value)
       }
     }

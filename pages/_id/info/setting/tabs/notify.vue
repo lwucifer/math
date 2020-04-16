@@ -75,5 +75,5 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import "~/assets/scss/components/account/_account-info-setting.scss";
 </style>

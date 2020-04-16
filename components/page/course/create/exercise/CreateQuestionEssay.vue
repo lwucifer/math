@@ -10,7 +10,7 @@
     <app-editor v-model="payload.answers[0].content" />
     <div v-if="get(exercise, 'category', '') === 'TEST'">
       <label class="d-inline-block mb-3" for="question-editor">Điểm</label>
-      <app-input v-model="payload.score" />
+      <app-input v-model="payload.points" />
     </div>
     <div class="d-flex justify-content-end mt-5">
       <app-button
@@ -63,7 +63,7 @@ export default {
         exercise_id: get(this, "exercise.id", ""),
         type: "ESSAY",
         content: "",
-        score: '',
+        points: '',
         answers: [
           {
             correct: true,
@@ -83,7 +83,7 @@ export default {
       this.confirmLoading = true;
 
       if (get(this, 'exercise.category', '') === 'EXERCISE') {
-        this.payload.score = '';
+        this.payload.points = '';
       }
 
       const payload = createPayloadQuestion(this.payload);

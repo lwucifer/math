@@ -46,7 +46,7 @@
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
-            v-model="filter.query"
+            v-model="params.query"
             :size="'sm'"
           ></app-search>
         </div>
@@ -62,10 +62,10 @@
       @pagechange="onPageChange"
       :data="classList"
     >
-      <template v-slot:cell(action)="{row}">
+      <template v-slot:cell(is_block_on_next_lesson)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.id)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.block" width="16" height="16"/>
+          <button type="button" @click="block(row.invitation_id, row.is_block_on_next_lesson)">
+            <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
             <IconLock2 v-else width="16" height="16"/>
           </button>
         </td>
@@ -90,14 +90,13 @@ import ModalInviteStudent from "~/components/page/elearning/manager/olclasses/Mo
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
+import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
-
-import OlclassesService from "~/services/elearning/creating/Olclasses";
+const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {
   components: {
@@ -128,7 +127,7 @@ export default {
           sort: true
         },
         {
-          name: "date_invite",
+          name: "invited_time",
           text: "Ngày tham gia",
           sort: true
         },
@@ -138,26 +137,11 @@ export default {
           sort: true
         },
         {
-          name: "action",
+          name: "is_block_on_next_lesson",
           text: ""
         }
       ],
-      filter: {
-        query: null,
-        status: null,
-        query_date: null,
-        search_type: null
-      },
-      courses: [
-        {
-          value: 1,
-          text: "Khóa học 1"
-        },
-        {
-          value: 2,
-          text: "Khóa học 2"
-        }
-      ],
+      courses: [],
       filterCourse: null,
       statuses: [
         {
@@ -182,30 +166,37 @@ export default {
       params: {
         page: 1,
         size: 10,
+        params: ''
       },
       loading: false,
-      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
+      listSchoolClasses: [],
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       classes: "Olclasses"
-    })
+    }),
+    ...mapState(STORE_SCHOOL_CLASSES, {
+      stateSchoolClasses: "schoolClasses"
+    }),
   },
 
   methods: {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
+      that.params.size = that.pagination.size;
+      that.params.page = that.pagination.page;
+      that.getList();
     },
     submit() {
       this.params = {...this.params, ...this.filter};
       console.log(this.params);
       this.getList();
     },
-    handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+    handleChangedCourse() {
+      
     },
     handleFocusSearchInput() {
     },
@@ -219,13 +210,32 @@ export default {
       });
     },
 
+    async block(id, isBlock) {
+      if (isBlock) {
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.BLOCK}`,
+          { invitation_ids: [id] }
+        );
+      } else {
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.UNBLOCK}`,
+          { invitation_ids: [id] }
+        );
+      }
+    },
+
     async getList() {
       try {
         this.loading = true;
-        //const room_id = this.$router.params.id;
-        this.params.online_class_id = 'c0d65259-4b7f-487c-8a05-41f91d74e8a7';
+        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        this.params.online_class_id = online_class_id;
+        if ( this.filterCourse ) {
+          this.params.class_id = this.filterCourse.value 
+        }
+        if ( this.filterCourse ) {
+          this.params.class_id = this.filterCourse.value 
+        }
         let params = { ...this.params };
-        console.log(room_id)
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.INVITATIONS}`,
           { params }
@@ -245,6 +255,25 @@ export default {
       }
     },
 
+    async getSchoolClasses() {
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+        );
+        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let list = [];
+        lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
+      }
+    },
+
     async inviteStudents() {
       this.openModal = true;
     },
@@ -254,6 +283,7 @@ export default {
 
   created() {
     this.getList();
+    this.getSchoolClasses();
   }
 };
 </script>
