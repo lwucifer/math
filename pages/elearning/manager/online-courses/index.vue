@@ -33,10 +33,10 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
 
-  const PublishedTab = () => import("./tabs/published")
-  const EditingTab = () => import("./tabs/editting")
-  const PendingTab = () => import("./tabs/pending")
-  const DeniedTab = () => import("./tabs/denied")
+  const PublishedTab = () => import("./tabs/active")
+  const EditingTab = () => import("./tabs/draft")
+  const PendingTab = () => import("./tabs/starting")
+  const DeniedTab = () => import("./tabs/finished")
 
   export default {
 

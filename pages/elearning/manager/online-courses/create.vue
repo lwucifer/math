@@ -36,7 +36,7 @@
                 <label>
                   <strong>Tên phòng học</strong>(Tối đa 60 ký tự)
                 </label>
-                <app-input v-model="itemName" size="sm" />
+                <app-input v-model="params.name" size="sm" />
               </div>
 
               <div class="form-item">
@@ -60,16 +60,16 @@
                 <label>
                   <strong>Gửi lời mời học đến toàn bộ học sinh đã tham gia bài giảng/ khóa học này của bạn</strong>
                 </label>
-                <app-radio name="sendmess" value="0" class="mr-6" v-model="sendMess">Có</app-radio>
-                <app-radio name="sendmess" value="1" v-model="sendMess">Không</app-radio>
+                <app-radio name="sendmess" value="1" class="mr-6" v-model="sendMess">Có</app-radio>
+                <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
               </div>
 
               <div class="form-item">
                 <label>
                   <strong>Cho phép học sinh tải video bài giảng của bạn</strong>
                 </label>
-                <app-radio name="dơwnloadvideo" value="0" class="mr-6" v-model="downloadVideo">Có</app-radio>
-                <app-radio name="dơwnloadvideo" value="1" v-model="downloadVideo">Không</app-radio>
+                <app-radio name="dơwnloadvideo" value="1" class="mr-6" v-model="downloadVideo">Có</app-radio>
+                <app-radio name="dơwnloadvideo" value="0" v-model="downloadVideo">Không</app-radio>
               </div>
 
               <div class="form-item">
@@ -90,7 +90,7 @@
                       <app-vue-select
                         style="width: 11rem"
                         class="app-vue-select form-item__selection mr-3"
-                        v-model="startTime.value"
+                        v-model="startTime.time"
                         :options="times"
                         label="text"
                         searchable
@@ -105,7 +105,7 @@
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedTimeType"
+                        @input="handleChangedTime"
                       ></app-vue-select>
                     </div>
                     <div class="d-flex-center">
@@ -113,23 +113,23 @@
                       <app-vue-select
                         style="width: 9rem"
                         class="app-vue-select form-item__selection mr-2"
-                        v-model="startTime.hours"
+                        v-model="duration.hours"
                         :options="hours"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedTime"
+                        @input="handleChangedDuration"
                       ></app-vue-select>
                       <span>Giờ</span>
                       <app-vue-select
                         style="width: 9rem"
                         class="app-vue-select form-item__selection ml-3 mr-2"
-                        v-model="startTime.minutes"
+                        v-model="duration.minutes"
                         :options="minutes"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedTimeType"
+                        @input="handleChangedDuration"
                       ></app-vue-select>
                       <span>Phút</span>
                     </div>
@@ -141,38 +141,38 @@
                     </label>
                     <div class="d-flex-center">
                       <app-checkbox
-                        @change="check($event, 2)"
-                        :checked="selectedItems.includes(2)"
+                        @change="check($event, 'MON')"
+                        :checked="selectedItems.includes('MON')"
                         label="Thứ 2"
                       ></app-checkbox>
                       <app-checkbox
-                        @change="check($event, 3)"
-                        :checked="selectedItems.includes(3)"
+                        @change="check($event, 'TUE')"
+                        :checked="selectedItems.includes('TUE')"
                         label="Thứ 3"
                       />
                       <app-checkbox
-                        @change="check($event, 4)"
-                        :checked="selectedItems.includes(4)"
+                        @change="check($event, 'WED')"
+                        :checked="selectedItems.includes('WED')"
                         label="Thứ 4"
                       />
                       <app-checkbox
-                        @change="check($event, 5)"
-                        :checked="selectedItems.includes(5)"
+                        @change="check($event, 'THU')"
+                        :checked="selectedItems.includes('THU')"
                         label="Thứ 5"
                       />
                       <app-checkbox
-                        @change="check($event, 6)"
-                        :checked="selectedItems.includes(6)"
+                        @change="check($event, 'FRI')"
+                        :checked="selectedItems.includes('FRI')"
                         label="Thứ 6"
                       />
                       <app-checkbox
-                        @change="check($event, 7)"
-                        :checked="selectedItems.includes(7)"
+                        @change="check($event, 'SAT')"
+                        :checked="selectedItems.includes('SAT')"
                         label="Thứ 7"
                       />
                       <app-checkbox
-                        @change="check($event, 8)"
-                        :checked="selectedItems.includes(8)"
+                        @change="check($event, 'SUN')"
+                        :checked="selectedItems.includes('SUN')"
                         label="Chủ nhật"
                       />
                     </div>
@@ -232,12 +232,13 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
 
+import { get, reject } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import OlclassesService from "~/services/elearning/creating/Olclasses";
-import { createPayloadAddOlclass } from "~/models/elearning/Olclass";
+import { useEffect, getParamQuery } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
   layout: "no-header",
@@ -262,21 +263,26 @@ export default {
         end: null
       },
       startTime: {
-        value: "1:00",
-        type: "AM"
+        time: {
+          value: "1:00",
+          text: "1:00"
+        },
+        type: {
+          value: "AM",
+          text: "AM"
+        }
       },
-      allSelected: [],
-      filter: [],
-      filterCourse: null,
-      filterPrivacy: null,
-      schedules: {
-        days_of_week: "",
-        duration: 0,
-        from_date: "",
-        schedule_id: "",
-        start_time: "",
-        to_date: ""
+      duration: {
+        hours: {
+          value: '1',
+          text: '1'
+        },
+        minutes: {
+          value: '30',
+          text: '30'
+        }
       },
+      allSelected: [],      
       hours: [
         {
           value: "1",
@@ -305,7 +311,7 @@ export default {
       ],
       minutes: [
         {
-          value: "0",
+          value: "00",
           text: "00"
         },
         {
@@ -373,10 +379,6 @@ export default {
           text: "5:30"
         },
         {
-          value: "5:30",
-          text: "5:30"
-        },
-        {
           value: "6:00",
           text: "6:00"
         },
@@ -433,81 +435,118 @@ export default {
           text: "12:30"
         }
       ],
-      courses: [
-        {
-          value: 1,
-          text: "Khóa học 1"
-        },
-        {
-          value: 2,
-          text: "Khóa học 2"
-        }
-      ],
+      filterCourse: null,
+      courses: [],
+      filterPrivacy: {
+        value: true,
+        text: "Công khai"
+      },
       privacies: [
         {
-          value: 1,
+          value: true,
           text: "Công khai"
         },
         {
-          value: 2,
-          text: "Chỉ mình tôi"
+          value: false,
+          text: "Riêng tư"
         }
       ],
       selectedItems: [],
+      courseNameModel: "",
       params: {
-        elearning_id: "xxxxxx",
-        enable: true
-      }
+          elearning_id: "",
+          name: "",
+          enable: true,
+          is_invite_all: false,
+          is_allow_download: false,
+          schedules: [
+            {
+              from_date: "",
+              to_date: "",
+              start_time: "1:30 AM",
+              duration: 90,
+              days_of_week: ""
+            }
+          ]
+        }
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/creating/creating-olclasses", {
+      olclasses: "Olclasses"
+    }),
+    ...mapState(STORE_PUBLIC_SEARCH, {
+      stateLessons: "Lessons"
+    })
+  },
+
+  watch: {
+    sendMess(newValue, oldValue) {
+      this.params.is_invite_all = newValue == '1';
+    },
+    downloadVideo(newValue, oldValue) {
+      this.params.is_allow_download = newValue == '1';
+    },
   },
 
   methods: {
     async fnSave() {
       try {
         this.loading = true;
-        let params = { ...this.params };
-        const payload = createPayloadAddOlclass(this.params);
-        const para = {
-          dto: {
-            elearning_id: "string",
-            enable: true,
-            id: "string",
-            is_allow_download: true,
-            is_invite_all: true,
-            name: "string",
-            schedules: [
-              {
-                days_of_week: "string",
-                duration: 0,
-                from_date: "string",
-                schedule_id: "string",
-                start_time: "string",
-                to_date: "string"
-              }
-            ]
-          }
-        };
-        console.log(payload);
+        this.params.schedules[0].from_date = this.timeApply.start;
+        this.params.schedules[0].to_date = this.timeApply.end;
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.ADD}`,
-          { para }
+          JSON.stringify(this.params)
         );
       } catch (e) {
       } finally {
         this.loading = false;
       }
     },
+
     fnDelete() {
       alert(333);
     },
-    handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+
+    async getLessons() {
+      try {
+        let userId = this.$store.state.auth.token
+          ? this.$store.state.auth.token.id
+          : "";
+        await this.$store.dispatch(
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
+          { userId }
+        );
+        let lessonList = this.get(this.stateLessons, "data.content", []);
+        let list = [];
+        lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
+      }
     },
-    handleChangedPrivacy(val) {
-      this.filter.privacy = this.filterPrivacy.value;
+
+    handleChangedTime() {
+      this.params.schedules[0].start_time = this.startTime.time.value + ' ' +this.startTime.type.value;
+    },
+    
+    handleChangedDuration() {
+      let duration = parseInt(this.duration.hours.value) * 60 + parseInt(this.duration.minutes.value);
+      this.params.schedules[0].duration = parseInt(duration);
+    },
+
+    handleChangedCourse() {
+      this.params.elearning_id = this.filterCourse.value;
+    },
+    handleChangedPrivacy() {
+      this.params.enable = this.filterPrivacy.value;
     },
     check(checked, item) {
       if (checked) {
@@ -515,7 +554,6 @@ export default {
       } else {
         this.popSelectedIndexes(item);
       }
-      this.$emit("check", item);
     },
     popSelectedIndexes(item) {
       if (_.some(this.selectedItems, item)) {
@@ -524,13 +562,28 @@ export default {
           ({ id }) => id === item.id
         );
       }
+      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
     },
     pushSelectedIndexes(item) {
       if (!_.some(this.selectedItems, item)) {
         this.selectedItems.push(item);
       }
-    }
-  }
+      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
+    },
+
+    arrayToString(data) {
+      return data.reduce((result, item) => {
+        const com = result ? ',' : '';
+        return result = result + com + item;
+      }, '')
+    },
+
+    get
+  },
+
+  created () {
+    this.getLessons();
+  },
 };
 </script>
 

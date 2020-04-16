@@ -82,6 +82,10 @@ export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/
 export const ELEARNING_CREATING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses`;
 export const ELEARNING_CREATING_OLCLASSES_INVITATIONS = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invitations`;
 export const ELEARNING_CREATING_OLCLASSES_INVITE = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invite`;
+export const ELEARNING_CREATING_OLCLASSES_BLOCK = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/block`;
+export const ELEARNING_CREATING_OLCLASSES_LESSON = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/lesson`;
+export const ELEARNING_CREATING_OLCLASSES_LESSON_ATTENDANCES = 
+`${SCHOOLLY_ALIAS}/elearning/creating/olclasses/lesson/attendances`;
 
 /**
  * STUDY

@@ -106,7 +106,13 @@ export const CREATING_OLCLASSES = {
     SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
     SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
     SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete",
-    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList"
+    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList",
+    SET_CREATING_OLCLASSES_INVITE: "setCreatingOlclassesInvite",
+    SET_CREATING_OLCLASSES_BLOCK: "setCreatingOlclassesBlock"
+};
+
+export const CREATING_OLCLASSES_LESSON = {
+    SET_CREATING_OLCLASSES_ATTENDANCES: "setCreatingOlclassesLessonAttendances",
 };
 
 export const CREATING_ANSWER = {
