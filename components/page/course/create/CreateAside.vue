@@ -105,17 +105,15 @@ export default {
 
   created() {
     const elearning_id = getParamQuery("elearning_id");
-    if (elearning_id) {
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    }
+    const options = {
+      params: {
+        elearning_id,
+      },
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+      options
+    );
   },
 
   watch: {
