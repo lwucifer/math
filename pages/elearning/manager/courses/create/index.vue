@@ -7,14 +7,14 @@
 
       <div class="col-md-9">
         <CreateGeneralInformation
-          v-if="formActive === 'general'"
+          v-show="formActive === 'general'"
           class="mb-5"
         />
-        <CreateLearningContentCourse v-if="formActive === 'content-course'" />
-        <CreateLearningContentLecture v-if="formActive === 'content-lecture'" />
-        <CreateSetting v-if="formActive === 'settings'" />
-        <CreateExercise v-if="formActive === 'exercise'" />
-        <CreateExam v-if="formActive === 'exam'" />
+        <CreateLearningContentCourse v-show="formActive === 'content-course'" />
+        <CreateLearningContentLecture v-show="formActive === 'content-lecture'" />
+        <CreateSetting v-show="formActive === 'settings'" />
+        <CreateExercise v-show="formActive === 'exercise'" />
+        <CreateExam v-show="formActive === 'exam'" />
       </div>
     </div>
   </div>

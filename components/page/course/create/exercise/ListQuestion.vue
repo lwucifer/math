@@ -141,6 +141,7 @@ export default {
     },
 
     handleRefreshQuestion() {
+      this.isShowEditQuestion = false;
       this.$emit("handleRefreshQuestion");
     },
 
