@@ -55,7 +55,10 @@
       </div>
       <div class="message-info__box" v-if="!tabChat">
         <h5 class="message-info__box__title">Thành viên</h5>
-        <div class="message-info__box__content" v-if="!checkMemberList">
+        <div
+          class="message-info__box__content"
+          v-if="memberList.listMember && memberList.listMember.length > 0"
+        >
           <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
             <IconPlus height="20" width="20" class="mr-3" />Thêm người
           </button>

@@ -80,7 +80,7 @@
         </client-only>
       </div>
 
-      <div class="aside-box__content">
+      <div class="aside-box__content" v-if="!checkList">
         <client-only>
           <infinite-loading
             direction="top"
@@ -187,45 +187,121 @@
                   <span>{{item.created_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
-              <div
-                class="message-box__item__desc"
-                v-if="item.content && item.img_url && item.img_url.low"
+              <template
+                v-if="item.content && item.img_url && item.img_url.low || item.content && item.file_url"
               >
-                <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                </div>
-                <div class="message-box__item__desc__image">
+                <div class="message-box__item__desc">
+                  <div class="message-box__item__desc__text">
+                    <p>{{item.content}}</p>
+                  </div>
+                  <!-- <div class="message-box__item__desc__image">
                   <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
+                  </div>-->
+                  <div class="message-box__item__desc__actions">
+                    <button title="Trả lời" @click="reply()">
+                      <IconReply />
                     </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
+                    <button title="Chuyển tiếp">
+                      <IconUpload />
+                    </button>
+                    <app-dropdown
+                      position="left"
+                      v-model="dropdownEdit"
+                      :content-width="'10rem'"
+                      class="link--dropdown"
+                    >
+                      <button slot="activator" type="button" class="link--dropdown__button">
+                        <IconDots />
+                      </button>
+                      <div class="link--dropdown__content">
+                        <ul>
+                          <li class="link--dropdown__content__item">
+                            <a>Sửa tin nhắn</a>
+                          </li>
+                          <li class="link--dropdown__content__item">
+                            <a @click="visibleDelete = true">Xóa tin</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </app-dropdown>
+                  </div>
                 </div>
-              </div>
+                <div class="message-box__item__desc" v-if="item.img_url.low">
+                  <!-- <div class="message-box__item__desc__text">
+                    <p>{{item.content}}</p>
+                  </div>-->
+                  <div class="message-box__item__desc__image">
+                    <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
+                  </div>
+                  <div class="message-box__item__desc__actions">
+                    <button title="Trả lời" @click="reply()">
+                      <IconReply />
+                    </button>
+                    <button title="Chuyển tiếp">
+                      <IconUpload />
+                    </button>
+                    <app-dropdown
+                      position="left"
+                      v-model="dropdownEdit"
+                      :content-width="'10rem'"
+                      class="link--dropdown"
+                    >
+                      <button slot="activator" type="button" class="link--dropdown__button">
+                        <IconDots />
+                      </button>
+                      <div class="link--dropdown__content">
+                        <ul>
+                          <li class="link--dropdown__content__item">
+                            <a>Sửa tin nhắn</a>
+                          </li>
+                          <li class="link--dropdown__content__item">
+                            <a @click="visibleDelete = true">Xóa tin</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </app-dropdown>
+                  </div>
+                </div>
+                <div class="message-box__item__desc" v-if="item.file_url">
+                  <!-- <div class="message-box__item__desc__text">
+                  <p>{{item.content}}</p>
+                  </div>-->
+                  <div class="item-file">
+                    <div class="icon">
+                      <IconFileAlt class="fill-primary" />
+                    </div>
+                    <span>{{item.file_name_upload}}</span>
+                  </div>
+                  <div class="message-box__item__desc__actions">
+                    <button title="Trả lời" @click="reply()">
+                      <IconReply />
+                    </button>
+                    <button title="Chuyển tiếp">
+                      <IconUpload />
+                    </button>
+                    <app-dropdown
+                      position="left"
+                      v-model="dropdownEdit"
+                      :content-width="'10rem'"
+                      class="link--dropdown"
+                    >
+                      <button slot="activator" type="button" class="link--dropdown__button">
+                        <IconDots />
+                      </button>
+                      <div class="link--dropdown__content">
+                        <ul>
+                          <li class="link--dropdown__content__item">
+                            <a>Sửa tin nhắn</a>
+                          </li>
+                          <li class="link--dropdown__content__item">
+                            <a @click="visibleDelete = true">Xóa tin</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </app-dropdown>
+                  </div>
+                </div>
+              </template>
               <div class="message-box__item__desc" v-else-if="item.content">
                 <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
@@ -347,7 +423,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="aside-box__content"></div> -->
+      <div class="aside-box__content" v-else></div>
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -558,6 +634,7 @@ export default {
       listImgSrc: [],
       // dataPushMessage: [],
       messagesList: [],
+      checkList: false,
       friends: [
         {
           id: "1",
@@ -755,6 +832,10 @@ export default {
       ]({
         params: this.messageListQuery
       });
+      console.log("getData", getData);
+      if (getData && !getData.messages && this.messagesList.length == 0) {
+        this.checkList = true;
+      }
       if (getData.messages && getData.messages.length) {
         this.messageListQuery.page += 1;
         this.messagesList.push(...getData.messages);
