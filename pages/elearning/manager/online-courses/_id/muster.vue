@@ -92,7 +92,7 @@
                 :heads="heads"
                 :pagination="pagination"
                 @pagechange="onPageChange"
-                :data="classList"
+                :data="lessons"
               >
                 <template v-slot:cell(muster)="{row}">
                   <td>
@@ -159,9 +159,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
-
-import OlclassesService from "~/services/elearning/creating/Olclasses";
+const STORE_NAMESPACE = "elearning/teaching/olclass";
 
 export default {
   components: {
@@ -178,7 +176,6 @@ export default {
 
   data() {
     return {
-      tab: 1,
       openModal: false,
       heads: [
         {
@@ -212,28 +209,8 @@ export default {
         query_date: null,
         search_type: null
       },
-      courses: [
-        {
-          value: 1,
-          text: "Khóa học 1"
-        },
-        {
-          value: 2,
-          text: "Khóa học 2"
-        }
-      ],
+      courses: [],
       filterCourse: null,
-      statuses: [
-        {
-          value: 1,
-          text: "Status 1"
-        },
-        {
-          value: 2,
-          text: "Status 2"
-        }
-      ],
-      isAuthenticated: true,
       pagination: {
         total: 15,
         page: 1,
@@ -242,19 +219,18 @@ export default {
         first: 1,
         last: 10
       },
-      classList: [],
+      lessons: [],
       params: {
         page: 1,
         size: 10,
       },
       loading: false,
-      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      classes: "Olclasses"
+      stateAttendances: "Attendances"
     })
   },
 
@@ -265,7 +241,6 @@ export default {
     },
     submit() {
       this.params = {...this.params, ...this.filter};
-      console.log(this.params);
       this.getList();
     },
     handleChangedCourse(val) {
@@ -277,31 +252,24 @@ export default {
     },
     handleSearch() {
     },
-    selectRow(data) {
-      this.ids = data.map((row, index, data) => {
-          return row.online_class_id
-      });
-    },
 
     async getList() {
       try {
         this.loading = true;
-        //const room_id = this.$router.params.id;
-        this.params.online_class_id = 'c0d65259-4b7f-487c-8a05-41f91d74e8a7';
+        const lesson_id  = this.$route.params.id ? this.$route.params.id : "";
         let params = { ...this.params };
-        console.log(room_id)
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.INVITATIONS}`,
-          { params }
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
+          { params, id: lesson_id, after: 'attendances'}
         );
-        this.classList = this.get(this.classes, 'data.content', [])
-        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        this.lessons = this.get(this.stateAttendances, 'data.content', [])
+        this.pagination.size = this.get(this.stateAttendances, 'data.size', 10)
+        this.pagination.first = this.get(this.stateAttendances, 'data.first', 1)
+        this.pagination.last = this.get(this.stateAttendances, 'data.last', 1)
+        this.pagination.number = this.get(this.stateAttendances, 'data.number', 0)
+        this.pagination.totalPages = this.get(this.stateAttendances, 'data.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateAttendances, 'data.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {

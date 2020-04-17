@@ -60,7 +60,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="classList"
+      :data="students"
     >
       <template v-slot:cell(is_block_on_next_lesson)="{row}">
         <td class="nowrap">
@@ -86,7 +86,7 @@ import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
-import ModalInviteStudent from "~/components/page/elearning/manager/olclasses/ModalInviteStudent"
+import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
@@ -95,7 +95,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {
@@ -143,17 +143,6 @@ export default {
       ],
       courses: [],
       filterCourse: null,
-      statuses: [
-        {
-          value: 1,
-          text: "Status 1"
-        },
-        {
-          value: 2,
-          text: "Status 2"
-        }
-      ],
-      isAuthenticated: true,
       pagination: {
         total: 15,
         page: 1,
@@ -162,11 +151,10 @@ export default {
         first: 1,
         last: 10
       },
-      classList: [],
+      students: [],
       params: {
         page: 1,
         size: 10,
-        params: ''
       },
       loading: false,
       listSchoolClasses: [],
@@ -175,7 +163,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      classes: "Olclasses"
+      stateInvites: "Invites"
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
@@ -211,15 +199,21 @@ export default {
     },
 
     async block(id, isBlock) {
+      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+      const params = {
+        invitation_ids: [id],
+        online_class_id: online_class_id,
+        //student_id: "string"
+      };
       if (isBlock) {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.BLOCK}`,
-          { invitation_ids: [id] }
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
+          params
         );
       } else {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.UNBLOCK}`,
-          { invitation_ids: [id] }
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
+          params
         );
       }
     },
@@ -237,17 +231,17 @@ export default {
         }
         let params = { ...this.params };
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.INVITATIONS}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_INVITES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.classes, 'data.content', [])
-        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        this.students = this.get(this.stateInvites, 'data.content', [])
+        this.pagination.size = this.get(this.stateInvites, 'data.size', 10)
+        this.pagination.first = this.get(this.stateInvites, 'data.first', 1)
+        this.pagination.last = this.get(this.stateInvites, 'data.last', 1)
+        this.pagination.number = this.get(this.stateInvites, 'data.number', 0)
+        this.pagination.totalPages = this.get(this.stateInvites, 'data.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateInvites, 'data.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateInvites, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {

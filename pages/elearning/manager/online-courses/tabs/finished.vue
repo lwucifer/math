@@ -33,7 +33,7 @@
         <label for>Chọn ngày</label>
         <app-date-picker
           class="ml-3"
-          v-model="filter.query_date"
+          v-model="params.query_date"
           square
           size="sm"
           placeholder="dd/mm/yyyy"
@@ -50,7 +50,7 @@
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
-            v-model="filter.query"
+            v-model="params.query"
             :size="'sm'"
           ></app-search>
         </div>
@@ -77,7 +77,6 @@
       @pagechange="onPageChange"
       :data="classList"
       multiple-selection
-      @selectionChange="selectRow"
     >
       <template v-slot:cell(privacy)="{row}">
         <td class="nowrap">
@@ -109,10 +108,8 @@ import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
-
-import OlclassesService from "~/services/elearning/creating/Olclasses";
 
 export default {
   components: {
@@ -157,34 +154,8 @@ export default {
           text: ""
         }
       ],
-      filter: {
-        query: null,
-        status: null,
-        query_date: null,
-        search_type: null
-      },
-      courses: [
-        {
-          value: 1,
-          text: "Khóa học 1"
-        },
-        {
-          value: 2,
-          text: "Khóa học 2"
-        }
-      ],
+      courses: [],
       filterCourse: null,
-      statuses: [
-        {
-          value: 1,
-          text: "Status 1"
-        },
-        {
-          value: 2,
-          text: "Status 2"
-        }
-      ],
-      isAuthenticated: true,
       pagination: {
         total: 15,
         page: 1,
@@ -198,7 +169,10 @@ export default {
       params: {
         page: 1,
         size: 10,
-        class_status: "FINISHED"
+        class_status: "FINISHED",
+        query: null,
+        query_date: null,
+        search_type: null
       },
       loading: false,
     };
@@ -206,7 +180,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      classes: "Olclasses"
+      stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
       stateLessons: "Lessons"
@@ -222,20 +196,14 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params, ...this.filter };
       this.getList();
     },
     handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+      this.params.elearning_id = this.filterCourse.value;
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},
     handleSearch() {},
-    selectRow(data) {
-      this.ids = data.map((row, index, data) => {
-        return row.online_class_id;
-      });
-    },
 
     async getLessons() {
       try {
@@ -264,19 +232,18 @@ export default {
       try {
         this.loading = true;
         let params = { ...this.params };
-        console.log(params);
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.LIST}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.classes, "data.content", []);
-        this.pagination.size = this.get(this.detailInfo, "data.page.size", 10);
-        this.pagination.first = this.get(this.detailInfo, "data.page.first", 1);
-        this.pagination.last = this.get(this.detailInfo, "data.page.last", 1);
-        this.pagination.number = this.get(this.detailInfo, "data.page.number", 0);
-        this.pagination.totalPages = this.get(this.detailInfo, "data.page.total_pages", 0);
-        this.pagination.totalElements = this.get(this.detailInfo, "data.page.total_elements", 0);
-        this.pagination.numberOfElements = this.get(this.detailInfo, "data.page.number_of_elements", 0);
+        this.classList = this.get(this.stateClass, "data.content", []);
+        this.pagination.size = this.get(this.stateClass, "data.size", 10);
+        this.pagination.first = this.get(this.stateClass, "data.first", 1);
+        this.pagination.last = this.get(this.stateClass, "data.last", 1);
+        this.pagination.number = this.get(this.stateClass, "data.number", 0);
+        this.pagination.totalPages = this.get(this.stateClass, "data.total_pages", 0);
+        this.pagination.totalElements = this.get(this.stateClass, "data.total_elements", 0);
+        this.pagination.numberOfElements = this.get(this.stateClass, "data.number_of_elements", 0);
       } catch (e) {
       } finally {
         this.loading = false;
@@ -286,7 +253,7 @@ export default {
     async deleteRows() {
       let ids = { online_class_ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
-        `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.DELETE}`,
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
         JSON.stringify(ids)
       );
 

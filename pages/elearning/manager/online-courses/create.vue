@@ -237,12 +237,12 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
+const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
   layout: "no-header",
-  name: "onlineclasses",
+  name: "onlineclass",
 
   components: {
     HeaderCreate,
@@ -254,7 +254,6 @@ export default {
   data() {
     return {
       tab: 1,
-      itemName: "",
       sendMess: "0",
       downloadVideo: "0",
       showBonus: false,
@@ -282,7 +281,6 @@ export default {
           text: '30'
         }
       },
-      allSelected: [],      
       hours: [
         {
           value: "1",
@@ -452,7 +450,6 @@ export default {
         }
       ],
       selectedItems: [],
-      courseNameModel: "",
       params: {
           elearning_id: "",
           name: "",
@@ -473,9 +470,6 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/creating/creating-olclasses", {
-      olclasses: "Olclasses"
-    }),
     ...mapState(STORE_PUBLIC_SEARCH, {
       stateLessons: "Lessons"
     })
@@ -497,7 +491,7 @@ export default {
         this.params.schedules[0].from_date = this.timeApply.start;
         this.params.schedules[0].to_date = this.timeApply.end;
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.ADD}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
           JSON.stringify(this.params)
         );
       } catch (e) {
