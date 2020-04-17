@@ -156,6 +156,7 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
+        this.$router.push('/elearning/manager/courses');
         return;
       }
 

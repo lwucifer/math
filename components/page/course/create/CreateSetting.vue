@@ -134,9 +134,9 @@ export default {
       is_submit: false,
       payload: {
         comment_allow: "",
-        price: "",
+        price: 0,
         elearning_id: get(this, "general.id", ""),
-        fee: "",
+        fee: 0,
         privacy: "",
       },
     };
@@ -151,8 +151,8 @@ export default {
       handler: function() {
         this.payload.elearning_id = getParamQuery("elearning_id");
         this.payload.comment_allow = get(this, "setting.comment_allow", "");
-        this.payload.price = get(this, "setting.price", "");
-        this.payload.fee = get(this, "setting.fee", "");
+        this.payload.price = get(this, "setting.price", 0);
+        this.payload.fee = get(this, "setting.fee", 0);
         this.payload.privacy = get(this, "setting.privacy", "");
         const fee = toNumber(get(this, "setting.fee", ""));
         const price = toNumber(get(this, "setting.price", ""));
