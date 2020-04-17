@@ -72,14 +72,13 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="classList"
+      :data="lessons"
     >
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.id)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.block" width="16" height="16"/>
-            <IconLock2 v-else width="16" height="16"/>
-          </button>
+          <n-link :to="'/elearning/manager/online-courses/' + row.lesson_id + '/muster'">
+          50/100
+          </n-link>
         </td>
       </template>
     </app-table>
@@ -98,7 +97,7 @@ import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
-import ModalInviteStudent from "~/components/page/elearning/manager/olclasses/ModalInviteStudent"
+import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
@@ -107,9 +106,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/creating/creating-olclasses";
-
-import OlclassesService from "~/services/elearning/creating/Olclasses";
+const STORE_NAMESPACE = "elearning/teaching/olclass";
 
 export default {
   components: {
@@ -130,28 +127,28 @@ export default {
       openModal: false,
       heads: [
         {
-          name: "student_name",
-          text: "Học sinh",
+          name: "online_class_name",
+          text: "Phòng học",
           sort: true
         },
         {
-          name: "class_name",
-          text: "Lớp",
+          name: "elearning_name",
+          text: "Thuộc bài giảng/khóa học",
           sort: true
         },
         {
-          name: "date_invite",
-          text: "Ngày tham gia",
+          name: "lesson_index",
+          text: "Thứ tự buổi học",
           sort: true
         },
         {
-          name: "point",
-          text: "Điểm chuyên cần",
+          name: "start_time",
+          text: "Thời gian diễn ra",
           sort: true
         },
         {
           name: "action",
-          text: ""
+          text: "Số học sinh có mặt"
         }
       ],
       filter: {
@@ -160,28 +157,8 @@ export default {
         query_date: null,
         search_type: null
       },
-      courses: [
-        {
-          value: 1,
-          text: "Khóa học 1"
-        },
-        {
-          value: 2,
-          text: "Khóa học 2"
-        }
-      ],
+      courses: [],
       filterCourse: null,
-      statuses: [
-        {
-          value: 1,
-          text: "Status 1"
-        },
-        {
-          value: 2,
-          text: "Status 2"
-        }
-      ],
-      isAuthenticated: true,
       pagination: {
         total: 15,
         page: 1,
@@ -190,19 +167,18 @@ export default {
         first: 1,
         last: 10
       },
-      classList: [],
+      lessons: [],
       params: {
         page: 1,
         size: 10,
       },
       loading: false,
-      query_status: ["STARTING", "ACTIVE", "DRAFT", "FINISHED"]
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      classes: "Olclasses"
+      stateLessons: "Lessons"
     })
   },
 
@@ -238,17 +214,17 @@ export default {
         this.params.online_class_id = online_class_id;
         let params = { ...this.params };
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.CREATING_OLCLASSES.INVITATIONS}`,
-          { params }
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
+          { params}
         );
-        this.classList = this.get(this.classes, 'data.content', [])
-        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        this.lessons = this.get(this.stateLessons, 'data.content', [])
+        this.pagination.size = this.get(this.stateLessons, 'data.size', 10)
+        this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
+        this.pagination.last = this.get(this.stateLessons, 'data.last', 1)
+        this.pagination.number = this.get(this.stateLessons, 'data.number', 0)
+        this.pagination.totalPages = this.get(this.stateLessons, 'data.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateLessons, 'data.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateLessons, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {

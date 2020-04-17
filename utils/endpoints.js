@@ -79,13 +79,13 @@ export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
-export const ELEARNING_CREATING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses`;
-export const ELEARNING_CREATING_OLCLASSES_INVITATIONS = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invitations`;
-export const ELEARNING_CREATING_OLCLASSES_INVITE = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/invite`;
-export const ELEARNING_CREATING_OLCLASSES_BLOCK = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/block`;
-export const ELEARNING_CREATING_OLCLASSES_LESSON = `${SCHOOLLY_ALIAS}/elearning/creating/olclasses/lesson`;
-export const ELEARNING_CREATING_OLCLASSES_LESSON_ATTENDANCES = 
-`${SCHOOLLY_ALIAS}/elearning/creating/olclasses/lesson/attendances`;
+export const TEACHING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses`;
+export const TEACHING_OLCLASS_INVITES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/invites`;
+export const TEACHING_OLCLASS_BLOCK = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/banned`;
+export const TEACHING_OLCLASS_LESSONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lessons`;
+export const TEACHING_OLCLASS_LESSON = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lesson`;
+export const TEACHING_OLCLASS_LESSON_ATTENDANCES = 
+`${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lesson/attendances`;
 
 /**
  * STUDY

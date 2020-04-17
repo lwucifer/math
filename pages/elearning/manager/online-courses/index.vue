@@ -9,10 +9,10 @@
           <div class="elearning-manager-content__title">
             <h5 class="color-primary mb-3">Lịch học online</h5>
             <div class="elearning-manager-content__title__nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Đã đăng</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Đang soạn</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Chờ duyệt</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Bị từ chối</a>
+              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Đang diễn ra</a>
+              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Đã lên lịch</a>
+              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Đang soạn</a>
+              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đã kết thúc</a>
             </div>
             <hr class />
           </div>
@@ -33,19 +33,19 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
 
-  const PublishedTab = () => import("./tabs/active")
-  const EditingTab = () => import("./tabs/draft")
-  const PendingTab = () => import("./tabs/starting")
-  const DeniedTab = () => import("./tabs/finished")
+  const Tab1 = () => import("./tabs/streaming")
+  const Tab2 = () => import("./tabs/scheduled")
+  const Tab3 = () => import("./tabs/writting")
+  const Tab4 = () => import("./tabs/finished")
 
   export default {
 
     components: {
       ElearningManagerSide,
-      PublishedTab,
-      EditingTab,
-      PendingTab,
-      DeniedTab
+      Tab1,
+      Tab2,
+      Tab3,
+      Tab4
     },
 
     data() {
@@ -58,7 +58,7 @@
       ...mapState("auth", ["loggedUser"]),
       currentTabComponent: function() {
         // List of tabs
-        const MATCHED_TABS = ['PublishedTab', 'EditingTab', 'PendingTab', 'DeniedTab']
+        const MATCHED_TABS = ['Tab1', 'Tab2', 'Tab3', 'Tab4']
         return (this.tab > 0) ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0]
       }
     },

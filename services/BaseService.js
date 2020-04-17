@@ -89,4 +89,12 @@ export default class BaseService {
 
     return data;
   }
+  
+  async getWithMiddleID(payload, id, end) {
+    const { data } = await this.$axios.get(`${this.$api}/${id}/${end}`, payload);
+
+    const result = data ? data : {};
+
+    return result;
+  }
 }
