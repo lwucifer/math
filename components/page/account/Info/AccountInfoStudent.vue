@@ -65,7 +65,7 @@ export default {
     this.organization.phone = get(this,"profileList.organization.phone","");
     this.organization.email = get(this,"profileList.organization.email","");
     this.organization.address = get(this,"profileList.organization.address","");
-    this.work.class = get(this,"profileList.work.class","");
+    this.work.class = get(this,"profileList.work.classes","");
     this.work.code = get(this,"profileList.code","")
     this.work.profession = get(this,"profileList.work.profession","");
     this.work.homeroom_class = get(this,"profileList.work.homeroom_class","");

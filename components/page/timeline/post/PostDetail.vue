@@ -28,7 +28,13 @@
     </div>
 
     <div class="post-detail__right">
-      <PostDetailPost show-edit show-comment :post="localPost" @delete="deletePost" @like="likePost" />
+      <PostDetailPost
+        show-edit
+        show-comment
+        :post="localPost"
+        @delete="deletePost"
+        @like="likePost"
+      />
     </div>
 
     <div class="post-detail__actions">
@@ -194,8 +200,15 @@ export default {
         this.localPost = {
           ...this.localPost,
           type_like: data.type_like,
-          is_like: !!data.type_like
+          is_like: !!data.type_like,
+          total_like: !!data.type_like
+            ? (this.localPost.total_like += 1)
+            : (this.localPost.total_like -= 1)
         };
+
+        if (this.parentPost.post_id === this.post.post_id) {
+          this.$emit("parent-post-liked", this.localPost);
+        }
       }
 
       // Have to run cb

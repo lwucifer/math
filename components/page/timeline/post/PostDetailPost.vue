@@ -33,7 +33,7 @@
 
         <!-- <template v-if="showEdit && userId === get(post, 'author.id', null)">
           <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
-        </template> -->
+        </template>-->
       </div>
     </div>
 
@@ -298,24 +298,49 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content) {
-      const commentModel = createComment(this.post.post_id, null, content);
+    async postComment({ content, listTags, image, link }) {
+      const formData = new FormData();
+      const commentModel = createComment({
+        source_id: this.post.post_id,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
+      });
+
+      for (const key in commentModel) {
+        const value = commentModel[key];
+        if (value === null || value === undefined) continue;
+        // Check whether field is an array
+        formData.append(
+          key,
+          Array.isArray(value) ? JSON.stringify(value) : value
+        );
+      }
+
       const doPostComment = await new CommentService(this.$axios)[
         ACTION_TYPE_BASE.ADD
-      ](commentModel);
+      ](formData);
 
       if (doPostComment.success) {
-        if ("listParentComments" in this.parentCommentData) {
-          const { listParentComments } = this.parentCommentData;
-          this.parentCommentData.listParentComments = [
-            doPostComment.data,
-            ...listParentComments
-          ];
-        } else {
-          this.parentCommentData = {
-            listParentComments: [doPostComment.data]
-          };
-        }
+        const timeout = setTimeout(
+          () => {
+            if ("listParentComments" in this.parentCommentData) {
+              const { listParentComments } = this.parentCommentData;
+              this.parentCommentData.listParentComments = [
+                doPostComment.data,
+                ...listParentComments
+              ];
+            } else {
+              this.parentCommentData = {
+                listParentComments: [doPostComment.data]
+              };
+            }
+            
+            clearTimeout(timeout);
+          },
+          image ? 1000 : 0
+        );
       } else {
         this.$toasted.error(doPostComment.message);
       }

@@ -217,8 +217,7 @@ export default {
         limit: 10,
         source_id: this.post.post_id
       },
-      parentCommentData: {},
-      childrenCommentData: {}
+      parentCommentData: {}
     };
   },
 

@@ -33,10 +33,10 @@
                   v-if="post.files && post.files.length"
                   class="my-4"
                   :images="post.files.map(item => ({
-                  id: item.post_id,
-                  thumb: get(item, 'link.high', null),
-                  object: 'image'
-                }))"
+                    id: item.post_id,
+                    thumb: get(item, 'link.high', null),
+                    object: 'image'
+                  }))"
                   @click-item="imageObj => handleClickImage(imageObj, post)"
                 />
 
@@ -126,6 +126,7 @@
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
+              @parent-post-liked="handleParentPostLiked"
             />
           </app-modal>
 
@@ -182,66 +183,68 @@
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-            <!-- <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
-              class="mb-4"
-              nuxt
-              size="sm"
-              :key="message.id"
-              :to="`/messages/t/${message.id}`"
-            /> -->
-          </AsideBox>
+          <div v-sticky sticky-offset="{ top: 101 }">
+            <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
+              <!-- <app-content-box
+                v-for="message in messagesConverted"
+                v-bind="message"
+                class="mb-4"
+                nuxt
+                size="sm"
+                :key="message.id"
+                :to="`/messages/t/${message.id}`"
+              />-->
+            </AsideBox>
 
-          <AsideBox title="Khóa học Online nổi bật">
-            <div class="timeline-aside-tabs">
-              <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
-              <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
-            </div>
-
-            <div class="time-aside-tabs-content">
-              <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in freeCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
-
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+            <AsideBox title="Khóa học Online nổi bật">
+              <div class="timeline-aside-tabs">
+                <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
+                <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
               </div>
 
-              <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in privateCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
+              <div class="time-aside-tabs-content">
+                <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in freeCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
 
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in privateCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
+
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div class="text-center mt-4">
+                  <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
+                </div>
               </div>
-
-              <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
-              </div>
-            </div>
-          </AsideBox>
+            </AsideBox>
+          </div>
         </div>
       </div>
     </div>
@@ -385,7 +388,7 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    }
 
     // messagesConverted() {
     //   return this.messages && this.messsages.length ? this.messages.map(item => {
@@ -605,7 +608,10 @@ export default {
                   return {
                     ...item,
                     type_like: data.type_like,
-                    is_like: !!data.type_like
+                    is_like: !!data.type_like,
+                    total_like: !!data.type_like
+                      ? (item.total_like += 1)
+                      : (item.total_like -= 1)
                   };
                 }
                 return item;
@@ -738,7 +744,7 @@ export default {
         actionTypes.BASE.LIST
       ]({
         params: {
-          page: get(this, 'feeds.page.number', 1) + 1
+          page: get(this, "feeds.page.number", 1) + 1
         }
       });
 
@@ -751,6 +757,15 @@ export default {
       } else {
         $state.complete();
       }
+    },
+
+    /**
+     * Handle Post liked when Post in PostDetail === Post
+     */
+    handleParentPostLiked(newPost) {
+      this.feeds.listPost = this.feeds.listPost.map(item =>
+        newPost.post_id === item.post_id ? newPost : item
+      );
     }
   }
 };

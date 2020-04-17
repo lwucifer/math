@@ -679,9 +679,9 @@ export default {
      */
     clear() {
       this.editor.setContent("");
-      this.link = null;
-      this.linkDataFetched = false;
+      this.removePreviewLink();
       this.fileList = [];
+      this.previewList = [];
       this.listTag = [];
       this.checkin = null;
       this.privacy = 15;

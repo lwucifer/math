@@ -29,12 +29,9 @@
             <app-input labelFixed v-model="name" label="Họ và tên" disabled />
             <app-input v-model="phone" label="Số điện thoại" disabled />
             <app-input v-model="email" label="Email" disabled/>
-            <div class="picker-group__infostudent">
-              <div class="form-group">
-                <label>Giới tính</label>
-                <app-select v-model="sex" :sex="sex" :options="opts" class="form-control max-w-170" />
-              </div>
-              <app-date-picker square label="Ngày sinh" v-model="birthday" :disabled="true"/>
+            <div class="picker-group__profileInfo">
+              <app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>
+              <app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>
             </div>
           </div>
           <app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">
@@ -44,16 +41,10 @@
             :visible="showChangePass"
             @click-close="showChangePass = false"
           />
-          <AccountInfoStudent :profileList="profileList" v-if="accountLink.list.linked"/>
+          <AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>
           <div class="d-flex mt-4">
             <app-button class="ml-auto" square>Lưu thay đổi</app-button>
           </div>
-          <app-notify-modal
-            :show="notify.showNotify"
-            :message="notify.message"
-            :link="notify.redirectLink"
-            @close="closeNotify"
-          />
         </div>
       </div>
     </div>
@@ -84,12 +75,6 @@ export default {
     AccountChangePasswordModal,
     AccountLinkModal
   },
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
-      store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
-    ]);
-  },
   data() {
     return {
       isAuthenticated: true,
@@ -99,25 +84,35 @@ export default {
       email: "",
       sex: "",
       birthday: "",
-      address: "",
       showChangePass: false,
       accountLink:{
         showModal: false,
         list:""
       },
-      notify: {
-        redirectLink: "",
-        message: "",
-        showNotify: false
-      },
-      opts: [
-        { value: "MALE", text: "Nam" },
-        { value: "FEMALE", text: "Nữ" }
-      ]
+      profileInfo:""
     };
   },
-
+  watch:{
+    profileList: {
+        handler: function() {
+          this.name = get(this,"profileList.fullname","");
+          this.phone = get(this,"profileList.phone","");
+          this.email = get(this,"profileList.email","");
+          this.address = get(this,"profileList.address","");
+          this.sex = get(this,"profileList.sex","") === "MALE" ? "Nam" : "Nữ";
+          this.birthday = getDateBirthDay(get(this,"profileList.birthday",""));
+          this.accountLink.list = get(this,"linkList.data",{});
+          this.profileInfo = get(this,"profileList",{});
+        }
+      }
+  },
   methods: {
+    async fetchProfile(){
+      await Promise.all([
+        this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
+        this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
+      ])
+    },
     closeNotify() {
       this.notify.showNotify = false;
     },
@@ -125,38 +120,19 @@ export default {
       this.accountLink.showModal = false;
     },
     async handleRefresh(){
-      await Promise.all([
-        this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
-        this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
-      ])
-    }
-
-    // async handleUploadChange(fileList, event) {
-    //   this.avatar = Array.from(fileList);
-
-    //   getBase64(this.avatar[0], src => {
-    //     this.avatarSrc = src;
-    //   });
-    //   const body = new FormData();
-    //   body.append("avatar_images", fileList[0]);
-    //   console.log("[avatar_images]", fileList[0]);
-    //   this.accountPersonalEditAvatar(body).then(result => {});
-    // }
+      this.fetchProfile();
+    },
   },
   computed: {
     ...mapState("account", {
-      profileList: "profileList",
+      profileList: "profileList"
+    }),
+    ...mapState("account", {
       linkList: "linkList"
     })
   },
   created() {
-    this.name = get(this,"profileList.fullname","");
-    this.phone = get(this,"profileList.phone","");
-    this.email = get(this,"profileList.email","");
-    this.address = get(this,"profileList.address","");
-    this.sex = get(this,"profileList.sex","");
-    this.birthday = getDateBirthDay(this.profileList.birthday);
-    this.accountLink.list = get(this,"linkList.data",{})
+    this.fetchProfile();
   }
 };
 </script>
@@ -184,12 +160,18 @@ export default {
       white-space: nowrap;
     }
   }
-  .picker-group__infostudent {
+  .picker-group__profileInfo {
     display: flex;
-    .app-date-picker {
-      margin-left: 60px;
-      label {
-        margin-right: 20px;
+    .sex_Profile .app-input__input {
+      width: 62px;
+      margin-right: 80px;
+    }
+    .birthday_Profile{
+      .app-input__label{
+        width: 10rem;
+      }
+      .app-input__input{
+        width: 110px;
       }
     }
   }
