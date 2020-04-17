@@ -183,66 +183,68 @@
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-            <!-- <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
-              class="mb-4"
-              nuxt
-              size="sm"
-              :key="message.id"
-              :to="`/messages/t/${message.id}`"
-            />-->
-          </AsideBox>
+          <div v-sticky sticky-offset="{ top: 101 }">
+            <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
+              <!-- <app-content-box
+                v-for="message in messagesConverted"
+                v-bind="message"
+                class="mb-4"
+                nuxt
+                size="sm"
+                :key="message.id"
+                :to="`/messages/t/${message.id}`"
+              />-->
+            </AsideBox>
 
-          <AsideBox title="Khóa học Online nổi bật">
-            <div class="timeline-aside-tabs">
-              <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
-              <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
-            </div>
-
-            <div class="time-aside-tabs-content">
-              <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in freeCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
-
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+            <AsideBox title="Khóa học Online nổi bật">
+              <div class="timeline-aside-tabs">
+                <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
+                <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
               </div>
 
-              <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in privateCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
+              <div class="time-aside-tabs-content">
+                <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in freeCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
 
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in privateCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
+
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div class="text-center mt-4">
+                  <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
+                </div>
               </div>
-
-              <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
-              </div>
-            </div>
-          </AsideBox>
+            </AsideBox>
+          </div>
         </div>
       </div>
     </div>
