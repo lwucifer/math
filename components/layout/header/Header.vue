@@ -1,5 +1,5 @@
 <template>
-  <div class="the-header" v-sticky :sticky-z-index="999">
+  <div class="the-header" v-sticky :sticky-z-index="100">
     <div class="the-header__content">
       <div class="the-header__logo">
         <n-link to="/">

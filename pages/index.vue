@@ -183,7 +183,7 @@
         </div>
 
         <div class="col-md-4">
-          <div v-sticky sticky-offset="{ top: 101 }">
+          <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9">
             <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
               <!-- <app-content-box
                 v-for="message in messagesConverted"

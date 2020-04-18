@@ -1,7 +1,7 @@
 .post-editor {
     margin-bottom: 1.8rem;
     position: relative;
-    z-index: 2;
+    z-index: 101;
 
     &--has-overlay {
         .post-editor__privacy,
