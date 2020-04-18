@@ -104,17 +104,8 @@
                     </div>
                   </td>
                 </template>
-                <template v-slot:cell(action)="{row}">
-                  <td class="nowrap">
-                    <button type="button" @click="block(row.id)">
-                      <IconLockOpenAlt
-                        class="fill-primary"
-                        v-if="!row.block"
-                        width="16"
-                        height="16"
-                      />
-                      <IconLock2 v-else width="16" height="16" />
-                    </button>
+                <template v-slot:cell(point)="{row}">
+                  <td class="text-center">
                   </td>
                 </template>
               </app-table>
@@ -195,13 +186,9 @@ export default {
         },
         {
           name: "point",
-          text: "Điểm chuyên cần",
+          text: "<p class='text-center'>Điểm chuyên cần</p>",
           sort: true
         },
-        {
-          name: "action",
-          text: ""
-        }
       ],
       filter: {
         query: null,
