@@ -7,7 +7,7 @@ import { get } from "lodash";
  * initial state
  */
 const state = () => ({
-  elearningPublicSummary: []
+  elearnings: null,
 });
 
 /**
@@ -32,9 +32,14 @@ const actions = {
         result
       );
     } catch (error) {
+      commit(
+        mutationTypes.ELEARNING_PUBLIC_SUMMARY
+          .SET_ELEARNING_PUBLIC_SUMMARY_LIST,
+        null
+      );
       console.log("[Elearning Summary] list.error", error);
     }
-  }
+  },
 };
 
 /**
@@ -43,10 +48,10 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_PUBLIC_SUMMARY.SET_ELEARNING_PUBLIC_SUMMARY_LIST](
     state,
-    elearningPublicSummary
+    elearnings
   ) {
-    state.elearningPublicSummary = get(elearningPublicSummary, 'data', []);
-  }
+    state.elearnings = get(elearnings, "data", null);
+  },
 };
 
 export default {
@@ -54,5 +59,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
