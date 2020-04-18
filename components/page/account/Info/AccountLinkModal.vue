@@ -12,7 +12,7 @@
               <h5 class="text-primary">Liên kết trường học</h5>
               <p class="my-3 text-gray">Vui lòng nhập mã liên kết</p>
               <app-input v-model="payload.code" placeholder="Nhập mã"/>
-              <p class="text-secondary mt-2 text-left font-weight-light">Nếu bạn chưa có mã liên kết, vui lòng liên hệ với nhà trường</p>
+              <p class="text-secondary my-2 font-weight-light">Nếu bạn chưa có mã liên kết, vui lòng liên hệ với nhà trường</p>
               <div>
                   <app-button square color="secondary" @click="$emit('click-close')">Hủy</app-button>
                   <app-button square class="ml-3" @click.prevent="submitLink">Xác nhận</app-button>
@@ -58,6 +58,7 @@ export default {
                 return;
             }
             this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+            this.$emit('handleRefresh')
         }
     }
 }

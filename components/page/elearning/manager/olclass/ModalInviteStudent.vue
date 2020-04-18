@@ -48,7 +48,7 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
 
-const STORE_CREATING_OLCLASSES = "elearning/creating/creating-olclasses";
+const STORE_TEACHING_OLCLASS = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
 
@@ -90,7 +90,7 @@ export default {
       };
       try {
         await this.$store.dispatch(
-          `${STORE_CREATING_OLCLASSES}/${actionTypes.CREATING_OLCLASSES.INVITE}`,
+          `${STORE_TEACHING_OLCLASS}/${actionTypes.TEACHING_OLCLASS_INVITES.ADD}`,
           params
         );
       } catch (e) {

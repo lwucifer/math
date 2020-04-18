@@ -101,18 +101,28 @@ export const ELEARNING = {
     SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel"
 };
 
-export const CREATING_OLCLASSES = {
-    SET_CREATING_OLCLASSES_LIST: "setCreatingOlclassesList",
-    SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
-    SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
-    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete",
-    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList",
-    SET_CREATING_OLCLASSES_INVITE: "setCreatingOlclassesInvite",
-    SET_CREATING_OLCLASSES_BLOCK: "setCreatingOlclassesBlock"
+export const TEACHING_OLCLASSES = {
+    SET_TEACHING_OLCLASS_LIST: "setTeachingOlclassList",
+    SET_TEACHING_OLCLASS_ADD: "setTeachingOlclassAdd",
+    SET_TEACHING_OLCLASS_EDIT: "setTeachingOlclassEdit",
+    SET_TEACHING_OLCLASS_DELETE: "setTeachingOlclassDelete",
+    SET_TEACHING_OLCLASS_BLOCK: "setTeachingOlclassBlock",
+    SET_TEACHING_OLCLASS_UNBLOCK: "setTeachingOlclassUnBlock",
 };
 
-export const CREATING_OLCLASSES_LESSON = {
-    SET_CREATING_OLCLASSES_ATTENDANCES: "setCreatingOlclassesLessonAttendances",
+export const TEACHING_OLCLASS_INVITES = {
+    SET_TEACHING_OLCLASS_INVITES_LIST: "setTeachingOlclassInvitesList",
+    SET_TEACHING_OLCLASS_INVITES_ADD: "setTeachingOlclassInvitesList",
+    SET_TEACHING_OLCLASS_INVITES_EDIT: "setTeachingOlclassInvitesList",
+};
+
+export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_LIST: "setTeachingOlclassLessonAttendancesList",
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_EDIT: "setTeachingOlclassLessonAttendancesEdit",
+};
+
+export const TEACHING_OLCLASS_LESSONS = {
+    SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
 };
 
 export const CREATING_ANSWER = {

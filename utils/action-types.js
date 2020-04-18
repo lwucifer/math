@@ -151,19 +151,27 @@ export const CREATING_ANSWER = {
     DELETE: "creatingAnswerDelete"
 };
 
-export const CREATING_OLCLASSES = {
-    LIST: "creatingOlclassesList",
-    ADD: "creatingOlclassesAdd",
-    EDIT: "creatingOlclassesEdit",
-    DELETE: "creatingOlclassesDelete",
-    INVITATIONS: "creatingOlclassesInvitations",
-    INVITE: "creatingOlclassesInvite",
-    BLOCK: "creatingOlclassesBlock",
-    UNBLOCK: "creatingOlclassesUnBlock"
+export const TEACHING_OLCLASSES = {
+    LIST: "teachingOlclassesList",
+    ADD: "teachingOlclassesAdd",
+    EDIT: "teachingOlclassesEdit",
+    DELETE: "teachingOlclassesDelete",
+    BLOCK: "teachingOlclassesBlock",
+    UNBLOCK: "teachingOlclassesUnBlock"
 };
 
-export const CREATING_OLCLASSES_LESSON = {
-    ATTENDANCES: "creatingOlclassesLessonAttendances"
+export const TEACHING_OLCLASS_INVITES = {
+    LIST: "teachingOlclassInvitesList",
+    ADD: "teachingOlclassInvitesAdd",
+    EDIT: "teachingOlclassInvitesEdit",
+}
+
+export const TEACHING_OLCLASS_LESSONS = {
+    LIST: "teachingOlclassLessonsList"
+}
+export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
+    LIST: "teachingOlclassLessonAttendancesList",
+    EDIT: "teachingOlclassLessonAttendancesEdit"
 };
 
 export const CREATING_CHAPTER = {
