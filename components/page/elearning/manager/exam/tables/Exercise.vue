@@ -26,7 +26,7 @@
 
       <template v-slot:cell(created_at)="{row}">
         <td>
-          {{ get(row, 'created_at', '') | moment("DD/MM/YYYY") }}
+          {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
         </td>
       </template>
     </app-table><!--End table-->
@@ -93,11 +93,11 @@
             text: "Thể loại",
           },
           {
-            name: "lesson_name",
+            name: "lesson",
             text: "Thuộc bài giảng",
           },
           {
-            name: "elearning_name",
+            name: "elearning",
             text: "Thuộc khóa học",
           },
           {
@@ -106,7 +106,7 @@
             sort: true
           },
           {
-            name: "created_at",
+            name: "created",
             text: "Ngày khởi tạo",
             sort: true
           },

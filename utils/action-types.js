@@ -227,6 +227,10 @@ export const ELEARNING_TEACHING_EXERCISE = {
     DETAIL: "elearningTeachingExerciseDetail"
 };
 
+export const ELEARNING_TEACHING_TEST = {
+    LIST: "elearningTeachingTestList"
+};
+
 export const ELEARNING_TEACHING_SUBMISSION = {
     LIST: "elearningTeachingSubmissionList",
     DETAIL: "elearningTeachingSubmissionDetail",

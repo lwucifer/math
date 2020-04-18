@@ -106,7 +106,6 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
-        this.list = this.get(this.detailInfo, 'data.content', [])
         this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
         this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
         this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
