@@ -1,6 +1,6 @@
 <template>
   <app-modal
-    v-bind="{ width, centered }"
+    v-bind="{ width, centered, order }"
     :component-class="{ 'app-modal-confirm': true }"
   >
     <div slot="content" class="py-4 px-5">
@@ -44,6 +44,10 @@
 export default {
   props: {
     centered: Boolean,
+    order: {
+      type: Number,
+      default: 1
+    },
 
     // This component props
     title: {

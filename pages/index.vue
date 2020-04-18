@@ -23,7 +23,7 @@
               :post="post"
               class="mb-4"
               :show-menu-dropdown="post.author && post.author.id === userId"
-              @delete="deletePost"
+              @delete="showModalConfirmDelete"
               @like="likePost"
               @edit="editPost"
               @share="openModalShare"
@@ -127,6 +127,7 @@
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
               @parent-post-liked="handleParentPostLiked"
+              @delete="showModalConfirmDelete"
             />
           </app-modal>
 
@@ -180,6 +181,15 @@
               >Lưu</app-button>
             </div>
           </app-modal>
+
+          <app-modal-confirm
+            v-if="modalConfirmDelete"
+            okText="Xoá"
+            title="Bạn có chắc chắn muốn xoá?"
+            :confirmLoading="modalConfirmDeleteLoading"
+            @cancel="hideModalConfirmDelete"
+            @ok="deletePost(modalConfirmDeleteId)"
+          ></app-modal-confirm>
         </div>
 
         <div class="col-md-4">
@@ -198,8 +208,16 @@
 
             <AsideBox title="Khóa học Online nổi bật">
               <div class="timeline-aside-tabs">
-                <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
-                <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
+                <a
+                  href
+                  :class="{ active: coursesTab === 0 }"
+                  @click.prevent="coursesTab = 0"
+                >Miễn phí</a>
+                <a
+                  href
+                  :class="{ active: coursesTab === 1 }"
+                  @click.prevent="coursesTab = 1"
+                >Trả phí</a>
               </div>
 
               <div class="time-aside-tabs-content">
@@ -362,6 +380,10 @@ export default {
       // Share post
       showModalShare: false,
       shareData: {},
+      // Delete post
+      modalConfirmDelete: false,
+      modalConfirmDeleteId: null,
+      modalConfirmDeleteLoading: false,
       // Course tabs
       coursesTab: 0,
 
@@ -567,10 +589,21 @@ export default {
       }
     },
 
+    showModalConfirmDelete(id) {
+      this.modalConfirmDelete = true;
+      this.modalConfirmDeleteId = id;
+    },
+
+    hideModalConfirmDelete() {
+      this.modalConfirmDelete = false;
+      this.modalConfirmDeleteId = null;
+    },
+
     /**
      * DELETE a post
      */
     async deletePost(id) {
+      this.modalConfirmDeleteLoading = true;
       const doDelete = await new SocialPostsService(this.$axios)[
         actionTypes.BASE.DELETE
       ](id);
@@ -588,6 +621,9 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
+
+      this.hideModalConfirmDelete();
+      this.modalConfirmDeleteLoading = false;
     },
 
     /**
