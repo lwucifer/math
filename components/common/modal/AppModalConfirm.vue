@@ -4,7 +4,9 @@
     :component-class="{ 'app-modal-confirm': true }"
   >
     <div slot="content" class="py-4 px-5">
-      <div class="mb-3 text-center" v-html="title"></div>
+      <slot name="title">
+        <div class="mb-3 text-center">{{ title }}</div>
+      </slot>
 
       <div class="d-flex justify-content-center">
         <app-button
