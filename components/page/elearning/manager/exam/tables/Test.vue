@@ -12,7 +12,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/exams/list?elearning_id=${row.id}`">
+            :to="`/elearning/manager/exams/${row.id}/submissions`">
             <IconArrow />
           </n-link>
         </td>
@@ -24,7 +24,7 @@
         </td>
       </template>
 
-      <template v-slot:cell(created)="{row}">
+      <template v-slot:cell(created_at)="{row}">
         <td>
           {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
         </td>
@@ -37,7 +37,7 @@
   import { get } from "lodash"
   import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
 
-  import { ELEARNING_TYPES } from "~/utils/constants"
+  import { EXERCISE_TYPES } from "~/utils/constants"
 
   export default {
     components: {
@@ -72,8 +72,8 @@
     filters: {
       exerciseTypeFilter: function(val) {
         const MATCHED_DATA = {
-          [ELEARNING_TYPES.COURSE]: 'Khóa học',
-          [ELEARNING_TYPES.LECTURE]: 'Bài giảng'
+          [EXERCISE_TYPES.CHOICE]: 'Trắc nghiệm',
+          [EXERCISE_TYPES.ESSAY]: 'Tự luận'
         }
         if (MATCHED_DATA.hasOwnProperty(val))
         return MATCHED_DATA[val]
@@ -85,16 +85,24 @@
       return {
         heads: [
           {
-            name: "name",
-            text: "Khóa học/bài giảng",
+            name: "title",
+            text: "Tiêu đề",
           },
           {
             name: "type",
             text: "Thể loại",
           },
           {
-            name: "exercises",
-            text: "Số bài tập",
+            name: "lesson",
+            text: "Thuộc bài giảng",
+          },
+          {
+            name: "elearning",
+            text: "Thuộc khóa học",
+          },
+          {
+            name: "participants",
+            text: "Học sinh làm bài",
             sort: true
           },
           {

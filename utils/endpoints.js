@@ -71,14 +71,19 @@ export const ELEARNING_PUBLIC_SUBJECT = `${SCHOOLLY_ALIAS}/elearning/public/subj
 export const ELEARNING_PUBLIC_LEVEL = `${SCHOOLLY_ALIAS}/elearning/public/levels`;
 export const ELEARNING_TEACHING_REPOSITORY_FILE = `${SCHOOLLY_ALIAS}/elearning/teaching/repository/files`;
 export const ELEARNING_TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/elearning/teaching/repository`;
-export const ELEARNING_TEACHING_EXERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/exercises`;
+export const ELEARNING_TEACHING_EXERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/elearning/exercises`;
+export const ELEARNING_TEACHING_TEST = `${SCHOOLLY_ALIAS}/elearning/teaching/elearning/exercises`;
 export const ELEARNING_TEACHING_SUBMISSION = `${SCHOOLLY_ALIAS}/elearning/teaching/submissions`;
 export const ELEARNING_TEACHING_VOTE = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
+export const ELEARNING_TEACHING_EXERCISE_ELEARNING = `${SCHOOLLY_ALIAS}/elearning/teaching/exercise_elearnings`;
 export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/setting`;
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
 
+/**
+ * ONLINE CLASS
+ */
 export const TEACHING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses`;
 export const TEACHING_OLCLASS_INVITES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/invites`;
 export const TEACHING_OLCLASS_BLOCK = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/banned`;
@@ -125,10 +130,11 @@ export const MESSAGE_SEND_IMG = `${SCHOOLLY_ALIAS}/social/api/message/uploadImg`
 export const LIMIT_MESSAGES = `${SCHOOLLY_ALIAS}/social/api/message/getLimit`;
 export const MESSAGE_TYPE = `${SCHOOLLY_ALIAS}/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `${SCHOOLLY_ALIAS}/social/api/message/uploadFile`;
+
 /**
  * TEACHING
  */
-export const TEACHING_SUMMARY = `${SCHOOLLY_ALIAS}/teaching/summary`;
+export const TEACHING_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/teaching/summary`;
 export const TEACHING_ELEARNING = `${SCHOOLLY_ALIAS}/teaching/elearnings`;
 export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/teaching/excercises`;
 export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/teaching/repository`;

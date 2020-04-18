@@ -11,6 +11,18 @@
     </div>
     <!--Options group-->
 
+    <!--Info group-->
+    <div class="class-info mb-4">
+      <strong>Tổng số học sinh đã mời: <span class="color-primary">50</span></strong>
+      <div class="class-info-content mt-3">
+        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">95%</strong></div>
+        <div class="item">Tỷ lệ vắng có mặt: <strong class="color-primary">5%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">5%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">1%</strong></div>
+      </div>
+    </div>
+    <!--end info group-->
+
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
@@ -25,18 +37,16 @@
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 18rem">
+      <div class="filter-form__item" style="min-width: 22rem">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
-          v-model="filterCourse"
-          :options="courses"
+          v-model="filterIndex"
+          :options="indexs"
           label="text"
-          placeholder="Theo lớp"
+          placeholder="Theo thứ tự buổi học"
           searchable
           clearable
-          @input="handleChangedCourse"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
+          @input="handleChangedIndex"
         ></app-vue-select>
       </div>
 
@@ -60,14 +70,13 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="students"
+      :data="lessons"
     >
-      <template v-slot:cell(is_block_on_next_lesson)="{row}">
+      <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.invitation_id, row.is_block_on_next_lesson)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
-            <IconLock2 v-else width="16" height="16"/>
-          </button>
+          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'">
+          50/100
+          </n-link>
         </td>
       </template>
     </app-table>
@@ -90,13 +99,12 @@ import ModalInviteStudent from "~/components/page/elearning/manager/olclass/Moda
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
-import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { useEffect, getParamQuery } from "~/utils/common";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {
   components: {
@@ -117,32 +125,57 @@ export default {
       openModal: false,
       heads: [
         {
-          name: "student_name",
-          text: "Học sinh",
+          name: "online_class_name",
+          text: "Phòng học",
           sort: true
         },
         {
-          name: "class_name",
-          text: "Lớp",
+          name: "elearning_name",
+          text: "Thuộc bài giảng/khóa học",
           sort: true
         },
         {
-          name: "invited_time",
-          text: "Ngày tham gia",
+          name: "lesson_index",
+          text: "Thứ tự buổi học",
           sort: true
         },
         {
-          name: "point",
-          text: "Điểm chuyên cần",
+          name: "start_time",
+          text: "Thời gian diễn ra",
           sort: true
         },
         {
-          name: "is_block_on_next_lesson",
-          text: ""
+          name: "action",
+          text: "Số học sinh có mặt"
         }
       ],
-      courses: [],
-      filterCourse: null,
+      indexs: [
+        {
+          value: '0',
+          text: '0'
+        },
+        {
+          value: '1',
+          text: '1'
+        },
+        {
+          value: '2',
+          text: '2'
+        },
+        {
+          value: '3',
+          text: '3'
+        },
+        {
+          value: '4',
+          text: '4'
+        },
+        {
+          value: '5',
+          text: '5'
+        },
+      ],
+      filterIndex: null,
       pagination: {
         total: 15,
         page: 1,
@@ -151,71 +184,32 @@ export default {
         first: 1,
         last: 10
       },
-      students: [],
+      lessons: [],
       params: {
         page: 1,
         size: 10,
+        query: null,
       },
       loading: false,
-      listSchoolClasses: [],
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateInvites: "Invites"
-    }),
-    ...mapState(STORE_SCHOOL_CLASSES, {
-      stateSchoolClasses: "schoolClasses"
-    }),
+      stateLessons: "Lessons"
+    })
   },
 
   methods: {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
-      that.params.size = that.pagination.size;
-      that.params.page = that.pagination.page;
-      that.getList();
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
-      console.log(this.params);
       this.getList();
     },
-    handleChangedCourse() {
-      
-    },
-    handleFocusSearchInput() {
-    },
-    handleBlurSearchInput() {
-    },
-    handleSearch() {
-    },
-    selectRow(data) {
-      this.ids = data.map((row, index, data) => {
-          return row.online_class_id
-      });
-    },
-
-    async block(id, isBlock) {
-      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
-      const params = {
-        invitation_ids: [id],
-        online_class_id: online_class_id,
-        //student_id: "string"
-      };
-      if (isBlock) {
-        await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
-          params
-        );
-      } else {
-        await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
-          params
-        );
-      }
+    handleChangedIndex() {
+      this.params.lesson_index = this.filterIndex.value;
     },
 
     async getList() {
@@ -223,48 +217,23 @@ export default {
         this.loading = true;
         const online_class_id = this.$route.params.id ? this.$route.params.id : "";
         this.params.online_class_id = online_class_id;
-        if ( this.filterCourse ) {
-          this.params.class_id = this.filterCourse.value 
-        }
-        if ( this.filterCourse ) {
-          this.params.class_id = this.filterCourse.value 
-        }
         let params = { ...this.params };
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_INVITES.LIST}`,
-          { params }
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
+          { params}
         );
-        this.students = this.get(this.stateInvites, 'data.content', [])
-        this.pagination.size = this.get(this.stateInvites, 'data.size', 10)
-        this.pagination.first = this.get(this.stateInvites, 'data.first', 1)
-        this.pagination.last = this.get(this.stateInvites, 'data.last', 1)
-        this.pagination.number = this.get(this.stateInvites, 'data.number', 0)
-        this.pagination.totalPages = this.get(this.stateInvites, 'data.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateInvites, 'data.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateInvites, 'data.number_of_elements', 0)
+        this.lessons = this.get(this.stateLessons, 'data.content', [])
+        this.pagination.size = this.get(this.stateLessons, 'data.size', 10)
+        this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
+        this.pagination.last = this.get(this.stateLessons, 'data.last', 1)
+        this.pagination.number = this.get(this.stateLessons, 'data.number', 0)
+        this.pagination.totalPages = this.get(this.stateLessons, 'data.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateLessons, 'data.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateLessons, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {
         this.loading = false
-      }
-    },
-
-    async getSchoolClasses() {
-      try {
-        await this.$store.dispatch(
-          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
-        );
-        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
-        let list = [];
-        lessonList.forEach(element => {
-          list.push({
-            value: element.id,
-            text: element.name
-          });
-        });
-        this.courses = list;
-      } catch (e) {
-      } finally {
       }
     },
 
@@ -277,13 +246,23 @@ export default {
 
   created() {
     this.getList();
-    this.getSchoolClasses();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+.class-info {
+  margin: 0 2rem;
+  padding: 1rem 1.5rem 1.5rem;
+  background: #f8f8f8;
+  .class-info-content {
+    display: table;
+    .item {
+      display: table-cell;
+    }
+  }
+}
 .appended-col {
   p {
     max-width: 15rem;

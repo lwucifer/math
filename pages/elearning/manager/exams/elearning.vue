@@ -1,65 +1,80 @@
 <template>
-  <div class="elearning-">
-    <!--Filter form-->
-    <filter-form
-      @submitFilter="submitFilter"
-      @changedType="handleChangedType"
-      @submitSearch="handleSubmitSearch"
-    />
-    <list-table
-      :pagination="pagination"
-      :list="list"
-      :loading="loading"
-      @changedPagination="updatePagination"
-    />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <ElearningManagerSide active="3" />
+      </div>
+      <div class="col-md-9">
+        <div class="elearning-manager-content">
+          <div class="elearning-manager-content__title">
+            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
+            <hr class/>
+          </div>
+
+          <div class="elearning-manager-content__main">
+            <div>
+              <!--Filter form-->
+              <elearning-manager-filter-form
+                @submitFilter="submitFilter"
+                @changedType="handleChangedType"
+                @submitSearch="handleSubmitSearch"
+              />
+              <elearning-manager-filter-table
+                :pagination="pagination"
+                :list="list"
+                :loading="loading"
+                @changedPagination="updatePagination"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseElearningFilter"
+import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/tables/ExerciseElearning"
 import { mapState } from "vuex"
-import * as actionTypes from "~/utils/action-types"
 import { get } from "lodash"
-import { useEffect, getParamQuery } from "~/utils/common"
-import FilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseFilter"
-import ListTable from "~/components/page/elearning/manager/exam/tables/Exercise"
-import { EXERCISE_CATEGORIES } from '~/utils/constants'
+import * as actionTypes from "~/utils/action-types"
 
-const STORE_NAMESPACE = "elearning/teaching/exercise"
+const STORE_NAMESPACE = 'elearning/teaching/elearning'
 
 export default {
+  layout: "manage",
+
   components: {
-    FilterForm,
-    ListTable
+    ElearningManagerSide,
+    ElearningManagerFilterForm,
+    ElearningManagerFilterTable
   },
-  filters: {
-  },
+
   data() {
     return {
       pagination: {
         totalElements: 0,
-        last: false,
         totalPages: 1,
+        numberOfElements: 0,
+        last: false,
         size: 10,
         number: 0,
         first: true,
-        numberOfElements: 0
       },
       params: {
         page: 1,
-        size: 10,
-        category: EXERCISE_CATEGORIES.EXERCISE,
-        elearning_id: null,
-        lesson_id: null
+        size: 10
       },
       list: [],
       loading: false
-    };
+    }
   },
-
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      detailInfo: 'exercises'
+      detailInfo: 'elearnings'
     }),
   },
 
@@ -72,7 +87,7 @@ export default {
       this.updateFilter({ type: val })
     },
     handleSubmitSearch(val) {
-      this.updateFilter({ keyword: val })
+      this.updateFilter({ query: val })
     },
     submitFilter(val) {
       this.updateFilter(val)
@@ -85,11 +100,10 @@ export default {
     async getList() {
       try {
         this.loading = true
-        this.params.elearning_id = getParamQuery('elearning_id')
         let params = { ...this.params }
-
+      
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.LIST}`, { params }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
         this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
@@ -101,7 +115,7 @@ export default {
         this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
         // this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
       } catch (e) {
-        console.log('Get list exercise ', e)
+        console.log('Get list exercise elearning', e)
       } finally {
         this.loading = false
       }
@@ -112,12 +126,12 @@ export default {
     },
     get
   },
-
   created() {
     this.getList()
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>
