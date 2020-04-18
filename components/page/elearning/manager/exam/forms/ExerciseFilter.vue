@@ -12,9 +12,9 @@
       </app-button>
     </div>
 
-    <div class="filter-form__item">
+    <div class="filter-form__item" style="min-width: 140px;">
       <app-vue-select
-        class="app-vue-select filter-form__item__selection"
+        class="w-100"
         v-model="filters.type"
         :options="types"
         :reduce="item => item.value"
@@ -102,6 +102,6 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>

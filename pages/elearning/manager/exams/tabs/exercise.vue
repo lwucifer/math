@@ -120,5 +120,4 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>
