@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <app-button size="sm" color="info" class="mr-3" square @click="close()">Hủy</app-button>
+        <app-button size="sm" color="info" class="mr-3" square @click="close(false)">Hủy</app-button>
         <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
       </div>
     </div>
@@ -59,7 +59,7 @@ export default {
     return {
       arrMember: [],
       name: "",
-      classSelected: {},
+      classSelected: null,
       classList: [],
       studentList: [],
       invateStudent: {
@@ -71,8 +71,8 @@ export default {
   },
 
   methods: {
-    close() {
-      this.$emit("close");
+    close(invite) {
+      this.$emit("close", invite);
     },
 
     arrayToStringIds(data) {
@@ -83,18 +83,21 @@ export default {
     },
 
     async hanldeInvate() {
-      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
-      let params = {
-        online_class_id: online_class_id,
-        student_ids: [this.arrayToStringIds(this.studentList)]
-      };
-      try {
-        await this.$store.dispatch(
-          `${STORE_TEACHING_OLCLASS}/${actionTypes.TEACHING_OLCLASS_INVITES.ADD}`,
-          params
-        );
-      } catch (e) {
-      } finally {
+      if (this.studentList.length > 0) {
+        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        let params = {
+          online_class_id: online_class_id,
+          student_ids: [this.arrayToStringIds(this.studentList)]
+        };
+        try {
+          await this.$store.dispatch(
+            `${STORE_TEACHING_OLCLASS}/${actionTypes.TEACHING_OLCLASS_INVITES.ADD}`,
+            params
+          );
+        } catch (e) {
+        } finally {
+          this.close(true)
+        }
       }
     },
 

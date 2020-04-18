@@ -88,7 +88,7 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link class :to="row.online_class_id">Vào phòng học</n-link>
+          <n-link class :to="'./online-class/' + row.online_class_id + '/invites'">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
@@ -169,7 +169,7 @@ export default {
       params: {
         page: 1,
         size: 10,
-        class_status: "WRITTING",
+        class_status: "FINISHED",
         query: null,
         query_date: null,
         search_type: null
@@ -180,7 +180,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateClass: "OnlinelClass"
+      stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
       stateLessons: "Lessons"
@@ -196,11 +196,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params, ...this.filter };
       this.getList();
     },
     handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+      this.params.elearning_id = this.filterCourse.value;
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},
@@ -233,7 +232,6 @@ export default {
       try {
         this.loading = true;
         let params = { ...this.params };
-        console.log(params);
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }

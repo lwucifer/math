@@ -24,6 +24,8 @@
           searchable
           clearable
           @input="handleChangedCourse"
+          @search:focus="handleFocusSearchInput"
+          @search:blur="handleBlurSearchInput"
         ></app-vue-select>
       </div>
 
@@ -86,7 +88,7 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link class :to="'./online-courses/' + row.online_class_id">Vào phòng học</n-link>
+          <n-link class :to="'./online-class/' + row.online_class_id + '/invites'">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
@@ -103,7 +105,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
@@ -152,8 +154,9 @@ export default {
           text: ""
         }
       ],
-      courses: [],
       filterCourse: null,
+      courses: [],
+      isAuthenticated: true,
       pagination: {
         total: 15,
         page: 1,
@@ -167,11 +170,10 @@ export default {
       params: {
         page: 1,
         size: 10,
-        class_status: "SCHEDULED",
-        elearning_id: null,
-        status: null,
-        query_date: null,
+        class_status: "STREAMING",
         query: null,
+        query_date: null,
+        search_type: null
       },
       loading: false,
     };
@@ -194,13 +196,19 @@ export default {
       that.params.page = that.pagination.page;
       that.getList();
     },
-
     submit() {
       this.getList();
     },
-
-    handleChangedCourse(val) {
+    handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+    },
+    handleFocusSearchInput() {},
+    handleBlurSearchInput() {},
+    handleSearch() {},
+    selectRow(data) {
+      this.ids = data.map((row, index, data) => {
+        return row.online_class_id;
+      });
     },
 
     async getLessons() {
@@ -256,7 +264,17 @@ export default {
       );
 
       if (doDelete.success) {
-        this.getList();
+        const { courses } = this;
+        const newListPost =
+          courses && courses.listPost
+            ? courses.listPost.filter(item => item.post_id !== id)
+            : [];
+        this.classList = {
+          listPost: newListPost,
+          page: courses.page || {}
+        };
+
+        console.log(this.classList);
       } else {
         this.$toasted.error(doDelete.message);
       }

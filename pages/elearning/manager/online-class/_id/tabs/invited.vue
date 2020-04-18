@@ -11,18 +11,6 @@
     </div>
     <!--Options group-->
 
-    <!--Info group-->
-    <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã mời: <span class="color-primary">50</span></strong>
-      <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">95%</strong></div>
-        <div class="item">Tỷ lệ vắng có mặt: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">1%</strong></div>
-      </div>
-    </div>
-    <!--end info group-->
-
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
@@ -58,7 +46,7 @@
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
-            v-model="filter.query"
+            v-model="params.query"
             :size="'sm'"
           ></app-search>
         </div>
@@ -72,20 +60,21 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="lessons"
+      :data="students"
     >
-      <template v-slot:cell(action)="{row}">
+      <template v-slot:cell(is_block_on_next_lesson)="{row}">
         <td class="nowrap">
-          <n-link :to="'/elearning/manager/online-courses/' + row.lesson_id + '/muster'">
-          50/100
-          </n-link>
+          <button type="button" @click="block(row.invitation_id, row.is_block_on_next_lesson)">
+            <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
+            <IconLock2 v-else width="16" height="16"/>
+          </button>
         </td>
       </template>
     </app-table>
     <!--End table-->
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="openModal = false" v-if="openModal"/>
+    <ModalInviteStudent @close="closeModal" v-if="openModal"/>
     <!-- End -->
   </div>
 </template>
@@ -101,12 +90,13 @@ import ModalInviteStudent from "~/components/page/elearning/manager/olclass/Moda
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 
+import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
+const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {
   components: {
@@ -127,36 +117,30 @@ export default {
       openModal: false,
       heads: [
         {
-          name: "online_class_name",
-          text: "Phòng học",
+          name: "student_name",
+          text: "Học sinh",
           sort: true
         },
         {
-          name: "elearning_name",
-          text: "Thuộc bài giảng/khóa học",
+          name: "class_name",
+          text: "Lớp",
           sort: true
         },
         {
-          name: "lesson_index",
-          text: "Thứ tự buổi học",
+          name: "invited_time",
+          text: "Ngày tham gia",
           sort: true
         },
         {
-          name: "start_time",
-          text: "Thời gian diễn ra",
+          name: "point",
+          text: "Điểm chuyên cần",
           sort: true
         },
         {
-          name: "action",
-          text: "Số học sinh có mặt"
+          name: "is_block_on_next_lesson",
+          text: ""
         }
       ],
-      filter: {
-        query: null,
-        status: null,
-        query_date: null,
-        search_type: null
-      },
       courses: [],
       filterCourse: null,
       pagination: {
@@ -167,33 +151,45 @@ export default {
         first: 1,
         last: 10
       },
-      lessons: [],
+      students: [],
       params: {
         page: 1,
         size: 10,
       },
       loading: false,
+      listSchoolClasses: [],
     };
   },
+
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateLessons: "Lessons"
-    })
+      stateInvites: "Invites"
+    }),
+    ...mapState(STORE_SCHOOL_CLASSES, {
+      stateSchoolClasses: "schoolClasses"
+    }),
   },
 
   methods: {
+    closeModal(e) {
+      this.openModal = false;
+      if (e) this.getList();
+    },
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
+      that.params.size = that.pagination.size;
+      that.params.page = that.pagination.page;
+      that.getList();
     },
     submit() {
       this.params = {...this.params, ...this.filter};
       console.log(this.params);
       this.getList();
     },
-    handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+    handleChangedCourse() {
+      
     },
     handleFocusSearchInput() {
     },
@@ -207,28 +203,70 @@ export default {
       });
     },
 
+    async block(id, isBlock) {
+      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+      const params = {
+        invitation_ids: [id],
+        online_class_id: online_class_id,
+        //student_id: "string"
+      };
+      if (isBlock) {
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
+          params
+        );
+      } else {
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
+          params
+        );
+      }
+    },
+
     async getList() {
       try {
         this.loading = true;
         const online_class_id = this.$route.params.id ? this.$route.params.id : "";
         this.params.online_class_id = online_class_id;
+        if ( this.filterCourse ) {
+          this.params.class_id = this.filterCourse.value
+        }
         let params = { ...this.params };
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
-          { params}
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_INVITES.LIST}`,
+          { params }
         );
-        this.lessons = this.get(this.stateLessons, 'data.content', [])
-        this.pagination.size = this.get(this.stateLessons, 'data.size', 10)
-        this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
-        this.pagination.last = this.get(this.stateLessons, 'data.last', 1)
-        this.pagination.number = this.get(this.stateLessons, 'data.number', 0)
-        this.pagination.totalPages = this.get(this.stateLessons, 'data.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateLessons, 'data.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateLessons, 'data.number_of_elements', 0)
+        this.students = this.get(this.stateInvites, 'data.content', [])
+        this.pagination.size = this.get(this.stateInvites, 'data.size', 10)
+        this.pagination.first = this.get(this.stateInvites, 'data.first', 1)
+        this.pagination.last = this.get(this.stateInvites, 'data.last', 1)
+        this.pagination.number = this.get(this.stateInvites, 'data.number', 0)
+        this.pagination.totalPages = this.get(this.stateInvites, 'data.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateInvites, 'data.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateInvites, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {
         this.loading = false
+      }
+    },
+
+    async getSchoolClasses() {
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+        );
+        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let list = [];
+        lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
       }
     },
 
@@ -241,23 +279,13 @@ export default {
 
   created() {
     this.getList();
+    this.getSchoolClasses();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-.class-info {
-  margin: 0 2rem;
-  padding: 1rem 1.5rem 1.5rem;
-  background: #f8f8f8;
-  .class-info-content {
-    display: table;
-    .item {
-      display: table-cell;
-    }
-  }
-}
 .appended-col {
   p {
     max-width: 15rem;

@@ -17,7 +17,7 @@
                   <div class="top">
                     <IconBook class="fill-primary mr-3" />Số bài giảng
                   </div>
-                  <strong>35</strong>
+                  <strong>{{stateTeaching.total_lectures}}</strong>
                 </div>
               </div>
               <div class="col-md-3">
@@ -25,7 +25,7 @@
                   <div class="top">
                     <IconCalendar class="fill-primary mr-3" />Số khóa học
                   </div>
-                  <strong>59</strong>
+                  <strong>{{stateTeaching.total_courses}}</strong>
                 </div>
               </div>
               <div class="col-md-6">
@@ -34,8 +34,8 @@
                     <IconChartLine class="fill-primary mr-3" />Điểm bình chọn giáo viên
                   </div>
                   <div class="bottom">
-                    <strong class="mr-4">4/5</strong>
-                    <app-stars :stars="4" :size="16" />
+                    <strong class="mr-4">{{stateTeaching.voting_rate}}/5</strong>
+                    <app-stars :stars="stateTeaching.voting_rate" :size="16" />
                   </div>
                 </div>
               </div>
@@ -46,10 +46,19 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Số học sinh tham gia
                 </div>
-                <strong>33</strong>
+                <strong>{{stateTeaching.participants}}</strong>
               </div>
               <div class="ml-auto">
-                <app-select size="sm" />
+                <app-vue-select
+                  style="width: 17rem"
+                  class="app-vue-select"
+                  v-model="time"
+                  :options="times"
+                  label="text"
+                  searchable
+                  clearable
+                  @input="handleChangedTime"
+                ></app-vue-select>
               </div>
             </div>
             <hr class="mt-4 mb-4" />
@@ -58,11 +67,20 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Doanh thu
                 </div>
-                <strong class="mb-3">1.250.330 VNĐ</strong>
+                <strong class="mb-3">{{stateTeaching.revenue}} VNĐ</strong>
                 <n-link :to="'/elearning/manager/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
               </div>
               <div class="ml-auto">
-                <app-select size="sm" />
+                <app-vue-select
+                  style="width: 17rem"
+                  class="app-vue-select"
+                  v-model="time"
+                  :options="times"
+                  label="text"
+                  searchable
+                  clearable
+                  @input="handleChangedTime"
+                ></app-vue-select>
               </div>
             </div>
           </div>
@@ -85,6 +103,8 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
+const STORE_NAMESPACE = "elearning/teaching/summary";
+
 export default {
   layout: "manage",
   name: "E-learning",
@@ -95,35 +115,94 @@ export default {
     IconBook,
     IconCalendar,
     IconDollarAlt,
-    IconChartLine,
-  },
-
-  async fetch({ params, query, store }) {
-    await store.dispatch(
-      `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`
-    );
+    IconChartLine
   },
 
   data() {
     return {
-      isAuthenticated: true,
+      time: {
+        value: null,
+        text: "Toàn thời gian"
+      },
+      times: [
+        {
+          value: null,
+          text: "Toàn thời gian"
+        },
+        {
+          value: "year",
+          text: "Năm"
+        },
+        {
+          value: "month",
+          text: "Tháng"
+        },
+        {
+          value: "week",
+          text: "Tuần"
+        },
+        {
+          value: "day",
+          text: "Trong ngày"
+        }
+      ],
+      teacherInfo: {}
     };
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("elearning/study/study", {
-      elearning: "elearningStudy"
+    ...mapState(STORE_NAMESPACE, {
+      stateTeaching: "teachingInfo"
     })
   },
 
   methods: {
+    handleChangedTime() {
+      this.getSummary();
+    },
+
+    async getSummary() {
+      const today = new Date();
+      let from_date;
+      let fromdate;
+      switch (this.time.value) {
+        case 'day':
+          fromdate = new Date(today.getTime() - 24*60*60*1000);
+          from_date = fromdate.getDate()+'/0'+(fromdate.getMonth()+1)+'/'+fromdate.getFullYear();
+          break;
+        case 'week':
+          fromdate = new Date(today.getTime() - 7*24*60*60*1000);
+          from_date = fromdate.getDate()+'/0'+(fromdate.getMonth()+1)+'/'+fromdate.getFullYear();
+          break;
+        case 'month':
+          from_date = today.getDate()+'/0'+(today.getMonth())+'/'+today.getFullYear();
+          break;
+        case 'year':
+          from_date = (today.getDate()-1)+'/0'+(today.getMonth()+1)+'/'+today.getFullYear();
+          break;
+      }
+      const to_date = today.getDate()+'/0'+(today.getMonth()+1)+'/'+today.getFullYear();
+      let params = {};
+      if (from_date) {
+        params = {
+          from_date: from_date,
+          to_date: to_date,
+        };
+      }
+      console.log(params);
+      await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_SUMMARY.INFO}`,
+        params
+      );
+    },
+
     get
   },
 
-  created () {
-    console.log(this.elearning);
-  },
+  created() {
+    this.getSummary();
+  }
 };
 </script>
 
