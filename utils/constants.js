@@ -67,6 +67,11 @@ export const EXERCISE_TYPES = {
     ESSAY: "ESSAY"
 }
 
+export const EXERCISE_CATEGORIES = {
+    EXERCISE: "EXERCISE",
+    TEST: "TEST"
+}
+
 export const SUBMISSION_RESULTS = {
   PASS: 1,
   FAIL: -1,

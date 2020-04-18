@@ -29,17 +29,17 @@
 
     <!--Right form-->
     <div class="filter-form__right">
-      <div class="filter-form__item filter-form__item--search">
-        <app-input
-          type="text"
-          v-model="filters.keyword"
-          placeholder="Nhập để tìm kiếm..."
-          :size="'sm'"
+      <div class="filter-form__item filter-form__item--search border-0">
+        <app-search
+          class="w-100"
+          size="sm"
+          placeholder="Nhập để tìm kiếm"
+          v-model="filters.query"
           @input="handleChangedSearch"
-        />
-        <button type="submit">
-          <IconSearch width="15" height="15" />
-        </button>
+          @keyup.enter.native="handleSubmitSearch"
+          @submit="submit"
+        >
+        </app-search>
       </div>
     </div><!--End right form-->
 
@@ -48,15 +48,12 @@
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import IconSearch from "~/assets/svg/icons/search.svg?inline"
-  import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
+  import { EXERCISE_TYPES } from "~/utils/constants"
 
   export default {
     name: "ElearningManagerFilterForm",
     components: {
       IconFilter,
-      IconSearch,
-      IconArrow
     },
     data() {
       return {
@@ -66,19 +63,21 @@
         },
         types: [
           {
-            value: 1,
+            value: EXERCISE_TYPES.CHOICE,
             text: 'Trắc nghiệm'
           },
           {
-            value: 2,
+            value: EXERCISE_TYPES.ESSAY,
             text: 'Tự luận'
           },
         ],
+        initStatus: true
       }
     },
     watch: {
       filters: {
         handler(val, old){
+          this.initStatus = false
           this.$emit("changedFilter", val)
         },
         deep: true
@@ -86,7 +85,9 @@
     },
     methods: {
       submit() {
-        this.$emit('submit', this.filters)
+        if (!this.initStatus) {
+          this.$emit('submitFilter', this.filters)
+        }
       },
       handleChangedType(val) {
         this.$emit('changedType', val)
@@ -94,6 +95,9 @@
       handleChangedSearch(val) {
         this.$emit('changedQuery', val)
       },
+      handleSubmitSearch(e) {
+        this.$emit('submitSearch', e.target.value)
+      }
     }
   }
 </script>

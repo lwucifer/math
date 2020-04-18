@@ -218,9 +218,17 @@ export const REPOSITORY = {
     INFO: "info"
 };
 
+export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
+    LIST: "elearningTeachingExerciseElearningList",
+};
+
 export const ELEARNING_TEACHING_EXERCISE = {
     LIST: "elearningTeachingExerciseList",
     DETAIL: "elearningTeachingExerciseDetail"
+};
+
+export const ELEARNING_TEACHING_TEST = {
+    LIST: "elearningTeachingTestList"
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {

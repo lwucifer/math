@@ -1,13 +1,12 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import Exercise from "~/services/elearning/teaching/Exercise";
+import ExerciseElearning from "~/services/elearning/teaching/ExerciseElearning";
 
 /**
  * initial state
  */
 const state = () => ({
-  exercises: [],
-  currentExercise: {}
+  elearnings: [],
 });
 
 /**
@@ -19,13 +18,13 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_TEACHING_EXERCISE.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.LIST]({ commit }, payload) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.LIST](
+      const result = await new ExerciseElearning(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
       // set to mutation
-      commit(mutationTypes.ELEARNING_TEACHING_EXERCISE.SET_TEACHING_EXERCISE_LIST, result);
+      commit(mutationTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.SET_TEACHING_EXERCISE_ELEARNING_LIST, result);
     } catch (error) {
       console.log("[Teaching exercises] list.error", error);
     }
@@ -123,39 +122,15 @@ const actions = {
       console.log("[Teaching exercise] detail.error", error);
     }
   },
-  
-  async [actionTypes.ELEARNING_CREATING_EXERCISES.EDIT]({ commit }, payload) {
-    try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.EDIT](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_EDIT, result);
-    } catch (error) {
-      console.log("[Teaching exercises] edit.error", error);
-    }
-  },
-  
-  async [actionTypes.ELEARNING_CREATING_EXERCISES.DELETE]({ commit }, payload) {
-    try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.DELETE](
-        payload
-      );
-      // set to mutation
-      // commit(mutationTypes.CREATING_ANSWER.SET_CREATING_ANSWER_DELETE, result);
-    } catch (error) {
-      console.log("[Teaching exercises] delete.error", error);
-    }
-  }
 };
 
 /**
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_TEACHING_EXERCISE.SET_TEACHING_EXERCISE_LIST](state, exercises) {
-    console.log("SET_ELEARNING_TEACHING_EXERCISES_LIST", exercises);
-    state.exercises = exercises;
+  [mutationTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.SET_TEACHING_EXERCISE_ELEARNING_LIST](state, data) {
+    console.log("SET_ELEARNING_TEACHING_EXERCISE_ELEARNING_LIST", data);
+    state.elearnings = data;
   },
   [mutationTypes.ELEARNING_TEACHING_EXERCISE.SET_TEACHING_EXERCISE_DETAIL](state, exercise) {
     console.log("SET_ELEARNING_TEACHING_EXERCISES_DETAIL", exercise);

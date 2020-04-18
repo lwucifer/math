@@ -12,9 +12,9 @@
       </app-button>
     </div>
 
-    <div class="filter-form__item">
+    <div class="filter-form__item" style="min-width: 140px;">
       <app-vue-select
-        class="app-vue-select filter-form__item__selection"
+        class="w-100"
         v-model="filters.type"
         :options="types"
         :reduce="item => item.value"
@@ -48,9 +48,10 @@
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import { ELEARNING_TYPES } from "~/utils/constants"
+  import { EXERCISE_TYPES } from "~/utils/constants"
 
   export default {
+    name: "ElearningManagerFilterForm",
     components: {
       IconFilter,
     },
@@ -58,16 +59,16 @@
       return {
         filters: {
           type: null,
-          query: ''
+          keyword: ''
         },
         types: [
           {
-            value: ELEARNING_TYPES.LECTURE,
-            text: 'Bài giảng'
+            value: EXERCISE_TYPES.CHOICE,
+            text: 'Trắc nghiệm'
           },
           {
-            value: ELEARNING_TYPES.COURSE,
-            text: 'Khóa học'
+            value: EXERCISE_TYPES.ESSAY,
+            text: 'Tự luận'
           },
         ],
         initStatus: true

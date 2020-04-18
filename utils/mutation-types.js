@@ -171,9 +171,17 @@ export const ELEARNING_TEACHING_REPOSITORY = {
     SET_TEACHING_REPOSITORY_INFO: "setElearningTeachingRespositoryInfo"
 };
 
+export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
+    SET_TEACHING_EXERCISE_ELEARNING_LIST: "setElearningTeachingExerciseElearningList"
+};
+
 export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
     SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail"
+};
+
+export const ELEARNING_TEACHING_TEST = {
+    SET_TEACHING_TEST_LIST: "setElearningTeachingExerciseList",
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {
