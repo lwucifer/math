@@ -218,6 +218,10 @@ export const REPOSITORY = {
     INFO: "info"
 };
 
+export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
+    LIST: "elearningTeachingExerciseElearningList",
+};
+
 export const ELEARNING_TEACHING_EXERCISE = {
     LIST: "elearningTeachingExerciseList",
     DETAIL: "elearningTeachingExerciseDetail"

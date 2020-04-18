@@ -34,22 +34,12 @@
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.keyword"
+          v-model="filters.query"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
         >
         </app-search>
-        <!--<app-input-->
-          <!--type="text"-->
-          <!--v-model="filters.keyword"-->
-          <!--placeholder="Nhập để tìm kiếm..."-->
-          <!--:size="'sm'"-->
-          <!--@input="handleChangedSearch"-->
-        <!--/>-->
-        <!--<button type="submit">-->
-          <!--<IconSearch width="15" height="15" />-->
-        <!--</button>-->
       </div>
     </div><!--End right form-->
 
@@ -58,29 +48,26 @@
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import IconSearch from "~/assets/svg/icons/search.svg?inline"
-  import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
+  import { ELEARNING_TYPES } from "~/utils/constants"
 
   export default {
     components: {
       IconFilter,
-      IconSearch,
-      IconArrow
     },
     data() {
       return {
         filters: {
           type: null,
-          keyword: ''
+          query: ''
         },
         types: [
           {
-            value: 1,
-            text: 'Trắc nghiệm'
+            value: ELEARNING_TYPES.LECTURE,
+            text: 'Bài giảng'
           },
           {
-            value: 2,
-            text: 'Tự luận'
+            value: ELEARNING_TYPES.COURSE,
+            text: 'Khóa học'
           },
         ],
         initStatus: true
@@ -105,11 +92,9 @@
         this.$emit('changedType', val)
       },
       handleChangedSearch(val) {
-        console.log('change search', val)
         this.$emit('changedQuery', val)
       },
       handleSubmitSearch(e) {
-        console.log('submit search')
         this.$emit('submitSearch', e.target.value)
       }
     }
