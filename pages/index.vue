@@ -195,7 +195,7 @@
         <div class="col-md-4">
           <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9">
             <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-              <!-- <app-content-box
+              <app-content-box
                 v-for="message in messagesConverted"
                 v-bind="message"
                 class="mb-4"
@@ -203,7 +203,7 @@
                 size="sm"
                 :key="message.id"
                 :to="`/messages/t/${message.id}`"
-              />-->
+              />
             </AsideBox>
 
             <AsideBox title="Khóa học Online nổi bật">
@@ -329,8 +329,8 @@ export default {
 
   async asyncData({ $axios }) {
     const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
-    // const getMessages = () =>
-    //   new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
+    const getMessages = () =>
+      new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
     const getFreeCourse = () =>
       new SearchService($axios)[actionTypes.BASE.ADD]({
         free: true,
@@ -344,19 +344,19 @@ export default {
 
     const [
       { data: feeds = {} },
-      // { data: messages = [] },
+      { data: messages = [] },
       { data: freeCourses = [] },
       { data: privateCourses = [] }
     ] = await Promise.all([
       getFeeds(),
-      // getMessages(),
+      getMessages(),
       getFreeCourse(),
       getPrivateCourse()
     ]);
 
     return {
       feeds: feeds || [],
-      // messages: messages || [],
+      messages: messages || [],
       freeCourses: freeCourses.content || [],
       privateCourses: privateCourses.content || []
     };
@@ -410,21 +410,21 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    }
+    },
 
-    // messagesConverted() {
-    //   return this.messages && this.messsages.length ? this.messages.map(item => {
-    //     return {
-    //       id: item.room.id,
-    //       title: item.room.members
-    //         .filter(member => member.user_id !== this.userId)
-    //         .map(member => member.fullname)
-    //         .join(", "),
-    //       desc: item.message.content,
-    //       image: get(item, 'room.room_avatar.low', null)
-    //     };
-    //   }) : [];
-    // }
+    messagesConverted() {
+      return this.messages && this.messages.length ? this.messages.map(item => {
+        return {
+          id: item.room.id,
+          title: item.room.members
+            .filter(member => member.user_id !== this.userId)
+            .map(member => member.fullname)
+            .join(", "),
+          desc: item.message.content,
+          image: get(item, 'room.room_avatar.low', null)
+        };
+      }) : [];
+    }
   },
 
   mounted() {
