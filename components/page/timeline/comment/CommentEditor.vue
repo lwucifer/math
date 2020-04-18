@@ -2,7 +2,7 @@
   <div class="comment-editor" :class="classes">
     <app-avatar
       :size="reply ? 'xs' : 'sm'"
-      :src="$store.state.auth.avatarUser && $store.state.auth.avatarUser.low"
+      :src="avatarUser && avatarUser.low ? avatarUser.low : null"
       class="comment-editor__avatar"
     />
 
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { debounce, isEmpty, get, uniq } from "lodash";
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
@@ -188,6 +189,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters('auth', ['avatarUser']),
+
     classes() {
       return {
         "comment-editor--reply": this.reply
