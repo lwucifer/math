@@ -4,21 +4,30 @@
       <div class="col-md-3">
         <ElearningManagerSide active="8"/>
       </div>
-      <div class="col-md-9 wrapContent__ElearningManagerRC">
-        <div class="titleRateComment__ElearningManagerRC">
-          <span>Đánh giá và bình luận</span>
-        </div>
-        <div>
-          <app-divider class="divider__ElearningManagerRC"></app-divider>
-        </div>
-        <div>
-          <ElearningManagerRateComment
-            :list.sync="list"
-            :pagination="pagination"
-            :loading="loading"
-            @changedFilter="updateFilter"
-            @changedPagination="updatePagination"
-          />
+      <div class="col-md-9">
+        <div class="elearning-manager-content">
+          <div class="elearning-manager-content__title">
+            <h5 class="color-primary mb-3">Đánh giá và bình luận</h5>
+            <hr class/>
+          </div>
+          <div class="elearning-manager-content__main">
+            <filter-form
+              @submitFilter="submitFilter"
+              @changedCmt="handleChangedCmt"
+              @changedRate="handleChangedRate"
+              @changedClass="handleChangedClass"
+              @changedCourse="handleChangedCourse"
+            >
+            </filter-form>
+    
+            <list-table
+              :pagination="pagination"
+              :list.sync="list"
+              :loading="loading"
+              @changedPagination="updatePagination"
+            >
+            </list-table>
+          </div>
         </div>
       </div>
     </div>
@@ -26,20 +35,22 @@
 </template>
 
 <script>
-  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
-  import ElearningManagerRateComment from "~/components/page/elearning/manager/ratecomment/ElearningManagerRateComment";
-
+  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+  import FilterForm from "~/components/page/elearning/manager/ratecomment/forms/VoteFilter"
+  import ListTable from "~/components/page/elearning/manager/ratecomment/tables/Vote"
+  
   import {mapState} from "vuex"
   import { useEffect, getParamQuery } from "~/utils/common"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
 
-  const STORE_NAMESPACE = 'elearning/public/public-vote'
+  const STORE_NAMESPACE = 'elearning/teaching/vote'
 
   export default {
     components: {
       ElearningManagerSide,
-      ElearningManagerRateComment
+      FilterForm,
+      ListTable
     },
     data() {
       return {
@@ -73,22 +84,45 @@
         this.params = { ...this.params, ...val }
         this.refreshData()
       },
-
+      submitFilter(val) {
+        this.updateFilter(val)
+      },
+      handleChangedCmt(val) {
+        this.updateFilter({ cmt: val })
+      },
+      handleChangedRate(val) {
+        this.updateFilter({ rate: val })
+      },
+      handleChangedClass(val) {
+        this.updateFilter({ class: val })
+      },
+      handleChangedCourse(val) {
+        this.updateFilter({ course: val })
+      },
       updatePagination(val) {
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
         this.params.size = val.size
+        this.getList()
       },
       async getList() {
         try {
           this.loading = true
-          this.params.elearning_id = getParamQuery('elearning_id')
+          // this.params.elearning_id = getParamQuery('elearning_id')
+          this.params.elearning_id = '2522525'
           let params = { ...this.params }
 
           await this.$store.dispatch(
-            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_VOTE.LIST}`, { params }
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_VOTE.LIST}`, { params }
           )
-          this.list = this.get(this.detailInfo, 'content', [])
-          this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+          this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
+          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
         } catch (e) {
           console.log('Get votes ', e)
         } finally {
@@ -102,15 +136,11 @@
       get
     },
     created() {
-      useEffect(this, this.getList.bind(this), [
-        "params.page",
-        "params.size",
-        "params.elearning_id"
-      ])
+      this.getList()
     }
   }
 </script>
 
-<style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/_elearning-rate-comment-index.scss";
+<style lang="scss" scoped>
+  @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>
