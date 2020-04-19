@@ -14,7 +14,7 @@
 
     <div class="filter-form__item" style="min-width: 140px;">
       <app-vue-select
-        class="w-100"
+        class="app-vue-select w-100"
         v-model="filters.type"
         :options="types"
         :reduce="item => item.value"

@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-">
+  <div>
     <!--Filter form-->
     <filter-form
       @submitFilter="submitFilter"
