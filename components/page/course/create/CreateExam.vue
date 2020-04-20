@@ -20,7 +20,7 @@
       />
 
       <ExerciseList
-        v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
+        v-for="(exercise, index) in exams"
         :key="exercise.id"
         :exercise="exercise"
         :index="index"
@@ -71,6 +71,7 @@ export default {
       lessons: [],
       lesson: null,
       category: "TEST",
+      exams: [],
     };
   },
 
@@ -81,7 +82,7 @@ export default {
   },
 
   created() {
-    this.getLessons();
+    this.getExams();
   },
 
   methods: {
@@ -90,18 +91,29 @@ export default {
       this.getLesson(get(this, "lesson.id", ""));
     },
 
-    async getLesson(lesson_id) {
-      if (lesson_id) {
-        const res = await this.$store.dispatch(
-          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
-          lesson_id
-        );
-        if (get(res, "success", false)) {
-          this.lesson = get(res, "data", null);
-          return;
-        }
-      }
-      this.lesson = null;
+    async getExams() {
+      const options = {
+        params: {
+          elearning_id: getParamQuery("elearning_id"),
+          category: "TEST",
+        },
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
+        options
+      );
+      this.exams = get(res, "data.content", []);
+      // if (lesson_id) {
+      //   const res = await this.$store.dispatch(
+      //     `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
+      //     lesson_id
+      //   );
+      //   if (get(res, "success", false)) {
+      //     this.lesson = get(res, "data", null);
+      //     return;
+      //   }
+      // }
+      // this.lesson = null;
     },
 
     handleRefreshExcercises() {
