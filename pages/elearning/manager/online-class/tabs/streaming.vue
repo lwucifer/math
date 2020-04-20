@@ -75,6 +75,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @selectionChange="selectRow"
       :data="classList"
       multiple-selection
     >
@@ -167,6 +168,7 @@ export default {
       },
       classList: [],
       lessonList: [],
+      ids: [],
       params: {
         page: 1,
         size: 10,
@@ -256,7 +258,7 @@ export default {
       }
     },
 
-    async deleteRows() {
+     async deleteRows() {
       let ids = { online_class_ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
@@ -264,17 +266,7 @@ export default {
       );
 
       if (doDelete.success) {
-        const { courses } = this;
-        const newListPost =
-          courses && courses.listPost
-            ? courses.listPost.filter(item => item.post_id !== id)
-            : [];
-        this.classList = {
-          listPost: newListPost,
-          page: courses.page || {}
-        };
-
-        console.log(this.classList);
+        this.getList();
       } else {
         this.$toasted.error(doDelete.message);
       }
