@@ -5,36 +5,27 @@
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
-
-      <SelectLesson
-        :lessons="lessons"
-        v-if="get(general, 'type', '') === 'COURSE'"
-        @handleSelectLesson="handleSelectLesson"
+      <ButtonCreateExercise
+        v-if="isShowButtonCreate"
+        @handleClick="handleShowFormAdd"
+        :category="category"
       />
-      
-      <div v-if="lesson">
-        <ButtonCreateExercise
-          v-if="isShowButtonCreate"
-          @handleClick="handleShowFormAdd"
-          :category="category"
-        />
 
-        <FormCreateExercise
-          v-if="isShowFormAdd"
-          @handleCancel="handleCancelAddCreate"
-          :lesson="lesson"
-          @handleRefreshExcercises="handleRefreshExcercises"
-          :category="category"
-        />
+      <FormCreateExam
+        v-if="isShowFormAdd"
+        @handleCancel="handleCancelAddCreate"
+        :lesson="lesson"
+        @handleRefreshExcercises="handleRefreshExcercises"
+        :category="category"
+      />
 
-        <ExerciseList
-          v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
-          :key="exercise.id"
-          :exercise="exercise"
-          :index="index"
-          @handleRefreshQuestion="handleRefreshQuestion"
-        />
-      </div>
+      <ExerciseList
+        v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
+        :key="exercise.id"
+        :exercise="exercise"
+        :index="index"
+        @handleRefreshQuestion="handleRefreshQuestion"
+      />
     </div>
   </div>
 </template>
@@ -48,7 +39,7 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import FormCreateExam from "~/components/page/course/create/exercise/FormCreateExam";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -68,7 +59,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExercise,
-    FormCreateExercise,
+    FormCreateExam,
     ExerciseList,
     SelectLesson,
   },
