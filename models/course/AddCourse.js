@@ -125,6 +125,10 @@ class Exercise {
       this.lesson_id = payload.lesson_id;
     }
 
+    if (payload.elearning_id) {
+      this.elearning_id = payload.elearning_id;
+    }
+
     if (payload.required !== "") {
       this.required = payload.required ? true : false;
     }

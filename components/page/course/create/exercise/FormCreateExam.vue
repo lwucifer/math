@@ -160,10 +160,6 @@ export default {
   },
 
   props: {
-    lesson: {
-      type: Object,
-      default: null,
-    },
     category: {
       type: String,
       default: "",
@@ -185,7 +181,7 @@ export default {
     return {
       payload: {
         index: 1,
-        lesson_id: "",
+        elearning_id: getParamQuery("elearning_id"),
         required: get(this, "category", "") === "TEST" ? 1 : "",
         title: "",
         type: "",
@@ -207,7 +203,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
 
-      this.payload.lesson_id = get(this, "lesson.id", "");
+      this.payload.elearning_id = getParamQuery("elearning_id");
       if (this.payload.type === "ESSAY") this.payload.pass_score = 10;
 
       const payload = createPayloadExercise(this.payload);
