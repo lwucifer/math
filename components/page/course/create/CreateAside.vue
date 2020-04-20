@@ -96,9 +96,9 @@ export default {
     }),
     is_submit() {
       return (
-        get(this, "progress.data.general_status", false) &&
-        get(this, "progress.data.content_status", false) &&
-        get(this, "progress.data.setting_status", false)
+        get(this, "progress.data.general_status", -1) == 1 &&
+        get(this, "progress.data.content_status", -1) == 1 &&
+        get(this, "progress.data.setting_status", -1) == 1
       );
     },
   },
@@ -143,13 +143,13 @@ export default {
       this.confirmLoading = true;
 
       const elearning_id = getParamQuery("elearning_id");
-      const params = {
+      const data = {
         elearning_id,
       };
 
       const res = await this.$store.dispatch(
         `elearning/creating/creating-publish/${actionTypes.ELEARNING_CREATING_PUBLISH.POST}`,
-        params
+        data
       );
 
       this.handleCancel();

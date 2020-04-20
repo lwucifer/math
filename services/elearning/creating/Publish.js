@@ -6,12 +6,12 @@ export default class Publish extends BaseService {
     super($axios, APIs.ELEARNING_CREATING_PUBLISH);
   }
 
-  async postPublish(params) {
-    const { data } = await this.$axios({
+  async postPublish(data) {
+    const res = await this.$axios({
       url: this.$api,
       method: "POST",
-      params,
+      data,
     });
-    return data;
+    return res.data;
   }
 }
