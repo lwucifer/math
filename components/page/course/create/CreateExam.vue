@@ -14,7 +14,6 @@
       <FormCreateExam
         v-if="isShowFormAdd"
         @handleCancel="handleCancelAddCreate"
-        :lesson="lesson"
         @handleRefreshExcercises="handleRefreshExcercises"
         :category="category"
       />
@@ -68,8 +67,6 @@ export default {
     return {
       isShowButtonCreate: true,
       isShowFormAdd: false,
-      lessons: [],
-      lesson: null,
       category: "TEST",
       exams: [],
     };
@@ -88,7 +85,7 @@ export default {
   methods: {
     handleRefreshQuestion() {
       this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
+      this.getExams();
     },
 
     async getExams() {
@@ -103,22 +100,11 @@ export default {
         options
       );
       this.exams = get(res, "data.content", []);
-      // if (lesson_id) {
-      //   const res = await this.$store.dispatch(
-      //     `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
-      //     lesson_id
-      //   );
-      //   if (get(res, "success", false)) {
-      //     this.lesson = get(res, "data", null);
-      //     return;
-      //   }
-      // }
-      // this.lesson = null;
     },
 
     handleRefreshExcercises() {
       this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
+      this.getExams();
       this.isShowFormAdd = false;
       this.isShowButtonCreate = true;
     },
@@ -128,38 +114,9 @@ export default {
       this.isShowFormAdd = true;
     },
 
-    handleSelectLesson(lesson) {
-      this.getLesson(get(lesson, "id", ""));
-    },
-
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    async getLessons() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        let lessons = [];
-        get(res, "data", []).map((lesson) => {
-          lesson.value = lesson.id;
-          lesson.text = lesson.name;
-          lessons.push(lesson);
-        });
-        this.lessons = lessons;
-        if (get(this, "general.type", "") === "LECTURE") {
-          this.lesson = lessons[0];
-        }
-      }
     },
 
     getProgress() {
