@@ -318,9 +318,10 @@ export const ELEARNING_INFO = {
 export const TEACHING_SUMMARY = {
     SET_TEACHING_SUMMARY_INFO: "setTeachingSummaryInfo"
 };
-export const TEACHING_ELEARNING = {
-    SET_TEACHING_ELEARNING_LIST: "setTeachingElearningList",
-    SET_TEACHING_ELEARNING_DELETE: "setTeachingElearningDelete"
+export const TEACHING_ELEARNINGS = {
+    SET_TEACHING_ELEARNINGS_LIST: "setTeachingElearningsList",
+    SET_TEACHING_ELEARNINGS_DELETE: "setTeachingElearningsDelete",
+    SET_TEACHING_ELEARNINGS_RESTORE: "setTeachingElearningsRestore",
 };
 export const TEACHING_STUDENTS = {
     SET_TEACHING_STUDENTS_LIST: "setTeachingStudentsList",
