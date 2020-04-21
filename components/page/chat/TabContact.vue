@@ -69,7 +69,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="tabs-content" v-if="tab == 1">
+          <div class="tabs-content" v-if="tabChat == true">
             <div class="btn-create-chat" v-if="checkChatList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -129,7 +129,7 @@
               </client-only>
             </template>
           </div>
-          <div class="tabs-content" v-if="tab == 2">
+          <div class="tabs-content" v-if="tabChat == false">
             <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -298,7 +298,7 @@ export default {
       groupsListTab: [],
       chatsListTab: [],
       infiniteId: +new Date(),
-      infiniteIdChat: +new Date(),
+      infiniteIdChat: +new Date() + 1,
       // dataPushChat: [],
       // dataPushGroup: [],
       dataGroupLeave: {},
@@ -507,11 +507,11 @@ export default {
     }
   },
   watch: {
-    tab(_newval) {
-      if (_newval == 1) {
+    tabChat(_newval) {
+      if (_newval == true) {
         this.chatsListTab = [];
         this.chatListQuery.page = 1;
-        // this.infiniteIdChat += 1;
+        this.infiniteIdChat += 1;
       } else {
         this.groupsListTab = [];
         this.groupListQuery.page = 1;
