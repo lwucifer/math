@@ -1,6 +1,10 @@
 import Vue from "vue"
 import numeral from "numeral"
-import { EXERCISE_CATEGORIES } from "~/utils/constants"
+import {
+  EXERCISE_CATEGORIES,
+  EXERCISE_TYPES,
+  SUBMISSION_RESULTS,
+} from "~/utils/constants"
 
 /**
  * 10000 => "10.000"
@@ -69,7 +73,7 @@ export function truncStrFilter(str = '', charCounter = 0, useWordBoundary = fals
 }
 
 /**
- * Translate exercise category => vietnamese
+ * Translate exercise category => label
  * @Param {string} str
  */
 export function exCate2Txt(str = '') {
@@ -77,10 +81,38 @@ export function exCate2Txt(str = '') {
         [EXERCISE_CATEGORIES.EXERCISE]: 'Bài tập',
         [EXERCISE_CATEGORIES.TEST]: 'Bài kiểm tra'
     };
-    if (MATCHED_DATA.hasOwnProperty(str)) {
+    if (MATCHED_DATA.hasOwnProperty(str))
         return MATCHED_DATA[str];
-    }
     return 'Loại khác'
+}
+
+/**
+ * Translate exercise type => label
+ * @Param {string} str
+ */
+export function exType2Txt(str = '') {
+  const MATCHED_DATA = {
+    [EXERCISE_TYPES.CHOICE]: 'Trắc nghiệm',
+    [EXERCISE_TYPES.ESSAY]: 'Tự luận'
+  }
+  if (MATCHED_DATA.hasOwnProperty(str))
+    return MATCHED_DATA[str]
+  return '-'
+}
+
+/**
+ * Translate submission results => status
+ * @Param {string} str
+ */
+export function subResult2Txt(str = '') {
+  const MATCHED_DATA = {
+    [SUBMISSION_RESULTS.PASSED]: 'Đạt',
+    [SUBMISSION_RESULTS.FAILED]: 'Không đạt',
+    [SUBMISSION_RESULTS.PENDING]: 'Chưa chấm điểm'
+  }
+  if (MATCHED_DATA.hasOwnProperty(str))
+    return MATCHED_DATA[str]
+  return '-'
 }
 
 const filters = {
@@ -88,7 +120,9 @@ const filters = {
     numeralFormat,
     fileSizeFilter,
     truncStrFilter,
-    exCate2Txt
+    exCate2Txt,
+    exType2Txt,
+    subResult2Txt
 }
 
 // register global utility filters

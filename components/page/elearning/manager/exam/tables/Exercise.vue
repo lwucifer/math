@@ -21,7 +21,7 @@
 
       <template v-slot:cell(type)="{row}">
         <td>
-          {{ get(row, 'type', '') | exerciseTypeFilter }}
+          {{ get(row, 'type', '') | exType2Txt }}
         </td>
       </template>
 
@@ -37,8 +37,6 @@
 <script>
   import { get } from "lodash"
   import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
-
-  import { EXERCISE_TYPES } from "~/utils/constants"
 
   export default {
     components: {
@@ -69,19 +67,6 @@
         default: false
       }
     },
-
-    filters: {
-      exerciseTypeFilter: function(val) {
-        const MATCHED_DATA = {
-          [EXERCISE_TYPES.CHOICE]: 'Trắc nghiệm',
-          [EXERCISE_TYPES.ESSAY]: 'Tự luận'
-        }
-        if (MATCHED_DATA.hasOwnProperty(val))
-        return MATCHED_DATA[val]
-        return '-'
-      }
-    },
-
     data() {
       return {
         heads: [
