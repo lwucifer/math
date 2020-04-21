@@ -52,24 +52,33 @@
     </div>
     
     <div class="filter-form__item" style="min-width: 170px">
-      <app-vue-select
-        class="app-vue-select w-100"
-        :options="classes"
-        v-model="filters.course"
-        :reduce="item => item.value"
-        label="text"
-        placeholder="Bài giảng/khóa học"
-        searchable
-        clearable
-        @input="handleChangedCourse"
-      >
-      </app-vue-select>
+      <app-select-voted-elearnings />
+      <!--<app-vue-select-->
+        <!--class="app-vue-select w-100"-->
+        <!--:options="classes"-->
+        <!--v-model="filters.course"-->
+        <!--:reduce="item => item.value"-->
+        <!--label="text"-->
+        <!--placeholder="Bài giảng/khóa học"-->
+        <!--searchable-->
+        <!--clearable-->
+        <!--@input="handleChangedCourse"-->
+        <!--@open="getVotedElearnings"-->
+        <!--@close="closeVotedElearningsFilter"-->
+      <!--&gt;-->
+        <!--<template #list-footer v-if="hasNextPage">-->
+          <!--<li ref="load" class="loader">-->
+            <!--Loading more options...-->
+          <!--</li>-->
+        <!--</template>-->
+      <!--</app-vue-select>-->
     </div>
   </div>
 </template>
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
+  const VOTED_ELEARNING_STORE_NAMESPACE = 'elearning/public/public-voted-elearning'
 
   export default {
     components: {
@@ -92,6 +101,7 @@
             text: '10C'
           },
         ],
+        elearnings: [],
         rates: [
           {
             value: '1',
@@ -126,6 +136,12 @@
         deep: true
       }
     },
+    computed: {
+      hasMoreVotedElearning () {
+        return true
+        // return this.paginated.length < this.filtered.length;
+      },
+    },
     methods: {
       submit() {
         if (!this.initStatus) {
@@ -148,6 +164,32 @@
         console.log('cmt change: ', val)
         this.$emit('changedCmt', val)
       },
+      async getVotedElearnings() {
+        try {
+          this.loading = true
+          let params = { ...this.params }
+    
+          await this.$store.dispatch(
+            `${STORE_NAMESPACE}/${actionTypes.VOTED_ELEARNING_STORE_NAMESPACE.LIST}`, { params }
+          )
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+          this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
+          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        } catch (e) {
+          console.log('Get votes ', e)
+        } finally {
+          this.loading = false
+        }
+      },
+      closeVotedElearningsFilter() {
+      
+      }
     }
   }
 </script>
