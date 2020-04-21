@@ -59,6 +59,7 @@ export default {
   },
 
   created() {
+    console.log(this.teacher)
     this.fetchTeacherInfo();
   },
 

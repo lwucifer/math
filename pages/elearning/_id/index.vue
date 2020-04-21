@@ -6,11 +6,11 @@
 
         <ElearningViewInfo :info="info" />
 
-        <ElearningMainMenu :title="typeText" />
+        <ElearningMainMenu />
 
-        <ElearningIntroduce :info="info" :title="typeText" />
+        <ElearningIntroduce :info="info" />
 
-        <ElearningContent :title="typeText" :program="program" />
+        <ElearningContent :program="program" :info="info" />
 
         <div class="box">
           <section class="scroll-target" id="teacher">

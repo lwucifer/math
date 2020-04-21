@@ -22,11 +22,21 @@
 </template>
 
 <script>
+import { get } from "lodash";
+
 export default {
-  props: {
-    title: {
-      type: String,
-      default: "",
+  computed: {
+    title() {
+      switch (get(this, "info.type", "")) {
+        case "LECTURE":
+          return "bài giảng";
+          break;
+        case "COURSE":
+          return "khoá học";
+          break;
+        default:
+          break;
+      }
     },
   },
   methods: {
