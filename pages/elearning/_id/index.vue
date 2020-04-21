@@ -16,7 +16,7 @@
           <section class="scroll-target" id="teacher">
             <h5 class="mb-4">Thông tin giáo viên</h5>
             <CourseTeacherInfo
-              :teacher="get(info, 'teacher', null)"
+              :teacher_id="get(info, 'teacher.id', '')"
               class="mb-3"
             />
           </section>

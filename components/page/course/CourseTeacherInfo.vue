@@ -45,6 +45,7 @@ import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -53,28 +54,28 @@ export default {
   },
 
   props: {
-    teacher: {
-      type: Object,
+    teacher_id: {
+      type: String,
+      default: "",
     },
   },
 
   created() {
-    console.log(this.teacher)
-    this.fetchTeacherInfo();
+    useEffect(this, this.getTeacher.bind(this), ["teacher_id"]);
   },
 
-  watch: {
-    "teacher.id": function(id) {
-      this.fetchTeacherInfo();
-    },
+  computed: {
+    ...mapState("elearning/public/public-elearning-teacher", {
+      teacher: "teacher",
+    }),
   },
 
   methods: {
     get,
-    fetchTeacherInfo() {
+    getTeacher() {
       const options = {
         params: {
-          id: get(this, "teacher.id", ""),
+          teacher_id: get(this, "teacher_id", ""),
         },
       };
       this.$store.dispatch(
