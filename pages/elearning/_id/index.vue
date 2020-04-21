@@ -6,32 +6,7 @@
 
         <ElearningViewInfo :info="info" />
 
-        <div class="elearning-view__main-nav" v-sticky>
-          <a
-            class="scroll-link"
-            href="#introduce"
-            @click.prevent="scrollTo('#introduce')"
-            >Giới thiệu</a
-          >
-          <a
-            class="scroll-link"
-            href="#course-content"
-            @click.prevent="scrollTo('#course-content')"
-            >Nội dung {{ typeText }}</a
-          >
-          <a
-            class="scroll-link"
-            href="#teacher"
-            @click.prevent="scrollTo('#teacher')"
-            >Giáo viên</a
-          >
-          <a
-            class="scroll-link"
-            href="#review"
-            @click.prevent="scrollTo('#review')"
-            >Đánh giá</a
-          >
-        </div>
+        <ElearningMainMenu :title="typeText" />
 
         <section class="scroll-target" id="introduce">
           <div class="box mb-4">
@@ -265,6 +240,7 @@ import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
 import ElearningReview from "~/components/page/elearning/ElearningReview";
 import ElearningRightSide from "~/components/page/elearning/ElearningRightSide";
 import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
+import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -294,7 +270,8 @@ export default {
     IconAngleDown,
     IconFileAlt,
     IconPlayCircle,
-    ElearningViewInfo
+    ElearningViewInfo,
+    ElearningMainMenu,
   },
 
   created() {
