@@ -2,7 +2,7 @@
   <div class="container elearning-view">
     <div class="row">
       <div class="col-md-8">
-        <h2>{{ info.name }}</h2>
+        <h2>{{ get(info, "name", "") }}</h2>
 
         <div class="elearning-view__info">
           <div class="author">
@@ -63,20 +63,25 @@
           <div class="box mb-4">
             <h5 class="mb-4">Lợi ích từ {{ typeText }}</h5>
 
-            <div v-if="typeof info.benefits === 'string'" class="d-flex">
-              <template v-if="info.benefits">
+            <div
+              v-if="typeof get(info, 'benefits', '') === 'string'"
+              class="d-flex"
+            >
+              <template v-if="get(info, 'benefits', [])">
                 <IconCheckCircle class="icon body-1 mr-2" />
-                <p v-html="info.benefits" />
+                <p v-html="get(info, 'benefits', [])" />
               </template>
             </div>
 
-            <span v-else-if="!info.benefits" class="caption text-sub"
+            <span
+              v-else-if="!get(info, 'benefits', [])"
+              class="caption text-sub"
               >Chưa có nội dung</span
             >
 
             <div v-else class="row">
               <div
-                v-for="(item, index) in info.benefits"
+                v-for="(item, index) in get(info, 'benefits', [])"
                 :key="index"
                 class="col-md-6 d-flex mb-15"
               >
@@ -88,7 +93,10 @@
 
           <div class="box mb-4">
             <h5 class="mb-4">Mô tả tổng quát</h5>
-            <div v-if="info.description" v-html="info.description"></div>
+            <div
+              v-if="get(info, 'description', '')"
+              v-html="get(info, 'description', '')"
+            ></div>
             <span v-else class="caption text-sub">Chưa có nội dung.</span>
             <!-- <div class="text-center my-3">
               <a class="btn-load-more">Xem thêm</a>
@@ -120,7 +128,9 @@
             </div>
             <div class="col-auto">
               Thời lượng:
-              <strong class="color-primary">{{ info.duration || "--" }}</strong>
+              <strong class="color-primary">{{
+                get(info, "duration", "--")
+              }}</strong>
             </div>
           </div>
 
@@ -224,7 +234,10 @@
         <div class="box">
           <section class="scroll-target" id="teacher">
             <h5 class="mb-4">Thông tin giáo viên</h5>
-            <CourseTeacherInfo :teacher="info.teacher" class="mb-3" />
+            <CourseTeacherInfo
+              :teacher="get(info, 'teacher', null)"
+              class="mb-3"
+            />
           </section>
 
           <hr class="mt-3 mb-4" />
@@ -305,67 +318,70 @@ export default {
     IconCheckCircle,
     IconAngleDown,
     IconFileAlt,
-    IconPlayCircle
+    IconPlayCircle,
   },
 
   async asyncData({ $axios, params }) {
-    const getInfo = () =>
-      new InfoService($axios)[actionTypes.BASE.LIST]({
-        params: {
-          elearning_id: params.id
-        }
-      });
-    const getLevels = () => new LevelService($axios)[actionTypes.BASE.LIST]();
-    const getSubjects = () =>
-      new SubjectService($axios)[actionTypes.BASE.LIST]();
-    const getProgram = () =>
-      new ProgramService($axios)[actionTypes.BASE.LIST]({
-        params: {
-          elearning_id: params.id
-        }
-      });
-    const getRelatedCourses = () =>
-      new RelatedService($axios)[actionTypes.BASE.LIST]({
-        params: {
-          elearning_id: params.id
-        }
-      });
-
-    const [
-      dataInfo = {},
-      dataLevels = {},
-      dataSubjects = {},
-      dataProgram = {},
-      dataRelatedCourses = {}
-    ] = await Promise.all([
-      getInfo(),
-      getLevels(),
-      getSubjects(),
-      getProgram(),
-      getRelatedCourses()
-    ]);
-
-    return {
-      info: dataInfo.data || {},
-      levels: dataLevels.data || [],
-      subjects: dataSubjects.data || [],
-      program: dataProgram.data || {},
-      relatedCourses: dataRelatedCourses.data || []
-    };
+    // const getInfo = () =>
+    //   new InfoService($axios)[actionTypes.BASE.LIST]({
+    //     params: {
+    //       elearning_id: params.id
+    //     }
+    //   });
+    // const getLevels = () => new LevelService($axios)[actionTypes.BASE.LIST]();
+    // const getSubjects = () =>
+    //   new SubjectService($axios)[actionTypes.BASE.LIST]();
+    // const getProgram = () =>
+    //   new ProgramService($axios)[actionTypes.BASE.LIST]({
+    //     params: {
+    //       elearning_id: params.id
+    //     }
+    //   });
+    // const getRelatedCourses = () =>
+    //   new RelatedService($axios)[actionTypes.BASE.LIST]({
+    //     params: {
+    //       elearning_id: params.id
+    //     }
+    //   });
+    // const [
+    //   dataInfo = {},
+    //   dataLevels = {},
+    //   dataSubjects = {},
+    //   dataProgram = {},
+    //   dataRelatedCourses = {}
+    // ] = await Promise.all([
+    //   getInfo(),
+    //   getLevels(),
+    //   getSubjects(),
+    //   getProgram(),
+    //   getRelatedCourses()
+    // ]);
+    // return {
+    //   info: dataInfo.data || {},
+    //   levels: dataLevels.data || [],
+    //   subjects: dataSubjects.data || [],
+    //   program: dataProgram.data || {},
+    //   relatedCourses: dataRelatedCourses.data || []
+    // };
   },
 
-  updated() {
-    console.log(this.$route)
+  created() {
+    this.getData();
   },
 
   data() {
     return {
+      info: null,
+      levels: [],
+      subjects: [],
+      program: [],
+      relatedCourses: [],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
         setWrapperSize: true,
-        watchOverflow: true
-      }
+        watchOverflow: true,
+      },
     };
   },
 
@@ -389,22 +405,21 @@ export default {
 
     levelText() {
       const [level = {}] = this.levels.filter(
-        level => this.info.level === level.id
+        (level) => this.info.level === level.id
       );
       return level.name || "";
     },
 
     subjectText() {
       const [subject = {}] = this.subjects.filter(
-        subject => this.info.subject === subject.code
+        (subject) => this.info.subject === subject.code
       );
       return subject.name || "";
-    }
+    },
   },
 
   mounted() {
-    window.addEventListener("scroll", this.bindScrollStatus);
-
+    // window.addEventListener("scroll", this.bindScrollStatus);
     // if (this.$route.hash && process.browser) {
     //   const hashEl = document.querySelector(this.$route.hash);
     //   hashEl && this.scrollTo(this.$route.hash);
@@ -412,11 +427,52 @@ export default {
   },
 
   beforeDestroy() {
-    window.removeEventListener("scroll", this.bindScrollStatus);
+    // window.removeEventListener("scroll", this.bindScrollStatus);
   },
 
   methods: {
     get,
+
+    async getData() {
+      const elearning_id = get(this, "$route.params.id", "");
+
+      const getInfo = () =>
+        new InfoService(this.$axios)[actionTypes.BASE.LIST]({
+          params: {
+            elearning_id,
+          },
+        });
+      const getLevels = () =>
+        new LevelService(this.$axios)[actionTypes.BASE.LIST]();
+      const getSubjects = () =>
+        new SubjectService(this.$axios)[actionTypes.BASE.LIST]();
+      const getProgram = () =>
+        new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
+          params: {
+            elearning_id,
+          },
+        });
+      const getRelatedCourses = () =>
+        new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
+          params: {
+            elearning_id,
+          },
+        });
+
+      const data = await Promise.all([
+        getInfo(),
+        getLevels(),
+        getSubjects(),
+        getProgram(),
+        getRelatedCourses(),
+      ]);
+
+      this.info = get(data, "0.data", null);
+      this.levels = get(data, "0.data", []);
+      this.subjects = get(data, "0.data", []);
+      this.program = get(data, "0.data", []);
+      this.relatedCourses = get(data, "0.data.content", []);
+    },
 
     bindScrollStatus(event) {
       const navLink = document.querySelector(".elearning-view__main-nav");
@@ -428,7 +484,7 @@ export default {
         const react = el.getBoundingClientRect();
 
         if (window.scrollY + react.top <= scrollDistance + 1) {
-          Array.from(link).forEach(linkEl => {
+          Array.from(link).forEach((linkEl) => {
             const activeLink = document.querySelector(
               `.scroll-link[href="#${el.id}"]`
             );
@@ -450,15 +506,15 @@ export default {
       window.scrollTo({
         top: scrollPosition - navLink.clientHeight,
         left: 0,
-        behavior: "smooth"
+        behavior: "smooth",
       });
       // })
       // this.$router.replace({
       //   path: this.$route.path,
       //   hash: id
       // });
-    }
-  }
+    },
+  },
 };
 </script>
 
