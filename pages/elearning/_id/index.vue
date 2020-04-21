@@ -8,177 +8,9 @@
 
         <ElearningMainMenu :title="typeText" />
 
-        <section class="scroll-target" id="introduce">
-          <div class="box mb-4">
-            <h5 class="mb-4">Lợi ích từ {{ typeText }}</h5>
+        <ElearningIntroduce :info="info" :title="typeText" />
 
-            <div
-              v-if="typeof get(info, 'benefits', '') === 'string'"
-              class="d-flex"
-            >
-              <template v-if="get(info, 'benefits', [])">
-                <IconCheckCircle class="icon body-1 mr-2" />
-                <p v-html="get(info, 'benefits', [])" />
-              </template>
-            </div>
-
-            <span
-              v-else-if="!get(info, 'benefits', [])"
-              class="caption text-sub"
-              >Chưa có nội dung</span
-            >
-
-            <div v-else class="row">
-              <div
-                v-for="(item, index) in get(info, 'benefits', [])"
-                :key="index"
-                class="col-md-6 d-flex mb-15"
-              >
-                <IconCheckCircle class="icon body-1 mr-2" />
-                <p v-html="item" />
-              </div>
-            </div>
-          </div>
-
-          <div class="box mb-4">
-            <h5 class="mb-4">Mô tả tổng quát</h5>
-            <div
-              v-if="get(info, 'description', '')"
-              v-html="get(info, 'description', '')"
-            ></div>
-            <span v-else class="caption text-sub">Chưa có nội dung.</span>
-            <!-- <div class="text-center my-3">
-              <a class="btn-load-more">Xem thêm</a>
-            </div>-->
-          </div>
-        </section>
-
-        <section
-          class="box elearning-view__content scroll-target mb-4"
-          id="course-content"
-        >
-          <h5>Nội dung {{ typeText }}</h5>
-          <div class="row flex-wrap info">
-            <div class="col-auto">
-              Trình độ:
-              <strong class="color-primary">{{
-                get(program, "level", "")
-              }}</strong>
-            </div>
-            <div class="col-auto">
-              Môn học:
-              <strong class="color-primary">{{
-                get(program, "subject", "")
-              }}</strong>
-            </div>
-            <div class="col-auto">
-              Số bài giảng:
-              <strong class="color-primary">chưa ghép</strong>
-            </div>
-            <div class="col-auto">
-              Thời lượng:
-              <strong class="color-primary">{{
-                get(info, "duration", "--")
-              }}</strong>
-            </div>
-          </div>
-
-          <div class="evlc-item mb-3">
-            <div class="evlc-item__head">
-              <div class="evlc-item__head-left mr-4">
-                Bài giảng đại số lớp 10
-              </div>
-              <div class="evlc-item__head-right ml-auto">
-                <button class="evlc-item__btn evlc-item__btn-collapse active">
-                  <IconAngleDown class="icon" />
-                </button>
-              </div>
-            </div>
-
-            <div class="evlc-item__body bg-input-gray">
-              <div class="d-flex align-items-center text-error py-3">
-                <IconFileAlt class="icon subheading mr-2" />Bài tập số 1
-              </div>
-              <app-divider class="my-0" />
-              <div class="d-flex align-items-center text-error py-3">
-                <IconFileAlt class="icon subheading mr-2" />Bài tập số 2
-              </div>
-            </div>
-          </div>
-
-          <div class="evlc-item mb-3">
-            <div class="evlc-item__head">
-              <div class="evlc-item__head-left mr-4">
-                <b>Chương 1:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-              </div>
-              <div
-                class="evlc-item__head-right d-flex align-items-center ml-auto"
-              >
-                <span class="mr-3">3 Bài</span>
-                <button class="evlc-item__btn evlc-item__btn-collapse active">
-                  <IconAngleDown class="icon" />
-                </button>
-              </div>
-            </div>
-
-            <div class="evlc-item__body bg-input-gray">
-              <div class="d-flex align-items-center py-3">
-                <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle
-                    class="icon subheading mr-2 text-primary"
-                  />Bài 1: Tạo và tối ưu tài khoản instagran trên máy tính
-                </div>
-                <div class="ml-auto">10:15</div>
-              </div>
-              <app-divider class="my-0" />
-              <div class="d-flex align-items-center py-3">
-                <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle
-                    class="icon subheading mr-2 text-primary"
-                  />Bài 2: Tạo và tối ưu tài khoản instagran trên máy tính
-                </div>
-                <div class="ml-auto">10:15</div>
-              </div>
-              <app-divider class="my-0" />
-              <div class="d-flex align-items-center py-3">
-                <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle
-                    class="icon subheading mr-2 text-primary"
-                  />Bài 3: Tạo và tối ưu tài khoản instagran trên máy tính
-                </div>
-                <div class="ml-auto">10:15</div>
-              </div>
-              <app-divider class="my-0" />
-            </div>
-          </div>
-
-          <div class="evlc-item mb-3">
-            <div class="evlc-item__head">
-              <div class="evlc-item__head-left mr-4">
-                <b>Chương 2:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-              </div>
-              <div
-                class="evlc-item__head-right d-flex align-items-center ml-auto"
-              >
-                <span class="mr-3">3 Bài</span>
-                <button class="evlc-item__btn evlc-item__btn-collapse">
-                  <IconAngleDown class="icon" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="download-item">
-            <IconBooks class="fill-primary mr-3" />Tài liệu đính kèm
-            <a
-              href
-              class="ml-auto color-primary d-flex-center font-weight-bold text-decoration-none"
-            >
-              Tải về
-              <IconDownload class="ml-2" />
-            </a>
-          </div>
-        </section>
+        <ElearningContent :title="typeText" :program="program" />
 
         <div class="box">
           <section class="scroll-target" id="teacher">
@@ -241,6 +73,8 @@ import ElearningReview from "~/components/page/elearning/ElearningReview";
 import ElearningRightSide from "~/components/page/elearning/ElearningRightSide";
 import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
+import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
+import ElearningContent from "~/components/page/elearning/ElearningContent";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -272,6 +106,8 @@ export default {
     IconPlayCircle,
     ElearningViewInfo,
     ElearningMainMenu,
+    ElearningIntroduce,
+    ElearningContent,
   },
 
   created() {
@@ -311,33 +147,19 @@ export default {
         }
       }
     },
-
-    levelText() {
-      const [level = {}] = this.levels.filter(
-        (level) => this.info.level === level.id
-      );
-      return level.name || "";
-    },
-
-    subjectText() {
-      const [subject = {}] = this.subjects.filter(
-        (subject) => this.info.subject === subject.code
-      );
-      return subject.name || "";
-    },
   },
 
-  mounted() {
-    window.addEventListener("scroll", this.bindScrollStatus);
-    // if (this.$route.hash && process.browser) {
-    //   const hashEl = document.querySelector(this.$route.hash);
-    //   hashEl && this.scrollTo(this.$route.hash);
-    // }
-  },
+  // mounted() {
+  //   window.addEventListener("scroll", this.bindScrollStatus);
+  //   // if (this.$route.hash && process.browser) {
+  //   //   const hashEl = document.querySelector(this.$route.hash);
+  //   //   hashEl && this.scrollTo(this.$route.hash);
+  //   // }
+  // },
 
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.bindScrollStatus);
-  },
+  // beforeDestroy() {
+  //   window.removeEventListener("scroll", this.bindScrollStatus);
+  // },
 
   methods: {
     get,
@@ -383,46 +205,26 @@ export default {
       this.relatedCourses = get(data, "0.data.content", []);
     },
 
-    bindScrollStatus(event) {
-      const navLink = document.querySelector(".elearning-view__main-nav");
-      const link = document.querySelectorAll('.scroll-link[href^="#"]');
-      const target = document.getElementsByClassName("scroll-target");
-      const scrollDistance = window.scrollY + navLink.clientHeight;
+    // bindScrollStatus(event) {
+    //   const navLink = document.querySelector(".elearning-view__main-nav");
+    //   const link = document.querySelectorAll('.scroll-link[href^="#"]');
+    //   const target = document.getElementsByClassName("scroll-target");
+    //   const scrollDistance = window.scrollY + navLink.clientHeight;
 
-      for (const el of target) {
-        const react = el.getBoundingClientRect();
+    //   for (const el of target) {
+    //     const react = el.getBoundingClientRect();
 
-        if (window.scrollY + react.top <= scrollDistance + 1) {
-          Array.from(link).forEach((linkEl) => {
-            const activeLink = document.querySelector(
-              `.scroll-link[href="#${el.id}"]`
-            );
-            linkEl.classList.remove("active");
-            activeLink.classList.add("active");
-          });
-        }
-      }
-    },
-
-    scrollTo(id) {
-      const target = document.querySelector(id);
-      const navLink = document.querySelector(".elearning-view__main-nav");
-      const targetTop = target.getBoundingClientRect().top;
-      const scrollPosition = targetTop + window.scrollY;
-      const hash = this.$route.hash;
-      // this.requestFrameId && window.cancelAnimationFrame(this.requestFrameId);
-      // this.requestFrameId = window.requestAnimationFrame(() => {
-      window.scrollTo({
-        top: scrollPosition - navLink.clientHeight,
-        left: 0,
-        behavior: "smooth",
-      });
-      // })
-      // this.$router.replace({
-      //   path: this.$route.path,
-      //   hash: id
-      // });
-    },
+    //     if (window.scrollY + react.top <= scrollDistance + 1) {
+    //       Array.from(link).forEach((linkEl) => {
+    //         const activeLink = document.querySelector(
+    //           `.scroll-link[href="#${el.id}"]`
+    //         );
+    //         linkEl.classList.remove("active");
+    //         activeLink.classList.add("active");
+    //       });
+    //     }
+    //   }
+    // },
   },
 };
 </script>
