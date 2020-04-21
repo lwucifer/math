@@ -87,7 +87,7 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link class :to="'./online-class/' + row.online_class_id + '/invites'">Vào phòng học</n-link>
+          <n-link class :to="'./' + row.online_class_id + '/invites'">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
