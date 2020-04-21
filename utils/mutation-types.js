@@ -189,7 +189,11 @@ export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
 };
 
 export const ELEARNING_TEACHING_TEST = {
-    SET_TEACHING_TEST_LIST: "setElearningTeachingExerciseList",
+    SET_TEACHING_TEST_LIST: "setElearningTeachingTestList",
+};
+
+export const ELEARNING_TEACHING_RESULT = {
+  SET_TEACHING_RESULT_DETAIL: "setElearningTeachingResultDetail",
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {

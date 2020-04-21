@@ -1,92 +1,77 @@
 <template>
-  <!--UI 1302-->
   <div class="container">
-    <!--<div class="row">-->
-      <!--<div class="col-md-3">-->
-        <!--<ElearningManagerSide active="3"/>-->
-      <!--</div>-->
-      <!--<div class="col-md-9">-->
-        <!--<div class="elearning-manager-content">-->
-          <!--<div class="elearning-manager-content__title">-->
-            <!--<header-breadcrumb-->
-              <!--title="Bài tập và bài kiểm tra"-->
-              <!--:breadcrumb="breadcrumb"-->
-            <!--/>-->
-          <!--</div>-->
-
-          <!--<div class="elearning-manager-content__main">-->
-            <!--<div class="">-->
-              <!--&lt;!&ndash;Filter form&ndash;&gt;-->
-              <!--<submission-filter-form-->
-                <!--@changedFilter="updateFilter"-->
-              <!--/>-->
-
-              <!--&lt;!&ndash;Table&ndash;&gt;-->
-              <!--<submission-table-->
-                <!--:list.sync="list"-->
-                <!--:pagination="pagination"-->
-                <!--:loading="loading"-->
-                <!--@changedPagination="updatePagination"-->
-              <!--/>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
+    <div class="row">
+      <div class="col-md-3">
+        <ElearningManagerSide active="3"/>
+      </div>
+      <div class="col-md-9">
+        <div class="elearning-manager-content">
+          <div class="elearning-manager-content__title">
+            <header-breadcrumb
+              title="Bài tập và bài kiểm tra"
+              :breadcrumb="breadcrumb"
+            />
+          </div>
+          
+          <div class="elearning-manager-content__main">
+            <component
+              :is="currentComponent"
+              :detail="result"
+              @refreshSubmission="refreshData"
+            >
+            </component>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
-  import SubmissionFilterForm from "~/components/page/elearning/manager/exam/forms/ResultFilter"
-  import SubmissionTable from "~/components/page/elearning/manager/exam/tables/Submission"
   import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
-
-  import {mapState} from "vuex"
+  import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
-  import { get } from "lodash"
-  import { useEffect, getParamQuery } from "~/utils/common"
+  import { get, isEmpty } from "lodash"
+  import { EXERCISE_TYPES } from "~/utils/constants"
+  import { getParamQuery } from "~/utils/common"
 
-  const STORE_NAMESPACE = "elearning/teaching/submission"
+  const ChoiceSubmission = () => import('./choice')
+  const EssaySubmission = () => import('./essay')
+  
+  const STORE_NAMESPACE = "elearning/teaching/result"
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
-
+  
   export default {
     layout: "exercise",
     components: {
       ElearningManagerSide,
-      SubmissionTable,
-      SubmissionFilterForm,
-      HeaderBreadcrumb
+      HeaderBreadcrumb,
+      ChoiceSubmission,
+      EssaySubmission,
     },
-
+    
     data() {
       return {
-        pagination: {
-          totalElements: 0,
-          last: false,
-          totalPages: 1,
-          size: 10,
-          number: 0,
-          first: true,
-          numberOfElements: 0
-        },
-        params: {
-          page: 1,
-          size: 10,
-          exercise_id: ''
-        },
-        list: [],
-        loading: false,
+        item: {},
       }
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
-      ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'submissions'
-      }),
       ...mapState(EXERCISE_STORE_NAMESPACE, {
         exercise: 'currentExercise'
       }),
+      ...mapState(STORE_NAMESPACE, {
+        result: 'currentResult'
+      }),
+      currentComponent: function () { // either Objective Test or Writing Test
+        const MATCHED_COMPONENTS = {
+          [EXERCISE_TYPES.CHOICE]: "ChoiceSubmission",
+          [EXERCISE_TYPES.ESSAY]: "EssaySubmission",
+        }
+        
+        return MATCHED_COMPONENTS[get(this, 'exercise.type', EXERCISE_TYPES.CHOICE)]
+      },
       breadcrumb: function() {
         let data = [
           {
@@ -95,68 +80,55 @@
           },
           {
             text: get(this, 'exercise.title', ''),
+            link: `/elearning/manager/exams/${this.exercise.id}/participant`
+          },
+          {
+            text: get(this, 'result.data.name', ''),
             link: '/elearning/manager/exams'
           }
         ]
         return data
       }
     },
-
+    
     methods: {
-      async getExerciseDetail() {
+      async getDetail() {
         const exerciseId = this.$route.params.id
+        const studentId = getParamQuery('student_id')
+        const userId = getParamQuery('user_id')
+        console.log('exerciseId', exerciseId)
+        console.log('studentId', studentId)
+        console.log('userId', userId)
+        const params = {
+          exercise_id: exerciseId,
+          student_id: studentId,
+          user_id: userId
+        }
         await this.$store.dispatch(
-          `${EXERCISE_STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.DETAIL}`, exerciseId
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_RESULT.DETAIL}`,
+          { params }
         )
       },
-      async getList() {
-        try {
-          this.loading = true
-          const exerciseId = this.$route.params.id
-          this.params.exercise_id = exerciseId
-          let params = {...this.params}
+      async getExerciseDetail() {
+        const exerciseId = this.$route.params.id
+        if (isEmpty(this.exercise) || get(this, 'exercise.id') != exerciseId) {
           await this.$store.dispatch(
-            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.LIST}`, {params}
+            `${EXERCISE_STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.DETAIL}`, exerciseId
           )
-          this.list = this.get(this.detailInfo, 'data.content', [])
-          this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
-        } catch (e) {
-
-        } finally {
-          this.loading = false
         }
-
-      },
-      updateFilter(val) {
-        this.params = { ...this.params, ...val }
-        this.refreshData()
-      },
-      updatePagination(val) {
-        this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
-        this.params.size = val.size
       },
       refreshData() {
-        this.params.page = 1
-        this.getList()
-      },
-      get
+        this.getDetail()
+        this.getExerciseDetail()
+      }
     },
-
+    
     created() {
-      useEffect(this, this.getList.bind(this), [
-        "params.page",
-        "params.size",
-        "params.exercise_id",
-        "params.keyword",
-        "params.class",
-        "params.result",
-      ])
-      this.getExerciseDetail()
+      this.refreshData()
     }
-  }
+  };
 </script>
 
 <style lang="scss">
   @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>

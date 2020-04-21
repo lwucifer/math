@@ -44,7 +44,7 @@
         <td>
           <n-link
             class
-            :to="`/elearning/manager/exams/${$route.params.id}/submissions/${row.id}`">
+            :to="`/elearning/manager/exams/${$route.params.id}/results?student_id=${row.student_id}&user_id=${row.id}`">
             Xem chi tiết
           </n-link>
         </td>
