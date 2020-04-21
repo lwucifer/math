@@ -102,7 +102,7 @@
               <li>
                 <n-link to>Trợ giúp</n-link>
               </li>
-              <li>
+              <li @click.prevent="handleLogout">
                 <n-link to>Đăng xuất</n-link>
               </li>
             </ul>
@@ -132,6 +132,7 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
@@ -155,11 +156,16 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("auth", ["removeToken"]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },
     redirectMessages() {
       this.$router.push("/messages/t");
+    },
+    handleLogout() {
+      this.removeToken();
+      this.redirectSignin();
     }
   }
 };
