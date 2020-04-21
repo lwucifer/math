@@ -4,7 +4,12 @@
       <div class="message-info__acc">
         <div class="message-info__acc__image" v-if="!noMessage">
           <app-avatar v-if="typeRoom==2" :src="avatarSrc" size="md" class="comment-item__avatar" />
-          <app-avatar v-else :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''" size="md" class="comment-item__avatar" />
+          <app-avatar
+            v-else
+            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
+            size="md"
+            class="comment-item__avatar"
+          />
           <app-upload
             class="cgi-upload-avt change-avatar"
             @change="handleUploadChange"
@@ -38,11 +43,11 @@
       <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
         <div class="message-info__box__content attachment">
-          <!-- <ul class="list-unstyle" v-for="(item, index) in listFile" :key="index">
+          <ul class="list-unstyle" v-for="(item, index) in listFile" :key="index">
             <li>
               <a>{{ item.file_name_upload }}</a>
             </li>
-          </ul> -->
+          </ul>
         </div>
       </div>
       <div class="message-info__box">
@@ -58,7 +63,7 @@
         </div>
         <div class="message-info__box__content" v-else></div>
       </div>
-      <div class="message-info__box" v-if="!tabChat">
+      <div class="message-info__box" v-if="!tabChat && typeRoom == 2">
         <h5 class="message-info__box__title">Thành viên</h5>
         <div
           class="message-info__box__content"
@@ -314,10 +319,17 @@ export default {
     }
   },
   watch: {
-    groupListDetail(_newval) {
+    memberList(_newval) {
       this.memberListTab = [];
       this.memberListQuery.page = 1;
       this.infiniteId += 1;
+    },
+    tabChat(_newval) {
+      if (_newval) {
+        this.memberListTab = [];
+        this.memberListQuery.page = 1;
+        this.infiniteId += 1;
+      }
     }
   }
 };
