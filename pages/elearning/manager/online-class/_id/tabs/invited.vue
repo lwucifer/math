@@ -64,7 +64,7 @@
     >
       <template v-slot:cell(is_block_on_next_lesson)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.invitation_id, row.is_block_on_next_lesson)">
+          <button type="button" @click="block(row.invitation_id, row.student_id,row.is_block_on_next_lesson)">
             <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
             <IconLock2 v-else width="16" height="16"/>
           </button>
@@ -203,12 +203,12 @@ export default {
       });
     },
 
-    async block(id, isBlock) {
+    async block(invitationId, studentId, isBlock) {
       const online_class_id = this.$route.params.id ? this.$route.params.id : "";
       const params = {
-        invitation_ids: [id],
+        invitation_ids: [invitationId],
         online_class_id: online_class_id,
-        //student_id: "string"
+        student_id: studentId
       };
       if (isBlock) {
         await this.$store.dispatch(

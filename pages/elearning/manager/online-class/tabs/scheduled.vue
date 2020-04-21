@@ -73,6 +73,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @selectionChange="selectRow"
       :data="classList"
       multiple-selection
     >
@@ -164,6 +165,7 @@ export default {
       },
       classList: [],
       lessonList: [],
+      ids: [],
       params: {
         page: 1,
         size: 10,
@@ -201,6 +203,12 @@ export default {
 
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
+    },
+
+    selectRow(data) {
+      this.ids = data.map((row, index, data) => {
+        return row.online_class_id;
+      });
     },
 
     async getLessons() {

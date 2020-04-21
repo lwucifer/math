@@ -5,36 +5,26 @@
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
-
-      <SelectLesson
-        :lessons="lessons"
-        v-if="get(general, 'type', '') === 'COURSE'"
-        @handleSelectLesson="handleSelectLesson"
+      <ButtonCreateExercise
+        v-if="isShowButtonCreate"
+        @handleClick="handleShowFormAdd"
+        :category="category"
       />
-      
-      <div v-if="lesson">
-        <ButtonCreateExercise
-          v-if="isShowButtonCreate"
-          @handleClick="handleShowFormAdd"
-          :category="category"
-        />
 
-        <FormCreateExercise
-          v-if="isShowFormAdd"
-          @handleCancel="handleCancelAddCreate"
-          :lesson="lesson"
-          @handleRefreshExcercises="handleRefreshExcercises"
-          :category="category"
-        />
+      <FormCreateExam
+        v-if="isShowFormAdd"
+        @handleCancel="handleCancelAddCreate"
+        @handleRefreshExcercises="handleRefreshExcercises"
+        :category="category"
+      />
 
-        <ExerciseList
-          v-for="(exercise, index) in get(lesson, 'exercise_tests', [])"
-          :key="exercise.id"
-          :exercise="exercise"
-          :index="index"
-          @handleRefreshQuestion="handleRefreshQuestion"
-        />
-      </div>
+      <ExerciseList
+        v-for="(exercise, index) in exams"
+        :key="exercise.id"
+        :exercise="exercise"
+        :index="index"
+        @handleRefreshQuestion="handleRefreshQuestion"
+      />
     </div>
   </div>
 </template>
@@ -48,7 +38,7 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import FormCreateExam from "~/components/page/course/create/exercise/FormCreateExam";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -68,7 +58,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExercise,
-    FormCreateExercise,
+    FormCreateExam,
     ExerciseList,
     SelectLesson,
   },
@@ -77,9 +67,8 @@ export default {
     return {
       isShowButtonCreate: true,
       isShowFormAdd: false,
-      lessons: [],
-      lesson: null,
       category: "TEST",
+      exams: [],
     };
   },
 
@@ -90,32 +79,32 @@ export default {
   },
 
   created() {
-    this.getLessons();
+    this.getExams();
   },
 
   methods: {
     handleRefreshQuestion() {
       this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
+      this.getExams();
     },
 
-    async getLesson(lesson_id) {
-      if (lesson_id) {
-        const res = await this.$store.dispatch(
-          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
-          lesson_id
-        );
-        if (get(res, "success", false)) {
-          this.lesson = get(res, "data", null);
-          return;
-        }
-      }
-      this.lesson = null;
+    async getExams() {
+      const options = {
+        params: {
+          elearning_id: getParamQuery("elearning_id"),
+          category: "TEST",
+        },
+      };
+      const res = await this.$store.dispatch(
+        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
+        options
+      );
+      this.exams = get(res, "data.content", []);
     },
 
     handleRefreshExcercises() {
       this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
+      this.getExams();
       this.isShowFormAdd = false;
       this.isShowButtonCreate = true;
     },
@@ -125,38 +114,9 @@ export default {
       this.isShowFormAdd = true;
     },
 
-    handleSelectLesson(lesson) {
-      this.getLesson(get(lesson, "id", ""));
-    },
-
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    async getLessons() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        let lessons = [];
-        get(res, "data", []).map((lesson) => {
-          lesson.value = lesson.id;
-          lesson.text = lesson.name;
-          lessons.push(lesson);
-        });
-        this.lessons = lessons;
-        if (get(this, "general.type", "") === "LECTURE") {
-          this.lesson = lessons[0];
-        }
-      }
     },
 
     getProgress() {

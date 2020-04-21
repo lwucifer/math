@@ -398,9 +398,10 @@ export const SOCIAL_FOLLOW = {
 export const TEACHING_SUMMARY = {
     INFO: "teachingSummary"
 };
-export const TEACHING_ELEARNING = {
-    LIST: "teachingElearningList",
-    DELETE: "teachingElearningDelete"
+export const TEACHING_ELEARNINGS = {
+    LIST: "teachingElearningsList",
+    DELETE: "teachingElearningsDelete",
+    RESTORE: "teachingElearningsRestore",
 };
 export const TEACHING_ONLINE_CLASS = {
     LIST: "teachingOnlineCLassList",

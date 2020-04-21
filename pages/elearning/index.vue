@@ -39,14 +39,15 @@ export default {
     Loading,
   },
 
-  created() {
-    this.$store.dispatch(
+  async created() {
+    await this.$store.dispatch(
       `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
   data() {
     return {
+      loading: true,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
