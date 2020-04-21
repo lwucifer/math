@@ -4,33 +4,7 @@
       <div class="col-md-8">
         <h2>{{ get(info, "name", "") }}</h2>
 
-        <div class="elearning-view__info">
-          <div class="author">
-            <app-avatar
-              :src="get(info, 'teacher.avatar.low', null)"
-              :size="32"
-            />
-            <span class="name ml-2">{{ get(info, "teacher.name", "") }}</span>
-          </div>
-
-          <div class="views ml-auto">
-            <IconEye />
-            <strong class="ml-2 mr-1">{{ get(info, "total_view", 0) }}</strong>
-            lượt xem
-          </div>
-
-          <div class="stars">
-            <app-stars
-              :stars="Math.floor(get(info, 'rates.averageRate', 0))"
-              :size="16"
-            />
-            <strong class="ml-3">{{ get(info, "rates.averageRate", 0) }}</strong
-            >&nbsp;
-            <span class="text-sub"
-              >({{ get(info, "rates.totalReview", 0) }})</span
-            >
-          </div>
-        </div>
+        <ElearningViewInfo :info="info" />
 
         <div class="elearning-view__main-nav" v-sticky>
           <a
@@ -290,6 +264,7 @@ import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
 import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
 import ElearningReview from "~/components/page/elearning/ElearningReview";
 import ElearningRightSide from "~/components/page/elearning/ElearningRightSide";
+import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -319,50 +294,7 @@ export default {
     IconAngleDown,
     IconFileAlt,
     IconPlayCircle,
-  },
-
-  async asyncData({ $axios, params }) {
-    // const getInfo = () =>
-    //   new InfoService($axios)[actionTypes.BASE.LIST]({
-    //     params: {
-    //       elearning_id: params.id
-    //     }
-    //   });
-    // const getLevels = () => new LevelService($axios)[actionTypes.BASE.LIST]();
-    // const getSubjects = () =>
-    //   new SubjectService($axios)[actionTypes.BASE.LIST]();
-    // const getProgram = () =>
-    //   new ProgramService($axios)[actionTypes.BASE.LIST]({
-    //     params: {
-    //       elearning_id: params.id
-    //     }
-    //   });
-    // const getRelatedCourses = () =>
-    //   new RelatedService($axios)[actionTypes.BASE.LIST]({
-    //     params: {
-    //       elearning_id: params.id
-    //     }
-    //   });
-    // const [
-    //   dataInfo = {},
-    //   dataLevels = {},
-    //   dataSubjects = {},
-    //   dataProgram = {},
-    //   dataRelatedCourses = {}
-    // ] = await Promise.all([
-    //   getInfo(),
-    //   getLevels(),
-    //   getSubjects(),
-    //   getProgram(),
-    //   getRelatedCourses()
-    // ]);
-    // return {
-    //   info: dataInfo.data || {},
-    //   levels: dataLevels.data || [],
-    //   subjects: dataSubjects.data || [],
-    //   program: dataProgram.data || {},
-    //   relatedCourses: dataRelatedCourses.data || []
-    // };
+    ElearningViewInfo
   },
 
   created() {
@@ -419,7 +351,7 @@ export default {
   },
 
   mounted() {
-    // window.addEventListener("scroll", this.bindScrollStatus);
+    window.addEventListener("scroll", this.bindScrollStatus);
     // if (this.$route.hash && process.browser) {
     //   const hashEl = document.querySelector(this.$route.hash);
     //   hashEl && this.scrollTo(this.$route.hash);
@@ -427,7 +359,7 @@ export default {
   },
 
   beforeDestroy() {
-    // window.removeEventListener("scroll", this.bindScrollStatus);
+    window.removeEventListener("scroll", this.bindScrollStatus);
   },
 
   methods: {
