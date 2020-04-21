@@ -12,7 +12,8 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/exams/${row.id}/submissions`">
+            :to="`/elearning/manager/exams/${row.id}/participants`"
+          >
             <IconArrow />
           </n-link>
         </td>

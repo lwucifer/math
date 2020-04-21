@@ -1,5 +1,6 @@
 import Vue from "vue"
 import numeral from "numeral"
+import { EXERCISE_CATEGORIES } from "~/utils/constants"
 
 /**
  * 10000 => "10.000"
@@ -67,11 +68,27 @@ export function truncStrFilter(str = '', charCounter = 0, useWordBoundary = fals
       : subString) + " ...";
 }
 
+/**
+ * Translate exercise category => vietnamese
+ * @Param {string} str
+ */
+export function exCate2Txt(str = '') {
+    const MATCHED_DATA = {
+        [EXERCISE_CATEGORIES.EXERCISE]: 'Bài tập',
+        [EXERCISE_CATEGORIES.TEST]: 'Bài kiểm tra'
+    };
+    if (MATCHED_DATA.hasOwnProperty(str)) {
+        return MATCHED_DATA[str];
+    }
+    return 'Loại khác'
+}
+
 const filters = {
     toThousandFilter,
     numeralFormat,
     fileSizeFilter,
-    truncStrFilter
+    truncStrFilter,
+    exCate2Txt
 }
 
 // register global utility filters
