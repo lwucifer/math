@@ -6,19 +6,29 @@
 
         <div class="elearning-view__info">
           <div class="author">
-            <app-avatar :src="get(info, 'teacher.avatar.low', null)" :size="32" />
-            <span class="name ml-2">{{ get(info, 'teacher.name', '') }}</span>
+            <app-avatar
+              :src="get(info, 'teacher.avatar.low', null)"
+              :size="32"
+            />
+            <span class="name ml-2">{{ get(info, "teacher.name", "") }}</span>
           </div>
 
           <div class="views ml-auto">
             <IconEye />
-            <strong class="ml-2 mr-1">{{ get(info, 'total_view', 0) }}</strong> lượt xem
+            <strong class="ml-2 mr-1">{{ get(info, "total_view", 0) }}</strong>
+            lượt xem
           </div>
 
           <div class="stars">
-            <app-stars :stars="Math.floor(get(info, 'rates.averageRate', 0))" :size="16" />
-            <strong class="ml-3">{{ get(info, 'rates.averageRate', 0) }}</strong>&nbsp;
-            <span class="text-sub">({{ get(info, 'rates.totalReview', 0) }})</span>
+            <app-stars
+              :stars="Math.floor(get(info, 'rates.averageRate', 0))"
+              :size="16"
+            />
+            <strong class="ml-3">{{ get(info, "rates.averageRate", 0) }}</strong
+            >&nbsp;
+            <span class="text-sub"
+              >({{ get(info, "rates.totalReview", 0) }})</span
+            >
           </div>
         </div>
 
@@ -27,14 +37,26 @@
             class="scroll-link"
             href="#introduce"
             @click.prevent="scrollTo('#introduce')"
-          >Giới thiệu</a>
+            >Giới thiệu</a
+          >
           <a
             class="scroll-link"
             href="#course-content"
             @click.prevent="scrollTo('#course-content')"
-          >Nội dung {{ typeText }}</a>
-          <a class="scroll-link" href="#teacher" @click.prevent="scrollTo('#teacher')">Giáo viên</a>
-          <a class="scroll-link" href="#review" @click.prevent="scrollTo('#review')">Đánh giá</a>
+            >Nội dung {{ typeText }}</a
+          >
+          <a
+            class="scroll-link"
+            href="#teacher"
+            @click.prevent="scrollTo('#teacher')"
+            >Giáo viên</a
+          >
+          <a
+            class="scroll-link"
+            href="#review"
+            @click.prevent="scrollTo('#review')"
+            >Đánh giá</a
+          >
         </div>
 
         <section class="scroll-target" id="introduce">
@@ -48,7 +70,9 @@
               </template>
             </div>
 
-            <span v-else-if="!info.benefits" class="caption text-sub">Chưa có nội dung</span>
+            <span v-else-if="!info.benefits" class="caption text-sub"
+              >Chưa có nội dung</span
+            >
 
             <div v-else class="row">
               <div
@@ -72,16 +96,23 @@
           </div>
         </section>
 
-        <section class="box elearning-view__content scroll-target mb-4" id="course-content">
+        <section
+          class="box elearning-view__content scroll-target mb-4"
+          id="course-content"
+        >
           <h5>Nội dung {{ typeText }}</h5>
           <div class="row flex-wrap info">
             <div class="col-auto">
               Trình độ:
-              <strong class="color-primary">{{ get(program, 'level', '') }}</strong>
+              <strong class="color-primary">{{
+                get(program, "level", "")
+              }}</strong>
             </div>
             <div class="col-auto">
               Môn học:
-              <strong class="color-primary">{{ get(program, 'subject', '') }}</strong>
+              <strong class="color-primary">{{
+                get(program, "subject", "")
+              }}</strong>
             </div>
             <div class="col-auto">
               Số bài giảng:
@@ -89,13 +120,15 @@
             </div>
             <div class="col-auto">
               Thời lượng:
-              <strong class="color-primary">{{ info.duration || '--' }}</strong>
+              <strong class="color-primary">{{ info.duration || "--" }}</strong>
             </div>
           </div>
 
           <div class="evlc-item mb-3">
             <div class="evlc-item__head">
-              <div class="evlc-item__head-left mr-4">Bài giảng đại số lớp 10</div>
+              <div class="evlc-item__head-left mr-4">
+                Bài giảng đại số lớp 10
+              </div>
               <div class="evlc-item__head-right ml-auto">
                 <button class="evlc-item__btn evlc-item__btn-collapse active">
                   <IconAngleDown class="icon" />
@@ -119,7 +152,9 @@
               <div class="evlc-item__head-left mr-4">
                 <b>Chương 1:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
               </div>
-              <div class="evlc-item__head-right d-flex align-items-center ml-auto">
+              <div
+                class="evlc-item__head-right d-flex align-items-center ml-auto"
+              >
                 <span class="mr-3">3 Bài</span>
                 <button class="evlc-item__btn evlc-item__btn-collapse active">
                   <IconAngleDown class="icon" />
@@ -130,21 +165,27 @@
             <div class="evlc-item__body bg-input-gray">
               <div class="d-flex align-items-center py-3">
                 <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 1: Tạo và tối ưu tài khoản instagran trên máy tính
+                  <IconPlayCircle
+                    class="icon subheading mr-2 text-primary"
+                  />Bài 1: Tạo và tối ưu tài khoản instagran trên máy tính
                 </div>
                 <div class="ml-auto">10:15</div>
               </div>
               <app-divider class="my-0" />
               <div class="d-flex align-items-center py-3">
                 <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 2: Tạo và tối ưu tài khoản instagran trên máy tính
+                  <IconPlayCircle
+                    class="icon subheading mr-2 text-primary"
+                  />Bài 2: Tạo và tối ưu tài khoản instagran trên máy tính
                 </div>
                 <div class="ml-auto">10:15</div>
               </div>
               <app-divider class="my-0" />
               <div class="d-flex align-items-center py-3">
                 <div class="d-flex align-items-center mr-4">
-                  <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 3: Tạo và tối ưu tài khoản instagran trên máy tính
+                  <IconPlayCircle
+                    class="icon subheading mr-2 text-primary"
+                  />Bài 3: Tạo và tối ưu tài khoản instagran trên máy tính
                 </div>
                 <div class="ml-auto">10:15</div>
               </div>
@@ -157,7 +198,9 @@
               <div class="evlc-item__head-left mr-4">
                 <b>Chương 2:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
               </div>
-              <div class="evlc-item__head-right d-flex align-items-center ml-auto">
+              <div
+                class="evlc-item__head-right d-flex align-items-center ml-auto"
+              >
                 <span class="mr-3">3 Bài</span>
                 <button class="evlc-item__btn evlc-item__btn-collapse">
                   <IconAngleDown class="icon" />
@@ -194,7 +237,11 @@
       </div>
 
       <div class="col-md-4">
-        <ElearningRightSide v-sticky sticky-offset="top" v-bind="{ info, program }" />
+        <ElearningRightSide
+          v-sticky
+          sticky-offset="top"
+          v-bind="{ info, program }"
+        />
       </div>
     </div>
 
@@ -305,6 +352,10 @@ export default {
       program: dataProgram.data || {},
       relatedCourses: dataRelatedCourses.data || []
     };
+  },
+
+  updated() {
+    console.log(this.$route)
   },
 
   data() {
