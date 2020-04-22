@@ -81,31 +81,30 @@
         leave-active-class="animated faster fadeOut"
       >
         <CommentItem
-          v-for="item in listComments"
+          v-for="item in commentTree.comments || []"
           :key="item.id"
           :level="2"
           :post="post"
+          :parentComment="data"
           :data="item"
-          @edited="handleChildCommentEdited"
-          @deleted="handleDeleted"
         />
       </transition-group>
 
       <CommentItemReplied
-        v-if="data.children && data.children.list && data.children.list.length && !childrenCommentData.page"
+        v-if="data.children && data.children.list && data.children.list.length && !commentTree.page"
         :data="data.children"
-        @click="getChildrenComment(data.id)"
+        @click="getChildComment(data.id)"
       />
 
       <div v-if="isFetchingComment" class="text-center">
         <app-spin />
       </div>
 
-      <div v-if="childrenCommentData.page && !childrenCommentData.page.last" class="text-center">
+      <div v-if="commentTree.page && !commentTree.page.last" class="text-center">
         <a
           href
           class="post__comment-more"
-          @click.prevent="getChildrenComment(data.id)"
+          @click.prevent="getChildComment(data.id)"
         >Xem thêm {{ numOfViewMoreChildrenComment }} bình luận ...</a>
       </div>
 
@@ -115,11 +114,12 @@
 </template>
 
 <script>
-import { uniqWith, isEmpty } from "lodash";
+import { get, uniqWith, isEmpty } from "lodash";
 import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
-  BASE as ACTION_TYPE_BASE
+  BASE as ACTION_TYPE_BASE,
+  SOCIAL as ACTION_TYPE_SOCIAL
 } from "~/utils/action-types";
 import { createComment, editComment } from "~/models/social/Comment";
 
@@ -145,8 +145,12 @@ export default {
     },
     post: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       validator: value => ["post_id"].every(key => key in value)
+    },
+    parentComment: {
+      type: Object,
+      default: () => ({})
     },
     data: {
       type: Object,
@@ -164,12 +168,6 @@ export default {
 
   data() {
     return {
-      childrenCommentParams: {
-        page: 1,
-        limit: 10,
-        parent_comment_id: this.data.id
-      },
-      childrenCommentData: {},
       isFetchingComment: false,
       showReply: false,
       menuDropdown: false,
@@ -187,16 +185,12 @@ export default {
       return { ...levelClasses };
     },
 
-    listComments() {
-      if ("listComments" in this.childrenCommentData) {
-        return this.childrenCommentData.listComments;
-      } else {
-        return [];
-      }
+    commentTree() {
+      return get(this.data, "$children", {});
     },
 
     numOfViewMoreChildrenComment() {
-      const { page } = this.childrenCommentData;
+      const { page } = this.commentTree;
       return page.totalPages - page.number === 1
         ? page.totalElements - page.size * page.number
         : page.size;
@@ -216,37 +210,19 @@ export default {
 
   methods: {
     isEmpty,
+    get,
 
-    async getChildrenComment(id) {
+    async getChildComment(id) {
       this.isFetchingComment = true;
 
-      const getComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_SOCIAL_COMMENTS.LIST_CHILDREN
-      ]({
-        params: this.childrenCommentParams
-      });
-
-      if (getComment.success) {
-        // Set to parent comment data
-        const { listComments, page } = this.childrenCommentData;
-        if (listComments && page) {
-          const tmpListComments = [
-            ...listComments,
-            ...getComment.data.listComments
-          ];
-          this.childrenCommentData = {
-            listComments: uniqWith(tmpListComments, (a, b) => a.id === b.id),
-            page: getComment.data.page
-          };
-        } else {
-          this.childrenCommentData = getComment.data;
+      const doGet = await this.$store.dispatch(
+        `social/${ACTION_TYPE_SOCIAL.GET_CHILD_COMMENT}`,
+        {
+          source_id: this.post.post_id,
+          parent_comment_id: id,
+          page: get(this.commentTree, "page.number", 0) + 1
         }
-
-        // Set page param for the next request
-        this.childrenCommentParams.page += 1;
-      } else {
-        this.$toasted.error(getComment.message);
-      }
+      );
 
       this.isFetchingComment = false;
     },
@@ -260,7 +236,6 @@ export default {
     },
 
     async postComment({ content, listTags, image, link }) {
-      const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         parent_comment_id: this.data.id,
@@ -270,43 +245,10 @@ export default {
         comment_link: link
       });
 
-      for (const key in commentModel) {
-        const value = commentModel[key];
-        if (value === null || value === undefined) continue;
-        // Check whether field is an array
-        formData.append(
-          key,
-          Array.isArray(value) ? JSON.stringify(value) : value
-        );
-      }
-
-      const doPostComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.ADD
-      ](formData);
-
-      if (doPostComment.success) {
-        const timeout = setTimeout(
-          async () => {
-            if (!this.childrenCommentData.page) {
-              await this.getChildrenComment(this.data.id);
-            } else if ("listComments" in this.childrenCommentData) {
-              const { listComments } = this.childrenCommentData;
-              this.childrenCommentData.listComments = [
-                doPostComment.data,
-                ...listComments
-              ];
-            } else {
-              this.childrenCommentData = {
-                listComments: [doPostComment.data]
-              };
-            }
-            clearTimeout(timeout);
-          },
-          image ? 1000 : 0
-        );
-      } else {
-        this.$toasted.error(doPostComment.message);
-      }
+      const doPostComment = await this.$store.dispatch(
+        `social/${ACTION_TYPE_SOCIAL.ADD_CHILD_COMMENT}`,
+        commentModel
+      );
     },
 
     async editComment({
@@ -317,41 +259,31 @@ export default {
       isDeleteOldImg,
       listTagsDel
     }) {
-      const formData = new FormData();
       const commentModel = editComment({
         source_id: this.post.post_id,
-        // parent_comment_id: this.level === 2 ? this.data.id : null,
         comment_id: this.data.id,
         comment_content: content,
         list_tag: listTags,
         comment_images: image,
         comment_link: link,
         delete_img: isDeleteOldImg,
-        list_tag_del: listTagsDel
+        list_tag_del: listTagsDel,
+        parent_comment_id: this.parentComment.id
       });
 
-      for (const key in commentModel) {
-        const value = commentModel[key];
-        if (value === null || value === undefined) continue;
-        // Check whether field is an array
-        formData.append(
-          key,
-          Array.isArray(value) ? JSON.stringify(value) : value
-        );
-      }
-
-      const doEdit = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.EDIT_PAYLOAD
-      ](formData);
+      const doEdit =
+        this.level === 1
+          ? await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.EDIT_COMMENT}`,
+              commentModel
+            )
+          : await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.EDIT_CHILD_COMMENT}`,
+              commentModel
+            );
 
       if (doEdit.success) {
-        const timeout = setTimeout(
-          () => {
-            this.$emit("edited", doEdit.data, this.cancelEdit);
-            clearTimeout(timeout);
-          },
-          image ? 1000 : 0
-        );
+        this.cancelEdit();
       } else {
         this.$toasted.error(doEdit.message);
       }
@@ -360,22 +292,40 @@ export default {
     async deleteComment(event) {
       event.preventDefault();
 
-      const doDelete = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.DELETE_PAYLOAD
-      ]({ params: { id: this.data.id } });
+      const doDelete =
+        this.level === 1
+          ? await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.DELETE_COMMENT}`,
+              { id: this.data.id, source_id: this.post.post_id }
+            )
+          : await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.DELETE_CHILD_COMMENT}`,
+              {
+                id: this.data.id,
+                source_id: this.post.post_id,
+                parent_comment_id: this.parentComment.id
+              }
+            );
 
       if (doDelete.success) {
-        this.$emit("deleted", this.data.id);
+        this.level === 1
+          ? await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.GET_COMMENT}`,
+              {
+                source_id: this.post.post_id,
+                page: get(this.post, "$commentTree.page.number", 1)
+              }
+            )
+          : await this.$store.dispatch(
+              `social/${ACTION_TYPE_SOCIAL.GET_CHILD_COMMENT}`,
+              {
+                source_id: this.post.post_id,
+                parent_comment_id: this.parentComment.id,
+                page: get(this.parentComment, "$children.page.number", 1)
+              }
+            );
       } else {
         this.$toasted.error(doDelete.message);
-      }
-    },
-
-    handleDeleted(id) {
-      if ("listComments" in this.childrenCommentData) {
-        this.childrenCommentData.listComments = this.childrenCommentData.listComments.filter(
-          comment => comment.id !== id
-        );
       }
     },
 
@@ -389,18 +339,6 @@ export default {
       this.editData = {};
       this.menuDropdown = false;
     },
-
-    handleChildCommentEdited(commentData, cancelEdit) {
-      this.childrenCommentData.listComments = this.childrenCommentData.listComments.map(
-        item => {
-          if (item.id === commentData.id) {
-            return commentData;
-          }
-          return item;
-        }
-      );
-      cancelEdit();
-    }
   }
 };
 </script>
