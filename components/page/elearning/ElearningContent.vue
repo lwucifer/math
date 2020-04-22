@@ -25,94 +25,15 @@
       </div>
     </div>
 
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          Bài giảng đại số lớp 10
-        </div>
-        <div class="evlc-item__head-right ml-auto">
-          <button class="evlc-item__btn evlc-item__btn-collapse active">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
+    <ElearningContentLecture
+      v-if="get(info, 'type', '') === 'LECTURE'"
+      :lesson="get(program, '0.lessons.0', null)"
+    />
 
-      <div class="evlc-item__body bg-input-gray">
-        <div class="d-flex align-items-center text-error py-3">
-          <IconFileAlt class="icon subheading mr-2" />Bài tập số 1
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center text-error py-3">
-          <IconFileAlt class="icon subheading mr-2" />Bài tập số 2
-        </div>
-      </div>
-    </div>
-
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          <b>Chương 1:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-        </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
-          <span class="mr-3">3 Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse active">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
-
-      <div class="evlc-item__body bg-input-gray">
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 1:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 2:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 3:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-      </div>
-    </div>
-
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          <b>Chương 2:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-        </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
-          <span class="mr-3">3 Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="download-item">
-      <IconBooks class="fill-primary mr-3" />Tài liệu đính kèm
-      <a
-        href
-        class="ml-auto color-primary d-flex-center font-weight-bold text-decoration-none"
-      >
-        Tải về
-        <IconDownload class="ml-2" />
-      </a>
-    </div>
+    <ElearningContentCourse
+      :program="program"
+      v-if="get(info, 'type', '') === 'COURSE'"
+    />
   </section>
 </template>
 
@@ -127,6 +48,8 @@ const IconPlayCircle = () =>
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
+import ElearningContentLecture from "~/components/page/elearning/ElearningContentLecture";
+import ElearningContentCourse from "~/components/page/elearning/ElearningContentCourse";
 
 export default {
   components: {
@@ -135,6 +58,8 @@ export default {
     IconBooks,
     IconAngleDown,
     IconPlayCircle,
+    ElearningContentLecture,
+    ElearningContentCourse,
   },
   props: {
     program: {},
@@ -142,9 +67,6 @@ export default {
   },
   created() {
     useEffect(this, this.handleGetLesson.bind(this), ["$route.params.id"]);
-  },
-  updated() {
-    console.log(this.program);
   },
   computed: {
     title() {
