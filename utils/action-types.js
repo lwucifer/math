@@ -402,3 +402,6 @@ export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
     DELETE: "teachingStudentsDelete"
 };
+export const TEACHING_STATISTIC_REVENUE = {
+    LIST:"teachingStatisticRevenuList"
+};
