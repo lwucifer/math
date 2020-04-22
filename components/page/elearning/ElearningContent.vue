@@ -7,21 +7,21 @@
     <div class="row flex-wrap info">
       <div class="col-auto">
         Trình độ:
-        <strong class="color-primary">{{ get(program, "level", "") }}</strong>
+        <strong class="color-primary">{{ get(info, "level.name", "") }}</strong>
       </div>
       <div class="col-auto">
         Môn học:
-        <strong class="color-primary">{{ get(program, "subject", "") }}</strong>
+        <strong class="color-primary">{{
+          get(info, "subject.name", "")
+        }}</strong>
       </div>
       <div class="col-auto">
         Số bài giảng:
-        <strong class="color-primary">chưa ghép</strong>
+        <strong class="color-primary">{{ get(info, "lessons", "0") }}</strong>
       </div>
       <div class="col-auto">
         Thời lượng:
-        <strong class="color-primary">{{
-          get(program, "duration", "--")
-        }}</strong>
+        <strong class="color-primary">{{ get(info, "duration", "--") }}</strong>
       </div>
     </div>
 
@@ -125,6 +125,8 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconPlayCircle = () =>
   import("~/assets/svg/design-icons/play-circle.svg?inline");
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -137,6 +139,12 @@ export default {
   props: {
     program: {},
     info: {},
+  },
+  created() {
+    useEffect(this, this.handleGetLesson.bind(this), ["$route.params.id"]);
+  },
+  updated() {
+    console.log(this.program);
   },
   computed: {
     title() {
@@ -152,6 +160,19 @@ export default {
       }
     },
   },
-  methods: { get },
+  methods: {
+    get,
+    async handleGetLesson() {
+      const options = {
+        params: {
+          elearning_id: get(this, "$route.params.id", ""),
+        },
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+    },
+  },
 };
 </script>
