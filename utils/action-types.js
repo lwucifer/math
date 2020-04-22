@@ -243,10 +243,8 @@ export const ELEARNING_TEACHING_RESULT = {
     DETAIL: "elearningTeachingResultDetail"
 };
 
-export const ELEARNING_TEACHING_SUBMISSION = {
-    LIST: "elearningTeachingSubmissionList",
-    DETAIL: "elearningTeachingSubmissionDetail",
-    MARK: "elearningTeachingSubmissionMark"
+export const ELEARNING_TEACHING_EVALUATION = {
+    ADD: "elearningTeachingEvaluationAdd",
 };
 
 export const ELEARNING_TEACHING_VOTE = {

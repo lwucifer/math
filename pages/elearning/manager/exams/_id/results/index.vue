@@ -35,6 +35,7 @@
   import { get, isEmpty } from "lodash"
   import { EXERCISE_TYPES } from "~/utils/constants"
   import { getParamQuery } from "~/utils/common"
+  import { exCate2Txt } from "~/plugins/filters"
 
   const ChoiceSubmission = () => import('./choice')
   const EssaySubmission = () => import('./essay')
@@ -75,7 +76,7 @@
       breadcrumb: function() {
         let data = [
           {
-            text: 'Bài tập',
+            text: exCate2Txt(this.get(this.exercise, 'category', '')),
             link: '/elearning/manager/exams'
           },
           {
@@ -83,7 +84,7 @@
             link: `/elearning/manager/exams/${this.exercise.id}/participant`
           },
           {
-            text: get(this, 'result.data.name', ''),
+            text: get(this, 'result.name', ''),
             link: '/elearning/manager/exams'
           }
         ]
@@ -96,9 +97,6 @@
         const exerciseId = this.$route.params.id
         const studentId = getParamQuery('student_id')
         const userId = getParamQuery('user_id')
-        console.log('exerciseId', exerciseId)
-        console.log('studentId', studentId)
-        console.log('userId', userId)
         const params = {
           exercise_id: exerciseId,
           student_id: studentId,
@@ -120,7 +118,8 @@
       refreshData() {
         this.getDetail()
         this.getExerciseDetail()
-      }
+      },
+      get
     },
     
     created() {
