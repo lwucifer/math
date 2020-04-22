@@ -412,5 +412,8 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete",
+    DELETE: "teachingStudentsDelete"
+};
+export const TEACHING_STATISTIC_REVENUE = {
+    LIST:"teachingStatisticRevenuList"
 };

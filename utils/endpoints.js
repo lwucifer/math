@@ -146,3 +146,4 @@ export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/elearning/teaching/intera
 export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/elearning/teaching/students`;
 export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/elearning/teaching/invites`;
 export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
+export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;
