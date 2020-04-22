@@ -41,7 +41,7 @@ import { mapState } from "vuex"
 import { get } from "lodash"
 import * as actionTypes from "~/utils/action-types"
 
-const STORE_NAMESPACE = 'elearning/teaching/elearning'
+const STORE_NAMESPACE = 'elearning/teaching/exercise-elearning'
 
 export default {
   layout: "manage",

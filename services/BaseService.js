@@ -93,6 +93,16 @@ export default class BaseService {
     return data;
   }
   
+  async putWithRawJson(payload) {
+    const { data } = await this.$axios.put(this.$api, payload, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return data;
+  }
+
   async deleteWithRawJson(payload) {
     const { data } = await this.$axios.delete(this.$api, {
       headers: {

@@ -17,7 +17,7 @@
                   <div class="top">
                     <IconBook class="fill-primary mr-3" />Số bài giảng
                   </div>
-                  <strong>{{stateTeaching.total_lectures}}</strong>
+                  <strong>{{teacherInfo.total_lectures}}</strong>
                 </div>
               </div>
               <div class="col-md-3">
@@ -25,7 +25,7 @@
                   <div class="top">
                     <IconCalendar class="fill-primary mr-3" />Số khóa học
                   </div>
-                  <strong>{{stateTeaching.total_courses}}</strong>
+                  <strong>{{teacherInfo.total_courses}}</strong>
                 </div>
               </div>
               <div class="col-md-6">
@@ -34,8 +34,8 @@
                     <IconChartLine class="fill-primary mr-3" />Điểm bình chọn giáo viên
                   </div>
                   <div class="bottom">
-                    <strong class="mr-4">{{stateTeaching.voting_rate}}/5</strong>
-                    <app-stars :stars="stateTeaching.voting_rate" :size="16" />
+                    <strong class="mr-4">{{teacherInfo.voting_rate}}/5</strong>
+                    <app-stars :stars="teacherInfo.voting_rate" :size="16" />
                   </div>
                 </div>
               </div>
@@ -46,7 +46,7 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Số học sinh tham gia
                 </div>
-                <strong>{{stateTeaching.participants}}</strong>
+                <strong>{{teacherInfo.participants}}</strong>
               </div>
               <div class="ml-auto">
                 <app-vue-select
@@ -67,7 +67,7 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Doanh thu
                 </div>
-                <strong class="mb-3">{{stateTeaching.revenue}} VNĐ</strong>
+                <strong class="mb-3">{{teacherInfo.revenue}} VNĐ</strong>
                 <n-link :to="'/elearning/manager/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
               </div>
               <div class="ml-auto">
@@ -108,6 +108,7 @@ const STORE_NAMESPACE = "elearning/teaching/summary";
 export default {
   layout: "manage",
   name: "E-learning",
+  middleware: "authenticated",
 
   components: {
     ElearningManagerSide,
@@ -146,7 +147,13 @@ export default {
           text: "Trong ngày"
         }
       ],
-      teacherInfo: {}
+      teacherInfo: {
+        total_lectures: 0,
+        total_courses: 0,
+        voting_rate: 0,
+        participants: 0,
+        revenue: 0,
+      }
     };
   },
 
@@ -162,39 +169,63 @@ export default {
       this.getSummary();
     },
 
+    addZero(e) {
+      return parseInt(e) > 9 ? e : '0' + e;
+    },
+
     async getSummary() {
-      const today = new Date();
-      let from_date;
-      let fromdate;
-      switch (this.time.value) {
-        case 'day':
-          fromdate = new Date(today.getTime() - 24*60*60*1000);
-          from_date = fromdate.getDate()+'/0'+(fromdate.getMonth()+1)+'/'+fromdate.getFullYear();
-          break;
-        case 'week':
-          fromdate = new Date(today.getTime() - 7*24*60*60*1000);
-          from_date = fromdate.getDate()+'/0'+(fromdate.getMonth()+1)+'/'+fromdate.getFullYear();
-          break;
-        case 'month':
-          from_date = today.getDate()+'/0'+(today.getMonth())+'/'+today.getFullYear();
-          break;
-        case 'year':
-          from_date = (today.getDate()-1)+'/0'+(today.getMonth()+1)+'/'+today.getFullYear();
-          break;
+      try {
+        this.loading = true;
+        const today = new Date();
+        let from_date;
+        let fromdate;
+        switch (this.time.value) {
+          case 'day':
+            fromdate = new Date(today.getTime() - 24*60*60*1000);
+            from_date = fromdate.getFullYear()+'-'+ 
+                        this.addZero((fromdate.getMonth()+1))+'-'+
+                        this.addZero(fromdate.getDate());
+            break;
+          case 'week':
+            fromdate = new Date(today.getTime() - 7*24*60*60*1000);
+            from_date = fromdate.getFullYear()+'-'+
+                        this.addZero((fromdate.getMonth()+1))+'-'+
+                        this.addZero(fromdate.getDate());
+            break;
+          case 'month':
+            from_date = today.getFullYear()+'-'+
+                        this.addZero(today.getMonth())+'-'+
+                        this.addZero(today.getDate());
+            break;
+          case 'year':
+            from_date = (today.getFullYear()-1)+'-'+
+                        this.addZero((today.getMonth()+1))+'-'+ 
+                        this.addZero(today.getDate());
+            break;
+        }
+        const to_date = today.getFullYear()+'-'+
+                        this.addZero((today.getMonth()+1))+'-'+
+                        this.addZero(today.getDate());
+        let params = {};
+        if (from_date) {
+          params = {
+            from_date: from_date,
+            to_date: to_date,
+          };
+        }
+
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_SUMMARY.INFO}`,
+          params
+        );
+        if (this.stateTeaching) {
+          this.teacherInfo = {...this.stateTeaching}
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
       }
-      const to_date = today.getDate()+'/0'+(today.getMonth()+1)+'/'+today.getFullYear();
-      let params = {};
-      if (from_date) {
-        params = {
-          from_date: from_date,
-          to_date: to_date,
-        };
-      }
-      console.log(params);
-      await this.$store.dispatch(
-        `${STORE_NAMESPACE}/${actionTypes.TEACHING_SUMMARY.INFO}`,
-        params
-      );
     },
 
     get

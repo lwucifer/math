@@ -19,13 +19,16 @@ export default {
 
     props: {
         checked: {
-            default: true
+            default: false
             },
-        value: {}
+        value: {
+            type: String,
+            default: ""
+        }
     },
     methods: {
         handleChange(e) {
-        this.$emit("change", e.target.checked);
+        this.$emit("change", {check:e.target.checked,value:this.value});
         }
     }
 }

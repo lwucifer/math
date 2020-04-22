@@ -2,56 +2,18 @@
   <div>
       <h5 class="color-primary my-4">E-LEARNING HỌC TẬP</h5>
       <div class="setting-notify-content__account-info">
-        <div class="d-flex">
-            <div>
-                <p>Thông báo từ giáo viên</p>
-                <p>Thông báo đẩy, Email</p>
-            </div>
-            <button class="btn-show-form__account-info" @click.prevent="showFormNotify=!showFormNotify">
-                <IconCaretUp class="icon" v-if="showFormNotify"/>
-                <IconCaretDown class="icon" v-else/>
-            </button>
-        </div>
-         <FormNotify v-if="showFormNotify"/>
-        <hr>
-        <div class="pt-4">
-            <p>Nhắc nhở làm bài tập</p>
-            <p>Thông báo đẩy, Email</p>
-            <FormNotify/>
-        </div>
-        <hr>
-        <div class="pt-4">
-            <p>Thông báo sau khi có điểm</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
-        <hr>
-        <div class="pt-4">
-            <p>Thông báo lịch học tại phòng học online</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
+         <div v-for="notify in notifys" :key="notify.title">
+             <FormNotify :notify="notify"/>
+             <hr class="mb-3">
+         </div>
       </div>
 
       <h5 class="color-primary my-4">MẠNG XÃ HỘI</h5>
       <div class="setting-notify-content__account-info">
-        <div>
-            <p>Bình luận</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
-        <hr>
-        <div class="pt-4">
-            <p>Gắn thẻ</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
-        <hr>
-        <div class="pt-4">
-            <p>Yêu cầu kết bạn</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
-        <hr>
-        <div class="pt-4">
-            <p>Các thông báo khác</p>
-            <p>Thông báo đẩy, Email</p>
-        </div>
+        <div v-for="notify in socials" :key="notify.title">
+             <FormNotify :notify="notify"/>
+             <hr class="mb-3">
+         </div>
       </div>
   </div>
 </template>
@@ -68,7 +30,43 @@ export default {
     },
     data(){
         return({
-            showFormNotify:false
+            showFormNotify:false,
+            notifys:[
+                {
+                title: "Thông báo từ giáo viên",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Nhắc nhở làm bài tập",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Thông báo khi có điểm",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Thông báo lịch học tại phòng học online",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                }
+            ],
+            socials:[
+                {
+                title: "Bình luận",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Gắn thẻ",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Yêu cầu kết bạn",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                },
+                {
+                title: "Các thông báo khác",
+                describe:"Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+                }
+            ]
         })
     }
 }

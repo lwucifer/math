@@ -78,7 +78,7 @@
                     <app-search
                       class
                       :placeholder="'Nhập để tìm kiếm...'"
-                      v-model="filter.query"
+                      v-model="params.query"
                       :size="'sm'"
                     ></app-search>
                   </div>
@@ -94,18 +94,19 @@
                 @pagechange="onPageChange"
                 :data="lessons"
               >
-                <template v-slot:cell(muster)="{row}">
+                <template v-slot:cell(attendance_status)="{row, index}">
                   <td>
                     <div class="div-table">
-                      <app-checkox/>
-                      <app-checkox/>
-                      <app-checkox/>
-                      <app-checkox/>
+                      <app-checkbox :checked="row.attendance_status == 'M'" @change="updateStatus(row.online_attendance_id, 'M', index)"/>
+                      <app-checkbox :checked="row.attendance_status == 'K'" @change="updateStatus(row.online_attendance_id, 'K', index)"/>
+                      <app-checkbox :checked="row.attendance_status == 'P'" @change="updateStatus(row.online_attendance_id, 'P', index)"/>
+                      <app-checkbox :checked="row.attendance_status == 'C'" @change="updateStatus(row.online_attendance_id, 'C', index)"/>
                     </div>
                   </td>
                 </template>
-                <template v-slot:cell(point)="{row}">
+                <template v-slot:cell(attendance_point)="{row}">
                   <td class="text-center">
+                    {{row.attendance_point}}%
                   </td>
                 </template>
               </app-table>
@@ -151,6 +152,7 @@ import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
+const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {
   components: {
@@ -180,22 +182,16 @@ export default {
           sort: true
         },
         {
-          name: "muster",
+          name: "attendance_status",
           text: "<p class='text-center'>Điểm danh</p><div class='bottom'><span>M</span><span>K</span><span>P</span><span>C</span></div>",
           sort: true
         },
         {
-          name: "point",
+          name: "attendance_point",
           text: "<p class='text-center'>Điểm chuyên cần</p>",
           sort: true
         },
       ],
-      filter: {
-        query: null,
-        status: null,
-        query_date: null,
-        search_type: null
-      },
       courses: [],
       filterCourse: null,
       pagination: {
@@ -210,6 +206,8 @@ export default {
       params: {
         page: 1,
         size: 10,
+        class_id: null,
+        query: null
       },
       loading: false,
     };
@@ -218,7 +216,10 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateAttendances: "Attendances"
-    })
+    }),
+    ...mapState(STORE_SCHOOL_CLASSES, {
+      stateSchoolClasses: "schoolClasses"
+    }),
   },
 
   methods: {
@@ -227,11 +228,11 @@ export default {
       that.pagination = { ...that.pagination, ...e };
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
+      this.params = {...this.params};
       this.getList();
     },
     handleChangedCourse(val) {
-      this.filter.course = this.filterCourse.value;
+      this.params.class_id = this.filterCourse.value;
     },
     handleFocusSearchInput() {
     },
@@ -249,23 +250,58 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
           { params, id: lesson_id, after: 'attendances'}
         );
-        this.lessons = this.get(this.stateAttendances, 'data.content', [])
-        this.pagination.size = this.get(this.stateAttendances, 'data.size', 10)
-        this.pagination.first = this.get(this.stateAttendances, 'data.first', 1)
-        this.pagination.last = this.get(this.stateAttendances, 'data.last', 1)
-        this.pagination.number = this.get(this.stateAttendances, 'data.number', 0)
-        this.pagination.totalPages = this.get(this.stateAttendances, 'data.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateAttendances, 'data.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.number_of_elements', 0)
+        this.lessons = this.get(this.stateAttendances, 'data.attendance_list.content', [])
+        this.pagination.size = this.get(this.stateAttendances, 'data.attendance_list.size', 10)
+        this.pagination.first = this.get(this.stateAttendances, 'data.attendance_list.first', 1)
+        this.pagination.last = this.get(this.stateAttendances, 'data.attendance_list.last', 1)
+        this.pagination.number = this.get(this.stateAttendances, 'data.attendance_list.number', 0)
+        this.pagination.totalPages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
+        this.pagination.totalElements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
       } catch (e) {
 
       } finally {
         this.loading = false
       }
     },
+    
+    async updateStatus(id, status, index) {
+      let list = [...this.lessons];
+      list[index] = {...list[index], attendance_status: status};
+      this.lessons = list;
+      try {
+        let attendances = [
+          {
+            online_attendance_id: id,
+            attendance_status: status
+          }
+        ];
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.EDIT}`,
+          { attendances }
+        );
+      } catch (e) {
+      } finally {
+      }
+    },
 
-    async inviteStudents() {
-      this.openModal = true;
+    async getSchoolClasses() {
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+        );
+        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let list = [];
+        lessonList.forEach(element => {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        });
+        this.courses = list;
+      } catch (e) {
+      } finally {
+      }
     },
 
     get
@@ -273,11 +309,12 @@ export default {
 
   created() {
     this.getList();
+    this.getSchoolClasses();
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 
@@ -324,12 +361,28 @@ export default {
     }
   }
 }
-.div-table {
-  display: table;
-  width: 100%;
-  text-align: center;
-  > * {
-    display: table-cell;
+
+.app-table .bottom {
+    display: table;
+    width: 100%;
+    margin-top: 1rem;
+    >span {
+      display: table-cell;
+      text-align: center;
+      color: #333;
+      width: 20%;
+    }
   }
-}
+  .div-table {
+    display: table;
+    width: 100%;
+    text-align: center;
+    > * {
+      display: table-cell;
+      .app-checkbox__checkmark {
+        margin: 0 auto !important;
+      }
+    }
+  }
+
 </style>

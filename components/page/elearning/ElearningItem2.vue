@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-item2">
     <div class="elearning-item2__image">
-      <img class="d-block w-100" :src="get(info, 'avatar.low', null)" :alt="item.name" />
+      <img class="d-block w-100" :src="get(item, 'avatar.low', null)" :alt="item.name" />
       <div class="status-online" v-if="item.onlineStatus && item.online === 1">{{item.onlineStatus}}</div>
       <div class="online" v-if="item.online">Trực tiếp</div>
       <div class="video" v-if="item.video">

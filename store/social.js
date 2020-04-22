@@ -13,6 +13,7 @@ import Label from "~/services/social/label";
 // import Photos from "~/services/social/photos";
 // import SocialFollow from "~/services/social/follow";
 // import TagPhotos from "~/services/social/tagPhoto";
+import RegisterDevice from "~/services/social/RegisterDevice";
 
 /**
  * initial state
@@ -711,6 +712,22 @@ const actions = {
       return result;
     } catch (error) {
       return error;
+    }
+  },
+
+  async [actionTypes.SOCIAL_NOTIFICATIONS.REGISTER_DEVICE](
+    { commit },
+    payload
+  ) {
+    try {
+      const data = await new RegisterDevice(this.$axios)[actionTypes.BASE.ADD](
+        payload
+      );
+      console.log("[RegisterDevice] add", data);
+      return data;
+    } catch (err) {
+      console.log("[RegisterDevice] add.err", err);
+      return err;
     }
   },
 };
