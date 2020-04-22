@@ -139,7 +139,7 @@ export default {
           message = "User is locked";
           break;
         case ERRORS.LOGIN.BAD_CREDEN:
-          message = "Bad credentials";
+          message = "Mật khẩu bạn nhập chưa đúng";
           break;
         case ERRORS.LOGIN.EMAIL_LEFT:
           message = "Email/phone or password is incorrect, 1 time left";

@@ -7,112 +7,33 @@
     <div class="row flex-wrap info">
       <div class="col-auto">
         Trình độ:
-        <strong class="color-primary">{{ get(program, "level", "") }}</strong>
+        <strong class="color-primary">{{ get(info, "level.name", "") }}</strong>
       </div>
       <div class="col-auto">
         Môn học:
-        <strong class="color-primary">{{ get(program, "subject", "") }}</strong>
+        <strong class="color-primary">{{
+          get(info, "subject.name", "")
+        }}</strong>
       </div>
       <div class="col-auto">
         Số bài giảng:
-        <strong class="color-primary">chưa ghép</strong>
+        <strong class="color-primary">{{ get(info, "lessons", "0") }}</strong>
       </div>
       <div class="col-auto">
         Thời lượng:
-        <strong class="color-primary">{{
-          get(program, "duration", "--")
-        }}</strong>
+        <strong class="color-primary">{{ get(info, "duration", "--") }}</strong>
       </div>
     </div>
 
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          Bài giảng đại số lớp 10
-        </div>
-        <div class="evlc-item__head-right ml-auto">
-          <button class="evlc-item__btn evlc-item__btn-collapse active">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
+    <ElearningContentLecture
+      v-if="get(info, 'type', '') === 'LECTURE'"
+      :lesson="get(program, '0.lessons.0', null)"
+    />
 
-      <div class="evlc-item__body bg-input-gray">
-        <div class="d-flex align-items-center text-error py-3">
-          <IconFileAlt class="icon subheading mr-2" />Bài tập số 1
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center text-error py-3">
-          <IconFileAlt class="icon subheading mr-2" />Bài tập số 2
-        </div>
-      </div>
-    </div>
-
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          <b>Chương 1:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-        </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
-          <span class="mr-3">3 Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse active">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
-
-      <div class="evlc-item__body bg-input-gray">
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 1:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 2:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-        <div class="d-flex align-items-center py-3">
-          <div class="d-flex align-items-center mr-4">
-            <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài 3:
-            Tạo và tối ưu tài khoản instagran trên máy tính
-          </div>
-          <div class="ml-auto">10:15</div>
-        </div>
-        <app-divider class="my-0" />
-      </div>
-    </div>
-
-    <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          <b>Chương 2:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-        </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
-          <span class="mr-3">3 Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="download-item">
-      <IconBooks class="fill-primary mr-3" />Tài liệu đính kèm
-      <a
-        href
-        class="ml-auto color-primary d-flex-center font-weight-bold text-decoration-none"
-      >
-        Tải về
-        <IconDownload class="ml-2" />
-      </a>
-    </div>
+    <ElearningContentCourse
+      :program="program"
+      v-if="get(info, 'type', '') === 'COURSE'"
+    />
   </section>
 </template>
 
@@ -125,6 +46,10 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 const IconPlayCircle = () =>
   import("~/assets/svg/design-icons/play-circle.svg?inline");
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+import * as actionTypes from "~/utils/action-types";
+import ElearningContentLecture from "~/components/page/elearning/ElearningContentLecture";
+import ElearningContentCourse from "~/components/page/elearning/ElearningContentCourse";
 
 export default {
   components: {
@@ -133,10 +58,15 @@ export default {
     IconBooks,
     IconAngleDown,
     IconPlayCircle,
+    ElearningContentLecture,
+    ElearningContentCourse,
   },
   props: {
     program: {},
     info: {},
+  },
+  created() {
+    useEffect(this, this.handleGetLesson.bind(this), ["$route.params.id"]);
   },
   computed: {
     title() {
@@ -152,6 +82,19 @@ export default {
       }
     },
   },
-  methods: { get },
+  methods: {
+    get,
+    async handleGetLesson() {
+      const options = {
+        params: {
+          elearning_id: get(this, "$route.params.id", ""),
+        },
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
+        options
+      );
+    },
+  },
 };
 </script>
