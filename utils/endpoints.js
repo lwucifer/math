@@ -143,3 +143,10 @@ export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/elearning/teaching/intera
 export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/elearning/teaching/students`;
 export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/elearning/teaching/invites`;
 export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
+
+/**
+ * PAYMENT
+ */
+export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/order`;
+export const PAYMENT_HASHKEY = `${SCHOOLLY_ALIAS}/payment/transaction/hashkey/generate`;
+export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/payment/transaction/validate`;

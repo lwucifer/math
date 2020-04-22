@@ -6,7 +6,7 @@ export const BASE = {
     EDIT: "edit",
     DELETE: "delete",
     DETAIL: "detail",
-    EDIT_PAYLOAD: "editPayload",
+    EDIT_paymentLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload"
 };
 
@@ -403,3 +403,10 @@ export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
     DELETE: "teachingStudentsDelete"
 };
+
+export const PAYMENT = {
+    POST_PAY: "postPay",
+    POST_ORDER: "postOder",
+    POST_HASHKEY: "postHashKeyGenerate",
+    VALIDATE_TRANSACTION: "validateTransaction",
+}
