@@ -4,6 +4,7 @@ import OlClass from "~/services/elearning/teaching/Olclass";
 import Invites from "~/services/elearning/teaching/OlclassInvites";
 import Block from "~/services/elearning/teaching/OlclassBlock";
 import Attendances from "~/services/elearning/teaching/OlclassAttendances";
+import BaseAttendance from "~/services/elearning/teaching/OlclassLesson";
 import Lessons from "~/services/elearning/teaching/OlclassLessons";
 
 /**
@@ -149,15 +150,27 @@ const actions = {
     }
   },
   
+  // TTENDANCES
   async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST]({ commit }, options) {
     try {
-      const result = await new Attendances(this.$axios)["getWithMiddleID"](
+      const result = await new BaseAttendance(this.$axios)["getWithMiddleID"](
         options, options.id, options.after
       );
       commit(
         mutationTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES
           .SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_LIST,
         result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
+    }
+  },
+
+  async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.EDIT]({ commit }, options) {
+    try {
+      const result = await new Attendances(this.$axios)['putWithRawJson'](
+        options
       );
       return result;
     } catch (error) {

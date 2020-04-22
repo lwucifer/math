@@ -19,8 +19,7 @@
         Khóa học
       </app-button>
     </div>
-    <Loading class="bg-white" v-if="list.length == 0" />
-    <div style="position: relative;" v-else>
+    <div style="position: relative;">
       <div
         ref="swiper"
         v-swiper="currentSwiperOptions"
@@ -28,12 +27,10 @@
         :instanceName="sliderName"
       >
         <div class="swiper-wrapper">
-          <Loading v-if="false" class="bg-white" />
           <div
             class="swiper-slide"
             v-for="(item, index) in list"
             :key="index"
-            v-else
           >
             <course-item2 :item="item" />
           </div>

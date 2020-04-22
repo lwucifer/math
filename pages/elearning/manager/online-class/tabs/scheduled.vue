@@ -73,6 +73,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @selectionChange="selectRow"
       :data="classList"
       multiple-selection
     >
@@ -86,7 +87,7 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link class :to="'./online-class/' + row.online_class_id + '/invites'">Vào phòng học</n-link>
+          <n-link class :to="'./' + row.online_class_id + '/invites'">Vào phòng học</n-link>
         </td>
       </template>
     </app-table>
@@ -164,6 +165,7 @@ export default {
       },
       classList: [],
       lessonList: [],
+      ids: [],
       params: {
         page: 1,
         size: 10,
@@ -201,6 +203,12 @@ export default {
 
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
+    },
+
+    selectRow(data) {
+      this.ids = data.map((row, index, data) => {
+        return row.online_class_id;
+      });
     },
 
     async getLessons() {

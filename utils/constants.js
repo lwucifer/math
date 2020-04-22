@@ -73,9 +73,9 @@ export const EXERCISE_CATEGORIES = {
 }
 
 export const SUBMISSION_RESULTS = {
-  PASS: 1,
-  FAIL: -1,
-  NO_SCORE: 0
+    PASSED: 'PASSED',
+    FAILED: 'FAILED',
+    PENDING: 'PENDING'
 }
 
 export const SCALE_MARK = 10

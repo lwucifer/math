@@ -805,9 +805,8 @@ export default {
         this.groupListDetail.room &&
         this.groupListDetail.room.type == 2
       ) {
-        return;
-        this.groupListDetail.room.room_avatar &&
-        this.groupListDetail.room.room_avatar.low
+        return this.groupListDetail.room.room_avatar &&
+          this.groupListDetail.room.room_avatar.low
           ? this.groupListDetail.room.room_avatar.low
           : "https://picsum.photos/40/40";
       }
@@ -864,42 +863,44 @@ export default {
       if (this.listImage[0]) {
         const fileType = this.listImage[0]["type"];
         const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-        let checkImage = validImageTypes.includes(fileType);
+        this.dataCheck = validImageTypes.includes(fileType);
         getBase64(this.listImage[0], src => {
-          this.dataCheck = checkImage;
+          // this.dataCheck = checkImage;
           this.listImgSrc = [
             {
-              src: checkImage ? src : this.listImage[0].name,
-              image: checkImage
+              src: this.dataCheck ? src : this.listImage[0].name,
+              image: this.dataCheck
             }
           ];
         });
-        console.log("listFile", listFile[0]);
-        const body = new FormData();
-        // this.fileList.forEach(item => {
-        //   console.log("item", item);
-        //   body.append("msg_image", item);
-        // });
-        if (checkImage) {
+      }
+    },
+
+    async uploadFile() {
+      const body = new FormData();
+      if (this.listImage[0]) {
+        if (this.dataCheck) {
           body.append("msg_image", this.fileList[0]);
           body.append("room_id", this.$route.params.id);
-          this.messageSendImg(body).then(result => {
+          await this.messageSendImg(body).then(result => {
             console.log("[sendFile]", result);
-            this.urlEmitMessage =
-              result.data &&
-              result.data.full_img_url &&
-              result.data.full_img_url.low
-                ? result.data.full_img_url.low
-                : "";
-            this.messageId =
-              result.data && result.data.message_id
-                ? result.data.message_id
-                : "";
+            if (result.success == true) {
+              this.urlEmitMessage =
+                result.data &&
+                result.data.full_img_url &&
+                result.data.full_img_url.low
+                  ? result.data.full_img_url.low
+                  : "";
+              this.messageId =
+                result.data && result.data.message_id
+                  ? result.data.message_id
+                  : "";
+            }
           });
         } else {
           body.append("file_upload", this.fileList[0]);
           body.append("room_id", this.$route.params.id);
-          this.messageSendFile(body).then(result => {
+          await this.messageSendFile(body).then(result => {
             console.log("[sendFile]", result);
             this.urlFileUpload =
               result.data && result.data.file_url ? result.data.file_url : "";
@@ -915,7 +916,6 @@ export default {
         }
       }
     },
-
     async handleUploadChange(fileList, event) {
       this.listImage = Array.from(fileList);
 
@@ -974,13 +974,12 @@ export default {
       }
     },
     async handleEmitMessage() {
-      // debugger;
-      // await this.uploadFile();
       this.emitCloseFalse(false, this.isGroup);
+      await this.uploadFile();
       if (this.tag.length == 0) {
         if (
           this.textChat != "" ||
-          (this.urlEmitMessage && this.urlEmitMessage.low != "") ||
+          (this.urlEmitMessage && this.urlEmitMessage != "") ||
           (this.urlFileUpload && this.urlFileNameUpload)
         ) {
           const dataEmit = {
@@ -1079,7 +1078,6 @@ export default {
       this.message_id = "";
       this.listImgSrc = [];
     }
-    // async uploadFile() {}
   },
   created() {
     this.messageListQuery.room_id = this.$route.params.id;

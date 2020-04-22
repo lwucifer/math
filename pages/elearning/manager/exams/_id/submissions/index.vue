@@ -1,38 +1,38 @@
 <template>
   <!--UI 1302-->
   <div class="container">
-    <div class="row">
-      <div class="col-md-3">
-        <ElearningManagerSide active="3"/>
-      </div>
-      <div class="col-md-9">
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <header-breadcrumb
-              title="Bài tập và bài kiểm tra"
-              :breadcrumb="breadcrumb"
-            />
-          </div>
+    <!--<div class="row">-->
+      <!--<div class="col-md-3">-->
+        <!--<ElearningManagerSide active="3"/>-->
+      <!--</div>-->
+      <!--<div class="col-md-9">-->
+        <!--<div class="elearning-manager-content">-->
+          <!--<div class="elearning-manager-content__title">-->
+            <!--<header-breadcrumb-->
+              <!--title="Bài tập và bài kiểm tra"-->
+              <!--:breadcrumb="breadcrumb"-->
+            <!--/>-->
+          <!--</div>-->
 
-          <div class="elearning-manager-content__main">
-            <div class="">
-              <!--Filter form-->
-              <submission-filter-form
-                @changedFilter="updateFilter"
-              />
+          <!--<div class="elearning-manager-content__main">-->
+            <!--<div class="">-->
+              <!--&lt;!&ndash;Filter form&ndash;&gt;-->
+              <!--<submission-filter-form-->
+                <!--@changedFilter="updateFilter"-->
+              <!--/>-->
 
-              <!--Table-->
-              <submission-table
-                :list.sync="list"
-                :pagination="pagination"
-                :loading="loading"
-                @changedPagination="updatePagination"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              <!--&lt;!&ndash;Table&ndash;&gt;-->
+              <!--<submission-table-->
+                <!--:list.sync="list"-->
+                <!--:pagination="pagination"-->
+                <!--:loading="loading"-->
+                <!--@changedPagination="updatePagination"-->
+              <!--/>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 

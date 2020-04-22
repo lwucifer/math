@@ -1,0 +1,120 @@
+<template>
+  <div class="elearning-manager-result">
+    <mark-section
+      title="Kết quả bài làm"
+      :is-pass="isPass"
+      :result="result"
+      :started-at="get(this, 'detail.start_time', '')"
+      :finished-at="get(this, 'detail.timestamp', '')"
+      :duration="get(this, 'detail.duration', 0)"
+      :question-num="get(this, 'detail.questions', 0)"
+      :correct-ans="get(this, 'detail.corrects', 0)"
+      :has-mark="hasMark"
+    />
+
+    <div class="py-3">
+      <submission-content
+        :contents="submissionContent"
+      />
+      <!--form-->
+      <mark-form-section
+        @submit="mark"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+  import MarkSection from "~/components/page/elearning/manager/exam/Mark"
+  import MarkFormSection from "~/components/page/elearning/manager/exam/forms/EssayMark"
+  import SubmissionContent from "~/components/page/elearning/manager/exam/EssaySubmissionContent"
+  import {mapState} from "vuex"
+  import * as actionTypes from "~/utils/action-types"
+  import { get } from "lodash"
+  import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
+  import { createPayloadMarkSubmission } from "~/models/elearning/Submission";
+  
+  const STORE_NAMESPACE = 'elearning/teaching/submission'
+
+  export default {
+
+    components: {
+      MarkSection,
+      MarkFormSection,
+      SubmissionContent
+    },
+    props: {
+      detail: {
+        type: Object,
+        required: true
+      }
+    },
+    data() {
+      return {
+      }
+    },
+    computed: {
+      ...mapState("auth", ["loggedUser"]),
+      isPass: function() {
+        return get(this, 'detail.result', -1) == SUBMISSION_RESULTS.PASS
+      },
+      hasMark: function() {
+        return (get(this, 'detail.result', -1) != SUBMISSION_RESULTS.NO_SCORE)
+      },
+      result: function() {
+        if (get(this, 'detail.result') == SUBMISSION_RESULTS.NO_SCORE) {
+          return 'Chưa chấm điểm'
+        } else {
+          if (this.isPass) {
+            return `${get(this, 'detail.mark', 0)}/${SCALE_MARK} (Đạt)`
+          } else {
+            return `${get(this, 'detail.mark', 0)}/${SCALE_MARK} (Không đạt)`
+          }
+        }
+      },
+      submissionContent: function() {
+        let data = []
+        const questionInfo = get(this, 'detail.contents', [])[0]
+        const question = {
+          title: "Câu hỏi",
+          content: get(questionInfo, 'question_name', '')
+        }
+        const content = {
+          title: "Câu trả lời",
+          content: get(questionInfo, 'student_answer', '')
+        }
+        
+        data.push(question, content)
+        return data
+      }
+    },
+
+    methods: {
+      async mark(content) {
+        const payload = { ...createPayloadMarkSubmission(content), ...{ submission_id: this.detail.id } }
+        const res = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK}`, payload
+        )
+        
+        if (get(res, "success", false)) {
+          this.$emit("refreshSubmission")
+          this.$toasted.success(
+            get(res, "message", "")
+          );
+          return
+        }
+        this.$toasted.error(
+          get(res, "message", "")
+        );
+      },
+      get
+    },
+    created() {
+    }
+  };
+</script>
+
+<style lang="scss">
+  @import "~/assets/scss/components/elearning/_elearning-result.scss";
+  @import "~/assets/scss/components/elearning/_elearning-writing-test-result.scss";
+</style>

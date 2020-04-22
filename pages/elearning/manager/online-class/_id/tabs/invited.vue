@@ -64,10 +64,15 @@
     >
       <template v-slot:cell(is_block_on_next_lesson)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.invitation_id, row.is_block_on_next_lesson)">
+          <button type="button" @click="block(row.invitation_id, row.student_id,row.is_block_on_next_lesson)">
             <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
             <IconLock2 v-else width="16" height="16"/>
           </button>
+        </td>
+      </template>
+      <template v-slot:cell(attendance_point)="{row}">
+        <td>
+          {{row.attendance_point}}%
         </td>
       </template>
     </app-table>
@@ -113,7 +118,6 @@ export default {
 
   data() {
     return {
-      tab: 1,
       openModal: false,
       heads: [
         {
@@ -127,12 +131,12 @@ export default {
           sort: true
         },
         {
-          name: "invited_time",
+          name: "join_date",
           text: "Ngày tham gia",
           sort: true
         },
         {
-          name: "point",
+          name: "attendance_point",
           text: "Điểm chuyên cần",
           sort: true
         },
@@ -155,6 +159,7 @@ export default {
       params: {
         page: 1,
         size: 10,
+        query: null
       },
       loading: false,
       listSchoolClasses: [],
@@ -184,12 +189,11 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
-      console.log(this.params);
+      this.params = {...this.params};
       this.getList();
     },
     handleChangedCourse() {
-      
+      this.params.class_id = this.filterCourse.value;
     },
     handleFocusSearchInput() {
     },
@@ -203,21 +207,21 @@ export default {
       });
     },
 
-    async block(id, isBlock) {
+    async block(invitationId, studentId, isBlock) {
       const online_class_id = this.$route.params.id ? this.$route.params.id : "";
       const params = {
-        invitation_ids: [id],
+        invitation_ids: [invitationId],
         online_class_id: online_class_id,
-        //student_id: "string"
+        student_id: studentId
       };
       if (isBlock) {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
           params
         );
       } else {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
           params
         );
       }
