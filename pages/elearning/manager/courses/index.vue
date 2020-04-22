@@ -259,7 +259,7 @@ export default {
 
   watch: {
     tab(newValue, oldValue) {
-      //params.hide = newValue == '';
+      this.params.hide = newValue == '';
       this.getList();
     }
   },

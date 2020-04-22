@@ -137,6 +137,10 @@ export const ELEARNING_PUBLIC_SEARCH = {
     DETAIL: "elearningPublicElearningDetail",
 };
 
+export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
+    LIST: "elearningPublicVotedElearning",
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
@@ -228,8 +232,16 @@ export const ELEARNING_TEACHING_EXERCISE = {
     DETAIL: "elearningTeachingExerciseDetail",
 };
 
+export const ELEARNING_TEACHING_EXERCISE_PARTICIPANT = {
+    LIST: "elearningTeachingExerciseParticipantList",
+};
+
 export const ELEARNING_TEACHING_TEST = {
     LIST: "elearningTeachingTestList",
+};
+
+export const ELEARNING_TEACHING_RESULT = {
+    DETAIL: "elearningTeachingResultDetail",
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {

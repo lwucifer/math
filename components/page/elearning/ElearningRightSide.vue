@@ -3,52 +3,59 @@
     <img
       class="d-block w-100 mb-4"
       :src="get(info, 'avatar.medium', null)"
-      :alt="info.name"
+      :alt="get(info, 'name', '')"
     />
 
-    <template v-if="info.free">
+    <template v-if="get(info, 'free', '')">
       <div class="elearning-right-side__price-wrapper">
-        <b v-if="info.free" class="elearning-right-side__price text-error">Miễn phí</b>
+        <b
+          v-if="get(info, 'free', '')"
+          class="elearning-right-side__price text-error"
+          >Miễn phí</b
+        >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Tham gia học</app-button>
+      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+        >Tham gia học</app-button
+      >
     </template>
 
     <template v-else>
       <div class="elearning-right-side__price-wrapper">
         <template v-if="get(info, 'price.discount', 0)">
-          <b
-            class="elearning-right-side__price text-error"
-          >{{ get(info, 'price.discount', 0) | numeralFormat }}đ</b>
-          <s
-            class="heading-4 text-gray-2"
-          >{{ get(info, 'price.original_price', 0) | numeralFormat }}đ</s>
+          <b class="elearning-right-side__price text-error"
+            >{{ get(info, "price.discount", 0) | numeralFormat }}đ</b
+          >
+          <s class="heading-4 text-gray-2"
+            >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</s
+          >
         </template>
 
-        <b
-          v-else
-          class="elearning-right-side__price text-error"
-        >{{ get(info, 'price.original_price', 0) | numeralFormat }}đ</b>
+        <b v-else class="elearning-right-side__price text-error"
+          >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</b
+        >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4">Chọn mua</app-button>
+      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+        >Chọn mua</app-button
+      >
       <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
     </template>
 
     <ul class="info">
       <li>
         <IconBook class="icon" />
-        Trình độ: {{ program.level || '' }}
+        Trình độ: {{ get(program, "level", "") }}
       </li>
       <li>
         <IconSubject class="icon" />
-        Môn học: {{ program.subject || '' }}
+        Môn học: {{ get(program, "subject", "") }}
       </li>
       <li>
         <IconLessons class="icon" />
-        Số bài giảng: {{ program.lessons || 0 }} bài
+        Số bài giảng: {{ get(program, "lessons", 0) }} bài
       </li>
       <li>
         <IconClock class="icon" />
-        Thời lượng: {{ program.duration || 0 }} phút
+        Thời lượng: {{ get(program, "duration", 0) }} phút
       </li>
       <li>
         <IconEye class="icon" />Xem được trên máy tính, điện thoại, tablet
@@ -84,20 +91,13 @@ export default {
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook
+    IconBook,
   },
   props: {
     info: {
       type: Object,
-      default: () => ({}),
-      validator: value => ["avatar"].every(key => key in value)
     },
-    program: {
-      type: Object,
-      default: () => ({}),
-      validator: value =>
-        ["level", "subject", "lessons", "duration"].every(key => key in value)
-    }
+    program: {},
   },
 
   data() {
@@ -105,8 +105,8 @@ export default {
   },
 
   methods: {
-    get
-  }
+    get,
+  },
 };
 </script>
 

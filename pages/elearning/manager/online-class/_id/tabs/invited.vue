@@ -70,6 +70,11 @@
           </button>
         </td>
       </template>
+      <template v-slot:cell(attendance_point)="{row}">
+        <td>
+          {{row.attendance_point}}%
+        </td>
+      </template>
     </app-table>
     <!--End table-->
 
@@ -113,7 +118,6 @@ export default {
 
   data() {
     return {
-      tab: 1,
       openModal: false,
       heads: [
         {
@@ -127,12 +131,12 @@ export default {
           sort: true
         },
         {
-          name: "invited_time",
+          name: "join_date",
           text: "Ngày tham gia",
           sort: true
         },
         {
-          name: "point",
+          name: "attendance_point",
           text: "Điểm chuyên cần",
           sort: true
         },
@@ -155,6 +159,7 @@ export default {
       params: {
         page: 1,
         size: 10,
+        query: null
       },
       loading: false,
       listSchoolClasses: [],
@@ -184,12 +189,11 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = {...this.params, ...this.filter};
-      console.log(this.params);
+      this.params = {...this.params};
       this.getList();
     },
     handleChangedCourse() {
-      
+      this.params.class_id = this.filterCourse.value;
     },
     handleFocusSearchInput() {
     },
@@ -212,12 +216,12 @@ export default {
       };
       if (isBlock) {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
           params
         );
       } else {
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
           params
         );
       }

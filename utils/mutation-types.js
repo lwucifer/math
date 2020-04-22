@@ -93,6 +93,10 @@ export const ELEARNING_PUBLIC_RELATED = {
     SET_ELEARNING_PUBLIC_RELATED_LIST: "setElearningPublicRelatedList"
 };
 
+export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
+    SET_ELEARNING_PUBLIC_VOTED_ELEARNING_LIST: "setElearningPublicVotedElearningList"
+};
+
 export const ELEARNING = {
     SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
     SET_ELEARNING_PROGRAM: "setElearningProgram",
@@ -177,11 +181,19 @@ export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
 
 export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
-    SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail"
+    SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
+};
+
+export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
+    SET_TEACHING_EXERCISE_PARTICIPANT_LIST: "setElearningTeachingExerciseParticipantList",
 };
 
 export const ELEARNING_TEACHING_TEST = {
-    SET_TEACHING_TEST_LIST: "setElearningTeachingExerciseList",
+    SET_TEACHING_TEST_LIST: "setElearningTeachingTestList",
+};
+
+export const ELEARNING_TEACHING_RESULT = {
+  SET_TEACHING_RESULT_DETAIL: "setElearningTeachingResultDetail",
 };
 
 export const ELEARNING_TEACHING_SUBMISSION = {
