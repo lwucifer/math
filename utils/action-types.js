@@ -7,7 +7,7 @@ export const BASE = {
     DELETE: "delete",
     DETAIL: "detail",
     EDIT_PAYLOAD: "editPayload",
-    DELETE_PAYLOAD: "deletePayload"
+    DELETE_PAYLOAD: "deletePayload",
 };
 
 export const AUTH = {
@@ -21,49 +21,50 @@ export const AUTH = {
     VERIFY_OTP: "verifiOtp",
     RESET_PASSWORD_REQUEST: "resetPasswordRequest",
     VERIFY_EMAIL: "verifyEmail",
-    REFRESH_TOKEN: "refreshToken"
+    REFRESH_TOKEN: "refreshToken",
 };
 
 export const SOCIAL_POST = {
     LIST: "socialPostsList",
     ADD: "socialPostsAdd",
     EDIT: "socialPostsEdit",
-    DELETE: "socialPostsDelete"
+    DELETE: "socialPostsDelete",
 };
 
 export const SOCIAL_LIKES = {
     LIST: "socialLikesList",
     ADD: "socialLikesAdd",
-    DELETE: "socialLikesDelete"
+    DELETE: "socialLikesDelete",
 };
 
 export const SOCIAL_SHARES = {
-    LIST: "socialSharesList"
+    LIST: "socialSharesList",
 };
 
 export const SOCIAL_COMMENTS = {
     LIST: "socialCommentsList",
-    LIST_CHILDREN: "socialCommentListChildren"
+    LIST_CHILDREN: "socialCommentListChildren",
 };
 
 export const SOCIAL_MEDIAS = {
-    LIST: "socialMediasList"
+    LIST: "socialMediasList",
 };
 
 export const SOCIAL_NOTIFICATIONS = {
-    LIST: "socialNotifications"
+    LIST: "socialNotifications",
+    REGISTER_DEVICE: "registerDevice",
 };
 
 export const SOCIAL_CONFIG = {
-    LIST: "socialConfigList"
+    LIST: "socialConfigList",
 };
 
 export const SOCIAL_FEEDS = {
-    LIST: "socialFeedsList"
+    LIST: "socialFeedsList",
 };
 
 export const SOCIAL_LABEL = {
-    LIST: "socialLabelList"
+    LIST: "socialLabelList",
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -74,62 +75,62 @@ export const ACCOUNT_PERSONAL = {
     EDIT_PHONE: "accountPersonalEditPhone",
     EDIT_EMAIL: "accountPersonalEditEmail",
     VERIFY_OTP_EMAIL: "verifyOtpEmail",
-    UPDATE_PHONE: "accountPersonalUpdatePhone"
+    UPDATE_PHONE: "accountPersonalUpdatePhone",
 };
 
 export const ACCOUNT_PROFILE = {
-    LIST: "accountProfileList"
+    LIST: "accountProfileList",
 };
 
 export const ACCOUNT_LINK = {
     LIST: "accountLinkList",
-    ADD: "accountLinkAdd"
+    ADD: "accountLinkAdd",
 };
 
 export const ACCOUNT_TRANSACTIONS = {
-    LIST: "accountTransactionList"
+    LIST: "accountTransactionList",
 };
 
 export const ACCOUNT_REVENUE = {
-    LIST: "accountRevenueList"
+    LIST: "accountRevenueList",
 };
 
 export const ACCOUNT_EARNING = {
-    LIST: "accountEarningList"
+    LIST: "accountEarningList",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
-    LIST: "elearningPublicSummaryList"
+    LIST: "elearningPublicSummaryList",
 };
 
 export const ELEARNING_PUBLIC_CATEGORY = {
-    LIST: "elearningPublicCategoryList"
+    LIST: "elearningPublicCategoryList",
 };
 
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
-    LIST: "elearningPublicElearningTeacherList"
+    LIST: "elearningPublicElearningTeacherList",
 };
 
 export const ELEARNING_PUBLIC_INFO = {
-    LIST: "elearningPublicInfoList"
+    LIST: "elearningPublicInfoList",
 };
 
 export const ELEARNING_PUBLIC_VOTE = {
-    LIST: "elearningPublicVoteList"
+    LIST: "elearningPublicVoteList",
 };
 
 export const ELEARNING_PUBLIC_PLACE = {
     PROVINCE: "elearningPublicPlaceProvince",
     DISTRICT: "elearningPublicPlaceDistrict",
-    WARD: "elearningPublicPlaceWard"
+    WARD: "elearningPublicPlaceWard",
 };
 
 export const ELEARNING_PUBLIC_PROGRAM = {
-    LIST: "elearningPublicProgramList"
+    LIST: "elearningPublicProgramList",
 };
 
 export const ELEARNING_PUBLIC_RELATED = {
-    LIST: "elearningPublicRelatedList"
+    LIST: "elearningPublicRelatedList",
 };
 
 export const ELEARNING_PUBLIC_SEARCH = {
@@ -137,7 +138,7 @@ export const ELEARNING_PUBLIC_SEARCH = {
 };
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
-    LIST: "elearningPublicVotedElearning"
+    LIST: "elearningPublicVotedElearning",
 };
 
 export const ELEARNING = {
@@ -145,14 +146,14 @@ export const ELEARNING = {
     PROGRAM: "elearningProgram",
     RELATED: "elearningPublicRelated",
     SUBJECT: "elearningPublicSubject",
-    LEVEL: "elearningPublicLevel"
+    LEVEL: "elearningPublicLevel",
 };
 
 export const CREATING_ANSWER = {
     LIST: "creatingAnswerList",
     ADD: "creatingAnswerAdd",
     EDIT: "creatingAnswerEdit",
-    DELETE: "creatingAnswerDelete"
+    DELETE: "creatingAnswerDelete",
 };
 
 export const TEACHING_OLCLASSES = {
@@ -161,35 +162,35 @@ export const TEACHING_OLCLASSES = {
     EDIT: "teachingOlclassesEdit",
     DELETE: "teachingOlclassesDelete",
     BLOCK: "teachingOlclassesBlock",
-    UNBLOCK: "teachingOlclassesUnBlock"
+    UNBLOCK: "teachingOlclassesUnBlock",
 };
 
 export const TEACHING_OLCLASS_INVITES = {
     LIST: "teachingOlclassInvitesList",
     ADD: "teachingOlclassInvitesAdd",
     EDIT: "teachingOlclassInvitesEdit",
-}
+};
 
 export const TEACHING_OLCLASS_LESSONS = {
-    LIST: "teachingOlclassLessonsList"
-}
+    LIST: "teachingOlclassLessonsList",
+};
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",
-    EDIT: "teachingOlclassLessonAttendancesEdit"
+    EDIT: "teachingOlclassLessonAttendancesEdit",
 };
 
 export const CREATING_CHAPTER = {
     LIST: "creatingChapterList",
     ADD: "creatingChapterAdd",
     EDIT: "creatingChapterEdit",
-    DELETE: "creatingChapterDelete"
+    DELETE: "creatingChapterDelete",
 };
 
 export const ELEARNING_CREATING_ANSWER = {
     LIST: "elearningCreatingAnswerList",
     ADD: "elearningCreatingAnswerAdd",
     EDIT: "elearningCreatingAnswerEdit",
-    DELETE: "elearningCreatingAnswerDelete"
+    DELETE: "elearningCreatingAnswerDelete",
 };
 
 export const ELEARNING_CREATING_PROGRESS = "ELEARNING_CREATING_PROGRESS";
@@ -198,28 +199,28 @@ export const ELEARNING_CREATING_CHAPTER = {
     LIST: "elearningCreatingChapterList",
     ADD: "elearningCreatingChapterAdd",
     EDIT: "elearningCreatingChapterEdit",
-    DELETE: "elearningCreatingChapterDelete"
+    DELETE: "elearningCreatingChapterDelete",
 };
 
 export const ELEARNING_CREATING_DOC = {
     LIST: "elearningCreatingDocList",
     ADD: "elearningCreatingDocAdd",
     EDIT: "elearningCreatingDocEdit",
-    DELETE: "elearningCreatingDocDelete"
+    DELETE: "elearningCreatingDocDelete",
 };
 
 export const ELEARNING_TEACHING_REPOSITORY_FILE = {
     LIST: "elearningTeachingRepositoryFileList",
     ADD: "elearningTeachingRepositoryFileAdd",
-    DELETE: "elearningTeachingRepositoryFileDelete"
+    DELETE: "elearningTeachingRepositoryFileDelete",
 };
 
 export const ELEARNING_TEACHING_REPOSITORY = {
-    INFO: "elearningTeachingRepositoryFileInfo"
+    INFO: "elearningTeachingRepositoryFileInfo",
 };
 
 export const REPOSITORY = {
-    INFO: "info"
+    INFO: "info",
 };
 
 export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
@@ -236,40 +237,38 @@ export const ELEARNING_TEACHING_EXERCISE_PARTICIPANT = {
 };
 
 export const ELEARNING_TEACHING_TEST = {
-    LIST: "elearningTeachingTestList"
+    LIST: "elearningTeachingTestList",
 };
 
 export const ELEARNING_TEACHING_RESULT = {
-    DETAIL: "elearningTeachingResultDetail"
+    DETAIL: "elearningTeachingResultDetail",
 };
 
-export const ELEARNING_TEACHING_SUBMISSION = {
-    LIST: "elearningTeachingSubmissionList",
-    DETAIL: "elearningTeachingSubmissionDetail",
-    MARK: "elearningTeachingSubmissionMark"
+export const ELEARNING_TEACHING_EVALUATION = {
+    ADD: "elearningTeachingEvaluationAdd",
 };
 
 export const ELEARNING_TEACHING_VOTE = {
-    LIST: "elearningTeachingVoteList"
+    LIST: "elearningTeachingVoteList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
     LIST: "elearningCreatingExercisesList",
     ADD: "elearningCreatingExercisesAdd",
     EDIT: "elearningCreatingExercisesEdit",
-    DELETE: "elearningCreatingExercisesDelete"
+    DELETE: "elearningCreatingExercisesDelete",
 };
 
 export const ELEARNING_CREATING_GENERAL = {
     LIST: "elearningCreatingGeneralList",
     ADD: "elearningCreatingGeneralAdd",
     EDIT: "elearningCreatingGeneralEdit",
-    DELETE: "elearningCreatingGeneralDelete"
+    DELETE: "elearningCreatingGeneralDelete",
 };
 
 export const ELEARNING_CREATING_SETTING = {
     LIST: "elearningCreatingSettingList",
-    ADD: "elearningCreatingSettingAdd"
+    ADD: "elearningCreatingSettingAdd",
 };
 
 export const ELEARNING_CREATING_LESSONS = {
@@ -277,87 +276,87 @@ export const ELEARNING_CREATING_LESSONS = {
     ADD: "elearningCreatingLessonsAdd",
     EDIT: "elearningCreatingLessonsEdit",
     DELETE: "elearningCreatingLessonsDelete",
-    DETAIL: "elearningCreatingLessonsDetail"
+    DETAIL: "elearningCreatingLessonsDetail",
 };
 
 export const ELEARNING_CREATING_PUBLISH = {
-    POST: "elearningCreatingPublishPost"
+    POST: "elearningCreatingPublishPost",
 };
 
 export const ELEARNING_CREATING_QUESTIONS = {
     LIST: "elearningCreatingQuestionsList",
     ADD: "elearningCreatingQuestionsAdd",
     EDIT: "elearningCreatingQuestionsEdit",
-    DELETE: "elearningCreatingQuestionsDelete"
+    DELETE: "elearningCreatingQuestionsDelete",
 };
 
 export const STUDY = {
-    ELEARNING: "studyElearningList"
+    ELEARNING: "studyElearningList",
 };
 
 export const SCHOOL_CLASSES = {
     LIST: "schoolClassesList",
     ADD: "schoolClassesAdd",
     EDIT: "schoolClassesEdit",
-    DELETE: "schoolClassesDelete"
+    DELETE: "schoolClassesDelete",
 };
 
 export const SCHOOL_INFO = {
-    INFO: "schoolInfo"
+    INFO: "schoolInfo",
 };
 
 export const SCHOOL_ELEARNING = {
-    LIST: "schoolElearning"
+    LIST: "schoolElearning",
 };
 
 export const SCHOOL_PROFESSIONAL = {
     LIST: "schoolProfessionalList",
     ADD: "schoolProfessionalAdd",
     EDIT: "schoolProfessionalEdit",
-    DELETE: "schoolProfessionalDelete"
+    DELETE: "schoolProfessionalDelete",
 };
 
 export const SCHOOL_STUDENTS = {
     LIST: "schoolStudentsList",
     ADD: "schoolStudentsAdd",
     EDIT: "schoolStudentsEdit",
-    DELETE: "schoolStudentsDelete"
+    DELETE: "schoolStudentsDelete",
 };
 
 export const SCHOOL_TEACHERS = {
     LIST: "schoolTeachersList",
     ADD: "schoolTeachersAdd",
     EDIT: "schoolTeachersEdit",
-    DELETE: "schoolTeachersDelete"
+    DELETE: "schoolTeachersDelete",
 };
 
 export const ELEARNING_STURY = {
-    LIST: "elearningStudyList"
+    LIST: "elearningStudyList",
 };
 
 export const ELEARNING_STURY_FAVOURITE = {
     LIST: "elearningStudyFavouriteList",
     ADD: "elearningStudyFavouriteAdd",
-    DELETE: "elearningStudyFavouriteDelete"
+    DELETE: "elearningStudyFavouriteDelete",
 };
 
 export const ELEARNING_STURY_VOTE = {
     LIST: "elearningStudyVoteList",
-    ADD: "elearningStudyVoteAdd"
+    ADD: "elearningStudyVoteAdd",
 };
 
 export const ELEARNING_STURY_ARCHIVE = {
     LIST: "elearningStudyArchiveList",
     ADD: "elearningStudyArchiveAdd",
-    DELETE: "elearningStudyArchiveDelete"
+    DELETE: "elearningStudyArchiveDelete",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
-    LIST: "elearningSchoolSummaryList"
+    LIST: "elearningSchoolSummaryList",
 };
 
 export const ELEARNING_SCHOOL_SEARCH = {
-    LIST: "elearningSchoolSearchList"
+    LIST: "elearningSchoolSearchList",
 };
 
 export const MESSAGE_GROUP = {
@@ -374,7 +373,7 @@ export const MESSAGE_GROUP = {
     GROUP_LIST_DETAIL: "getGroupListDetail",
     MESSAGE_SEND_IMG: "messageSendImg",
     LIST_MESSAGE_TYPE: "getListMessageType",
-    MESSAGE_SEND_FILE: "messageSendFile"
+    MESSAGE_SEND_FILE: "messageSendFile",
 };
 
 export const SOCIAL_FRIEND = {
@@ -382,21 +381,21 @@ export const SOCIAL_FRIEND = {
     // LIST: "socialFriendListInvite",
     INVITE_FRIEND: "inviteFriend",
     LIST_INVITE: "getListInvite",
-    DELETE_FRIEND: "deleteFriend"
+    DELETE_FRIEND: "deleteFriend",
 };
 
 export const SOCIAL_PHOTO = {
     POST_PHOTO_LIST: "postPhotoList",
-    POST_TAG_PHOTO_LIST: "postTagPhotoList"
+    POST_TAG_PHOTO_LIST: "postTagPhotoList",
 };
 
 export const SOCIAL_FOLLOW = {
     CREATE_FOLLOW: "createFollow",
-    DELETE_FOLLOW: "deleteFollow"
+    DELETE_FOLLOW: "deleteFollow",
 };
 
 export const TEACHING_SUMMARY = {
-    INFO: "teachingSummary"
+    INFO: "teachingSummary",
 };
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
@@ -405,13 +404,16 @@ export const TEACHING_ELEARNINGS = {
 };
 export const TEACHING_ONLINE_CLASS = {
     LIST: "teachingOnlineCLassList",
-    DELETE: "teachingOnlineCLassDelete"
+    DELETE: "teachingOnlineCLassDelete",
 };
 export const TEACHING_INTERACTIVE = {
     LIST: "teachingInteractiveList",
-    DELETE: "teachingInteractiveDelete"
+    DELETE: "teachingInteractiveDelete",
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
     DELETE: "teachingStudentsDelete"
+};
+export const TEACHING_STATISTIC_REVENUE = {
+    LIST:"teachingStatisticRevenuList"
 };

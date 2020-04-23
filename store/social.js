@@ -11,6 +11,7 @@ import FriendInvite from "~/services/social/Friendinvite";
 import Photos from "~/services/social/photos";
 import SocialFollow from "~/services/social/follow";
 import TagPhotos from "~/services/social/tagPhoto";
+import RegisterDevice from "~/services/social/RegisterDevice";
 
 /**
  * initial state
@@ -27,15 +28,15 @@ const state = () => ({
     friendList: {},
     inviteList: {},
     postPhotoList: {},
-    postTagPhotoList: {}
+    postTagPhotoList: {},
 });
 
 /**
  * initial getters
  */
 const getters = {
-    configPrivacyLevels: state =>
-        state.configs.privacy_levels ? state.configs.privacy_levels : []
+    configPrivacyLevels: (state) =>
+        state.configs.privacy_levels ? state.configs.privacy_levels : [],
 };
 
 /**
@@ -91,20 +92,20 @@ const actions = {
                     id: "0",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: "Dat Leo",
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "1",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: "Dat Leo 1",
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "2",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: " Nguyen Dat Leo",
-                    timestamp: "2019-01-04 14:00:00"
-                }
+                    timestamp: "2019-01-04 14:00:00",
+                },
             ];
             console.log("[Likes] list", result);
             // set to mutation
@@ -122,20 +123,20 @@ const actions = {
                     id: "0",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: "Dat Leo",
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "1",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: "Dat Leo 1",
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "2",
                     avatar: "https://picsum.photos/2560/1440",
                     fullname: " Nguyen Dat Leo",
-                    timestamp: "2019-01-04 14:00:00"
-                }
+                    timestamp: "2019-01-04 14:00:00",
+                },
             ];
             console.log("[Shares] list", result);
             // set to mutation
@@ -156,7 +157,7 @@ const actions = {
                     likes: 20,
                     replies: 21,
                     liked: true,
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "1",
@@ -165,7 +166,7 @@ const actions = {
                     likes: 201,
                     replies: 212,
                     liked: true,
-                    timestamp: "2019-01-04 14:00:00"
+                    timestamp: "2019-01-04 14:00:00",
                 },
                 {
                     id: "2",
@@ -174,8 +175,8 @@ const actions = {
                     likes: 120,
                     replies: 121,
                     liked: true,
-                    timestamp: "2019-01-04 14:00:00"
-                }
+                    timestamp: "2019-01-04 14:00:00",
+                },
             ];
             console.log("[Comment] list", result);
             // set to mutation
@@ -194,22 +195,22 @@ const actions = {
                     creator: "Dat Leo",
                     type: "image",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
+                    url: "https://picsum.photos/2560/1440",
                 },
                 {
                     id: "2",
                     creator: "Dat Leo 1",
                     type: "image",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
+                    url: "https://picsum.photos/2560/1440",
                 },
                 {
                     id: "3",
                     creator: "Dat Leo 1",
                     type: "video",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
-                }
+                    url: "https://picsum.photos/2560/1440",
+                },
             ];
             console.log("[Medias] list", result);
             // set to mutation
@@ -228,22 +229,22 @@ const actions = {
                     creator: "Dat Leo",
                     type: "image",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
+                    url: "https://picsum.photos/2560/1440",
                 },
                 {
                     id: "2",
                     creator: "Dat Leo 1",
                     type: "image",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
+                    url: "https://picsum.photos/2560/1440",
                 },
                 {
                     id: "3",
                     creator: "Dat Leo 1",
                     type: "video",
                     thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440"
-                }
+                    url: "https://picsum.photos/2560/1440",
+                },
             ];
             console.log("[Medias] list", result);
             // set to mutation
@@ -400,7 +401,22 @@ const actions = {
             console.log("[SocialFollow] delete.err", err);
             return err;
         }
-    }
+    },
+
+    async [actionTypes.SOCIAL_NOTIFICATIONS.REGISTER_DEVICE]({ commit },
+        payload
+    ) {
+        try {
+            const data = await new RegisterDevice(this.$axios)[actionTypes.BASE.ADD](
+                payload
+            );
+            console.log("[RegisterDevice] add", data);
+            return data;
+        } catch (err) {
+            console.log("[RegisterDevice] add.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -455,7 +471,7 @@ const mutations = {
         _postTagPhotoList
     ) {
         state.postTagPhotoList = _postTagPhotoList;
-    }
+    },
 };
 
 export default {
@@ -463,5 +479,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };
