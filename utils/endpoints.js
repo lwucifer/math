@@ -89,6 +89,7 @@ export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/
  * ONLINE CLASS
  */
 export const TEACHING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses`;
+export const TEACHING_OLCLASS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass`;
 export const TEACHING_OLCLASS_INVITES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/invites`;
 export const TEACHING_OLCLASS_BLOCK = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/banned`;
 export const TEACHING_OLCLASS_LESSONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lessons`;
@@ -147,4 +148,20 @@ export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/elearning/teaching/intera
 export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/elearning/teaching/students`;
 export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/elearning/teaching/invites`;
 export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
+
+/**
+ * PAYMENT
+ */
+export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/elearning/order`;
+export const PAYMENT_HASHKEY = `${SCHOOLLY_ALIAS}/payment/transaction/hashkey/generate`;
+export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/payment/transaction/validate`;
+
+
+/**
+ * CART
+ */
+export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;
+
+
+
 export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;

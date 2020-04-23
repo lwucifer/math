@@ -438,8 +438,22 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete",
+    DELETE: "teachingStudentsDelete"
 };
+
+export const PAYMENT = {
+    POST_PAY: "postPay",
+    POST_ORDER: "postOder",
+    POST_HASHKEY: "postHashKeyGenerate",
+    VALIDATE_TRANSACTION: "validateTransaction",
+}
+
+export const CART = {
+    LIST: "cartList",
+    ADD: "cartAdd",
+    DELETE: "cartDelete"
+}
+
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",
 };

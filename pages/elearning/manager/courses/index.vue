@@ -228,12 +228,12 @@ export default {
       ],
       currentHeads: [],
       pagination: {
-        total: 10,
-        page: 1,
+        total: 0,
+        number: 0,
         size: 10,
-        totalElements: 10,
-        first: 1,
-        last: 10
+        totalElements: 0,
+        first: 0,
+        last: 0
       },
       isTeacher: true,
       time1: null,
@@ -309,7 +309,7 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       that.params.limit = that.pagination.size;
-      that.params.page = that.pagination.page;
+      that.params.page = that.pagination.number + 1;
       that.getList();
     },
 

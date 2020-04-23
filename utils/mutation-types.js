@@ -351,11 +351,17 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
-    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
+    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete"
 };
+
+export const CART = {
+    SET_CART_LIST: "setCartList",
+}
+
 export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
 };
+
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
 };
