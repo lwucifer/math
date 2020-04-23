@@ -1,42 +1,48 @@
 <template>
-  <div class="course-teacher-info">
-    <div class="teacher-top">
-      <app-avatar
-        :src="get(teacher, 'avatar.medium', 'https://picsum.photos/125/125')"
-        :size="125"
-      />
-      <div class="info">
-        <h4 class="name">{{ get(teacher, "name", "") }}</h4>
-        <p>{{ get(teacher, "school_name", "") }}</p>
-        <div class="stars">
-          <app-stars :stars="Math.floor(get(teacher, 'rate', 0))" :size="16" />
+  <section class="scroll-target" id="teacher">
+    <h5 class="mb-4">Thông tin giáo viên</h5>
+    <div class="course-teacher-info">
+      <div class="teacher-top">
+        <app-avatar
+          :src="get(teacher, 'avatar.medium', 'https://picsum.photos/125/125')"
+          :size="125"
+        />
+        <div class="info">
+          <h4 class="name">{{ get(teacher, "name", "") }}</h4>
+          <p>{{ get(teacher, "school_name", "") }}</p>
+          <div class="stars">
+            <app-stars
+              :stars="Math.floor(get(teacher, 'rate', 0))"
+              :size="16"
+            />
+          </div>
+        </div>
+
+        <div class="right">
+          <div>
+            <strong class="color-primary">
+              {{ get(teacher, "elearning_total", 0) }}
+            </strong>
+            Bài giảng/khoá học
+          </div>
+          <div>
+            <strong class="color-primary">
+              {{ get(teacher, "participant_total", 0) }}
+            </strong>
+            Học viên
+          </div>
         </div>
       </div>
 
-      <div class="right">
-        <div>
-          <strong class="color-primary">
-            {{ get(teacher, "elearning_total", 0) }}
-          </strong>
-          Bài giảng/khoá học
-        </div>
-        <div>
-          <strong class="color-primary">
-            {{ get(teacher, "participant_total", 0) }}
-          </strong>
-          Học viên
+      <div class="mt-4 teacher-bottom">
+        <h4 class="mb-3">Tiểu sử</h4>
+        {{ get(teacher, "description", "") }}
+        <div class="text-center my-3">
+          <n-link class="text-decoration-none" to="">Xem thêm</n-link>
         </div>
       </div>
     </div>
-
-    <div class="mt-4 teacher-bottom">
-      <h4 class="mb-3">Tiểu sử</h4>
-      {{ get(teacher, "description", "") }}
-      <div class="text-center my-3">
-        <n-link class="text-decoration-none" to="">Xem thêm</n-link>
-      </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -45,6 +51,7 @@ import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -53,28 +60,28 @@ export default {
   },
 
   props: {
-    teacher: {
-      type: Object,
+    teacher_id: {
+      type: String,
+      default: "",
     },
   },
 
   created() {
-    console.log(this.teacher)
-    this.fetchTeacherInfo();
+    useEffect(this, this.getTeacher.bind(this), ["teacher_id"]);
   },
 
-  watch: {
-    "teacher.id": function(id) {
-      this.fetchTeacherInfo();
-    },
+  computed: {
+    ...mapState("elearning/public/public-elearning-teacher", {
+      teacher: "teacher",
+    }),
   },
 
   methods: {
     get,
-    fetchTeacherInfo() {
+    getTeacher() {
       const options = {
         params: {
-          id: get(this, "teacher.id", ""),
+          teacher_id: get(this, "teacher_id", ""),
         },
       };
       this.$store.dispatch(

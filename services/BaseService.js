@@ -68,6 +68,20 @@ export default class BaseService {
 
     return data;
   }
+
+  async putWithFormData(payload) {
+    let formData = new FormData();
+    forEach(payload, function(value, key) {
+      formData.append(key, value);
+    });
+    const { data } = await this.$axios.put(this.$api, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+
+    return data;
+  }
   
   async postWithRawJson(payload) {
     const { data } = await this.$axios.post(this.$api, payload, {
@@ -79,6 +93,16 @@ export default class BaseService {
     return data;
   }
   
+  async putWithRawJson(payload) {
+    const { data } = await this.$axios.put(this.$api, payload, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return data;
+  }
+
   async deleteWithRawJson(payload) {
     const { data } = await this.$axios.delete(this.$api, {
       headers: {

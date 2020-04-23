@@ -13,20 +13,14 @@
         <ElearningContent :program="program" :info="info" />
 
         <div class="box">
-          <section class="scroll-target" id="teacher">
-            <h5 class="mb-4">Thông tin giáo viên</h5>
-            <CourseTeacherInfo
-              :teacher="get(info, 'teacher', null)"
-              class="mb-3"
-            />
-          </section>
+          <CourseTeacherInfo
+            :teacher_id="get(info, 'teacher.id', '')"
+            class="mb-3"
+          />
 
           <hr class="mt-3 mb-4" />
 
-          <section class="scroll-target" id="review">
-            <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
-            <ElearningReview :info="info" />
-          </section>
+          <ElearningReview :info="info" />
         </div>
       </div>
 
@@ -173,10 +167,6 @@ export default {
             elearning_id,
           },
         });
-      const getLevels = () =>
-        new LevelService(this.$axios)[actionTypes.BASE.LIST]();
-      const getSubjects = () =>
-        new SubjectService(this.$axios)[actionTypes.BASE.LIST]();
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
           params: {
@@ -192,17 +182,13 @@ export default {
 
       const data = await Promise.all([
         getInfo(),
-        getLevels(),
-        getSubjects(),
         getProgram(),
         getRelatedCourses(),
       ]);
 
       this.info = get(data, "0.data", null);
-      this.levels = get(data, "0.data", []);
-      this.subjects = get(data, "0.data", []);
-      this.program = get(data, "0.data", []);
-      this.relatedCourses = get(data, "0.data.content", []);
+      this.program = get(data, "1.data", []);
+      this.relatedCourses = get(data, "2.data.content", []);
     },
 
     // bindScrollStatus(event) {

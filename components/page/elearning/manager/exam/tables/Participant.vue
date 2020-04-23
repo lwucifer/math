@@ -16,32 +16,43 @@
             <span
               class="font-weight-bold"
               :class="{
-                'score--pass': (get(row, 'result') == SUBMISSION_RESULTS.PASS),
-                'score--fail': (get(row, 'result') == SUBMISSION_RESULTS.FAIL),
-                'score--empty': (get(row, 'result') == SUBMISSION_RESULTS.NO_SCORE),
+                'score--pass': (get(row, 'result', '') == SUBMISSION_RESULTS.PASSED),
+                'score--fail': (get(row, 'result', '') == SUBMISSION_RESULTS.FAILED),
+                'score--empty': (get(row, 'result', '') == SUBMISSION_RESULTS.PENDING),
               }"
             >
-            {{ get(row, 'mark', 'Chưa chấm điểm') }}
+              <span
+                v-if="isNotDo(row)"
+              >
+                Chưa làm bài
+              </span>
+              <span v-if="isPending(row)">Chưa chấm điểm</span>
+              <span v-if="isMarked(row)">
+                {{ get(row, 'mark', 0)}}/{{ get(row, 'points', 10) }}
+              </span>
           </span>
     
             <template slot="popover">
-              {{ get(row, 'result')  | submissionStatus }}
+              {{ get(row, 'result')  | subResult2Txt }}
             </template>
   
           </v-popover>
           
         </td>
       </template>
-      <template v-slot:cell(timestamp)="{row}">
+      <template v-slot:cell(submission)="{row}">
         <td>
-          {{ get(row, 'timestamp', '') | moment("hh:mm A DD/MM/YYYY") }}
+          <span v-if="get(row, 'submission')">
+            {{ get(row, 'submission', '') | moment("hh:mm A DD/MM/YYYY") }}
+          </span>
         </td>
       </template>
       <template v-slot:cell(action)="{row}">
         <td>
           <n-link
+            v-if="isPending(row) || isMarked(row)"
             class
-            :to="`/elearning/manager/exams/${$route.params.id}/submissions/${row.id}`">
+            :to="`/elearning/manager/exams/${$route.params.id}/results?student_id=${row.student_id}&user_id=${row.id}`">
             Xem chi tiết
           </n-link>
         </td>
@@ -82,30 +93,16 @@
         default: false
       }
     },
-
-    filters: {
-      submissionStatus: function(val) {
-        if (val == SUBMISSION_RESULTS.NO_SCORE) {
-          return 'Chưa chấm điểm'
-        } else if (val == SUBMISSION_RESULTS.PASS) {
-           return 'Đạt'
-        } else if (val == SUBMISSION_RESULTS.FAIL) {
-          return 'Không đạt'
-        }
-        return ''
-      }
-    },
-
     data() {
       return {
         heads: [
           {
-            name: "student",
+            name: "name",
             text: "Học sinh",
             sort: false
           },
           {
-            name: "class",
+            name: "class_name",
             text: "Lớp",
             sort: false
           },
@@ -115,12 +112,12 @@
             sort: false
           },
           {
-            name: "times",
+            name: "reworks",
             text: "Số lần làm bài",
             sort: false
           },
           {
-            name: "timestamp",
+            name: "submission",
             text: "Thời gian nộp bài",
             sort: false
           },
@@ -137,11 +134,28 @@
     computed: {
       updating: function () {
         return this.loading
-      }
+      },
     },
     methods: {
       onPageChange(e) {
         this.$emit('changedPagination', e)
+      },
+      isNotDo(item) {
+        let flat = true
+        if (item.result) {
+          if (this.get(item, 'result') != SUBMISSION_RESULTS.NONE) {
+            flat = false
+          }
+        }
+        return flat
+      },
+      isPending(item) {
+        return this.get(item, 'result', false) && this.get(item, 'result') == SUBMISSION_RESULTS.PENDING
+      },
+      isMarked(item) {
+        return this.get(item, 'result', false) &&
+          this.get(item, 'result') != SUBMISSION_RESULTS.NONE &&
+          this.get(item, 'result') != SUBMISSION_RESULTS.PENDING
       },
       get
     },

@@ -15,7 +15,7 @@
     <div class="filter-form__item">
       <app-vue-select
         class="app-vue-select filter-form__item__selection"
-        v-model="filters.class"
+        v-model="filters.class_id"
         :options="classes"
         :reduce="item => item.value"
         label="text"
@@ -28,33 +28,38 @@
     </div>
 
     <div class="filter-form__item">
-      <app-vue-select
-        class="app-vue-select filter-form__item__selection"
+      <app-select-submission-result
         v-model="filters.result"
-        :options="results"
-        :reduce="item => item.value"
-        label="text"
-        placeholder="Theo kết quả"
-        searchable
-        clearable
         @input="handleChangedResult"
       >
-      </app-vue-select>
+      </app-select-submission-result>
+      <!--<app-vue-select-->
+        <!--class="app-vue-select filter-form__item__selection"-->
+        <!--v-model="filters.result"-->
+        <!--:options="results"-->
+        <!--:reduce="item => item.value"-->
+        <!--label="text"-->
+        <!--placeholder="Theo kết quả"-->
+        <!--searchable-->
+        <!--clearable-->
+        <!--@input="handleChangedResult"-->
+      <!--&gt;-->
+      <!--</app-vue-select>-->
     </div>
 
     <!--Right form-->
     <div class="filter-form__right">
-      <div class="filter-form__item filter-form__item--search">
-        <app-input
-          type="text"
-          v-model="filters.keyword"
-          placeholder="Nhập để tìm kiếm..."
-          :size="'sm'"
+      <div class="filter-form__item filter-form__item--search border-0">
+        <app-search
+          class="w-100"
+          size="sm"
+          placeholder="Nhập để tìm kiếm"
+          v-model="filters.query"
           @input="handleChangedSearch"
-        />
-        <button type="submit">
-          <IconSearch width="15" height="15" />
-        </button>
+          @keyup.enter.native="handleSubmitSearch"
+          @submit="submit"
+        >
+        </app-search>
       </div>
     </div><!--End right form-->
 
@@ -76,8 +81,8 @@
     data() {
       return {
         filters: {
-          keyword: '',
-          class: null,
+          query: null,
+          class_id: null,
           result: null
         },
         types: [
@@ -110,11 +115,13 @@
             text: '9/10'
           },
         ],
+        initStatus: true
       }
     },
     watch: {
       filters: {
         handler(val, old){
+          this.initStatus = false
           this.$emit("changedFilter", val)
         },
         deep: true
@@ -122,7 +129,9 @@
     },
     methods: {
       submit() {
-        this.$emit('submit', this.filters)
+        if (!this.initStatus) {
+          this.$emit('submitFilter', this.filters)
+        }
       },
       handleChangedClass(val) {
         this.$emit('changedClass', val)
@@ -133,6 +142,9 @@
       handleChangedResult(val) {
         this.$emit('changedResult', val)
       },
+      handleSubmitSearch(e) {
+        this.$emit('submitSearch', e.target.value)
+      }
     }
   }
 </script>

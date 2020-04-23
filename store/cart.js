@@ -16,12 +16,13 @@ const getters = {
   cartCheckout: state => {
     const items = state.carts.map(it => {
       return {
-        elearning_id: it.id,
+        elearning_id: it.elearning_id,
         price: it.price
       };
     });
+    const totalCost = items.reduce((a, c) => a + c.price, 0);
     return {
-      cost: 10,
+      cost: totalCost,
       method: "",
       note: "note",
       orders: items
@@ -38,7 +39,7 @@ const actions = {
       );
 
       console.log("[CART.LIST] list", result);
-      commit(mutationTypes.CART.SET_CART_LIST, result);
+      commit(mutationTypes.CART.SET_CART_LIST, result.data.content);
       return result;
     } catch (error) {
       console.log("[CART.LIST] list.error", error);

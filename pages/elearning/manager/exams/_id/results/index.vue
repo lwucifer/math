@@ -12,11 +12,11 @@
               :breadcrumb="breadcrumb"
             />
           </div>
-
+          
           <div class="elearning-manager-content__main">
             <component
               :is="currentComponent"
-              :detail="submission"
+              :detail="result"
               @refreshSubmission="refreshData"
             >
             </component>
@@ -34,13 +34,15 @@
   import * as actionTypes from "~/utils/action-types"
   import { get, isEmpty } from "lodash"
   import { EXERCISE_TYPES } from "~/utils/constants"
+  import { getParamQuery } from "~/utils/common"
+  import { exCate2Txt } from "~/plugins/filters"
 
-  const ChoiceSubmission = () => import('../choice')
-  const EssaySubmission = () => import('../essay')
-
-  const STORE_NAMESPACE = "elearning/teaching/submission"
+  const ChoiceSubmission = () => import('./choice')
+  const EssaySubmission = () => import('./essay')
+  
+  const STORE_NAMESPACE = "elearning/teaching/result"
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
-
+  
   export default {
     layout: "exercise",
     components: {
@@ -49,7 +51,7 @@
       ChoiceSubmission,
       EssaySubmission,
     },
-
+    
     data() {
       return {
         item: {},
@@ -61,40 +63,48 @@
         exercise: 'currentExercise'
       }),
       ...mapState(STORE_NAMESPACE, {
-        submission: 'currentSubmission'
+        result: 'currentResult'
       }),
       currentComponent: function () { // either Objective Test or Writing Test
         const MATCHED_COMPONENTS = {
           [EXERCISE_TYPES.CHOICE]: "ChoiceSubmission",
           [EXERCISE_TYPES.ESSAY]: "EssaySubmission",
         }
-
+        
         return MATCHED_COMPONENTS[get(this, 'exercise.type', EXERCISE_TYPES.CHOICE)]
       },
       breadcrumb: function() {
         let data = [
           {
-            text: 'Bài tập',
+            text: exCate2Txt(this.get(this.exercise, 'category', '')),
             link: '/elearning/manager/exams'
           },
           {
             text: get(this, 'exercise.title', ''),
-            link: `/elearning/manager/exams/${this.exercise.id}/submissions`
+            link: `/elearning/manager/exams/${this.exercise.id}/participant`
           },
           {
-            text: get(this, 'submission.student', ''),
+            text: get(this, 'result.name', ''),
             link: '/elearning/manager/exams'
           }
         ]
         return data
       }
     },
-
+    
     methods: {
       async getDetail() {
-        const submissionId = this.$route.params.submission
+        const exerciseId = this.$route.params.id
+        const studentId = getParamQuery('student_id')
+        const userId = getParamQuery('user_id')
+        const params = {
+          exercise_id: exerciseId,
+          student_id: studentId,
+          user_id: userId
+        }
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.DETAIL}`, submissionId
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_RESULT.DETAIL}`,
+          { params }
         )
       },
       async getExerciseDetail() {
@@ -108,9 +118,10 @@
       refreshData() {
         this.getDetail()
         this.getExerciseDetail()
-      }
+      },
+      get
     },
-
+    
     created() {
       this.refreshData()
     }
