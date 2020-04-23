@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import IconSuccess from "~/assets/svg/Icons/success.svg?inline";
+import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 export default {
     components:{
         IconSuccess
