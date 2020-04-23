@@ -86,7 +86,7 @@
         <button
           class="post__button"
           :disabled="btnCommentLoading"
-          @click="!isCommentFetched && getParentComment()"
+          @click="!isCommentFetched && getComment()"
         >
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
@@ -101,12 +101,10 @@
 
         <div class="post__comment-list">
           <CommentItem
-            v-for="item in listParentComments"
+            v-for="item in commentTree.comments || []"
             :key="item.id"
             :post="post"
             :data="item"
-            @edited="handleCommentEdited"
-            @deleted="handleDeleted"
           />
 
           <div class="text-center" v-if="btnCommentLoading">
@@ -115,15 +113,15 @@
 
           <div class="text-center">
             <a
-              v-if="parentCommentData.page && !parentCommentData.page.last"
+              v-if="commentTree.page && commentTree.page.last === false"
               href
               class="post__comment-more"
-              @click.prevent="getParentComment"
+              @click.prevent="getComment"
             >Xem thêm {{ numOfViewMoreParentComment }} bình luận ...</a>
           </div>
 
           <div
-            v-if="!listParentComments.length"
+            v-if="commentTree.comments && !commentTree.comments.length"
             class="post__comment-empty text-center text-sub"
           >Bài viết chưa có bình luận.</div>
         </div>
@@ -139,9 +137,12 @@
 </template>
 
 <script>
-import { uniqWith, isEmpty } from "lodash";
+import { get, uniqWith } from "lodash";
 import CommentService from "~/services/social/comments";
-import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import {
+  BASE as ACTION_TYPE_BASE,
+  SOCIAL as ACTION_TYPE_SOCIAL
+} from "~/utils/action-types";
 import { checkEditorEmpty } from "~/utils/validations";
 import { testJSON } from "~/utils/common";
 import { createComment } from "~/models/social/Comment";
@@ -186,7 +187,9 @@ export default {
     },
     post: {
       type: Object,
-      default: () => {},
+      default: () => ({
+        $commentTree: {}
+      }),
       validator: value =>
         [
           "post_id",
@@ -211,31 +214,25 @@ export default {
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
-      ],
-      parentCommentParams: {
-        page: 1,
-        limit: 10,
-        source_id: this.post.post_id
-      },
-      parentCommentData: {}
+      ]
     };
   },
 
   computed: {
-    listParentComments() {
-      return this.parentCommentData.listParentComments || [];
-    },
-
     numOfViewMoreParentComment() {
-      const { page } = this.parentCommentData;
+      const { page = {} } = this.commentTree;
       return page.totalPages - page.number === 1
         ? page.totalElements - page.size * page.number
         : page.size;
+    },
+
+    commentTree() {
+      return this.post.$commentTree || {}
     }
   },
 
   created() {
-    this.showComment && this.getParentComment();
+    this.showComment && this.getComment();
   },
 
   methods: {
@@ -254,46 +251,21 @@ export default {
       this.btnLikeLoading = true;
     },
 
-    async getParentComment() {
+    async getComment() {
       this.btnCommentLoading = true;
-
-      const getComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.LIST
-      ]({
-        params: this.parentCommentParams
-      });
-
-      if (getComment.success) {
-        // Set to parent comment data
-        const { listParentComments = [], page = {} } = this.parentCommentData;
-        if (listParentComments.length && !isEmpty(page)) {
-          const tmpListParentComments = [
-            ...listParentComments,
-            ...getComment.data.listParentComments
-          ];
-          this.parentCommentData = {
-            listParentComments: uniqWith(
-              tmpListParentComments,
-              (a, b) => a.id === b.id
-            ),
-            page: getComment.data.page
-          };
-        } else {
-          this.parentCommentData = getComment.data;
+      const getComment = await this.$store.dispatch(
+        `social/${ACTION_TYPE_SOCIAL.GET_COMMENT}`,
+        {
+          source_id: this.post.post_id,
+          page: get(this.commentTree, "page.number", 0) + 1
         }
-
-        // Set page param for the next request
-        this.parentCommentParams.page += 1;
-      } else {
-        this.$toasted.error(getComment.message);
-      }
+      );
 
       this.btnCommentLoading = false;
       this.isCommentFetched = true;
     },
 
     async postComment({ content, listTags, image, link }) {
-      const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
         comment_content: content,
@@ -302,62 +274,15 @@ export default {
         comment_link: link
       });
 
-      for (const key in commentModel) {
-        const value = commentModel[key];
-        if (value === null || value === undefined) continue;
-        // Check whether field is an array
-        formData.append(
-          key,
-          Array.isArray(value) ? JSON.stringify(value) : value
-        );
-      }
+      const doPostComment = await this.$store.dispatch(
+        `social/${ACTION_TYPE_SOCIAL.ADD_COMMENT}`,
+        commentModel
+      );
 
-      const doPostComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.ADD
-      ](formData);
-
-      if (doPostComment.success) {
-        const timeout = setTimeout(
-          () => {
-            if ("listParentComments" in this.parentCommentData) {
-              const { listParentComments } = this.parentCommentData;
-              this.parentCommentData.listParentComments = [
-                doPostComment.data,
-                ...listParentComments
-              ];
-            } else {
-              this.parentCommentData = {
-                listParentComments: [doPostComment.data]
-              };
-            }
-            clearTimeout(timeout);
-          },
-          image ? 1000 : 0
-        );
-      } else {
+      if (!doPostComment.success) {
         this.$toasted.error(doPostComment.message);
       }
     },
-
-    handleDeleted(id) {
-      if ("listParentComments" in this.parentCommentData) {
-        this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.filter(
-          comment => comment.id !== id
-        );
-      }
-    },
-
-    handleCommentEdited(commentData, cancelEdit) {
-      this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.map(
-        item => {
-          if (item.id === commentData.id) {
-            return commentData;
-          }
-          return item;
-        }
-      );
-      cancelEdit();
-    }
   }
 };
 </script>

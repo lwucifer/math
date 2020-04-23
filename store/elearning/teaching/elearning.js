@@ -1,6 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Elearnings from "~/services/elearning/teaching/Elearnings";
+import ElearningHides from "~/services/elearning/teaching/ElearningHides";
 
 /**
  * initial state
@@ -28,7 +29,29 @@ const actions = {
     } catch (error) {
       console.log("[Teaching elearning] list.error", error);
     }
-  }
+  },
+
+  async [actionTypes.TEACHING_ELEARNINGS.DELETE]({ commit }, payload) {
+    try {
+      const result = await new Elearnings(this.$axios)['deleteWithRawJson'](
+        payload
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING elearning] list.error", error);
+    }
+  },
+
+  async [actionTypes.TEACHING_ELEARNINGS.HIDE]({ commit }, payload) {
+    try {
+      const result = await new ElearningHides(this.$axios)["postWithRawJson"](
+        payload
+      );
+      return result;
+    } catch (error) {
+      console.log("[Teaching elearning] list.error", error);
+    }
+  },
 };
 
 /**

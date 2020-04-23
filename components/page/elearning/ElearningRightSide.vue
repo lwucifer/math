@@ -34,7 +34,12 @@
           >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</b
         >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+      <app-button
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mb-4"
+        @click.prevent="handleAddToCart"
         >Chọn mua</app-button
       >
       <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
@@ -75,6 +80,8 @@
 
 <script>
 import { get } from "lodash";
+import qs from "qs";
+
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -82,6 +89,11 @@ import IconSubject from "~/assets/svg/icons/subject.svg?inline";
 import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
+
+import { mapActions, mapGetters } from "vuex";
+import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
+import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
+import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
 export default {
   components: {
@@ -91,22 +103,35 @@ export default {
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook,
+    IconBook
   },
   props: {
     info: {
-      type: Object,
+      type: Object
     },
-    program: {},
+    program: {}
   },
 
   data() {
     return {};
   },
 
+  computed: {
+    ...mapGetters("cart", ["cartCheckout"])
+  },
+
   methods: {
     get,
-  },
+
+    ...mapActions("cart", ["cartAdd"]),
+
+    handleAddToCart() {
+      console.log("[handleAddToCart]", this.info.id);
+      this.cartAdd({ elearning_id: this.info.id }).then(result => {
+        console.log("[handleAddToCart] cartAdd", result);
+      });
+    }
+  }
 };
 </script>
 

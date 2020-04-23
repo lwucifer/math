@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderCreate @clickSave="fnSave" @clickDelete="fnDelete" />
+    <HeaderCreate @clickSave="fnSave" @clickCancel="fnCancel" :ok="fullParams"/>
     <div class="container">
       <div class="row">
         <div class="col-md-3 olclasses-create-side">
@@ -185,7 +185,7 @@
                     <div>
                       <app-date-picker
                         class="ml-3"
-                        v-model="timeApply.start"
+                        v-model="params.schedules[0].from_date"
                         square
                         size="sm"
                         label="Từ"
@@ -197,7 +197,7 @@
                       </app-date-picker>
                       <app-date-picker
                         class="ml-3"
-                        v-model="timeApply.end"
+                        v-model="params.schedules[0].to_date"
                         square
                         size="sm"
                         label="Đến"
@@ -214,14 +214,39 @@
             </div>
 
             <div class="text-right mt-4 mb-4">
-              <app-button square size="sm" normal color="info" class="mr-3" @click="fnDelete">Hủy</app-button>
-              <app-button square size="sm" normal @click="fnSave">Tạo lịch</app-button>
+              <app-button square size="sm" normal color="info" class="mr-3" @click="fnCancel">Hủy</app-button>
+              <app-button square size="sm" normal @click="fnSave" :disabled="!fullParams">Tạo lịch</app-button>
             </div>
             <hr />
           </div>
         </div>
       </div>
     </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+    />
+
+    <app-modal
+        centered
+        :width="408"
+        :component-class="{ 'app-modal-confirm': true }"
+        @close="$router.push('/')"
+        v-if="showNotify"
+    >
+        <div slot="content">
+          <div class="text-center pt-4 pb-4">
+            <a class="btn-close" @click="showNotify = false">X</a>
+            <p class="title mb-4">{{message}}</p>
+            <div class="text-center">
+                <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
+            </div>
+            </div>
+        </div>
+    </app-modal>
   </div>
 </template>
 
@@ -229,7 +254,6 @@
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
-
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
 
 import { get, reject } from "lodash";
@@ -239,6 +263,225 @@ import { useEffect, getParamQuery } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
+
+function initialState (){
+  return {
+    tab: 1,
+    message: "",
+    fullParams: false,
+    sendMess: "0",
+    downloadVideo: "0",
+    showModalConfirm: false,
+    showNotify: false,
+    confirmLoading: false,
+    showBonus: false,
+    startTime: {
+      time: {
+        value: "1:00",
+        text: "1:00"
+      },
+      type: {
+        value: "AM",
+        text: "AM"
+      }
+    },
+    duration: {
+      hours: {
+        value: '1',
+        text: '1'
+      },
+      minutes: {
+        value: '30',
+        text: '30'
+      }
+    },
+    hours: [
+      {
+        value: "1",
+        text: "1"
+      },
+      {
+        value: "2",
+        text: "2"
+      },
+      {
+        value: "3",
+        text: "3"
+      },
+      {
+        value: "4",
+        text: "4"
+      },
+      {
+        value: "5",
+        text: "5"
+      },
+      {
+        value: "6",
+        text: "6"
+      }
+    ],
+    minutes: [
+      {
+        value: "00",
+        text: "00"
+      },
+      {
+        value: "15",
+        text: "15"
+      },
+      {
+        value: "30",
+        text: "30"
+      },
+      {
+        value: "45",
+        text: "45"
+      }
+    ],
+    timeTypes: [
+      {
+        value: "AM",
+        text: "AM"
+      },
+      {
+        value: "PM",
+        text: "PM"
+      }
+    ],
+    times: [
+      {
+        value: "1:00",
+        text: "1:00"
+      },
+      {
+        value: "1:30",
+        text: "1:30"
+      },
+      {
+        value: "2:00",
+        text: "2:00"
+      },
+      {
+        value: "2:30",
+        text: "2:30"
+      },
+      {
+        value: "3:00",
+        text: "3:00"
+      },
+      {
+        value: "3:30",
+        text: "3:30"
+      },
+      {
+        value: "4:00",
+        text: "4:00"
+      },
+      {
+        value: "4:30",
+        text: "4:30"
+      },
+      {
+        value: "5:00",
+        text: "5:00"
+      },
+      {
+        value: "5:30",
+        text: "5:30"
+      },
+      {
+        value: "6:00",
+        text: "6:00"
+      },
+      {
+        value: "6:30",
+        text: "6:30"
+      },
+      {
+        value: "7:00",
+        text: "7:00"
+      },
+      {
+        value: "7:30",
+        text: "7:30"
+      },
+      {
+        value: "8:00",
+        text: "8:00"
+      },
+      {
+        value: "8:30",
+        text: "8:30"
+      },
+      {
+        value: "9:00",
+        text: "9:00"
+      },
+      {
+        value: "9:30",
+        text: "9:30"
+      },
+      {
+        value: "10:00",
+        text: "10:00"
+      },
+      {
+        value: "10:30",
+        text: "10:30"
+      },
+      {
+        value: "11:00",
+        text: "11:00"
+      },
+      {
+        value: "11:30",
+        text: "11:30"
+      },
+      {
+        value: "12:00",
+        text: "12:00"
+      },
+      {
+        value: "12:30",
+        text: "12:30"
+      }
+    ],
+    filterCourse: null,
+    courses: [],
+    filterPrivacy: {
+      value: true,
+      text: "Công khai"
+    },
+    privacies: [
+      {
+        value: true,
+        text: "Công khai"
+      },
+      {
+        value: false,
+        text: "Riêng tư"
+      }
+    ],
+    selectedItems: [],
+    params: {
+        elearning_id: "",
+        name: "",
+        enable: true,
+        is_invite_all: false,
+        is_allow_download: false,
+        schedules: [
+          {
+            from_date: "",
+            to_date: "",
+            start_time: "1:30 AM",
+            duration: 90,
+            days_of_week: ""
+          }
+        ]
+      }
+  };
+}
 
 export default {
   layout: "no-header",
@@ -252,221 +495,7 @@ export default {
   },
 
   data() {
-    return {
-      tab: 1,
-      sendMess: "0",
-      downloadVideo: "0",
-      showBonus: false,
-      timeApply: {
-        start: null,
-        end: null
-      },
-      startTime: {
-        time: {
-          value: "1:00",
-          text: "1:00"
-        },
-        type: {
-          value: "AM",
-          text: "AM"
-        }
-      },
-      duration: {
-        hours: {
-          value: '1',
-          text: '1'
-        },
-        minutes: {
-          value: '30',
-          text: '30'
-        }
-      },
-      hours: [
-        {
-          value: "1",
-          text: "1"
-        },
-        {
-          value: "2",
-          text: "2"
-        },
-        {
-          value: "3",
-          text: "3"
-        },
-        {
-          value: "4",
-          text: "4"
-        },
-        {
-          value: "5",
-          text: "5"
-        },
-        {
-          value: "6",
-          text: "6"
-        }
-      ],
-      minutes: [
-        {
-          value: "00",
-          text: "00"
-        },
-        {
-          value: "15",
-          text: "15"
-        },
-        {
-          value: "30",
-          text: "30"
-        },
-        {
-          value: "45",
-          text: "45"
-        }
-      ],
-      timeTypes: [
-        {
-          value: "AM",
-          text: "AM"
-        },
-        {
-          value: "PM",
-          text: "PM"
-        }
-      ],
-      times: [
-        {
-          value: "1:00",
-          text: "1:00"
-        },
-        {
-          value: "1:30",
-          text: "1:30"
-        },
-        {
-          value: "2:00",
-          text: "2:00"
-        },
-        {
-          value: "2:30",
-          text: "2:30"
-        },
-        {
-          value: "3:00",
-          text: "3:00"
-        },
-        {
-          value: "3:30",
-          text: "3:30"
-        },
-        {
-          value: "4:00",
-          text: "4:00"
-        },
-        {
-          value: "4:30",
-          text: "4:30"
-        },
-        {
-          value: "5:00",
-          text: "5:00"
-        },
-        {
-          value: "5:30",
-          text: "5:30"
-        },
-        {
-          value: "6:00",
-          text: "6:00"
-        },
-        {
-          value: "6:30",
-          text: "6:30"
-        },
-        {
-          value: "7:00",
-          text: "7:00"
-        },
-        {
-          value: "7:30",
-          text: "7:30"
-        },
-        {
-          value: "8:00",
-          text: "8:00"
-        },
-        {
-          value: "8:30",
-          text: "8:30"
-        },
-        {
-          value: "9:00",
-          text: "9:00"
-        },
-        {
-          value: "9:30",
-          text: "9:30"
-        },
-        {
-          value: "10:00",
-          text: "10:00"
-        },
-        {
-          value: "10:30",
-          text: "10:30"
-        },
-        {
-          value: "11:00",
-          text: "11:00"
-        },
-        {
-          value: "11:30",
-          text: "11:30"
-        },
-        {
-          value: "12:00",
-          text: "12:00"
-        },
-        {
-          value: "12:30",
-          text: "12:30"
-        }
-      ],
-      filterCourse: null,
-      courses: [],
-      filterPrivacy: {
-        value: true,
-        text: "Công khai"
-      },
-      privacies: [
-        {
-          value: true,
-          text: "Công khai"
-        },
-        {
-          value: false,
-          text: "Riêng tư"
-        }
-      ],
-      selectedItems: [],
-      params: {
-          elearning_id: "",
-          name: "",
-          enable: true,
-          is_invite_all: false,
-          is_allow_download: false,
-          schedules: [
-            {
-              from_date: "",
-              to_date: "",
-              start_time: "1:30 AM",
-              duration: 90,
-              days_of_week: ""
-            }
-          ]
-        }
-    };
+    return initialState();
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
@@ -482,26 +511,57 @@ export default {
     downloadVideo(newValue, oldValue) {
       this.params.is_allow_download = newValue == '1';
     },
+    params: {
+      handler(newValue){
+        this.fullParams =
+        newValue.elearning_id != "" &&
+        newValue.name != "" &&
+        newValue.schedules[0].to_date != "" &&
+        newValue.schedules[0].from_date != "" &&
+        newValue.schedules[0].start_time != "" &&
+        newValue.schedules[0].duration != "" &&
+        newValue.schedules[0].days_of_week != "" ;
+     },
+     deep: true
+      
+    },
   },
 
   methods: {
-    async fnSave() {
+    async handleOk() {
       try {
-        this.loading = true;
-        this.params.schedules[0].from_date = this.timeApply.start;
-        this.params.schedules[0].to_date = this.timeApply.end;
-        await this.$store.dispatch(
+        this.confirmLoading = true;
+        const doCreate = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
           JSON.stringify(this.params)
         );
+        if (doCreate.success) {
+          this.fnCancel();
+          this.message = "Tạo phòng học thành công!"
+          this.showNotify = true;
+        }
       } catch (e) {
+        this.message = e;
+        this.showNotify = true;
       } finally {
-        this.loading = false;
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
       }
     },
 
-    fnDelete() {
-      alert(333);
+    fnCancel() {
+      let temp = [...this.courses];
+      Object.assign(this.$data, initialState());
+      this.courses = [...temp];
+    },
+
+    fnSave() {
+      this.showModalConfirm = true;
+    },
+    
+    handleCancelModal() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
     },
 
     async getLessons() {

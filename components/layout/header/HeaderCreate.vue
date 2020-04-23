@@ -1,14 +1,15 @@
 <template>
   <div class="header-create">
     <div class="header-create__content container">
-      <app-button class="header-create__btn header-create__btn-back" outline square nuxt to="../">
+      <app-button class="header-create__btn header-create__btn-back" outline square @click="back">
         <IconArrowLeft class="icon mr-2" />
         Quay lại
       </app-button>
 
       <div class="header-create__right">
-        <app-button class="header-create__btn mr-4" square @click="fnSave">Lưu</app-button>
-        <app-button class="header-create__btn" color="secondary" square @click="fnDelete">Xoá</app-button>
+        <app-button class="header-create__btn mr-4" square @click="fnSave" :disabled="!ok">Lưu</app-button>
+        <app-button class="header-create__btn" color="secondary" square @click="fnDelete" v-if="edit">Xoá</app-button>
+        <app-button class="header-create__btn" color="secondary" square @click="fnCancel" v-else>Hủy</app-button>
       </div>
     </div>
   </div>
@@ -21,6 +22,11 @@ export default {
   components: {
     IconArrowLeft
   },
+  
+  props: {
+    edit: Boolean,
+    ok: Boolean,
+  },
 
   methods: {
     fnSave() {
@@ -28,6 +34,12 @@ export default {
     },
     fnDelete() {
       this.$emit('clickDelete');
+    },
+    fnCancel() {
+      this.$emit('clickCancel');
+    },
+    back() {
+      this.$router.back();
     },
   },
 }

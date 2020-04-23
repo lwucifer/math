@@ -1,7 +1,6 @@
 .post-editor {
     margin-bottom: 1.8rem;
     position: relative;
-    z-index: 101;
 
     &--has-overlay {
         .post-editor__privacy,
@@ -10,6 +9,8 @@
         }
         
         &.active {
+            z-index: 101;
+
             .post-editor__overlay {
                 visibility: visible;
                 opacity: 1;
