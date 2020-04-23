@@ -202,6 +202,9 @@ export const ELEARNING_TEACHING_SUBMISSION = {
     SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
     SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark",
 };
+export const ELEARNING_TEACHING_EVALUATION = {
+    SET_TEACHING_EVALUATION_ADD: "setElearningTeachingEvaluationAdd",
+};
 
 export const ELEARNING_TEACHING_VOTE = {
     SET_TEACHING_VOTE_LIST: "setElearningTeachingVoteList",
@@ -347,4 +350,7 @@ export const TEACHING_INTERACTIVE = {
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
     SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
+};
+export const TEACHING_STATISTIC_REVENUE = {
+    SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
 };

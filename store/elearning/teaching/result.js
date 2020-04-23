@@ -24,11 +24,11 @@ const actions = {
         payload
       );
       // set to mutation
-      commit(mutationTypes.ELEARNING_TEACHING_RESULT.SET_TEACHING_RESULT_DETAIL, result);
+      commit(mutationTypes.ELEARNING_TEACHING_RESULT.SET_TEACHING_RESULT_DETAIL, result.data);
     } catch (error) {
       console.log("[Teaching results] list.error", error);
     }
-  },
+  }
 };
 
 /**
