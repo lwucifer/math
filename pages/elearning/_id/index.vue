@@ -13,20 +13,14 @@
         <ElearningContent :program="program" :info="info" />
 
         <div class="box">
-          <section class="scroll-target" id="teacher">
-            <h5 class="mb-4">Thông tin giáo viên</h5>
-            <CourseTeacherInfo
-              :teacher_id="get(info, 'teacher.id', '')"
-              class="mb-3"
-            />
-          </section>
+          <CourseTeacherInfo
+            :teacher_id="get(info, 'teacher.id', '')"
+            class="mb-3"
+          />
 
           <hr class="mt-3 mb-4" />
 
-          <section class="scroll-target" id="review">
-            <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
-            <ElearningReview :info="info" />
-          </section>
+          <ElearningReview :info="info" />
         </div>
       </div>
 
