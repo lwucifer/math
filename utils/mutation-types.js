@@ -333,7 +333,7 @@ export const TEACHING_SUMMARY = {
 export const TEACHING_ELEARNINGS = {
     SET_TEACHING_ELEARNINGS_LIST: "setTeachingElearningsList",
     SET_TEACHING_ELEARNINGS_DELETE: "setTeachingElearningsDelete",
-    SET_TEACHING_ELEARNINGS_RESTORE: "setTeachingElearningsRestore",
+    SET_TEACHING_ELEARNINGS_HIDE: "setTeachingElearningsHide",
 };
 export const TEACHING_STUDENTS = {
     SET_TEACHING_STUDENTS_LIST: "setTeachingStudentsList",
