@@ -68,4 +68,43 @@ export default class BaseService {
 
     return data;
   }
+  
+  async postWithRawJson(payload) {
+    const { data } = await this.$axios.post(this.$api, payload, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return data;
+  }
+  
+  async putWithRawJson(payload) {
+    const { data } = await this.$axios.put(this.$api, payload, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return data;
+  }
+
+  async deleteWithRawJson(payload) {
+    const { data } = await this.$axios.delete(this.$api, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: payload
+    });
+
+    return data;
+  }
+  
+  async getWithMiddleID(payload, id, end) {
+    const { data } = await this.$axios.get(`${this.$api}/${id}/${end}`, payload);
+
+    const result = data ? data : {};
+
+    return result;
+  }
 }

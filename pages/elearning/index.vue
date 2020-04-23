@@ -29,48 +29,45 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-
-// Import faked data
-import { LESSONS, SCIENCES } from "~/server/fakedata/course/courses";
+import { VclFacebook } from "vue-content-loading";
+import Loading from "~/components/common/contentBox/Loading";
 
 export default {
   components: {
-    CourseSliderTab
+    CourseSliderTab,
+    VclFacebook,
+    Loading,
   },
 
-  async fetch({ params, query, store }) {
-    await store.dispatch(
+  async created() {
+    await this.$store.dispatch(
       `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
   data() {
     return {
-      isAuthenticated: true,
-      lessons: LESSONS,
-      sciences: SCIENCES,
+      loading: true,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
         setWrapperSize: true,
         autoHeight: true,
         watchOverflow: true,
-        showName: true
+        showName: true,
       },
-      active_el: 0
     };
   },
 
   computed: {
-    ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/public/public-summary", {
-      elearnings: "elearningPublicSummary"
-    })
+      elearnings: "elearnings",
+    }),
   },
 
   methods: {
-    get
-  }
+    get,
+  },
 };
 </script>
 

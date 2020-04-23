@@ -33,7 +33,7 @@ import {
   DISTRICTS,
   PROVINCES,
   SCHOOL_TYPES,
-  SCHOOL_TYPE_DETAILS
+  SCHOOL_TYPE_DETAILS,
 } from "~/server/fakedata/school/test";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -46,7 +46,7 @@ export default {
 
   components: {
     SchoolFilter,
-    SchoolListBox
+    SchoolListBox,
   },
 
   async fetch({ params, query, store }) {
@@ -63,17 +63,17 @@ export default {
       province_id: "",
       district_id: "",
       ward_id: "",
-      keyword: ""
+      keyword: "",
     };
   },
 
   computed: {
     ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch"
+      schoolSearch: "elearningSchoolSearch",
     }),
     ...mapState("elearning/public/public-category", {
-      categories: "categories"
-    })
+      categories: "categories",
+    }),
   },
 
   created() {
@@ -81,7 +81,7 @@ export default {
       "province_id",
       "district_id",
       "ward_id",
-      "keyword"
+      "keyword",
     ]);
   },
 
@@ -112,8 +112,8 @@ export default {
         `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
         options
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

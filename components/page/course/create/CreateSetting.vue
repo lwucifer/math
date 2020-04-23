@@ -67,25 +67,35 @@
       <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá bán</div>
         <div class="col-md-4">
-          <app-input v-model="payload.fee" type="text" class="mb-0"></app-input>
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.fee" />
+            </div>
+          </div>
+          <!-- <app-input v-model="payload.fee" type="text" class="mb-0"></app-input> -->
         </div>
       </div>
 
       <div class="row align-items-center mb-4" v-if="this.free == 1">
         <div class="col-md-3">Giá sau khuyến mại</div>
         <div class="col-md-4">
-          <app-input
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.price" />
+            </div>
+          </div>
+          <!-- <app-input
             v-model="payload.price"
             type="text"
             class="mb-0"
-          ></app-input>
+          ></app-input> -->
         </div>
         <div class="percent_price__ElearningCreate" v-if="percent_price">
           <span>{{ percent_price }}</span>
         </div>
       </div>
 
-      <create-action @handleCLickSave="handleCLickSave" />
+      <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" />
     </div>
 
     <app-modal-confirm
@@ -121,17 +131,19 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       free: "",
+      is_submit: false,
       payload: {
         comment_allow: "",
-        price: "",
+        price: 0,
         elearning_id: get(this, "general.id", ""),
-        fee: "",
+        fee: 0,
         privacy: "",
       },
     };
   },
   created() {
     this.fetchSetting();
+    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 
   watch: {
@@ -139,8 +151,8 @@ export default {
       handler: function() {
         this.payload.elearning_id = getParamQuery("elearning_id");
         this.payload.comment_allow = get(this, "setting.comment_allow", "");
-        this.payload.price = get(this, "setting.price", "");
-        this.payload.fee = get(this, "setting.fee", "");
+        this.payload.price = get(this, "setting.price", 0);
+        this.payload.fee = get(this, "setting.fee", 0);
         this.payload.privacy = get(this, "setting.privacy", "");
         const fee = toNumber(get(this, "setting.fee", ""));
         const price = toNumber(get(this, "setting.price", ""));
@@ -156,18 +168,6 @@ export default {
       },
       deep: true,
     },
-    "payload.price": {
-      handler: function() {
-        this.payload.price = numeral(this.payload.price).format();
-        this.handleSetPercent();
-      },
-    },
-    "payload.fee": {
-      handler: function() {
-        this.payload.fee = numeral(this.payload.fee).format();
-        this.handleSetPercent();
-      },
-    },
   },
 
   computed: {
@@ -180,6 +180,22 @@ export default {
   },
 
   methods: {
+    handleCheckSubmit() {
+      this.handleSetPercent();
+      if (this.payload.comment_allow === "") return (this.is_submit = false);
+      if (this.payload.privacy === "") return (this.is_submit = false);
+      if (this.free === "") return (this.is_submit = false);
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return (this.is_submit = false);
+        }
+        if (!this.payload.price) {
+          return (this.is_submit = false);
+        }
+      }
+      this.is_submit = true;
+    },
+
     fetchSetting() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id) {
@@ -221,7 +237,8 @@ export default {
 
     async handleSaveSetting() {
       this.confirmLoading = true;
-      const payload = createPayloadCourseSetting(this.payload);
+      this.payload.elearning_id = getParamQuery("elearning_id");
+      const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
         payload

@@ -23,7 +23,7 @@
               :post="post"
               class="mb-4"
               :show-menu-dropdown="post.author && post.author.id === userId"
-              @delete="deletePost"
+              @delete="showModalConfirmDelete"
               @like="likePost"
               @edit="editPost"
               @share="openModalShare"
@@ -33,10 +33,10 @@
                   v-if="post.files && post.files.length"
                   class="my-4"
                   :images="post.files.map(item => ({
-                  id: item.post_id,
-                  thumb: item.link.high,
-                  object: 'image'
-                }))"
+                    id: item.post_id,
+                    thumb: get(item, 'link.high', null),
+                    object: 'image'
+                  }))"
                   @click-item="imageObj => handleClickImage(imageObj, post)"
                 />
 
@@ -126,6 +126,8 @@
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
+              @parent-post-liked="handleParentPostLiked"
+              @delete="showModalConfirmDelete"
             />
           </app-modal>
 
@@ -179,69 +181,88 @@
               >Lưu</app-button>
             </div>
           </app-modal>
+
+          <app-modal-confirm
+            v-if="modalConfirmDelete"
+            okText="Xoá"
+            title="Bạn có chắc chắn muốn xoá?"
+            :confirmLoading="modalConfirmDeleteLoading"
+            @cancel="hideModalConfirmDelete"
+            @ok="deletePost(modalConfirmDeleteId)"
+          ></app-modal-confirm>
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-            <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
-              class="mb-4"
-              nuxt
-              size="sm"
-              :key="message.id"
-              :to="`/messages/t/${message.id}`"
-            />
-          </AsideBox>
+          <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9">
+            <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
+              <app-content-box
+                v-for="message in messagesConverted"
+                v-bind="message"
+                class="mb-4"
+                nuxt
+                size="sm"
+                :key="message.id"
+                :to="`/messages/t/${message.id}`"
+              />
+            </AsideBox>
 
-          <AsideBox title="Khóa học Online nổi bật">
-            <div class="timeline-aside-tabs">
-              <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
-              <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
-            </div>
-
-            <div class="time-aside-tabs-content">
-              <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in freeCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
-
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+            <AsideBox title="Khóa học Online nổi bật">
+              <div class="timeline-aside-tabs">
+                <a
+                  href
+                  :class="{ active: coursesTab === 0 }"
+                  @click.prevent="coursesTab = 0"
+                >Miễn phí</a>
+                <a
+                  href
+                  :class="{ active: coursesTab === 1 }"
+                  @click.prevent="coursesTab = 1"
+                >Trả phí</a>
               </div>
 
-              <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="item in privateCourses"
-                  :key="item.id"
-                  class="align-items-center"
-                  size="sm"
-                  :image="get(item, 'avatar.low', null)"
-                >
-                  <n-link slot="image" :to="`/elearning/${item.id}`">
-                    <img :src="item.image" :alt="item.name" />
-                  </n-link>
+              <div class="time-aside-tabs-content">
+                <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in freeCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
 
-                  <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                </app-content-box>
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in privateCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
+
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div class="text-center mt-4">
+                  <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
+                </div>
               </div>
-
-              <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
-              </div>
-            </div>
-          </AsideBox>
+            </AsideBox>
+          </div>
         </div>
       </div>
     </div>
@@ -359,6 +380,10 @@ export default {
       // Share post
       showModalShare: false,
       shareData: {},
+      // Delete post
+      modalConfirmDelete: false,
+      modalConfirmDeleteId: null,
+      modalConfirmDeleteLoading: false,
       // Course tabs
       coursesTab: 0,
 
@@ -388,7 +413,7 @@ export default {
     },
 
     messagesConverted() {
-      return this.messages ? this.messages.map(item => {
+      return this.messages && this.messages.length ? this.messages.map(item => {
         return {
           id: item.room.id,
           title: item.room.members
@@ -564,10 +589,21 @@ export default {
       }
     },
 
+    showModalConfirmDelete(id) {
+      this.modalConfirmDelete = true;
+      this.modalConfirmDeleteId = id;
+    },
+
+    hideModalConfirmDelete() {
+      this.modalConfirmDelete = false;
+      this.modalConfirmDeleteId = null;
+    },
+
     /**
      * DELETE a post
      */
     async deletePost(id) {
+      this.modalConfirmDeleteLoading = true;
       const doDelete = await new SocialPostsService(this.$axios)[
         actionTypes.BASE.DELETE
       ](id);
@@ -585,6 +621,9 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
+
+      this.hideModalConfirmDelete();
+      this.modalConfirmDeleteLoading = false;
     },
 
     /**
@@ -605,7 +644,10 @@ export default {
                   return {
                     ...item,
                     type_like: data.type_like,
-                    is_like: !!data.type_like
+                    is_like: !!data.type_like,
+                    total_like: !!data.type_like
+                      ? (item.total_like += 1)
+                      : (item.total_like -= 1)
                   };
                 }
                 return item;
@@ -738,7 +780,7 @@ export default {
         actionTypes.BASE.LIST
       ]({
         params: {
-          page: this.feeds.page.number + 1
+          page: get(this, "feeds.page.number", 1) + 1
         }
       });
 
@@ -751,6 +793,15 @@ export default {
       } else {
         $state.complete();
       }
+    },
+
+    /**
+     * Handle Post liked when Post in PostDetail === Post
+     */
+    handleParentPostLiked(newPost) {
+      this.feeds.listPost = this.feeds.listPost.map(item =>
+        newPost.post_id === item.post_id ? newPost : item
+      );
     }
   }
 };

@@ -284,3 +284,19 @@
 .post .mention {
     font-weight: 700;
 }
+
+.post__interactive {
+    .app-content-box {
+        &__title {
+            font-size: $font-size-base;
+        }
+
+        &__desc, &__meta-footer {
+            font-size: $font-size-caption;
+        }
+
+        &__meta-footer {
+            margin-top: 5px;
+        }
+    }
+}

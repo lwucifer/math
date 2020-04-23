@@ -7,34 +7,34 @@
       @changedQuery="handleChangedSearch"
       @changedStatus="handleChangedStatus"
       @submitSearch="handleSubmitSearch"
-      class="mb-4"
+      class="mb-4 px-0"
     />
     <div>
       
-        <v-popover
-          :disabled="additionalActions.delete"
-          trigger="hover"
-          placement="top"
-          offset="5"
+      <v-popover
+        :disabled="additionalActions.delete"
+        trigger="hover"
+        placement="top"
+        offset="5"
+      >
+        <app-button
+          size="sm"
+          square
+          normal
+          :disabled="!additionalActions.delete"
+          :color="additionalActions.delete ? 'secondary' : 'disabled'"
+          @click="visible.delete = true"
+          class="bntRemoveList__ElearningManagerFilterTable"
         >
-          <app-button
-            size="sm"
-            square
-            normal
-            :disabled="!additionalActions.delete"
-            :color="additionalActions.delete ? 'secondary' : 'disabled'"
-            @click="visible.delete = true"
-            class="bntRemoveList__ElearningManagerFilterTable"
-          >
-            <IconTrashAlt/>
-            <span>Xóa tài liệu</span>
-          </app-button>
-  
-          <template slot="popover">
-            <span>Bạn vui lòng chọn tài liệu cần xóa</span>
-          </template>
-        </v-popover>
-        
+          <IconTrashAlt style="fill: #fff; height: 16px;"/>
+          <span>Xóa tài liệu</span>
+        </app-button>
+
+        <template slot="popover">
+          <span>Bạn vui lòng chọn tài liệu cần xóa</span>
+        </template>
+      </v-popover>
+      
     </div>
 
     <div class="wrapTable__ElearningManagerFilterTable">
@@ -229,5 +229,4 @@
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/manager/material/_elearning-filtertable.scss";
 </style>

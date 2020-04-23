@@ -6,7 +6,7 @@ import TeachingSummary from "~/services/elearning/teaching/Summary";
  * initial state
  */
 const state = () => ({
-  teachingInfo: {}
+  teachingInfo: []
 });
 
 /**
@@ -36,8 +36,8 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.TEACHING_SUMMARY.SET_TEACHING_SUMMARY_INFO](state, teachingInfo) {
-    state.teachingInfo = teachingInfo;
+  [mutationTypes.TEACHING_SUMMARY.SET_TEACHING_SUMMARY_INFO](state, _teachingInfo) {
+    state.teachingInfo = _teachingInfo;
   }
 };
 

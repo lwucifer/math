@@ -32,8 +32,7 @@
             v-for="(item, index) in list"
             :key="index"
           >
-            <course-item2 :item="item"
-            />
+            <course-item2 :item="item" />
           </div>
         </div>
 
@@ -43,14 +42,23 @@
         ></div>
       </div>
 
-      <div class="swiper-button-custom swiper-button-prev--circle" v-if="currentSwiperOptions.navigation" slot="button-prev" @click="swiper.slidePrev()">
+      <div
+        class="swiper-button-custom swiper-button-prev--circle"
+        v-if="currentSwiperOptions.navigation"
+        slot="button-prev"
+        @click="swiper.slidePrev()"
+      >
         <IconChevronLeft />
       </div>
-      <div class="swiper-button-custom swiper-button-next--circle" v-if="currentSwiperOptions.navigation" slot="button-next" @click="swiper.slideNext()">
+      <div
+        class="swiper-button-custom swiper-button-next--circle"
+        v-if="currentSwiperOptions.navigation"
+        slot="button-next"
+        @click="swiper.slideNext()"
+      >
         <IconChevronRight />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -62,6 +70,7 @@ import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 import IconNote from "~/assets/svg/icons/note.svg?inline";
 import { get } from "lodash";
+import Loading from "~/components/common/contentBox/Loading";
 
 export default {
   components: {
@@ -69,33 +78,34 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    CourseItem2
+    CourseItem2,
+    Loading,
   },
 
   props: {
     elearnings: {
-      type: Object,
-      default: null
+      // type: Object,
+      default: null,
     },
 
     swiperOptions: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
 
-    title: { type: String }
+    title: { type: String },
   },
 
   computed: {
     sliderName() {
-      return 'slider-' + new Date().getTime();
+      return "slider-" + new Date().getTime();
     },
     swiper: {
       get() {
         return this.$refs.swiper.swiper;
       },
-      set() {}
-    }
+      set() {},
+    },
   },
 
   data() {
@@ -109,45 +119,60 @@ export default {
       breakpoints: {
         1366: {
           slidesPerView: 5,
-          spaceBetween: 20
+          spaceBetween: 20,
         },
         1024: {
           slidesPerView: 4,
-          spaceBetween: 20
+          spaceBetween: 20,
         },
         768: {
           slidesPerView: 3,
-          spaceBetween: 20
+          spaceBetween: 20,
         },
         640: {
           slidesPerView: 2,
-          spaceBetween: 10
+          spaceBetween: 10,
         },
         320: {
           slidesPerView: 1,
-          spaceBetween: 10
-        }
-      }
+          spaceBetween: 10,
+        },
+      },
     };
 
     return {
       defaultSwiperOptions,
       currentSwiperOptions: assignIn(defaultSwiperOptions, this.swiperOptions),
       tab: 1,
-      list: []
+      list: [],
     };
   },
 
   methods: {
     changeTab(tab) {
       this.tab = tab;
-      this.list = tab === 1 ? get(this, "elearnings.lectures", []) : get(this, "elearnings.courses", []);
-    }
+      this.list =
+        tab === 1
+          ? get(this, "elearnings.lectures", [])
+          : get(this, "elearnings.courses", []);
+    },
+  },
+
+  watch: {
+    elearnings: {
+      handler: function() {
+        this.list =
+          this.tab === 1
+            ? get(this, "elearnings.lectures", [])
+            : get(this, "elearnings.courses", []);
+      },
+      deep: true,
+    },
   },
 
   created() {
     this.list = get(this, "elearnings.lectures", []);
-  }
+  },
 };
 </script>
 

@@ -18,10 +18,10 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_CREATING_PUBLISH.POST]({ commit }, options) {
+  async [actionTypes.ELEARNING_CREATING_PUBLISH.POST]({ commit }, data) {
     try {
       const result = await new Publish(this.$axios)['postPublish'](
-        options
+        data
       );
       return result;
     } catch (error) {

@@ -55,6 +55,7 @@ module.exports = {
         { src: '~/plugins/vue-cropper', ssr: false },
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
+        { src: "@/plugins/vue-input-number.js" },
     ],
     /**
      * Global middleware
@@ -113,9 +114,11 @@ module.exports = {
     /*
      ** Customize the progress bar color
      */
-    loading: {
-        color: "#3B8070"
-    },
+    // loading: {
+    //     color: "#3B8070"
+    // },
+
+    loading: false,
 
     /*
      ** Build configuration

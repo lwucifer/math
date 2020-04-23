@@ -3,8 +3,18 @@
     <div class="message-info">
       <div class="message-info__acc">
         <div class="message-info__acc__image" v-if="!noMessage">
-          <app-avatar :src="avatarSrc" size="md" class="comment-item__avatar" />
-          <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadChange">
+          <app-avatar v-if="typeRoom==2" :src="avatarSrc" size="md" class="comment-item__avatar" />
+          <app-avatar
+            v-else
+            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
+            size="md"
+            class="comment-item__avatar"
+          />
+          <app-upload
+            class="cgi-upload-avt change-avatar"
+            @change="handleUploadChange"
+            v-if="typeRoom == 2"
+          >
             <template>
               <div class="cgi-upload-avt-preview">
                 <IconPhoto width="16" height="16" />
@@ -12,7 +22,7 @@
             </template>
           </app-upload>
         </div>
-        <div class="message-info__acc__title" v-if="!noMessage">
+        <div class="message-info__acc__title" v-if="!noMessage && typeRoom == 2">
           <input v-if="changeName" type="text" v-model="name" />
           <span v-else>
             <a href="#" v-if="name">{{name}}</a>
@@ -28,17 +38,17 @@
             <IconTick width="20" height="20" />
           </button>
         </div>
-        <div v-else style="height: 10rem"></div>
+        <div v-else-if="typeRoom==1">{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</div>
       </div>
       <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
-        <!-- <div class="message-info__box__content attachment">
-          <ul class="list-unstyle" v-for="(item, index) in fileshare" :key="index">
+        <div class="message-info__box__content attachment">
+          <ul class="list-unstyle" v-for="(item, index) in listFile" :key="index">
             <li>
-              <a :href="item.link">{{ item.title }}</a>
+              <a>{{ item.file_name_upload }}</a>
             </li>
           </ul>
-        </div>-->
+        </div>
       </div>
       <div class="message-info__box">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
@@ -53,9 +63,12 @@
         </div>
         <div class="message-info__box__content" v-else></div>
       </div>
-      <div class="message-info__box" v-if="!tabChat">
+      <div class="message-info__box" v-if="!tabChat && typeRoom == 2">
         <h5 class="message-info__box__title">Thành viên</h5>
-        <div class="message-info__box__content">
+        <div
+          class="message-info__box__content"
+          v-if="memberList.listMember && memberList.listMember.length > 0"
+        >
           <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
             <IconPlus height="20" width="20" class="mr-3" />Thêm người
           </button>
@@ -170,7 +183,8 @@ export default {
         room_id: ""
       },
       name: "",
-      avatarSrc: ""
+      avatarSrc: "",
+      checkMemberList: false
     };
   },
   created() {
@@ -187,10 +201,35 @@ export default {
   },
   computed: {
     ...mapState("message", ["memberList", "groupListDetail", "tabChat"]),
+    ...mapGetters("auth", ["userId"]),
     listImage() {
       return this.groupListDetail && this.groupListDetail.listImage
         ? this.groupListDetail.listImage
         : [];
+    },
+    listFile() {
+      return this.groupListDetail && this.groupListDetail.listFile
+        ? this.groupListDetail.listFile
+        : [];
+    },
+    typeRoom() {
+      return this.groupListDetail &&
+        this.groupListDetail.room &&
+        this.groupListDetail.room.type
+        ? this.groupListDetail.room.type
+        : "";
+    },
+    nameRoom() {
+      if (
+        this.groupListDetail &&
+        this.groupListDetail.room &&
+        this.groupListDetail.room.type == 1
+      ) {
+        const [dataName] = this.memberList.listMember.filter(
+          item => item.id != this.userId
+        );
+        return dataName;
+      }
     }
   },
   methods: {
@@ -208,6 +247,9 @@ export default {
       ]({
         params: this.memberListQuery
       });
+      if (getData && !getData.listMember && this.memberListTab.length == 0) {
+        this.checkMemberList = true;
+      }
       if (getData.listMember && getData.listMember.length) {
         this.memberListQuery.page += 1;
         this.memberListTab.push(...getData.listMember);
@@ -277,10 +319,17 @@ export default {
     }
   },
   watch: {
-    groupListDetail(_newval) {
+    memberList(_newval) {
       this.memberListTab = [];
       this.memberListQuery.page = 1;
       this.infiniteId += 1;
+    },
+    tabChat(_newval) {
+      if (_newval) {
+        this.memberListTab = [];
+        this.memberListQuery.page = 1;
+        this.infiniteId += 1;
+      }
     }
   }
 };

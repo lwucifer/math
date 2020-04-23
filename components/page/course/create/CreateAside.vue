@@ -49,32 +49,32 @@ const menu = [
     key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "content",
     title: "Nội dung học tập",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "settings",
     title: "Cài đặt",
     optional: false,
-    checked: false
+    checked: false,
   },
   {
     key: "exercise",
     title: "Bài tập",
     optional: true,
-    checked: false
+    checked: false,
   },
   {
     key: "exam",
     title: "Bài kiểm tra",
     optional: true,
-    checked: false
-  }
+    checked: false,
+  },
 ];
 
 export default {
@@ -83,57 +83,55 @@ export default {
       menu,
       active: "general",
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
-      general: "general"
+      general: "general",
     }),
     ...mapState("elearning/creating/creating-progress", {
-      progress: "progress"
+      progress: "progress",
     }),
     is_submit() {
       return (
-        get(this, "progress.data.general_complete", false) &&
-        get(this, "progress.data.content_complete", false) &&
-        get(this, "progress.data.setting_complete", false)
+        get(this, "progress.data.general_status", -1) == 1 &&
+        get(this, "progress.data.content_status", -1) == 1 &&
+        get(this, "progress.data.setting_status", -1) == 1
       );
-    }
+    },
   },
 
   created() {
     const elearning_id = getParamQuery("elearning_id");
-    if (elearning_id) {
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    }
+    const options = {
+      params: {
+        elearning_id,
+      },
+    };
+    this.$store.dispatch(
+      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+      options
+    );
   },
 
   watch: {
     progress: {
       handler: function() {
-        let checked = get(this, "progress.data.general_complete", false);
+        let checked = get(this, "progress.data.general_status", false) == 1;
         this.menu[0]["checked"] = checked;
-        checked = get(this, "progress.data.content_complete", false);
+        checked = get(this, "progress.data.content_status", false) == 1;
         this.menu[1]["checked"] = checked;
-        checked = get(this, "progress.data.setting_complete", false);
+        checked = get(this, "progress.data.setting_status", false) == 1;
         this.menu[2]["checked"] = checked;
-        checked = get(this, "progress.data.exercise_complete", false);
+        checked = get(this, "progress.data.exercise_status", false) == 1;
         this.menu[3]["checked"] = checked;
-        checked = get(this, "progress.data.test_complete", false);
+        checked = get(this, "progress.data.test_status", false) == 1;
         this.menu[4]["checked"] = checked;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -145,19 +143,20 @@ export default {
       this.confirmLoading = true;
 
       const elearning_id = getParamQuery("elearning_id");
-      const params = {
-        elearning_id
+      const data = {
+        elearning_id,
       };
 
       const res = await this.$store.dispatch(
         `elearning/creating/creating-publish/${actionTypes.ELEARNING_CREATING_PUBLISH.POST}`,
-        params
+        data
       );
 
       this.handleCancel();
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
+        this.$router.push('/elearning/manager/courses');
         return;
       }
 
@@ -176,7 +175,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.general_complete", false)) return;
+      if (!get(this, "progress.data.general_status", false) == 1) return;
 
       if (key === "content") {
         this.active = key;
@@ -191,7 +190,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.content_complete", false)) return;
+      if (!get(this, "progress.data.content_status", false) == 1) return;
 
       if (key === "settings") {
         this.active = key;
@@ -199,12 +198,10 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.setting_complete", false)) return;
-
       this.active = key;
       this.$emit("click-item", key);
-    }
-  }
+    },
+  },
 };
 </script>
 

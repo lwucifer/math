@@ -7,10 +7,10 @@
         <app-input
           :message="messageErrorForgot"
           :error="errorForgot"
+          :validate="validateForgot"
           type="text"
           v-model="email"
           placeholder="Nhập số điện thoại hoặc email"
-          :validate="validateForgot"
           @input="hanldeEmail"
         />
         <app-button
@@ -55,6 +55,7 @@ import {
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 
 export default {
   components: {},
@@ -116,31 +117,39 @@ export default {
       }
     },
     hanldeShowModalOTP() {
-      if (!this.email.includes("@")) {
-        const data = {
-          phone: `+${formatPhoneNumber(this.email)}`,
-          appVerifier: window.recaptchaVerifier
-        };
-        this.sendotp(data).then(result => {
-          console.log("result huydv", result);
-          if (!result.code) {
-            console.log("result huydv11111", result);
-            this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
-          } else {
-            this.errorForgot = true;
-            if (result && result.code == "auth/invalid-phone-number") {
-              this.messageErrorForgot = "Số điện thoại bạn nhập không đúng";
-            } else {
-              this.messageErrorForgot = "Có lỗi. Xin vui lòng thử lại";
-            }
-          }
-        });
+      if (this.email == "") {
+        this.validateForgot = VALIDATE_STATUS.ERROR;
+        this.messageErrorForgot =
+          "Vui lòng nhập email hoặc số điện thoại cần khôi phục";
       } else {
-        this.resetPass();
+        if (!this.email.includes("@")) {
+          const data = {
+            phone: `+${formatPhoneNumber(this.email)}`,
+            appVerifier: window.recaptchaVerifier
+          };
+          this.sendotp(data).then(result => {
+            console.log("result huydv", result);
+            if (!result.code) {
+              console.log("result huydv11111", result);
+              this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
+            } else {
+              this.validateForgot = VALIDATE_STATUS.ERROR;
+              this.errorForgot = true;
+              if (result && result.code == "auth/invalid-phone-number") {
+                this.messageErrorForgot = "Số điện thoại bạn nhập không đúng";
+              } else {
+                this.messageErrorForgot = "Có lỗi. Xin vui lòng thử lại";
+              }
+            }
+          });
+        } else {
+          this.resetPass();
+        }
       }
     },
     showErrorForgot(error) {
       this.errorForgot = true;
+      this.validateForgot = VALIDATE_STATUS.ERROR;
       let message = "";
       switch (error.code) {
         case ERRORS.REGISTER.REQUIRED:

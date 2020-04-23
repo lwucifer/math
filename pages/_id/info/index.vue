@@ -9,16 +9,29 @@
           <h5 class="color-primary">Thông tin tài khoản</h5>
           <hr class="mt-3 mb-3" />
           <div class="wrapInfoAccount">
-            <h5>Thông tin cá nhân</h5>
+            <div class="d-flex">
+              <h5>Thông tin cá nhân</h5>
+              <app-button square 
+                          class="btnAccountLink_account-info"  
+                          v-if="!accountLink.list.linked"
+                          v-on:click="accountLink.showModal=true"
+              >
+                <IconPlus class="icon"/>
+                <span class="ml-3">Liên kết trường học</span>
+              </app-button>
+
+              <AccountLinkModal :visible="accountLink.showModal" 
+                                @click-close="closeLinkModal"
+                                @handleRefresh="handleRefresh"
+                                />
+              
+            </div>
             <app-input labelFixed v-model="name" label="Họ và tên" disabled />
             <app-input v-model="phone" label="Số điện thoại" disabled />
-            <app-input v-model="email" label="Email" />
-            <div class="picker-group__infostudent">
-              <div class="form-group">
-                <label>Giới tính</label>
-                <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
-              </div>
-              <app-date-picker square label="Ngày sinh" v-model="birthday" />
+            <app-input v-model="email" label="Email" disabled/>
+            <div class="picker-group__profileInfo">
+              <app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>
+              <app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>
             </div>
           </div>
           <app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">
@@ -28,16 +41,10 @@
             :visible="showChangePass"
             @click-close="showChangePass = false"
           />
-          <AccountInfoStudent :accounttype="accounttype" />
+          <AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>
           <div class="d-flex mt-4">
-            <app-button class="ml-auto" square @click="save()">Lưu thay đổi</app-button>
+            <app-button class="ml-auto" square>Lưu thay đổi</app-button>
           </div>
-          <app-notify-modal
-            :show="notify.showNotify"
-            :message="notify.message"
-            :link="notify.redirectLink"
-            @close="closeNotify"
-          />
         </div>
       </div>
     </div>
@@ -48,11 +55,12 @@
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import AccountInfoStudent from "~/components/page/account/Info/AccountInfoStudent";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
+import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconLock2 from "~/assets/svg/icons/lock2.svg?inline";
-import firebase from "@/services/firebase/FirebaseInit";
+import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 
 // Import faked data
@@ -61,17 +69,11 @@ import { SCHOOL } from "~/server/fakedata/school/test";
 export default {
   components: {
     IconPhoto,
-    IconLock2,
+    IconPlus,
     SchoolAccountSide,
     AccountInfoStudent,
-    AccountChangePasswordModal
-  },
-  async fetch({ params, query, store }) {
-    console.log(store.state.auth.access_token);
-    const userId = params.id;
-    await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
-    ]);
+    AccountChangePasswordModal,
+    AccountLinkModal
   },
   data() {
     return {
@@ -82,112 +84,60 @@ export default {
       email: "",
       sex: "",
       birthday: "",
-      address: "",
-      accounttype: "USER",
       showChangePass: false,
-      notify: {
-        redirectLink: "",
-        message: "",
-        showNotify: false
-      }
+      accountLink:{
+        showModal: false,
+        list:""
+      },
+      profileInfo:""
     };
   },
-
+  watch:{
+    profileList: {
+        handler: function() {
+          this.name = get(this,"profileList.fullname","");
+          this.phone = get(this,"profileList.phone","");
+          this.email = get(this,"profileList.email","");
+          this.address = get(this,"profileList.address","");
+          this.sex = get(this,"profileList.sex","") === "MALE" ? "Nam" : "Nữ";
+          this.birthday = getDateBirthDay(get(this,"profileList.birthday",""));
+          this.accountLink.list = get(this,"linkList.data",{});
+          this.profileInfo = get(this,"profileList",{});
+        }
+      }
+  },
   methods: {
-    ...mapActions("account", ["accountPersonalEdit", "accountPersonalList"]),
-    save() {
-      const data = {
-        sex: this.sex,
-        address: this.address,
-        birthday: getDateFormat(this.birthday)
-      };
-      Promise.all([
-        this.$store.dispatch(
-          `account/${actionTypes.ACCOUNT_PERSONAL.EDIT}`,
-          data
-        )
-      ]).then(result => {
-        console.log("[accountPersonalEdit]", result);
-        console.log("thanh cong");
-        this.notify = {
-          redirectLink: "",
-          message: "Bạn đã cập nhật thành công",
-          showNotify: true
-        };
-      });
+    async fetchProfile(){
+      await Promise.all([
+        this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
+        this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
+      ])
     },
     closeNotify() {
       this.notify.showNotify = false;
-    }
-
-    // async handleUploadChange(fileList, event) {
-    //   this.avatar = Array.from(fileList);
-
-    //   getBase64(this.avatar[0], src => {
-    //     this.avatarSrc = src;
-    //   });
-    //   const body = new FormData();
-    //   body.append("avatar_images", fileList[0]);
-    //   console.log("[avatar_images]", fileList[0]);
-    //   this.accountPersonalEditAvatar(body).then(result => {});
-    // }
+    },
+    closeLinkModal(){
+      this.accountLink.showModal = false;
+    },
+    async handleRefresh(){
+      this.fetchProfile();
+    },
   },
   computed: {
-    ...mapState("account", ["personalList"])
+    ...mapState("account", {
+      profileList: "profileList"
+    }),
+    ...mapState("account", {
+      linkList: "linkList"
+    })
   },
   created() {
-    this.name = this.personalList.fullname || "";
-    this.phone = this.personalList.phone_number || "";
-    this.email = this.personalList.email || "";
-    this.address = this.personalList.address || "";
-    this.sex = this.personalList.sex;
-    this.birthday = getDateBirthDay(this.personalList.birthday);
+    this.fetchProfile();
   }
 };
 </script>
 
 <style lang="scss">
 @import "~/assets/scss/components/school/_school-account.scss";
-.wrapInfoAccount {
-  padding: 20px;
-  label {
-    color: #999999;
-  }
-  h5 {
-    margin-bottom: 25px;
-  }
-  .app-input {
-    display: flex;
-    .app-input__label {
-      white-space: nowrap;
-      width: 15rem;
-    }
-  }
-  .form-group {
-    label {
-      width: 14rem;
-      white-space: nowrap;
-    }
-  }
-  .picker-group__infostudent {
-    display: flex;
-    .app-date-picker {
-      margin-left: 60px;
-      label {
-        margin-right: 20px;
-      }
-    }
-  }
-}
-.btnChangePassword {
-  margin-left: 17rem;
-  margin-bottom: 30px;
-}
-.account-edit-modal .app-modal-content .app-input {
-  display: flex;
-  flex-wrap: wrap;
-  .app-input__error {
-    margin-left: 16.1rem;
-  }
-}
+@import "~/assets/scss/components/account/_account-info.scss";
 </style>

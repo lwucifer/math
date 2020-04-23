@@ -1,11 +1,12 @@
 <template>
-  <div class="elearning-">
+  <div>
     <!--Filter form-->
-    <elearning-manager-filter-form
-      @changedFilter="updateFilter"
-      @submit="submitFilter"
+    <filter-form
+      @submitFilter="submitFilter"
+      @changedType="handleChangedType"
+      @submitSearch="handleSubmitSearch"
     />
-    <elearning-manager-filter-table
+    <list-table
       :pagination="pagination"
       :list="list"
       :loading="loading"
@@ -19,15 +20,16 @@ import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
 import { get } from "lodash"
 import { useEffect, getParamQuery } from "~/utils/common"
-import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/ElearningManagerFilterForm"
-import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/ElearningManagerFilterTable"
+import FilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseFilter"
+import ListTable from "~/components/page/elearning/manager/exam/tables/Exercise"
+import { EXERCISE_CATEGORIES } from '~/utils/constants'
 
 const STORE_NAMESPACE = "elearning/teaching/exercise"
 
 export default {
   components: {
-    ElearningManagerFilterForm,
-    ElearningManagerFilterTable
+    FilterForm,
+    ListTable
   },
   filters: {
   },
@@ -45,7 +47,7 @@ export default {
       params: {
         page: 1,
         size: 10,
-        // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
+        category: EXERCISE_CATEGORIES.EXERCISE,
         elearning_id: null,
         lesson_id: null
       },
@@ -66,25 +68,38 @@ export default {
       this.params = { ...this.params, ...val }
       this.refreshData()
     },
+    handleChangedType(val) {
+      this.updateFilter({ type: val })
+    },
+    handleSubmitSearch(val) {
+      this.updateFilter({ keyword: val })
+    },
     submitFilter(val) {
       this.updateFilter(val)
     },
     updatePagination(val) {
       this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
       this.params.size = val.size
+      this.getList()
     },
     async getList() {
       try {
         this.loading = true
-        // this.params.elearning_id = getParamQuery('elearning_id')
-        this.params.elearning_id = "230291b7-e762-4da8-b411-77c313fee652"
+        this.params.elearning_id = getParamQuery('elearning_id')
         let params = { ...this.params }
 
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
-        this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+        this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
+        this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
+        this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
+        this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
+        this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+        this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+        this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+        // this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
       } catch (e) {
         console.log('Get list exercise ', e)
       } finally {
@@ -99,16 +114,10 @@ export default {
   },
 
   created() {
-    useEffect(this, this.getList.bind(this), [
-      "params.page",
-      "params.size",
-      "params.elearning_id"
-    ])
+    this.getList()
   }
 };
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-  /*@import "~/assets/scss/components/elearning/manager/_elearning-exercise.scss";*/
 </style>

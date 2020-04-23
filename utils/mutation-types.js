@@ -35,6 +35,10 @@ export const ACCOUNT_PERSONAL = {
     SET_ACCOUNT_PERSONAL_LIST: "setAccountPersonalList"
 };
 
+export const ACCOUNT_PROFILE = {
+    SET_ACCOUNT_PROFILE_LIST: "setAccountProfileList",
+};
+
 export const ACCOUNT_LINK = {
     SET_ACCOUNT_LINK_LIST: "setAccountLinkList"
 };
@@ -89,6 +93,10 @@ export const ELEARNING_PUBLIC_RELATED = {
     SET_ELEARNING_PUBLIC_RELATED_LIST: "setElearningPublicRelatedList"
 };
 
+export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
+    SET_ELEARNING_PUBLIC_VOTED_ELEARNING_LIST: "setElearningPublicVotedElearningList"
+};
+
 export const ELEARNING = {
     SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
     SET_ELEARNING_PROGRAM: "setElearningProgram",
@@ -97,12 +105,28 @@ export const ELEARNING = {
     SET_ELEARNING_PUBLIC_LEVEL: "setElearningPublicLevel"
 };
 
-export const CREATING_OLCLASSES = {
-    SET_CREATING_OLCLASSES_LIST: "setCreatingOlclassesList",
-    SET_CREATING_OLCLASSES_ADD: "setCreatingOlclassesAdd",
-    SET_CREATING_OLCLASSES_EDIT: "setCreatingOlclassesEdit",
-    SET_CREATING_OLCLASSES_DELETE: "setCreatingOlclassesDelete",
-    SET_CREATING_OLCLASSES_INVITATIONS_LIST: "setCreatingOlclassesInvitationsList"
+export const TEACHING_OLCLASSES = {
+    SET_TEACHING_OLCLASS_LIST: "setTeachingOlclassList",
+    SET_TEACHING_OLCLASS_ADD: "setTeachingOlclassAdd",
+    SET_TEACHING_OLCLASS_EDIT: "setTeachingOlclassEdit",
+    SET_TEACHING_OLCLASS_DELETE: "setTeachingOlclassDelete",
+    SET_TEACHING_OLCLASS_BLOCK: "setTeachingOlclassBlock",
+    SET_TEACHING_OLCLASS_UNBLOCK: "setTeachingOlclassUnBlock",
+};
+
+export const TEACHING_OLCLASS_INVITES = {
+    SET_TEACHING_OLCLASS_INVITES_LIST: "setTeachingOlclassInvitesList",
+    SET_TEACHING_OLCLASS_INVITES_ADD: "setTeachingOlclassInvitesList",
+    SET_TEACHING_OLCLASS_INVITES_EDIT: "setTeachingOlclassInvitesList",
+};
+
+export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_LIST: "setTeachingOlclassLessonAttendancesList",
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_EDIT: "setTeachingOlclassLessonAttendancesEdit",
+};
+
+export const TEACHING_OLCLASS_LESSONS = {
+    SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
 };
 
 export const CREATING_ANSWER = {
@@ -151,15 +175,29 @@ export const ELEARNING_TEACHING_REPOSITORY = {
     SET_TEACHING_REPOSITORY_INFO: "setElearningTeachingRespositoryInfo"
 };
 
-export const ELEARNING_TEACHING_EXERCISE = {
-    SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
-    SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail"
+export const ELEARNING_TEACHING_EXERCISE_ELEARNING = {
+    SET_TEACHING_EXERCISE_ELEARNING_LIST: "setElearningTeachingExerciseElearningList"
 };
 
-export const ELEARNING_TEACHING_SUBMISSION = {
-    SET_TEACHING_SUBMISSION_LIST: "setElearningTeachingSubmissionList",
-    SET_TEACHING_SUBMISSION_DETAIL: "setElearningTeachingSubmissionDetail",
-    SET_TEACHING_SUBMISSION_MARK: "setElearningTeachingSubmissionMark"
+export const ELEARNING_TEACHING_EXERCISE = {
+    SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
+    SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
+};
+
+export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
+    SET_TEACHING_EXERCISE_PARTICIPANT_LIST: "setElearningTeachingExerciseParticipantList",
+};
+
+export const ELEARNING_TEACHING_TEST = {
+    SET_TEACHING_TEST_LIST: "setElearningTeachingTestList",
+};
+
+export const ELEARNING_TEACHING_RESULT = {
+  SET_TEACHING_RESULT_DETAIL: "setElearningTeachingResultDetail",
+};
+
+export const ELEARNING_TEACHING_EVALUATION = {
+  SET_TEACHING_EVALUATION_ADD: "setElearningTeachingEvaluationAdd",
 };
 
 export const ELEARNING_TEACHING_VOTE = {
@@ -290,9 +328,10 @@ export const ELEARNING_INFO = {
 export const TEACHING_SUMMARY = {
     SET_TEACHING_SUMMARY_INFO: "setTeachingSummaryInfo"
 };
-export const TEACHING_ELEARNING = {
-    SET_TEACHING_ELEARNING_LIST: "setTeachingElearningList",
-    SET_TEACHING_ELEARNING_DELETE: "setTeachingElearningDelete"
+export const TEACHING_ELEARNINGS = {
+    SET_TEACHING_ELEARNINGS_LIST: "setTeachingElearningsList",
+    SET_TEACHING_ELEARNINGS_DELETE: "setTeachingElearningsDelete",
+    SET_TEACHING_ELEARNINGS_RESTORE: "setTeachingElearningsRestore",
 };
 export const TEACHING_STUDENTS = {
     SET_TEACHING_STUDENTS_LIST: "setTeachingStudentsList",
@@ -305,4 +344,7 @@ export const TEACHING_INTERACTIVE = {
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
     SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete"
+};
+export const TEACHING_STATISTIC_REVENUE = {
+    SET_TEACHING_STATISTIC_REVENUE_LIST:"setTeachingStatisticRevenuList"
 };

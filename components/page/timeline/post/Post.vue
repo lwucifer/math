@@ -105,6 +105,7 @@
             :key="item.id"
             :post="post"
             :data="item"
+            @edited="handleCommentEdited"
             @deleted="handleDeleted"
           />
 
@@ -216,8 +217,7 @@ export default {
         limit: 10,
         source_id: this.post.post_id
       },
-      parentCommentData: {},
-      childrenCommentData: {}
+      parentCommentData: {}
     };
   },
 
@@ -292,7 +292,7 @@ export default {
       this.isCommentFetched = true;
     },
 
-    async postComment(content, listTags, image, link) {
+    async postComment({ content, listTags, image, link }) {
       const formData = new FormData();
       const commentModel = createComment({
         source_id: this.post.post_id,
@@ -308,9 +308,7 @@ export default {
         // Check whether field is an array
         formData.append(
           key,
-          Array.isArray(value)
-            ? JSON.stringify(value)
-            : value
+          Array.isArray(value) ? JSON.stringify(value) : value
         );
       }
 
@@ -319,20 +317,23 @@ export default {
       ](formData);
 
       if (doPostComment.success) {
-        const timeout = setTimeout(() => {
-          if ("listParentComments" in this.parentCommentData) {
-            const { listParentComments } = this.parentCommentData;
-            this.parentCommentData.listParentComments = [
-              doPostComment.data,
-              ...listParentComments
-            ];
-          } else {
-            this.parentCommentData = {
-              listParentComments: [doPostComment.data]
-            };
-          }
-          clearTimeout(timeout);
-        }, image ? 1000 : 0);
+        const timeout = setTimeout(
+          () => {
+            if ("listParentComments" in this.parentCommentData) {
+              const { listParentComments } = this.parentCommentData;
+              this.parentCommentData.listParentComments = [
+                doPostComment.data,
+                ...listParentComments
+              ];
+            } else {
+              this.parentCommentData = {
+                listParentComments: [doPostComment.data]
+              };
+            }
+            clearTimeout(timeout);
+          },
+          image ? 1000 : 0
+        );
       } else {
         this.$toasted.error(doPostComment.message);
       }
@@ -344,6 +345,18 @@ export default {
           comment => comment.id !== id
         );
       }
+    },
+
+    handleCommentEdited(commentData, cancelEdit) {
+      this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.map(
+        item => {
+          if (item.id === commentData.id) {
+            return commentData;
+          }
+          return item;
+        }
+      );
+      cancelEdit();
     }
   }
 };

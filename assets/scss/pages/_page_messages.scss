@@ -361,7 +361,7 @@
                             right: 0;
                             bottom: -2rem;
                             background: rgba(51, 51, 51, 0.6);
-                            padding: .5rem;
+                            padding: 0.5rem;
                             transition: all 300ms;
                         }
                     }
@@ -383,14 +383,14 @@
                         }
                         .btn-change-name {
                             height: 2.4rem;
-                            margin-left: .5rem;
+                            margin-left: 0.5rem;
                             position: absolute;
                             right: 0;
                             top: 0;
                         }
                         .btn-save-name {
                             height: 2.4rem;
-                            margin-left: .5rem;
+                            margin-left: 0.5rem;
                             position: absolute;
                             right: 0;
                             top: 0;
@@ -487,39 +487,73 @@
     }
     .message-box__item__desc {
         display: flex;
+        width: 100%;
+        justify-content: flex-end;
         // margin-top: 1rem;
         .message-box__item__desc__text {
-            background: #f7f6f9;
+            background: #f8f8f8;
             border-radius: 5px;
             padding: 1rem 1.2rem;
+            margin: 0.5rem 0;
         }
         .message-box__item__desc__image {
             border-radius: 5px;
-            padding: 1rem 0;
+            margin: 0.5rem 0;
         }
         .message-box__item__desc__actions {
             opacity: 0;
             visibility: hidden;
             transition: all 300ms;
+            min-width: 17rem;
+            padding-right: 0.8rem;
+            margin: 0.5rem 0;
         }
         &:hover .message-box__item__desc__actions {
             opacity: 1;
             visibility: visible;
         }
     }
+    .item-file {
+        order: 2;
+        height: 7rem;
+        width: 15rem;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        align-items: center;
+        border: 1px solid $color-border;
+        color: #666;
+        margin: 0.5rem 0;
+        .icon {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            width: 100%;
+            background-color: $color-border;
+            padding: 0 0.5rem;
+        }
+        .btn-remove {
+            background-color: transparent;
+            right: 0.5rem;
+            top: 0.5rem;
+        }
+        span {
+            display: block;
+            margin: 1rem 0.6rem;
+            overflow: hidden;
+        }
+    }
     &.item__1 {
         .message-box__item__desc {
+            justify-content: flex-start;
             .message-box__item__desc__text {
-                flex: 1;
                 order: 1;
             }
             .message-box__item__desc__image {
                 // color: #ffffff;
-                flex: 1;
                 order: 1;
             }
             .message-box__item__desc__actions {
-                width: 17rem;
                 order: 2;
             }
         }
@@ -533,16 +567,13 @@
             .message-box__item__desc__text {
                 background-color: #32af85;
                 color: #ffffff;
-                flex: 1;
                 order: 2;
             }
             .message-box__item__desc__image {
-                flex: 1;
                 order: 2;
             }
         }
         .message-box__item__desc__actions {
-            width: 17rem;
             order: 1;
         }
         .message-box__item__content {
@@ -668,28 +699,30 @@ button:focus {
     }
 }
 
-.aside-box__bottom{
+.aside-box__bottom {
     .input-chat {
         display: flex;
         width: 100%;
     }
     .list-chat-img {
+        flex-wrap: wrap;
         .item {
             margin-bottom: 1rem;
-            height: 12rem;
+            height: 10rem;
             border-radius: 10px;
             position: relative;
             overflow: hidden;
             margin-right: 1rem;
-            .btn-remove {
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-            }
             img {
                 width: auto;
                 height: 100%;
             }
+        }
+        .btn-remove {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            z-index: 9;
         }
     }
 }
@@ -718,8 +751,8 @@ ul {
     color: #999;
     margin: 1rem 1.5rem;
     .btn-create-chat-icon {
-        background: #EEEEEE;
-        border: 1px dashed #CCCCCC;
+        background: #eeeeee;
+        border: 1px dashed #cccccc;
         box-sizing: border-box;
         border-radius: 50%;
         width: 4rem;
@@ -731,5 +764,59 @@ ul {
         svg path {
             fill: #999;
         }
+    }
+}
+
+.app-files {
+    label {
+        cursor: pointer;
+    }
+    input {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+    }
+}
+
+.list-chat-img {
+    display: flex;
+    align-items: center;
+    .item-file {
+        height: 7rem;
+        width: 15rem;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        align-items: center;
+        border: 1px solid $color-border;
+        color: #666;
+        margin: 1.5rem 0;
+        .icon {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            width: 100%;
+            background-color: $color-border;
+            padding: 0 0.5rem;
+        }
+        .btn-remove {
+            background-color: transparent;
+            right: 0.5rem;
+            top: 0.5rem;
+        }
+        span {
+            display: block;
+            margin: 1rem 0.6rem;
+            overflow: hidden;
+        }
+    }
+    .btn-remove {
+        width: 1.8rem;
+        height: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 2px;
     }
 }

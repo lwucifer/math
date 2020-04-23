@@ -91,19 +91,28 @@ export function createPayloadAddDocument(payload) {
 }
 
 class CourseSetting {
-  constructor(payload) {
+  constructor(payload, free) {
     if (payload.comment_allow !== "") {
       this.comment_allow = payload.comment_allow == 1 ? true : false;
     }
-    this.price = payload.price !== "" ? numeral(payload.price).value() : "";
-    this.fee = payload.fee !== "" ? numeral(payload.fee).value() : "";
+
+    if (free == 1) {
+      this.price = numeral(payload.price).value();
+      this.fee = numeral(payload.fee).value();
+    }
+
+    if (free == 2) {
+      this.price = 0;
+      this.fee = 0;
+    }
+
     this.elearning_id = payload.elearning_id;
     this.privacy = payload.privacy;
   }
 }
 
-export function createPayloadCourseSetting(payload) {
-  return Object.freeze(new CourseSetting(payload));
+export function createPayloadCourseSetting(payload, free) {
+  return Object.freeze(new CourseSetting(payload, free));
 }
 
 class Exercise {
@@ -111,27 +120,39 @@ class Exercise {
     if (payload.id) {
       this.id = payload.id;
     }
+
     if (payload.lesson_id) {
       this.lesson_id = payload.lesson_id;
     }
+
+    if (payload.elearning_id) {
+      this.elearning_id = payload.elearning_id;
+    }
+
     if (payload.required !== "") {
       this.required = payload.required ? true : false;
     }
+
+    if (payload.required == 1) {
+      if (payload.pass_score !== "") {
+        this.pass_score = payload.pass_score;
+      }
+      if (payload.reworks !== "") {
+        this.reworks = payload.reworks;
+      }
+      if (payload.duration !== "") {
+        this.duration = payload.duration;
+      }
+    }
+
     if (payload.title) {
       this.title = payload.title;
     }
+
     if (payload.type) {
       this.type = payload.type;
     }
-    if (payload.pass_score !== "") {
-      this.pass_score = payload.pass_score;
-    }
-    if (payload.reworks !== "") {
-      this.reworks = payload.reworks;
-    }
-    if (payload.duration !== "") {
-      this.duration = payload.duration;
-    }
+
     if (payload.category) {
       this.category = payload.category;
     }
@@ -147,8 +168,8 @@ class Question {
     if (payload.exercise_id) {
       this.exercise_id = payload.exercise_id;
     }
-    if (payload.score) {
-      this.score = payload.score;
+    if (payload.points) {
+      this.points = payload.points;
     }
     if (payload.exercise_id) {
       this.exercise_id = payload.exercise_id;

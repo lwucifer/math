@@ -9,16 +9,17 @@
           <div class="pl-4 pr-4">
             <h5 class="color-primary mb-3">Bài giảng và khóa học</h5>
             <div class="elearning-manager__tab">
-              <a @click="tab = 1" :class="tab == 1 ? 'active' : ''">Đã đăng</a>
-              <a @click="tab = 2" :class="tab == 2 ? 'active' : ''">Đang soạn</a>
-              <a @click="tab = 3" :class="tab == 3 ? 'active' : ''">Chờ duyệt</a>
-              <a @click="tab = 4" :class="tab == 4 ? 'active' : ''">Bị từ chối</a>
+              <a @click="tab = 'APPROVED'" :class="tab == 'APPROVED' ? 'active' : ''">Đã đăng</a>
+              <a @click="tab = 'PENDING'" :class="tab == 'PENDING' ? 'active' : ''">Đang soạn</a>
+              <a @click="tab = 'WAITING_FOR_APPROVE'" :class="tab == 'WAITING_FOR_APPROVE' ? 'active' : ''">Chờ duyệt</a>
+              <a @click="tab = 'REJECTED'" :class="tab == 'REJECTED' ? 'active' : ''">Bị từ chối</a>
+              <a @click="tab = ''" :class="tab == '' ? 'active' : ''">Danh sách ẩn</a>
             </div>
             <div class="elearning-manager__serch">
               <app-button rounded size="sm" class="mr-4" normal>
                 <IconFilter />Lọc kết quả
               </app-button>
-              <app-checkbox label="Miễn phí" />
+              <app-checkbox label="Miễn phí" v-model="params.free" />
               <app-select :options="opts1" v-model="opt1" size="sm" />
               <app-select :options="opts2" v-model="opt2" size="sm" />
               <app-input class="mb-0" size="sm" placeholder="Nhập để tìm kiếm...">
@@ -32,51 +33,47 @@
             </app-button>
           </div>
 
-          <app-table
-            :heads="heads"
-            :pagination="pagination"
-            @pagechange="onPageChange"
-            @sort="sort"
-            :data="list"
-            :sortBy="list"
-            @selectAll="selectAll"
-          >
-            <tr v-for="(item, index) in list" :key="index">
-              <td class="pr-0">
-                <label
-                  class="table-checkbox"
-                  :class="ids.includes(item.id) ? 'border-primary' : ''"
-                >
-                  <input type="checkbox" v-model="ids" :value="item.id" @change="changeSelect" />
-                  <IconTick v-if="ids.includes(item.id)" height="9" width="9" />
-                </label>
-              </td>
-              <td>
-                <div class="d-flex">
-                  <div>
-                    <img :src="item.image" alt />
+          <!--Table-->
+            <app-table
+              :heads="heads"
+              :pagination="pagination"
+              @pagechange="onPageChange"
+              @selectionChange="selectRow"
+              :data="elearningList"
+              multiple-selection
+            >
+              <template v-slot:cell(name)="{row}">
+                <td>
+                  <div class="table-avatar">
+                    <div class="left">
+                      <img :src="row.avatar.high" alt="">
+                    </div>
+                    <div class="right">
+                      <h6 class="mb-2">{{row.name}}</h6>
+                      <p>{{row.subject}}</p>
+                    </div>
                   </div>
-                  <div class="ml-3 max-w-100">
-                    <strong>{{item.name}}</strong>
-                    <div class="mt-3 color-666">{{item.desc}}</div>
-                  </div>
-                </div>
-              </td>
-              <td v-html="item.price"></td>
-              <td>
-                <span v-if="item.type == 1" class="color-primary">Công khai</span>
-                <span v-else-if="item.type == 2" class="color-red">Riêng tư</span>
-                <span v-else>-</span>
-              </td>
-              <td v-html="item.name"></td>
-              <td>
-                <div class="text-desc">
-                  <p class="text-desc__text">{{item.content}}</p>
-                  <div class="text-desc__sub">{{item.content}}</div>
-                </div>
-              </td>
-            </tr>
-          </app-table>
+                </td>
+              </template>
+              <template v-slot:cell(hide)="{row}">
+                <td>
+                  <span v-if="row.hide" class="color-red">Riêng tư</span>
+                  <span v-else class="color-primary">Công khai</span>
+                </td>
+              </template>
+              <template v-slot:cell(price)="{row}">
+                <td>
+                  {{row.price.original_price}}
+                </td>
+              </template>
+              <template v-slot:cell(vote)="{row}">
+                <td>
+                  <strong>{{row.vote.average_rate}}</strong>
+                  <span>({{row.vote.average_rate}})</span>
+                </td>
+              </template>
+            </app-table>
+          <!--End table-->
         </div>
       </div>
     </div>
@@ -90,13 +87,12 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 
-// Import faked data
-import {} from "~/server/fakedata/elearning/test";
-
-//import CoursesService from "~/services/elearning/study/Study";
-
 import { mapState } from "vuex";
-//import * as actionTypes from "~/utils/action-types";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+
+const STORE_NAMESPACE = "elearning/teaching/elearning";
 
 export default {
   layout: "manage",
@@ -110,15 +106,9 @@ export default {
     IconTick
   },
 
-  // async fetch({ params, query, store }) {
-  //   await Promise.all([
-  //     store.dispatch(`elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`),
-  //   ]);
-  // },
-
   data() {
     return {
-      tab: 1,
+      tab: 'APPROVED',
       ids: [],
       heads: [
         {
@@ -137,11 +127,82 @@ export default {
           sort: true
         },
         {
-          name: "",
+          name: "hide",
           text: "Hiển thị"
         },
         {
-          name: "date",
+          name: "created",
+          text: "Ngày đăng",
+          sort: true
+        },
+        {
+          name: "views",
+          text: "Lượt xem",
+          sort: true
+        },
+        {
+          name: "participants",
+          text: "Số học sinh tham gia",
+          sort: true
+        },
+        {
+          name: "vote",
+          text: "Đánh giá",
+          sort: true
+        },
+        // {
+        //   name: "content",
+        //   text: "Lý do bị từ chối"
+        // }
+      ],
+      heads2: [
+        {
+          name: "",
+          text: "",
+          selectAll: true
+        },
+        {
+          name: "name",
+          text: "Bài giảng và khóa học",
+          sort: true
+        },
+        {
+          name: "price",
+          text: "Học phí",
+          sort: true
+        },
+        {
+          name: "hide",
+          text: "Hiển thị"
+        },
+        {
+          name: "created",
+          text: "Ngày đăng",
+          sort: true
+        }
+      ],
+      heads3: [
+        {
+          name: "",
+          text: "",
+          selectAll: true
+        },
+        {
+          name: "name",
+          text: "Bài giảng và khóa học",
+          sort: true
+        },
+        {
+          name: "price",
+          text: "Học phí",
+          sort: true
+        },
+        {
+          name: "hide",
+          text: "Hiển thị"
+        },
+        {
+          name: "created",
           text: "Ngày đăng",
           sort: true
         },
@@ -150,12 +211,11 @@ export default {
           text: "Lý do bị từ chối"
         }
       ],
-      isAuthenticated: true,
       pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
+        total: 10,
+        page: 1,
+        size: 10,
+        totalElements: 10,
         first: 1,
         last: 10
       },
@@ -165,8 +225,8 @@ export default {
       opt1: "",
       opts1: [
         { value: "", text: "Theo loại" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
+        { value: "COURSE", text: "COURSE" },
+        { value: "LECTURE", text: "LECTURE" }
       ],
       opt2: "",
       opts2: [
@@ -179,192 +239,99 @@ export default {
         name: "Savannah Mckinney",
         avatar: "https://picsum.photos/125/125"
       },
-      list: [
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 2,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 3,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 4,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 5,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 6,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        },
-        {
-          id: 7,
-          name: "Mua khóa học Đại số 11",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          date: "19/11/2019",
-          image: "https://picsum.photos/103/61",
-          desc: "Mô tả khóa học",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque Nibh et ultricies augue at scelerisque"
-        }
-      ],
-      listQuery: {
+      elearningList: [],
+      ids: [],
+      params: {
         page: 1,
-        size: 10
+        limit: 10,
+        free: null
       },
+      xxx: "PENDING | WAITING_FOR_APPROVE | APPROVED | REJECTED | HIDE"
     };
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-   
+    ...mapState(STORE_NAMESPACE, {
+      stateElearnings: "elearnings"
+    }),
+  },
+
+  watch: {
+    tab(newValue, oldValue) {
+      this.params.hide = newValue == '';
+      this.getList();
+    }
   },
 
   methods: {
-    selectAll(e) {
-      this.ids = e;
-      console.log(this.ids);
-    },
-    changeSelect() {
-      console.log(this.ids);
-    },
-    sort(e) {
-      this.list = [...e];
-    },
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
+      that.params.limit = that.pagination.size;
+      that.params.page = that.pagination.page;
+      that.getList();
     },
-    /**
-     * DELETE
-     */
-    // async deletePost(id) {
-    //   const doDelete = await new CoursesService(this.$axios)[
-    //     actionTypes.BASE.DELETE
-    //   ](id);
 
-    //   if (doDelete.success) {
-    //     const { courses } = this;
-    //     const newListPost =
-    //       courses && courses.listPost
-    //         ? courses.listPost.filter(item => item.post_id !== id)
-    //         : [];
-    //     this.courses = {
-    //       listPost: newListPost,
-    //       page: courses.page || {}
-    //     };
-    //   } else {
-    //     this.$toasted.error(doDelete.message);
-    //   }
-    // },
+    selectRow(data) {
+      this.ids = data.map((row, index, data) => {
+        return row.online_class_id;
+      });
+    },
 
-    // async getList() {
-    //   const elearningType = "1";
-    //   this.listQuery.type = elearningType;
-    //   let params = {
-    //     type: elearningType
-    //   }
-    //   params = {...this.listQuery};
-    //   this.$store.dispatch(
-    //     `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`, { params }
-    //   )
-    // },
-    
-    // async getList2() {
-    //   const elearningId = "230291b7-e762-4da8-b411-77c313fee652";
-    //   this.listQuery.elearning_id = elearningId;
-    //   let params = {
-    //     elearning_id: elearningId
-    //   }
-    //   params = {...this.listQuery};
-    //   this.$store.dispatch(
-    //     `elearning/study/study-archive/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`, { params }
-    //   )
-    // },
+    async getList() {
+      try {
+        this.loading = true;
+        let xx = {
+          "free": true,
+          "hide": true,
+          "keyword": "string",
+          "limit": 0,
+          "page": 0,
+          "privacy": "string",
+          "status": "string",
+          "subject": "string",
+          "type": "string"
+        };
+        let params = { ...this.params };
+        params.status = this.tab;
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
+            params
+        );
+        this.elearningList = this.get(this.stateElearnings, "data.content", []);
+        this.pagination.size = this.get(this.stateElearnings, "data.page.size", 10);
+        this.pagination.first = this.get(this.stateElearnings, "data.page.first", 1);
+        this.pagination.last = this.get(this.stateElearnings, "data.page.last", 1);
+        this.pagination.number = this.get(this.stateElearnings, "data.page.number", 0);
+        this.pagination.totalPages = this.get(this.stateElearnings, "data.page.total_pages", 0);
+        this.pagination.totalElements = this.get(this.stateElearnings, "data.page.total_elements", 0);
+        this.pagination.numberOfElements = this.get(this.stateElearnings, "data.page.number_of_elements", 0);
+      } catch (e) {
+      } finally {
+        this.loading = false;
+      }
+    },
+
+     async deleteRows() {
+      let ids = { ids: [...this.ids] };
+      const doDelete = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.DELETE}`,
+        JSON.stringify(ids)
+      );
+
+      if (doDelete.success) {
+        this.getList();
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    get
   },
 
   created() {
-    // this.getList();
-    // this.getList2();
+    this.getList();
   }
 };
 </script>
@@ -372,4 +339,16 @@ export default {
 <style lang="scss">
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
+
+.table-avatar {
+  display: flex;
+  .left {
+    width: 10rem;
+    margin-right: 1rem;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
 </style>

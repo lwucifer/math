@@ -2,7 +2,7 @@
   <div class="comment-editor" :class="classes">
     <app-avatar
       :size="reply ? 'xs' : 'sm'"
-      :src="$store.state.auth.avatarUser && $store.state.auth.avatarUser.low"
+      :src="avatarUser && avatarUser.low ? avatarUser.low : null"
       class="comment-editor__avatar"
     />
 
@@ -67,15 +67,18 @@
         <template v-else>Đang tìm nạp bản xem trước</template>
       </div>
 
-      <div v-else-if="!linkDataFetching && linkDataFetched" class="comment-editor__preview-link mt-3">
+      <div
+        v-else-if="!linkDataFetching && linkDataFetched"
+        class="comment-editor__preview-link mt-3"
+      >
         <a href class="comment-editor__preview-link__remove" @click.prevent="removePreviewLink">
           <IconTimes class="icon" />
         </a>
 
         <app-content-box
+          class="mb-0"
           tag="a"
           target="_blank"
-          class="mb-4"
           size="sm"
           :href="link.url"
           :image="link.image"
@@ -90,7 +93,8 @@
 </template>
 
 <script>
-import { debounce, isEmpty } from "lodash";
+import { mapGetters } from "vuex";
+import { debounce, isEmpty, get, uniq } from "lodash";
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
 import { Editor, EditorContent } from "tiptap";
@@ -123,7 +127,31 @@ export default {
   },
 
   props: {
-    reply: Boolean
+    reply: Boolean,
+    prefetch: Boolean,
+    mode: {
+      type: String,
+      default: "add",
+      validator: value => ["add", "edit"].includes(value)
+    },
+    initialValues: {
+      avatar: Object,
+      comment_content: String,
+      comment_image: Object,
+      comment_link: String,
+      is_like: Number,
+      type_like: String,
+      tags: Array,
+      default: () => ({
+        avatar: {},
+        comment_content: "",
+        comment_image: {},
+        comment_link: "",
+        is_like: 0,
+        type_like: null,
+        tags: []
+      })
+    }
   },
 
   data() {
@@ -144,18 +172,25 @@ export default {
       mentionInfiniteId: +new Date(),
 
       // Image upload data
-      uploadFileList: [],
-      uploadImgSrc: null,
+      uploadImgSrc: get(this.initialValues, "comment_image.low", null),
 
       // Fetch link data
       linkDataFetching: false,
-      linkDataFetched: false,
+      linkDataFetched: !!this.initialValues.comment_link,
       linkDataFetchError: false,
-      link: null
+
+      // Form submit data
+      uploadFileList: [],
+      link: this.initialValues.comment_link
+        ? JSON.parse(this.initialValues.comment_link)
+        : null,
+      isDeleteOldImg: false
     };
   },
 
   computed: {
+    ...mapGetters('auth', ['avatarUser']),
+
     classes() {
       return {
         "comment-editor--reply": this.reply
@@ -169,10 +204,7 @@ export default {
     },
 
     submitable() {
-      const conditions = [
-        this.uploadFileList.length,
-        !isEmpty(this.link)
-      ];
+      const conditions = [this.uploadFileList.length, !isEmpty(this.link)];
 
       return conditions.some(condition => !!condition);
     }
@@ -181,7 +213,7 @@ export default {
   mounted() {
     // Init editor
     this.editor = new Editor({
-      content: "",
+      content: this.initialValues.comment_content,
       autoFocus: true,
       extensions: [
         new Placeholder({
@@ -320,9 +352,10 @@ export default {
       const tagEls = el.querySelectorAll("[data-mention-id]");
 
       if (tagEls.length) {
-        return Array.from(tagEls).map(item =>
+        const list = Array.from(tagEls).map(item =>
           parseInt(item.getAttribute("data-mention-id"))
         );
+        return uniq(list);
       }
       return [];
     },
@@ -332,13 +365,28 @@ export default {
       const clearedHtml = clearEmptyTag(html);
 
       if (clearedHtml || this.submitable) {
-        this.$emit(
-          "submit",
-          clearedHtml,
-          this.getTagsFromHTML(clearedHtml),
-          this.uploadFileList[0] || null,
-          !isEmpty(this.link) ? JSON.stringify(this.link) : null
-        );
+        const initialTags = Array.isArray(this.initialValues.tags)
+          ? this.initialValues.tags.map(item => item.id)
+          : [];
+        const localTags = this.getTagsFromHTML(clearedHtml);
+        const params = {
+          content: clearedHtml,
+          listTags: localTags,
+          image: this.uploadFileList[0] || null,
+          link: !isEmpty(this.link) ? JSON.stringify(this.link) : null,
+          isDeleteOldImg: this.isDeleteOldImg
+        };
+
+        if (this.mode === "edit") {
+          params.listTags = localTags.filter(
+            item => !initialTags.includes(item)
+          );
+          params.listTagsDel = initialTags.filter(
+            item => !localTags.includes(item)
+          );
+        }
+
+        this.$emit("submit", params);
         this.clear();
       }
     },
@@ -451,6 +499,10 @@ export default {
     removeImgUpload() {
       this.uploadFileList = [];
       this.uploadImgSrc = null;
+
+      if (this.mode === "edit") {
+        this.isDeleteOldImg = true;
+      }
     },
 
     handleUploadChange(fileList, event) {

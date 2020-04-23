@@ -2,22 +2,23 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="text-sub mb-2 d-inline-block"
-        >Tiêu đề {{ text }}</label
+        >Tiêu đề {{ title }}</label
       >
-      <app-input id="title" :counter="100" v-model="payload.title" />
+      <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
     <div class="row align-items-center mb-4">
       <div class="col-md-2">
-        <label for="require" class="text-gray caption">Loại {{ text }}</label>
+        <label for="require" class="text-gray caption">Loại {{ title }}</label>
       </div>
       <div class="col-md-10">
         <app-select
           class="cc-select"
           id="require"
           :options="[
+            { value: '', text: 'Chọn' },
             { value: 'CHOICE', text: 'Trắc nghiệm' },
-            { value: 'ESSAY', text: 'Tự luận' }
+            { value: 'ESSAY', text: 'Tự luận' },
           ]"
           placeholder="Bắt buộc"
           size="sm"
@@ -31,19 +32,20 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="category === 'EXERCISE'">
       <div class="col-md-2">
-        <label for="require" class="text-gray caption"
-          >{{ text }} bắt buộc?</label
-        >
+        <label for="require" class="text-gray caption">{{
+          title_required
+        }}</label>
       </div>
       <div class="col-md-10">
         <app-select
           class="cc-select"
           id="require"
           :options="[
+            { value: '', text: 'Chọn' },
             { value: 1, text: 'Có' },
-            { value: 0, text: 'Không' }
+            { value: 0, text: 'Không' },
           ]"
           placeholder="Bắt buộc"
           size="sm"
@@ -57,7 +59,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-md-2">
         <label for="time" class="text-gray caption">Thời gian làm bài</label>
       </div>
@@ -76,7 +78,10 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div
+      class="row align-items-center mb-4"
+      v-show="payload.required"
+    >
       <div class="col-md-2">
         <label for="point" class="text-gray caption">Điểm đạt</label>
       </div>
@@ -97,7 +102,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-md-2">
         <label for="count" class="text-gray caption">Số lần làm bài</label>
       </div>
@@ -129,7 +134,7 @@
         class="font-weight-semi-bold"
         square
         @click="handleAddExcercise"
-        >Tạo {{ text }}</app-button
+        >Tạo {{ title }}</app-button
       >
     </div>
     <app-modal-confirm
@@ -151,24 +156,29 @@ import { createPayloadExercise } from "~/models/course/AddCourse";
 
 export default {
   components: {
-    IconAngleDown
+    IconAngleDown,
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null
+      default: null,
     },
     category: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   computed: {
-    text() {
+    title() {
       return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
-    }
+    },
+    title_required() {
+      return get(this, "category", "") === "TEST"
+        ? "Bài kiểm tra bắt buộc?"
+        : "Bài tập bắt buộc?";
+    },
   },
 
   data() {
@@ -176,16 +186,16 @@ export default {
       payload: {
         index: 1,
         lesson_id: "",
-        required: 1,
+        required: get(this, "category", "") === "TEST" ? 1 : "",
         title: "",
-        type: "CHOICE",
+        type: "",
         pass_score: 0,
         reworks: 0,
         duration: 0,
-        category: this.category
+        category: this.category,
       },
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -198,6 +208,7 @@ export default {
       this.confirmLoading = true;
 
       this.payload.lesson_id = get(this, "lesson.id", "");
+
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
@@ -219,7 +230,7 @@ export default {
       this.confirmLoading = false;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>
