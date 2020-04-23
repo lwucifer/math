@@ -97,8 +97,8 @@
                         :src="item && item.image && item.image.low ? item.image.low : 'https://picsum.photos/60/60'"
                       />
                       <div class="text-gray ml-3">
-                        <p>{{item.meta_data}}</p>
-                        <p>{{item.created_at | moment('from')}}</p>
+                        <p>{{item && item.meta_data}}</p>
+                        <p>{{item && item.created_at | moment('from')}}</p>
                       </div>
                       <div class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover">
                         <button
@@ -219,7 +219,7 @@ import IconEllipseAlt from "~/assets/svg/icons/ellipse-alt.svg?inline";
 import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
 import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 
 export default {
   components: {
@@ -271,13 +271,8 @@ export default {
       };
       this.readNotification(params).then(result => {
         if (result.success == true) {
-          // this.notiList = [];
-          // this.notiListQuery.page = 1;
-          // this.infiniteId += 1;
         }
       });
-      // this.readAnnouncenment = false;
-      // this.read = true;
     },
     handleUnreadNotify() {
       this.readAnnouncenment = true;
@@ -285,7 +280,7 @@ export default {
     },
     handleVisibleChange(isvisible) {
       if (isvisible) {
-        this.socialNotifications();
+        // this.socialNotifications();
       }
     },
     async notiInfiniteHandler($state) {
@@ -293,12 +288,12 @@ export default {
         `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
         {
           params: {
-            page: get(this, "notis.page.number", 1) + 1
+            page: get(this, "notis.page.number", 0) + 1
           }
         }
       );
       console.log("getData", getData);
-      if (getData && getData.success) {
+      if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();
       } else {
         $state.complete();

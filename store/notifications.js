@@ -1,7 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Notifications from "~/services/notification/notifications";
-import { uniqWith } from "lodash";
+import { isEmpty } from "lodash";
 
 /**
  * initial state
@@ -28,24 +28,15 @@ const actions = {
                 actionTypes.BASE.LIST
             ](payload);
             console.log("[Notifications] list", result);
-            if (state.notis.listNotification) {
-                const listNotification = result.data.listNotification.map((noti) => ({
-                    ...noti,
-                }));
+            if (result.success && !isEmpty(result.data)) {
+                const { page, listNotification } = result.data;
                 commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
-                    ...state.notis,
-                    listNotification: uniqWith(
-                        state.notis.listNotification.concat(listNotification),
-                        (a, b) => a.id === b.id
+                    listNotification: state.notis.listNotification.concat(
+                        listNotification
                     ),
+                    page,
                 });
-            } else {
-                commit(
-                    mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST,
-                    result.data
-                );
             }
-
             return result;
         } catch (err) {
             console.log("[Notifications] list.err", err);
@@ -63,6 +54,37 @@ const actions = {
             return data;
         } catch (err) {
             console.log("[RegisterDevice] add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_NOTIFICATIONS.READ_NOTIFICATION]({ state, commit },
+        payload
+    ) {
+        try {
+            const result = await new Notifications(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
+            console.log("[Notifications] edit", result);
+            if (result.success) {
+                // const { data } = result;
+                const newlistNotification = state.notis.listNotification.map((item) => {
+                    if (item.id.toString() === payload.notifications) {
+                        return {
+                            ...item,
+                            is_read: 1,
+                        };
+                    }
+                    return item;
+                });
+
+                commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
+                    ...state.notis,
+                    listNotification: newlistNotification,
+                });
+            }
+            return result;
+        } catch (err) {
+            console.log("[Notifications] edit.err", err);
             return err;
         }
     },
