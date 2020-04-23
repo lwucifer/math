@@ -13,8 +13,8 @@ import Label from "~/services/social/label";
 // import Photos from "~/services/social/photos";
 // import SocialFollow from "~/services/social/follow";
 // import TagPhotos from "~/services/social/tagPhoto";
-import RegisterDevice from "~/services/social/RegisterDevice";
-import Notifications from "~/services/social/notifications";
+// import RegisterDevice from "~/services/social/RegisterDevice";
+// import Notifications from "~/services/social/notifications";
 
 /**
  * initial state

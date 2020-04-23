@@ -66,6 +66,7 @@
           :content-width="'580px'"
           open-on-click
           class="link--dropdown link--dropdown-auth item p-0"
+          @visible-change="handleVisibleChange"
         >
           <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
             <IconBell />
@@ -84,7 +85,11 @@
               </li>
             </ul>
             <ul style="overflow-y: auto; max-height:400px">
-              <li v-for="(item, index) in notiList ? notiList : []" :key="index" class="p-0">
+              <li
+                v-for="(item, index) in notis && notis.listNotification ? notis.listNotification : []"
+                :key="index"
+                class="p-0"
+              >
                 <n-link to>
                   <div :class="item && item.is_read == 1  ? 'readed' : ''">
                     <div class="wrapitemnotify">
@@ -124,7 +129,7 @@
                 </n-link>
               </li>
               <client-only>
-                <infinite-loading :identifier="infiniteId" @infinite="NotiInfiniteHandler">
+                <infinite-loading @infinite="notiInfiniteHandler">
                   <template slot="no-more">Không còn thông báo.</template>
                 </infinite-loading>
               </client-only>
@@ -207,13 +212,14 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
-import { mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconEllipseAlt from "~/assets/svg/icons/ellipse-alt.svg?inline";
 import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
-import Notifications from "~/services/social/notifications";
+import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -238,20 +244,17 @@ export default {
     readAnnouncenment: true,
     read: false,
     notiList: [],
-    infiniteId: +new Date(),
-    notiListQuery: {
-      page: 1,
-      limit: 5
-    }
+    infiniteId: +new Date()
   }),
   computed: {
+    ...mapState("notifications", ["notis"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     }
   },
   methods: {
     ...mapMutations("auth", ["removeToken"]),
-    ...mapActions("social", ["readNotification"]),
+    ...mapActions("notifications", ["socialNotifications", "readNotification"]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },
@@ -269,7 +272,7 @@ export default {
       this.readNotification(params).then(result => {
         if (result.success == true) {
           // this.notiList = [];
-          this.notiListQuery.page = 1;
+          // this.notiListQuery.page = 1;
           // this.infiniteId += 1;
         }
       });
@@ -280,19 +283,22 @@ export default {
       this.readAnnouncenment = true;
       this.read = false;
     },
-    async NotiInfiniteHandler($state) {
-      const { data: getData = {} } = await new Notifications(this.$axios)[
-        actionTypes.BASE.LIST
-      ]({
-        params: this.notiListQuery
-      });
-      // if (getData && !getData.listMember && this.memberListTab.length == 0) {
-      //   this.checkMemberList = true;
-      // }
-      if (getData.listNotification && getData.listNotification.length) {
-        this.notiListQuery.page += 1;
-        this.notiList.push(...getData.listNotification);
-        // this.groupsListTab = this.dataPushGroup.map(item => item);
+    handleVisibleChange(isvisible) {
+      if (isvisible) {
+        this.socialNotifications();
+      }
+    },
+    async notiInfiniteHandler($state) {
+      const getData = await this.$store.dispatch(
+        `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
+        {
+          params: {
+            page: get(this, "notis.page.number", 1) + 1
+          }
+        }
+      );
+      console.log("getData", getData);
+      if (getData && getData.success) {
         $state.loaded();
       } else {
         $state.complete();
