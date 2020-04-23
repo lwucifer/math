@@ -425,7 +425,7 @@ export const TEACHING_SUMMARY = {
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
     DELETE: "teachingElearningsDelete",
-    RESTORE: "teachingElearningsRestore",
+    HIDE: "teachingElearningsHide",
 };
 export const TEACHING_ONLINE_CLASS = {
     LIST: "teachingOnlineCLassList",
