@@ -22,13 +22,22 @@
         </a>
 
         <div class="post-detail__media">
-          <img class="d-block mx-auto" :src="localPost.link_image && localPost.link_image.high" alt />
+          <img class="d-block mx-auto" :src="linkImage" alt />
         </div>
       </template>
     </div>
 
     <div class="post-detail__right">
+      <Post
+        v-if="isParentPost"
+        show-edit
+        show-comment
+        :post="localPost"
+        @delete="deletePost"
+        @like="likePost"
+      ></Post>
       <PostDetailPost
+        v-else
         show-edit
         show-comment
         :post="localPost"
@@ -78,11 +87,16 @@
 </template>
 
 <script>
+import { get } from "lodash";
 import { LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
-import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
+import {
+  BASE as ACTION_TYPE_BASE,
+  SOCIAL as ACTION_TYPE_SOCIAL
+} from "~/utils/action-types";
 import { createLike } from "~/models/social/Like";
 import LikesService from "~/services/social/likes";
 
+import Post from "~/components/page/timeline/post/Post";
 import PostDetailPost from "./PostDetailPost";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
@@ -91,6 +105,7 @@ import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 
 export default {
   components: {
+    Post,
     PostDetailPost,
     IconDots,
     IconClose,
@@ -100,6 +115,7 @@ export default {
 
   props: {
     loading: Boolean,
+    isParentPost: Boolean,
     parentPost: {
       type: Object,
       default: () => ({}),
@@ -151,6 +167,14 @@ export default {
         this.parentPost.files.length &&
         index !== this.parentPost.files.length - 1
       );
+    },
+
+    linkImage() {
+      if (this.isParentPost) {
+        return get(this.localPost, "files[0].link.high", null);
+      } else {
+        return get(this.localPost, "link_image.high", null);
+      }
     }
   },
 
@@ -192,24 +216,10 @@ export default {
      */
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-      const { success = false, data = {} } = await new LikesService(
-        this.$axios
-      )[ACTION_TYPE_BASE.ADD](likeModel);
-
-      if (success) {
-        this.localPost = {
-          ...this.localPost,
-          type_like: data.type_like,
-          is_like: !!data.type_like,
-          total_like: !!data.type_like
-            ? (this.localPost.total_like += 1)
-            : (this.localPost.total_like -= 1)
-        };
-
-        if (this.parentPost.post_id === this.post.post_id) {
-          this.$emit("parent-post-liked", this.localPost);
-        }
-      }
+      const doLike = await this.$store.dispatch(
+        `social/${ACTION_TYPE_SOCIAL.LIKE_POST}`,
+        likeModel
+      );
 
       // Have to run cb
       cb();

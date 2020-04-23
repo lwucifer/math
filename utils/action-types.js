@@ -67,6 +67,31 @@ export const SOCIAL_LABEL = {
     LIST: "socialLabelList",
 };
 
+export const SOCIAL = {
+    GET_FEEDS: "socialGetFeeds",
+    ADD_POST: "socialAddPost",
+    EDIT_POST: "socialEditPost",
+    DELETE_POST: "socialDeletePost",
+    // GET_LIKE_POST: "socialGetLikePost",
+    // GET_LIKE_COMMENT: "socialGetLikeComment",
+    // GET_LIKE_CHILD_COMMENT: "socialGetLikeChildComment",
+    LIKE_POST: "socialLikePost",
+    // LIKE_COMMENT: "socialLikeComment",
+    // LIKE_CHILD_COMMENT: "socialLikeChildComment",
+    GET_COMMENT: "socialGetComment",
+    ADD_COMMENT: "socialAddComment",
+    EDIT_COMMENT: "socialEditComment",
+    DELETE_COMMENT: "socialDeleteComment",
+    GET_CHILD_COMMENT: "socialGetChildComment",
+    ADD_CHILD_COMMENT: "socialAddChildComment",
+    EDIT_CHILD_COMMENT: "socialEditChildComment",
+    DELETE_CHILD_COMMENT: "socialDeleteChildComment",
+    SHARE: "socialShare",
+    GET_LABELS: "socialGetLabels",
+    GET_CONFIGS: "socialGetConfigs",
+    GET_MODAL_DETAIL_POST: "getModalDetailPost"
+}
+
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
     EDIT: "accountPersonalEdit",
