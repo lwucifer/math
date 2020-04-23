@@ -10,44 +10,26 @@
                 get(info, "rates.averageRate", 0)
               }}</strong>
               <app-stars
-                :stars="Math.floor(get(info, 'rates.averageRate', 0))"
+                :stars="Math.floor(get(info, 'voting.average_rate', 0))"
                 :size="16"
                 class="mt-2 mb-3"
               />
               <p class="color-999">
-                ({{ get(info, "rates.totalReview", 0) }} người đánh giá)
+                ({{ get(info, "voting.total_votes", 0) }} người đánh giá)
               </p>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
-            <ElearningStars :rates="get(info, 'rates.rates', [])" />
+            <ElearningStars :voting="get(info, 'voting', null)" />
           </div>
         </div>
       </div>
 
-      <div class="elearning-review__nav mb-4">
-        <app-button
-          class="mr-4"
-          :color="tabActive === 'all' ? 'primary' : 'gray'"
-          normal
-          size="sm"
-          square
-          @click="changeTab('all')"
-          >Tất cả</app-button
-        >
-
-        <app-button
-          v-for="rate in get(info, 'rates.rates', [])"
-          class="mr-4"
-          :color="tabActive === rate.rate ? 'primary' : 'gray'"
-          normal
-          :key="rate.rate"
-          size="sm"
-          square
-          @click="changeTab(rate.rate)"
-          >{{ `${rate.rate} sao (${rate.count})` }}</app-button
-        >
-      </div>
+      <ElearningReviewButton
+        :info="info"
+        @changeTab="changeTab"
+        :tabActive="tabActive"
+      />
 
       <div class="elearning-review__commnents">
         <div v-if="fetchingReview" class="text-center">
@@ -81,12 +63,14 @@ import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import VoteService from "~/services/elearning/public/Vote.js";
 import ElearningStars from "~/components/page/elearning/ElearningStars";
 import ElearningReviewComment from "~/components/page/elearning/ElearningReviewComment";
+import ElearningReviewButton from "~/components/page/elearning/ElearningReviewButton";
 import { ELEARNING_TYPES } from "~/utils/constants";
 
 export default {
   components: {
     ElearningStars,
     ElearningReviewComment,
+    ElearningReviewButton,
   },
 
   props: {
@@ -130,19 +114,18 @@ export default {
     get,
 
     async changeTab(key) {
-      this.fetchingReview = true;
+      this.tabActive = key;
 
+      this.fetchingReview = true;
       const getReview = await this.getReview(key !== "all" ? key : null, 1);
+      this.fetchingReview = false;
 
       if (getReview.success) {
         getReview.data.content = this.formatReviewData(getReview.data.content);
         this.localReview = getReview.data;
-        this.tabActive = key;
-      } else {
-        this.$toasted.error(getReview.message);
+        return;
       }
-
-      this.fetchingReview = false;
+      this.$toasted.error(getReview.message);
     },
 
     async onPageChange({ number }) {
