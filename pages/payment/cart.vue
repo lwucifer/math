@@ -26,5 +26,5 @@ export default {
 </script>
 
 <style>
-@import "~/assets/scss/components/payment/_payment.scss";
+
 </style>
