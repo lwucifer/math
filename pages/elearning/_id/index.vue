@@ -23,10 +23,7 @@
 
           <hr class="mt-3 mb-4" />
 
-          <section class="scroll-target" id="review">
-            <h5 class="mb-3">Đánh giá {{ typeText }}</h5>
-            <ElearningReview :info="info" />
-          </section>
+          <ElearningReview :info="info" />
         </div>
       </div>
 
