@@ -1,9 +1,9 @@
 <template>
   <div class="elearning-slider-tab">
     <h3 class="mb-4" v-if="title">{{ title }}</h3>
-    
+
     <div
-      v-if="content.length"
+      v-show="content.length"
       v-swiper:mySwiper="currentSwiperOptions"
       class="post-slider elearning-slider"
       v-on="$listeners"
@@ -29,7 +29,7 @@
       <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
     </div>
 
-    <div v-else class="text-center text-sub">Không có dữ liệu</div>
+    <div v-show="!content.length" class="text-center text-sub">Không có dữ liệu</div>
   </div>
 </template>
 
@@ -57,7 +57,7 @@ export default {
     },
     swiperOptions: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     title: { type: String }
   },

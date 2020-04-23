@@ -18,18 +18,20 @@ export const BASE = {
 export const PUBLIC = {};
 
 export const SOCIAL = {
-    SET_POSTS_LIST: "setPostsList",
-    SET_SOCIAL_LIKES_LIST: "setSocialLikesList",
-    SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
-    SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
-    SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
-    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
-    SET_SOCIAL_CONFIG_LIST: "setSocialConfigList",
-    SET_SOCIAL_LABEL_LIST: "setSocialLabelList",
-    SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
-    SET_SOCIAL_FRIEND_INVITE_LIST: "setSocialFriendInviteList",
-    SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
-    SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList",
+    SET_FEEDS: "setSocialFeeds",
+    UPDATE_FEEDS: "updateSocialFeeds",
+    SET_CONFIGS: "setSocialConfigs",
+    SET_LABELS: "setSocialLabels",
+    SET_MODAL_DETAIL_POST: "setModalDetailPost"
+    // SET_SOCIAL_LIKES_LIST: "setSocialLikesList",
+    // SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
+    // SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
+    // SET_SOCIAL_MEDIAS_LIST: "setSocialMediasList",
+    // SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotificationList",
+    // SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
+    // SET_SOCIAL_FRIEND_INVITE_LIST: "setSocialFriendInviteList",
+    // SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
+    // SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList"
 };
 
 export const ACCOUNT_PERSONAL = {
@@ -337,7 +339,7 @@ export const TEACHING_SUMMARY = {
 export const TEACHING_ELEARNINGS = {
     SET_TEACHING_ELEARNINGS_LIST: "setTeachingElearningsList",
     SET_TEACHING_ELEARNINGS_DELETE: "setTeachingElearningsDelete",
-    SET_TEACHING_ELEARNINGS_RESTORE: "setTeachingElearningsRestore",
+    SET_TEACHING_ELEARNINGS_HIDE: "setTeachingElearningsHide",
 };
 export const TEACHING_STUDENTS = {
     SET_TEACHING_STUDENTS_LIST: "setTeachingStudentsList",

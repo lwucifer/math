@@ -150,8 +150,8 @@ export default {
       validator: value =>
         value.every(option => ["value", "text"].every(key => key in option))
     },
-    value: [String, Number, Array],
-    defaultValue: [String, Number, Array],
+    value: [String, Number, Array, Boolean],
+    defaultValue: [String, Number, Array, Boolean],
     mode: {
       type: String,
       default: "" // '' | 'tags'
