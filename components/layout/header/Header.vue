@@ -64,9 +64,11 @@
           position="right"
           v-model="dropdownNotify"
           :content-width="'580px'"
+          open-on-click
           class="link--dropdown link--dropdown-auth item p-0"
+          @visible-change="handleVisibleChange"
         >
-          <button class="item" slot="activator"> 
+          <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
             <IconBell />
             <span class="number">9</span>
           </button>
@@ -81,15 +83,65 @@
                   </div>
                 </div>
               </li>
-              <li v-for="index in 5" :key="index" class="p-0">
+            </ul>
+            <ul style="overflow-y: auto; max-height:400px">
+              <li
+                v-for="(item, index) in notis && notis.listNotification ? notis.listNotification : []"
+                :key="index"
+                class="p-0"
+              >
                 <n-link to>
-                  <AnnoucementItem/>
+                  <div :class="item && item.is_read == 1  ? 'readed' : ''">
+                    <div class="wrapitemnotify">
+                      <app-avatar
+                        :src="item && item.image && item.image.low ? item.image.low : 'https://picsum.photos/60/60'"
+                      />
+                      <div class="text-gray ml-3">
+                        <p>{{item.meta_data}}</p>
+                        <p>{{item.created_at | moment('from')}}</p>
+                      </div>
+                      <div class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover">
+                        <button
+                          class="cc-box__btn cc-box__btn-edit"
+                          v-tooltip.bottom="{ content: 'Xóa thông báo', classes: ['tooltipAnnouncenment'] }"
+                        >
+                          <IconTrashAlt class="icon fill-disabled" />
+                        </button>
+                        <button
+                          class="cc-box__btn cc-box__btn-edit mt-2"
+                          v-if="item && item.is_read == 0"
+                          @click.prevent="handleReadNotify(item.id)"
+                          v-tooltip.bottom="{ content: 'Đánh dấu đã đọc', classes: ['tooltipAnnouncenment'] }"
+                        >
+                          <IconEllipse class="d-block fill-gray" />
+                        </button>
+                        <button
+                          class="cc-box__btn cc-box__btn-edit mt-2"
+                          v-else
+                          @click.prevent="handleUnreadNotify"
+                          v-tooltip.bottom="{ content: 'Đánh dấu chưa đọc', classes: ['tooltipAnnouncenment'] }"
+                        >
+                          <IconEllipseAlt class="d-block fill-gray" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </n-link>
               </li>
-              <li class="text-center">
-                <n-link to="/account/info/announcement" class="text-primary font-weight-bold">Xem tất cả</n-link>
-              </li>
+              <client-only>
+                <infinite-loading @infinite="notiInfiniteHandler">
+                  <template slot="no-more">Không còn thông báo.</template>
+                </infinite-loading>
+              </client-only>
             </ul>
+            <!-- <ul>
+              <li class="text-center">
+                <n-link
+                  to="/account/info/announcement"
+                  class="text-primary font-weight-bold"
+                >Xem tất cả</n-link>
+              </li>
+            </ul>-->
           </div>
         </app-dropdown>
         <app-dropdown
@@ -160,8 +212,14 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
-import { mapMutations } from "vuex";
-import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem"
+import { mapState, mapMutations, mapActions } from "vuex";
+import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconEllipseAlt from "~/assets/svg/icons/ellipse-alt.svg?inline";
+import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
+import Notifications from "~/services/notification/notifications";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -172,22 +230,31 @@ export default {
     IconBell,
     IconShoppingCartAlt,
     IconMessager,
-    AnnoucementItem
+    AnnoucementItem,
+    IconTrashAlt,
+    IconEllipseAlt,
+    IconEllipse
   },
 
   data: () => ({
     showLogin: false,
     dropdownAuth: false,
     dropdownCourse: false,
-    dropdownNotify: false
+    dropdownNotify: false,
+    readAnnouncenment: true,
+    read: false,
+    notiList: [],
+    infiniteId: +new Date()
   }),
   computed: {
+    ...mapState("notifications", ["notis"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     }
   },
   methods: {
     ...mapMutations("auth", ["removeToken"]),
+    ...mapActions("notifications", ["socialNotifications", "readNotification"]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },
@@ -197,6 +264,45 @@ export default {
     handleLogout() {
       this.removeToken();
       this.redirectSignin();
+    },
+    handleReadNotify(id) {
+      const params = {
+        notifications: id.toString()
+      };
+      this.readNotification(params).then(result => {
+        if (result.success == true) {
+          // this.notiList = [];
+          // this.notiListQuery.page = 1;
+          // this.infiniteId += 1;
+        }
+      });
+      // this.readAnnouncenment = false;
+      // this.read = true;
+    },
+    handleUnreadNotify() {
+      this.readAnnouncenment = true;
+      this.read = false;
+    },
+    handleVisibleChange(isvisible) {
+      if (isvisible) {
+        this.socialNotifications();
+      }
+    },
+    async notiInfiniteHandler($state) {
+      const getData = await this.$store.dispatch(
+        `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
+        {
+          params: {
+            page: get(this, "notis.page.number", 1) + 1
+          }
+        }
+      );
+      console.log("getData", getData);
+      if (getData && getData.success) {
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
     }
   }
 };
@@ -204,4 +310,5 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/the-header/_the-header.scss";
+@import "~/assets/scss/components/account/_account-info-announcement-item.scss";
 </style>

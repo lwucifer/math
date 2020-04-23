@@ -6,8 +6,8 @@
       <div class="row">
         <div class="col-md-8">
           <PostEditor
-            @submit="handlePostEditorSubmit"
             :active="postEditorActive"
+            @submit="handlePostEditorSubmit"
             @active-change="active => postEditorActive = active"
           />
 
@@ -123,6 +123,7 @@
               slot="content"
               :parent-post="modalDetailDataParent"
               :post="modalDetailDataPost"
+              :is-parent-post="modalDetailDataParent.post_id === modalDetailDataPost.post_id"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
@@ -270,7 +271,7 @@
 </template>
 
 <script>
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
@@ -303,7 +304,7 @@ import PostShareContent from "~/components/page/timeline/post/PostShareContent";
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
-  watchQuery: ["post_id", "photo_id"],
+  // watchQuery: ["post_id", "photo_id"],
 
   middleware: "authenticated",
 
@@ -320,46 +321,49 @@ export default {
     PostShareContent
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
-      store.dispatch(`social/${actionTypes.SOCIAL_LABEL.LIST}`)
+  fetch({ params, query, store }) {
+    Promise.all([
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_CONFIGS}`),
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_LABELS}`),
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_FEEDS}`)
     ]);
   },
 
-  async asyncData({ $axios }) {
-    const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
-    const getMessages = () =>
-      new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
-    const getFreeCourse = () =>
-      new SearchService($axios)[actionTypes.BASE.ADD]({
-        free: true,
-        limit: 5
-      });
-    const getPrivateCourse = () =>
-      new SearchService($axios)[actionTypes.BASE.ADD]({
-        free: false,
-        limit: 5
-      });
+  async asyncData({ $axios, error }) {
+    try {
+      const getMessages = () =>
+        new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
+      const getFreeCourse = () =>
+        new SearchService($axios)[actionTypes.BASE.ADD]({
+          free: true,
+          limit: 5
+        });
+      const getPrivateCourse = () =>
+        new SearchService($axios)[actionTypes.BASE.ADD]({
+          free: false,
+          limit: 5
+        });
 
-    const [
-      { data: feeds = {} },
-      { data: messages = [] },
-      { data: freeCourses = [] },
-      { data: privateCourses = [] }
-    ] = await Promise.all([
-      getFeeds(),
-      getMessages(),
-      getFreeCourse(),
-      getPrivateCourse()
-    ]);
+      const [
+        // { data: feeds = {} },
+        { data: messages = [] },
+        { data: freeCourses = [] },
+        { data: privateCourses = [] }
+      ] = await Promise.all([
+        getMessages(),
+        getFreeCourse(),
+        getPrivateCourse()
+      ]);
 
-    return {
-      feeds: feeds || [],
-      messages: messages || [],
-      freeCourses: freeCourses.content || [],
-      privateCourses: privateCourses.content || []
-    };
+      return {
+        // feeds: feeds || [],
+        messages: messages || [],
+        freeCourses: freeCourses.content || [],
+        privateCourses: privateCourses.content || []
+      };
+    } catch (e) {
+      error({ statusCode: e.status, message: e.message });
+    }
   },
 
   data() {
@@ -405,6 +409,7 @@ export default {
   },
 
   computed: {
+    ...mapState("social", ["feeds"]),
     ...mapGetters("social", ["configPrivacyLevels"]),
 
     userId() {
@@ -413,17 +418,19 @@ export default {
     },
 
     messagesConverted() {
-      return this.messages && this.messages.length ? this.messages.map(item => {
-        return {
-          id: item.room.id,
-          title: item.room.members
-            .filter(member => member.user_id !== this.userId)
-            .map(member => member.fullname)
-            .join(", "),
-          desc: item.message.content,
-          image: get(item, 'room.room_avatar.low', null)
-        };
-      }) : [];
+      return this.messages && this.messages.length
+        ? this.messages.map(item => {
+            return {
+              id: item.room.id,
+              title: item.room.members
+                .filter(member => member.user_id !== this.userId)
+                .map(member => member.fullname)
+                .join(", "),
+              desc: item.message.content,
+              image: get(item, "room.room_avatar.low", null)
+            };
+          })
+        : [];
     }
   },
 
@@ -475,7 +482,7 @@ export default {
       }
 
       // get data
-      this.getDetailPost(id);
+      this.getDetailPost(id, post);
     },
 
     /**
@@ -532,7 +539,12 @@ export default {
       this.handleClickImage({ id }, post);
     },
 
-    async getDetailPost(id) {
+    async getDetailPost(id, post) {
+      if (id === post.post_id) {
+        this.modalDetailDataPost = post;
+        return;
+      }
+
       const getPost = await new PostService(this.$axios)[
         actionTypes.BASE.DETAIL
       ](id);
@@ -547,46 +559,23 @@ export default {
      * Submit POST a post
      */
     async handlePostEditorSubmit(data, cb) {
-      this.postLoading = true;
-
-      const formData = new FormData();
       const dataWithModel = createPost(data);
 
-      for (const key in dataWithModel) {
-        // Check whether field is an array
-        if (key === "post_image") {
-          const values = data[key];
-          for (let i = 0; i < values.length; i++) {
-            formData.append(key, values[i]);
-          }
-        } else {
-          formData.append(
-            key,
-            Array.isArray(dataWithModel[key])
-              ? JSON.stringify(data[key])
-              : data[key]
-          );
-        }
-      }
-
+      this.postLoading = true;
       this.postEditorActive = false;
 
       const doAdd = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.ADD}`,
-        formData
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        dataWithModel
       );
 
       if (doAdd.success) {
         cb();
-        const timeout = setTimeout(() => {
-          this.feeds.listPost = [doAdd.data, ...this.feeds.listPost];
-          this.postLoading = false;
-          clearTimeout(timeout);
-        }, data.post_image.length * 1000);
       } else {
         this.$toasted.error(doAdd.message);
-        this.postLoading = false;
       }
+
+      this.postLoading = false;
     },
 
     showModalConfirmDelete(id) {
@@ -604,21 +593,12 @@ export default {
      */
     async deletePost(id) {
       this.modalConfirmDeleteLoading = true;
-      const doDelete = await new SocialPostsService(this.$axios)[
-        actionTypes.BASE.DELETE
-      ](id);
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_POST}`,
+        id
+      );
 
-      if (doDelete.success) {
-        const { feeds } = this;
-        const newListPost =
-          feeds && feeds.listPost
-            ? feeds.listPost.filter(item => item.post_id !== id)
-            : [];
-        this.feeds = {
-          listPost: newListPost,
-          page: feeds.page || {}
-        };
-      } else {
+      if (!doDelete.success) {
         this.$toasted.error(doDelete.message);
       }
 
@@ -631,30 +611,11 @@ export default {
      */
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-      const { success = false, data = {} } = await new LikesService(
-        this.$axios
-      )[actionTypes.BASE.ADD](likeModel);
 
-      if (success) {
-        const { feeds } = this;
-        const newListPost =
-          feeds && feeds.listPost
-            ? feeds.listPost.map(item => {
-                if (item.post_id === likeModel.source_id) {
-                  return {
-                    ...item,
-                    type_like: data.type_like,
-                    is_like: !!data.type_like,
-                    total_like: !!data.type_like
-                      ? (item.total_like += 1)
-                      : (item.total_like -= 1)
-                  };
-                }
-                return item;
-              })
-            : [];
-        this.feeds.listPost = newListPost;
-      }
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_POST}`,
+        likeModel
+      );
 
       // Have to run cb
       cb();
@@ -685,49 +646,18 @@ export default {
     },
 
     async handleSubmitEditPost(data) {
-      this.modalEditPostLoading = true;
-
-      const formData = new FormData();
       const dataWithModel = editPost(data);
 
-      for (const key in dataWithModel) {
-        // Check whether field is an array
-        if (key === "post_image") {
-          const values = data[key];
-          for (let i = 0; i < values.length; i++) {
-            formData.append(key, values[i]);
-          }
-        } else {
-          formData.append(
-            key,
-            Array.isArray(dataWithModel[key])
-              ? JSON.stringify(data[key])
-              : data[key]
-          );
-        }
-      }
+      this.modalEditPostLoading = true;
 
       const doEdit = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.EDIT}`,
-        formData
+        `social/${actionTypes.SOCIAL.EDIT_POST}`,
+        dataWithModel
       );
 
       if (doEdit.success) {
-        const { success, data: newPost = {} } = await new PostService(
-          this.$axios
-        )[actionTypes.BASE.DETAIL](data.post_id);
-
-        if (success) {
-          const timeout = setTimeout(() => {
-            const postIndex = this.feeds.listPost.findIndex(
-              item => item.post_id === newPost.post_id
-            );
-            this.feeds.listPost[postIndex] = newPost;
-            this.modalEditPostLoading = false;
-            this.showModalEditPost = false;
-            clearTimeout(timeout);
-          }, data.post_image.length * 1000);
-        }
+        this.modalEditPostLoading = false;
+        this.showModalEditPost = false;
       } else {
         this.$toasted.error(doEdit.message);
         this.modalEditPostLoading = false;
@@ -743,25 +673,15 @@ export default {
     },
 
     async sharePost({ post_id, content, list_tag, label_id }, cb) {
-      const shareModel = createShare(post_id, content);
-      const doShare = await new ShareService(this.$axios)[actionTypes.BASE.ADD](
+      const shareModel = createShare(post_id, content, list_tag, label_id);
+      const doShare = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.SHARE}`,
         shareModel
       );
 
       if (doShare.success) {
-        const { success, data: newPost = {} } = await new PostService(
-          this.$axios
-        )[actionTypes.BASE.DETAIL](doShare.data.post_id);
-
-        if (success) {
-          this.feeds.listPost = [newPost, ...this.feeds.listPost];
-        }
-
         this.cancelShare();
-        const timeout = setTimeout(() => {
-          cb();
-          clearTimeout(timeout);
-        }, 500);
+        cb();
       } else {
         this.$toasted.error(doShare.message);
       }
@@ -776,19 +696,16 @@ export default {
      * Infinite scroll handler
      */
     async feedInfiniteHandler($state) {
-      const { data: feeds = {} } = await new FeedsService(this.$axios)[
-        actionTypes.BASE.LIST
-      ]({
-        params: {
-          page: get(this, "feeds.page.number", 1) + 1
+      const getData = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_FEEDS}`,
+        {
+          params: {
+            page: get(this, "feeds.page.number", 1) + 1
+          }
         }
-      });
+      );
 
-      if (feeds.listPost && feeds.listPost.length) {
-        this.feeds = {
-          listPost: this.feeds.listPost.concat(feeds.listPost),
-          page: feeds.page
-        };
+      if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();
       } else {
         $state.complete();

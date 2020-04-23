@@ -37,7 +37,7 @@ export const LIKES = `${SCHOOLLY_ALIAS}/social/api/like`;
 export const SHARES = `${SCHOOLLY_ALIAS}/social/api/share`;
 export const COMMENTS = `${SCHOOLLY_ALIAS}/social/api/comment`;
 export const MEDIAS = `${SCHOOLLY_ALIAS}/social/medias`;
-export const NOTIFICATIONS = `${SCHOOLLY_ALIAS}/social/api/notifications`;
+export const NOTIFICATIONS = `${SCHOOLLY_ALIAS}/social/api/notification`;
 export const SOCIAL_CONFIG = `${SCHOOLLY_ALIAS}/social/api/config`;
 export const SOCIAL_LABEL = `${SCHOOLLY_ALIAS}/social/api/label`;
 export const SOCIAL_FRIEND = `${SCHOOLLY_ALIAS}/social/api/friend`;
@@ -148,4 +148,20 @@ export const TEACHING_INTERACTIVE = `${SCHOOLLY_ALIAS}/elearning/teaching/intera
 export const TEACHING_STUDENTS = `${SCHOOLLY_ALIAS}/elearning/teaching/students`;
 export const TEACHING_INVITE = `${SCHOOLLY_ALIAS}/elearning/teaching/invites`;
 export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
+
+/**
+ * PAYMENT
+ */
+export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/elearning/order`;
+export const PAYMENT_HASHKEY = `${SCHOOLLY_ALIAS}/payment/transaction/hashkey/generate`;
+export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/payment/transaction/validate`;
+
+
+/**
+ * CART
+ */
+export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;
+
+
+
 export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;
