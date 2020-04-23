@@ -271,7 +271,7 @@
 </template>
 
 <script>
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
@@ -304,7 +304,7 @@ import PostShareContent from "~/components/page/timeline/post/PostShareContent";
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
-  watchQuery: ["post_id", "photo_id"],
+  // watchQuery: ["post_id", "photo_id"],
 
   middleware: "authenticated",
 
@@ -321,8 +321,8 @@ export default {
     PostShareContent
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
+  fetch({ params, query, store }) {
+    Promise.all([
       store.dispatch(`social/${actionTypes.SOCIAL.GET_CONFIGS}`),
       store.dispatch(`social/${actionTypes.SOCIAL.GET_LABELS}`),
       store.dispatch(`social/${actionTypes.SOCIAL.GET_FEEDS}`)
@@ -331,7 +331,6 @@ export default {
 
   async asyncData({ $axios, error }) {
     try {
-      // const getFeeds = () => new FeedsService($axios)[actionTypes.BASE.LIST]();
       const getMessages = () =>
         new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
       const getFreeCourse = () =>
@@ -351,7 +350,6 @@ export default {
         { data: freeCourses = [] },
         { data: privateCourses = [] }
       ] = await Promise.all([
-        // getFeeds(),
         getMessages(),
         getFreeCourse(),
         getPrivateCourse()
@@ -707,7 +705,7 @@ export default {
         }
       );
 
-      if (getData.sucees) {
+      if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();
       } else {
         $state.complete();
