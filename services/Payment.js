@@ -1,5 +1,5 @@
 import * as APIs from "../utils/endpoints";
-import BaseService from "../BaseService";
+import BaseService from "./BaseService";
 import * as actionTypes from "~/utils/action-types";
 
 export default class Payment extends BaseService {

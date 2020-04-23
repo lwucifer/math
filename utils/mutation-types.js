@@ -335,3 +335,7 @@ export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
     SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete"
 };
+
+export const CART = {
+    SET_CART_LIST = "setCartList",
+}

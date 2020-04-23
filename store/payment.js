@@ -1,10 +1,10 @@
 import * as actionTypes from "../utils/action-types";
+import Payment from '../services/Payment';
 
 /**
  * initial state
  */
 const state = () => ({
-  earningSummaryList: []
 });
 
 /**

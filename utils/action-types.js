@@ -410,3 +410,9 @@ export const PAYMENT = {
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
 }
+
+export const CART = {
+    LIST: "cartList",
+    ADD: "cartAdd",
+    DELETE: "cartDelete"
+}

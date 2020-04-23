@@ -147,6 +147,12 @@ export const TEACHING_VOTES = `${SCHOOLLY_ALIAS}/elearning/teaching/votes`;
 /**
  * PAYMENT
  */
-export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/order`;
+export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/elearning/order`;
 export const PAYMENT_HASHKEY = `${SCHOOLLY_ALIAS}/payment/transaction/hashkey/generate`;
 export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/payment/transaction/validate`;
+
+
+/**
+ * CART
+ */
+export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;

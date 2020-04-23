@@ -34,7 +34,7 @@
           >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</b
         >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+      <app-button color="secondary" fullWidth square class="text-uppercase mb-4" @click.prevent="handleAddToCart"
         >Chọn mua</app-button
       >
       <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
@@ -75,6 +75,8 @@
 
 <script>
 import { get } from "lodash";
+import qs from qs;
+
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -82,6 +84,12 @@ import IconSubject from "~/assets/svg/icons/subject.svg?inline";
 import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
+
+import { mapActions, mapGetters } from 'vuex';
+import { createOrderPaymentReq } from '../../../models/payment/OrderPaymentReq';
+import { createHashKeyReq } from '../../../models/payment/HashKeyReq';
+import { RESPONSE_SUCCESS } from '~/utils/config.js';
+
 
 export default {
   components: {
@@ -104,8 +112,63 @@ export default {
     return {};
   },
 
+  computed: {
+    ...mapGetters("cart", [
+      "cartCheckout"
+    ])
+  },
+
   methods: {
     get,
+    ...mapActions("payment", [
+      "postOder",
+      "postHashKeyGenerate",
+    ]),
+
+    ...mapActions("cart", [
+      "cartAdd",
+    ]),
+
+    handleAddToCart() {
+      console.log("[handleAddToCart]", this.info.id)
+      this.cartAdd(this.info.id);
+    },
+
+    handleCheckout() {
+      console.log("[handleCheckout]", this.info);
+
+      // STEP 1: Submit Order
+      const { cost, method, note, orders } = this.cartCheckout;
+      const orderPaymentReq = createOrderPaymentReq(cost, method, note, orders);
+
+      this.postOder(orderPaymentReq).then(result => {
+        console.log("[postOder]", result);
+        if(result.success == RESPONSE_SUCCESS) {
+          // STEP 2: Get Hash Key
+          const hashKeyReq = createHashKeyReq({
+            vpc_ReturnURL: process.env.PAYMENT_RETURN_URL,
+            vpc_OrderInfo: result.id,
+            vpc_Amount: result.amount,
+            vpc_TicketNo: process.env.PAYMENT_VPC_TICKETNO,
+            AgainLink: process.env.PAYMENT_AGAIN_LINK,
+            Title: result.id,
+          })
+          this.postHashKeyGenerate(hashKeyReq).then(hashKeyRes => {
+            console.log("[postHashKeyGenerate]", hashKeyRes);
+            
+            // STEP 3: Request Payment to OnePay
+            const onepayUrlWithParams = `${process.env.PAYMENT_REQ_URL}?${qs.stringify(hashKeyRes)}`
+            window.location.href = onepayUrlWithParams;
+          })
+
+
+        } else {
+          // STEP 2 failed
+        }
+      }).catch(err => {
+        console.log("[postOder] err", err);
+      })
+    }
   },
 };
 </script>
