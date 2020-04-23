@@ -78,16 +78,16 @@
       multiple-selection
     >
       <template v-slot:cell(privacy)="{row}">
-        <td class="nowrap">
+        <td>
           <span
             :class="row.privacy == 'PUBLIC' ? 'text-primary': 'text-secondary' "
           >{{ row.privacy }}</span>
         </td>
       </template>
-
-      <template v-slot:cell(action)="{row}">
-        <td class="nowrap">
-          <n-link class :to="'./' + row.online_class_id + '/invites'">Vào phòng học</n-link>
+      <template v-slot:cell(time)="{row}">
+        <td>
+          <span>{{row.time.time}}</span><br/>
+          <span>{{row.time.day}}</span>
         </td>
       </template>
     </app-table>
@@ -147,21 +147,17 @@ export default {
           name: "num_invitation",
           text: "Số học sinh đã mời",
           sort: true
-        },
-        {
-          name: "action",
-          text: ""
         }
       ],
       courses: [],
       filterCourse: null,
       pagination: {
-        total: 15,
-        page: 1,
-        pager: 10,
-        totalElements: 55,
-        first: 1,
-        last: 10
+        total: 0,
+        number: 0,
+        size: 10,
+        totalElements: 0,
+        first: 0,
+        last: 0
       },
       classList: [],
       lessonList: [],
@@ -193,7 +189,7 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       that.params.size = that.pagination.size;
-      that.params.page = that.pagination.page;
+      that.params.page = that.pagination.number + 1;
       that.getList();
     },
 
@@ -234,15 +230,40 @@ export default {
       }
     },
 
+    formatAMPM(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return strTime;
+    },
     async getList() {
+      const self = this;
       try {
-        this.loading = true;
-        let params = { ...this.params };
-        await this.$store.dispatch(
+        self.loading = true;
+        let params = { ...self.params };
+        await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.stateClass, "data.content", []);
+
+        const classes = self.get(self.stateClass, "data.content", []);
+        self.classList = classes.map(function (item) {
+          const duration = parseInt(item.recent_schedule.duration)*60*1000;
+          const date = new Date("2000-01-01 " + item.recent_schedule.start_time);
+          const end = self.formatAMPM(new Date(date.getTime() + duration));
+          return {
+            ...item,
+            time: {
+              day: item.recent_schedule.day,
+              time: item.recent_schedule.start_time + ' - ' + end
+            }
+          };
+        });
+
         this.pagination.size = this.get(this.stateClass, "data.size", 10);
         this.pagination.first = this.get(this.stateClass, "data.first", 1);
         this.pagination.last = this.get(this.stateClass, "data.last", 1);
