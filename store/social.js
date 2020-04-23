@@ -107,20 +107,19 @@ const actions = {
         payload
       );
 
-      if (state.feeds.listPost) {
-        const listPost = result.data.listPost.map((post) => ({
+      if (result.success) {
+        const { listPost = [], page = {} } = result.data;
+        const newListPost = listPost.map((post) => ({
           ...post,
           $commentTree: {},
         }));
         commit(mutationTypes.SOCIAL.SET_FEEDS, {
-          ...state.feeds,
           listPost: uniqWith(
-            state.feeds.listPost.concat(listPost),
+            state.feeds.listPost.concat(newListPost),
             (a, b) => a.post_id === b.post_id
           ),
+          page
         });
-      } else {
-        commit(mutationTypes.SOCIAL.SET_FEEDS, result.data);
       }
       return result;
     } catch (err) {
@@ -733,6 +732,8 @@ const actions = {
       return err;
     }
   },
+
+  // async [actionTypes.SOCIAL]({ state, commit }, payload) {},
 };
 
 /**
@@ -750,10 +751,10 @@ const mutations = {
   [mutationTypes.SOCIAL.SET_FEEDS](state, _feeds) {
     state.feeds = _feeds;
   },
-  
+
   [mutationTypes.SOCIAL.SET_MODAL_DETAIL_POST](state, _post) {
     state.modalDetailPost = _post;
-  }
+  },
 };
 
 export default {
