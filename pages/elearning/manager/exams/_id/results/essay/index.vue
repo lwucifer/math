@@ -18,9 +18,17 @@
       />
       <!--form-->
       <mark-form-section
-        @submit="mark"
+        v-if="isPending"
+        @submit="handleMark"
       />
     </div>
+  
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="confirmMark"
+      @cancel="cancelMark"
+    />
   </div>
 </template>
 
@@ -31,10 +39,12 @@
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
-  import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
-  import { createPayloadMarkSubmission } from "~/models/elearning/Submission";
-  
-  const STORE_NAMESPACE = 'elearning/teaching/submission'
+  import { SUBMISSION_RESULTS } from "~/utils/constants"
+  import { createPayloadAddEvaluation } from "~/models/elearning/Evaluation"
+  import { subResult2Txt } from "~/plugins/filters"
+  import { getParamQuery } from "~/utils/common"
+
+  const STORE_NAMESPACE = 'elearning/teaching/evaluation'
 
   export default {
 
@@ -51,51 +61,67 @@
     },
     data() {
       return {
+        showModalConfirm: false,
+        confirmLoading: false,
+        payload: {
+          exercise_id: this.$route.params.id,
+          user_id: this.getParamQuery('user_id')
+        }
       }
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
       isPass: function() {
-        return get(this, 'detail.result', -1) == SUBMISSION_RESULTS.PASS
+        return get(this, 'detail.result', false) &&
+          (get(this, 'detail.result', SUBMISSION_RESULTS.FAILED) == SUBMISSION_RESULTS.PASSED)
+      },
+      isPending: function() {
+        return get(this, 'detail.result', false) &&
+          (get(this, 'detail.result', SUBMISSION_RESULTS.FAILED) == SUBMISSION_RESULTS.PENDING)
       },
       hasMark: function() {
-        return (get(this, 'detail.result', -1) != SUBMISSION_RESULTS.NO_SCORE)
+        return get(this, 'detail.result', false) &&
+          (get(this, 'detail.result', '') != SUBMISSION_RESULTS.PENDING)
       },
       result: function() {
-        if (get(this, 'detail.result') == SUBMISSION_RESULTS.NO_SCORE) {
-          return 'Chưa chấm điểm'
+        if (
+          get(this, 'detail.result', false) &&
+          get(this, 'detail.result') == SUBMISSION_RESULTS.PENDING
+        ) {
+          return subResult2Txt(SUBMISSION_RESULTS.PENDING)
         } else {
           if (this.isPass) {
-            return `${get(this, 'detail.mark', 0)}/${SCALE_MARK} (Đạt)`
+            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.mark', 0)} (${subResult2Txt(SUBMISSION_RESULTS.PASSED)})`
           } else {
-            return `${get(this, 'detail.mark', 0)}/${SCALE_MARK} (Không đạt)`
+            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.mark', 0)} (${subResult2Txt(SUBMISSION_RESULTS.FAILED)})`
           }
         }
       },
       submissionContent: function() {
-        let data = []
-        const questionInfo = get(this, 'detail.contents', [])[0]
-        const question = {
-          title: "Câu hỏi",
-          content: get(questionInfo, 'question_name', '')
-        }
-        const content = {
-          title: "Câu trả lời",
-          content: get(questionInfo, 'student_answer', '')
-        }
-        
-        data.push(question, content)
-        return data
+        return get(this, 'detail.question_list', [])
       }
     },
 
     methods: {
-      async mark(content) {
-        const payload = { ...createPayloadMarkSubmission(content), ...{ submission_id: this.detail.id } }
+      handleMark(content) {
+        this.payload = { ...this.payload, ...content }
+        this.showModalConfirm = true
+      },
+      async confirmMark() {
+        this.confirmLoading = true
+        await this.mark()
+        this.confirmLoading = false
+        this.showModalConfirm = false
+      },
+      cancelMark() {
+        this.showModalConfirm = false
+      },
+      async mark() {
+        const payload = createPayloadAddEvaluation(this.payload)
         const res = await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_SUBMISSION.MARK}`, payload
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EVALUATION.ADD}`,
+          payload
         )
-        
         if (get(res, "success", false)) {
           this.$emit("refreshSubmission")
           this.$toasted.success(
@@ -107,7 +133,8 @@
           get(res, "message", "")
         );
       },
-      get
+      get,
+      getParamQuery
     },
     created() {
     }
