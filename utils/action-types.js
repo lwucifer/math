@@ -53,6 +53,7 @@ export const SOCIAL_MEDIAS = {
 export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications",
     REGISTER_DEVICE: "registerDevice",
+    READ_NOTIFICATION: "readNotification",
 };
 
 export const SOCIAL_CONFIG = {
@@ -437,8 +438,8 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete"
+    DELETE: "teachingStudentsDelete",
 };
 export const TEACHING_STATISTIC_REVENUE = {
-    LIST:"teachingStatisticRevenuList"
+    LIST: "teachingStatisticRevenuList",
 };

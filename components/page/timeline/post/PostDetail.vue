@@ -116,6 +116,10 @@ export default {
   props: {
     loading: Boolean,
     isParentPost: Boolean,
+    parentPostId: {
+      type: Number,
+      required: true
+    },
     parentPost: {
       type: Object,
       default: () => ({}),

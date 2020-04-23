@@ -14,6 +14,7 @@ import Label from "~/services/social/label";
 // import SocialFollow from "~/services/social/follow";
 // import TagPhotos from "~/services/social/tagPhoto";
 import RegisterDevice from "~/services/social/RegisterDevice";
+import Notifications from "~/services/social/notifications";
 
 /**
  * initial state
@@ -118,7 +119,7 @@ const actions = {
             state.feeds.listPost.concat(newListPost),
             (a, b) => a.post_id === b.post_id
           ),
-          page
+          page,
         });
       }
       return result;
@@ -714,22 +715,6 @@ const actions = {
       return result;
     } catch (error) {
       return error;
-    }
-  },
-
-  async [actionTypes.SOCIAL_NOTIFICATIONS.REGISTER_DEVICE](
-    { commit },
-    payload
-  ) {
-    try {
-      const data = await new RegisterDevice(this.$axios)[actionTypes.BASE.ADD](
-        payload
-      );
-      console.log("[RegisterDevice] add", data);
-      return data;
-    } catch (err) {
-      console.log("[RegisterDevice] add.err", err);
-      return err;
     }
   },
 
