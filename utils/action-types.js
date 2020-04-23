@@ -88,7 +88,8 @@ export const SOCIAL = {
     DELETE_CHILD_COMMENT: "socialDeleteChildComment",
     SHARE: "socialShare",
     GET_LABELS: "socialGetLabels",
-    GET_CONFIGS: "socialGetConfigs"
+    GET_CONFIGS: "socialGetConfigs",
+    GET_MODAL_DETAIL_POST: "getModalDetailPost"
 }
 
 export const ACCOUNT_PERSONAL = {

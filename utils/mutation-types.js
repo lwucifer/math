@@ -21,6 +21,7 @@ export const SOCIAL = {
     UPDATE_FEEDS: "updateSocialFeeds",
     SET_CONFIGS: "setSocialConfigs",
     SET_LABELS: "setSocialLabels",
+    SET_MODAL_DETAIL_POST: "setModalDetailPost"
     // SET_SOCIAL_LIKES_LIST: "setSocialLikesList",
     // SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
     // SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",

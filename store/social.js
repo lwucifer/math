@@ -25,6 +25,7 @@ const state = () => ({
     listPost: [],
     page: {},
   },
+  modalDetailPost: {},
 });
 
 /**
@@ -50,19 +51,21 @@ const getters = {
   //   }
   // },
 
-  commentItem: (state) => (postId, commentId) => {
-    const [post = {}] = state.feeds.listPost.filter(
-      (item) => item.post_id === postId
-    );
-    const { $commentTree = {} } = post;
-    if ($commentTree.comments && $commentTree.comments.length) {
-      const [comment = {}] = $commentTree.comments.filter(
-        (item) => item.id === commentId
-      );
-      return comment;
-    }
-    return {};
-  },
+  // commentItem: (state) => (postId, commentId) => {
+  //   const [post = {}] = state.feeds.listPost.filter(
+  //     (item) => item.post_id === postId
+  //   );
+  //   const { $commentTree = {} } = post;
+  //   if ($commentTree.comments && $commentTree.comments.length) {
+  //     const [comment = {}] = $commentTree.comments.filter(
+  //       (item) => item.id === commentId
+  //     );
+  //     return comment;
+  //   }
+  //   return {};
+  // },
+
+  post: (state) => (id) => state.feeds.listPost.find((post) => post.id === id),
 };
 
 /**
@@ -747,6 +750,10 @@ const mutations = {
   [mutationTypes.SOCIAL.SET_FEEDS](state, _feeds) {
     state.feeds = _feeds;
   },
+  
+  [mutationTypes.SOCIAL.SET_MODAL_DETAIL_POST](state, _post) {
+    state.modalDetailPost = _post;
+  }
 };
 
 export default {
