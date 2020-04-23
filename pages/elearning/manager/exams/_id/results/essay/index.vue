@@ -21,6 +21,7 @@
         v-if="isPending"
         @submit="handleMark"
       />
+  
     </div>
   
     <app-modal-confirm
@@ -28,7 +29,8 @@
       :confirmLoading="confirmLoading"
       @ok="confirmMark"
       @cancel="cancelMark"
-    />
+    >
+    </app-modal-confirm>
   </div>
 </template>
 
@@ -91,9 +93,9 @@
           return subResult2Txt(SUBMISSION_RESULTS.PENDING)
         } else {
           if (this.isPass) {
-            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.mark', 0)} (${subResult2Txt(SUBMISSION_RESULTS.PASSED)})`
+            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.points', 0)} (${subResult2Txt(SUBMISSION_RESULTS.PASSED)})`
           } else {
-            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.mark', 0)} (${subResult2Txt(SUBMISSION_RESULTS.FAILED)})`
+            return `${get(this, 'detail.mark', 0)}/${get(this, 'detail.points', 0)} (${subResult2Txt(SUBMISSION_RESULTS.FAILED)})`
           }
         }
       },
