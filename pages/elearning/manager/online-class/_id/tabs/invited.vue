@@ -78,6 +78,10 @@
     </app-table>
     <!--End table-->
 
+    <div class="pl-4 pr-4 mt-4">
+      <i class="color-999">*Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia tất cả các phòng học online theo yêu cầu của giáo viên</i>
+    </div>
+
     <!-- Modal invite students -->
     <ModalInviteStudent @close="closeModal" v-if="openModal"/>
     <!-- End -->
@@ -148,12 +152,12 @@ export default {
       courses: [],
       filterCourse: null,
       pagination: {
-        total: 15,
-        page: 1,
-        pager: 10,
-        totalElements: 55,
-        first: 1,
-        last: 10
+        total: 0,
+        number: 0,
+        size: 10,
+        totalElements: 0,
+        first: 0,
+        last: 0
       },
       students: [],
       params: {
@@ -185,7 +189,7 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       that.params.size = that.pagination.size;
-      that.params.page = that.pagination.page;
+      that.params.page = that.pagination.number + 1;
       that.getList();
     },
     submit() {

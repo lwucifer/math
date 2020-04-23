@@ -98,7 +98,6 @@ export default {
         return {
           total: 0,
           size: 10,
-          page: 1,
           totalElements: 0,
           first: 1,
           last: 1,
