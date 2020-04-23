@@ -14,7 +14,8 @@ const state = () => ({
     accountStatus: "",
     token: null,
     access_token: null,
-    firebaseToken: ""
+    firebaseToken: "",
+    currentDevice: {},
 });
 
 /**
@@ -51,7 +52,7 @@ const getters = {
     },
     avatarUser(state) {
         return state.token.avatar ? state.token.avatar : {};
-    }
+    },
 };
 
 /**
@@ -63,7 +64,7 @@ const actions = {
             phone,
             email,
             password,
-            g_recaptcha_response
+            g_recaptcha_response,
         });
         if (result.success) {
             console.log("Login [REPONSE]", result);
@@ -98,7 +99,7 @@ const actions = {
         if (window.confirmationResult) {
             return confirmationResult
                 .confirm(payload)
-                .then(result => {
+                .then((result) => {
                     // User signed in successfully.
                     const user = result.user;
                     console.log("user", user);
@@ -106,7 +107,7 @@ const actions = {
                     return result;
                     // ...
                 })
-                .catch(error => {
+                .catch((error) => {
                     // User couldn't sign in (bad verification code?)
                     // ...
                     console.log("error", error);
@@ -161,7 +162,7 @@ const actions = {
             console.log("[REFRESH_TOKEN] err", err);
             return err;
         }
-    }
+    },
 };
 
 /**
@@ -194,7 +195,10 @@ const mutations = {
     [mutationTypes.AUTH.SET_FIREBASE_TOKEN](state, _firebaseToken) {
         console.log("firebase Token", _firebaseToken);
         state.firebaseToken = _firebaseToken;
-    }
+    },
+    [mutationTypes.AUTH.SET_CURRENT_DEVICE](state, _currentdevice) {
+        state.currentDevice = _currentdevice;
+    },
 };
 
 export default {
@@ -202,5 +206,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };
