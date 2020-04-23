@@ -19,7 +19,6 @@ const getters = {};
 const actions = {
   async [actionTypes.ELEARNING_TEACHING_EVALUATION.ADD]({ commit }, payload) {
     try {
-      console.log('payload ne: ', payload)
       const result = await new Evaluation(this.$axios)[actionTypes.BASE.ADD](
         payload
       );

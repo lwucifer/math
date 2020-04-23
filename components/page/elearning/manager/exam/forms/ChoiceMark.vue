@@ -17,6 +17,7 @@
       <app-button
         square
         normal
+        :disabled="!formData.to_passed"
         :color="formData.to_passed ? 'primary' : 'disabled'"
         @click="submit"
       >

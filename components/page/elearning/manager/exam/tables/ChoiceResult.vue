@@ -8,40 +8,61 @@
       :need-pagination="false"
     >
       <template v-slot:cell(num)="{row, index}">
+        <!--<td-->
+          <!--class="table&#45;&#45;question-test__question-index"-->
+          <!--title="Chi tiết"-->
+          <!--@click="clickQuestion({row, index})"-->
+        <!--&gt;-->
         <td
           class="table--question-test__question-index"
           title="Chi tiết"
-          @click="clickQuestion({row, index})"
         >
           
+          <!--<v-popover-->
+            <!--class="tooltip&#45;&#45;question"-->
+            <!--:open="index == currentQuestionIndex"-->
+            <!--offset="10"-->
+          <!--&gt;-->
           <v-popover
             class="tooltip--question"
-            :open="index == currentQuestionIndex"
             offset="10"
+            trigger="hover"
           >
-            <div class="">
-              <span>{{ index + 1 }}</span>
+            <div>
+              <span>{{ get(row, 'index') }}</span>
             </div>
             
-            <template slot="popover">
-              <span v-close-popover class="icon-close" title="Đóng">
+            <template slot="popover" class="tooltip-detail">
+              <div class="text-right">
+                <span v-close-popover class="icon-close" title="Đóng">
                 <IconClose/>
               </span>
-              <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
-              <div v-if="loadingQuestion" class="text-center">
-                <app-spin></app-spin>
               </div>
+              <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
+              <!--<div v-if="loadingQuestion" class="text-center">-->
+                <!--<app-spin></app-spin>-->
+              <!--</div>-->
               <choice-question-detail
-                v-else-if="selectedQuestion"
-                :name="selectedQuestion.name"
-                :content="selectedQuestion.content"
-                :options="[{ title: 'abc', content: 'options 1' }]"
+                style="min-width: 41rem; max-width: 75rem;"
+                :content="get(row, 'content')"
+                :options="get(row, 'answers')"
               />
             </template>
           
           </v-popover>
         
-        
+        </td>
+      </template>
+  
+      <template v-slot:cell(student_answer)="{row}">
+        <td>
+          {{ row | ansKey }}
+        </td>
+      </template>
+  
+      <template v-slot:cell(correct_answer)="{row}">
+        <td>
+          {{ row | trueAns }}
         </td>
       </template>
     </app-table><!--End table-->
@@ -51,15 +72,42 @@
 <script>
   import IconClose from "~/assets/svg/icons/close2.svg?inline"
   import ChoiceQuestionDetail from "~/components/page/elearning/manager/exam/ChoiceQuestionDetail"
-  
-  import {get} from "lodash"
-  
+  import { get } from "lodash"
+
+  const ANS_KEYS = ['A', 'B', 'C', 'D', 'E']
+
   export default {
     components: {
       IconClose,
       ChoiceQuestionDetail
     },
-    
+    filters: {
+      trueAns(info) {
+        const opts = info.answers
+        const optsLeng = opts.length
+        
+        for(let i = 0; i < optsLeng; i++) {
+          const tmp = opts[i]
+          if (get(tmp, 'correct', false)) {
+            return ANS_KEYS[i]
+          }
+        }
+        return '-'
+      },
+      ansKey(info) {
+        const opts = info.answers
+        const optsLeng = opts.length
+        const ans = info.student.answer
+  
+        for(let i = 0; i < optsLeng; i++) {
+          const tmp = opts[i]
+          if (tmp.id == ans) {
+            return ANS_KEYS[i]
+          }
+        }
+        return '-'
+      }
+    },
     props: {
       title: {
         type: String,
@@ -67,16 +115,14 @@
       },
       list: {
         type: Array,
-        default: () => []
+        default: () => [],
+        validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
       },
       loading: {
         type: Boolean,
         default: false
-      }
+      },
     },
-    
-    filters: {},
-    
     data() {
       return {
         heads: [
@@ -95,7 +141,7 @@
         ],
         currentQuestionIndex: null,
         loadingQuestion: false,
-        selectedQuestion: null
+        selectedQuestion: null,
       }
     },
     
@@ -106,7 +152,6 @@
     },
     methods: {
       clickQuestion({row, index}) {
-        console.log('click row: ', row, index)
         this.currentQuestionIndex = index
         this.$nextTick(() => {
           this.loadingQuestion = true
@@ -133,5 +178,4 @@
 </script>
 
 <style lang="scss">
-
 </style>
