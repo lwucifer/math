@@ -244,10 +244,8 @@ export const ELEARNING_TEACHING_RESULT = {
     DETAIL: "elearningTeachingResultDetail",
 };
 
-export const ELEARNING_TEACHING_SUBMISSION = {
-    LIST: "elearningTeachingSubmissionList",
-    DETAIL: "elearningTeachingSubmissionDetail",
-    MARK: "elearningTeachingSubmissionMark",
+export const ELEARNING_TEACHING_EVALUATION = {
+    ADD: "elearningTeachingEvaluationAdd",
 };
 
 export const ELEARNING_TEACHING_VOTE = {
@@ -414,5 +412,8 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete",
+    DELETE: "teachingStudentsDelete"
+};
+export const TEACHING_STATISTIC_REVENUE = {
+    LIST:"teachingStatisticRevenuList"
 };

@@ -60,10 +60,38 @@
           <IconShoppingCartAlt />
           <span class="number">9</span>
         </button>
-        <button class="item">
-          <IconBell />
-          <span class="number">9</span>
-        </button>
+        <app-dropdown
+          position="right"
+          v-model="dropdownNotify"
+          :content-width="'580px'"
+          class="link--dropdown link--dropdown-auth item p-0"
+        >
+          <button class="item" slot="activator"> 
+            <IconBell />
+            <span class="number">9</span>
+          </button>
+          <div class="link--dropdown__content">
+            <ul>
+              <li>
+                <div class="d-flex">
+                  <h6>Thông báo</h6>
+                  <div class="ml-auto">
+                    <n-link class="text-primary" to>Đánh dấu tất cả đã đọc</n-link>
+                    <n-link class="ml-3 text-primary" to="/account/info/setting">Cài đặt</n-link>
+                  </div>
+                </div>
+              </li>
+              <li v-for="index in 5" :key="index" class="p-0">
+                <n-link to>
+                  <AnnoucementItem/>
+                </n-link>
+              </li>
+              <li class="text-center">
+                <n-link to="/account/info/announcement" class="text-primary font-weight-bold">Xem tất cả</n-link>
+              </li>
+            </ul>
+          </div>
+        </app-dropdown>
         <app-dropdown
           position="right"
           v-model="dropdownAuth"
@@ -133,6 +161,7 @@ import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
 import { mapMutations } from "vuex";
+import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem"
 
 export default {
   components: {
@@ -142,13 +171,15 @@ export default {
     IconCaretDown,
     IconBell,
     IconShoppingCartAlt,
-    IconMessager
+    IconMessager,
+    AnnoucementItem
   },
 
   data: () => ({
     showLogin: false,
     dropdownAuth: false,
-    dropdownCourse: false
+    dropdownCourse: false,
+    dropdownNotify: false
   }),
   computed: {
     isAuthenticated() {

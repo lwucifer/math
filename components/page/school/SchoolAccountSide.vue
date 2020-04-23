@@ -24,7 +24,7 @@
       <n-link class="link-gray" to='/_id/info/transactions' :class="active == 4 ? 'active' : ''">
         <IconHistory />Lịch sử giao dịch
       </n-link>
-      <n-link class="link-gray" to :class="active == 5 ? 'active' : ''">
+      <n-link class="link-gray" to='/_id/info/announcement' :class="active == 5 ? 'active' : ''">
         <IconBell />Thông báo
       </n-link>
       <n-link class="link-gray" to='/_id/info/setting' :class="active == 6 ? 'active' : ''">
