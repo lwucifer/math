@@ -12,6 +12,7 @@ import Photos from "~/services/social/photos";
 import SocialFollow from "~/services/social/follow";
 import TagPhotos from "~/services/social/tagPhoto";
 import RegisterDevice from "~/services/social/RegisterDevice";
+import Notifications from "~/services/social/notifications";
 
 /**
  * initial state
@@ -223,34 +224,32 @@ const actions = {
 
     async [actionTypes.SOCIAL_NOTIFICATIONS.LIST]({ commit }, payload) {
         try {
-            // const result = await new Comments(this.$axios)[actionTypes.BASE.LIST](payload);
-            const result = [{
-                    id: "1",
-                    creator: "Dat Leo",
-                    type: "image",
-                    thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440",
-                },
-                {
-                    id: "2",
-                    creator: "Dat Leo 1",
-                    type: "image",
-                    thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440",
-                },
-                {
-                    id: "3",
-                    creator: "Dat Leo 1",
-                    type: "video",
-                    thumd: "https://picsum.photos/2560/1440",
-                    url: "https://picsum.photos/2560/1440",
-                },
-            ];
-            console.log("[Medias] list", result);
+            const result = await new Notifications(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Notifications] list", result);
             // set to mutation
             commit(mutationTypes.SOCIAL.SET_SOCIAL_NOTIFICATIONS_LIST, result);
+            return result;
         } catch (err) {
-            console.log("[Medias] list.err", err);
+            console.log("[Notifications] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_NOTIFICATIONS.READ_NOTIFICATION]({ commit },
+        payload
+    ) {
+        try {
+            const result = await new Notifications(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
+            console.log("[Notifications] edit", result);
+            // set to mutation
+            // commit(mutationTypes.SOCIAL.SET_SOCIAL_NOTIFICATIONS_LIST, result);
+            return result;
+        } catch (err) {
+            console.log("[Notifications] edit.err", err);
             return err;
         }
     },
