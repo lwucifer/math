@@ -16,26 +16,29 @@
               <a @click="tab = ''" :class="tab == '' ? 'active' : ''">Danh sách ẩn</a>
             </div>
             <div class="elearning-manager__serch">
-              <app-button rounded size="sm" class="mr-4" normal>
+              <app-button rounded size="sm" class="mr-4" normal @click="getList">
                 <IconFilter />Lọc kết quả
               </app-button>
-              <app-checkbox label="Miễn phí" v-model="params.free" />
-              <app-select :options="opts1" v-model="opt1" size="sm" />
-              <app-select :options="opts2" v-model="opt2" size="sm" />
-              <app-input class="mb-0" size="sm" placeholder="Nhập để tìm kiếm...">
+              <app-select :options="free" v-model="params.free" size="sm" />
+              <app-select :options="types" v-model="params.type" size="sm" />
+              <app-select :options="privacies" v-model="params.privacy" size="sm" />
+              <app-input class="mb-0" size="sm" placeholder="Nhập để tìm kiếm..." v-model="params.keyword">
                 <a class="d-flex" slot="unit">
                   <IconSearch width="17" height="17" />
                 </a>
               </app-input>
             </div>
-            <app-button color="secondary" square size="sm" normal class="mb-4">
+            <app-button square size="sm" normal class="mb-4 btn-color-blue" @click="restoreRows" v-if="tab == ''">
+              <IconTrashAlt height="15" width="15" class="fill-white mr-2" />Khôi phục
+            </app-button>
+            <app-button color="secondary" square size="sm" normal class="mb-4" @click="deleteRows" v-else>
               <IconTrashAlt height="15" width="15" class="fill-white mr-2" />Xoá khỏi danh sách
             </app-button>
           </div>
 
           <!--Table-->
             <app-table
-              :heads="heads"
+              :heads="currentHeads"
               :pagination="pagination"
               @pagechange="onPageChange"
               @selectionChange="selectRow"
@@ -70,6 +73,18 @@
                 <td>
                   <strong>{{row.vote.average_rate}}</strong>
                   <span>({{row.vote.average_rate}})</span>
+                </td>
+              </template>
+              <template v-slot:cell(price)="{row}">
+                <td>
+                  <span v-if="row.price > 0">{{row.price}}Đ</span>
+                  <span v-else>Miễn phí</span>
+                </td>
+              </template>
+              <template v-slot:cell(participants)="{row}">
+                <td>
+                  <span v-if="row.participants > 0">{{row.participants}}</span>
+                  <n-link v-else to>Thêm học sinh</n-link>
                 </td>
               </template>
             </app-table>
@@ -142,7 +157,7 @@ export default {
         },
         {
           name: "participants",
-          text: "Số học sinh tham gia",
+          text: "Số học sinh<br>tham gia",
           sort: true
         },
         {
@@ -211,6 +226,7 @@ export default {
           text: "Lý do bị từ chối"
         }
       ],
+      currentHeads: [],
       pagination: {
         total: 10,
         page: 1,
@@ -222,17 +238,23 @@ export default {
       isTeacher: true,
       time1: null,
       time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Theo loại" },
-        { value: "COURSE", text: "COURSE" },
-        { value: "LECTURE", text: "LECTURE" }
+      selectType: null,
+      types: [
+        { value: null, text: "Theo loại" },
+        { value: "COURSE", text: "Khóa học" },
+        { value: "LECTURE", text: "Bài giảng" }
       ],
-      opt2: "",
-      opts2: [
-        { value: "", text: "Theo hiển thị" },
-        { value: "1", text: "Tăng dần" },
-        { value: "2", text: "Giảm dần" }
+      selectPrivacy: null,
+      privacies: [
+        { value: null, text: "Theo hiển thị" },
+        { value: "PUBLIC", text: "Công khai" },
+        { value: "PRIVATE", text: "Riêng tư" }
+      ],
+      selectFree: null,
+      free: [
+        { value: null, text: "Theo học phí" },
+        { value: true, text: "Miễn phí" },
+        { value: false, text: "Có phí" }
       ],
       teacher: {
         id: "1",
@@ -240,13 +262,14 @@ export default {
         avatar: "https://picsum.photos/125/125"
       },
       elearningList: [],
-      ids: [],
       params: {
         page: 1,
         limit: 10,
-        free: null
+        free: null,
+        privacy: null,
+        type: null,
+        keyword: null
       },
-      xxx: "PENDING | WAITING_FOR_APPROVE | APPROVED | REJECTED | HIDE"
     };
   },
 
@@ -259,7 +282,24 @@ export default {
 
   watch: {
     tab(newValue, oldValue) {
+      this.ids = [];
       this.params.hide = newValue == '';
+      switch (newValue) {
+        case 'PENDING':
+        case 'WAITING_FOR_APPROVE':
+          this.currentHeads = [...this.heads2]
+          break;
+        case 'APPROVED':
+          this.currentHeads = [...this.heads]
+          break;
+        case '':
+        case 'REJECTED':
+          this.currentHeads = [...this.heads3]
+          break;
+        default:
+          this.currentHeads = [...this.heads]
+          break;
+      }
       this.getList();
     }
   },
@@ -275,24 +315,13 @@ export default {
 
     selectRow(data) {
       this.ids = data.map((row, index, data) => {
-        return row.online_class_id;
+        return row.id;
       });
     },
 
     async getList() {
       try {
         this.loading = true;
-        let xx = {
-          "free": true,
-          "hide": true,
-          "keyword": "string",
-          "limit": 0,
-          "page": 0,
-          "privacy": "string",
-          "status": "string",
-          "subject": "string",
-          "type": "string"
-        };
         let params = { ...this.params };
         params.status = this.tab;
         await this.$store.dispatch(
@@ -326,8 +355,29 @@ export default {
         this.$toasted.error(doDelete.message);
       }
     },
+     
+    async restoreRows() {
+      let params = { 
+        hide: false,
+        ids: [...this.ids] 
+      };
+      const doRestore = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.HIDE}`,
+        params
+      );
+
+      if (doRestore.success) {
+        this.getList();
+      } else {
+        this.$toasted.error(doRestore.message);
+      }
+    },
 
     get
+  },
+
+  beforeMount () {
+    this.currentHeads = [...this.heads];
   },
 
   created() {
@@ -350,5 +400,8 @@ export default {
       height: auto;
     }
   }
+}
+.btn-color-blue {
+  background-color: #1481FE;
 }
 </style>

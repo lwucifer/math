@@ -139,6 +139,7 @@ export const MESSAGE_SEND_FILE = `${SCHOOLLY_ALIAS}/social/api/message/uploadFil
  */
 export const TEACHING_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/teaching/summary`;
 export const TEACHING_ELEARNINGS = `${SCHOOLLY_ALIAS}/elearning/teaching/elearnings`;
+export const TEACHING_ELEARNING_HIDES = `${SCHOOLLY_ALIAS}/elearning/teaching/elearnings/hides`;
 export const TEACHING_EXCERCISE = `${SCHOOLLY_ALIAS}/elearning/teaching/excercises`;
 export const TEACHING_REPOSITORY = `${SCHOOLLY_ALIAS}/elearning/teaching/repository`;
 export const TEACHING_ONLINE_CLASS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass`;
