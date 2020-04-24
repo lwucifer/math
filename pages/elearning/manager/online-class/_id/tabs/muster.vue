@@ -123,6 +123,7 @@ export default {
     return {
       tab: 1,
       openModal: false,
+      summary: {},
       heads: [
         {
           name: "online_class_name",
@@ -196,7 +197,8 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateLessons: "Lessons"
+      stateLessons: "Lessons",
+      stateAttendantSummary: "AttendantSummary",
     })
   },
 
@@ -239,6 +241,24 @@ export default {
         this.loading = false
       }
     },
+    
+    async getSummary() {
+      try {
+        this.loading = true;
+        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        const params = {};
+        await this.$store.dispatch(
+          (`${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.SUMMARY}`),
+          { params, id: online_class_id, after: 'attendant/summary/'}
+        );
+        this.summary = this.get(this.stateAttendantSummary, 'data', [])
+        console.log('xxxxxxx', this.summary)
+      } catch (e) {
+
+      } finally {
+        this.loading = false
+      }
+    },
 
     async inviteStudents() {
       this.openModal = true;
@@ -249,6 +269,7 @@ export default {
 
   created() {
     this.getList();
+    this.getSummary();
   }
 };
 </script>
