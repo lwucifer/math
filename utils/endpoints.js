@@ -52,6 +52,7 @@ export const REGISTER_DEVICE = `${SCHOOLLY_ALIAS}/social/api/device`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
+export const ELEARNING_PUBLIC_TEACHER_ELS = `${SCHOOLLY_ALIAS}/elearning/public/teacher_els`;
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = `${SCHOOLLY_ALIAS}/elearning/public/elearning/teacher`;
 export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
