@@ -98,6 +98,10 @@ export const ELEARNING_PUBLIC_RELATED = {
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
     SET_ELEARNING_PUBLIC_VOTED_ELEARNING_LIST: "setElearningPublicVotedElearningList",
+}
+
+export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
+    SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST: "setElearningPublicSchoolYearList",
 };
 
 export const ELEARNING = {
@@ -210,6 +214,10 @@ export const ELEARNING_TEACHING_EVALUATION = {
 
 export const ELEARNING_TEACHING_VOTE = {
     SET_TEACHING_VOTE_LIST: "setElearningTeachingVoteList",
+};
+
+export const ELEARNING_TEACHING_CLASS = {
+    SET_TEACHING_CLASS_LIST: "setElearningTeachingClassList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {

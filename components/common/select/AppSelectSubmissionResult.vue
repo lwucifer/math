@@ -1,16 +1,20 @@
 <template>
-  <app-vue-select
-    class="app-vue-select filter-form__item__selection w-100"
-    v-model="selectedItem"
-    :options="options"
-    :reduce="item => item.val"
-    label="label"
-    :placeholder="placeholder"
-    :searchable="searchable"
-    :clearable="clearable"
-    @input="handleChangedResult"
-  >
-  </app-vue-select>
+  <div>
+    <div class="filter-form__item">
+      <app-vue-select
+        class="app-vue-select filter-form__item__selection w-100"
+        v-model="selectedItem"
+        :options="options"
+        :reduce="item => item.val"
+        label="label"
+        :placeholder="placeholder"
+        :searchable="searchable"
+        :clearable="clearable"
+        @input="handleChangedResult"
+      >
+      </app-vue-select>
+    </div>
+  </div>
 </template>
 
 <script>

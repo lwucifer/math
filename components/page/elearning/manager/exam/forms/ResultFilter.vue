@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-form">
+  <div class="filter-form filter-form--participant">
     <div class="filter-form__item">
       <app-button
         color="primary"
@@ -11,41 +11,16 @@
         <span>Lọc kết quả</span>
       </app-button>
     </div>
+    
+    <app-select-class
+      @changedClass="handleChangedClass"
+    />
 
-    <div class="filter-form__item">
-      <app-vue-select
-        class="app-vue-select filter-form__item__selection"
-        v-model="filters.class_id"
-        :options="classes"
-        :reduce="item => item.value"
-        label="text"
-        placeholder="Theo lớp"
-        searchable
-        clearable
-        @input="handleChangedClass"
-      >
-      </app-vue-select>
-    </div>
-
-    <div class="filter-form__item">
-      <app-select-submission-result
-        v-model="filters.result"
-        @input="handleChangedResult"
-      >
-      </app-select-submission-result>
-      <!--<app-vue-select-->
-        <!--class="app-vue-select filter-form__item__selection"-->
-        <!--v-model="filters.result"-->
-        <!--:options="results"-->
-        <!--:reduce="item => item.value"-->
-        <!--label="text"-->
-        <!--placeholder="Theo kết quả"-->
-        <!--searchable-->
-        <!--clearable-->
-        <!--@input="handleChangedResult"-->
-      <!--&gt;-->
-      <!--</app-vue-select>-->
-    </div>
+    <app-select-submission-result
+      v-model="filters.result"
+      @input="handleChangedResult"
+    >
+    </app-select-submission-result>
 
     <!--Right form-->
     <div class="filter-form__right">
@@ -140,6 +115,7 @@
         this.$emit('changedQuery', val)
       },
       handleChangedResult(val) {
+        this.filters.result = val
         this.$emit('changedResult', val)
       },
       handleSubmitSearch(e) {
