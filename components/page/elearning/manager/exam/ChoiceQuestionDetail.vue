@@ -5,17 +5,13 @@
     <div class="question--options">
       <p style="line-height: 2.4rem;">Đáp án:</p>
       <div class="options__detail row">
-        <div class="option__item col-md-6">
-          <span class="option__key">A: </span> <p class="answer-wrapper" v-html="' Đáp án 01Đáp án 01Đáp án 01Đáp án 01 Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01Đáp án 01'"></p>
-        </div>
-        <div class="option__item col-md-6">
-          <span class="option__key">B: </span><p class="answer-wrapper" v-html="'Đáp án 02'"></p>
-        </div>
-        <div class="option__item col-md-6">
-          <span class="option__key">C: </span><p class="answer-wrapper" v-html="'Đáp án 03'"></p>
-        </div>
-        <div class="option__item col-md-6">
-          <span class="option__key">D: </span><p class="answer-wrapper" v-html="'Đáp án 04'"></p>
+        <div
+          class="option__item col-md-6"
+          v-for="(item, index) in options"
+          :key="index"
+        >
+          <span class="option__key">{{ getObjectKey(index) }}: </span>
+          <p class="answer-wrapper" v-html="item.answer"></p>
         </div>
       </div>
     </div>
@@ -25,10 +21,6 @@
 <script>
   export default {
     props: {
-      name: {
-        type: String,
-        required: true
-      },
       content: {
         type: String,
         required: true
@@ -36,6 +28,12 @@
       options: {
         type: Array,
         required: true
+      }
+    },
+    methods: {
+      getObjectKey(index) {
+        const data = ['A', 'B', 'C', 'D', 'E']
+        return data[index]
       }
     }
   }

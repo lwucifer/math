@@ -70,3 +70,23 @@ $vs-border-radius: 0 !default;
 .app-vue-select .vs__selected-options {
     overflow: hidden;
 }
+
+//Custom scrollbar
+.vs__dropdown-menu {
+    &::-webkit-scrollbar {
+        height: 5px;
+        width: 2px;
+    }
+    
+    &::-webkit-scrollbar-track { // bg color of scrollbar
+        -webkit-box-shadow: inset 0 0 6px $color-scrollbar-track;
+    }
+    
+    &::-webkit-scrollbar-thumb { // track point
+        background-color: $color-scrollbar-thumb;
+        //background-color: red;
+        //outline: 1px solid #708090;
+    }
+    &::-webkit-scrollbar-thumb:horizontal{
+    }
+}

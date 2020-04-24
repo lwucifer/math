@@ -164,7 +164,11 @@ export const ELEARNING_PUBLIC_SEARCH = {
 };
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
-    LIST: "elearningPublicVotedElearning",
+    LIST: "elearningPublicVotedElearningList",
+};
+
+export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
+    LIST: "elearningPublicSchoolYearList",
 };
 
 export const ELEARNING = {
@@ -203,6 +207,10 @@ export const TEACHING_OLCLASS_LESSONS = {
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",
     EDIT: "teachingOlclassLessonAttendancesEdit",
+    SUMMARY: "teachingOlclassLessonAttendancesSummary",
+};
+export const TEACHING_OLCLASS_LESSON_SESSIONS = {
+    LIST: "teachingOlclassLessonSessionsList",
 };
 
 export const CREATING_CHAPTER = {
@@ -276,6 +284,10 @@ export const ELEARNING_TEACHING_EVALUATION = {
 
 export const ELEARNING_TEACHING_VOTE = {
     LIST: "elearningTeachingVoteList",
+};
+
+export const ELEARNING_TEACHING_CLASS = {
+    LIST: "elearningTeachingClassList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -438,8 +450,22 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete",
+    DELETE: "teachingStudentsDelete"
 };
+
+export const PAYMENT = {
+    POST_PAY: "postPay",
+    POST_ORDER: "postOder",
+    POST_HASHKEY: "postHashKeyGenerate",
+    VALIDATE_TRANSACTION: "validateTransaction",
+}
+
+export const CART = {
+    LIST: "cartList",
+    ADD: "cartAdd",
+    DELETE: "cartDelete"
+}
+
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",
 };

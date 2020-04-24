@@ -20,9 +20,6 @@
             <keep-alive>
               <component v-bind:is="currentTabComponent"></component>
             </keep-alive>
-            <div class="pl-4 pr-4 mt-4">
-              <i class="color-999">*Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia tất cả các phòng học online theo yêu cầu của giáo viên</i>
-            </div>
           </div>
         </div>
       </div>

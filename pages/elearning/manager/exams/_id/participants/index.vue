@@ -181,4 +181,11 @@
 <style lang="scss">
   @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
   @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+  .filter-form {
+    &.filter-form--participant {
+      .filter-form__item--search {
+        width: 20rem;
+      }
+    }
+  }
 </style>

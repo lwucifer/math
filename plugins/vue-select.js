@@ -13,4 +13,6 @@ vSelect.props.components.default = () => ({
     },
 });
 
-Vue.use(vSelect)
+if (process.BROWSER_BUILD) {
+  Vue.use(vSelect)
+}

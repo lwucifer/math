@@ -22,7 +22,7 @@ export const SOCIAL = {
     UPDATE_FEEDS: "updateSocialFeeds",
     SET_CONFIGS: "setSocialConfigs",
     SET_LABELS: "setSocialLabels",
-    SET_MODAL_DETAIL_POST: "setModalDetailPost"
+    SET_MODAL_DETAIL_POST: "setModalDetailPost",
     // SET_SOCIAL_LIKES_LIST: "setSocialLikesList",
     // SET_SOCIAL_SHARES_LIST: "setSocialSharesList",
     // SET_SOCIAL_SHARES_LIST: "setSocialCommentsList",
@@ -98,6 +98,10 @@ export const ELEARNING_PUBLIC_RELATED = {
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
     SET_ELEARNING_PUBLIC_VOTED_ELEARNING_LIST: "setElearningPublicVotedElearningList",
+}
+
+export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
+    SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST: "setElearningPublicSchoolYearList",
 };
 
 export const ELEARNING = {
@@ -126,6 +130,11 @@ export const TEACHING_OLCLASS_INVITES = {
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_LIST: "setTeachingOlclassLessonAttendancesList",
     SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_EDIT: "setTeachingOlclassLessonAttendancesEdit",
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_SUMMARY: "setTeachingOlclassLessonAttendancesSummary",
+};
+
+export const TEACHING_OLCLASS_LESSON_SESSIONS = {
+    SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST: "setTeachingOlclassLessonSessionsList",
 };
 
 export const TEACHING_OLCLASS_LESSONS = {
@@ -210,6 +219,10 @@ export const ELEARNING_TEACHING_EVALUATION = {
 
 export const ELEARNING_TEACHING_VOTE = {
     SET_TEACHING_VOTE_LIST: "setElearningTeachingVoteList",
+};
+
+export const ELEARNING_TEACHING_CLASS = {
+    SET_TEACHING_CLASS_LIST: "setElearningTeachingClassList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -351,8 +364,17 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
-    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
+    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete"
 };
+
+export const CART = {
+    SET_CART_LIST: "setCartList",
+}
+
 export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
+};
+
+export const SOCIAL_NOTI = {
+    SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
 };
