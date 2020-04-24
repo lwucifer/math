@@ -35,7 +35,7 @@
 
     <ElearningSliderTab
       class="mt-4"
-      :content="relatedCourses"
+      :content="teacherEls"
       :swiperOptions="sliderOptions"
       title="Bài giảng cùng giáo viên"
     />
@@ -60,6 +60,7 @@ import LevelService from "~/services/elearning/public/Level";
 import SubjectService from "~/services/elearning/public/Subject";
 import ProgramService from "~/services/elearning/public/Program";
 import RelatedService from "~/services/elearning/public/Related";
+import TeacherEls from "~/services/elearning/public/TeacherEls";
 
 import CourseTeacherInfo from "~/components/page/course/CourseTeacherInfo";
 import ElearningSliderTab from "~/components/page/elearning/ElearningSliderTab";
@@ -115,6 +116,7 @@ export default {
       subjects: [],
       program: [],
       relatedCourses: [],
+      teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
@@ -154,6 +156,27 @@ export default {
   // beforeDestroy() {
   //   window.removeEventListener("scroll", this.bindScrollStatus);
   // },
+
+  watch: {
+    "info.teacher.id": {
+      handler: async function() {
+        const teacher_id = get(this, "info.teacher.id", "");
+        const options = {
+          params: {
+            teacher_id,
+          },
+        };
+        const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
+          options
+        );
+        if (get(res, "success", false) === true) {
+          this.teacherEls = get(res, "data.content", []);
+          return;
+        }
+        this.teacherEls = [];
+      },
+    },
+  },
 
   methods: {
     get,

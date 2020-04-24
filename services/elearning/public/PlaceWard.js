@@ -1,5 +1,5 @@
 import * as APIs from "~/utils/endpoints";
-import BaseService from "../../BaseService";
+import BaseService from "~/services/BaseService";
 
 export default class PlaceWard extends BaseService {
     constructor($axios) {
