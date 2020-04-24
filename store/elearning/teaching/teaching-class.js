@@ -20,51 +20,9 @@ const getters = {};
 const actions = {
   async [actionTypes.ELEARNING_TEACHING_CLASS.LIST]({ commit }, payload) {
     try {
-      // const result = await new TeachingClass(this.$axios)[actionTypes.BASE.LIST](
-      //   payload
-      // );
-      const result = {
-        "code": "200",
-        "success": true,
-        "data": {
-          "content": [
-            {
-              id: 'id class 1',
-              name: 'class 1',
-            },
-            {
-              id: 'id class 2',
-              name: 'class 2',
-            }
-          ],
-          "pageable": {
-            "sort": {
-              "unsorted": false,
-              "sorted": true,
-              "empty": false
-            },
-            "page_number": 0,
-            "page_size": 10,
-            "offset": 0,
-            "paged": true,
-            "unpaged": false
-          },
-          "last": true,
-          "total_pages": 1,
-          "total_elements": 2,
-          "first": true,
-          "sort": {
-            "unsorted": false,
-            "sorted": true,
-            "empty": false
-          },
-          "number_of_elements": 2,
-          "size": 10,
-          "number": 0,
-          "empty": true
-        },
-        "message": "success"
-      }
+      const result = await new TeachingClass(this.$axios)[actionTypes.BASE.LIST](
+        payload
+      );
       // set to mutation
       commit(mutationTypes.ELEARNING_TEACHING_CLASS.SET_TEACHING_CLASS_LIST, result);
     } catch (error) {
