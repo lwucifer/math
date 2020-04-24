@@ -5,7 +5,9 @@ import Invites from "~/services/elearning/teaching/OlclassInvites";
 import Block from "~/services/elearning/teaching/OlclassBlock";
 import Attendances from "~/services/elearning/teaching/OlclassAttendances";
 import BaseAttendance from "~/services/elearning/teaching/OlclassLesson";
+import BaseOlclass from "~/services/elearning/teaching/OlclassBase";
 import Lessons from "~/services/elearning/teaching/OlclassLessons";
+import Sessions from "~/services/elearning/teaching/OlclassLessonSessions";
 
 /**
  * initial state
@@ -13,8 +15,10 @@ import Lessons from "~/services/elearning/teaching/OlclassLessons";
 const state = () => ({
   OnlineClass: [],
   Attendances: [],
+  AttendantSummary: [],
   Invites: [],
   Lessons: [],
+  LessonSessions: [],
 });
 
 /**
@@ -80,6 +84,21 @@ const actions = {
       return result;
     } catch (error) {
       console.log("[TEACHING Olclass] delete.error", error);
+    }
+  },
+
+  async [actionTypes.TEACHING_OLCLASS_LESSON_SESSIONS.LIST]({ commit }, options) {
+    try {
+      const result = await new Sessions(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASS_LESSON_SESSIONS.SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
     }
   },
 
@@ -150,7 +169,7 @@ const actions = {
     }
   },
   
-  // TTENDANCES
+  // ATTENDANCES
   async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST]({ commit }, options) {
     try {
       const result = await new BaseAttendance(this.$axios)["getWithMiddleID"](
@@ -177,6 +196,22 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
+
+  async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.SUMMARY]({ commit }, options) {
+    try {
+      const result = await new BaseOlclass (this.$axios)["getWithMiddleID"](
+        options, options.id, options.after
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES
+          .SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_SUMMARY,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
+    }
+  },
 };
 
 /**
@@ -194,6 +229,12 @@ const mutations = {
   },
   [mutationTypes.TEACHING_OLCLASS_LESSONS.SET_TEACHING_OLCLASS_LESSONS_LIST](state, _Lessons) {
     state.Lessons = _Lessons;
+  },
+  [mutationTypes.TEACHING_OLCLASS_LESSON_SESSIONS.SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST](state, _sessions) {
+    state.LessonSessions = _sessions;
+  },
+  [mutationTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_SUMMARY](state, _summary) {
+    state.AttendantSummary = _summary;
   },
 };
 

@@ -126,6 +126,11 @@ export const TEACHING_OLCLASS_INVITES = {
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_LIST: "setTeachingOlclassLessonAttendancesList",
     SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_EDIT: "setTeachingOlclassLessonAttendancesEdit",
+    SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_SUMMARY: "setTeachingOlclassLessonAttendancesSummary",
+};
+
+export const TEACHING_OLCLASS_LESSON_SESSIONS = {
+    SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST: "setTeachingOlclassLessonSessionsList",
 };
 
 export const TEACHING_OLCLASS_LESSONS = {

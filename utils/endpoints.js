@@ -90,6 +90,7 @@ export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/
  */
 export const TEACHING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses`;
 export const TEACHING_OLCLASS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass`;
+export const TEACHING_OLCLASS_LESSON_SESSIONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses/lesson/sessions`;
 export const TEACHING_OLCLASS_INVITES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/invites`;
 export const TEACHING_OLCLASS_BLOCK = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/banned`;
 export const TEACHING_OLCLASS_LESSONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lessons`;
