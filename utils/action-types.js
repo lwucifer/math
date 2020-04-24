@@ -207,6 +207,10 @@ export const TEACHING_OLCLASS_LESSONS = {
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",
     EDIT: "teachingOlclassLessonAttendancesEdit",
+    SUMMARY: "teachingOlclassLessonAttendancesSummary",
+};
+export const TEACHING_OLCLASS_LESSON_SESSIONS = {
+    LIST: "teachingOlclassLessonSessionsList",
 };
 
 export const CREATING_CHAPTER = {

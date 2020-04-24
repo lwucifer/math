@@ -52,6 +52,7 @@ export const REGISTER_DEVICE = `${SCHOOLLY_ALIAS}/social/api/device`;
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `${SCHOOLLY_ALIAS}/elearning/public/summary`;
+export const ELEARNING_PUBLIC_TEACHER_ELS = `${SCHOOLLY_ALIAS}/elearning/public/teacher_els`;
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = `${SCHOOLLY_ALIAS}/elearning/public/elearning/teacher`;
 export const ELEARNING_PUBLIC_CATEGORY = `${SCHOOLLY_ALIAS}/elearning/public/school/categories`;
 export const ELEARNING_PUBLIC_INFO = `${SCHOOLLY_ALIAS}/elearning/public/info`;
@@ -92,6 +93,7 @@ export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/
  */
 export const TEACHING_OLCLASSES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses`;
 export const TEACHING_OLCLASS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass`;
+export const TEACHING_OLCLASS_LESSON_SESSIONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclasses/lesson/sessions`;
 export const TEACHING_OLCLASS_INVITES = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/invites`;
 export const TEACHING_OLCLASS_BLOCK = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/banned`;
 export const TEACHING_OLCLASS_LESSONS = `${SCHOOLLY_ALIAS}/elearning/teaching/olclass/lessons`;
