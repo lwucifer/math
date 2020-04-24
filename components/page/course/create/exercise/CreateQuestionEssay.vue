@@ -8,7 +8,7 @@
       >Nội dung câu trả lời</label
     >
     <app-editor v-model="payload.answers[0].content" />
-    <div v-if="get(exercise, 'category', '') === 'TEST'">
+    <div>
       <label class="d-inline-block mb-3" for="question-editor">Điểm</label>
       <app-input v-model="payload.points" />
     </div>
@@ -81,10 +81,6 @@ export default {
 
     async handleOk() {
       this.confirmLoading = true;
-
-      if (get(this, 'exercise.category', '') === 'EXERCISE') {
-        this.payload.points = '';
-      }
 
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(
