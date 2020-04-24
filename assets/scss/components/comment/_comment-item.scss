@@ -55,6 +55,10 @@ a.comment-item__name {
 
 .comment-item__action {
     font-weight: 700;
+    
+    &--liked {
+        color: $color-red !important;
+    }
 }
 
 .comment-item__menu-dropdown {

@@ -7,7 +7,7 @@
         <div class="col-md-8">
           <PostEditor
             :active="postEditorActive"
-            @submit="handlePostEditorSubmit"
+            @submit="addPost"
             @active-change="active => postEditorActive = active"
           />
 
@@ -27,6 +27,8 @@
               @like="likePost"
               @edit="editPost"
               @share="openModalShare"
+              @get-comment="getComment"
+              @post-comment="postComment"
             >
               <template slot="media-content" slot-scope="{ link }">
                 <PostImage
@@ -69,6 +71,44 @@
                   @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
                 />
               </PostShareContent>
+
+              <template slot="comment" slot-scope="{ commentTree }">
+                <transition-group
+                  enter-active-class="animated faster fadeIn"
+                  leave-active-class="animated faster fadeOut"
+                >
+                  <CommentItem
+                    v-for="comment in commentTree.comments || []"
+                    :key="comment.id"
+                    :post="post"
+                    :data="comment"
+                    @edit="editComment"
+                    @delete="deleteComment"
+                    @like="likeComment"
+                    @get-child-comment="getChildComment"
+                    @post-child-comment="postChildComment"
+                  >
+                    <template slot="child-comment" slot-scope="{ commentTree }">
+                      <transition-group
+                        enter-active-class="animated faster fadeIn"
+                        leave-active-class="animated faster fadeOut"
+                      >
+                        <CommentItem
+                          v-for="childComment in commentTree.comments || []"
+                          :key="childComment.id"
+                          :level="2"
+                          :post="post"
+                          :parentComment="comment"
+                          :data="childComment"
+                          @edit="editChildComment"
+                          @delete="deleteChildComment"
+                          @like="likeChildComment"
+                        />
+                      </transition-group>
+                    </template>
+                  </CommentItem>
+                </transition-group>
+              </template>
             </Post>
           </transition-group>
 
@@ -121,7 +161,7 @@
           >
             <PostDetail
               slot="content"
-              :parent-post="modalDetailDataParent"
+              :parent-post-id="modalDetailDataParent.post_id"
               :post="modalDetailDataPost"
               :is-parent-post="modalDetailDataParent.post_id === modalDetailDataPost.post_id"
               @click-close="handleCloseModal"
@@ -278,6 +318,7 @@ import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
 import { createShare } from "~/models/social/Share";
 import { createPost, editPost } from "~/models/post/Post";
+import { createComment, editComment } from "~/models/social/Comment";
 import {
   COURSES_LIST,
   TIMELINE_SLIDER_ITEMS
@@ -300,6 +341,12 @@ import PostDetail from "~/components/page/timeline/post/PostDetail";
 import PostImage from "~/components/page/timeline/post/PostImage";
 import PostModalShare from "~/components/page/timeline/post/PostModalShare";
 import PostShareContent from "~/components/page/timeline/post/PostShareContent";
+const CommentItem = () =>
+  import("~/components/page/timeline/comment/CommentItem");
+const CommentItemReplied = () =>
+  import("~/components/page/timeline/comment/CommentItemReplied");
+const CommentEditor = () =>
+  import("~/components/page/timeline/comment/CommentEditor");
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
@@ -318,7 +365,10 @@ export default {
     PostImage,
     VclFacebook,
     PostModalShare,
-    PostShareContent
+    PostShareContent,
+    CommentItem,
+    CommentItemReplied,
+    CommentEditor
   },
 
   fetch({ params, query, store }) {
@@ -555,29 +605,6 @@ export default {
       }
     },
 
-    /**
-     * Submit POST a post
-     */
-    async handlePostEditorSubmit(data, cb) {
-      const dataWithModel = createPost(data);
-
-      this.postLoading = true;
-      this.postEditorActive = false;
-
-      const doAdd = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.ADD_POST}`,
-        dataWithModel
-      );
-
-      if (doAdd.success) {
-        cb();
-      } else {
-        this.$toasted.error(doAdd.message);
-      }
-
-      this.postLoading = false;
-    },
-
     showModalConfirmDelete(id) {
       this.modalConfirmDelete = true;
       this.modalConfirmDeleteId = id;
@@ -586,39 +613,6 @@ export default {
     hideModalConfirmDelete() {
       this.modalConfirmDelete = false;
       this.modalConfirmDeleteId = null;
-    },
-
-    /**
-     * DELETE a post
-     */
-    async deletePost(id) {
-      this.modalConfirmDeleteLoading = true;
-      const doDelete = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.DELETE_POST}`,
-        id
-      );
-
-      if (!doDelete.success) {
-        this.$toasted.error(doDelete.message);
-      }
-
-      this.hideModalConfirmDelete();
-      this.modalConfirmDeleteLoading = false;
-    },
-
-    /**
-     * Like a POST
-     */
-    async likePost(id, cb) {
-      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-
-      await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.LIKE_POST}`,
-        likeModel
-      );
-
-      // Have to run cb
-      cb();
     },
 
     editPost(post) {
@@ -700,7 +694,7 @@ export default {
         `social/${actionTypes.SOCIAL.GET_FEEDS}`,
         {
           params: {
-            page: get(this, "feeds.page.number", 1) + 1
+            page: get(this, "feeds.page.number", 0) + 1
           }
         }
       );
@@ -719,6 +713,236 @@ export default {
       this.feeds.listPost = this.feeds.listPost.map(item =>
         newPost.post_id === item.post_id ? newPost : item
       );
+    },
+
+    //
+    //
+    //
+    //
+    //
+
+    /**
+     * To Submit POST a post
+     */
+    async addPost(data, cb) {
+      const dataWithModel = createPost(data);
+
+      this.postLoading = true;
+      this.postEditorActive = false;
+
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        dataWithModel
+      );
+
+      if (doAdd.success) {
+        cb();
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
+
+      this.postLoading = false;
+    },
+
+    /**
+     * To DELETE a post
+     */
+    async deletePost(id) {
+      this.modalConfirmDeleteLoading = true;
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_POST}`,
+        id
+      );
+
+      if (!doDelete.success) {
+        this.$toasted.error(doDelete.message);
+      }
+
+      this.hideModalConfirmDelete();
+      this.modalConfirmDeleteLoading = false;
+    },
+
+    /**
+     * To LIKE a POST
+     */
+    async likePost(id, cb) {
+      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
+
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_POST}`,
+        likeModel
+      );
+
+      // Have to run cb
+      cb();
+    },
+
+    /**
+     * To GET comment of post
+     */
+    async getComment(postId, page, setIsFetchingComment, setIsCommentFetched) {
+      setIsCommentFetched && setIsFetchingComment(true);
+
+      const getComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_COMMENT}`,
+        {
+          source_id: postId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+      setIsCommentFetched && setIsCommentFetched(true);
+    },
+
+    /**
+     * To POST a comment to post
+     */
+    async postComment(postId, { content, listTags, image, link }, clearEditor) {
+      const commentModel = createComment({
+        source_id: postId,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
+      });
+
+      const doPostComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_COMMENT}`,
+        commentModel
+      );
+
+      if (doPostComment.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    /**
+     * To EDIT a comment of post
+     */
+    async editComment(dataModel, cancelEdit) {
+      const commentModel = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_COMMENT}`,
+        commentModel
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a comment of post
+     */
+    async deleteComment({ id, source_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_COMMENT}`,
+        { id, source_id }
+      );
+
+      if (doDelete.success) {
+        await this.getComment(source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a comment of post
+     */
+    async likeComment(id, postId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(`social/${actionTypes.SOCIAL.LIKE_COMMENT}`, {
+        model,
+        postId
+      });
+    },
+
+    /**
+     * To GET child comment list of post
+     */
+    async getChildComment(parentCommentId, postId, page, setIsFetchingComment) {
+      setIsFetchingComment && setIsFetchingComment(true);
+
+      const doGet = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_CHILD_COMMENT}`,
+        {
+          source_id: postId,
+          parent_comment_id: parentCommentId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+    },
+
+    /**
+     * To POST a child comment of post
+     */
+    async postChildComment(dataModel, clearEditor) {
+      const model = createComment(dataModel);
+      const doAction = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_CHILD_COMMENT}`,
+        model
+      );
+
+      if (doAction.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doAction.message);
+      }
+    },
+
+    /**
+     * To EDIT a child comment of post
+     */
+    async editChildComment(dataModel, cancelEdit) {
+      const model = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_CHILD_COMMENT}`,
+        model
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a child comment of post
+     */
+    async deleteChildComment({ id, source_id, parent_comment_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_CHILD_COMMENT}`,
+        { id, source_id, parent_comment_id }
+      );
+
+      if (doDelete.success) {
+        await this.getChildComment(parent_comment_id, source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a child comment of post
+     */
+    async likeChildComment(id, postId, parentCommentId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(`social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT}`, {
+        model,
+        postId,
+        parentCommentId
+      });
     }
   }
 };

@@ -13,8 +13,8 @@ import Label from "~/services/social/label";
 // import Photos from "~/services/social/photos";
 // import SocialFollow from "~/services/social/follow";
 // import TagPhotos from "~/services/social/tagPhoto";
-import RegisterDevice from "~/services/social/RegisterDevice";
-import Notifications from "~/services/social/notifications";
+// import RegisterDevice from "~/services/social/RegisterDevice";
+// import Notifications from "~/services/social/notifications";
 
 /**
  * initial state
@@ -66,7 +66,8 @@ const getters = {
   //   return {};
   // },
 
-  post: (state) => (id) => state.feeds.listPost.find((post) => post.id === id),
+  post: (state) => (id) =>
+    state.feeds.listPost.find((post) => post.post_id === id),
 };
 
 /**
@@ -269,9 +270,7 @@ const actions = {
               ...item,
               type_like: data.type_like,
               is_like: !!data.type_like,
-              total_like: !!data.type_like
-                ? item.total_like + 1
-                : item.total_like - 1,
+              total_like: data.total_like,
             };
           }
           return item;
@@ -489,9 +488,60 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL.GET_CHILD_COMMENT]({ state, commit }, payload) {
+  async [actionTypes.SOCIAL.LIKE_COMMENT](
+    { state, commit },
+    { model = {}, postId } = {}
+  ) {
     try {
-      const { source_id, parent_comment_id, page } = payload;
+      const result = await new Like(this.$axios)[actionTypes.BASE.ADD](model);
+
+      if (result.success) {
+        const { source_id } = model;
+        const { total_like, type_like } = result.data;
+
+        const newListPost = state.feeds.listPost.map((post) => {
+          if (post.post_id === postId) {
+            const newCommentTree = {
+              ...post.$commentTree,
+              comments: post.$commentTree.comments.map((comment) => {
+                if (comment.id === source_id) {
+                  return {
+                    ...comment,
+                    type_like,
+                    is_like: !!type_like,
+                    total_like,
+                  };
+                } else {
+                  return comment;
+                }
+              }),
+            };
+            return {
+              ...post,
+              $commentTree: newCommentTree,
+            };
+          } else {
+            return post;
+          }
+        });
+
+        commit(mutationTypes.SOCIAL.SET_FEEDS, {
+          ...state.feeds,
+          listPost: newListPost,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async [actionTypes.SOCIAL.GET_CHILD_COMMENT](
+    { state, commit },
+    { source_id, parent_comment_id, page } = {}
+  ) {
+    try {
       const result = await new Comment(this.$axios)[
         actionTypes.SOCIAL_COMMENTS.LIST_CHILDREN
       ]({
@@ -662,9 +712,11 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL.DELETE_CHILD_COMMENT]({ state, commit }, payload) {
+  async [actionTypes.SOCIAL.DELETE_CHILD_COMMENT](
+    { state, commit },
+    { id, source_id, parent_comment_id } = {}
+  ) {
     try {
-      const { id, source_id, parent_comment_id } = payload;
       const result = await new Comment(this.$axios)[
         actionTypes.BASE.DELETE_PAYLOAD
       ]({
@@ -718,7 +770,67 @@ const actions = {
     }
   },
 
-  // async [actionTypes.SOCIAL]({ state, commit }, payload) {},
+  async [actionTypes.SOCIAL.LIKE_CHILD_COMMENT](
+    { state, commit },
+    { model = {}, postId, parentCommentId } = {}
+  ) {
+    try {
+      const result = await new Like(this.$axios)[actionTypes.BASE.ADD](model);
+
+      if (result.success) {
+        const { source_id } = model;
+        const { total_like, type_like } = result.data;
+
+        const newListPost = state.feeds.listPost.map((post) => {
+          if (post.post_id === postId) {
+            const newComments = post.$commentTree.comments.map((comment) => {
+              if (comment.id === parentCommentId) {
+                const newChildCommentTree = {
+                  ...comment.$children,
+                  comments: comment.$children.comments.map((item) =>
+                    item.id === source_id
+                      ? {
+                          ...item,
+                          type_like,
+                          is_like: !!type_like,
+                          total_like,
+                        }
+                      : item
+                  ),
+                };
+                return {
+                  ...comment,
+                  $children: newChildCommentTree
+                }
+              }
+              return comment;
+            });
+
+            const newCommentTree = {
+              ...post.$commentTree,
+              comments: newComments
+            };
+
+            return {
+              ...post,
+              $commentTree: newCommentTree,
+            };
+          } else {
+            return post;
+          }
+        });
+
+        commit(mutationTypes.SOCIAL.SET_FEEDS, {
+          ...state.feeds,
+          listPost: newListPost,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 /**

@@ -71,24 +71,12 @@
       <div class="comment-item__actions">
         <n-link to class="comment-item__time">{{ data.created_at | moment('from') }}</n-link>
 
-        <a href class="comment-item__action" @click.prevent>Like</a>
+        <a href class="comment-item__action" :class="likeClasses" @click.prevent="like">Like</a>
 
         <a href class="comment-item__action" @click.prevent="handleClickReply">Reply</a>
       </div>
 
-      <transition-group
-        enter-active-class="animated faster fadeIn"
-        leave-active-class="animated faster fadeOut"
-      >
-        <CommentItem
-          v-for="item in commentTree.comments || []"
-          :key="item.id"
-          :level="2"
-          :post="post"
-          :parentComment="data"
-          :data="item"
-        />
-      </transition-group>
+      <slot name="child-comment" v-bind="{ commentTree }"></slot>
 
       <CommentItemReplied
         v-if="data.children && data.children.list && data.children.list.length && !commentTree.page"
@@ -185,12 +173,18 @@ export default {
       return { ...levelClasses };
     },
 
+    likeClasses() {
+      return {
+        "comment-item__action--liked": this.data.is_like
+      };
+    },
+
     commentTree() {
       return get(this.data, "$children", {});
     },
 
     numOfViewMoreChildrenComment() {
-      const { page } = this.commentTree;
+      const { page = {} } = this.commentTree;
       return page.totalPages - page.number === 1
         ? page.totalElements - page.size * page.number
         : page.size;
@@ -212,19 +206,18 @@ export default {
     isEmpty,
     get,
 
-    async getChildComment(id) {
-      this.isFetchingComment = true;
+    setIsFetchingComment(value = false) {
+      this.isFetchingComment = value;
+    },
 
-      const doGet = await this.$store.dispatch(
-        `social/${ACTION_TYPE_SOCIAL.GET_CHILD_COMMENT}`,
-        {
-          source_id: this.post.post_id,
-          parent_comment_id: id,
-          page: get(this.commentTree, "page.number", 0) + 1
-        }
+    getChildComment(id) {
+      this.$emit(
+        "get-child-comment",
+        id,
+        this.post.post_id,
+        get(this.commentTree, "page.number", 0) + 1,
+        this.setIsFetchingComment
       );
-
-      this.isFetchingComment = false;
     },
 
     handleClickReply() {
@@ -235,23 +228,20 @@ export default {
       }
     },
 
-    async postComment({ content, listTags, image, link }) {
-      const commentModel = createComment({
+    async postComment({ content, listTags, image, link }, clearEditor) {
+      const dataModel = {
         source_id: this.post.post_id,
         parent_comment_id: this.data.id,
         comment_content: content,
         list_tag: listTags,
         comment_images: image,
         comment_link: link
-      });
+      };
 
-      const doPostComment = await this.$store.dispatch(
-        `social/${ACTION_TYPE_SOCIAL.ADD_CHILD_COMMENT}`,
-        commentModel
-      );
+      this.$emit("post-child-comment", dataModel, clearEditor);
     },
 
-    async editComment({
+    editComment({
       content,
       listTags,
       image,
@@ -259,7 +249,7 @@ export default {
       isDeleteOldImg,
       listTagsDel
     }) {
-      const commentModel = editComment({
+      const dataModel = {
         source_id: this.post.post_id,
         comment_id: this.data.id,
         comment_content: content,
@@ -269,63 +259,33 @@ export default {
         delete_img: isDeleteOldImg,
         list_tag_del: listTagsDel,
         parent_comment_id: this.parentComment.id
-      });
+      };
 
-      const doEdit =
-        this.level === 1
-          ? await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.EDIT_COMMENT}`,
-              commentModel
-            )
-          : await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.EDIT_CHILD_COMMENT}`,
-              commentModel
-            );
-
-      if (doEdit.success) {
-        this.cancelEdit();
-      } else {
-        this.$toasted.error(doEdit.message);
-      }
+      this.$emit("edit", dataModel, this.cancelEdit);
     },
 
-    async deleteComment(event) {
+    deleteComment(event) {
       event.preventDefault();
 
-      const doDelete =
-        this.level === 1
-          ? await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.DELETE_COMMENT}`,
-              { id: this.data.id, source_id: this.post.post_id }
-            )
-          : await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.DELETE_CHILD_COMMENT}`,
-              {
-                id: this.data.id,
-                source_id: this.post.post_id,
-                parent_comment_id: this.parentComment.id
-              }
-            );
-
-      if (doDelete.success) {
-        this.level === 1
-          ? await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.GET_COMMENT}`,
-              {
-                source_id: this.post.post_id,
-                page: get(this.post, "$commentTree.page.number", 1)
-              }
-            )
-          : await this.$store.dispatch(
-              `social/${ACTION_TYPE_SOCIAL.GET_CHILD_COMMENT}`,
-              {
-                source_id: this.post.post_id,
-                parent_comment_id: this.parentComment.id,
-                page: get(this.parentComment, "$children.page.number", 1)
-              }
-            );
+      if (this.level === 1) {
+        this.$emit(
+          "delete",
+          {
+            id: this.data.id,
+            source_id: this.post.post_id
+          },
+          get(this.post, "$commentTree.page.number", 1)
+        );
       } else {
-        this.$toasted.error(doDelete.message);
+        this.$emit(
+          "delete",
+          {
+            id: this.data.id,
+            source_id: this.post.post_id,
+            parent_comment_id: this.parentComment.id
+          },
+          get(this.parentComment, "$children.page.number", 1)
+        );
       }
     },
 
@@ -339,6 +299,10 @@ export default {
       this.editData = {};
       this.menuDropdown = false;
     },
+
+    like() {
+      this.$emit("like", this.data.id, this.post.post_id, this.parentComment.id);
+    }
   }
 };
 </script>

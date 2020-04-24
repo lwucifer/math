@@ -386,8 +386,7 @@ export default {
           );
         }
 
-        this.$emit("submit", params);
-        this.clear();
+        this.$emit("submit", params, this.clear);
       }
     },
 

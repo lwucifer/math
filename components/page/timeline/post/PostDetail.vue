@@ -120,20 +120,20 @@ export default {
       type: Number,
       required: true
     },
-    parentPost: {
-      type: Object,
-      default: () => ({}),
-      validator: value =>
-        [
-          "post_id",
-          "author",
-          "created_at",
-          "total_like",
-          "total_comment",
-          "content",
-          "privacy"
-        ].every(key => key in value)
-    },
+    // parentPost: {
+    //   type: Object,
+    //   default: () => ({}),
+    //   validator: value =>
+    //     [
+    //       "post_id",
+    //       "author",
+    //       "created_at",
+    //       "total_like",
+    //       "total_comment",
+    //       "content",
+    //       "privacy"
+    //     ].every(key => key in value)
+    // },
     post: {
       type: Object,
       default: () => ({})
@@ -154,6 +154,7 @@ export default {
     },
 
     showPrevArrow() {
+      if (!this.parentPost) return;
       const index = this.parentPost.files.findIndex(
         item => item.post_id === this.post.post_id
       );
@@ -163,6 +164,7 @@ export default {
     },
 
     showNextArrow() {
+      if (!this.parentPost) return;
       const index = this.parentPost.files.findIndex(
         item => item.post_id === this.post.post_id
       );
@@ -179,12 +181,22 @@ export default {
       } else {
         return get(this.localPost, "link_image.high", null);
       }
+    },
+    
+    parentPost() {
+      return this.$store.getters[`social/post`](this.parentPostId);
     }
   },
 
   watch: {
     post(newValue) {
       this.localPost = newValue;
+    },
+
+    parentPost(newValue) {
+      if (this.isParentPost) {
+        this.localPost = newValue;
+      }
     }
   },
 
