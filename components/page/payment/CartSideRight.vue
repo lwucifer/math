@@ -60,9 +60,9 @@ export default {
       // STEP 2: Get Hash Key & Create Order
       const hashKeyReq = createHashKeyReq({
         vpc_ReturnURL: process.env.PAYMENT_RETURN_URL,
-        vpc_Amount: result.amount,
+        vpc_Amount: cost + '',
         AgainLink: process.env.PAYMENT_AGAIN_LINK,
-        Title: result.id,
+        Title: "title is here",
         payment_request: orderPaymentReq
       });
       this.postHashKeyGenerate(hashKeyReq)

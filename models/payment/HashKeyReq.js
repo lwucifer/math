@@ -1,9 +1,9 @@
 class HashKeyReq {
   constructor(payload) {
-    this.again_link = payload.payload.again_link;
-    this.title = payload.title;
+    this.AgainLink = payload.AgainLink;
+    this.Title = payload.Title;
     this.vpc_access_code = payload.vpc_access_code;
-    this.vpc_amount = payload.vpc_amount;
+    this.vpc_Amount = payload.vpc_Amount;
     this.vpc_card_list = payload.vpc_card_list;
     this.vpc_command = payload.vpc_command;
     this.vpc_currency = payload.vpc_currency;
@@ -14,7 +14,7 @@ class HashKeyReq {
     this.vpc_merch_txn_ref = payload.vpc_merch_txn_ref;
     this.vpc_merchant = payload.vpc_merchant;
     this.vpc_order_info = payload.vpc_order_info;
-    this.vpc_return_url = payload.vpc_return_url;
+    this.vpc_ReturnURL = payload.vpc_ReturnURL;
     this.vpc_secure_hash = payload.vpc_secure_hash;
     this.vpc_ticket_no = payload.vpc_ticket_no;
     this.vpc_txn_response_code = payload.vpc_txn_response_code;
@@ -26,10 +26,10 @@ class HashKeyReq {
 export function createHashKeyReq(payload) {
   return Object.freeze(
     new HashKeyReq({
-      again_link: payload.again_link,
-      title: payload.title,
+      AgainLink: payload.AgainLink,
+      Title: payload.Title,
       vpc_access_code: payload.vpc_access_code,
-      vpc_amount: payload.vpc_amount,
+      vpc_Amount: payload.vpc_Amount,
       vpc_card_list: payload.vpc_card_list,
       vpc_command: payload.vpc_command,
       vpc_currency: payload.vpc_currency,
@@ -40,7 +40,7 @@ export function createHashKeyReq(payload) {
       vpc_merch_txn_ref: payload.vpc_merch_txn_ref,
       vpc_merchant: payload.vpc_merchant,
       vpc_order_info: payload.vpc_order_info,
-      vpc_return_url: payload.vpc_return_url,
+      vpc_ReturnURL: payload.vpc_ReturnURL,
       vpc_secure_hash: payload.vpc_secure_hash,
       vpc_ticket_no: payload.vpc_ticket_no,
       vpc_txn_response_code: payload.vpc_txn_response_code,
