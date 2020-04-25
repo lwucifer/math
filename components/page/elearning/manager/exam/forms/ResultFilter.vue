@@ -13,6 +13,10 @@
     </div>
     
     <app-select-class
+      class-name="filter-form__item"
+      :class-style="{ 'min-width': '115px' }"
+      class-year-name="filter-form__item"
+      :year-style="{ 'min-width': '110px' }"
       @changedClass="handleChangedClass"
     />
 

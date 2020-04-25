@@ -1,10 +1,12 @@
 <template>
   <div class="d-md-flex">
     <app-select-school-year
+      :class="classYearName"
+      :style="yearStyle"
       @input="changedSchoolYear"
     />
   
-    <div class="filter-form__item" style="min-width: 115px;">
+    <div :class="className" :style="classStyle">
       <app-vue-select
         :disabled="!get(this, 'params.school_year_id', false)"
         class="app-vue-select w-100"
@@ -15,7 +17,7 @@
         v-model="selectedClass"
         :reduce="item => item.id"
         label="name"
-        placeholder="Theo lớp"
+        :placeholder="placeholder"
         @input="onChange"
         @open="onOpen"
         @close="onClose"
@@ -47,13 +49,29 @@
     
     model: {
       prop: "value",
-      event: "change"
+      event: "input"
     },
     
     props: {
-      subjectId: {
-        type: String|Number,
-        default: null
+      placeholder: {
+        type: String,
+        default: 'Theo lớp'
+      },
+      classStyle: {
+        type: Object,
+        default: () => {}
+      },
+      className: {
+        type: String,
+        default: ''
+      },
+      yearStyle: {
+        type: Object,
+        default: () => {}
+      },
+      classYearName: {
+        type: String,
+        default: ''
       }
     },
     
@@ -100,6 +118,7 @@
         }
       },
       onChange(val) {
+        this.$emit('input', val)
         this.$emit('changedClass', val)
       },
       async getList() {
@@ -133,7 +152,9 @@
       },
       changedSchoolYear(val) {
         this.params.school_year_id = val
-        this.getList()
+        if (val != null && val != '') {
+          this.getList()
+        }
       },
       get
     },
