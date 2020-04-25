@@ -1,4 +1,8 @@
 import { forEach, get } from "lodash";
+import Fingerprint2 from "fingerprintjs2";
+import * as constants from "~/utils/constants";
+import { setDeviceId } from "./auth";
+
 
 export function getBase64(img, callback) {
   const reader = new FileReader();
@@ -30,7 +34,7 @@ export function remove_unicode(str) {
 
 export function useEffect(that, watcher, props) {
   watcher();
-  const iterator = function(prop) {
+  const iterator = function (prop) {
     that.$watch(prop, {
       handler: watcher,
       deep: true,
@@ -42,7 +46,7 @@ export function useEffect(that, watcher, props) {
 export function redirectWithParams(params = {}) {
   let currentUrlParams = new URLSearchParams(window.location.search);
 
-  forEach(params, function(value, key) {
+  forEach(params, function (value, key) {
     currentUrlParams.set(key, value);
   });
 
@@ -85,4 +89,30 @@ export function testJSON(text) {
   } catch (error) {
     return false;
   }
+}
+
+
+export function getDeviceID() {
+  let deviceID = "";
+
+  Fingerprint2.get(components => {
+    deviceID = Fingerprint2.x64hash128(
+      components
+        .map((pair) => {
+          console.log("[pair]", pair);
+          if (constants.FINGERPRINT_PROPS.includes(pair.key)) {
+            return pair.value;
+          }
+        })
+        .join(),
+      31
+    );
+    console.log("[setDeviceId]", deviceID);
+
+    setDeviceId(deviceID);
+  });
+
+  // set to cookies
+
+  return deviceID;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-form__item" style="min-width: 120px;">
+  <div>
     <app-vue-select
       class="app-vue-select w-100"
       :options="list"
@@ -30,10 +30,6 @@
     },
     
     props: {
-      subjectId: {
-        type: String|Number,
-        default: null
-      },
       searchable: {
         type: Boolean,
         default: true
@@ -41,6 +37,14 @@
       placeholder: {
         type: String,
         default: 'Năm học'
+      },
+      classStyle: {
+        type: Object,
+        default: () => {}
+      },
+      className: {
+        type: String,
+        default: ''
       }
     },
     
@@ -83,7 +87,7 @@
         loading(true)
       },
       genLabel(option) {
-        return `${get(option, 'from_year', 0)} - ${get(option, 'to_year', 0)}`
+        return `${get(option, 'from_year', 0)}-${get(option, 'to_year', 0)}`
       },
       get
     },
