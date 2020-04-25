@@ -1,27 +1,28 @@
 <template>
-  <app-vue-select
-    class="app-vue-select w-100"
-    :options="list"
-    searchable
-    clearable
-    append-to-body
-    v-model="selectedItem"
-    :reduce="item => item.elearning_id"
-    label="name"
-    placeholder="Bài giảng/khóa học"
-    @input="onChange"
-    @open="onOpen"
-    @close="onClose"
-  >
-    <template slot="list-footer" v-if="hasMoreVotedElearning">
-      <li ref="load" class="loader text-center">
-        <app-spin
-          size="small"
-        />
-      </li>
-    </template>
-  </app-vue-select>
-
+  <div>
+    <app-vue-select
+      class="app-vue-select w-100"
+      :options="list"
+      searchable
+      clearable
+      append-to-body
+      v-model="selectedItem"
+      :reduce="item => item.elearning_id"
+      label="name"
+      :placeholder="placeholder"
+      @input="onChange"
+      @open="onOpen"
+      @close="onClose"
+    >
+      <template slot="list-footer" v-if="hasMoreVotedElearning">
+        <li ref="load" class="loader text-center">
+          <app-spin
+            size="small"
+          />
+        </li>
+      </template>
+    </app-vue-select>
+  </div>
 </template>
 
 <script>
@@ -41,13 +42,17 @@
     
     model: {
       prop: "value",
-      event: "change"
+      event: "input"
     },
     
     props: {
       subjectId: {
         type: String|Number,
         default: null
+      },
+      placeholder: {
+        type: String,
+        default: 'Bài giảng/khóa học'
       }
     },
     
@@ -85,6 +90,7 @@
         }
       },
       onChange(val) {
+        this.$emit('input', val)
         this.$emit('changedCourse', val)
       },
       async getList() {
