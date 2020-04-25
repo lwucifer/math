@@ -18,12 +18,13 @@ export default {
             listBanks:[
                 {
                     id:1,
-                    avatar:"/_nuxt/assets/images/payment/image 14.png"
+                    avatar:"~assets/images/payment/image 14.png"
                 },
                 {
                     id:2,
-                    avatar:"/_nuxt/assets/images/payment/image 14.png"
-                }
+                    avatar:"~assets/images/payment/image 14.png.png"
+                },
+                {}
             ]
         }
     }
@@ -37,6 +38,6 @@ export default {
     margin-left: 20px;
     margin-top: 15px;
     display: flex;
-    flex-flow: row wrap;
+    justify-content: flex-start;
 }
 </style>

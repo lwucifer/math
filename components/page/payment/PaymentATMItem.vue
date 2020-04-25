@@ -2,7 +2,7 @@
   <div class="item-atm-form_payment">
         <input type="radio" :id="bank.id" name="selector">
         <label :for="bank.id">
-            <img v-bind:src="bank.avatar">
+            <img :src="bank.avatar">
         </label>
         <div class="check">
             <IconSuccess  class="icon subheading"/>
@@ -29,6 +29,8 @@ export default {
 .item-atm-form_payment{
     position: relative;
     margin: 10px;
+    width: 15%;
+    height: 54px;
     input[type=radio]{
             position: absolute;
             visibility: hidden;
@@ -36,8 +38,14 @@ export default {
     label{
         cursor: pointer;
         display: block;
-        padding:12px;
         border: 1px dashed #EEEEEE;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 54px;
+        img{
+            height: 31px;
+        }
     }
     .check{
         position: absolute;
