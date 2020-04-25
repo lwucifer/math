@@ -62,7 +62,7 @@
     
       <template v-slot:cell(course)="{row}">
         <td>
-          <n-link to="/" style="text-decoration: none;">
+          <n-link :to="`/elearning/${get(row, 'elearning.id', '')}`" style="text-decoration: none;" target="_blank">
             {{ get(row, 'elearning.name', '') }}
           </n-link>
         </td>

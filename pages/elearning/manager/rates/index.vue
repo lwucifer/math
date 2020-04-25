@@ -16,7 +16,7 @@
               @changedCmt="handleChangedCmt"
               @changedRate="handleChangedRate"
               @changedClass="handleChangedClass"
-              @changedCourse="handleChangedCourse"
+              @changedElearning="handleChangedElearning"
             >
             </filter-form>
     
@@ -88,16 +88,16 @@
         this.updateFilter(val)
       },
       handleChangedCmt(val) {
-        this.updateFilter({ cmt: val })
+        this.updateFilter({ has_cmt: val })
       },
       handleChangedRate(val) {
         this.updateFilter({ rate: val })
       },
       handleChangedClass(val) {
-        this.updateFilter({ class: val })
+        this.updateFilter({ class_id: val })
       },
-      handleChangedCourse(val) {
-        this.updateFilter({ course: val })
+      handleChangedElearning(val) {
+        this.updateFilter({ elearning_id: val })
       },
       updatePagination(val) {
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
@@ -107,8 +107,6 @@
       async getList() {
         try {
           this.loading = true
-          // this.params.elearning_id = getParamQuery('elearning_id')
-          this.params.elearning_id = '2522525'
           let params = { ...this.params }
 
           await this.$store.dispatch(
@@ -116,13 +114,13 @@
           )
           this.list = this.get(this.detailInfo, 'data.content', [])
           // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
-          this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-          this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-          this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-          this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+          this.pagination.size = this.get(this.detailInfo, 'data.size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'data.first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'data.last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'data.number', 0)
+          this.pagination.totalPages = this.get(this.detailInfo, 'data.total_pages', 0)
+          this.pagination.totalElements = this.get(this.detailInfo, 'data.total_elements', 0)
+          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.number_of_elements', 0)
         } catch (e) {
           console.log('Get votes ', e)
         } finally {
