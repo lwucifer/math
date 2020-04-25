@@ -1,6 +1,5 @@
 .filter-form {
     padding: 0 1rem;
-    margin-bottom: 2rem;
     display: flex;
     
     &__item__btn {
@@ -8,7 +7,7 @@
     }
 
     &__item {
-        margin: 0 1rem;
+        margin: 0 1rem 2rem 1rem;
         display: inline-block;
         display: flex;
         align-items: center;

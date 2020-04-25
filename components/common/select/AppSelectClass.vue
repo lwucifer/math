@@ -49,7 +49,7 @@
     
     model: {
       prop: "value",
-      event: "change"
+      event: "input"
     },
     
     props: {
@@ -118,6 +118,7 @@
         }
       },
       onChange(val) {
+        this.$emit('input', val)
         this.$emit('changedClass', val)
       },
       async getList() {
