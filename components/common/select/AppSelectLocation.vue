@@ -1,9 +1,9 @@
 <template>
   <fragment>
-    <div class="school-filter__form__item" v-if="provinces.length">
+    <div class="school-filter__form__item">
       <app-vue-select
         class="app-vue-select"
-        :v-model="province"
+        v-model="province"
         :options="provinces"
         label="name"
         placeholder="Theo tỉnh thành"
@@ -15,10 +15,10 @@
       </app-vue-select>
     </div>
 
-    <div class="school-filter__form__item" v-if="districts.length">
+    <div class="school-filter__form__item">
       <app-vue-select
         class="app-vue-select"
-        :v-model="district"
+        v-model="district"
         :options="districts"
         label="name"
         :reduce="value => value"
@@ -30,10 +30,10 @@
       </app-vue-select>
     </div>
 
-    <div class="school-filter__form__item" v-if="wards.length">
+    <div class="school-filter__form__item">
       <app-vue-select
         class="app-vue-select"
-        :v-model="ward"
+        v-model="ward"
         :options="wards"
         label="name"
         :reduce="value => value"
