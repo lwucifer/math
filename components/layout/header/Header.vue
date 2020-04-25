@@ -56,7 +56,7 @@
           <IconMessager />
           <span class="number">9</span>
         </button>
-        <button class="item">
+        <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
           <span class="number">9</span>
         </button>

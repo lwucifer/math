@@ -19,6 +19,7 @@ class HashKeyReq {
     this.vpc_ticket_no = payload.vpc_ticket_no;
     this.vpc_txn_response_code = payload.vpc_txn_response_code;
     this.vpc_version = payload.vpc_version;
+    this.payment_request = payload.payment_request;
   }
 }
 
@@ -43,7 +44,8 @@ export function createHashKeyReq(payload) {
       vpc_secure_hash: payload.vpc_secure_hash,
       vpc_ticket_no: payload.vpc_ticket_no,
       vpc_txn_response_code: payload.vpc_txn_response_code,
-      vpc_version: payload.vpc_version
+      vpc_version: payload.vpc_version,
+      payment_request: payload.payment_request,
     })
   );
 }

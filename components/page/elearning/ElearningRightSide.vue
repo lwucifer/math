@@ -126,7 +126,7 @@ export default {
     ...mapActions("cart", ["cartAdd"]),
 
     handleAddToCart() {
-      console.log("[handleAddToCart]", this.info.id);
+      console.log("[handleAddToCart]", this.info);
       this.cartAdd({ elearning_id: this.info.id }).then(result => {
         console.log("[handleAddToCart] cartAdd", result);
       });

@@ -1,5 +1,6 @@
-import { checkRequestAuthorize, removeToken } from "~/utils/auth";
 import { AUTH as ACTION_AUTH } from "~/utils/action-types";
+import { checkRequestAuthorize, getDeviceId, removeToken } from "~/utils/auth";
+import { DEVICE_ID } from "~/utils/config";
 import { AUTH as MUTATION_AUTH } from "~/utils/mutation-types";
 
 let isAlreadyFetchingAccessToken = false;
@@ -16,16 +17,22 @@ function addSubscriber(callback) {
 export default function({ store, $axios, redirect }) {
     $axios.onRequest((config) => {
         // console.log("[onRequest]", config.url);
+        // add Device-Id if existed
+        const deviceIdFromCookie = getDeviceId();
+        console.log("[onRequest] deviceIdFromCookie", deviceIdFromCookie)
+        if(deviceIdFromCookie) {
+            config.headers.common[DEVICE_ID] = deviceIdFromCookie;
+        }
 
+        // add Authorization token if needed
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
             config.headers.common[
                 "Authorization"
             ] = `Bearer ${store.state.auth.access_token}`;
 
-            // config.headers.common["Authorization"] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo0LCJwaG9uZV9udW1iZXIiOiIwMzU2MjU3MzI1In0sImlhdCI6MTU3NTUzNDcxOSwiZXhwIjoxODM0NzM0NzE5fQ.w-oB2pH2aPiyzTXpSQumuShy5xQQEGfURDp1-KjzfkM`;
         } else {
-            config.headers.common = {};
+            delete config.headers.common['Authorization'];
         }
     });
 

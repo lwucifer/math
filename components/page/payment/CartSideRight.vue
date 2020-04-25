@@ -4,9 +4,12 @@
       <h5>Tổng tiền</h5>
       <h5 class="text-secondary ml-auto">{{cartCheckout.cost}}</h5>
     </div>
-    <app-button square color="secondary" class="btn-cart_payment" @click.prevent="handleCheckout"
-      >TIẾN HÀNH ĐẶT MUA</app-button
-    >
+    <app-button
+      square
+      color="secondary"
+      class="btn-cart_payment"
+      @click.prevent="handleCheckout"
+    >TIẾN HÀNH ĐẶT MUA</app-button>
     <div class="d-flex align-items-center">
       <IconBookOpen class="fill-gray" />
       <span class="ml-2">Nội dung chương trình học tập đa dạng</span>
@@ -24,14 +27,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import qs from 'qs';
+import qs from "qs";
 
 import IconBookOpen from "~/assets/svg/design-icons/book-open.svg?inline";
 import IconDollar from "~/assets/svg/icons/dollar.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
-import { createOrderPaymentReq } from '../../../models/payment/OrderPaymentReq';
-import { RESPONSE_SUCCESS } from '../../../utils/config';
-import { createHashKeyReq } from '../../../models/payment/HashKeyReq';
+import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
+import { RESPONSE_SUCCESS } from "../../../utils/config";
+import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
 
 export default {
   components: {
@@ -54,34 +57,28 @@ export default {
       const { cost, method, note, orders } = this.cartCheckout;
       const orderPaymentReq = createOrderPaymentReq(cost, method, note, orders);
 
-      this.postOder(orderPaymentReq)
-        .then(result => {
-          console.log("[postOder]", result);
-          if (result.success == RESPONSE_SUCCESS) {
-            // STEP 2: Get Hash Key
-            const hashKeyReq = createHashKeyReq({
-              vpc_ReturnURL: process.env.PAYMENT_RETURN_URL,
-              vpc_OrderInfo: result.id,
-              vpc_Amount: result.amount,
-              vpc_TicketNo: process.env.PAYMENT_VPC_TICKETNO,
-              AgainLink: process.env.PAYMENT_AGAIN_LINK,
-              Title: result.id
-            });
-            this.postHashKeyGenerate(hashKeyReq).then(hashKeyRes => {
-              console.log("[postHashKeyGenerate]", hashKeyRes);
+      // STEP 2: Get Hash Key & Create Order
+      const hashKeyReq = createHashKeyReq({
+        vpc_ReturnURL: process.env.PAYMENT_RETURN_URL,
+        vpc_Amount: result.amount,
+        AgainLink: process.env.PAYMENT_AGAIN_LINK,
+        Title: result.id,
+        payment_request: orderPaymentReq
+      });
+      this.postHashKeyGenerate(hashKeyReq)
+        .then(hashKeyRes => {
+          console.log("[postHashKeyGenerate]", hashKeyRes, hashKeyReq);
 
-              // STEP 3: Request Payment to OnePay
-              const onepayUrlWithParams = `${
-                process.env.PAYMENT_REQ_URL
-              }?${qs.stringify(hashKeyRes)}`;
-              window.location.href = onepayUrlWithParams;
-            });
-          } else {
-            // STEP 2 failed
-          }
+          // STEP 3: Request Payment to OnePay
+          const onepayUrlWithParams = `${
+            process.env.PAYMENT_REQ_URL
+          }?${qs.stringify(hashKeyRes)}`;
+
+          console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
+          // window.location.href = onepayUrlWithParams;
         })
         .catch(err => {
-          console.log("[postOder] err", err);
+          console.log("[postHashKeyGenerate] err", err);
         });
     }
   }
