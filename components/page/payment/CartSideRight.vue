@@ -70,12 +70,15 @@ export default {
           console.log("[postHashKeyGenerate]", hashKeyRes, hashKeyReq);
 
           // STEP 3: Request Payment to OnePay
-          const onepayUrlWithParams = `${
-            process.env.PAYMENT_REQ_URL
-          }?${qs.stringify(hashKeyRes)}`;
-
-          console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
-          // window.location.href = onepayUrlWithParams;
+          if(hashKeyRes.success == RESPONSE_SUCCESS){
+            const onepayUrlWithParams = `${
+              process.env.PAYMENT_REQ_URL
+            }?${qs.stringify(hashKeyRes.data)}`;
+  
+            console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
+            alert(onepayUrlWithParams)
+            window.location.href = onepayUrlWithParams;
+          }
         })
         .catch(err => {
           console.log("[postHashKeyGenerate] err", err);
