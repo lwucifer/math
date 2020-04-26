@@ -1,6 +1,6 @@
 import { AUTH as ACTION_AUTH } from "~/utils/action-types";
-import { checkRequestAuthorize, getDeviceId, removeToken } from "~/utils/auth";
-import { DEVICE_ID } from "~/utils/config";
+import { checkRequestAuthorize, getDeviceId, removeToken, checkRequestClientInfo } from "~/utils/auth";
+import { DEVICE_ID, CLIENT_INFO } from "~/utils/config";
 import { AUTH as MUTATION_AUTH } from "~/utils/mutation-types";
 
 let isAlreadyFetchingAccessToken = false;
@@ -14,14 +14,17 @@ function addSubscriber(callback) {
     subscribers.push(callback);
 }
 
-export default function({ store, $axios, redirect }) {
+export default function ({ store, $axios, redirect }) {
     $axios.onRequest((config) => {
         // console.log("[onRequest]", config.url);
         // add Device-Id if existed
-        const deviceIdFromCookie = getDeviceId();
-        console.log("[onRequest] deviceIdFromCookie", deviceIdFromCookie)
-        if(deviceIdFromCookie) {
-            config.headers.common[DEVICE_ID] = deviceIdFromCookie;
+        if (checkRequestClientInfo(config.url)) {
+            const deviceIdFromCookie = getDeviceId();
+            console.log("[onRequest] deviceIdFromCookie", deviceIdFromCookie);
+            
+            const deviceObj = { [DEVICE_ID]: deviceIdFromCookie };
+            console.log("[deviceObj]", deviceObj, JSON.stringify(deviceObj))
+            config.headers.common[CLIENT_INFO] = JSON.stringify(deviceObj);
         }
 
         // add Authorization token if needed

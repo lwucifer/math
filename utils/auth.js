@@ -3,7 +3,8 @@ import {
     SCHOOLLY_ACCESS_TOKEN,
     TOKEN_USER_SCHOOLLY,
     UNAUTHORIZE_API,
-    DEVICE_ID
+    DEVICE_ID,
+    CLIENT_INFO_API
 } from "./config";
 
 /**
@@ -135,4 +136,16 @@ export const checkRequestAuthorize = _url => {
     }
 
     return true;
+};
+
+export const checkRequestClientInfo = _url => {
+    const urls = _url.split("?");
+    console.log("[checkRequestClientInfo] urls", urls);
+
+    // public api
+    if (CLIENT_INFO_API.includes(urls[0])) {
+        return true;
+    }
+
+    return false;
 };

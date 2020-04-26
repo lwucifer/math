@@ -60,9 +60,9 @@ export default {
       // STEP 2: Get Hash Key & Create Order
       const hashKeyReq = createHashKeyReq({
         vpc_ReturnURL: process.env.PAYMENT_RETURN_URL,
-        vpc_Amount: result.amount,
+        vpc_Amount: cost + '',
         AgainLink: process.env.PAYMENT_AGAIN_LINK,
-        Title: result.id,
+        Title: "title is here",
         payment_request: orderPaymentReq
       });
       this.postHashKeyGenerate(hashKeyReq)
@@ -70,12 +70,15 @@ export default {
           console.log("[postHashKeyGenerate]", hashKeyRes, hashKeyReq);
 
           // STEP 3: Request Payment to OnePay
-          const onepayUrlWithParams = `${
-            process.env.PAYMENT_REQ_URL
-          }?${qs.stringify(hashKeyRes)}`;
-
-          console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
-          // window.location.href = onepayUrlWithParams;
+          if(hashKeyRes.success == RESPONSE_SUCCESS){
+            const onepayUrlWithParams = `${
+              process.env.PAYMENT_REQ_URL
+            }?${qs.stringify(hashKeyRes.data)}`;
+  
+            console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
+            alert(onepayUrlWithParams)
+            window.location.href = onepayUrlWithParams;
+          }
         })
         .catch(err => {
           console.log("[postHashKeyGenerate] err", err);
