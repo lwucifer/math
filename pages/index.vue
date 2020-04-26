@@ -167,9 +167,57 @@
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
-              @parent-post-liked="handleParentPostLiked"
               @delete="showModalConfirmDelete"
-            />
+            >
+              <PostDetailPost
+                slot="post"
+                slot-scope="{ post, isParentPost }"
+                show-edit
+                show-comment
+                :post="post"
+                :is-parent-post="isParentPost"
+                @get-comment="getComment"
+                @post-comment="postComment"
+              >
+                <template slot="comment" slot-scope="{ commentTree }">
+                  <transition-group
+                    enter-active-class="animated faster fadeIn"
+                    leave-active-class="animated faster fadeOut"
+                  >
+                    <CommentItem
+                      v-for="comment in commentTree.comments || []"
+                      :key="comment.id"
+                      :post="post"
+                      :data="comment"
+                      @edit="editComment"
+                      @delete="deleteComment"
+                      @like="likeComment"
+                      @get-child-comment="getChildComment"
+                      @post-child-comment="postChildComment"
+                    >
+                      <template slot="child-comment" slot-scope="{ commentTree }">
+                        <transition-group
+                          enter-active-class="animated faster fadeIn"
+                          leave-active-class="animated faster fadeOut"
+                        >
+                          <CommentItem
+                            v-for="childComment in commentTree.comments || []"
+                            :key="childComment.id"
+                            :level="2"
+                            :post="post"
+                            :parentComment="comment"
+                            :data="childComment"
+                            @edit="editChildComment"
+                            @delete="deleteChildComment"
+                            @like="likeChildComment"
+                          />
+                        </transition-group>
+                      </template>
+                    </CommentItem>
+                  </transition-group>
+                </template>
+              </PostDetailPost>
+            </PostDetail>
           </app-modal>
 
           <PostModalShare
@@ -336,11 +384,15 @@ import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
 import AsideBox from "~/components/layout/asideBox/AsideBox";
 import Post from "~/components/page/timeline/post/Post";
-import PostSlider from "~/components/page/timeline/post/PostSlider";
-import PostDetail from "~/components/page/timeline/post/PostDetail";
-import PostImage from "~/components/page/timeline/post/PostImage";
-import PostModalShare from "~/components/page/timeline/post/PostModalShare";
-import PostShareContent from "~/components/page/timeline/post/PostShareContent";
+const PostSlider = () => import("~/components/page/timeline/post/PostSlider");
+const PostDetail = () => import("~/components/page/timeline/post/PostDetail");
+const PostImage = () => import("~/components/page/timeline/post/PostImage");
+const PostModalShare = () =>
+  import("~/components/page/timeline/post/PostModalShare");
+const PostShareContent = () =>
+  import("~/components/page/timeline/post/PostShareContent");
+const PostDetailPost = () =>
+  import("~/components/page/timeline/post/PostDetailPost");
 const CommentItem = () =>
   import("~/components/page/timeline/comment/CommentItem");
 const CommentItemReplied = () =>
@@ -368,7 +420,8 @@ export default {
     PostShareContent,
     CommentItem,
     CommentItemReplied,
-    CommentEditor
+    CommentEditor,
+    PostDetailPost
   },
 
   fetch({ params, query, store }) {
@@ -535,6 +588,22 @@ export default {
       this.getDetailPost(id, post);
     },
 
+    async getDetailPost(id, post) {
+      if (id === post.post_id) {
+        this.modalDetailDataPost = post;
+        return;
+      }
+
+      const getPost = await new PostService(this.$axios)[
+        actionTypes.BASE.DETAIL
+      ](id);
+      if (getPost.success) {
+        this.modalDetailDataPost = getPost.data;
+      } else {
+        this.$toasted.error(getPost.message);
+      }
+    },
+
     /**
      * Hande click nav button of browser
      * @param { Object } event - event emited
@@ -587,22 +656,6 @@ export default {
      */
     handleClickNext(id, post) {
       this.handleClickImage({ id }, post);
-    },
-
-    async getDetailPost(id, post) {
-      if (id === post.post_id) {
-        this.modalDetailDataPost = post;
-        return;
-      }
-
-      const getPost = await new PostService(this.$axios)[
-        actionTypes.BASE.DETAIL
-      ](id);
-      if (getPost.success) {
-        this.modalDetailDataPost = getPost.data;
-      } else {
-        this.$toasted.error(getPost.message);
-      }
     },
 
     showModalConfirmDelete(id) {
@@ -666,6 +719,11 @@ export default {
       });
     },
 
+    cancelShare() {
+      this.showModalShare = false;
+      this.shareData = {};
+    },
+
     async sharePost({ post_id, content, list_tag, label_id }, cb) {
       const shareModel = createShare(post_id, content, list_tag, label_id);
       const doShare = await this.$store.dispatch(
@@ -681,11 +739,11 @@ export default {
       }
     },
 
-    cancelShare() {
-      this.showModalShare = false;
-      this.shareData = {};
-    },
-
+    //
+    //
+    //
+    //
+    //
     /**
      * Infinite scroll handler
      */
@@ -705,21 +763,6 @@ export default {
         $state.complete();
       }
     },
-
-    /**
-     * Handle Post liked when Post in PostDetail === Post
-     */
-    handleParentPostLiked(newPost) {
-      this.feeds.listPost = this.feeds.listPost.map(item =>
-        newPost.post_id === item.post_id ? newPost : item
-      );
-    },
-
-    //
-    //
-    //
-    //
-    //
 
     /**
      * To Submit POST a post
@@ -938,11 +981,14 @@ export default {
      */
     async likeChildComment(id, postId, parentCommentId) {
       const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
-      await this.$store.dispatch(`social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT}`, {
-        model,
-        postId,
-        parentCommentId
-      });
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT}`,
+        {
+          model,
+          postId,
+          parentCommentId
+        }
+      );
     }
   }
 };
