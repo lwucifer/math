@@ -69,7 +69,7 @@ export default class BaseService {
     return data;
   }
 
-  async putWithFormData(payload) {
+  async [actionTypes.BASE.EDIT_FORMDATA](payload) {
     let formData = new FormData();
     forEach(payload, function(value, key) {
       formData.append(key, value);
