@@ -91,8 +91,8 @@ import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 
 import { mapActions, mapGetters } from "vuex";
-import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
-import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
+import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
+import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
 export default {
@@ -103,13 +103,13 @@ export default {
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook
+    IconBook,
   },
   props: {
     info: {
-      type: Object
+      type: Object,
     },
-    program: {}
+    program: {},
   },
 
   data() {
@@ -117,7 +117,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("cart", ["cartCheckout"])
+    ...mapGetters("cart", ["cartCheckout"]),
   },
 
   methods: {
@@ -126,12 +126,19 @@ export default {
     ...mapActions("cart", ["cartAdd"]),
 
     handleAddToCart() {
-      console.log("[handleAddToCart]", this.info);
-      this.cartAdd({ elearning_id: this.info.id }).then(result => {
-        console.log("[handleAddToCart] cartAdd", result);
-      });
-    }
-  }
+      this.cartAdd({ elearning_id: this.info.id })
+        .then((result) => {
+          if (get(result, "success", false)) {
+            this.$toasted.success("Thành công");
+            return;
+          }
+          this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 
