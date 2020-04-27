@@ -228,7 +228,7 @@ const actions = {
               });
               resolve(result);
               clearTimeout(timeout);
-            }, get(payloay, "post_image", []).length * 1000);
+            }, get(payload, "post_image", []).length * 1000);
           });
         }
       }
@@ -844,7 +844,7 @@ const actions = {
       if (success) {
         const post = {
           ...state.detailPost,
-          ...data.data,
+          ...data,
         };
         commit(mutationTypes.SOCIAL.SET_DETAIL_POST, post);
       }
@@ -896,7 +896,7 @@ const actions = {
               });
               resolve(result);
               clearTimeout(timeout);
-            }, get(payloay, "post_image", []).length * 1000);
+            }, get(payload, "post_image", []).length * 1000);
           });
         }
       }
@@ -943,7 +943,11 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL.GET_COMMENT_DETAI_POST](
+  async [actionTypes.SOCIAL.CLEAR_DETAIL_POST]({ commit }) {
+    commit(mutationTypes.SOCIAL.SET_DETAIL_POST, {});
+  },
+
+  async [actionTypes.SOCIAL.GET_COMMENT_DETAIL_POST](
     { state, commit },
     payload
   ) {
@@ -1005,7 +1009,7 @@ const actions = {
 
         commit(mutationTypes.SOCIAL.SET_DETAIL_POST, {
           ...state.detailPost,
-          total_comment: get(...state.detailPost, "total_comment", 0) + 1,
+          total_comment: get(state.detailPost, "total_comment", 0) + 1,
           $commentTree: newCommentTree,
         });
       }
@@ -1031,7 +1035,7 @@ const actions = {
         const newCommentTree = {
           ...post.$commentTree,
           comments: post.$commentTree.comments.map((comment) => {
-            if (comment.id === comment_id) {
+            if (comment.id === payload.comment_id) {
               return {
                 ...comment,
                 ...data,
@@ -1127,7 +1131,7 @@ const actions = {
           $commentTree: newCommentTree,
         };
 
-        commit(mutationTypes.SOCIAL.SET_FEEDS, newPost);
+        commit(mutationTypes.SOCIAL.SET_DETAIL_POST, newPost);
       }
 
       return result;
@@ -1185,7 +1189,7 @@ const actions = {
           $commentTree: newCommentTree,
         };
 
-        commit(mutationTypes.SOCIAL.SET_FEEDS, newPost);
+        commit(mutationTypes.SOCIAL.SET_DETAIL_POST, newPost);
       }
 
       return result;
@@ -1234,7 +1238,7 @@ const actions = {
           $commentTree: newCommentTree,
         };
 
-        commit(mutationTypes.SOCIAL.SET_FEEDS, newPost);
+        commit(mutationTypes.SOCIAL.SET_DETAIL_POST, newPost);
       }
 
       return result;
@@ -1284,7 +1288,7 @@ const actions = {
           $commentTree: newCommentTree,
         };
 
-        commit(mutationTypes.SOCIAL.SET_FEEDS, newPost);
+        commit(mutationTypes.SOCIAL.SET_DETAIL_POST, newPost);
       }
 
       return result;

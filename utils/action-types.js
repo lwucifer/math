@@ -95,6 +95,7 @@ export const SOCIAL = {
     EDIT_DETAIL_POST: "socialEditDetailPost",
     DELETE_DETAIL_POST: "socialDeleteDetailPost",
     LIKE_DETAIL_POST: "socialLikeDetailPost",
+    CLEAR_DETAIL_POST: "socialClearDetailPost",
     GET_COMMENT_DETAIL_POST: "socialGetCommentDetailPost",
     ADD_COMMENT_DETAIL_POST: "socialAddCommentDetailPost",
     EDIT_COMMENT_DETAIL_POST: "socialEditCommentDetailPost",

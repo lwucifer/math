@@ -227,14 +227,20 @@ export default {
     }
   },
 
-  mounted() {
-    this.getComment();
-  },
+  // mounted() {
+  //   this.getComment();
+  // },
 
   watch: {
-    post(newValue, oldValue) {
-      if (newValue.post_id !== oldValue.post_id) {
-        // get new data post here
+    post: {
+      immediate: true,
+      handler: function(newValue, oldValue) {
+        const newPostId = get(newValue, "post_id", null);
+        const oldPostId = get(oldValue, "post_id", null);
+        if (newPostId !== oldPostId && !this.isCommentFetched) {
+          console.log("getComment", newValue, oldValue);
+          this.getComment();
+        }
       }
     }
   },

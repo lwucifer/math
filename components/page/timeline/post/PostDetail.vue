@@ -103,16 +103,20 @@ export default {
       type: Number,
       required: true
     },
-    post: {
-      type: Object,
-      default: () => ({})
+    postId: {
+      type: Number,
+      required: true
     }
+    // post: {
+    //   type: Object,
+    //   default: () => ({})
+    // }
   },
 
   data() {
     return {
       dropdownShow: false,
-      localPost: this.post
+      localPost: {}
     };
   },
 
@@ -154,17 +158,36 @@ export default {
 
     parentPost() {
       return this.$store.getters[`social/post`](this.parentPostId);
+    },
+
+    post() {
+      return this.$store.state.social.detailPost;
     }
   },
 
   watch: {
-    post(newValue) {
-      this.localPost = newValue;
+    postId: {
+      immediate: true,
+      handler: function(newValue) {
+        if (!this.isParentPost && typeof newValue == "number") {
+          this.$store.dispatch(
+            `social/${ACTION_TYPE_SOCIAL.GET_DETAIL_POST}`,
+            newValue
+          );
+        }
+      }
     },
 
-    parentPost(newValue) {
-      if (this.isParentPost) {
-        this.localPost = newValue;
+    post(newValue) {
+      this.localPost = newValue || {};
+    },
+
+    parentPost: {
+      immediate: true,
+      handler: function(newValue) {
+        if (this.isParentPost) {
+          this.localPost = newValue;
+        }
       }
     }
   },
