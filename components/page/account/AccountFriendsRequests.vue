@@ -102,7 +102,7 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["inviteList"])
+    ...mapState("account", ["inviteList"])
   },
 
   methods: {}

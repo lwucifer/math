@@ -9,6 +9,7 @@ import Earning from "../services/account/Earning";
 import UpdateAvatar from "../services/account/UpdateAvatar";
 import UpdateCover from "../services/account/UpdateCover";
 import Profile from "../services/account/Profile";
+import FriendInvite from "~/services/social/Friendinvite";
 /**
  * initial state
  */
@@ -18,7 +19,8 @@ const state = () => ({
     revenueList: {},
     earningList: {},
     linkList: {},
-    profileList: {}
+    profileList: {},
+    inviteList: {},
 });
 
 /**
@@ -213,13 +215,36 @@ const actions = {
     },
     async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
         try {
-            const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](payload);
-            commit(mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST,result.data);
+            const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            commit(
+                mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST,
+                result.data
+            );
         } catch (err) {
             console.log("PROFILE add.err", err);
             return err;
         }
-    }
+    },
+    async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new FriendInvite(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[FriendInvite] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_FRIEND.SET_SOCIAL_FRIEND_INVITE_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[FriendInvite] list.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -257,10 +282,19 @@ const mutations = {
     [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
         state.linkList = _linkList;
     },
-    [mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST](state, _profileList) {
+    [mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST](
+        state,
+        _profileList
+    ) {
         console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
         state.profileList = _profileList;
-    }
+    },
+    [mutationTypes.SOCIAL_FRIEND.SET_SOCIAL_FRIEND_INVITE_LIST](
+        state,
+        _inviteList
+    ) {
+        state.inviteList = _inviteList;
+    },
 };
 
 export default {
@@ -268,5 +302,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

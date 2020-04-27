@@ -98,7 +98,7 @@ export const ELEARNING_PUBLIC_RELATED = {
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
     SET_ELEARNING_PUBLIC_VOTED_ELEARNING_LIST: "setElearningPublicVotedElearningList",
-}
+};
 
 export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
     SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST: "setElearningPublicSchoolYearList",
@@ -340,6 +340,7 @@ export const MESSAGE_GROUP = {
     EMIT_CLOSE_FALSE: "emitCloseFalse",
     SET_LIST_MESSAGE_TYPE: "setListMessageType",
     SET_TAB_CHAT: "setTabChat",
+    SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
 };
 
 export const ELEARNING_INFO = {
@@ -364,12 +365,12 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
-    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete"
+    SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
 };
 
 export const CART = {
     SET_CART_LIST: "setCartList",
-}
+};
 
 export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
@@ -377,4 +378,9 @@ export const TEACHING_STATISTIC_REVENUE = {
 
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
+    SET_NOTI_UNREAD: "setNotiUnread",
+};
+
+export const SOCIAL_FRIEND = {
+    SET_SOCIAL_FRIEND_INVITE_LIST: "setFriendInviteList",
 };

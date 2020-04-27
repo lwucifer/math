@@ -97,3 +97,7 @@ export const DEVICE_TYPE = {
     MOBILE_APP: "MOBILE_APP",
     DESKTOP_APP: "DESKTOP_APP",
 };
+export const UPDATE_NOTI = {
+    ALL: "All",
+    ONLY_ONE: "ONLY_ONE",
+};

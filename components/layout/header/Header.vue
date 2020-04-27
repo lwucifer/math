@@ -70,7 +70,7 @@
         >
           <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
             <IconBell />
-            <span class="number">9</span>
+            <span class="number" v-if="notiUnread > 0">{{notiUnread}}</span>
           </button>
           <div class="link--dropdown__content">
             <ul>
@@ -78,7 +78,11 @@
                 <div class="d-flex">
                   <h6>Thông báo</h6>
                   <div class="ml-auto">
-                    <n-link class="text-primary" to>Đánh dấu tất cả đã đọc</n-link>
+                    <n-link
+                      class="text-primary"
+                      to
+                      @click.native="unreadAll"
+                    >Đánh dấu tất cả đã đọc</n-link>
                     <n-link class="ml-3 text-primary" to="/account/info/setting">Cài đặt</n-link>
                   </div>
                 </div>
@@ -118,7 +122,7 @@
                         <button
                           class="cc-box__btn cc-box__btn-edit mt-2"
                           v-else
-                          @click.prevent="handleUnreadNotify"
+                          @click.prevent="handleReadNotify(item.id)"
                           v-tooltip.bottom="{ content: 'Đánh dấu chưa đọc', classes: ['tooltipAnnouncenment'] }"
                         >
                           <IconEllipseAlt class="d-block fill-gray" />
@@ -220,6 +224,7 @@ import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
 import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
+import { UPDATE_NOTI } from "~/utils/constants";
 
 export default {
   components: {
@@ -247,14 +252,21 @@ export default {
     infiniteId: +new Date()
   }),
   computed: {
-    ...mapState("notifications", ["notis"]),
+    ...mapState("notifications", ["notis", "notiUnread"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     }
   },
+  created() {
+    this.getNotiUnread();
+  },
   methods: {
     ...mapMutations("auth", ["removeToken"]),
-    ...mapActions("notifications", ["socialNotifications", "readNotification"]),
+    ...mapActions("notifications", [
+      "socialNotifications",
+      "readNotification",
+      "getNotiUnread"
+    ]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },
@@ -265,18 +277,26 @@ export default {
       this.removeToken();
       this.redirectSignin();
     },
+    // Handle read/unread 1 noti
     handleReadNotify(id) {
       const params = {
-        notifications: id.toString()
+        update: UPDATE_NOTI.ONLY_ONE,
+        notification_id: id
       };
       this.readNotification(params).then(result => {
         if (result.success == true) {
         }
       });
     },
-    handleUnreadNotify() {
-      this.readAnnouncenment = true;
-      this.read = false;
+    // Handle unread all noti
+    unreadAll() {
+      const params = {
+        update: UPDATE_NOTI.ALL
+      };
+      this.readNotification(params).then(result => {
+        if (result.success == true) {
+        }
+      });
     },
     handleVisibleChange(isvisible) {
       if (isvisible) {
