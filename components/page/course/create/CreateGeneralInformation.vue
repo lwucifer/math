@@ -74,7 +74,10 @@
             :sticky-offset="`{ top: 70, bottom: 0 }`"
             v-model="payload.description"
           />
-          <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+          <span class="text-error" v-if="error_description">{{
+            error_description
+          }}</span>
+          <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
         <CourseSelectAvatar
@@ -128,18 +131,26 @@ import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 const schema = yup.object().shape({
   avatar: yup.string().required(),
   benefit: yup.string().required(),
-  description: yup.string().min(300).max(2000).required(),
+  description: yup
+    .string()
+    .min(300)
+    .max(2000)
+    .required(),
   level: yup.string().required(),
-  name: yup.string().required(),
+  name: yup.string().max(60).required(),
   subject: yup.string().required(),
   type: yup.string().required(),
 });
 
 const schema_update = yup.object().shape({
   benefit: yup.string().required(),
-  description: yup.string().min(300).max(2000).required(),
+  description: yup
+    .string()
+    .min(300)
+    .max(2000)
+    .required(),
   level: yup.string().required(),
-  name: yup.string().required(),
+  name: yup.string().max(60).required(),
   subject: yup.string().required(),
   type: yup.string().required(),
 });
@@ -160,6 +171,7 @@ export default {
     return {
       isSubmit: false,
       disable_type: false,
+      error_description: "",
       title:
         "Xác nhận? Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu",
       payload: {
@@ -183,10 +195,18 @@ export default {
   watch: {
     payload: {
       handler: function() {
-        let payload = cloneDeep(this.payload);
-        payload.description = payload.description.replace('<p></p>', '');
         let that = this;
         const elearning_id = getParamQuery("elearning_id");
+        let payload = cloneDeep(this.payload);
+        payload.description = payload.description.replace("<p></p>", "");
+
+        if (payload.description.length < 300) {
+          this.error_description = "Bạn chưa nhập đủ 300 ký tự";
+        } else if (payload.description.length > 2000) {
+          this.error_description = "Bạn nhập quá số ký tự cho phép";
+        } else {
+          this.error_description = "";
+        }
 
         if (elearning_id) {
           schema_update.isValid(payload).then(function(valid) {
