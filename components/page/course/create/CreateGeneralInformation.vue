@@ -74,7 +74,10 @@
             :sticky-offset="`{ top: 70, bottom: 0 }`"
             v-model="payload.description"
           />
-          <span class="text-sub caption">Tối thiểu 300 ký tự</span>
+          <span class="text-error" v-if="error.description">{{
+            error.description
+          }}</span>
+          <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
         <CourseSelectAvatar
@@ -103,7 +106,7 @@
 <script>
 import * as yup from "yup";
 import numeral from "numeral";
-import { toNumber, get } from "lodash";
+import { toNumber, get, cloneDeep, trim } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import {
@@ -111,6 +114,7 @@ import {
   getParamQuery,
   redirectWithParams,
   image,
+  stripHtml,
 } from "~/utils/common";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -127,18 +131,32 @@ import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 const schema = yup.object().shape({
   avatar: yup.string().required(),
   benefit: yup.string().required(),
-  description: yup.string().required(),
+  description: yup
+    .string()
+    .min(300)
+    .max(2000)
+    .required(),
   level: yup.string().required(),
-  name: yup.string().required(),
+  name: yup
+    .string()
+    .max(60)
+    .required(),
   subject: yup.string().required(),
   type: yup.string().required(),
 });
 
 const schema_update = yup.object().shape({
   benefit: yup.string().required(),
-  description: yup.string().required(),
+  description: yup
+    .string()
+    .min(300)
+    .max(2000)
+    .required(),
   level: yup.string().required(),
-  name: yup.string().required(),
+  name: yup
+    .string()
+    .max(60)
+    .required(),
   subject: yup.string().required(),
   type: yup.string().required(),
 });
@@ -159,8 +177,11 @@ export default {
     return {
       isSubmit: false,
       disable_type: false,
+      error: {
+        description: "",
+      },
       title:
-        "Xác nhận? <br /> Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu",
+        "Xác nhận? Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu",
       payload: {
         avatar: "",
         benefit: [],
@@ -183,8 +204,20 @@ export default {
     payload: {
       handler: function() {
         let that = this;
-        const payload = createPayloadAddCourse(this.payload);
         const elearning_id = getParamQuery("elearning_id");
+        let payload = cloneDeep(this.payload);
+        payload.description = payload.description.replace("<p></p>", "");
+
+        if (
+          payload.description.length > 0 &&
+          payload.description.length < 300
+        ) {
+          this.error.description = "Bạn chưa nhập đủ 300 ký tự";
+        } else if (payload.description.length > 2000) {
+          this.error.description = "Bạn nhập quá số ký tự cho phép";
+        } else {
+          this.error.description = "";
+        }
 
         if (elearning_id) {
           schema_update.isValid(payload).then(function(valid) {
@@ -234,6 +267,7 @@ export default {
       this.payload.subject = get(this, "general.subject", "");
       this.payload.level = get(this, "general.level", "");
       this.payload.type = get(this, "general.type", "");
+      this.error = {};
     },
 
     removeBenefit(index) {
