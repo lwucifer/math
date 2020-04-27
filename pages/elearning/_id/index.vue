@@ -2,8 +2,6 @@
   <div class="container elearning-view">
     <div class="row">
       <div class="col-md-8">
-        <h2>{{ get(info, "name", "") }}</h2>
-
         <ElearningViewInfo :info="info" />
 
         <ElearningMainMenu />
