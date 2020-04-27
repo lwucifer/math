@@ -11,15 +11,34 @@
     -webkit-overflow-scrolling: touch;
 }
 
-.app-modal-root:last-child .app-modal-overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    z-index: map-get($z-index, modal);
-    background-color: rgba(0, 0, 0, 0.8);
+.app-modal-root {
+    .app-modal-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        z-index: map-get($z-index, modal);
+    }
+
+    &:nth-child(1) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    &:nth-child(2) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    &:nth-child(3) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
 }
 
 .app-modal {
