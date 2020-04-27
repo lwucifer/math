@@ -99,18 +99,16 @@ export default {
   props: {
     loading: Boolean,
     isParentPost: Boolean,
-    parentPostId: {
-      type: Number,
-      required: true
+    parentPost: {
+      type: Object,
+      required: true,
+      default: () => ({})
     },
-    postId: {
-      type: Number,
-      required: true
+    post: {
+      type: Object,
+      required: true,
+      default: () => ({})
     }
-    // post: {
-    //   type: Object,
-    //   default: () => ({})
-    // }
   },
 
   data() {
@@ -155,29 +153,9 @@ export default {
         return get(this.localPost, "link_image.high", null);
       }
     },
-
-    parentPost() {
-      return this.$store.getters[`social/post`](this.parentPostId);
-    },
-
-    post() {
-      return this.$store.state.social.detailPost;
-    }
   },
 
   watch: {
-    postId: {
-      immediate: true,
-      handler: function(newValue) {
-        if (!this.isParentPost && typeof newValue == "number") {
-          this.$store.dispatch(
-            `social/${ACTION_TYPE_SOCIAL.GET_DETAIL_POST}`,
-            newValue
-          );
-        }
-      }
-    },
-
     post(newValue) {
       this.localPost = newValue || {};
     },

@@ -98,7 +98,7 @@
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
-        <button class="post__button">
+        <button class="post__button" @click="$emit('share', post)">
           <IconShare class="icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
@@ -200,12 +200,7 @@ export default {
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
-      ],
-      parentCommentParams: {
-        page: 1,
-        limit: 10
-      },
-      parentCommentData: {}
+      ]
     };
   },
 
@@ -237,9 +232,8 @@ export default {
       handler: function(newValue, oldValue) {
         const newPostId = get(newValue, "post_id", null);
         const oldPostId = get(oldValue, "post_id", null);
-        if (newPostId !== oldPostId && !this.isCommentFetched) {
-          console.log("getComment", newValue, oldValue);
-          this.getComment();
+        if (newPostId !== oldPostId) {
+          this.getComment(1);
         }
       }
     }

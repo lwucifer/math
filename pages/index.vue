@@ -161,8 +161,8 @@
           >
             <PostDetail
               slot="content"
-              :post-id="modalDetailPostId"
-              :parent-post-id="modalDetailParentPostId"
+              :post="modalDetailPost"
+              :parent-post="modalDetailParentPost"
               :is-parent-post="modalDetailParentPostId === modalDetailPostId"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
@@ -535,6 +535,16 @@ export default {
             };
           })
         : [];
+    },
+
+    modalDetailPost() {
+      return this.$store.state.social.detailPost;
+    },
+
+    modalDetailParentPost() {
+      return (
+        this.$store.getters[`social/post`](this.modalDetailParentPostId) || {}
+      );
     }
   },
 
@@ -573,7 +583,6 @@ export default {
       // Change url
       if (typeof window.history.pushState != "undefined") {
         this.modalDetailParentPostId = post.post_id;
-        this.modalDetailShow = true;
 
         window.history.pushState(
           { theater: true },
@@ -591,7 +600,15 @@ export default {
         this.modalDetailPostId = post.post_id;
       } else {
         this.modalDetailPostId = id;
+        this.$store.dispatch(
+          `social/${actionTypes.SOCIAL.GET_DETAIL_POST}`,
+          id
+        );
       }
+
+      this.$nextTick(() => {
+        this.modalDetailShow = true;
+      });
     },
 
     /**
@@ -704,9 +721,8 @@ export default {
 
     openModalShare(post) {
       this.shareData = post;
-      const timeout = setTimeout(() => {
+      this.$nextTick(() => {
         this.showModalShare = true;
-        clearTimeout(timeout);
       });
     },
 

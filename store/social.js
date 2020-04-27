@@ -35,37 +35,6 @@ const state = () => ({
 const getters = {
   configPrivacyLevels: (state) => get(state, "configs.privacy_levels", []),
 
-  // commentTree: (state) => (postId, parentId) => {
-  //   const [post = {}] = state.feeds.listPost.filter(
-  //     (item) => item.post_id === postId
-  //   );
-  //   const { $commentTree = {} } = post;
-
-  //   if (!parentId) {
-  //     return $commentTree;
-  //   } else {
-  //     const [commentObj = {}] =
-  //       $commentTree.comments && $commentTree.comments.length
-  //         ? $commentTree.comments.filter((item) => item.id === parentId)
-  //         : [];
-  //     return commentObj.$children || {};
-  //   }
-  // },
-
-  // commentItem: (state) => (postId, commentId) => {
-  //   const [post = {}] = state.feeds.listPost.filter(
-  //     (item) => item.post_id === postId
-  //   );
-  //   const { $commentTree = {} } = post;
-  //   if ($commentTree.comments && $commentTree.comments.length) {
-  //     const [comment = {}] = $commentTree.comments.filter(
-  //       (item) => item.id === commentId
-  //     );
-  //     return comment;
-  //   }
-  //   return {};
-  // },
-
   post: (state) => (id) =>
     state.feeds.listPost.find((post) => post.post_id === id),
 };
@@ -843,8 +812,8 @@ const actions = {
 
       if (success) {
         const post = {
-          ...state.detailPost,
           ...data,
+          $commentTree: {}
         };
         commit(mutationTypes.SOCIAL.SET_DETAIL_POST, post);
       }
