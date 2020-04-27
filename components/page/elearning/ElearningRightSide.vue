@@ -75,6 +75,9 @@
         <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
+    <PaymentModal :show="showModalPayment"
+                  :fail="AddCartFail"
+    />
   </div>
 </template>
 
@@ -95,6 +98,7 @@ import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
+import PaymentModal from "~/components/page/payment/PaymentModal"
 export default {
   components: {
     IconShare,
@@ -103,7 +107,8 @@ export default {
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook
+    IconBook,
+    PaymentModal
   },
   props: {
     info: {
@@ -113,7 +118,11 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      showModalPayment: false,
+      AddCartFail:false
+
+    };
   },
 
   computed: {
@@ -129,6 +138,15 @@ export default {
       console.log("[handleAddToCart]", this.info);
       this.cartAdd({ elearning_id: this.info.id }).then(result => {
         console.log("[handleAddToCart] cartAdd", result);
+        if(result.success){
+          this.showModalPayment = true;
+          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
+        }
+        else{
+          this.showModalPayment = true;
+          this.AddCartFail = true;
+          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
+        }
       });
     }
   }
