@@ -8,6 +8,7 @@ export const BASE = {
     DETAIL: "detail",
     EDIT_PAYLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload",
+    EDIT_FORMDATA: "putWithFormData"
 };
 
 export const AUTH = {
@@ -90,7 +91,20 @@ export const SOCIAL = {
     SHARE: "socialShare",
     GET_LABELS: "socialGetLabels",
     GET_CONFIGS: "socialGetConfigs",
-    GET_MODAL_DETAIL_POST: "getModalDetailPost"
+    GET_DETAIL_POST: "socialGetDetailPost",
+    EDIT_DETAIL_POST: "socialEditDetailPost",
+    DELETE_DETAIL_POST: "socialDeleteDetailPost",
+    LIKE_DETAIL_POST: "socialLikeDetailPost",
+    GET_COMMENT_DETAIL_POST: "socialGetCommentDetailPost",
+    ADD_COMMENT_DETAIL_POST: "socialAddCommentDetailPost",
+    EDIT_COMMENT_DETAIL_POST: "socialEditCommentDetailPost",
+    DELETE_COMMENT_DETAIL_POST: "socialDeleteCommentDetailPost",
+    LIKE_COMMENT_DETAIL_POST: "socialLikeCommentDetailPost",
+    GET_CHILD_COMMENT_DETAI_POST: "socialGetChildCommentDetailPost",
+    ADD_CHILD_COMMENT_DETAIL_POST: "socialAddChildCommentDetailPost",
+    EDIT_CHILD_COMMENT_DETAIL_POST: "socialEditChildCommentDetailPost",
+    DELETE_CHILD_COMMENT_DETAIL_POST: "socialDeleteChildCommentDetailPost",
+    LIKE_CHILD_COMMENT_DETAIL_POST: "socialLikeChildCommentDetailPost",
 }
 
 export const ACCOUNT_PERSONAL = {

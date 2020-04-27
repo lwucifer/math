@@ -1,29 +1,41 @@
 <template>
-  <div class="auth auth-signin">
+  <div class="container">
     <div id="label-verify-phone"></div>
-    <div class="auth__main">
-      <h3>Đăng ký</h3>
-      <div class="auth__nav">
-        <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
-        <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="wrap-form_auth">
+          <div class="head-form_auth">
+            <h3>Đăng ký</h3>
+            <div class="auth__nav-v2">
+              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+              <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+            </div>
+          </div>
+          <div class="px-4 pt-3">
+            <SignupEmail v-show="byEmail" />
+            <SignupPhone v-show="!byEmail" />
+          </div>
+          <p class="title-either_auth">hoặc</p>
+          <div>
+            <p>Đăng ký nhanh với</p>
+            <div class="mt-3 mb-15">
+              <app-button class="btn-social btn-facebook">
+                <IconFacebook class="mr-2" />Facebook
+              </app-button>
+              <app-button class="btn-social btn-google">
+                <IconGoogle class="mr-2" />Google
+              </app-button>
+            </div>
+            <div>
+              <span>Đã có tài khoản?</span>
+              <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+            </div>
+          </div>
+        </div>
       </div>
-      <SignupEmail v-show="byEmail" />
-      <SignupPhone v-show="!byEmail" />
-      <hr class="mt-4 mb-4" />
-      <div>
-        <p>Đăng ký nhanh với</p>
-        <div class="mt-3 mb-15">
-          <app-button class="btn-social btn-facebook">
-            <IconFacebook class="mr-2" />Facebook
-          </app-button>
-          <app-button class="btn-social btn-google">
-            <IconGoogle class="mr-2" />Google
-          </app-button>
-        </div>
-        <div>
-          <span>Đã có tài khoản?</span>
-          <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
-        </div>
+      <div class="col-md-6 text-center">
+        <h1 class="color-primary">Schoolly</h1>
+        <img src="~assets/images/auth/image 13.png">
       </div>
     </div>
   </div>
@@ -103,5 +115,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>
