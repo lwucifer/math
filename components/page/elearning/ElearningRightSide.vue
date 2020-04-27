@@ -94,8 +94,8 @@ import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 
 import { mapActions, mapGetters } from "vuex";
-import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
-import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
+import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
+import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
 import PaymentModal from "~/components/page/payment/PaymentModal"
@@ -112,9 +112,9 @@ export default {
   },
   props: {
     info: {
-      type: Object
+      type: Object,
     },
-    program: {}
+    program: {},
   },
 
   data() {
@@ -126,7 +126,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("cart", ["cartCheckout"])
+    ...mapGetters("cart", ["cartCheckout"]),
   },
 
   methods: {
