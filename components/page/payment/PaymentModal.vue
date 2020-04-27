@@ -1,18 +1,15 @@
 <template>
-  <div class="modal_payment" :class="show ? 'show' : ''" v-if="fail">
-      
-          <div class="d-flex flex-column align-items-center">
-              <IconShoppingCartAlt class="fill-secondary"/>
-              <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
-          </div>
-  </div>
-  <div class="modal_payment" :class="show ? 'show' : ''" v-else>
-        <div class="d-flex align-items-center">
-            <IconSuccess class="icon mr-2"/>
-            <span>Thêm giỏ hàng thành công</span>
-        </div>
-        <app-button square class="mt-4">Xem giỏ hàng và thanh toán</app-button>
+<div class="modal_payment" :class="show ? 'show' : ''" v-if="fail">
+        <IconShoppingCartAlt class="fill-secondary"/>
+        <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
+</div>
+<div class="modal_payment" :class="show ? 'show' : ''" v-else>
+    <div class="d-flex align-items-center">
+        <IconSuccess class="icon mr-2"/>
+        <span>Thêm giỏ hàng thành công</span>
     </div>
+    <app-button square class="mt-4">Xem giỏ hàng và thanh toán</app-button>
+</div>
 </template>
 
 <script>
