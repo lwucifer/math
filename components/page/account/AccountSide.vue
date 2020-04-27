@@ -368,7 +368,7 @@ export default {
 
   computed: {
     ...mapState("account", ["personalList"]),
-    ...mapState("social", ["friendList"]),
+    ...mapState("message", ["friendList"]),
     filterSex() {
       return this.personalList
         ? this.personalList.sex == 1

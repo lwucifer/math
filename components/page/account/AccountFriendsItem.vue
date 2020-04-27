@@ -67,16 +67,12 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["friendList"])
+    ...mapState("message", ["friendList"])
   },
 
   methods: {
-    ...mapActions("social", [
-      "deleteFriend",
-      "socialFriendList",
-      "createFollow",
-      "deleteFollow"
-    ]),
+    ...mapActions("social", ["deleteFriend", "createFollow", "deleteFollow"]),
+    ...mapActions("messages", ["socialFriendList"]),
     hanldeUnfriend(_id) {
       console.log("[hanldeUnfriend] id", _id);
       this.deleteFriend(_id).then(result => {

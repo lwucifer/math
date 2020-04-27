@@ -47,6 +47,7 @@ export const SOCIAL_POST_TAG_PHOTO = `${SCHOOLLY_ALIAS}/social/aip/post/tagPhoto
 export const SOCIAL_FOLLOW = `${SCHOOLLY_ALIAS}/social/api/follow`;
 export const SOCIAL_SCRAPER = `${SCHOOLLY_ALIAS}/social/api/openGraphScraper`;
 export const REGISTER_DEVICE = `${SCHOOLLY_ALIAS}/social/api/device`;
+export const NOTIFICATION_UNREAD = `${SCHOOLLY_ALIAS}/social/api/notification/unRead`;
 
 /**
  * ELEARNING
@@ -160,12 +161,9 @@ export const PAYMENT_CREATE_ORDER = `${SCHOOLLY_ALIAS}/elearning/order`;
 export const PAYMENT_HASHKEY = `${SCHOOLLY_ALIAS}/elearning/payment/transaction/hashkey/generate`;
 export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/payment/transaction/validate`;
 
-
 /**
  * CART
  */
 export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;
-
-
 
 export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;

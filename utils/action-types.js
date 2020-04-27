@@ -8,7 +8,7 @@ export const BASE = {
     DETAIL: "detail",
     EDIT_PAYLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload",
-    EDIT_FORMDATA: "putWithFormData"
+    EDIT_FORMDATA: "putWithFormData",
 };
 
 export const AUTH = {
@@ -55,6 +55,7 @@ export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications",
     REGISTER_DEVICE: "registerDevice",
     READ_NOTIFICATION: "readNotification",
+    GET_NOTI_UNREAD: "getNotiUnread",
 };
 
 export const SOCIAL_CONFIG = {
@@ -105,7 +106,7 @@ export const SOCIAL = {
     EDIT_CHILD_COMMENT_DETAIL_POST: "socialEditChildCommentDetailPost",
     DELETE_CHILD_COMMENT_DETAIL_POST: "socialDeleteChildCommentDetailPost",
     LIKE_CHILD_COMMENT_DETAIL_POST: "socialLikeChildCommentDetailPost",
-}
+};
 
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
@@ -464,7 +465,7 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete"
+    DELETE: "teachingStudentsDelete",
 };
 
 export const PAYMENT = {
@@ -472,13 +473,13 @@ export const PAYMENT = {
     POST_ORDER: "postOder",
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
-}
+};
 
 export const CART = {
     LIST: "cartList",
     ADD: "cartAdd",
-    DELETE: "cartDelete"
-}
+    DELETE: "cartDelete",
+};
 
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",

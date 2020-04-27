@@ -98,7 +98,7 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["friendList"])
+    ...mapState("message", ["friendList"])
   }
 };
 </script>
