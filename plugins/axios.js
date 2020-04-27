@@ -91,11 +91,13 @@ export default function ({ store, $axios, redirect }) {
     });
 
     $axios.onResponseError((error) => {
-        // console.log("[onResponseError]", error);
+        console.log("[onResponseError]", error);
         const code = parseInt(error.response && error.response.status);
         if (code === 401) {
             removeToken();
             redirect("/auth/signin");
+        } else if(code == 404) {
+            // do something on 404 api
         }
         // console.log("[onResponseError]", error.response);
     });
