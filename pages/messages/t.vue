@@ -55,7 +55,7 @@ export default {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     const room_id = route.params.id;
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_FRIEND.LIST}`, {
+      store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
         params: {
           user_id: userId
         }

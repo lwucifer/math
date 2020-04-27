@@ -14,6 +14,7 @@ import MessageSendImg from "~/services/message/MessageSendImg";
 import Personal from "../services/account/Personal";
 import MessageType from "~/services/message/MessageType";
 import MessageSendFile from "~/services/message/MessageSendFile";
+import Friend from "~/services/social/friend";
 
 /**
  * initial state
@@ -28,7 +29,8 @@ const state = () => ({
     closeCreate: true,
     isGroupState: false,
     listMessageType: {},
-    tabChat: true
+    tabChat: true,
+    friendList: {},
 });
 
 /**
@@ -241,7 +243,22 @@ const actions = {
             console.log("[MessageType] edit.err", err);
             return err;
         }
-    }
+    },
+    async [actionTypes.SOCIAL_FRIEND.LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Friend(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[SocialFriend] list", result);
+
+            // set to mutation
+            commit(mutationTypes.MESSAGE_GROUP.SET_SOCIAL_FRIEND_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[SocialFriend] list.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -279,7 +296,10 @@ const mutations = {
     [mutationTypes.MESSAGE_GROUP.SET_TAB_CHAT](state, _tabChat) {
         console.log("tabChat", _tabChat);
         state.tabChat = _tabChat;
-    }
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_SOCIAL_FRIEND_LIST](state, _friendList) {
+        state.friendList = _friendList;
+    },
 };
 
 export default {
@@ -287,5 +307,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

@@ -298,7 +298,7 @@ export default {
       groupsListTab: [],
       chatsListTab: [],
       infiniteId: +new Date(),
-      infiniteIdChat: +new Date() + 1,
+      infiniteIdChat: +new Date() + 100,
       // dataPushChat: [],
       // dataPushGroup: [],
       dataGroupLeave: {},
@@ -307,8 +307,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("social", ["friendList"]),
-    ...mapState("message", ["groupList", "listMessageType", "tabChat"]),
+    ...mapState("message", [
+      "groupList",
+      "listMessageType",
+      "tabChat",
+      "friendList"
+    ]),
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
       const dataMapGroup = this.groupsListTab.map(item => {
@@ -511,7 +515,7 @@ export default {
       if (_newval == true) {
         this.chatsListTab = [];
         this.chatListQuery.page = 1;
-        this.infiniteIdChat += 1;
+        // this.infiniteIdChat += 1;
       } else {
         this.groupsListTab = [];
         this.groupListQuery.page = 1;

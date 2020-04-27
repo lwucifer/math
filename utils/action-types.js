@@ -54,6 +54,7 @@ export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications",
     REGISTER_DEVICE: "registerDevice",
     READ_NOTIFICATION: "readNotification",
+    GET_NOTI_UNREAD: "getNotiUnread",
 };
 
 export const SOCIAL_CONFIG = {
@@ -90,8 +91,8 @@ export const SOCIAL = {
     SHARE: "socialShare",
     GET_LABELS: "socialGetLabels",
     GET_CONFIGS: "socialGetConfigs",
-    GET_MODAL_DETAIL_POST: "getModalDetailPost"
-}
+    GET_MODAL_DETAIL_POST: "getModalDetailPost",
+};
 
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
@@ -450,7 +451,7 @@ export const TEACHING_INTERACTIVE = {
 };
 export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
-    DELETE: "teachingStudentsDelete"
+    DELETE: "teachingStudentsDelete",
 };
 
 export const PAYMENT = {
@@ -458,13 +459,13 @@ export const PAYMENT = {
     POST_ORDER: "postOder",
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
-}
+};
 
 export const CART = {
     LIST: "cartList",
     ADD: "cartAdd",
-    DELETE: "cartDelete"
-}
+    DELETE: "cartDelete",
+};
 
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",

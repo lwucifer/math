@@ -703,12 +703,13 @@ export default {
   },
 
   computed: {
-    ...mapState("social", [{ labelList: "labels" }, "friendList"]),
+    ...mapState("social", [{ labelList: "labels" }]),
     ...mapState("message", [
       "messageList",
       "groupListDetail",
       "messageOn",
-      "memberList"
+      "memberList",
+      "friendList"
     ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
@@ -728,6 +729,7 @@ export default {
 
     tagOptions() {
       return (
+        this.friendList &&
         this.friendList.listFriend &&
         this.friendList.listFriend.map(item => ({
           ...item,
@@ -994,11 +996,17 @@ export default {
           };
           console.log("[socket] dataEmit", dataEmit);
           this.setEmitMessage(dataEmit);
-          this.getGroupListDetail({
-            params: {
-              room_id: this.$route.params.id
-            }
-          });
+          // if img or file call api group detail
+          if (
+            (this.urlEmitMessage && this.urlEmitMessage != "") ||
+            (this.urlFileUpload && this.urlFileNameUpload)
+          ) {
+            this.getGroupListDetail({
+              params: {
+                room_id: this.$route.params.id
+              }
+            });
+          }
         }
         this.textChat = "";
       } else if (this.tag.length == 1) {
