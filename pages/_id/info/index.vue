@@ -5,46 +5,66 @@
         <SchoolAccountSide :school="school" :active="1" />
       </div>
       <div class="col-md-9">
-        <div class="school-account__main box">
-          <h5 class="color-primary">Thông tin tài khoản</h5>
-          <hr class="mt-3 mb-3" />
-          <div class="wrapInfoAccount">
-            <div class="d-flex">
-              <h5>Thông tin cá nhân</h5>
-              <app-button square 
-                          class="btnAccountLink_account-info"  
-                          v-if="!accountLink.list.linked"
-                          v-on:click="accountLink.showModal=true"
-              >
-                <IconPlus class="icon"/>
-                <span class="ml-3">Liên kết trường học</span>
-              </app-button>
+        <div class="school-account__main">
+          <block-section
+            title="Thông tin tài khoản"
+          >
+            <template v-slot:content>
+              <div class="">
+                <general-info />
+                <!--<sub-block-section-->
+                  <!--title="Thông tin cá nhân"-->
+                <!--&gt;-->
+                  <!--<template v-slot:content>-->
+                    <!--<div class="wrapInfoAccount">-->
+                      <!--<div class="d-flex">-->
+                        <!--<app-button-->
+                          <!--square-->
+                          <!--class="btnAccountLink_account-info"-->
+                          <!--v-if="!accountLink.list.linked"-->
+                          <!--v-on:click="accountLink.showModal=true"-->
+                        <!--&gt;-->
+                          <!--<IconPlus class="icon"/>-->
+                          <!--<span class="ml-3">Liên kết trường học</span>-->
+                        <!--</app-button>-->
+      <!---->
+                        <!--<AccountLinkModal-->
+                          <!--:visible="accountLink.showModal"-->
+                          <!--@click-close="closeLinkModal"-->
+                          <!--@handleRefresh="handleRefresh"-->
+                        <!--/>-->
+    <!---->
+                      <!--</div>-->
+                      <!--<app-input labelFixed v-model="name" label="Họ và tên" disabled />-->
+                      <!--<app-input v-model="phone" label="Số điện thoại" disabled />-->
+                      <!--<app-input v-model="email" label="Email" disabled/>-->
+                      <!--<div class="picker-group__profileInfo">-->
+                        <!--<app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>-->
+                        <!--<app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">-->
+                      <!--<span class="ml-3">Thay đổi mật khẩu</span>-->
+                    <!--</app-button>-->
+                    <!--<AccountChangePasswordModal-->
+                      <!--:visible="showChangePass"-->
+                      <!--@click-close="showChangePass = false"-->
+                    <!--/>-->
+                    <!--<AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>-->
+                    <!--<div class="d-flex mt-4">-->
+                      <!--<app-button class="ml-auto" square>Lưu thay đổi</app-button>-->
+                    <!--</div>-->
+                  <!--</template>-->
+                <!--</sub-block-section>-->
+                
+                <school-info />
 
-              <AccountLinkModal :visible="accountLink.showModal" 
-                                @click-close="closeLinkModal"
-                                @handleRefresh="handleRefresh"
-                                />
-              
-            </div>
-            <app-input labelFixed v-model="name" label="Họ và tên" disabled />
-            <app-input v-model="phone" label="Số điện thoại" disabled />
-            <app-input v-model="email" label="Email" disabled/>
-            <div class="picker-group__profileInfo">
-              <app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>
-              <app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>
-            </div>
-          </div>
-          <app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">
-            <span class="ml-3">Thay đổi mật khẩu</span>
-          </app-button>
-          <AccountChangePasswordModal
-            :visible="showChangePass"
-            @click-close="showChangePass = false"
-          />
-          <AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>
-          <div class="d-flex mt-4">
-            <app-button class="ml-auto" square>Lưu thay đổi</app-button>
-          </div>
+                <department-info />
+                
+                
+              </div>
+            </template>
+          </block-section>
         </div>
       </div>
     </div>
@@ -54,6 +74,9 @@
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import AccountInfoStudent from "~/components/page/account/Info/AccountInfoStudent";
+import GeneralInfo from "~/components/page/account/Info/GeneralInfo";
+import SchoolInfo from "~/components/page/account/Info/SchoolInfo";
+import DepartmentInfo from "~/components/page/account/Info/DepartmentInfo";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
 import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
 import * as actionTypes from "~/utils/action-types";
@@ -73,7 +96,10 @@ export default {
     SchoolAccountSide,
     AccountInfoStudent,
     AccountChangePasswordModal,
-    AccountLinkModal
+    AccountLinkModal,
+    GeneralInfo,
+    SchoolInfo,
+    DepartmentInfo
   },
   data() {
     return {
