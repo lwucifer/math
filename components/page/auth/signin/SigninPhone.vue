@@ -82,6 +82,21 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
+            // enable FB Messaging
+            console.log("[Signin] fireMess", this.$fireMess);
+            
+            this.$fireMess.requestPermission()
+                .then(() => {
+                    console.log("[Messaging] have permission");
+                    return this.$fireMess.getToken();
+                })
+                .then(token => {
+                    console.log("[Messaging] token", token)
+                })
+                .catch(err => {
+                    console.log("[Messaging] Error occured ", err);
+                })
+
             this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);

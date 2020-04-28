@@ -6,21 +6,13 @@ const state = () => ({
 
 const actions = {
   async nuxtServerInit({ commit }) {
-    console.log("[nuxtServerInit]");
-    // get auth info from session
-    //   const options = {
-    //     method: 'GET',
-    //     url: '/auth/info',
-    //   };
+    console.log("[nuxtServerInit] context", this.$fireMess);
 
-    //   const res = await this.$axios(options);
-
-    //   if (res.data.authUser) {
-    //     commit('setUser', res.data.authUser);
-    //   } else {
-    //     commit('setUser', null);
-    //   }
   },
+
+  onAuthStateChanged({ commit }) {
+    console.log("[onAuthStateChanged]")
+  }
 
 
 };
@@ -28,9 +20,9 @@ const actions = {
 const getters = {};
 
 const mutations = {
-  setUser(state, user) {
-    state.authUser = user;
-  },
+  // setUser(state, user) {
+  //   state.authUser = user;
+  // },
 };
 
 export default {
