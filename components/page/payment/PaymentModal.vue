@@ -1,21 +1,23 @@
 <template>
-<div class="modal_payment" :class="show ? 'show' : ''" v-if="fail">
-    <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
-        <IconClose2/>
-    </button>
-        <IconShoppingCartAlt class="fill-secondary"/>
-        <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
-</div>
-<div class="modal_payment" :class="show ? 'show' : ''" v-else>
-    <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
-        <IconClose2/>
-    </button>
-    <div class="d-flex align-items-center">
-        <IconSuccess class="icon mr-2"/>
-        <span>Thêm giỏ hàng thành công</span>
+    <div :class="show ? 'show-modal_payment' : ''" >
+        <div class="modal_payment" v-if="fail">
+            <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
+                <IconClose2/>
+            </button>
+            <IconShoppingCartAlt class="fill-secondary"/>
+            <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
+        </div>
+        <div class="modal_payment" v-else>
+            <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
+                <IconClose2/>
+            </button>
+            <div class="d-flex align-items-center">
+                <IconSuccess class="icon mr-2"/>
+                <span>Thêm giỏ hàng thành công</span>
+            </div>
+            <app-button square class="mt-4">Xem giỏ hàng và thanh toán</app-button>
+        </div>
     </div>
-    <app-button square class="mt-4">Xem giỏ hàng và thanh toán</app-button>
-</div>
 </template>
 
 <script>
@@ -52,20 +54,21 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 10%;
-    right: 5%;
+    top: 60px;
+    right: 7%;
     visibility: hidden;
     .btn-close-modal{
         top:7%;
         right: 7%;
         position: absolute;
     }
-    
 }
-.show{
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    visibility: visible;
+.show-modal_payment{
+    .modal_payment{
+        -webkit-animation: fadein 0.5s;
+        animation: fadein 0.5s;
+        visibility: visible;
+    }
     }
 @-webkit-keyframes fadein {
   from {top: 0; opacity: 0;}
