@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { getBase64 } from "~/utils/common";
+import { mapState } from "vuex";
 import { USER_ROLES } from "~/utils/constants"
 import { get } from "lodash"
 import * as actionTypes from "~/utils/action-types";

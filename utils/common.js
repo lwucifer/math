@@ -97,7 +97,7 @@ export function getDeviceID() {
         deviceID = Fingerprint2.x64hash128(
             components
                 .map((pair) => {
-                    console.log("[pair]", pair);
+                    // console.log("[pair]", pair);
                     // get device name by userAgent
                     if(pair.key == "userAgent"){
                         deviceOs = pair.value;
@@ -176,3 +176,8 @@ export const detectBrowser = () => {
     console.log("browserName", browserName);
     return browserName;
 };
+
+export const isCommonElementIn2Array = (arr1, arr2) => {
+    if(!arr1 || !arr2) return false;
+    return !!arr2.filter(e => arr1.indexOf(e) > -1).length;
+}
