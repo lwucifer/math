@@ -2,15 +2,15 @@
   <div class="container">
       <div class="row">
         <div class="col-md-6">
-            <div class="wrap-success-auth px-4">
+            <div class="wrap-success-auth">
                 <IconSuccess class="mb-3"/>
-                <h3>Đăng ký thành công</h3>
-                <p class="my-4">Cảm ơn bạn đã tạo tài khoản Schoolly. Để hoàn tất việc đăng ký, vui lòng xác thực tài khoản qua email datpt262@gmail.com</p>
+                <h3 class="text-primary">Đổi mật khẩu thành công</h3>
+                <p class="my-4">Tài khoản của bạn đã được cập nhật mật khẩu mới</p>
                 <app-button class="mt-2" square 
                             :to="'/auth/signin'"
                             nuxt
                 >
-                Xác thực tài khoản
+                Đăng nhập ngay
                 </app-button>
             </div>
         </div>

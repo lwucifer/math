@@ -34,8 +34,7 @@
         </div>
       </div>
       <div class="col-md-6 text-center">
-        <h1 class="color-primary">Schoolly</h1>
-        <img src="~assets/images/auth/image 13.png">
+        <ImageAuth/>
       </div>
     </div>
   </div>
@@ -54,13 +53,14 @@ import {
 import { formatPhoneNumber } from "~/utils/validations";
 import SignupEmail from "~/components/page/auth/signup/SignupEmail";
 import SignupPhone from "~/components/page/auth/signup/SignupPhone";
-
+import ImageAuth  from "~/components/page/auth/ImageAuth";
 export default {
   components: {
     IconFacebook,
     IconGoogle,
     SignupEmail,
-    SignupPhone
+    SignupPhone,
+    ImageAuth
   },
 
   data() {

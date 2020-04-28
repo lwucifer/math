@@ -1,6 +1,6 @@
 <template>
   <div class="auth__main">
-    <h3>Quên mật khẩu?</h3>
+    <h3 class="text-primary">Quên mật khẩu?</h3>
     <div class="auth_content mt-5">
       <app-input
         type="password"
@@ -102,7 +102,7 @@ export default {
         );
         const doAdd = this.forgotPassword(resetPassModelEmail).then(result => {
           if (result.success == true) {
-            this.$router.push("/auth/signin");
+            this.$router.push("/auth/forgot/success");
           } else {
             this.showErrorChangePass(result);
           }

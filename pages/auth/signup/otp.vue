@@ -1,23 +1,33 @@
 <template>
-  <div class="auth auth-signin">
-    <div class="auth__main">
-      <h3>Xác thực tài khoản</h3>
-      <div class="auth_content mt-4">
-        <app-input type="text" v-model="otp" placeholder="Nhập mã OTP"/>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="wrap-success-auth px-4">
+          <h3>Xác thực tài khoản</h3>
+          <div class="auth_content mt-4">
+            <app-input type="text" v-model="otp" placeholder="Nhập mã OTP"/>
+          </div>
+          <app-button color="primary" square fullWidth @click="confirmOtp">
+              Xác thực tài khoản
+          </app-button>
+        </div>
       </div>
-      <app-button color="primary" square fullWidth @click="login">
-          Xác thực tài khoản
-      </app-button>
+      <div class="col-md-6 text-center">
+          <ImageAuth/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import ImageAuth  from "~/components/page/auth/ImageAuth";
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 
 export default {
-  components: {},
+  components: {
+    ImageAuth
+  },
 
   data() {
     return {
@@ -26,13 +36,21 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["login"]),
-    login() {
+    ...mapActions("auth", ["verifiOtp"]),
+    async confirmOtp(){
+      await this.verifiOtp(this.otp).then(result => {
+        console.log("result huydv", result);
+        if (result && result.user) {
+          console.log(result.user)
+        } else {
+          console.log(result)
+        }
+      })
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

@@ -36,8 +36,7 @@
           </div>
       </div>
       <div class="col-md-6 text-center">
-        <h1 class="color-primary">Schoolly</h1>
-        <img src="~assets/images/auth/image 13.png">
+        <ImageAuth/>
       </div>
     </div>
   </div>
@@ -57,8 +56,9 @@ import * as constants from "~/utils/constants";
 
 import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
 import IconGoogle from "~/assets/svg/icons/google.svg?inline";
+import ImageAuth  from "~/components/page/auth/ImageAuth"
 export default {
-  components: { SigninEmail, SigninPhone,IconFacebook,IconGoogle },
+  components: { SigninEmail, SigninPhone,IconFacebook,IconGoogle,ImageAuth },
 
   data() {
     return {
