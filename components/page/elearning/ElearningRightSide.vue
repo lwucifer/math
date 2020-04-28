@@ -75,9 +75,7 @@
         <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
-    <PaymentModal :show="showModalPayment"
-                  :fail="AddCartFail"
-    />
+    <PaymentModal :show="showModalPayment" :fail="AddCartFail" />
   </div>
 </template>
 
@@ -98,7 +96,7 @@ import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
-import PaymentModal from "~/components/page/payment/PaymentModal"
+import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
   components: {
     IconShare,
@@ -108,7 +106,7 @@ export default {
     IconLessons,
     IconSubject,
     IconBook,
-    PaymentModal
+    PaymentModal,
   },
   props: {
     info: {
@@ -120,8 +118,7 @@ export default {
   data() {
     return {
       showModalPayment: false,
-      AddCartFail:false
-
+      AddCartFail: false,
     };
   },
 
@@ -136,20 +133,17 @@ export default {
 
     handleAddToCart() {
       console.log("[handleAddToCart]", this.info);
-      this.cartAdd({ elearning_id: this.info.id }).then(result => {
+      this.cartAdd({ elearning_id: this.info.id }).then((result) => {
         console.log("[handleAddToCart] cartAdd", result);
-        if(result.success){
+        if (result.success) {
           this.showModalPayment = true;
-          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
-        }
-        else{
+        } else {
           this.showModalPayment = true;
           this.AddCartFail = true;
-          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
