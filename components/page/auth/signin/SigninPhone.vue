@@ -40,7 +40,6 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import { createSigninWithPhone } from "~/models/auth/Signin";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
-import { setFirebaseToken } from "~/utils/auth";
 import { ERRORS } from "~/utils/error-code";
 import { required, minLength } from "vuelidate/lib/validators";
 
@@ -83,8 +82,7 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
-            // enable FB Messaging
-            this.getFirebaseToken();
+            this.$emit('signin', true);
 
             this.$router.push("/");
           } else {
@@ -151,22 +149,7 @@ export default {
       }
       this.messageErrorLogin = message;
     },
-    getFirebaseToken() {
-      console.log("[getFirebaseToken]");
-      this.$fireMess
-        .requestPermission()
-        .then(granted => {
-          console.log("[Messaging] have permission", granted);
-          return this.$fireMess.getToken();
-        })
-        .then(token => {
-          console.log("[Messaging] token", token);
-          setFirebaseToken(token);
-        })
-        .catch(err => {
-          console.log("[Messaging] Error occured ", err);
-        });
-    }
+    
   }
 };
 </script>

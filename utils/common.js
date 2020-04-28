@@ -1,7 +1,7 @@
 import { forEach, get } from "lodash";
 import Fingerprint2 from "fingerprintjs2";
 import * as constants from "~/utils/constants";
-import { setDeviceId } from "./auth";
+import { setDeviceId, setDeviceOs } from "./auth";
 
 export function getBase64(img, callback) {
     const reader = new FileReader();
@@ -33,7 +33,7 @@ export function remove_unicode(str) {
 
 export function useEffect(that, watcher, props) {
     watcher();
-    const iterator = function(prop) {
+    const iterator = function (prop) {
         that.$watch(prop, {
             handler: watcher,
             deep: true,
@@ -45,7 +45,7 @@ export function useEffect(that, watcher, props) {
 export function redirectWithParams(params = {}) {
     let currentUrlParams = new URLSearchParams(window.location.search);
 
-    forEach(params, function(value, key) {
+    forEach(params, function (value, key) {
         currentUrlParams.set(key, value);
     });
 
@@ -91,22 +91,29 @@ export function testJSON(text) {
 
 export function getDeviceID() {
     let deviceID = "";
+    let deviceOs = "";
 
     Fingerprint2.get((components) => {
         deviceID = Fingerprint2.x64hash128(
             components
-            .map((pair) => {
-                console.log("[pair]", pair);
-                if (constants.FINGERPRINT_PROPS.includes(pair.key)) {
-                    return pair.value;
-                }
-            })
-            .join(),
+                .map((pair) => {
+                    console.log("[pair]", pair);
+                    // get device name by userAgent
+                    if(pair.key == "userAgent"){
+                        deviceOs = pair.value;
+                    }
+                    if (constants.FINGERPRINT_PROPS.includes(pair.key)) {
+                        return pair.value;
+                    }
+
+                })
+                .join(),
             31
         );
         console.log("[setDeviceId]", deviceID);
-
         setDeviceId(deviceID);
+        setDeviceOs(deviceOs);
+
     });
 
     // set to cookies
@@ -133,7 +140,7 @@ export const detectBrowser = () => {
     // Safari 3.0+ "[object HTMLElementConstructor]"
     let isSafari =
         /constructor/i.test(window.HTMLElement) ||
-        (function(p) {
+        (function (p) {
             return p.toString() === "[object SafariRemoteNotification]";
         })(!window["safari"] ||
             (typeof safari !== "undefined" && safari.pushNotification)
