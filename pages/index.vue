@@ -161,9 +161,9 @@
           >
             <PostDetail
               slot="content"
-              :parent-post-id="modalDetailDataParent.post_id"
-              :post="modalDetailDataPost"
-              :is-parent-post="modalDetailDataParent.post_id === modalDetailDataPost.post_id"
+              :post="modalDetailPost"
+              :parent-post="modalDetailParentPost"
+              :is-parent-post="modalDetailParentPostId === modalDetailPostId"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
@@ -176,10 +176,11 @@
                 show-comment
                 :post="post"
                 :is-parent-post="isParentPost"
-                @get-comment="getComment"
-                @post-comment="postComment"
+                @like="(...args) => isParentPost ? likePost(...args) : likeDetailPost(...args)"
+                @get-comment="(...args) => isParentPost ? getComment(...args) : getCommentDetailPost(...args)"
+                @post-comment="(...args) => isParentPost ? postComment(...args) : postCommentDetailPost(...args)"
               >
-                <template slot="comment" slot-scope="{ commentTree }">
+                <template v-if="!isEmpty(post)" slot="comment" slot-scope="{ commentTree }">
                   <transition-group
                     enter-active-class="animated faster fadeIn"
                     leave-active-class="animated faster fadeOut"
@@ -189,11 +190,11 @@
                       :key="comment.id"
                       :post="post"
                       :data="comment"
-                      @edit="editComment"
-                      @delete="deleteComment"
-                      @like="likeComment"
-                      @get-child-comment="getChildComment"
-                      @post-child-comment="postChildComment"
+                      @edit="(...args) => isParentPost ? editComment(...args) : editCommentDetailPost(...args)"
+                      @delete="(...args) => isParentPost ? deleteComment(...args) : deleteCommentDetailPost(...args)"
+                      @like="(...args) => isParentPost ? likeComment(...args) : likeCommentDetailPost(...args)"
+                      @get-child-comment="(...args) => isParentPost ? getChildComment(...args) : getChildCommentDetailPost(...args)"
+                      @post-child-comment="(...args) => isParentPost ? postChildComment(...args) : postChildCommentDetailPost(...args)"
                     >
                       <template slot="child-comment" slot-scope="{ commentTree }">
                         <transition-group
@@ -207,9 +208,9 @@
                             :post="post"
                             :parentComment="comment"
                             :data="childComment"
-                            @edit="editChildComment"
-                            @delete="deleteChildComment"
-                            @like="likeChildComment"
+                            @edit="(...args) => isParentPost ? editChildComment(...args) : editChildCommentDetailPost(...args)"
+                            @delete="(...args) => isParentPost ? deleteChildComment(...args) : deleteChildCommentDetailPost(...args)"
+                            @like="(...args) => isParentPost ? likeChildComment(...args) : likeChildCommentDetailPost(...args)"
                           />
                         </transition-group>
                       </template>
@@ -478,8 +479,8 @@ export default {
       postLoading: false,
       // Modal post detail
       modalDetailShow: false,
-      modalDetailDataParent: {},
-      modalDetailDataPost: {},
+      modalDetailParentPostId: null,
+      modalDetailPostId: null,
       // Edit post
       showModalEditPost: false,
       modalEditPostLoading: false,
@@ -534,6 +535,16 @@ export default {
             };
           })
         : [];
+    },
+
+    modalDetailPost() {
+      return this.$store.state.social.detailPost;
+    },
+
+    modalDetailParentPost() {
+      return (
+        this.$store.getters[`social/post`](this.modalDetailParentPostId) || {}
+      );
     }
   },
 
@@ -561,6 +572,7 @@ export default {
 
   methods: {
     get,
+    isEmpty,
 
     /**
      * Click image -> change url
@@ -570,8 +582,7 @@ export default {
     handleClickImage({ id }, post) {
       // Change url
       if (typeof window.history.pushState != "undefined") {
-        this.modalDetailDataParent = post;
-        this.modalDetailShow = true;
+        this.modalDetailParentPostId = post.post_id;
 
         window.history.pushState(
           { theater: true },
@@ -584,24 +595,20 @@ export default {
         );
       }
 
-      // get data
-      this.getDetailPost(id, post);
-    },
-
-    async getDetailPost(id, post) {
+      // set data
       if (id === post.post_id) {
-        this.modalDetailDataPost = post;
-        return;
+        this.modalDetailPostId = post.post_id;
+      } else {
+        this.modalDetailPostId = id;
+        this.$store.dispatch(
+          `social/${actionTypes.SOCIAL.GET_DETAIL_POST}`,
+          id
+        );
       }
 
-      const getPost = await new PostService(this.$axios)[
-        actionTypes.BASE.DETAIL
-      ](id);
-      if (getPost.success) {
-        this.modalDetailDataPost = getPost.data;
-      } else {
-        this.$toasted.error(getPost.message);
-      }
+      this.$nextTick(() => {
+        this.modalDetailShow = true;
+      });
     },
 
     /**
@@ -636,8 +643,9 @@ export default {
       }
 
       this.modalDetailShow = false;
-      this.modalDetailDataParent = {};
-      this.modalDetailDataPost = {};
+      this.modalDetailParentPostId = null;
+      this.modalDetailPostId = null;
+      this.$store.dispatch(`social/${actionTypes.SOCIAL.CLEAR_DETAIL_POST}`);
     },
 
     /**
@@ -713,9 +721,8 @@ export default {
 
     openModalShare(post) {
       this.shareData = post;
-      const timeout = setTimeout(() => {
+      this.$nextTick(() => {
         this.showModalShare = true;
-        clearTimeout(timeout);
       });
     },
 
@@ -983,6 +990,216 @@ export default {
       const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
       await this.$store.dispatch(
         `social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT}`,
+        {
+          model,
+          postId,
+          parentCommentId
+        }
+      );
+    },
+
+    /**
+     * To LIKE detail post modal
+     */
+    async likeDetailPost(id, cb) {
+      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
+
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_DETAIL_POST}`,
+        likeModel
+      );
+
+      // Have to run cb
+      cb();
+    },
+
+    /**
+     * To GET comment of detail post modal
+     */
+    async getCommentDetailPost(
+      postId,
+      page,
+      setIsFetchingComment,
+      setIsCommentFetched
+    ) {
+      setIsCommentFetched && setIsFetchingComment(true);
+
+      const getComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_COMMENT_DETAIL_POST}`,
+        {
+          source_id: postId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+      setIsCommentFetched && setIsCommentFetched(true);
+    },
+
+    /**
+     * To POST comment of detail post modal
+     */
+    async postCommentDetailPost(
+      postId,
+      { content, listTags, image, link },
+      clearEditor
+    ) {
+      const commentModel = createComment({
+        source_id: postId,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
+      });
+
+      const doPostComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_COMMENT_DETAIL_POST}`,
+        commentModel
+      );
+
+      if (doPostComment.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    /**
+     * To EDIT comment of detail post modal
+     */
+    async editCommentDetailPost(dataModel, cancelEdit) {
+      const commentModel = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_COMMENT_DETAIL_POST}`,
+        commentModel
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE comment of detail post modal
+     */
+    async deleteCommentDetailPost({ id, source_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_COMMENT_DETAIL_POST}`,
+        { id, source_id }
+      );
+
+      if (doDelete.success) {
+        await this.getCommentDetailPost(source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE comment of detail post modal
+     */
+    async likeCommentDetailPost(id, postId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_COMMENT_DETAIL_POST}`,
+        {
+          model,
+          postId
+        }
+      );
+    },
+
+    /**
+     * To GET child comment list of post modal
+     */
+    async getChildCommentDetailPost(
+      parentCommentId,
+      postId,
+      page,
+      setIsFetchingComment
+    ) {
+      setIsFetchingComment && setIsFetchingComment(true);
+
+      const doGet = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_CHILD_COMMENT_DETAI_POST}`,
+        {
+          source_id: postId,
+          parent_comment_id: parentCommentId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+    },
+
+    /**
+     * To POST a child comment of post modal
+     */
+    async postChildCommentDetailPost(dataModel, clearEditor) {
+      const model = createComment(dataModel);
+      const doAction = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_CHILD_COMMENT_DETAIL_POST}`,
+        model
+      );
+
+      if (doAction.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doAction.message);
+      }
+    },
+
+    /**
+     * To EDIT a child comment of post modal
+     */
+    async editChildCommentDetailPost(dataModel, cancelEdit) {
+      const model = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_CHILD_COMMENT_DETAIL_POST}`,
+        model
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a child comment of post modal
+     */
+    async deleteChildCommentDetailPost(
+      { id, source_id, parent_comment_id },
+      page
+    ) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_CHILD_COMMENT_DETAIL_POST}`,
+        { id, source_id, parent_comment_id }
+      );
+
+      if (doDelete.success) {
+        await this.getChildCommentDetailPost(
+          parent_comment_id,
+          source_id,
+          page
+        );
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a child comment of post modal
+     */
+    async likeChildCommentDetailPost(id, postId, parentCommentId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT_DETAIL_POST}`,
         {
           model,
           postId,

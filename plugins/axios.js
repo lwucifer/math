@@ -16,14 +16,10 @@ function addSubscriber(callback) {
 
 export default function ({ store, $axios, redirect }) {
     $axios.onRequest((config) => {
-        // console.log("[onRequest]", config.url);
         // add Device-Id if existed
         if (checkRequestClientInfo(config.url)) {
             const deviceIdFromCookie = getDeviceId();
-            console.log("[onRequest] deviceIdFromCookie", deviceIdFromCookie);
-            
             const deviceObj = { [DEVICE_ID]: deviceIdFromCookie };
-            console.log("[deviceObj]", deviceObj, JSON.stringify(deviceObj))
             config.headers.common[CLIENT_INFO] = JSON.stringify(deviceObj);
         }
 

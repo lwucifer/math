@@ -140,12 +140,19 @@ export const checkRequestAuthorize = _url => {
 
 export const checkRequestClientInfo = _url => {
     const urls = _url.split("?");
-    console.log("[checkRequestClientInfo] urls", urls);
+
+    let check = false;
+
+    CLIENT_INFO_API.map(item => {
+        if (urls[0].includes(item)) {
+            check = true;
+        }
+    })
 
     // public api
-    if (CLIENT_INFO_API.includes(urls[0])) {
-        return true;
-    }
+    // if (CLIENT_INFO_API.indexOf(urls[0])) {
+    //     return true;
+    // }
 
-    return false;
+    return check;
 };
