@@ -88,7 +88,7 @@
         <app-spin />
       </div>
 
-      <div v-if="commentTree.page && !commentTree.page.last" class="text-center">
+      <div v-if="commentTree.page && commentTree.page.last === false" class="text-center">
         <a
           href
           class="post__comment-more"

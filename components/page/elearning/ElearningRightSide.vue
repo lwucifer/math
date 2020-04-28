@@ -75,7 +75,11 @@
         <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
-    <PaymentModal :show="showModalPayment" :fail="AddCartFail" />
+    <PaymentModal
+      :show="showModalPayment"
+      :fail="AddCartFail"
+      @close-modal="handleCloseModal"
+    />
   </div>
 </template>
 
@@ -142,6 +146,9 @@ export default {
           this.AddCartFail = true;
         }
       });
+    },
+    handleCloseModal() {
+      this.showModalPayment = false;
     },
   },
 };
