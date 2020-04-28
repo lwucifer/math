@@ -29,25 +29,20 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { VclFacebook } from "vue-content-loading";
-import Loading from "~/components/common/contentBox/Loading";
 
 export default {
   components: {
     CourseSliderTab,
-    VclFacebook,
-    Loading,
   },
 
-  async created() {
-    await this.$store.dispatch(
+  async fetch({ params, query, store }) {
+    await store.dispatch(
       `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
   },
 
   data() {
     return {
-      loading: true,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
