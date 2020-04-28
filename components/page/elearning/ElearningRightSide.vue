@@ -149,7 +149,7 @@ export default {
       });
     },
     handleCloseModal(){
-      this.showModalPayment = false;
+      this.showModalPayment = false
     }
   }
 };
