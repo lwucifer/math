@@ -11,49 +11,54 @@
         <!--</app-upload>-->
     <!--</div>-->
     <!--<p class="school-side__name mt-2">{{personalList.fullname}}</p>-->
-    <div class="school-side__links">
-      <div class="school-side__links__item" :class="active == 1 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/'>
-          <IconUser3 width="20" height="20"/>
-          <span>
-            Thông tin tài khoản
-          </span>
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 2 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/withdrawals'>
-          <IconHistory />
-          <span>
-            Lịch sửa rút tiền
-          </span>
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 3 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/revenues'>
-          <IconHistory />Thống kê doanh thu
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 4 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/transactions'>
-          <IconHistory />Lịch sử giao dịch
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 5 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/announcement'>
-          <IconBell />Thông báo
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 6 ? 'active' : ''">
-        <n-link class="link-gray" to='/_id/info/setting'>
-          <IconBell />Cài đặt
-        </n-link>
-      </div>
-      <div class="school-side__links__item" :class="active == 7 ? 'active' : ''">
-        <n-link class="link-gray" to>
-          <IconExclamation />Trợ giúp
-        </n-link>
-      </div>
-    </div>
+    <!--<div class="school-side__links">-->
+      <!--<div class="school-side__links__item" :class="active == 1 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/'>-->
+          <!--<IconUser3 width="20" height="20"/>-->
+          <!--<span>-->
+            <!--Thông tin tài khoản-->
+          <!--</span>-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 2 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/withdrawals'>-->
+          <!--<IconHistory />-->
+          <!--<span>-->
+            <!--Lịch sửa rút tiền-->
+          <!--</span>-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 3 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/revenues'>-->
+          <!--<IconHistory />Thống kê doanh thu-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 4 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/transactions'>-->
+          <!--<IconHistory />Lịch sử giao dịch-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 5 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/announcement'>-->
+          <!--<IconBell />Thông báo-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 6 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to='/_id/info/setting'>-->
+          <!--<IconBell />Cài đặt-->
+        <!--</n-link>-->
+      <!--</div>-->
+      <!--<div class="school-side__links__item" :class="active == 7 ? 'active' : ''">-->
+        <!--<n-link class="link-gray" to>-->
+          <!--<IconExclamation />Trợ giúp-->
+        <!--</n-link>-->
+      <!--</div>-->
+    <!--</div>-->
+    <aside-menu
+      :selected-item="'general'"
+      :items="menuItems"
+    >
+    </aside-menu>
   </div>
 </template>
 
@@ -68,6 +73,97 @@ import IconSearch from "~/assets/svg/icons/search2.svg?inline";
 import IconDollarAlt from '~/assets/svg/design-icons/dollar-alt.svg?inline';
 import { mapState, mapActions } from "vuex";
 import { getBase64 } from "~/utils/common";
+import { USER_ROLES } from "~/utils/constants"
+import { get } from "lodash"
+
+const MENU_ITEMS = [
+  {
+    label: 'Thông tin tài khoản',
+    key: '1',
+    icon: 'user.svg',
+    link: '/_id/info/',
+    roles: [
+      USER_ROLES.ROLE_USER,
+      USER_ROLES.ROLE_STUDENT,
+      USER_ROLES.ROLE_TEACHER,
+      USER_ROLES.ROLE_PARENT,
+      USER_ROLES['ROLE_SYSTEM-ADMIN'],
+      USER_ROLES['ROLE_ORG-ADMIN'],
+    ]
+  },
+  {
+    label: 'Lịch sử rút tiền',
+    key: '2',
+    icon: 'history.svg',
+    link: '/_id/info/withdrawals',
+    roles: [
+      USER_ROLES.ROLE_TEACHER,
+    ]
+  },
+  {
+    label: 'Thông báo',
+    key: '5',
+    icon: 'bell.svg',
+    link: '/_id/info/announcement',
+    roles: [
+      USER_ROLES.ROLE_USER,
+      USER_ROLES.ROLE_STUDENT,
+      USER_ROLES.ROLE_TEACHER,
+      USER_ROLES.ROLE_PARENT,
+      USER_ROLES['ROLE_SYSTEM-ADMIN'],
+      USER_ROLES['ROLE_ORG-ADMIN'],
+    ]
+  },
+  {
+    label: 'Lịch sử giao dịch',
+    key: '4',
+    icon: 'history.svg',
+    link: '/_id/info/transactions',
+    roles: [
+      USER_ROLES.ROLE_USER,
+      USER_ROLES.ROLE_STUDENT,
+      USER_ROLES.ROLE_TEACHER,
+      USER_ROLES.ROLE_PARENT,
+    ]
+  },
+  {
+    label: 'Thống kê doanh thu',
+    key: '3',
+    icon: 'exclamation.svg',
+    link: '/_id/info/revenues',
+    roles: [
+      USER_ROLES.ROLE_TEACHER,
+    ]
+  },
+  {
+    label: 'Cài đặt chung',
+    key: '6',
+    icon: 'cog.svg',
+    link: '/_id/info/setting',
+    roles: [
+      USER_ROLES.ROLE_USER,
+      USER_ROLES.ROLE_STUDENT,
+      USER_ROLES.ROLE_TEACHER,
+      USER_ROLES.ROLE_PARENT,
+      USER_ROLES['ROLE_SYSTEM-ADMIN'],
+      USER_ROLES['ROLE_ORG-ADMIN'],
+    ]
+  },
+  {
+    label: 'Trợ giúp',
+    key: 'support',
+    icon: 'exclamation.svg',
+    link: '/_id/info',
+    roles: [
+      USER_ROLES.ROLE_USER,
+      USER_ROLES.ROLE_STUDENT,
+      USER_ROLES.ROLE_TEACHER,
+      USER_ROLES.ROLE_PARENT,
+      USER_ROLES['ROLE_SYSTEM-ADMIN'],
+      USER_ROLES['ROLE_ORG-ADMIN'],
+    ]
+  }
+]
 
 export default {
   components: {
@@ -84,6 +180,7 @@ export default {
     return{
       avatar: [],
       avatarSrc: "https://picsum.photos/170/170",
+      MENU_ITEMS: MENU_ITEMS
     }
   },
   props: {
@@ -98,6 +195,21 @@ export default {
   },
   computed:{
     ...mapState("account", ["personalList"]),
+    ...mapState("account", { profile: "profileList" }),
+    menuItems: function() {
+      const data = []
+      const currentRole = this.get(this, 'profile.role', false)
+      if (currentRole) {
+        const menuLeng = this.MENU_ITEMS.length
+        for(let i = 0; i < menuLeng; i++) {
+          const tmp = this.MENU_ITEMS[i]
+          if (tmp.roles.includes(currentRole.authority)) {
+            data.push(tmp)
+          }
+        }
+      }
+      return data
+    }
   },
   methods:{
     ...mapActions("account", [
@@ -115,7 +227,8 @@ export default {
       this.accountPersonalEditAvatar(body).then(result=>{
 
       })
-    }
+    },
+    get
   },
   created(){
     this.avatarSrc = this.personalList.avatar
