@@ -77,6 +77,7 @@
     </div>
     <PaymentModal :show="showModalPayment"
                   :fail="AddCartFail"
+                  @close-modal="handleCloseModal"
     />
   </div>
 </template>
@@ -140,14 +141,15 @@ export default {
         console.log("[handleAddToCart] cartAdd", result);
         if(result.success){
           this.showModalPayment = true;
-          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
         }
         else{
           this.showModalPayment = true;
           this.AddCartFail = true;
-          setTimeout(()=> { this.showModalPayment= false;return } , 1000)
         }
       });
+    },
+    handleCloseModal(){
+      this.showModalPayment = false;
     }
   }
 };

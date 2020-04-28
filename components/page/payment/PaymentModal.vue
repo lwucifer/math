@@ -1,9 +1,15 @@
 <template>
 <div class="modal_payment" :class="show ? 'show' : ''" v-if="fail">
+    <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
+        <IconClose2/>
+    </button>
         <IconShoppingCartAlt class="fill-secondary"/>
         <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
 </div>
 <div class="modal_payment" :class="show ? 'show' : ''" v-else>
+    <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
+        <IconClose2/>
+    </button>
     <div class="d-flex align-items-center">
         <IconSuccess class="icon mr-2"/>
         <span>Thêm giỏ hàng thành công</span>
@@ -15,15 +21,17 @@
 <script>
 import IconSuccess from '~/assets/svg/icons/success.svg?inline';
 import IconShoppingCartAlt from '~/assets/svg/design-icons/shopping-cart-alt.svg?inline';
+import IconClose2 from '~/assets/svg/icons/close2.svg?inline';
 export default {
     components:{
         IconSuccess,
-        IconShoppingCartAlt
+        IconShoppingCartAlt,
+        IconClose2
     },
     props:{
         show:{
             type: Boolean,
-            default: true
+            default: false
         },
         fail:{
             type: Boolean,
@@ -47,6 +55,11 @@ export default {
     top: 10%;
     right: 5%;
     visibility: hidden;
+    .btn-close-modal{
+        top:7%;
+        right: 7%;
+        position: absolute;
+    }
     
 }
 .show{
