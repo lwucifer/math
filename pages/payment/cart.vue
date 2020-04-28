@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row" v-if="true">
+    <div class="row" v-if="cartCheckout.orders.length">
       <div class="col-md-8 bg-white py-3 px-4">
         <h6 class="text-primary">Giỏ hàng</h6>
         <div

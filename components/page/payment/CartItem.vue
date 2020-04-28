@@ -45,7 +45,9 @@ export default {
         if (get(res, "success", false)) {
           this.$toasted.success(get(res, "message", "Thành công"));
           this.cartList();
+          return;
         }
+        this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
       });
     },
   },

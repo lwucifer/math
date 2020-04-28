@@ -134,10 +134,12 @@ export default {
     get,
 
     ...mapActions("cart", ["cartAdd"]),
+    ...mapActions("cart", ["cartList"]),
 
     handleAddToCart() {
       const elearning_id = get(this, "info.id", "");
       this.cartAdd({ elearning_id }).then((result) => {
+        this.cartList();
         this.showModalPayment = true;
         if (!result.success) {
           this.AddCartFail = true;
