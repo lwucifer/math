@@ -1,6 +1,10 @@
 <template>
   <div class="container">
       <div>
+          <br>
+          <br>
+          <br>
+          <br>
           <h5>Thống kê - Sở GDĐT tỉnh Vĩnh Phúc</h5>
           <hr class="mt-3"/>
           <FilterBar/>
