@@ -1,6 +1,5 @@
 <template>
-  <VclFacebook v-if="loading" class="bg-white" />
-  <div class="container" v-else>
+  <div class="container">
     <course-slider-tab
       :elearnings="get(elearnings, 'highlight', null)"
       :swiperOptions="sliderOptions"
@@ -30,12 +29,10 @@ import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { VclFacebook } from "vue-content-loading";
 
 export default {
   components: {
     CourseSliderTab,
-    VclFacebook,
   },
 
   async fetch({ params, query, store }) {
@@ -46,7 +43,6 @@ export default {
 
   data() {
     return {
-      loading: false,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
