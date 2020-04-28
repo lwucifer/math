@@ -52,12 +52,12 @@
                 <app-vue-select
                   style="width: 17rem"
                   class="app-vue-select"
-                  v-model="time"
+                  v-model="timeSelect1"
                   :options="times"
                   label="text"
                   searchable
                   clearable
-                  @input="handleChangedTime"
+                  @input="handleChangedTime(1)"
                 ></app-vue-select>
               </div>
             </div>
@@ -68,18 +68,18 @@
                   <IconUserUser class="fill-primary mr-3" />Doanh thu
                 </div>
                 <strong class="mb-3">{{teacherInfo.revenue}} VNĐ</strong>
-                <n-link :to="'/elearning/manager/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
+                <n-link :to="'/temp/department/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
               </div>
               <div class="ml-auto">
                 <app-vue-select
                   style="width: 17rem"
                   class="app-vue-select"
-                  v-model="time"
+                  v-model="timeSelect2"
                   :options="times"
                   label="text"
                   searchable
                   clearable
-                  @input="handleChangedTime"
+                  @input="handleChangedTime(2)"
                 ></app-vue-select>
               </div>
             </div>
@@ -121,7 +121,11 @@ export default {
 
   data() {
     return {
-      time: {
+      timeSelect1: {
+        value: null,
+        text: "Toàn thời gian"
+      },
+      timeSelect2: {
         value: null,
         text: "Toàn thời gian"
       },
@@ -165,21 +169,22 @@ export default {
   },
 
   methods: {
-    handleChangedTime() {
-      this.getSummary();
+    handleChangedTime(select) {
+      this.getSummary(select);
     },
 
     addZero(e) {
       return parseInt(e) > 9 ? e : '0' + e;
     },
 
-    async getSummary() {
+    async getSummary(select = null) {
       try {
         this.loading = true;
         const today = new Date();
         let from_date;
         let fromdate;
-        switch (this.time.value) {
+        let time = select == 1 ? this.timeSelect1.value : this.timeSelect2.value;
+        switch (time) {
           case 'day':
             fromdate = new Date(today.getTime() - 24*60*60*1000);
             from_date = fromdate.getFullYear()+'-'+ 
@@ -219,7 +224,13 @@ export default {
           params
         );
         if (this.stateTeaching) {
-          this.teacherInfo = {...this.stateTeaching}
+          if (select ==  1) {
+            this.teacherInfo.participants = this.stateTeaching.participants
+          } else if (select ==  2) {
+            this.teacherInfo.revenue = this.stateTeaching.revenue
+          } else {
+            this.teacherInfo = {...this.stateTeaching}
+          }
         }
       } catch (e) {
         console.log(e)
