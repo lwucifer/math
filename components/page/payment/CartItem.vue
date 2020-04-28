@@ -37,11 +37,15 @@ export default {
 
   methods: {
     ...mapActions("cart", ["cartDelete"]),
+    ...mapActions("cart", ["cartList"]),
 
     deleteCartItem() {
       const elearning_id = get(this, "item.elearning_id", "");
       this.cartDelete(elearning_id).then((res) => {
-        console.log(res);
+        if (get(res, "success", false)) {
+          this.$toasted.success(get(res, "message", "Thành công"));
+          this.cartList();
+        }
       });
     },
   },
