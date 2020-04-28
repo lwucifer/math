@@ -25,19 +25,19 @@
                 <div class="class-info-content mt-3">
                   <div class="item">
                     Tỷ lệ có mặt:
-                    <strong class="color-primary">95%</strong>
+                    <strong class="color-primary">{{summary.total_student_absent_allowed}}%</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng có mặt:
-                    <strong class="color-primary">5%</strong>
+                    <strong class="color-primary">{{summary.total_student_absent_not_allowed}}%</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng mặt có phép:
-                    <strong class="color-primary">5%</strong>
+                    <strong class="color-primary">{{summary.total_student_late}}%</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng mặt không phép:
-                    <strong class="color-primary">1%</strong>
+                    <strong class="color-primary">{{summary.total_student_present}}%</strong>
                   </div>
                 </div>
               </div>
@@ -192,15 +192,21 @@ export default {
           sort: true
         },
       ],
+      summary: {
+        total_student_absent_allowed: 0,
+        total_student_absent_not_allowed: 0,
+        total_student_late: 0,
+        total_student_present: 0,
+      },
       courses: [],
       filterCourse: null,
       pagination: {
-        total: 15,
-        page: 1,
-        pager: 10,
-        totalElements: 55,
-        first: 1,
-        last: 10
+        total: 0,
+        number: 0,
+        size: 10,
+        totalElements: 0,
+        first: 0,
+        last: 0
       },
       lessons: [],
       params: {
@@ -226,6 +232,9 @@ export default {
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
+      that.params.size = that.pagination.size;
+      that.params.page = that.pagination.number + 1;
+      that.getList();
     },
     submit() {
       this.params = {...this.params};
@@ -258,6 +267,10 @@ export default {
         this.pagination.totalPages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
         this.pagination.totalElements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
         this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
+        this.summary.total_student_absent_allowed = this.get(this.stateAttendances, 'data.total_student_absent_allowed', 0)
+        this.summary.total_student_absent_not_allowed = this.get(this.stateAttendances, 'data.total_student_absent_not_allowed', 0)
+        this.summary.total_student_late = this.get(this.stateAttendances, 'data.total_student_late', 0)
+        this.summary.total_student_present = this.get(this.stateAttendances, 'data.total_student_present', 0)
       } catch (e) {
 
       } finally {
@@ -345,7 +358,7 @@ export default {
 }
 .bottom-content {
   display: flex;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   .left {
     i {
       display: block;

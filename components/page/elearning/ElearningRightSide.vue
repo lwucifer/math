@@ -34,7 +34,12 @@
           >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</b
         >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+      <app-button
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mb-4"
+        @click.prevent="handleAddToCart"
         >Chọn mua</app-button
       >
       <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
@@ -70,11 +75,18 @@
         <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
+    <PaymentModal
+      v-if="showModalPayment"
+      :fail="AddCartFail"
+      @close-modal="handleCloseModal"
+    />
   </div>
 </template>
 
 <script>
 import { get } from "lodash";
+import qs from "qs";
+
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -83,6 +95,12 @@ import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 
+import { mapActions, mapGetters } from "vuex";
+import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
+import { createHashKeyReq } from "~/models/payment/HashKeyReq";
+import { RESPONSE_SUCCESS } from "~/utils/config.js";
+
+import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
   components: {
     IconShare,
@@ -92,6 +110,7 @@ export default {
     IconLessons,
     IconSubject,
     IconBook,
+    PaymentModal,
   },
   props: {
     info: {
@@ -101,11 +120,36 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      showModalPayment: false,
+      AddCartFail: false,
+    };
+  },
+
+  computed: {
+    ...mapGetters("cart", ["cartCheckout"]),
   },
 
   methods: {
     get,
+
+    ...mapActions("cart", ["cartAdd"]),
+    ...mapActions("cart", ["cartList"]),
+
+    handleAddToCart() {
+      const elearning_id = get(this, "info.id", "");
+      this.cartAdd({ elearning_id }).then((result) => {
+        this.cartList();
+        this.showModalPayment = true;
+        if (!result.success) {
+          this.AddCartFail = true;
+        }
+      });
+    },
+    handleCloseModal() {
+      this.showModalPayment = false;
+      this.AddCartFail = false;
+    },
   },
 };
 </script>

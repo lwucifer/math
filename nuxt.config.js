@@ -25,6 +25,16 @@ module.exports = {
 
     env: {
         SOCKET_URI: process.env.SOCKET_URI,
+        PAYMENT_REQ_URL: process.env.PAYMENT_REQ_URL,
+        PAYMENT_RETURN_URL: process.env.PAYMENT_RETURN_URL,
+        PAYMENT_VPC_VERSION: process.env.PAYMENT_VPC_VERSION,
+        PAYMENT_VPC_ACCESS_CODE: process.env.PAYMENT_VPC_ACCESS_CODE,
+        PAYMENT_VPC_COMMAND: process.env.PAYMENT_VPC_COMMAND,
+        PAYMENT_VPC_CURRENCY: process.env.PAYMENT_VPC_CURRENCY,
+        PAYMENT_VPC_MERCHANT: process.env.PAYMENT_VPC_MERCHANT,
+        PAYMENT_VPC_TICKETNO: process.env.PAYMENT_VPC_TICKETNO,
+        PAYMENT_AGAIN_LINK: process.env.PAYMENT_AGAIN_LINK,
+
     },
 
     /**

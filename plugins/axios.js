@@ -1,5 +1,6 @@
-import { checkRequestAuthorize, removeToken } from "~/utils/auth";
 import { AUTH as ACTION_AUTH } from "~/utils/action-types";
+import { checkRequestAuthorize, getDeviceId, removeToken, checkRequestClientInfo } from "~/utils/auth";
+import { DEVICE_ID, CLIENT_INFO } from "~/utils/config";
 import { AUTH as MUTATION_AUTH } from "~/utils/mutation-types";
 
 let isAlreadyFetchingAccessToken = false;
@@ -13,19 +14,24 @@ function addSubscriber(callback) {
     subscribers.push(callback);
 }
 
-export default function({ store, $axios, redirect }) {
+export default function ({ store, $axios, redirect }) {
     $axios.onRequest((config) => {
-        // console.log("[onRequest]", config.url);
+        // add Device-Id if existed
+        if (checkRequestClientInfo(config.url)) {
+            const deviceIdFromCookie = getDeviceId();
+            const deviceObj = { [DEVICE_ID]: deviceIdFromCookie };
+            config.headers.common[CLIENT_INFO] = JSON.stringify(deviceObj);
+        }
 
+        // add Authorization token if needed
         if (checkRequestAuthorize(config.url)) {
             if (!store.getters["auth/token"]) return;
             config.headers.common[
                 "Authorization"
             ] = `Bearer ${store.state.auth.access_token}`;
 
-            // config.headers.common["Authorization"] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo0LCJwaG9uZV9udW1iZXIiOiIwMzU2MjU3MzI1In0sImlhdCI6MTU3NTUzNDcxOSwiZXhwIjoxODM0NzM0NzE5fQ.w-oB2pH2aPiyzTXpSQumuShy5xQQEGfURDp1-KjzfkM`;
         } else {
-            config.headers.common = {};
+            delete config.headers.common['Authorization'];
         }
     });
 
@@ -81,11 +87,13 @@ export default function({ store, $axios, redirect }) {
     });
 
     $axios.onResponseError((error) => {
-        // console.log("[onResponseError]", error);
+        console.log("[onResponseError]", error);
         const code = parseInt(error.response && error.response.status);
         if (code === 401) {
             removeToken();
             redirect("/auth/signin");
+        } else if(code == 404) {
+            // do something on 404 api
         }
         // console.log("[onResponseError]", error.response);
     });

@@ -1,24 +1,28 @@
 <template>
-  <app-vue-select
-    class="app-vue-select w-100"
-    :options="list"
-    :filterable="false"
-    searchable
-    clearable
-    v-model="selectedItem"
-    :reduce="item => item.elearning_id"
-    label="name"
-    placeholder="Bài giảng/khóa học"
-    @input="handleChangedCourse"
-    @open="onOpen"
-    @close="closeVotedElearningsFilter"
-  >
-    <template #list-footer v-if="hasMoreVotedElearning">
-      <li ref="load" class="loader">
-        Loading more options...
-      </li>
-    </template>
-  </app-vue-select>
+  <div>
+    <app-vue-select
+      class="app-vue-select w-100"
+      :options="list"
+      searchable
+      clearable
+      append-to-body
+      v-model="selectedItem"
+      :reduce="item => item.elearning_id"
+      label="name"
+      :placeholder="placeholder"
+      @input="onChange"
+      @open="onOpen"
+      @close="onClose"
+    >
+      <template slot="list-footer" v-if="hasMoreVotedElearning">
+        <li ref="load" class="loader text-center">
+          <app-spin
+            size="small"
+          />
+        </li>
+      </template>
+    </app-vue-select>
+  </div>
 </template>
 
 <script>
@@ -38,28 +42,31 @@
     
     model: {
       prop: "value",
-      event: "change"
+      event: "input"
     },
     
     props: {
       subjectId: {
         type: String|Number,
         default: null
+      },
+      placeholder: {
+        type: String,
+        default: 'Bài giảng/khóa học'
       }
     },
     
     data() {
       return {
-        loading: false,
         observer: null,
         pagination: {},
         params: {
           page: 1,
-          size: 50,
+          size: 10,
           subject_id: this.subjectId,
         },
         list: [],
-        selectedItem: null
+        selectedItem: null,
       }
     },
     
@@ -67,9 +74,8 @@
       ...mapState(STORE_NAMESPACE, {
         detailInfo: "elearnings",
       }),
-      hasMoreVotedElearning () {
-        return true
-        return !this.get(this.pagination, 'last', true)
+      hasMoreVotedElearning: function() {
+        return this.get(this.pagination, 'total_elements', 0) > this.get(this.pagination, 'number_of_elements', 0)
       },
     },
     
@@ -78,17 +84,18 @@
     
     methods: {
       async onOpen() {
-        console.log('opening')
         if (this.hasMoreVotedElearning) {
-          console.log('loading data')
           await this.$nextTick();
           this.observer.observe(this.$refs.load)
         }
       },
+      onChange(val) {
+        this.$emit('input', val)
+        this.$emit('changedCourse', val)
+      },
       async getList() {
         try {
           let params = { ...this.params }
-          console.log('get listing...')
           
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_VOTED_ELEARNING.LIST}`, { params }
@@ -100,15 +107,13 @@
         } finally {
         }
       },
-      handleChangedCourse(val) {
-        console.log('change elearning')
-        this.$emit('changedCourse', val)
+      onClose() {
+        this.observer.disconnect();
       },
-      closeVotedElearningsFilter() {
-      
+      onSearch(search, loading) {
+        loading(true)
       },
       async infiniteScroll ([{isIntersecting, target}]) {
-        console.log('infiniteSroll', isIntersecting, target)
         if (isIntersecting) {
           const ul = target.offsetParent
           const scrollTop = target.offsetParent.scrollTop
@@ -121,12 +126,10 @@
       get
     },
     mounted () {
-      this.observer = new IntersectionObserver(this.infiniteScroll);
+      this.observer = new IntersectionObserver(this.infiniteScroll.bind(this));
     },
     created() {
-      // useEffect(this, this.getList.bind(this), [
-      //   "params.subject_id"
-      // ]);
+      this.getList()
     },
   };
 </script>

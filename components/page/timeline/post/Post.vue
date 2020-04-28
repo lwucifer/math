@@ -85,7 +85,7 @@
 
         <button
           class="post__button"
-          :disabled="btnCommentLoading"
+          :disabled="isFetchingComment"
           @click="!isCommentFetched && getComment()"
         >
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
@@ -100,14 +100,9 @@
         <app-divider class="mt-0 mb-3" />
 
         <div class="post__comment-list">
-          <CommentItem
-            v-for="item in commentTree.comments || []"
-            :key="item.id"
-            :post="post"
-            :data="item"
-          />
+          <slot name="comment" v-bind="{ commentTree }"></slot>
 
-          <div class="text-center" v-if="btnCommentLoading">
+          <div class="text-center" v-if="isFetchingComment">
             <app-spin />
           </div>
 
@@ -129,7 +124,7 @@
         <CommentEditor class="post__comment-editor my-3" @submit="postComment" />
       </template>
 
-      <div class="text-center" v-else-if="btnCommentLoading">
+      <div class="text-center" v-else-if="isFetchingComment">
         <app-spin />
       </div>
     </div>
@@ -207,7 +202,7 @@ export default {
     return {
       menuDropdown: false,
       btnLikeLoading: false,
-      btnCommentLoading: false,
+      isFetchingComment: false,
       isCommentFetched: false,
       shareWith: 0,
       shareWithOpts: [
@@ -227,7 +222,7 @@ export default {
     },
 
     commentTree() {
-      return this.post.$commentTree || {}
+      return this.post.$commentTree || {};
     }
   },
 
@@ -251,38 +246,27 @@ export default {
       this.btnLikeLoading = true;
     },
 
-    async getComment() {
-      this.btnCommentLoading = true;
-      const getComment = await this.$store.dispatch(
-        `social/${ACTION_TYPE_SOCIAL.GET_COMMENT}`,
-        {
-          source_id: this.post.post_id,
-          page: get(this.commentTree, "page.number", 0) + 1
-        }
-      );
-
-      this.btnCommentLoading = false;
-      this.isCommentFetched = true;
+    setIsFetchingComment(value = false) {
+      this.isFetchingComment = value;
     },
 
-    async postComment({ content, listTags, image, link }) {
-      const commentModel = createComment({
-        source_id: this.post.post_id,
-        comment_content: content,
-        list_tag: listTags,
-        comment_images: image,
-        comment_link: link
-      });
-
-      const doPostComment = await this.$store.dispatch(
-        `social/${ACTION_TYPE_SOCIAL.ADD_COMMENT}`,
-        commentModel
-      );
-
-      if (!doPostComment.success) {
-        this.$toasted.error(doPostComment.message);
-      }
+    setIsCommentFetched(value = false) {
+      this.isCommentFetched = value;
     },
+
+    getComment() {
+      this.$emit(
+        "get-comment",
+        this.post.post_id,
+        get(this.commentTree, "page.number", 0) + 1,
+        this.setIsFetchingComment,
+        this.setIsCommentFetched
+      );
+    },
+
+    postComment(...args) {
+      this.$emit("post-comment", this.post.post_id, ...args);
+    }
   }
 };
 </script>

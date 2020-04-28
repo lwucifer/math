@@ -1,6 +1,5 @@
 .filter-form {
-    padding: 0 2rem;
-    margin-bottom: 2rem;
+    padding: 0 1rem;
     display: flex;
     
     &__item__btn {
@@ -8,18 +7,18 @@
     }
 
     &__item {
-        margin: 0 1rem;
+        margin: 0 1rem 2rem 1rem;
         display: inline-block;
         display: flex;
         align-items: center;
 
-        &:last-child {
-            margin-right: 0;
-        }
-
-        &:first-child {
-            margin-left: 0;
-        }
+        //&:last-child {
+        //    margin-right: 0;
+        //}
+        //
+        //&:first-child {
+        //    margin-left: 0;
+        //}
 
         &__btn {
             font-size: 1.4rem;

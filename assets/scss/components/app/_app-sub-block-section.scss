@@ -1,0 +1,20 @@
+.sub-block-section {
+    background-color: transparent;
+    margin-bottom: 3rem;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    
+    .sub-block-section__main {
+        padding: 1.5rem;
+        background-color: #fff;
+    }
+    
+    &__title {
+        padding: 1.5rem;
+        color: #333;
+        background: #f9f9f9;
+    }
+    
+    &__title--main {
+        color: #333;
+    }
+}

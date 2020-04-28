@@ -92,13 +92,13 @@
 
         <button
           class="post__button"
-          :disabled="btnCommentLoading"
-          @click="!isCommentFetched && getParentComment()"
+          :disabled="isFetchingComment"
+          @click="!isCommentFetched && getComment()"
         >
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
-        <button class="post__button">
+        <button class="post__button" @click="$emit('share', post)">
           <IconShare class="icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
@@ -107,33 +107,31 @@
         <app-divider class="mt-0 mb-3" />
 
         <div class="post__comment-list">
-          <CommentItem
-            v-for="item in listParentComments"
-            :key="item.id"
-            :post="post"
-            :data="item"
-            @deleted="handleDeleted"
-          />
+          <slot name="comment" v-bind="{ commentTree }"></slot>
+
+          <div class="text-center" v-if="isFetchingComment">
+            <app-spin />
+          </div>
 
           <div class="text-center">
             <a
-              v-if="parentCommentData.page && !parentCommentData.page.last"
+              v-if="commentTree.page && commentTree.page.last === false"
               href
               class="post__comment-more"
-              @click.prevent="getParentComment"
+              @click.prevent="getComment"
             >Xem thêm {{ numOfViewMoreParentComment }} bình luận ...</a>
           </div>
 
           <div
-            v-if="!listParentComments.length"
+            v-if="commentTree.comments && !commentTree.comments.length"
             class="post__comment-empty text-center text-sub"
           >Bài viết chưa có bình luận.</div>
         </div>
 
-        <CommentEditor class="post__comment-editor mb-3" @submit="postComment" />
+        <CommentEditor class="post__comment-editor my-3" @submit="postComment" />
       </template>
 
-      <div class="text-center" v-if="btnCommentLoading">
+      <div class="text-center" v-else-if="isFetchingComment">
         <app-spin />
       </div>
     </div>
@@ -186,7 +184,8 @@ export default {
     post: {
       type: Object,
       default: () => ({})
-    }
+    },
+    isParentPost: Boolean
   },
 
   data() {
@@ -194,63 +193,54 @@ export default {
       edit: false,
       menuDropdown: false,
       btnLikeLoading: false,
-      btnCommentLoading: false,
+      isFetchingComment: false,
       isCommentFetched: false,
       shareWith: 0,
       shareWithOpts: [
         { value: 0, text: "Công khai" },
         { value: 1, text: "Bạn bè" },
         { value: 3, text: "Chỉ mình tôi" }
-      ],
-      parentCommentParams: {
-        page: 1,
-        limit: 10
-      },
-      parentCommentData: {}
+      ]
     };
   },
 
   computed: {
-    listParentComments() {
-      return this.parentCommentData.listParentComments || [];
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     },
 
     numOfViewMoreParentComment() {
-      const { page } = this.parentCommentData;
+      const { page = {} } = this.commentTree;
       return page.totalPages - page.number === 1
         ? page.totalElements % page.size
         : page.size;
     },
 
-    userId() {
-      const { $store: store = {} } = this;
-      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    commentTree() {
+      return this.post.$commentTree || {};
     }
   },
 
-  // created() {
-  //   this.getParentComment();
+  // mounted() {
+  //   this.getComment();
   // },
 
   watch: {
-    post(newValue, oldValue) {
-      if (newValue.post_id !== oldValue.post_id) {
-        this.resetFetchCommentData();
-        this.getParentComment();
+    post: {
+      immediate: true,
+      handler: function(newValue, oldValue) {
+        const newPostId = get(newValue, "post_id", null);
+        const oldPostId = get(oldValue, "post_id", null);
+        if (newPostId !== oldPostId) {
+          this.getComment(1);
+        }
       }
     }
   },
 
   methods: {
     get,
-
-    resetFetchCommentData() {
-      this.parentCommentData = {};
-      this.parentCommentParams = {
-        page: 1,
-        limit: 10
-      };
-    },
 
     handleClickDelete() {
       this.$emit("delete", this.post.post_id);
@@ -264,94 +254,26 @@ export default {
       this.btnLikeLoading = true;
     },
 
-    async getParentComment() {
-      this.btnCommentLoading = true;
-
-      const getComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.LIST
-      ]({
-        params: { ...this.parentCommentParams, source_id: this.post.post_id }
-      });
-
-      if (getComment.success) {
-        // Set to parent comment data
-        const { listParentComments, page } = this.parentCommentData;
-        if (listParentComments && page) {
-          this.parentCommentData = {
-            listParentComments: [
-              ...listParentComments,
-              ...getComment.data.listParentComments
-            ],
-            page: getComment.data.page
-          };
-        } else {
-          this.parentCommentData = getComment.data;
-        }
-
-        // Set page param for the next request
-        this.parentCommentParams.page += 1;
-      } else {
-        this.$toasted.error(getComment.message);
-      }
-
-      this.btnCommentLoading = false;
-      this.isCommentFetched = true;
+    setIsFetchingComment(value = false) {
+      this.isFetchingComment = value;
     },
 
-    async postComment({ content, listTags, image, link }) {
-      const formData = new FormData();
-      const commentModel = createComment({
-        source_id: this.post.post_id,
-        comment_content: content,
-        list_tag: listTags,
-        comment_images: image,
-        comment_link: link
-      });
-
-      for (const key in commentModel) {
-        const value = commentModel[key];
-        if (value === null || value === undefined) continue;
-        // Check whether field is an array
-        formData.append(
-          key,
-          Array.isArray(value) ? JSON.stringify(value) : value
-        );
-      }
-
-      const doPostComment = await new CommentService(this.$axios)[
-        ACTION_TYPE_BASE.ADD
-      ](formData);
-
-      if (doPostComment.success) {
-        const timeout = setTimeout(
-          () => {
-            if ("listParentComments" in this.parentCommentData) {
-              const { listParentComments } = this.parentCommentData;
-              this.parentCommentData.listParentComments = [
-                doPostComment.data,
-                ...listParentComments
-              ];
-            } else {
-              this.parentCommentData = {
-                listParentComments: [doPostComment.data]
-              };
-            }
-            
-            clearTimeout(timeout);
-          },
-          image ? 1000 : 0
-        );
-      } else {
-        this.$toasted.error(doPostComment.message);
-      }
+    setIsCommentFetched(value = false) {
+      this.isCommentFetched = value;
     },
 
-    handleDeleted(id) {
-      if ("listParentComments" in this.parentCommentData) {
-        this.parentCommentData.listParentComments = this.parentCommentData.listParentComments.filter(
-          comment => comment.id !== id
-        );
-      }
+    getComment() {
+      this.$emit(
+        "get-comment",
+        this.post.post_id,
+        get(this.commentTree, "page.number", 0) + 1,
+        this.setIsFetchingComment,
+        this.setIsCommentFetched
+      );
+    },
+
+    postComment(...args) {
+      this.$emit("post-comment", this.post.post_id, ...args);
     }
   }
 };

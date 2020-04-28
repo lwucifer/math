@@ -1,38 +1,58 @@
 <template>
-  <div class="school-side">
-    <div class="school-side__avatar">
-      <app-avatar :src="avatarSrc" :size="125" />
-      <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadAvatar">
-          <template>
-            <div class="cgi-upload-avt-preview">
-              <IconPhoto width="13" height="13" />
-            </div>
-          </template>
-        </app-upload>
-    </div>
-    <p class="school-side__name mt-2">{{personalList.fullname}}</p>
+  <div class="school-side menu-side">
+    <!--<div class="school-side__avatar">-->
+      <!--<app-avatar :src="avatarSrc" :size="125" />-->
+      <!--<app-upload class="cgi-upload-avt change-avatar" @change="handleUploadAvatar">-->
+          <!--<template>-->
+            <!--<div class="cgi-upload-avt-preview">-->
+              <!--<IconPhoto width="13" height="13" />-->
+            <!--</div>-->
+          <!--</template>-->
+        <!--</app-upload>-->
+    <!--</div>-->
+    <!--<p class="school-side__name mt-2">{{personalList.fullname}}</p>-->
     <div class="school-side__links">
-      <n-link class="link-gray" to='/_id/info/' :class="active == 1 ? 'active' : ''">
-        <IconUser3 width="20" height="20"/>Thông tin tài khoản
-      </n-link>
-      <n-link class="link-gray" to='/_id/info/withdrawals' :class="active == 2 ? 'active' : ''">
-        <IconHistory />Lịch sửa rút tiền
-      </n-link>
-      <n-link class="link-gray" to='/_id/info/revenues' :class="active == 3 ? 'active' : ''">
-        <IconHistory />Thống kê doanh thu
-      </n-link>
-      <n-link class="link-gray" to='/_id/info/transactions' :class="active == 4 ? 'active' : ''">
-        <IconHistory />Lịch sử giao dịch
-      </n-link>
-      <n-link class="link-gray" to='/_id/info/announcement' :class="active == 5 ? 'active' : ''">
-        <IconBell />Thông báo
-      </n-link>
-      <n-link class="link-gray" to='/_id/info/setting' :class="active == 6 ? 'active' : ''">
-        <IconBell />Cài đặt
-      </n-link>
-      <n-link class="link-gray" to :class="active == 7 ? 'active' : ''">
-        <IconExclamation />Trợ giúp
-      </n-link>
+      <div class="school-side__links__item" :class="active == 1 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/'>
+          <IconUser3 width="20" height="20"/>
+          <span>
+            Thông tin tài khoản
+          </span>
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 2 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/withdrawals'>
+          <IconHistory />
+          <span>
+            Lịch sửa rút tiền
+          </span>
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 3 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/revenues'>
+          <IconHistory />Thống kê doanh thu
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 4 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/transactions'>
+          <IconHistory />Lịch sử giao dịch
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 5 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/announcement'>
+          <IconBell />Thông báo
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 6 ? 'active' : ''">
+        <n-link class="link-gray" to='/_id/info/setting'>
+          <IconBell />Cài đặt
+        </n-link>
+      </div>
+      <div class="school-side__links__item" :class="active == 7 ? 'active' : ''">
+        <n-link class="link-gray" to>
+          <IconExclamation />Trợ giúp
+        </n-link>
+      </div>
     </div>
   </div>
 </template>

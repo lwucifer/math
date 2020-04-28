@@ -8,6 +8,7 @@ export const BASE = {
     DETAIL: "detail",
     EDIT_PAYLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload",
+    EDIT_FORMDATA: "putWithFormData",
 };
 
 export const AUTH = {
@@ -54,6 +55,7 @@ export const SOCIAL_NOTIFICATIONS = {
     LIST: "socialNotifications",
     REGISTER_DEVICE: "registerDevice",
     READ_NOTIFICATION: "readNotification",
+    GET_NOTI_UNREAD: "getNotiUnread",
 };
 
 export const SOCIAL_CONFIG = {
@@ -77,8 +79,8 @@ export const SOCIAL = {
     // GET_LIKE_COMMENT: "socialGetLikeComment",
     // GET_LIKE_CHILD_COMMENT: "socialGetLikeChildComment",
     LIKE_POST: "socialLikePost",
-    // LIKE_COMMENT: "socialLikeComment",
-    // LIKE_CHILD_COMMENT: "socialLikeChildComment",
+    LIKE_COMMENT: "socialLikeComment",
+    LIKE_CHILD_COMMENT: "socialLikeChildComment",
     GET_COMMENT: "socialGetComment",
     ADD_COMMENT: "socialAddComment",
     EDIT_COMMENT: "socialEditComment",
@@ -90,8 +92,22 @@ export const SOCIAL = {
     SHARE: "socialShare",
     GET_LABELS: "socialGetLabels",
     GET_CONFIGS: "socialGetConfigs",
-    GET_MODAL_DETAIL_POST: "getModalDetailPost"
-}
+    GET_DETAIL_POST: "socialGetDetailPost",
+    EDIT_DETAIL_POST: "socialEditDetailPost",
+    DELETE_DETAIL_POST: "socialDeleteDetailPost",
+    LIKE_DETAIL_POST: "socialLikeDetailPost",
+    CLEAR_DETAIL_POST: "socialClearDetailPost",
+    GET_COMMENT_DETAIL_POST: "socialGetCommentDetailPost",
+    ADD_COMMENT_DETAIL_POST: "socialAddCommentDetailPost",
+    EDIT_COMMENT_DETAIL_POST: "socialEditCommentDetailPost",
+    DELETE_COMMENT_DETAIL_POST: "socialDeleteCommentDetailPost",
+    LIKE_COMMENT_DETAIL_POST: "socialLikeCommentDetailPost",
+    GET_CHILD_COMMENT_DETAI_POST: "socialGetChildCommentDetailPost",
+    ADD_CHILD_COMMENT_DETAIL_POST: "socialAddChildCommentDetailPost",
+    EDIT_CHILD_COMMENT_DETAIL_POST: "socialEditChildCommentDetailPost",
+    DELETE_CHILD_COMMENT_DETAIL_POST: "socialDeleteChildCommentDetailPost",
+    LIKE_CHILD_COMMENT_DETAIL_POST: "socialLikeChildCommentDetailPost",
+};
 
 export const ACCOUNT_PERSONAL = {
     LIST: "accountPersonalList",
@@ -164,7 +180,11 @@ export const ELEARNING_PUBLIC_SEARCH = {
 };
 
 export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
-    LIST: "elearningPublicVotedElearning",
+    LIST: "elearningPublicVotedElearningList",
+};
+
+export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
+    LIST: "elearningPublicSchoolYearList",
 };
 
 export const ELEARNING = {
@@ -203,6 +223,10 @@ export const TEACHING_OLCLASS_LESSONS = {
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",
     EDIT: "teachingOlclassLessonAttendancesEdit",
+    SUMMARY: "teachingOlclassLessonAttendancesSummary",
+};
+export const TEACHING_OLCLASS_LESSON_SESSIONS = {
+    LIST: "teachingOlclassLessonSessionsList",
 };
 
 export const CREATING_CHAPTER = {
@@ -276,6 +300,10 @@ export const ELEARNING_TEACHING_EVALUATION = {
 
 export const ELEARNING_TEACHING_VOTE = {
     LIST: "elearningTeachingVoteList",
+};
+
+export const ELEARNING_TEACHING_CLASS = {
+    LIST: "elearningTeachingClassList",
 };
 
 export const ELEARNING_CREATING_EXERCISES = {
@@ -440,6 +468,20 @@ export const TEACHING_STUDENTS = {
     LIST: "teachingStudentsList",
     DELETE: "teachingStudentsDelete",
 };
+
+export const PAYMENT = {
+    POST_PAY: "postPay",
+    POST_ORDER: "postOder",
+    POST_HASHKEY: "postHashKeyGenerate",
+    VALIDATE_TRANSACTION: "validateTransaction",
+};
+
+export const CART = {
+    LIST: "cartList",
+    ADD: "cartAdd",
+    DELETE: "cartDelete",
+};
+
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",
 };

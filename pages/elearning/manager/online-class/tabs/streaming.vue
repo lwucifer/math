@@ -159,12 +159,12 @@ export default {
       courses: [],
       isAuthenticated: true,
       pagination: {
-        total: 15,
-        page: 1,
-        pager: 10,
-        totalElements: 55,
-        first: 1,
-        last: 10
+        total: 0,
+        number: 0,
+        size: 10,
+        totalElements: 0,
+        first: 0,
+        last: 0
       },
       classList: [],
       lessonList: [],
@@ -195,7 +195,7 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       that.params.size = that.pagination.size;
-      that.params.page = that.pagination.page;
+      that.params.page = that.pagination.number + 1;
       that.getList();
     },
     submit() {

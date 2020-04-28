@@ -80,23 +80,11 @@ export const SUBMISSION_RESULTS = {
 export const SCALE_MARK = 10;
 
 export const FINGERPRINT_PROPS = [
-    "name",
-    "screenResolution",
-    "availableScreenResolution",
+    "userAgent",
     "brandModel",
     "language",
-    "timezone",
-    "timezoneOffset",
-    "userAgent",
-    "plugins",
-    "canvas",
-    "webglVendorAndRenderer",
-    "audio",
     "platform",
-    "fingerPrint",
     "deviceId",
-    "type",
-    "relatedDevices",
     "deviceMemory",
     "hardwareConcurrency",
     "sessionStorage",
@@ -108,4 +96,8 @@ export const DEVICE_TYPE = {
     WEB: "WEB",
     MOBILE_APP: "MOBILE_APP",
     DESKTOP_APP: "DESKTOP_APP",
+};
+export const UPDATE_NOTI = {
+    ALL: "All",
+    ONLY_ONE: "ONLY_ONE",
 };

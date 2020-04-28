@@ -1,14 +1,44 @@
 <template>
-  <div class="auth auth-signin">
-    <div class="auth__main">
-      <h3>Đăng nhập</h3>
-      <div class="auth__nav">
-        <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
-        <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="wrap-form_auth">
+          <div class="head-form_auth">
+            <h3>Đăng nhập</h3>
+              <div class="auth__nav-v2">
+                <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+                <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+              </div>
+            </div>
+            <div class="px-4">
+              <SigninEmail v-show="byEmail" />
+              <SigninPhone v-show="!byEmail" />
+            </div>
+            <p class="title-either_auth">hoặc</p>
+            <div>
+              <p>Đăng ký nhanh với</p>
+              <div class="mt-3 mb-15">
+                <app-button class="btn-social btn-facebook">
+                  <IconFacebook class="mr-2" />Facebook
+                </app-button>
+                <app-button class="btn-social btn-google">
+                  <IconGoogle class="mr-2" />Google
+                </app-button>
+              </div>
+              <div>
+                <span>Đã có tài khoản?</span>
+                <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+              </div>
+          </div>
+          <!--
+            <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none mb-4">Quên mật khẩu?</n-link>
+          -->
+          </div>
       </div>
-      <SigninEmail v-show="byEmail" />
-      <SigninPhone v-show="!byEmail" />
-      <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none">Quên mật khẩu?</n-link>
+      <div class="col-md-6 text-center">
+        <h1 class="color-primary">Schoolly</h1>
+        <img src="~assets/images/auth/image 13.png">
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +55,10 @@ import SigninPhone from "~/components/page/auth/signin/SigninPhone";
 import Fingerprint2 from "fingerprintjs2";
 import * as constants from "~/utils/constants";
 
+import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
+import IconGoogle from "~/assets/svg/icons/google.svg?inline";
 export default {
-  components: { SigninEmail, SigninPhone },
+  components: { SigninEmail, SigninPhone,IconFacebook,IconGoogle },
 
   data() {
     return {
@@ -109,5 +141,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

@@ -2,7 +2,9 @@ import Cookie from "js-cookie";
 import {
     SCHOOLLY_ACCESS_TOKEN,
     TOKEN_USER_SCHOOLLY,
-    UNAUTHORIZE_API
+    UNAUTHORIZE_API,
+    DEVICE_ID,
+    CLIENT_INFO_API
 } from "./config";
 
 /**
@@ -20,6 +22,14 @@ export const getToken = () => {
     if (process.server) return;
     const token = window.localStorage.getItem(TOKEN_USER_SCHOOLLY);
     return token ? JSON.parse(token) : null;
+};
+
+/**
+ * get device_id from local storage
+ */
+export const getDeviceId = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(DEVICE_ID);
 };
 
 /**
@@ -49,6 +59,14 @@ export const setToken = _token => {
     if (process.server) return;
     // console.log("[setToken] localStorage", _token);
     window.localStorage.setItem(TOKEN_USER_SCHOOLLY, JSON.stringify(_token));
+};
+
+export const setDeviceId = _deviceId => {
+    console.log("[auth][setDeviceId]",_deviceId);
+    if (!_deviceId) return;
+    Cookie.set(DEVICE_ID, _deviceId);
+    if (process.server) return;
+    window.localStorage.setItem(DEVICE_ID, _deviceId);
 };
 
 export const removeToken = () => {
@@ -89,6 +107,19 @@ export const getAccessTokenFromCookie = req => {
     return userCookie;
 };
 
+/**
+ * get device_id from cookie
+ */
+export const getDeviceIdFromCookie = req => {
+    if (!req || !req.headers || !req.headers.cookie) return;
+    const jwtCookie = req.headers.cookie
+        .split(";")
+        .find(c => c.trim().startsWith(DEVICE_ID));
+    if (!jwtCookie) return null;
+    const userCookie = jwtCookie.split("=")[1];
+    return userCookie;
+};
+
 export const checkRequestAuthorize = _url => {
     const urls = _url.split("?");
     // console.log("urls", urls);
@@ -105,4 +136,23 @@ export const checkRequestAuthorize = _url => {
     }
 
     return true;
+};
+
+export const checkRequestClientInfo = _url => {
+    const urls = _url.split("?");
+
+    let check = false;
+
+    CLIENT_INFO_API.map(item => {
+        if (urls[0].includes(item)) {
+            check = true;
+        }
+    })
+
+    // public api
+    // if (CLIENT_INFO_API.indexOf(urls[0])) {
+    //     return true;
+    // }
+
+    return check;
 };

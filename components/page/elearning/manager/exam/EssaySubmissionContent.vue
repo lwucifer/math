@@ -31,7 +31,7 @@
     },
     computed: {
       hasManyQues: function() {
-        return this.contents.length > 0
+        return this.contents.length > 1
       }
     },
     data() {

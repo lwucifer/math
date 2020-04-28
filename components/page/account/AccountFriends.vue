@@ -118,7 +118,8 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["friendList", "inviteList"])
+    ...mapState("account", ["friendList", "inviteList"]),
+    ...mapState("message", ["friendList"])
   },
 
   methods: {}

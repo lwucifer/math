@@ -185,7 +185,7 @@
                     <div>
                       <app-date-picker
                         class="ml-3"
-                        v-model="timeApply.start"
+                        v-model="params.schedules[0].from_date"
                         square
                         size="sm"
                         label="Từ"
@@ -197,7 +197,7 @@
                       </app-date-picker>
                       <app-date-picker
                         class="ml-3"
-                        v-model="timeApply.end"
+                        v-model="params.schedules[0].to_date"
                         square
                         size="sm"
                         label="Đến"
@@ -229,6 +229,24 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
     />
+
+    <app-modal
+        centered
+        :width="408"
+        :component-class="{ 'app-modal-confirm': true }"
+        @close="$router.push('/')"
+        v-if="showNotify"
+    >
+        <div slot="content">
+          <div class="text-center pt-4 pb-4">
+            <a class="btn-close" @click="showNotify = false">X</a>
+            <p class="title mb-4">{{message}}</p>
+            <div class="text-center">
+                <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
+            </div>
+            </div>
+        </div>
+    </app-modal>
   </div>
 </template>
 
@@ -236,7 +254,6 @@
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
-
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
 
 import { get, reject } from "lodash";
@@ -250,16 +267,14 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 function initialState (){
   return {
     tab: 1,
+    message: "",
     fullParams: false,
     sendMess: "0",
     downloadVideo: "0",
     showModalConfirm: false,
+    showNotify: false,
     confirmLoading: false,
     showBonus: false,
-    timeApply: {
-      start: null,
-      end: null
-    },
     startTime: {
       time: {
         value: "1:00",
@@ -506,7 +521,6 @@ export default {
         newValue.schedules[0].start_time != "" &&
         newValue.schedules[0].duration != "" &&
         newValue.schedules[0].days_of_week != "" ;
-      console.log(newValue, this.fullParams)
      },
      deep: true
       
@@ -517,13 +531,18 @@ export default {
     async handleOk() {
       try {
         this.confirmLoading = true;
-        this.params.schedules[0].from_date = this.timeApply.start;
-        this.params.schedules[0].to_date = this.timeApply.end;
-        await this.$store.dispatch(
+        const doCreate = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
           JSON.stringify(this.params)
         );
+        if (doCreate.success) {
+          this.fnCancel();
+          this.message = "Tạo phòng học thành công!"
+          this.showNotify = true;
+        }
       } catch (e) {
+        this.message = e;
+        this.showNotify = true;
       } finally {
         this.confirmLoading = false;
         this.showModalConfirm = false;
