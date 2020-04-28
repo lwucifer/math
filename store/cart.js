@@ -1,6 +1,6 @@
-import * as actionTypes from "../utils/action-types";
-import * as mutationTypes from "../utils/mutation-types";
-import Cart from "../services/Cart";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
+import Cart from "~/services/Cart";
 
 /**
  * initial state

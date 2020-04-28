@@ -79,7 +79,6 @@ import {
   SOCIAL as ACTION_TYPE_SOCIAL
 } from "~/utils/action-types";
 import { createLike } from "~/models/social/Like";
-import LikesService from "~/services/social/likes";
 
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
@@ -99,12 +98,14 @@ export default {
   props: {
     loading: Boolean,
     isParentPost: Boolean,
-    parentPostId: {
-      type: Number,
-      required: true
+    parentPost: {
+      type: Object,
+      required: true,
+      default: () => ({})
     },
     post: {
       type: Object,
+      required: true,
       default: () => ({})
     }
   },
@@ -112,7 +113,7 @@ export default {
   data() {
     return {
       dropdownShow: false,
-      localPost: this.post
+      localPost: {}
     };
   },
 
@@ -151,20 +152,19 @@ export default {
         return get(this.localPost, "link_image.high", null);
       }
     },
-
-    parentPost() {
-      return this.$store.getters[`social/post`](this.parentPostId);
-    }
   },
 
   watch: {
     post(newValue) {
-      this.localPost = newValue;
+      this.localPost = newValue || {};
     },
 
-    parentPost(newValue) {
-      if (this.isParentPost) {
-        this.localPost = newValue;
+    parentPost: {
+      immediate: true,
+      handler: function(newValue) {
+        if (this.isParentPost) {
+          this.localPost = newValue;
+        }
       }
     }
   },

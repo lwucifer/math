@@ -88,7 +88,7 @@
         <app-spin />
       </div>
 
-      <div v-if="commentTree.page && !commentTree.page.last" class="text-center">
+      <div v-if="commentTree.page && commentTree.page.last === false" class="text-center">
         <a
           href
           class="post__comment-more"
@@ -103,7 +103,6 @@
 
 <script>
 import { get, uniqWith, isEmpty } from "lodash";
-import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
   BASE as ACTION_TYPE_BASE,
