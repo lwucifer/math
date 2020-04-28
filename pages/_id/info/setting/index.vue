@@ -2,7 +2,7 @@
   <div class="container">
       <div class="row">
           <div class="col-md-3">
-            <SchoolAccountSide :active="6" />
+            <SchoolAccountSide active="6" />
           </div>
           <div class="col-md-9 cc-panel bg-white pt-4 px-5">
               <h5 class="color-primary mb-4">Cài đặt chung</h5>
