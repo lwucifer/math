@@ -4,6 +4,7 @@ import Notifications from "~/services/notification/notifications";
 import { isEmpty } from "lodash";
 import NotiUnRead from "~/services/notification/NotiUnRead";
 import { UPDATE_NOTI } from "~/utils/constants";
+import RegisterDevice from "~/services/notification/RegisterDevice";
 
 /**
  * initial state
