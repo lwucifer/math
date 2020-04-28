@@ -138,14 +138,14 @@ module.exports = {
             measurementId: process.env.FB_MEASUREMENT_ID,
             fcmPublicVapidKey: process.env.FB_FCM_PUBLIC_VAPI_KEY,
         },
-        onFirebaseHosting: false,
+        // onFirebaseHosting: false,
         services: {
-            auth: {
-                initialize: {
-                    onAuthStateChangedAction: 'onAuthStateChanged'
-                },
-                ssr: true
-            },
+            // auth: {
+            //     initialize: {
+            //         onAuthStateChangedAction: 'onAuthStateChanged'
+            //     },
+            //     ssr: true
+            // },
             //   firestore: true,
             //   functions: {
             //     // emulatorPort: 12345

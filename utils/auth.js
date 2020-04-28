@@ -4,7 +4,8 @@ import {
     TOKEN_USER_SCHOOLLY,
     UNAUTHORIZE_API,
     DEVICE_ID,
-    CLIENT_INFO_API
+    CLIENT_INFO_API,
+    FIREBASE_TOKEN
 } from "./config";
 
 /**
@@ -31,6 +32,15 @@ export const getDeviceId = () => {
     if (process.server) return;
     return window.localStorage.getItem(DEVICE_ID);
 };
+
+/**
+ * get firebase_token from local storage
+ */
+export const getFirebaseToken = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(FIREBASE_TOKEN);
+};
+
 
 /**
  * set bearer token after login success
@@ -62,11 +72,17 @@ export const setToken = _token => {
 };
 
 export const setDeviceId = _deviceId => {
-    console.log("[auth][setDeviceId]",_deviceId);
+    console.log("[auth][setDeviceId]", _deviceId);
     if (!_deviceId) return;
     Cookie.set(DEVICE_ID, _deviceId);
     if (process.server) return;
     window.localStorage.setItem(DEVICE_ID, _deviceId);
+};
+
+export const setFirebaseToken = _fbToken => {
+    console.log("[auth][setFirebaseToken]", _fbToken);
+    if (!_fbToken) return;
+    window.localStorage.setItem(FIREBASE_TOKEN, _fbToken);
 };
 
 export const removeToken = () => {
