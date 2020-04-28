@@ -71,6 +71,7 @@ export default {
   },
   async mounted() {
     await this.$recaptcha.init();
+    console.log("[Signin] fireMess", this.$fireMess);
   },
   methods: {
     ...mapActions("auth", ["login"]),
@@ -134,9 +135,9 @@ export default {
       }
     }
   },
-  mounted() {
-    this.initFingerPrint();
-  }
+  // mounted() {
+    // this.initFingerPrint();
+  // }
 };
 </script>
 
