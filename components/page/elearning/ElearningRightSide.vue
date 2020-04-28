@@ -75,9 +75,10 @@
         <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
-    <PaymentModal :show="showModalPayment"
-                  :fail="AddCartFail"
-                  @close-modal="handleCloseModal"
+    <PaymentModal
+      v-if="showModalPayment"
+      :fail="AddCartFail"
+      @close-modal="handleCloseModal"
     />
   </div>
 </template>
@@ -99,7 +100,7 @@ import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 
-import PaymentModal from "~/components/page/payment/PaymentModal"
+import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
   components: {
     IconShare,
@@ -109,7 +110,7 @@ export default {
     IconLessons,
     IconSubject,
     IconBook,
-    PaymentModal
+    PaymentModal,
   },
   props: {
     info: {
@@ -121,8 +122,7 @@ export default {
   data() {
     return {
       showModalPayment: false,
-      AddCartFail:false
-
+      AddCartFail: false,
     };
   },
 
@@ -136,22 +136,19 @@ export default {
     ...mapActions("cart", ["cartAdd"]),
 
     handleAddToCart() {
-      console.log("[handleAddToCart]", this.info);
-      this.cartAdd({ elearning_id: this.info.id }).then(result => {
-        console.log("[handleAddToCart] cartAdd", result);
-        if(result.success){
-          this.showModalPayment = true;
-        }
-        else{
-          this.showModalPayment = true;
+      const elearning_id = get(this, "info.id", "");
+      this.cartAdd({ elearning_id }).then((result) => {
+        this.showModalPayment = true;
+        if (!result.success) {
           this.AddCartFail = true;
         }
       });
     },
-    handleCloseModal(){
-      this.showModalPayment = false
-    }
-  }
+    handleCloseModal() {
+      this.showModalPayment = false;
+      this.AddCartFail = false;
+    },
+  },
 };
 </script>
 
