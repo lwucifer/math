@@ -103,7 +103,6 @@
 
 <script>
 import { get, uniqWith, isEmpty } from "lodash";
-import CommentService from "~/services/social/comments";
 import {
   SOCIAL_COMMENTS as ACTION_TYPE_SOCIAL_COMMENTS,
   BASE as ACTION_TYPE_BASE,

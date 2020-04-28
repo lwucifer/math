@@ -140,7 +140,6 @@
 
 <script>
 import { get } from "lodash";
-import CommentService from "~/services/social/comments";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { createComment } from "~/models/social/Comment";
 

@@ -79,7 +79,6 @@ import {
   SOCIAL as ACTION_TYPE_SOCIAL
 } from "~/utils/action-types";
 import { createLike } from "~/models/social/Like";
-import LikesService from "~/services/social/likes";
 
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";

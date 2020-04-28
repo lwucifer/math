@@ -373,13 +373,8 @@ import {
   TIMELINE_SLIDER_ITEMS
 } from "~/server/fakedata/timeline";
 import { VclFacebook } from "vue-content-loading";
-import FeedsService from "~/services/social/feeds";
-import SocialPostsService from "~/services/social/post";
-import LikesService from "~/services/social/likes";
-import ShareService from "~/services/social/shares";
 import LimitMessagesSerice from "~/services/message/LimitMessages";
 import SearchService from "~/services/elearning/public/Search";
-import PostService from "~/services/social/post";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
