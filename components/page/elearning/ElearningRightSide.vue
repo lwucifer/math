@@ -76,7 +76,7 @@
       </a>
     </div>
     <PaymentModal
-      :show="showModalPayment"
+      v-if="showModalPayment"
       :fail="AddCartFail"
       @close-modal="handleCloseModal"
     />
@@ -136,19 +136,17 @@ export default {
     ...mapActions("cart", ["cartAdd"]),
 
     handleAddToCart() {
-      console.log("[handleAddToCart]", this.info);
-      this.cartAdd({ elearning_id: this.info.id }).then((result) => {
-        console.log("[handleAddToCart] cartAdd", result);
-        if (result.success) {
-          this.showModalPayment = true;
-        } else {
-          this.showModalPayment = true;
+      const elearning_id = get(this, "info.id", "");
+      this.cartAdd({ elearning_id }).then((result) => {
+        this.showModalPayment = true;
+        if (!result.success) {
           this.AddCartFail = true;
         }
       });
     },
     handleCloseModal() {
       this.showModalPayment = false;
+      this.AddCartFail = false;
     },
   },
 };
