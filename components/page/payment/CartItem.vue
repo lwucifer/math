@@ -22,24 +22,29 @@
 
 <script>
 import { mapActions } from "vuex";
+import { get } from "lodash";
+import { getDeviceID } from "~/utils/common";
+
 export default {
   name: "CartItem",
 
   props: {
     item: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   methods: {
     ...mapActions("cart", ["cartDelete"]),
 
     deleteCartItem() {
-      console.log("[deleteCartItem]", this.item);
-      this.cartDelete(this.item.elearning_id);
-    }
-  }
+      const elearning_id = get(this, "item.elearning_id", "");
+      this.cartDelete(elearning_id).then((res) => {
+        console.log(res);
+      });
+    },
+  },
 };
 </script>
 
