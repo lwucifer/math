@@ -248,6 +248,7 @@ import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
 import { UPDATE_NOTI } from "~/utils/constants";
+import { detectBrowser } from "~/utils/common";
 
 export default {
   components: {
@@ -280,6 +281,9 @@ export default {
       return this.$store.getters["auth/isAuthenticated"];
     },
     ...mapGetters("cart", ["cartCheckout"]),
+  },
+  mounted() {
+    console.log("detectBrowser", detectBrowser());
   },
   created() {
     this.getNotiUnread();
