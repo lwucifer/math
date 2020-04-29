@@ -16,7 +16,7 @@
     </div>
     <app-button
       square
-      class="mt-4"
+      class="mt-4 btn-view-cart"
       @click.prevent="$router.push('/payment/cart')"
       >Xem giỏ hàng và thanh toán</app-button
     >
@@ -59,8 +59,11 @@ export default {
   // visibility: hidden;
   .btn-close-modal {
     top: 7%;
-    right: 7%;
+    right: 5%;
     position: absolute;
+  }
+  .btn-view-cart{
+      font-size: 14px;
   }
 }
 @-webkit-keyframes fadein {

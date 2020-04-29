@@ -34,7 +34,15 @@ module.exports = {
         PAYMENT_VPC_MERCHANT: process.env.PAYMENT_VPC_MERCHANT,
         PAYMENT_VPC_TICKETNO: process.env.PAYMENT_VPC_TICKETNO,
         PAYMENT_AGAIN_LINK: process.env.PAYMENT_AGAIN_LINK,
-
+        FB_API_KEY: process.env.FB_API_KEY,
+        FB_AUTH_DOMAIN: process.env.FB_AUTH_DOMAIN,
+        FB_DB_URL: process.env.FB_DB_URL,
+        FB_PROJECT_ID: process.env.FB_PROJECT_ID,
+        FB_STORAGE_BUCKET: process.env.FB_STORAGE_BUCKET,
+        FB_MESSAGING_SENDER_ID: process.env.FB_MESSAGING_SENDER_ID,
+        FB_APP_ID: process.env.FB_APP_ID,
+        FB_MEASUREMENT_ID: process.env.FB_MEASUREMENT_ID,
+        FB_FCM_PUBLIC_VAPI_KEY: process.env.FB_FCM_PUBLIC_VAPI_KEY,
     },
 
     /**
@@ -56,7 +64,7 @@ module.exports = {
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
         { src: "@/plugins/vue-moment.js" },
-        { src: "@/plugins/firebase-auth.js" },
+        // { src: "@/plugins/firebase-auth.js" },
         { src: "@/plugins/vue-select.js" },
         { src: "@/plugins/filters.js" },
         { src: "@/plugins/vue-fragment.js" },
@@ -82,7 +90,9 @@ module.exports = {
         "@nuxtjs/style-resources",
         "@nuxtjs/svg",
         "portal-vue/nuxt",
-        "@nuxtjs/recaptcha"
+        "@nuxtjs/recaptcha",
+        '@nuxtjs/pwa',
+        '@nuxtjs/firebase'
     ],
 
     /*
@@ -98,7 +108,7 @@ module.exports = {
         retry: {
             retries: 0
         }, // interceptor retry time request
-        debug: true // default false
+        debug: false // default false
     },
 
     recaptcha: {
@@ -114,6 +124,59 @@ module.exports = {
             "~assets/scss/abstracts/*.scss",
             "~assets/scss/vendors/*.scss"
         ]
+    },
+
+    firebase: {
+        config: {
+            apiKey: process.env.FB_API_KEY,
+            authDomain: process.env.FB_AUTH_DOMAIN,
+            databaseURL: process.env.FB_DB_URL,
+            projectId: process.env.FB_PROJECT_ID,
+            storageBucket: process.env.FB_STORAGE_BUCKET,
+            messagingSenderId: process.env.FB_MESSAGING_SENDER_ID,
+            appId: process.env.FB_APP_ID,
+            measurementId: process.env.FB_MEASUREMENT_ID,
+            fcmPublicVapidKey: process.env.FB_FCM_PUBLIC_VAPI_KEY,
+        },
+        // onFirebaseHosting: false,
+        services: {
+            // auth: {
+            //     initialize: {
+            //         onAuthStateChangedAction: 'onAuthStateChanged'
+            //     },
+            //     ssr: true
+            // },
+            //   firestore: true,
+            //   functions: {
+            //     // emulatorPort: 12345
+            //   },
+            //   storage: true,
+            //   realtimeDb: true,
+            //   performance: true,
+            //   analytics: true,
+            //   remoteConfig: {
+            //     settings: {
+            //       fetchTimeoutMillis: 60000,
+            //       minimumFetchIntervalMillis: 43200000
+            //     },
+            //     defaultConfig: {
+            //       welcome_message: 'Welcome'
+            //     }
+            //   },
+            messaging: {
+                createServiceWorker: true
+            }
+        }
+    },
+    pwa: {
+        workbox: {
+            importScripts: [
+                '/firebase-auth-sw.js'
+            ],
+            // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+            // only set this true for testing and remember to always clear your browser cache in development
+            dev: true
+        }
     },
 
     /*

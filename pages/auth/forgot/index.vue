@@ -1,47 +1,53 @@
 <template>
-  <div class="auth auth-forgot">
-    <div id="label-verify-phone"></div>
-    <div class="auth__main">
-      <h3>Quên mật khẩu?</h3>
-      <div class="auth_content mt-5">
-        <app-input
-          :message="messageErrorForgot"
-          :error="errorForgot"
-          :validate="validateForgot"
-          type="text"
-          v-model="email"
-          placeholder="Nhập số điện thoại hoặc email"
-          @input="hanldeEmail"
-        />
-        <app-button
-          color="primary"
-          square
-          fullWidth
-          @click="hanldeShowModalOTP"
-          class="mb-3"
-        >Khôi phục mật khẩu</app-button>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 d-flex align-items-center">
+        <div id="label-verify-phone"></div>
+        <div class="wrap-forgot-psw">
+          <h3 class="text-primary">Quên mật khẩu?</h3>
+          <div class="auth_content mt-5">
+            <app-input
+              :message="messageErrorForgot"
+              :error="errorForgot"
+              :validate="validateForgot"
+              type="text"
+              v-model="email"
+              placeholder="Nhập số điện thoại hoặc email"
+              @input="hanldeEmail"
+            />
+            <app-button
+              color="primary"
+              square
+              @click="hanldeShowModalOTP"
+              class="mb-3 btn-restore"
+            >Khôi phục mật khẩu</app-button>
+          </div>
+        </div>
+        <app-modal
+          centered
+          :width="400"
+          :component-class="{ 'auth-modal': true }"
+          v-if="modalConfirmEmail"
+        >
+          <!-- <h3 class="color-primary" slot="header">Đăng ký thành công</h3> -->
+
+          <div slot="content">
+            <p class="line-height-2">
+              <br />Vui lòng xác thực tài khoản qua email
+              <br />
+              <span class="color-primary">{{this.email}}</span>
+            </p>
+            <n-link
+              :to="'/auth/forgot/confirmsuccess'"
+              class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
+            >Xác thực tài khoản</n-link>
+          </div>
+        </app-modal>
+      </div>
+      <div class="col-md-6 text-center">
+        <ImageAuth/>
       </div>
     </div>
-    <app-modal
-      centered
-      :width="400"
-      :component-class="{ 'auth-modal': true }"
-      v-if="modalConfirmEmail"
-    >
-      <!-- <h3 class="color-primary" slot="header">Đăng ký thành công</h3> -->
-
-      <div slot="content">
-        <p class="line-height-2">
-          <br />Vui lòng xác thực tài khoản qua email
-          <br />
-          <span class="color-primary">{{this.email}}</span>
-        </p>
-        <n-link
-          :to="'/auth/signin'"
-          class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
-        >Xác thực tài khoản</n-link>
-      </div>
-    </app-modal>
   </div>
 </template>
 
@@ -56,9 +62,9 @@ import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
 import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
-
+import ImageAuth  from "~/components/page/auth/ImageAuth";
 export default {
-  components: {},
+  components: { ImageAuth },
 
   data() {
     return {
@@ -171,4 +177,5 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="cgi-form-group">
-    <h2 class="cgi-form-title heading-6 mb-4">Hình đại diện</h2>
+    <h2 class="cgi-form-title heading-6 mb-4">Hình đại diện cho bài giảng</h2>
 
     <div class="row csa-row">
       <div class="col csa-col csa-col--left mb-4">

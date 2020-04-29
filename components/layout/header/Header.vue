@@ -58,9 +58,11 @@
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
-          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">{{
+          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">
+            {{
             get(cartCheckout, "orders.length", 0)
-          }}</span>
+            }}
+          </span>
         </button>
         <app-dropdown
           position="right"
@@ -80,12 +82,12 @@
                 <div class="d-flex">
                   <h6>Thông báo</h6>
                   <div class="ml-auto">
-                    <n-link class="text-primary" to @click.native="unreadAll"
-                      >Đánh dấu tất cả đã đọc</n-link
-                    >
-                    <n-link class="ml-3 text-primary" to="/account/info/setting"
-                      >Cài đặt</n-link
-                    >
+                    <n-link
+                      class="text-primary"
+                      to
+                      @click.native="unreadAll"
+                    >Đánh dấu tất cả đã đọc</n-link>
+                    <n-link class="ml-3 text-primary" to="/account/info/setting">Cài đặt</n-link>
                   </div>
                 </div>
               </li>
@@ -112,9 +114,7 @@
                         <p>{{ item && item.meta_data }}</p>
                         <p>{{ item && item.created_at | moment("from") }}</p>
                       </div>
-                      <div
-                        class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover"
-                      >
+                      <div class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover">
                         <button
                           class="cc-box__btn cc-box__btn-edit"
                           v-tooltip.bottom="{
@@ -157,75 +157,21 @@
                 </infinite-loading>
               </client-only>
             </ul>
-            <!-- <ul>
-              <li class="text-center">
-                <n-link
-                  to="/account/info/announcement"
-                  class="text-primary font-weight-bold"
-                >Xem tất cả</n-link>
-              </li>
-            </ul>-->
           </div>
         </app-dropdown>
-        <app-dropdown
-          position="right"
-          v-model="dropdownAuth"
-          :content-width="'15rem'"
-          class="link--dropdown link--dropdown-auth item"
-        >
-          <app-avatar
-            slot="activator"
-            class="the-header__user-avt"
-            src="https://picsum.photos/60/60"
-            :size="44"
-          ></app-avatar>
-          <div class="link--dropdown__content">
-            <ul>
-              <li>
-                <n-link to="/elearning/manager">Quản lý E-Learning</n-link>
-              </li>
-              <li>
-                <n-link to>Quản lý học sinh</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info">Thông tin tài khoản</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info/revenues">Thống kê doanh thu</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info/transactions"
-                  >Lịch sử giao dịch</n-link
-                >
-              </li>
-              <li>
-                <n-link to>Cài đặt</n-link>
-              </li>
-              <li>
-                <n-link to>Thông báo</n-link>
-              </li>
-              <li>
-                <n-link to>Trợ giúp</n-link>
-              </li>
-              <li @click.prevent="handleLogout">
-                <n-link to>Đăng xuất</n-link>
-              </li>
-            </ul>
-          </div>
-        </app-dropdown>
+
+        <user-header />
       </div>
 
       <div v-else class="d-flex">
         <n-link
           class="btn btn--size-md btn--color-primary btn--square mr-3"
           :to="'/auth/signin'"
-          >Đăng nhập</n-link
-        >
+        >Đăng nhập</n-link>
         <n-link
           class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
           :to="'/auth/signup'"
-          >Đăng ký</n-link
-        >
+        >Đăng ký</n-link>
       </div>
     </div>
   </div>
@@ -262,7 +208,7 @@ export default {
     AnnoucementItem,
     IconTrashAlt,
     IconEllipseAlt,
-    IconEllipse,
+    IconEllipse
   },
 
   data: () => ({
@@ -273,14 +219,14 @@ export default {
     readAnnouncenment: true,
     read: false,
     notiList: [],
-    infiniteId: +new Date(),
+    infiniteId: +new Date()
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     },
-    ...mapGetters("cart", ["cartCheckout"]),
+    ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {
     console.log("detectBrowser", detectBrowser());
@@ -294,7 +240,7 @@ export default {
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
-      "getNotiUnread",
+      "getNotiUnread"
     ]),
     redirectSignin() {
       this.$router.push("/auth/signin");
@@ -310,9 +256,9 @@ export default {
     handleReadNotify(id) {
       const params = {
         update: UPDATE_NOTI.ONLY_ONE,
-        notification_id: id,
+        notification_id: id
       };
-      this.readNotification(params).then((result) => {
+      this.readNotification(params).then(result => {
         if (result.success == true) {
         }
       });
@@ -320,9 +266,9 @@ export default {
     // Handle unread all noti
     unreadAll() {
       const params = {
-        update: UPDATE_NOTI.ALL,
+        update: UPDATE_NOTI.ALL
       };
-      this.readNotification(params).then((result) => {
+      this.readNotification(params).then(result => {
         if (result.success == true) {
         }
       });
@@ -337,8 +283,8 @@ export default {
         `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
         {
           params: {
-            page: get(this, "notis.page.number", 0) + 1,
-          },
+            page: get(this, "notis.page.number", 0) + 1
+          }
         }
       );
       console.log("getData", getData);
@@ -347,8 +293,8 @@ export default {
       } else {
         $state.complete();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

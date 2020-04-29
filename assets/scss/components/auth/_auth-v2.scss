@@ -76,3 +76,30 @@
         }
     }
 }
+.wrap-forgot-psw{
+    margin:100px auto;
+    padding:30px 55px;
+    width: 461px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    .btn-restore{
+        width: 293px;
+    }
+}
+.wrap-change-psw{
+    margin:100px auto;
+    width: 461px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+.wrap-success-auth{
+    width: 461px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 40px 0;
+}

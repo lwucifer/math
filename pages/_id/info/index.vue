@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :school="school" :active="1" />
+        <SchoolAccountSide active="1" />
       </div>
       <div class="col-md-9">
         <div class="school-account__main">
@@ -60,8 +60,6 @@
                 <school-info />
 
                 <department-info />
-                
-                
               </div>
             </template>
           </block-section>
@@ -104,7 +102,6 @@ export default {
   data() {
     return {
       isAuthenticated: true,
-      school: SCHOOL,
       name: "",
       phone: "",
       email: "",

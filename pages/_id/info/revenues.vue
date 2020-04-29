@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide active="3" :school="teacher" />
+        <SchoolAccountSide active="'3'" :school="teacher" />
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">

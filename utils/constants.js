@@ -101,3 +101,28 @@ export const UPDATE_NOTI = {
     ALL: "All",
     ONLY_ONE: "ONLY_ONE",
 };
+
+export const USER_ROLES = {
+    ROLE_USER: 'ROLE_USER',
+    ROLE_STUDENT: 'ROLE_STUDENT',
+    ROLE_TEACHER: 'ROLE_TEACHER',
+    ROLE_PARENT: 'ROLE_PARENT',
+    ROLE_SYSTEM_ADMIN: 'ROLE_SYSTEM-ADMIN',
+    ROLE_ORG_ADMIN: 'ROLE_ORG-ADMIN',
+}
+
+export const ELEARNING_SIDE_MENU = {
+    
+}
+
+export const ACCOUNT_PROFILE_MENU = {
+    ELEARNING: 1,
+    STUDENT: 2,
+    ACCOUNT_INFO: 3,
+    REVENUE: 1,
+    TRANSACTION: 4,
+    NOTIFICATION: 5,
+    SETTINGS: 6,
+    SUPPORT: 7,
+    SIGNOUT: 8,
+}
