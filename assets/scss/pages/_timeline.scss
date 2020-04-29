@@ -26,3 +26,8 @@
     height: 4rem;
     min-width: 18rem;
 }
+
+.timeline-aside-wrapper {
+    max-height: calc(100vh - 101px);
+    overflow-y: auto;
+}
