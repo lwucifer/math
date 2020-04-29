@@ -1,6 +1,6 @@
 <template>
   <div class="auth__main">
-    <h3>Quên mật khẩu?</h3>
+    <h3 class="text-primary">Quên mật khẩu?</h3>
     <div class="auth_content mt-5">
       <app-input
         maxlength="6"
@@ -46,6 +46,7 @@
         @click="sendOTP"
         :class="countDown === 0 ? '' : 'disable'"
         class="btn-send-otp"
+        style="color:#E6A01E;"
       >Gửi lại mã xác thực ({{countDown}}s)</a>
     </div>
   </div>
@@ -128,7 +129,7 @@ export default {
             );
             const doAdd = this.forgotPassword(resetPassModelPhone).then(res => {
               if (res.success == true) {
-                this.$router.push("/auth/signin");
+                this.$router.push("/auth/forgot/success");
               } else {
                 this.showErrorChangePass(result);
               }

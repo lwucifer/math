@@ -3,22 +3,46 @@
     <n-link class="link-gray item" :to="'/elearning/manager/'" :class="active == 1 ? 'active' : ''">
       <IconDashboard width="20" height="20" />Tổng quan
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/courses/'" :class="active == 2 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/courses/'"
+      :class="active == 2 ? 'active' : ''"
+    >
       <IconBook width="20" height="20" />Bài giảng và khóa học
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/exams'" :class="active == 3 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/exams'"
+      :class="active == 3 ? 'active' : ''"
+    >
       <IconCalendar />Bài tập và bài kiểm tra
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/warehouses'" :class="active == 4 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/warehouses'"
+      :class="active == 4 ? 'active' : ''"
+    >
       <IconBooks />Kho học liệu
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/online-class'" :class="active == 5 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/online-class'"
+      :class="active == 5 ? 'active' : ''"
+    >
       <IconFolderCheck />Phòng học online
     </n-link>
-    <n-link class="link-gray item" :to ="'/elearning/manager/interacts'" :class="active == 6 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/interacts'"
+      :class="active == 6 ? 'active' : ''"
+    >
       <IconChatUser />Tương tác với học sinh
     </n-link>
-    <n-link class="link-gray item" :to="'/elearning/manager/rates'" :class="active == 8 ? 'active' : ''">
+    <n-link
+      class="link-gray item"
+      :to="'/elearning/manager/rates'"
+      :class="active == 8 ? 'active' : ''"
+    >
       <IconStar />Đánh giá và bình luận
     </n-link>
   </div>

@@ -4,7 +4,9 @@ import {
     TOKEN_USER_SCHOOLLY,
     UNAUTHORIZE_API,
     DEVICE_ID,
-    CLIENT_INFO_API
+    CLIENT_INFO_API,
+    FIREBASE_TOKEN,
+    DEVICE_OS
 } from "./config";
 
 /**
@@ -31,6 +33,23 @@ export const getDeviceId = () => {
     if (process.server) return;
     return window.localStorage.getItem(DEVICE_ID);
 };
+
+/**
+ * get firebase_token from local storage
+ */
+export const getFirebaseToken = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(FIREBASE_TOKEN);
+};
+
+/**
+ * get device_os from local storage
+ */
+export const getDeviceOs = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(DEVICE_OS);
+};
+
 
 /**
  * set bearer token after login success
@@ -62,11 +81,26 @@ export const setToken = _token => {
 };
 
 export const setDeviceId = _deviceId => {
-    console.log("[auth][setDeviceId]",_deviceId);
+    console.log("[auth][setDeviceId]", _deviceId);
     if (!_deviceId) return;
     Cookie.set(DEVICE_ID, _deviceId);
     if (process.server) return;
     window.localStorage.setItem(DEVICE_ID, _deviceId);
+};
+
+export const setDeviceOs = _deviceOs => {
+    console.log("[auth][setDeviceOs]", _deviceOs);
+    if (!_deviceOs) return;
+    Cookie.set(DEVICE_OS, _deviceOs);
+    if (process.server) return;
+    window.localStorage.setItem(DEVICE_OS, _deviceOs);
+};
+
+
+export const setFirebaseToken = _fbToken => {
+    console.log("[auth][setFirebaseToken]", _fbToken);
+    if (!_fbToken) return;
+    window.localStorage.setItem(FIREBASE_TOKEN, _fbToken);
 };
 
 export const removeToken = () => {
@@ -140,7 +174,6 @@ export const checkRequestAuthorize = _url => {
 
 export const checkRequestClientInfo = _url => {
     const urls = _url.split("?");
-
     let check = false;
 
     CLIENT_INFO_API.map(item => {
@@ -148,11 +181,6 @@ export const checkRequestClientInfo = _url => {
             check = true;
         }
     })
-
-    // public api
-    // if (CLIENT_INFO_API.indexOf(urls[0])) {
-    //     return true;
-    // }
 
     return check;
 };

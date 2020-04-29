@@ -5,39 +5,38 @@
         <div class="wrap-form_auth">
           <div class="head-form_auth">
             <h3>Đăng nhập</h3>
-              <div class="auth__nav-v2">
-                <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
-                <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
-              </div>
+            <div class="auth__nav-v2">
+              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+              <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
             </div>
-            <div class="px-4">
-              <SigninEmail v-show="byEmail" />
-              <SigninPhone v-show="!byEmail" />
+          </div>
+          <div class="px-4">
+            <SigninEmail v-show="byEmail" @signin="handleSigninSuccess" />
+            <SigninPhone v-show="!byEmail" @signin="handleSigninSuccess" />
+          </div>
+          <p class="title-either_auth">hoặc</p>
+          <div>
+            <p>Đăng ký nhanh với</p>
+            <div class="mt-3 mb-15">
+              <app-button class="btn-social btn-facebook">
+                <IconFacebook class="mr-2" />Facebook
+              </app-button>
+              <app-button class="btn-social btn-google">
+                <IconGoogle class="mr-2" />Google
+              </app-button>
             </div>
-            <p class="title-either_auth">hoặc</p>
             <div>
-              <p>Đăng ký nhanh với</p>
-              <div class="mt-3 mb-15">
-                <app-button class="btn-social btn-facebook">
-                  <IconFacebook class="mr-2" />Facebook
-                </app-button>
-                <app-button class="btn-social btn-google">
-                  <IconGoogle class="mr-2" />Google
-                </app-button>
-              </div>
-              <div>
-                <span>Đã có tài khoản?</span>
-                <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
-              </div>
+              <span>Đã có tài khoản?</span>
+              <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+            </div>
           </div>
           <!--
             <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none mb-4">Quên mật khẩu?</n-link>
           -->
-          </div>
+        </div>
       </div>
       <div class="col-md-6 text-center">
-        <h1 class="color-primary">Schoolly</h1>
-        <img src="~assets/images/auth/image 13.png">
+        <ImageAuth />
       </div>
     </div>
   </div>
@@ -46,19 +45,25 @@
 <script>
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { getDeviceID } from "~/utils/common";
+
 import {
   createSigninWithPhone,
   createSigninWithEmail
 } from "~/models/auth/Signin";
 import SigninEmail from "~/components/page/auth/signin/SigninEmail";
 import SigninPhone from "~/components/page/auth/signin/SigninPhone";
-import Fingerprint2 from "fingerprintjs2";
 import * as constants from "~/utils/constants";
+import { setFirebaseToken } from "~/utils/auth";
 
 import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
 import IconGoogle from "~/assets/svg/icons/google.svg?inline";
+import ImageAuth from "~/components/page/auth/ImageAuth";
+import { createRegisterDeviceModel } from '../../models/notifications/RegisterDevice';
+
+
 export default {
-  components: { SigninEmail, SigninPhone,IconFacebook,IconGoogle },
+  components: { SigninEmail, SigninPhone, IconFacebook, IconGoogle, ImageAuth },
 
   data() {
     return {
@@ -71,73 +76,57 @@ export default {
   },
   async mounted() {
     await this.$recaptcha.init();
-    console.log("[Signin] fireMess", this.$fireMess);
+
+    // check whether device_id is set or not?
+    const isDeviceIdExist = !!getDeviceID();
+    !isDeviceIdExist && this.initFingerPrint();
   },
   methods: {
     ...mapActions("auth", ["login"]),
-    ...mapMutations("auth", ["setCurrentDevice"]),
+    ...mapActions("notifications", ["registerDevice"]),
+
+    handleSigninSuccess(isSuccess) {
+      console.log("[handleSigninSuccess]", isSuccess);
+      this.getFirebaseToken(this.registerDevice);
+    },
+
     tabPhone() {
       (this.byEmail = false), (this.password = "");
     },
     tabEmail() {
       (this.byEmail = true), (this.password = "");
     },
-    fingerprintReport() {
-      Fingerprint2.get(components => {
-        let murmur = Fingerprint2.x64hash128(
-          components
-            .map(function(pair) {
-              return pair.value;
-            })
-            .join(),
-          31
-        );
-        const device_info = this.getDeviceInfoFromComponent(components);
-        console.log("[device_info]", device_info);
-        device_info.fingerPrint = murmur;
-        device_info.name = this.getDeviceName(device_info.userAgent);
-        console.log("[device_info] name", device_info.name);
-        device_info.type = constants.DEVICE_TYPE.WEB;
 
-        this.setCurrentDevice(device_info);
-      });
-    },
-    getDeviceInfoFromComponent(components) {
-      let deviceInfo = null;
-      let details = "{";
-      for (let index in components) {
-        let obj = components[index];
-        if (constants.FINGERPRINT_PROPS.includes(obj.key)) {
-          let line = `"${obj.key}":"${String(obj.value).substr(0, 100)}"`;
-          details += line;
-          if (parseInt(index) < components.length - 1) {
-            details += ",";
-          }
-        }
-      }
-      details += "}";
-      if (!details) return;
-      return JSON.parse(details);
-    },
-    getDeviceName(_userAgent) {
-      if (!_userAgent) return "Unknown";
-      const splits = _userAgent.split(/[(;)]/);
-      if (!splits || splits.length <= 3) return _userAgent;
-      const browser = splits[splits.length - 1] || "Unknown";
-      const app = splits[2] || "Unknown";
-      return `${browser.trim()} (${app.trim()})` || "Unknown";
-    },
     initFingerPrint() {
+      console.log("[initFingerPrint]", window.requestIdleCallback);
       if (window.requestIdleCallback) {
-        requestIdleCallback(this.fingerprintReport);
+        requestIdleCallback(getDeviceID);
       } else {
-        setTimeout(this.fingerprintReport, 500);
+        setTimeout(getDeviceID, 500);
       }
+    },
+
+    getFirebaseToken(callback) {
+      console.log("[getFirebaseToken]");
+      this.$fireMess
+        .requestPermission()
+        .then(granted => {
+          console.log("[Messaging] have permission", granted);
+          return this.$fireMess.getToken();
+        })
+        .then(token => {
+          console.log("[Messaging] token", token);
+          setFirebaseToken(token);
+
+          // register notification here
+          const deviceRegReq = createRegisterDeviceModel();
+          callback(deviceRegReq);
+        })
+        .catch(err => {
+          console.log("[Messaging] Error occured ", err);
+        });
     }
-  },
-  // mounted() {
-    // this.initFingerPrint();
-  // }
+  }
 };
 </script>
 

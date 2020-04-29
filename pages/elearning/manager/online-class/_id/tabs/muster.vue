@@ -13,12 +13,12 @@
 
     <!--Info group-->
     <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã mời: <span class="color-primary">50</span></strong>
+      <strong>Tổng số học sinh đã mời: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">95%</strong></div>
-        <div class="item">Tỷ lệ vắng có mặt: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">5%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">1%</strong></div>
+        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
       </div>
     </div>
     <!--end info group-->
@@ -107,6 +107,8 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
 export default {
+  layout: "manage",
+    
   components: {
     IconFilter,
     IconSearch,
@@ -252,7 +254,6 @@ export default {
           { params, id: online_class_id, after: 'attendant/summary/'}
         );
         this.summary = this.get(this.stateAttendantSummary, 'data', [])
-        console.log('xxxxxxx', this.summary)
       } catch (e) {
 
       } finally {

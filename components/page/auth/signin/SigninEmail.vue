@@ -86,8 +86,8 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
-            // enable FB Messaging
-            console.log("[Signin] fireMess", this.$fireMess);
+            this.$emit('signin', true);
+            
             this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);

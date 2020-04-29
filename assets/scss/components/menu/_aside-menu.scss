@@ -1,0 +1,53 @@
+
+.aside-menu {
+  &__item {
+    padding: 1rem 1.5rem;
+    background-color: #F9F9F9;
+    margin-bottom: 8px;
+    border-left: 4px solid #F9F9F9;
+    a {
+      color: #585858;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      svg path {
+        fill: #666;
+      }
+      &:hover {
+        svg path {
+          fill: $color-primary;
+        }
+      }
+      svg.icon {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 1.5rem;
+      }
+    }
+    &.active {
+      border-left: 4px solid $color-primary;
+      a {
+        color: $color-primary;
+        font-weight: 600;
+        svg {
+          path {
+            fill: $color-primary;
+          }
+        }
+      }
+    }
+    
+    &:hover {
+      border-color: #008329;
+      a {
+        color: #008329;
+        align-items: center;
+        svg {
+          path {
+            fill: #008329;
+          }
+        }
+      }
+    }
+  }
+}

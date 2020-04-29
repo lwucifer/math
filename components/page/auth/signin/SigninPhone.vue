@@ -46,8 +46,8 @@ import { required, minLength } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
-      phone: "",
-      password: "",
+      phone: "0356235645",
+      password: "quangTrung@123",
       error: "",
       errorMessage: {
         phone: "",
@@ -82,20 +82,7 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
-            // enable FB Messaging
-            console.log("[Signin] fireMess", this.$fireMess);
-            
-            this.$fireMess.requestPermission()
-                .then(() => {
-                    console.log("[Messaging] have permission");
-                    return this.$fireMess.getToken();
-                })
-                .then(token => {
-                    console.log("[Messaging] token", token)
-                })
-                .catch(err => {
-                    console.log("[Messaging] Error occured ", err);
-                })
+            this.$emit('signin', true);
 
             this.$router.push("/");
           } else {
@@ -161,7 +148,8 @@ export default {
           break;
       }
       this.messageErrorLogin = message;
-    }
+    },
+    
   }
 };
 </script>

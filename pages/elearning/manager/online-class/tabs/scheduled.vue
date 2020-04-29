@@ -90,6 +90,11 @@
           <span>{{row.time.day}}</span>
         </td>
       </template>
+      <template v-slot:cell(action)="{row}">
+        <td class="nowrap">
+          <a class @click="openModal(row.online_class_id)">Vào phòng học</a>
+        </td>
+      </template>
     </app-table>
     <!--End table-->
   </div>
@@ -111,6 +116,8 @@ const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
+  layout: "manage",
+    
   components: {
     IconFilter,
     IconSearch,
@@ -147,6 +154,9 @@ export default {
           name: "num_invitation",
           text: "Số học sinh đã mời",
           sort: true
+        },
+        {
+          name: "action"
         }
       ],
       courses: [],
@@ -289,6 +299,10 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
+    },
+
+    openModal(id) {
+
     },
 
     get

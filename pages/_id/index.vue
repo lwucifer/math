@@ -20,7 +20,7 @@
           </ul>
 
           <div class="tab-content">
-            <AccountTimeline />
+            <!-- <AccountTimeline /> -->
           </div>
         </div>
       </div>
