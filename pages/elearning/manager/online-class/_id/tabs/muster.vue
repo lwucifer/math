@@ -107,6 +107,8 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
 export default {
+  layout: "manage",
+    
   components: {
     IconFilter,
     IconSearch,

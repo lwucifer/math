@@ -116,6 +116,8 @@ const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
+  layout: "manage",
+    
   components: {
     IconFilter,
     IconSearch,

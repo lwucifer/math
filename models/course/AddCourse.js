@@ -7,6 +7,10 @@ class AddCourse {
       this.avatar = payload.avatar;
     }
 
+    if (payload.cover_image) {
+      this.cover_image = payload.cover_image;
+    }
+
     if (payload.benefit) {
       this.benefit = JSON.stringify(payload.benefit);
     }

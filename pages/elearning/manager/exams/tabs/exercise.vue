@@ -27,6 +27,8 @@ import { EXERCISE_CATEGORIES } from '~/utils/constants'
 const STORE_NAMESPACE = "elearning/teaching/exercise"
 
 export default {
+  layout: "manage",
+    
   components: {
     FilterForm,
     ListTable

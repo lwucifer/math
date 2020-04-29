@@ -59,6 +59,8 @@ $vs-border-radius: 0 !default;
     .vs__actions {
         padding: 4px 15px 0 3px;
     }
+
+    min-width: 180px;
 }
 
 .vs__selected + .vs__search {
