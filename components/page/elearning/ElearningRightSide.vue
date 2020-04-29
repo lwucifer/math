@@ -14,7 +14,12 @@
           >Miễn phí</b
         >
       </div>
-      <app-button color="secondary" fullWidth square class="text-uppercase mb-4"
+      <app-button
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mb-4"
+        @click="handleStudy"
         >Tham gia học</app-button
       >
     </template>
@@ -132,6 +137,10 @@ export default {
 
   methods: {
     get,
+
+    handleStudy() {
+      console.log(this.info)
+    },
 
     ...mapActions("cart", ["cartAdd"]),
     ...mapActions("cart", ["cartList"]),

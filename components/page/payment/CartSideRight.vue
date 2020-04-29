@@ -67,7 +67,7 @@ export default {
       });
       this.postHashKeyGenerate(hashKeyReq)
         .then(hashKeyRes => {
-          console.log("[postHashKeyGenerate]", hashKeyRes, hashKeyReq);
+          // console.log("[postHashKeyGenerate]", hashKeyRes, hashKeyReq);
 
           // STEP 3: Request Payment to OnePay
           if(hashKeyRes.success == RESPONSE_SUCCESS){
@@ -75,8 +75,8 @@ export default {
               process.env.PAYMENT_REQ_URL
             }?${qs.stringify(hashKeyRes.data)}`;
   
-            console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
-            alert(onepayUrlWithParams)
+            // console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
+            // alert(onepayUrlWithParams)
             window.location.href = onepayUrlWithParams;
           }
         })
