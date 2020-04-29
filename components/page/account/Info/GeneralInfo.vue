@@ -21,17 +21,15 @@
             @handleRefresh="handleRefresh"
           />
         </div>
-  
-        <div class="school-side__avatar">
-          <app-avatar :src="avatarSrc" :size="125" />
-          <app-upload class="cgi-upload-avt change-avatar" @change="handleUploadAvatar">
-            <template>
-              <div class="cgi-upload-avt-preview">
-                <IconPhoto width="13" height="13" />
-              </div>
-            </template>
-          </app-upload>
+        
+        <div class="app-input app-input--size-md">
+          <label class="app-input__label app-input__label--fixed">Ảnh đại diện</label>
+          <upload-avatar
+            :av-srt="avatarSrc"
+          >
+          </upload-avatar>
         </div>
+        
         <app-input labelFixed v-model="name" label="Họ và tên" disabled />
         <app-input v-model="phone" label="Số điện thoại" disabled />
         <app-input v-model="email" label="Email" disabled/>
@@ -57,6 +55,7 @@
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import AccountInfoStudent from "~/components/page/account/Info/AccountInfoStudent";
+import UploadAvatar from "~/components/page/account/Info/UploadAvatar";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
 import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
 import * as actionTypes from "~/utils/action-types";
@@ -76,6 +75,7 @@ export default {
     AccountInfoStudent,
     AccountChangePasswordModal,
     AccountLinkModal,
+    UploadAvatar
   },
   data() {
     return {
@@ -111,6 +111,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions("account", [
+      "accountPersonalEditAvatar",
+      "accountPersonalList"
+    ]),
     async fetchProfile(){
       await Promise.all([
         this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
@@ -126,20 +130,9 @@ export default {
     async handleRefresh(){
       this.fetchProfile();
     },
-    async handleUploadAvatar(fileList, event){
-      this.avatar = Array.from(fileList)
-      getBase64(this.avatar[0], src => {
-        this.avatarSrc = src;
-      })
-      const body = new FormData();
-      body.append("avatar_images", fileList[0]);
-      console.log("[avatar_images]", fileList[0]);
-      this.accountPersonalEditAvatar(body).then(result=>{
-      
-      })
-    }
   },
   computed: {
+    ...mapState("account", ["personalList"]),
     ...mapState("account", {
       profileList: "profileList"
     }),
@@ -149,6 +142,9 @@ export default {
   },
   created() {
     this.fetchProfile();
+    this.avatarSrc = this.personalList.avatar
+      ? this.personalList.avatar.low
+      : "https://picsum.photos/170/170";
   }
 };
 </script>

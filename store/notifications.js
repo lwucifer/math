@@ -54,10 +54,10 @@ const actions = {
             const data = await new RegisterDevice(this.$axios)[actionTypes.BASE.ADD](
                 payload
             );
-            console.log("[RegisterDevice] add", data);
+            console.log("[RegisterDevice] add", data, payload);
             return data;
         } catch (err) {
-            console.log("[RegisterDevice] add.err", err);
+            console.log("[RegisterDevice] add.err", err, payload);
             return err;
         }
     },

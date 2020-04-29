@@ -1,41 +1,37 @@
 <template>
-  <div class="auth auth-signin">
-    <div class="auth__main">
-      <h3>Đăng ký thành công</h3>
-      <div class="auth_content mt-4 mb-4 text-center">
-        <p class="line-height-2">
-            Tài khoản của bạn đã đăng ký thành công!<br>
-            Vui lòng xác thực tài khoản qua email<br> 
-            <span class="color-primary">datpt262@gmail.com</span>
-        </p>
-      </div>
-      <app-button color="primary" square fullWidth @click="login">
-          Xác thực tài khoản
-      </app-button>
+  <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+            <div class="wrap-success-auth px-4">
+                <IconSuccess class="mb-3"/>
+                <h3>Đăng ký thành công</h3>
+                <p class="my-4">Cảm ơn bạn đã tạo tài khoản Schoolly. Để hoàn tất việc đăng ký, vui lòng xác thực tài khoản qua email datpt262@gmail.com</p>
+                <app-button class="mt-2" square 
+                            :to="'/auth/signin'"
+                            nuxt
+                >
+                Xác thực tài khoản
+                </app-button>
+            </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <ImageAuth/>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
-import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
-
+import ImageAuth  from "~/components/page/auth/ImageAuth";
+import IconSuccess from '~/assets/svg/icons/success.svg?inline';
 export default {
-  components: {},
-
-  data() {
-    return {
-    };
-  },
-
-  methods: {
-    ...mapActions("auth", ["login"]),
-    login() {
+    components:{
+        ImageAuth,
+        IconSuccess
     }
-  }
-};
+}
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

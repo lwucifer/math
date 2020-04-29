@@ -86,6 +86,8 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
+            this.$emit('signin', true);
+            
             this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);

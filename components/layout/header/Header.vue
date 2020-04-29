@@ -58,7 +58,9 @@
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
-          <span class="number">9</span>
+          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">{{
+            get(cartCheckout, "orders.length", 0)
+          }}</span>
         </button>
         <app-dropdown
           position="right"
@@ -70,7 +72,7 @@
         >
           <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
             <IconBell />
-            <span class="number" v-if="notiUnread > 0">{{notiUnread}}</span>
+            <span class="number" v-if="notiUnread > 0">{{ notiUnread }}</span>
           </button>
           <div class="link--dropdown__content">
             <ul>
@@ -78,36 +80,47 @@
                 <div class="d-flex">
                   <h6>Thông báo</h6>
                   <div class="ml-auto">
-                    <n-link
-                      class="text-primary"
-                      to
-                      @click.native="unreadAll"
-                    >Đánh dấu tất cả đã đọc</n-link>
-                    <n-link class="ml-3 text-primary" to="/account/info/setting">Cài đặt</n-link>
+                    <n-link class="text-primary" to @click.native="unreadAll"
+                      >Đánh dấu tất cả đã đọc</n-link
+                    >
+                    <n-link class="ml-3 text-primary" to="/account/info/setting"
+                      >Cài đặt</n-link
+                    >
                   </div>
                 </div>
               </li>
             </ul>
             <ul style="overflow-y: auto; max-height:400px">
               <li
-                v-for="(item, index) in notis && notis.listNotification ? notis.listNotification : []"
+                v-for="(item, index) in notis && notis.listNotification
+                  ? notis.listNotification
+                  : []"
                 :key="index"
                 class="p-0"
               >
                 <n-link to>
-                  <div :class="item && item.is_read == 1  ? 'readed' : ''">
+                  <div :class="item && item.is_read == 1 ? 'readed' : ''">
                     <div class="wrapitemnotify">
                       <app-avatar
-                        :src="item && item.image && item.image.low ? item.image.low : 'https://picsum.photos/60/60'"
+                        :src="
+                          item && item.image && item.image.low
+                            ? item.image.low
+                            : 'https://picsum.photos/60/60'
+                        "
                       />
                       <div class="text-gray ml-3">
-                        <p>{{item && item.meta_data}}</p>
-                        <p>{{item && item.created_at | moment('from')}}</p>
+                        <p>{{ item && item.meta_data }}</p>
+                        <p>{{ item && item.created_at | moment("from") }}</p>
                       </div>
-                      <div class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover">
+                      <div
+                        class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover"
+                      >
                         <button
                           class="cc-box__btn cc-box__btn-edit"
-                          v-tooltip.bottom="{ content: 'Xóa thông báo', classes: ['tooltipAnnouncenment'] }"
+                          v-tooltip.bottom="{
+                            content: 'Xóa thông báo',
+                            classes: ['tooltipAnnouncenment'],
+                          }"
                         >
                           <IconTrashAlt class="icon fill-disabled" />
                         </button>
@@ -115,7 +128,10 @@
                           class="cc-box__btn cc-box__btn-edit mt-2"
                           v-if="item && item.is_read == 0"
                           @click.prevent="handleReadNotify(item.id)"
-                          v-tooltip.bottom="{ content: 'Đánh dấu đã đọc', classes: ['tooltipAnnouncenment'] }"
+                          v-tooltip.bottom="{
+                            content: 'Đánh dấu đã đọc',
+                            classes: ['tooltipAnnouncenment'],
+                          }"
                         >
                           <IconEllipse class="d-block fill-gray" />
                         </button>
@@ -123,7 +139,10 @@
                           class="cc-box__btn cc-box__btn-edit mt-2"
                           v-else
                           @click.prevent="handleReadNotify(item.id)"
-                          v-tooltip.bottom="{ content: 'Đánh dấu chưa đọc', classes: ['tooltipAnnouncenment'] }"
+                          v-tooltip.bottom="{
+                            content: 'Đánh dấu chưa đọc',
+                            classes: ['tooltipAnnouncenment'],
+                          }"
                         >
                           <IconEllipseAlt class="d-block fill-gray" />
                         </button>
@@ -175,7 +194,9 @@
                 <n-link to="/account/info/revenues">Thống kê doanh thu</n-link>
               </li>
               <li>
-                <n-link to="/account/info/transactions">Lịch sử giao dịch</n-link>
+                <n-link to="/account/info/transactions"
+                  >Lịch sử giao dịch</n-link
+                >
               </li>
               <li>
                 <n-link to>Cài đặt</n-link>
@@ -198,11 +219,13 @@
         <n-link
           class="btn btn--size-md btn--color-primary btn--square mr-3"
           :to="'/auth/signin'"
-        >Đăng nhập</n-link>
+          >Đăng nhập</n-link
+        >
         <n-link
           class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
           :to="'/auth/signup'"
-        >Đăng ký</n-link>
+          >Đăng ký</n-link
+        >
       </div>
     </div>
   </div>
@@ -216,7 +239,7 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconBell from "~/assets/svg/icons/bell.svg?inline";
 import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
 import IconMessager from "~/assets/svg/icons/messager.svg?inline";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconEllipseAlt from "~/assets/svg/icons/ellipse-alt.svg?inline";
@@ -239,7 +262,7 @@ export default {
     AnnoucementItem,
     IconTrashAlt,
     IconEllipseAlt,
-    IconEllipse
+    IconEllipse,
   },
 
   data: () => ({
@@ -250,13 +273,14 @@ export default {
     readAnnouncenment: true,
     read: false,
     notiList: [],
-    infiniteId: +new Date()
+    infiniteId: +new Date(),
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
-    }
+    },
+    ...mapGetters("cart", ["cartCheckout"]),
   },
   mounted() {
     console.log("detectBrowser", detectBrowser());
@@ -265,11 +289,12 @@ export default {
     this.getNotiUnread();
   },
   methods: {
+    get,
     ...mapMutations("auth", ["removeToken"]),
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
-      "getNotiUnread"
+      "getNotiUnread",
     ]),
     redirectSignin() {
       this.$router.push("/auth/signin");
@@ -285,9 +310,9 @@ export default {
     handleReadNotify(id) {
       const params = {
         update: UPDATE_NOTI.ONLY_ONE,
-        notification_id: id
+        notification_id: id,
       };
-      this.readNotification(params).then(result => {
+      this.readNotification(params).then((result) => {
         if (result.success == true) {
         }
       });
@@ -295,9 +320,9 @@ export default {
     // Handle unread all noti
     unreadAll() {
       const params = {
-        update: UPDATE_NOTI.ALL
+        update: UPDATE_NOTI.ALL,
       };
-      this.readNotification(params).then(result => {
+      this.readNotification(params).then((result) => {
         if (result.success == true) {
         }
       });
@@ -312,8 +337,8 @@ export default {
         `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
         {
           params: {
-            page: get(this, "notis.page.number", 0) + 1
-          }
+            page: get(this, "notis.page.number", 0) + 1,
+          },
         }
       );
       console.log("getData", getData);
@@ -322,8 +347,8 @@ export default {
       } else {
         $state.complete();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
