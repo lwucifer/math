@@ -85,6 +85,11 @@
           @handleSelectAvatar="handleSelectAvatar"
         />
 
+        <CourseSelectCover
+          :defaultImg="get(general, 'cover_url.medium', '')"
+          @handleSelect="handleSelectCover"
+        />
+
         <create-action
           @handleCLickSave="handleCLickSave"
           :isSubmit="isSubmit"
@@ -126,6 +131,7 @@ import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
 import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
+import CourseSelectCover from "~/components/page/course/create/info/CourseSelectCover";
 import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 
 const schema = yup.object().shape({
@@ -171,6 +177,7 @@ export default {
     IconCheckCircle,
     IconTrashAlt,
     CourseBenefit,
+    CourseSelectCover,
   },
 
   data() {
@@ -189,6 +196,7 @@ export default {
         level: "",
         name: "",
         subject: "",
+        cover_image: "",
         type: "",
       },
       showModalConfirm: false,
@@ -305,6 +313,10 @@ export default {
 
     handleSelectAvatar(avatar) {
       this.payload.avatar = avatar;
+    },
+
+    handleSelectCover(cover) {
+      this.payload.cover_image = cover;
     },
 
     handleChangeSubject(subject) {
