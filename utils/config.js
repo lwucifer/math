@@ -16,6 +16,51 @@ export const DATE_YYYY_MM_DD = "YYYY/MM/DD";
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
+export const DATE_SHORTCUT = [
+  {
+    text: 'Hôm nay',
+    onClick() {
+      const date = new Date();
+      return date;
+    },
+  },
+  {
+    text: 'Hôm qua',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24);
+      return [start, end]
+    },
+  },
+  {
+    text: 'Tuần này',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+      return [start, end];
+    },
+  },
+  {
+    text: 'Tháng này',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      return [start, end];
+    },
+  },
+  {
+    text: 'Tháng trước',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      return [start, end];
+    },
+  },
+];
 
 export const UNAUTHORIZE_API = ["user/public/renew", "user/public/login"];
 export const CLIENT_INFO_API = [CART_LIST, PAYMENT_HASHKEY];
