@@ -46,8 +46,13 @@ export default {
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
   },
+  mounted() {
+    // console.log("detectBrowser", detectBrowser());
+    this.cartList();
+  },
   methods: {
     get,
+    ...mapActions("cart", ["cartList"]),
   },
 };
 </script>
