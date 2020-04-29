@@ -80,6 +80,8 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
 export default {
+  layout: "manage",
+    
   components: {
     IconFilter,
     IconSearch

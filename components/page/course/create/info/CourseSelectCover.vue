@@ -1,6 +1,6 @@
 <template>
   <div class="cgi-form-group">
-    <h2 class="cgi-form-title heading-6 mb-4">Hình đại diện cho bài giảng</h2>
+    <h2 class="cgi-form-title heading-6 mb-4">Hình minh hoạ cho bài giảng</h2>
 
     <div class="row csa-row">
       <div class="col csa-col csa-col--left mb-4">
@@ -92,7 +92,7 @@ export default {
   },
 
   props: {
-    defaultAvatar: {}
+    defaultImg: {}
   },
 
   data() {
@@ -109,8 +109,8 @@ export default {
   },
 
   watch: {
-    defaultAvatar: function() {
-      this.avatarSrc = this.defaultAvatar;
+    defaultImg: function() {
+      this.avatarSrc = this.defaultImg;
     }
   },
 
@@ -134,7 +134,7 @@ export default {
     removeAvatar() {
       this.avatar = [];
       this.avatarSrc = null;
-      this.$emit("handleSelectAvatar", "");
+      this.$emit("handleSelect", "");
       this.file = "";
     },
 
@@ -162,7 +162,7 @@ export default {
         this.avatarSrc = data;
         this.savingCrop = false;
         this.cropping = false;
-        this.$emit("handleSelectAvatar", file);
+        this.$emit("handleSelect", file);
       });
     }
   }

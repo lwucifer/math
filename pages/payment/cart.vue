@@ -5,7 +5,7 @@
         <h6 class="text-primary">Giỏ hàng</h6>
         <div
           class="mt-3"
-          v-for="(item, index) in cartCheckout.orders"
+          v-for="(item, index) in carts"
           :key="index"
         >
           <CartItem :item="item" />
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import CartSideRight from "~/components/page/payment/CartSideRight";
 import CartItem from "~/components/page/payment/CartItem";
 import { get } from "lodash";
@@ -45,11 +45,16 @@ export default {
 
   methods: {
     ...mapActions("cart", ["cartList"]),
-    get,
+    get
   },
 
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
+    ...mapState(`cart`, { carts: "carts" }),
+  },
+
+  created() {
+    console.log(this.carts);
   },
 
   mounted() {

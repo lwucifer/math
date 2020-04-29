@@ -58,9 +58,9 @@
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
-          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">{{
-            get(cartCheckout, "orders.length", 0)
-          }}</span>
+          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">
+            {{ get(cartCheckout, "orders.length", 0) }}
+          </span>
         </button>
         <app-dropdown
           position="right"
@@ -157,62 +157,10 @@
                 </infinite-loading>
               </client-only>
             </ul>
-            <!-- <ul>
-              <li class="text-center">
-                <n-link
-                  to="/account/info/announcement"
-                  class="text-primary font-weight-bold"
-                >Xem tất cả</n-link>
-              </li>
-            </ul>-->
           </div>
         </app-dropdown>
-        <app-dropdown
-          position="right"
-          v-model="dropdownAuth"
-          :content-width="'15rem'"
-          class="link--dropdown link--dropdown-auth item"
-        >
-          <app-avatar
-            slot="activator"
-            class="the-header__user-avt"
-            src="https://picsum.photos/60/60"
-            :size="44"
-          ></app-avatar>
-          <div class="link--dropdown__content">
-            <ul>
-              <li>
-                <n-link to="/elearning/manager">Quản lý E-Learning</n-link>
-              </li>
-              <li>
-                <n-link to>Quản lý học sinh</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info">Thông tin tài khoản</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info/revenues">Thống kê doanh thu</n-link>
-              </li>
-              <li>
-                <n-link to="/account/info/transactions"
-                  >Lịch sử giao dịch</n-link
-                >
-              </li>
-              <li>
-                <n-link to>Cài đặt</n-link>
-              </li>
-              <li>
-                <n-link to>Thông báo</n-link>
-              </li>
-              <li>
-                <n-link to>Trợ giúp</n-link>
-              </li>
-              <li @click.prevent="handleLogout">
-                <n-link to>Đăng xuất</n-link>
-              </li>
-            </ul>
-          </div>
-        </app-dropdown>
+
+        <user-header />
       </div>
 
       <div v-else class="d-flex">
@@ -283,7 +231,8 @@ export default {
     ...mapGetters("cart", ["cartCheckout"]),
   },
   mounted() {
-    console.log("detectBrowser", detectBrowser());
+    // console.log("detectBrowser", detectBrowser());
+    this.cartList();
   },
   created() {
     this.getNotiUnread();
@@ -296,6 +245,7 @@ export default {
       "readNotification",
       "getNotiUnread",
     ]),
+    ...mapActions("cart", ["cartList"]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },

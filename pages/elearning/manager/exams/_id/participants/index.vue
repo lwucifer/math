@@ -54,6 +54,7 @@
 
   export default {
     layout: "exercise",
+    
     components: {
       ElearningManagerSide,
       ParticipantTable,

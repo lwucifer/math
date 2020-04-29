@@ -11,22 +11,21 @@
         Quay lại
     </app-button>-->
 
-      <div class="create-action__right" v-if="isShowAction">
-        <app-button
-          @click="handleCLickSave"
-          class="create-action__btn mr-4"
-          square
-          :disabled="!isSubmit"
-          >Lưu</app-button
-        >
-        <app-button
-          class="create-action__btn"
-          color="secondary"
-          square
-          @click="$emit('handleDelete')"
-          >Xoá</app-button
-        >
-      </div>
+    <div class="create-action__right" v-if="isShowAction">
+      <app-button
+        class="create-action__btn"
+        color="secondary"
+        square
+        @click="$emit('handleDelete')"
+        >Xoá</app-button
+      >
+      <app-button
+        @click="handleCLickSave"
+        class="create-action__btn mr-4"
+        square
+        :disabled="!isSubmit"
+        >Lưu</app-button
+      >
     </div>
   </div>
 </template>

@@ -10,6 +10,7 @@ import UpdateAvatar from "../services/account/UpdateAvatar";
 import UpdateCover from "../services/account/UpdateCover";
 import Profile from "../services/account/Profile";
 import FriendInvite from "~/services/social/Friendinvite";
+import Withdrawals from "~/services/account/Withdrawals";
 /**
  * initial state
  */
@@ -21,12 +22,17 @@ const state = () => ({
     linkList: {},
     profileList: {},
     inviteList: {},
+    withdrawalsList:{}
 });
 
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    accountRole(state) {
+        return state.profileList ? state.profileList.role : []
+    }
+};
 
 /**
  * initial actions
@@ -213,6 +219,19 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_WITHDRAWALS.LIST]({ commit }, payload) {
+        try {
+            const result = await new Withdrawals(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            console.log("[Withdrawals] list", result);
+            // set to mutation
+            commit(mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS, result);
+        } catch (err) {
+            console.log("[Withdrawals] list.err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
         try {
             const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](
@@ -278,6 +297,13 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_EARNING_LIST", _earningList);
         state.earningList = _earningList;
+    },
+    [mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS](
+        state,
+        _withdrawalsList
+    ) {
+        console.log("SET_ACCOUNT_WITHDRAWALS", _withdrawalsList);
+        state.withdrawalsList = _withdrawalsList;
     },
     [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
         state.linkList = _linkList;

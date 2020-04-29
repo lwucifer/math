@@ -1,4 +1,6 @@
 require("dotenv").config();
+const webpack = require("webpack");
+
 
 module.exports = {
     head: {
@@ -20,7 +22,7 @@ module.exports = {
             rel: "icon",
             type: "image/x-icon",
             href: "/favicon.ico"
-        }]
+        }],
     },
 
     env: {
@@ -43,6 +45,8 @@ module.exports = {
         FB_APP_ID: process.env.FB_APP_ID,
         FB_MEASUREMENT_ID: process.env.FB_MEASUREMENT_ID,
         FB_FCM_PUBLIC_VAPI_KEY: process.env.FB_FCM_PUBLIC_VAPI_KEY,
+        ZOOM_API_KEY: process.env.ZOOM_API_KEY,
+        ZOOM_API_SECRET: process.env.ZOOM_API_SECRET,
     },
 
     /**
@@ -64,7 +68,6 @@ module.exports = {
         { src: "@/plugins/textarea-autosize.js", ssr: false },
         { src: "@/plugins/vuelidate.js", ssr: true },
         { src: "@/plugins/vue-moment.js" },
-        // { src: "@/plugins/firebase-auth.js" },
         { src: "@/plugins/vue-select.js" },
         { src: "@/plugins/filters.js" },
         { src: "@/plugins/vue-fragment.js" },
@@ -74,6 +77,7 @@ module.exports = {
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
         { src: "@/plugins/vue-input-number.js" },
+        { src: "@/plugins/zoom.js", ssr: false },
     ],
     /**
      * Global middleware
@@ -138,31 +142,7 @@ module.exports = {
             measurementId: process.env.FB_MEASUREMENT_ID,
             fcmPublicVapidKey: process.env.FB_FCM_PUBLIC_VAPI_KEY,
         },
-        // onFirebaseHosting: false,
         services: {
-            // auth: {
-            //     initialize: {
-            //         onAuthStateChangedAction: 'onAuthStateChanged'
-            //     },
-            //     ssr: true
-            // },
-            //   firestore: true,
-            //   functions: {
-            //     // emulatorPort: 12345
-            //   },
-            //   storage: true,
-            //   realtimeDb: true,
-            //   performance: true,
-            //   analytics: true,
-            //   remoteConfig: {
-            //     settings: {
-            //       fetchTimeoutMillis: 60000,
-            //       minimumFetchIntervalMillis: 43200000
-            //     },
-            //     defaultConfig: {
-            //       welcome_message: 'Welcome'
-            //     }
-            //   },
             messaging: {
                 createServiceWorker: true
             }
@@ -187,16 +167,24 @@ module.exports = {
     /*
      ** Customize the progress bar color
      */
-    // loading: {
-    //     color: "#3B8070"
-    // },
-
     loading: false,
 
     /*
      ** Build configuration
      */
     build: {
+        /**
+         * add external plugins
+         */
+        vendor: ["jquery"],
+        plugins: [
+            new webpack.ProvidePlugin({
+                $: 'jquery',
+                jquery: 'jquery',
+                'window.jQuery': 'jquery',
+                jQuery: 'jquery'
+            })
+        ],
         /*
          ** Run ESLint on save
          */
