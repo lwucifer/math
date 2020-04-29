@@ -32,9 +32,9 @@ import qs from "qs";
 import IconBookOpen from "~/assets/svg/design-icons/book-open.svg?inline";
 import IconDollar from "~/assets/svg/icons/dollar.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
-import { createOrderPaymentReq } from "../../../models/payment/OrderPaymentReq";
-import { RESPONSE_SUCCESS } from "../../../utils/config";
-import { createHashKeyReq } from "../../../models/payment/HashKeyReq";
+import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
+import { RESPONSE_SUCCESS } from "~/utils/config";
+import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 
 export default {
   components: {
@@ -74,10 +74,10 @@ export default {
             const onepayUrlWithParams = `${
               process.env.PAYMENT_REQ_URL
             }?${qs.stringify(hashKeyRes.data)}`;
-  
+
             console.log("[postHashKeyGenerate] onepayUrlWithParams", onepayUrlWithParams);
-            alert(onepayUrlWithParams)
-            window.location.href = onepayUrlWithParams;
+            // alert(onepayUrlWithParams)
+            // window.location.href = onepayUrlWithParams;
           }
         })
         .catch(err => {

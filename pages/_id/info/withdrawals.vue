@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide active="2" :school="teacher" />
+        <SchoolAccountSide active="2"/>
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">
@@ -18,8 +18,18 @@
               <app-select :options="opts" v-model="opt" size="sm" />
             </div>
             <div class="dates d-flex ml-auto">
-              <app-date-picker v-model="time1" label="From" square size="sm" class="ml-auto" />
-              <app-date-picker v-model="time2" label="To" square size="sm" />
+              <app-date-picker  label="From"
+                                square size="sm" 
+                                class="ml-auto"
+                                @input="changeDateFrom"
+                                valueFormat="YYYY-MM-DD"
+               />
+              <app-date-picker  label="To" 
+                                square 
+                                size="sm"
+                                @input="changeDateTo" 
+                                valueFormat="YYYY-MM-DD"
+              />
               <app-button size="sm" square normal class="ml-1">Tìm</app-button>
             </div>
           </div>
@@ -44,6 +54,7 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 
 export default {
   name: "E-learning",
@@ -57,13 +68,13 @@ export default {
     return {
       heads: [
         {
-          name: "time",
+          name: "timestamp",
           text: "Thời gian",
           sort: true,
           time: true
         },
         {
-          name: "price",
+          name: "amount",
           text: "Giá trị",
           sort: true
         },
@@ -87,93 +98,61 @@ export default {
         first: 1,
         last: 10
       },
-      isTeacher: true,
-      time1: null,
-      time2: null,
+      params:{
+        from:"",
+        to:"",
+        page:"",
+        size:"",
+        status:""
+      },
       opt: "",
       opts: [
         { value: "", text: "Tất cả các loại giao dịch" },
         { value: "1", text: "Theo trạng thái" },
         { value: "2", text: "Theo giá trị" }
       ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
-      },
-      list: [
-       {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          time: "16:50:30 20-11-2019",
-          status: "<span class='status'>Thành công</span>"
-        },
-       {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "3290000",
-          code: "S88HKDKD",
-          time: "16:50:30 22-11-2019",
-          status: "<span class='status-2'>Chờ duyệt</span>"
-        },
-       {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          time: "16:50:30 20-11-2018",
-          status: "<span class='status'>Thành công</span>"
-        },
-       {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "3290000",
-          code: "S88HKDKD",
-          time: "16:50:30 22-11-2017",
-          status: "<span class='status-2'>Chờ duyệt</span>"
-        },
-       {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          time: "16:50:30 20-11-2019",
-          status: "<span class='status'>Thành công</span>"
-        },
-       {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "3290000",
-          code: "S88HKDKD",
-          time: "16:50:30 22-11-2019",
-          status: "<span class='status-2'>Chờ duyệt</span>"
-        },
-       {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          time: "16:50:30 20-11-2018",
-          status: "<span class='status'>Thành công</span>"
-        },
-       {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "3290000",
-          code: "S88HKDKD",
-          time: "16:50:30 20-11-2017",
-          status: "<span class='status-2'>Chờ duyệt</span>"
-        },
-      ]
+      list:[]
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("account", {
+      withdrawalsList: "withdrawalsList",
+    })
   },
-
+  created(){
+    this.fetchWithdrawals();
+  },
+  watch:{
+    withdrawalsList:{
+      handler:function(){
+        this.list = get(this,"withdrawalsList.data.content",[])
+        console.log(this.list,'lol')
+      }
+    }
+  },
   methods: {
+    fetchWithdrawals(){
+      const payload = {
+        params :{
+          to: this.params.to,
+          from: this.params.from,
+          size: this.params.size,
+          page: this.params.page,
+          status: this.params.status
+        }
+      }
+      this.$store.dispatch(`account/${actionTypes.ACCOUNT_WITHDRAWALS.LIST}`,payload)
+    },
+    changeDateFrom(date){
+      this.params.from = date;
+      console.log(this.params.from,'lol')
+      this.fetchWithdrawals();
+    },
+    changeDateTo(date){
+      this.params.to = date;
+      this.fetchWithdrawals();
+    },
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
