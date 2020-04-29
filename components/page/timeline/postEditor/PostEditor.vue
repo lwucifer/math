@@ -243,7 +243,7 @@ import "tippy.js/themes/light.css";
 import { isEmpty, debounce, uniqWith } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import { Editor, EditorContent } from "tiptap";
-import { Placeholder, Mention } from "tiptap-extensions";
+import { Placeholder, Mention, HardBreak, History } from "tiptap-extensions";
 
 import { getBase64, isValidUrl } from "~/utils/common";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
@@ -425,6 +425,8 @@ export default {
     this.editor = new Editor({
       content: this.content,
       extensions: [
+        new HardBreak(),
+        new History(),
         new Placeholder({
           showOnlyCurrent: true,
           showOnlyWhenEditable: true,
