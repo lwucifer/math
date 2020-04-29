@@ -38,6 +38,19 @@
     }
     
     &__title--main {
-        color: #222;
+        color: $color-text-dark;
+        display: flex;
+        align-items: center;
+        
+        svg {
+        
+        }
+        svg path {
+            fill: currentColor;
+        }
+    }
+    
+    &__icon-title {
+        margin: 0 1.5rem 0 1rem;
     }
 }
