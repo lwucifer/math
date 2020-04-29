@@ -141,6 +141,10 @@ export const ACCOUNT_EARNING = {
     LIST: "accountEarningList",
 };
 
+export const ACCOUNT_WITHDRAWALS = {
+    LIST: "accountWithdrawalsList",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     LIST: "elearningPublicSummaryList",
 };
