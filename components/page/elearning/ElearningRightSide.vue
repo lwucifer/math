@@ -6,7 +6,7 @@
       :alt="get(info, 'name', '')"
     />
 
-    <template v-if="get(info, 'free', '')">
+    <template v-if="get(info, 'free', false)">
       <div class="elearning-right-side__price-wrapper">
         <b
           v-if="get(info, 'free', '')"
@@ -26,17 +26,21 @@
 
     <template v-else>
       <div class="elearning-right-side__price-wrapper">
-        <template v-if="get(info, 'price.discount', 0)">
+        <template v-if="get(info, 'elearning_price.discount', 0)">
           <b class="elearning-right-side__price text-error"
-            >{{ get(info, "price.discount", 0) | numeralFormat }}đ</b
+            >{{ get(info, "elearning_price.discount", 0) | numeralFormat }}đ</b
           >
           <s class="heading-4 text-gray-2"
-            >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</s
+            >{{
+              get(info, "elearning_price.original_price", 0) | numeralFormat
+            }}đ</s
           >
         </template>
 
         <b v-else class="elearning-right-side__price text-error"
-          >{{ get(info, "price.original_price", 0) | numeralFormat }}đ</b
+          >{{
+            get(info, "elearning_price.original_price", 0) | numeralFormat
+          }}đ</b
         >
       </div>
       <app-button
@@ -135,11 +139,16 @@ export default {
     ...mapGetters("cart", ["cartCheckout"]),
   },
 
+  created() {
+    console.log(this.info);
+  },
+
   methods: {
     get,
 
     handleStudy() {
-      console.log(this.info)
+      const elearning_id = get(this, "info.id", "");
+      this.$router.push(`/elearning/${elearning_id}/study`);
     },
 
     ...mapActions("cart", ["cartAdd"]),
