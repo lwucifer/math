@@ -39,7 +39,8 @@
   const Tab4 = () => import("./tabs/finished")
 
   export default {
-
+    layout: "manage",
+    
     components: {
       ElearningManagerSide,
       Tab1,
