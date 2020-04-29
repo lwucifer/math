@@ -59,8 +59,7 @@ import { setFirebaseToken } from "~/utils/auth";
 import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
 import IconGoogle from "~/assets/svg/icons/google.svg?inline";
 import ImageAuth from "~/components/page/auth/ImageAuth";
-import { createRegisterDeviceModel } from '../../models/notifications/RegisterDevice';
-
+import { createRegisterDeviceModel } from "../../models/notifications/RegisterDevice";
 
 export default {
   components: { SigninEmail, SigninPhone, IconFacebook, IconGoogle, ImageAuth },
@@ -108,6 +107,7 @@ export default {
 
     getFirebaseToken(callback) {
       console.log("[getFirebaseToken]");
+      debugger;
       this.$fireMess
         .requestPermission()
         .then(granted => {

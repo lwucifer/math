@@ -384,3 +384,8 @@ export const SOCIAL_NOTI = {
 export const SOCIAL_FRIEND = {
     SET_SOCIAL_FRIEND_INVITE_LIST: "setFriendInviteList",
 };
+
+export const SOCIAL_PHOTO = {
+    SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
+    SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList",
+};
