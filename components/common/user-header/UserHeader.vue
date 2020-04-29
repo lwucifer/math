@@ -240,7 +240,6 @@ export default {
           break;
       }
 
-      console.log("[checkMenuGuard]", _menuActive, isValidMenu);
       return isValidMenu;
     }
   },

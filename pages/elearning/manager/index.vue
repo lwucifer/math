@@ -108,7 +108,6 @@ const STORE_NAMESPACE = "elearning/teaching/summary";
 export default {
   layout: "manage",
   name: "E-learning",
-  middleware: "authenticated",
 
   components: {
     ElearningManagerSide,

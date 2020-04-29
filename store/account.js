@@ -26,7 +26,11 @@ const state = () => ({
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    accountRole(state) {
+        return state.profileList ? state.profileList.role : []
+    }
+};
 
 /**
  * initial actions
