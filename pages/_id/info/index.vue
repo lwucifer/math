@@ -10,57 +10,55 @@
             title="Thông tin tài khoản"
           >
             <template v-slot:content>
-              <div class="">
-                <general-info />
-                <!--<sub-block-section-->
-                  <!--title="Thông tin cá nhân"-->
-                <!--&gt;-->
-                  <!--<template v-slot:content>-->
-                    <!--<div class="wrapInfoAccount">-->
-                      <!--<div class="d-flex">-->
-                        <!--<app-button-->
-                          <!--square-->
-                          <!--class="btnAccountLink_account-info"-->
-                          <!--v-if="!accountLink.list.linked"-->
-                          <!--v-on:click="accountLink.showModal=true"-->
-                        <!--&gt;-->
-                          <!--<IconPlus class="icon"/>-->
-                          <!--<span class="ml-3">Liên kết trường học</span>-->
-                        <!--</app-button>-->
-      <!---->
-                        <!--<AccountLinkModal-->
-                          <!--:visible="accountLink.showModal"-->
-                          <!--@click-close="closeLinkModal"-->
-                          <!--@handleRefresh="handleRefresh"-->
-                        <!--/>-->
+              <general-info />
+              <!--<sub-block-section-->
+                <!--title="Thông tin cá nhân"-->
+              <!--&gt;-->
+                <!--<template v-slot:content>-->
+                  <!--<div class="wrapInfoAccount">-->
+                    <!--<div class="d-flex">-->
+                      <!--<app-button-->
+                        <!--square-->
+                        <!--class="btnAccountLink_account-info"-->
+                        <!--v-if="!accountLink.list.linked"-->
+                        <!--v-on:click="accountLink.showModal=true"-->
+                      <!--&gt;-->
+                        <!--<IconPlus class="icon"/>-->
+                        <!--<span class="ml-3">Liên kết trường học</span>-->
+                      <!--</app-button>-->
     <!---->
-                      <!--</div>-->
-                      <!--<app-input labelFixed v-model="name" label="Họ và tên" disabled />-->
-                      <!--<app-input v-model="phone" label="Số điện thoại" disabled />-->
-                      <!--<app-input v-model="email" label="Email" disabled/>-->
-                      <!--<div class="picker-group__profileInfo">-->
-                        <!--<app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>-->
-                        <!--<app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>-->
-                      <!--</div>-->
+                      <!--<AccountLinkModal-->
+                        <!--:visible="accountLink.showModal"-->
+                        <!--@click-close="closeLinkModal"-->
+                        <!--@handleRefresh="handleRefresh"-->
+                      <!--/>-->
+  <!---->
                     <!--</div>-->
-                    <!--<app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">-->
-                      <!--<span class="ml-3">Thay đổi mật khẩu</span>-->
-                    <!--</app-button>-->
-                    <!--<AccountChangePasswordModal-->
-                      <!--:visible="showChangePass"-->
-                      <!--@click-close="showChangePass = false"-->
-                    <!--/>-->
-                    <!--<AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>-->
-                    <!--<div class="d-flex mt-4">-->
-                      <!--<app-button class="ml-auto" square>Lưu thay đổi</app-button>-->
+                    <!--<app-input labelFixed v-model="name" label="Họ và tên" disabled />-->
+                    <!--<app-input v-model="phone" label="Số điện thoại" disabled />-->
+                    <!--<app-input v-model="email" label="Email" disabled/>-->
+                    <!--<div class="picker-group__profileInfo">-->
+                      <!--<app-input v-model="sex" label="Giới tính" class="sex_Profile" disabled/>-->
+                      <!--<app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>-->
                     <!--</div>-->
-                  <!--</template>-->
-                <!--</sub-block-section>-->
-                
-                <school-info />
+                  <!--</div>-->
+                  <!--<app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">-->
+                    <!--<span class="ml-3">Thay đổi mật khẩu</span>-->
+                  <!--</app-button>-->
+                  <!--<AccountChangePasswordModal-->
+                    <!--:visible="showChangePass"-->
+                    <!--@click-close="showChangePass = false"-->
+                  <!--/>-->
+                  <!--<AccountInfoStudent :profileList="profileInfo" v-if="accountLink.list.linked"/>-->
+                  <!--<div class="d-flex mt-4">-->
+                    <!--<app-button class="ml-auto" square>Lưu thay đổi</app-button>-->
+                  <!--</div>-->
+                <!--</template>-->
+              <!--</sub-block-section>-->
+              
+              <school-info />
 
-                <department-info />
-              </div>
+              <department-info />
             </template>
           </block-section>
         </div>
