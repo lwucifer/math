@@ -109,7 +109,7 @@ export const validateScriptTag = string => {
  * @param {String} content
  */
 export const checkEditorEmpty = content => {
-  const regex = /(<p>)+(<br>){0,}?\s{0,}?(<\/\p>)/g;
+  const regex = /^(<p>)(<\/\p>)$/;
   return !content || regex.test(content);
 };
 
