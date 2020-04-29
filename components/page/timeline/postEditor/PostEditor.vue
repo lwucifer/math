@@ -242,7 +242,7 @@ import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
 import { isEmpty, debounce, uniqWith } from "lodash";
 import { mapState, mapGetters } from "vuex";
-import { Editor, EditorContent } from "tiptap";
+import { Editor, EditorContent, Extension } from "tiptap";
 import { Placeholder, Mention, HardBreak, History } from "tiptap-extensions";
 
 import { getBase64, isValidUrl } from "~/utils/common";
@@ -426,6 +426,23 @@ export default {
       content: this.content,
       extensions: [
         new HardBreak(),
+        // Make press enter = insert hard break
+        new (class extends Extension {
+          keys() {
+            return {
+              Enter(state, dispatch, view) {
+                const { schema, doc, tr } = view.state;
+
+                const hard_break = schema.nodes.hard_break;
+                const transaction = tr
+                  .replaceSelectionWith(hard_break.create())
+                  .scrollIntoView();
+                view.dispatch(transaction);
+                return true;
+              }
+            };
+          }
+        })(),
         new History(),
         new Placeholder({
           showOnlyCurrent: true,
@@ -574,7 +591,7 @@ export default {
       // push to list
       Array.from(event.target.files).forEach(file => {
         if (this.fileList.length >= 6) {
-          this.$toasted.error('1 bài viết chỉ cho phép tối đa 6 ảnh.')
+          this.$toasted.error("1 bài viết chỉ cho phép tối đa 6 ảnh.");
           return;
         }
         // if is preview a link -> remove that. Post prefer image than link
