@@ -77,7 +77,7 @@ module.exports = {
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
         { src: "@/plugins/vue-input-number.js" },
-        { src: "@/plugins/zoom.js", ssr: false },
+        // { src: "@/plugins/zoom.js", ssr: false },
     ],
     /**
      * Global middleware
