@@ -15,7 +15,15 @@
               <app-button rounded size="sm" class="mr-4">
                 <IconFilter />Lọc kết quả
               </app-button>
-              <app-select :options="opts" v-model="opt" size="sm" />
+              <app-vue-select :options="opts" 
+                              v-model="opt" 
+                              size="sm" 
+                              :placeholder="'Theo trạng thái'" 
+                              label="text"
+                              searchable
+                              clearable
+                              @input="handlerChangeStatus"
+                  />
             </div>
             <div class="dates d-flex ml-auto">
               <app-date-picker  label="From"
@@ -42,6 +50,11 @@
             <tr v-for="(item , index) in list" :key="index">
               <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
             </tr>
+            <template v-slot:cell(status)="{row}">
+              <td v-if="row.status=='SUCCESS'">Thành công</td>
+              <td v-else-if="row.status=='FAIL'">Thất bại</td>
+              <td v-else-if="row.status=='PENDING'">Chờ xử lí</td>
+            </template>
           </app-table>
         </div>
       </div>
@@ -79,7 +92,7 @@ export default {
           sort: true
         },
         {
-          name: "name",
+          name: "desc",
           text: "Nội dung",
           sort: true
         },
@@ -90,14 +103,7 @@ export default {
         },
       ],
       isAuthenticated: true,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
-      },
+      pagination: {},
       params:{
         from:"",
         to:"",
@@ -107,9 +113,10 @@ export default {
       },
       opt: "",
       opts: [
-        { value: "", text: "Tất cả các loại giao dịch" },
-        { value: "1", text: "Theo trạng thái" },
-        { value: "2", text: "Theo giá trị" }
+        { value: 'SUCCESS', text: 'Thành công' },
+        { value: 'PENDING', text: 'Chờ xử lí' },
+        { value: 'FAIL', text: 'Thất bại' }
+
       ],
       list:[]
     };
@@ -126,8 +133,8 @@ export default {
   watch:{
     withdrawalsList:{
       handler:function(){
-        this.list = get(this,"withdrawalsList.data.content",[])
-        console.log(this.list,'lol')
+        this.list = get(this,"withdrawalsList.data.content",[]);
+        this.pagination = get(this,"withdrawalsList.data.page",{});
       }
     }
   },
@@ -146,18 +153,22 @@ export default {
     },
     changeDateFrom(date){
       this.params.from = date;
-      console.log(this.params.from,'lol')
       this.fetchWithdrawals();
     },
     changeDateTo(date){
       this.params.to = date;
       this.fetchWithdrawals();
     },
+    handlerChangeStatus(select){
+      this.params.status = get(select,"value","");
+      console.log(get(select,"value",""),"lol")
+      this.fetchWithdrawals();
+    },
     onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    }
+      this.params.size = e.size;
+      this.params.page = e.number + 1;
+      this.fetchWithdrawals();
+    },
   }
 };
 </script>

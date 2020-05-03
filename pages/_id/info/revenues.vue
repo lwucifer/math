@@ -72,6 +72,12 @@
               <tr v-for="(item , index) in list" :key="index">
                 <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
               </tr>
+              <template v-slot:cell(fee)="{row}">
+                <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+              </template>
+              <template v-slot:cell(total)="{row}">
+                <td>{{ formatFee(get(row, 'total', ''))}} đ</td>
+              </template>
             </app-table>
           </div>
         </div>
@@ -87,6 +93,8 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import numeral from "numeral";
+import { number } from 'yup';
 export default {
   name: "E-learning",
 
@@ -125,11 +133,11 @@ export default {
             sort: true
           },
           {
-            name: "discount",
+            name: "fee",
             text: "Phí GD",
           },
           {
-            name:"cost",
+            name:"total",
             text:"Tổng"
           }
         ],
@@ -203,7 +211,12 @@ export default {
       this.params.size = e.size;
       this.params.page = e.number + 1;
       this.fetchEarning();
-    }
+    },
+    formatFee(fee){ 
+      return numeral(fee).format('0.00')
+    },
+    get,
+    numeral
   }
 };
 </script>
