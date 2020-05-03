@@ -58,6 +58,10 @@ export const ACCOUNT_EARNING = {
     SET_ACCOUNT_EARNING_LIST: "setAccountEarningList",
 };
 
+export const ACCOUNT_WITHDRAWALS = {
+    SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
+};
+
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };

@@ -51,7 +51,8 @@ export default {
         "btn--color-gray": this.color === "gray",
         "btn--color-red": this.color === "red",
         "btn--color-default": this.color === "default",
-        "btn--color-disabled": this.color === "disabled"
+        "btn--color-disabled": this.color === "disabled",
+        "btn--color-transparent": this.color === "transparent",
       };
 
       const outlineColorClasses = {
