@@ -9,6 +9,9 @@
       :type="type"
       :placeholder="placeholder"
       :disabled	="disabled"
+      :range="range"
+      :range-separator="rangeSeparator"
+      :shortcuts="shortcuts"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -57,6 +60,18 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    range: {
+      type: Boolean,
+      default: false
+    },
+    rangeSeparator: {
+      type: String,
+      default: '-'
+    },
+    shortcuts: {
+      type: Array,
+      default: () => []
     }
   },
 
