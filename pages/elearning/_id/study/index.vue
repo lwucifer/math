@@ -33,7 +33,11 @@
             </div>
           </div>
           <div class="col-md-4">
-            <ElearningCourseSide :info="info" :data="data" />
+            <ElearningCourseSide
+              :info="info"
+              :data="data"
+              :progress="progress"
+            />
           </div>
         </div>
       </div>
@@ -54,6 +58,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
+import ProgressService from "~/services/elearning/study/Progress";
 import { get } from "lodash";
 import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
@@ -92,11 +97,22 @@ export default {
             elearning_id,
           },
         });
+      const getProgress = () =>
+        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
+          params: {
+            elearning_id,
+          },
+        });
 
-      const data = await Promise.all([getInfo(), getInteractiveQuestion()]);
+      const data = await Promise.all([
+        getInfo(),
+        getInteractiveQuestion(),
+        getProgress(),
+      ]);
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
+      this.progress = get(data, "2.data", null);
     },
     get,
     async addQuestionSuccess() {
@@ -118,6 +134,7 @@ export default {
       comments: COMMENTS,
       info: null,
       interactive_questions: null,
+      progress: null,
       data: {
         number: 9,
         times: "9 giờ 30 phút",
