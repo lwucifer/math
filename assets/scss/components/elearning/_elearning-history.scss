@@ -1,5 +1,5 @@
 .elearning-history__main {
-	background-color: #fff;
+	background: #F9F9F9;
 	padding: 1rem 0;
 
 	.elearning-history__table {
@@ -148,3 +148,9 @@
 		}
 	}
 }
+.date_withdrawals{
+	width: 25rem;
+	.mx-datepicker{
+	  width: 100% !important;
+	}
+  }
