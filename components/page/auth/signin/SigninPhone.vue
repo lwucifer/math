@@ -46,8 +46,8 @@ import { required, minLength } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
-      phone: "0961717593",
-      password: "Huydv123",
+      phone: "",
+      password: "",
       error: "",
       errorMessage: {
         phone: "",

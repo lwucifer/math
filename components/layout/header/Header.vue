@@ -58,9 +58,10 @@
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
-          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">
-            {{ get(cartCheckout, "orders.length", 0) }}
-          </span>
+          <span
+            v-if="get(cartCheckout, 'orders.length', 0)"
+            class="number"
+          >{{ get(cartCheckout, "orders.length", 0) }}</span>
         </button>
         <app-dropdown
           position="right"
@@ -80,12 +81,12 @@
                 <div class="d-flex">
                   <h6>Thông báo</h6>
                   <div class="ml-auto">
-                    <n-link class="text-primary" to @click.native="unreadAll"
-                      >Đánh dấu tất cả đã đọc</n-link
-                    >
-                    <n-link class="ml-3 text-primary" to="/account/info/setting"
-                      >Cài đặt</n-link
-                    >
+                    <n-link
+                      class="text-primary"
+                      to
+                      @click.native="unreadAll"
+                    >Đánh dấu tất cả đã đọc</n-link>
+                    <n-link class="ml-3 text-primary" to="/account/info/setting">Cài đặt</n-link>
                   </div>
                 </div>
               </li>
@@ -112,9 +113,7 @@
                         <p>{{ item && item.meta_data }}</p>
                         <p>{{ item && item.created_at | moment("from") }}</p>
                       </div>
-                      <div
-                        class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover"
-                      >
+                      <div class="d-flex flex-column align-items-center pl-3 ml-auto btn-hover">
                         <button
                           class="cc-box__btn cc-box__btn-edit"
                           v-tooltip.bottom="{
@@ -167,13 +166,11 @@
         <n-link
           class="btn btn--size-md btn--color-primary btn--square mr-3"
           :to="'/auth/signin'"
-          >Đăng nhập</n-link
-        >
+        >Đăng nhập</n-link>
         <n-link
           class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
           :to="'/auth/signup'"
-          >Đăng ký</n-link
-        >
+        >Đăng ký</n-link>
       </div>
     </div>
   </div>
@@ -210,7 +207,7 @@ export default {
     AnnoucementItem,
     IconTrashAlt,
     IconEllipseAlt,
-    IconEllipse,
+    IconEllipse
   },
 
   data: () => ({
@@ -221,16 +218,20 @@ export default {
     readAnnouncenment: true,
     read: false,
     notiList: [],
-    infiniteId: +new Date(),
+    infiniteId: +new Date()
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
     },
-    ...mapGetters("cart", ["cartCheckout"]),
+    ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {
+    this.$fireMess.onMessage(payload => {
+      console.log("Message received. ", payload);
+      // ...
+    });
     // console.log("detectBrowser", detectBrowser());
     this.cartList();
   },
@@ -243,7 +244,7 @@ export default {
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
-      "getNotiUnread",
+      "getNotiUnread"
     ]),
     ...mapActions("cart", ["cartList"]),
     redirectSignin() {
@@ -260,9 +261,9 @@ export default {
     handleReadNotify(id) {
       const params = {
         update: UPDATE_NOTI.ONLY_ONE,
-        notification_id: id,
+        notification_id: id
       };
-      this.readNotification(params).then((result) => {
+      this.readNotification(params).then(result => {
         if (result.success == true) {
         }
       });
@@ -270,9 +271,9 @@ export default {
     // Handle unread all noti
     unreadAll() {
       const params = {
-        update: UPDATE_NOTI.ALL,
+        update: UPDATE_NOTI.ALL
       };
-      this.readNotification(params).then((result) => {
+      this.readNotification(params).then(result => {
         if (result.success == true) {
         }
       });
@@ -287,8 +288,8 @@ export default {
         `notifications/${actionTypes.SOCIAL_NOTIFICATIONS.LIST}`,
         {
           params: {
-            page: get(this, "notis.page.number", 0) + 1,
-          },
+            page: get(this, "notis.page.number", 0) + 1
+          }
         }
       );
       console.log("getData", getData);
@@ -297,8 +298,8 @@ export default {
       } else {
         $state.complete();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -107,7 +107,6 @@ export default {
 
     getFirebaseToken(callback) {
       console.log("[getFirebaseToken]");
-      debugger;
       this.$fireMess
         .requestPermission()
         .then(granted => {
