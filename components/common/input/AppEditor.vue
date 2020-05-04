@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble, Extension } from "tiptap";
 import {
   Blockquote,
   CodeBlock,
@@ -376,7 +376,24 @@ export default {
         }),
         new TableHeader(),
         new TableCell(),
-        new TableRow()
+        new TableRow(),
+        // Make press enter = insert hard break
+        new (class extends Extension {
+          keys() {
+            return {
+              Enter(state, dispatch, view) {
+                const { schema, doc, tr } = view.state;
+
+                const hard_break = schema.nodes.hard_break;
+                const transaction = tr
+                  .replaceSelectionWith(hard_break.create())
+                  .scrollIntoView();
+                view.dispatch(transaction);
+                return true;
+              }
+            };
+          }
+        })(),
       ],
       content: this.value,
       onUpdate: ({ getHTML }) => {
