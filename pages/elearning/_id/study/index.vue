@@ -79,15 +79,15 @@ export default {
           {
             id: 1,
             name: "Bài giảng online cho khoá học",
-            done: false
+            status: 1
           },
           {
             id: 2,
             name: "Bài giảng online cho khoá học",
-            done: true
+            status: 2
           }
         ],
-        list: COURSE_LESSON
+        list: COURSE_LESSON[1]
       }
     };
   },
