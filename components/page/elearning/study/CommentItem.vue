@@ -36,8 +36,8 @@
   </div>
 </template>
 <script>
-import CommentItemChild from "~/components/page/elearning/course/comment/CommentItemChild";
-import CommentInput from "~/components/page/elearning/course/comment/CommentInput";
+import CommentItemChild from "~/components/page/elearning/study/CommentItemChild";
+import CommentInput from "~/components/page/elearning/study/CommentInput";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 

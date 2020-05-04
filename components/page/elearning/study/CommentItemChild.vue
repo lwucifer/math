@@ -19,8 +19,8 @@
   </div>
 </template>
 <script>
-import CommentItem from "~/components/page/elearning/course/comment/CommentItem";
-import CommentInput from "~/components/page/elearning/course/comment/CommentInput";
+import CommentItem from "~/components/page/elearning/study/CommentItem";
+import CommentInput from "~/components/page/elearning/study/CommentInput";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
