@@ -8,7 +8,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 
 export default {
-  async created() {
+  async mounted() {
     // const payload = {
     //   vpc_Amount: getParamQuery("vpc_Amount"),
     //   vpc_Card: getParamQuery("vpc_Card"),
@@ -33,16 +33,15 @@ export default {
     //   vpc_Version: getParamQuery("vpc_Version"),
     // };
     const payload = get(this, "$router.history.current.query", {});
-    console.log(payload)
-    // const res = await this.$store.dispatch(
-    //   `payment/${actionTypes.PAYMENT.VALIDATE_TRANSACTION}`,
-    //   payload
-    // );
-    // if (res.success) {
-    //   this.$router.push("/payment/success");
-    //   return;
-    // }
-    // this.$router.push("/payment/fail");
+    const res = await this.$store.dispatch(
+      `payment/${actionTypes.PAYMENT.VALIDATE_TRANSACTION}`,
+      payload
+    );
+    if (res.success) {
+      this.$router.push("/payment/success");
+      return;
+    }
+    this.$router.push("/payment/fail");
   },
 };
 </script>
