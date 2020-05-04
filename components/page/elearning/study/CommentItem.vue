@@ -1,21 +1,25 @@
 <template>
   <div class="elearning-course-comment__item">
-    <app-avatar :src="comment.avatar" :size="50" />
+    <app-avatar :src="get(comment, 'creator.avatar.low', '')" :size="50" />
     <div class="content">
       <div>
-        <strong class="pr-3">{{ comment.name }}</strong>
-        <span>{{ comment.time }}</span>
+        <strong class="pr-3">{{ get(comment, "creator.name", "") }}</strong>
+        <span>{{ get(comment, "timestamp", "") }}</span>
       </div>
-      <div class="text">{{ comment.content }}</div>
+      <div class="text">{{ get(comment, "content", "") }}</div>
       <div class="actions mt-3">
         <button>
-          <IconLike :class="comment.liked ? 'fill-primary' : 'fill-999'" />
+          <IconLike
+            :class="get(comment, 'liked', false) ? 'fill-primary' : 'fill-999'"
+          />
         </button>
-        <span v-if="comment.likes > 0">{{ comment.likes }}</span>
+        <span v-if="get(comment, 'likes', 0) > 0">{{
+          get(comment, "likes", 0)
+        }}</span>
         <button
           type="button"
           class="bold color-999 ml-4"
-          @click="reply(comment.id)"
+          @click="reply(get(comment, 'id', ''))"
         >
           Phản hồi
         </button>
@@ -40,6 +44,7 @@ import CommentItemChild from "~/components/page/elearning/study/CommentItemChild
 import CommentInput from "~/components/page/elearning/study/CommentInput";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -63,32 +68,32 @@ export default {
     return {
       showReply: false,
       comments: [],
-      comment: [
-        {
-          id: 1,
-          avatar: "https://picsum.photos/50/52",
-          name: "Quyên Ngọc",
-          content:
-            "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-          time: "20/11/2022",
-          likes: 100,
-          liked: true,
-          parent: true,
-          parentId: "",
-        },
-        {
-          id: 2,
-          avatar: "https://picsum.photos/52/50",
-          name: "Ngọc Quyên",
-          content:
-            "Tã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-          time: "20/11/2022",
-          likes: 100,
-          liked: true,
-          parent: true,
-          parentId: "",
-        },
-      ],
+      // comment: [
+      //   {
+      //     id: 1,
+      //     avatar: "https://picsum.photos/50/52",
+      //     name: "Quyên Ngọc",
+      //     content:
+      //       "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+      //     time: "20/11/2022",
+      //     likes: 100,
+      //     liked: true,
+      //     parent: true,
+      //     parentId: "",
+      //   },
+      //   {
+      //     id: 2,
+      //     avatar: "https://picsum.photos/52/50",
+      //     name: "Ngọc Quyên",
+      //     content:
+      //       "Tã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
+      //     time: "20/11/2022",
+      //     likes: 100,
+      //     liked: true,
+      //     parent: true,
+      //     parentId: "",
+      //   },
+      // ],
     };
   },
 
@@ -97,6 +102,7 @@ export default {
       this.comments[id] = this.comment;
       this.showReply = true;
     },
+    get,
   },
 };
 </script>

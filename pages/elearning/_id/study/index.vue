@@ -28,6 +28,7 @@
               <ElearningQuestion
                 v-if="type === 'question'"
                 :interactive_questions="interactive_questions"
+                @addQuestionSuccess="addQuestionSuccess"
               />
             </div>
           </div>
@@ -74,8 +75,7 @@ export default {
   },
 
   created() {
-    console.log(this.$router.history.current.params.id);
-    this.getData(this.$router.history.current.params.id);
+    this.getData(get(this, "$router.history.current.params.id", ""));
   },
 
   methods: {
@@ -86,21 +86,29 @@ export default {
             elearning_id,
           },
         });
-      const getProgram = () =>
+      const getInteractiveQuestion = () =>
         new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST]({
           params: {
             elearning_id,
           },
         });
 
-      const data = await Promise.all([getInfo(), getProgram()]);
-
-      console.log(data);
+      const data = await Promise.all([getInfo(), getInteractiveQuestion()]);
 
       this.info = get(data, "0.data", null);
-      this.interactive_questions = get(data, "1.data", []);
+      this.interactive_questions = get(data, "1.data", null);
     },
     get,
+    async addQuestionSuccess() {
+      const res = await new InteractiveQuestionService(this.$axios)[
+        actionTypes.BASE.LIST
+      ]({
+        params: {
+          elearning_id: get(this, "$router.history.current.params.id", ""),
+        },
+      });
+      this.interactive_questions = get(res, "data", null);
+    },
   },
 
   data() {

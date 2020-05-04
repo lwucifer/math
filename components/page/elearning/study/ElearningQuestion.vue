@@ -18,6 +18,7 @@
     <ElearningCourseComment
       :comments="get(interactive_questions, 'content', [])"
       :auth="auth"
+      @addQuestionSuccess="$emit('addQuestionSuccess')"
     />
   </div>
 </template>
