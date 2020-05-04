@@ -84,7 +84,7 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["postPhotoList", "postTagPhotoList"]),
+    ...mapState("account", ["postPhotoList", "postTagPhotoList"]),
     filterPhotoList() {
       return this.postPhotoList && this.postPhotoList.listPhotos
         ? this.postPhotoList.listPhotos

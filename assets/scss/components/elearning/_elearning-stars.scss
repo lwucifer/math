@@ -4,12 +4,17 @@
         display: flex;
         align-items: center;
         flex-wrap: nowrap;
+
+        > strong {
+            font-variant-numeric: tabular-nums;
+        }
+
         + .star {
             margin-top: 1rem;
         }
-        >span {
-            width: 6rem;
-            text-align: right;
+
+        > span {
+            margin-left: 1rem;
         }
     }
     .chart {

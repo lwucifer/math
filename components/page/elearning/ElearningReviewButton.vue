@@ -2,59 +2,51 @@
   <div class="elearning-review__nav mb-4">
     <app-button
       class="mr-4"
-      :color="tabActive === 'all' ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 'all'"
       size="sm"
-      square
       @click="changeTab('all')"
-      >Tất cả</app-button
-    >
+    >Tất cả</app-button>
 
     <app-button
       class="mr-4"
-      :color="tabActive == 5 ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 5"
       size="sm"
-      square
       @click="changeTab(5)"
-      >{{ `5 sao (${get(info, "voting.vote1_rate.votes", 0)})` }}</app-button
-    >
+    >{{ `5 sao (${get(info, "voting.vote1_rate.votes", 0)})` }}</app-button>
+
     <app-button
       class="mr-4"
-      :color="tabActive == 4 ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 4"
       size="sm"
-      square
       @click="changeTab(4)"
-      >{{ `4 sao (${get(info, "voting.vote2_rate.votes", 0)})` }}</app-button
-    >
+    >{{ `4 sao (${get(info, "voting.vote2_rate.votes", 0)})` }}</app-button>
+
     <app-button
       class="mr-4"
-      :color="tabActive == 3 ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 3"
       size="sm"
-      square
       @click="changeTab(3)"
-      >{{ `3 sao (${get(info, "voting.vote3_rate.votes", 0)})` }}</app-button
-    >
+    >{{ `3 sao (${get(info, "voting.vote3_rate.votes", 0)})` }}</app-button>
+
     <app-button
       class="mr-4"
-      :color="tabActive == 2 ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 2"
       size="sm"
-      square
       @click="changeTab(2)"
-      >{{ `2 sao (${get(info, "voting.vote4_rate.votes", 0)})` }}</app-button
-    >
+    >{{ `2 sao (${get(info, "voting.vote4_rate.votes", 0)})` }}</app-button>
+
     <app-button
       class="mr-4"
-      :color="tabActive == 1 ? 'primary' : 'gray'"
-      normal
+      color="primary"
+      :outline="tabActive !== 1"
       size="sm"
-      square
       @click="changeTab(1)"
-      >{{ `1 sao (${get(info, "voting.vote5_rate.votes", 0)})` }}</app-button
-    >
+    >{{ `1 sao (${get(info, "voting.vote5_rate.votes", 0)})` }}</app-button>
   </div>
 </template>
 
@@ -69,6 +61,6 @@ export default {
       this.$emit("changeTab", key);
     },
     get
-  },
+  }
 };
 </script>

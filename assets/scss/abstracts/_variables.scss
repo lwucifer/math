@@ -33,9 +33,9 @@ $color-text-white: #fff !default;
 
 // Other Colors
 $color-image-placeholder: #f6f6f6 !default;
-$color-border: #EEEEEE !default;
+$color-border: #F2F2F2 !default;
 $color-active: $color-red !default;
-$color-disabled: #CCCCCC !default;
+$color-disabled: #E0E0E0 !default;
 
 
 // Common box-shadow
@@ -105,6 +105,7 @@ $text-size: (
     subheading: 1.8rem,
     body-1: 1.6rem,
     body-2: $font-size-base,
+    body-3: 1.3rem,
     title: 1.6rem,
     caption: $font-size-caption
 ) !default;
