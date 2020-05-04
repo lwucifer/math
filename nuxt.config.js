@@ -78,6 +78,7 @@ module.exports = {
         { src: "@/plugins/tooltip.js", ssr: false },
         { src: "@/plugins/vue-input-number.js" },
         // { src: "@/plugins/zoom.js", ssr: false },
+        { src: '@/plugins/streaming.js', ssr: false }
     ],
     /**
      * Global middleware
