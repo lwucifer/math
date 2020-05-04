@@ -6,7 +6,7 @@
       :alt="get(info, 'name', '')"
     />
 
-    <template v-if="get(info, 'free', false)">
+    <template v-if="get(info, 'elearning_price.free', false)">
       <div class="elearning-right-side__price-wrapper">
         <b
           v-if="get(info, 'free', '')"
