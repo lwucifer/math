@@ -43,14 +43,14 @@ export default {
     CreateLearningContentLecture,
   },
 
-  async fetch({ params, query, store }) {
-    await store.dispatch(
-      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
-    );
-    await store.dispatch(
-      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
-    );
-  },
+  // async fetch({ params, query, store }) {
+  //   await store.dispatch(
+  //     `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
+  //   );
+  //   await store.dispatch(
+  //     `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
+  //   );
+  // },
 
   data() {
     return {

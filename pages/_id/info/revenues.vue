@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide active="'3'" :school="teacher" />
+        <SchoolAccountSide active="'3'"/>
       </div>
       <div class="col-md-9">
         <div class="elearning-history__main">
@@ -11,7 +11,7 @@
             <div class="d-flex-center">
               <p>
                 <span>Số dư:</span>
-                <strong class="color-red h5">15.000.000 đ</strong>
+                <strong class="color-red h5">{{this.balance}}</strong>
               </p>
               <app-button color="secondary" size="sm" class="ml-4" square>Rút tiền</app-button>
               <n-link class="ml-auto" :to="'/elearning/revenue/withdrawal'">Xem lịch sử rút tiền</n-link>
@@ -25,42 +25,59 @@
               <div class="col-md-3">
                 <div class="item">
                   <p>Hôm nay</p>
-                  <strong>150.000 đ</strong>
+                  <strong>{{this.today_revenue}} đ</strong>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="item">
                   <p>Tuần này</p>
-                  <strong>550.000 đ</strong>
+                  <strong>{{this.week_revenue}} đ</strong>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="item">
                   <p>Tháng này</p>
-                  <strong>1.500.000 đ</strong>
+                  <strong>{{this.month_revenue}} đ</strong>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="item">
                   <p>Tháng trước</p>
-                  <strong>2.500.000 đ</strong>
+                  <strong>{{this.last_month_revenue}}</strong>
                 </div>
               </div>
             </div>
             <hr class="mt-4" />
           </div>
 
+          <h3>Chi tiết doanh thu</h3>
           <div class="elearning-history__table">
             <div class="d-flex mb-3 pl-4 pr-4">
-              <n-link :to="'/elearning/revenue/'" class="bold text-decoration-none d-flex-center">
-                <IconArrowLeft class="fill-primary" />Quay lại
-              </n-link>
-              <p class="ml-auto">Chi tiết doanh số từ 01/10/2019 đến 01/11/2019</p>
+              <app-date-picker label="from" 
+                              @input="changeDateFrom" 
+                              v-model="params.from"
+                              valueFormat="YYYY-MM-DD"
+              />
+              <app-date-picker label="to"
+                               @input="changeDateTo"
+                               v-model="params.to"
+                               valueFormat="YYYY-MM-DD"
+              />
+              <div class="ml-auto">
+                <p class="text-right">Tổng tiền</p>
+                <h3>{{this.revenue}}</h3>
+              </div>
             </div>
             <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
               <tr v-for="(item , index) in list" :key="index">
                 <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
               </tr>
+              <template v-slot:cell(fee)="{row}">
+                <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+              </template>
+              <template v-slot:cell(total)="{row}">
+                <td>{{ formatFee(get(row, 'total', ''))}} đ</td>
+              </template>
             </app-table>
           </div>
         </div>
@@ -73,10 +90,11 @@
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 
-
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-
+import { get } from "lodash";
+import numeral from "numeral";
+import { number } from 'yup';
 export default {
   name: "E-learning",
 
@@ -87,162 +105,118 @@ export default {
 
   data() {
     return {
+      balance:'',
+      today_revenue:'',
+      week_revenue:'',
+      month_revenue:'',
+      last_month_revenue:'',
       heads: [
-        {
-          name: "time",
-          text: "Thời gian",
-          sort: true
+          {
+            name: "code",
+            text: "Mã đơn hàng",
+          },
+          {
+            name: "timestamp",
+            text: "Thời gian",
+          },
+          {
+            name: "customer",
+            text: "Khách hàng",
+          },
+          {
+            name:"desc",
+            text:"Nội dung"
+          },
+          {
+            name: "cost",
+            text: "Giá trị",
+            sort: true
+          },
+          {
+            name: "fee",
+            text: "Phí GD",
+          },
+          {
+            name:"total",
+            text:"Tổng"
+          }
+        ],
+        pagination:{},
+        list:[],
+        params:{
+          from:"",
+          to:"",
+          size:"",
+          page:""
         },
-        {
-          name: "code",
-          text: "Mã đơn hàng",
-          sort: true
-        },
-        {
-          name: "customer",
-          text: "Khách hàng",
-          sort: false
-        },
-        {
-          name: "name",
-          text: "Nội dung",
-          sort: false
-        },
-        {
-          name: "price",
-          text: "Giá trị",
-          sort: true
-        },
-      ],
-      isAuthenticated: true,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
-      },
-      isTeacher: true,
-      time1: null,
-      time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Loại giao dịch" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
-      ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
-      },
-      list: [
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "9290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019",
-          status: "<span>xxxx</span>"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "7290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "3290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 2,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "5290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "4290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1590000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1660000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        }
-      ],
-      active_el: 0
+        revenue:""
     };
   },
+  created(){
+    this.fetchRevenue();
+    this.fetchEarning();
+  },
+  watch:{
+    revenueList: {
+      handler: function(){
+        this.balance = get(this,"revenueList.data.balance",'');
+        this.today_revenue = get(this,"revenueList.data.today_revenue",'');
+        this.week_revenue = get(this,"revenueList.data.week_revenue",'');
+        this.month_revenue = get(this,"revenueList.data.month_revenue",'');
+        this.last_month_revenue = get(this,"revenueList.data.last_month_revenue",'');
+      }
+    },
+    earningList:{
+      handler: function(){
+        this.pagination = get(this,"earningList.data.earnings.page",{});
+        this.list = get(this,"earningList.data.earnings.content",[]);
+        this.revenue = get(this,"earningList.data.revenue","");
+      }
+    }
+  },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("account", {
+      revenueList: "revenueList",
+    }),
+    ...mapState("account", {
+      earningList: "earningList",
+    })
   },
 
   methods: {
+    fetchRevenue(){
+      const res = this.$store.dispatch(`account/${actionTypes.ACCOUNT_REVENUE.LIST}`)
+    },
+    fetchEarning(){
+      const payload = {
+        params :{
+          to: this.params.to,
+          from: this.params.from,
+          size: this.params.size,
+          page: this.params.page
+        }
+      }
+      this.$store.dispatch(`account/${actionTypes.ACCOUNT_EARNING.LIST}`,payload)
+    },
+    changeDateFrom(text){
+      this.params.from = text;
+      this.fetchEarning()
+    },
+    changeDateTo(text){
+      this.params.to = text;
+      this.fetchEarning()
+    },
     onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    }
+      this.params.size = e.size;
+      this.params.page = e.number + 1;
+      this.fetchEarning();
+    },
+    formatFee(fee){ 
+      return numeral(fee).format('0.00')
+    },
+    get,
+    numeral
   }
 };
 </script>

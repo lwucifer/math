@@ -15,6 +15,8 @@ import TheHeaderExercise from "~/components/layout/header/HeaderExercise"
 import Footer from "~/components/layout/footer/Footer"
 
 export default {
+  middleware: ["authenticated", "teacher-role"],
+  
   components: {
     TheHeaderExercise,
     Footer

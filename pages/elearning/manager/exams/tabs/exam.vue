@@ -27,6 +27,8 @@
   const STORE_NAMESPACE = "elearning/teaching/test"
   
   export default {
+    layout: "manage",
+    
     components: {
       FilterForm,
       ListTable

@@ -22,32 +22,35 @@ import { useEffect } from "~/utils/common";
 
 export default {
   components: {
-    IconAngleDown
+    IconAngleDown,
   },
 
   props: {
     defaultValue: {
-      default: ""
-    }
+      default: "",
+    },
   },
 
   data() {
     return {
-      level: null
+      level: null,
     };
   },
 
   created() {
+    this.$store.dispatch(
+      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
+    );
     useEffect(this, this.handleChangeLevels.bind(this), [
       "defaultValue",
-      "levels"
+      "levels",
     ]);
   },
 
   computed: {
     ...mapState("elearning/public/public-levels", {
-      levels: "levels"
-    })
+      levels: "levels",
+    }),
   },
 
   methods: {
@@ -56,8 +59,10 @@ export default {
       this.$emit("handleChangeLevel", level);
     },
     handleChangeLevels() {
-      this.level = this.levels.filter(level => level.id == this.defaultValue)[0];
-    }
-  }
+      this.level = this.levels.filter(
+        (level) => level.id == this.defaultValue
+      )[0];
+    },
+  },
 };
 </script>

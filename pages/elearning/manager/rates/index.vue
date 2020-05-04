@@ -47,6 +47,8 @@
   const STORE_NAMESPACE = 'elearning/teaching/vote'
 
   export default {
+    layout: "manage",
+    
     components: {
       ElearningManagerSide,
       FilterForm,
