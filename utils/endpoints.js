@@ -113,6 +113,7 @@ export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
 export const STUDY_INFO = `${SCHOOLLY_ALIAS}/elearning/study/elearning/info`;
 export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/interactive/questions`;
 export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
+export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elearning/progress`;
 
 /**
  * SCHOOL
