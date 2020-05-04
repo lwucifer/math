@@ -46,8 +46,8 @@ import { required, minLength } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
-      phone: "0356235645",
-      password: "quangTrung@123",
+      phone: "",
+      password: "",
       error: "",
       errorMessage: {
         phone: "",
@@ -82,7 +82,7 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
-            this.$emit('signin', true);
+            this.$emit("signin", true);
 
             this.$router.push("/");
           } else {
@@ -148,8 +148,7 @@ export default {
           break;
       }
       this.messageErrorLogin = message;
-    },
-    
+    }
   }
 };
 </script>
