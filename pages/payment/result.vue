@@ -33,15 +33,16 @@ export default {
     //   vpc_Version: getParamQuery("vpc_Version"),
     // };
     const payload = get(this, "$router.history.current.query", {});
-    const res = await this.$store.dispatch(
-      `payment/${actionTypes.PAYMENT.VALIDATE_TRANSACTION}`,
-      payload
-    );
-    if (res.success) {
-      this.$router.push("/payment/success");
-      return;
-    }
-    this.$router.push("/payment/fail");
+    console.log(payload)
+    // const res = await this.$store.dispatch(
+    //   `payment/${actionTypes.PAYMENT.VALIDATE_TRANSACTION}`,
+    //   payload
+    // );
+    // if (res.success) {
+    //   this.$router.push("/payment/success");
+    //   return;
+    // }
+    // this.$router.push("/payment/fail");
   },
 };
 </script>
