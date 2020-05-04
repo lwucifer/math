@@ -1,7 +1,7 @@
 <template>
   <div>
-    <portal to="modal">
-      <div class="app-modal-root" id="modal-root">
+    <portal to="modal" :order="order">
+      <div class="app-modal-root">
         <div class="app-modal-overlay"></div>
         <div
           class="app-modal-wrapper"
@@ -14,7 +14,10 @@
           <div
             class="app-modal"
             role="document"
-            :style="`width: ${typeof width === 'number' ? width + 'px' : width}`"
+            :style="{
+              width: typeof width === 'number' ? width + 'px' : width,
+              maxWidth: typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth,
+            }"
           >
             <div class="app-modal-content">
               <slot name="header" />
@@ -37,9 +40,16 @@ export default {
       type: [Number, String],
       default: 520 // number in px or css value
     },
+    maxWidth: {
+      type: [Number, String]
+    },
     componentClass: {
       type: Object,
       default: () => {}
+    },
+    order: {
+      type: Number,
+      default: 1
     },
     centered: Boolean,
     visible: Boolean

@@ -1,40 +1,101 @@
 <template>
   <div class="elearning-right-side">
-    <img :src="banner" alt/>
-    <div class="price">
-        Miễn phí
-    </div>
-    <app-button color="secondary" fullWidth square class="text-uppercase mt-3 mb-3">Tham gia học</app-button>
+    <img
+      class="d-block w-100 mb-4"
+      :src="get(info, 'avatar.medium', null)"
+      :alt="get(info, 'name', '')"
+    />
+
+    <template v-if="get(info, 'elearning_price.free', false)">
+      <div class="elearning-right-side__price-wrapper">
+        <b
+          v-if="get(info, 'free', '')"
+          class="elearning-right-side__price text-error"
+          >Miễn phí</b
+        >
+      </div>
+      <app-button
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mb-4"
+        @click="handleStudy"
+        >Tham gia học</app-button
+      >
+    </template>
+
+    <template v-else>
+      <div class="elearning-right-side__price-wrapper">
+        <template v-if="get(info, 'elearning_price.discount', 0)">
+          <b class="elearning-right-side__price text-error"
+            >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
+          >
+          <s class="heading-4 text-gray-2"
+            >{{
+              get(info, "elearning_price.original_price", 0) | numeralFormat
+            }}đ</s
+          >
+        </template>
+
+        <b v-else class="elearning-right-side__price text-error"
+          >{{
+            get(info, "elearning_price.original_price", 0) | numeralFormat
+          }}đ</b
+        >
+      </div>
+      <app-button
+        color="secondary"
+        fullWidth
+        square
+        class="text-uppercase mb-4"
+        @click.prevent="handleAddToCart"
+        >Chọn mua</app-button
+      >
+      <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
+    </template>
+
     <ul class="info">
       <li>
-        <IconBook class="mr-2"/>Trình độ: Lớp 10
+        <IconBook class="icon" />
+        Trình độ: {{ get(program, "level", "") }}
       </li>
       <li>
-        <IconSubject class="mr-2"/>Môn học: Toán
+        <IconSubject class="icon" />
+        Môn học: {{ get(program, "subject", "") }}
       </li>
       <li>
-        <IconLessons class="mr-2"/>Số bài giảng: 1 bài
+        <IconLessons class="icon" />
+        Số bài giảng: {{ get(program, "lessons", 0) }} bài
       </li>
       <li>
-        <IconClock class="mr-2"/>Thời lượng: 15 phút
+        <IconClock class="icon" />
+        Thời lượng: {{ get(program, "duration", 0) }} phút
       </li>
       <li>
-        <IconEye class="mr-2"/>Xem được trên máy tính, điện thoại, tablet
+        <IconEye class="icon" />Xem được trên máy tính, điện thoại, tablet
       </li>
     </ul>
     <hr />
-    <div class="mt-15 mb-3 d-flex">
+    <div class="my-3 d-flex">
       <a class="color-primary d-flex-center">
-        <IconShare class="fill-primary mr-2"/>Chia sẻ
+        <IconShare class="fill-primary mr-2" />Chia sẻ
       </a>
       <a class="color-red ml-auto d-flex-center">
-        <IconHeart class="fill-red mr-2"/>Yêu thích
+        <IconHeart class="fill-red mr-2" />Yêu thích
       </a>
     </div>
+    <PaymentModal
+      v-if="showModalPayment"
+      :fail="AddCartFail"
+      @close-modal="handleCloseModal"
+    />
   </div>
 </template>
+
 <script>
-import BannerImage from "~/assets/images/tmp/money.png";
+import { get } from "lodash";
+import qs from "qs";
+
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -43,6 +104,12 @@ import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 
+import { mapActions, mapGetters } from "vuex";
+import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
+import { createHashKeyReq } from "~/models/payment/HashKeyReq";
+import { RESPONSE_SUCCESS } from "~/utils/config.js";
+
+import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
   components: {
     IconShare,
@@ -51,19 +118,56 @@ export default {
     IconClock,
     IconLessons,
     IconSubject,
-    IconBook
+    IconBook,
+    PaymentModal,
   },
   props: {
-    date: {
+    info: {
       type: Object,
-      default: () => {}
-    }
+    },
+    program: {},
   },
 
   data() {
-      return {
-          banner: BannerImage
-      }
+    return {
+      showModalPayment: false,
+      AddCartFail: false,
+    };
+  },
+
+  computed: {
+    ...mapGetters("cart", ["cartCheckout"]),
+  },
+
+  updated() {
+    console.log(this.info);
+  },
+
+  methods: {
+    get,
+
+    handleStudy() {
+      const elearning_id = get(this, "info.id", "");
+      this.$router.push(`/elearning/${elearning_id}/study`);
+    },
+
+    ...mapActions("cart", ["cartAdd"]),
+    ...mapActions("cart", ["cartList"]),
+
+    handleAddToCart() {
+      const elearning_id = get(this, "info.id", "");
+      this.cartAdd({ elearning_id }).then((result) => {
+        this.cartList();
+        this.showModalPayment = true;
+        if (!result.success) {
+          this.AddCartFail = true;
+        }
+      });
+    },
+    handleCloseModal() {
+      this.showModalPayment = false;
+      this.AddCartFail = false;
+    },
   },
 };
 </script>

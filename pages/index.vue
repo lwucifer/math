@@ -5,35 +5,112 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <PostEditor @submit="handlePostEditorSubmit" />
+          <PostEditor
+            :active="postEditorActive"
+            @submit="addPost"
+            @active-change="active => postEditorActive = active"
+          />
 
-          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
+          <VclFacebook v-if="postLoading" class="bg-white" />
 
-          <app-skeleton :loading="loading" class="mb-4"></app-skeleton>
-
-          <template v-show="!loading">
+          <transition-group
+            enter-active-class="animated faster fadeIn"
+            leave-active-class="animated faster fadeOut"
+          >
             <Post
               v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
               :key="post.post_id"
               :post="post"
               class="mb-4"
               :show-menu-dropdown="post.author && post.author.id === userId"
-              @delete="deletePost"
+              @delete="showModalConfirmDelete"
               @like="likePost"
+              @edit="editPost"
+              @share="openModalShare"
+              @get-comment="getComment"
+              @post-comment="postComment"
             >
-              <PostImage
-                v-if="post.files && post.files.length"
-                slot="media-content"
-                class="my-4"
-                :images="post.files.map(item => ({
+              <template slot="media-content" slot-scope="{ link }">
+                <PostImage
+                  v-if="post.files && post.files.length"
+                  class="my-4"
+                  :images="post.files.map(item => ({
+                    id: item.post_id,
+                    thumb: get(item, 'link.high', null),
+                    object: 'image'
+                  }))"
+                  @click-item="imageObj => handleClickImage(imageObj, post)"
+                />
+
+                <template v-else-if="post.link && link">
+                  <app-divider class="my-4"></app-divider>
+                  <app-content-box
+                    tag="a"
+                    target="_blank"
+                    class="mb-4"
+                    size="md"
+                    :href="link.url"
+                    :image="link.image"
+                    :title="link.title"
+                    :desc="link.description"
+                    :meta-footer="link.siteName"
+                  />
+                </template>
+              </template>
+
+              <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
+                <PostImage
+                  v-if="post.parent_post && post.parent_post.files && post.parent_post.files.length"
+                  slot="media-content"
+                  class="mt-4"
+                  :images="post.parent_post.files.map(item => ({
                   id: item.post_id,
                   thumb: item.link.high,
                   object: 'image'
                 }))"
-                @click-item="imageObj => handleClickImage(imageObj, post)"
-              />
+                  @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
+                />
+              </PostShareContent>
+
+              <template slot="comment" slot-scope="{ commentTree }">
+                <transition-group
+                  enter-active-class="animated faster fadeIn"
+                  leave-active-class="animated faster fadeOut"
+                >
+                  <CommentItem
+                    v-for="comment in commentTree.comments || []"
+                    :key="comment.id"
+                    :post="post"
+                    :data="comment"
+                    @edit="editComment"
+                    @delete="deleteComment"
+                    @like="likeComment"
+                    @get-child-comment="getChildComment"
+                    @post-child-comment="postChildComment"
+                  >
+                    <template slot="child-comment" slot-scope="{ commentTree }">
+                      <transition-group
+                        enter-active-class="animated faster fadeIn"
+                        leave-active-class="animated faster fadeOut"
+                      >
+                        <CommentItem
+                          v-for="childComment in commentTree.comments || []"
+                          :key="childComment.id"
+                          :level="2"
+                          :post="post"
+                          :parentComment="comment"
+                          :data="childComment"
+                          @edit="editChildComment"
+                          @delete="deleteChildComment"
+                          @like="likeChildComment"
+                        />
+                      </transition-group>
+                    </template>
+                  </CommentItem>
+                </transition-group>
+              </template>
             </Post>
-          </template>
+          </transition-group>
 
           <div class="d-none">
             <!-- DEMO FOR POST LINK -->
@@ -66,85 +143,14 @@
               </template>
             </Post>-->
             <!-- END DEMO FOR POST SLIDER -->
-
-            <!-- DEMO FOR POST 1 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[{ object: 'image', thumb: 'https://picsum.photos/1920/1080'}]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 1 IMAGE -->
-
-            <!-- DEMO FOR POST 2 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                    { object: 'image', thumb: 'https://picsum.photos/361/361'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 2 IMAGE -->
-
-            <!-- DEMO FOR POST 3 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/546/362'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                    { object: 'image', thumb: 'https://picsum.photos/179/179'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 3 IMAGE -->
-
-            <!-- DEMO FOR POST 4 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/555/555'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                    { object: 'image', thumb: 'https://picsum.photos/182/182'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 4 IMAGE -->
-
-            <!-- DEMO FOR POST 5 IMAGE -->
-            <!-- <Post>
-              <template slot="media-content">
-                <PostImage
-                  :images="[
-                    { object: 'image', thumb: 'https://picsum.photos/729/437'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                    { object: 'image', thumb: 'https://picsum.photos/178/178'},
-                  ]"
-                  class="my-4"
-                  @click-item="modalDetailShow = true"
-                />
-              </template>
-            </Post>-->
-            <!-- END DEMO FOR POST 5 IMAGE -->
           </div>
+
+          <client-only>
+            <infinite-loading @infinite="feedInfiniteHandler">
+              <VclFacebook slot="spinner" class="bg-white" />
+              <template slot="no-more">Không còn bài viết.</template>
+            </infinite-loading>
+          </client-only>
 
           <app-modal
             v-if="modalDetailShow"
@@ -154,75 +160,199 @@
             @close="handleCloseModal"
           >
             <PostDetail
-              v-if="modalDetailShow"
               slot="content"
-              :post="dataModalDetail"
+              :post="modalDetailPost"
+              :parent-post="modalDetailParentPost"
+              :is-parent-post="modalDetailParentPostId === modalDetailPostId"
               @click-close="handleCloseModal"
               @click-prev="handleClickPrev"
               @click-next="handleClickNext"
-            />
+              @delete="showModalConfirmDelete"
+            >
+              <PostDetailPost
+                slot="post"
+                slot-scope="{ post, isParentPost }"
+                show-edit
+                show-comment
+                :post="post"
+                :is-parent-post="isParentPost"
+                @like="(...args) => isParentPost ? likePost(...args) : likeDetailPost(...args)"
+                @get-comment="(...args) => isParentPost ? getComment(...args) : getCommentDetailPost(...args)"
+                @post-comment="(...args) => isParentPost ? postComment(...args) : postCommentDetailPost(...args)"
+              >
+                <template v-if="!isEmpty(post)" slot="comment" slot-scope="{ commentTree }">
+                  <transition-group
+                    enter-active-class="animated faster fadeIn"
+                    leave-active-class="animated faster fadeOut"
+                  >
+                    <CommentItem
+                      v-for="comment in commentTree.comments || []"
+                      :key="comment.id"
+                      :post="post"
+                      :data="comment"
+                      @edit="(...args) => isParentPost ? editComment(...args) : editCommentDetailPost(...args)"
+                      @delete="(...args) => isParentPost ? deleteComment(...args) : deleteCommentDetailPost(...args)"
+                      @like="(...args) => isParentPost ? likeComment(...args) : likeCommentDetailPost(...args)"
+                      @get-child-comment="(...args) => isParentPost ? getChildComment(...args) : getChildCommentDetailPost(...args)"
+                      @post-child-comment="(...args) => isParentPost ? postChildComment(...args) : postChildCommentDetailPost(...args)"
+                    >
+                      <template slot="child-comment" slot-scope="{ commentTree }">
+                        <transition-group
+                          enter-active-class="animated faster fadeIn"
+                          leave-active-class="animated faster fadeOut"
+                        >
+                          <CommentItem
+                            v-for="childComment in commentTree.comments || []"
+                            :key="childComment.id"
+                            :level="2"
+                            :post="post"
+                            :parentComment="comment"
+                            :data="childComment"
+                            @edit="(...args) => isParentPost ? editChildComment(...args) : editChildCommentDetailPost(...args)"
+                            @delete="(...args) => isParentPost ? deleteChildComment(...args) : deleteChildCommentDetailPost(...args)"
+                            @like="(...args) => isParentPost ? likeChildComment(...args) : likeChildCommentDetailPost(...args)"
+                          />
+                        </transition-group>
+                      </template>
+                    </CommentItem>
+                  </transition-group>
+                </template>
+              </PostDetailPost>
+            </PostDetail>
           </app-modal>
+
+          <PostModalShare
+            v-if="showModalShare"
+            :post="shareData"
+            @cancel="cancelShare"
+            @share="sharePost"
+          >
+            <PostShareContent slot="share-content" :post="shareData.parent_post">
+              <PostImage
+                v-if="shareData.parent_post && shareData.parent_post.files && shareData.parent_post.files.length"
+                slot="media-content"
+                class="my-4"
+                :images="shareData.parent_post.files.map(item => ({
+                  id: item.post_id,
+                  thumb: item.link.high,
+                  object: 'image'
+                }))"
+              />
+            </PostShareContent>
+          </PostModalShare>
+
+          <app-modal v-if="showModalEditPost" :width="770">
+            <PostEditor
+              slot="content"
+              ref="editEditor"
+              class="mb-0"
+              mode="edit"
+              :initialValues="editPostData"
+              prefetch
+              :show-overlay="false"
+              @submit="handleSubmitEditPost"
+            />
+            <div slot="footer" class="text-right px-4 pb-3">
+              <app-button
+                class="mr-3"
+                color="info"
+                :disabled="modalEditPostLoading"
+                size="sm"
+                square
+                @click="closeModalEditPost"
+              >Huỷ</app-button>
+
+              <app-button
+                color="primary"
+                :loading="modalEditPostLoading"
+                size="sm"
+                square
+                @click="handleClickSaveEditPost"
+              >Lưu</app-button>
+            </div>
+          </app-modal>
+
+          <app-modal-confirm
+            v-if="modalConfirmDelete"
+            okText="Xoá"
+            title="Bạn có chắc chắn muốn xoá?"
+            :confirmLoading="modalConfirmDeleteLoading"
+            @cancel="hideModalConfirmDelete"
+            @ok="deletePost(modalConfirmDeleteId)"
+          ></app-modal-confirm>
         </div>
 
         <div class="col-md-4">
-          <AsideBox :title="`Tin nhắn (2)`" link="/messages" linkText="Xem toàn bộ >>">
-            <app-content-box
-              v-for="(item, index) in messages"
-              class="mb-4"
-              nuxt
-              to
-              size="sm"
-              :key="index"
-              :image="item.image"
-              :title="item.title"
-              :desc="item.desc"
-            />
-          </AsideBox>
+          <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9" class="timeline-aside-wrapper">
+            <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
+              <app-content-box
+                v-for="message in messagesConverted"
+                v-bind="message"
+                class="mb-4"
+                nuxt
+                size="sm"
+                :key="message.id"
+                :to="`/messages/t/${message.id}`"
+              />
+            </AsideBox>
 
-          <AsideBox title="Khóa học Online nổi bật">
-            <div class="timeline-aside-tabs">
-              <a href class="active" @click.prevent>Miễn phí</a>
-              <a href @click.prevent>Trả phí</a>
-            </div>
-
-            <div class="time-aside-tabs-content">
-              <div class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="(item, index) in coursesList"
-                  class="align-items-center"
-                  size="sm"
-                  :key="index"
-                  :image="item.image"
-                  :title="item.title"
-                  :desc="item.desc"
-                >
-                  <n-link slot="image" to>
-                    <img :src="item.image" :alt="item.title" />
-                  </n-link>
-
-                  <n-link slot="title" to>{{ item.title }}</n-link>
-
-                  <n-link slot="desc" to>{{ item.desc }}</n-link>
-                </app-content-box>
+            <AsideBox title="Khóa học Online nổi bật">
+              <div class="timeline-aside-tabs">
+                <a
+                  href
+                  :class="{ active: coursesTab === 0 }"
+                  @click.prevent="coursesTab = 0"
+                >Miễn phí</a>
+                <a
+                  href
+                  :class="{ active: coursesTab === 1 }"
+                  @click.prevent="coursesTab = 1"
+                >Trả phí</a>
               </div>
 
-              <!-- <div class="timeline-aside-tab-pane">
-                <app-content-box
-                  v-for="(item, index) in coursesList.reverse()"
-                  nuxt
-                  size="sm"
-                  :key="index"
-                  :image="item.image"
-                  :title="item.title"
-                  :desc="item.desc"
-                ></app-content-box>
-              </div>-->
+              <div class="time-aside-tabs-content">
+                <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in freeCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
 
-              <div class="text-center mt-4">
-                <app-button class="timeline-aside-btn">Xem Tất Cả</app-button>
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
+                  <app-content-box
+                    v-for="item in privateCourses"
+                    :key="item.id"
+                    class="align-items-center"
+                    size="sm"
+                    :image="get(item, 'avatar.low', null)"
+                  >
+                    <n-link slot="image" :to="`/elearning/${item.id}`">
+                      <img :src="item.image" :alt="item.name" />
+                    </n-link>
+
+                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
+
+                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  </app-content-box>
+                </div>
+
+                <div class="text-center mt-4">
+                  <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
+                </div>
               </div>
-            </div>
-          </AsideBox>
+            </AsideBox>
+          </div>
         </div>
       </div>
     </div>
@@ -230,23 +360,48 @@
 </template>
 
 <script>
+import { get, isEmpty } from "lodash";
 import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { POST_TYPES, LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
 import { createLike } from "~/models/social/Like";
+import { createShare } from "~/models/social/Share";
+import { createPost, editPost } from "~/models/post/Post";
+import { createComment, editComment } from "~/models/social/Comment";
+import {
+  COURSES_LIST,
+  TIMELINE_SLIDER_ITEMS
+} from "~/server/fakedata/timeline";
+import { VclFacebook } from "vue-content-loading";
+import LimitMessagesSerice from "~/services/message/LimitMessages";
+import SearchService from "~/services/elearning/public/Search";
 
 import SliderBanner from "~/components/page/timeline/slider/SliderBanner";
 import PostEditor from "~/components/page/timeline/postEditor/PostEditor";
 import AsideBox from "~/components/layout/asideBox/AsideBox";
 import Post from "~/components/page/timeline/post/Post";
-import PostSlider from "~/components/page/timeline/post/PostSlider";
-import PostDetail from "~/components/page/timeline/post/PostDetail";
-import PostImage from "~/components/page/timeline/post/PostImage";
+const PostSlider = () => import("~/components/page/timeline/post/PostSlider");
+const PostDetail = () => import("~/components/page/timeline/post/PostDetail");
+const PostImage = () => import("~/components/page/timeline/post/PostImage");
+const PostModalShare = () =>
+  import("~/components/page/timeline/post/PostModalShare");
+const PostShareContent = () =>
+  import("~/components/page/timeline/post/PostShareContent");
+const PostDetailPost = () =>
+  import("~/components/page/timeline/post/PostDetailPost");
+const CommentItem = () =>
+  import("~/components/page/timeline/comment/CommentItem");
+const CommentItemReplied = () =>
+  import("~/components/page/timeline/comment/CommentItemReplied");
+const CommentEditor = () =>
+  import("~/components/page/timeline/comment/CommentEditor");
 
 import BannerImage from "~/assets/images/tmp/timeline-slider.jpg";
 
 export default {
-  watchQuery: ["post_id", "photo_id"],
+  // watchQuery: ["post_id", "photo_id"],
+
+  middleware: "authenticated",
 
   components: {
     SliderBanner,
@@ -255,42 +410,86 @@ export default {
     Post,
     PostSlider,
     PostDetail,
-    PostImage
+    PostImage,
+    VclFacebook,
+    PostModalShare,
+    PostShareContent,
+    CommentItem,
+    CommentItemReplied,
+    CommentEditor,
+    PostDetailPost
   },
 
-  async fetch({ params, query, store }) {
-    await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_CONFIG.LIST}`),
-      store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`)
+  fetch({ params, query, store }) {
+    Promise.all([
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_CONFIGS}`),
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_LABELS}`),
+      store.dispatch(`social/${actionTypes.SOCIAL.GET_FEEDS}`)
     ]);
+  },
+
+  async asyncData({ $axios, error }) {
+    try {
+      const getMessages = () =>
+        new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
+      const getFreeCourse = () =>
+        new SearchService($axios)[actionTypes.BASE.ADD]({
+          free: true,
+          limit: 5
+        });
+      const getPrivateCourse = () =>
+        new SearchService($axios)[actionTypes.BASE.ADD]({
+          free: false,
+          limit: 5
+        });
+
+      const [
+        // { data: feeds = {} },
+        { data: messages = [] },
+        { data: freeCourses = [] },
+        { data: privateCourses = [] }
+      ] = await Promise.all([
+        getMessages(),
+        getFreeCourse(),
+        getPrivateCourse()
+      ]);
+
+      return {
+        // feeds: feeds || [],
+        messages: messages || [],
+        freeCourses: freeCourses.content || [],
+        privateCourses: privateCourses.content || []
+      };
+    } catch (e) {
+      error({ statusCode: e.status, message: e.message });
+    }
   },
 
   data() {
     return {
       POST_TYPES: Object.freeze(POST_TYPES),
-      loading: true,
+      loading: false,
       banners: new Array(3).fill(BannerImage, 0),
-      coursesTab: 0,
+      postEditorActive: false,
+      postLoading: false,
+      // Modal post detail
       modalDetailShow: false,
-      dataModalDetail: {},
-      messages: [
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Mr. Damian",
-          desc: "Tiếng Trung cơ bản cho người mới bắt đầu 1"
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Nguyễn Đăng Dũng",
-          desc:
-            "Nắm được các kỹ năng cơ bản của giao tiếp: kỹ năng nghe, nói, khen chê và phi ngôn ngữ."
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Trần Quyền",
-          desc: "Tiếng Trung cơ bản cho người mới bắt đầu 1"
-        }
-      ],
+      modalDetailParentPostId: null,
+      modalDetailPostId: null,
+      // Edit post
+      showModalEditPost: false,
+      modalEditPostLoading: false,
+      editPostData: {},
+      // Share post
+      showModalShare: false,
+      shareData: {},
+      // Delete post
+      modalConfirmDelete: false,
+      modalConfirmDeleteId: null,
+      modalConfirmDeleteLoading: false,
+      // Course tabs
+      coursesTab: 0,
+
       coursesTabsList: [
         {
           text: "Miễn phí",
@@ -301,75 +500,10 @@ export default {
           value: 1
         }
       ],
-      coursesList: [
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Chiến lược tài chính",
-          desc: "Ts. Lê Thẩm Dương"
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Thực hành làm kế toán tổng hợp trên phầm mềm Misa",
-          desc: "Nguyễn Lê Hoàng"
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Chiến lược tài chính",
-          desc: "Ts. Lê Thẩm Dương"
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Chiến lược tài chính",
-          desc: "Ts. Lê Thẩm Dương"
-        },
-        {
-          image: "https://picsum.photos/64/64",
-          title: "Chiến lược tài chính",
-          desc: "Ts. Lê Thẩm Dương"
-        }
-      ],
-      timelineSliderItems: [
-        {
-          id: 0,
-          type: "image",
-          src: "https://picsum.photos/171/171"
-        },
-        {
-          id: 1,
-          type: "video",
-          src: "https://picsum.photos/1920/1080"
-        },
-        {
-          id: 2,
-          type: "image",
-          src: "https://picsum.photos/1024/768"
-        },
-        {
-          id: 3,
-          type: "image",
-          src: "https://picsum.photos/180/180"
-        },
-        {
-          id: 4,
-          type: "image",
-          src: "https://picsum.photos/200/200"
-        },
-        {
-          id: 5,
-          type: "image",
-          src: "https://picsum.photos/350/350"
-        },
-        {
-          id: 6,
-          type: "image",
-          src: "https://picsum.photos/400/400"
-        },
-        {
-          id: 7,
-          type: "image",
-          src: "https://picsum.photos/240/240"
-        }
-      ]
+
+      //Fake data
+      coursesList: COURSES_LIST,
+      timelineSliderItems: TIMELINE_SLIDER_ITEMS
     };
   },
 
@@ -380,50 +514,96 @@ export default {
     userId() {
       const { $store: store = {} } = this;
       return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    messagesConverted() {
+      return this.messages && this.messages.length
+        ? this.messages.map(item => {
+            return {
+              id: item.room.id,
+              title: item.room.members
+                .filter(member => member.user_id !== this.userId)
+                .map(member => member.fullname)
+                .join(", "),
+              desc: item.message.content,
+              image: get(item, "room.room_avatar.low", null)
+            };
+          })
+        : [];
+    },
+
+    modalDetailPost() {
+      return this.$store.state.social.detailPost;
+    },
+
+    modalDetailParentPost() {
+      return (
+        this.$store.getters[`social/post`](this.modalDetailParentPostId) || {}
+      );
     }
   },
 
   mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 500);
-
     if (process.browser) {
-      window.addEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.addEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout);
+        });
+      });
     }
   },
 
   beforeDestroy() {
     if (process.browser) {
-      window.removeEventListener("popstate", event =>
-        setTimeout(() => this.handlePopstate(event))
-      );
+      window.removeEventListener("popstate", event => {
+        const timeout = setTimeout(() => {
+          this.handlePopstate(event);
+          clearTimeout(timeout);
+        });
+      });
     }
   },
 
   methods: {
+    get,
+    isEmpty,
+
     /**
      * Click image -> change url
-     * @param { Object } imageObj - { type: image | video, post: post object }
+     * @param { Object } imageObj - { id, thumb, object }
+     * @param { Object } post
      */
-    handleClickImage(imageObj, post) {
+    handleClickImage({ id }, post) {
+      // Change url
       if (typeof window.history.pushState != "undefined") {
-        console.log("handleClickImage", imageObj);
-        this.dataModalDetail = post;
-        this.modalDetailShow = true;
+        this.modalDetailParentPostId = post.post_id;
 
         window.history.pushState(
           { theater: true },
           "",
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       } else {
         this.$router.push(
-          `${window.location.origin}/post?photo_id=${imageObj.id}`
+          `${window.location.origin}/post/${post.post_id}?photo_id=${id}`
         );
       }
+
+      // set data
+      if (id === post.post_id) {
+        this.modalDetailPostId = post.post_id;
+      } else {
+        this.modalDetailPostId = id;
+        this.$store.dispatch(
+          `social/${actionTypes.SOCIAL.GET_DETAIL_POST}`,
+          id
+        );
+      }
+
+      this.$nextTick(() => {
+        this.modalDetailShow = true;
+      });
     },
 
     /**
@@ -458,58 +638,569 @@ export default {
       }
 
       this.modalDetailShow = false;
-      this.dataModalDetail = {};
+      this.modalDetailParentPostId = null;
+      this.modalDetailPostId = null;
+      this.$store.dispatch(`social/${actionTypes.SOCIAL.CLEAR_DETAIL_POST}`);
     },
 
     /**
      * on click prev arrow on modal post detail -> get prev image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickPrev() {
-      console.log("handleClickPrev");
+    handleClickPrev(id, post) {
+      this.handleClickImage({ id }, post);
     },
 
     /**
      * on click next arrow on modal post detail -> get next image info
+     * @param { Number } id - post_id of image post
+     * @param { Object } post - parent post
      */
-    handleClickNext() {
-      console.log("handleClickNext");
+    handleClickNext(id, post) {
+      this.handleClickImage({ id }, post);
     },
 
-    /**
-     * Submit POST a post
-     */
-    async handlePostEditorSubmit(data) {
-      const formData = new FormData();
-      for (const key in data) {
-        formData.append(key, data[key]);
-      }
-      console.log("formData after append", FormData);
-      const doAdd = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.ADD}`,
-        formData
+    showModalConfirmDelete(id) {
+      this.modalConfirmDelete = true;
+      this.modalConfirmDeleteId = id;
+    },
+
+    hideModalConfirmDelete() {
+      this.modalConfirmDelete = false;
+      this.modalConfirmDeleteId = null;
+    },
+
+    editPost(post) {
+      this.editPostData = {
+        post_id: post.post_id,
+        content: post.content,
+        link: post.link || "",
+        post_image: post.files || [],
+        list_tag:
+          post.tags && post.tags.length ? post.tags.map(item => item.id) : [],
+        check_in: null,
+        privacy: get(post, "privacy.value", null),
+        label_id: get(post, "label.id", null)
+      };
+      this.showModalEditPost = true;
+    },
+
+    closeModalEditPost() {
+      this.showModalEditPost = false;
+      this.editPostData = {};
+    },
+
+    handleClickSaveEditPost() {
+      this.$refs.editEditor && this.$refs.editEditor.submit();
+    },
+
+    async handleSubmitEditPost(data) {
+      const dataWithModel = editPost(data);
+
+      this.modalEditPostLoading = true;
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_POST}`,
+        dataWithModel
       );
-      console.log("doAdd result", doAdd);
+
+      if (doEdit.success) {
+        this.modalEditPostLoading = false;
+        this.showModalEditPost = false;
+      } else {
+        this.$toasted.error(doEdit.message);
+        this.modalEditPostLoading = false;
+      }
+    },
+
+    openModalShare(post) {
+      this.shareData = post;
+      this.$nextTick(() => {
+        this.showModalShare = true;
+      });
+    },
+
+    cancelShare() {
+      this.showModalShare = false;
+      this.shareData = {};
+    },
+
+    async sharePost({ post_id, content, list_tag, label_id }, cb) {
+      const shareModel = createShare(post_id, content, list_tag, label_id);
+      const doShare = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.SHARE}`,
+        shareModel
+      );
+
+      if (doShare.success) {
+        this.cancelShare();
+        cb();
+      } else {
+        this.$toasted.error(doShare.message);
+      }
+    },
+
+    //
+    //
+    //
+    //
+    //
+    /**
+     * Infinite scroll handler
+     */
+    async feedInfiniteHandler($state) {
+      const getData = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_FEEDS}`,
+        {
+          params: {
+            page: get(this, "feeds.page.number", 0) + 1
+          }
+        }
+      );
+
+      if (getData.success && !isEmpty(getData.data)) {
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
     },
 
     /**
-     * DELETE a post
+     * To Submit POST a post
+     */
+    async addPost(data, cb) {
+      const dataWithModel = createPost(data);
+
+      this.postLoading = true;
+      this.postEditorActive = false;
+
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        dataWithModel
+      );
+
+      if (doAdd.success) {
+        cb();
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
+
+      this.postLoading = false;
+    },
+
+    /**
+     * To DELETE a post
      */
     async deletePost(id) {
+      this.modalConfirmDeleteLoading = true;
       const doDelete = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL_POST.DELETE}`,
+        `social/${actionTypes.SOCIAL.DELETE_POST}`,
         id
       );
-      console.log("doDelete", doDelete);
+
+      if (!doDelete.success) {
+        this.$toasted.error(doDelete.message);
+      }
+
+      this.hideModalConfirmDelete();
+      this.modalConfirmDeleteLoading = false;
     },
 
+    /**
+     * To LIKE a POST
+     */
     async likePost(id, cb) {
       const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
-      const doLike = await this.$store.dispatch(`social/${actionTypes.SOCIAL_LIKES.ADD}`, likeModel);
-      console.log('likePost', doLike)
-      this.$store.dispatch(`social/${actionTypes.SOCIAL_FEEDS.LIST}`)
+
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_POST}`,
+        likeModel
+      );
 
       // Have to run cb
       cb();
+    },
+
+    /**
+     * To GET comment of post
+     */
+    async getComment(postId, page, setIsFetchingComment, setIsCommentFetched) {
+      setIsCommentFetched && setIsFetchingComment(true);
+
+      const getComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_COMMENT}`,
+        {
+          source_id: postId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+      setIsCommentFetched && setIsCommentFetched(true);
+    },
+
+    /**
+     * To POST a comment to post
+     */
+    async postComment(postId, { content, listTags, image, link }, clearEditor) {
+      const commentModel = createComment({
+        source_id: postId,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
+      });
+
+      const doPostComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_COMMENT}`,
+        commentModel
+      );
+
+      if (doPostComment.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    /**
+     * To EDIT a comment of post
+     */
+    async editComment(dataModel, cancelEdit) {
+      const commentModel = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_COMMENT}`,
+        commentModel
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a comment of post
+     */
+    async deleteComment({ id, source_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_COMMENT}`,
+        { id, source_id }
+      );
+
+      if (doDelete.success) {
+        await this.getComment(source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a comment of post
+     */
+    async likeComment(id, postId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(`social/${actionTypes.SOCIAL.LIKE_COMMENT}`, {
+        model,
+        postId
+      });
+    },
+
+    /**
+     * To GET child comment list of post
+     */
+    async getChildComment(parentCommentId, postId, page, setIsFetchingComment) {
+      setIsFetchingComment && setIsFetchingComment(true);
+
+      const doGet = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_CHILD_COMMENT}`,
+        {
+          source_id: postId,
+          parent_comment_id: parentCommentId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+    },
+
+    /**
+     * To POST a child comment of post
+     */
+    async postChildComment(dataModel, clearEditor) {
+      const model = createComment(dataModel);
+      const doAction = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_CHILD_COMMENT}`,
+        model
+      );
+
+      if (doAction.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doAction.message);
+      }
+    },
+
+    /**
+     * To EDIT a child comment of post
+     */
+    async editChildComment(dataModel, cancelEdit) {
+      const model = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_CHILD_COMMENT}`,
+        model
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a child comment of post
+     */
+    async deleteChildComment({ id, source_id, parent_comment_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_CHILD_COMMENT}`,
+        { id, source_id, parent_comment_id }
+      );
+
+      if (doDelete.success) {
+        await this.getChildComment(parent_comment_id, source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a child comment of post
+     */
+    async likeChildComment(id, postId, parentCommentId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT}`,
+        {
+          model,
+          postId,
+          parentCommentId
+        }
+      );
+    },
+
+    /**
+     * To LIKE detail post modal
+     */
+    async likeDetailPost(id, cb) {
+      const likeModel = createLike(id, LIKE_SOURCE_TYPES.POST, LIKE_TYPES.LIKE);
+
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_DETAIL_POST}`,
+        likeModel
+      );
+
+      // Have to run cb
+      cb();
+    },
+
+    /**
+     * To GET comment of detail post modal
+     */
+    async getCommentDetailPost(
+      postId,
+      page,
+      setIsFetchingComment,
+      setIsCommentFetched
+    ) {
+      setIsCommentFetched && setIsFetchingComment(true);
+
+      const getComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_COMMENT_DETAIL_POST}`,
+        {
+          source_id: postId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+      setIsCommentFetched && setIsCommentFetched(true);
+    },
+
+    /**
+     * To POST comment of detail post modal
+     */
+    async postCommentDetailPost(
+      postId,
+      { content, listTags, image, link },
+      clearEditor
+    ) {
+      const commentModel = createComment({
+        source_id: postId,
+        comment_content: content,
+        list_tag: listTags,
+        comment_images: image,
+        comment_link: link
+      });
+
+      const doPostComment = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_COMMENT_DETAIL_POST}`,
+        commentModel
+      );
+
+      if (doPostComment.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doPostComment.message);
+      }
+    },
+
+    /**
+     * To EDIT comment of detail post modal
+     */
+    async editCommentDetailPost(dataModel, cancelEdit) {
+      const commentModel = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_COMMENT_DETAIL_POST}`,
+        commentModel
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE comment of detail post modal
+     */
+    async deleteCommentDetailPost({ id, source_id }, page) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_COMMENT_DETAIL_POST}`,
+        { id, source_id }
+      );
+
+      if (doDelete.success) {
+        await this.getCommentDetailPost(source_id, page);
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE comment of detail post modal
+     */
+    async likeCommentDetailPost(id, postId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_COMMENT_DETAIL_POST}`,
+        {
+          model,
+          postId
+        }
+      );
+    },
+
+    /**
+     * To GET child comment list of post modal
+     */
+    async getChildCommentDetailPost(
+      parentCommentId,
+      postId,
+      page,
+      setIsFetchingComment
+    ) {
+      setIsFetchingComment && setIsFetchingComment(true);
+
+      const doGet = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.GET_CHILD_COMMENT_DETAI_POST}`,
+        {
+          source_id: postId,
+          parent_comment_id: parentCommentId,
+          page
+        }
+      );
+
+      setIsFetchingComment && setIsFetchingComment(false);
+    },
+
+    /**
+     * To POST a child comment of post modal
+     */
+    async postChildCommentDetailPost(dataModel, clearEditor) {
+      const model = createComment(dataModel);
+      const doAction = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_CHILD_COMMENT_DETAIL_POST}`,
+        model
+      );
+
+      if (doAction.success) {
+        clearEditor();
+      } else {
+        this.$toasted.error(doAction.message);
+      }
+    },
+
+    /**
+     * To EDIT a child comment of post modal
+     */
+    async editChildCommentDetailPost(dataModel, cancelEdit) {
+      const model = editComment(dataModel);
+
+      const doEdit = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.EDIT_CHILD_COMMENT_DETAIL_POST}`,
+        model
+      );
+
+      if (doEdit.success) {
+        cancelEdit();
+      } else {
+        this.$toasted.error(doEdit.message);
+      }
+    },
+
+    /**
+     * To DELETE a child comment of post modal
+     */
+    async deleteChildCommentDetailPost(
+      { id, source_id, parent_comment_id },
+      page
+    ) {
+      const doDelete = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.DELETE_CHILD_COMMENT_DETAIL_POST}`,
+        { id, source_id, parent_comment_id }
+      );
+
+      if (doDelete.success) {
+        await this.getChildCommentDetailPost(
+          parent_comment_id,
+          source_id,
+          page
+        );
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
+    /**
+     * To LIKE a child comment of post modal
+     */
+    async likeChildCommentDetailPost(id, postId, parentCommentId) {
+      const model = createLike(id, LIKE_SOURCE_TYPES.COMMENT, LIKE_TYPES.LIKE);
+      await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.LIKE_CHILD_COMMENT_DETAIL_POST}`,
+        {
+          model,
+          postId,
+          parentCommentId
+        }
+      );
     }
   }
 };

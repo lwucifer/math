@@ -1,23 +1,31 @@
 .post-editor {
     margin-bottom: 1.8rem;
     position: relative;
-    z-index: 2;
 
-    &.active {
-        .post-editor__overlay {
-            visibility: visible;
-            opacity: 1;
-        }
-
+    &--has-overlay {
         .post-editor__privacy,
         .post-editor__submit {
-            display: flex;
+            display: none;
+        }
+        
+        &.active {
+            z-index: 101;
+
+            .post-editor__overlay {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .post-editor__privacy,
+            .post-editor__submit {
+                display: flex;
+            }
         }
     }
 }
 
 .post-editor__privacy {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: space-between;
 }
@@ -50,20 +58,7 @@
 }
 
 .post-editor__avatar {
-    flex: 0 0 6rem;
-    width: 6rem;
-    height: 6rem;
     margin-right: 1.6rem;
-    border-radius: 50%;
-    overflow: hidden;
-    background-color: $color-image-placeholder;
-
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
 }
 
 .post-editor__editor {
@@ -204,8 +199,13 @@
         fill: $color-text-gray;
     }
 
-    &__prepend {
+    .app-select__prepend {
         fill: $color-text-gray;
+
+        img {
+            max-width: 1.6rem;
+            max-height: 1.6rem;
+        }
     }
 }
 
@@ -213,4 +213,35 @@
     .app-dropdown__content {
         top: calc(100% + 1.5rem);
     }
+}
+
+.post-editor__preview-link {
+    position: relative;
+
+    &__remove {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        z-index: 1;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        &:hover {
+            .icon {
+                color: $color-primary;
+            }
+        }
+    }
+}
+
+.post-editor .mention {
+    font-weight: 700;
 }

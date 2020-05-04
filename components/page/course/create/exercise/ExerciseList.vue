@@ -1,0 +1,124 @@
+<template>
+  <div class="cc-panel__body">
+    <div class="cc-box">
+      <div class="cc-box__head">
+        <div class="cc-box__head-left">
+          <EditExerciseName
+            :exercise="get(this, 'exercise', {})"
+            :index="index"
+            @handleRefreshExcercises="handleRefreshExcercises"
+          />
+        </div>
+
+        <div class="cc-box__head-right">
+          <a href @click.prevent="handleAddQuestion" class="text-secondary"
+            >Thêm câu hỏi</a
+          >
+          <button
+            class="cc-box__btn cc-box__btn-collapse"
+            @click="isShowExercise = !isShowExercise"
+          >
+            <IconAngleDown class="icon" v-if="!isShowExercise" />
+            <IconAngleUp class="icon" v-else />
+          </button>
+        </div>
+      </div>
+
+      <div class="cc-box__body">
+        <CreateQuestionChoice
+          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
+          :exercise="exercise"
+          @handleCancelAddQuestion="handleCancelAddQuestion"
+          @handleRefreshQuestion="handleRefreshQuestion"
+        />
+        <CreateQuestionEssay
+          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
+          :exercise="exercise"
+          @handleRefreshQuestion="handleRefreshQuestion"
+          @handleCancelAddQuestion="handleCancelAddQuestion"
+        />
+        <fragment v-if="isShowExercise">
+          <ListQuestion
+            v-for="(question, index) in get(exercise, 'questions', [])"
+            :key="question.id"
+            :index="index"
+            :question="question"
+            :exercise="exercise"
+            @handleRefreshQuestion="handleRefreshQuestion"
+          />
+        </fragment>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
+import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
+import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
+import { get } from "lodash";
+import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
+import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
+import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
+import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
+import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
+
+export default {
+  components: {
+    IconInfoCircle,
+    IconAngleDown,
+    IconEditAlt,
+    IconTrashAlt,
+    IconAlignCenterAlt,
+    IconFileCheck,
+    IconClipboardNotes,
+    CreateQuestionEssay,
+    CreateQuestionChoice,
+    ListQuestion,
+    EditExerciseName,
+    IconAngleUp
+  },
+
+  props: {
+    exercise: {
+      type: Object,
+      default: null
+    },
+    index: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  data() {
+    return {
+      isAddQuestionForm: false,
+      isShowExercise: true
+    };
+  },
+
+  methods: {
+    handleRefreshQuestion() {
+      this.isAddQuestionForm = false;
+      this.$emit("handleRefreshQuestion");
+    },
+
+    handleCancelAddQuestion() {
+      this.isAddQuestionForm = false;
+    },
+
+    get,
+
+    handleAddQuestion() {
+      this.isAddQuestionForm = !this.isAddQuestionForm;
+    },
+    handleRefreshExcercises() {
+      this.$emit("handleRefreshExcercises");
+    }
+  }
+};
+</script>

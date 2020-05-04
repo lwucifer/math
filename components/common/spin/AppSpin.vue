@@ -1,5 +1,5 @@
 <template>
-  <div class="app-spin">
+  <div class="app-spin" :class="classes">
     <div class="app-spin__dots">
       <i></i>
       <i></i>
@@ -15,6 +15,25 @@ export default {
   props: {
     text: {
       type: String
+    },
+    color: {
+      type: String,
+      default: '',
+      validator: value => ['', 'white'].includes(value)
+    },
+    size: {
+      type: String,
+      default: '',
+      validator: value => ['', 'small'].includes(value)
+    }
+  },
+
+  computed: {
+    classes() {
+      return {
+        'app-spin--white': this.color === 'white',
+        'app-spin--small': this.size === 'small'
+      }
     }
   }
 }

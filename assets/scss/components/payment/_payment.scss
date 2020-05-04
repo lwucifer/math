@@ -1,0 +1,35 @@
+.wrap-cart-item_payment{
+    display: flex;
+    border: 1px solid #EEEEEE;
+    box-sizing: border-box;
+    padding: 10px;
+    align-items: center;
+    img{
+        width: 110px;
+        height: 66px;
+    }
+    .price-cart_payment{
+        border-right: 1px solid #CCCCCC;
+        padding-right: 10px;
+        color: #CCCCCC;
+    }
+}
+.wrap-cart-side_payment{
+    background: white; 
+    padding: 27px 20px 23px 20px;
+    margin-left: 20px;
+    .btn-cart_payment{
+        margin: 23px 0px;
+        width: 100%;
+    }
+ }
+.wrap-success_payment{
+    text-align: center;
+    margin: 20px 100px 100px;
+    background: #ffffff;
+}
+.icon-fail_payment{
+    width: 66px;
+    height: 60px;
+    path{ fill: #E9446A;}
+}

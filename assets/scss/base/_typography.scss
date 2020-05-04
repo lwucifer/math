@@ -13,11 +13,30 @@ body {
     color: $color-text;
 }
 
+h1 {
+    font-size: map-get($text-size, 'heading-1');
+}
+h2 {
+    font-size: map-get($text-size, 'heading-2');
+}
+h3 {
+    font-size: map-get($text-size, 'heading-3');
+}
+h4 {
+    font-size: map-get($text-size, 'heading-4');
+}
+h5 {
+    font-size: map-get($text-size, 'heading-5');
+}
+h6 {
+    font-size: map-get($text-size, 'heading-6');
+}
+
 
 // Text size
 @each $name, $font-size in $text-size {
     .#{$name} {
-        font-size: $font-size;
+        font-size: $font-size !important;
     }
 }
 
@@ -28,7 +47,7 @@ body {
 }
 
 
-// align
+// Align
 .text-right {
     text-align: right;
 }
@@ -39,4 +58,26 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+// Font weight
+.font-weight-light {
+    font-weight: 300;
+}
+
+.font-weight-normal {
+    font-weight: 400 !important;
+}
+
+.font-weight-semi-bold {
+    font-weight: 600 !important;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+//Wrap text
+.nowrap {
+    white-space: nowrap;
 }

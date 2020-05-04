@@ -1,10 +1,14 @@
 .comment-editor {
-    @include clearfix;
+    display: flex;
+}
+
+.comment-editor__right {
+    flex-grow: 1;
+    max-width: calc(100% - 4rem - 8px);
 }
 
 .comment-editor__editor-wrapper {
     position: relative;
-    flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
@@ -39,7 +43,6 @@
 }
 
 .comment-editor__avatar {
-    float: left;
     margin-right: 8px;
     margin-top: -0.25rem;
 }
@@ -54,39 +57,99 @@
 
 .comment-editor__button {
     padding: .65rem .75rem;
+    font-size: 2rem;
+    color: $color-text-gray-2;
 
-    svg {
+    .icon {
         display: block;
-        width: 2rem;
-        height: 2rem;
-        fill: $color-text-gray-2;
     }
 
-    &:nth-of-type(1) {
-        right: 1.1rem + 2rem + 1.4rem;
-    }
+    // &:nth-of-type(1) {
+    //     right: 1.1rem + 2rem + 1.4rem;
+    // }
 
-    &:nth-of-type(2) {
-        right: 1.1rem;
-    }
+    // &:nth-of-type(2) {
+    //     right: 1.1rem;
+    // }
 
     &.image {
         &:hover {
-            svg {
-                fill: $color-blue;
-            }
+            color: $color-blue;
         }
     }
 
     &.emoji {
         &:hover {
-            svg {
-                fill: $color-purple;
-            }
+            color: $color-purple;
         }
     }
 }
 
+// Upload
+.comment-editor__upload {
+    
+}
+
+.comment-editor__upload__preview {
+    position: relative;
+    display: inline-block;
+
+    img {
+        display: block;
+        max-width: 8.6rem;
+        max-height: 8.6rem;
+    }
+}
+
+.comment-editor__upload__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:hover {
+        color: $color-primary;
+    }
+}
+
+.comment-editor__preview-link {
+    position: relative;
+
+    $this: &;
+
+    &__remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        visibility: hidden;
+
+        .icon {
+            color: $color-text;
+            font-size: 2rem;
+        }
+
+        &:hover {
+            .icon {
+                color: $color-primary;
+            }
+        }
+    }
+
+    &:hover {
+        #{$this}__remove {
+            visibility: visible;
+        }
+    }
+}
 
 // MODIFIER
 .comment-editor--reply {
@@ -103,5 +166,9 @@
     .comment-editor__avatar {
         margin-top: .5rem;
         margin-right: 4px;
+    }
+
+    .comment-editor__right {
+        max-width: calc(100% - 2rem - 4px);
     }
 }

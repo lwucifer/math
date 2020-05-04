@@ -7,28 +7,49 @@
     z-index: map-get($z-index, modal);
     overflow: auto;
     outline: 0;
+    text-align: center;
     -webkit-overflow-scrolling: touch;
 }
 
-.app-modal-overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    z-index: map-get($z-index, modal);
-    background-color: rgba(0, 0, 0, 0.8);
+.app-modal-root {
+    .app-modal-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        z-index: map-get($z-index, modal);
+    }
+
+    &:nth-child(1) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    &:nth-child(2) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    &:nth-child(3) {
+        .app-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
 }
 
 .app-modal {
     position: relative;
+    display: inline-block;
     padding-bottom: 2.4rem;
-    margin: 0 auto;
     position: relative;
     top: 10rem;
     width: auto;
     max-width: calc(100% - 1.5rem);
+    text-align: left;
 }
 
 .app-modal-content {
@@ -38,7 +59,6 @@
 }
 
 .app-modal-centered {
-    text-align: center;
 
     &:before {
         content: '';
@@ -51,8 +71,6 @@
     .app-modal {
         top: 0;
         vertical-align: middle;
-        display: inline-block;
-        text-align: left;
     }
 }
 

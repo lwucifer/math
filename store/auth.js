@@ -1,8 +1,11 @@
 import * as mutationTypes from "../utils/mutation-types";
 import * as actionTypes from "../utils/action-types";
 import auth from "../services/Auth";
-import { setToken, setAccessToken } from "../utils/auth";
+import * as APIs from "../utils/endpoints";
+import { setToken, setAccessToken, removeToken } from "../utils/auth";
 import { authFire } from "../services/firebase/FirebaseInit";
+
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * initial state
@@ -11,7 +14,8 @@ const state = () => ({
     accountStatus: "",
     token: null,
     access_token: null,
-    firebaseToken: ""
+    firebaseToken: "",
+    currentDevice: {},
 });
 
 /**
@@ -26,7 +30,29 @@ const getters = {
     },
     accessToken(state) {
         return state.access_token;
-    }
+    },
+    refreshToken(state) {
+        if (!state.token) return null;
+        if (typeof state.token == "string") {
+            return state.token ? JSON.parse(state.token).refresh_token : null;
+        }
+        return state.token.refresh_token;
+    },
+    getSocketURIParam(state) {
+        const account = state.token;
+        const uuidV4 = uuidv4();
+
+        return `user_id=${account.id}&token=${account.access_token}&unique_id=${uuidV4}`;
+    },
+    userId(state) {
+        return state.token.id ? state.token.id : "";
+    },
+    fullName(state) {
+        return state.token.fullname ? state.token.fullname : "";
+    },
+    avatarUser(state) {
+        return state.token.avatar ? state.token.avatar : {};
+    },
 };
 
 /**
@@ -38,7 +64,7 @@ const actions = {
             phone,
             email,
             password,
-            g_recaptcha_response
+            g_recaptcha_response,
         });
         if (result.success) {
             console.log("Login [REPONSE]", result);
@@ -50,11 +76,6 @@ const actions = {
 
     async [actionTypes.AUTH.REGISTER]({ commit }, payload) {
         const result = await new auth(this.$axios).register(payload);
-        // if (result.success) {
-        //     console.log("Login [REPONSE]", result);
-        //     commit(mutationTypes.AUTH.SET_TOKEN, result.data);
-        //     commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, result.data.access_token);
-        // }
         return result;
     },
 
@@ -78,7 +99,7 @@ const actions = {
         if (window.confirmationResult) {
             return confirmationResult
                 .confirm(payload)
-                .then(result => {
+                .then((result) => {
                     // User signed in successfully.
                     const user = result.user;
                     console.log("user", user);
@@ -86,9 +107,10 @@ const actions = {
                     return result;
                     // ...
                 })
-                .catch(error => {
+                .catch((error) => {
                     // User couldn't sign in (bad verification code?)
                     // ...
+                    console.log("error", error);
                     return error;
                 });
         }
@@ -102,7 +124,7 @@ const actions = {
     async [actionTypes.AUTH.LOGOUT]({ commit }) {
         const result = await auth(this.$axios).logout();
         if (result.success) {
-            commit(mutationTypes.AUTH.SET_LOGIN, result.data);
+            commit(mutationTypes.AUTH.REMOVE_TOKEN);
         }
     },
 
@@ -123,7 +145,24 @@ const actions = {
     async [actionTypes.AUTH.VERIFY_EMAIL]({ commit }, payload) {
         const result = await new auth(this.$axios).verifyEmail(payload);
         return result;
-    }
+    },
+    async [actionTypes.AUTH.REFRESH_TOKEN]({ commit, state }, payload) {
+        console.log("payload", payload);
+        try {
+            const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
+            // console.log("payload", payload);
+            console.log("[REFRESH_TOKEN] response", data);
+            if (data.success == true) {
+                // update rewnewToken
+                commit(mutationTypes.AUTH.SET_ACCESS_TOKEN, data.data.access_token);
+                commit(mutationTypes.AUTH.SET_TOKEN, data.data);
+            }
+            return data;
+        } catch (err) {
+            console.log("[REFRESH_TOKEN] err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -131,8 +170,10 @@ const actions = {
  */
 const mutations = {
     [mutationTypes.AUTH.SET_TOKEN](state, token) {
+        // console.log("[SET_TOKEN] token", token);
         const renewToken = Object.assign({}, state.token, token);
         state.token = renewToken;
+        // console.log("[SET_TOKEN] renewToken", renewToken);
         setToken(renewToken);
     },
 
@@ -141,8 +182,10 @@ const mutations = {
         setAccessToken(access_token);
     },
 
-    [mutationTypes.AUTH.SET_LOGOUT](state) {
-        state.loggedUser = null;
+    [mutationTypes.AUTH.REMOVE_TOKEN](state) {
+        state.token = null;
+        state.access_token = null;
+        removeToken();
     },
 
     [mutationTypes.AUTH.SET_ACCOUNT_STATUS](state, _status) {
@@ -152,7 +195,10 @@ const mutations = {
     [mutationTypes.AUTH.SET_FIREBASE_TOKEN](state, _firebaseToken) {
         console.log("firebase Token", _firebaseToken);
         state.firebaseToken = _firebaseToken;
-    }
+    },
+    [mutationTypes.AUTH.SET_CURRENT_DEVICE](state, _currentdevice) {
+        state.currentDevice = _currentdevice;
+    },
 };
 
 export default {
@@ -160,5 +206,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

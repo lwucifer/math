@@ -3,13 +3,16 @@
     <!-- TAGS MODE -->
     <template v-if="mode === 'tags'">
       <div class="app-select__selected" @click="handleClickSelected">
-        <span class="app-select__placeholder" v-if="!value.length">{{ $attrs.placeholder || '' }}</span>
+        <span
+          class="app-select__placeholder"
+          v-if="!localValue.length"
+        >{{ $attrs.placeholder || '' }}</span>
         <app-tag
-          v-for="(item, index) in selectedValues"
+          v-for="(item, index) in selected"
           :key="item.value"
           class="ma-1"
           show-close
-          @close="handleCloseTag(item, index)"
+          @close.stop="handleCloseTag(item, index)"
         >{{ item.text }}</app-tag>
 
         <div class="app-select__field">
@@ -26,11 +29,14 @@
       </div>
 
       <div class="app-select__options" v-show="active">
-        <div v-if="!optionsVisible.length" class="app-select__option">{{ emptyMessage }}</div>
+        <div
+          v-if="!optionsVisible.length && emptyMessage"
+          class="app-select__option text-sub text-center"
+        >{{ emptyMessage }}</div>
 
         <div
           v-for="option in optionsVisible"
-          v-show="value.findIndex(id => id === option.value)"
+          v-show="localValue.findIndex(id => id === option.value)"
           class="app-select__option"
           :key="option.value"
           @click="handleClickOption(option)"
@@ -38,6 +44,8 @@
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
           <template v-else>{{ option.text }}</template>
         </div>
+
+        <slot name="options-append" />
       </div>
     </template>
     <!-- END TAGS MODE -->
@@ -45,16 +53,16 @@
     <!-- DEFAULT MODE -->
     <template v-else>
       <div class="app-select__selected" tabindex="0" @click="handleClickSelected">
-        <span class="app-select__prepend" v-if="$slots.prepend">
-          <slot name="prepend" />
+        <span class="app-select__prepend" v-if="$slots.prepend || $scopedSlots.prepend">
+          <slot name="prepend" :selected="selected" />
         </span>
 
         <span
-          v-if="value === null || value === undefined"
+          v-if="localValue === null || localValue === undefined"
           class="app-select__placeholder"
         >{{ $attrs.placeholder || '' }}</span>
 
-        <span class="app-select__selected-value">{{ selectedText }}</span>
+        <span class="app-select__selected-value">{{ selected.text }}</span>
 
         <div class="mr-auto"></div>
 
@@ -72,7 +80,7 @@
 
         <template v-if="showClear">
           <span
-            v-if="!(value === null || value === undefined)"
+            v-if="!(localValue === null || localValue === undefined)"
             class="app-select__clear"
             @click.stop="handleClickClear"
           >
@@ -89,7 +97,10 @@
       </div>
 
       <div class="app-select__options" v-show="active">
-        <div v-if="!options.length" class="app-select__option">{{ emptyMessage }}</div>
+        <div
+          v-if="!options.length && emptyMessage"
+          class="app-select__option text-sub"
+        >{{ emptyMessage }}</div>
 
         <div
           v-for="option in options"
@@ -100,6 +111,8 @@
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
           <template v-else>{{ option.text }}</template>
         </div>
+
+        <slot name="options-append" />
       </div>
     </template>
     <!-- END DEFAULT MODE -->
@@ -107,12 +120,19 @@
 </template>
 
 <script>
+import { uniqWith } from "lodash";
 const IconCaretDown = () => import("~/assets/svg/icons/caret-down.svg?inline");
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   inheritAttrs: false,
-  
+
+  provide() {
+    return {
+      appSelect: this
+    };
+  },
+
   components: {
     IconCaretDown,
     IconClose
@@ -130,7 +150,8 @@ export default {
       validator: value =>
         value.every(option => ["value", "text"].every(key => key in option))
     },
-    value: [String, Number, Array],
+    value: [String, Number, Array, Boolean],
+    defaultValue: [String, Number, Array, Boolean],
     mode: {
       type: String,
       default: "" // '' | 'tags'
@@ -140,44 +161,75 @@ export default {
       default: "No option"
     },
     showClear: Boolean,
-    searchable: Boolean
+    searchable: Boolean,
+    size: {
+      type: String,
+      default: "md" // 'sm' | 'md'
+    }
   },
 
-  data: () => ({
-    active: false,
-    search: ""
-  }),
+  data() {
+    return {
+      active: false,
+      search: "",
+      localValue: ["null", "undefined"].includes(typeof this.value)
+        ? this.defaultValue
+        : this.value,
+      tmpOptions: this.options
+    };
+  },
 
   computed: {
     classes() {
       return {
         active: this.active,
         "app-select--tags": this.mode === "tags",
-        "app-select--searchable": this.searchable
+        "app-select--searchable": this.searchable,
+        "app-select--size-sm": this.size === "sm"
       };
     },
 
-    selectedText() {
-      const [selected = {}] = this.options.filter(
-        item => item.value === this.value
-      );
-      return selected && selected.text;
-    },
-
-    selectedValues() {
-      if (this.mode !== "tags") return;
-      return this.value.map(id => {
-        const [optionItem = {}] = this.options.filter(
-          option => option.value === id
+    selected() {
+      if (this.mode === "tags") {
+        return this.localValue.map(id => {
+          const [optionItem = {}] = this.tmpOptions.filter(
+            option => option.value === id
+          );
+          return optionItem;
+        });
+      } else {
+        const [optSelected = {}] = this.options.filter(
+          item => item.value === this.localValue
         );
-        return optionItem;
-      });
+        return optSelected;
+      }
     },
 
     optionsVisible() {
+      if (this.mode !== "tags") return;
       return this.options.filter(
-        option => this.value.findIndex(id => id === option.value) === -1
+        option => this.localValue.findIndex(id => id === option.value) === -1
       );
+    }
+  },
+
+  watch: {
+    active(newValue) {
+      this.$emit("visible-change", newValue);
+    },
+
+    value(newValue) {
+      this.localValue = newValue;
+    },
+
+    localValue(newValue) {
+      this.$emit("change", newValue, this.selected);
+    },
+
+    options(newValue) {
+      if (this.mode !== "tags" || !newValue.length) return;
+      const tmp = this.tmpOptions.concat(newValue);
+      this.tmpOptions = uniqWith(tmp, (a, b) => a.value === b.value);
     }
   },
 
@@ -188,17 +240,17 @@ export default {
     },
 
     unSelectOption(index) {
-      return this.value
+      return this.localValue
         .slice(0, index)
-        .concat(this.value.slice(index + 1, this.value.length));
+        .concat(this.localValue.slice(index + 1, this.localValue.length));
     },
 
     handleClickOption(option) {
       if (this.mode === "tags") {
-        this.$emit("change", [...this.value, option.value]);
+        this.localValue = [...this.localValue, option.value];
       } else {
         // on default mode
-        this.$emit("change", option.value);
+        this.localValue = option.value;
       }
 
       this.hideOptions();
@@ -224,14 +276,14 @@ export default {
     },
 
     handleCloseTag(id, index) {
-      this.$emit("change", this.unSelectOption(index));
+      this.localValue = this.unSelectOption(index);
     },
 
     handleClickClear() {
       if (this.mode === "tags") {
-        this.$emit("change", []);
+        this.localValue = [];
       } else {
-        this.$emit("change", null);
+        this.localValue = null;
       }
     }
   }

@@ -1,59 +1,95 @@
 <template>
-  <div class="course-teacher-info">
-    <div class="teacher-top">
-      <app-avatar src="https://picsum.photos/125/125" :size="125" />
-      <div class="info">
-        <h4 class="name">Vũ Ngọc Quyền</h4>
-        <p>Giảng viên</p>
-        <div class="stars">
-            <app-stars :stars="4"/>
+  <section class="scroll-target" id="teacher">
+    <h5 class="mb-4">Thông tin giáo viên</h5>
+    <div class="course-teacher-info">
+      <div class="teacher-top">
+        <app-avatar
+          :src="get(teacher, 'avatar.medium', 'https://picsum.photos/125/125')"
+          :size="125"
+        />
+        <div class="info">
+          <h4 class="name">{{ get(teacher, "name", "") }}</h4>
+          <p>{{ get(teacher, "school_name", "") }}</p>
+          <div class="stars">
+            <app-stars
+              :stars="Math.floor(get(teacher, 'rate', 0))"
+              :size="16"
+            />
+          </div>
+        </div>
+
+        <div class="right">
+          <div>
+            <strong class="color-primary">
+              {{ get(teacher, "elearning_total", 0) }}
+            </strong>
+            Bài giảng/khoá học
+          </div>
+          <div>
+            <strong class="color-primary">
+              {{ get(teacher, "participant_total", 0) }}
+            </strong>
+            Học viên
+          </div>
         </div>
       </div>
 
-      <div class="right">
-        <div>
-          <strong class="color-primary">2</strong>
-          Khóa học
-        </div>
-        <div>
-          <strong class="color-primary">2.254</strong>
-          Học viên
+      <div class="mt-4 teacher-bottom">
+        <h4 class="mb-3">Tiểu sử</h4>
+        {{ get(teacher, "description", "") }}
+        <div class="text-center my-3">
+          <n-link class="text-decoration-none" to="">Xem thêm</n-link>
         </div>
       </div>
     </div>
-
-    <div class="mt-4 teacher-bottom">
-      <h4 class="mb-3">Tiểu sử</h4>
-      <p>- Bạn đang mong muốn xây dựng một Hệ thống Kinh doanh Online Bài Bản cho riêng mình mà vẫn chưa tìm được hướng đi rõ ràng từ việc xác định sản phẩm kinh doanh - mô hình kinh doanh phù hợp, cách để liên hệ nhà cung cấp để đàm phán nhập hàng, cách nghiên cứu khách hàng, đối thủ, quảng cáo và tối ưu...... ?</p>
-      <p>- Bạn đã có kinh nghiệm Kinh doanh online, và đang mong muốn mở rộng Hệ Thống Online Đa Kênh ngoài kênh truyền thống sang Facebook, Instagram, Zalo, Youtube, Email Marketing, Website, SMS...?</p>
-      <div class="text-center mt-4 mb-3">
-        <a class="btn-load-more">Xem thêm</a>
-      </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
+import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
-      IconStar,
-      IconStarO
+    IconStar,
+    IconStarO,
   },
 
   props: {
-    teacher: {
-      type: Object,
-      required: true,
-      default: () => {}
-    }
+    teacher_id: {
+      type: String,
+      default: "",
+    },
   },
 
-  data() {
-    return {};
-  }
+  created() {
+    useEffect(this, this.getTeacher.bind(this), ["teacher_id"]);
+  },
+
+  computed: {
+    ...mapState("elearning/public/public-elearning-teacher", {
+      teacher: "teacher",
+    }),
+  },
+
+  methods: {
+    get,
+    getTeacher() {
+      const options = {
+        params: {
+          teacher_id: get(this, "teacher_id", ""),
+        },
+      };
+      this.$store.dispatch(
+        `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,
+        options
+      );
+    },
+  },
 };
 </script>
 

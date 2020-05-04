@@ -1,0 +1,146 @@
+<template>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <ElearningManagerSide active="8"/>
+      </div>
+      <div class="col-md-9">
+        <div class="elearning-manager-content">
+          <div class="elearning-manager-content__title">
+            <h5 class="color-primary mb-3">Đánh giá và bình luận</h5>
+            <hr class/>
+          </div>
+          <div class="elearning-manager-content__main">
+            <filter-form
+              @submitFilter="submitFilter"
+              @changedCmt="handleChangedCmt"
+              @changedRate="handleChangedRate"
+              @changedClass="handleChangedClass"
+              @changedElearning="handleChangedElearning"
+            >
+            </filter-form>
+    
+            <list-table
+              :pagination="pagination"
+              :list.sync="list"
+              :loading="loading"
+              @changedPagination="updatePagination"
+            >
+            </list-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+  import FilterForm from "~/components/page/elearning/manager/ratecomment/forms/VoteFilter"
+  import ListTable from "~/components/page/elearning/manager/ratecomment/tables/Vote"
+  
+  import {mapState} from "vuex"
+  import { useEffect, getParamQuery } from "~/utils/common"
+  import * as actionTypes from "~/utils/action-types"
+  import { get } from "lodash"
+
+  const STORE_NAMESPACE = 'elearning/teaching/vote'
+
+  export default {
+    layout: "manage",
+    
+    components: {
+      ElearningManagerSide,
+      FilterForm,
+      ListTable
+    },
+    data() {
+      return {
+        pagination: {
+          totalElements: 0,
+          last: false,
+          totalPages: 1,
+          size: 10,
+          number: 0,
+          first: true,
+          numberOfElements: 0
+        },
+        params: {
+          page: 1,
+          size: 10,
+          // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
+          elearning_id: null
+        },
+        list: [],
+        loading: false
+      }
+    },
+    computed: {
+      ...mapState("auth", ["loggedUser"]),
+      ...mapState(STORE_NAMESPACE, {
+        detailInfo: 'votes'
+      }),
+    },
+    methods: {
+      updateFilter(val) {
+        this.params = { ...this.params, ...val }
+        this.refreshData()
+      },
+      submitFilter(val) {
+        this.updateFilter(val)
+      },
+      handleChangedCmt(val) {
+        this.updateFilter({ has_cmt: val })
+      },
+      handleChangedRate(val) {
+        this.updateFilter({ rate: val })
+      },
+      handleChangedClass(val) {
+        this.updateFilter({ class_id: val })
+      },
+      handleChangedElearning(val) {
+        this.updateFilter({ elearning_id: val })
+      },
+      updatePagination(val) {
+        this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
+        this.params.size = val.size
+        this.getList()
+      },
+      async getList() {
+        try {
+          this.loading = true
+          let params = { ...this.params }
+
+          await this.$store.dispatch(
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_VOTE.LIST}`, { params }
+          )
+          this.list = this.get(this.detailInfo, 'data.content', [])
+          // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+          this.pagination.size = this.get(this.detailInfo, 'data.size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'data.first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'data.last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'data.number', 0)
+          this.pagination.totalPages = this.get(this.detailInfo, 'data.total_pages', 0)
+          this.pagination.totalElements = this.get(this.detailInfo, 'data.total_elements', 0)
+          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.number_of_elements', 0)
+        } catch (e) {
+          console.log('Get votes ', e)
+        } finally {
+          this.loading = false
+        }
+      },
+      refreshData() {
+        this.params.page = 1
+        this.getList()
+      },
+      get
+    },
+    created() {
+      this.getList()
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+  @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
+</style>

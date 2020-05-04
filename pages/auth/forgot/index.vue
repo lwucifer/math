@@ -1,38 +1,53 @@
 <template>
-  <div class="auth auth-forgot">
-    <div id="label-verify-phone"></div>
-    <div class="auth__main">
-      <h3>Quên mật khẩu?</h3>
-      <div class="auth_content mt-5">
-        <app-input
-          message="Tài khoản không tồn tại"
-          type="text"
-          v-model="email"
-          placeholder="Nhập số điện thoại hoặc email"
-          :validate="error ? 2 : 0"
-        />
-        <app-button
-          color="primary"
-          square
-          fullWidth
-          @click="hanldeShowModalOTP"
-          class="mb-3"
-        >Khôi phục mật khẩu</app-button>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 d-flex align-items-center">
+        <div id="label-verify-phone"></div>
+        <div class="wrap-forgot-psw">
+          <h3 class="text-primary">Quên mật khẩu?</h3>
+          <div class="auth_content mt-5">
+            <app-input
+              :message="messageErrorForgot"
+              :error="errorForgot"
+              :validate="validateForgot"
+              type="text"
+              v-model="email"
+              placeholder="Nhập số điện thoại hoặc email"
+              @input="hanldeEmail"
+            />
+            <app-button
+              color="primary"
+              square
+              @click="hanldeShowModalOTP"
+              class="mb-3 btn-restore"
+            >Khôi phục mật khẩu</app-button>
+          </div>
+        </div>
+        <app-modal
+          centered
+          :width="400"
+          :component-class="{ 'auth-modal': true }"
+          v-if="modalConfirmEmail"
+        >
+          <!-- <h3 class="color-primary" slot="header">Đăng ký thành công</h3> -->
+
+          <div slot="content">
+            <p class="line-height-2">
+              <br />Vui lòng xác thực tài khoản qua email
+              <br />
+              <span class="color-primary">{{this.email}}</span>
+            </p>
+            <n-link
+              :to="'/auth/forgot/confirmsuccess'"
+              class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
+            >Xác thực tài khoản</n-link>
+          </div>
+        </app-modal>
+      </div>
+      <div class="col-md-6 text-center">
+        <ImageAuth/>
       </div>
     </div>
-    <app-modal centered :width="306" :component-class="{ 'auth-modal': true }" v-if="showModalOTP">
-      <h3 class="color-primary" slot="header">
-        Xác thực tài khoản
-        <a class="btn-close" @click="showModalOTP = false">X</a>
-      </h3>
-
-      <div slot="content">
-        <div class="form-group_border-bottom">
-          <input type="text" v-model="otp" class="form-control ml-0" placeholder="Nhập mã OTP" />
-        </div>
-        <app-button color="primary" square fullWidth @click="acceptOTP">Xác nhận</app-button>
-      </div>
-    </app-modal>
   </div>
 </template>
 
@@ -42,12 +57,14 @@ import { mapState, mapActions } from "vuex";
 import {
   createResetWithPhone,
   createResetWithEmail
-} from "../../../models/auth/Forgot";
+} from "~/models/auth/Forgot";
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
-
+import { ERRORS } from "~/utils/error-code";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
+import ImageAuth  from "~/components/page/auth/ImageAuth";
 export default {
-  components: {},
+  components: { ImageAuth },
 
   data() {
     return {
@@ -56,7 +73,12 @@ export default {
       password: "",
       error: false,
       showModalOTP: false,
-      otp: ""
+      otp: "",
+      modalConfirmEmail: false,
+      errorRespon: false,
+      messageErrorForgot: "",
+      errorForgot: false,
+      validateForgot: ""
     };
   },
 
@@ -77,7 +99,12 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["resetPasswordRequest", "sendotp", "verifiOtp"]),
+    ...mapActions("auth", ["resetPasswordRequest", "sendotp"]),
+    hanldeEmail() {
+      this.errorForgot = false;
+      this.validateForgot = "";
+      this.messageErrorForgot = "";
+    },
     async resetPass() {
       try {
         const token = await this.$recaptcha.execute("login");
@@ -86,8 +113,9 @@ export default {
         let resetModel = createResetWithEmail(this.email, token);
         const doAdd = this.resetPasswordRequest(resetModel).then(result => {
           if (result.success == true) {
-            // this.$router.push("/auth/signin");
+            this.modalConfirmEmail = true;
           } else {
+            this.showErrorForgot(result);
           }
         });
       } catch (error) {
@@ -95,23 +123,53 @@ export default {
       }
     },
     hanldeShowModalOTP() {
-      if (!this.email.includes("@")) {
-        const data = {
-          phone: `+${formatPhoneNumber(this.email)}`,
-          appVerifier: window.recaptchaVerifier
-        };
-        this.sendotp(data).then(result => {
-          console.log("result huydv", result);
-          if (result) {
-            console.log("result huydv11111", result);
-            this.$router.push(
-              `/auth/forgot/changepass?phone=${formatPhoneNumber(this.email)}`
-            );
-          }
-        });
+      if (this.email == "") {
+        this.validateForgot = VALIDATE_STATUS.ERROR;
+        this.messageErrorForgot =
+          "Vui lòng nhập email hoặc số điện thoại cần khôi phục";
       } else {
-        this.resetPass();
+        if (!this.email.includes("@")) {
+          const data = {
+            phone: `+${formatPhoneNumber(this.email)}`,
+            appVerifier: window.recaptchaVerifier
+          };
+          this.sendotp(data).then(result => {
+            console.log("result huydv", result);
+            if (!result.code) {
+              console.log("result huydv11111", result);
+              this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
+            } else {
+              this.validateForgot = VALIDATE_STATUS.ERROR;
+              this.errorForgot = true;
+              if (result && result.code == "auth/invalid-phone-number") {
+                this.messageErrorForgot = "Số điện thoại bạn nhập không đúng";
+              } else {
+                this.messageErrorForgot = "Có lỗi. Xin vui lòng thử lại";
+              }
+            }
+          });
+        } else {
+          this.resetPass();
+        }
       }
+    },
+    showErrorForgot(error) {
+      this.errorForgot = true;
+      this.validateForgot = VALIDATE_STATUS.ERROR;
+      let message = "";
+      switch (error.code) {
+        case ERRORS.REGISTER.REQUIRED:
+          message =
+            "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
+          break;
+        case ERRORS.FORGOT_PASSWORD.USER_NOT_FOUND:
+          message = "User not found";
+          break;
+        default:
+          message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";
+          break;
+      }
+      this.messageErrorForgot = message;
     }
   }
 };
@@ -119,4 +177,5 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

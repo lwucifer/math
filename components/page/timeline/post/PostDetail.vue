@@ -13,39 +13,38 @@
       <app-spin v-if="loading"></app-spin>
 
       <template v-else>
-        <a href="" class="post-detail__prev" @click.prevent @click="handleClickPrev">
+        <a v-if="showPrevArrow" href class="post-detail__prev" @click.prevent="handleClickPrev">
           <IconChevronLeft />
         </a>
 
-        <a href="" class="post-detail__next" @click.prevent @click="handleClickNext">
+        <a v-if="showNextArrow" href class="post-detail__next" @click.prevent="handleClickNext">
           <IconChevronRight />
         </a>
 
         <div class="post-detail__media">
-          <img :src="post.files[0].link.high" alt />
+          <img class="d-block mx-auto" :src="linkImage" alt />
         </div>
       </template>
     </div>
 
     <div class="post-detail__right">
-      <Post
-        show-edit
-        :fullname="post.creator && post.creator.fullname"
-        :updated="post.updated"
-        :likes="post.likes"
-        :comments="post.comments"
-        :content="post.content"
-      />
+      <slot name="post" v-bind="{ post: localPost, isParentPost }"></slot>
     </div>
 
     <div class="post-detail__actions">
       <app-dropdown
         class="post-detail__actions-menu"
-        position="left"
+        position="right"
         open-on-click
         v-model="dropdownShow"
       >
-        <button slot="activator" slot-scope="{ on }" type="button" class="post-detail__actions-btn" v-on="on">
+        <button
+          slot="activator"
+          slot-scope="{ on }"
+          type="button"
+          class="post-detail__actions-btn"
+          v-on="on"
+        >
           <IconDots />
         </button>
 
@@ -73,15 +72,23 @@
 </template>
 
 <script>
-import Post from "./Post";
+import { get } from "lodash";
+import { LIKE_SOURCE_TYPES, LIKE_TYPES } from "~/utils/constants";
+import {
+  BASE as ACTION_TYPE_BASE,
+  SOCIAL as ACTION_TYPE_SOCIAL
+} from "~/utils/action-types";
+import { createLike } from "~/models/social/Like";
+
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
-import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
-import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
+const IconChevronLeft = () =>
+  import("~/assets/svg/icons/chevron-left.svg?inline");
+const IconChevronRight = () =>
+  import("~/assets/svg/icons/chevron-right.svg?inline");
 
 export default {
   components: {
-    Post,
     IconDots,
     IconClose,
     IconChevronLeft,
@@ -90,28 +97,99 @@ export default {
 
   props: {
     loading: Boolean,
+    isParentPost: Boolean,
+    parentPost: {
+      type: Object,
+      required: true,
+      default: () => ({})
+    },
     post: {
       type: Object,
-      validator: value =>
-        ["id", "creator", "updated", "likes", "comments", "content"].every(
-          key => key in value
-        )
-    },
+      required: true,
+      default: () => ({})
+    }
   },
 
   data() {
     return {
-      dropdownShow: false
+      dropdownShow: false,
+      localPost: {}
     };
+  },
+
+  computed: {
+    userId() {
+      const { $store: store = {} } = this;
+      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    },
+
+    showPrevArrow() {
+      if (!this.parentPost) return;
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      return (
+        this.parentPost.files && this.parentPost.files.length && index !== 0
+      );
+    },
+
+    showNextArrow() {
+      if (!this.parentPost) return;
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      return (
+        this.parentPost.files &&
+        this.parentPost.files.length &&
+        index !== this.parentPost.files.length - 1
+      );
+    },
+
+    linkImage() {
+      if (this.isParentPost) {
+        return get(this.localPost, "files[0].link.high", null);
+      } else {
+        return get(this.localPost, "link_image.high", null);
+      }
+    },
+  },
+
+  watch: {
+    post(newValue) {
+      this.localPost = newValue || {};
+    },
+
+    parentPost: {
+      immediate: true,
+      handler: function(newValue) {
+        if (this.isParentPost) {
+          this.localPost = newValue;
+        }
+      }
+    }
   },
 
   methods: {
     handleClickPrev() {
-      this.$emit('click-prev')
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      const prevPost = this.parentPost.files[index - 1];
+
+      if (prevPost) {
+        this.$emit("click-prev", prevPost.post_id, this.parentPost);
+      }
     },
 
     handleClickNext() {
-      this.$emit('click-next')
+      const index = this.parentPost.files.findIndex(
+        item => item.post_id === this.post.post_id
+      );
+      const nextPost = this.parentPost.files[index + 1];
+
+      if (nextPost) {
+        this.$emit("click-next", nextPost.post_id, this.parentPost);
+      }
     }
   }
 };

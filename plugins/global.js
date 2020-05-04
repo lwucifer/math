@@ -1,37 +1,39 @@
+// Globally register all base components for convenience, because they
+// will be used very frequently. Components are registered using the
+// PascalCased version of their file name.
 import Vue from "vue";
 
-import AppButton from "~/components/common/button/AppButton";
-import AppDivider from "~/components/common/divider/AppDivider";
-import AppContentBox from "~/components/common/contentBox/AppContentBox";
-import AppAvatar from "~/components/common/avatar/AppAvatar";
-import AppModal from "~/components/common/modal/AppModal";
-import AppDropdown from "~/components/common/dropdown/AppDropdown";
-import AppSelect from "~/components/common/select/AppSelect";
-import AppSelectSex from "~/components/common/select/AppSelectSex";
-import AppVideo from "~/components/common/video/AppVideo";
-import AppSkeleton from "~/components/common/skeleton/AppSkeleton";
-import AppDatePicker from "~/components/common/datepicker/AppDatePicker";
-import AppSpin from "~/components/common/spin/AppSpin";
-import AppTag from "~/components/common/tag/AppTag";
-import AppStars from "~/components/common/stars/AppStars";
-import AppInput from "~/components/common/input/AppInput";
-import Pagination from "~/components/common/pagination/Pagination";
-import AppTable from "~/components/common/table/AppTable";
+// https://webpack.js.org/guides/dependency-management/#require-context
+const requireComponent = require.context(
+    // Look for files in the current directory
+    "../components/common/",
+    // Do look in subdirectories
+    true,
+    // Only include "_base-" prefixed .vue files
+    /[\w-]+\.vue$/
+);
 
-Vue.component("app-button", AppButton);
-Vue.component("app-divider", AppDivider);
-Vue.component("app-content-box", AppContentBox);
-Vue.component("app-avatar", AppAvatar);
-Vue.component("app-modal", AppModal);
-Vue.component("app-dropdown", AppDropdown);
-Vue.component("app-select", AppSelect);
-Vue.component("app-select-sex", AppSelectSex);
-Vue.component("app-video", AppVideo);
-Vue.component("app-skeleton", AppSkeleton);
-Vue.component("app-date-picker", AppDatePicker);
-Vue.component("app-spin", AppSpin);
-Vue.component("app-tag", AppTag);
-Vue.component("app-stars", AppStars);
-Vue.component("app-input", AppInput);
-Vue.component("app-pagination", Pagination);
-Vue.component("app-table", AppTable);
+// For each matching file name...
+requireComponent.keys().forEach(fileName => {
+    // Get the component config
+    const componentConfig = requireComponent(fileName);
+
+    // only get Original Component Name
+    const arrName = fileName.split("/");
+    const originalName = arrName[arrName.length - 1];
+    // Get the PascalCase version of the component name
+    const componentName = originalName
+        // Remove the "./_" from the beginning
+        .replace(/^\.\/_/, "")
+        // Remove the file extension from the end
+        .replace(/\.\w+$/, "")
+        // Split up kebabs
+        .split("-")
+        // Upper case
+        .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
+        // Concatenated
+        .join("");
+
+    // Globally register the component
+    Vue.component(componentName, componentConfig.default || componentConfig);
+});

@@ -10,7 +10,6 @@
             Tổng quan
             <hr class="mt-3" />
           </h5>
-
           <div class="elearning-manager__dashboard mt-15">
             <div class="row row-space-5">
               <div class="col-md-3">
@@ -18,7 +17,7 @@
                   <div class="top">
                     <IconBook class="fill-primary mr-3" />Số bài giảng
                   </div>
-                  <strong>35</strong>
+                  <strong>{{teacherInfo.total_lectures}}</strong>
                 </div>
               </div>
               <div class="col-md-3">
@@ -26,7 +25,7 @@
                   <div class="top">
                     <IconCalendar class="fill-primary mr-3" />Số khóa học
                   </div>
-                  <strong>59</strong>
+                  <strong>{{teacherInfo.total_courses}}</strong>
                 </div>
               </div>
               <div class="col-md-6">
@@ -35,8 +34,8 @@
                     <IconChartLine class="fill-primary mr-3" />Điểm bình chọn giáo viên
                   </div>
                   <div class="bottom">
-                    <strong class="mr-4">4/5</strong>
-                    <app-stars :stars="4" :size="16" />
+                    <strong class="mr-4">{{teacherInfo.voting_rate}}/5</strong>
+                    <app-stars :stars="teacherInfo.voting_rate" :size="16" />
                   </div>
                 </div>
               </div>
@@ -47,10 +46,19 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Số học sinh tham gia
                 </div>
-                <strong>33</strong>
+                <strong>{{teacherInfo.participants}}</strong>
               </div>
               <div class="ml-auto">
-                <app-select size="sm" />
+                <app-vue-select
+                  style="width: 17rem"
+                  class="app-vue-select"
+                  v-model="timeSelect1"
+                  :options="times"
+                  label="text"
+                  searchable
+                  clearable
+                  @input="handleChangedTime(1)"
+                ></app-vue-select>
               </div>
             </div>
             <hr class="mt-4 mb-4" />
@@ -59,11 +67,20 @@
                 <div class="top">
                   <IconUserUser class="fill-primary mr-3" />Doanh thu
                 </div>
-                <strong class="mb-3">1.250.330 VNĐ</strong>
-                <n-link :to="'/elearning/manager/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
+                <strong class="mb-3">{{teacherInfo.revenue}} VNĐ</strong>
+                <n-link :to="'/temp/department/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
               </div>
               <div class="ml-auto">
-                <app-select size="sm" />
+                <app-vue-select
+                  style="width: 17rem"
+                  class="app-vue-select"
+                  v-model="timeSelect2"
+                  :options="times"
+                  label="text"
+                  searchable
+                  clearable
+                  @input="handleChangedTime(2)"
+                ></app-vue-select>
               </div>
             </div>
           </div>
@@ -83,8 +100,13 @@ import IconUserUser from "~/assets/svg/icons/user-user.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+
+const STORE_NAMESPACE = "elearning/teaching/summary";
 
 export default {
+  layout: "manage",
   name: "E-learning",
 
   components: {
@@ -93,140 +115,134 @@ export default {
     IconBook,
     IconCalendar,
     IconDollarAlt,
-    IconChartLine,
     IconChartLine
   },
 
   data() {
     return {
-      isAuthenticated: true,
-      pagination: {
-        total: 15,
-        page: 6,
-        pager: 20,
-        totalElements: 55,
-        first: 1,
-        last: 10
+      timeSelect1: {
+        value: null,
+        text: "Toàn thời gian"
       },
-      isTeacher: true,
-      time1: null,
-      time2: null,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Loại giao dịch" },
-        { value: "1", text: "Mua" },
-        { value: "2", text: "Bán" }
-      ],
-      teacher: {
-        id: "1",
-        name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125"
+      timeSelect2: {
+        value: null,
+        text: "Toàn thời gian"
       },
-      list: [
+      times: [
         {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
+          value: null,
+          text: "Toàn thời gian"
         },
         {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 2,
-          type: 2,
-          time: "16:50:30 19-11-2019"
+          value: "year",
+          text: "Năm"
         },
         {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          value: "month",
+          text: "Tháng"
         },
         {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 2,
-          time: "16:50:30 19-11-2019"
+          value: "week",
+          text: "Tuần"
         },
         {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "1290000",
-          customer: "Nguyễn Văn A",
-          code: "S88HKDKD",
-          pay: 1,
-          type: 1,
-          time: "16:50:30 19-11-2019"
+          value: "day",
+          text: "Trong ngày"
         }
       ],
-      active_el: 0
+      teacherInfo: {
+        total_lectures: 0,
+        total_courses: 0,
+        voting_rate: 0,
+        participants: 0,
+        revenue: 0,
+      }
     };
   },
+
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(STORE_NAMESPACE, {
+      stateTeaching: "teachingInfo"
+    })
   },
 
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
-    }
+    handleChangedTime(select) {
+      this.getSummary(select);
+    },
+
+    addZero(e) {
+      return parseInt(e) > 9 ? e : '0' + e;
+    },
+
+    async getSummary(select = null) {
+      try {
+        this.loading = true;
+        const today = new Date();
+        let from_date;
+        let fromdate;
+        let time = select == 1 ? this.timeSelect1.value : this.timeSelect2.value;
+        switch (time) {
+          case 'day':
+            fromdate = new Date(today.getTime() - 24*60*60*1000);
+            from_date = fromdate.getFullYear()+'-'+ 
+                        this.addZero((fromdate.getMonth()+1))+'-'+
+                        this.addZero(fromdate.getDate());
+            break;
+          case 'week':
+            fromdate = new Date(today.getTime() - 7*24*60*60*1000);
+            from_date = fromdate.getFullYear()+'-'+
+                        this.addZero((fromdate.getMonth()+1))+'-'+
+                        this.addZero(fromdate.getDate());
+            break;
+          case 'month':
+            from_date = today.getFullYear()+'-'+
+                        this.addZero(today.getMonth())+'-'+
+                        this.addZero(today.getDate());
+            break;
+          case 'year':
+            from_date = (today.getFullYear()-1)+'-'+
+                        this.addZero((today.getMonth()+1))+'-'+ 
+                        this.addZero(today.getDate());
+            break;
+        }
+        const to_date = today.getFullYear()+'-'+
+                        this.addZero((today.getMonth()+1))+'-'+
+                        this.addZero(today.getDate());
+        let params = {};
+        if (from_date) {
+          params = {
+            from_date: from_date,
+            to_date: to_date,
+          };
+        }
+
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_SUMMARY.INFO}`,
+          params
+        );
+        if (this.stateTeaching) {
+          if (select ==  1) {
+            this.teacherInfo.participants = this.stateTeaching.participants
+          } else if (select ==  2) {
+            this.teacherInfo.revenue = this.stateTeaching.revenue
+          } else {
+            this.teacherInfo = {...this.stateTeaching}
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    get
+  },
+
+  created() {
+    this.getSummary();
   }
 };
 </script>

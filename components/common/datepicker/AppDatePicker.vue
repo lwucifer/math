@@ -1,7 +1,26 @@
 <template>
   <div class="app-date-picker" :class="classes">
     <label v-if="label">{{label}}</label>
-    <date-picker v-model="text" @change="change()" valuetype="format" format="DD/MM/YYYY"></date-picker>
+    <date-picker
+      v-model="text"
+      @change="change()"
+      valueType="format"
+      :format="valueFormat"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled	="disabled"
+      :range="range"
+      :range-separator="rangeSeparator"
+      :shortcuts="shortcuts"
+    >
+      <template v-slot:icon-calendar>
+        <slot name="icon-calendar"></slot>
+      </template>
+
+      <template v-slot:icon-clear>
+        <slot name="icon-clear"></slot>
+      </template>
+    </date-picker>
   </div>
 </template>
 
@@ -22,6 +41,37 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    valueFormat: {
+      type: String,
+      default: 'DD/MM/YYYY'
+    },
+    type: {
+      type: String,
+      default: 'date',
+      validator: value => ['date', 'datetime', 'year', 'month', 'time', 'week'].includes(value)
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    range: {
+      type: Boolean,
+      default: false
+    },
+    rangeSeparator: {
+      type: String,
+      default: '-'
+    },
+    shortcuts: {
+      type: Array,
+      default: () => []
     }
   },
 

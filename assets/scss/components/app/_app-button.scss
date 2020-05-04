@@ -4,7 +4,7 @@
     font-family: inherit;
     text-decoration: none;
     white-space: nowrap;
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     max-width: 100%;
     cursor: pointer;
 
@@ -14,25 +14,42 @@
     justify-content: center;
 
     // Default styles
-    border-radius: 5px;
-    padding: .5rem 2rem;
+    border-radius: 2px;
+    padding: .8rem 2.4rem;
     border-color: transparent;
-    background-color: $color-text-sub;
-    color: $color-text;
-    font-weight: 700;
+    background-color: $color-text-white;
+    color: $color-text-white;
+    font-weight: 600;
     
-    // &:hover, &:focus {
-    //     color: $color-primary;
-    //     border-color: $color-primary;
-    // }
+    svg path {
+        fill: currentColor;
+    }
+    
+     &:hover, &:focus {
+         background-color: $color-primary-3;
+         box-shadow: $showdow-hover;
+     }
 
     &.disabled, &[disabled] {
         pointer-events: none;
-        background-color: $color-disabled;
-        color: #fff;
+        background-color: $color-text-sub !important;
+        border-color: $color-disabled !important;
+        color: $color-gray !important;
     }
 }
 
+// Icon into button
+.icon--btn {
+    color: inherit;
+}
+
+.icon--btn--pre {
+    margin-right: 7px;
+}
+
+.icon--btn--suf {
+    margin-left: 7px;
+}
 
 // Size of button
 .btn--size-xs {
@@ -45,7 +62,7 @@
 
 .btn--size-sm {
     height: 3.2rem;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
 }
 
 .btn--size-md {
@@ -53,7 +70,8 @@
 }
 
 .btn--size-lg {
-    height: 4.8rem;
+    height: 4rem;
+    padding: 1.2rem 1.5rem;
 }
 
 .btn--size-xl {
@@ -69,8 +87,8 @@
 
 // Type of button
 .btn--flat {
-    background-color: transparent;
-    border: none;
+    background-color: transparent !important;
+    border: none !important;
 }
 
 
@@ -90,7 +108,18 @@
 .btn--color-white {
     background-color: #fff;
     color: $color-primary !important;
-    border: 1px solid $color-primary;
+    &:hover {
+        color: $color-primary-3 !important;
+        background-color: #fff;
+    }
+}
+
+.btn--color-disabled {
+    background-color: $color-text-sub;
+    color: $color-gray !important;
+    &:hover {
+        background-color: inherit;
+    }
 }
 
 .btn--color-gray {
@@ -117,9 +146,18 @@
     border: 1px solid $color-red;
 }
 
+.btn--color-transparent {
+    background-color: transparent;
+    color: $color-primary;
+    box-shadow: none !important;
+    &:hover {
+        color: $color-primary-3;
+        background-color: transparent;
+    }
+}
 // Font weight
 .btn--normal {
-    font-weight: normal;
+    font-weight: 600;
 }
 
 // Border-radius
@@ -151,4 +189,17 @@
     background-color: transparent;
     color: #fff !important;
     border-color: #fff;
+}
+
+
+// Loading state
+.btn--loading {
+    pointer-events: none;
+    opacity: .6;
+}
+
+
+// Components
+.btn__spin {
+    margin-right: 6px;
 }

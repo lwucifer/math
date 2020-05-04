@@ -68,18 +68,7 @@
         }
     }
     .bottom {
-        padding: 0 1rem 1rem;
-        .title {
-            color: #333;
-            text-decoration: none;
-            font-size: 1.6rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            display: block;
-            &:hover {
-                color: $color-primary;
-            }
-        }
+        padding: 1rem;
     }
 }
 .elearning-item2_teacher >div {
@@ -101,7 +90,20 @@
     &.price {
         color: $color-red;
         justify-content: flex-end;
-        font-size: 1.6rem;
         font-weight: bold;
+    }
+}
+
+.elearning-item2__title {
+    font-size: $font-size-base;
+    font-weight: 700;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    &:hover {
+        color: $color-primary;
     }
 }

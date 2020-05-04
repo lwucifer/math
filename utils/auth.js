@@ -1,5 +1,13 @@
 import Cookie from "js-cookie";
-import { SCHOOLLY_ACCESS_TOKEN, TOKEN_USER_SCHOOLLY } from "./config";
+import {
+    SCHOOLLY_ACCESS_TOKEN,
+    TOKEN_USER_SCHOOLLY,
+    UNAUTHORIZE_API,
+    DEVICE_ID,
+    CLIENT_INFO_API,
+    FIREBASE_TOKEN,
+    DEVICE_OS
+} from "./config";
 
 /**
  * get access_token from local storage
@@ -19,24 +27,80 @@ export const getToken = () => {
 };
 
 /**
+ * get device_id from local storage
+ */
+export const getDeviceId = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(DEVICE_ID);
+};
+
+/**
+ * get firebase_token from local storage
+ */
+export const getFirebaseToken = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(FIREBASE_TOKEN);
+};
+
+/**
+ * get device_os from local storage
+ */
+export const getDeviceOs = () => {
+    if (process.server) return;
+    return window.localStorage.getItem(DEVICE_OS);
+};
+
+
+/**
  * set bearer token after login success
  */
 export const setAccessToken = accessToken => {
+    // console.log("[setAccessToken]", accessToken);
     if (!accessToken) return;
+    // console.log("[setAccessToken] Cookie", accessToken);
     Cookie.set(SCHOOLLY_ACCESS_TOKEN, accessToken, {
         expires: parseInt(process.env.SESSION_EXPIRES)
     });
+    // console.log("[setAccessToken] process", accessToken);
     if (process.server) return;
+    // console.log("[setAccessToken] localStorage", accessToken);
     window.localStorage.setItem(SCHOOLLY_ACCESS_TOKEN, accessToken);
 };
 
 export const setToken = _token => {
+    // console.log("[setToken]", _token);
     if (!_token) return;
+    // console.log("[setToken] Cookie", _token, Cookie);
     Cookie.set(TOKEN_USER_SCHOOLLY, _token, {
         expires: parseInt(process.env.SESSION_EXPIRES)
     });
+    // console.log("[setToken] process", process.server);
     if (process.server) return;
+    // console.log("[setToken] localStorage", _token);
     window.localStorage.setItem(TOKEN_USER_SCHOOLLY, JSON.stringify(_token));
+};
+
+export const setDeviceId = _deviceId => {
+    console.log("[auth][setDeviceId]", _deviceId);
+    if (!_deviceId) return;
+    Cookie.set(DEVICE_ID, _deviceId);
+    if (process.server) return;
+    window.localStorage.setItem(DEVICE_ID, _deviceId);
+};
+
+export const setDeviceOs = _deviceOs => {
+    console.log("[auth][setDeviceOs]", _deviceOs);
+    if (!_deviceOs) return;
+    Cookie.set(DEVICE_OS, _deviceOs);
+    if (process.server) return;
+    window.localStorage.setItem(DEVICE_OS, _deviceOs);
+};
+
+
+export const setFirebaseToken = _fbToken => {
+    console.log("[auth][setFirebaseToken]", _fbToken);
+    if (!_fbToken) return;
+    window.localStorage.setItem(FIREBASE_TOKEN, _fbToken);
 };
 
 export const removeToken = () => {
@@ -77,20 +141,46 @@ export const getAccessTokenFromCookie = req => {
     return userCookie;
 };
 
+/**
+ * get device_id from cookie
+ */
+export const getDeviceIdFromCookie = req => {
+    if (!req || !req.headers || !req.headers.cookie) return;
+    const jwtCookie = req.headers.cookie
+        .split(";")
+        .find(c => c.trim().startsWith(DEVICE_ID));
+    if (!jwtCookie) return null;
+    const userCookie = jwtCookie.split("=")[1];
+    return userCookie;
+};
+
 export const checkRequestAuthorize = _url => {
-    // const urls = _url.split('?');
+    const urls = _url.split("?");
     // console.log("urls", urls);
 
     // if url contain token=true => return true;
     if (_url.includes("token=true")) return true;
 
     // public api url
-    if (_url.includes("/login")) return false;
+    if (_url.includes("/public")) return false;
 
     // public api
-    // if (UNAUTHORIZE_API.includes(urls[0])) {
-    //   return false;
-    // }
+    if (UNAUTHORIZE_API.includes(urls[0])) {
+        return false;
+    }
 
     return true;
+};
+
+export const checkRequestClientInfo = _url => {
+    const urls = _url.split("?");
+    let check = false;
+
+    CLIENT_INFO_API.map(item => {
+        if (urls[0].includes(item)) {
+            check = true;
+        }
+    })
+
+    return check;
 };

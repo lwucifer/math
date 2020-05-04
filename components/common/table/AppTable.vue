@@ -3,28 +3,80 @@
     <table>
       <thead>
         <tr>
-          <th v-for="(item, index) in heads" :key="index" @click="sort(item.name)">{{item.text}}</th>
+          <th
+            v-if="multipleSelection"
+          >
+            <app-checkbox
+              @change="changeSelect"
+              v-model="allSelected"
+              :disabled="!hasData"
+              title="Chọn tất cả"
+            />
+            <hr />
+          </th>
+          <th v-for="(item, index) in heads" :key="index">
+            <div v-html="item.text"></div>
+            <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
+            <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
+              <IconDirection height="18" width="18" />
+            </span>
+            <hr />
+          </th>
         </tr>
       </thead>
-      <tbody>
+      <!-- Use slot body -->
+      <tbody v-if="hasDefaultSlot && hasData">
+        <slot />
+      </tbody>
+      <!-- Use data list -->
+      <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)">
         <tr v-for="(cat, i) in sortedCats" :key="i">
-          <td v-for="(item, j) in heads" :key="j">{{ cat[item.name] }}</td>
+          <td v-if="multipleSelection || selectAll" class="pr-0">
+            <app-checkbox
+              @change="check($event, cat)"
+              :checked="selectedItems.includes(cat)"
+            />
+          </td>
+          <!--Slot is named by column key-->
+          <slot
+            v-for="(item, j) in heads"
+            :item="item"
+            :index="i"
+            :row="cat"
+            :name="'cell(' + item.name + ')'"
+          >
+            <td
+              v-html="cat[item.name]"
+              v-bind:style="cat[item.css] ? cat[item.css] : ''"
+            >
+
+            </td>
+          </slot>
         </tr>
       </tbody>
     </table>
-
-    <app-pagination :type="2" :pagination="pagination" @pagechange="onPageChange" class="mt-3" />
+    <div class="text-center w-100 py-5" v-if="(!hasData) && (!loading)">
+      {{ noDataTxt }}
+    </div>
+    <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
+    <div v-if="needPagination" class="pagination">
+      <hr />
+      <app-pagination v-if="hasData && (!loading)" :type="2" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
+    </div>
   </div>
 </template>
 
 <script>
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
+import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
+import { isEqual } from "lodash";
 
 export default {
   components: {
     IconStar,
-    IconStarO
+    IconStarO,
+    IconDirection
   },
 
   props: {
@@ -38,49 +90,169 @@ export default {
       required: false,
       default: () => []
     },
+    sortBy: Array,
     pagination: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => {
+        return {
+          total: 0,
+          size: 10,
+          totalElements: 0,
+          first: 1,
+          last: 1,
+          number: 0
+        }
+      }
     },
-    type: [String, Number]
+    selectAll: Boolean,
+    multipleSelection: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    opts: {
+      type: Array,
+      default: () => {
+        return [
+          { value: 10, text: "10" },
+          { value: 20, text: "20" },
+          { value: 30, text: "30" },
+          { value: 50, text: "50" }
+        ]
+      }
+    },
+    noDataTxt: {
+      type: String,
+      default: 'Không tìm thấy dữ liệu'
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    needPagination: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {
     return {
-      cats: [],
+      listSortBy: [],
       currentSort: "name",
-      currentSortDir: "asc"
+      currentSortDir: "asc",
+      selectedItems: [], // An array of selected rows
     };
   },
-
+  watch: {
+    selectedItems: function (oldVal, newVal) {
+      this.$emit("selectionChange", this.selectedItems);
+    }
+  },
   methods: {
-    sort: function(s) {
-      if (s === this.currentSort) {
+    check(checked, item) {
+      if (checked) {
+        this.pushSelectedIndexes(item);
+      } else {
+        this.popSelectedIndexes(item);
+      }
+      this.$emit("check", item);
+    },
+
+    popSelectedIndexes(item) {
+      if (_.some(this.selectedItems, item)) { // this.selectedItems include item
+        this.selectedItems = _.reject(this.selectedItems, ({id}) => id === item.id);
+      }
+    },
+
+    pushSelectedIndexes(item) {
+      if (!(_.some(this.selectedItems, item))) { // this.selectedItems include item
+        this.selectedItems.push(item);
+      }
+    },
+
+    changeSelect(checked) {// select all
+      if (checked) {
+        this.selectedItems = this.data;
+      } else {
+        this.selectedItems = [];
+      }
+      this.$emit("selectAll", this.selectedItems);
+    },
+
+    sort: function(sortBy) {
+      if (sortBy === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
-      this.currentSort = s;
+      this.currentSort = sortBy;
+      this.$emit("sort", { sortBy: this.currentSort, order: this.currentSortDir });
+    },
+    onPageChange(e) {
+      this.$emit("pagechange", e);
+    },
+    swap(array, i, k) {
+      const temp = array[i];
+      array[i] = array[k];
+      array[k] = temp;
     }
   },
 
   computed: {
+    hasDefaultSlot() {
+      return !!this.$slots.default;
+    },
     sortedCats: function() {
-      return this.cats.sort((a, b) => {
-        let modifier = 1;
-        if (this.currentSortDir === "desc") modifier = -1;
-        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-        return 0;
-      });
+      for (let i = this.cats.length - 1; i > 0; i--) {
+        let check = true;
+        for (let k = 0; k < i; k++) {
+          if (this.currentSortDir === "desc") {
+            if (
+              this.cats[k][this.currentSort] >
+              this.cats[k + 1][this.currentSort]
+            ) {
+              this.swap(this.cats, k, k + 1);
+            }
+            this.currentSortDir === "asc";
+            check = false;
+          } else {
+            if (
+              this.cats[k][this.currentSort] <
+              this.cats[k + 1][this.currentSort]
+            ) {
+              this.swap(this.cats, k, k + 1);
+            }
+            this.currentSortDir === "desc";
+            check = false;
+          }
+        }
+        if (check) {
+          break;
+        }
+      }
+      return this.cats;
+    },
+    cats: function() {
+      return this.data;
+    },
+    allSelected: {
+      set(value) {
+        return value
+      },
+      get() {
+        return this.hasData && isEqual(this.selectedItems, this.data)
+      }
+    },
+    hasData() {
+      return this.data.length > 0
     }
   },
 
   created() {
-    this.cats = [...this.data];
+    // this.cats = [...this.data];
   }
 };
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/app/_app-stars.scss";
+@import "~/assets/scss/components/app/_app-table.scss";
 </style>

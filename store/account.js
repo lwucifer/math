@@ -1,10 +1,18 @@
 import * as actionTypes from "../utils/action-types";
 import * as mutationTypes from "../utils/mutation-types";
+import * as APIs from "../utils/endpoints";
 import Personal from "../services/account/Personal";
 import Link from "../services/account/Link";
 import Transactions from "../services/account/Transactions";
 import Revenue from "../services/account/Revenue";
 import Earning from "../services/account/Earning";
+import UpdateAvatar from "../services/account/UpdateAvatar";
+import UpdateCover from "../services/account/UpdateCover";
+import Profile from "../services/account/Profile";
+import FriendInvite from "~/services/social/Friendinvite";
+import Photos from "~/services/social/photos";
+import TagPhotos from "~/services/social/tagPhoto";
+import Withdrawals from "~/services/account/Withdrawals";
 /**
  * initial state
  */
@@ -12,13 +20,21 @@ const state = () => ({
     personalList: {},
     transactionsList: {},
     revenueList: {},
-    earningList: {}
+    earningList: {},
+    linkList: {},
+    profileList: {},
+    inviteList: {},
+    withdrawalsList: {},
 });
 
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    accountRole(state) {
+        return state.profileList ? state.profileList.role : [];
+    },
+};
 
 /**
  * initial actions
@@ -35,6 +51,7 @@ const actions = {
                 mutationTypes.ACCOUNT_PERSONAL.SET_ACCOUNT_PERSONAL_LIST,
                 result.data
             );
+            return result;
         } catch (err) {
             console.log("[Personal] list.err", err);
             return err;
@@ -46,17 +63,46 @@ const actions = {
                 actionTypes.BASE.EDIT_PAYLOAD
             ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_PERSONAL.EDIT_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.CHECK_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.VERIFY_OTP_EMAIL]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.post(APIs.VERIFY_OTP_EMAIL, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PERSONAL.UPDATE_PHONE]({ commit }, payload) {
+        try {
+            const { data } = await this.$axios.put(APIs.UPDATE_PHONE, payload);
+            return data;
+        } catch (err) {
+            console.log("[SYSTEM ROLE] err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_AVATAR]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                payload
-            );
+            const result = await new UpdateAvatar(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
+            return result;
         } catch (err) {
             console.log("[Personal] edit.err", err);
             return err;
@@ -76,9 +122,9 @@ const actions = {
     },
     async [actionTypes.ACCOUNT_PERSONAL.EDIT_COVER]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.EDIT](
-                paload
-            );
+            const result = await new UpdateCover(this.$axios)[
+                actionTypes.BASE.EDIT_PAYLOAD
+            ](payload);
             console.log("[Personal] edit", result);
             return result;
         } catch (err) {
@@ -174,7 +220,88 @@ const actions = {
             console.log("[Earning] list.err", err);
             return err;
         }
-    }
+    },
+    async [actionTypes.ACCOUNT_WITHDRAWALS.LIST]({ commit }, payload) {
+        try {
+            const result = await new Withdrawals(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            console.log("[Withdrawals] list", result);
+            // set to mutation
+            commit(mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS, result);
+        } catch (err) {
+            console.log("[Withdrawals] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
+        try {
+            const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            commit(
+                mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST,
+                result.data
+            );
+        } catch (err) {
+            console.log("PROFILE add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new FriendInvite(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[FriendInvite] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_FRIEND.SET_SOCIAL_FRIEND_INVITE_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[FriendInvite] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Photos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Photos] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_PHOTO_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[Photos] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new TagPhotos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[TagPhotos] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_TAG_PHOTO_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[TagPhotos] list.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -208,7 +335,42 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_EARNING_LIST", _earningList);
         state.earningList = _earningList;
-    }
+    },
+    [mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS](
+        state,
+        _withdrawalsList
+    ) {
+        console.log("SET_ACCOUNT_WITHDRAWALS", _withdrawalsList);
+        state.withdrawalsList = _withdrawalsList;
+    },
+    [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
+        state.linkList = _linkList;
+    },
+    [mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST](
+        state,
+        _profileList
+    ) {
+        console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
+        state.profileList = _profileList;
+    },
+    [mutationTypes.SOCIAL_FRIEND.SET_SOCIAL_FRIEND_INVITE_LIST](
+        state,
+        _inviteList
+    ) {
+        state.inviteList = _inviteList;
+    },
+    [mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_PHOTO_LIST](
+        state,
+        _postPhotoList
+    ) {
+        state.postPhotoList = _postPhotoList;
+    },
+    [mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_TAG_PHOTO_LIST](
+        state,
+        _postTagPhotoList
+    ) {
+        state.postTagPhotoList = _postTagPhotoList;
+    },
 };
 
 export default {
@@ -216,5 +378,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

@@ -18,8 +18,8 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_SUMMARY.LIST]({ commit }, payload) {
-    commit(mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST, COURSES);
+  // async [actionTypes.ELEARNING_SUMMARY.LIST]({ commit }, payload) {
+  //   commit(mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST, COURSES);
     // try {
     //   const result = await new Summary(this.$axios)[actionTypes.BASE.LIST](
     //     payload
@@ -31,20 +31,20 @@ const actions = {
     //   console.log("[Summary] list.error", error);
     //   return error;
     // }
-  }
+  // }
 };
 
 /**
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST](
-    state,
-    _earningSummaryList
-  ) {
-    console.log("SET_EARNING_SUMMARY_LIST", _earningSummaryList);
-    state.earningSummaryList = _earningSummaryList;
-  }
+  // [mutationTypes.ELEARNING_SUMMARY.SET_ELEARNING_SUMMARY_LIST](
+  //   state,
+  //   _earningSummaryList
+  // ) {
+  //   console.log("SET_EARNING_SUMMARY_LIST", _earningSummaryList);
+  //   state.earningSummaryList = _earningSummaryList;
+  // }
 };
 
 export default {

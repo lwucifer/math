@@ -1,38 +1,68 @@
 <template>
-  <div class="auth auth-signin">
-    <div class="auth__main">
-      <h3>Đăng nhập</h3>
-      <div class="auth__nav">
-        <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
-        <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="wrap-form_auth">
+          <div class="head-form_auth">
+            <h3>Đăng nhập</h3>
+            <div class="auth__nav-v2">
+              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+              <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+            </div>
+          </div>
+          <div class="px-4">
+            <SigninEmail v-show="byEmail" @signin="handleSigninSuccess" />
+            <SigninPhone v-show="!byEmail" @signin="handleSigninSuccess" />
+          </div>
+          <p class="title-either_auth">hoặc</p>
+          <div>
+            <p>Đăng ký nhanh với</p>
+            <div class="mt-3 mb-15">
+              <app-button class="btn-social btn-facebook">
+                <IconFacebook class="mr-2" />Facebook
+              </app-button>
+              <app-button class="btn-social btn-google">
+                <IconGoogle class="mr-2" />Google
+              </app-button>
+            </div>
+            <div>
+              <span>Đã có tài khoản?</span>
+              <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+            </div>
+          </div>
+          <!--
+            <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none mb-4">Quên mật khẩu?</n-link>
+          -->
+        </div>
       </div>
-      <div class="auth_content mb-4">
-        <app-input v-if="byEmail" type="text" v-model="email" placeholder="Email" />
-        <app-input v-else type="text" v-model="phone" placeholder="Số điện thoại" />
-        <app-input type="password" v-model="password" placeholder="Mật khẩu" class="mb-2" />
-        <p
-          class="color-red text-center full-width"
-          v-if="error"
-        >Email hoặc mật khẩu không chính xác.</p>
+      <div class="col-md-6 text-center">
+        <ImageAuth />
       </div>
-
-      <app-button color="primary" square fullWidth @click="SubmitLogin" class="mb-3">Đăng nhập</app-button>
-      <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none">Quên mật khẩu?</n-link>
     </div>
   </div>
 </template>
 
 <script>
 import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { getDeviceID } from "~/utils/common";
+
 import {
   createSigninWithPhone,
   createSigninWithEmail
-} from "../../models/auth/Signin";
-import { formatPhoneNumber } from "~/utils/validations";
+} from "~/models/auth/Signin";
+import SigninEmail from "~/components/page/auth/signin/SigninEmail";
+import SigninPhone from "~/components/page/auth/signin/SigninPhone";
+import * as constants from "~/utils/constants";
+import { setFirebaseToken } from "~/utils/auth";
+
+import IconFacebook from "~/assets/svg/icons/facebook.svg?inline";
+import IconGoogle from "~/assets/svg/icons/google.svg?inline";
+import ImageAuth from "~/components/page/auth/ImageAuth";
+import { createRegisterDeviceModel } from "../../models/notifications/RegisterDevice";
 
 export default {
-  components: {},
+  components: { SigninEmail, SigninPhone, IconFacebook, IconGoogle, ImageAuth },
 
   data() {
     return {
@@ -45,40 +75,60 @@ export default {
   },
   async mounted() {
     await this.$recaptcha.init();
+
+    // check whether device_id is set or not?
+    const isDeviceIdExist = !!getDeviceID();
+    !isDeviceIdExist && this.initFingerPrint();
   },
   methods: {
     ...mapActions("auth", ["login"]),
-    async SubmitLogin() {
-      try {
-        const token = await this.$recaptcha.execute("login");
-        console.log("ReCaptcha token:", token);
-        let loginModel = !this.byEmail
-          ? createSigninWithPhone(
-              `+${formatPhoneNumber(this.phone)}`,
-              this.password,
-              token
-            )
-          : createSigninWithEmail(this.email, this.password, token);
-        const doAdd = this.login(loginModel).then(result => {
-          if (result.success == true) {
-            this.$router.push("/");
-          } else {
-          }
-        });
-      } catch (error) {
-        console.log("Login error:", error);
-      }
+    ...mapActions("notifications", ["registerDevice"]),
+
+    handleSigninSuccess(isSuccess) {
+      console.log("[handleSigninSuccess]", isSuccess);
+      this.getFirebaseToken(this.registerDevice);
     },
+
     tabPhone() {
       (this.byEmail = false), (this.password = "");
     },
     tabEmail() {
       (this.byEmail = true), (this.password = "");
+    },
+
+    initFingerPrint() {
+      console.log("[initFingerPrint]", window.requestIdleCallback);
+      if (window.requestIdleCallback) {
+        requestIdleCallback(getDeviceID);
+      } else {
+        setTimeout(getDeviceID, 500);
+      }
+    },
+
+    getFirebaseToken(callback) {
+      console.log("[getFirebaseToken]");
+      this.$fireMess
+        .requestPermission()
+        .then(granted => {
+          console.log("[Messaging] have permission", granted);
+          return this.$fireMess.getToken();
+        })
+        .then(token => {
+          console.log("[Messaging] token", token);
+          setFirebaseToken(token);
+
+          // register notification here
+          const deviceRegReq = createRegisterDeviceModel();
+          callback(deviceRegReq);
+        })
+        .catch(err => {
+          console.log("[Messaging] Error occured ", err);
+        });
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/auth/_auth.scss";
+@import "~/assets/scss/components/auth/_auth-v2.scss";
 </style>

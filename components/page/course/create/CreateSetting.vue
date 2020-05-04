@@ -1,0 +1,294 @@
+<template>
+  <div class="cc-panel bg-white mb-4">
+    <div class="cc-panel__title">
+      <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
+    </div>
+
+    <div class="cc-panel__body">
+      <div class="row align-items-center mb-4">
+        <div class="col-md-3">Chế độ hiển thị</div>
+        <div class="col-md-9">
+          <app-select
+            class="cc-select"
+            @change="handleChangePrivacy"
+            :value="payload.privacy"
+            :options="[
+              { value: '', text: 'Chọn chế độ hiển thị' },
+              { value: 'PUBLIC', text: 'Công khai' },
+              { value: 'PRIVATE', text: 'Riêng tư' },
+            ]"
+            placeholder="Chọn chế độ hiển thị"
+          >
+            <template slot="placeholder-icon">
+              <IconAngleDown class="icon" />
+            </template>
+          </app-select>
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4">
+        <div class="col-md-4">Cho phép bình luận tại bài giảng</div>
+        <div class="col-md-8">
+          <app-radio-group v-model="payload.comment_allow">
+            <app-radio
+              value="1"
+              class="mr-4"
+              :checked="payload.comment_allow === true"
+              >Có</app-radio
+            >
+            <app-radio value="0" :checked="payload.comment_allow === false"
+              >Không</app-radio
+            >
+          </app-radio-group>
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4">
+        <div class="col-md-3">Học phí</div>
+        <div class="col-md-9">
+          <app-select
+            class="cc-select"
+            @change="handleChangeFree"
+            :value="free"
+            :options="[
+              { value: '', text: 'Chọn học phí' },
+              { value: 1, text: 'Trả phí' },
+              { value: 2, text: 'Miễn phí' },
+            ]"
+            placeholder="Chọn học phí"
+          >
+            <template slot="placeholder-icon">
+              <IconAngleDown class="icon" />
+            </template>
+          </app-select>
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4" v-if="this.free == 1">
+        <div class="col-md-3">Giá bán</div>
+        <div class="col-md-4">
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.fee" />
+            </div>
+          </div>
+          <!-- <app-input v-model="payload.fee" type="text" class="mb-0"></app-input> -->
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4" v-if="this.free == 1">
+        <div class="col-md-3">Giá sau khuyến mại</div>
+        <div class="col-md-4">
+          <div class="app-input mb-0 app-input--size-md">
+            <div class="app-input__input">
+              <currency-input v-model="payload.price" />
+            </div>
+          </div>
+          <!-- <app-input
+            v-model="payload.price"
+            type="text"
+            class="mb-0"
+          ></app-input> -->
+        </div>
+        <div class="percent_price__ElearningCreate" v-if="percent_price">
+          <span>{{ percent_price }}</span>
+        </div>
+      </div>
+
+      <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" />
+    </div>
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleSaveSetting"
+      @cancel="handleCancelSetting"
+    />
+  </div>
+</template>
+
+<script>
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import CreateAction from "~/components/page/course/create/common/CreateAction";
+import { getParamQuery, useEffect } from "~/utils/common";
+import { get, toNumber, defaultTo } from "lodash";
+import numeral from "numeral";
+import { createPayloadCourseSetting } from "~/models/course/AddCourse";
+import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
+import { validatePrice } from "~/utils/validations";
+import * as yup from "yup";
+
+export default {
+  components: {
+    IconAngleDown,
+    CreateAction,
+  },
+
+  data() {
+    return {
+      percent_price: "",
+      showModalConfirm: false,
+      confirmLoading: false,
+      free: "",
+      is_submit: false,
+      payload: {
+        comment_allow: "",
+        price: 0,
+        elearning_id: get(this, "general.id", ""),
+        fee: 0,
+        privacy: "",
+      },
+    };
+  },
+  created() {
+    this.fetchSetting();
+    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
+  },
+
+  watch: {
+    setting: {
+      handler: function() {
+        this.payload.elearning_id = getParamQuery("elearning_id");
+        this.payload.comment_allow = get(this, "setting.comment_allow", "");
+        this.payload.price = get(this, "setting.price", 0);
+        this.payload.fee = get(this, "setting.fee", 0);
+        this.payload.privacy = get(this, "setting.privacy", "");
+        const fee = toNumber(get(this, "setting.fee", ""));
+        const price = toNumber(get(this, "setting.price", ""));
+        if (fee) {
+          this.percent_price = numeral((price - fee) / fee).format("0%");
+        }
+        if (fee > 0) {
+          this.free = 1;
+        }
+        if (toNumber(get(this, "setting.fee", "-1")) === 0) {
+          this.free = 2;
+        }
+      },
+      deep: true,
+    },
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-setting", {
+      setting: "setting",
+    }),
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+  },
+
+  methods: {
+    handleCheckSubmit() {
+      this.handleSetPercent();
+      if (this.payload.comment_allow === "") return (this.is_submit = false);
+      if (this.payload.privacy === "") return (this.is_submit = false);
+      if (this.free === "") return (this.is_submit = false);
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return (this.is_submit = false);
+        }
+        if (!this.payload.price) {
+          return (this.is_submit = false);
+        }
+      }
+      this.is_submit = true;
+    },
+
+    fetchSetting() {
+      const elearning_id = getParamQuery("elearning_id");
+      if (elearning_id) {
+        const options = {
+          params: {
+            elearning_id,
+          },
+        };
+        this.$store.dispatch(
+          `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
+          options
+        );
+      }
+    },
+
+    handleChangePrivacy(privacy) {
+      this.payload.privacy = privacy;
+    },
+
+    handleChangeFree(free) {
+      this.free = free;
+      if (free != 1) {
+        this.payload.fee = 0;
+        this.payload.price = 0;
+      }
+    },
+
+    handleSetPercent() {
+      const _fee = numeral(get(this, "payload.fee", 0)).value();
+      const _price = numeral(get(this, "payload.price", 0)).value();
+      if (_fee && _price) {
+        this.percent_price = numeral((_price - _fee) / _fee).format("0%");
+      }
+    },
+
+    async handleCLickSave() {
+      this.showModalConfirm = true;
+    },
+
+    async handleSaveSetting() {
+      this.confirmLoading = true;
+      this.payload.elearning_id = getParamQuery("elearning_id");
+      const payload = createPayloadCourseSetting(this.payload, this.free);
+      const result = await this.$store.dispatch(
+        `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
+        payload
+      );
+
+      this.handleCancelSetting();
+
+      if (get(result, "success", false)) {
+        this.getProgress();
+        this.fetchSetting();
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
+        return;
+      }
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
+    },
+
+    handleCancelSetting() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
+    getProgress() {
+      const elearning_id = getParamQuery("elearning_id");
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
+        options
+      );
+    },
+
+    numeral,
+  },
+};
+</script>
+
+<style lang="scss">
+.percent_price__ElearningCreate {
+  background: #32af85;
+  span {
+    color: #ffffff;
+    display: block;
+    padding: 5px;
+  }
+}
+</style>

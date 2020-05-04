@@ -1,0 +1,67 @@
+.the-header__user {
+  position: relative;
+  &:hover {
+    /deep/ .the-header__user-menu {
+      display: block;
+    }
+  }
+}
+
+.the-header__user-avt {
+  margin-left: 4rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.the-header__user-menu {
+  display: none;
+  position: absolute;
+  padding-top: 2rem;
+  top: 3.2rem;
+  z-index: map_get($z-index, "dropdown");
+  //border: 1px solid #eee;
+  //box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  min-width: 37.3rem;
+  right: 0;
+
+  ul {
+    list-style-type: none;
+    border: 1px solid #eee;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  &__item {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 1.6rem;
+      color: #666;
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-right: 1rem;
+        width: 22px;
+      }
+    }
+
+    &:hover {
+      a.nuxt-link-active {
+        color: $color-primary;
+      }
+
+      a svg path {
+        fill: $color-primary !important;
+      }
+    }
+  }
+}

@@ -1,25 +1,9 @@
 <template>
   <div class="elearning-slider-tab">
-    <div class="toolbar">
-      <h3 v-if="title">{{title}}</h3>
-      <app-button
-        @click="changeTab(1)"
-        :color="tab === 1 ? 'primary' : 'info'"
-        square
-        v-if="sciences.length > 0"
-      >
-        <IconNote />Bài giảng
-      </app-button>
-      <app-button
-        @click="changeTab(2)"
-        :color="tab === 2 ? 'primary' : 'info'"
-        square
-        v-if="sciences.length > 0"
-      >
-        <IconBooks />Khóa học
-      </app-button>
-    </div>
+    <h3 class="mb-4" v-if="title">{{ title }}</h3>
+
     <div
+      v-show="content.length"
       v-swiper:mySwiper="currentSwiperOptions"
       class="post-slider elearning-slider"
       v-on="$listeners"
@@ -27,7 +11,7 @@
       <div class="swiper-wrapper">
         <div
           class="swiper-slide elearning-slider-tab-container"
-          v-for="(item, index) in list"
+          v-for="(item, index) in content"
           :key="index"
         >
           <div class="slider-item" @click="$emit('click-item', item, index)">
@@ -44,6 +28,8 @@
       </div>
       <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
     </div>
+
+    <div v-show="!content.length" class="text-center text-sub">Không có dữ liệu</div>
   </div>
 </template>
 
@@ -65,19 +51,13 @@ export default {
   },
 
   props: {
-    lessons: {
+    content: {
       type: Array,
       default: () => []
     },
-
-    sciences: {
-      type: Array,
-      default: () => []
-    },
-
     swiperOptions: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     title: { type: String }
   },
@@ -90,8 +70,7 @@ export default {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev"
       },
-      pagination: false,
-      showName: false
+      pagination: false
     };
 
     return {
@@ -101,17 +80,6 @@ export default {
       list: []
     };
   },
-
-  methods: {
-    changeTab(tab) {
-      this.tab = tab;
-      this.list = tab === 1 ? [...this.lessons] : [...this.sciences];
-    }
-  },
-
-  created() {
-    this.list = this.lessons;
-  }
 };
 </script>
 

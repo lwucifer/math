@@ -10,9 +10,18 @@
       </n-link>
 
       <div class="post__title">
-        <div class="post__title-row">
+        <div class="post__title-row mb-1">
           <h5 class="post__name">
-            <n-link to>{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+            <n-link
+              :to="`/account/${post.author.id}`"
+            >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+
+            <span v-if="post.label" class="text-sub font-weight-normal">
+              cảm thấy {{ post.label.icon }}
+              <b class="text-base">{{ post.label.des }}</b>
+            </span>
+
+            <PostTags v-if="post.tags && post.tags.length" :tags="post.tags || []" />
           </h5>
         </div>
 
@@ -23,16 +32,12 @@
             <!-- <IconGlobe class="icon" /> -->
           </span>
         </div>
-
-        <template v-if="showEdit">
-          <button v-show="!edit" class="post__btn-edit" @click="edit = true">Chỉnh sửa</button>
-        </template>
       </div>
 
       <app-dropdown
         v-if="showMenuDropdown"
         class="post__menu-dropdown"
-        position="left"
+        position="right"
         open-on-click
         v-model="menuDropdown"
       >
@@ -42,7 +47,7 @@
 
         <ul class="post__menu-dropdown__list">
           <li>
-            <a href>Chỉnh sửa bài viết</a>
+            <a href @click.prevent="$emit('edit', post)">Chỉnh sửa bài viết</a>
           </li>
           <li>
             <a href @click.prevent="handleClickDelete">Xoá</a>
@@ -52,27 +57,10 @@
     </div>
 
     <div class="post__post">
-      <template v-if="edit">
-        <textarea rows="3" class="post__edit-desc" placeholder="Thêm mô tả" v-textarea-autosize>Những người phụ nữ đang bán hàng online và đang gặp phải vấn đề liên quan đến bán lẻ và phát triển đội nhóm. Đang bị Thiếu chiến lược, thiếu kế hoạch hành động chi tiết.</textarea>
-        <input type="text" placeholder="Cùng với ai?" class="post__edit-tag" />
-        <input type="text" placeholder="Ở đâu?" class="post__edit-location" />
+      <div v-if="!checkEditorEmpty(post.content)" v-html="post.content" class="post__post-desc"></div>
+      <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
-        <div class="post__edit-actions">
-          <app-select class="post__edit-select" :options="shareWithOpts" v-model="shareWith">
-            <IconGlobe slot="prepend" class="post__edit-select__prepend d-block" />
-          </app-select>
-
-          <button class="post__edit-btn post__edit-btn-cancel" @click="edit = false">Huỷ</button>
-          <button class="post__edit-btn post__edit-btn-done" @click="edit = false">Chỉnh sửa xong</button>
-        </div>
-      </template>
-
-      <template v-else>
-        <div class="post__post-desc" v-html="post.content"></div>
-        <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
-      </template>
-
-      <slot name="media-content" />
+      <slot name="media-content" :link="testJSON(post.link)  ? JSON.parse(post.link) : null" />
 
       <slot />
     </div>
@@ -83,54 +71,84 @@
         <span>{{ post.total_comment }} bình luận</span>
       </div>
 
-      <app-divider class="my-3" />
+      <app-divider class="mt-3 mb-0" />
 
-      <div class="post__actions">
+      <div class="post__actions my-3">
         <button
           class="post__button"
           :class="{ 'active': post.is_like }"
-          :disabled="buttonLikeLoading"
+          :disabled="btnLikeLoading"
           @click="handleClickLike"
         >
           <IconHeart class="icon" width="2.1rem" height="1.8rem" />Thích
         </button>
 
-        <button class="post__button">
+        <button
+          class="post__button"
+          :disabled="isFetchingComment"
+          @click="!isCommentFetched && getComment()"
+        >
           <IconBubble class="icon" width="2.1rem" height="2rem" />Bình luận
         </button>
 
-        <button class="post__button">
+        <button class="post__button" @click="$emit('share', post)">
           <IconShare class="icon" width="2.1rem" height="2.1rem" />Chia sẻ
         </button>
       </div>
 
-      <app-divider class="my-3" />
+      <template v-if="isCommentFetched">
+        <app-divider class="mt-0 mb-3" />
 
-      <div class="post__comment-list d-none">
-        <CommentItem>
-          <CommentItemReplied />
-        </CommentItem>
+        <div class="post__comment-list">
+          <slot name="comment" v-bind="{ commentTree }"></slot>
 
-        <CommentItem>
-          <CommentItem :level="2" />
-
-          <div class="text-center">
-            <a href class="post__comment-more" @click.prevent>Xem thêm bình luận ...</a>
+          <div class="text-center" v-if="isFetchingComment">
+            <app-spin />
           </div>
 
-          <CommentEditor reply />
-        </CommentItem>
-      </div>
+          <div class="text-center">
+            <a
+              v-if="commentTree.page && commentTree.page.last === false"
+              href
+              class="post__comment-more"
+              @click.prevent="getComment"
+            >Xem thêm {{ numOfViewMoreParentComment }} bình luận ...</a>
+          </div>
 
-      <CommentEditor class="post__comment-editor" />
+          <div
+            v-if="commentTree.comments && !commentTree.comments.length"
+            class="post__comment-empty text-center text-sub"
+          >Bài viết chưa có bình luận.</div>
+        </div>
+
+        <CommentEditor class="post__comment-editor my-3" @submit="postComment" />
+      </template>
+
+      <div class="text-center" v-else-if="isFetchingComment">
+        <app-spin />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentItem from "~/components/page/timeline/comment/CommentItem";
-import CommentItemReplied from "~/components/page/timeline/comment/CommentItemReplied";
-import CommentEditor from "~/components/page/timeline/comment/CommentEditor";
+import { get, uniqWith } from "lodash";
+import CommentService from "~/services/social/comments";
+import {
+  BASE as ACTION_TYPE_BASE,
+  SOCIAL as ACTION_TYPE_SOCIAL
+} from "~/utils/action-types";
+import { checkEditorEmpty } from "~/utils/validations";
+import { testJSON } from "~/utils/common";
+import { createComment } from "~/models/social/Comment";
+
+const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
+const CommentItem = () =>
+  import("~/components/page/timeline/comment/CommentItem");
+const CommentItemReplied = () =>
+  import("~/components/page/timeline/comment/CommentItemReplied");
+const CommentEditor = () =>
+  import("~/components/page/timeline/comment/CommentEditor");
 
 import IconGlobe from "~/assets/svg/icons/globe.svg?inline";
 import IconHeart from "~/assets/svg/icons/heart.svg?inline";
@@ -140,6 +158,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 export default {
   components: {
+    PostTags,
     CommentItem,
     CommentItemReplied,
     CommentEditor,
@@ -151,8 +170,8 @@ export default {
   },
 
   props: {
-    showEdit: Boolean,
     showMenuDropdown: Boolean,
+    showComment: Boolean,
     comments: {
       type: Number,
       default: 0
@@ -163,9 +182,12 @@ export default {
     },
     post: {
       type: Object,
-      default: () => {},
+      default: () => ({
+        $commentTree: {}
+      }),
       validator: value =>
         [
+          "post_id",
           "author",
           "created_at",
           "total_like",
@@ -178,9 +200,10 @@ export default {
 
   data() {
     return {
-      edit: false,
       menuDropdown: false,
-      buttonLikeLoading: false,
+      btnLikeLoading: false,
+      isFetchingComment: false,
+      isCommentFetched: false,
       shareWith: 0,
       shareWithOpts: [
         { value: 0, text: "Công khai" },
@@ -190,17 +213,59 @@ export default {
     };
   },
 
+  computed: {
+    numOfViewMoreParentComment() {
+      const { page = {} } = this.commentTree;
+      return page.totalPages - page.number === 1
+        ? page.totalElements - page.size * page.number
+        : page.size;
+    },
+
+    commentTree() {
+      return this.post.$commentTree || {};
+    }
+  },
+
+  created() {
+    this.showComment && this.getComment();
+  },
+
   methods: {
+    checkEditorEmpty,
+    testJSON,
+
     handleClickDelete() {
       this.$emit("delete", this.post.post_id);
     },
 
     handleClickLike() {
       const cb = () => {
-        this.buttonLikeLoading = false;
-      }
+        this.btnLikeLoading = false;
+      };
       this.$emit("like", this.post.post_id, cb);
-      this.buttonLikeLoading = true;
+      this.btnLikeLoading = true;
+    },
+
+    setIsFetchingComment(value = false) {
+      this.isFetchingComment = value;
+    },
+
+    setIsCommentFetched(value = false) {
+      this.isCommentFetched = value;
+    },
+
+    getComment() {
+      this.$emit(
+        "get-comment",
+        this.post.post_id,
+        get(this.commentTree, "page.number", 0) + 1,
+        this.setIsFetchingComment,
+        this.setIsCommentFetched
+      );
+    },
+
+    postComment(...args) {
+      this.$emit("post-comment", this.post.post_id, ...args);
     }
   }
 };

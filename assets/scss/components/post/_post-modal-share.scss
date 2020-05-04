@@ -1,0 +1,72 @@
+.pms-header,
+.pms-body,
+.pms-footer {
+    padding: 1rem 2rem;
+}
+
+.pms-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $color-border;
+
+    &__title {
+        font-size: 2rem;
+        color: $color-primary;
+    }
+}
+
+.pms-body {
+    .psc {
+        pointer-events: none;
+    }
+}
+
+.pms-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid $color-border;
+
+    &__flat-btn {
+        font-size: 2rem;
+
+        &.tag {
+            color: $color-yellow;
+        }
+
+        &.location {
+            color: $color-pink;
+        }
+
+        &.emoji {
+            color: $color-purple;
+        }
+    }
+
+    &__btn {
+        font-weight: normal;
+        font-size: 1.4rem;
+    }
+
+    &__left, &__right {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    &__right {
+        display: flex;
+    }
+}
+
+.pms-editor {
+    margin-bottom: 2rem;
+
+    .ProseMirror {
+        min-height: 2.5em;
+    }
+
+    .ProseMirror-focused {
+        outline: none;
+    }
+}
