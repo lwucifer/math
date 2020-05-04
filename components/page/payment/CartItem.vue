@@ -1,10 +1,12 @@
 <template>
   <div class="wrap-cart-item_payment">
-    <span @click="handleClickCartItem(item)">
-      <img :src="get(item, 'elearning_avatar', '')" />
+    <span @click="handleClickCartItem(item)" style="cursor: pointer">
+      <img :src="get(item, 'images.low', '')" />
     </span>
     <div class="ml-3">
-      <p>{{ get(item, "elearning_name", "") }}</p>
+      <p @click="handleClickCartItem(item)" style="cursor: pointer">
+        {{ get(item, "elearning_name", "") }}
+      </p>
       <p class="my-2 text-disabled">{{ get(item, "teacher_name", "") }}</p>
       <p class="text-secondary">
         <a @click.prevent="deleteCartItem">Xóa</a>
@@ -38,7 +40,7 @@ export default {
   },
 
   updated() {
-    console.log(this.item)
+    console.log(this.item);
   },
 
   methods: {
