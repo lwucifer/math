@@ -20,14 +20,16 @@
     background-color: $color-text-white;
     color: $color-text-white;
     font-weight: 600;
+    transition: color .3s, background-color .3s, box-shadow .3s;
     
     svg path {
         fill: currentColor;
     }
     
      &:hover, &:focus {
-         background-color: $color-primary-3;
-         box-shadow: $showdow-hover;
+        outline: none;
+        background-color: $color-primary-3;
+        box-shadow: $showdow-hover;
      }
 
     &.disabled, &[disabled] {
@@ -63,6 +65,10 @@
 .btn--size-sm {
     height: 3.2rem;
     font-size: 1.3rem;
+
+    &.btn-outline {
+        line-height: 1;
+    }
 }
 
 .btn--size-md {

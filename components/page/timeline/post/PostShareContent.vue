@@ -21,7 +21,7 @@
       <n-link
         :to="`/post/${post.post_id}`"
         class="psc__date text-gray text-decoration-none"
-      >10 tháng 3</n-link>
+      >{{ post.created_at | moment('from') }}</n-link>
 
       <div class="psc__desc mt-3">
         <span v-html="post.content" class="psc__text text-sub"></span>
