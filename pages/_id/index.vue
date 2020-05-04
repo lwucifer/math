@@ -46,7 +46,7 @@ export default {
     console.log("params", params);
     const userId = params.id;
     await Promise.all([
-      store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
+      // store.dispatch(`social/${actionTypes.SOCIAL_POST.LIST}`),
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
       store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
       store.dispatch(`account/${actionTypes.SOCIAL_FRIEND.LIST_INVITE}`)
