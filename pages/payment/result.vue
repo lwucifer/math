@@ -8,7 +8,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 
 export default {
-  async created() {
+  async mounted() {
     // const payload = {
     //   vpc_Amount: getParamQuery("vpc_Amount"),
     //   vpc_Card: getParamQuery("vpc_Card"),
