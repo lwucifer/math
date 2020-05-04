@@ -1,0 +1,23 @@
+.app-breadcrumb {
+    list-style-type: none;
+}
+
+.app-breadcrumb-item-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.app-breadcrumb-separator {
+    font-size: 1.2rem;
+    margin: 0 1rem;
+}
+
+.app-breadcrumb-item {
+    font-size: 1.4rem;
+    line-height: (24/14);
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
