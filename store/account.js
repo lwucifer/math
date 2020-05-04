@@ -175,17 +175,15 @@ const actions = {
             console.log("[Link] add", result);
             return result;
         } catch (err) {
-            console.log("[Link] add.err", err);
+            console.log("[Transactions] add.err", err);
             return err;
         }
     },
     async [actionTypes.ACCOUNT_TRANSACTIONS.LIST]({ commit }, payload) {
         try {
-            const result = await new Link(this.$axios)[actionTypes.BASE.LIST](
+            const result = await new Transactions(this.$axios)[actionTypes.BASE.LIST](
                 payload
             );
-            console.log("[Link] list", result);
-            // set to mutation
             commit(
                 mutationTypes.ACCOUNT_TRANSACTIONS.SET_ACCOUNT_TRANSACTIONS_LIST,
                 result

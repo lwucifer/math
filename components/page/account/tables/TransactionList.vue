@@ -8,6 +8,11 @@
     <tr v-for="(item , index) in list" :key="index">
       <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
     </tr>
+    <template v-slot:cell(status)="{row}">
+      <td v-if="row.status=='-1'">Thất bại</td>
+      <td v-else-if="row.status=='0'">Chờ xử lí</td>
+      <td v-else-if="row.status=='1'">Thành công</td>
+    </template>
   </app-table>
 </template>
 
@@ -41,33 +46,33 @@
       return {
         heads: [
           {
-            name: "time",
-            text: "Thời gian",
-            sort: true
-          },
-          {
             name: "code",
             text: "Mã đơn hàng",
             sort: true
           },
           {
-            name: "name",
-            text: "Nội dung",
+            name: "timestamp",
+            text: "Ngày mua",
             sort: true
           },
           {
-            name: "price",
-            text: "Giá trị",
+            name: "desc",
+            text: "Sản phẩm",
             sort: true
           },
           {
-            name: "type",
-            text: "Loại GD",
+            name: "cost",
+            text: "Tổng tiền",
             sort: true
           },
           {
-            name: "pay",
-            text: "Phương thức thanh toán",
+            name: "status",
+            text: "Trạng thái",
+            sort: true
+          },
+          {
+            name: "method",
+            text: "Phương thức TT",
             sort: true
           },
         ],
