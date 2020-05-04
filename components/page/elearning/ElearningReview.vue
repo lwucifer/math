@@ -1,6 +1,6 @@
 <template>
-  <section class="scroll-target" id="review">
-    <h5 class="mb-3">Đánh giá {{ title }}</h5>
+  <section class="scroll-target elearning-id-box" id="review">
+    <h4 class="mb-3">Đánh giá {{ title }}</h4>
     <div class="elearning-review">
       <div class="elearning-review__top mb-4">
         <div class="row items-center">
@@ -14,7 +14,7 @@
                 :size="16"
                 class="mt-2 mb-3"
               />
-              <p class="color-999">
+              <p>
                 ({{ get(info, "voting.total_votes", 0) }} người đánh giá)
               </p>
             </div>
@@ -35,16 +35,16 @@
         <div v-if="fetchingReview" class="text-center">
           <app-spin />
         </div>
-        <div
+        <!-- <div
           v-else-if="!localReview.content || !localReview.content.length"
           class="text-sub text-center"
         >
           Chưa có nhận xét nào phù hợp với tiêu chí bạn đã chọn
-        </div>
+        </div> -->
 
         <ElearningReviewComment
           :data="item"
-          v-for="item in get(localReview, 'content', [])"
+          v-for="item in fakeComment"
           :key="item.id"
         />
         <app-pagination
@@ -52,6 +52,19 @@
           @pagechange="onPageChange"
           class="mt-4 mb-3"
         />
+        <!-- <app-pagination
+          :pagination="{
+          total: 99,
+          size: 10,
+          page: 1,
+          totalElements: 99,
+          first: 1,
+          last: 1,
+          number: 2
+        }"
+          @pagechange="onPageChange"
+          class="mt-4"
+        /> -->
       </div>
     </div>
   </section>
@@ -107,6 +120,24 @@ export default {
         number: 6,
         size: 10,
       },
+      fakeComment: [
+        {
+          id: 99,
+          avatar: 'https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/image/public/elearning/avatar/300x180/20200504113022574_2a24115a882ad6519af95061912d1875e7151430c7223edf36195172c1d08d2e.png',
+          fullname: 'Nguyen Tien Dat',
+          comment: 'Khoá học bổ ích',
+          rate: 2,
+          created: '2020-03-02 00:00:00'
+        },
+        {
+          id: 9,
+          avatar: 'https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/image/public/elearning/avatar/300x180/20200504113022574_2a24115a882ad6519af95061912d1875e7151430c7223edf36195172c1d08d2e.png',
+          fullname: 'Nguyen Tien Dat',
+          comment: 'Khoá học bổ ích',
+          rate: 4,
+          created: '2020-03-02 00:00:00'
+        },
+      ]
     };
   },
 

@@ -12,7 +12,7 @@
 
 body {
   overscroll-behavior: none;
-  background-color: #fbfcfe;
+  background-color: #f2f2f2;
 }
 
 body.body-scroll-lock {
@@ -129,32 +129,32 @@ h6,
 .h5,
 .h6 {
   font-weight: bold;
-  color: #333;
+  color: #222222;
 }
-h1,
-.h1 {
-  font-size: 3rem;
-}
-h2,
-.h2 {
-  font-size: 2.5rem;
-}
-h3,
-.h3 {
-  font-size: 2rem;
-}
-h4,
-.h4 {
-  font-size: 1.8rem;
-}
-h5,
-.h5 {
-  font-size: 1.6rem;
-}
-h6,
-.h6 {
-  font-size: 1.4rem;
-}
+// h1,
+// .h1 {
+//   font-size: 3rem;
+// }
+// h2,
+// .h2 {
+//   font-size: 2.5rem;
+// }
+// h3,
+// .h3 {
+//   font-size: 2rem;
+// }
+// h4,
+// .h4 {
+//   font-size: 1.8rem;
+// }
+// h5,
+// .h5 {
+//   font-size: 1.6rem;
+// }
+// h6,
+// .h6 {
+//   font-size: 1.4rem;
+// }
 
 table,
 .table {
@@ -359,7 +359,7 @@ input:-webkit-autofill:active {
 }
 
 .btn-load-more {
-  font-weight: bold;
+  // font-weight: bold;
   font-size: 1.4rem;
   color: $color-primary;
   cursor: pointer;

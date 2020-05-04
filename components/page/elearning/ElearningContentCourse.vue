@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="evlc-item mb-3"
+      class="evlc-item mt-3"
       v-for="(chapter, index_chapter) in program"
       :key="chapter.chapter_id"
     >
