@@ -110,6 +110,8 @@ export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
 export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
+export const STUDY_INFO = `${SCHOOLLY_ALIAS}/elearning/study/elearning/info`;
+export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/interactive/questions?`;
 
 /**
  * SCHOOL

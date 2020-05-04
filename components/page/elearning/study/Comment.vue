@@ -2,14 +2,24 @@
   <div>
     <div class="d-flex">
       <app-avatar :src="auth.avatar" :size="50" />
-      <app-input textarea v-model="comment" placeholder="Bình luận" class="ml-3 w-100" />
+      <app-input
+        textarea
+        v-model="comment"
+        placeholder="Bình luận"
+        class="ml-3 w-100"
+      />
     </div>
-    <CommentItem :auth="auth" :data="item" v-for="(item, index) in data" :key="index" />
+    <CommentItem
+      :auth="auth"
+      :comment="comment"
+      v-for="(comment, index) in comments"
+      :key="index"
+    />
   </div>
 </template>
 <script>
-import CommentItem from "~/components/page/elearning/course/comment/CommentItem";
-import CommentInput from "~/components/page/elearning/course/comment/CommentInput";
+import CommentItem from "~/components/page/elearning/study/CommentItem";
+import CommentInput from "~/components/page/elearning/study/CommentInput";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
@@ -18,27 +28,27 @@ export default {
     IconCamera,
     IconLike,
     CommentInput,
-    CommentItem
+    CommentItem,
   },
   props: {
-    data: {
+    comments: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     auth: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   data() {
     return {
       comment: "",
-      reply: false
+      reply: false,
     };
   },
 
-  methods: {}
+  methods: {},
 };
 </script>
 
