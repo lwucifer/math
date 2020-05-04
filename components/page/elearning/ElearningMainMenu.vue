@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-view__main-nav" v-sticky>
+  <div class="elearning-view__main-nav">
     <a
       class="scroll-link"
       href="#introduce"

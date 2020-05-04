@@ -2,27 +2,21 @@
     display: flex;
     align-items: center;
     font-size: 1.6rem;
-    margin: 1.5rem 0 3rem;
 
     .stars {
         font-size: 1.4rem;
     }
 
-    >div {
+    > div {
         display: flex;
         align-items: center;
-        margin-right: 3.5rem;
+        margin-right: 2.3rem;
     }
-}
-
-.elearning-view__info .author {
-    
 }
 
 .elearning-view__content {
     .info {
-        margin-top: 1.8rem;
-        margin-bottom: 2.3rem;
+        margin-bottom: 1.4rem;
     }
     
     .download-item {
@@ -71,7 +65,7 @@
         border: 1px solid $color-border;
         display: flex;
         align-items: center;
-        padding: .6rem 1.5rem;
+        padding: 1rem 1.5rem;
     }
 
     &__body {
@@ -96,4 +90,10 @@
             transform: rotate(180deg);
         }
     }
+}
+
+.elearning-id-box {
+    padding: 2rem;
+    background-color: #fff;
+    margin-bottom: 2rem;
 }
