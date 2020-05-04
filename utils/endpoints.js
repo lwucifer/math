@@ -18,8 +18,9 @@ export const ACCOUNT_PROFILE = `${SCHOOLLY_ALIAS}/user/account/profile`;
 export const ACCOUNT_LINK = `${SCHOOLLY_ALIAS}/user/account/link`;
 export const ACCOUNT_PHONE = `${SCHOOLLY_ALIAS}/account/phone`;
 export const ACCOUNT_TRANSACTIONS = `${SCHOOLLY_ALIAS}/account/transactions`;
-export const ACCOUNT_REVENUE = `${SCHOOLLY_ALIAS}/account/revenue`;
-export const ACCOUNT_EARNING = `${SCHOOLLY_ALIAS}/account/earning`;
+export const ACCOUNT_REVENUE = `${SCHOOLLY_ALIAS}/user/account/revenue`;
+export const ACCOUNT_EARNING = `${SCHOOLLY_ALIAS}/user/account/earning`;
+export const ACCOUNT_HISTORY_WITHDRAWALS = `${SCHOOLLY_ALIAS}/user/account/withdrawals`;
 export const VERIFY_EMAIL = `${SCHOOLLY_ALIAS}user/public/verify`;
 export const REFRESH_TOKEN = `${SCHOOLLY_ALIAS}user/public/renew`;
 export const UPDATE_AVATAR = `${SCHOOLLY_ALIAS}/social/api/user/updateAvatar`;
@@ -109,6 +110,9 @@ export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
 export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
+export const STUDY_INFO = `${SCHOOLLY_ALIAS}/elearning/study/elearning/info`;
+export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/interactive/questions`;
+export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
 
 /**
  * SCHOOL

@@ -47,11 +47,11 @@ export default {
       store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, userId),
       store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
       store.dispatch(
-        `social/${actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST}`,
+        `account/${actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST}`,
         userId
       ),
       store.dispatch(
-        `social/${actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST}`,
+        `account/${actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST}`,
         userId
       )
     ]);

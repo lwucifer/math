@@ -58,11 +58,10 @@
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
           <IconShoppingCartAlt />
-          <span v-if="get(cartCheckout, 'orders.length', 0)" class="number">
-            {{
-            get(cartCheckout, "orders.length", 0)
-            }}
-          </span>
+          <span
+            v-if="get(cartCheckout, 'orders.length', 0)"
+            class="number"
+          >{{ get(cartCheckout, "orders.length", 0) }}</span>
         </button>
         <app-dropdown
           position="right"
@@ -229,7 +228,12 @@ export default {
     ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {
-    console.log("detectBrowser", detectBrowser());
+    this.$fireMess.onMessage(payload => {
+      console.log("Message received. ", payload);
+      // ...
+    });
+    // console.log("detectBrowser", detectBrowser());
+    this.cartList();
   },
   created() {
     this.getNotiUnread();
@@ -242,6 +246,7 @@ export default {
       "readNotification",
       "getNotiUnread"
     ]),
+    ...mapActions("cart", ["cartList"]),
     redirectSignin() {
       this.$router.push("/auth/signin");
     },

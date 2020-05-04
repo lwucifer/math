@@ -10,6 +10,9 @@ import UpdateAvatar from "../services/account/UpdateAvatar";
 import UpdateCover from "../services/account/UpdateCover";
 import Profile from "../services/account/Profile";
 import FriendInvite from "~/services/social/Friendinvite";
+import Photos from "~/services/social/photos";
+import TagPhotos from "~/services/social/tagPhoto";
+import Withdrawals from "~/services/account/Withdrawals";
 /**
  * initial state
  */
@@ -21,6 +24,7 @@ const state = () => ({
     linkList: {},
     profileList: {},
     inviteList: {},
+    withdrawalsList: {},
 });
 
 /**
@@ -28,8 +32,8 @@ const state = () => ({
  */
 const getters = {
     accountRole(state) {
-        return state.profileList ? state.profileList.role : []
-    }
+        return state.profileList ? state.profileList.role : [];
+    },
 };
 
 /**
@@ -217,6 +221,19 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_WITHDRAWALS.LIST]({ commit }, payload) {
+        try {
+            const result = await new Withdrawals(this.$axios)[actionTypes.BASE.LIST](
+                payload
+            );
+            console.log("[Withdrawals] list", result);
+            // set to mutation
+            commit(mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS, result);
+        } catch (err) {
+            console.log("[Withdrawals] list.err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
         try {
             const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](
@@ -246,6 +263,42 @@ const actions = {
             return result;
         } catch (err) {
             console.log("[FriendInvite] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_PHOTO.POST_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Photos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Photos] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_PHOTO_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[Photos] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.SOCIAL_PHOTO.POST_TAG_PHOTO_LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new TagPhotos(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[TagPhotos] list", result);
+
+            // set to mutation
+            commit(
+                mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_TAG_PHOTO_LIST,
+                result || []
+            );
+            return result;
+        } catch (err) {
+            console.log("[TagPhotos] list.err", err);
             return err;
         }
     },
@@ -283,6 +336,13 @@ const mutations = {
         console.log("SET_ACCOUNT_EARNING_LIST", _earningList);
         state.earningList = _earningList;
     },
+    [mutationTypes.ACCOUNT_WITHDRAWALS.SET_ACCOUNT_WITHDRAWALS](
+        state,
+        _withdrawalsList
+    ) {
+        console.log("SET_ACCOUNT_WITHDRAWALS", _withdrawalsList);
+        state.withdrawalsList = _withdrawalsList;
+    },
     [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
         state.linkList = _linkList;
     },
@@ -298,6 +358,18 @@ const mutations = {
         _inviteList
     ) {
         state.inviteList = _inviteList;
+    },
+    [mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_PHOTO_LIST](
+        state,
+        _postPhotoList
+    ) {
+        state.postPhotoList = _postPhotoList;
+    },
+    [mutationTypes.SOCIAL_PHOTO.SET_SOCIAL_POST_TAG_PHOTO_LIST](
+        state,
+        _postTagPhotoList
+    ) {
+        state.postTagPhotoList = _postTagPhotoList;
     },
 };
 

@@ -3,7 +3,7 @@
       <div class="row">
         <div class="col-md-6">
             <div class="wrap-success-auth">
-                <IconSuccess class="mb-3"/>
+                <IconSuccess class="mb-3 fill-primary"/>
                 <h3 class="text-primary">Đổi mật khẩu thành công</h3>
                 <p class="my-4">Tài khoản của bạn đã được cập nhật mật khẩu mới</p>
                 <app-button class="mt-2" square 

@@ -22,42 +22,46 @@ import { useEffect } from "~/utils/common";
 
 export default {
   components: {
-    IconAngleDown
+    IconAngleDown,
   },
 
   created() {
+    this.$store.dispatch(
+      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
+    );
     useEffect(this, this.handleChangeSubjects.bind(this), [
       "subjects",
-      "defaultValue"
+      "defaultValue",
     ]);
   },
 
   props: {
-    defaultValue: ""
+    defaultValue: "",
   },
 
   data() {
     return {
-      subject: null
+      subject: null,
     };
   },
 
   computed: {
     ...mapState("elearning/public/public-subject", {
-      subjects: "subjects"
-    })
+      subjects: "subjects",
+    }),
   },
 
   methods: {
     handleChangeSubjects() {
-      this.subject = this.subjects.filter(
-        subject => subject.id == this.defaultValue
+      const subject = this.subjects.filter(
+        (subject) => subject.id == this.defaultValue
       )[0];
+      if (subject) this.subject = subject;
     },
     get,
     handleChangeSubject(subject) {
       this.$emit("handleChangeSubject", subject);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -1,20 +1,24 @@
 <template>
   <div class="wrap-cart-item_payment">
-    <span>
-      <img src="https://picsum.photos/110/66" />
+    <span @click="handleClickCartItem(item)" style="cursor: pointer">
+      <img :src="get(item, 'images.low', '')" />
     </span>
     <div class="ml-3">
-      <p>{{ item.elearning_name }}</p>
-      <p class="my-2 text-disabled">{{ item.teacher_name }}</p>
+      <p @click="handleClickCartItem(item)" style="cursor: pointer">
+        {{ get(item, "elearning_name", "") }}
+      </p>
+      <p class="my-2 text-disabled">{{ get(item, "teacher_name", "") }}</p>
       <p class="text-secondary">
         <a @click.prevent="deleteCartItem">Xóa</a>
       </p>
     </div>
     <div class="ml-auto">
-      <h6 class="text-right">{{ item.price }} đ</h6>
+      <h6 class="text-right">{{ get(item, "price", "") }} đ</h6>
       <div class="d-flex mt-3">
-        <span class="price-cart_payment">{{ item.original_price }}đ</span>
-        <h6 class="ml-2">{{ item.discount }}%</h6>
+        <span class="price-cart_payment"
+          >{{ get(item, "original_price", "") }}đ</span
+        >
+        <h6 class="ml-2">{{ get(item, "discount", "") }}%</h6>
       </div>
     </div>
   </div>
@@ -35,9 +39,19 @@ export default {
     },
   },
 
+  updated() {
+    console.log(this.item);
+  },
+
   methods: {
     ...mapActions("cart", ["cartDelete"]),
     ...mapActions("cart", ["cartList"]),
+    get,
+
+    handleClickCartItem(item) {
+      const elearning_id = get(item, "elearning_id", "");
+      this.$router.push(`/elearning/${elearning_id}`);
+    },
 
     deleteCartItem() {
       const elearning_id = get(this, "item.elearning_id", "");

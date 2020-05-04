@@ -1,5 +1,7 @@
 <template>
   <div class="container elearning-view">
+    <Breadcrumb />
+
     <div class="row">
       <div class="col-md-8">
         <ElearningViewInfo :info="info" />
@@ -11,7 +13,10 @@
         <ElearningContent :program="program" :info="info" />
 
         <div class="box">
-          <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" class="mb-3" />
+          <CourseTeacherInfo
+            :teacher_id="get(info, 'teacher.id', '')"
+            class="mb-3"
+          />
 
           <hr class="mt-3 mb-4" />
 
@@ -20,7 +25,11 @@
       </div>
 
       <div class="col-md-4">
-        <ElearningRightSide v-sticky sticky-offset="top" v-bind="{ info, program }" />
+        <ElearningRightSide
+          v-sticky
+          sticky-offset="{ top: 90, bottom: 0 }"
+          v-bind="{ info, program }"
+        />
       </div>
     </div>
 
@@ -62,6 +71,7 @@ import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
+import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -95,7 +105,8 @@ export default {
     ElearningViewInfo,
     ElearningMainMenu,
     ElearningIntroduce,
-    ElearningContent
+    ElearningContent,
+    Breadcrumb
   },
 
   created() {
@@ -114,8 +125,8 @@ export default {
         spaceBetween: 20,
         slidesPerView: 5,
         setWrapperSize: true,
-        watchOverflow: true
-      }
+        watchOverflow: true,
+      },
     };
   },
 
@@ -135,11 +146,10 @@ export default {
             break;
         }
       }
-    }
+    },
   },
 
   mounted() {
-    
     // check whether device_id is set or not?
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
@@ -161,8 +171,8 @@ export default {
         const teacher_id = get(this, "info.teacher.id", "");
         const options = {
           params: {
-            teacher_id
-          }
+            teacher_id,
+          },
         };
         const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
           options
@@ -172,8 +182,8 @@ export default {
           return;
         }
         this.teacherEls = [];
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -185,26 +195,26 @@ export default {
       const getInfo = () =>
         new InfoService(this.$axios)[actionTypes.BASE.LIST]({
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         });
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         });
       const getRelatedCourses = () =>
         new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
           params: {
-            elearning_id
-          }
+            elearning_id,
+          },
         });
 
       const data = await Promise.all([
         getInfo(),
         getProgram(),
-        getRelatedCourses()
+        getRelatedCourses(),
       ]);
 
       this.info = get(data, "0.data", null);
@@ -213,13 +223,12 @@ export default {
     },
 
     initFingerPrint() {
-      console.log("[initFingerPrint]", window.requestIdleCallback);
       if (window.requestIdleCallback) {
         requestIdleCallback(getDeviceID);
       } else {
         setTimeout(getDeviceID, 500);
       }
-    }
+    },
 
     // bindScrollStatus(event) {
     //   const navLink = document.querySelector(".elearning-view__main-nav");
@@ -241,7 +250,7 @@ export default {
     //     }
     //   }
     // },
-  }
+  },
 };
 </script>
 

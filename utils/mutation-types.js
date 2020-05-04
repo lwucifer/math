@@ -58,6 +58,10 @@ export const ACCOUNT_EARNING = {
     SET_ACCOUNT_EARNING_LIST: "setAccountEarningList",
 };
 
+export const ACCOUNT_WITHDRAWALS = {
+    SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
+};
+
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
@@ -383,4 +387,9 @@ export const SOCIAL_NOTI = {
 
 export const SOCIAL_FRIEND = {
     SET_SOCIAL_FRIEND_INVITE_LIST: "setFriendInviteList",
+};
+
+export const SOCIAL_PHOTO = {
+    SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
+    SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList",
 };
