@@ -1,5 +1,10 @@
 import { AUTH as ACTION_AUTH } from "~/utils/action-types";
-import { checkRequestAuthorize, getDeviceId, removeToken, checkRequestClientInfo } from "~/utils/auth";
+import {
+    checkRequestAuthorize,
+    getDeviceId,
+    removeToken,
+    checkRequestClientInfo,
+} from "~/utils/auth";
 import { DEVICE_ID, CLIENT_INFO } from "~/utils/config";
 import { AUTH as MUTATION_AUTH } from "~/utils/mutation-types";
 
@@ -14,12 +19,13 @@ function addSubscriber(callback) {
     subscribers.push(callback);
 }
 
-export default function ({ store, $axios, redirect }) {
+export default function({ store, $axios, redirect }) {
     $axios.onRequest((config) => {
         // add Device-Id if existed
         if (checkRequestClientInfo(config.url)) {
             const deviceIdFromCookie = getDeviceId();
-            const deviceObj = { [DEVICE_ID]: deviceIdFromCookie };
+            const deviceObj = {
+                [DEVICE_ID]: deviceIdFromCookie };
             config.headers.common[CLIENT_INFO] = JSON.stringify(deviceObj);
         }
 
@@ -29,9 +35,8 @@ export default function ({ store, $axios, redirect }) {
             config.headers.common[
                 "Authorization"
             ] = `Bearer ${store.state.auth.access_token}`;
-
         } else {
-            delete config.headers.common['Authorization'];
+            delete config.headers.common["Authorization"];
         }
     });
 
@@ -92,7 +97,7 @@ export default function ({ store, $axios, redirect }) {
         if (code === 401) {
             removeToken();
             redirect("/auth/signin");
-        } else if(code == 404) {
+        } else if (code == 404) {
             // do something on 404 api
         }
         // console.log("[onResponseError]", error.response);

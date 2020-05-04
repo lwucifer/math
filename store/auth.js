@@ -147,7 +147,6 @@ const actions = {
         return result;
     },
     async [actionTypes.AUTH.REFRESH_TOKEN]({ commit, state }, payload) {
-        console.log("payload", payload);
         try {
             const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
             // console.log("payload", payload);
