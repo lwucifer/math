@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-slider-tab">
-    <h3 class="mb-4" v-if="title">{{ title }}</h3>
+    <h3 class="elearning-slider-tab__title mb-4" v-if="title">{{ title }}</h3>
 
     <div
       v-show="content.length"
@@ -21,10 +21,10 @@
       </div>
 
       <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
-        <IconChevronLeft />
+        <IconChevronLeft class="icon" />
       </div>
       <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
-        <IconChevronRight />
+        <IconChevronRight class="icon" />
       </div>
       <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
     </div>
@@ -83,6 +83,7 @@ export default {
 };
 </script>
 
+<style src="swiper/dist/css/swiper.css"></style>
 <style lang="scss">
 @import "~/assets/scss/components/elearning/_elearning-slider-tab.scss";
 </style>

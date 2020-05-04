@@ -15,30 +15,30 @@
         <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" />
 
         <ElearningReview :info="info" />
+
+        <ElearningSliderTab
+          class="mt-6"
+          :content="teacherEls"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng cùng giáo viên"
+        />
+
+        <ElearningSliderTab
+          :content="relatedCourses"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng liên quan"
+          class="mt-6"
+        />
       </div>
 
       <div class="col-md-4">
         <ElearningRightSide
           v-sticky
-          sticky-offset="{ top: 90, bottom: 20 }"
+          sticky-offset="{ top: 90, bottom: 0 }"
           v-bind="{ info, program }"
         />
       </div>
     </div>
-
-    <ElearningSliderTab
-      class="mt-4"
-      :content="teacherEls"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng cùng giáo viên"
-    />
-
-    <ElearningSliderTab
-      :content="relatedCourses"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng liên quan"
-      class="mt-5"
-    />
   </div>
 </template>
 
@@ -116,9 +116,9 @@ export default {
       teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
-        slidesPerView: 5,
+        slidesPerView: 3,
         setWrapperSize: true,
-        watchOverflow: true
+        watchOverflow: true,
       }
     };
   },
