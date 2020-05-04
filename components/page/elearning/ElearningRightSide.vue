@@ -28,7 +28,7 @@
       <div class="elearning-right-side__price-wrapper">
         <template v-if="get(info, 'elearning_price.discount', 0)">
           <b class="elearning-right-side__price text-error"
-            >{{ get(info, "elearning_price.discount", 0) | numeralFormat }}đ</b
+            >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
           >
           <s class="heading-4 text-gray-2"
             >{{
@@ -139,7 +139,7 @@ export default {
     ...mapGetters("cart", ["cartCheckout"]),
   },
 
-  created() {
+  updated() {
     console.log(this.info);
   },
 

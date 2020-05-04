@@ -37,6 +37,10 @@ export default {
     },
   },
 
+  updated() {
+    console.log(this.item)
+  },
+
   methods: {
     ...mapActions("cart", ["cartDelete"]),
     ...mapActions("cart", ["cartList"]),
