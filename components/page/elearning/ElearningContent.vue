@@ -1,19 +1,18 @@
 <template>
-  <section
-    class="box elearning-view__content scroll-target mb-4"
-    id="course-content"
-  >
-    <h5>Nội dung {{ title }}</h5>
-    <div class="row flex-wrap info">
+  <section class="elearning-id-box elearning-view__content">
+    <h4 class="mb-4">Nội dung {{ title }}</h4>
+    <div class="row flex-wrap info body-3">
       <div class="col-auto">
         Trình độ:
         <strong class="color-primary">{{ get(info, "level.name", "") }}</strong>
       </div>
       <div class="col-auto">
         Môn học:
-        <strong class="color-primary">{{
+        <strong class="color-primary">
+          {{
           get(info, "subject.name", "")
-        }}</strong>
+          }}
+        </strong>
       </div>
       <div class="col-auto">
         Số bài giảng:
@@ -30,10 +29,7 @@
       :lesson="get(program, '0.lessons.0', null)"
     />
 
-    <ElearningContentCourse
-      :program="program"
-      v-if="get(info, 'type', '') === 'COURSE'"
-    />
+    <ElearningContentCourse :program="program" v-if="get(info, 'type', '') === 'COURSE'" />
   </section>
 </template>
 
@@ -59,11 +55,11 @@ export default {
     IconAngleDown,
     IconPlayCircle,
     ElearningContentLecture,
-    ElearningContentCourse,
+    ElearningContentCourse
   },
   props: {
     program: {},
-    info: {},
+    info: {}
   },
   created() {
     useEffect(this, this.handleGetLesson.bind(this), ["$route.params.id"]);
@@ -80,21 +76,21 @@ export default {
         default:
           break;
       }
-    },
+    }
   },
   methods: {
     get,
     async handleGetLesson() {
       const options = {
         params: {
-          elearning_id: get(this, "$route.params.id", ""),
-        },
+          elearning_id: get(this, "$route.params.id", "")
+        }
       };
       this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
         options
       );
-    },
-  },
+    }
+  }
 };
 </script>
