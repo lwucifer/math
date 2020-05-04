@@ -8,7 +8,7 @@
       />
     </div>
     <div>
-      <p class="mb-2">Thay ảnh đại diện</p>
+      <p class="mb-2"><b>Thay ảnh đại diện</b></p>
       <p class="mb-4">Định dạng hình ảnh cho phép là .jpg, .jpeg, .bmp hoặc .png</p>
       <app-upload class="" @change="handleUploadAvatar">
         <template>

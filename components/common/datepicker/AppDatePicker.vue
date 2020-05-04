@@ -34,7 +34,7 @@ export default {
   },
 
   props: {
-    value: [String, Number, Date],
+    value: [String, Number, Date, Array],
     label: String,
     size: String,
     square: {

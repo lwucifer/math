@@ -38,7 +38,17 @@
           <app-input v-model="birthday" label="Ngày sinh" class="birthday_Profile" disabled/>
         </div>
       </div>
-      <app-button color="red" square v-on:click="showChangePass=true" class="btnChangePassword">
+      <!--<app-button-->
+        <!--color="red"-->
+        <!--square-->
+        <!--v-on:click="showChangePass=true"-->
+        <!--class="btnChangePassword"-->
+      <!--&gt;-->
+      <app-button
+        class="btnChangePassword"
+        nuxt
+        :to="accountInfo ? '/' + accountInfo.id + '/info/change_pwd' : '/'"
+      >
         <span class="">Thay đổi mật khẩu</span>
       </app-button>
       <AccountChangePasswordModal
@@ -66,6 +76,7 @@ import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 // Import faked data
 import { SCHOOL } from "~/server/fakedata/school/test";
+import { getToken } from "~/utils/auth";
 
 export default {
   components: {
@@ -138,7 +149,10 @@ export default {
     }),
     ...mapState("account", {
       linkList: "linkList"
-    })
+    }),
+    accountInfo() {
+      return getToken()
+    }
   },
   created() {
     this.fetchProfile();

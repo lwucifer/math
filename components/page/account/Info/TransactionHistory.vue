@@ -1,7 +1,12 @@
 <template>
   <sub-block-section>
     <template v-slot:title>
-      <filter-form />
+      <filter-form 
+        @changeDate="changeDate"
+        @changeStatus="changeStatus"
+        @changePayment="changePayment"
+        :selectDateDefault="DateDefault"
+      />
     </template>
     
     <template v-slot:content>
@@ -24,6 +29,7 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
+import moment from "moment";
 // Import faked data
 
 export default {
@@ -36,148 +42,70 @@ export default {
   },
   data() {
     return {
-      pagination: {
-        totalElements: 0,
-        last: false,
-        totalPages: 1,
-        size: 10,
-        number: 0,
-        first: true,
-        numberOfElements: 0
-      },
-      params: {
-        page: 1,
-        size: 10,
-        // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
-        elearning_id: null
-      },
-      list: [
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-        {
-          id: 1,
-          name: "Mua khóa học Đại số 10",
-          price: "2290000",
-          code: "D88HKDKD",
-          type: "Mua",
-          pay: "Thanh toán Online",
-          time: "16:50:30 20-11-2019"
-        },
-        {
-          id: 1,
-          name: "Bán khóa học Đại số 10",
-          price: "2990000",
-          code: "D88HKDKD",
-          type: "Bán",
-          pay: "Chuyển khoản",
-          time: "06:50:30 10-11-2019"
-        },
-      ],
-      loading: false
+      pagination: {},
+      params: {},
+      list: [],
+      loading: false,
+      DateDefault:[]
     }
   },
   watch:{
-  
+    transactionsList:{
+      handler : function(){
+        this.list = get(this,"transactionsList.data.content",[]);
+        this.pagination = get(this,"transactionsList.data.page",{});
+      }
+    }
   },
   methods: {
     updatePagination(val) {
-      // this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
-      // this.params.size = val.size
-      // this.getList()
+      this.params.size = val.size;
+      this.params.page = val.number + 1;
+      this.fetchTransaction();
     },
+    fetchTransaction(){
+      const payload = {
+        params :{
+          to: this.params.to,
+          from: this.params.from,
+          size: this.params.size,
+          page: this.params.page,
+          status: this.params.status,
+          method:this.params.method
+        }
+      }
+      this.$store.dispatch(`account/${actionTypes.ACCOUNT_TRANSACTIONS.LIST}`,payload)
+    },
+    changeDate(date){
+      this.params.from = date[0];
+      this.params.to = date[1];
+      this.fetchTransaction();
+    },
+    changePayment(e){
+      this.params.method = e;
+      this.fetchTransaction();
+    },
+    changeStatus(s){
+      this.params.status = s;
+      this.fetchTransaction();
+    },
+    getDateSelect(){
+      const firstday = moment().format("YYYY-MM-01");
+      const today = moment().format("YYYY-MM-DD");
+      this.DateDefault = [firstday,today];
+      this.params.from = firstday;
+      this.params.to = today;
+    }
   },
   computed: {
-  
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("account", {
+      transactionsList: "transactionsList",
+    })
   },
   created() {
+    this.getDateSelect();
+    this.fetchTransaction();
   }
 };
 </script>
