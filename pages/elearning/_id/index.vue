@@ -1,5 +1,7 @@
 <template>
   <div class="container elearning-view">
+    <Breadcrumb />
+
     <div class="row">
       <div class="col-md-8">
         <ElearningViewInfo :info="info" />
@@ -25,7 +27,7 @@
       <div class="col-md-4">
         <ElearningRightSide
           v-sticky
-          sticky-offset="top"
+          sticky-offset="{ top: 90, bottom: 0 }"
           v-bind="{ info, program }"
         />
       </div>
@@ -69,6 +71,7 @@ import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
+import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -103,6 +106,7 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
+    Breadcrumb
   },
 
   created() {
