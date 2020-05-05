@@ -15,7 +15,9 @@ export const BASE = {
     RESET: "resetData",
 };
 
-export const PUBLIC = {};
+export const PUBLIC = {
+    SET_BANK_LIST: "setBankList"
+};
 
 export const SOCIAL = {
     SET_FEEDS: "setSocialFeeds",
@@ -61,6 +63,10 @@ export const ACCOUNT_EARNING = {
 export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
 };
+
+export const ACCOUNT_BANKS = {
+    SET_ACCOUNT_BANKS_LIST : "setAccountBanksList"
+}
 
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",

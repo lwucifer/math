@@ -172,3 +172,9 @@ export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/elearning/payment
 export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;
 
 export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;
+/**
+ * BANK
+ */
+export const PUBLIC_BANK = `${SCHOOLLY_ALIAS}/user/public/banks`;
+export const ACCOUNT_BANK = `${SCHOOLLY_ALIAS}/user/account/banks`;
+export const ACCOUNT_BANK_VALIDATE = `${SCHOOLLY_ALIAS}/user/account/banks/validate`;
