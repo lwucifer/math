@@ -160,10 +160,10 @@ export const checkRequestAuthorize = _url => {
     // console.log("urls", urls);
 
     // if url contain token=true => return true;
-    if (_url.includes("token=true")) return true;
+    // if (_url.includes("token=true")) return true;
 
     // public api url
-    if (_url.includes("/public")) return false;
+    // if (_url.includes("/public")) return false;
 
     // public api
     if (UNAUTHORIZE_API.includes(urls[0])) {

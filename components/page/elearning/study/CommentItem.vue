@@ -10,17 +10,12 @@
       <div class="actions mt-3">
         <button>
           <IconLike
-            :class="get(comment, 'liked', false) ? 'fill-primary' : 'fill-999'"
+            :class="liked ? 'fill-primary' : 'fill-999'"
+            @click="handleLikeAnswer"
           />
         </button>
-        <span v-if="get(comment, 'likes', 0) > 0">{{
-          get(comment, "likes", 0)
-        }}</span>
-        <button
-          type="button"
-          class="bold color-999 ml-4"
-          @click="reply(get(comment, 'id', ''))"
-        >
+        <span v-if="likes > 0">{{ likes }}</span>
+        <button type="button" class="bold color-999 ml-4" @click="reply">
           Phản hồi
         </button>
       </div>
@@ -28,13 +23,8 @@
         <button type="button" class="mt-3 mb-3" @click="showReply = false">
           Ẩn câu trả lời
         </button>
-        <CommentInput :data="auth" />
-        <CommentItemChild
-          :auth="auth"
-          :data="item"
-          v-for="(item, index) in comments[data.id]"
-          :key="index"
-        />
+        <CommentInput />
+        <CommentItemChild :data="comment" />
       </div>
     </div>
   </div>
@@ -45,6 +35,8 @@ import CommentInput from "~/components/page/elearning/study/CommentInput";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { get } from "lodash";
+import QuestionLikeService from "~/services/elearning/study/QuestionLike";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -58,51 +50,52 @@ export default {
       type: Object,
       default: () => {},
     },
-    auth: {
-      type: Object,
-      default: () => {},
+  },
+
+  watch: {
+    comment: {
+      handler: function() {
+        this.liked = get(this, "comment.liked", false);
+        this.likes = get(this, "comment.likes", 0);
+      },
+      deep: true,
     },
   },
 
   data() {
     return {
       showReply: false,
-      comments: [],
-      // comment: [
-      //   {
-      //     id: 1,
-      //     avatar: "https://picsum.photos/50/52",
-      //     name: "Quyên Ngọc",
-      //     content:
-      //       "Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-      //     time: "20/11/2022",
-      //     likes: 100,
-      //     liked: true,
-      //     parent: true,
-      //     parentId: "",
-      //   },
-      //   {
-      //     id: 2,
-      //     avatar: "https://picsum.photos/52/50",
-      //     name: "Ngọc Quyên",
-      //     content:
-      //       "Tã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-      //     time: "20/11/2022",
-      //     likes: 100,
-      //     liked: true,
-      //     parent: true,
-      //     parentId: "",
-      //   },
-      // ],
+      liked: get(this, "comment.liked", false),
+      likes: get(this, "comment.likes", 0),
+      submit: true,
     };
   },
 
   methods: {
-    reply(id) {
-      this.comments[id] = this.comment;
+    reply() {
       this.showReply = true;
     },
     get,
+    async handleLikeAnswer() {
+      if (!this.submit) return;
+      this.submit = false;
+      const payload = {
+        question_id: this.comment.id,
+        like: !this.liked,
+      };
+
+      const res = await new QuestionLikeService(this.$axios)["add"](payload);
+
+      this.submit = true;
+
+      if (get(res, "success", false)) {
+        this.liked = !this.liked;
+        this.likes = this.liked ? this.likes + 1 : this.likes - 1;
+        return;
+      }
+
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
   },
 };
 </script>
