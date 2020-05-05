@@ -47,6 +47,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+
 import ElearningCourseComment from "~/components/page/elearning/course/comment/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
@@ -55,8 +60,6 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 // Import faked data
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
-import { mapState } from "vuex";
-import * as actionTypes from "~/utils/action-types";
 
 export default {
   name: "Elearning",
@@ -91,9 +94,10 @@ export default {
       }
     };
   },
+
   computed: {
     ...mapState("auth", ["loggedUser"])
-  }
+  },
 };
 </script>
 
