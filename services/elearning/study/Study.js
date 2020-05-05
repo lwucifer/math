@@ -14,4 +14,13 @@ export default class Study extends BaseService {
     });
     return data;
   }
+
+  async likeAnswer(payload) {
+    const { data } = await this.$axios.request({
+      url: APIs.STUDY_QUESTION_LIKE_ANSWER,
+      method: "POST",
+      data: payload,
+    });
+    return data;
+  }
 }

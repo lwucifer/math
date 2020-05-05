@@ -9,9 +9,12 @@
       <div class="text">{{ answer.content }}</div>
       <div class="actions mt-3 mb-3">
         <button>
-          <IconLike :class="answer.liked ? 'fill-primary' : 'fill-999'" />
+          <IconLike
+            :class="liked ? 'fill-primary' : 'fill-999'"
+            @click="handleLikeAnswer"
+          />
         </button>
-        <span v-if="answer.likes > 0">{{ answer.likes }}</span>
+        <span v-if="likes > 0">{{ likes }}</span>
         <!-- <button class="bold color-999 ml-4" @click="reply(data.id, data.name)">
           Phản hồi
         </button> -->
@@ -25,6 +28,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { get } from "lodash";
 import { mapState } from "vuex";
+import StudyService from "~/services/elearning/study/Study";
 
 export default {
   components: {
@@ -40,36 +44,20 @@ export default {
 
   data() {
     return {
-      showReply: false,
-      comments: [],
-      visible: false,
-      // comment: [
-      //   {
-      //     id: 1,
-      //     avatar: "https://picsum.photos/58/50",
-      //     name: "Nguyễn Ngọ Quyên",
-      //     content:
-      //       "Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-      //     time: "20/11/2022",
-      //     likes: 100,
-      //     liked: true,
-      //     parent: true,
-      //     parentId: "",
-      //   },
-      //   {
-      //     id: 2,
-      //     avatar: "https://picsum.photos/56/50",
-      //     name: "Nguyễn Ngọc Quy",
-      //     content:
-      //       "Từ Từ Từ Bố ơi mình đi đâu thế? đã siêu thích chú Xuân Bắc và bé Bi Béo rồi. Cu Bi lớn rồi, nhưng vẫn mập mạp và rất đáng yêu.",
-      //     time: "20/11/2022",
-      //     likes: 100,
-      //     liked: true,
-      //     parent: true,
-      //     parentId: "",
-      //   },
-      // ],
+      liked: get(this, "answer.liked", false),
+      likes: get(this, "answer.likes", 0),
+      submit: true,
     };
+  },
+
+  watch: {
+    answer: {
+      handler: function() {
+        this.liked = get(this, "answer.liked", false);
+        this.likes = get(this, "answer.likes", 0);
+      },
+      deep: true,
+    },
   },
 
   computed: {
@@ -77,18 +65,35 @@ export default {
   },
 
   // updated() {
-  //   console.log(this.comment);
+  //   console.log(this.answer);
   // },
 
   // created() {
-  //   console.log(this.comment);
+  //   console.log(this.answer);
   // },
 
   methods: {
     get,
-    reply(id) {
-      this.comments[id] = this.comment;
-      this.showReply = !this.showReply;
+    async handleLikeAnswer() {
+      if (!this.submit) return;
+      this.submit = false;
+
+      const payload = {
+        like: !this.liked,
+        answer_id: get(this, "answer.id", ""),
+      };
+
+      const res = await new StudyService(this.$axios)["likeAnswer"](payload);
+
+      this.submit = true;
+
+      if (get(res, "success", false)) {
+        this.liked = !this.liked;
+        this.likes = this.liked ? this.likes + 1 : this.likes - 1;
+        return;
+      }
+
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
   },
 };
