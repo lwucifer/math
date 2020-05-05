@@ -106,4 +106,23 @@
     .pagination {
         margin: 0 2rem;
     }
+    
+    .status-item {
+        border-radius: 2px;
+        color: #fff;
+        font-weight: normal;
+        padding: .5rem 1rem;
+        letter-spacing: -0.01em;
+        text-align: center;
+    }
+    
+    .status-item--success {
+        background-color: $color-primary;
+    }
+    .status-item--pending {
+        background-color: $color-warning;
+    }
+    .status-item--fail {
+        background-color: $color-error;
+    }
 }

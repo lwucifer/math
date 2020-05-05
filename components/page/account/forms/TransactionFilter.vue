@@ -9,7 +9,7 @@
     <div class="d-flex filter-form__input-wrapper">
       <div
         class="filter-form__item"
-        style="min-width: 25rem;"
+        style="min-width: 21rem;"
       >
         <app-date-picker
           class="w-100"
@@ -31,34 +31,32 @@
         <filter-button @click="filterSelect= !filterSelect">
           Lọc kết quả
         </filter-button>
-        <div class="d-flex ml-3" v-if="filterSelect">
-          <div>
-            <app-vue-select
-              class="app-vue-select mr-3"
-              :options="statuses"
-              :reduce="item => item.value"
-              v-model="filters.status"
-              label="text"
-              placeholder="Theo trạng thái"
-              searchable
-              clearable
-              @input="handleSelectStatus"
-            />
-          </div>
-          <div style="width:230px">
-            <app-vue-select
-              class="app-vue-select w-100"
-              :options="opts"
-              :reduce="item => item.value"
-              v-model="filters.payment"
-              label="text"
-              placeholder="Theo phương thức thanh toán"
-              searchable
-              clearable
-              @input="handleSelectPayment"
-            />
-          </div>
-        </div>
+      </div>
+      <div class="filter-form__item" v-if="filterSelect">
+        <app-vue-select
+          class="app-vue-select"
+          :options="statuses"
+          :reduce="item => item.value"
+          v-model="filters.status"
+          label="text"
+          placeholder="Theo trạng thái"
+          searchable
+          clearable
+          @input="handleSelectStatus"
+        />
+      </div>
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 27rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="opts"
+          :reduce="item => item.value"
+          v-model="filters.payment"
+          label="text"
+          placeholder="Theo phương thức thanh toán"
+          searchable
+          clearable
+          @input="handleSelectPayment"
+        />
       </div>
     </div>
   </filter-form>
