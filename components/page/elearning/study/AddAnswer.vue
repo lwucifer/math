@@ -41,6 +41,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { mapState } from "vuex";
 import { get } from "lodash";
+import StudyService from "~/services/elearning/study/Study";
 
 export default {
   components: {
@@ -54,6 +55,7 @@ export default {
   props: {
     tag: Object,
     reply: Boolean,
+    question: Object,
   },
 
   data() {
@@ -112,8 +114,23 @@ export default {
 
   methods: {
     get,
-    save() {
-      this.close();
+    async save() {
+      const params = {
+        content: this.editor
+          .getHTML()
+          .replace("<p>", "")
+          .replace("</p>", ""),
+        question_id: get(this, "question.id", ""),
+      };
+      const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
+        params
+      );
+      if (get(res, "success", false)) {
+        this.$emit("addAnswerSuccess");
+        this.close();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
     cancel() {
       this.close();

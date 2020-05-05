@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/study/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
@@ -70,7 +69,6 @@ export default {
   layout: "no-header",
 
   components: {
-    ElearningCourseComment,
     ElearningCourseSide,
     IconSearch,
     IconCamera,

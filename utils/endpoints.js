@@ -116,6 +116,7 @@ export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/int
 export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
 export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elearning/progress`;
 export const STUDY_QUESTION_LIKE = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question/like`;
+export const STUDY_QUESTION_ADD_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer`;
 
 /**
  * SCHOOL
