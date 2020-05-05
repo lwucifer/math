@@ -21,7 +21,6 @@
         "@nuxtjs/recaptcha": "^0.6.2",
         "@nuxtjs/style-resources": "^1.0.0",
         "@nuxtjs/svg": "^0.1.6",
-        "@zoomus/websdk": "^1.7.6",
         "core-js": "^2.6.5",
         "fingerprintjs2": "^2.1.0",
         "firebase": "^7.8.0",
