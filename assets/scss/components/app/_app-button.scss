@@ -28,7 +28,6 @@
     
      &:hover, &:focus {
         outline: none;
-        background-color: $color-primary-3;
         box-shadow: $showdow-hover;
      }
 
@@ -106,9 +105,10 @@
     }
 }
 
-.btn--color-info {
-    color: #fff !important;
-    background-color: #ccc;
+.btn--color-primary {
+    &:hover, &:focus {
+        background-color: $color-primary-3;
+    }
 }
 
 .btn--color-white {
@@ -138,12 +138,6 @@
     background: #F9F9F9;
     border: 1px solid #EEEEEE;
     color: #666 !important;
-}
-
-.btn--color-secondary {
-    background: $color-red;
-    border: 1px solid $color-red;
-    color: #fff !important;
 }
 
 .btn--color-red {
