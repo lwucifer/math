@@ -18,6 +18,9 @@
                       <strong class="color-red h3 mr-4">{{ balance | toThousandFilter('.') }} {{ CURRENCY }}</strong>
                       <app-button
                         size="sm"
+                        nuxt
+                        :disabled="!accountInfo"
+                        :to="accountInfo ? '/' + accountInfo.id + '/info/do_withdrawals' : '/'"
                       >
                         Rút tiền
                       </app-button>
@@ -27,9 +30,10 @@
                         <app-button
                           nuxt
                           color="transparent"
+                          :disabled="!accountInfo"
                           :to="accountInfo ? '/' + accountInfo.id + '/info/withdrawals' : '/'"
                           style="color: #656565; font-weight: normal;"
-                          class="pr-0"
+                          class="px-0"
                         >
                           <slot name="icon">
                             <icon-clock class="icon--btn icon--btn--pre"/>
@@ -45,7 +49,7 @@
                   <div class="elearning-history__statistical">
                     <h5 class="mb-3 font-weight-semi-bold">Thống kê nhanh</h5>
                     <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Hôm nay</p>
                           <span class="value">
@@ -53,7 +57,7 @@
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tuần này</p>
                           <span class="value">
@@ -61,7 +65,7 @@
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tháng này</p>
                           <span class="value">
@@ -69,7 +73,7 @@
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tháng trước</p>
                           <span class="value">
@@ -92,9 +96,9 @@
               >
                 <template v-slot:title>
                   <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-9 mb-3">
                       <filter-form>
-                        <div class="mb-3">
+                        <div class="mb-2">
                         <span class="filter-form__title">
                           Chọn khoảng thời gian
                         </span>
@@ -130,7 +134,7 @@
                       </filter-form>
                     </div>
                     <div class="col-md-3 text-md-right">
-                      <p class="font-weight-semi-bold mb-3">Tổng tiền</p>
+                      <p class="font-weight-semi-bold mb-2">Tổng tiền</p>
                       <p class="font-weight-bold h3">{{ revenue | toThousandFilter('.') }} {{ CURRENCY }}</p>
                     </div>
                   </div>
