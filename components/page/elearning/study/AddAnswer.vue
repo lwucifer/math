@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       editor: null,
+      submit: true,
       editorDefault: null,
       emojiPicker: null,
       testContent: "",
@@ -115,6 +116,8 @@ export default {
   methods: {
     get,
     async save() {
+      if (!this.submit) return;
+      this.submit = false;
       const params = {
         content: this.editor
           .getHTML()
@@ -125,6 +128,7 @@ export default {
       const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
         params
       );
+      this.submit = true;
       if (get(res, "success", false)) {
         this.$emit("addAnswerSuccess");
         this.close();
