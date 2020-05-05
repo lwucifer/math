@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/study/Comment";
+import ElearningCourseComment from "~/components/page/elearning/study/Question";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";

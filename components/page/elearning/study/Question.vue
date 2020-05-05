@@ -10,16 +10,16 @@
         @keyup.enter.native="handleChangeComment"
       />
     </div>
-    <CommentItem
-      :comment="comment"
-      v-for="(comment, index) in comments"
+    <QuestionItem
+      :question="question"
+      v-for="(question, index) in questions"
       :key="index"
+      @addAnswerSuccess="$emit('addAnswerSuccess')"
     />
   </div>
 </template>
 <script>
-import CommentItem from "~/components/page/elearning/study/CommentItem";
-import CommentInput from "~/components/page/elearning/study/CommentInput";
+import QuestionItem from "~/components/page/elearning/study/QuestionItem";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -30,11 +30,10 @@ export default {
   components: {
     IconCamera,
     IconLike,
-    CommentInput,
-    CommentItem,
+    QuestionItem,
   },
   props: {
-    comments: {
+    questions: {
       type: Array,
       default: () => [],
     },
@@ -45,7 +44,7 @@ export default {
   },
 
   created() {
-    console.log(this.user_login);
+    // console.log(this.user_login);
   },
 
   data() {
@@ -77,7 +76,7 @@ export default {
       this.submit = true;
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
-    get
+    get,
   },
 };
 </script>

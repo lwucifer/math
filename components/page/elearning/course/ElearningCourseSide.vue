@@ -45,11 +45,13 @@
             </p> -->
           </div>
           <label class="toggle">
-            <input type="checkbox" v-model="ids" :value="item.id" />
-            <IconUpO class="up" v-if="ids.includes(item.id)" />
+            <input type="checkbox" v-model="ids" :value="data.id" />
+            <IconUpO class="up" v-if="ids.includes(data.id)" />
             <IconDownO class="down" v-else />
           </label>
         </div>
+        {{data.name}}
+        <div class="elearning-lesson-side__lessons mt-3" v-if="ids.includes(data.id)"></div>
 
         <div
           v-if="ids.includes(item.id)"
@@ -57,7 +59,7 @@
         >
           <div
             class="content elearning-lesson-side__lesson"
-            v-for="(lesson, j) in item.lessons"
+            v-for="(lesson, j) in data.lessons"
             :key="j"
             :class="lesson.completes ? 'active' : ''"
           >

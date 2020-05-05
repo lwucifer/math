@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/study/Comment";
 import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
@@ -54,6 +53,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 // Import faked data
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
@@ -65,12 +65,13 @@ import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 
+// http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
+
 export default {
   name: "Elearning",
   layout: "no-header",
 
   components: {
-    ElearningCourseComment,
     ElearningCourseSide,
     IconSearch,
     IconCamera,
@@ -154,8 +155,9 @@ export default {
       },
     };
   },
+
   computed: {
-    ...mapState("auth", ["loggedUser"]),
+    ...mapState("auth", ["loggedUser"])
   },
 };
 </script>
