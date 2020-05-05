@@ -142,6 +142,8 @@
 import { get } from "lodash";
 import { BASE as ACTION_TYPE_BASE } from "~/utils/action-types";
 import { createComment } from "~/models/social/Comment";
+import { mapGetters } from 'vuex';
+
 
 const PostTags = () => import("~/components/page/timeline/post/PostTags.vue");
 const CommentItem = () =>
@@ -204,10 +206,11 @@ export default {
   },
 
   computed: {
-    userId() {
-      const { $store: store = {} } = this;
-      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    ...mapGetters("auth", ["userId"]),
+    // userId() {
+    //   const { $store: store = {} } = this;
+    //   return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    // },
 
     numOfViewMoreParentComment() {
       const { page = {} } = this.commentTree;

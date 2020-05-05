@@ -2,67 +2,81 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide active="2"/>
+        <SchoolAccountSide :active="2"/>
       </div>
       <div class="col-md-9">
         <block-section
-          title="Lịch sử giao dịch"
+          title="Lịch sử rút tiền"
           has-icon
         >
           <template v-slot:content>
-            <div class="elearning-history__main">
-              <h5 class="mb-3 elearning-history__title">
-                Chọn khoảng thời gian
-              </h5>
-              <div class="elearning-history__toolbar">
-                <div class="date_withdrawals">
-                  <app-date-picker
-                    class="w-100"
-                    v-model="dateDefault"
-                    square
-                    range
-                    size="sm"
-                    placeholder="DD/MM/YYYY - DD/MM/YYYY"
-                    :shortcuts="DATE_SHORTCUT"
-                    @input="handlerChangeDate"
-                    valueFormat="YYYY-MM-DD"
-                  >
-                </app-date-picker>
-                </div>
-                <div class="d-flex ml-3">
-                  <filter-button @click="filterSelect= !filterSelect">
-                    Lọc kết quả
-                  </filter-button>
-                  <app-vue-select 
-                    :options="opts" 
-                    v-model="opt" 
-                    size="sm" 
-                    :placeholder="'Theo trạng thái'" 
-                    label="text"
-                    searchable
-                    clearable
-                    class="app-vue-select ml-3"
-                    @input="handlerChangeStatus"
-                    v-if="filterSelect"
+            <sub-block-section
+            >
+              <template v-slot:title>
+                <filter-form>
+                  <div class="mb-2">
+                    <span class="filter-form__title">
+                      Chọn khoảng thời gian
+                    </span>
+                  </div>
+    
+                  <div class="d-flex filter-form__input-wrapper">
+                    <div
+                      class="filter-form__item"
+                      style="min-width: 21rem;"
+                    >
+                      <app-date-picker
+                        class="w-100"
+                        v-model="dateDefault"
+                        square
+                        range
+                        size="sm"
+                        placeholder="DD/MM/YYYY - DD/MM/YYYY"
+                        :shortcuts="DATE_SHORTCUT"
+                        @input="handlerChangeDate"
+                        valueFormat="YYYY-MM-DD"
+                      >
+                      </app-date-picker>
+                    </div>
+                    <div class="filter-form__item d-flex">
+                      <filter-button @click="filterSelect= !filterSelect">
+                        Lọc kết quả
+                      </filter-button>
+                    </div>
+                    <div class="filter-form__item" v-if="filterSelect">
+                      <app-vue-select
+                        :options="opts"
+                        v-model="opt"
+                        size="sm"
+                        :placeholder="'Theo trạng thái'"
+                        label="text"
+                        searchable
+                        clearable
+                        class="app-vue-select"
+                        @input="handlerChangeStatus"
                       />
-                </div>
-              </div>
-              <app-table
-                :heads="heads"
-                :pagination="pagination"
-                @pagechange="onPageChange"
-                :data="list"
-              >
-                <tr v-for="(item , index) in list" :key="index">
-                  <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
-                </tr>
-                <template v-slot:cell(status)="{row}">
-                  <td v-if="row.status=='SUCCESS'">Thành công</td>
-                  <td v-else-if="row.status=='FAIL'">Thất bại</td>
-                  <td v-else-if="row.status=='PENDING'">Chờ xử lí</td>
-                </template>
-              </app-table>
-            </div>
+                    </div>
+                  </div>
+                </filter-form>
+              </template>
+              <template v-slot:content>
+                <app-table
+                  :heads="heads"
+                  :pagination="pagination"
+                  @pagechange="onPageChange"
+                  :data="list"
+                  style="margin-left: -1.5rem; margin-right: -1.5rem;"
+                >
+                  <template v-slot:cell(status)="{row}">
+                    <td>
+                      <span class="status-item d-inline-block" :class="statusClass(row.status)" style="min-width: 10.1rem;">
+                        {{ row.status | withdrawalStatus2Txt}}
+                      </span>
+                    </td>
+                  </template>
+                </app-table>
+              </template>
+            </sub-block-section>
           </template>
         </block-section>
       </div>
@@ -78,6 +92,9 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { DATE_SHORTCUT} from "~/utils/config";
 import moment from "moment";
+import {
+  WITHDRAWAL_STATUSES
+} from "~/utils/constants"
 
 export default {
   name: "E-learning",
@@ -186,6 +203,17 @@ export default {
       this.params.page = e.number + 1;
       this.fetchWithdrawals();
     },
+    statusClass(type) {
+      if (type == WITHDRAWAL_STATUSES.SUCCESS) {
+        return { 'status-item--success': true }
+      } else if (type == WITHDRAWAL_STATUSES.PENDING) {
+        return { 'status-item--pending': true }
+      } else if (type == WITHDRAWAL_STATUSES.FAILED) {
+        return { 'status-item--fail': true }
+      } else {
+        return {}
+      }
+    }
   }
 };
 </script>

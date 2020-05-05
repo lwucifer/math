@@ -489,3 +489,15 @@ export const CART = {
 export const TEACHING_STATISTIC_REVENUE = {
     LIST: "teachingStatisticRevenuList",
 };
+
+export const ACCOUNT_BANKS = {
+    LIST: "accountBanksList",
+    ADD: "accountBankAdd",
+    EDIT: "accountBankEdit",
+    DELETE : "accountBankDelete",
+    VALIDATE: "accountBankValidate"
+}
+
+export const PUBLIC_BANK = {
+    LIST: "publicBankList"
+}

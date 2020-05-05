@@ -1,33 +1,44 @@
 <template>
   <div class="container">
+    <breadcrumb />
+    
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="3" />
       </div>
       <div class="col-md-9">
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <hr class/>
-          </div>
-
-          <div class="elearning-manager-content__main">
-            <div>
-              <!--Filter form-->
-              <elearning-manager-filter-form
-                @submitFilter="submitFilter"
-                @changedType="handleChangedType"
-                @submitSearch="handleSubmitSearch"
-              />
-              <elearning-manager-filter-table
-                :pagination="pagination"
-                :list="list"
-                :loading="loading"
-                @changedPagination="updatePagination"
-              />
+        <sub-block-section
+          title="Bài tập và bài kiểm tra"
+        >
+          <template v-slot:content>
+            <div class="elearning-manager-content">
+              <div class="elearning-manager-content__title">
+                <head-tabs
+                  :tabs="tabs"
+                  :active.sync="tab"
+                  @selectedItem="changeTab"
+                />
+              </div>
+    
+              <div class="elearning-manager-content__main">
+                <div>
+                  <!--Filter form-->
+                  <elearning-manager-filter-form
+                    @submitFilter="submitFilter"
+                    @changedType="handleChangedType"
+                    @submitSearch="handleSubmitSearch"
+                  />
+                  <elearning-manager-filter-table
+                    :pagination="pagination"
+                    :list="list"
+                    :loading="loading"
+                    @changedPagination="updatePagination"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>
@@ -37,6 +48,8 @@
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseElearningFilter"
 import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/tables/ExerciseElearning"
+import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+import HeadTabs from "~/components/page/elearning/HeadTab";
 import { mapState } from "vuex"
 import { get } from "lodash"
 import * as actionTypes from "~/utils/action-types"
@@ -47,6 +60,8 @@ export default {
   layout: "manage",
 
   components: {
+    Breadcrumb,
+    HeadTabs,
     ElearningManagerSide,
     ElearningManagerFilterForm,
     ElearningManagerFilterTable
@@ -54,6 +69,17 @@ export default {
 
   data() {
     return {
+      tab: 'exercise',
+      tabs: [
+        {
+          key: 'exercise',
+          text: 'Bài tập'
+        },
+        {
+          key: 'exam',
+          text: 'Bài kiểm tra'
+        },
+      ],
       pagination: {
         totalElements: 0,
         totalPages: 1,
@@ -123,6 +149,9 @@ export default {
     refreshData() {
       this.params.page = 1
       this.getList()
+    },
+    changeTab(key) {
+      this.tab = key
     },
     get
   },

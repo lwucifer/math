@@ -6,7 +6,7 @@ export const SCHOOLLY_ALIAS = ``;
 export const LOGIN = `${SCHOOLLY_ALIAS}/user/public/login`;
 export const REGISTER = `${SCHOOLLY_ALIAS}/user/public/register`;
 export const REGISTER_VALIDATE = `${SCHOOLLY_ALIAS}/user/public/validate`;
-export const LOGOUT = `${SCHOOLLY_ALIAS}/auth/logout`;
+export const LOGOUT = `${SCHOOLLY_ALIAS}/user/account/logout`;
 export const AUTH_INFO = `${SCHOOLLY_ALIAS}/auth/info`;
 export const SEND_OTP = `${SCHOOLLY_ALIAS}/auth/otp`;
 export const CHECK_PHONE = `${SCHOOLLY_ALIAS}/user/public/validate`;
@@ -116,6 +116,8 @@ export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/int
 export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
 export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elearning/progress`;
 export const STUDY_QUESTION_LIKE = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question/like`;
+export const STUDY_QUESTION_ADD_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer`;
+export const STUDY_QUESTION_LIKE_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer/like`;
 
 /**
  * SCHOOL
@@ -174,3 +176,9 @@ export const PAYMENT_VALIDATE_TRANSACTION = `${SCHOOLLY_ALIAS}/elearning/payment
 export const CART_LIST = `${SCHOOLLY_ALIAS}/elearning/cart`;
 
 export const TEACHING_STATISTIC_REVENUE = `${SCHOOLLY_ALIAS}/elearning/teaching/statistic/revenue`;
+/**
+ * BANK
+ */
+export const PUBLIC_BANK = `${SCHOOLLY_ALIAS}/user/public/banks`;
+export const ACCOUNT_BANK = `${SCHOOLLY_ALIAS}/user/account/banks`;
+export const ACCOUNT_BANK_VALIDATE = `${SCHOOLLY_ALIAS}/user/account/banks/validate`;
