@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex">
-      <app-avatar :src="auth.avatar" :size="50" />
+      <app-avatar :src="get(user_login, 'avatar.low', '')" :size="50" />
       <app-input
         textarea
         v-model="comment"
@@ -11,7 +11,6 @@
       />
     </div>
     <CommentItem
-      :auth="auth"
       :comment="comment"
       v-for="(comment, index) in comments"
       :key="index"
@@ -25,6 +24,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -38,10 +38,14 @@ export default {
       type: Array,
       default: () => [],
     },
-    auth: {
-      type: Object,
-      default: () => {},
-    },
+  },
+
+  computed: {
+    ...mapState("auth", { user_login: "token" }),
+  },
+
+  created() {
+    console.log(this.user_login);
   },
 
   data() {
@@ -73,6 +77,7 @@ export default {
       this.submit = true;
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
+    get
   },
 };
 </script>

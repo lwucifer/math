@@ -15,11 +15,7 @@
           />
         </button>
         <span v-if="likes > 0">{{ likes }}</span>
-        <button
-          type="button"
-          class="bold color-999 ml-4"
-          @click="reply"
-        >
+        <button type="button" class="bold color-999 ml-4" @click="reply">
           Phản hồi
         </button>
       </div>
@@ -27,8 +23,8 @@
         <button type="button" class="mt-3 mb-3" @click="showReply = false">
           Ẩn câu trả lời
         </button>
-        <CommentInput :data="auth" />
-        <CommentItemChild :auth="auth" :data="comment" />
+        <CommentInput />
+        <CommentItemChild :data="comment" />
       </div>
     </div>
   </div>
@@ -51,10 +47,6 @@ export default {
   },
   props: {
     comment: {
-      type: Object,
-      default: () => {},
-    },
-    auth: {
       type: Object,
       default: () => {},
     },
