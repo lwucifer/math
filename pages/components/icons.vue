@@ -2,9 +2,18 @@
   <div class="container icons-page">
     <nav class="mb-6 nav">
       <ul>
-        <li><a href="#icons">Icons</a></li>
-        <li><a href="#design-icons">Design Icons</a></li>
-        <li><a href="#text-editor">Text Editor Icons</a></li>
+        <li>
+          <a href="#icons">Icons</a>
+        </li>
+        <li>
+          <a href="#v2-icons">V2 Icons</a>
+        </li>
+        <li>
+          <a href="#design-icons">Design Icons</a>
+        </li>
+        <li>
+          <a href="#text-editor">Text Editor Icons</a>
+        </li>
       </ul>
     </nav>
 
@@ -18,6 +27,23 @@
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/icons')"
+            />
+          </div>
+          <span class="caption">{{ icon.path }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-6" id="v2-icons">
+      <h2 class="mb-3 title">Icons from /svg/v2-icons</h2>
+      <div class="row">
+        <div class="col-2 my-3 text-center" v-for="icon in v2Icons" :key="icon.path">
+          <div>
+            <component
+              :is="icon.icon.default"
+              class="icon"
+              fill="#000"
+              @click="handleClick(icon.path, '~/assets/svg/v-2icons')"
             />
           </div>
           <span class="caption">{{ icon.path }}</span>
@@ -98,22 +124,19 @@ export default {
     dataModal: {},
     icons: [],
     designIcons: [],
-    textEditorIcons: []
+    textEditorIcons: [],
+    v2Icons: []
   }),
 
   head() {
     return {
-      title: 'Icons - Schoolly'
-    }
+      title: "Icons - Schoolly"
+    };
   },
 
   created() {
     // https://webpack.js.org/guides/dependency-management/#requirecontext
-    const req = require.context(
-      "~/assets/svg/icons?inline",
-      false,
-      /.*\.svg$/
-    );
+    const req = require.context("~/assets/svg/icons?inline", false, /.*\.svg$/);
 
     const req2 = require.context(
       "~/assets/svg/design-icons?inline",
@@ -123,6 +146,12 @@ export default {
 
     const req3 = require.context(
       "~/assets/svg/text-editor?inline",
+      false,
+      /.*\.svg$/
+    );
+
+    const req4 = require.context(
+      "~/assets/svg/v2-icons?inline",
       false,
       /.*\.svg$/
     );
@@ -141,6 +170,11 @@ export default {
       const icon = req3(key);
       this.textEditorIcons.push({ path: key, icon });
     });
+
+    req4.keys().forEach(key => {
+      const icon = req4(key);
+      this.v2Icons.push({ path: key, icon });
+    });
   },
 
   methods: {
@@ -156,8 +190,9 @@ export default {
 
     convertIconComponentName(path) {
       const fileName = path.replace(/(\.\/|.svg)/g, "");
-      const fileNameConverted = fileName
-        .split("-")
+      const splitedFileName =
+        fileName.indexOf("_") > -1 ? fileName.split("_") : fileName.split("-");
+      const fileNameConverted = splitedFileName
         .map(
           word => word.slice(0, 1).toUpperCase() + word.slice(1, word.length)
         )
@@ -165,7 +200,7 @@ export default {
       return `Icon${fileNameConverted}`;
     },
 
-    convertIconPath({ path, sourcePath}) {
+    convertIconPath({ path, sourcePath }) {
       const fileName = path.replace("./", "");
       return `${sourcePath}/${fileName}?inline`;
     }
@@ -195,12 +230,12 @@ export default {
     a {
       text-decoration: none;
       color: inherit;
-      font-size: map-get($text-size, 'body-1');
+      font-size: map-get($text-size, "body-1");
       font-weight: 700;
       margin-right: 3rem;
 
       &:hover {
-        color: $color-primary
+        color: $color-primary;
       }
     }
   }

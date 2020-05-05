@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="box11" v-if="get(progress, 'type', '') === 'COURSE'">
+    <div class="box11">
       <p class="mb-3">
         <strong>{{ get(progress, "total_lessons", 0) }} Bài giảng</strong>
         ({{ get(progress, "duration", "") }})
@@ -126,6 +126,10 @@ export default {
     },
     info: {},
     progress: {},
+  },
+
+  updated() {
+    console.log(this.progress)
   },
 
   data() {
