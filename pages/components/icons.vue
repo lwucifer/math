@@ -43,7 +43,7 @@
               :is="icon.icon.default"
               class="icon"
               fill="#000"
-              @click="handleClick(icon.path, '~/assets/svg/v-2icons')"
+              @click="handleClick(icon.path, '~/assets/svg/v2-icons')"
             />
           </div>
           <span class="caption">{{ icon.path }}</span>
