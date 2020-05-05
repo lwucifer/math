@@ -152,7 +152,7 @@ export default {
 
     const req4 = require.context(
       "~/assets/svg/v2-icons?inline",
-      false,
+      true,
       /.*\.svg$/
     );
 
