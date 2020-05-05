@@ -23,8 +23,8 @@ export default class Auth {
         return data;
     }
 
-    async [actionTypes.AUTH.LOGOUT]() {
-        const { data } = await this.$axios.post(`${APIs.LOGOUT}`);
+    async [actionTypes.AUTH.LOGOUT](payload) {
+        const { data } = await this.$axios.post(`${APIs.LOGOUT}`, payload);
         return data;
     }
 

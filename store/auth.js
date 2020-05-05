@@ -45,16 +45,16 @@ const getters = {
         return `user_id=${account.id}&token=${account.access_token}&unique_id=${uuidV4}`;
     },
     userId(state) {
-        return state.token.id ? state.token.id : "";
+        return !!state.token ? state.token.id : "";
     },
     fullName(state) {
-        return state.token.fullname ? state.token.fullname : "";
+        return !!state.token ? state.token.fullname : "";
     },
     avatarUser(state) {
-        return state.token.avatar ? state.token.avatar : {};
+        return !!state.token ? state.token.avatar : {};
     },
     roles(state) {
-        return state.token ? state.token.roles : []
+        return !!state.token ? state.token.roles : []
     }
 };
 
@@ -124,11 +124,12 @@ const actions = {
         return result;
     },
 
-    async [actionTypes.AUTH.LOGOUT]({ commit }) {
-        const result = await auth(this.$axios).logout();
+    async [actionTypes.AUTH.LOGOUT]({ commit }, payload) {
+        const result = await new auth(this.$axios).logout(payload);
         if (result.success) {
             commit(mutationTypes.AUTH.REMOVE_TOKEN);
         }
+        return result;
     },
 
     async [actionTypes.AUTH.STATUS]({ commit }, payload) {
