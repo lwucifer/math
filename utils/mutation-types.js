@@ -384,6 +384,7 @@ export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
     REVICE_NOTI: "reviceNoti",
+    COMMIT_NOTI_UNREAD: "commitNotiUnread",
 };
 
 export const SOCIAL_FRIEND = {
