@@ -65,6 +65,8 @@ import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 
+// http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
+
 export default {
   name: "Elearning",
   layout: "no-header",
