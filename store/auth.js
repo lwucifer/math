@@ -53,6 +53,9 @@ const getters = {
     avatarUser(state) {
         return state.token.avatar ? state.token.avatar : {};
     },
+    roles(state) {
+        return state.token ? state.token.roles : []
+    }
 };
 
 /**
@@ -147,7 +150,6 @@ const actions = {
         return result;
     },
     async [actionTypes.AUTH.REFRESH_TOKEN]({ commit, state }, payload) {
-        console.log("payload", payload);
         try {
             const { data } = await this.$axios.post(APIs.REFRESH_TOKEN, payload);
             // console.log("payload", payload);

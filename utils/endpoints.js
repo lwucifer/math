@@ -89,6 +89,7 @@ export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
+export const ELEARNING_JOIN = `${SCHOOLLY_ALIAS}/elearning/join`;
 
 /**
  * ONLINE CLASS
@@ -114,6 +115,7 @@ export const STUDY_INFO = `${SCHOOLLY_ALIAS}/elearning/study/elearning/info`;
 export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/interactive/questions`;
 export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
 export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elearning/progress`;
+export const STUDY_QUESTION_LIKE = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question/like`;
 
 /**
  * SCHOOL

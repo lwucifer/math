@@ -5,16 +5,15 @@
         <SchoolAccountSide active="1" />
       </div>
       <div class="col-md-9">
-        <div class="">
-          <block-section
-            title="Đổi mật khẩu"
-            has-icon
-          >
-            <template v-slot:content>
-              <change-pwd-form />
-            </template>
-          </block-section>
-        </div>
+        <block-section
+          title="Đổi mật khẩu"
+          has-icon
+        >
+          <template v-slot:content>
+            <change-pwd-form />
+            <update-pwd-noti />
+          </template>
+        </block-section>
       </div>
     </div>
   </div>
@@ -23,6 +22,7 @@
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide"
 import ChangePwdForm from "~/components/page/account/forms/ChangePwd"
+import UpdatePwdNoti from "~/components/page/account/noti/UpdatePwd"
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -33,7 +33,8 @@ export default {
   components: {
     IconFilter,
     SchoolAccountSide,
-    ChangePwdForm
+    ChangePwdForm,
+    UpdatePwdNoti
   },
 
   data() {

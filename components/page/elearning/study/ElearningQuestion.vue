@@ -17,7 +17,6 @@
     <hr class="mt-4 mb-4" />
     <ElearningCourseComment
       :comments="get(interactive_questions, 'content', [])"
-      :auth="auth"
       @addQuestionSuccess="$emit('addQuestionSuccess')"
     />
   </div>
@@ -25,7 +24,6 @@
 
 <script>
 import ElearningCourseComment from "~/components/page/elearning/study/Comment";
-import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import { get } from "lodash";
 
 export default {
@@ -34,12 +32,6 @@ export default {
   },
   props: {
     interactive_questions: {},
-  },
-  data() {
-    return {
-      auth: AUTH,
-      comments: COMMENTS,
-    };
   },
   methods: { get },
 };

@@ -15,30 +15,30 @@
         <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" />
 
         <ElearningReview :info="info" />
+
+        <ElearningSliderTab
+          class="mt-6"
+          :content="teacherEls"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng cùng giáo viên"
+        />
+
+        <ElearningSliderTab
+          :content="relatedCourses"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng liên quan"
+          class="mt-6"
+        />
       </div>
 
       <div class="col-md-4">
         <ElearningRightSide
           v-sticky
-          sticky-offset="{ top: 90, bottom: 20 }"
+          sticky-offset="{ top: 90, bottom: 0 }"
           v-bind="{ info, program }"
         />
       </div>
     </div>
-
-    <ElearningSliderTab
-      class="mt-4"
-      :content="teacherEls"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng cùng giáo viên"
-    />
-
-    <ElearningSliderTab
-      :content="relatedCourses"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng liên quan"
-      class="mt-5"
-    />
   </div>
 </template>
 
@@ -80,7 +80,7 @@ const IconPlayCircle = () =>
 
 export default {
   name: "E-learningDetail",
-  layout: "manage",
+  // layout: "manage",
 
   components: {
     CourseTeacherInfo,
@@ -99,7 +99,7 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
-    Breadcrumb
+    Breadcrumb,
   },
 
   created() {
@@ -116,10 +116,10 @@ export default {
       teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
-        slidesPerView: 5,
+        slidesPerView: 3,
         setWrapperSize: true,
-        watchOverflow: true
-      }
+        watchOverflow: true,
+      },
     };
   },
 
@@ -139,7 +139,7 @@ export default {
             break;
         }
       }
-    }
+    },
   },
 
   mounted() {
@@ -164,8 +164,8 @@ export default {
         const teacher_id = get(this, "info.teacher.id", "");
         const options = {
           params: {
-            teacher_id
-          }
+            teacher_id,
+          },
         };
         const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
           options
@@ -175,8 +175,8 @@ export default {
           return;
         }
         this.teacherEls = [];
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -185,29 +185,28 @@ export default {
     async getData() {
       const elearning_id = get(this, "$route.params.id", "");
 
+      const params = {
+        elearning_id,
+        token: "true",
+      };
+
       const getInfo = () =>
         new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id
-          }
+          params,
         });
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id
-          }
+          params,
         });
       const getRelatedCourses = () =>
         new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id
-          }
+          params,
         });
 
       const data = await Promise.all([
         getInfo(),
         getProgram(),
-        getRelatedCourses()
+        getRelatedCourses(),
       ]);
 
       this.info = get(data, "0.data", null);
@@ -221,7 +220,7 @@ export default {
       } else {
         setTimeout(getDeviceID, 500);
       }
-    }
+    },
 
     // bindScrollStatus(event) {
     //   const navLink = document.querySelector(".elearning-view__main-nav");
@@ -243,7 +242,7 @@ export default {
     //     }
     //   }
     // },
-  }
+  },
 };
 </script>
 

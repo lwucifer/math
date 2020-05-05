@@ -3,17 +3,49 @@
     title="Thông tin đơn vị công tác"
   >
     <template v-slot:content>
-      <div class="wrapInfoAccount">
-        <app-input labelFixed  label="Tên trường" v-model="organization.name" disabled/>
-        <app-input  label="Mã trường" v-model="organization.code" disabled/>
-        <app-input  label="Email" v-model="organization.email" disabled/>
-        <app-input  label="Số điện thoại" v-model="organization.phone" disabled/>
-        <app-input  label="Địa chỉ" v-model="organization.address" disabled/>
-        <app-input  label="Mã cán bộ" v-model="work.code" disabled/>
-        <app-input  label="Chức vụ" v-model="work.duty" disabled/>
-        <app-input  label="Tổ chuyên môn" v-model="work.profession" disabled/>
-        <app-input  label="Lớp chủ nhiệm" v-model="work.homeroom_class" disabled/>
-        <app-input  label="Các lớp giảng dạy" v-model="work.teaching_classes" disabled/>
+      <div class="form--normal">
+        <div class="row">
+          <div class="col-md-3"><label for="" class="form--normal__title">Tên trường</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.name" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Mã trường</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.code" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Email</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.email" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Số điện thoại</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.phone" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Địa chỉ</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.address" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Mã cán bộ</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.code" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Chức vụ</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.duty" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Tổ chuyên môn</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.profession" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Lớp chủ nhiệm</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.homeroom_class" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Các lớp giảng dạy</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.teaching_classes" disabled />
+          </div>
+        </div>
       </div>
     </template>
   </sub-block-section>

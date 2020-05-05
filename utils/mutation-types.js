@@ -389,6 +389,7 @@ export const TEACHING_STATISTIC_REVENUE = {
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
+    REVICE_NOTI: "reviceNoti",
 };
 
 export const SOCIAL_FRIEND = {

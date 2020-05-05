@@ -91,7 +91,7 @@
                 </div>
               </li>
             </ul>
-            <ul style="overflow-y: auto; max-height:400px">
+            <ul style="overflow-y: auto; max-height:400px" id="ul-noti" ref="ulNoti">
               <li
                 v-for="(item, index) in notis && notis.listNotification
                   ? notis.listNotification
@@ -151,7 +151,7 @@
                 </n-link>
               </li>
               <client-only>
-                <infinite-loading @infinite="notiInfiniteHandler">
+                <infinite-loading v-if="dropdownNotify" @infinite="notiInfiniteHandler">
                   <template slot="no-more">Không còn thông báo.</template>
                 </infinite-loading>
               </client-only>
@@ -218,7 +218,8 @@ export default {
     readAnnouncenment: true,
     read: false,
     notiList: [],
-    infiniteId: +new Date()
+    infiniteId: +new Date(),
+    checkPayload: false
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
@@ -230,7 +231,18 @@ export default {
   mounted() {
     this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
-      // ...
+      const data = {
+        ...payload.data,
+        is_read: 0,
+        meta_data: payload.notification.body
+      };
+      this.reviceNoti(data);
+      this.socialNotifications({
+        params: {
+          page: 1
+        }
+      });
+      this.checkPayload = true;
     });
     // console.log("detectBrowser", detectBrowser());
     this.cartList();
@@ -241,6 +253,7 @@ export default {
   methods: {
     get,
     ...mapMutations("auth", ["removeToken"]),
+    ...mapMutations("notifications", ["reviceNoti"]),
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
@@ -279,8 +292,10 @@ export default {
       });
     },
     handleVisibleChange(isvisible) {
-      if (isvisible) {
-        // this.socialNotifications();
+      // console.log("this.$refs", this.$refs);
+      if (isvisible && this.checkPayload) {
+        this.$refs.ulNoti.scrollTop = 0;
+        this.checkPayload = false;
       }
     },
     async notiInfiniteHandler($state) {

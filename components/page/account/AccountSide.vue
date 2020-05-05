@@ -54,7 +54,13 @@
         </tbody>
       </table>
 
-      <app-button class="mt-3" square fullWidth @click="showEdit = true">Chỉnh sửa thông tin</app-button>
+      <app-button
+        class="mt-3"
+        square
+        fullWidth
+        v-if="checkUserID"
+        @click="showEdit = true"
+      >Chỉnh sửa thông tin</app-button>
       <AccountEditModal :visible="showEdit" @click-close="showEdit = false" />
       <!-- 
       <app-button square fullWidth @click="showChangePass = true">Đổi mật khẩu</app-button>
@@ -159,7 +165,7 @@
 <script>
 import AccountEditModal from "~/components/page/account/AccountEditModal";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
@@ -369,12 +375,17 @@ export default {
   computed: {
     ...mapState("account", ["personalList"]),
     ...mapState("message", ["friendList"]),
+    ...mapGetters("auth", ["userId"]),
     filterSex() {
       return this.personalList
         ? this.personalList.sex == 1
           ? "Nam"
           : "Nữ"
         : "";
+    },
+    checkUserID() {
+      const dataId = this.$route.params.id ? this.$route.params.id : "";
+      return dataId == this.userId ? true : false;
     }
   }
 };

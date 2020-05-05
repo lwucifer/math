@@ -1,7 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Notifications from "~/services/notification/notifications";
-import { isEmpty } from "lodash";
+import { isEmpty, uniqWith } from "lodash";
 import NotiUnRead from "~/services/notification/NotiUnRead";
 import { UPDATE_NOTI } from "~/utils/constants";
 import RegisterDevice from "~/services/notification/RegisterDevice";
@@ -35,8 +35,9 @@ const actions = {
             if (result.success && !isEmpty(result.data)) {
                 const { page, listNotification } = result.data;
                 commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
-                    listNotification: state.notis.listNotification.concat(
-                        listNotification
+                    listNotification: uniqWith(
+                        listNotification.concat(state.notis.listNotification),
+                        (a, b) => a.id === b.id
                     ),
                     page,
                 });
@@ -148,11 +149,17 @@ const actions = {
  */
 const mutations = {
     [mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST](state, _notis) {
+        console.log("[state.notis]", _notis);
         state.notis = _notis;
     },
     [mutationTypes.SOCIAL_NOTI.SET_NOTI_UNREAD](state, _notiUnread) {
         state.notiUnread =
             _notiUnread && _notiUnread.total_unread ? _notiUnread.total_unread : 0;
+    },
+    [mutationTypes.SOCIAL_NOTI.REVICE_NOTI](state, _noti) {
+        console.log("[REVICE_NOTI]", state.notis, _noti);
+        if (_noti) {}
+        // state.notis.listNotification.unshift(_noti);
     },
 };
 

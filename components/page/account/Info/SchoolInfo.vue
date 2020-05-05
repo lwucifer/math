@@ -3,14 +3,37 @@
     title="Thông tin trường học"
   >
     <template v-slot:content>
-      <div class="wrapInfoAccount">
-        <app-input labelFixed  label="Tên trường" v-model="organization.name" disabled/>
-        <app-input  label="Mã trường" v-model="organization.code" disabled/>
-        <app-input  label="Email" v-model="organization.email" disabled/>
-        <app-input  label="Số điện thoại" v-model="organization.phone" disabled/>
-        <app-input  label="Địa chỉ" v-model="organization.address" disabled/>
-        <app-input  label="Mã học sinh" v-model="work.code" disabled/>
-        <app-input  label="Lớp" v-model="work.class" disabled/>
+      <div class="form--normal">
+        <div class="row">
+          <div class="col-md-3"><label for="" class="form--normal__title">Tên trường</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.name" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Mã trường</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.code" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Email</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.email" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Số điện thoại</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.phone" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Địa chỉ</label></div>
+          <div class="col-md-9">
+            <app-input v-model="organization.address" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Mã học sinh</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.code" disabled />
+          </div>
+          <div class="col-md-3"><label for="" class="form--normal__title">Lớp</label></div>
+          <div class="col-md-9">
+            <app-input v-model="work.class" disabled />
+          </div>
+        </div>
       </div>
     </template>
   </sub-block-section>

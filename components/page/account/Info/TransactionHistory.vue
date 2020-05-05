@@ -34,7 +34,6 @@ import moment from "moment";
 
 export default {
   components: {
-    TransactionList,
     SchoolAccountSide,
     UploadAvatar,
     FilterForm,

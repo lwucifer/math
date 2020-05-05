@@ -1,6 +1,6 @@
 .elearning-right-side {
     position: relative;
-    padding: 1.6rem 2rem 1.1rem 2rem;
+    padding: 0 2rem;
     background-color: #fff;
 
     ul.info {
@@ -11,7 +11,7 @@
         li {
             display: flex;
             align-items: center;
-            padding: 1rem 0;
+            margin: 1.2rem 0;
 
             .icon {
                 font-size: 2rem;
@@ -26,14 +26,14 @@
     }
 }
 
+.elearning-right-side__img {
+    margin: 0 -2rem 1.6rem -2rem;
+}
+
 .elearning-right-side__price-wrapper {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.6rem;
-}
-
-.elearning-right-side__price {
-    font-size: 3rem;
 }
