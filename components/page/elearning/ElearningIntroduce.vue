@@ -24,7 +24,7 @@
 
     <h4 class="my-4">Mô tả tổng quát</h4>
     <div v-if="get(info, 'description', '')" v-html="get(info, 'description', '')"></div>
-    <span v-else class="caption text-sub">Chưa có nội dung.</span>
+    <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
     <!-- <div class="text-center mt-3">
       <a class="btn-load-more">Xem thêm</a>
     </div> -->

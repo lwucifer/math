@@ -35,16 +35,16 @@
         <div v-if="fetchingReview" class="text-center">
           <app-spin />
         </div>
-        <!-- <div
+        <div
           v-else-if="!localReview.content || !localReview.content.length"
-          class="text-sub text-center"
+          class="text-gray-2 caption text-center"
         >
           Chưa có nhận xét nào phù hợp với tiêu chí bạn đã chọn
-        </div> -->
+        </div>
 
         <ElearningReviewComment
           :data="item"
-          v-for="item in fakeComment"
+          v-for="item in get(localReview, 'content', [])"
           :key="item.id"
         />
         <app-pagination
@@ -119,25 +119,7 @@ export default {
         totalPages: 15,
         number: 6,
         size: 10,
-      },
-      fakeComment: [
-        {
-          id: 99,
-          avatar: 'https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/image/public/elearning/avatar/300x180/20200504113022574_2a24115a882ad6519af95061912d1875e7151430c7223edf36195172c1d08d2e.png',
-          fullname: 'Nguyen Tien Dat',
-          comment: 'Khoá học bổ ích',
-          rate: 2,
-          created: '2020-03-02 00:00:00'
-        },
-        {
-          id: 9,
-          avatar: 'https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/image/public/elearning/avatar/300x180/20200504113022574_2a24115a882ad6519af95061912d1875e7151430c7223edf36195172c1d08d2e.png',
-          fullname: 'Nguyen Tien Dat',
-          comment: 'Khoá học bổ ích',
-          rate: 4,
-          created: '2020-03-02 00:00:00'
-        },
-      ]
+      }
     };
   },
 

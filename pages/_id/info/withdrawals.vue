@@ -5,58 +5,66 @@
         <SchoolAccountSide active="2"/>
       </div>
       <div class="col-md-9">
-        <div class="elearning-history__main">
-          <h5 class="color-primary mb-3 elearning-history__title">
-            Lịch sử giao dịch
-            <hr class="mt-3" />
-          </h5>
-          <div class="elearning-history__toolbar">
-            <div>
-              <app-button rounded size="sm" class="mr-4">
-                <IconFilter />Lọc kết quả
-              </app-button>
-              <app-vue-select :options="opts" 
-                              v-model="opt" 
-                              size="sm" 
-                              :placeholder="'Theo trạng thái'" 
-                              label="text"
-                              searchable
-                              clearable
-                              @input="handlerChangeStatus"
-                  />
+        <block-section
+          title="Lịch sử giao dịch"
+          has-icon
+        >
+          <template v-slot:content>
+            <div class="elearning-history__main">
+              <h5 class="mb-3 elearning-history__title">
+                Chọn khoảng thời gian
+              </h5>
+              <div class="elearning-history__toolbar">
+                <div class="date_withdrawals">
+                  <app-date-picker
+                    class="w-100"
+                    v-model="dateDefault"
+                    square
+                    range
+                    size="sm"
+                    placeholder="DD/MM/YYYY - DD/MM/YYYY"
+                    :shortcuts="DATE_SHORTCUT"
+                    @input="handlerChangeDate"
+                    valueFormat="YYYY-MM-DD"
+                  >
+                </app-date-picker>
+                </div>
+                <div class="d-flex ml-3">
+                  <filter-button @click="filterSelect= !filterSelect">
+                    Lọc kết quả
+                  </filter-button>
+                  <app-vue-select 
+                    :options="opts" 
+                    v-model="opt" 
+                    size="sm" 
+                    :placeholder="'Theo trạng thái'" 
+                    label="text"
+                    searchable
+                    clearable
+                    class="app-vue-select ml-3"
+                    @input="handlerChangeStatus"
+                    v-if="filterSelect"
+                      />
+                </div>
+              </div>
+              <app-table
+                :heads="heads"
+                :pagination="pagination"
+                @pagechange="onPageChange"
+                :data="list"
+              >
+                <tr v-for="(item , index) in list" :key="index">
+                  <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
+                </tr>
+                <template v-slot:cell(status)="{row}">
+                  <td v-if="row.status=='SUCCESS'">Thành công</td>
+                  <td v-else-if="row.status=='FAIL'">Thất bại</td>
+                  <td v-else-if="row.status=='PENDING'">Chờ xử lí</td>
+                </template>
+              </app-table>
             </div>
-            <div class="dates d-flex ml-auto">
-              <app-date-picker  label="From"
-                                square size="sm" 
-                                class="ml-auto"
-                                @input="changeDateFrom"
-                                valueFormat="YYYY-MM-DD"
-               />
-              <app-date-picker  label="To" 
-                                square 
-                                size="sm"
-                                @input="changeDateTo" 
-                                valueFormat="YYYY-MM-DD"
-              />
-              <app-button size="sm" square normal class="ml-1">Tìm</app-button>
-            </div>
-          </div>
-          <app-table
-            :heads="heads"
-            :pagination="pagination"
-            @pagechange="onPageChange"
-            :data="list"
-          >
-            <tr v-for="(item , index) in list" :key="index">
-              <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
-            </tr>
-            <template v-slot:cell(status)="{row}">
-              <td v-if="row.status=='SUCCESS'">Thành công</td>
-              <td v-else-if="row.status=='FAIL'">Thất bại</td>
-              <td v-else-if="row.status=='PENDING'">Chờ xử lí</td>
-            </template>
-          </app-table>
-        </div>
+          </template>
+        </block-section>
       </div>
     </div>
   </div>
@@ -68,6 +76,8 @@ import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { DATE_SHORTCUT} from "~/utils/config";
+import moment from "moment";
 
 export default {
   name: "E-learning",
@@ -118,7 +128,10 @@ export default {
         { value: 'FAIL', text: 'Thất bại' }
 
       ],
-      list:[]
+      list:[],
+      DATE_SHORTCUT: DATE_SHORTCUT,
+      dateDefault:null,
+      filterSelect: false
     };
   },
   computed: {
@@ -128,6 +141,7 @@ export default {
     })
   },
   created(){
+    this.getDateSelect();
     this.fetchWithdrawals();
   },
   watch:{
@@ -139,6 +153,13 @@ export default {
     }
   },
   methods: {
+    getDateSelect(){
+      const firstday = moment().format("YYYY-MM-01");
+      const today = moment().format("YYYY-MM-DD");
+      this.dateDefault = [firstday,today];
+      this.params.from = firstday;
+      this.params.to = today;
+    },
     fetchWithdrawals(){
       const payload = {
         params :{
@@ -151,17 +172,13 @@ export default {
       }
       this.$store.dispatch(`account/${actionTypes.ACCOUNT_WITHDRAWALS.LIST}`,payload)
     },
-    changeDateFrom(date){
-      this.params.from = date;
-      this.fetchWithdrawals();
-    },
-    changeDateTo(date){
-      this.params.to = date;
-      this.fetchWithdrawals();
-    },
     handlerChangeStatus(select){
       this.params.status = get(select,"value","");
-      console.log(get(select,"value",""),"lol")
+      this.fetchWithdrawals();
+    },
+    handlerChangeDate(date){
+      this.params.from = date[0];
+      this.params.to = date[1];
       this.fetchWithdrawals();
     },
     onPageChange(e) {

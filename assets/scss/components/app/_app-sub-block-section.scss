@@ -17,4 +17,32 @@
     &__title--main {
         color: #333;
     }
+    
+    &__main {
+        background-color: #fff;
+        padding: 1.5rem;
+    }
+}
+
+.form--normal {
+    .row {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        div[class^="col-"] {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+    }
+    
+    &__title {
+        color: $color-text-dark;
+        display: block;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    &__note {
+        font-size: 1.3rem;
+        font-weight: normal;
+    }
 }

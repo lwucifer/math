@@ -66,3 +66,4 @@ export const UNAUTHORIZE_API = ["user/public/renew", "user/public/login"];
 export const CLIENT_INFO_API = [CART_LIST, PAYMENT_HASHKEY];
 
 export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 4096; // MB
+export const CURRENCY = 'đ';
