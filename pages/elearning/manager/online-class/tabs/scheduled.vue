@@ -97,6 +97,7 @@
       </template>
     </app-table>
     <!--End table-->
+    <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false"/>
   </div>
 </template>
 
@@ -106,6 +107,7 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
+import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass"
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -123,11 +125,14 @@ export default {
     IconSearch,
     IconArrow,
     IconCalendar,
-    IconTrash
+    IconTrash,
+    ModalJoinClass
   },
 
   data() {
     return {
+      rowClassId: null,
+      modalShow: false,
       tab: 1,
       heads: [
         {
@@ -302,7 +307,8 @@ export default {
     },
 
     openModal(id) {
-
+      this.rowClassId = id;
+      this.modalShow = true;
     },
 
     get
