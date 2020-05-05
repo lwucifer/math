@@ -5,14 +5,12 @@
         <SchoolAccountSide :active="3"/>
       </div>
       <div class="col-md-9">
-        <div class="elearning-history__main">
+        <div class="elearning-history__main" style="background: transparent;">
           <block-section
             title="Doanh thu"
           >
             <template v-slot:content>
-              <sub-block-section
-                title="Thông tin cá nhân"
-              >
+              <sub-block-section class="mb-0">
                 <template v-slot:title>
                   <div class="row">
                     <div class="col-md-6 d-flex align-items-center">
@@ -20,18 +18,22 @@
                       <strong class="color-red h3 mr-4">{{ balance | toThousandFilter('.') }} {{ CURRENCY }}</strong>
                       <app-button
                         size="sm"
+                        nuxt
+                        :disabled="!accountInfo"
+                        :to="accountInfo ? '/' + accountInfo.id + '/info/do_withdrawals' : '/'"
                       >
                         Rút tiền
                       </app-button>
                     </div>
                     <div class="col-md-6">
-                      <div class="text-right">
+                      <div class="text-md-right">
                         <app-button
                           nuxt
                           color="transparent"
+                          :disabled="!accountInfo"
                           :to="accountInfo ? '/' + accountInfo.id + '/info/withdrawals' : '/'"
                           style="color: #656565; font-weight: normal;"
-                          class="pr-0"
+                          class="px-0"
                         >
                           <slot name="icon">
                             <icon-clock class="icon--btn icon--btn--pre"/>
@@ -47,40 +49,112 @@
                   <div class="elearning-history__statistical">
                     <h5 class="mb-3 font-weight-semi-bold">Thống kê nhanh</h5>
                     <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Hôm nay</p>
                           <span class="value">
-                            <strong>{{ today_revenue | toThousandFilter }} đ</strong>
+                            <strong>{{ today_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tuần này</p>
                           <span class="value">
-                            <strong>{{ week_revenue | toThousandFilter }} đ</strong>
+                            <strong>{{ week_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tháng này</p>
                           <span class="value">
-                            <strong>{{ month_revenue | toThousandFilter }} đ</strong>
+                            <strong>{{ month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-6 col-md-3">
                         <div class="item">
                           <p class="title">Tháng trước</p>
                           <span class="value">
-                            <strong>{{ last_month_revenue | toThousandFilter }} đ</strong>
+                            <strong>{{ last_month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
+                </template>
+              </sub-block-section>
+            </template>
+          </block-section>
+          
+          <block-section
+            title="Chi tiết doanh thu"
+          >
+            <template v-slot:content>
+              <sub-block-section
+              >
+                <template v-slot:title>
+                  <div class="row">
+                    <div class="col-md-9 mb-3">
+                      <filter-form>
+                        <div class="mb-2">
+                        <span class="filter-form__title">
+                          Chọn khoảng thời gian
+                        </span>
+                        </div>
+                        
+                        <div class="d-flex filter-form__input-wrapper">
+                          <div
+                            class="filter-form__item"
+                            style="min-width: 25rem;"
+                          >
+                            <app-date-picker
+                              class="w-100"
+                              v-model="dateDefault"
+                              square
+                              range
+                              size="sm"
+                              placeholder="DD/MM/YYYY - DD/MM/YYYY"
+                              :shortcuts="DATE_SHORTCUT"
+                              @input="changeDate"
+                              valueFormat="YYYY-MM-DD"
+                            >
+                              <!--<template v-slot:icon-calendar>-->
+                              <!--<IconCalendar />-->
+                              <!--</template>-->
+                            </app-date-picker>
+                          </div>
+                          <div class="filter-form__item d-flex">
+                            <filter-button @click="filterSelect= !filterSelect">
+                              Lọc kết quả
+                            </filter-button>
+                          </div>
+                        </div>
+                      </filter-form>
+                    </div>
+                    <div class="col-md-3 text-md-right">
+                      <p class="font-weight-semi-bold mb-2">Tổng tiền</p>
+                      <p class="font-weight-bold h3">{{ revenue | toThousandFilter('.') }} {{ CURRENCY }}</p>
+                    </div>
+                  </div>
+                </template>
+                
+                <template v-slot:content>
+                  <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
+                    <tr v-for="(item , index) in list" :key="index">
+                      <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
+                    </tr>
+                    <template v-slot:cell(cost)="{row}">
+                      <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                    </template>
+                    <template v-slot:cell(fee)="{row}">
+                      <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+                    </template>
+                    <template v-slot:cell(total)="{row}">
+                      <td>{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                    </template>
+                  </app-table>
                 </template>
               </sub-block-section>
             </template>
@@ -178,6 +252,7 @@
   import {CURRENCY} from "~/utils/config";
   import IconClock from "~/assets/svg/design-icons/clock.svg?inline";
   import {getToken} from "~/utils/auth";
+  import {DATE_SHORTCUT} from "~/utils/config";
   
   export default {
     name: "E-learning",
@@ -191,6 +266,7 @@
     data() {
       return {
         CURRENCY: CURRENCY,
+        DATE_SHORTCUT: DATE_SHORTCUT,
         balance: '',
         today_revenue: '',
         week_revenue: '',
@@ -235,7 +311,8 @@
           size: "",
           page: ""
         },
-        revenue: ""
+        revenue: "",
+        dateDefault: ''
       };
     },
     created() {
@@ -302,7 +379,10 @@
         this.fetchEarning();
       },
       formatFee(fee) {
-        return numeral(fee).format('0.00')
+        return numeral(fee).format('0')
+      },
+      changeDate(date){
+        console.log('[Revenues] Change date range')
       },
       get,
       numeral
