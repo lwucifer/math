@@ -53,6 +53,9 @@ const getters = {
     avatarUser(state) {
         return state.token.avatar ? state.token.avatar : {};
     },
+    roles(state) {
+        return state.token ? state.token.roles : []
+    }
 };
 
 /**
