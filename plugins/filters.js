@@ -4,6 +4,7 @@ import {
   EXERCISE_CATEGORIES,
   EXERCISE_TYPES,
   SUBMISSION_RESULTS,
+  WITHDRAWAL_STATUSES
 } from "~/utils/constants"
 
 /**
@@ -116,6 +117,21 @@ export function subResult2Txt(str = '') {
   return '-'
 }
 
+/**
+ * Translate submission results => status
+ * @Param {string} str
+ */
+export function withdrawalStatus2Txt(str = '') {
+  const MATCHED_DATA = {
+    [WITHDRAWAL_STATUSES.SUCCESS]: 'Thành công',
+    [WITHDRAWAL_STATUSES.FAILED]: 'Thất bại',
+    [WITHDRAWAL_STATUSES.PENDING]: 'Chờ duyệt',
+  }
+  if (MATCHED_DATA.hasOwnProperty(str))
+    return MATCHED_DATA[str]
+  return '-'
+}
+
 const filters = {
     toThousandFilter,
     numeralFormat,
@@ -123,7 +139,8 @@ const filters = {
     truncStrFilter,
     exCate2Txt,
     exType2Txt,
-    subResult2Txt
+    subResult2Txt,
+    withdrawalStatus2Txt
 }
 
 // register global utility filters

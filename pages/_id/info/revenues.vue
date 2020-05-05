@@ -5,7 +5,7 @@
         <SchoolAccountSide :active="3"/>
       </div>
       <div class="col-md-9">
-        <div class="elearning-history__main" style="background: transparent;">
+        <div class="elearning-history__main py-0" style="background: transparent;">
           <block-section
             title="Doanh thu"
           >
@@ -141,10 +141,10 @@
                 </template>
                 
                 <template v-slot:content>
-                  <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
-                    <tr v-for="(item , index) in list" :key="index">
-                      <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
-                    </tr>
+                  <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list" style="margin-left: -1.5rem; margin-right: -1.5rem;">
+                    <!--<tr v-for="(item , index) in list" :key="index">-->
+                      <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
+                    <!--</tr>-->
                     <template v-slot:cell(cost)="{row}">
                       <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
                     </template>

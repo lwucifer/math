@@ -126,3 +126,9 @@ export const ACCOUNT_PROFILE_MENU = {
     SUPPORT: 7,
     SIGNOUT: 8,
 }
+
+export const WITHDRAWAL_STATUSES = {
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAIL',
+    PENDING: 'PENDING'
+}
