@@ -23,7 +23,7 @@
                   <div class="d-flex filter-form__input-wrapper">
                     <div
                       class="filter-form__item"
-                      style="min-width: 25rem;"
+                      style="min-width: 21rem;"
                     >
                       <app-date-picker
                         class="w-100"
