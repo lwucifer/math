@@ -89,6 +89,7 @@ export const ELEARNING_CREATING_SETTING = `${SCHOOLLY_ALIAS}/elearning/creating/
 export const ELEARNING_CREATING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `${SCHOOLLY_ALIAS}/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `${SCHOOLLY_ALIAS}/elearning/creating/publish`;
+export const ELEARNING_JOIN = `${SCHOOLLY_ALIAS}/elearning/join`;
 
 /**
  * ONLINE CLASS
