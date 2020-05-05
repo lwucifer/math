@@ -1,10 +1,12 @@
 <template>
   <div class="elearning-right-side">
-    <img
-      class="d-block w-100 mb-4"
-      :src="get(info, 'avatar.medium', null)"
-      :alt="get(info, 'name', '')"
-    />
+    <div class="elearning-right-side__img">
+      <img
+        class="d-block w-100"
+        :src="get(info, 'avatar.medium', null)"
+        :alt="get(info, 'name', '')"
+      />
+    </div>
 
     <template
       v-if="
@@ -13,16 +15,13 @@
     >
       <div class="elearning-right-side__price-wrapper">
         <b
-          v-if="get(info, 'free', '')"
-          class="elearning-right-side__price text-error"
+          class="heading-2 text-primary ml-auto"
           >Miễn phí</b
         >
       </div>
       <app-button
-        color="secondary"
         fullWidth
-        square
-        class="text-uppercase mb-4"
+        class="text-uppercase font-weight-bold mb-4"
         @click="handleStudy"
         >Tham gia học</app-button
       >
@@ -48,9 +47,7 @@
         >
       </div>
       <app-button
-        color="secondary"
         fullWidth
-        square
         class="text-uppercase mb-4"
         @click.prevent="handleAddToCart"
         >Chọn mua</app-button

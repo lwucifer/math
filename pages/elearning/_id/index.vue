@@ -80,7 +80,7 @@ const IconPlayCircle = () =>
 
 export default {
   name: "E-learningDetail",
-  layout: "manage",
+  // layout: "manage",
 
   components: {
     CourseTeacherInfo,
