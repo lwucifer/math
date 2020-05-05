@@ -6,7 +6,11 @@
       :alt="get(info, 'name', '')"
     />
 
-    <template v-if="get(info, 'elearning_price.free', false)">
+    <template
+      v-if="
+        get(info, 'elearning_price.free', false) || get(info, 'is_study', false)
+      "
+    >
       <div class="elearning-right-side__price-wrapper">
         <b
           v-if="get(info, 'free', '')"
@@ -108,6 +112,7 @@ import { mapActions, mapGetters } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
+import JoinService from "~/services/elearning/Join";
 
 import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
@@ -146,9 +151,21 @@ export default {
   methods: {
     get,
 
-    handleStudy() {
+    async handleStudy() {
       const elearning_id = get(this, "info.id", "");
-      this.$router.push(`/elearning/${elearning_id}/study`);
+
+      const payload = {
+        elearning_id,
+      };
+
+      const res = await new JoinService(this.$axios)["add"](payload);
+
+      if (get(res, "success", false)) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
+
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
     ...mapActions("cart", ["cartAdd"]),

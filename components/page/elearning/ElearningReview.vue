@@ -1,6 +1,6 @@
 <template>
-  <section class="scroll-target" id="review">
-    <h5 class="mb-3">Đánh giá {{ title }}</h5>
+  <section class="scroll-target elearning-id-box" id="review">
+    <h4 class="mb-3">Đánh giá {{ title }}</h4>
     <div class="elearning-review">
       <div class="elearning-review__top mb-4">
         <div class="row items-center">
@@ -14,7 +14,7 @@
                 :size="16"
                 class="mt-2 mb-3"
               />
-              <p class="color-999">
+              <p>
                 ({{ get(info, "voting.total_votes", 0) }} người đánh giá)
               </p>
             </div>
@@ -37,7 +37,7 @@
         </div>
         <div
           v-else-if="!localReview.content || !localReview.content.length"
-          class="text-sub text-center"
+          class="text-gray-2 caption text-center"
         >
           Chưa có nhận xét nào phù hợp với tiêu chí bạn đã chọn
         </div>
@@ -52,6 +52,19 @@
           @pagechange="onPageChange"
           class="mt-4 mb-3"
         />
+        <!-- <app-pagination
+          :pagination="{
+          total: 99,
+          size: 10,
+          page: 1,
+          totalElements: 99,
+          first: 1,
+          last: 1,
+          number: 2
+        }"
+          @pagechange="onPageChange"
+          class="mt-4"
+        /> -->
       </div>
     </div>
   </section>
@@ -106,7 +119,7 @@ export default {
         totalPages: 15,
         number: 6,
         size: 10,
-      },
+      }
     };
   },
 

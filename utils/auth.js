@@ -8,6 +8,7 @@ import {
     FIREBASE_TOKEN,
     DEVICE_OS
 } from "./config";
+import { getParamQuery } from "./common";
 
 /**
  * get access_token from local storage

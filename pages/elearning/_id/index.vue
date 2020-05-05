@@ -6,22 +6,29 @@
       <div class="col-md-8">
         <ElearningViewInfo :info="info" />
 
-        <ElearningMainMenu />
+        <!-- <ElearningMainMenu /> -->
 
         <ElearningIntroduce :info="info" />
 
         <ElearningContent :program="program" :info="info" />
 
-        <div class="box">
-          <CourseTeacherInfo
-            :teacher_id="get(info, 'teacher.id', '')"
-            class="mb-3"
-          />
+        <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" />
 
-          <hr class="mt-3 mb-4" />
+        <ElearningReview :info="info" />
 
-          <ElearningReview :info="info" />
-        </div>
+        <ElearningSliderTab
+          class="mt-6"
+          :content="teacherEls"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng cùng giáo viên"
+        />
+
+        <ElearningSliderTab
+          :content="relatedCourses"
+          :swiperOptions="sliderOptions"
+          title="Bài giảng liên quan"
+          class="mt-6"
+        />
       </div>
 
       <div class="col-md-4">
@@ -32,20 +39,6 @@
         />
       </div>
     </div>
-
-    <ElearningSliderTab
-      class="mt-4"
-      :content="teacherEls"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng cùng giáo viên"
-    />
-
-    <ElearningSliderTab
-      :content="relatedCourses"
-      :swiperOptions="sliderOptions"
-      title="Bài giảng liên quan"
-      class="mt-5"
-    />
   </div>
 </template>
 
@@ -106,7 +99,7 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
-    Breadcrumb
+    Breadcrumb,
   },
 
   created() {
@@ -123,7 +116,7 @@ export default {
       teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
-        slidesPerView: 5,
+        slidesPerView: 3,
         setWrapperSize: true,
         watchOverflow: true,
       },
@@ -192,23 +185,22 @@ export default {
     async getData() {
       const elearning_id = get(this, "$route.params.id", "");
 
+      const params = {
+        elearning_id,
+        token: "true",
+      };
+
       const getInfo = () =>
         new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
+          params,
         });
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
+          params,
         });
       const getRelatedCourses = () =>
         new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
+          params,
         });
 
       const data = await Promise.all([
