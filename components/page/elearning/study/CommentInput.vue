@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-course-comment__input">
     <div class="main">
-      <app-avatar :src="data.avatar" :size="50" />
+      <app-avatar :src="get(user_login, 'avatar.low', '')" :size="50" />
       <div class="editor-wrapper">
         <client-only>
           <editor-content :editor="editor" class="editor" />
@@ -9,30 +9,38 @@
 
         <div class="actions">
           <button type="button">
-            <IconCamera class="fill-999"/>
+            <IconCamera class="fill-999" />
           </button>
         </div>
       </div>
     </div>
     <div class="text-right">
-      <app-button color="info" @click="cancel" size="xs" square class="btn-cancel">Hủy</app-button>
-      <app-button color="info" @click="save" size="xs" square class="color-999">Phản hồi</app-button>
+      <app-button
+        color="info"
+        @click="cancel"
+        size="xs"
+        square
+        class="btn-cancel"
+        >Hủy</app-button
+      >
+      <app-button color="info" @click="save" size="xs" square class="color-999"
+        >Phản hồi</app-button
+      >
     </div>
   </div>
 </template>
 
 <script>
 import { Editor, EditorContent } from "tiptap";
-import {
-  Placeholder,
-  Heading,
-} from "tiptap-extensions";
+import { Placeholder, Heading } from "tiptap-extensions";
 import EmojiButton from "@joeattardi/emoji-button";
 
 import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import { mapState } from "vuex";
+import { get } from "lodash";
 
 export default {
   components: {
@@ -40,11 +48,10 @@ export default {
     IconAddImage,
     IconEmoji,
     IconCamera,
-    IconLike
+    IconLike,
   },
 
   props: {
-    data: Object,
     tag: Object,
     reply: Boolean,
   },
@@ -55,40 +62,43 @@ export default {
       editorDefault: null,
       emojiPicker: null,
       testContent: "",
-      name: this.tag && this.tag.name? this.tag.name : "",
+      name: this.tag && this.tag.name ? this.tag.name : "",
     };
   },
 
   computed: {
     classes() {
       return {
-        "comment-editor--reply": this.reply
+        "comment-editor--reply": this.reply,
       };
-    }
+    },
+    ...mapState("auth", { user_login: "token" }),
   },
 
   mounted() {
-
     // Init editor
     this.editor = new Editor({
       extensions: [
         new Heading({ levels: [4, 5, 6] }),
         new Placeholder({
           showOnlyCurrent: false,
-          emptyNodeText: "Phản hồi"
-        })
+          emptyNodeText: "Phản hồi",
+        }),
       ],
-      content: this.tag && this.tag.name? `<p></p><h6>`+ this.tag.name +`</h6>` : ""
+      content:
+        this.tag && this.tag.name
+          ? `<p></p><h6>` + this.tag.name + `</h6>`
+          : "",
     });
 
     // Init emoji picker
     this.emojiPicker = new EmojiButton({
       position: "top-end",
       zIndex: 9,
-      autoHide: false
+      autoHide: false,
     });
 
-    this.emojiPicker.on("emoji", emoji => {
+    this.emojiPicker.on("emoji", (emoji) => {
       const currentContent = this.editor.getHTML();
       console.log("currentContent", currentContent);
       console.log("emoji", emoji);
@@ -101,6 +111,7 @@ export default {
   },
 
   methods: {
+    get,
     save() {
       this.close();
     },
@@ -114,10 +125,13 @@ export default {
           new Heading({ levels: [4, 5, 6] }),
           new Placeholder({
             showOnlyCurrent: false,
-            emptyNodeText: "Phản hồi"
-          })
+            emptyNodeText: "Phản hồi",
+          }),
         ],
-        content: this.tag && this.tag.name? `<p></p><h6>`+ this.tag.name +`</h6>` : ""
+        content:
+          this.tag && this.tag.name
+            ? `<p></p><h6>` + this.tag.name + `</h6>`
+            : "",
       });
       this.$emit("close", false);
     },
@@ -133,8 +147,8 @@ export default {
       emojiPicker.pickerVisible
         ? emojiPicker.hidePicker()
         : emojiPicker.showPicker(button);
-    }
-  }
+    },
+  },
 };
 </script>
 

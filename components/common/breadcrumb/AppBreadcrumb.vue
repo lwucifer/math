@@ -53,7 +53,7 @@ export default {
 
   methods: {
     getName(matchedPathArray, idx) {
-      console.log("getName idx", idx);
+      // console.log("getName idx", idx);
       const fullPath = "/" + matchedPathArray.slice(0, idx + 1).join("/");
       const route = this.routes.find(item => item.path === fullPath) || {};
       return route.name;
