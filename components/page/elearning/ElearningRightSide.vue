@@ -36,7 +36,7 @@
     </template>
 
     <app-button
-      v-if="get(info, 'is_study', false)"
+      v-if="get(info, 'elearning_price.free', false) || get(info, 'is_study', false)"
       fullWidth
       class="text-uppercase body-2 font-weight-bold mb-4"
       @click="handleStudy"
