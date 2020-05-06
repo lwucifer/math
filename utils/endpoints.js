@@ -106,7 +106,7 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `${SCHOOLLY_ALIAS}/elearning/
 /**
  * STUDY
  */
-export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
+export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/elearning/study/elearnings`;
 export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
 export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
 export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;

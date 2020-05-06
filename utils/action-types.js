@@ -392,6 +392,10 @@ export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
 };
 
+export const ELEARNING_STUDY_STUDENT = {
+    LIST: "elearningStudyStudentList",
+};
+
 export const ELEARNING_STURY_FAVOURITE = {
     LIST: "elearningStudyFavouriteList",
     ADD: "elearningStudyFavouriteAdd",
