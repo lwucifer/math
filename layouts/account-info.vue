@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap layout-default">
-  <TheHeaderClient/>
+  <TheHeader />
     <nuxt class="page-content"/>
 
     <portal-target name="modal" multiple></portal-target>
@@ -8,12 +8,13 @@
 </template>
 
 <script>
-import TheHeaderClient from "~/components/layout/header/HeaderClient"
+import TheHeader from "~/components/layout/header/Header"
+
 export default {
   middleware: ["authenticated"],
   
   components: {
-    TheHeaderClient
+    TheHeader
   }
 }
 </script>

@@ -223,6 +223,7 @@ export const TEACHING_OLCLASS_INVITES = {
 
 export const TEACHING_OLCLASS_LESSONS = {
     LIST: "teachingOlclassLessonsList",
+    INFO: "teachingOlclassLessonInfo",
 };
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",

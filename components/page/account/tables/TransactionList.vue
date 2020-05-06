@@ -10,7 +10,6 @@
       <td v-if="row.status != statusPending">
         <span
           :class="statusClass(row.status)"
-          @click.prevent="handleRepayOrder(row)"
         >{{ row.status | transactionStatus2Txt }}</span>
       </td>
       <td v-else>
@@ -137,10 +136,10 @@ export default {
 
     handleCancelOrder(item) {
       console.log("[handleCancelOrder]", item);
-      this.cancelPay(item.transaction_id).then(result => {
+      this.cancelPay(item.tx_id).then(result => {
         console.log("[cancelPay]", result);
         if(result.success == RESPONSE_SUCCESS) {
-          this.setForceGetTransactionList(true);
+          this.setForceGetTransactionList();
         }
       })
     },

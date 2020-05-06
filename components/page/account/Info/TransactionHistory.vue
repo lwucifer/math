@@ -56,8 +56,11 @@ export default {
       }
     },
 
-    forceGetTransactions(_newVal) {
+    forceGetTransactions(_newVal, _oldVal) {
       console.log("[forceGetTransactions] watch", _newVal);
+      if(_newVal != _oldVal){
+        this.fetchTransaction();
+      }
     }
   },
   methods: {

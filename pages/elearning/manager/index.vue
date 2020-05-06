@@ -60,7 +60,7 @@
               <h6>Doanh thu</h6>
               <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
             </div>
-            <div class="elearning-manager__dashboard elearning-manager__revenue mt-15">
+            <div class="elearning-manager__dashboard elearning-manager__revenue mt-15 text-center">
               <div class="revenue">
                 11.250.330 VNĐ
               </div>

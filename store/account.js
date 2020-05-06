@@ -381,10 +381,9 @@ const mutations = {
     },
     [mutationTypes.ACCOUNT_TRANSACTIONS.SET_FORCE_GET_TRANSACTIONS_LIST](
         state,
-        _isForce
     ) {
-        console.log("SET_FORCE_GET_TRANSACTIONS_LIST", _isForce);
-        state.forceGetTransactions = _isForce;
+        console.log("SET_FORCE_GET_TRANSACTIONS_LIST");
+        state.forceGetTransactions = !state.forceGetTransactions;
     },
     [mutationTypes.ACCOUNT_REVENUE.SET_ACCOUNT_REVENUE_LIST](
         state,
