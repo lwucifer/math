@@ -170,7 +170,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.list = get(this, "elearnings.lectures", []);
   },
 };
