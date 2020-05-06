@@ -1,12 +1,12 @@
 <template>
   <div class="elearning-course-comment__item">
-    <app-avatar :src="get(comment, 'creator.avatar.low', '')" :size="50" />
+    <app-avatar :src="get(question, 'creator.avatar.low', '')" :size="50" />
     <div class="content">
       <div>
-        <strong class="pr-3">{{ get(comment, "creator.name", "") }}</strong>
-        <span>{{ get(comment, "timestamp", "") }}</span>
+        <strong class="pr-3">{{ get(question, "creator.name", "") }}</strong>
+        <span>{{ get(question, "timestamp", "") }}</span>
       </div>
-      <div class="text">{{ get(comment, "content", "") }}</div>
+      <div class="text">{{ get(question, "content", "") }}</div>
       <div class="actions mt-3">
         <button>
           <IconLike
@@ -23,15 +23,22 @@
         <button type="button" class="mt-3 mb-3" @click="showReply = false">
           Ẩn câu trả lời
         </button>
-        <CommentInput />
-        <CommentItemChild :data="comment" />
+        <AddAnswer
+          :question="question"
+          @addAnswerSuccess="$emit('addAnswerSuccess')"
+        />
+        <AnswerItem
+          :answer="answer"
+          v-for="(answer, index) in get(question, 'interactive_answers', [])"
+          :key="index"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
-import CommentItemChild from "~/components/page/elearning/study/CommentItemChild";
-import CommentInput from "~/components/page/elearning/study/CommentInput";
+import AnswerItem from "~/components/page/elearning/study/AnswerItem";
+import AddAnswer from "~/components/page/elearning/study/AddAnswer";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { get } from "lodash";
@@ -42,11 +49,11 @@ export default {
   components: {
     IconCamera,
     IconLike,
-    CommentItemChild,
-    CommentInput,
+    AnswerItem,
+    AddAnswer,
   },
   props: {
-    comment: {
+    question: {
       type: Object,
       default: () => {},
     },
@@ -55,8 +62,8 @@ export default {
   watch: {
     comment: {
       handler: function() {
-        this.liked = get(this, "comment.liked", false);
-        this.likes = get(this, "comment.likes", 0);
+        this.liked = get(this, "question.liked", false);
+        this.likes = get(this, "question.likes", 0);
       },
       deep: true,
     },
@@ -65,8 +72,8 @@ export default {
   data() {
     return {
       showReply: false,
-      liked: get(this, "comment.liked", false),
-      likes: get(this, "comment.likes", 0),
+      liked: get(this, "question.liked", false),
+      likes: get(this, "question.likes", 0),
       submit: true,
     };
   },

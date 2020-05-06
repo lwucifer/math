@@ -79,6 +79,8 @@ import {
   SOCIAL as ACTION_TYPE_SOCIAL
 } from "~/utils/action-types";
 import { createLike } from "~/models/social/Like";
+import { mapGetters } from 'vuex';
+
 
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
@@ -118,10 +120,12 @@ export default {
   },
 
   computed: {
-    userId() {
-      const { $store: store = {} } = this;
-      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    ...mapGetters("auth", ["userId"]),
+
+    // userId() {
+    //   const { $store: store = {} } = this;
+    //   return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    // },
 
     showPrevArrow() {
       if (!this.parentPost) return;

@@ -1,11 +1,11 @@
 .manager-side {
-  padding: 1rem 3rem;
-  background-color: #fff;
   .item {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    padding: 1rem 0;
+    padding: 1.2rem 0;
+    font-weight: 500;
+    color: $color-text;
     button {
       outline: none;
       line-height: 1;
@@ -14,7 +14,8 @@
       margin-right: 0.8rem;
       width: 2rem;
       path {
-        fill: #666;
+        fill: currentColor;
+        fill-opacity: 1;
       }
     }
     &:hover {

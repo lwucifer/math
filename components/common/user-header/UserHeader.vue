@@ -70,8 +70,9 @@
 <script>
 import { mapState } from "vuex";
 import { USER_ROLES, ACCOUNT_PROFILE_MENU } from "~/utils/constants";
+import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
 import { isCommonElementIn2Array } from "~/utils/common";
-import { getToken } from "~/utils/auth";
+import { getToken, getDeviceId } from "~/utils/auth";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
@@ -82,12 +83,18 @@ import IconDollar from "~/assets/svg/icons/dollar.svg?inline";
 import IconTransaction from "~/assets/svg/icons/transaction.svg?inline";
 import IconSupport from "~/assets/svg/icons/support.svg?inline";
 import IconLogout from "~/assets/svg/icons/logout.svg?inline";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   data() {
     return {
-      MENU: ACCOUNT_PROFILE_MENU
+      MENU: ACCOUNT_PROFILE_MENU,
+      // notify logout
+      notify: {
+        redirectLink: "",
+        message: "",
+        showNotify: true
+      }
     };
   },
 
@@ -110,54 +117,61 @@ export default {
 
     getAccountInfoLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info`;
       }
     },
 
     getRevenueLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info/revenues`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/revenues`;
       }
     },
 
     getTransactionLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info/transactions`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/transactions`;
       }
     },
 
     getNotificationLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info/announcement`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/announcement`;
       }
     },
 
     getSettingLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info/setting`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/setting`;
       }
     },
 
     getSupportLink() {
       const accountObj = getToken();
-      if(!!accountObj) {
-        return `/${accountObj.id}/info/support`
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/support`;
       }
-    },
+    }
   },
 
   methods: {
     ...mapMutations("auth", ["removeToken"]),
+    ...mapActions("auth", ["logout"]),
     get,
     handleLogout() {
-      // console.log("aaa");
-      this.removeToken();
-      this.$router.push("/auth/signin");
+      console.log("[handleLogout]");
+      const device_id = getDeviceId();
+
+      this.logout({ device_id }).then(result => {
+        console.log("[handleLogout] result", result, device_id);
+        if (result.success == RESPONSE_SUCCESS) {
+          this.$router.push("/auth/signin");
+        }
+      });
     },
 
     async fetchProfile() {

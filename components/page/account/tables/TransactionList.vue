@@ -4,19 +4,23 @@
     :pagination="pagination"
     @pagechange="onPageChange"
     :data="list"
+    style="margin-left: -1.5rem; margin-right: -1.5rem;"
   >
-    <tr v-for="(item , index) in list" :key="index">
-      <td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>
-    </tr>
     <template v-slot:cell(status)="{row}">
-      <td v-if="row.status=='-1'">Thất bại</td>
-      <td v-else-if="row.status=='0'">Chờ xử lí</td>
-      <td v-else-if="row.status=='1'">Thành công</td>
+      <td>
+        <span :class="statusClass(row.status)">
+          {{ row.status | transactionStatus2Txt }}
+        </span>
+      </td>
     </template>
   </app-table>
 </template>
 
 <script>
+  import {
+    TRANSACTION_STATUSES
+  } from "~/utils/constants"
+  
   export default {
     props: {
       list: {
@@ -82,6 +86,17 @@
       onPageChange(e) {
         this.$emit('changedPagination', e)
       },
+      statusClass(type) {
+        if (type == TRANSACTION_STATUSES.SUCCESS) {
+          return { 'text-success': true }
+        } else if (type == TRANSACTION_STATUSES.PENDING) {
+          return { 'text-warning': true }
+        } else if (type == TRANSACTION_STATUSES.FAILED) {
+          return { 'text-error': true }
+        } else {
+          return {}
+        }
+      }
     }
   }
 </script>
