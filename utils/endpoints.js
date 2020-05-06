@@ -106,18 +106,19 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/
 /**
  * STUDY
  */
-export const STUDY_ELEARNING = `/study/elearning`;
-export const STUDY_MY_ELEARNING = `/study`;
-export const STUDY_FAVOURITE = `/elearning/study/favourite`;
-export const STUDY_VOTE = `/elearning/study/votes`;
-export const STUDY_ARCHIVE = `/elearning/study/archive`;
-export const STUDY_INFO = `/elearning/study/elearning/info`;
-export const STUDY_INTERACTIVE_QUESTION = `/elearning/study/interactive/questions`;
-export const STUDY_INTERACTIVE_QUESTION_ADD = `/elearning/study/interactive/question`;
-export const STUDY_ELEARNING_PROGRESS = `/elearning/study/elearning/progress`;
-export const STUDY_QUESTION_LIKE = `/elearning/study/interactive/question/like`;
-export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
-export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
+export const STUDY_ELEARNING = `${SCHOOLLY_ALIAS}/study/elearning`;
+export const STUDY_MY_ELEARNING = `${SCHOOLLY_ALIAS}/study`;
+export const STUDY_FAVOURITE = `${SCHOOLLY_ALIAS}/elearning/study/favourite`;
+export const STUDY_VOTE = `${SCHOOLLY_ALIAS}/elearning/study/votes`;
+export const STUDY_ARCHIVE = `${SCHOOLLY_ALIAS}/elearning/study/archive`;
+export const STUDY_INFO = `${SCHOOLLY_ALIAS}/elearning/study/elearning/info`;
+export const STUDY_INTERACTIVE_QUESTION = `${SCHOOLLY_ALIAS}/elearning/study/interactive/questions`;
+export const STUDY_INTERACTIVE_QUESTION_ADD = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question`;
+export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elearning/progress`;
+export const STUDY_QUESTION_LIKE = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question/like`;
+export const STUDY_QUESTION_ADD_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer`;
+export const STUDY_QUESTION_LIKE_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer/like`;
+export const STUDY_LESSON = `${SCHOOLLY_ALIAS}/streaming/video`;
 
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
