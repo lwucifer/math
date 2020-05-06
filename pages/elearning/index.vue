@@ -1,25 +1,26 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="!elearnings">Loading...</div>
+  <div class="container" v-else>
     <course-slider-tab
       :elearnings="get(elearnings, 'highlight', null)"
       :swiperOptions="sliderOptions"
       title="Nổi bật"
     />
     <course-slider-tab
-      :elearnings="get(elearnings, 'suggestion', [])"
+      :elearnings="get(elearnings, 'suggestion', null)"
       :swiperOptions="sliderOptions"
       title="Gợi ý"
       class="mt-5"
     />
     <course-slider-tab
-      :elearnings="get(elearnings, 'recent', [])"
+      :elearnings="get(elearnings, 'recent', null)"
       :swiperOptions="sliderOptions"
       title="Bài giảng mới nhất"
       class="mt-5"
     />
-    <div class="text-center mt-3">
+    <!-- <div class="text-center mt-3">
       <app-button square>Xem tất cả bài giảng</app-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -35,10 +36,20 @@ export default {
     CourseSliderTab,
   },
 
-  async fetch({ params, query, store }) {
-    await store.dispatch(
+  // async fetch({ params, query, store }) {
+  //   await store.dispatch(
+  //     `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
+  //   );
+  // },
+
+  mounted() {
+    this.$store.dispatch(
       `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
     );
+  },
+
+  updated() {
+    console.log(this.elearnings)
   },
 
   data() {
@@ -52,6 +63,10 @@ export default {
         showName: true,
       },
     };
+  },
+
+  updated() {
+    console.log(this.elearnings);
   },
 
   computed: {
