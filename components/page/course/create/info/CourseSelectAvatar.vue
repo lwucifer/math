@@ -10,7 +10,7 @@
               ref="cropper"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
-              :fixedNumber="[730, 410]"
+              :fixedNumber="[340, 204]"
               fixed
               autoCrop
               full
@@ -39,7 +39,7 @@
       <div class="col csa-col csa-col--right mb-4">
         <p class="csa-desc caption text-gray">
           - Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
-          730x410 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
+          340x204 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
           .png
         </p>
         <p class="csa-desc caption text-gray">
