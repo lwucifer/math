@@ -48,11 +48,13 @@
     z-index: map-get($z-index, 'dropdown');
     top: 100%;
     left: 0;
-    margin-top: 5px;
+    margin-top: 1px;
     min-width: 100%;
     background-color: #fff;
-    border: 1px solid $color-border;
-    box-shadow: 0px 5px 5px 0px rgba(#000, .1);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    max-height: 250px;
+    overflow-y: auto;
 }
 
 .app-select__option {
