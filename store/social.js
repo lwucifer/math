@@ -85,6 +85,29 @@ const actions = {
           $commentTree: {},
         }));
         commit(mutationTypes.SOCIAL.SET_FEEDS, {
+          listPost: newListPost,
+          page,
+        });
+      }
+      return result;
+    } catch (err) {
+      return err;
+    }
+  },
+
+  async [actionTypes.SOCIAL.GET_FEEDS_INFINITE]({ state, commit }, payload) {
+    try {
+      const result = await new Feeds(this.$axios)[actionTypes.BASE.LIST](
+        payload
+      );
+
+      if (result.success) {
+        const { listPost = [], page = {} } = result.data;
+        const newListPost = listPost.map((post) => ({
+          ...post,
+          $commentTree: {},
+        }));
+        commit(mutationTypes.SOCIAL.SET_FEEDS, {
           listPost: uniqWith(
             state.feeds.listPost.concat(newListPost),
             (a, b) => a.post_id === b.post_id
