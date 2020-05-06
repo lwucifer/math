@@ -10,6 +10,7 @@
               <div class="elearning-lesson_image">
                 <Streaming
                   url="http://202.134.19.25:1935/vod_dev/_definst_/mp4:https/20200416164926546_f694b2127dfebed665c38e821612767054202ee5508452c52d2e8cff3bc770f9.mp4/playlist.m3u8?token=6e0ea6b6-3dc0-4135-b884-6b3029601b6d"
+                  thumbnail="https://picsum.photos/750/422"
                 />
                 <!-- <img src="https://picsum.photos/750/422" alt /> -->
               </div>
