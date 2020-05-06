@@ -10,14 +10,11 @@
             style="flex: 1"
             :options="tagOptions"
             v-model="tag"
+            @change="changeUser"
             @visible-change="handleFriendsVisibleChange"
           >
-            <div
-              slot="option"
-              slot-scope="{ option }"
-              class="d-flex align-items-center"
-              @click.prevent="changeUserChat(option)"
-            >
+            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+              <!-- @click.prevent="changeUserChat(option)" -->
               <app-avatar
                 :src="option.avatar && option.avatar.low ? option.avatar.low : null"
                 size="sm"
@@ -38,7 +35,7 @@
         </div>
       </div>
 
-      <div class="aside-box__top" v-if="messagesList.length > 0 && !isCreated">
+      <div class="aside-box__top" v-if="!isCreated">
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
@@ -1063,12 +1060,18 @@ export default {
       }
       this.removeImgSrc();
     },
-    changeUserChat(option) {
-      console.log("[option]", option, this.tag.length);
+    changeUser() {
+      console.log("[option]", this.tag.length);
       if (this.tag.length == 0) {
+        this.getMessageList({
+          params: {
+            room_id: this.$route.params.id
+          }
+        });
+      } else if (this.tag.length == 1) {
         const data = {
           type: 1,
-          members: option.id.toString(),
+          members: this.tag[0].toString(),
           name: this.name ? this.name : ""
         };
         this.createGroup(data).then(result => {
@@ -1126,6 +1129,16 @@ export default {
           ? this.roomIdPush
           : this.$route.params.id;
         this.infiniteId += 1;
+      }
+    },
+    isCreated(_newVal) {
+      console.log("_newVal", _newVal);
+      if (_newVal == false && this.tag.length > 0) {
+        this.getMessageList({
+          params: {
+            room_id: this.$route.params.id
+          }
+        });
       }
     }
   }
