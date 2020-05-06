@@ -6,68 +6,35 @@
     </p>
 
     <div
-      v-for="(item, index) in get(progress, 'programs', [])"
+      v-for="(program, index) in get(progress, 'programs', [])"
       :key="index"
       class="elearning-lesson-side__course"
     >
       <div class="elearning-lesson-side__course-title">
         <div>
           <strong class="color-primary mb-2">
-            Chương {{ index + 1 }}: {{ get(item, "chapter", "") }}</strong
+            Chương {{ index + 1 }}: {{ get(program, "chapter", "") }}</strong
           >
           <!-- <p class="color-999 font-size-12" v-if="!ids.includes(item.id)">
               {{ item.done }} - {{ item.times }}
             </p> -->
         </div>
         <label class="toggle">
-          <input type="checkbox" v-model="ids" :value="data.id" />
-          <IconUpO class="up" v-if="ids.includes(data.id)" />
+          <input type="checkbox" v-model="ids" :value="program.id" />
+          <IconUpO class="up" v-if="ids.includes(program.id)" />
           <IconDownO class="down" v-else />
         </label>
       </div>
-      {{ data.name }}
-      <div
-        class="elearning-lesson-side__lessons mt-3"
-        v-if="ids.includes(data.id)"
-      ></div>
 
       <div
-        v-if="ids.includes(item.id)"
+        v-if="ids.includes(program.id)"
         class="elearning-lesson-side__lessons mt-3"
       >
-        <div
-          class="content elearning-lesson-side__lesson"
-          v-for="(lesson, j) in data.lessons"
+        <ElearningProgramCourseItem
+          v-for="(lesson, j) in get(program, 'lessons', [])"
           :key="j"
-          :class="lesson.completes ? 'active' : ''"
-        >
-          <div class="lesson-title mb-2">
-            <app-checkbox v-model="lesson.completes" />
-            <p class="text-uppercase pl-1">{{ lesson.name }}</p>
-          </div>
-          <div class="bottom d-flex">
-            <div>
-              <IconPlay class="mr-2" />
-              <span>{{ lesson.duration }}</span>
-            </div>
-            <div class="color-primary ml-auto" v-if="lesson.completes">
-              <IconFileCheckAlt
-                class="mr-2 fill-primary"
-                height="16"
-                width="16"
-              />
-              <span>Xem kết quả</span>
-            </div>
-            <div class="color-red ml-auto" v-else-if="!lesson.status">
-              <IconFileEditAlt class="mr-2 fill-red" height="16" width="16" />
-              <span>Làm bài tập</span>
-            </div>
-            <div class="color-yellow ml-auto" v-else>
-              <IconFileClock class="mr-2 fill-yellow" height="16" width="16" />
-              <span>Chờ chấm điểm</span>
-            </div>
-          </div>
-        </div>
+          :lesson="lesson"
+        />
       </div>
     </div>
   </div>
@@ -82,6 +49,7 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
+import ElearningProgramCourseItem from "~/components/page/elearning/study/ElearningProgramCourseItem";
 
 export default {
   components: {
@@ -92,6 +60,7 @@ export default {
     IconFileCheckAlt,
     IconFileEditAlt,
     IconFileCheck,
+    ElearningProgramCourseItem,
   },
   props: {
     data: {
@@ -105,6 +74,14 @@ export default {
       ids: [],
       check: {},
     };
+  },
+
+  created() {
+    console.log(this.data, this.progress);
+  },
+
+  updated() {
+    console.log(this.data, this.progress);
   },
 
   methods: { get },

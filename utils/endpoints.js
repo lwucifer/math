@@ -118,6 +118,7 @@ export const STUDY_ELEARNING_PROGRESS = `${SCHOOLLY_ALIAS}/elearning/study/elear
 export const STUDY_QUESTION_LIKE = `${SCHOOLLY_ALIAS}/elearning/study/interactive/question/like`;
 export const STUDY_QUESTION_ADD_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer`;
 export const STUDY_QUESTION_LIKE_ANSWER = `${SCHOOLLY_ALIAS}/elearning/study/interactive/answer/like`;
+export const STUDY_LESSON = `${SCHOOLLY_ALIAS}/streaming/video`;
 
 /**
  * SCHOOL
