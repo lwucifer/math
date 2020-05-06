@@ -168,7 +168,10 @@ export default {
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
 
-      if (get(this, "info.is_study", false)) {
+      if (
+        get(this, "info.is_study", false) ||
+        !get(this, "info.elearning_price.free", true)
+      ) {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
