@@ -157,9 +157,14 @@ const mutations = {
             _notiUnread && _notiUnread.total_unread ? _notiUnread.total_unread : 0;
     },
     [mutationTypes.SOCIAL_NOTI.REVICE_NOTI](state, _noti) {
-        console.log("[REVICE_NOTI]", state.notis, _noti);
-        if (_noti) {}
+        // console.log("[REVICE_NOTI]", state.notis, _noti);
+        if (_noti) {
+            state.notiUnread += 1;
+        }
         // state.notis.listNotification.unshift(_noti);
+    },
+    [mutationTypes.SOCIAL_NOTI.COMMIT_NOTI_UNREAD](state, _commitNotiUnread) {
+        state.notiUnread = _commitNotiUnread;
     },
 };
 

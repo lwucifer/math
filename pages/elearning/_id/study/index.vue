@@ -1,13 +1,17 @@
 <template>
   <div>
     <HeaderCourse />
-    <div class="container elearning-lesson">
+    <div class="container elearning-lesson" v-if="loading">Loading</div>
+    <div class="container elearning-lesson" v-else>
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
             <div class="box11">
               <div class="elearning-lesson_image">
-                <img src="https://picsum.photos/750/422" alt />
+                <Streaming
+                  url="http://202.134.19.25:1935/vod_dev/_definst_/mp4:https/20200416164926546_f694b2127dfebed665c38e821612767054202ee5508452c52d2e8cff3bc770f9.mp4/playlist.m3u8?token=6e0ea6b6-3dc0-4135-b884-6b3029601b6d"
+                />
+                <!-- <img src="https://picsum.photos/750/422" alt /> -->
               </div>
               <div class="elearning-lesson__main-nav">
                 <a
@@ -64,6 +68,7 @@ import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
+import Streaming from "~/components/page/elearning/study/Streaming";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -78,6 +83,7 @@ export default {
     HeaderCourse,
     ElearningInfo,
     ElearningQuestion,
+    Streaming,
   },
 
   created() {
@@ -105,11 +111,15 @@ export default {
           },
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getInteractiveQuestion(),
         getProgress(),
       ]);
+
+      this.loading = false;
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
@@ -131,6 +141,7 @@ export default {
   data() {
     return {
       type: "summary",
+      loading: true,
       auth: AUTH,
       comments: COMMENTS,
       info: null,
@@ -157,7 +168,7 @@ export default {
   },
 
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
   },
 };
 </script>
