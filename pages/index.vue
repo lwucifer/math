@@ -757,7 +757,7 @@ export default {
      */
     async feedInfiniteHandler($state) {
       const getData = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.GET_FEEDS}`,
+        `social/${actionTypes.SOCIAL.GET_FEEDS_INFINITE}`,
         {
           params: {
             page: get(this, "feeds.page.number", 0) + 1

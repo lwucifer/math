@@ -77,6 +77,13 @@ export const EXERCISE_CATEGORIES = {
     TEST: "TEST",
 };
 
+export const EXERCISE_STATUS = {
+    NONE: "NONE",
+    PENDING: "PENDING",
+    FAILED: "FAILED",
+    PASSED: "PASSED"
+}
+
 export const SUBMISSION_RESULTS = {
     PASSED: "PASSED",
     FAILED: "FAILED",
