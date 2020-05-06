@@ -149,6 +149,7 @@ export const TEACHING_OLCLASS_LESSON_SESSIONS = {
 
 export const TEACHING_OLCLASS_LESSONS = {
     SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
+    SET_TEACHING_OLCLASS_LESSON_INFO: "setTeachingOlclassLessonInfo",
 };
 
 export const CREATING_ANSWER = {
