@@ -14,7 +14,7 @@
     display: inline-flex;
     align-items: center;
     background-color: #fff;
-    padding: .5rem 1.5rem;
+    padding: .5rem 1rem;
     cursor: pointer;
     white-space: nowrap;
     width: 100%;
@@ -59,7 +59,7 @@
     position: relative;
     display: block;
     cursor: pointer;
-    padding: .5rem 1rem .5rem (1rem + .8rem);
+    padding: .7rem 1rem .7rem (1rem + 1.6rem);
     white-space: nowrap;
 
     &:hover, &.active {
@@ -110,6 +110,15 @@
     height: 100%;
 }
 
+.app-select__checked-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    margin-top: -.4rem;
+    font-size: .8rem;
+    margin-right: .8rem;
+}
+
 // Mode = 'tags'
 .app-select--tags {
     .app-select__selected {
@@ -149,13 +158,6 @@
     }
 }
 
-.app-slect__checked-icon {
-    position: absolute;
-    left: 1rem;
-    font-size: .8rem;
-    margin-right: .8rem;
-}
-
 // Searchable
 .app-select--searchable {
     &.active {
@@ -170,5 +172,10 @@
 .app-select--size-sm {
     .app-select__selected {
         height: 3.2rem;
+    }
+
+    .app-select__option {
+        padding: .5rem 1rem .5rem (1rem + 1.6rem);
+        font-size: 1.3rem;
     }
 }

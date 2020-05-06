@@ -91,7 +91,7 @@
         <span class="app-select__arrow">
           <!--Slot for change the caret icon-->
           <slot name="placeholder-icon">
-            <IconExpandMore />
+            <IconExpandMore class="icon d-block" />
           </slot>
         </span>
       </div>
@@ -108,7 +108,7 @@
           :key="option.value"
           @click="handleClickOption(option)"
         >
-          <span v-if="option.value === value" class="app-slect__checked-icon">
+          <span v-if="option.value === value" class="app-select__checked-icon">
             <IconTick class="icon" />
           </span>
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
