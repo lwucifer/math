@@ -158,6 +158,8 @@ export default {
         }
       } else if (type == TRANSACTION_STATUSES.FAILED) {
         return { "text-error": true };
+      }  else if (type == TRANSACTION_STATUSES.CANCEL_SUCCESS) {
+        return { "text-default": true };
       } else {
         return {};
       }

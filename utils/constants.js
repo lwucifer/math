@@ -144,4 +144,5 @@ export const TRANSACTION_STATUSES = {
     FAILED: '-1',
     PENDING: '0',
     CANCEL: '2',
+    CANCEL_SUCCESS: '-2',
 }
