@@ -17,13 +17,13 @@
           </n-link>
         </td>
       </template>
-
+      
       <template v-slot:cell(type)="{row}">
         <td>
           {{ get(row, 'type', '') | exerciseTypeFilter }}
         </td>
       </template>
-  
+      
       <template v-slot:cell(rate)="{row}">
         <td>
           <v-popover
@@ -36,30 +36,30 @@
               <span class="status-item status-item--success d-inline-block">
                 {{get(row, 'passed_percent', 0)}}%
               </span>
-                  <span class="status-item status-item--fail d-inline-block">
+              <span class="status-item status-item--fail d-inline-block">
                 {{get(row, 'failed_percent', 0)}}%
               </span>
-                  <span class="status-item status-item--pending d-inline-block">
+              <span class="status-item status-item--pending d-inline-block">
                 {{get(row, 'pending_percent', 0)}}%
               </span>
             </div>
-    
+            
             <template slot="popover" class="tooltip-detail">
               <div>
                 <rate-status
-                  :total="get(row, 'total_students', 0)"
-                  :passed="get(row, 'passed', 0)"
-                  :failed="get(row, 'failed', 0)"
-                  :pending="get(row, 'pending', 0)"
+                  total="1000"
+                  passed="200"
+                  failed="300"
+                  pending="500"
                 >
                 </rate-status>
               </div>
             </template>
-  
+          
           </v-popover>
         </td>
       </template>
-
+      
       <template v-slot:cell(created)="{row}">
         <td>
           {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
@@ -74,13 +74,13 @@
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
   import { ELEARNING_TYPES } from "~/utils/constants"
-
+  
   export default {
     components: {
       IconArrow,
       RateStatus
     },
-
+    
     props: {
       list: {
         type: Array,
@@ -105,7 +105,7 @@
         default: false
       }
     },
-
+    
     filters: {
       exerciseTypeFilter: function(val) {
         const MATCHED_DATA = {
@@ -113,11 +113,11 @@
           [ELEARNING_TYPES.LECTURE]: 'Bài giảng'
         }
         if (MATCHED_DATA.hasOwnProperty(val))
-        return MATCHED_DATA[val]
+          return MATCHED_DATA[val]
         return '-'
       }
     },
-
+    
     data() {
       return {
         heads: [
@@ -151,7 +151,7 @@
         ],
       }
     },
-
+    
     computed: {
     },
     methods: {

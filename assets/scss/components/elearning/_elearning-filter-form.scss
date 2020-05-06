@@ -7,8 +7,7 @@
     }
 
     &__item {
-        margin: 0 1rem 2rem 1rem;
-        display: inline-block;
+        margin: 0 0.6rem 2rem 0.6rem;
         display: flex;
         align-items: center;
 
@@ -59,7 +58,7 @@
         border: 1px solid #eee;
         display: flex;
         height: 3.2rem;
-        padding: 0 .5rem;
+        padding: 0;
         width: 29rem;
 
         .app-input,

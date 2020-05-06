@@ -55,7 +55,7 @@
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
   import { ELEARNING_TYPES, ELEARNING_STATUSES } from '~/utils/constants'
-
+  
   export default {
     components: {
       IconFilter,
