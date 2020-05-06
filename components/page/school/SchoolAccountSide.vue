@@ -97,7 +97,7 @@ export default {
       const data = [];
       const currentRole = this.get(this, "profile.role.authority", false);
       if (currentRole) {
-        const menuLeng = this.getAuthMenu.length;
+        const menuLeng = this.getAuthMenu ? this.getAuthMenu.length : 0;
         for (let i = 0; i < menuLeng; i++) {
           const tmp = this.getAuthMenu[i];
           if (tmp.roles.includes(currentRole)) {

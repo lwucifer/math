@@ -84,6 +84,10 @@
           {
             value: 1,
             text: 'Thành công'
+          },
+          {
+            value: -2,
+            text: 'Đã Huỷ'
           }
         ],
         opts:[
