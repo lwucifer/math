@@ -36,6 +36,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
+  
   components: {
     AccountSide,
     AccountTimeline,

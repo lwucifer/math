@@ -230,7 +230,7 @@ export default {
   methods: {
     get,
     ...mapMutations("auth", ["removeToken"]),
-    ...mapMutations("notifications", ["reviceNoti"]),
+    ...mapMutations("notifications", ["reviceNoti", "commitNotiUnread"]),
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
@@ -273,6 +273,11 @@ export default {
       if (isvisible && this.checkPayload) {
         this.$refs.ulNoti.scrollTop = 0;
         this.checkPayload = false;
+      }
+
+      // if isvisible noti == true and number noti > 0
+      if (isvisible && this.notiUnread > 0) {
+        this.commitNotiUnread(0);
       }
     },
     async notiInfiniteHandler($state) {

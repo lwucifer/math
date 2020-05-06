@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="color-primary mb-3">{{ title }}</h5>
+    <h5 class="color-primary mb-3" v-if="title">{{ title }}</h5>
     <div class="elearning-manager-content__title__nav" v-if="tabs.length > 0">
       <a
         v-for="(item, index) in tabs"

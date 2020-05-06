@@ -45,8 +45,6 @@ module.exports = {
         FB_APP_ID: process.env.FB_APP_ID,
         FB_MEASUREMENT_ID: process.env.FB_MEASUREMENT_ID,
         FB_FCM_PUBLIC_VAPI_KEY: process.env.FB_FCM_PUBLIC_VAPI_KEY,
-        ZOOM_API_KEY: process.env.ZOOM_API_KEY,
-        ZOOM_API_SECRET: process.env.ZOOM_API_SECRET,
     },
 
     /**
@@ -77,7 +75,7 @@ module.exports = {
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
         { src: "@/plugins/vue-input-number.js" },
-        // { src: "@/plugins/zoom.js", ssr: false },
+        { src: '@/plugins/streaming.js', ssr: false }
     ],
     /**
      * Global middleware
@@ -155,7 +153,7 @@ module.exports = {
             ],
             // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
             // only set this true for testing and remember to always clear your browser cache in development
-            dev: true
+            dev: false
         }
     },
 

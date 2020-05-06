@@ -136,5 +136,6 @@ export const WITHDRAWAL_STATUSES = {
 export const TRANSACTION_STATUSES = {
     SUCCESS: '1',
     FAILED: '-1',
-    PENDING: '0'
+    PENDING: '0',
+    CANCEL: '2',
 }

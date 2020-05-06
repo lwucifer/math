@@ -50,6 +50,7 @@ export const ACCOUNT_LINK = {
 
 export const ACCOUNT_TRANSACTIONS = {
     SET_ACCOUNT_TRANSACTIONS_LIST: "setAccountTransactionList",
+    SET_FORCE_GET_TRANSACTIONS_LIST: "setForceGetTransactionList",
 };
 
 export const ACCOUNT_REVENUE = {
@@ -333,6 +334,14 @@ export const ELEARNING_STUDY_ARCHIVE = {
     SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete",
 };
 
+export const ELEARNING_STUDY_EXERCISE = {
+    SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
+    SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
+    SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
+    SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
+};
+
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -393,6 +402,7 @@ export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
     REVICE_NOTI: "reviceNoti",
+    COMMIT_NOTI_UNREAD: "commitNotiUnread",
 };
 
 export const SOCIAL_FRIEND = {

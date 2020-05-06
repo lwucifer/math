@@ -26,6 +26,8 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 const ElearningTab = () => import("./tabs/elearning");
 const SocialTab = () => import("./tabs/social");
 export default {
+    layout: 'account-info',
+    
     components:{
         SchoolAccountSide,
         ElearningTab,

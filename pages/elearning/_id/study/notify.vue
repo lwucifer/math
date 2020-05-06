@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import ElearningChoiceQuestion from "~/components/page/elearning/course/ElearningChoiceQuestion";
 import ElearningEssayQuestion from "~/components/page/elearning/course/ElearningEssayQuestion";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";

@@ -13,6 +13,9 @@ import FriendInvite from "~/services/social/Friendinvite";
 import Photos from "~/services/social/photos";
 import TagPhotos from "~/services/social/tagPhoto";
 import Withdrawals from "~/services/account/Withdrawals";
+import Friend from "~/services/social/friend";
+// import FriendInvite from "~/services/social/Friendinvite";
+
 /**
  * initial state
  */
@@ -25,6 +28,7 @@ const state = () => ({
     profileList: {},
     inviteList: {},
     withdrawalsList: {},
+    forceGetTransactions: false,
 });
 
 /**
@@ -300,6 +304,61 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.SOCIAL_FRIEND.LIST]({ commit }, payload) {
+        try {
+            const { data: result = {} } = await new Friend(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[SocialFriend] list", result);
+
+            // set to mutation
+            commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST, result || []);
+            return result;
+        } catch (err) {
+            console.log("[SocialFriend] list.err", err);
+            return err;
+        }
+    },
+
+    // async [actionTypes.SOCIAL_FRIEND.LIST_INVITE]({ commit }, payload) {
+    //     try {
+    //         const { data: result = {} } = await new FriendInvite(this.$axios)[
+    //             actionTypes.BASE.LIST
+    //         ](payload);
+    //         console.log("[FriendInvite] list", result);
+
+    //         // set to mutation
+    //         commit(mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST, result || []);
+    //         return result;
+    //     } catch (err) {
+    //         console.log("[FriendInvite] list.err", err);
+    //         return err;
+    //     }
+    // },
+
+    async [actionTypes.SOCIAL_FRIEND.INVITE_FRIEND]({ commit }, payload) {
+        try {
+            const data = await new Friend(this.$axios)[actionTypes.BASE.ADD](payload);
+            console.log("[Friend] add", data);
+            return data;
+        } catch (err) {
+            console.log("[Friend] add.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.SOCIAL_FRIEND.DELETE_FRIEND]({ commit }, payload) {
+        try {
+            const data = await new Friend(this.$axios)[actionTypes.BASE.DELETE](
+                payload
+            );
+            console.log("[Friend] delete", data);
+            return data;
+        } catch (err) {
+            console.log("[Friend] delete.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -319,6 +378,13 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_TRANSACTIONS_LIST", _transactionsList);
         state.transactionsList = _transactionsList;
+    },
+    [mutationTypes.ACCOUNT_TRANSACTIONS.SET_FORCE_GET_TRANSACTIONS_LIST](
+        state,
+        _isForce
+    ) {
+        console.log("SET_FORCE_GET_TRANSACTIONS_LIST", _isForce);
+        state.forceGetTransactions = _isForce;
     },
     [mutationTypes.ACCOUNT_REVENUE.SET_ACCOUNT_REVENUE_LIST](
         state,
@@ -369,6 +435,12 @@ const mutations = {
     ) {
         state.postTagPhotoList = _postTagPhotoList;
     },
+    [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_LIST](state, _friendList) {
+        state.friendList = _friendList;
+    },
+    // [mutationTypes.SOCIAL.SET_SOCIAL_FRIEND_INVITE_LIST](state, _inviteList) {
+    //     state.inviteList = _inviteList;
+    // },
 };
 
 export default {
