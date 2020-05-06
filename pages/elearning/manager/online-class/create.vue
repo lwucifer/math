@@ -11,9 +11,10 @@
           <app-button full-width square normal>Tạo phòng học</app-button>
         </div>
         <div class="col-md-9">
+          <h5 class="page-title">
+            Tạo phòng học online
+          </h5>
           <div class="olclasses-create-main box">
-            <h5 class="color-primary mb-3">Tạo phòng học online</h5>
-            <hr />
             <div class="mt-4">
               <div class="form-item">
                 <label>
@@ -217,7 +218,6 @@
               <app-button square size="sm" normal color="info" class="mr-3" @click="fnCancel">Hủy</app-button>
               <app-button square size="sm" normal @click="fnSave" :disabled="!fullParams">Tạo lịch</app-button>
             </div>
-            <hr />
           </div>
         </div>
       </div>

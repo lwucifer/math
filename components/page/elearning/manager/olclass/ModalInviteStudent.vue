@@ -77,17 +77,17 @@ export default {
 
     arrayToStringIds(data) {
       return data.reduce((result, item) => {
-        const com = result ? ',' : '';
-        return result = result + com + item.id;
+        const com = result ? '","' : '';
+        return result = result + com + item;
       }, '')
     },
 
     async hanldeInvate() {
-      if (this.studentList.length > 0) {
+      if (this.arrMember.length > 0) {
         const online_class_id = this.$route.params.id ? this.$route.params.id : "";
         let params = {
           online_class_id: online_class_id,
-          student_ids: [this.arrayToStringIds(this.studentList)]
+          student_ids: [...this.arrMember]
         };
         try {
           await this.$store.dispatch(

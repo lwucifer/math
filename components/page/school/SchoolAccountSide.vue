@@ -65,14 +65,6 @@ export default {
       if (!!accountObj) {
         return [
           {
-            label: "Lịch sử rút tiền",
-            key: 2,
-            icon: "history.svg",
-            link: `/${accountObj.id}/info/withdrawals`,
-            roles: [USER_ROLES.ROLE_TEACHER]
-          },
-
-          {
             label: "Lịch sử giao dịch",
             key: 4,
             icon: "history.svg",
@@ -105,7 +97,7 @@ export default {
       const data = [];
       const currentRole = this.get(this, "profile.role.authority", false);
       if (currentRole) {
-        const menuLeng = this.getAuthMenu.length;
+        const menuLeng = this.getAuthMenu ? this.getAuthMenu.length : 0;
         for (let i = 0; i < menuLeng; i++) {
           const tmp = this.getAuthMenu[i];
           if (tmp.roles.includes(currentRole)) {

@@ -127,3 +127,8 @@
 .clearfix {
     @include clearfix;
 }
+
+.text-clickable {
+    cursor: pointer;
+    // text-decoration: underline;
+}

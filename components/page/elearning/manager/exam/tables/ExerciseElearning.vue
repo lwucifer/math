@@ -13,7 +13,7 @@
             class
             title="Chi tiết"
             :to="`/elearning/manager/exams/list?elearning_id=${row.id}`">
-            <IconArrow />
+            <IconArrow height="13"/>
           </n-link>
         </td>
       </template>
@@ -21,6 +21,42 @@
       <template v-slot:cell(type)="{row}">
         <td>
           {{ get(row, 'type', '') | exerciseTypeFilter }}
+        </td>
+      </template>
+  
+      <template v-slot:cell(rate)="{row}">
+        <td>
+          <v-popover
+            offset="10"
+            trigger="hover"
+            placement="top"
+            popover-class="tooltip--rate"
+          >
+            <div>
+              <span class="status-item status-item--success d-inline-block">
+                {{get(row, 'passed_percent', 0)}}%
+              </span>
+                  <span class="status-item status-item--fail d-inline-block">
+                {{get(row, 'failed_percent', 0)}}%
+              </span>
+                  <span class="status-item status-item--pending d-inline-block">
+                {{get(row, 'pending_percent', 0)}}%
+              </span>
+            </div>
+    
+            <template slot="popover" class="tooltip-detail">
+              <div>
+                <rate-status
+                  :total="get(row, 'total_students', 0)"
+                  :passed="get(row, 'passed', 0)"
+                  :failed="get(row, 'failed', 0)"
+                  :pending="get(row, 'pending', 0)"
+                >
+                </rate-status>
+              </div>
+            </template>
+  
+          </v-popover>
         </td>
       </template>
 
@@ -35,13 +71,14 @@
 
 <script>
   import { get } from "lodash"
-  import IconArrow from "~/assets/svg/icons/arrow.svg?inline"
-
+  import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
+  import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
   import { ELEARNING_TYPES } from "~/utils/constants"
 
   export default {
     components: {
-      IconArrow
+      IconArrow,
+      RateStatus
     },
 
     props: {
@@ -95,6 +132,11 @@
           {
             name: "exercises",
             text: "Số bài tập",
+            sort: true
+          },
+          {
+            name: "rate",
+            text: "Tỷ lệ hoàn thành",
             sort: true
           },
           {

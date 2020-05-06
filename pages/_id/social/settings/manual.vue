@@ -24,6 +24,7 @@ import AsideBox from "~/components/layout/asideBox/AsideBox";
 import IconExclamationO from "~/assets/svg/icons/exclamation-o.svg?inline";
 
 export default {
+  
   components: {
     AsideBox,
     IconExclamationO

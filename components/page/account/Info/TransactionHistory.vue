@@ -54,6 +54,13 @@ export default {
         this.list = get(this,"transactionsList.data.content",[]);
         this.pagination = get(this,"transactionsList.data.page",{});
       }
+    },
+
+    forceGetTransactions(_newVal, _oldVal) {
+      console.log("[forceGetTransactions] watch", _newVal);
+      if(_newVal != _oldVal){
+        this.fetchTransaction();
+      }
     }
   },
   methods: {
@@ -98,14 +105,16 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("account", {
-      transactionsList: "transactionsList",
-    })
+    ...mapState("account", [
+      "transactionsList",
+      "forceGetTransactions",
+    ])
   },
   created() {
     this.getDateSelect();
     this.fetchTransaction();
-  }
+  },
+
 };
 </script>
 

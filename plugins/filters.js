@@ -141,7 +141,9 @@ export function transactionStatus2Txt(str = '') {
   const MATCHED_DATA = {
     [TRANSACTION_STATUSES.SUCCESS]: 'Thành công',
     [TRANSACTION_STATUSES.FAILED]: 'Thất bại',
-    [TRANSACTION_STATUSES.PENDING]: 'Chờ duyệt',
+    [TRANSACTION_STATUSES.PENDING]: 'TTLại', // can repay if status == pending
+    [TRANSACTION_STATUSES.CANCEL]: 'Huỷ', // can repay if status == pending
+    [TRANSACTION_STATUSES.CANCEL_SUCCESS]: 'Đã Huỷ', // can repay if status == pending
   }
   if (MATCHED_DATA.hasOwnProperty(str))
     return MATCHED_DATA[str]

@@ -5,16 +5,21 @@
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
+        <h5 class="page-title">
+          Lớp học online
+        </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Lịch học online</h5>
             <div class="elearning-manager-content__title__nav">
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Đang diễn ra</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Đã lên lịch</a>
               <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Đang soạn</a>
               <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đã kết thúc</a>
             </div>
-            <hr class />
+            <n-link :to="'/elearning/manager/online-class/create'" class="btn btn--size-sm btn--color-info btn--square btn-right">
+              <IconPlusCircle class="fill-white mr-2"/>
+              <span class="color-white">Tạo phòng học online</span>
+            </n-link>
           </div>
 
           <div class="elearning-manager-content__main">
@@ -29,6 +34,7 @@
 </template>
 
 <script>
+  import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
@@ -43,6 +49,7 @@
     
     components: {
       ElearningManagerSide,
+      IconPlusCircle,
       Tab1,
       Tab2,
       Tab3,

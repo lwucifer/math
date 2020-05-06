@@ -1,6 +1,6 @@
+import * as actionTypes from "~/utils/action-types";
 import * as APIs from "../utils/endpoints";
 import BaseService from "./BaseService";
-import * as actionTypes from "~/utils/action-types";
 
 export default class Payment extends BaseService {
   constructor($axios) {
@@ -40,6 +40,31 @@ export default class Payment extends BaseService {
       `${APIs.PAYMENT_CREATE_ORDER}`,
       payload
     );
+    const result = data ? data : {};
+    return result;
+  }
+
+  /**
+   * to repay if order is pending
+   * @param {RePayReq} payload 
+   */
+  async [actionTypes.PAYMENT.REPAY](payload) {
+    console.log("[Payment][REPAY]", payload);
+    const { data } = await this.$axios.post(
+      `${APIs.PAYMENT_REPAY}`,
+      payload
+    );
+    const result = data ? data : {};
+    return result;
+  }
+
+  /**
+   * to cancel if order is pending
+   * @param {RePayReq} payload 
+   */
+  async [actionTypes.PAYMENT.CANCEL_PAY](transactionId) {
+    console.log("[Payment][CANCEL_PAY]", transactionId);
+    const { data } = await this.$axios.post(`${APIs.PAYMENT_CANCEL}/${transactionId}`);
     const result = data ? data : {};
     return result;
   }

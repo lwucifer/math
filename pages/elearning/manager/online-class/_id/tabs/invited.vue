@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-wrapper">
     <!--Options group-->
-    <div class="filter-form mb-4">
+    <div class="filter-form">
       <div class="filter-form__item ml-auto" @click="openModal = true">
         <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
           <IconPlusCircle class="fill-white" height="14" width="14"/>

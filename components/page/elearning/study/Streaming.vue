@@ -1,9 +1,10 @@
 <template>
-  <section class="container">
+  <section class="stream-frame">
     <div
-      class="video-player-box"
+      class="video-player-box vjs-big-play-centered"
       :playsinline="playsinline"
       @play="onPlayerPlay($event)"
+      @error="onPlayerError($event)"
       @pause="onPlayerPause($event)"
       @ended="onPlayerEnded($event)"
       @loadeddata="onPlayerLoadeddata($event)"
@@ -29,6 +30,29 @@ export default {
 
   props: {
     url: String,
+    thumbnail: {
+      type: String,
+    },
+  },
+
+  updated() {
+    console.log(this.url);
+  },
+
+  watch: {
+    url: {
+      handler: function() {
+        console.log(this.url);
+        this.$forceUpdate();
+      },
+      deep: true,
+    },
+    playerOptions: {
+      handler: function() {
+        console.log(this.playerOptions);
+      },
+      deep: true,
+    },
   },
 
   data() {
@@ -42,15 +66,17 @@ export default {
       // videojs options
       playerOptions: {
         muted: true,
-        language: "en",
+        fluid: true,
+        // responsive: true,
+        language: "vi",
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [
           {
-            type: "application/x-mpegURL",
+            // type: "application/x-mpegURL",
             src: this.url,
           },
         ],
-        // poster: "/static/images/author.jpg",
+        poster: this.thumbnail,
       },
     };
   },
@@ -61,6 +87,9 @@ export default {
     // listen event
     onPlayerPlay(player) {
       console.log("player play!", player);
+    },
+    onPlayerError(player) {
+      console.log("player error!", player);
     },
     onPlayerPause(player) {
       console.log("player pause!", player);
@@ -100,14 +129,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.container {
-  width: 60%;
-  margin: 0 auto;
-  padding: 50px 0;
-
-  .video-player-box {
-    min-height: 200px;
-  }
-}
+<style lang="scss">
+@import "~/assets/scss/components/elearning/course/_elearning-stream.scss";
 </style>
