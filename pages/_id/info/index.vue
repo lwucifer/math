@@ -40,6 +40,8 @@ import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 import { SCHOOL } from "~/server/fakedata/school/test";
 
 export default {
+  layout: 'account-info',
+  
   components: {
     IconPhoto,
     IconPlus,

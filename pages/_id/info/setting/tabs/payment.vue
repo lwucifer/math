@@ -45,6 +45,9 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 export default {
+
+  layout: 'account-info',
+  
   components:{
     IconCiclePlus,
     IconCheck,

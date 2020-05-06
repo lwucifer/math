@@ -60,6 +60,7 @@ import * as actionTypes from "~/utils/action-types";
 
 export default {
   name: "E-learning",
+  layout: 'account-info',
 
   components: {
     ElearningItem,
