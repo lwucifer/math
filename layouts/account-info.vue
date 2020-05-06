@@ -10,6 +10,8 @@
 <script>
 import TheHeaderClient from "~/components/layout/header/HeaderClient"
 export default {
+  middleware: ["authenticated"],
+  
   components: {
     TheHeaderClient
   }

@@ -236,7 +236,10 @@ const actions = {
                 payload
             );
             // set to mutation
-            commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE, result);
+            commit(
+                mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE,
+                result.data.listMessage
+            );
             console.log("[MessageType] post", result);
             return result;
         } catch (err) {

@@ -256,6 +256,7 @@
   
   export default {
     name: "E-learning",
+    layout: 'account-info',
     
     components: {
       IconArrowLeft,

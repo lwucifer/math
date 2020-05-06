@@ -485,6 +485,8 @@ export const PAYMENT = {
     POST_ORDER: "postOder",
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
+    REPAY: "postRepay",
+    CANCEL_PAY: "cancelPay",
 };
 
 export const CART = {

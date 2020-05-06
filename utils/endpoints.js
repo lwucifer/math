@@ -174,6 +174,8 @@ export const TEACHING_VOTES = `/elearning/teaching/votes`;
 export const PAYMENT_CREATE_ORDER = `/elearning/order`;
 export const PAYMENT_HASHKEY = `/elearning/payment/transaction/hashkey/generate`;
 export const PAYMENT_VALIDATE_TRANSACTION = `/elearning/payment/transaction/validate`;
+export const PAYMENT_REPAY = `/elearning/payment/repay`;
+export const PAYMENT_CANCEL = `/elearning/payment/cancel`;
 
 /**
  * CART

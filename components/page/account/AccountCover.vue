@@ -192,10 +192,10 @@ export default {
     ...mapActions("account", [
       "accountPersonalEditAvatar",
       "accountPersonalEditCover",
+      "inviteFriend",
       "accountPersonalList"
     ]),
     ...mapActions("social", [
-      "inviteFriend",
       "getListInvite",
       "deleteFriend",
       "deleteFollow",
