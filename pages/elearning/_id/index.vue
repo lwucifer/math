@@ -1,5 +1,6 @@
 <template>
-  <div class="container elearning-view">
+  <div class="container elearning-view" v-if="loading">Loading...</div>
+  <div class="container elearning-view" v-else>
     <Breadcrumb />
 
     <div class="row">
@@ -109,6 +110,7 @@ export default {
   data() {
     return {
       info: null,
+      loading: true,
       levels: [],
       subjects: [],
       program: [],
@@ -203,11 +205,15 @@ export default {
           params,
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getProgram(),
         getRelatedCourses(),
       ]);
+
+      this.loading = false;
 
       this.info = get(data, "0.data", null);
       this.program = get(data, "1.data", []);

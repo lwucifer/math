@@ -1,13 +1,22 @@
 <template>
   <div>
     <HeaderCourse />
-    <div class="container elearning-lesson">
+    <div class="container elearning-lesson" v-if="loading">Loading...</div>
+    <div class="container elearning-lesson" v-else>
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
             <div class="box11">
               <div class="elearning-lesson_image">
-                <img src="https://picsum.photos/750/422" alt />
+                <Streaming
+                  v-if="type_study_lesson === 'video'"
+                  :url="url_video_streaming"
+                />
+                <img
+                  src="https://picsum.photos/750/422"
+                  alt
+                  v-if="type_study_lesson === 'image'"
+                />
               </div>
               <div class="elearning-lesson__main-nav">
                 <a
@@ -33,11 +42,7 @@
             </div>
           </div>
           <div class="col-md-4">
-            <ElearningCourseSide
-              :info="info"
-              :data="data"
-              :progress="progress"
-            />
+            <ElearningCourseSide :info="info" :progress="progress" />
           </div>
         </div>
       </div>
@@ -46,7 +51,7 @@
 </template>
 
 <script>
-import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
@@ -64,6 +69,11 @@ import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
+import Streaming from "~/components/page/elearning/study/Streaming";
+import {
+  STUDY_LESSON_TYPE_VIDEO,
+  STUDY_LESSON_TYPE_IMAGE,
+} from "~/utils/event-type";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -78,6 +88,7 @@ export default {
     HeaderCourse,
     ElearningInfo,
     ElearningQuestion,
+    Streaming,
   },
 
   created() {
@@ -105,11 +116,15 @@ export default {
           },
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getInteractiveQuestion(),
         getProgress(),
       ]);
+
+      this.loading = false;
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
@@ -131,33 +146,42 @@ export default {
   data() {
     return {
       type: "summary",
-      auth: AUTH,
-      comments: COMMENTS,
+      loading: true,
       info: null,
       interactive_questions: null,
       progress: null,
-      data: {
-        number: 9,
-        times: "9 giờ 30 phút",
-        classes: [
-          {
-            id: 1,
-            name: "Bài giảng online cho khoá học",
-            done: false,
-          },
-          {
-            id: 2,
-            name: "Bài giảng online cho khoá học",
-            done: true,
-          },
-        ],
-        list: COURSE_LESSON,
-      },
+      type_study_lesson: "image",
+      url_video_streaming: "",
     };
   },
 
+  watch: {
+    event_study_lesson: {
+      handler: function() {
+        const type = get(this, "event_study_lesson.name", "");
+
+        if (type === STUDY_LESSON_TYPE_VIDEO) {
+          const url = get(
+            this,
+            "event_study_lesson.data.stream_urls.hls_url",
+            ""
+          );
+          this.type_study_lesson = "video";
+          this.url_video_streaming = url;
+        }
+
+        if (type === STUDY_LESSON_TYPE_IMAGE) {
+          this.type_study_lesson = "image";
+          this.url_video_streaming = "";
+        }
+      },
+      deep: true,
+    },
+  },
+
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("event", { event_study_lesson: "payload" }),
   },
 };
 </script>

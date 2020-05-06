@@ -110,7 +110,33 @@ const actions = {
       console.log("[VALIDATE_TRANSACTION] list.error", error);
       return error;
     }
-  }
+  },
+
+  async [actionTypes.PAYMENT.REPAY]({ commit }, payload) {
+    try {
+      const result = await new Payment(this.$axios)[actionTypes.PAYMENT.REPAY](
+        payload
+      );
+      console.log("[REPAY] result", result);
+      return result;
+    } catch (error) {
+      console.log("[REPAY] error", error);
+      return error;
+    }
+  },
+
+  async [actionTypes.PAYMENT.CANCEL_PAY]({ commit }, payload) {
+    try {
+      const result = await new Payment(this.$axios)[actionTypes.PAYMENT.CANCEL_PAY](
+        payload
+      );
+      console.log("[CANCEL_PAY] result", result);
+      return result;
+    } catch (error) {
+      console.log("[CANCEL_PAY] error", error);
+      return error;
+    }
+  },
 
 };
 

@@ -410,6 +410,13 @@ export const ELEARNING_STURY_ARCHIVE = {
     DELETE: "elearningStudyArchiveDelete",
 };
 
+export const ELEARNING_STUDY_EXERCISE = {
+    LIST_QUESTION: "elearningSudyExerciseQuestionList",
+    LIST_RESULT: "elearningSudyExerciseResultList",
+    LIST_SUBMISTION: "elearningSudyExerciseSubmissionList",
+    ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };
@@ -479,6 +486,8 @@ export const PAYMENT = {
     POST_ORDER: "postOder",
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
+    REPAY: "postRepay",
+    CANCEL_PAY: "cancelPay",
 };
 
 export const CART = {

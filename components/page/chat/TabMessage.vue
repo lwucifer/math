@@ -10,14 +10,11 @@
             style="flex: 1"
             :options="tagOptions"
             v-model="tag"
+            @change="changeUser"
             @visible-change="handleFriendsVisibleChange"
           >
-            <div
-              slot="option"
-              slot-scope="{ option }"
-              class="d-flex align-items-center"
-              @click.prevent="changeUserChat(option)"
-            >
+            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+              <!-- @click.prevent="changeUserChat(option)" -->
               <app-avatar
                 :src="option.avatar && option.avatar.low ? option.avatar.low : null"
                 size="sm"
@@ -38,7 +35,7 @@
         </div>
       </div>
 
-      <div class="aside-box__top" v-if="messagesList.length > 0">
+      <div class="aside-box__top" v-if="!isCreated">
         <div class="message-desc">
           <div class="message-decs__image">
             <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
@@ -823,7 +820,8 @@ export default {
       "getGroupList",
       "getMessageList",
       "getGroupListDetail",
-      "messageSendFile"
+      "messageSendFile",
+      "getListMessageType"
     ]),
     ...mapMutations("message", ["setEmitMessage", "emitCloseFalse"]),
     async messageInfiniteHandler($state) {
@@ -833,7 +831,7 @@ export default {
       ]({
         params: this.messageListQuery
       });
-      console.log("getData", getData);
+      console.log("getData Message", getData);
       if (getData && !getData.messages && this.messagesList.length == 0) {
         this.checkList = true;
       }
@@ -942,13 +940,6 @@ export default {
       });
     },
 
-    // async sendImgChat(fileList) {
-    //   console.log("[msg_image]", fileList);
-    //   debugger;
-    //   if (fileList.length > 0) {
-    //   }
-    // },
-
     async friendsInfiniteHandler($state) {
       const { data = {} } = await new FriendService(this.$axios)[
         ACTION_TYPE_BASE.LIST
@@ -991,10 +982,16 @@ export default {
             file_url: this.urlFileUpload,
             file_name_upload: this.urlFileNameUpload,
             message_id: this.messageId,
-            avatar: this.avatarUser.low ? this.avatarUser.low : "",
+            avatar:
+              this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
             fullname: this.fullName ? this.fullName : ""
           };
           console.log("[socket] dataEmit", dataEmit);
+          // this.getListMessageType({
+          //   params: {
+          //     room_type: 1
+          //   }
+          // });
           this.setEmitMessage(dataEmit);
           // if img or file call api group detail
           if (
@@ -1023,6 +1020,11 @@ export default {
         };
         console.log("[socket] dataEmit", dataEmit);
         this.setEmitMessage(dataEmit);
+        this.getListMessageType({
+          params: {
+            room_type: 1
+          }
+        });
       } else if (this.tag.length > 1) {
         const data = {
           type: 2,
@@ -1031,7 +1033,12 @@ export default {
         };
         this.createGroup(data).then(result => {
           if (result.success == true) {
-            this.getGroupList();
+            this.getListMessageType({
+              params: {
+                room_type: 2
+              }
+            });
+            // this.getGroupList();
             this.$toasted.show("success");
             this.$router.push(`/messages/t/${result.data.id}`);
             const dataEmit = {
@@ -1053,12 +1060,18 @@ export default {
       }
       this.removeImgSrc();
     },
-    changeUserChat(option) {
-      console.log("[option]", option, this.tag.length);
+    changeUser() {
+      console.log("[option]", this.tag.length);
       if (this.tag.length == 0) {
+        this.getMessageList({
+          params: {
+            room_id: this.$route.params.id
+          }
+        });
+      } else if (this.tag.length == 1) {
         const data = {
           type: 1,
-          members: option.id.toString(),
+          members: this.tag[0].toString(),
           name: this.name ? this.name : ""
         };
         this.createGroup(data).then(result => {
@@ -1116,6 +1129,16 @@ export default {
           ? this.roomIdPush
           : this.$route.params.id;
         this.infiniteId += 1;
+      }
+    },
+    isCreated(_newVal) {
+      console.log("_newVal", _newVal);
+      if (_newVal == false && this.tag.length > 0) {
+        this.getMessageList({
+          params: {
+            room_id: this.$route.params.id
+          }
+        });
       }
     }
   }
