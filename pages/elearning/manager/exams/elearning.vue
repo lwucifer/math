@@ -52,7 +52,7 @@
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseElearningFilter"
 import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/tables/ExerciseElearning"
-import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+// import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import { mapState } from "vuex"
 import { get } from "lodash"
@@ -68,7 +68,7 @@ export default {
   layout: "manage",
 
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     HeadTabs,
     ElearningManagerSide,
     ElearningManagerFilterForm,

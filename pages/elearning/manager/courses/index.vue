@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <breadcrumb />
+
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="2" />
@@ -169,7 +171,7 @@ const STORE_NAMESPACE = "elearning/teaching/elearning";
 
 export default {
   layout: "manage",
-  name: "E-learning",
+  name: "ManageCourse",
 
   components: {
     ElearningManagerSide,

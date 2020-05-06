@@ -61,6 +61,7 @@ export default {
     schoolNum() {
       const type = get(this, "category.type", "");
       const schoolNumKey = get(SCHOOL_TYPE[type], "schoolNumKey", "");
+      console.log("[schoolNum] schoolNumKey", this.schoolSearch, schoolNumKey)
       return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
     },
     studentNum() {
@@ -84,7 +85,8 @@ export default {
     showAll() {
       this.$emit("showAll", this.id);
     }
-  }
+  },
+
 };
 </script>
 

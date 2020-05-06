@@ -6,8 +6,8 @@
       :is-current="index === crumbs.length - 1"
       :disabled="crumb.disabled"
     >
-      <n-link v-if="index < crumbs.length - 1" :to="crumb.to">{{ crumb.name }}</n-link>
-      <span v-else>{{ crumb.name }}</span>
+      <n-link v-if="index < crumbs.length - 1" :to="crumb.to">{{ crumb.name | convertBreadcrumText(elearningInfo) }}</n-link>
+      <span v-else>{{ crumb.name | convertBreadcrumText(elearningInfo) }}</span>
     </app-breadcrumb-item>
     <IconArrowForwardIos24pxOutlined slot="separator" class="icon" />
   </app-breadcrumb>
@@ -15,6 +15,8 @@
 
 <script>
 import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
+
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -28,16 +30,14 @@ export default {
           path: "/elearning",
           name: "Elearning"
         },
-        // {
-        //   path: "/elearning/:id",
-        //   name: "Elearning test detail"
-        // },
-        // {
-        //   path: "/elearning/:id",
-        //   name: "Elearning test detail"
-        // },
       ]
     };
+  },
+
+  computed: {
+    ...mapState("elearning/public/public-info", [
+      "elearningInfo",
+    ])
   }
 };
 </script>
