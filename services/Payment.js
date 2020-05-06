@@ -62,12 +62,9 @@ export default class Payment extends BaseService {
    * to cancel if order is pending
    * @param {RePayReq} payload 
    */
-  async [actionTypes.PAYMENT.CANCEL_PAY](payload) {
-    console.log("[Payment][CANCEL_PAY]", payload);
-    const { data } = await this.$axios.post(
-      `${APIs.PAYMENT_CANCEL}`,
-      payload
-    );
+  async [actionTypes.PAYMENT.CANCEL_PAY](transactionId) {
+    console.log("[Payment][CANCEL_PAY]", transactionId);
+    const { data } = await this.$axios.post(`${APIs.PAYMENT_CANCEL}/${transactionId}`);
     const result = data ? data : {};
     return result;
   }

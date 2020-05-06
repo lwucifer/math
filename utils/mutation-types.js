@@ -50,6 +50,7 @@ export const ACCOUNT_LINK = {
 
 export const ACCOUNT_TRANSACTIONS = {
     SET_ACCOUNT_TRANSACTIONS_LIST: "setAccountTransactionList",
+    SET_FORCE_GET_TRANSACTIONS_LIST: "setForceGetTransactionList",
 };
 
 export const ACCOUNT_REVENUE = {

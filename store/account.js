@@ -28,6 +28,7 @@ const state = () => ({
     profileList: {},
     inviteList: {},
     withdrawalsList: {},
+    forceGetTransactions: false,
 });
 
 /**
@@ -377,6 +378,13 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_TRANSACTIONS_LIST", _transactionsList);
         state.transactionsList = _transactionsList;
+    },
+    [mutationTypes.ACCOUNT_TRANSACTIONS.SET_FORCE_GET_TRANSACTIONS_LIST](
+        state,
+        _isForce
+    ) {
+        console.log("SET_FORCE_GET_TRANSACTIONS_LIST", _isForce);
+        state.forceGetTransactions = _isForce;
     },
     [mutationTypes.ACCOUNT_REVENUE.SET_ACCOUNT_REVENUE_LIST](
         state,

@@ -7,11 +7,22 @@
     style="margin-left: -1.5rem; margin-right: -1.5rem;"
   >
     <template v-slot:cell(status)="{row}">
-      <td>
+      <td v-if="row.status != statusPending">
         <span
           :class="statusClass(row.status)"
           @click.prevent="handleRepayOrder(row)"
         >{{ row.status | transactionStatus2Txt }}</span>
+      </td>
+      <td v-else>
+        <span
+          :class="statusClass(row.status, 'repay')"
+          @click.prevent="handleRepayOrder(row)"
+        >{{ row.status | transactionStatus2Txt }}</span>
+
+        <span
+          :class="statusClass(row.status, 'cancel')"
+          @click.prevent="handleCancelOrder(row)"
+        >{{ statusCancel | transactionStatus2Txt }}</span>
       </td>
     </template>
   </app-table>
@@ -20,11 +31,10 @@
 <script>
 import { TRANSACTION_STATUSES } from "~/utils/constants";
 
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import qs from "qs";
 import { createRepayReq } from "~/models/payment/RepayReq";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-
 
 export default {
   props: {
@@ -84,11 +94,16 @@ export default {
           text: "Phương thức TT",
           sort: true
         }
-      ]
+      ],
+      statusPending: TRANSACTION_STATUSES.PENDING,
+      statusCancel: TRANSACTION_STATUSES.CANCEL,
     };
   },
   methods: {
-    ...mapActions("payment", ["postRepay"]),
+    ...mapActions("payment", ["postRepay", "cancelPay"]),
+    ...mapMutations("account", [
+      "setForceGetTransactionList",
+    ]),
 
     handleRepayOrder(item) {
       console.log("[handleRepayOrder]", item);
@@ -115,19 +130,33 @@ export default {
           );
           window.location.href = onepayUrlWithParams;
         } else {
-          console.log("[dosomething else]")
+          console.log("[dosomething else]");
         }
       });
+    },
+
+    handleCancelOrder(item) {
+      console.log("[handleCancelOrder]", item);
+      this.cancelPay(item.transaction_id).then(result => {
+        console.log("[cancelPay]", result);
+        if(result.success == RESPONSE_SUCCESS) {
+          this.setForceGetTransactionList(true);
+        }
+      })
     },
 
     onPageChange(e) {
       this.$emit("changedPagination", e);
     },
-    statusClass(type) {
+    statusClass(type, action) {
       if (type == TRANSACTION_STATUSES.SUCCESS) {
         return { "text-success": true };
       } else if (type == TRANSACTION_STATUSES.PENDING) {
-        return { "text-warning": true, "text-clickable": true }; // allow to click to repay
+        if(action == 'repay'){
+          return { "text-success": true, "text-clickable": true }; // allow to click to repay
+        } else {
+          return { "text-error": true, "text-clickable": true, 'ml-10': true, }; // allow to click to cancel
+        }
       } else if (type == TRANSACTION_STATUSES.FAILED) {
         return { "text-error": true };
       } else {
