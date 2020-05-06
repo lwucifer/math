@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-lesson-side">
     <OnlineClass :info="info" />
-    <ElearningProgramCourse :data="data" :progress="progress" />
+    <ElearningProgramCourse :progress="progress" />
   </div>
 </template>
 <script>
@@ -29,10 +29,6 @@ export default {
     OnlineClass,
   },
   props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
     info: {},
     progress: {},
   },

@@ -63,10 +63,6 @@ export default {
     ElearningProgramCourseItem,
   },
   props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
     progress: {},
   },
   data() {
@@ -77,11 +73,11 @@ export default {
   },
 
   created() {
-    console.log(this.data, this.progress);
+    console.log(this.progress);
   },
 
   updated() {
-    console.log(this.data, this.progress);
+    console.log(this.progress);
   },
 
   methods: { get },

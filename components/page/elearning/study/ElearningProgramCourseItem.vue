@@ -43,6 +43,10 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
+import {
+  STUDY_LESSON_TYPE_VIDEO,
+  STUDY_LESSON_TYPE_IMAGE,
+} from "~/utils/event-type";
 import StudyService from "~/services/elearning/study/Study";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
@@ -63,7 +67,17 @@ export default {
   methods: {
     get,
     async handleStuty() {
-      console.log(this.lesson)
+      console.log(this.lesson);
+
+      if (get(this, "lesson.format", "") === "HTML") {
+        const payload = {
+          name: STUDY_LESSON_TYPE_IMAGE,
+          data: "",
+        };
+        this.$store.dispatch("event/pushEvent", payload);
+        return;
+      }
+
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const lesson_id = get(this, "lesson.id", "");
       const res = await new StudyService(this.$axios)["studyLesson"](
@@ -71,7 +85,11 @@ export default {
         lesson_id
       );
       if (get(res, "success", false)) {
-        console.log(get(res, "data", null));
+        const payload = {
+          name: STUDY_LESSON_TYPE_VIDEO,
+          data: get(res, "data", null),
+        };
+        this.$store.dispatch("event/pushEvent", payload);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
