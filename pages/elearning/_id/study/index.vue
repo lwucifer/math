@@ -6,13 +6,17 @@
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
-            <div class="box11">
+            <div class="box22">
               <div class="elearning-lesson_image">
                 <Streaming
                   url="http://202.134.19.25:1935/vod_dev/_definst_/mp4:https/20200416164926546_f694b2127dfebed665c38e821612767054202ee5508452c52d2e8cff3bc770f9.mp4/playlist.m3u8?token=6e0ea6b6-3dc0-4135-b884-6b3029601b6d"
                 />
                 <!-- <img src="https://picsum.photos/750/422" alt /> -->
               </div>
+
+              <!-- <ElearningExercise /> -->
+
+              
               <div class="elearning-lesson__main-nav">
                 <a
                   :class="{ active: type === 'summary' }"
@@ -69,6 +73,7 @@ import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
+import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -84,6 +89,7 @@ export default {
     ElearningInfo,
     ElearningQuestion,
     Streaming,
+    ElearningExercise
   },
 
   created() {
