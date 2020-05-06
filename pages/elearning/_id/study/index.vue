@@ -1,7 +1,8 @@
 <template>
   <div>
     <HeaderCourse />
-    <div class="container elearning-lesson">
+    <div class="container elearning-lesson" v-if="loading">Loading</div>
+    <div class="container elearning-lesson" v-else>
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
@@ -110,11 +111,15 @@ export default {
           },
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getInteractiveQuestion(),
         getProgress(),
       ]);
+
+      this.loading = false;
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
@@ -136,6 +141,7 @@ export default {
   data() {
     return {
       type: "summary",
+      loading: true,
       auth: AUTH,
       comments: COMMENTS,
       info: null,
