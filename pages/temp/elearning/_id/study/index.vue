@@ -45,7 +45,7 @@
 
 <script>
 import ElearningCourseComment from "~/components/page/elearning/study/Question";
-import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
