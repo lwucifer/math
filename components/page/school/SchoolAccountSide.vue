@@ -65,14 +65,6 @@ export default {
       if (!!accountObj) {
         return [
           {
-            label: "Lịch sử rút tiền",
-            key: 2,
-            icon: "history.svg",
-            link: `/${accountObj.id}/info/withdrawals`,
-            roles: [USER_ROLES.ROLE_TEACHER]
-          },
-
-          {
             label: "Lịch sử giao dịch",
             key: 4,
             icon: "history.svg",
