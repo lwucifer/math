@@ -521,14 +521,17 @@ export default {
         this.groupListQuery.page = 1;
         this.infiniteId += 1;
       }
+    },
+    listMessageType(_newval) {
+      if (_newval) {
+        this.chatsListTab = [];
+        this.chatListQuery.page = 1;
+        this.groupsListTab = [];
+        this.groupListQuery.page = 1;
+        this.infiniteIdChat += 1;
+        this.infiniteId += 1;
+      }
     }
-    // listMessageType(_newval) {
-    //   if (_newval) {
-    //     this.groupsListTab = [];
-    //     this.groupListQuery.page = 1;
-    //     this.infiniteId += 1;
-    //   }
-    // }
   }
 };
 </script>
