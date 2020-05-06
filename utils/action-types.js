@@ -409,6 +409,13 @@ export const ELEARNING_STURY_ARCHIVE = {
     DELETE: "elearningStudyArchiveDelete",
 };
 
+export const ELEARNING_STUDY_EXERCISE = {
+    LIST_QUESTION: "elearningSudyExerciseQuestionList",
+    LIST_RESULT: "elearningSudyExerciseResultList",
+    LIST_SUBMISTION: "elearningSudyExerciseSubmissionList",
+    ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };

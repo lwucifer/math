@@ -11,9 +11,8 @@
       <div class="d-flex justify-content-center">
         <app-button
           class="font-weight-semi-bold mr-3"
-          color="info"
+          color="default"
           size="sm"
-          square
           @click="$emit('cancel')"
         >
           <slot name="cancelText">{{ cancelText }}</slot>
@@ -23,7 +22,6 @@
           class="font-weight-semi-bold"
           color="primary"
           size="sm"
-          square
           :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
           @click="$emit('ok')"
         >
