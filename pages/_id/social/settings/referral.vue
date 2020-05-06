@@ -78,6 +78,7 @@ import AsideBox from "~/components/layout/asideBox/AsideBox";
 import IconPages from "~/assets/svg/icons/pages.svg?inline";
 
 export default {
+  
   components: {
     AsideBox,
     IconPages

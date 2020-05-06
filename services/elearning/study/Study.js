@@ -23,4 +23,12 @@ export default class Study extends BaseService {
     });
     return data;
   }
+
+  async studyLesson(elearning_id, lesson_id) {
+    const { data } = await this.$axios.request({
+      url: `${APIs.STUDY_LESSON}/elearning/${elearning_id}/lesson/${lesson_id}/vod`,
+      method: "GET",
+    });
+    return data;
+  }
 }

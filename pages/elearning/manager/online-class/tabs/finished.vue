@@ -14,7 +14,7 @@
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 18rem">
+      <div class="filter-form__item" style="min-width: 20rem">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -79,11 +79,25 @@
       :data="classList"
       multiple-selection
     >
+      <template v-slot:cell(online_class_name)="{row}">
+        <td>
+          <n-link
+            :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
+            class="link"
+          >{{row.online_class_name}}</n-link>
+        </td>
+      </template>
       <template v-slot:cell(privacy)="{row}">
-        <td class="nowrap">
-          <span
-            :class="row.privacy == 'PUBLIC' ? 'text-primary': 'text-secondary' "
-          >{{ row.privacy }}</span>
+        <td>
+          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
+          <span class="text-secondary" v-else>Riêng tư</span>
+        </td>
+      </template>
+      <template v-slot:cell(time)="{row}">
+        <td>
+          <span>{{row.time.time}}</span>
+          <br />
+          <span>{{row.time.day}}</span>
         </td>
       </template>
     </app-table>
@@ -97,6 +111,7 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -108,13 +123,14 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
   layout: "manage",
-    
+
   components: {
     IconFilter,
     IconSearch,
     IconArrow,
     IconCalendar,
-    IconTrash
+    IconTrash,
+    IconHamberger
   },
 
   data() {
@@ -168,7 +184,7 @@ export default {
         query_date: null,
         search_type: null
       },
-      loading: false,
+      loading: false
     };
   },
   computed: {
@@ -227,22 +243,61 @@ export default {
       }
     },
 
+    formatAMPM(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
     async getList() {
+      const self = this;
       try {
-        this.loading = true;
-        let params = { ...this.params };
-        await this.$store.dispatch(
+        self.loading = true;
+        let params = { ...self.params };
+        await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
         );
-        this.classList = this.get(this.stateClass, "data.content", []);
+
+        const classes = self.get(self.stateClass, "data.content", []);
+        self.classList = classes.map(function(item) {
+          const duration = parseInt(item.recent_schedule.duration) * 60 * 1000;
+          const date = new Date(
+            "2000-01-01 " + item.recent_schedule.start_time
+          );
+          const end = self.formatAMPM(new Date(date.getTime() + duration));
+          return {
+            ...item,
+            time: {
+              day: item.recent_schedule.day,
+              time: item.recent_schedule.start_time + " - " + end
+            }
+          };
+        });
+
         this.pagination.size = this.get(this.stateClass, "data.size", 10);
         this.pagination.first = this.get(this.stateClass, "data.first", 1);
         this.pagination.last = this.get(this.stateClass, "data.last", 1);
         this.pagination.number = this.get(this.stateClass, "data.number", 0);
-        this.pagination.totalPages = this.get(this.stateClass, "data.total_pages", 0);
-        this.pagination.totalElements = this.get(this.stateClass, "data.total_elements", 0);
-        this.pagination.numberOfElements = this.get(this.stateClass, "data.number_of_elements", 0);
+        this.pagination.totalPages = this.get(
+          this.stateClass,
+          "data.total_pages",
+          0
+        );
+        this.pagination.totalElements = this.get(
+          this.stateClass,
+          "data.total_elements",
+          0
+        );
+        this.pagination.numberOfElements = this.get(
+          this.stateClass,
+          "data.number_of_elements",
+          0
+        );
       } catch (e) {
       } finally {
         this.loading = false;

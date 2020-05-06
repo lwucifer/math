@@ -50,6 +50,7 @@ export const ACCOUNT_LINK = {
 
 export const ACCOUNT_TRANSACTIONS = {
     SET_ACCOUNT_TRANSACTIONS_LIST: "setAccountTransactionList",
+    SET_FORCE_GET_TRANSACTIONS_LIST: "setForceGetTransactionList",
 };
 
 export const ACCOUNT_REVENUE = {
@@ -149,6 +150,7 @@ export const TEACHING_OLCLASS_LESSON_SESSIONS = {
 
 export const TEACHING_OLCLASS_LESSONS = {
     SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
+    SET_TEACHING_OLCLASS_LESSON_INFO: "setTeachingOlclassLessonInfo",
 };
 
 export const CREATING_ANSWER = {
@@ -313,6 +315,9 @@ export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
 };
 
+export const ELEARNING_STUDY_STUDENT = {
+    SET_ELEARNING_STUDY_STUDENT: "setElearningStudyStudent",
+};
 export const ELEARNING_STUDY_FAVOURITE = {
     SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
     SET_ELEARNING_STUDY_FAVOURITE_ADD: "setElearningStudyFavouriteAdd",
@@ -329,6 +334,14 @@ export const ELEARNING_STUDY_ARCHIVE = {
     SET_ELEARNING_STUDY_ARCHIVE_ADD: "setElearningStudyArchiveAdd",
     SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete",
 };
+
+export const ELEARNING_STUDY_EXERCISE = {
+    SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
+    SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
+    SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
+    SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
+};
+
 
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",

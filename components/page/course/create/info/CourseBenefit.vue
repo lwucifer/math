@@ -28,6 +28,7 @@
         class="bg-input-gray mb-3 flex-grow"
         placeholder="Nhập lợi ích từ khoá học"
         v-model="benefitEditorValue"
+        @onBlur="handleBlur"
       />
       <app-button
         square
@@ -36,6 +37,7 @@
         >Thêm</app-button
       >
     </div>
+    <span class="text-error">{{ error }}</span>
   </div>
 </template>
 
@@ -49,27 +51,49 @@ const IconTrashAlt = () =>
 export default {
   components: {
     IconCheckCircle,
-    IconTrashAlt
+    IconTrashAlt,
   },
 
   props: {
     name: {
       type: String,
-      default: ""
+      default: "",
     },
     benefit: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
 
   data() {
     return {
-      benefitEditorValue: ""
+      benefitEditorValue: "",
+      error: "",
     };
   },
 
+  watch: {
+    benefit: {
+      handler: function() {
+        if (!this.benefit.length) {
+          this.error = "Chưa thêm lợi ích";
+        } else {
+          this.error = "";
+        }
+      },
+      deep: true,
+    },
+  },
+
   methods: {
+    handleBlur() {
+      if (!this.benefit.length) {
+        this.error = "Chưa thêm lợi ích";
+      } else {
+        this.error = "";
+      }
+    },
+
     removeBenefit(index) {
       this.$emit("removeBenefit", index);
     },
@@ -79,7 +103,7 @@ export default {
         this.$emit("addBenefit", html);
         this.benefitEditorValue = "";
       }
-    }
-  }
+    },
+  },
 };
 </script>

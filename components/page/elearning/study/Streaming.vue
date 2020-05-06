@@ -31,8 +31,28 @@ export default {
   props: {
     url: String,
     thumbnail: {
-      type: String
-    }
+      type: String,
+    },
+  },
+
+  updated() {
+    console.log(this.url);
+  },
+
+  watch: {
+    url: {
+      handler: function() {
+        console.log(this.url);
+        this.$forceUpdate();
+      },
+      deep: true,
+    },
+    playerOptions: {
+      handler: function() {
+        console.log(this.playerOptions);
+      },
+      deep: true,
+    },
   },
 
   data() {
@@ -110,5 +130,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/course/_elearning-stream.scss";
+@import "~/assets/scss/components/elearning/course/_elearning-stream.scss";
 </style>

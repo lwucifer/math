@@ -1,5 +1,5 @@
 .filter-form {
-    padding: 0 1rem;
+    padding: 0;
     display: flex;
     
     &__item__btn {
@@ -10,14 +10,28 @@
         margin: 0 0.6rem 2rem 0.6rem;
         display: flex;
         align-items: center;
+        &:first-child {
+            margin-left: 0;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+        .app-date-picker {
+            width: 13rem;
+            .mx-datepicker svg {
+                fill: $color-primary !important;
+            }
+        }
 
-        //&:last-child {
-        //    margin-right: 0;
-        //}
-        //
-        //&:first-child {
-        //    margin-left: 0;
-        //}
+        .app-search {
+            .app-search__input input {
+                max-width: 100%;
+            }
+            .submit-btn {
+                background: $color-primary;
+                color: #fff;
+            }
+        }
 
         &__btn {
             font-size: 1.4rem;
@@ -28,14 +42,9 @@
         }
 
         &__btn--submit {
-            color: #fbfbfb !important;
-            border-radius: 10rem;
-            span {
-
-            }
-            svg {
-                margin-right: 3px;
-            }
+            background: #008329;
+            border-radius: 2px;
+            padding: 0 2.4rem;
         }
 
         &__selection {
