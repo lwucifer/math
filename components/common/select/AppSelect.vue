@@ -91,7 +91,7 @@
         <span class="app-select__arrow">
           <!--Slot for change the caret icon-->
           <slot name="placeholder-icon">
-            <IconCaretDown />
+            <IconExpandMore />
           </slot>
         </span>
       </div>
@@ -108,6 +108,9 @@
           :key="option.value"
           @click="handleClickOption(option)"
         >
+          <span v-if="option.value === value" class="app-slect__checked-icon">
+            <IconTick class="icon" />
+          </span>
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
           <template v-else>{{ option.text }}</template>
         </div>
@@ -121,8 +124,10 @@
 
 <script>
 import { uniqWith } from "lodash";
-const IconCaretDown = () => import("~/assets/svg/icons/caret-down.svg?inline");
+const IconExpandMore = () =>
+  import("~/assets/svg/v2-icons/expand_more_24px.svg?inline");
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+const IconTick = () => import("~/assets/svg/icons/tick-gray.svg?inline");
 
 export default {
   inheritAttrs: false,
@@ -134,8 +139,9 @@ export default {
   },
 
   components: {
-    IconCaretDown,
-    IconClose
+    IconExpandMore,
+    IconClose,
+    IconTick
   },
 
   model: {

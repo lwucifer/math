@@ -1,6 +1,7 @@
 .app-select {
     position: relative;
     display: inline-block;
+    color: $color-dark;
 
     &.active {
         .app-select__selected {
@@ -13,14 +14,18 @@
     display: inline-flex;
     align-items: center;
     background-color: #fff;
-    border: 1px solid #D8DDE6;
     padding: .5rem 1.5rem;
     cursor: pointer;
     white-space: nowrap;
     width: 100%;
     height: 4rem;
+    border-radius: 2px;
+    transition: box-shadow .3s;
+    box-shadow: $shadow-1;
 
-    &:hover {
+    &:hover, &:focus {
+        box-shadow: $shadow-hover;
+
         .app-select__clear {
             visibility: visible;
         }
@@ -34,11 +39,8 @@
 .app-select__arrow {
     margin-left: 6px;
     user-select: none;
-
-    svg {
-        display: block;
-        fill: #c4c4c4;
-    }
+    font-size: 1.6rem;
+    color: $color-primary;
 }
 
 .app-select__options {
@@ -54,18 +56,15 @@
 }
 
 .app-select__option {
+    position: relative;
     display: block;
     cursor: pointer;
-    padding: .7rem 1rem;
-    border-bottom: 1px solid transparent;
+    padding: .5rem 1rem .5rem (1rem + .8rem);
     white-space: nowrap;
 
     &:hover, &.active {
-        background-color: $color-border;
-    }
-
-    &:not(:last-child) {
-        border-bottom-color: $color-border;
+        background-color: $color-text-light-2;
+        color: $color-primary;
     }
 }
 
@@ -129,6 +128,7 @@
     .app-select__option {
         padding-top: .5rem;
         padding-bottom: .5rem;
+        padding-left: 1rem;
         border-bottom: 0;
     }
 
@@ -147,6 +147,13 @@
         max-width: 100%;
         border: 0;
     }
+}
+
+.app-slect__checked-icon {
+    position: absolute;
+    left: 1rem;
+    font-size: .8rem;
+    margin-right: .8rem;
 }
 
 // Searchable
