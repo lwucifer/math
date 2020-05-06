@@ -11,7 +11,7 @@
           title="Bài tập và bài kiểm tra"
         >
           <template v-slot:content>
-            <div class="elearning-manager-content">
+            <div class="elearning-manager-content p-0">
               <div class="elearning-manager-content__title">
                 <head-tabs
                   :tabs="tabs"

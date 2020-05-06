@@ -12,7 +12,6 @@
       </a>
       <!--<a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>-->
     </div>
-    <hr class />
   </div>
 </template>
 

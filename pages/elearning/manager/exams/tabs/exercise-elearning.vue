@@ -2,7 +2,6 @@
   <div>
     <!--Filter form-->
     <elearning-manager-filter-form
-      class="mb-3"
       @submitFilter="submitFilter"
       @changedType="handleChangedType"
       @changedRate="handleChangedRate"
@@ -14,19 +13,6 @@
       :loading="loading"
       @changedPagination="updatePagination"
     />
-    
-    <!--&lt;!&ndash;Filter form&ndash;&gt;-->
-    <!--<filter-form-->
-      <!--@submitFilter="submitFilter"-->
-      <!--@changedType="handleChangedType"-->
-      <!--@submitSearch="handleSubmitSearch"-->
-    <!--/>-->
-    <!--<list-table-->
-      <!--:pagination="pagination"-->
-      <!--:list="list"-->
-      <!--:loading="loading"-->
-      <!--@changedPagination="updatePagination"-->
-    <!--/>-->
   </div>
 </template>
 

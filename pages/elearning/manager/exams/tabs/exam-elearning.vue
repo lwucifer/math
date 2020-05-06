@@ -2,7 +2,6 @@
   <div>
     <!--Filter form-->
     <elearning-manager-filter-form
-      class="mb-3"
       @submitFilter="submitFilter"
       @changedType="handleChangedType"
       @changedRate="handleChangedRate"
@@ -13,17 +12,6 @@
       :list="list"
       :loading="loading"
       @changedPagination="updatePagination"
-    />
-    <app-pagination
-      :pagination="{
-          total: 39,
-          size: 10,
-          page: 1,
-          totalElements: 10,
-          first: 1,
-          last: 0,
-          number: 0
-        }"
     />
   </div>
 </template>
