@@ -15,7 +15,7 @@
 
     // Default styles
     border-radius: 2px;
-    padding: .8rem 2.4rem;
+    padding: .8rem 1.5rem;
     border-color: transparent;
     font-weight: 600;
     transition: color .3s, background-color .3s, box-shadow .3s;
@@ -23,8 +23,6 @@
     background-color: $color-text-white;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
 
-
-    
     svg path {
         fill: currentColor;
     }
@@ -58,7 +56,6 @@
 // Size of button
 .btn--size-xs {
     height: 2.5rem;
-    font-size: 1.4rem;
     font-size: 12px;
     font-weight: normal;
     padding: 0 1rem;
@@ -66,7 +63,6 @@
 
 .btn--size-sm {
     height: 3.2rem;
-    font-size: 1.3rem;
 
     &.btn-outline {
         line-height: 1;
@@ -151,6 +147,11 @@
         background-color: transparent;
     }
 }
+
+.btn--color-orange {
+    background-color: $color-orange;
+}
+
 // Font weight
 .btn--normal {
     font-weight: 600;
