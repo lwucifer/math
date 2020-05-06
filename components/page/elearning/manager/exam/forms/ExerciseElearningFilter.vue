@@ -1,6 +1,6 @@
 <template>
-  <filter-form class="px-0">
-    <div class="d-flex filter-form__input-wrapper">
+  <filter-form class="">
+    <div class="d-flex">
       <div
         class="filter-form__item filter-form__item--search border-0"
         style="max-width: 36rem; min-width: 30rem;"
