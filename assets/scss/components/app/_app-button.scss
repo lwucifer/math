@@ -29,7 +29,7 @@
     
      &:hover, &:focus {
         outline: none;
-        box-shadow: $showdow-hover;
+        box-shadow: $shadow-hover;
      }
 
     &.disabled, &[disabled] {
