@@ -1,12 +1,16 @@
-import * as actionTypes from "~/utils/action-types";
-import * as mutationTypes from "~/utils/mutation-types";
 import Exercise from "~/services/elearning/study/Exercise";
+import * as actionTypes from "~/utils/action-types";
+import { RESPONSE_SUCCESS } from "~/utils/config";
+import * as mutationTypes from "~/utils/mutation-types";
 
 /**
  * initial state
  */
 const state = () => ({
-  elearningStudy: []
+  questions: [],
+  results: [],
+  submissions: [],
+  submissionAdd: {},
 });
 
 /**
@@ -23,7 +27,9 @@ const actions = {
     try {
       const result = await new Exercise(this.$axios)[actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION](payload);
       console.log("[LIST_QUESTION]", result);
-      // commit(mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY, result);
+      if (result.success == RESPONSE_SUCCESS) {
+        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_LIST, result);
+      }
 
       return result;
     } catch (error) {
@@ -39,7 +45,9 @@ const actions = {
     try {
       const result = await new Exercise(this.$axios)[actionTypes.ELEARNING_STUDY_EXERCISE.LIST_RESULT](payload);
       console.log("[LIST_RESULT]", result);
-      // commit(mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY, result);
+      if (result.success == RESPONSE_SUCCESS) {
+        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST, result);
+      }
 
       return result;
     } catch (error) {
@@ -55,7 +63,9 @@ const actions = {
     try {
       const result = await new Exercise(this.$axios)[actionTypes.BASE.LIST](payload);
       console.log("[LIST_SUBMISTION]", result);
-      // commit(mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY, result);
+      if (result.success == RESPONSE_SUCCESS) {
+        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_LIST, result);
+      }
 
       return result;
     } catch (error) {
@@ -71,7 +81,9 @@ const actions = {
     try {
       const result = await new Exercise(this.$axios)[actionTypes.BASE.ADD](payload);
       console.log("[ADD_SUBMISTION]", result);
-      // commit(mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY, result);
+      if (result.success == RESPONSE_SUCCESS) {
+        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_ADD, result);
+      }
 
       return result;
     } catch (error) {
@@ -85,12 +97,33 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  // [mutationTypes.ELEARNING_STUDY.SET_ELEARNING_STUDY](
-  //   state,
-  //   elearningStudy
-  // ) {
-  //   state.elearningStudy = elearningStudy;
-  // }
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_LIST](
+    state,
+    _list
+  ) {
+    state.questions = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST](
+    state,
+    _list
+  ) {
+    state.results = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_LIST](
+    state,
+    _list
+  ) {
+    state.submissions = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_ADD](
+    state,
+    _submissionAdd
+  ) {
+    state.submissionAdd = _submissionAdd;
+  },
 };
 
 export default {

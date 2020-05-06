@@ -330,6 +330,14 @@ export const ELEARNING_STUDY_ARCHIVE = {
     SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete",
 };
 
+export const ELEARNING_STUDY_EXERCISE = {
+    SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
+    SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
+    SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
+    SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
+};
+
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
