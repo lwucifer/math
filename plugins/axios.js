@@ -33,7 +33,7 @@ export default function({ store, $axios, redirect }) {
     }
 
     // add Authorization token if needed
-    if (checkRequestAuthorize(config.url, get(config, "params.token", 'false'))) {
+    if (checkRequestAuthorize(config.url)) {
       if (!store.getters["auth/token"]) return;
       config.headers.common[
         "Authorization"

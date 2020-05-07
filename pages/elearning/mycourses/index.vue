@@ -33,11 +33,11 @@ export default {
             tab: 2,
             list:[],
             total:{
-                elearnings:"",
-                courses:"",
-                lectures:"",
-                favourites:"",
-                archieves:""
+                elearnings:null,
+                courses:null,
+                lectures:null,
+                favourites:null,
+                archieves:null
             },
             pagination:{
                 total: 0,
