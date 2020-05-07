@@ -1,7 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
 import Notifications from "~/services/notification/notifications";
-import { isEmpty, uniqWith } from "lodash";
+import { isEmpty, uniqWith, omit } from "lodash";
 import NotiUnRead from "~/services/notification/NotiUnRead";
 import { UPDATE_NOTI } from "~/utils/constants";
 import RegisterDevice from "~/services/notification/RegisterDevice";
@@ -28,19 +28,32 @@ const getters = {};
 const actions = {
     async [actionTypes.SOCIAL_NOTIFICATIONS.LIST]({ state, commit }, payload) {
         try {
+            const payloadParams = {
+                params: omit(payload.params, "payloadCheck"),
+            };
             const result = await new Notifications(this.$axios)[
                 actionTypes.BASE.LIST
-            ](payload);
+            ](payloadParams);
             console.log("[Notifications] list", result);
             if (result.success && !isEmpty(result.data)) {
                 const { page, listNotification } = result.data;
-                commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
-                    listNotification: uniqWith(
-                        listNotification.concat(state.notis.listNotification),
-                        (a, b) => a.id === b.id
-                    ),
-                    page,
-                });
+                if (payload.params.payloadCheck) {
+                    commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
+                        listNotification: uniqWith(
+                            listNotification.concat(state.notis.listNotification),
+                            (a, b) => a.id === b.id
+                        ),
+                        page,
+                    });
+                } else {
+                    commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, {
+                        listNotification: uniqWith(
+                            state.notis.listNotification.concat(listNotification),
+                            (a, b) => a.id === b.id
+                        ),
+                        page,
+                    });
+                }
             }
             return result;
         } catch (err) {

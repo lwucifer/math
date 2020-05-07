@@ -421,6 +421,10 @@ export const ELEARNING_STUDY_EXERCISE = {
     ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",
 };
 
+export const ELEARNING_STUDY_STATISTIC = {
+    LIST: "elearningStudyStatistic"
+}
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };
