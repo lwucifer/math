@@ -3,7 +3,8 @@
     <div class="e-exercise-components">
       <!-- <ElearningExerciseList /> -->
       <!-- <ElearningExerciseBeforeBegin /> -->
-      <ElearningExerciseDoExercise />
+      <!-- <ElearningExerciseDoExercise /> -->
+      <ElearningExerciseResults />
     </div>
 
     <div class="e-exercise-bottom">
@@ -23,7 +24,8 @@ import IconCropFree from "~/assets/svg/v2-icons/crop_free_24px.svg?inline";
 
 import ElearningExerciseList from "~/components/page/elearning/study/exercise/ElearningExerciseList";
 import ElearningExerciseBeforeBegin from "~/components/page/elearning/study/exercise/ElearningExerciseBeforeBegin";
-import ElearningExerciseDoExercise from "~/components/page/elearning/study/exercise/ElearningExerciseDoExercise.vue"
+import ElearningExerciseDoExercise from "~/components/page/elearning/study/exercise/ElearningExerciseDoExercise.vue";
+import ElearningExerciseResults from "~/components/page/elearning/study/exercise/ElearningExerciseResults";
 
 export default {
   components: {
@@ -33,7 +35,8 @@ export default {
     // components
     ElearningExerciseList,
     ElearningExerciseBeforeBegin,
-    ElearningExerciseDoExercise
+    ElearningExerciseDoExercise,
+    ElearningExerciseResults
   }
 };
 </script>
