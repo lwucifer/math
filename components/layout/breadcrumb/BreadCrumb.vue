@@ -27,11 +27,15 @@ export default {
         {
           path: "/elearning",
           name: "Elearning"
-        }
+        },
         // {
         //   path: "/elearning/:id",
         //   name: "Elearning test detail"
-        // }
+        // },
+        // {
+        //   path: "/elearning/:id",
+        //   name: "Elearning test detail"
+        // },
       ]
     };
   }

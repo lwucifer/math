@@ -24,12 +24,8 @@
     </div>
     <div class="school-list-box__footer">
       <div class="text-center">
-        <app-button
-          square
-          class="mt-3 school-list-box__footer__submit-btn"
-          @click="showAll"
-        >
-          <span class="">Xem tất cả</span>
+        <app-button square class="mt-3 school-list-box__footer__submit-btn" @click="showAll">
+          <span class>Xem tất cả</span>
         </app-button>
       </div>
     </div>
@@ -58,25 +54,27 @@ export default {
   },
 
   computed: {
-    schoolNum() {
-      const type = get(this, "category.type", "");
-      const schoolNumKey = get(SCHOOL_TYPE[type], "schoolNumKey", "");
-      return get(this, `schoolSearch.data.${schoolNumKey}`, 0);
-    },
-    studentNum() {
-      const type = get(this, "category.type", "");
-      const studentNumKey = get(SCHOOL_TYPE[type], "studentNumKey", "");
-      return get(this, `schoolSearch.data.${studentNumKey}`, 0);
-    },
-    teacherNum() {
-      const type = get(this, "category.type", "");
-      const teacherNumKey = get(SCHOOL_TYPE[type], "teacherNumKey", "");
-      return get(this, `schoolSearch.data.${teacherNumKey}`, 0);
-    },
     schools() {
       const type = get(this, "category.type", "");
-      const schoolsKey = get(SCHOOL_TYPE[type], "schoolsKey", "");
-      return get(this, `schoolSearch.data.${schoolsKey}`, []);
+      const schoolList = get(this, `schoolSearch.data.content`, []);
+      console.log("[schoolList]", schoolList, type);
+      return schoolList.filter(sc => sc.type == type) || [];
+    },
+
+    schoolNum() {
+      return this.schools.length || 0;
+    },
+
+    studentNum() {
+      return this.schools.reduce((a, b) => {
+        return a + b.student_number;
+      }, 0);
+    },
+
+    teacherNum() {
+      return this.schools.reduce((a, b) => {
+        return a + b.teacher_number;
+      }, 0);
     }
   },
 

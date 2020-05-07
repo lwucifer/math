@@ -1,35 +1,10 @@
 <template>
-  <div class="filter-form">
-    <div class="filter-form__item">
-      <app-button
-        color="primary"
-        class="filter-form__item__btn filter-form__item__btn--submit"
-        :size="'sm'"
-        @click="submit"
+  <filter-form class="">
+    <div class="d-flex">
+      <div
+        class="filter-form__item filter-form__item--search border-0"
+        style="max-width: 36rem; min-width: 30rem;"
       >
-        <IconFilter />
-        <span>Lọc kết quả</span>
-      </app-button>
-    </div>
-
-    <div class="filter-form__item">
-      <app-vue-select
-        class="app-vue-select filter-form__item__selection"
-        v-model="filters.type"
-        :options="types"
-        :reduce="item => item.value"
-        label="text"
-        placeholder="Theo thể loại"
-        searchable
-        clearable
-        @input="handleChangedType"
-      >
-      </app-vue-select>
-    </div>
-
-    <!--Right form-->
-    <div class="filter-form__right">
-      <div class="filter-form__item filter-form__item--search border-0">
         <app-search
           class="w-100"
           size="sm"
@@ -38,17 +13,48 @@
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
+          color="primary"
         >
         </app-search>
       </div>
-    </div><!--End right form-->
-
-  </div><!--End filter form-->
+      <div class="filter-form__item">
+        <filter-button @click="clickSubmit">
+          Lọc kết quả
+        </filter-button>
+      </div>
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="types"
+          :reduce="item => item.value"
+          v-model="filters.type"
+          label="text"
+          placeholder="Thể loại"
+          searchable
+          clearable
+          @input="handleSelectType"
+        />
+      </div>
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="rates"
+          :reduce="item => item.value"
+          v-model="filters.rate"
+          label="text"
+          placeholder="Tỷ lệ hoàn thành"
+          searchable
+          clearable
+          @input="handleSelectRate"
+        />
+      </div>
+    </div>
+  </filter-form>
 </template>
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import { ELEARNING_TYPES } from "~/utils/constants"
+  import { ELEARNING_TYPES, ELEARNING_STATUSES } from '~/utils/constants'
 
   export default {
     components: {
@@ -56,9 +62,11 @@
     },
     data() {
       return {
+        filterSelect:false,
         filters: {
           type: null,
-          query: ''
+          query: '',
+          rate: null,
         },
         types: [
           {
@@ -68,6 +76,20 @@
           {
             value: ELEARNING_TYPES.COURSE,
             text: 'Khóa học'
+          },
+        ],
+        rates: [
+          {
+            value: ELEARNING_STATUSES.PASSED,
+            text: 'Đạt'
+          },
+          {
+            value: ELEARNING_STATUSES.FAILED,
+            text: 'Không đạt'
+          },
+          {
+            value: ELEARNING_STATUSES.PENDING,
+            text: 'Chưa chấm điểm'
           },
         ],
         initStatus: true
@@ -88,7 +110,10 @@
           this.$emit('submitFilter', this.filters)
         }
       },
-      handleChangedType(val) {
+      handleSelectRate(val) {
+        this.$emit('changedRate', val)
+      },
+      handleSelectType(val) {
         this.$emit('changedType', val)
       },
       handleChangedSearch(val) {
@@ -96,11 +121,26 @@
       },
       handleSubmitSearch(e) {
         this.$emit('submitSearch', e.target.value)
+      },
+      clickSubmit() {
+        if (this.filterSelect) {
+          this.resetForm()
+          this.filterSelect = false
+          if (!this.initStatus) {
+            this.$emit('submitFilter', this.filters)
+          }
+        } else {
+          this.filterSelect = true
+        }
+      },
+      resetForm() {
+        this.filters.rate = null
+        this.filters.type = null
+        this.filters.query = ''
       }
     }
   }
 </script>
 
 <style scoped lang="scss">
-  @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 </style>

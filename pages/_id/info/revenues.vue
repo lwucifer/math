@@ -256,6 +256,7 @@
   
   export default {
     name: "E-learning",
+    layout: 'account-info',
     
     components: {
       IconArrowLeft,
@@ -365,14 +366,6 @@
         }
         this.$store.dispatch(`account/${actionTypes.ACCOUNT_EARNING.LIST}`, payload)
       },
-      changeDateFrom(text) {
-        this.params.from = text;
-        this.fetchEarning()
-      },
-      changeDateTo(text) {
-        this.params.to = text;
-        this.fetchEarning()
-      },
       onPageChange(e) {
         this.params.size = e.size;
         this.params.page = e.number + 1;
@@ -382,7 +375,9 @@
         return numeral(fee).format('0')
       },
       changeDate(date){
-        console.log('[Revenues] Change date range')
+        this.params.from = date[0];
+        this.params.to = date[1];
+        this.fetchEarning();
       },
       get,
       numeral

@@ -117,6 +117,7 @@
 }
 
 .elearning-manager__revenue {
+    margin: 5rem 0;
     .revenue {
         background: #F2F2F2;
         border: 1px solid #E0E0E0;
@@ -127,15 +128,18 @@
         display: inline-block;
         margin: 0 auto;
         text-align: center;
+        color: rgba($color: #D50000, $alpha: 0.7);
+        font-size: 2.8rem;
+        font-weight: bold;
     }
 }
 
 .page-title {
     background: #f9f9f9;
-    box-shadow: 0px 1px 0px #E0E0E0;
+    //box-shadow: 0px 1px 0px #E0E0E0;
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid $color-border;
     font-size: 1.8rem;
+    color: #333;
 }
 
 .elearning-manager__dashboard-filter {
@@ -149,4 +153,9 @@
             white-space: nowrap;
         }
     }
+}
+
+.app-table .link {
+    text-decoration: none;
+    color: #656565;
 }

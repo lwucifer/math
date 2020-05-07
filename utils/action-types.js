@@ -223,6 +223,7 @@ export const TEACHING_OLCLASS_INVITES = {
 
 export const TEACHING_OLCLASS_LESSONS = {
     LIST: "teachingOlclassLessonsList",
+    INFO: "teachingOlclassLessonInfo",
 };
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
     LIST: "teachingOlclassLessonAttendancesList",
@@ -392,6 +393,10 @@ export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
 };
 
+export const ELEARNING_STUDY_STUDENT = {
+    LIST: "elearningStudyStudentList",
+};
+
 export const ELEARNING_STURY_FAVOURITE = {
     LIST: "elearningStudyFavouriteList",
     ADD: "elearningStudyFavouriteAdd",
@@ -485,6 +490,8 @@ export const PAYMENT = {
     POST_ORDER: "postOder",
     POST_HASHKEY: "postHashKeyGenerate",
     VALIDATE_TRANSACTION: "validateTransaction",
+    REPAY: "postRepay",
+    CANCEL_PAY: "cancelPay",
 };
 
 export const CART = {

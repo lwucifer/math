@@ -2,7 +2,7 @@
   <div class="elearning-review-comment">
     <app-avatar
       class="elearning-review-comment__avatar mr-3"
-      :src="data && data.avatar || 'https://picsum.photos/40/40'"
+      :src="(data && data.avatar) || 'https://picsum.photos/40/40'"
       :size="40"
     />
 
@@ -28,13 +28,13 @@ import IconClock from "~/assets/svg/design-icons/clock.svg?inline";
 
 export default {
   components: {
-    IconClock
+    IconClock,
   },
 
   data() {
     return {
       DATETIME_DISPLAY,
-      DATETIME_RECEIVE
+      DATETIME_RECEIVE,
     };
   },
 
@@ -42,12 +42,12 @@ export default {
     data: {
       type: Object,
       default: () => ({}),
-      validator: value =>
+      validator: (value) =>
         ["avatar", "fullname", "comment", "rate", "created"].every(
-          key => key in value
-        )
-    }
-  }
+          (key) => key in value
+        ),
+    },
+  },
 };
 </script>
 

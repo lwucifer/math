@@ -159,12 +159,12 @@ export const getDeviceIdFromCookie = (req) => {
   return userCookie;
 };
 
-export const checkRequestAuthorize = (_url, token = 'false') => {
+export const checkRequestAuthorize = (_url) => {
   const urls = _url.split("?");
   // console.log("urls", urls);
 
   // if url contain token=true => return true;
-  if (token == 'true') return true;
+  if (_url.includes("token=true")) return true;
 
   // public api url
   if (_url.includes("/public")) return false;

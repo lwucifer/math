@@ -26,32 +26,9 @@
         <li>
           <n-link to="/school">Trường học</n-link>
         </li>
-        <li>
-          <app-dropdown
-            position="left"
-            v-model="dropdownCourse"
-            :content-width="'20rem'"
-            class="link--dropdown link--dropdown-course"
-          >
-            <n-link slot="activator" to="/course">
-              Bài giảng và khóa học
-              <IconCaretDown width="10" height="10" class="fill-primary" />
-            </n-link>
-            <div class="link--dropdown__content">
-              <ul>
-                <li>
-                  <n-link to>Bài giảng</n-link>
-                </li>
-                <li>
-                  <n-link to>Khóa học</n-link>
-                </li>
-              </ul>
-            </div>
-          </app-dropdown>
-        </li>
       </ul>
-
       <div v-if="isAuthenticated" class="the-header__user">
+        <study-space />
         <button class="item" @click="redirectMessages">
           <IconMessager />
           <span class="number">9</span>

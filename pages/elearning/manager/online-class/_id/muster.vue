@@ -5,14 +5,16 @@
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
+        <h5 class="page-title">
+          Phòng học online
+        </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-15">Phòng học online</h5>
-            <p>
+            <p class="pt-3 pl-4">
               Phòng học online > Phòng học online số 1 > Danh sách điểm danh >
-              <strong>Buổi học số 1</strong>
+              <strong>{{lessonInfo.name}}</strong>
             </p>
-            <hr class="mt-4 mb-4"/>
+            <hr class="mt-3 mb-3"/>
           </div>
 
           <div class="elearning-manager-content__main pt-3">
@@ -20,7 +22,7 @@
               <!--Info group-->
               <div class="class-info mb-5">
                 <strong>
-                  Buổi học số 1 | 11:00 AM - 11:45 AM, 16/10/2019
+                  {{lessonInfo.name}} | {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
                 </strong>
                 <div class="class-info-content mt-3">
                   <div class="item">
@@ -171,6 +173,7 @@ export default {
 
   data() {
     return {
+      lessonInfo: {},
       openModal: false,
       heads: [
         {
@@ -223,7 +226,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateAttendances: "Attendances"
+      stateLessonInfo: "LessonInfo"
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
@@ -250,6 +253,38 @@ export default {
     handleBlurSearchInput() {
     },
     handleSearch() {
+    },
+
+    formatAMPM(date, year = false) {
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      let strTime = hours + ':' + minutes + ' ' + ampm;
+      let strDate = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+      let str = year ? strTime + ' ' + strDate : strTime;
+      return str;
+    },
+    async getLessonInfo() {
+      try {
+        this.loading = true;
+        const lesson_id  = this.$route.params.id ? this.$route.params.id : "";
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.INFO}`,
+          lesson_id
+        );
+        this.lessonInfo = this.get(this.stateLessonInfo, 'data', []);
+        this.lessonInfo = {
+          ...this.lessonInfo,
+          start_time: this.formatAMPM(new Date(this.lessonInfo.start_time)),
+          end_time: this.formatAMPM(new Date(this.lessonInfo.end_time), true),
+        };
+      } catch (e) {
+      } finally {
+        this.loading = false
+      }
     },
 
     async getList() {
@@ -324,6 +359,7 @@ export default {
 
   created() {
     this.getList();
+    this.getLessonInfo();
     this.getSchoolClasses();
   }
 };

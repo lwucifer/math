@@ -55,7 +55,8 @@
       class="mb-3"
       type="warning"
       size="sm"
-      >Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert
+      >Bạn đã mua bài giảng này vào ngày
+      {{ get(info, "join_date", "") }}</app-alert
     >
 
     <ul class="info">
@@ -166,6 +167,14 @@ export default {
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
+
+      if (
+        get(this, "info.is_study", false) ||
+        !get(this, "info.elearning_price.free", true)
+      ) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
 
       const payload = {
         elearning_id,

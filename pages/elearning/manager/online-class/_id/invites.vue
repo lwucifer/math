@@ -5,11 +5,12 @@
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
+        <h5 class="page-title">
+          Phòng học online
+        </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-15">Phòng học online</h5>
-            <p>Phòng học online  >  Phòng học online số 1  >  <strong>Danh sách đã mời</strong></p>
-            <div class="elearning-manager-content__title__nav mt-15">
+            <div class="elearning-manager-content__title__nav">
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Danh sách đã mời</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Danh sách điểm danh</a>
             </div>

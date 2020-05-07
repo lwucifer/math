@@ -46,6 +46,12 @@ export const ELEARNING_TYPES = {
     LECTURE: "LECTURE",
 };
 
+export const ELEARNING_STATUSES = {
+    PASSED: "PASSED",
+    FAILED: "FAILED",
+    PENDING: "PENDING",
+};
+
 export const CHAT = {
     JOIN_ROOM: "join_room",
     MESSAGE: "message",
@@ -70,6 +76,13 @@ export const EXERCISE_CATEGORIES = {
     EXERCISE: "EXERCISE",
     TEST: "TEST",
 };
+
+export const EXERCISE_STATUS = {
+    NONE: "NONE",
+    PENDING: "PENDING",
+    FAILED: "FAILED",
+    PASSED: "PASSED"
+}
 
 export const SUBMISSION_RESULTS = {
     PASSED: "PASSED",
@@ -112,7 +125,7 @@ export const USER_ROLES = {
 }
 
 export const ELEARNING_SIDE_MENU = {
-    
+
 }
 
 export const ACCOUNT_PROFILE_MENU = {
@@ -136,5 +149,7 @@ export const WITHDRAWAL_STATUSES = {
 export const TRANSACTION_STATUSES = {
     SUCCESS: '1',
     FAILED: '-1',
-    PENDING: '0'
+    PENDING: '0',
+    CANCEL: '2',
+    CANCEL_SUCCESS: '-2',
 }

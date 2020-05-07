@@ -11,7 +11,7 @@
           title="Bài tập và bài kiểm tra"
         >
           <template v-slot:content>
-            <div class="elearning-manager-content">
+            <div class="elearning-manager-content p-0">
               <div class="elearning-manager-content__title">
                 <head-tabs
                   :tabs="tabs"
@@ -21,20 +21,24 @@
               </div>
     
               <div class="elearning-manager-content__main">
-                <div>
-                  <!--Filter form-->
-                  <elearning-manager-filter-form
-                    @submitFilter="submitFilter"
-                    @changedType="handleChangedType"
-                    @submitSearch="handleSubmitSearch"
-                  />
-                  <elearning-manager-filter-table
-                    :pagination="pagination"
-                    :list="list"
-                    :loading="loading"
-                    @changedPagination="updatePagination"
-                  />
-                </div>
+                <keep-alive>
+                  <component v-bind:is="currentTabComponent"></component>
+                </keep-alive>
+                
+                <!--<div>-->
+                  <!--&lt;!&ndash;Filter form&ndash;&gt;-->
+                  <!--<elearning-manager-filter-form-->
+                    <!--@submitFilter="submitFilter"-->
+                    <!--@changedType="handleChangedType"-->
+                    <!--@submitSearch="handleSubmitSearch"-->
+                  <!--/>-->
+                  <!--<elearning-manager-filter-table-->
+                    <!--:pagination="pagination"-->
+                    <!--:list="list"-->
+                    <!--:loading="loading"-->
+                    <!--@changedPagination="updatePagination"-->
+                  <!--/>-->
+                <!--</div>-->
               </div>
             </div>
           </template>
@@ -48,11 +52,15 @@
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseElearningFilter"
 import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/tables/ExerciseElearning"
-import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+// import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import { mapState } from "vuex"
 import { get } from "lodash"
 import * as actionTypes from "~/utils/action-types"
+// import ExerciseTab from './tabs/exercise-elearning'
+
+const ExerciseTab = () => import("./tabs/exercise-elearning");
+const ExamTab = () => import("./tabs/exam-elearning");
 
 const STORE_NAMESPACE = 'elearning/teaching/exercise-elearning'
 
@@ -60,11 +68,13 @@ export default {
   layout: "manage",
 
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     HeadTabs,
     ElearningManagerSide,
     ElearningManagerFilterForm,
-    ElearningManagerFilterTable
+    ElearningManagerFilterTable,
+    ExerciseTab,
+    ExamTab
   },
 
   data() {
@@ -102,6 +112,13 @@ export default {
     ...mapState(STORE_NAMESPACE, {
       detailInfo: 'elearnings'
     }),
+    currentTabComponent: function() {
+      const MATCHED_TABS = {
+        exercise: 'ExerciseTab',
+        exam: 'ExamTab'
+      }
+      return MATCHED_TABS[this.tab]
+    }
   },
 
   methods: {
@@ -156,7 +173,7 @@ export default {
     get
   },
   created() {
-    this.getList()
+    // this.getList()
   }
 };
 </script>

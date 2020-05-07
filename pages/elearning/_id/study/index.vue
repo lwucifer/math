@@ -6,7 +6,7 @@
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
-            <div class="box11">
+            <div class="box22">
               <div class="elearning-lesson_image">
                 <Streaming
                   v-if="type_study_lesson === 'video'"
@@ -18,6 +18,10 @@
                   v-if="type_study_lesson === 'image'"
                 />
               </div>
+
+              <!-- <ElearningExercise /> -->
+
+              
               <div class="elearning-lesson__main-nav">
                 <a
                   :class="{ active: type === 'summary' }"
@@ -70,6 +74,7 @@ import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
+import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
 import {
   STUDY_LESSON_TYPE_VIDEO,
   STUDY_LESSON_TYPE_IMAGE,
@@ -89,6 +94,7 @@ export default {
     ElearningInfo,
     ElearningQuestion,
     Streaming,
+    ElearningExercise
   },
 
   created() {

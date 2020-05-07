@@ -31,8 +31,8 @@ export default {
   props: {
     url: String,
     thumbnail: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   updated() {
@@ -42,7 +42,7 @@ export default {
   watch: {
     url: {
       handler: function() {
-        console.log(this.url)
+        console.log(this.url);
         this.$forceUpdate();
       },
       deep: true,
@@ -59,7 +59,6 @@ export default {
     return {
       // component options
       playsinline: true,
-      videoLoaded: false,
 
       // api get streaming
       // {{API_ENDPOINT_CORE}}/streaming/video/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/lesson/1699ee83-60ec-488a-814f-d9cfbce252b4/vod
@@ -83,7 +82,6 @@ export default {
   },
   mounted() {
     console.log("this is current player instance object", this.myVideoPlayer);
-    this.videoLoaded = true;
   },
   methods: {
     // listen event
@@ -132,5 +130,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/elearning/course/_elearning-stream.scss";
+@import "~/assets/scss/components/elearning/course/_elearning-stream.scss";
 </style>
