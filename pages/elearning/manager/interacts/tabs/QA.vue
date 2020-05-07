@@ -2,46 +2,7 @@
   <div class="container">
     <div class="row wrap-filter-form__ElearningManagerInteractive">
       <div class="filter-form__ElearninManagerInteractive">
-        <div class="filter-item">
-          <app-button
-            color="primary"
-            class="btnFilterSummit__ElearningManagerInteractive"
-            :size="'sm'"
-            @click="submit"
-          >
-            <IconFilter />
-            <span>Lọc kết quả</span>
-          </app-button>
-        </div>
-        <div class="filter-item">
-          <app-vue-select
-            class="app-vue-select filter-form__item__selection"
-            v-model="filter.province"
-            :options="classes"
-            label="text"
-            placeholder="Theo lớp"
-            searchable
-            clearable
-            @input="handleChangedInput"
-            @search:focus="handleFocusSearchInput"
-            @search:blur="handleBlurSearchInput"
-          ></app-vue-select>
-        </div>
-        <div class="filter-item">
-          <app-vue-select
-            class="app-vue-select filter-form__item__selection"
-            :options="results"
-            label="text"
-            placeholder="Theo kết quả"
-            searchable
-            clearable
-            @input="handleChangedInput"
-            @search:focus="handleFocusSearchInput"
-            @search:blur="handleBlurSearchInput"
-          ></app-vue-select>
-        </div>
-      </div>
-      <div class="filter-form__right">
+
         <div class="wrapSearchForm___ElearningManagerFilterTable">
           <app-input
             type="text"
@@ -51,17 +12,67 @@
             @input="handleSearch"
             class="inputSearch"
           />
-          <button type="submit">
+
+          <button class="btn-search">
             <IconSearch width="15" height="15" />
           </button>
         </div>
+
+        <div class="filter-results">
+          <app-button
+            color="primary"
+            class="btnFilterSummit__ElearningManagerInteractive"
+            :size="'sm'"
+            @click="submit"
+          >
+            <IconHamberger />
+            <span>Lọc kết quả</span>
+          </app-button>
+        </div>
+
+
+        <div class="filter-course">
+          <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            v-model="filter.province"
+            :options="classes"
+            label="text"
+            placeholder="Bài giảng/khóa học"
+            searchable
+            clearable
+            @input="handleChangedInput"
+            @search:focus="handleFocusSearchInput"
+            @search:blur="handleBlurSearchInput"
+          ></app-vue-select>
+        </div>
+
+
+        <div class="filter-status">
+          <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            :options="results"
+            label="text"
+            placeholder="Trạng thái"
+            searchable
+            clearable
+            @input="handleChangedInput"
+            @search:focus="handleFocusSearchInput"
+            @search:blur="handleBlurSearchInput"
+          ></app-vue-select>
+        </div>
+      </div>
+
+
+      <div class="filter-form__right">
+        
       </div>
     </div>
+    
     <div class="wrapTable__ElearningManagerInteractive">
       <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id">Xem chi tiết</n-link>
+            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id"><IconArrowForwardIos24pxOutlined/></n-link>
           </td>
         </template>
         <template v-slot:cell(status)="{row}">
@@ -74,8 +85,10 @@
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
+import IconArrowForwardIos24pxOutlined from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
@@ -83,8 +96,9 @@ export default {
   layout: "manage",
     
   components: {
-    IconFilter,
-    IconSearch
+    IconHamberger,
+    IconSearch,
+    IconArrowForwardIos24pxOutlined
   },
   data() {
     return {
