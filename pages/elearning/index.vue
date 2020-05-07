@@ -58,7 +58,7 @@ export default {
         spaceBetween: 20,
         slidesPerView: 5,
         setWrapperSize: true,
-        autoHeight: true,
+        autoHeight: false,
         watchOverflow: true,
         showName: true,
       },
