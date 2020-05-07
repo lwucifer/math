@@ -69,7 +69,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="tabs-content" v-if="tabChat == true">
+          <div class="tabs-content" v-show="tabChat == true">
             <div class="btn-create-chat" v-if="checkChatList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -108,7 +108,7 @@
                   </button>
                   <div class="link--dropdown__content">
                     <ul>
-                      <li @click="handleNoti(item.allow_notication, item.room_id, item)">
+                      <li @click.stop="handleNoti(item.allow_notication, item.room_id, item)">
                         <a v-if="item.allow_notication">Tắt thông báo</a>
                         <a v-else>Bật thông báo</a>
                       </li>
@@ -123,13 +123,13 @@
                 </app-dropdown>
               </div>
               <client-only>
-                <infinite-loading :identifier="infiniteIdChat" @infinite="chatsInfiniteHandler">
+                <infinite-loading @infinite="chatsInfiniteHandler">
                   <template slot="no-more">Không còn tin nhắn nào.</template>
                 </infinite-loading>
               </client-only>
             </template>
           </div>
-          <div class="tabs-content" v-if="tabChat == false">
+          <div class="tabs-content" v-show="tabChat == false">
             <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -168,7 +168,7 @@
                   </button>
                   <div class="link--dropdown__content">
                     <ul>
-                      <li @click="handleNoti(item.allow_notication, item.room_id, item)">
+                      <li @click.stop="handleNoti(item.allow_notication, item.room_id, item)">
                         <a v-if="item.allow_notication">Tắt thông báo</a>
                         <a v-else>Bật thông báo</a>
                       </li>
@@ -183,7 +183,7 @@
                 </app-dropdown>
               </div>
               <client-only>
-                <infinite-loading :identifier="infiniteId" @infinite="groupsInfiniteHandler">
+                <infinite-loading @infinite="groupsInfiniteHandler">
                   <template slot="no-more">Không còn group.</template>
                 </infinite-loading>
               </client-only>
@@ -248,6 +248,7 @@ import GroupService from "~/services/message/Group";
 import MessageType from "~/services/message/MessageType";
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
+import { get, isEmpty } from "lodash";
 
 export default {
   components: {
@@ -311,24 +312,30 @@ export default {
       "groupList",
       "listMessageType",
       "tabChat",
-      "friendList"
+      "friendList",
+      "groups",
+      "chats"
     ]),
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
-      const dataMapGroup = this.groupsListTab.map(item => {
-        return {
-          ...item.message,
-          ...item.room,
-          ...item.sender,
-          message_id: item.message && item.message.id ? item.message.id : "",
-          room_id: item.room && item.room.id ? item.room.id : ""
-        };
-      });
+      const dataMapGroup =
+        this.groups &&
+        this.groups.listMessage &&
+        this.groups.listMessage.map(item => {
+          return {
+            ...item.message,
+            ...item.room,
+            ...item.sender,
+            message_id: item.message && item.message.id ? item.message.id : "",
+            room_id: item.room && item.room.id ? item.room.id : ""
+          };
+        });
       // debugger;
       const dataGroup = dataMapGroup.map(item => {
-        const [dataNoti] = item.members.filter(
-          item => item.user_id == this.userId
-        );
+        const [dataNoti] =
+          item &&
+          item.members &&
+          item.members.filter(item => item.user_id == this.userId);
         // console.log("dataNoti", dataNoti);
         const dataRoomName =
           (
@@ -349,19 +356,23 @@ export default {
       return dataGroup;
     },
     mapChatList() {
-      const dataMap = this.chatsListTab.map(item => {
-        return {
-          ...item.message,
-          ...item.room,
-          ...item.sender,
-          message_id: item.message && item.message.id ? item.message.id : "",
-          room_id: item.room && item.room.id ? item.room.id : ""
-        };
-      });
+      const dataMap =
+        this.chats &&
+        this.chats.listMessage &&
+        this.chats.listMessage.map(item => {
+          return {
+            ...item.message,
+            ...item.room,
+            ...item.sender,
+            message_id: item.message && item.message.id ? item.message.id : "",
+            room_id: item.room && item.room.id ? item.room.id : ""
+          };
+        });
       const data = dataMap.map(item => {
-        const [dataName] = item.members.filter(
-          item => item.user_id != this.userId
-        );
+        const [dataName] =
+          item &&
+          item.members &&
+          item.members.filter(item => item.user_id != this.userId);
         const [dataNoti] = item.members.filter(
           item => item.user_id == this.userId
         );
@@ -408,15 +419,13 @@ export default {
     handleNoti(noti, roomId, item) {
       const data = {
         room_id: roomId,
-        notification: noti == 1 ? 0 : 1
+        notification: noti == 1 ? 0 : 1,
+        user_id: this.userId
       };
       this.groupNotification(data).then(result => {
         if (result.success == true) {
           this.$toasted.show("success");
           if (item.type == 2) {
-            this.groupsListTab = [];
-            this.groupListQuery.page = 1;
-            this.infiniteId += 1;
           } else {
             this.chatsListTab = [];
             this.chatListQuery.page = 1;
@@ -451,53 +460,37 @@ export default {
     },
 
     async groupsInfiniteHandler($state) {
-      const { data: getData = {} } = await new MessageType(this.$axios)[
-        actionTypes.BASE.LIST
-      ]({
-        params: this.groupListQuery
-      });
-      console.log("getData_TYPE2", getData);
-      if (getData && !getData.listMessage && this.groupsListTab.length == 0) {
-        this.checkGroupList = true;
-      }
-      if (getData.listMessage && getData.listMessage.length) {
-        this.groupListQuery.page += 1;
-        this.groupsListTab.push(...getData.listMessage);
-        // this.groupsListTab = [];
-        // if (this.groupsListTab.length == 0) {
-        //   this.checkGroupList = true;
-        // }
+      const getData = await this.$store.dispatch(
+        `message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`,
+        {
+          params: {
+            page: get(this, "groups.page.number", 0) + 1,
+            room_type: 2
+          }
+        }
+      );
+      console.log("getData", getData);
 
+      if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();
-        // this.$store.commit(
-        //   `message/${mutationTypes.MESSAGE_GROUP.SET_GROUP_LIST_TYPE}`,
-        //   this.groupsListTab
-        // );
       } else {
-        // this.checkGroupList = true;
         $state.complete();
       }
     },
 
     async chatsInfiniteHandler($state) {
-      const { data: getData = {} } = await new MessageType(this.$axios)[
-        actionTypes.BASE.LIST
-      ]({
-        params: this.chatListQuery
-      });
+      const getData = await this.$store.dispatch(
+        `message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`,
+        {
+          params: {
+            page: get(this, "chats.page.number", 0) + 1,
+            room_type: 1
+          }
+        }
+      );
       console.log("getData", getData);
-      if (getData && !getData.listMessage && this.chatsListTab.length == 0) {
-        this.checkChatList = true;
-      }
-      if (getData.listMessage && getData.listMessage.length) {
-        this.chatListQuery.page += 1;
-        this.chatsListTab.push(...getData.listMessage);
-        // this.chatsListTab = [];
 
-        // this.$store.commit(
-        //   `message/${mutationTypes.MESSAGE_GROUP.SET_CHAT_LIST_TYPE}`,
-        //   this.chatsListTab
-        // );
+      if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();
       } else {
         $state.complete();
@@ -511,17 +504,17 @@ export default {
     }
   },
   watch: {
-    tabChat(_newval) {
-      if (_newval == true) {
-        this.chatsListTab = [];
-        this.chatListQuery.page = 1;
-        // this.infiniteIdChat += 1;
-      } else {
-        this.groupsListTab = [];
-        this.groupListQuery.page = 1;
-        this.infiniteId += 1;
-      }
-    },
+    // tabChat(_newval) {
+    //   if (_newval == true) {
+    //     this.chatsListTab = [];
+    //     this.chatListQuery.page = 1;
+    //     // this.infiniteIdChat += 1;
+    //   } else {
+    //     this.groupsListTab = [];
+    //     this.groupListQuery.page = 1;
+    //     this.infiniteId += 1;
+    //   }
+    // },
     listMessageType(_newval) {
       if (_newval) {
         this.chatsListTab = [];

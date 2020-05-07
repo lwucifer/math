@@ -597,10 +597,10 @@ export default {
   },
 
   props: {
-    isCreated: {
-      type: Boolean,
-      default: false
-    },
+    // isCreated: {
+    //   type: Boolean,
+    //   default: false
+    // },
     isGroup: {
       type: Boolean,
       default: false
@@ -706,7 +706,8 @@ export default {
       "groupListDetail",
       "messageOn",
       "memberList",
-      "friendList"
+      "friendList",
+      "isCreated"
     ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
@@ -823,7 +824,11 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
-    ...mapMutations("message", ["setEmitMessage", "emitCloseFalse"]),
+    ...mapMutations("message", [
+      "setEmitMessage",
+      "emitCloseFalse",
+      "setIsCreated"
+    ]),
     async messageInfiniteHandler($state) {
       // this.messageListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = await new Message(this.$axios)[
@@ -987,11 +992,6 @@ export default {
             fullname: this.fullName ? this.fullName : ""
           };
           console.log("[socket] dataEmit", dataEmit);
-          // this.getListMessageType({
-          //   params: {
-          //     room_type: 1
-          //   }
-          // });
           this.setEmitMessage(dataEmit);
           // if img or file call api group detail
           if (
@@ -1007,6 +1007,7 @@ export default {
         }
         this.textChat = "";
       } else if (this.tag.length == 1) {
+        this.setIsCreated(false);
         this.$router.push(`/messages/t/${this.roomIdPush}`);
         const dataEmit = {
           room_id: this.roomIdPush,
@@ -1015,14 +1016,16 @@ export default {
           file_url: this.urlFileUpload,
           file_name_upload: this.urlFileNameUpload,
           message_id: this.messageId,
-          avatar: this.avatarUser.low ? this.avatarUser.low : "",
+          avatar:
+            this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
           fullname: this.fullName ? this.fullName : ""
         };
         console.log("[socket] dataEmit", dataEmit);
         this.setEmitMessage(dataEmit);
         this.getListMessageType({
           params: {
-            room_type: 1
+            room_type: 1,
+            payloadCheck: "check"
           }
         });
       } else if (this.tag.length > 1) {
@@ -1031,11 +1034,13 @@ export default {
           members: this.tag.toString(),
           name: this.name ? this.name : ""
         };
-        this.createGroup(data).then(result => {
+        await this.createGroup(data).then(result => {
           if (result.success == true) {
+            this.setIsCreated(false);
             this.getListMessageType({
               params: {
-                room_type: 2
+                room_type: 2,
+                payloadCheck: "check"
               }
             });
             // this.getGroupList();
@@ -1048,7 +1053,10 @@ export default {
               file_url: this.urlFileUpload,
               file_name_upload: this.urlFileNameUpload,
               message_id: this.messageId,
-              avatar: this.avatarUser.low ? this.avatarUser.low : "",
+              avatar:
+                this.avatarUser && this.avatarUser.low
+                  ? this.avatarUser.low
+                  : "",
               fullname: this.fullName ? this.fullName : ""
             };
             console.log("[socket] dataEmit", dataEmit);
@@ -1063,6 +1071,7 @@ export default {
     changeUser() {
       console.log("[option]", this.tag.length);
       if (this.tag.length == 0) {
+        this.roomIdPush = "";
         this.getMessageList({
           params: {
             room_id: this.$route.params.id
@@ -1085,7 +1094,7 @@ export default {
             });
             // this.$router.push(`/messages/t/${result.data.id}`);
           } else {
-            // this.$toasted.error(result.message);
+            this.$toasted.error(result.message);
           }
         });
       } else {

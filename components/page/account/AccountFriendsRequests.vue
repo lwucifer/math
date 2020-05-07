@@ -2,7 +2,7 @@
   <div class="account-friends">
     <div class="account-friends__title d-block mb-4">
       <h3>Bạn bè</h3>
-      <p class="color-999 mt-2">Bạn có {{inviteList.totalInvite}} lời mời kết bạn</p>
+      <p class="color-999 mt-2">Bạn có {{filterTotalInvite}} lời mời kết bạn</p>
     </div>
     <div class="account-friends__list">
       <div class="row">
@@ -102,7 +102,12 @@ export default {
   },
 
   computed: {
-    ...mapState("account", ["inviteList"])
+    ...mapState("account", ["inviteList"]),
+    filterTotalInvite() {
+      return this.inviteList && this.inviteList.totalInvite
+        ? this.inviteList.totalInvite
+        : 0;
+    }
   },
 
   methods: {}

@@ -38,10 +38,22 @@
 
       <div class="app-input__validate-status" v-if="localValidate">
         <IconSuccess
-          height="14"
-          width="14"
           v-if="localValidate == VALIDATE_STATUS.SUCCESS"
-          class="mr-1"
+          height="20"
+          width="20"
+          class="mr-1 app-input__validate-status--success"
+        />
+        <IconError
+          v-else-if="localValidate == VALIDATE_STATUS.ERROR"
+          height="20"
+          width="20"
+          class="mr-1 app-input__validate-status--error"
+        />
+        <IconWarning
+          v-else-if="localValidate == VALIDATE_STATUS.WARNING"
+          height="20"
+          width="20"
+          class="mr-1 app-input__validate-status--warning"
         />
       </div>
 
@@ -50,23 +62,39 @@
         class="app-input__counter"
       >{{ `${localValue.toString().length}/${counter}` }}</div>
     </div>
-
+  
+    <div
+      class="app-input__default"
+      v-if="message && localValidate == VALIDATE_STATUS.DEFAULT"
+    >{{message}}</div>
+    <div
+      class="app-input__success"
+      v-if="message && localValidate == VALIDATE_STATUS.SUCCESS"
+    >{{message}}</div>
     <div
       class="app-input__error"
-      v-if="message && localValidate == VALIDATE_STATUS.ERROR"
+      v-else-if="message && localValidate == VALIDATE_STATUS.ERROR"
+    >{{message}}</div>
+    <div
+      class="app-input__warning"
+      v-else-if="message && localValidate == VALIDATE_STATUS.WARNING"
     >{{message}}</div>
   </div>
 </template>
 
 <script>
 import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
-import IconSuccess from "~/assets/svg/icons/success.svg?inline";
+import IconSuccess from "~/assets/svg/v2-icons/check_24px.svg?inline";
+import IconError from "~/assets/svg/v2-icons/alert/error_outline_24px.svg?inline";
+import IconWarning from "~/assets/svg/v2-icons/alert/warning_amber_24px.svg?inline";
 
 export default {
   inheritAttrs: false,
 
   components: {
-    IconSuccess
+    IconSuccess,
+    IconError,
+    IconWarning
   },
 
   model: {
@@ -151,6 +179,7 @@ export default {
         "app-input--has-counter": !!this.counter,
         "app-input--error": this.localValidate === VALIDATE_STATUS.ERROR,
         "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
+        "app-input--warning": this.localValidate === VALIDATE_STATUS.WARNING,
         "app-input--focused": this.isFocus,
         "app-input--textarea": this.textarea
       };
