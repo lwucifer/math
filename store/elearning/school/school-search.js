@@ -41,6 +41,7 @@ const mutations = {
     state,
     elearningSchoolSearch
   ) {
+    console.log("[SET_ELEARNING_SCHOOL_SEARCH_LIST]", elearningSchoolSearch)
     state.elearningSchoolSearch = elearningSchoolSearch;
   }
 };
