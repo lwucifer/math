@@ -16,8 +16,10 @@
                   <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">THÔNG BÁO</a>
                 </div>
 
-                <app-button v-if="tab == 2">
-                  <n-link :to="'/elearning/manager/interactive/createnotify'">Tạo thông báo</n-link>
+                <app-button nuxt :to="'/elearning/manager/interacts/createnotify'"
+                  v-if="tab == 2" 
+                  class="make-noti-button btn--color-info">
+                  <IconPlusCircle class="mr-2"/> Tạo thông báo
                 </app-button>
               </div>
               
@@ -35,6 +37,8 @@
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
+import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 const QATab = () => import("./tabs/QA");
@@ -46,7 +50,8 @@ export default {
   components: {
     ElearningManagerSide,
     QATab,
-    NotifyTab
+    NotifyTab,
+    IconPlusCircle
   },
   data() {
     return {
@@ -74,5 +79,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.make-noti-button {
+  height: 32px;
+
+  &:hover {
+    background: #14bff4 !important;
+  }
+}
 </style>

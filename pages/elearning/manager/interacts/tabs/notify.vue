@@ -9,8 +9,9 @@
       </app-button> -->
 
      
-      <div class="wrapSearchForm___ElearningManagerFilterTable search--modifer">
+      <div class="wrapSearchForm___ElearningManagerFilterTable flex-1">
         <app-input
+          style="width: 100%"
           type="text"
           v-model="filter.query"
           placeholder="Nhập để tìm kiếm..."
@@ -50,13 +51,16 @@
       </div>
     </div>
 
+    <app-button class="button-delete"><IconTrashAlt height="15" width="15" class="fill-white mr-2"/> Xoá</app-button>
+
     <div class="wrapTable__ElearningManagerInteractive">
-      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
+      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"  multiple-selection>
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id">Xem chi tiết</n-link>
+            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id"><IconArrowForwardIos24pxOutlined/></n-link>
           </td>
         </template>
+
         <template v-slot:cell(content)="{row,index}">
           <td
             title="Chi tiết"
@@ -82,6 +86,9 @@
 <script>
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
+import IconArrowForwardIos24pxOutlined from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { NOTIFIES } from "~/server/fakedata/elearning/materials";
@@ -90,13 +97,20 @@ export default {
     
   components: {
     IconHamberger,
-    IconSearch
+    IconSearch,
+    IconArrowForwardIos24pxOutlined,
+    IconTrashAlt
   },
   data() {
     return {
       currentQuestionIndex: null,
       tab: 1,
       heads: [
+        {
+          name: "",
+          text: "",
+          selectAll: true,
+        },
         {
           name: "title",
           text: "Tiêu đề",
