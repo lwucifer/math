@@ -4,8 +4,8 @@
     <div class="d-flex">
         <div class="elearning-manager-content__title__nav">
             <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a>
-            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.courses}})</a>
-            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.lectures}})</a>
+            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.lectures}})</a>
+            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.courses}})</a>
             <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">Yêu thích ({{total.favourites}})</a>
             <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
         </div>
@@ -13,7 +13,9 @@
             <app-search/>
         </div>
     </div>
-    <ElearningList/>
+    <ElearningList 
+        :elearningList="list"
+    />
     <app-pagination :pagination="pagination"  :type="2"/>
   </div>
 </template>
@@ -30,7 +32,7 @@ export default {
     data(){
         return{
             params:{},
-            tab: 2,
+            tab: 1,
             list:[],
             total:{
                 elearnings:null,
@@ -60,6 +62,12 @@ export default {
         }),
         ...mapState("elearning/study/study-student", {
             elearningStudyStatistic: "elearningStudyStatistic",
+        }),
+        ...mapState("elearning/study/study-student", {
+            elearningStudyArchive: "elearningStudyArchive",
+        }),
+        ...mapState("elearning/study/study-student", {
+            elearningStudyFavourite: "elearningStudyFavourite",
         })
     },
     watch:{
@@ -71,6 +79,11 @@ export default {
                 this.total.favourites = get(this,"elearningStudyStatistic.total_favourites",0)
                 this.total.archieves = get(this,"elearningStudyStatistic.total_archieves",0)
             }
+        },
+        elearningStudyStudent : {
+            handler: function(){
+                this.list = get(this,"elearningStudyStudent.content",[])
+            }
         }
     },
     methods:{
@@ -79,20 +92,26 @@ export default {
             if(tab===1){
                 this.params.type = "ALL"
                 this.fetchElearningList()
+                this.list = get(this,"elearningStudyStudent.content",[])
             }
             else if(tab===2){
-                this.params.type = "COURSE"
-                this.fetchElearningList()
-            }
-            else if(tab===3){
                 this.params.type = "LECTURE"
                 this.fetchElearningList()
+                this.list = get(this,"elearningStudyStudent.content",[])
+                
+            }
+            else if(tab===3){
+                this.params.type = "COURSE"
+                this.fetchElearningList()
+                this.list = get(this,"elearningStudyStudent.content",[])
             }
             else if(tab===4){
-                console.log('farvou')
+                this.fetchElearningFavourite();
+                this.list = get(this,"elearningStudyArchive.content",[])
             }
             else if(tab===5){
-                console.log('archive')
+                this.fetchElearningArchive()
+                this.list = get(this,"elearningStudyFavourite.content",[])
             }
             
         },
@@ -108,6 +127,12 @@ export default {
         },
         fetchElearningStatisticList(){
             this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STATISTIC.LIST}`)
+        },
+        fetchElearningArchive(){
+            this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`)
+        },
+        fetchElearningFavourite(){
+            this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`)
         }
     }
 }
