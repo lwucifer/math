@@ -105,6 +105,7 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/
  * STUDY
  */
 export const STUDY_ELEARNING = `/elearning/study/elearnings`;
+export const STUDY_STATISTIC_ELEARNING = `/elearning/study/elearning/statistic`;
 export const STUDY_MY_ELEARNING = `/study`;
 export const STUDY_FAVOURITE = `/elearning/study/favourite`;
 export const STUDY_VOTE = `/elearning/study/votes`;
