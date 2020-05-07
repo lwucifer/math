@@ -55,7 +55,7 @@
     props: {
       placeholder: {
         type: String,
-        default: 'Theo lớp'
+        default: 'Lớp học'
       },
       classStyle: {
         type: Object,
