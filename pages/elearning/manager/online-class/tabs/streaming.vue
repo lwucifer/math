@@ -3,8 +3,8 @@
     <!--Filter form-->
     <div class="filter-form">
 
-      <div class="filter-form__item">
-        <div style="width: 30rem;">
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
