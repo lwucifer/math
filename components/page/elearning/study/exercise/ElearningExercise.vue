@@ -3,8 +3,8 @@
     <div class="e-exercise-components">
       <!-- <ElearningExerciseList /> -->
       <!-- <ElearningExerciseBeforeBegin /> -->
-      <!-- <ElearningExerciseDoExercise /> -->
-      <ElearningExerciseResults />
+      <ElearningExerciseDoExercise />
+      <!-- <ElearningExerciseResults /> -->
     </div>
 
     <div class="e-exercise-bottom">
