@@ -1,0 +1,22 @@
+.e-exercise-do-exercise {
+    &__countdown {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.e-exercise-choose {
+    border-radius: 2px;
+    border: 1px solid #EEEEEE;
+    
+    &__answers {
+        margin-left: 1.4rem;
+
+        .app-radio:not(:last-child) {
+            margin-bottom: 1.6rem;
+        }
+    }
+    
+    &__question {
+        margin-bottom: 1.4rem;
+    }
+}

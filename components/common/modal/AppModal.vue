@@ -19,10 +19,42 @@
               maxWidth: typeof maxWidth === 'number' ? maxWidth + 'px' : maxWidth,
             }"
           >
-            <div class="app-modal-content">
-              <slot name="header" />
-              <slot name="content" />
-              <slot name="footer" />
+            <div class="app-modal-components">
+              <div v-if="header" class="app-modal-header">
+                <slot name="header" :close="close">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="app-modal-title">{{ title }}</h4>
+                    <button class="app-modal-close" @click="close">
+                      <IconClose class="icon d-block fill-opacity-1" />
+                    </button>
+                  </div>
+                </slot>
+              </div>
+
+              <div class="app-modal-content">
+                <slot name="content"></slot>
+              </div>
+
+              <div v-if="footer" class="app-modal-footer">
+                <slot name="footer">
+                  <div class="d-flex justify-content-end">
+                    <app-button
+                      class="mr-3"
+                      color="default"
+                      outline
+                      :loading="cancelLoading"
+                      :size="size"
+                      @click="cancel"
+                    >
+                      <slot name="cancelText">{{ cancelText }}</slot>
+                    </app-button>
+
+                    <app-button :loading="confirmLoading" :size="size" @click="ok">
+                      <slot name="okText">{{ okText }}</slot>
+                    </app-button>
+                  </div>
+                </slot>
+              </div>
             </div>
           </div>
         </div>
@@ -32,16 +64,27 @@
 </template>
 
 <script>
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+
 export default {
   inheritAttrs: false,
+
+  components: {
+    IconClose
+  },
 
   props: {
     width: {
       type: [Number, String],
-      default: 520 // number in px or css value
+      default: 600 // number in px or css value
     },
     maxWidth: {
       type: [Number, String]
+    },
+    size: {
+      type: String,
+      default: "md",
+      validator: value => ["sm", "md"].indexOf(value) > -1
     },
     componentClass: {
       type: Object,
@@ -52,14 +95,49 @@ export default {
       default: 1
     },
     centered: Boolean,
-    visible: Boolean
+    visible: Boolean,
+    title: String,
+    confirmLoading: Boolean,
+    cancelLoading: Boolean,
+    footer: {
+      type: Boolean,
+      default: true
+    },
+    header: {
+      type: Boolean,
+      default: true
+    },
+    cancelText: {
+      type: String,
+      default: "Đóng"
+    },
+    okText: {
+      type: String,
+      default: "Lưu thay đổi"
+    }
   },
 
   computed: {
     classes() {
       return {
-        "app-modal-centered": this.centered
+        "app-modal--centered": this.centered,
+        "app-modal--size-md": this.size === "md",
+        "app-modal--size-sm": this.size === "sm"
       };
+    }
+  },
+
+  methods: {
+    close() {
+      this.$emit("close");
+    },
+
+    ok() {
+      this.$emit("ok");
+    },
+
+    cancel() {
+      this.$emit("cancel");
     }
   }
 };

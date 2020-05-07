@@ -85,7 +85,7 @@
       </div>
     </section>
 
-    <app-modal v-if="modal" @close="hideModal" :width="600">
+    <app-modal v-if="modal" @close="hideModal" :width="600" :footer="false" :header="false">
       <div class="modal-content" slot="content">
         <code>
           <div v-text="`<template>`"></div>
@@ -212,11 +212,6 @@ export default {
 .icon {
   font-size: 3rem;
   cursor: pointer;
-}
-
-.modal-content {
-  padding: 4rem 2rem;
-  font-size: 1.6rem;
 }
 
 .nav {

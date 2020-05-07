@@ -89,12 +89,15 @@ module.exports = {
      */
     modules: [
         "@nuxtjs/axios",
-        "@nuxtjs/style-resources",
         "@nuxtjs/svg",
         "portal-vue/nuxt",
         "@nuxtjs/recaptcha",
         '@nuxtjs/pwa',
         '@nuxtjs/firebase'
+    ],
+
+    buildModules: [
+        "@nuxtjs/style-resources",
     ],
 
     /*

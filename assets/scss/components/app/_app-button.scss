@@ -189,6 +189,10 @@
     border-color: #fff;
 }
 
+.btn-outline--color-default {
+    border: 1px solid $color-disabled;
+    color: $color-primary !important;
+}
 
 // Loading state
 .btn--loading {
