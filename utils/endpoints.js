@@ -122,6 +122,7 @@ export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
+export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
 /**
  * SCHOOL

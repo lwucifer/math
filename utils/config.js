@@ -71,3 +71,4 @@ export const CURRENCY = 'đ';
 export const TIMEOUT = {
   NOTIFY: 5000,
 }
+

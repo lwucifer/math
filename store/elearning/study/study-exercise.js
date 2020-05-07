@@ -11,6 +11,8 @@ const state = () => ({
   results: [],
   submissions: [],
   submissionAdd: {},
+  elearningExercises: [],
+  currentExercise: {},
 });
 
 /**
@@ -23,17 +25,29 @@ const actions = {
    * Get questions and answers for exercise
    * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/getQuestionsUsingGET
    */
-  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION]({ commit }, payload) {
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION](
+    { commit },
+    payload
+  ) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION](payload);
+      const result = await new Exercise(this.$axios)[
+        actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION
+      ](payload);
       console.log("[LIST_QUESTION]", result);
       if (result.success == RESPONSE_SUCCESS) {
-        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_LIST, result);
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_EXERCISE_QUESTION_LIST,
+          result
+        );
       }
 
       return result;
     } catch (error) {
-      console.log("[Elearning ELEARNING_STUDY_EXERCISE] LIST_QUESTION.error", error);
+      console.log(
+        "[Elearning ELEARNING_STUDY_EXERCISE] LIST_QUESTION.error",
+        error
+      );
     }
   },
 
@@ -41,17 +55,28 @@ const actions = {
    * Get result of exercise
    * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/getResultExerciseUsingGET
    */
-  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_RESULT]({ commit }, payload) {
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_RESULT](
+    { commit },
+    payload
+  ) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.ELEARNING_STUDY_EXERCISE.LIST_RESULT](payload);
+      const result = await new Exercise(this.$axios)[
+        actionTypes.ELEARNING_STUDY_EXERCISE.LIST_RESULT
+      ](payload);
       console.log("[LIST_RESULT]", result);
       if (result.success == RESPONSE_SUCCESS) {
-        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST, result);
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST,
+          result
+        );
       }
 
       return result;
     } catch (error) {
-      console.log("[Elearning ELEARNING_STUDY_EXERCISE] LIST_RESULT.error", error);
+      console.log(
+        "[Elearning ELEARNING_STUDY_EXERCISE] LIST_RESULT.error",
+        error
+      );
     }
   },
 
@@ -59,17 +84,29 @@ const actions = {
    * Get student answers for exercise
    * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/getAnswersUsingGET
    */
-  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_SUBMISTION]({ commit }, payload) {
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_SUBMISTION](
+    { commit },
+    payload
+  ) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.LIST](payload);
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.LIST](
+        payload
+      );
       console.log("[LIST_SUBMISTION]", result);
       if (result.success == RESPONSE_SUCCESS) {
-        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_LIST, result);
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_EXERCISE_SUBMISSION_LIST,
+          result
+        );
       }
 
       return result;
     } catch (error) {
-      console.log("[Elearning ELEARNING_STUDY_EXERCISE] LIST_SUBMISTION.error", error);
+      console.log(
+        "[Elearning ELEARNING_STUDY_EXERCISE] LIST_SUBMISTION.error",
+        error
+      );
     }
   },
 
@@ -77,20 +114,61 @@ const actions = {
    * Submit answers for exercise
    * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/submitAnswersUsingPOST
    */
-  async [actionTypes.ELEARNING_STUDY_EXERCISE.ADD_SUBMISTION]({ commit }, payload) {
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.ADD_SUBMISTION](
+    { commit },
+    payload
+  ) {
     try {
-      const result = await new Exercise(this.$axios)[actionTypes.BASE.ADD](payload);
+      const result = await new Exercise(this.$axios)[actionTypes.BASE.ADD](
+        payload
+      );
       console.log("[ADD_SUBMISTION]", result);
       if (result.success == RESPONSE_SUCCESS) {
-        commit(mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_ADD, result);
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_EXERCISE_SUBMISSION_ADD,
+          result
+        );
       }
 
       return result;
     } catch (error) {
-      console.log("[Elearning ELEARNING_STUDY_EXERCISE] ADD_SUBMISTION.error", error);
+      console.log(
+        "[Elearning ELEARNING_STUDY_EXERCISE] ADD_SUBMISTION.error",
+        error
+      );
     }
   },
 
+  /**
+   * Get exercise list of e-learning
+   * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/getElearningExerciseUsingGET
+   */
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE](
+    { commit },
+    payload
+  ) {
+    try {
+      const result = await new Exercise(this.$axios)[
+        actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE
+      ](payload);
+      console.log("[LIST_ELEARNING_EXERCISE]", result);
+      if (result.success == RESPONSE_SUCCESS) {
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_ELEARNING_EXERCISE_LIST,
+          result.data
+        );
+      }
+
+      return result;
+    } catch (error) {
+      console.log(
+        "[LIST_ELEARNING_EXERCISE] error",
+        error
+      );
+    }
+  }
 };
 
 /**
@@ -124,6 +202,21 @@ const mutations = {
   ) {
     state.submissionAdd = _submissionAdd;
   },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_ELEARNING_EXERCISE_LIST](
+    state,
+    _list
+  ) {
+    state.elearningExercises = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT](
+    state,
+    _curr
+  ) {
+    console.log("[SET_STUDY_EXERCISE_CURRENT]", _curr)
+    state.currentExercise = _curr;
+  }
 };
 
 export default {
