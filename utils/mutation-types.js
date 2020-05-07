@@ -318,6 +318,11 @@ export const ELEARNING_STUDY = {
 export const ELEARNING_STUDY_STUDENT = {
     SET_ELEARNING_STUDY_STUDENT: "setElearningStudyStudent",
 };
+
+export const ELEARNING_STUDY_STATISTIC = {
+    SET_ELEARNING_STUDY_STATISTIC : "setElearningStudyStatistic"
+}
+
 export const ELEARNING_STUDY_FAVOURITE = {
     SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
     SET_ELEARNING_STUDY_FAVOURITE_ADD: "setElearningStudyFavouriteAdd",

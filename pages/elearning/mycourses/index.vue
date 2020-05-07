@@ -3,18 +3,18 @@
     <span class="title__study-space">Góc học tập</span>
     <div class="d-flex">
         <div class="elearning-manager-content__title__nav">
-            <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả</a>
-            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng</a>
-            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học</a>
-            <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">Yêu thích</a>
-            <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ</a>
+            <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a>
+            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.courses}})</a>
+            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.lectures}})</a>
+            <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">Yêu thích ({{total.favourites}})</a>
+            <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
         </div>
-        <div style="width: 267px;margin-left:auto">
+        <div style="width: 267px;margin-left:auto" placeholder="Tìm kiếm">
             <app-search/>
         </div>
     </div>
     <ElearningList/>
-    <app-pagination :pagination="pagination" :type="2"/>
+    <app-pagination :pagination="pagination"  :type="2"/>
   </div>
 </template>
 
@@ -32,38 +32,82 @@ export default {
             params:{},
             tab: 2,
             list:[],
+            total:{
+                elearnings:"",
+                courses:"",
+                lectures:"",
+                favourites:"",
+                archieves:""
+            },
             pagination:{
                 total: 0,
                 size: 10,
                 page: 1,
-                totalElements: 10,
+                totalElements: 0,
                 first: 1,
                 last: 1,
-                number: 10
+                number: 0
             }
         }
     },
     created(){
-        this.fetchElearningList()
+        this.fetchElearningList(),
+        this.fetchElearningStatisticList()
     },
     computed:{
         ...mapState("elearning/study/study-student", {
             elearningStudyStudent: "elearningStudyStudent",
+        }),
+        ...mapState("elearning/study/study-student", {
+            elearningStudyStatistic: "elearningStudyStatistic",
         })
+    },
+    watch:{
+        elearningStudyStatistic:{
+            handler: function(){
+                this.total.elearnings = get(this,"elearningStudyStatistic.total_elearnings",0)
+                this.total.courses = get(this,"elearningStudyStatistic.total_courses",0)
+                this.total.lectures = get(this,"elearningStudyStatistic.total_lectures",0)
+                this.total.favourites = get(this,"elearningStudyStatistic.total_favourites",0)
+                this.total.archieves = get(this,"elearningStudyStatistic.total_archieves",0)
+            }
+        }
     },
     methods:{
         changeTab(tab){
             this.tab = tab;
+            if(tab===1){
+                this.params.type = "ALL"
+                this.fetchElearningList()
+            }
+            else if(tab===2){
+                this.params.type = "COURSE"
+                this.fetchElearningList()
+            }
+            else if(tab===3){
+                this.params.type = "LECTURE"
+                this.fetchElearningList()
+            }
+            else if(tab===4){
+                console.log('farvou')
+            }
+            else if(tab===5){
+                console.log('archive')
+            }
+            
         },
         fetchElearningList(){
             const payload = {
                 params :{
-                    types: this.params.type,
+                    type: this.params.type,
                     size: this.params.size,
                     page: this.params.page
                 }
             }
             this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,payload)
+        },
+        fetchElearningStatisticList(){
+            this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STATISTIC.LIST}`)
         }
     }
 }
