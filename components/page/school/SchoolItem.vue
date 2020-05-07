@@ -18,15 +18,15 @@
       </n-link>
       <div class="school-item__info__statistic-item">
         <span> <IconLocation /> </span>
-        <span class="value">{{ school.province }}</span>
+        <span class="value">{{ school.ward}}-{{ school.district}}-{{ school.province }}</span>
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUser /></span>
-        <span class="value">{{ school.total_teacher }} giáo viên </span>
+        <span class="value">{{ school.teacher_number }} giáo viên </span>
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUserGroup /></span>
-        <span class="value">{{ school.total_student }} học sinh </span>
+        <span class="value">{{ school.student_number }} học sinh </span>
       </div>
     </div>
   </div>

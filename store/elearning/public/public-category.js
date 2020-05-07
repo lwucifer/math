@@ -25,6 +25,7 @@ const actions = {
       const result = await new Category(this.$axios)[actionTypes.BASE.LIST](
         options
       );
+      console.log("[ELEARNING_PUBLIC_CATEGORY]", result.data)
       // set to mutation
       commit(
         mutationTypes.ELEARNING_PUBLIC_CATEGORY
