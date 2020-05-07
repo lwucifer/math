@@ -1,20 +1,22 @@
 <template>
   <div class="wrap__elearning-item">
-      <img  src="https://picsum.photos/266/156" class="img__elearning-item"/>
-      <div class="px-3 py-3">
-          <p class="name_elearning-item">Nên tảng tiếng Anh cho Người mới bắt đầu Người mới bắt đầu </p>
-          <div class="d-flex align-items-center my-4">
+      <div class="img__elearning-item">
+          <img  :src="avatar ? avatar : 'https://picsum.photos/20/206'" />
+      </div>
+      <div class="wrap-content_Elearning">
+          <p class="name_elearning-item">{{name}}</p>
+          <div class="d-flex align-items-center my-3">
             <app-avatar
-                src="https://picsum.photos/20/20"
+                :src="teacher.avatar ? teacher.avatar : 'https://picsum.photos/20/206'"
                 :size="20"
             />
-            <span class="ml-2">Lily Edwards</span>
+            <span class="ml-2">{{teacher.name ? teacher.name : 'Nguyễn Văn C'}}</span>
         </div>
         <div class="proccess-bar-study-border">
-                <div class="percent-proccess" v-bind:style="{width: 15 +'%'}"></div>
+                <div class="percent-proccess" v-bind:style="{width: progress +'%'}"></div>
         </div>
         <div class="d-flex">
-            <span>Đã hoàn thành <strong class="text-primary">15%</strong></span>
+            <span>Đã hoàn thành <strong class="text-primary">{{progress}}%</strong></span>
             <div class="ml-auto">
                 <app-dropdown
                     class="post__menu-dropdown"
@@ -59,6 +61,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconHeartAlt from '~/assets/svg/design-icons/heart-alt.svg?inline';
 import IconShare24px from '~/assets/svg/v2-icons/share_24px.svg?inline';
 import IconArchiveAlt from '~/assets/svg/design-icons/archive-alt.svg?inline';
+import { get } from "lodash";
 export default {
     components:{
         IconDots,
@@ -68,8 +71,29 @@ export default {
     },
     data(){
         return{
-            menuDropdown:false
+            menuDropdown:false,
+            name:"",
+            avatar:"",
+            teacher:{
+                avatar:"",
+                name:""
+            },
+            progress:null
+
         }
+    },
+    props:{
+        elearning:{
+            default: null
+        }
+    },
+    created(){
+        this.name = get(this,"elearning.name","")
+        this.avatar = get(this,"elearning.avatar.low","")
+        this.teacher.avatar = get(this,"elearning.teacher.avatar","")
+        this.teacher.name = get(this,"elearning.teacher.name","")
+        this.progress = get(this,"elearning.progress","")
+
     }
 }
 </script>
@@ -80,16 +104,23 @@ export default {
     margin-bottom: 22px;
     background: #FFFFFF;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-    text-
+    .wrap-content_Elearning{
+        padding: 15px;
+    }
     .img__elearning-item{
         width: 100%;
-        height: 158.6px;
+        height: 159px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
     .proccess-bar-study-border{
             height: 5px;
             width: 100%;
             background: #EEEEEE;
-            margin: 13px 0;
+            margin: 15px 0;
             .percent-proccess{
                 background: #37A000;
                 height: 5px;
