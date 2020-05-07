@@ -1,33 +1,6 @@
 .filter-form__ElearninManagerInteractive{
   display: flex;
 
-  .filter-results {
-    margin: 0 1.2rem;
-
-    button {
-      border-radius: 2px !important;
-      background: $color-primary-3;
-      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-
-      @media (min-width: 1200px) {
-        width: 148px !important;
-      }
-
-      span {
-        margin-left: 7px;
-      }
-    }
-  }
-
-  .filter-course {
-    margin-right: 1.2rem;
-
-    @media (min-width: 1200px) {
-      width: 181px !important;
-    }
-  }
-  
-
   .filter-status {
     @media (min-width: 1200px) {
       width: 125px !important;
@@ -35,10 +8,42 @@
   }
 }
 
+.filter-results {
+  margin-right: 1.2rem;
+
+  button {
+    border-radius: 2px !important;
+    background: $color-primary-3;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+
+    @media (min-width: 1200px) {
+      width: 148px !important;
+    }
+
+    span {
+      margin-left: 7px;
+    }
+  }
+}
+
+.filter-course {
+  margin-right: 1.2rem;
+
+  @media (min-width: 1200px) {
+    width: 190px !important;
+  }
+}
+
+.search--modifer {
+  @media (min-width: 1200px) {
+    width: 50% !important;
+  }
+}
+
 
 .wrapSearchForm___ElearningManagerFilterTable{
-  margin-right: auto;
   position: relative;
+  margin-right: 1.2rem;
   
   @media (min-width: 1200px) {
     width: 30rem;

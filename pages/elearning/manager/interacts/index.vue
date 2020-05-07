@@ -10,11 +10,15 @@
       <div class="col-md-9">
         <sub-block-section title="Tương tác với học sinh">
           <template #content>
-              <div class="elearning-manager-content__title mb-4">
+              <div class="elearning-manager-content__title mb-4 justify-content-between align-items-center">
                 <div class="elearning-manager-content__title__nav">
                   <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">HỎI ĐÁP</a>
                   <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">THÔNG BÁO</a>
                 </div>
+
+                <app-button v-if="tab == 2">
+                  <n-link :to="'/elearning/manager/interactive/createnotify'">Tạo thông báo</n-link>
+                </app-button>
               </div>
               
               <div class="elearning-manager-content__main">

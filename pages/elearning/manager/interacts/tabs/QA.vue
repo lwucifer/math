@@ -61,11 +61,6 @@
           ></app-vue-select>
         </div>
       </div>
-
-
-      <div class="filter-form__right">
-        
-      </div>
     </div>
     
     <div class="wrapTable__ElearningManagerInteractive">
