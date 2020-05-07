@@ -61,6 +61,13 @@ $vs-border-radius: 0 !default;
     }
 
     min-width: 10rem;
+    
+    .vs__actions {
+        svg path {
+            fill: $color-primary;
+            fill-opacity: 1;
+        }
+    }
 }
 
 .vs__selected + .vs__search {
