@@ -97,7 +97,7 @@
                     <li>
                       <a>Xem trang cá nhân</a>
                     </li>
-                    <li @click.prevent="removeMember(item.id)">
+                    <li @click.stop="removeMember(item.id)">
                       <a>Xoá khỏi nhóm</a>
                     </li>
                   </ul>

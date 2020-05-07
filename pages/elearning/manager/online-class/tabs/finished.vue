@@ -3,36 +3,7 @@
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
-        <app-button
-          color="primary"
-          class="filter-form__item__btn filter-form__item__btn--submit"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item" style="min-width: 20rem">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filterCourse"
-          :options="courses"
-          label="text"
-          placeholder="Theo bài giảng/khóa học"
-          searchable
-          clearable
-          @input="handleChangedCourse"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        ></app-vue-select>
-      </div>
-
-      <div class="filter-form__item">
-        <label for>Chọn ngày</label>
         <app-date-picker
-          class="ml-3"
           v-model="params.query_date"
           square
           size="sm"
@@ -44,9 +15,8 @@
         </app-date-picker>
       </div>
 
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div style="width: 23rem;">
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
@@ -55,7 +25,32 @@
           ></app-search>
         </div>
       </div>
-      <!--End right form-->
+
+      <div class="filter-form__item">
+        <app-button
+          color="primary"
+          square
+          class="filter-form__item__btn filter-form__item__btn--submit"
+          :size="'sm'"
+          @click="submit"
+        >
+          <IconHamberger class="fill-white mr-2" />
+          <span>Lọc kết quả</span>
+        </app-button>
+      </div>
+
+      <div class="filter-form__item" style="min-width: 19rem">
+        <app-vue-select
+          class="app-vue-select filter-form__item__selection"
+          v-model="filterCourse"
+          :options="courses"
+          label="text"
+          placeholder="Bài giảng/khóa học"
+          searchable
+          clearable
+          @input="handleChangedCourse"
+        ></app-vue-select>
+      </div>
     </div>
     <!--End filter form-->
 

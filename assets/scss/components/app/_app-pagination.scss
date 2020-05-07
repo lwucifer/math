@@ -12,9 +12,7 @@
 
     .link {
         display: inline-block;
-        background: #eee;
-        border-radius: 5px;
-        color: #333;
+        color: #656565;
         font-size: 1.4rem;
         height: 3.2rem;
         padding: 0 1.2rem;
@@ -23,15 +21,14 @@
 
         &:not(.active):not(.disable) {
             cursor: pointer;
-
             &:hover {
-                background-color: #ddd;
+                color: $color-primary;
             }
         }
 
         &.active {
-            color: #fff;
-            background-color: $color-primary;
+            color: $color-primary;
+            border-bottom: 2px solid $color-primary;
         }
     }
 }
@@ -59,7 +56,7 @@
             width: 4rem;
             text-align: center;
             line-height: 3.2rem;
-            border: 1px solid $color-border;
+            border: 2px solid $color-border;
             margin: 0 1.5rem 0  1rem;
         }
 

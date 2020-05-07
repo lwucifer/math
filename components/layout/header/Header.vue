@@ -216,7 +216,8 @@ export default {
       this.reviceNoti(data);
       this.socialNotifications({
         params: {
-          page: 1
+          page: 1,
+          payloadCheck: "check"
         }
       });
       this.checkPayload = true;

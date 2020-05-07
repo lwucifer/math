@@ -15,15 +15,6 @@
                     top: calc(50% - 9px);
                 }
             }
-            .app-checkbox {
-                &__checkmark {
-                    border: 1px solid #CCCCCC !important;
-                }
-                
-                &__input:checked + .app-checkbox__checkmark {
-                    border: 2px solid $color-primary;
-                }
-            }
         }
     }
 

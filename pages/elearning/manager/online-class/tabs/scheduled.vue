@@ -15,8 +15,8 @@
         </app-date-picker>
       </div>
 
-      <div class="filter-form__item">
-        <div style="width: 30rem;">
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
@@ -72,6 +72,7 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       :data="classList"
+      primaryKey="online_class_id"
       multiple-selection
     >
       <template v-slot:cell(online_class_name)="{row}">
@@ -97,6 +98,16 @@
         <td class="nowrap">
           <a class @click="openModal(row.online_class_id)">Vào phòng học</a>
         </td>
+      </template>
+
+      <template v-slot:actions="{row}">
+        <a class @click="openModal(row.online_class_id)">
+          <IconCalendar class="fill-primary mr-2"/>Vào phòng học
+        </a>
+        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
+          <IconCalendar class="fill-blue mr-2"/>Xem danh sách học sinh
+        </n-link>
+        <button @click="deleteRows(row.online_class_id)"><IconCalendar class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
@@ -148,11 +159,6 @@ export default {
         {
           name: "elearning_name",
           text: "Thuộc khóa học",
-          sort: true
-        },
-        {
-          name: "privacy",
-          text: "Hiển thị",
           sort: true
         },
         {
@@ -297,8 +303,8 @@ export default {
       }
     },
 
-    async deleteRows() {
-      let ids = { online_class_ids: [...this.ids] };
+    async deleteRows(id = null) {
+      let ids = id ? { online_class_ids: [id] } : { online_class_ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
         JSON.stringify(ids)

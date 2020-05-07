@@ -6,7 +6,7 @@
       <div class="contact-list">
         <div
           class="item d-flex-center"
-          v-for="(item, index) in friendList.listFriend ? friendList.listFriend : []"
+          v-for="(item, index) in friendList && friendList.listFriend ? friendList.listFriend : []"
           :key="index"
         >
           <app-avatar
@@ -49,8 +49,8 @@ export default {
   },
 
   computed: {
-    ...mapState("social", ["friendList"]),
-    ...mapState("message", ["memberList"]),
+    // ...mapState("account", ["friendList"]),
+    ...mapState("message", ["memberList", "friendList"]),
     arrIdMember() {
       const data = this.memberList.listMember ? this.memberList.listMember : [];
       console.log(
