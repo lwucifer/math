@@ -16,7 +16,7 @@ export const BASE = {
 };
 
 export const PUBLIC = {
-    SET_BANK_LIST: "setBankList"
+    SET_BANK_LIST: "setBankList",
 };
 
 export const SOCIAL = {
@@ -65,8 +65,8 @@ export const ACCOUNT_WITHDRAWALS = {
 };
 
 export const ACCOUNT_BANKS = {
-    SET_ACCOUNT_BANKS_LIST : "setAccountBanksList"
-}
+    SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
+};
 
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
@@ -337,7 +337,6 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
 };
 
-
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -359,6 +358,9 @@ export const MESSAGE_GROUP = {
     SET_LIST_MESSAGE_TYPE: "setListMessageType",
     SET_TAB_CHAT: "setTabChat",
     SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
+    SET_LIST_MESSAGE_TYPE_GROUP: "setListMessageTypeGroup",
+    SET_LIST_MESSAGE_TYPE_CHAT: "setListMessageTypeChat",
+    SET_IS_CREATED: "setIsCreated",
 };
 
 export const ELEARNING_INFO = {

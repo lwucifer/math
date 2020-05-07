@@ -66,6 +66,11 @@ export default {
           room_type: 1
         }
       }),
+      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
+        params: {
+          room_type: 2
+        }
+      }),
       store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
         params: {
           room_id: room_id
@@ -95,14 +100,20 @@ export default {
   mounted() {},
   created() {},
   computed: {
-    ...mapState("message", ["messageEmit", "closeCreate", "isGroupState"]),
+    ...mapState("message", [
+      "messageEmit",
+      "closeCreate",
+      "isGroupState",
+      "isCreated"
+    ]),
     ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
   },
 
   methods: {
-    ...mapMutations("message", ["setOnMessage"]),
+    ...mapMutations("message", ["setOnMessage", "setIsCreated"]),
     addMessage() {
-      this.isCreate = !this.isCreate;
+      this.isCreate = !this.isCreated;
+      this.setIsCreated(this.isCreate);
     },
 
     clickTab() {

@@ -7,7 +7,9 @@
         class="btn btn--size-md btn--color-white btn--square btn--normal"
       >
         Lời mời kết bạn
-        <span>{{inviteList.totalInvite}}</span>
+        <span
+          v-if="inviteList && inviteList.totalInvite > 0"
+        >{{inviteList.totalInvite}}</span>
       </n-link>
     </div>
     <div class="account-friends__search form-group">
