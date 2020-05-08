@@ -23,7 +23,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in icons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon"
+              :is="get(icon, 'icon.default', icon.icon)"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/icons')"
@@ -40,7 +40,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in v2Icons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon"
+              :is="get(icon, 'icon.default', icon.icon)"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/v2-icons')"
@@ -57,7 +57,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in designIcons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon"
+              :is="get(icon, 'icon.default', icon.icon)"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/design-icons')"
@@ -74,7 +74,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in textEditorIcons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon"
+              :is="get(icon, 'icon.default', icon.icon)"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/text-editor')"
@@ -118,6 +118,8 @@
 </template>
 
 <script>
+import { get } from "lodash";
+
 export default {
   data: () => ({
     modal: false,
@@ -178,6 +180,8 @@ export default {
   },
 
   methods: {
+    get,
+
     handleClick(path, source) {
       this.dataModal = { path, sourcePath: source };
       this.modal = true;

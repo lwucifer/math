@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap-study-space">
+    <div class="wrap-study-space" v-if="checRoleStudent()">
         <app-dropdown
             position="left"
             v-model="dropdownCourse"
@@ -45,6 +45,8 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { isCommonElementIn2Array } from "~/utils/common";
+import { USER_ROLES } from "~/utils/constants";
 export default {
     data(){
         return{
@@ -72,15 +74,34 @@ export default {
                 }
             }
             this.$store.dispatch(`elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,payload)
-        }
+        },
+        async fetchProfile() {
+            await Promise.all([
+                this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`)
+            ]);
+        },
+        checRoleStudent(){
+            let isValid = true;
+            isValid = isCommonElementIn2Array(this.userRoles, [
+                USER_ROLES.ROLE_STUDENT
+            ]);
+            return isValid
+        },
+        get
     },
     computed:{
         ...mapState("elearning/study/study-student", {
             elearningStudyStudent: "elearningStudyStudent",
-        })
+        }),
+        ...mapState("account", { profile: "profileList" }),
+        userRoles() {
+            return this.get(this, "profile.role.authority", false) || [];
+        },
     },
-    created(){
-        this.fetchElearningList()
+    async created(){
+        this.fetchElearningList();
+        await this.fetchProfile();
+        this.checRoleStudent()
     },
 }
 </script>
@@ -94,6 +115,7 @@ export default {
     align-items: center;
     .item{
         text-decoration: none;
+        text-transform: uppercase;
         display: inline-block;
         width: 100%;
         padding: 3rem 0;

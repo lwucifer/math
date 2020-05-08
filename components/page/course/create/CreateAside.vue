@@ -1,5 +1,7 @@
 <template>
   <aside class="course-create-aside bg-white">
+    <h4 class="cca-title">Đề mục</h4>
+
     <ul class="cca-checkbox-list">
       <li
         v-for="item in menu"
@@ -7,16 +9,16 @@
         :class="{ active: item.key === active }"
         @click="handleClickMenuItem(item)"
       >
-        <app-checkbox
+        <app-checkbox-circle
           :value="item.key"
           :checked="item.checked"
-          :disabled="true"
+          :disabled="false"
         >
           {{ item.title }}
           <span v-if="item.optional" class="cca-sub-text text-sub"
             >(Tùy chọn)</span
           >
-        </app-checkbox>
+        </app-checkbox-circle>
       </li>
     </ul>
 
@@ -29,6 +31,7 @@
         >Gửi lên</app-button
       >
     </div>
+
     <app-modal-confirm
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
@@ -81,7 +84,7 @@ export default {
   data() {
     return {
       menu,
-      active: "general",
+      active: "",
       showModalConfirm: false,
       confirmLoading: false,
     };
@@ -205,4 +208,4 @@ export default {
 };
 </script>
 
-<style></style>
+

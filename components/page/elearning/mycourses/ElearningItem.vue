@@ -4,7 +4,7 @@
           <img  :src="avatar ? avatar : 'https://picsum.photos/20/206'" />
       </div>
       <div class="wrap-content_Elearning">
-          <p class="name_elearning-item">{{name}}</p>
+          <n-link class="name_elearning-item" :to="`/elearning/${elearning_id}`">{{name}}</n-link>
           <div class="d-flex align-items-center my-3">
             <app-avatar
                 :src="teacher.avatar ? teacher.avatar : 'https://picsum.photos/20/206'"
@@ -38,13 +38,13 @@
                         </li>
                         <li>
                             <n-link to>
-                                <IconHeartAlt class='icon' />
+                                <IconCardsHeart class='icon' />
                                 Bỏ yêu thích
                             </n-link>
                         </li>
                         <li>
                             <n-link to>
-                                <IconArchiveAlt class='icon' />
+                                <IconUnArchive class='icon' />
                                 Bỏ lưu trữ
                             </n-link>
                         </li>
@@ -58,20 +58,21 @@
 
 <script>
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
-import IconHeartAlt from '~/assets/svg/design-icons/heart-alt.svg?inline';
+import IconCardsHeart from '~/assets/svg/v2-icons/cards-heart.svg?inline';
 import IconShare24px from '~/assets/svg/v2-icons/share_24px.svg?inline';
-import IconArchiveAlt from '~/assets/svg/design-icons/archive-alt.svg?inline';
+import IconUnArchive from '~/assets/svg/v2-icons/un-archive.svg?inline';
 import { get } from "lodash";
 export default {
     components:{
         IconDots,
-        IconHeartAlt,
+        IconCardsHeart,
         IconShare24px,
-        IconArchiveAlt
+        IconUnArchive
     },
     data(){
         return{
             menuDropdown:false,
+            id:"",
             name:"",
             avatar:"",
             teacher:{
@@ -88,6 +89,8 @@ export default {
         }
     },
     created(){
+        console.log("[props] elearning", this.elearning)
+        this.elearning_id = get(this,"elearning.elearning_id","")
         this.name = get(this,"elearning.name","")
         this.avatar = get(this,"elearning.avatar.low","")
         this.teacher.avatar = get(this,"elearning.teacher.avatar","")
@@ -134,16 +137,28 @@ export default {
         line-height: 20px;
         color: #222222;
         overflow: hidden;
-        text-overflow: ellipsis
+        text-overflow: ellipsis;
+        text-decoration: none;
+    }
+    .app-dropdown__content{
+        right: -16px !important;
     }
     .link--dropdown__ElearningItem{
         list-style: none;
         padding:18px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         li{
-            margin:14px 0px;
             a{
                 text-decoration: none;
+                display: flex;
+                align-items: center;
+                svg{
+                    margin-right: 10px;
+                }
             }
+        }
+        li:nth-child(2){
+            margin: 14px 0px;
         }
     }
 }

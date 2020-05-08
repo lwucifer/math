@@ -16,7 +16,7 @@
     <ElearningList 
         :elearningList="list"
     />
-    <app-pagination :pagination="pagination"  :type="2"/>
+    <app-pagination :pagination="pagination" :type="1" />
   </div>
 </template>
 
@@ -25,7 +25,10 @@ import ElearningList from "~/components/page/elearning/mycourses/ElearningList"
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+
+
 export default {
+    middleware: ['student-role'],
     components:{
         ElearningList
     },
@@ -42,13 +45,13 @@ export default {
                 archieves:null
             },
             pagination:{
-                total: 0,
-                size: 10,
-                page: 1,
-                totalElements: 0,
-                first: 1,
-                last: 1,
-                number: 0
+                "totalElements": 103,
+                "last": false,
+                "totalPages": 222,
+                "size": 10,
+                "number": 2,
+                "first": true,
+                "numberOfElements": 10
             }
         }
     },
@@ -107,11 +110,11 @@ export default {
             }
             else if(tab===4){
                 this.fetchElearningFavourite();
-                this.list = get(this,"elearningStudyArchive.content",[])
+                this.list = get(this,"elearningStudyFavourite.content",[])
             }
             else if(tab===5){
                 this.fetchElearningArchive()
-                this.list = get(this,"elearningStudyFavourite.content",[])
+                this.list = get(this,"elearningStudyArchive.content",[])
             }
             
         },

@@ -2,14 +2,14 @@
   <div class="e-exercise-list-item text-center bg-white" :class="classes">
     <h3 class="e-exercise-list-item__name heading-5 mb-3">{{ name }}</h3>
     <div class="e-exercise-list-item__desc mb-3">
-      <span class="text-primary">{{ getTypeText(type) }}</span>
+      <span class="text-primary">{{ type | getExerciseTypeText }}</span>
       <app-divider class="e-exercise-list-item__divider" direction="vertical" />
       <span class="text-gray">Thời gian làm bài:</span>
       <b class="text-dark">{{ getDurationText(duration) }}</b>
     </div>
 
     <app-button
-      v-if="status === EXERCISE_STATUS.PENDING"
+      v-if="status === EXERCISE_STATUS.NONE"
       color="orange"
       size="sm"
       @click.prevent="handleDoExercise"
@@ -20,11 +20,12 @@
       v-else-if="status === EXERCISE_STATUS.FAILED"
       color="secondary"
       size="sm"
+      @click.prevent="handleDoExercise"
       >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
     >
 
     <app-button
-      v-else-if="status === EXERCISE_STATUS.NONE"
+      v-else-if="status === EXERCISE_STATUS.PENDING"
       color="orange"
       size="sm"
       >Chờ chấm điểm</app-button
@@ -45,6 +46,7 @@
 
 <script>
 import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
+
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
 
 import { mapMutations } from "vuex";
@@ -115,13 +117,13 @@ export default {
       this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
     },
 
-    getTypeText(type) {
-      if (type === EXERCISE_TYPES.CHOICE) {
-        return "Bài tập trắc nghiệm";
-      } else if (type === EXERCISE_TYPES.ESSAY) {
-        return "Bài tập tự luận";
-      }
-    },
+    // getTypeText(type) {
+    //   if (type === EXERCISE_TYPES.CHOICE) {
+    //     return "Bài tập trắc nghiệm";
+    //   } else if (type === EXERCISE_TYPES.ESSAY) {
+    //     return "Bài tập tự luận";
+    //   }
+    // },
 
     getDurationText(time) {
       const hour = Math.floor(time / 60);

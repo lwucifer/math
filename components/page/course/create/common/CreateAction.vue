@@ -12,6 +12,8 @@
     </app-button>-->
 
     <div class="create-action__right" v-if="isShowAction">
+      <app-button outline color="error"> Thiết lập lại</app-button>
+
       <app-button
         class="create-action__btn"
         color="secondary"
@@ -32,11 +34,12 @@
 
 <script>
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+// import IconDelete from "~assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import { get } from "lodash";
 
 export default {
   components: {
-    IconArrowLeft,
+    IconArrowLeft
   },
 
   props: {
