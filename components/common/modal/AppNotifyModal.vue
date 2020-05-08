@@ -1,5 +1,5 @@
 <template>
-  <app-modal centered :width="400" :component-class="{ 'auth-modal': true }" v-if="show">
+  <app-modal centered :width="400" :component-class="{ 'auth-modal': true }" :header="false" v-if="show">
     <div slot="content">
       <div class="auth_content text-center mb-4">
         <IconSucessGreen class="mt-3 mb-3" />

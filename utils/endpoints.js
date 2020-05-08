@@ -105,10 +105,11 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/
  * STUDY
  */
 export const STUDY_ELEARNING = `/elearning/study/elearnings`;
+export const STUDY_STATISTIC_ELEARNING = `/elearning/study/elearning/statistic`;
 export const STUDY_MY_ELEARNING = `/study`;
-export const STUDY_FAVOURITE = `/elearning/study/favourite`;
+export const STUDY_FAVOURITE = `/elearning/study/elearning/favourites`;
 export const STUDY_VOTE = `/elearning/study/votes`;
-export const STUDY_ARCHIVE = `/elearning/study/archive`;
+export const STUDY_ARCHIVE = `/elearning/study/elearning/archives`;
 export const STUDY_INFO = `/elearning/study/elearning/info`;
 export const STUDY_INTERACTIVE_QUESTION = `/elearning/study/interactive/questions`;
 export const STUDY_INTERACTIVE_QUESTION_ADD = `/elearning/study/interactive/question`;
@@ -121,6 +122,7 @@ export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
+export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
 /**
  * SCHOOL

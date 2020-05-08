@@ -1,3 +1,4 @@
+import { STUDY_MODE } from '~/utils/constants';
 /**
  * initial state
  */
@@ -6,6 +7,7 @@ const state = () => ({
     name: "",
     data: "",
   },
+  studyMode: STUDY_MODE.VIDEO_PLAYING, // defaul display video playing, options: VIDEO_PLAYING|DO_EXCERCISE|BEFORE_BEGIN -> DOING -> FINISH|DO_TEST
 });
 
 /**
@@ -28,6 +30,10 @@ const actions = {
 const mutations = {
   event(state, payload) {
     state.payload = payload;
+  },
+  setStudyMode(state, _mode) {
+    console.log("[setStudyMode]", _mode);
+    state.studyMode = _mode;
   },
 };
 

@@ -8,21 +8,34 @@
       <b class="text-dark">{{ getDurationText(duration) }}</b>
     </div>
 
-    <app-button v-if="status === EXERCISE_STATUS.NONE" color="orange" size="sm">Làm bài tập</app-button>
+    <app-button
+      v-if="status === EXERCISE_STATUS.PENDING"
+      color="orange"
+      size="sm"
+      @click.prevent="handleDoExercise"
+      >Làm bài tập</app-button
+    >
 
     <app-button
       v-else-if="status === EXERCISE_STATUS.FAILED"
       color="secondary"
       size="sm"
-    >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button>
+      >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
+    >
 
     <app-button
-      v-else-if="status === EXERCISE_STATUS.PENDING"
+      v-else-if="status === EXERCISE_STATUS.NONE"
       color="orange"
       size="sm"
-    >Chờ chấm điểm</app-button>
+      >Chờ chấm điểm</app-button
+    >
 
-    <app-button v-else-if="status === EXERCISE_STATUS.PASSED" color="primary" size="sm">Xem kết quả</app-button>
+    <app-button
+      v-else-if="status === EXERCISE_STATUS.PASSED"
+      color="primary"
+      size="sm"
+      >Xem kết quả</app-button
+    >
 
     <span v-if="required" class="e-exercise-list-item__star">
       <IconStar class="icon" />
@@ -31,8 +44,10 @@
 </template>
 
 <script>
-import { EXERCISE_STATUS, EXERCISE_TYPES } from "~/utils/constants";
+import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
+
+import { mapMutations } from "vuex";
 
 export default {
   components: {
@@ -40,6 +55,7 @@ export default {
   },
 
   props: {
+    id: String,
     stared: Boolean,
     name: String,
     duration: Number,
@@ -78,6 +94,27 @@ export default {
   },
 
   methods: {
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseCurrent"
+    ]),
+
+    ...mapMutations("event", ["setStudyMode"]),
+
+    handleDoExercise() {
+      console.log("[handleDoExercise]");
+
+      // set current exercise
+      this.setStudyExerciseCurrent({
+        id: this.id,
+        name: this.name,
+        type: this.type,
+        duration: this.duration,
+      });
+
+      // show befor begin exercise
+      this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
+    },
+
     getTypeText(type) {
       if (type === EXERCISE_TYPES.CHOICE) {
         return "Bài tập trắc nghiệm";

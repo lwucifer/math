@@ -60,7 +60,7 @@ export default {
   },
 
   watch: {
-    comment: {
+    question: {
       handler: function() {
         this.liked = get(this, "question.liked", false);
         this.likes = get(this, "question.likes", 0);
@@ -87,7 +87,7 @@ export default {
       if (!this.submit) return;
       this.submit = false;
       const payload = {
-        question_id: this.comment.id,
+        question_id: this.question.id,
         like: !this.liked,
       };
 

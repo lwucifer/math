@@ -94,6 +94,7 @@ export default {
     align-items: center;
     .item{
         text-decoration: none;
+        text-transform: uppercase;
         display: inline-block;
         width: 100%;
         padding: 3rem 0;

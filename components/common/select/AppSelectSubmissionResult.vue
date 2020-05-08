@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <div class="filter-form__item">
-      <app-vue-select
-        class="app-vue-select filter-form__item__selection w-100"
-        v-model="selectedItem"
-        :options="options"
-        :reduce="item => item.val"
-        label="label"
-        :placeholder="placeholder"
-        :searchable="searchable"
-        :clearable="clearable"
-        @input="handleChangedResult"
-      >
-      </app-vue-select>
-    </div>
+  <div class="">
+    <app-vue-select
+      class="app-vue-select filter-form__item__selection w-100"
+      v-model="selectedItem"
+      :options="options"
+      :reduce="item => item.val"
+      label="label"
+      :placeholder="placeholder"
+      :searchable="searchable"
+      :clearable="clearable"
+      @input="handleChangedResult"
+    >
+    </app-vue-select>
   </div>
 </template>
 
@@ -33,7 +31,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: 'Theo kết quả'
+      default: 'Kết quả'
     },
     clearable: {
       type: Boolean,

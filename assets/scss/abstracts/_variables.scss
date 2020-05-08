@@ -37,6 +37,7 @@ $color-image-placeholder: #f6f6f6 !default;
 $color-border: #F2F2F2 !default;
 $color-active: $color-red !default;
 $color-disabled: #E0E0E0 !default;
+$color-icon: rgba(0, 0, 0, 0.54);
 
 
 // Common box-shadow
@@ -164,7 +165,6 @@ $xy-border: (
     right: r,
     bottom: b,
     left: l,
-    all: a
 ) !default;
 
 $z-index: (

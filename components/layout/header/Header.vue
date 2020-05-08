@@ -28,7 +28,8 @@
         </li>
       </ul>
       <div v-if="isAuthenticated" class="the-header__user">
-        <study-space />
+        <study-space v-if="isStudentRole"/>
+
         <button class="item" @click="redirectMessages">
           <IconMessager />
           <span class="number">9</span>
@@ -169,7 +170,7 @@ import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
 import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
-import { UPDATE_NOTI } from "~/utils/constants";
+import { UPDATE_NOTI, USER_ROLES } from "~/utils/constants";
 import { detectBrowser } from "~/utils/common";
 
 export default {
@@ -202,6 +203,11 @@ export default {
     ...mapState("notifications", ["notis", "notiUnread"]),
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
+    },
+    isStudentRole() {
+      if(!this.isAuthenticated) return false;
+      const accountRole = this.$store.getters['auth/roles'].map(r => r.authority);
+      return accountRole.includes(USER_ROLES.ROLE_USER)
     },
     ...mapGetters("cart", ["cartCheckout"])
   },

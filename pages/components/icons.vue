@@ -23,7 +23,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in icons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon.default"
+              :is="icon.icon"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/icons')"
@@ -40,7 +40,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in v2Icons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon.default"
+              :is="icon.icon"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/v2-icons')"
@@ -57,7 +57,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in designIcons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon.default"
+              :is="icon.icon"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/design-icons')"
@@ -74,7 +74,7 @@
         <div class="col-2 my-3 text-center" v-for="icon in textEditorIcons" :key="icon.path">
           <div>
             <component
-              :is="icon.icon.default"
+              :is="icon.icon"
               class="icon"
               fill="#000"
               @click="handleClick(icon.path, '~/assets/svg/text-editor')"
@@ -85,7 +85,7 @@
       </div>
     </section>
 
-    <app-modal v-if="modal" @close="hideModal" :width="600">
+    <app-modal v-if="modal" @close="hideModal" :width="600" :footer="false" :header="false">
       <div class="modal-content" slot="content">
         <code>
           <div v-text="`<template>`"></div>
@@ -212,11 +212,6 @@ export default {
 .icon {
   font-size: 3rem;
   cursor: pointer;
-}
-
-.modal-content {
-  padding: 4rem 2rem;
-  font-size: 1.6rem;
 }
 
 .nav {

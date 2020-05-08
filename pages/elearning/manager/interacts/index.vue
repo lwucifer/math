@@ -8,21 +8,28 @@
         <ElearningManagerSide active="6" />
       </div>
       <div class="col-md-9">
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Bài tập và bài kiểm tra</h5>
-            <div class="elearning-manager-content__title__nav">
-              <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Bài tập</a>
-              <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>
-            </div>
-            <hr class />
-          </div>
-          <div class="elearning-manager-content__main">
-            <keep-alive>
-              <component v-bind:is="currentTabComponent"></component>
-            </keep-alive>
-          </div>
-        </div>
+        <sub-block-section title="Tương tác với học sinh">
+          <template #content>
+              <div class="elearning-manager-content__title mb-4 justify-content-between align-items-center">
+                <div class="elearning-manager-content__title__nav">
+                  <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">HỎI ĐÁP</a>
+                  <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">THÔNG BÁO</a>
+                </div>
+
+                <app-button nuxt :to="'/elearning/manager/interacts/createnotify'"
+                  v-if="tab == 2" 
+                  class="make-noti-button btn--color-info">
+                  <IconPlusCircle class="mr-2"/> Tạo thông báo
+                </app-button>
+              </div>
+              
+              <div class="elearning-manager-content__main">
+                <keep-alive>
+                  <component v-bind:is="currentTabComponent"></component>
+                </keep-alive>
+              </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>
@@ -30,17 +37,21 @@
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
+import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 const QATab = () => import("./tabs/QA");
 const NotifyTab = () => import("./tabs/notify");
+
 export default {
   layout: "manage",
 
   components: {
     ElearningManagerSide,
     QATab,
-    NotifyTab
+    NotifyTab,
+    IconPlusCircle
   },
   data() {
     return {
@@ -50,6 +61,7 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
+    
     currentTabComponent: function() {
       // List of tabs
       const MATCHED_TABS = ["QATab", "NotifyTab"];
@@ -67,5 +79,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.make-noti-button {
+  height: 32px;
+
+  &:hover {
+    background: #14bff4 !important;
+  }
+}
 </style>
