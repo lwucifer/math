@@ -25,7 +25,10 @@ import ElearningList from "~/components/page/elearning/mycourses/ElearningList"
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+
+
 export default {
+    middleware: ['student-role'],
     components:{
         ElearningList
     },
