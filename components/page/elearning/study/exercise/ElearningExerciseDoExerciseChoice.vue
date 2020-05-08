@@ -6,7 +6,11 @@
         <app-select v-model="questionNo" class="ml-3" :options="questionNoOpts" size="sm" />
       </div>
 
-      <a href class="text-decoration-none ml-5">Danh sách câu hỏi</a>
+      <a
+        href
+        class="text-decoration-none ml-5"
+        @click.prevent="modalListQuestions = true"
+      >Danh sách câu hỏi</a>
     </div>
 
     <div class="e-exercise-choose bg-white pa-3 mb-4">
@@ -44,16 +48,32 @@
       </div>
 
       <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
+      <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
     </div>
+
+    <app-modal v-if="modalListQuestions" title="Danh sách câu hỏi" :footer="false" @close="modalListQuestions = false">
+      <ElearingExerciseListQuestions slot="content" :type="EXERCISE_TYPES.CHOICE" />
+    </app-modal>
+
+    <app-modal-confirm
+      v-if="modalConfirmSubmit"
+      title="Xác nhận nộp bài"
+      description="Bạn có chắc chắn muốn nộp bài?"
+      @cancel="modalConfirmSubmit = false"
+      @ok="modalConfirmSubmit = false"
+      @close="modalConfirmSubmit = false"
+    ></app-modal-confirm>
   </div>
 </template>
 
 <script>
+import { EXERCISE_TYPES } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
+import ElearingExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { QUESTION_NAV } from "~/utils/constants";
@@ -64,7 +84,8 @@ export default {
   components: {
     IconArrowBack,
     IconArrowForward,
-    IconSend
+    IconSend,
+    ElearingExerciseListQuestions
   },
 
   data() {
@@ -75,8 +96,12 @@ export default {
 
     return {
       // questionNoOpts,
+      // EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
+      // questionNoOpts,
       questionNo: 1,
-      answer: null
+      answer: null,
+      modalListQuestions: false,
+      modalConfirmSubmit: false
     };
   },
 

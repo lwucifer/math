@@ -47,11 +47,11 @@
       @change="hanldeOtp"
       @close="closeModalOtp"
     />
-    <app-notify-modal
-      :show="notify.showNotify"
-      :message="notify.message"
-      :link="notify.redirectLink"
+    <app-modal-notify
+      v-if="notify.showNotify"
+      :title="notify.message"
       @close="closeNotify"
+      @ok="$router.push(notify.redirectLink)"
     />
   </div>
 </template>

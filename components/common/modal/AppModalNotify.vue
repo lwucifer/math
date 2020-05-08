@@ -1,14 +1,13 @@
 <template>
   <app-modal
     v-bind="{ width, centered, order }"
-    :component-class="{ 'app-modal-confirm': true }"
+    :component-class="{ 'app-modal-notify': true }"
     :header="false"
     :footer="false"
-    @close="$emit('cancel')"
   >
     <div slot="content">
       <slot v-if="type !== 'default'" name="icon">
-        <div class="app-modal-confirm__icon">
+        <div class="app-modal-notify__icon">
           <IconCheckCircle v-if="type === 'success'" />
           <IconAlertTriangle v-if="type === 'warning'" />
           <IconAlertCircle v-if="type === 'error'" />
@@ -16,24 +15,15 @@
       </slot>
 
       <slot v-if="title || $slots.title" name="title">
-        <h3 class="app-modal-confirm__title">{{ title }}</h3>
+        <h3 class="app-modal-notify__title">{{ title }}</h3>
       </slot>
 
       <slot v-if="description || $slots.description" name="description">
-        <div class="app-modal-confirm__desc">{{ description }}</div>
+        <div class="app-modal-notify__desc">{{ description }}</div>
       </slot>
 
-      <div class="app-modal-confirm__actions">
+      <div class="app-modal-notify__actions">
         <slot name="actions" :confirmLoading="confirmLoading">
-          <app-button
-            class="font-weight-semi-bold mr-3"
-            color="default"
-            outline
-            @click="$emit('cancel')"
-          >
-            <slot name="cancelText">{{ cancelText }}</slot>
-          </app-button>
-
           <app-button
             class="font-weight-semi-bold"
             color="primary"
@@ -46,7 +36,7 @@
         </slot>
       </div>
 
-      <button class="app-modal-confirm__close" @click="$emit('cancel')">
+      <button class="app-modal-notify__close" @click="$emit('close')">
         <IconClose class="icon d-block fill-opacity-1" />
       </button>
     </div>
@@ -60,6 +50,8 @@ const IconAlertTriangle = () => import("~/assets/svg/icons/alert-triangle-1.svg?
 const IconAlertCircle = () => import("~/assets/svg/icons/alert-circle-1.svg?inline");
 
 export default {
+  inheritAttrs: false,
+
   components: {
     IconClose,
     IconCheckCircle,
@@ -69,7 +61,10 @@ export default {
 
   props: {
     // Pass to app-modal
-    centered: Boolean,
+    centered: {
+      type: Boolean,
+      default: true
+    },
     order: {
       type: Number,
       default: 1
@@ -87,16 +82,12 @@ export default {
     },
     title: {
       type: String,
-      default: "Xác nhận?"
+      default: "Thông báo"
     },
     description: String,
     okText: {
       type: String,
-      default: "Xác nhận"
-    },
-    cancelText: {
-      type: String,
-      default: "Huỷ"
+      default: "Đóng"
     },
     confirmLoading: Boolean
   }
@@ -104,5 +95,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/app/_app-modal-confirm.scss";
+@import "~/assets/scss/components/app/_app-modal-notify.scss";
 </style>
