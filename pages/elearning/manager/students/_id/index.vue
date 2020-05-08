@@ -23,6 +23,15 @@
                     Cấm học sinh này
                 </app-button>
             </div>
+            <StudentManagerInfo/>
+            <div class="mt-4">
+                <h5 class="text-primary mb-3">Điểm đánh giá</h5>
+                <StudentManagerInfoTable 
+                    :heads="heads"
+                    :list="list"
+                    :pagination="pagination"
+                />
+            </div>
           </template>
         </sub-block-section>
       </div>
@@ -32,7 +41,9 @@
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+import StudentManagerInfo from "~/components/page/elearning/manager/student/StudentManagerInfo"
 import IconBlock24px from '~/assets/svg/v2-icons/block_24px.svg?inline';
+import StudentManagerInfoTable from "~/components/page/elearning/manager/student/StudentManagerInfoTable"
 
 import { mapState } from "vuex"
 import { get } from "lodash"
@@ -43,12 +54,42 @@ export default {
 
   components: {
     ElearningManagerSide,
-    IconBlock24px
+    StudentManagerInfo,
+    IconBlock24px,
+    StudentManagerInfoTable
   },
 
   data() {
     return {
-
+        heads:[
+            {
+                name:"title",
+                text:"Tiêu đề bài tập"
+            },
+            {
+                name:"mark",
+                text:"Điểm"
+            },
+            {
+                name:"action",
+                text:""
+            }
+        ],
+        list:[
+            {
+                title:"Justice League",
+                mark:10
+            }
+        ],
+        pagination: {
+                totalElements: 0,
+                last: false,
+                totalPages: 1,
+                size: 10,
+                number: 0,
+                first: true,
+                numberOfElements: 0
+            }
     }
   },
   computed: {
