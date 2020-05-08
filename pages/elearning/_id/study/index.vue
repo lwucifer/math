@@ -7,17 +7,34 @@
         <div class="row">
           <div class="col-md-8">
             <div class="box22">
-              <!-- VIDEO STREAMING -->
               <div class="elearning-lesson_image">
+                <img
+                  :src="
+                    get(info, 'cover_url.high', '') ||
+                      '/images/adefltu - course - image.png'
+                  "
+                  width="750"
+                  height="422"
+                  alt
+                  v-if="studyMode === defaultMode"
+                />
                 <Streaming
                   :url="get(payload, 'stream_urls.hls_url', '')"
                   v-if="studyMode == videoMode"
                 />
+                <a :href="get(payload, 'link', '')" v-if="studyMode == docMode"
+                  >Download</a
+                >
                 <img
-                  src="https://picsum.photos/750/422"
+                  :src="get(payload, 'link', '')"
                   alt
-                  v-if="studyMode === defaultMode"
+                  v-if="studyMode === imageMode"
                 />
+                <iframe
+                  style="width: 712px"
+                  :src="get(payload, 'link', '')"
+                  v-if="studyMode == articleMode"
+                ></iframe>
               </div>
 
               <!-- DO EXERCISE -->
@@ -64,7 +81,7 @@ import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 // Import faked data
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
 
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -138,6 +155,8 @@ export default {
         getProgress(),
       ]);
 
+      console.log(data);
+
       this.loading = false;
 
       this.info = get(data, "0.data", null);
@@ -155,6 +174,7 @@ export default {
       });
       this.interactive_questions = get(res, "data", null);
     },
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
   },
 
   data() {
@@ -167,7 +187,15 @@ export default {
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
+      docMode: STUDY_MODE.DOCS,
+      articleMode: STUDY_MODE.ARTICLE,
+      imageMode: STUDY_MODE.IMAGE,
     };
+  },
+
+  destroyed() {
+    this.setStudyMode("");
+    this.setPayload(null);
   },
 
   computed: {

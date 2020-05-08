@@ -6,7 +6,7 @@
     <div class="lesson-title mb-2">
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
-        :disabled="true"
+        :disabled="lesson.status == lessonCompleted"
       />
       <p class="text-uppercase pl-1 text-clickable" @click="handleStuty">
         {{ get(lesson, "name", "") }}
@@ -91,12 +91,21 @@ export default {
     async handleStuty() {
       console.log(this.lesson);
 
+      if (get(this, "lesson.type", "") === "DOCS") {
+        this.setStudyMode(STUDY_MODE.DOCS);
+        this.setPayload(this.lesson);
+        return;
+      }
+
       if (get(this, "lesson.type", "") === "ARTICLE") {
-        const payload = {
-          name: STUDY_LESSON_TYPE_IMAGE,
-          data: "",
-        };
-        this.$store.dispatch("event/pushEvent", payload);
+        this.setStudyMode(STUDY_MODE.ARTICLE);
+        this.setPayload(this.lesson);
+        return;
+      }
+
+      if (get(this, "lesson.type", "") === "IMAGE") {
+        this.setStudyMode(STUDY_MODE.IMAGE);
+        this.setPayload(this.lesson);
         return;
       }
 
@@ -128,6 +137,7 @@ export default {
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
     },
   },
+
   computed: {
     completes() {
       return get(this.lesson, "completes", 0);
