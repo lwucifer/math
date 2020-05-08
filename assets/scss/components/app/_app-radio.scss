@@ -8,8 +8,9 @@
 
     &:checked {
         + .app-radio__decor {
+            border-color: $color-brand;
             .app-radio__decor__inner {
-                background-color: $color-icon;
+                background-color: $color-brand;
             }
         }
     }
