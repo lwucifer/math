@@ -38,12 +38,9 @@
 
       <div class="col csa-col csa-col--right mb-4">
         <p class="csa-desc caption text-gray">
-          - Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
-          340x204 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
-          .png
-        </p>
-        <p class="csa-desc caption text-gray">
-          - Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
+          Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
+          <strong>340x204</strong> pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
+          .png. Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
         </p>
 
         <div class="mt-4">
@@ -63,7 +60,9 @@
               :fileList="avatar"
               class="cgi-upload-avt mb-3"
               @change="handleUploadChange"
+              placeholder="Chưa có ảnh nào được chọn"
             ></app-upload>
+
             <div v-show="false" class="text-error caption">
               <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên
               có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là

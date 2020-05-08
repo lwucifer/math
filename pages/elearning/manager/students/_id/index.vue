@@ -1,0 +1,114 @@
+<template>
+  <div class="container">
+    
+    <div class="row">
+      <div class="col-md-3">
+        <ElearningManagerSide active="2" />
+      </div>
+      <div class="col-md-9">
+        <sub-block-section
+          title="Nguyễn Văn Nam"
+          has-icon
+        >
+          <template v-slot:content>
+            <div class="d-flex">
+                <h5 class="text-primary">Thông tin học sinh</h5>
+                <app-button
+                    square
+                    color="secondary"
+                    size="sm"
+                    class="btn-block__manager-student"
+                >
+                    <IconBlock24px class="icon mr-2"/>
+                    Cấm học sinh này
+                </app-button>
+            </div>
+            <StudentManagerInfo/>
+            <div class="mt-4">
+                <h5 class="text-primary mb-3">Điểm đánh giá</h5>
+                <StudentManagerInfoTable 
+                    :heads="heads"
+                    :list="list"
+                    :pagination="pagination"
+                />
+            </div>
+          </template>
+        </sub-block-section>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+import StudentManagerInfo from "~/components/page/elearning/manager/student/StudentManagerInfo"
+import IconBlock24px from '~/assets/svg/v2-icons/block_24px.svg?inline';
+import StudentManagerInfoTable from "~/components/page/elearning/manager/student/StudentManagerInfoTable"
+
+import { mapState } from "vuex"
+import { get } from "lodash"
+import * as actionTypes from "~/utils/action-types"
+
+export default {
+  layout: "manage",
+
+  components: {
+    ElearningManagerSide,
+    StudentManagerInfo,
+    IconBlock24px,
+    StudentManagerInfoTable
+  },
+
+  data() {
+    return {
+        heads:[
+            {
+                name:"title",
+                text:"Tiêu đề bài tập"
+            },
+            {
+                name:"mark",
+                text:"Điểm"
+            },
+            {
+                name:"action",
+                text:""
+            }
+        ],
+        list:[
+            {
+                title:"Justice League",
+                mark:10
+            }
+        ],
+        pagination: {
+                totalElements: 0,
+                last: false,
+                totalPages: 1,
+                size: 10,
+                number: 0,
+                first: true,
+                numberOfElements: 0
+            }
+    }
+  },
+  computed: {
+  
+  },
+
+  methods: {
+    
+  },
+  created() {
+    // this.getList()
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+@import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
+.btn-block__manager-student{
+    background: #EB5757;
+    margin-left: auto;
+}
+</style>

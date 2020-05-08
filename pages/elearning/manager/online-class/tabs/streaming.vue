@@ -70,12 +70,6 @@
           >{{row.online_class_name}}</n-link>
         </td>
       </template>
-      <template v-slot:cell(privacy)="{row}">
-        <td>
-          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
-          <span class="text-secondary" v-else>Riêng tư</span>
-        </td>
-      </template>
 
       <template v-slot:cell(time)="{row}">
         <td>
@@ -87,11 +81,23 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <a class @click="openModal(row.online_class_id)">Vào phòng học</a>
+          <a class="color-primary" @click="openModal(row.online_class_id)">Vào phòng học</a>
         </td>
+      </template>
+
+      <template v-slot:actions="{row}">
+        <a class @click="openModal(row.online_class_id)">
+          <IconCalendar class="fill-primary mr-2"/>Vào phòng học
+        </a>
+        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
+          <IconCalendar class="fill-blue mr-2"/>Xem danh sách học sinh
+        </n-link>
+        <button @click="deleteRows(row.online_class_id)"><IconCalendar class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
+
+    <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false"/>
   </div>
 </template>
 
@@ -140,11 +146,6 @@ export default {
         {
           name: "elearning_name",
           text: "Thuộc khóa học",
-          sort: true
-        },
-        {
-          name: "privacy",
-          text: "Hiển thị",
           sort: true
         },
         {

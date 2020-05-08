@@ -57,7 +57,7 @@
           </template>
 
           <!-- Hover actions -->
-          <div class="actions" :class="mouseOver ? 'show' : ''" v-if="$slots.actions">
+          <div class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
             <slot name="actions" :row="cat"></slot>
           </div>
         </tr>
@@ -213,6 +213,9 @@ export default {
   computed: {
     hasDefaultSlot() {
       return !!this.$slots.default;
+    },
+    hasActionsSlot() {
+      return !!this.$slots[ 'actions' ] || !!this.$scopedSlots[ 'actions' ];
     },
     sortedCats: function() {
       for (let i = this.cats.length - 1; i > 0; i--) {

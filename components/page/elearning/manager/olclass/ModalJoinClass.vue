@@ -1,5 +1,7 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'join-class-modal': true }">
+  <app-modal centered :width="420" :component-class="{ 'join-class-modal': true }"
+    :footer="false" :header="false"
+  >
     <div slot="content" class="text-center box22">
       <div class="title-modal mb-4">
         <h3>Phòng đợi</h3>

@@ -7,7 +7,9 @@
       </div>
       <div class="col-md-9">
         <div class="wrap-content-create-notify__ElearningManagerInteractive">
-          <h5 class="notify-title"><ArrowLeft class="mr-3"/> Tạo thông báo</h5>
+          <h5 class="notify-title">
+            <ArrowLeft class="mr-3" />Tạo thông báo
+          </h5>
 
           <div class="notify-content">
             <div class="d-flex flex-column">
@@ -17,7 +19,8 @@
                 placeholder="Chọn"
                 searchable
                 clearable
-                class="content-select__ElearningManagerInteractive"></app-select>
+                class="content-select__ElearningManagerInteractive"
+              ></app-select>
             </div>
 
             <div class="form">
@@ -42,7 +45,12 @@
       </div>
     </div>
 
-    <app-modal-notify v-if="showModal" type="success" title="Tạo thông báo thành công!" @close="showModal = false"/>
+    <app-modal-notify
+      v-if="showModal"
+      type="success"
+      title="Tạo thông báo thành công!"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
@@ -58,13 +66,13 @@ export default {
   components: {
     ElearningManagerSide,
     IconClose,
-    ArrowLeft,
+    ArrowLeft
   },
   data() {
     return {
       tab: 1,
       isAuthenticated: true,
-      showModal: true
+      showModal: false
     };
   },
   computed: {

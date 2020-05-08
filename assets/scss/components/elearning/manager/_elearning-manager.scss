@@ -135,11 +135,12 @@
 }
 
 .page-title {
-    background: #f9f9f9;
-    //box-shadow: 0px 1px 0px #E0E0E0;
-    padding: 1.5rem 2rem;
     font-size: 1.8rem;
+    line-height: 1;
+    padding: 1.5rem;
     color: #333;
+    background: #f9f9f9;
+    border-bottom: 1px solid #E0E0E0;
 }
 
 .elearning-manager__dashboard-filter {

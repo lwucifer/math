@@ -16,7 +16,7 @@
                   width="750"
                   height="422"
                   alt
-                  v-if="studyMode === ''"
+                  v-if="studyMode === defaultMode"
                 />
                 <Streaming
                   :url="get(payload, 'stream_urls.hls_url', '')"
@@ -38,7 +38,7 @@
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-if="studyMode == exerciseMode" />
+              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
 
               <div class="elearning-lesson__main-nav">
                 <a
@@ -186,6 +186,7 @@ export default {
       progress: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
+      defaultMode: STUDY_MODE.DEFAULT,
       docMode: STUDY_MODE.DOCS,
       articleMode: STUDY_MODE.ARTICLE,
       imageMode: STUDY_MODE.IMAGE,
