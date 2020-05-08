@@ -57,7 +57,7 @@
           </template>
 
           <!-- Hover actions -->
-          <div class="actions" :class="mouseOver ? 'show' : ''">
+          <div class="actions" :class="mouseOver ? 'show' : ''" v-if="$slots.actions">
             <slot name="actions" :row="cat"></slot>
           </div>
         </tr>

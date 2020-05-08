@@ -1,41 +1,30 @@
 <template>
-  <div class="box11">
-    <p class="mb-3">
-      <strong>{{ get(progress, "total_lessons", 0) }} Bài giảng</strong>
-      ({{ get(progress, "duration", "") }})
-    </p>
-
-    <div
-      v-for="(program, index) in get(progress, 'programs', [])"
-      :key="index"
-      class="elearning-lesson-side__course"
-    >
-      <div class="elearning-lesson-side__course-title">
-        <div>
-          <strong class="color-primary mb-2">
-            Chương {{ index + 1 }}: {{ get(program, "chapter", "") }}</strong
-          >
-          <!-- <p class="color-999 font-size-12" v-if="!ids.includes(item.id)">
+  <div class="elearning-lesson-side__course">
+    <div class="elearning-lesson-side__course-title">
+      <div>
+        <strong class="color-primary mb-2">
+          Chương {{ index + 1 }}: {{ get(program, "chapter", "") }}</strong
+        >
+        <!-- <p class="color-999 font-size-12" v-if="!ids.includes(item.id)">
               {{ item.done }} - {{ item.times }}
             </p> -->
-        </div>
-        <label class="toggle">
-          <input type="checkbox" v-model="ids" :value="program.id" />
-          <IconUpO class="up" v-if="ids.includes(program.id)" />
-          <IconDownO class="down" v-else />
-        </label>
       </div>
+      <label class="toggle">
+        <input type="checkbox" v-model="ids" :value="get(program, 'id', '')" />
+        <IconUpO class="up" v-if="ids.includes(get(program, 'id', ''))" />
+        <IconDownO class="down" v-else />
+      </label>
+    </div>
 
-      <div
-        v-if="ids.includes(program.id)"
-        class="elearning-lesson-side__lessons mt-3"
-      >
-        <ElearningProgramCourseItem
-          v-for="(lesson, j) in get(program, 'lessons', [])"
-          :key="j"
-          :lesson="lesson"
-        />
-      </div>
+    <div
+      v-if="ids.includes(get(program, 'id', ''))"
+      class="elearning-lesson-side__lessons mt-3"
+    >
+      <ElearningProgramItem
+        v-for="(lesson, j) in get(program, 'lessons', [])"
+        :key="j"
+        :lesson="lesson"
+      />
     </div>
   </div>
 </template>
@@ -49,7 +38,7 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import ElearningProgramCourseItem from "~/components/page/elearning/study/ElearningProgramCourseItem";
+import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
 
 export default {
   components: {
@@ -60,10 +49,11 @@ export default {
     IconFileCheckAlt,
     IconFileEditAlt,
     IconFileCheck,
-    ElearningProgramCourseItem,
+    ElearningProgramItem,
   },
   props: {
-    progress: {},
+    program: {},
+    index: {},
   },
   data() {
     return {
@@ -73,11 +63,11 @@ export default {
   },
 
   created() {
-    console.log(this.progress);
+    console.log(this.program);
   },
 
   updated() {
-    console.log(this.progress);
+    console.log(this.program);
   },
 
   methods: { get },

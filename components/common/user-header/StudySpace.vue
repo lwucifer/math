@@ -115,11 +115,12 @@ export default {
     align-items: center;
     .item{
         text-decoration: none;
+        text-transform: uppercase;
         display: inline-block;
         width: 100%;
         padding: 3rem 0;
         display: block;
-        color: #656565;
+        color: #656565;P
         svg path{ fill: #656565;}
         &:hover{
             svg path{ fill: $color-primary;}

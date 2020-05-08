@@ -88,7 +88,7 @@ import { STUDY_MODE } from '~/utils/constants';
 
 export default {
   name: "Elearning",
-  layout: "no-header",
+  layout: "studying",
 
   components: {
     ElearningCourseSide,

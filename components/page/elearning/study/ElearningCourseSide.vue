@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-lesson-side">
     <OnlineClass :info="info" />
-    <ElearningProgramCourse :progress="progress" />
+    <ElearningProgram :progress="progress" />
   </div>
 </template>
 <script>
@@ -14,7 +14,7 @@ import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inlin
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
 import OnlineClass from "~/components/page/elearning/study/OnlineClass";
-import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
+import ElearningProgram from "~/components/page/elearning/study/ElearningProgram";
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
     IconFileCheckAlt,
     IconFileEditAlt,
     IconFileCheck,
-    ElearningProgramCourse,
+    ElearningProgram,
     OnlineClass,
   },
   props: {
@@ -34,7 +34,7 @@ export default {
   },
 
   created() {
-    console.log(this.progress, this.info);
+    // console.log(this.progress, this.info);
   },
 
   data() {

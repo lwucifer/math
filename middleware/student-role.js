@@ -4,11 +4,11 @@ export default function ({ store, route, redirect }) {
     if(!isAuthenticated){
         return redirect(`/auth/signin`);
     }
-
-    const isTeacherRole = store.getters['auth/isTeacherRole'];
-    console.log("[Middlware] teacher role", isTeacherRole);
     
-    if (!isTeacherRole) {
+    const isStudentRole = store.getters['auth/isStudentRole'];
+    console.log("[Middlware] student role", isStudentRole);
+    
+    if (!isStudentRole) {
         return redirect(`/`);
     }
 }

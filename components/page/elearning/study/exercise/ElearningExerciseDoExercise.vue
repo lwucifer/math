@@ -2,7 +2,7 @@
   <div class="e-exercise-do-exercise">
     <h1
       class="heading-3 text-dark-2 mt-3 mb-4 text-center"
-    >1.Bài giảng đại số lớp 10 - {{ getTypeText(type) }}</h1>
+    >{{ currentExercise.name }} - {{ type | getExerciseTypeText }}</h1>
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
       <span>
         Số câu hỏi:
@@ -13,7 +13,7 @@
       <!-- <span>
         Thời gian làm bài:
         <span class="text-secondary">50 phút</span>
-      </span> -->
+      </span>-->
       <!-- v-else -->
       <span>
         Thời gian còn lại:
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import { EXERCISE_TYPES } from "~/utils/constants";
 
 import ElearningExerciseDoExerciseChoice from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseChoice";
@@ -52,14 +54,10 @@ export default {
     };
   },
 
-  methods: {
-    getTypeText(type) {
-      if (type === EXERCISE_TYPES.CHOICE) {
-        return "Bài tập trắc nghiệm";
-      } else if (type === EXERCISE_TYPES.ESSAY) {
-        return "Bài tập tự luận";
-      }
-    }
+  methods: {},
+
+  computed: {
+    ...mapState("elearning/study/study-exercise", ["currentExercise"])
   }
 };
 </script>
