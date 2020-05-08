@@ -15,7 +15,7 @@
       <a
         href
         class="text-decoration-none ml-5"
-        @click.prevent="modalListQuestions = true"
+        @click.prevent="handleShowListQuestion"
         >Danh sách câu hỏi</a
       >
     </div>
@@ -79,7 +79,7 @@
       :footer="false"
       @close="modalListQuestions = false"
     >
-      <ElearingExerciseListQuestions
+      <ElearningExerciseListQuestions
         slot="content"
         :type="EXERCISE_TYPES.CHOICE"
       />
@@ -101,19 +101,20 @@ import { EXERCISE_TYPES } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
-import ElearingExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
+import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
+import { RESPONSE_SUCCESS } from "../../../../../utils/config";
 
 export default {
   components: {
     IconArrowBack,
     IconArrowForward,
     IconSend,
-    ElearingExerciseListQuestions
+    ElearningExerciseListQuestions
   },
 
   data() {
@@ -126,7 +127,7 @@ export default {
       // questionNoOpts,
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       // questionNoOpts,
-      questionNo: '',
+      questionNo: "",
       answer: null,
       modalListQuestions: false,
       modalConfirmSubmit: false
@@ -162,7 +163,8 @@ export default {
       "setStudyExerciseCurrentByNo"
     ]),
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyExerciseSubmissionAdd"
+      "elearningSudyExerciseSubmissionAdd",
+      "elearningSudyExerciseSubmissionList"
     ]),
 
     handleQuestionBack() {
@@ -205,7 +207,21 @@ export default {
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
-      // this.elearningSudyExerciseSubmissionAdd(submissionReq);
+      this.elearningSudyExerciseSubmissionAdd(submissionReq);
+    },
+
+    handleShowListQuestion() {
+      console.log("[handleShowListQuestion]");
+
+      this.elearningSudyExerciseSubmissionList({
+        params: {
+          exercise_id: this.submission.exercise_id
+        }
+      }).then(res => {
+        if (res.success == RESPONSE_SUCCESS) {
+          this.modalListQuestions = true;
+        }
+      });
     },
 
     handleChangedQuestionNumber() {
@@ -215,7 +231,6 @@ export default {
     },
 
     setAnswered() {
-
       // set current answered you checked
       const answered = this.currentExerciseAnswers.find(
         an => an.question_id == this.currentExerciseQuestion.id
@@ -246,7 +261,7 @@ export default {
     },
 
     currentExerciseQuestion(_newVal) {
-      console.log("[currentExerciseQuestion]", _newVal)
+      console.log("[currentExerciseQuestion]", _newVal);
       // set current question Option
       this.questionNo = _newVal.id;
     }

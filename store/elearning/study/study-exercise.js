@@ -124,7 +124,7 @@ const actions = {
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_EXERCISE_SUBMISSION_LIST,
-          result
+          result.data
         );
       }
 

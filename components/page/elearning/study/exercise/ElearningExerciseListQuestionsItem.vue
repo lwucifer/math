@@ -2,16 +2,17 @@
   <li class="e-exercise-list-questions__item">
     <h5
       class="e-exercise-list-questions__question"
-    >Duis ex do cupidatat irure irure eu aute ipsum excepteur nulla est ut veniam. Consectetur proident cillum occaecat?</h5>
+      v-html="question.content"
+    ></h5>
 
     <div
-      v-if="type === EXERCISE_TYPES.ESSAY"
+      v-if="question.type === EXERCISE_TYPES.ESSAY"
       class="e-exercise-list-questions__answer e-exercise-list-questions__answer--essay"
     >
       <a
         href
         class="e-exercise-list-questions__toggle-answer"
-        :class="{ 'expand': expand }"
+        :class="{ expand: expand }"
         @click.prevent="toggleExpand"
       >
         <template v-if="expand">Thu gọn</template>
@@ -22,30 +23,52 @@
       <div
         v-if="expand"
         class="e-exercise-list-questions__answer-content"
-      >Duis ex do cupidatat irure irure eu aute ipsum excepteur nulla est ut veniam. Consectetur proident cillum occaecat?</div>
+        v-html="question.correct_answer ? question.correct_answer.content : ''"
+      ></div>
     </div>
 
     <div
-      v-if="type === EXERCISE_TYPES.CHOICE"
+      v-if="question.type === EXERCISE_TYPES.CHOICE"
       class="e-exercise-list-questions__answer e-exercise-list-questions__answer--choice"
     >
-      <!-- IF USER'S ANSWER IS TRUE -->
-      <!-- <span class="d-inline-flex align-items-center text-primary">
-        Câu trả lời: A. Câu trả lời số 1
-        <IconCheck class="icon fill-opacity-1 heading-3 ml-2" />
-      </span> -->
-       <!-- IF USER'S ANSWER IS TRUE -->
-      
-       <!-- IF USER'S ANSWER IS FALSE -->
-      <span class="d-inline-flex align-items-center text-secondary">
-        Câu trả lời: A. Câu trả lời số 1
-        <IconCancel class="icon fill-opacity-1 heading-3 ml-2" />
-      </span>
+      <a
+        href
+        class="e-exercise-list-questions__toggle-answer"
+        :class="{ expand: expand }"
+        @click.prevent="toggleExpand"
+      >
+        <template v-if="expand">Thu gọn</template>
+        <template v-else>Xem đáp án</template>
+        <IconAngleDown class="icon" />
+      </a>
+      <span v-if="expand">
+        <!-- IF USER'S ANSWER IS TRUE -->
+        <span
+          class="d-inline-flex align-items-center text-primary"
+          v-if="question.isUserTrue"
+        >
+          Câu trả lời: A. Câu trả lời số 1
+          <IconCheck class="icon fill-opacity-1 heading-3 ml-2" />
+        </span>
+        <!-- IF USER'S ANSWER IS TRUE -->
 
-      <span class="d-inline-flex align-items-center text-primary ml-4">
-        Đáp án đúng: B. Câu trả lời số 2
+        <!-- IF USER'S ANSWER IS FALSE -->
+        <span v-else>
+          <span class="d-inline-flex align-items-center text-secondary">
+            Câu trả lời:
+            {{ question.student_answer ? question.student_answer.index : "" }}.
+            {{ question.student_answer ? question.student_answer.content : "" }}
+            <IconCancel class="icon fill-opacity-1 heading-3 ml-2" />
+          </span>
+
+          <span class="d-inline-flex align-items-center text-primary ml-4">
+            Đáp án đúng:
+            {{ question.correct_answer ? question.correct_answer.index : "" }}.
+            {{ question.correct_answer ? question.correct_answer.content : "" }}
+          </span>
+        </span>
+        <!-- IF USER'S ANSWER IS FALSE -->
       </span>
-       <!-- IF USER'S ANSWER IS FALSE -->
     </div>
   </li>
 </template>
@@ -65,10 +88,9 @@ export default {
   },
 
   props: {
-    type: {
-      type: String,
-      default: EXERCISE_TYPES.ESSAY,
-      validator: value => Object.values(EXERCISE_TYPES).includes(value)
+    question: {
+      type: Object,
+      default: () => {}
     }
   },
 
