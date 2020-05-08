@@ -15,9 +15,12 @@
     </div>
 
     <div class="e-exercise-essay__bottom d-flex">
-      <app-button class="mr-auto" color="default" size="sm" @click.prevent="handleUploadAnswer">
+      <!-- <app-button class="mr-auto" color="default" size="sm" @click.prevent="handleUploadAnswer">
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu trả lời
-      </app-button>
+      </app-button> -->
+      <app-upload class="mr-auto" color="default" @change="handleUploadAnswer">
+          <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu trả lời
+      </app-upload>
 
       <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
       <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
@@ -84,7 +87,7 @@ export default {
       const submissionReq = createExerciseSubmissionReq({
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        attachments: null,
+        attachments: this.submission.attachments,
         duration: durationCost, // in seconds
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
@@ -95,11 +98,13 @@ export default {
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
-      // this.elearningSudyExerciseSubmissionAdd(submissionReq);
+      
+      this.elearningSudyExerciseSubmissionAdd(submissionReq);
     },
 
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
+      this.setStudyExerciseSubmission({ attachments: file });
     }
   },
 
@@ -109,7 +114,7 @@ export default {
         question_id: this.currentExerciseQuestion.id,
         choise_answer_id: null, // only incase choice
         answer: this.answer, 
-        attach_answer_index: null 
+        attach_answer_index: 1 
       };
       console.log("[answer] watch", _newVal, _oldVal, answers);
       if (_newVal != _oldVal) {

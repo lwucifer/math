@@ -6,7 +6,7 @@
     <div class="text-center font-weight-semi-bold heading-5 mb-6">
       <span>
         Số câu hỏi:
-        <span class="text-secondary mr-6">5</span>
+        <span class="text-secondary mr-6">{{ currentExercise.questions }}</span>
       </span>
       <span>
         Thời gian làm bài:
