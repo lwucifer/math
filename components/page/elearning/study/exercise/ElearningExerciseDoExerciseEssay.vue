@@ -95,16 +95,17 @@ export default {
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
+        attachments: this.submission.attachments,
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
-      
+
       this.elearningSudyExerciseSubmissionAdd(submissionReq);
     },
 
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
-      this.setStudyExerciseSubmission({ attachments: file });
+      this.setStudyExerciseSubmission({ attachments: file, question_id:  this.currentExerciseQuestion.id});
     }
   },
 

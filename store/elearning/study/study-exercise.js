@@ -271,6 +271,7 @@ const mutations = {
     const updatedStartTime = _submission.start_time;
     const updatedExerciseId = _submission.exercise_id;
     const updatedAttachments = _submission.attachments;
+    const updatedQuestionId = _submission.question_id;
     
     if(!!updatedStartTime){
       state.submission = {...state.submission, start_time: updatedStartTime}
@@ -289,6 +290,7 @@ const mutations = {
       state.submission = { ...state.submission, answers: currAnsers };
     }
     if(!!updatedAttachments){
+      
       state.submission = {...state.submission, attachments: [...state.submission.attachments, updatedAttachments]}
     }
 
