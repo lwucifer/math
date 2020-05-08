@@ -46,7 +46,7 @@ a {
     color: inherit;
   }
 
-  &:any-link {
+  &:any-link:not(.btn) {
     &,
     &:hover {
       color: $color-brand;
