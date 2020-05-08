@@ -156,7 +156,7 @@ export default {
         });
         this.lessons = lessons;
         if (get(this, "general.type", "") === "LECTURE") {
-          this.lesson = lessons[0];
+          this.getLesson(get(lessons, "0.id", ""));
         }
       }
     },
