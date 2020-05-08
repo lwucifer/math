@@ -3,9 +3,9 @@
     <create-action :isShowAction="false" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">
-          Nội dung học tập
-        </h1>
+        <h4 class="cc-panel__heading">
+          Nội dung học tập 2
+        </h4>
       </div>
 
       <div class="cc-panel__body">

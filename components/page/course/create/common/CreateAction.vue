@@ -11,35 +11,50 @@
         Quay lại
     </app-button>-->
 
-    <div class="create-action__right" v-if="isShowAction">
-      <app-button outline color="error"> Thiết lập lại</app-button>
+    <div class="create-action__right d-flex align-items-center" v-if="isShowAction">
+      <app-button outline
+        class="mr-4" 
+        square
+        color="error"><IconDelete class="mr-2"/> Thiết lập lại</app-button>
 
       <app-button
+        class="mr-4"
+        color="primary"
+        square
+        outline
+        ><IconSave class="mr-2"/> Lưu nháp</app-button>
+
+      <!-- <app-button
         class="create-action__btn"
         color="secondary"
         square
         @click="$emit('handleDelete')"
-        >Xoá</app-button
-      >
+        >Xoá</app-button> -->
+
       <app-button
         @click="handleCLickSave"
         class="create-action__btn mr-4"
         square
         :disabled="!isSubmit"
-        >Lưu</app-button
-      >
+        ><Forward class="mr-2"/> Lưu & Tiếp tục</app-button>
     </div>
   </div>
 </template>
 
 <script>
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
-// import IconDelete from "~assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
+
 import { get } from "lodash";
 
 export default {
   components: {
-    IconArrowLeft
+    IconArrowLeft,
+    IconDelete,
+    IconSave,
+    Forward
   },
 
   props: {
