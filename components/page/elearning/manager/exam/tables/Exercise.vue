@@ -50,7 +50,7 @@
             title="Chi tiết"
             :to="`/elearning/manager/exams/${row.id}/participants`"
           >
-            <IconArrow />
+            <IconArrow height="13"/>
           </n-link>
         </td>
       </template>

@@ -1,117 +1,147 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-6 titleUpload__ElearningManager">
-        <span>Upload file</span>
-      </div>
-      <div class="col-md-6 wrapStorage__ElearningManager ">
-        <div class="d-flex justify-content-end">
-          <span>Dung lượng đã sử dụng: </span>
-          <span> {{ usedCapacity*1024*1024 | fileSizeFilter }}/{{ maxCapacity*1024*1024 | fileSizeFilter }}</span>
-        </div>
-        <div class="wrapProcessbarStorage__ElearningManager d-flex justify-content-end">
-          <div class="processStorage__ElearningManager mb-0">
-            <div class="barStorage_ElearningManager mb-0" v-bind:style="{width: capcityPercentage +'%'}"></div>
-          </div>
-          <span v-if="capcityPercentage || capcityPercentage == 0">{{ capcityPercentage }}%</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="wrapUploadFile__ElearningManager">
-      <div class="titleFormatFile__ElearningManager">
-        <span>
-          *Các định dạng file hỗ trợ .m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv.
-        </span>
-      </div>
-      <div
-        class="wrapBtnUploadFile__ElearningManager"
-        @drop="handleDrop"
-        @dragover="handleDragover"
-        @dragenter="handleDragover"
-      >
-
-        <!--Upload notification-->
-        <div class="upload-alert" v-show="isSuccess || isError">
-          <!--Upload fail-->
-          <div class="upload-alert--error" v-if="isError">
-            <div class="upload-alert--error__info mb-2">
-              <div style="line-height: 100%;">
-                <IconClose class="icon icon--close-alert" />
+      <div class="col-md-6">
+        <h5 class="upload-repository__title">Upload file</h5>
+        <div class="wrapUploadFile__ElearningManager">
+          <div
+            class="wrapBtnUploadFile__ElearningManager upload-repository__box upload-repository__box--upload"
+            @drop="handleDrop"
+            @dragover="handleDragover"
+            @dragenter="handleDragover"
+          >
+            <!--Upload notification-->
+            <div class="upload-alert" v-show="isSuccess || isError">
+              <!--Upload fail-->
+              <div class="upload-alert--error" v-if="isError">
+                <div class="upload-alert--error__info mb-2">
+                  <div style="line-height: 100%;">
+                    <IconCloseOutline class="icon icon--close-alert"/>
+                  </div>
+                  <div>
+                    <span class="upload-alert--error__mess">{{ get(error, 'message', '') }}</span>
+                  </div>
+                </div>
+          
+                <div class="upload-alert--error__status">
+                  {{ get(error, 'reason', '') }}
+                </div>
               </div>
-              <div>
-                <span class="upload-alert--error__mess">{{ get(error, 'message', '') }}</span>
+        
+              <!--Upload success-->
+              <div class="upload-alert--success" v-if="isSuccess">
+                <p class="upload-alert--success__title">
+                  <IconSuccess class="icon" width="30" height="30" style="height: 1.8rem; width: 1.8rem;"/>
+                  <span>
+                    Tải lên thành công
+                  </span>
+                </p>
+                <p class="file-name text-center">{{ currentFile.name }}</p>
+              </div>
+        
+              <!--Button continue uploading-->
+              <div class="text-center" v-show="isError || isSuccess">
+                <app-button
+                  @click="uploadOther"
+                  normal
+                  class="btn--other-file font-weight-medium px-4"
+                  size="sm"
+                >
+                  <slot name="icon">
+                    <IconUploadFile class="icon--btn icon--btn--pre" style="height: 17px;"/>
+                  </slot>
+                  <span>Tải lên một file khác</span>
+                </app-button>
               </div>
             </div>
-
-            <div class="upload-alert--error__status">
-              {{ get(error, 'reason', '') }}
-            </div>
-          </div>
-
-          <!--Upload success-->
-          <div class="upload-alert--success" v-if="isSuccess">
-            <p class="upload-alert--success__title">
-              <IconSuccess class="icon"/>
-              <span>
-                Tải lên thành công
-              </span>
-            </p>
-            <div class="">
-              <div class="process--upload">
-                <div class="process--upload__percentage" v-bind:style="{width: '100%'}"></div>
+      
+            <!--Uploading-->
+            <div class="py-3" v-if="isUploading">
+              <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
+              <div class="mb-2" style="padding-right: 2.7rem; position: relative">
+                <div>
+                  <app-progress
+                    :percentage="uploadPercentage"
+                    rounded
+                    size="lg"
+                    :inner-options="{ 'background-color': '#6FDA44' }"
+                  >
+                  </app-progress>
+                </div>
+                <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
               </div>
-              <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy"/>
+              <p class="process--upload__status">
+                <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
+              </p>
             </div>
-            <p class="file-name mb-2">{{ currentFile.name }}</p>
-          </div>
-
-          <!--Button continue uploading-->
-          <div class="text-center" v-show="isError || isSuccess">
-            <app-button
-              size="sm"
-              square
-              color="white"
-              class="btn--other-file bg-white"
-              @click="uploadOther"
-            >
-              <IconUploadFile class=""/>
-              Tải lên một file khác
-            </app-button>
+      
+            <!--Drag & drop file-->
+            <div class="text-center" v-if="isInitial">
+              <p class="mb-3 text-instruction">Click để chọn tập tin hoặc kéo thả tập tin vào đây để tải lên.</p>
+              <app-button
+                @click="handleUpload"
+                normal
+                class="font-weight-medium px-4 mb-3"
+                size="sm"
+              >
+                <slot name="icon">
+                  <IconUploadFile class="icon--btn icon--btn--pre" style="height: 17px;"/>
+                </slot>
+                <span>Tải lên</span>
+              </app-button>
+              <p style="font-size: 1.1rem; opacity: 0.5; line-height: 1.3rem;">
+                <span>
+                  Xem các định dạng file được chấp nhận
+                  <v-popover
+                    class="d-inline"
+                    offset="10"
+                    trigger="hover"
+                    placement="top"
+                    popover-class="tooltip--hh"
+                  >
+                    <IconInfo class="" style="width: 1.3rem; height: 1.3rem; margin-bottom: -2px;"/>
+                    <template slot="popover" class="tooltip-detail">
+                      tfafjaljflajl
+                    </template>
+                  </v-popover>
+                </span>
+              </p>
+              <!--<div>-->
+                <!--<button-->
+                  <!--class="btnUploadFile__ElearningManager"-->
+                  <!--@click="handleUpload"-->
+                <!--&gt;-->
+                  <!--<IconUploadFile class="iconUploadFile__ElearningManager"/>-->
+                <!--</button>-->
+              <!--</div>-->
+              <input
+                ref="upload-input"
+                type="file"
+                accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
+                @change="handleClick"
+              />
+            </div>
           </div>
         </div>
-
-        <!--Uploading-->
-        <div class="py-3" v-if="isUploading">
-          <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
-          <div class="mb-3" style="padding-right: 2.7rem; position: relative">
-            <div class="process--upload">
-              <div class="process--upload__percentage" v-bind:style="{width: uploadPercentage +'%'}"></div>
-            </div>
-            <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
-          </div>
-          <p class="process--upload__status">
-            <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
+      </div>
+      
+      <div class="col-md-6">
+        <h5 class="upload-repository__title">Bộ nhớ</h5>
+        <div class="upload-repository__box upload-repository__box--storage">
+          <p class="text-center mb-3">
+            <span class="font-weight-bold storage-status__figure">
+              <span class="text-primary">{{ usedCapacity*1024*1024 | fileSizeFilter }} /</span>
+              <span>{{ maxCapacity*1024*1024 | fileSizeFilter }}</span>
+            </span>
           </p>
-        </div>
-
-        <!--Drag & drop file-->
-        <div class="text-center" v-if="isInitial">
           <div>
-            <button
-              class="btnUploadFile__ElearningManager"
-              @click="handleUpload"
-            >
-              <IconUploadFile class="iconUploadFile__ElearningManager"/>
-            </button>
+            <app-progress
+              class="storage-status__progress"
+              :percentage="capcityPercentage"
+              rounded
+            ></app-progress>
           </div>
-          <p class="mt-3 text-instruction">Click để chọn tập tin hoặc kéo thả tập tin vào đây để tải lên.</p>
-          <input
-            ref="upload-input"
-            type="file"
-            accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
-            @change="handleClick"
-          />
+          <p class="storage-status__detail text-center">Đã sử dụng {{ usedCapacity*1024*1024 | fileSizeFilter }} trong tổng số {{ maxCapacity*1024*1024 | fileSizeFilter }}</p>
         </div>
       </div>
     </div>
@@ -119,7 +149,8 @@
 </template>
 
 <script>
-  import IconUploadFile from "~/assets/svg/icons/upload-cloud.svg?inline"
+  import IconUploadFile from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline"
+  import IconInfo from "~/assets/svg/v2-icons/info_24px.svg?inline"
   import IconCloseOutline from '~/assets/svg/icons/Close-outline.svg?inline'
   import IconClose from '~/assets/svg/icons/close.svg?inline'
   import IconSuccess from '~/assets/svg/icons/success.svg?inline'
@@ -136,7 +167,7 @@
   });
 
   const STORE_NAMESPACE = 'elearning/teaching/repository-files'
-  const DEFAULT_ERROR_MESSAGE = 'Upload tài liệu không thành công'
+  const DEFAULT_ERROR_MESSAGE = 'Tải lên không thành công'
   const DEFAULT_ERROR_REASON = 'Xảy ra lỗi'
 
   const STATUS = {
@@ -182,6 +213,7 @@
     },
     components: {
       IconUploadFile,
+      IconInfo,
       IconCloseOutline,
       IconClose,
       IconSuccess
@@ -299,6 +331,7 @@
           this.currentStatus = STATUS['SUCCESS']
           this.onSuccess && this.onSuccess(res)
         } else {
+          console.log('upload function error: ', res)
           let reason = res && get(res, "message", false) ? get(res, "message") : DEFAULT_ERROR_REASON
           this.hasError(DEFAULT_ERROR_MESSAGE, reason)
         }
@@ -323,11 +356,11 @@
       },
       isValidFile(file) {
         if (!this.isValidType(file)) {
-          this.hasError(DEFAULT_ERROR_MESSAGE, 'Chỉ cho phép tải các file có phần mở rộng .m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv')
+          this.hasError(DEFAULT_ERROR_MESSAGE, 'File tải lên không đúng định dạng cho phép')
           return false
         }
         if (!this.isValidSize(file)) {
-          this.hasError(DEFAULT_ERROR_MESSAGE, `Dung lượng tài liệu vượt quá giới hạn > ${fileSizeFilter(MAX_UPLOADED_REPOSITORY_FILE_SIZE*1024*1024)}`)
+          this.hasError(DEFAULT_ERROR_MESSAGE, `Dung lượng quá giới hạn > ${fileSizeFilter(MAX_UPLOADED_REPOSITORY_FILE_SIZE*1024*1024)}`)
           return false
         }
         if (!this.isAvailableStorage(file)) {
@@ -348,9 +381,11 @@
         return this.availableCapcity * 1024 * 1024 > fileSize
       },
       cancelUpload() {
+        console.log("cancel upload")
         if (this.isUploading) {
-          this.cancelUploadToken('Cancel upload file')
+          console.log('running ne')
           this.resetUpload()
+          this.cancelUploadToken('Cancel upload file')
         }
       },
       resetUpload() {

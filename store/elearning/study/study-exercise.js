@@ -270,6 +270,8 @@ const mutations = {
     const updatedAnswer = _submission.answers;
     const updatedStartTime = _submission.start_time;
     const updatedExerciseId = _submission.exercise_id;
+    const updatedAttachments = _submission.attachments;
+    const updatedQuestionId = _submission.question_id;
     
     if(!!updatedStartTime){
       state.submission = {...state.submission, start_time: updatedStartTime}
@@ -286,6 +288,10 @@ const mutations = {
         currAnsers[currAnswerIndex] = updatedAnswer;
       }
       state.submission = { ...state.submission, answers: currAnsers };
+    }
+    if(!!updatedAttachments){
+      
+      state.submission = {...state.submission, attachments: [...state.submission.attachments, updatedAttachments]}
     }
 
     console.log("[SET_STUDY_EXERCISE_SUBMISSION] state.submission", state.submission);

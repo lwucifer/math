@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-9">
         <sub-block-section
-          title="Danh sách bài tập"
+          title="Danh sách bài kiểm tra"
           has-icon
         >
           <template v-slot:content>
@@ -42,8 +42,8 @@
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
   import { useEffect, getParamQuery } from "~/utils/common"
-  import FilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseFilter"
-  import ListTable from "~/components/page/elearning/manager/exam/tables/Exercise"
+  import FilterForm from "~/components/page/elearning/manager/exam/forms/TestFilter"
+  import ListTable from "~/components/page/elearning/manager/exam/tables/Test"
   import { EXERCISE_CATEGORIES } from '~/utils/constants'
   
   const STORE_NAMESPACE = "elearning/teaching/exercise"
@@ -57,6 +57,7 @@
       FilterForm,
       ListTable
     },
+    middleware: ["teacher-role"],
     filters: {
     },
     data() {
@@ -73,7 +74,7 @@
         params: {
           page: 1,
           size: 10,
-          category: EXERCISE_CATEGORIES.EXERCISE,
+          category: EXERCISE_CATEGORIES.TEST,
           elearning_id: null,
         },
         list: [],
