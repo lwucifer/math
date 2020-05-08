@@ -4,6 +4,7 @@
     :component-class="{ 'app-modal-confirm': true }"
     :header="false"
     :footer="false"
+    @close="$emit('cancel')"
   >
     <div slot="content">
       <slot v-if="type !== 'default'" name="icon">
@@ -43,7 +44,7 @@
         </app-button>
       </div>
 
-      <button class="app-modal-confirm__close">
+      <button class="app-modal-confirm__close" @click="$emit('cancel')">
         <IconClose class="icon d-block fill-opacity-1" />
       </button>
     </div>
