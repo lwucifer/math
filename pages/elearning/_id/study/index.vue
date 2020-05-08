@@ -115,11 +115,6 @@ export default {
 
   mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
-
-    let parser = fetch(
-      "https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/html/20200508093854793_d8774973ab05ebfe84622b1c18e4e786cbb307364c90e9f9e2c890e3438ec3ca.html"
-    );
-    parser.then((res) => console.log(res));
   },
 
   watch: {

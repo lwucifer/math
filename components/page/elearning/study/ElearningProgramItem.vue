@@ -6,7 +6,7 @@
     <div class="lesson-title mb-2">
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
-        :disabled="true"
+        :disabled="lesson.status == lessonCompleted"
       />
       <p class="text-uppercase pl-1 text-clickable" @click="handleStuty">
         {{ get(lesson, "name", "") }}
