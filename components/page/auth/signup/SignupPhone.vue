@@ -48,7 +48,7 @@
       @close="closeModalOtp"
     />
     <app-modal-notify
-      v-if="true"
+      v-if="notify.showNotify"
       :title="notify.message"
       @close="closeNotify"
       @ok="$router.push(notify.redirectLink)"
