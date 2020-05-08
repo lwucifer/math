@@ -7,7 +7,9 @@
         <div class="row">
           <div class="col-md-8">
             <div class="box22">
-              <div class="elearning-lesson_image">
+
+              <!-- VIDEO STREAMING -->
+              <div class="elearning-lesson_image" v-if="studyMode == videoMode">
                 <Streaming
                   v-if="type_study_lesson === 'video'"
                   :url="url_video_streaming"
@@ -19,7 +21,8 @@
                 />
               </div>
 
-              <!-- <ElearningExercise /> -->
+              <!-- DO EXERCISE -->
+              <ElearningExercise v-else/>
 
               
               <div class="elearning-lesson__main-nav">
@@ -79,6 +82,7 @@ import {
   STUDY_LESSON_TYPE_VIDEO,
   STUDY_LESSON_TYPE_IMAGE,
 } from "~/utils/event-type";
+import { STUDY_MODE } from '~/utils/constants';
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -158,6 +162,8 @@ export default {
       progress: null,
       type_study_lesson: "image",
       url_video_streaming: "",
+      videoMode: STUDY_MODE.VIDEO_PLAYING,
+      exerciseMode: STUDY_MODE.DO_EXERCISE,
     };
   },
 
@@ -187,7 +193,10 @@ export default {
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("event", { event_study_lesson: "payload" }),
+    ...mapState("event", [
+      { event_study_lesson: "payload" },
+      'studyMode',
+    ]),
   },
 };
 </script>

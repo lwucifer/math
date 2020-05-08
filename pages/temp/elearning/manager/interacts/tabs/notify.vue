@@ -6,23 +6,25 @@
             <n-link :to="'/elearning/manager/interactive/createnotify'" class="n-link__ElearningManagerInteractive">Tạo thông báo</n-link>
           </app-button>
         </div> 
+
         <div class="filter-form__right" >
-              <div class="wrapSearchForm___ElearningManagerFilterTable">
-                    <app-input
-                        type="text"
-                        v-model="filter.query"
-                        placeholder="Nhập để tìm kiếm..."
-                        :size="'sm'"
-                        @input="handleSearch"
-                        class="inputSearch"
-                       
-                    />
-                    <button type="submit">
-                        <IconSearch width="15" height="15" />
-                    </button>
-                </div>
+          <div class="wrapSearchForm___ElearningManagerFilterTable">
+            <app-input
+                type="text"
+                v-model="filter.query"
+                placeholder="Nhập để tìm kiếm..."
+                :size="'sm'"
+                @input="handleSearch"
+                class="inputSearch"
+                
+            />
+            <button type="submit">
+                <IconSearch width="15" height="15" />
+            </button>
+          </div>
         </div>
       </div>
+      
       <div class="wrapTable__ElearningManagerInteractive">
         <app-table
           :heads="heads"

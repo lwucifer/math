@@ -1,6 +1,6 @@
 <template>
   <ol class="row e-exercise-list">
-    <div v-for="item in exercises" :key="item.id" class="col-md-6">
+    <div v-for="item in elearningExercises" :key="item.id" class="col-md-6">
       <ElearningExerciseListItem v-bind="{ ...item, started: item.required, status: item.result }" />
     </div>
   </ol>
@@ -9,6 +9,9 @@
 <script>
 import { EXERCISE_STATUS, EXERCISE_TYPES } from "~/utils/constants";
 import ElearningExerciseListItem from "~/components/page/elearning/study/exercise/ElearningExerciseListItem";
+
+import { mapState } from 'vuex';
+
 
 const fakeExercises = [
   {
@@ -62,12 +65,18 @@ export default {
     ElearningExerciseListItem
   },
 
-  props: {
-    exercises: {
-      type: Array,
-      default: () => fakeExercises
-    }
-  }
+  // props: {
+  //   exercises: {
+  //     type: Array,
+  //     default: () => fakeExercises
+  //   }
+  // },
+
+  computed: {
+    ...mapState("elearning/study/study-exercise", [
+      "elearningExercises",
+    ])
+  },
 };
 </script>
 
