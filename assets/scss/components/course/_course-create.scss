@@ -2,15 +2,53 @@
     padding-bottom: 2rem;
 }
 
+.cca-title {
+    padding: 1.2rem 1.5rem;
+    background: #F9F9F9;
+    box-shadow: 0px 1px 0px #E0E0E0;
+    height: 50px;
+}
+
 .cca-checkbox-list {
     list-style-type: none;
     padding: 1.3rem 0;
 
+    li:last-child {
+        &:after {
+            content: none;
+        }
+    }
+
     li {
         padding: .9rem 1.5rem;
+        position: relative;
+
+        &:after {
+            content: "";
+            position: absolute;
+            left: 22px;
+            bottom: -10px;
+            width: 2px;
+            height: 20px;
+            background: url("~assets/images/create-course/line.png") no-repeat;
+        }
 
         &.active {
-            background-color: #F8F8F8;
+            /deep/ .app-checkbox__checkmark {
+                border-color: $color-brand;
+            }
+
+            /deep/ .app-checkbox__input:checked +.app-checkbox__checkmark {
+                border-color: $color-brand !important;
+                svg {
+                    fill: $color-brand !important;
+                }
+            } 
+
+            /deep/ .app-checkbox__text {
+                color: $color-brand;
+                font-weight: 600;
+            }
         }
     }
 }
@@ -29,8 +67,8 @@
 }
 
 .cc-panel__title {
-    padding: 1rem 1.8rem;
-    border-bottom: 1px solid $color-border;
+    padding: 1.2rem 1.8rem;
+    box-shadow: 0px 1px 0px #E0E0E0;
 }
 
 .cc-panel__body {

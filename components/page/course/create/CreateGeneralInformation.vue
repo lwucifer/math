@@ -2,9 +2,9 @@
   <div>
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">
+        <h4 class="cc-panel__heading">
           Thông tin chung
-        </h1>
+        </h4>
       </div>
 
       <div class="cc-panel__body">
@@ -31,19 +31,20 @@
         </div>
 
         <div class="row">
-          <div class="col-md-3">
-            <div class="cgi-form-group mb-4">
-              <h2 class="cgi-form-title heading-6 mb-3">Trình độ</h2>
+          <div class="col-md-4">
+            <div class="cgi-form-group mb-4 d-flex justify-content-between align-items-center">
+              <h2 class="cgi-form-title heading-6">Trình độ</h2>
               <CourseSelectLevel
                 :defaultValue="payload.level"
                 @handleChangeLevel="handleChangeLevel"
               />
             </div>
           </div>
+          
 
-          <div class="col-md-3">
-            <div class="cgi-form-group mb-4">
-              <h2 class="cgi-form-title heading-6 mb-3">Môn học</h2>
+          <div class="col-md-4 ml-5">
+            <div class="cgi-form-group mb-4 d-flex justify-content-between align-items-center">
+              <h2 class="cgi-form-title heading-6">Môn học</h2>
               <CourseSelectSubject
                 :defaultValue="payload.subject"
                 @handleChangeSubject="handleChangeSubject"
@@ -55,9 +56,11 @@
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
             Tên {{ name }}
-            <span class="caption text-sub">(Tối đa 60 ký tự)</span>
+            <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span>
           </h2>
-          <app-input :counter="60" v-model="payload.name" />
+          <app-input 
+            placeholder="Nhập tiêu đề của khóa học"
+            :counter="60" v-model="payload.name" />
         </div>
 
         <CourseBenefit
@@ -68,7 +71,9 @@
         />
 
         <div class="cgi-form-group mb-4">
-          <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát</h2>
+          <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát
+             <span class="text-sub caption font-weight-normal">(Tối thiểu tổng 300 ký tự)</span>
+          </h2>
           <app-editor
             class="bg-input-gray mb-3"
             :sticky-offset="`{ top: 70, bottom: 0 }`"
@@ -89,14 +94,7 @@
           :defaultImg="get(general, 'cover_url.medium', '')"
           @handleSelect="handleSelectCover"
         />
-
-        <create-action
-          @handleCLickSave="handleCLickSave"
-          :isSubmit="isSubmit"
-          @handleDelete="handleReset"
-        />
       </div>
-
       <app-modal-confirm
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
@@ -105,6 +103,12 @@
         :title="title"
       />
     </div>
+
+    <create-action
+      @handleCLickSave="handleCLickSave"
+      :isSubmit="isSubmit"
+      @handleDelete="handleReset"
+    />
   </div>
 </template>
 
