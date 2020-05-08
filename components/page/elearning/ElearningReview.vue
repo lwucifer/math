@@ -14,9 +14,7 @@
                 :size="16"
                 class="mt-2 mb-3"
               />
-              <p>
-                ({{ get(info, "voting.total_votes", 0) }} người đánh giá)
-              </p>
+              <p>({{ get(info, "voting.total_votes", 0) }} người đánh giá)</p>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
@@ -113,14 +111,18 @@ export default {
   data() {
     return {
       tabActive: "all",
-      localReview: get(this.info, "reviews", []),
+      localReview: [],
       fetchingReview: false,
       pagination: {
         totalPages: 15,
         number: 6,
         size: 10,
-      }
+      },
     };
+  },
+
+  mounted() {
+    this.changeTab("all");
   },
 
   methods: {

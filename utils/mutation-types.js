@@ -15,7 +15,9 @@ export const BASE = {
     RESET: "resetData",
 };
 
-export const PUBLIC = {};
+export const PUBLIC = {
+    SET_BANK_LIST: "setBankList",
+};
 
 export const SOCIAL = {
     SET_FEEDS: "setSocialFeeds",
@@ -48,6 +50,7 @@ export const ACCOUNT_LINK = {
 
 export const ACCOUNT_TRANSACTIONS = {
     SET_ACCOUNT_TRANSACTIONS_LIST: "setAccountTransactionList",
+    SET_FORCE_GET_TRANSACTIONS_LIST: "setForceGetTransactionList",
 };
 
 export const ACCOUNT_REVENUE = {
@@ -60,6 +63,10 @@ export const ACCOUNT_EARNING = {
 
 export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
+};
+
+export const ACCOUNT_BANKS = {
+    SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
 
 export const ELEARNING_PUBLIC_SEARCH = {
@@ -143,6 +150,7 @@ export const TEACHING_OLCLASS_LESSON_SESSIONS = {
 
 export const TEACHING_OLCLASS_LESSONS = {
     SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
+    SET_TEACHING_OLCLASS_LESSON_INFO: "setTeachingOlclassLessonInfo",
 };
 
 export const CREATING_ANSWER = {
@@ -307,6 +315,14 @@ export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
 };
 
+export const ELEARNING_STUDY_STUDENT = {
+    SET_ELEARNING_STUDY_STUDENT: "setElearningStudyStudent",
+};
+
+export const ELEARNING_STUDY_STATISTIC = {
+    SET_ELEARNING_STUDY_STATISTIC : "setElearningStudyStatistic"
+}
+
 export const ELEARNING_STUDY_FAVOURITE = {
     SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
     SET_ELEARNING_STUDY_FAVOURITE_ADD: "setElearningStudyFavouriteAdd",
@@ -322,6 +338,19 @@ export const ELEARNING_STUDY_ARCHIVE = {
     SET_ELEARNING_STUDY_ARCHIVE_LIST: "setElearningStudyArchiveList",
     SET_ELEARNING_STUDY_ARCHIVE_ADD: "setElearningStudyArchiveAdd",
     SET_ELEARNING_STUDY_ARCHIVE_DELETE: "setElearningStudyArchiveDelete",
+};
+
+export const ELEARNING_STUDY_EXERCISE = {
+    SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
+    SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
+    SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
+    SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
+    SET_STUDY_EXERCISE_CURRENT: "setStudyExerciseCurrent",
+    SET_STUDY_EXERCISE_QUESTION_NAV: "setStudyExerciseQuestionNav",
+    SET_STUDY_EXERCISE_QUESTION_CHANGE: "setStudyExerciseQuestionChange",
+    SET_STUDY_EXERCISE_SUBMISSION: "setStudyExerciseSubmission",
+    // SET_STUDY_EXERCISE_ANSWER: "setStudyExerciseAnswer",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
@@ -345,6 +374,9 @@ export const MESSAGE_GROUP = {
     SET_LIST_MESSAGE_TYPE: "setListMessageType",
     SET_TAB_CHAT: "setTabChat",
     SET_SOCIAL_FRIEND_LIST: "setSocialFriendList",
+    SET_LIST_MESSAGE_TYPE_GROUP: "setListMessageTypeGroup",
+    SET_LIST_MESSAGE_TYPE_CHAT: "setListMessageTypeChat",
+    SET_IS_CREATED: "setIsCreated",
 };
 
 export const ELEARNING_INFO = {
@@ -384,6 +416,7 @@ export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
     REVICE_NOTI: "reviceNoti",
+    COMMIT_NOTI_UNREAD: "commitNotiUnread",
 };
 
 export const SOCIAL_FRIEND = {

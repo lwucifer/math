@@ -50,7 +50,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("social", ["inviteFriend", "getListInvite", "deleteFriend"]),
+    ...mapActions("account", ["inviteFriend", "getListInvite", "deleteFriend"]),
     hanldeInviteFriend(_id) {
       console.log("_id", _id);
       const data = {

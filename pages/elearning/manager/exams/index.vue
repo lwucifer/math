@@ -11,7 +11,7 @@ export default {
   components: {
     ElearningList,
   },
-
+  middleware: ["teacher-role"],
   data() {
     return {
     }

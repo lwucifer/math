@@ -10,6 +10,8 @@
 <script>
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem"
 export default {
+    layout: 'account-info',
+    
     components:{
         AnnoucementItem
     },

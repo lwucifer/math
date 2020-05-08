@@ -109,6 +109,7 @@ import {
   SOCIAL as ACTION_TYPE_SOCIAL
 } from "~/utils/action-types";
 import { createComment, editComment } from "~/models/social/Comment";
+import { mapGetters } from 'vuex';
 
 const CommentItemReplied = () =>
   import("~/components/page/timeline/comment/CommentItemReplied");
@@ -165,6 +166,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters("auth", ["userId"]),
+    
     classes() {
       const levelClasses = {
         "comment-item--level-2": this.level === 2
@@ -189,10 +192,10 @@ export default {
         : page.size;
     },
 
-    userId() {
-      const { $store: store = {} } = this;
-      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    // userId() {
+    //   const { $store: store = {} } = this;
+    //   return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    // },
 
     link() {
       return this.data && this.data.comment_link

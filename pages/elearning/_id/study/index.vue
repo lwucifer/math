@@ -1,14 +1,45 @@
 <template>
   <div>
     <HeaderCourse />
-    <div class="container elearning-lesson">
+    <div class="container elearning-lesson" v-if="loading">Loading...</div>
+    <div class="container elearning-lesson" v-else>
       <div class="elearning-lesson__main">
         <div class="row">
           <div class="col-md-8">
-            <div class="box11">
+            <div class="box22">
               <div class="elearning-lesson_image">
-                <img src="https://picsum.photos/750/422" alt />
+                <img
+                  :src="
+                    get(info, 'cover_url.high', '') ||
+                      '/images/adefltu - course - image.png'
+                  "
+                  width="750"
+                  height="422"
+                  alt
+                  v-if="studyMode === defaultMode"
+                />
+                <Streaming
+                  :url="get(payload, 'stream_urls.hls_url', '')"
+                  v-if="studyMode == videoMode"
+                />
+                <a :href="get(payload, 'link', '')" v-if="studyMode == docMode"
+                  >Download</a
+                >
+                <img
+                  :src="get(payload, 'link', '')"
+                  alt
+                  v-if="studyMode === imageMode"
+                />
+                <iframe
+                  style="width: 712px"
+                  :src="get(payload, 'link', '')"
+                  v-if="studyMode == articleMode"
+                ></iframe>
               </div>
+
+              <!-- DO EXERCISE -->
+              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
+
               <div class="elearning-lesson__main-nav">
                 <a
                   :class="{ active: type === 'summary' }"
@@ -33,11 +64,7 @@
             </div>
           </div>
           <div class="col-md-4">
-            <ElearningCourseSide
-              :info="info"
-              :data="data"
-              :progress="progress"
-            />
+            <ElearningCourseSide :info="info" :progress="progress" />
           </div>
         </div>
       </div>
@@ -46,15 +73,15 @@
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/study/Comment";
-import ElearningCourseSide from "~/components/page/elearning/course/ElearningCourseSide";
+import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 // Import faked data
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
-import { mapState } from "vuex";
+
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -64,23 +91,39 @@ import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
+import Streaming from "~/components/page/elearning/study/Streaming";
+import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import { STUDY_MODE } from "~/utils/constants";
+import { useEffect } from "~/utils/common";
+
+// http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
 export default {
   name: "Elearning",
-  layout: "no-header",
+  layout: "studying",
 
   components: {
-    ElearningCourseComment,
     ElearningCourseSide,
     IconSearch,
     IconCamera,
     HeaderCourse,
     ElearningInfo,
     ElearningQuestion,
+    Streaming,
+    ElearningExercise,
   },
 
-  created() {
+  mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
+  },
+
+  watch: {
+    payload: {
+      handler: function() {
+        console.log(this.payload);
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -104,11 +147,17 @@ export default {
           },
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getInteractiveQuestion(),
         getProgress(),
       ]);
+
+      console.log(data);
+
+      this.loading = false;
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
@@ -125,37 +174,33 @@ export default {
       });
       this.interactive_questions = get(res, "data", null);
     },
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
   },
 
   data() {
     return {
       type: "summary",
-      auth: AUTH,
-      comments: COMMENTS,
+      loading: true,
       info: null,
       interactive_questions: null,
       progress: null,
-      data: {
-        number: 9,
-        times: "9 giờ 30 phút",
-        classes: [
-          {
-            id: 1,
-            name: "Bài giảng online cho khoá học",
-            done: false,
-          },
-          {
-            id: 2,
-            name: "Bài giảng online cho khoá học",
-            done: true,
-          },
-        ],
-        list: COURSE_LESSON,
-      },
+      videoMode: STUDY_MODE.VIDEO_PLAYING,
+      exerciseMode: STUDY_MODE.DO_EXERCISE,
+      defaultMode: STUDY_MODE.DEFAULT,
+      docMode: STUDY_MODE.DOCS,
+      articleMode: STUDY_MODE.ARTICLE,
+      imageMode: STUDY_MODE.IMAGE,
     };
   },
+
+  destroyed() {
+    this.setStudyMode("");
+    this.setPayload(null);
+  },
+
   computed: {
     ...mapState("auth", ["loggedUser"]),
+    ...mapState("event", ["payload", "studyMode"]),
   },
 };
 </script>

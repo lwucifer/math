@@ -1,43 +1,40 @@
 <template>
   <div class="container">
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
+        <h5 class="page-title">
+          {{lessonInfo.name}}
+        </h5>
         <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-15">Phòng học online</h5>
-            <p>
-              Phòng học online > Phòng học online số 1 > Danh sách điểm danh >
-              <strong>Buổi học số 1</strong>
-            </p>
-            <hr class="mt-4 mb-4"/>
-          </div>
 
           <div class="elearning-manager-content__main pt-3">
             <div class="elearning-wrapper">
               <!--Info group-->
-              <div class="class-info mb-5">
+              <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
+              <div class="class-info mb-4 border">
                 <strong>
-                  Buổi học số 1 | 11:00 AM - 11:45 AM, 16/10/2019
+                  {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
                 </strong>
                 <div class="class-info-content mt-3">
                   <div class="item">
                     Tỷ lệ có mặt:
-                    <strong class="color-primary">{{summary.total_student_absent_allowed}}%</strong>
+                    <strong class="color-primary">{{summary.total_student_absent_allowed}}</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng có mặt:
-                    <strong class="color-primary">{{summary.total_student_absent_not_allowed}}%</strong>
+                    <strong class="color-primary">{{summary.total_student_absent_not_allowed}}</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng mặt có phép:
-                    <strong class="color-primary">{{summary.total_student_late}}%</strong>
+                    <strong class="color-primary">{{summary.total_student_late}}</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng mặt không phép:
-                    <strong class="color-primary">{{summary.total_student_present}}%</strong>
+                    <strong class="color-primary">{{summary.total_student_present}}</strong>
                   </div>
                 </div>
               </div>
@@ -45,36 +42,8 @@
 
               <!--Filter form-->
               <div class="filter-form">
-                <div class="filter-form__item">
-                  <app-button
-                    color="primary"
-                    class="filter-form__item__btn filter-form__item__btn--submit"
-                    :size="'sm'"
-                    @click="submit"
-                  >
-                    <IconFilter />
-                    <span>Lọc kết quả</span>
-                  </app-button>
-                </div>
-
-                <div class="filter-form__item" style="min-width: 18rem">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filterCourse"
-                    :options="courses"
-                    label="text"
-                    placeholder="Theo lớp"
-                    searchable
-                    clearable
-                    @input="handleChangedCourse"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
-                  ></app-vue-select>
-                </div>
-
-                <!--Right form-->
-                <div class="filter-form__right">
-                  <div style="width: 28rem;">
+                <div class="filter-form__item flex-1">
+                  <div style="width: 100%">
                     <app-search
                       class
                       :placeholder="'Nhập để tìm kiếm...'"
@@ -83,9 +52,55 @@
                     ></app-search>
                   </div>
                 </div>
-                <!--End right form-->
+
+                <div class="filter-form__item">
+                  <app-button
+                    color="primary"
+                    square
+                    class="filter-form__item__btn filter-form__item__btn--submit"
+                    :size="'sm'"
+                    @click="submit"
+                  >
+                    <IconHamberger class="fill-white mr-2" />
+                    <span>Lọc kết quả</span>
+                  </app-button>
+                </div>
+
+                <div class="filter-form__item" style="min-width: 12rem">
+                  <app-vue-select
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="filterCourse"
+                    :options="courses"
+                    label="text"
+                    placeholder="Lớp học"
+                    searchable
+                    clearable
+                    @input="handleChangedCourse"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                  ></app-vue-select>
+                </div>
+                <div class="filter-form__item" style="min-width: 12rem">
+                  <app-vue-select
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="filterCourse"
+                    :options="courses"
+                    label="text"
+                    placeholder="Điểm danh"
+                    searchable
+                    clearable
+                    @input="handleChangedCourse"
+                    @search:focus="handleFocusSearchInput"
+                    @search:blur="handleBlurSearchInput"
+                  ></app-vue-select>
+                </div>
               </div>
               <!--End filter form-->
+
+              <div class="d-flex mb-15">
+                <button class="color-primary bold">Cập nhật kết quả điểm danh</button>
+                <i class="ml-auto">*Kết quả điểm danh được cập nhật lần cuối vào lúc 10:00 AM, 18/10/2020</i>
+              </div>
 
               <!--Table-->
               <app-table
@@ -114,17 +129,16 @@
             </div>
 
             <div class="bottom-content">
-              <div class="left">
-              <i class="color-999">
-                *Kết quả điểm danh được cập nhật lần cuối vào lúc 10:00 AM, 18/10/2020
-              </i>
-              <i class="color-666">*Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia tất cả các phòng học online theo yêu cầu của giáo viên</i>
+              <div class="top">
+                <i >
+                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+                </i>
               </div>
-              <div class="right">
-                <p><span class="color-primary">M</span> = Đi muộn</p>
-                <p><span class="color-primary">K</span> = Không phép</p>
-                <p><span class="color-primary">P</span> = Có phép</p>
-                <p><span class="color-primary">C</span> = Có mặt</p>
+              <div class="bottom">
+                <p><strong class="color-primary">M</strong> = Đi muộn</p>
+                <p><strong class="color-primary">K</strong> = Không phép</p>
+                <p><strong class="color-primary">P</strong> = Có phép</p>
+                <p><strong class="color-primary">C</strong> = Có mặt</p>
               </div>
             </div>
           </div>
@@ -144,6 +158,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import { mapState } from "vuex";
@@ -158,6 +173,7 @@ export default {
   layout: "manage",
     
   components: {
+    IconHamberger,
     IconFilter,
     IconSearch,
     IconArrow,
@@ -171,6 +187,7 @@ export default {
 
   data() {
     return {
+      lessonInfo: {},
       openModal: false,
       heads: [
         {
@@ -223,7 +240,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateAttendances: "Attendances"
+      stateLessonInfo: "LessonInfo"
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
@@ -250,6 +267,38 @@ export default {
     handleBlurSearchInput() {
     },
     handleSearch() {
+    },
+
+    formatAMPM(date, year = false) {
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      let strTime = hours + ':' + minutes + ' ' + ampm;
+      let strDate = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+      let str = year ? strTime + ' ' + strDate : strTime;
+      return str;
+    },
+    async getLessonInfo() {
+      try {
+        this.loading = true;
+        const lesson_id  = this.$route.params.id ? this.$route.params.id : "";
+        await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.INFO}`,
+          lesson_id
+        );
+        this.lessonInfo = this.get(this.stateLessonInfo, 'data', []);
+        this.lessonInfo = {
+          ...this.lessonInfo,
+          start_time: this.formatAMPM(new Date(this.lessonInfo.start_time)),
+          end_time: this.formatAMPM(new Date(this.lessonInfo.end_time), true),
+        };
+      } catch (e) {
+      } finally {
+        this.loading = false
+      }
     },
 
     async getList() {
@@ -324,6 +373,7 @@ export default {
 
   created() {
     this.getList();
+    this.getLessonInfo();
     this.getSchoolClasses();
   }
 };
@@ -334,7 +384,7 @@ export default {
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 
 .class-info {
-  margin: 0 2rem;
+  margin: 0;
   padding: 1rem 1.5rem 1.5rem;
   background: #f8f8f8;
   .class-info-content {
@@ -359,17 +409,16 @@ export default {
   }
 }
 .bottom-content {
-  display: flex;
   padding: 1.5rem 2rem;
-  .left {
-    i {
-      display: block;
-      margin-bottom: 1rem;
-    }
+  background: #f8f8f8;
+  .top {
+    color: #222;
+    margin-bottom: 2.5rem;
   }
-  .right {
-    padding-left: 2rem;
+  .bottom {
     white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
     p >span {
       width: 12px;
       display: inline-block;

@@ -10,7 +10,7 @@
               ref="cropper"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
-              :fixedNumber="[750, 450]"
+              :fixedNumber="[340, 204]"
               fixed
               autoCrop
               full
@@ -21,10 +21,7 @@
 
         <div v-else class="cgi-upload-avt-preview">
           <img
-            :src="
-              avatarSrc ||
-                require('~/assets/images/create-course/default-course-image.png')
-            "
+            :src="avatarSrc || '/images/default-course-image.png'"
             alt
             class="d-block w-100"
             @error="handleError"
@@ -41,12 +38,9 @@
 
       <div class="col csa-col csa-col--right mb-4">
         <p class="csa-desc caption text-gray">
-          - Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
-          750x422 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
-          .png
-        </p>
-        <p class="csa-desc caption text-gray">
-          - Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
+          Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
+          <strong>340x204</strong> pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
+          .png. Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
         </p>
 
         <div class="mt-4">
@@ -66,7 +60,9 @@
               :fileList="avatar"
               class="cgi-upload-avt mb-3"
               @change="handleUploadChange"
+              placeholder="Chưa có ảnh nào được chọn"
             ></app-upload>
+
             <div v-show="false" class="text-error caption">
               <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên
               có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là
@@ -88,11 +84,11 @@ const IconExclamationTriangle = () =>
 export default {
   components: {
     IconClose,
-    IconExclamationTriangle
+    IconExclamationTriangle,
   },
 
   props: {
-    defaultAvatar: {}
+    defaultAvatar: {},
   },
 
   data() {
@@ -104,14 +100,14 @@ export default {
       savingCrop: false,
       cropperOutputType: null,
       file: "",
-      _avatarSrc: null
+      _avatarSrc: null,
     };
   },
 
   watch: {
     defaultAvatar: function() {
       this.avatarSrc = this.defaultAvatar;
-    }
+    },
   },
 
   methods: {
@@ -143,7 +139,7 @@ export default {
       this.cropperOutputType = fileList[0].name.split(".").slice(-1)[0];
       this.file = fileList[0];
 
-      getBase64(this.avatar[0], src => {
+      getBase64(this.avatar[0], (src) => {
         this.avatarChoosen = src;
         this.cropping = true;
         const timeout = setTimeout(() => {
@@ -156,7 +152,7 @@ export default {
     saveCrop() {
       this.savingCrop = true;
       // console.log(this.$refs.cropper.cropW, this.$refs.cropper.cropH);
-      this.$refs.cropper.getCropData(data => {
+      this.$refs.cropper.getCropData((data) => {
         const file = this.dataURLtoFile(data, this.file.name);
         this._avatarSrc = data;
         this.avatarSrc = data;
@@ -164,8 +160,8 @@ export default {
         this.cropping = false;
         this.$emit("handleSelectAvatar", file);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

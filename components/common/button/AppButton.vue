@@ -53,6 +53,7 @@ export default {
         "btn--color-default": this.color === "default",
         "btn--color-disabled": this.color === "disabled",
         "btn--color-transparent": this.color === "transparent",
+        "btn--color-orange": this.color === "orange",
       };
 
       const outlineColorClasses = {
@@ -62,7 +63,8 @@ export default {
         "btn-outline--color-success": this.color === "success",
         "btn-outline--color-error": this.color === "error",
         "btn-outline--color-warning": this.color === "warning",
-        "btn-outline--color-white": this.color === "white"
+        "btn-outline--color-white": this.color === "white",
+        "btn-outline--color-default": this.color === "default",
       };
 
       const otherClasses = {

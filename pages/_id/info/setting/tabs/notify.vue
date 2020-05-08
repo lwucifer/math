@@ -23,6 +23,8 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline";
 import FormNotify from "~/components/page/account/info/FormfNotify"
 export default {
+    layout: 'account-info',
+    
     components:{
         IconCaretDown,
         IconCaretUp,

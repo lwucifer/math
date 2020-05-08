@@ -7,6 +7,7 @@ $color-pink: #EF72C4 !default;
 $color-purple: #A671FE !default;
 $color-dark: #333333 !default;
 $color-gray: #999999 !default;
+$color-orange: #F3756C !default;
 
 // Theme Colors
 $color-primary: $color-green !default;
@@ -36,12 +37,13 @@ $color-image-placeholder: #f6f6f6 !default;
 $color-border: #F2F2F2 !default;
 $color-active: $color-red !default;
 $color-disabled: #E0E0E0 !default;
+$color-icon: rgba(0, 0, 0, 0.54);
 
 
 // Common box-shadow
 $shadow-1: 0px 0px 5px rgba(0, 0, 0, 0.05);
-$showdow-hover: 0px 3px 5px rgba(0, 0, 0, 0.2);
-$showdow-input: 0px 0px 5px rgba(0, 0, 0, 0.05), inset 0px 0px 8px rgba(0, 0, 0, 0.3);
+$shadow-hover: 0px 3px 5px rgba(0, 0, 0, 0.2);
+$shadow-input: 0px 0px 5px rgba(0, 0, 0, 0.05), inset 0px 0px 8px rgba(0, 0, 0, 0.3);
 
 // Fonts
 $font-base: "Montserrat", sans-serif !default;
@@ -125,17 +127,17 @@ $breakpoints: (
 // Grid options - to make grid
 $grid: (
     container: (
-        gap: 15,
+        gap: 12,
         responsive: (
-            sm: 540,
-            md: 720,
-            lg: 962,
-            xl: 1200
+            sm: 534,
+            md: 714,
+            lg: 954,
+            xl: 1164
         )
     ),
     columns: (
         max: 12,
-        gap: 30
+        gap: 24
     ),
     breakpoints: (
         default: 0,
@@ -163,7 +165,6 @@ $xy-border: (
     right: r,
     bottom: b,
     left: l,
-    all: a
 ) !default;
 
 $z-index: (

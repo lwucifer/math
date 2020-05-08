@@ -15,20 +15,22 @@
 
     // Default styles
     border-radius: 2px;
-    padding: .8rem 2.4rem;
+    padding: .8rem 1.5rem;
     border-color: transparent;
-    background-color: $color-text-white;
-    color: $color-text-white;
     font-weight: 600;
     transition: color .3s, background-color .3s, box-shadow .3s;
-    
+    color: $color-text-white;
+    background-color: $color-text-white;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+
     svg path {
         fill: currentColor;
+        fill-opacity: 1;
     }
     
      &:hover, &:focus {
         outline: none;
-        box-shadow: $showdow-hover;
+        box-shadow: $shadow-hover;
      }
 
     &.disabled, &[disabled] {
@@ -55,7 +57,6 @@
 // Size of button
 .btn--size-xs {
     height: 2.5rem;
-    font-size: 1.4rem;
     font-size: 12px;
     font-weight: normal;
     padding: 0 1rem;
@@ -63,7 +64,6 @@
 
 .btn--size-sm {
     height: 3.2rem;
-    font-size: 1.3rem;
 
     &.btn-outline {
         line-height: 1;
@@ -121,23 +121,16 @@
 }
 
 .btn--color-disabled {
-    background-color: $color-text-sub;
     color: $color-gray !important;
-    &:hover {
-        background-color: inherit;
-    }
 }
 
 .btn--color-gray {
-    background-color: #fff;
     color: #999 !important;
-    border: 1px solid #ccc;
 }
 
 .btn--color-default {
-    background: #F9F9F9;
-    border: 1px solid #EEEEEE;
-    color: #666 !important;
+    background: #fff;
+    color: $color-primary;
 }
 
 .btn--color-red {
@@ -155,6 +148,11 @@
         background-color: transparent;
     }
 }
+
+.btn--color-orange {
+    background-color: $color-orange;
+}
+
 // Font weight
 .btn--normal {
     font-weight: 600;
@@ -191,6 +189,10 @@
     border-color: #fff;
 }
 
+.btn-outline--color-default {
+    border: 1px solid $color-disabled;
+    color: $color-primary !important;
+}
 
 // Loading state
 .btn--loading {

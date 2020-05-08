@@ -1,6 +1,7 @@
 <template>
-  <div class="container elearning-view">
-    <Breadcrumb />
+  <div class="container elearning-view" v-if="loading">Loading...</div>
+  <div class="container elearning-view" v-else>
+    <breadcrumb />
 
     <div class="row">
       <div class="col-md-8">
@@ -64,7 +65,7 @@ import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
-import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+// import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -99,7 +100,7 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
-    Breadcrumb,
+    // Breadcrumb,
   },
 
   created() {
@@ -109,6 +110,7 @@ export default {
   data() {
     return {
       info: null,
+      loading: true,
       levels: [],
       subjects: [],
       program: [],
@@ -190,10 +192,11 @@ export default {
         token: "true",
       };
 
-      const getInfo = () =>
-        new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
-        });
+      // const getInfo = () =>
+      //   new InfoService(this.$axios)[actionTypes.BASE.LIST]({
+      //     params,
+      //   });
+      const getInfo = () => this.$store.dispatch(`elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`, params);
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
           params,
@@ -203,13 +206,17 @@ export default {
           params,
         });
 
+      this.loading = true;
+
       const data = await Promise.all([
         getInfo(),
         getProgram(),
         getRelatedCourses(),
       ]);
 
-      this.info = get(data, "0.data", null);
+      this.loading = false;
+
+      this.info = get(data, "0.data", {});
       this.program = get(data, "1.data", []);
       this.relatedCourses = get(data, "2.data.content", []);
     },

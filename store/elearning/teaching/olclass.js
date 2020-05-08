@@ -4,7 +4,7 @@ import OlClass from "~/services/elearning/teaching/Olclass";
 import Invites from "~/services/elearning/teaching/OlclassInvites";
 import Block from "~/services/elearning/teaching/OlclassBlock";
 import Attendances from "~/services/elearning/teaching/OlclassAttendances";
-import BaseAttendance from "~/services/elearning/teaching/OlclassLesson";
+import BaseLesson from "~/services/elearning/teaching/OlclassLesson";
 import BaseOlclass from "~/services/elearning/teaching/OlclassBase";
 import Lessons from "~/services/elearning/teaching/OlclassLessons";
 import Sessions from "~/services/elearning/teaching/OlclassLessonSessions";
@@ -18,6 +18,7 @@ const state = () => ({
   AttendantSummary: [],
   Invites: [],
   Lessons: [],
+  LessonInfo: [],
   LessonSessions: [],
 });
 
@@ -129,7 +130,7 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
-  
+
   async [actionTypes.TEACHING_OLCLASSES.BLOCK]({ commit }, options) {
     try {
       const result = await new Block(this.$axios)['postWithRawJson'](
@@ -140,7 +141,7 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
-  
+
   async [actionTypes.TEACHING_OLCLASSES.UNBLOCK]({ commit }, options) {
     try {
       const result = await new Block(this.$axios)['deleteWithRawJson'](
@@ -168,11 +169,26 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
-  
+
+  async [actionTypes.TEACHING_OLCLASS_LESSONS.INFO]({ commit }, id) {
+    try {
+      const result = await new BaseLesson(this.$axios)[actionTypes.BASE.DETAIL](
+        id
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASS_LESSONS
+          .SET_TEACHING_OLCLASS_LESSON_INFO,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
+    }
+  },
   // ATTENDANCES
   async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST]({ commit }, options) {
     try {
-      const result = await new BaseAttendance(this.$axios)["getWithMiddleID"](
+      const result = await new BaseLesson(this.$axios)["getWithMiddleID"](
         options, options.id, options.after
       );
       commit(
@@ -199,7 +215,7 @@ const actions = {
 
   async [actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.SUMMARY]({ commit }, options) {
     try {
-      const result = await new BaseOlclass (this.$axios)["getWithMiddleID"](
+      const result = await new BaseOlclass(this.$axios)["getWithMiddleID"](
         options, options.id, options.after
       );
       commit(
@@ -212,6 +228,24 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
+ 
+  // Lesson sessions
+  async [actionTypes.TEACHING_OLCLASS_LESSON_SESSIONS.LIST]({ commit }, options) {
+    try {
+      const result = await new Sessions(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASS_LESSON_SESSIONS
+          .SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
+    }
+  },
+
 };
 
 /**
@@ -235,6 +269,12 @@ const mutations = {
   },
   [mutationTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.SET_TEACHING_OLCLASS_LESSON_ATTENDANCES_SUMMARY](state, _summary) {
     state.AttendantSummary = _summary;
+  },
+  [mutationTypes.TEACHING_OLCLASS_LESSON_SESSIONS.SET_TEACHING_OLCLASS_LESSON_SESSIONS_LIST](state, _sessions) {
+    state.LessonSessions = _sessions;
+  },
+  [mutationTypes.TEACHING_OLCLASS_LESSONS.SET_TEACHING_OLCLASS_LESSON_INFO](state, _info) {
+    state.LessonInfo = _info;
   },
 };
 

@@ -67,3 +67,8 @@ export const CLIENT_INFO_API = [CART_LIST, PAYMENT_HASHKEY];
 
 export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 4096; // MB
 export const CURRENCY = 'đ';
+
+export const TIMEOUT = {
+  NOTIFY: 5000,
+}
+

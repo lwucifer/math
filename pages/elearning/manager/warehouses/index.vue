@@ -1,10 +1,38 @@
 <template>
   <div class="container">
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="4"/>
       </div>
       <div class="col-md-9">
+        <sub-block-section
+          title="Kho học liệu"
+        >
+          <template v-slot:content>
+            <div class="elearning-manager-content p-0">
+              <div class="elearning-manager-content__main py-2">
+                <ElearningManagerUploadFile
+                  :on-success="handleDoneAddFile"
+                  :max-capacity="get(capacityInfo, 'data.max_repository_capacity', 0)"
+                  :used-capacity="get(capacityInfo, 'data.used_repository_capacity', 0)"
+                />
+                <ElearningManagerFilterTable
+                  :list.sync="list"
+                  :pagination="pagination"
+                  :loading="loading"
+                  @submitFilter="submitFilter"
+                  @changedPagination="updatePagination"
+                  @changedType="handleChangedType"
+                  @changedStatus="handleChangedStatus"
+                  @submitSearch="handleSubmitSearch"
+                  @deletedItems="deleteItems"
+                />
+              </div>
+            </div>
+          </template>
+        </sub-block-section>
+        
         <div class="wrapContentMaterials__ElearningManager">
           <div class="titleMaterials__ElearningManager">
             <span>Danh sách bài giảng và khóa học</span>
@@ -54,6 +82,7 @@
       ElearningManagerUploadFile,
       ElearningManagerFilterTable
     },
+    middleware: ["teacher-role"],
     data() {
       return {
         pagination: {

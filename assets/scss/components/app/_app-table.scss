@@ -9,23 +9,25 @@
             cursor: pointer;
             opacity: 0;
             visibility: hidden;
-            
             height: 18px;
             width: 18px;
             position: absolute;
             right: 0;
             top: calc(50% - 9px);
-            //position: absolute;
-            //right: 1rem;
-            //top: calc(50% - 9px); // Align middle by vertical for sort icon
             svg path {
-                fill: #999;
+                fill: #222;
             }
         }
+        td, th {
+            border-bottom: 1px solid $color-border;
+        }
         th {
-            color: #999;
+            border-top: 1px solid $color-border;
+        }
+        th {
+            color: #222;
             text-align: left;
-            font-weight: normal;
+            font-weight: bold;
             padding: 1rem 1rem;
             position: relative;
             &:hover {
@@ -33,13 +35,6 @@
                     opacity: 1;
                     visibility: visible;
                 }
-            }
-
-            hr {
-                position: absolute;
-                left: 0;
-                right: 0;
-                bottom: 0;
             }
 
             &:first-child {
@@ -91,19 +86,77 @@
 
             &:nth-child(2n) {
                 >td {
-                    background-color: #f8f8f8;
+                    //background-color: #f8f8f8;
                 }
             }
 
             &:hover {
                 >td {
-                    background-color: rgba($color: $color-primary, $alpha: 0.05);
+                    background-color: #F9F9F9;
+                }
+            }
+        }
+        .app-checkbox__checkmark {
+            border: 1px solid #333;
+        }
+        tr {
+            position: relative;
+            transform: scale(1,1);
+            &:hover .actions.show {
+                opacity: 1;
+                visibility: visible;
+            }
+            .actions {
+                position:fixed;
+                left: 0;
+                right: 0;
+                top: 1px;
+                bottom: 1px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 300ms;
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                padding: 1rem 3rem;
+                background: rgba(255, 255, 255, 0.9);
+                button, a {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 1rem;
+                    line-height: 1;
+                    +button {
+                        margin-left: 3rem;
+                    }
                 }
             }
         }
     }
 
     .pagination {
-        margin: 0 2rem;
+        margin: 3rem 0 2rem;
     }
+    
+    .status-item {
+        border-radius: 2px;
+        color: #fff;
+        font-weight: normal;
+        padding: .5rem 1rem;
+        letter-spacing: -0.01em;
+        text-align: center;
+    }
+    
+    .status-item--success {
+        background-color: $color-primary;
+    }
+    .status-item--pending {
+        background-color: $color-warning;
+    }
+    .status-item--fail {
+        background-color: $color-error;
+    }
+}
+
+.none-decoration {
+    text-decoration: none;
 }

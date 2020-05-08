@@ -1,37 +1,66 @@
 <template>
   <div class="container">
-    <div class="row wrap-filter-form__ElearningManagerInteractive">
-      <div class="col-6">
-        <app-button square size="sm" class="btnCreate-notify__ElearningManagerInteractive">
-          <n-link
-            :to="'/elearning/manager/interactive/createnotify'"
-            class="n-link__ElearningManagerInteractive"
-          >Tạo thông báo</n-link>
+    <div class="row wrap-filter-form__ElearningManagerInteractive justify-content-between">
+      <!-- <app-button square size="sm" class="btnCreate-notify__ElearningManagerInteractive mr-4">
+        <n-link
+          :to="'/elearning/manager/interactive/createnotify'"
+          class="n-link__ElearningManagerInteractive"
+        >Tạo thông báo</n-link>
+      </app-button> -->
+
+     
+      <div class="wrapSearchForm___ElearningManagerFilterTable flex-1">
+        <app-input
+          style="width: 100%"
+          type="text"
+          v-model="filter.query"
+          placeholder="Nhập để tìm kiếm..."
+          :size="'sm'"
+          @input="handleSearch"
+          class="inputSearch"/>
+
+        <button class="btn-search">
+          <IconSearch width="15" height="15" />
+        </button>
+      </div>
+
+      <div class="filter-results">
+        <app-button
+          color="primary"
+          class="btnFilterSummit__ElearningManagerInteractive"
+          :size="'sm'"
+          @click="submit"
+        >
+          <IconHamberger />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
-      <div class="filter-form__right">
-        <div class="wrapSearchForm___ElearningManagerFilterTable">
-          <app-input
-            type="text"
-            v-model="filter.query"
-            placeholder="Nhập để tìm kiếm..."
-            :size="'sm'"
-            @input="handleSearch"
-            class="inputSearch"
-          />
-          <button type="submit">
-            <IconSearch width="15" height="15" />
-          </button>
-        </div>
+
+      <div class="filter-course">
+        <app-vue-select
+          class="app-vue-select filter-form__item__selection"
+          v-model="filter.province"
+          :options="classes"
+          label="text"
+          placeholder="Bài giảng/khóa học"
+          searchable
+          clearable
+          @input="handleChangedInput"
+          @search:focus="handleFocusSearchInput"
+          @search:blur="handleBlurSearchInput"></app-vue-select>
       </div>
     </div>
+
+    <app-button class="button-delete"><IconTrashAlt height="15" width="15" class="fill-white mr-2"/> Xoá</app-button>
+
     <div class="wrapTable__ElearningManagerInteractive">
-      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
+      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"  multiple-selection>
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id">Xem chi tiết</n-link>
+            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id"><IconArrowForwardIos24pxOutlined/></n-link>
           </td>
         </template>
+
         <template v-slot:cell(content)="{row,index}">
           <td
             title="Chi tiết"
@@ -55,8 +84,11 @@
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
+import IconArrowForwardIos24pxOutlined from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { NOTIFIES } from "~/server/fakedata/elearning/materials";
@@ -64,14 +96,21 @@ export default {
   layout: "manage",
     
   components: {
-    IconFilter,
-    IconSearch
+    IconHamberger,
+    IconSearch,
+    IconArrowForwardIos24pxOutlined,
+    IconTrashAlt
   },
   data() {
     return {
       currentQuestionIndex: null,
       tab: 1,
       heads: [
+        {
+          name: "",
+          text: "",
+          selectAll: true,
+        },
         {
           name: "title",
           text: "Tiêu đề",

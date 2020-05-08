@@ -356,6 +356,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -501,6 +502,8 @@ export default {
         }
       ],
 
+      
+
       //Fake data
       coursesList: COURSES_LIST,
       timelineSliderItems: TIMELINE_SLIDER_ITEMS
@@ -510,11 +513,14 @@ export default {
   computed: {
     ...mapState("social", ["feeds"]),
     ...mapGetters("social", ["configPrivacyLevels"]),
+    ...mapGetters("auth", ["userId"]),
 
-    userId() {
-      const { $store: store = {} } = this;
-      return "id" in store.state.auth.token ? store.state.auth.token.id : null;
-    },
+    // userId() {
+      // const account = $store.getters['auth/token'];
+      // return !!account ? account.id : null;
+      // const { $store: store = {} } = this;
+      // return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    // },
 
     messagesConverted() {
       return this.messages && this.messages.length
@@ -751,7 +757,7 @@ export default {
      */
     async feedInfiniteHandler($state) {
       const getData = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.GET_FEEDS}`,
+        `social/${actionTypes.SOCIAL.GET_FEEDS_INFINITE}`,
         {
           params: {
             page: get(this, "feeds.page.number", 0) + 1

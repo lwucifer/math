@@ -12,7 +12,6 @@
               :disabled="!hasData"
               title="Chọn tất cả"
             />
-            <hr />
           </th>
           <th v-for="(item, index) in heads" :key="index">
             <div v-html="item.text"></div>
@@ -20,7 +19,6 @@
             <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
               <IconDirection height="18" width="18" />
             </span>
-            <hr />
           </th>
         </tr>
       </thead>
@@ -30,14 +28,18 @@
       </tbody>
       <!-- Use data list -->
       <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)">
-        <tr v-for="(cat, i) in sortedCats" :key="i">
-          <td v-if="multipleSelection || selectAll" class="pr-0">
+        <tr v-for="(cat, i) in sortedCats" :key="i" :class="selectedItems.includes(cat) ? 'selected' : ''">
+        
+          <td v-if="multipleSelection || selectAll" class="pr-0" 
+          @mouseover="mouseOver = false" 
+          @mouseleave="mouseOver = true">
             <app-checkbox
               @change="check($event, cat)"
               :checked="selectedItems.includes(cat)"
             />
           </td>
           <!--Slot is named by column key-->
+          <template>
           <slot
             v-for="(item, j) in heads"
             :item="item"
@@ -48,10 +50,16 @@
             <td
               v-html="cat[item.name]"
               v-bind:style="cat[item.css] ? cat[item.css] : ''"
+              :key="j"
             >
-
             </td>
           </slot>
+          </template>
+
+          <!-- Hover actions -->
+          <div class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
+            <slot name="actions" :row="cat"></slot>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -59,9 +67,8 @@
       {{ noDataTxt }}
     </div>
     <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
-    <div v-if="needPagination" class="pagination">
-      <hr />
-      <app-pagination v-if="hasData && (!loading)" :type="2" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
+    <div v-if="needPagination" class="pagination mt-3">
+      <app-pagination v-if="hasData && (!loading)" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
     </div>
   </div>
 </template>
@@ -133,11 +140,16 @@ export default {
     needPagination: {
       type: Boolean,
       default: true
-    }
+    },
+    primaryKey: {
+      type: String,
+      default: 'id'
+    },
   },
 
   data() {
     return {
+      mouseOver: true,
       listSortBy: [],
       currentSort: "name",
       currentSortDir: "asc",
@@ -161,7 +173,8 @@ export default {
 
     popSelectedIndexes(item) {
       if (_.some(this.selectedItems, item)) { // this.selectedItems include item
-        this.selectedItems = _.reject(this.selectedItems, ({id}) => id === item.id);
+        let popId = item[this.primaryKey];
+        this.selectedItems = _.reject([...this.selectedItems], (i) => i[this.primaryKey] === popId);
       }
     },
 
@@ -200,6 +213,9 @@ export default {
   computed: {
     hasDefaultSlot() {
       return !!this.$slots.default;
+    },
+    hasActionsSlot() {
+      return !!this.$slots[ 'actions' ] || !!this.$scopedSlots[ 'actions' ];
     },
     sortedCats: function() {
       for (let i = this.cats.length - 1; i > 0; i--) {

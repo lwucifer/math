@@ -15,6 +15,7 @@ import Personal from "../services/account/Personal";
 import MessageType from "~/services/message/MessageType";
 import MessageSendFile from "~/services/message/MessageSendFile";
 import Friend from "~/services/social/friend";
+import { isEmpty, uniqWith, isEqual, omit } from "lodash";
 
 /**
  * initial state
@@ -31,6 +32,15 @@ const state = () => ({
     listMessageType: {},
     tabChat: true,
     friendList: {},
+    groups: {
+        listMessage: [],
+        page: {},
+    },
+    chats: {
+        listMessage: [],
+        page: {},
+    },
+    isCreated: false,
 });
 
 /**
@@ -144,12 +154,112 @@ const actions = {
             return err;
         }
     },
-    async [actionTypes.MESSAGE_GROUP.GROUP_NOTIFICATION]({ commit }, payload) {
+    async [actionTypes.MESSAGE_GROUP.GROUP_NOTIFICATION]({ state, commit },
+        payload
+    ) {
         try {
             const result = await new GroupNotification(this.$axios)[
                 actionTypes.BASE.EDIT_PAYLOAD
-            ](payload);
-            // console.log("[GroupNotification] edit", result);
+            ](omit(payload, "user_id"));
+            console.log("[GroupNotification] payload", payload);
+            if (result.success) {
+                // const { data } = result;
+                if (state.tabChat == false) {
+                    const newlistMessage = state.groups.listMessage.map((item) => {
+                        if (item.room.id === payload.room_id) {
+                            if (payload.notification == 1) {
+                                const newMemberNoti = item.room.members.map((i) => {
+                                    if (i.user_id == payload.user_id) {
+                                        return {
+                                            ...i,
+                                            allow_notication: 1,
+                                        };
+                                    }
+                                    return i;
+                                });
+                                return {
+                                    message: item.message,
+                                    sender: item.sender,
+                                    room: {
+                                        ...item.room,
+                                        members: newMemberNoti,
+                                    },
+                                };
+                            } else {
+                                const newMemberNoti = item.room.members.map((i) => {
+                                    if (i.user_id == payload.user_id) {
+                                        return {
+                                            ...i,
+                                            allow_notication: 0,
+                                        };
+                                    }
+                                    return i;
+                                });
+                                return {
+                                    message: item.message,
+                                    sender: item.sender,
+                                    room: {
+                                        ...item.room,
+                                        members: newMemberNoti,
+                                    },
+                                };
+                            }
+                        }
+                        return item;
+                    });
+                    commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_GROUP, {
+                        ...state.groups,
+                        listMessage: newlistMessage,
+                    });
+                } else {
+                    const newlistMessage = state.chats.listMessage.map((item) => {
+                        if (item.room.id === payload.room_id) {
+                            if (payload.notification == 1) {
+                                const newMemberNoti = item.room.members.map((i) => {
+                                    if (i.user_id == payload.user_id) {
+                                        return {
+                                            ...i,
+                                            allow_notication: 1,
+                                        };
+                                    }
+                                    return i;
+                                });
+                                return {
+                                    message: item.message,
+                                    sender: item.sender,
+                                    room: {
+                                        ...item.room,
+                                        members: newMemberNoti,
+                                    },
+                                };
+                            } else {
+                                const newMemberNoti = item.room.members.map((i) => {
+                                    if (i.user_id == payload.user_id) {
+                                        return {
+                                            ...i,
+                                            allow_notication: 0,
+                                        };
+                                    }
+                                    return i;
+                                });
+                                return {
+                                    message: item.message,
+                                    sender: item.sender,
+                                    room: {
+                                        ...item.room,
+                                        members: newMemberNoti,
+                                    },
+                                };
+                            }
+                        }
+                        return item;
+                    });
+                    commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_CHAT, {
+                        ...state.chats,
+                        listMessage: newlistMessage,
+                    });
+                }
+            }
             return result;
         } catch (err) {
             console.log("[GroupNotification] edit.err", err);
@@ -230,13 +340,59 @@ const actions = {
             return err;
         }
     },
-    async [actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE]({ commit }, payload) {
+    async [actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE]({ state, commit },
+        payload
+    ) {
+        const payloadParams = { params: omit(payload.params, "payloadCheck") };
         try {
             const result = await new MessageType(this.$axios)[actionTypes.BASE.LIST](
-                payload
+                payloadParams
             );
-            // set to mutation
-            commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE, result);
+            console.log("payload", payload);
+            if (payload.params.room_type == 2) {
+                if (result.success && !isEmpty(result.data)) {
+                    const { page, listMessage } = result.data;
+                    if (payload.params.payloadCheck) {
+                        commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_GROUP, {
+                            listMessage: uniqWith(
+                                listMessage.concat(state.groups.listMessage),
+                                isEqual
+                            ),
+                            page,
+                        });
+                    } else {
+                        commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_GROUP, {
+                            listMessage: uniqWith(
+                                state.groups.listMessage.concat(listMessage),
+                                isEqual
+                            ),
+                            page,
+                        });
+                    }
+                }
+            } else {
+                // set to mutation
+                if (result.success && !isEmpty(result.data)) {
+                    const { page, listMessage } = result.data;
+                    if (payload.params.payloadCheck) {
+                        commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_CHAT, {
+                            listMessage: uniqWith(
+                                listMessage.concat(state.chats.listMessage),
+                                isEqual
+                            ),
+                            page,
+                        });
+                    } else {
+                        commit(mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_CHAT, {
+                            listMessage: uniqWith(
+                                state.chats.listMessage.concat(listMessage),
+                                isEqual
+                            ),
+                            page,
+                        });
+                    }
+                }
+            }
             console.log("[MessageType] post", result);
             return result;
         } catch (err) {
@@ -299,6 +455,15 @@ const mutations = {
     },
     [mutationTypes.MESSAGE_GROUP.SET_SOCIAL_FRIEND_LIST](state, _friendList) {
         state.friendList = _friendList;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_GROUP](state, _groups) {
+        state.groups = _groups;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_LIST_MESSAGE_TYPE_CHAT](state, _chats) {
+        state.chats = _chats;
+    },
+    [mutationTypes.MESSAGE_GROUP.SET_IS_CREATED](state, _isCreated) {
+        state.isCreated = _isCreated;
     },
 };
 

@@ -210,6 +210,7 @@ export default {
         this.isEditorFocused = true;
       },
       onBlur: () => {
+        this.$emit('onBlur')
         this.isEditorFocused = false;
       }
     });

@@ -105,9 +105,15 @@ export const setFirebaseToken = (_fbToken) => {
 export const removeToken = () => {
   Cookie.remove(SCHOOLLY_ACCESS_TOKEN);
   Cookie.remove(TOKEN_USER_SCHOOLLY);
+  Cookie.remove(DEVICE_ID);
+  Cookie.remove(DEVICE_OS);
+  Cookie.remove(FIREBASE_TOKEN);
   if (process.server) return;
   window.localStorage.removeItem(SCHOOLLY_ACCESS_TOKEN);
   window.localStorage.removeItem(TOKEN_USER_SCHOOLLY);
+  window.localStorage.removeItem(DEVICE_ID);
+  window.localStorage.removeItem(DEVICE_OS);
+  window.localStorage.removeItem(FIREBASE_TOKEN);
 };
 
 export const isAuthenticated = () => {
@@ -153,12 +159,12 @@ export const getDeviceIdFromCookie = (req) => {
   return userCookie;
 };
 
-export const checkRequestAuthorize = (_url, token = 'false') => {
+export const checkRequestAuthorize = (_url) => {
   const urls = _url.split("?");
   // console.log("urls", urls);
 
   // if url contain token=true => return true;
-  if (token == 'true') return true;
+  if (_url.includes("token=true")) return true;
 
   // public api url
   if (_url.includes("/public")) return false;

@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-right-side">
+  <div class="elearning-right-side body-3">
     <div class="elearning-right-side__img">
       <img
         class="d-block w-100"
@@ -8,81 +8,93 @@
       />
     </div>
 
-    <template
-      v-if="
-        get(info, 'elearning_price.free', false) || get(info, 'is_study', false)
-      "
-    >
+    <template v-if="get(info, 'elearning_price.free', false)">
       <div class="elearning-right-side__price-wrapper">
-        <b
-          class="heading-2 text-primary ml-auto"
-          >Miễn phí</b
-        >
+        <b class="heading-2 text-primary ml-auto">Miễn phí</b>
       </div>
-      <app-button
-        fullWidth
-        class="text-uppercase font-weight-bold mb-4"
-        @click="handleStudy"
-        >Tham gia học</app-button
-      >
     </template>
 
     <template v-else>
       <div class="elearning-right-side__price-wrapper">
         <template v-if="get(info, 'elearning_price.discount', 0)">
-          <b class="elearning-right-side__price text-error"
-            >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
-          >
-          <s class="heading-4 text-gray-2"
-            >{{
+          <s class="heading-4 text-gray">
+            {{
               get(info, "elearning_price.original_price", 0) | numeralFormat
-            }}đ</s
+            }}đ
+          </s>
+          <b class="heading-2 text-primary"
+            >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
           >
         </template>
 
-        <b v-else class="elearning-right-side__price text-error"
-          >{{
-            get(info, "elearning_price.original_price", 0) | numeralFormat
-          }}đ</b
-        >
+        <b v-else class="heading-2 text-primary ml-auto">
+          {{ get(info, "elearning_price.original_price", 0) | numeralFormat }}đ
+        </b>
       </div>
-      <app-button
-        fullWidth
-        class="text-uppercase mb-4"
-        @click.prevent="handleAddToCart"
-        >Chọn mua</app-button
-      >
-      <!-- <app-alert class="mb-3" type="warning" size="sm">Bạn đã mua bài giảng này vào ngày 20/10/2019</app-alert> -->
     </template>
+
+    <app-button
+      v-if="
+        get(info, 'is_study', false) || get(info, 'elearning_price.free', false)
+      "
+      fullWidth
+      class="text-uppercase body-2 font-weight-bold mb-4"
+      @click="handleStudy"
+      >Tham gia học</app-button
+    >
+    <app-button
+      v-else
+      fullWidth
+      class="text-uppercase body-2 font-weight-bold mb-4"
+      @click.prevent="handleAddToCart"
+      >Chọn mua</app-button
+    >
+
+    <app-alert
+      v-if="get(info, 'is_study', false)"
+      class="mb-3"
+      type="warning"
+      size="sm"
+      >Bạn đã mua bài giảng này vào ngày
+      {{ get(info, "join_date", "") }}</app-alert
+    >
 
     <ul class="info">
       <li>
-        <IconBook class="icon" />
-        Trình độ: {{ get(program, "level", "") }}
+        <IconPersonOutline class="icon" />
+        Trình độ: {{ get(info, "level.name", "") }}
       </li>
       <li>
-        <IconSubject class="icon" />
-        Môn học: {{ get(program, "subject", "") }}
+        <IconBorderColor class="icon" />
+        Môn học: {{ get(info, "subject.name", "") }}
       </li>
       <li>
-        <IconLessons class="icon" />
-        Số bài giảng: {{ get(program, "lessons", 0) }} bài
+        <IconInsertComment class="icon" />
+        Số bài giảng: {{ get(info, "lessons", 0) }} bài
       </li>
       <li>
-        <IconClock class="icon" />
-        Thời lượng: {{ get(program, "duration", 0) }} phút
+        <IconTimer class="icon" />
+        Thời lượng: {{ get(info, "duration", "") }}
       </li>
       <li>
-        <IconEye class="icon" />Xem được trên máy tính, điện thoại, tablet
+        <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
+        tablet
       </li>
     </ul>
-    <hr />
-    <div class="my-3 d-flex">
-      <a class="color-primary d-flex-center">
-        <IconShare class="fill-primary mr-2" />Chia sẻ
+
+    <app-divider class="elearning-right-side__divider my-0" />
+
+    <div class="py-3 d-flex">
+      <a class="text-info d-flex-center">
+        <IconBxsShare class="icon subheading mr-2" />Chia sẻ
       </a>
-      <a class="color-red ml-auto d-flex-center">
-        <IconHeart class="fill-red mr-2" />Yêu thích
+      <a class="text-primary ml-auto d-flex-center">
+        <IconFavorite
+          v-if="info && info.is_favourite"
+          class="icon subheading mr-2"
+        />
+        <IconFavoriteBorder v-else class="icon subheading mr-2" />
+        Yêu thích
       </a>
     </div>
     <PaymentModal
@@ -98,12 +110,14 @@ import { get } from "lodash";
 import qs from "qs";
 
 import IconShare from "~/assets/svg/icons/share.svg?inline";
-import IconHeart from "~/assets/svg/icons/heart.svg?inline";
-import IconBook from "~/assets/svg/icons/book.svg?inline";
-import IconSubject from "~/assets/svg/icons/subject.svg?inline";
-import IconLessons from "~/assets/svg/icons/lessons.svg?inline";
-import IconClock from "~/assets/svg/icons/clock.svg?inline";
-import IconEye from "~/assets/svg/icons/eye.svg?inline";
+import IconFavoriteBorder from "~/assets/svg/v2-icons/favorite_border_24px.svg?inline";
+import IconFavorite from "~/assets/svg/v2-icons/favorite_24px.svg?inline";
+import IconPersonOutline from "~/assets/svg/v2-icons/person_outline_24px.svg?inline";
+import IconBorderColor from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
+import IconInsertComment from "~/assets/svg/v2-icons/insert_comment_24px.svg?inline";
+import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
+import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
+import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
 
 import { mapActions, mapGetters } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
@@ -115,17 +129,20 @@ import PaymentModal from "~/components/page/payment/PaymentModal";
 export default {
   components: {
     IconShare,
-    IconHeart,
-    IconEye,
-    IconClock,
-    IconLessons,
-    IconSubject,
-    IconBook,
+    IconFavoriteBorder,
+    IconFavorite,
+    IconPersonOutline,
+    IconBorderColor,
+    IconInsertComment,
+    IconTimer,
+    IconRemoveRedEye,
+    IconBxsShare,
     PaymentModal,
   },
   props: {
     info: {
       type: Object,
+      default: () => ({}),
     },
     program: {},
   },
@@ -141,7 +158,7 @@ export default {
     ...mapGetters("cart", ["cartCheckout"]),
   },
 
-  updated() {
+  created() {
     console.log(this.info);
   },
 
@@ -150,6 +167,14 @@ export default {
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
+
+      if (
+        get(this, "info.is_study", false) ||
+        !get(this, "info.elearning_price.free", true)
+      ) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
 
       const payload = {
         elearning_id,

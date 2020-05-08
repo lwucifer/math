@@ -350,13 +350,6 @@ input:-webkit-autofill:active {
 .pl-16 {
   padding-left: 16rem !important;
 }
-.icon {
-  width: 1em;
-  height: 1em;
-  flex-shrink: 0;
-  fill: currentColor;
-  transition: fill 0.3s;
-}
 
 .btn-load-more {
   // font-weight: bold;
@@ -476,6 +469,9 @@ input:-webkit-autofill:active {
 }
 .mt-15 {
   margin-top: 1.5rem;
+}
+.ml-10 {
+  margin-left: 1rem;
 }
 .w-auto {
   width: auto !important;

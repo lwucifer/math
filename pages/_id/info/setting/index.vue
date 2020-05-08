@@ -27,6 +27,8 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 const NotifyTab = () => import("./tabs/notify");
 const PaymentTab = () => import("./tabs/payment");
 export default {
+    layout: 'account-info',
+    
     components:{
         SchoolAccountSide,
         NotifyTab,

@@ -4,6 +4,8 @@ import auth from "../services/Auth";
 import * as APIs from "../utils/endpoints";
 import { setToken, setAccessToken, removeToken } from "../utils/auth";
 import { authFire } from "../services/firebase/FirebaseInit";
+import { USER_ROLES } from "~/utils/constants";
+
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -45,17 +47,33 @@ const getters = {
         return `user_id=${account.id}&token=${account.access_token}&unique_id=${uuidV4}`;
     },
     userId(state) {
-        return state.token.id ? state.token.id : "";
+        return !!state.token ? state.token.id : "";
     },
     fullName(state) {
-        return state.token.fullname ? state.token.fullname : "";
+        return !!state.token ? state.token.fullname : "";
     },
     avatarUser(state) {
-        return state.token.avatar ? state.token.avatar : {};
+        return !!state.token ? state.token.avatar : {};
     },
     roles(state) {
-        return state.token ? state.token.roles : []
-    }
+        return !!state.token ? state.token.roles : []
+    },
+    roleNames(state) {
+        const accountRole = !!state.token ? state.token.roles : [];
+        return accountRole.map(r => r.authority);
+    },
+    isTeacherRole(state) {
+        if (!state.token) return false;
+        const accountRole = !!state.token ? state.token.roles : [];
+        const roleNames = accountRole.map(r => r.authority);
+        return (roleNames.length > 0 && roleNames.includes(USER_ROLES.ROLE_TEACHER));
+    },
+    isStudentRole(state) {
+        if (!state.token) return false;
+        const accountRole = !!state.token ? state.token.roles : [];
+        const roleNames = accountRole.map(r => r.authority);
+        return (roleNames.length > 0 && roleNames.includes(USER_ROLES.ROLE_STUDENT));
+    },
 };
 
 /**
@@ -86,13 +104,13 @@ const actions = {
         console.log("VERIFY_WITH_PHONE", payload);
         return authFire
             .signInWithPhoneNumber(payload.phone, payload.appVerifier)
-            .then(function(confirmationResult) {
+            .then(function (confirmationResult) {
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
                 return confirmationResult;
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log("error", error);
                 return error;
             });
@@ -124,11 +142,12 @@ const actions = {
         return result;
     },
 
-    async [actionTypes.AUTH.LOGOUT]({ commit }) {
-        const result = await auth(this.$axios).logout();
+    async [actionTypes.AUTH.LOGOUT]({ commit }, payload) {
+        const result = await new auth(this.$axios).logout(payload);
         if (result.success) {
             commit(mutationTypes.AUTH.REMOVE_TOKEN);
         }
+        return result;
     },
 
     async [actionTypes.AUTH.STATUS]({ commit }, payload) {

@@ -26,32 +26,10 @@
         <li>
           <n-link to="/school">Trường học</n-link>
         </li>
-        <li>
-          <app-dropdown
-            position="left"
-            v-model="dropdownCourse"
-            :content-width="'20rem'"
-            class="link--dropdown link--dropdown-course"
-          >
-            <n-link slot="activator" to="/course">
-              Bài giảng và khóa học
-              <IconCaretDown width="10" height="10" class="fill-primary" />
-            </n-link>
-            <div class="link--dropdown__content">
-              <ul>
-                <li>
-                  <n-link to>Bài giảng</n-link>
-                </li>
-                <li>
-                  <n-link to>Khóa học</n-link>
-                </li>
-              </ul>
-            </div>
-          </app-dropdown>
-        </li>
       </ul>
-
       <div v-if="isAuthenticated" class="the-header__user">
+        <study-space v-if="isStudentRole"/>
+
         <button class="item" @click="redirectMessages">
           <IconMessager />
           <span class="number">9</span>
@@ -192,7 +170,7 @@ import IconEllipse from "~/assets/svg/icons/ellipse.svg?inline";
 import Notifications from "~/services/notification/notifications";
 import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
-import { UPDATE_NOTI } from "~/utils/constants";
+import { UPDATE_NOTI, USER_ROLES } from "~/utils/constants";
 import { detectBrowser } from "~/utils/common";
 
 export default {
@@ -223,9 +201,10 @@ export default {
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
-    isAuthenticated() {
-      return this.$store.getters["auth/isAuthenticated"];
-    },
+    ...mapGetters("auth", [
+      "isAuthenticated",
+      "isStudentRole",
+    ]),
     ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {
@@ -239,7 +218,8 @@ export default {
       this.reviceNoti(data);
       this.socialNotifications({
         params: {
-          page: 1
+          page: 1,
+          payloadCheck: "check"
         }
       });
       this.checkPayload = true;
@@ -253,7 +233,7 @@ export default {
   methods: {
     get,
     ...mapMutations("auth", ["removeToken"]),
-    ...mapMutations("notifications", ["reviceNoti"]),
+    ...mapMutations("notifications", ["reviceNoti", "commitNotiUnread"]),
     ...mapActions("notifications", [
       "socialNotifications",
       "readNotification",
@@ -296,6 +276,11 @@ export default {
       if (isvisible && this.checkPayload) {
         this.$refs.ulNoti.scrollTop = 0;
         this.checkPayload = false;
+      }
+
+      // if isvisible noti == true and number noti > 0
+      if (isvisible && this.notiUnread > 0) {
+        this.commitNotiUnread(0);
       }
     },
     async notiInfiniteHandler($state) {

@@ -1,87 +1,87 @@
 <template>
   <div class="container">
+    <breadcrumb />
+
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="1" />
       </div>
       <div class="col-md-9">
-        <div class="elearning-manager box">
-          <h5 class="color-primary">
-            Tổng quan
-            <hr class="mt-3" />
-          </h5>
-          <div class="elearning-manager__dashboard mt-15">
-            <div class="row row-space-5">
-              <div class="col-md-3">
-                <div class="item">
-                  <div class="top">
-                    <IconBook class="fill-primary mr-3" />Số bài giảng
+        <h5 class="page-title">
+          Tổng quan
+        </h5>
+        <div class="elearning-manager">
+          <div class="box22">
+            <div class="elearning-manager__dashboard-filter">
+              <h6>Thống kê</h6>
+              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
+            </div>
+            <div class="elearning-manager__dashboard mt-15">
+              <div class="row row-space-5">
+                <div class="col-md-6 item">
+                  <div class="">
+                    <div class="top">
+                      <span>Số bài giảng</span>
+                      <IconBook3 />
+                    </div>
+                    <strong>{{teacherInfo.total_lectures}}</strong>
                   </div>
-                  <strong>{{teacherInfo.total_lectures}}</strong>
                 </div>
-              </div>
-              <div class="col-md-3">
-                <div class="item">
-                  <div class="top">
-                    <IconCalendar class="fill-primary mr-3" />Số khóa học
+                <div class="col-md-6 item">
+                  <div class="">
+                    <div class="top">
+                      <span>Số khóa học</span>
+                      <IconData/>
+                    </div>
+                    <strong>{{teacherInfo.total_courses}}</strong>
                   </div>
-                  <strong>{{teacherInfo.total_courses}}</strong>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="item">
-                  <div class="top">
-                    <IconChartLine class="fill-primary mr-3" />Điểm bình chọn giáo viên
+                <div class="col-md-6 item">
+                  <div class="">
+                    <div class="top">
+                      <span>Số học sinh tham gia</span>
+                      <IconUsers2 />
+                    </div>
+                    <strong>{{teacherInfo.participants}}</strong>
                   </div>
-                  <div class="bottom">
-                    <strong class="mr-4">{{teacherInfo.voting_rate}}/5</strong>
-                    <app-stars :stars="teacherInfo.voting_rate" :size="16" />
+                </div>
+                <div class="col-md-6 item">
+                  <div class="">
+                    <div class="top">
+                      <span>Điểm đánh giá giáo viên</span>
+                      <IconStar2 />
+                    </div>
+                    <strong>{{teacherInfo.voting_rate}}/5</strong>
                   </div>
                 </div>
               </div>
             </div>
-            <hr class="mt-4 mb-4" />
-            <div class="d-flex">
-              <div class="item">
-                <div class="top">
-                  <IconUserUser class="fill-primary mr-3" />Số học sinh tham gia
-                </div>
-                <strong>{{teacherInfo.participants}}</strong>
-              </div>
-              <div class="ml-auto">
-                <app-vue-select
-                  style="width: 17rem"
-                  class="app-vue-select"
-                  v-model="timeSelect1"
-                  :options="times"
-                  label="text"
-                  searchable
-                  clearable
-                  @input="handleChangedTime(1)"
-                ></app-vue-select>
-              </div>
+          </div>
+          <div class="box22 mt-4">        
+            <div class="elearning-manager__dashboard-filter">
+              <h6>Doanh thu</h6>
+              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
             </div>
-            <hr class="mt-4 mb-4" />
-            <div class="d-flex">
-              <div class="item">
-                <div class="top">
-                  <IconUserUser class="fill-primary mr-3" />Doanh thu
-                </div>
-                <strong class="mb-3">{{teacherInfo.revenue}} VNĐ</strong>
-                <n-link :to="'/temp/department/revenue'" class="color-red">Xem chi tiết doanh thu</n-link>
+            <div class="elearning-manager__dashboard elearning-manager__revenue mt-15 text-center">
+              <div class="revenue">
+                11.250.330 VNĐ
               </div>
-              <div class="ml-auto">
-                <app-vue-select
-                  style="width: 17rem"
-                  class="app-vue-select"
-                  v-model="timeSelect2"
-                  :options="times"
-                  label="text"
-                  searchable
-                  clearable
-                  @input="handleChangedTime(2)"
-                ></app-vue-select>
+              <div class="chart">
+                  <GChart
+                    type="ColumnChart"
+                    :data="chartData"
+                    :options="chartOptions"
+                  />
               </div>
+              <n-link class="color-primary" :to="'/temp'"/>
+            </div>
+          </div>
+          <div class="box22 mt-4">        
+            <div class="elearning-manager__dashboard-filter">
+              <h6>Bài giảng và khóa học nổi bật</h6>
+              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
+            </div>
+            <div class="elearning-manager__dashboard elearning-manager__revenue mt-15">
             </div>
           </div>
         </div>
@@ -97,6 +97,12 @@ import IconBook from "~/assets/svg/icons/book.svg?inline";
 import IconDollarAlt from "~/assets/svg/design-icons/dollar-alt.svg?inline";
 import IconChartLine from "~/assets/svg/design-icons/chart-line.svg?inline";
 import IconUserUser from "~/assets/svg/icons/user-user.svg?inline";
+import IconStar2 from "~/assets/svg/icons/star2.svg?inline";
+import IconUsers2 from "~/assets/svg/icons/users2.svg?inline";
+import IconBook3 from "~/assets/svg/icons/book3.svg?inline";
+import IconData from "~/assets/svg/icons/data.svg?inline";
+
+import { GChart } from 'vue-google-charts'
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -115,11 +121,35 @@ export default {
     IconBook,
     IconCalendar,
     IconDollarAlt,
-    IconChartLine
+    IconChartLine,
+    IconStar2,
+    IconUsers2,
+    IconBook3,
+    IconData,
+    GChart
   },
 
   data() {
     return {
+      chartData: [
+        ['Year', ''],
+        ['0', 2000],
+        ['1', 1170],
+        ['2', 1200],
+        ['3', 1530],
+        ['4', 540],
+        ['5', 650],
+        ['6', 1650],
+      ],
+      chartOptions: {
+        chart: {
+          title: null,
+          subtitle: null,
+        },
+        colors: ['#37A000', '#d95f02', '#7570b3'],
+        height: 400
+      },
+      filterDate: null,
       timeSelect1: {
         value: null,
         text: "Toàn thời gian"

@@ -3,48 +3,20 @@
     <!--Filter form-->
     <div class="filter-form">
       <div class="filter-form__item">
-        <app-button
-          color="primary"
-          class="filter-form__item__btn filter-form__item__btn--submit"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item" style="min-width: 18rem">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filterCourse"
-          :options="courses"
-          label="text"
-          placeholder="Theo bài giảng/khóa học"
-          searchable
-          clearable
-          @input="handleChangedCourse"
-        ></app-vue-select>
-      </div>
-
-      <div class="filter-form__item">
-        <label for>Chọn ngày</label>
         <app-date-picker
-          class="ml-3"
           v-model="params.query_date"
           square
           size="sm"
           placeholder="dd/mm/yyyy"
         >
           <template v-slot:icon-calendar>
-            <IconCalendar />
+            <IconCalendar class="fill-primary"/>
           </template>
         </app-date-picker>
       </div>
 
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div style="width: 23rem;">
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
@@ -53,12 +25,37 @@
           ></app-search>
         </div>
       </div>
-      <!--End right form-->
+
+      <div class="filter-form__item">
+        <app-button
+          color="primary"
+          square
+          class="filter-form__item__btn filter-form__item__btn--submit"
+          :size="'sm'"
+          @click="submit"
+        >
+          <IconHamberger class="fill-white mr-2" />
+          <span>Lọc kết quả</span>
+        </app-button>
+      </div>
+
+      <div class="filter-form__item" style="min-width: 19rem">
+        <app-vue-select
+          class="app-vue-select filter-form__item__selection"
+          v-model="filterCourse"
+          :options="courses"
+          label="text"
+          placeholder="Bài giảng/khóa học"
+          searchable
+          clearable
+          @input="handleChangedCourse"
+        ></app-vue-select>
+      </div>
     </div>
     <!--End filter form-->
 
     <!--Options group-->
-    <div class="filter-form mb-3">
+    <div class="filter-form">
       <div class="filter-form__item" @click="deleteRows">
         <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
           <IconTrash />
@@ -67,7 +64,7 @@
       </div>
     </div>
     <!--Options group-->
-
+    <hr class="">
     <!--Table-->
     <app-table
       :heads="heads"
@@ -75,13 +72,20 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       :data="classList"
+      primaryKey="online_class_id"
       multiple-selection
     >
+      <template v-slot:cell(online_class_name)="{row}">
+        <td>
+          <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
+          {{row.online_class_name}}
+          </n-link>
+        </td>
+      </template>
       <template v-slot:cell(privacy)="{row}">
         <td>
-          <span
-            :class="row.privacy == 'PUBLIC' ? 'text-primary': 'text-secondary' "
-          >{{ row.privacy }}</span>
+          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
+          <span class="text-secondary" v-else>Riêng tư</span>
         </td>
       </template>
       <template v-slot:cell(time)="{row}">
@@ -90,10 +94,12 @@
           <span>{{row.time.day}}</span>
         </td>
       </template>
-      <template v-slot:cell(action)="{row}">
-        <td class="nowrap">
-          <a class @click="openModal(row.online_class_id)">Vào phòng học</a>
-        </td>
+
+      <template v-slot:actions="{row}">
+        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
+          <IconCalendar class="fill-blue mr-2"/>Xem danh sách học sinh
+        </n-link>
+        <button @click="deleteRows(row.online_class_id)"><IconTrash class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
@@ -106,6 +112,7 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -123,11 +130,13 @@ export default {
     IconSearch,
     IconArrow,
     IconCalendar,
-    IconTrash
+    IconTrash,
+    IconHamberger
   },
 
   data() {
     return {
+      rowClassId: null,
       tab: 1,
       heads: [
         {
@@ -141,11 +150,6 @@ export default {
           sort: true
         },
         {
-          name: "privacy",
-          text: "Hiển thị",
-          sort: true
-        },
-        {
           name: "time",
           text: "Thời gian",
           sort: true
@@ -154,9 +158,6 @@ export default {
           name: "num_invitation",
           text: "Số học sinh đã mời",
           sort: true
-        },
-        {
-          name: "action"
         }
       ],
       courses: [],
@@ -241,13 +242,13 @@ export default {
     },
 
     formatAMPM(date) {
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12;
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      var strTime = hours + ':' + minutes + ' ' + ampm;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      let strTime = hours + ':' + minutes + ' ' + ampm;
       return strTime;
     },
     async getList() {
@@ -287,8 +288,8 @@ export default {
       }
     },
 
-    async deleteRows() {
-      let ids = { online_class_ids: [...this.ids] };
+    async deleteRows(id = null) {
+      let ids = id ? { online_class_ids: [id] } : { online_class_ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
         JSON.stringify(ids)
@@ -299,10 +300,6 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
-    },
-
-    openModal(id) {
-
     },
 
     get
@@ -316,6 +313,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 .appended-col {
   p {

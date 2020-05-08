@@ -8,7 +8,14 @@
       <div class="wrap-group-input" v-if="showAddPayment">
         <div class="group-select-label">
           <label>Chọn ngân hàng nhận</label>
-          <app-select placeholder="Chọn ngân hàng"/>
+          <app-vue-select 
+            :placeholder="'Chọn ngân hàng'" 
+            label="name"
+            searchable
+            clearable
+            :options="opts"
+            class="app-vue-select ml-3"
+            />
         </div>
         <app-input  label="Chi nhánh"/>
         <app-input  label="Tên chủ tài khoản"/>
@@ -25,8 +32,7 @@
         <span>Bạn vừa thêm 1 tài khoản</span>
       </div>
       <div class="d-flex">
-        <AccountPaymentItem class="mr-4"/>
-        <AccountPaymentItem/>
+        <AccountPaymentList/>
       </div>
   </div>
 </template>
@@ -34,18 +40,47 @@
 <script>
 import IconCiclePlus from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import IconCheck from '~/assets/svg/design-icons/check.svg?inline';
-import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem"
+import AccountPaymentList from "~/components/page/account/Info/AccountPaymentList"
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 export default {
+
+  layout: 'account-info',
+  
   components:{
     IconCiclePlus,
     IconCheck,
-    AccountPaymentItem
+    AccountPaymentList
   },
   data(){
     return ({
-      showAddPayment: false
+      showAddPayment: false,
+      opts:[]
     })
+  },
+  watch:{
+    bankList:{
+      handler: function(){
+        this.opts = get(this,"bankList",[])
+      }
+    }
+  },
+  computed: {
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("bank", {
+      bankList: "bankList",
+    })
+  },
+  methods:{
+    fecthPublicBank(){
+      this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`)
+    },
+  },
+  created(){
+    this.fecthPublicBank();
   }
+
 }
 </script>
 

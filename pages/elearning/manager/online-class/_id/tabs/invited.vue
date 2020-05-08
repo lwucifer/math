@@ -1,26 +1,35 @@
 <template>
   <div class="elearning-wrapper">
-    <!--Options group-->
-    <div class="filter-form mb-4">
-      <div class="filter-form__item ml-auto" @click="openModal = true">
-        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="fill-white" height="14" width="14"/>
-          <span class="ml-3">Mời thêm học sinh</span>
-        </app-button>
-      </div>
-    </div>
-    <!--Options group-->
 
     <!--Filter form-->
     <div class="filter-form">
+      <div class="filter-form__item top" @click="openModal = true">
+        <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
+          <IconPlusCircle class="mr-2"/>
+          <span>Mời thêm học sinh</span>
+        </app-button>
+      </div>
+
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
+          <app-search
+            class
+            :placeholder="'Nhập để tìm kiếm...'"
+            v-model="params.query"
+            :size="'sm'"
+          ></app-search>
+        </div>
+      </div>
+
       <div class="filter-form__item">
         <app-button
           color="primary"
+          square
           class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
           @click="submit"
         >
-          <IconFilter />
+          <IconHamberger class="fill-white mr-2" />
           <span>Lọc kết quả</span>
         </app-button>
       </div>
@@ -31,7 +40,7 @@
           v-model="filterCourse"
           :options="courses"
           label="text"
-          placeholder="Theo lớp"
+          placeholder="Lớp học"
           searchable
           clearable
           @input="handleChangedCourse"
@@ -39,19 +48,6 @@
           @search:blur="handleBlurSearchInput"
         ></app-vue-select>
       </div>
-
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div style="width: 28rem;">
-          <app-search
-            class
-            :placeholder="'Nhập để tìm kiếm...'"
-            v-model="params.query"
-            :size="'sm'"
-          ></app-search>
-        </div>
-      </div>
-      <!--End right form-->
     </div>
     <!--End filter form-->
 
@@ -98,6 +94,7 @@ import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 
 import { get } from "lodash";
 import { mapState } from "vuex";
@@ -119,6 +116,7 @@ export default {
     IconPlusCircle,
     IconLock2,
     IconLockOpenAlt,
+    IconHamberger,
     ModalInviteStudent
   },
 
@@ -307,6 +305,16 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+.filter-form {
+  position: relative;
+  margin-top: 1rem;
+  .filter-form__item.top {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% +  2.3rem);
+    margin: 0 !important;
   }
 }
 </style>

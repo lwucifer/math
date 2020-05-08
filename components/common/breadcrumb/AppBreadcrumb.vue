@@ -36,8 +36,9 @@ export default {
   computed: {
     crumbs() {
       const pathArray = this.$route.path.split("/").slice(1);
+      // console.log("[pathArray]", pathArray, this.routes)
       const matchedPathArray = this.$route.matched[0].path.split("/").slice(1);
-      const breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
+      const breadcrumbs = pathArray.slice(0, 3).reduce((breadcrumbArray, path, idx) => {
         breadcrumbArray.push({
           path: path,
           to: breadcrumbArray[idx - 1]

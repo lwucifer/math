@@ -1,7 +1,7 @@
 <template>
   <div class="app-search" :class="classSize">
     <label v-if="label" :class="classLabel">{{ label }}</label>
-    <div class="app-search__input">
+    <div class="app-search__input" :class="inputClasses">
       <slot name="prepend-inner"></slot>
       <!-- Input Text  -->
       <input
@@ -14,12 +14,14 @@
       />
 
       <slot name="submit-btn">
-        <button
+        <app-button
           class="submit-btn"
+          :color="color"
+          :size="size"
           @click="submit"
         >
           <IconSearch width="15" height="15" />
-        </button>
+        </app-button>
       </slot>
     </div>
   </div>
@@ -67,7 +69,11 @@ export default {
     labelBold: Boolean,
     counter: {
       type: Number
-    }
+    },
+    color: {
+      type: String,
+      default: "white" // 'primary' | 'white', ...
+    },
   },
 
   data() {
@@ -81,7 +87,23 @@ export default {
     hasUnitSlot() {
       return !!this.$slots["unit"];
     },
-
+    inputClasses() {
+      const colorClasses = {
+        "app-search--color-primary": this.color === "primary",
+        "app-search--color-secondary": this.color === "secondary",
+        "app-search--color-info": this.color === "info",
+        "app-search--color-success": this.color === "success",
+        "app-search--color-error": this.color === "error",
+        "app-search--color-warning": this.color === "warning",
+        "app-search--color-white": this.color === "white",
+        "app-search--color-gray": this.color === "gray",
+        "app-search--color-red": this.color === "red",
+        "app-search--color-default": this.color === "default",
+        "app-search--color-disabled": this.color === "disabled",
+        "app-search--color-transparent": this.color === "transparent",
+      };
+      return colorClasses;
+    },
     classSize() {
       const disableClass = {
         disabled: this.disabled

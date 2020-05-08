@@ -15,20 +15,21 @@
                   </div> -->
     </div>
     <hr class="mt-4 mb-4" />
-    <ElearningCourseComment
-      :comments="get(interactive_questions, 'content', [])"
+    <Question
+      :questions="get(interactive_questions, 'content', [])"
       @addQuestionSuccess="$emit('addQuestionSuccess')"
+      @addAnswerSuccess="$emit('addQuestionSuccess')"
     />
   </div>
 </template>
 
 <script>
-import ElearningCourseComment from "~/components/page/elearning/study/Comment";
+import Question from "~/components/page/elearning/study/Question";
 import { get } from "lodash";
 
 export default {
   components: {
-    ElearningCourseComment,
+    Question,
   },
   props: {
     interactive_questions: {},

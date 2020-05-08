@@ -21,6 +21,7 @@ export const APP_INPUT_VALIDATE_STATUS = {
     DEFAULT: 0,
     SUCCESS: 1,
     ERROR: 2,
+    WARNING: 3
 };
 
 export const SOCIAL_LINK_SCHEMA = {
@@ -44,6 +45,12 @@ export const SOCIAL_LINK_SCHEMA = {
 export const ELEARNING_TYPES = {
     COURSE: "COURSE",
     LECTURE: "LECTURE",
+};
+
+export const ELEARNING_STATUSES = {
+    PASSED: "PASSED",
+    FAILED: "FAILED",
+    PENDING: "PENDING",
 };
 
 export const CHAT = {
@@ -70,6 +77,36 @@ export const EXERCISE_CATEGORIES = {
     EXERCISE: "EXERCISE",
     TEST: "TEST",
 };
+
+export const STUDY_MODE = {
+    DEFAULT: '',
+    VIDEO_PLAYING: 'VIDEO_PLAYING',
+    DOCS: 'DOCS',
+    ARTICLE: 'ARTICLE',
+    IMAGE: 'IMAGE',
+    DO_EXERCISE: 'DO_EXERCISE',
+    DO_EXERCISE_BEFORE_BEGIN: 'DO_EXERCISE_BEFORE_BEGIN',
+    DO_EXERCISE_DOING: 'DO_EXERCISE_DOING',
+    DO_EXERCISE_FINISH: 'DO_EXERCISE_FINISH',
+    DO_TEST: 'DO_TEST',
+}
+
+export const EXERCISE_STATUS = {
+    NONE: "NONE",
+    PENDING: "PENDING",
+    FAILED: "FAILED",
+    PASSED: "PASSED"
+}
+
+export const LESSION_STATUS = {
+    NOT_COMPLETE: 0,
+    COMPLETED: 1
+}
+
+export const QUESTION_NAV = {
+    NEXT: 1,
+    BACK: -1
+}
 
 export const SUBMISSION_RESULTS = {
     PASSED: "PASSED",
@@ -112,7 +149,7 @@ export const USER_ROLES = {
 }
 
 export const ELEARNING_SIDE_MENU = {
-    
+
 }
 
 export const ACCOUNT_PROFILE_MENU = {
@@ -125,4 +162,18 @@ export const ACCOUNT_PROFILE_MENU = {
     SETTINGS: 6,
     SUPPORT: 7,
     SIGNOUT: 8,
+}
+
+export const WITHDRAWAL_STATUSES = {
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAIL',
+    PENDING: 'PENDING'
+}
+
+export const TRANSACTION_STATUSES = {
+    SUCCESS: '1',
+    FAILED: '-1',
+    PENDING: '0',
+    CANCEL: '2',
+    CANCEL_SUCCESS: '-2',
 }

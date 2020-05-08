@@ -2,72 +2,104 @@
   <app-modal
     v-bind="{ width, centered, order }"
     :component-class="{ 'app-modal-confirm': true }"
+    :header="false"
+    :footer="false"
+    @close="$emit('cancel')"
   >
-    <div slot="content" class="py-4 px-5">
-      <slot name="title">
-        <div class="mb-3 text-center">{{ title }}</div>
+    <div slot="content">
+      <slot v-if="type !== 'default'" name="icon">
+        <div class="app-modal-confirm__icon">
+          <IconCheckCircle v-if="type === 'success'" />
+          <IconAlertTriangle v-if="type === 'warning'" />
+          <IconAlertCircle v-if="type === 'error'" />
+        </div>
       </slot>
 
-      <div class="d-flex justify-content-center">
-        <app-button
-          class="font-weight-semi-bold mr-3"
-          color="info"
-          size="sm"
-          square
-          @click="$emit('cancel')"
-        >
-          <slot name="cancelText">{{ cancelText }}</slot>
-        </app-button>
+      <slot v-if="title || $slots.title" name="title">
+        <h3 class="app-modal-confirm__title">{{ title }}</h3>
+      </slot>
 
-        <app-button
-          class="font-weight-semi-bold"
-          color="primary"
-          size="sm"
-          square
-          :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
-          @click="$emit('ok')"
-        >
-          <app-spin
-            v-if="confirmLoading"
-            class="mr-3"
-            color="white"
-            size="small"
-          />
-          <slot name="okText">{{ okText }}</slot>
-        </app-button>
+      <slot v-if="description || $slots.description" name="description">
+        <div class="app-modal-confirm__desc">{{ description }}</div>
+      </slot>
+
+      <div class="app-modal-confirm__actions">
+        <slot name="actions" :confirmLoading="confirmLoading">
+          <app-button
+            class="font-weight-semi-bold mr-3"
+            color="default"
+            outline
+            @click="$emit('cancel')"
+          >
+            <slot name="cancelText">{{ cancelText }}</slot>
+          </app-button>
+
+          <app-button
+            class="font-weight-semi-bold"
+            color="primary"
+            :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
+            @click="$emit('ok')"
+          >
+            <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
+            <slot name="okText">{{ okText }}</slot>
+          </app-button>
+        </slot>
       </div>
+
+      <button class="app-modal-confirm__close" @click="$emit('cancel')">
+        <IconClose class="icon d-block fill-opacity-1" />
+      </button>
     </div>
   </app-modal>
 </template>
 
 <script>
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+const IconCheckCircle = () => import("~/assets/svg/icons/check-circle-1.svg?inline");
+const IconAlertTriangle = () => import("~/assets/svg/icons/alert-triangle-1.svg?inline");
+const IconAlertCircle = () => import("~/assets/svg/icons/alert-circle-1.svg?inline");
+
 export default {
+  components: {
+    IconClose,
+    IconCheckCircle,
+    IconAlertTriangle,
+    IconAlertCircle
+  },
+
   props: {
+    // Pass to app-modal
     centered: Boolean,
     order: {
       type: Number,
       default: 1
     },
-
+    width: {
+      type: [Number, String],
+      default: 536 // number in px or css value
+    },
     // This component props
+    type: {
+      type: String,
+      default: "default",
+      validator: value =>
+        ["default", "success", "warning", "error"].includes(value)
+    },
     title: {
       type: String,
-      default: "Xác nhận?",
+      default: "Xác nhận?"
     },
+    description: String,
     okText: {
       type: String,
-      default: "Xác nhận",
+      default: "Xác nhận"
     },
     cancelText: {
       type: String,
-      default: "Huỷ",
+      default: "Huỷ"
     },
-    width: {
-      type: [Number, String],
-      default: "auto", // number in px or css value
-    },
-    confirmLoading: Boolean,
-  },
+    confirmLoading: Boolean
+  }
 };
 </script>
 

@@ -12,15 +12,35 @@
         padding: 1.5rem;
         color: #333;
         background: #f9f9f9;
+        border-bottom: 1px solid #E0E0E0;
     }
     
     &__title--main {
         color: #333;
+        display: flex;
+        align-items: center;
+        line-height: 100%;
+        svg {
+        
+        }
+        svg path {
+            fill: currentColor;
+        }
     }
     
     &__main {
         background-color: #fff;
         padding: 1.5rem;
+    }
+    
+    &__icon-title {
+        margin: 0 1.5rem 0 -0.5rem;
+        &:hover {
+            cursor: pointer;
+            path {
+                fill: $color-primary;
+            }
+        }
     }
 }
 
