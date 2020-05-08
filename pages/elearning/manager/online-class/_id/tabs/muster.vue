@@ -2,10 +2,10 @@
   <div class="elearning-wrapper">
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item ml-auto" @click="openModal = true">
-        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="fill-white" height="14" width="14"/>
-          <span class="ml-3">Mời thêm học sinh</span>
+       <div class="filter-form__item top" @click="openModal = true">
+        <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
+          <IconPlusCircle class="mr-2"/>
+          <span>Mời thêm học sinh</span>
         </app-button>
       </div>
     </div>
@@ -25,14 +25,26 @@
 
     <!--Filter form-->
     <div class="filter-form">
+      <div class="filter-form__item flex-1">
+        <div style="width: 100%">
+          <app-search
+            class
+            :placeholder="'Nhập để tìm kiếm...'"
+            v-model="params.query"
+            :size="'sm'"
+          ></app-search>
+        </div>
+      </div>
+
       <div class="filter-form__item">
         <app-button
           color="primary"
+          square
           class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
           @click="submit"
         >
-          <IconFilter />
+          <IconHamberger class="fill-white mr-2" />
           <span>Lọc kết quả</span>
         </app-button>
       </div>
@@ -43,25 +55,12 @@
           v-model="filterIndex"
           :options="indexs"
           label="text"
-          placeholder="Theo thứ tự buổi học"
+          placeholder="Thứ tự buổi học"
           searchable
           clearable
           @input="handleChangedIndex"
         ></app-vue-select>
       </div>
-
-      <!--Right form-->
-      <div class="filter-form__right">
-        <div style="width: 28rem;">
-          <app-search
-            class
-            :placeholder="'Nhập để tìm kiếm...'"
-            v-model="params.query"
-            :size="'sm'"
-          ></app-search>
-        </div>
-      </div>
-      <!--End right form-->
     </div>
     <!--End filter form-->
 
@@ -74,7 +73,7 @@
     >
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'">
+          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'" class="color-blue none-decoration">
           50/100
           </n-link>
         </td>
@@ -98,6 +97,7 @@ import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -118,6 +118,7 @@ export default {
     IconPlusCircle,
     IconLock2,
     IconLockOpenAlt,
+    IconHamberger,
     ModalInviteStudent
   },
 
@@ -278,7 +279,7 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 .class-info {
-  margin: 0 2rem;
+  margin: 0;
   padding: 1rem 1.5rem 1.5rem;
   background: #f8f8f8;
   .class-info-content {
@@ -299,6 +300,17 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+.filter-form {
+  position: relative;
+  margin-top: 1rem;
+  .filter-form__item.top {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% +  2.3rem);
+    margin: 0 !important;
   }
 }
 </style>
