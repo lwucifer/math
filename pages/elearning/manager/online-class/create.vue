@@ -1,16 +1,13 @@
 <template>
   <div>
-    <HeaderCreate @clickSave="fnSave" @clickCancel="fnCancel" :ok="fullParams"/>
     <div class="container">
-      <div class="row">
-        <div class="col-md-3 olclasses-create-side">
-          <div class="olclasses-create-side-title">
-            <app-checkbox :checked="true" class="mr-3" />
-            <span>Thông tin phòng học</span>
-          </div>
-          <app-button full-width square normal>Tạo phòng học</app-button>
-        </div>
-        <div class="col-md-9">
+    <breadcrumb />
+    
+    <div class="row">
+      <div class="col-md-3">
+        <ElearningManagerSide active="5" />
+      </div>
+      <div class="col-md-9">
           <h5 class="page-title">
             Tạo phòng học online
           </h5>
@@ -21,7 +18,7 @@
                   <strong>Thuộc bài giảng/ khóa học</strong>
                 </label>
                 <app-vue-select
-                  style="width: 17rem"
+                  style="width: 100%"
                   class="app-vue-select form-item__selection"
                   v-model="filterCourse"
                   :options="courses"
@@ -35,14 +32,17 @@
 
               <div class="form-item">
                 <label>
-                  <strong>Tên phòng học</strong>(Tối đa 60 ký tự)
+                  <strong>Tên phòng học</strong> (Tối đa 60 ký tự)
                 </label>
-                <app-input v-model="params.name" size="sm" />
+                <div class="input-limit">
+                  <input type="text" :value="params.name" @input="changeName"/>
+                  <span class="limit">{{params.name.length}}</span>
+                </div>
               </div>
 
               <div class="form-item">
                 <label>
-                  <strong>Chế độ hiển thị</strong>(Hiển thị theo thuộc tính của bài giảng /khóa học liên quan)
+                  <strong>Chế độ hiển thị</strong> (Hiển thị theo thuộc tính của bài giảng /khóa học liên quan)
                 </label>
                 <app-vue-select
                   style="width: 17rem"
@@ -65,31 +65,25 @@
                 <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
               </div>
 
-              <div class="form-item">
+              <!-- <div class="form-item">
                 <label>
                   <strong>Cho phép học sinh tải video bài giảng của bạn</strong>
                 </label>
                 <app-radio name="dơwnloadvideo" value="1" class="mr-6" v-model="downloadVideo">Có</app-radio>
                 <app-radio name="dơwnloadvideo" value="0" v-model="downloadVideo">Không</app-radio>
-              </div>
+              </div> -->
 
               <div class="form-item">
-                <button
-                  @click="showBonus = !showBonus"
-                  class="btn-toggle color-primary d-flex-center mb-15"
-                >
-                  <strong>Thêm lịch học</strong>
-                  <IconAngleUp v-if="showBonus" class="fill-primary" />
-                  <IconAngleDown v-else class="fill-primary" />
-                </button>
+                <p><strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)</p>
 
-                <div v-if="showBonus">
-                  <div class="form-item-box mb-4">
-                    <h6 class="mb-3">Thời khóa biểu</h6>
-                    <div class="d-flex-center mb-4">
+                <div class="box22 border mt-3" v-for="(item, index) in timeArray" :key="index">
+                  <div class="">
+                    <h6 class="mb-3">Giờ học</h6>
+                    <div class="d-flex-center">
+                    <div class="d-flex-center mb-4 mr-6">
                       <label class="mr-3">Bắt đầu vào lúc</label>
                       <app-vue-select
-                        style="width: 11rem"
+                        style="width: 10rem"
                         class="app-vue-select form-item__selection mr-3"
                         v-model="startTime.time"
                         :options="times"
@@ -99,7 +93,7 @@
                         @input="handleChangedTime"
                       ></app-vue-select>
                       <app-vue-select
-                        style="width: 10rem"
+                        style="width: 9rem"
                         class="app-vue-select form-item__selection"
                         v-model="startTime.type"
                         :options="timeTypes"
@@ -109,7 +103,7 @@
                         @input="handleChangedTime"
                       ></app-vue-select>
                     </div>
-                    <div class="d-flex-center">
+                    <div class="d-flex-center  mb-4">
                       <label class="mr-3">Thời lượng</label>
                       <app-vue-select
                         style="width: 9rem"
@@ -121,9 +115,8 @@
                         clearable
                         @input="handleChangedDuration"
                       ></app-vue-select>
-                      <span>Giờ</span>
                       <app-vue-select
-                        style="width: 9rem"
+                        style="width: 10rem"
                         class="app-vue-select form-item__selection ml-3 mr-2"
                         v-model="duration.minutes"
                         :options="minutes"
@@ -132,15 +125,15 @@
                         clearable
                         @input="handleChangedDuration"
                       ></app-vue-select>
-                      <span>Phút</span>
+                    </div>
                     </div>
                   </div>
 
-                  <div class="form-item">
+                  <div class="form-item mb-5">
                     <label>
                       <strong>Ngày học trong tuần</strong>
                     </label>
-                    <div class="d-flex-center">
+                    <div class="d-flex-center mt-3">
                       <app-checkbox
                         @change="check($event, 'MON')"
                         :checked="selectedItems.includes('MON')"
@@ -183,42 +176,53 @@
                     <label>
                       <strong>Thời gian áp dụng</strong>
                     </label>
-                    <div>
-                      <app-date-picker
-                        class="ml-3"
-                        v-model="params.schedules[0].from_date"
-                        square
-                        size="sm"
-                        label="Từ"
-                        placeholder="dd/mm/yyyy"
-                      >
-                        <template v-slot:icon-calendar>
-                          <IconCalendar />
-                        </template>
-                      </app-date-picker>
-                      <app-date-picker
-                        class="ml-3"
-                        v-model="params.schedules[0].to_date"
-                        square
-                        size="sm"
-                        label="Đến"
-                        placeholder="dd/mm/yyyy"
-                      >
-                        <template v-slot:icon-calendar>
-                          <IconCalendar />
-                        </template>
-                      </app-date-picker>
+                    <div class="d-flex-center mt-15">
+                      <div class="d-flex-center mr-4">
+                        <label>Từ</label>
+                        <app-date-picker
+                          class="ml-3"
+                          v-model="params.schedules[0].from_date"
+                          square
+                          size="sm"
+                          placeholder="dd/mm/yyyy"
+                        >
+                          <template v-slot:icon-calendar>
+                            <IconCalendar />
+                          </template>
+                        </app-date-picker>
+                      </div>
+                      <div class="d-flex-center">
+                        <label>Đến</label>
+                        <app-date-picker
+                          class="ml-3"
+                          v-model="params.schedules[0].to_date"
+                          square
+                          size="sm"
+                          placeholder="dd/mm/yyyy"
+                        >
+                          <template v-slot:icon-calendar>
+                            <IconCalendar />
+                          </template>
+                        </app-date-picker>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="text-right mt-4 mb-4">
-              <app-button square size="sm" normal color="info" class="mr-3" @click="fnCancel">Hủy</app-button>
-              <app-button square size="sm" normal @click="fnSave" :disabled="!fullParams">Tạo lịch</app-button>
+            <div class="mt-4 mb-4">
+              <app-button color="info" class="mr-3" @click="cancelTime">Hủy</app-button>
+              <app-button @click="saveTime">Thêm lịch học</app-button>
+              <button class="d-flex-center color-primary bold" @click="addTime"><IconPlus class="fill-primary mr-2" /> Thêm lịch học</button>
             </div>
           </div>
+
+          <div class="mt-4 mb-4 text-right">
+              <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
+              <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
+              <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
+            </div>
         </div>
       </div>
     </div>
@@ -228,6 +232,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      :footer="false" :header="false"
     />
 
     <app-modal
@@ -236,6 +241,7 @@
         :component-class="{ 'app-modal-confirm': true }"
         @close="$router.push('/')"
         v-if="showNotify"
+        :footer="false" :header="false"
     >
         <div slot="content">
           <div class="text-center pt-4 pb-4">
@@ -254,7 +260,9 @@
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
+import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
+import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 
 import { get, reject } from "lodash";
 import { mapState } from "vuex";
@@ -267,6 +275,7 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 function initialState (){
   return {
     tab: 1,
+    timeArray: [{}],
     message: "",
     fullParams: false,
     sendMess: "0",
@@ -288,55 +297,63 @@ function initialState (){
     duration: {
       hours: {
         value: '1',
-        text: '1'
+        text: '1 giờ'
       },
       minutes: {
         value: '30',
-        text: '30'
+        text: '30 phút'
       }
     },
     hours: [
       {
         value: "1",
-        text: "1"
+        text: "1 giờ"
       },
       {
         value: "2",
-        text: "2"
+        text: "2 giờ"
       },
       {
         value: "3",
-        text: "3"
+        text: "3 giờ"
       },
       {
         value: "4",
-        text: "4"
+        text: "4 giờ"
       },
       {
         value: "5",
-        text: "5"
+        text: "5 giờ"
       },
       {
         value: "6",
-        text: "6"
-      }
+        text: "6 giờ"
+      },
+      {
+        value: "7",
+        text: "7 giờ"
+      },
+      {
+        value: "8",
+        text: "8 giờ"
+      },
     ],
     minutes: [
       {
         value: "00",
-        text: "00"
+        text: "00 phút"
       },
       {
         value: "15",
-        text: "15"
+        text: "15 phút"
       },
       {
         value: "30",
-        text: "30"
+        text: "30 phút"
       },
       {
         value: "45",
-        text: "45"
+        text: "45 phút"
       }
     ],
     timeTypes: [
@@ -484,14 +501,16 @@ function initialState (){
 }
 
 export default {
-  layout: "no-header",
+  layout: "default",
   name: "onlineclass",
 
   components: {
     HeaderCreate,
     IconAngleUp,
+    IconPlus,
     IconAngleDown,
-    IconCalendar
+    IconCalendar,
+    ElearningManagerSide
   },
 
   data() {
@@ -528,6 +547,23 @@ export default {
   },
 
   methods: {
+    addTime() {
+      this.timeArray.push({});
+    },
+    saveTime() {
+      
+    },
+    cancelTime() {
+      
+    },
+    changeName(e) {
+      if (e.target.value.length < 61) {
+        this.params.name =  e.target.value;
+      } else {
+        e.target.value = this.params.name;
+      }
+    },
+
     async handleOk() {
       try {
         this.confirmLoading = true;
@@ -556,6 +592,9 @@ export default {
     },
 
     fnSave() {
+      this.showModalConfirm = true;
+    },
+    fnSave2() {
       this.showModalConfirm = true;
     },
     
@@ -643,4 +682,29 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/manager/_elearning-olclasses.scss";
+strong {
+  color: #222;
+}
+.input-limit {
+  position: relative;
+  input {
+    border: 1px solid #E0E0E0;
+    border-radius: 2px;
+    height: 4rem;
+    width: 100%;
+    padding: 0 5rem 0 1.5rem;
+  }
+  .limit {
+    background: $color-primary;
+    padding: 0 1rem;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    text-align: center;
+  }
+}
 </style>

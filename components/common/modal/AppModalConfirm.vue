@@ -4,6 +4,7 @@
     :component-class="{ 'app-modal-confirm': true }"
     :header="false"
     :footer="false"
+    @close="$emit('cancel')"
   >
     <div slot="content">
       <slot v-if="type !== 'default'" name="icon">
@@ -23,27 +24,29 @@
       </slot>
 
       <div class="app-modal-confirm__actions">
-        <app-button
-          class="font-weight-semi-bold mr-3"
-          color="default"
-          outline
-          @click="$emit('cancel')"
-        >
-          <slot name="cancelText">{{ cancelText }}</slot>
-        </app-button>
+        <slot name="actions" :confirmLoading="confirmLoading">
+          <app-button
+            class="font-weight-semi-bold mr-3"
+            color="default"
+            outline
+            @click="$emit('cancel')"
+          >
+            <slot name="cancelText">{{ cancelText }}</slot>
+          </app-button>
 
-        <app-button
-          class="font-weight-semi-bold"
-          color="primary"
-          :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
-          @click="$emit('ok')"
-        >
-          <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
-          <slot name="okText">{{ okText }}</slot>
-        </app-button>
+          <app-button
+            class="font-weight-semi-bold"
+            color="primary"
+            :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
+            @click="$emit('ok')"
+          >
+            <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
+            <slot name="okText">{{ okText }}</slot>
+          </app-button>
+        </slot>
       </div>
 
-      <button class="app-modal-confirm__close">
+      <button class="app-modal-confirm__close" @click="$emit('cancel')">
         <IconClose class="icon d-block fill-opacity-1" />
       </button>
     </div>
@@ -52,9 +55,9 @@
 
 <script>
 import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
-import IconCheckCircle from "~/assets/svg/icons/check-circle-1.svg?inline";
-import IconAlertTriangle from "~/assets/svg/icons/alert-triangle-1.svg?inline";
-import IconAlertCircle from "~/assets/svg/icons/alert-circle-1.svg?inline";
+const IconCheckCircle = () => import("~/assets/svg/icons/check-circle-1.svg?inline");
+const IconAlertTriangle = () => import("~/assets/svg/icons/alert-triangle-1.svg?inline");
+const IconAlertCircle = () => import("~/assets/svg/icons/alert-circle-1.svg?inline");
 
 export default {
   components: {

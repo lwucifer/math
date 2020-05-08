@@ -2,6 +2,7 @@ import Exercise from "~/services/elearning/study/Exercise";
 import * as actionTypes from "~/utils/action-types";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import * as mutationTypes from "~/utils/mutation-types";
+import { QUESTION_NAV } from "~/utils/constants";
 
 /**
  * initial state
@@ -13,12 +14,38 @@ const state = () => ({
   submissionAdd: {},
   elearningExercises: [],
   currentExercise: {},
+  currentExerciseQuestion: null,
+  // currentExerciseAnswer: [],
+  submission: {
+    exercise_id: '',
+    start_time: '',
+    duration: 0,
+    answers: [],
+    attachments: [],
+  }
 });
 
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+  numOfQuestion: (state) => {
+    return state.questions ? state.questions.length : 0;
+  },
+  currentQuestionIndex: (state) => {
+    return state.questions.findIndex(item => item.id == state.currentExerciseQuestion.id);
+  },
+  questionNoOpts: state => {
+    const questionNoOpts = !state.questions ? [] : state.questions.map(item => {
+      return {
+        value: item.id,
+        text: item.index
+      }
+    });
+    console.log("[questionNoOpts]", questionNoOpts, state.questions)
+    return questionNoOpts;
+  },
+};
 
 const actions = {
   /**
@@ -38,7 +65,7 @@ const actions = {
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_EXERCISE_QUESTION_LIST,
-          result
+          result.data
         );
       }
 
@@ -127,8 +154,9 @@ const actions = {
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_EXERCISE_SUBMISSION_ADD,
-          result
+          result.data
         );
+        return result;
       }
 
       return result;
@@ -180,6 +208,8 @@ const mutations = {
     _list
   ) {
     state.questions = _list;
+    state.currentExerciseQuestion = (_list && _list.length > 0) ? _list[0] : null;
+
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST](
@@ -214,9 +244,60 @@ const mutations = {
     state,
     _curr
   ) {
-    console.log("[SET_STUDY_EXERCISE_CURRENT]", _curr)
     state.currentExercise = _curr;
-  }
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_NAV](
+    state,
+    _nav
+  ) {
+    console.log("[SET_STUDY_EXERCISE_QUESTION_NAV]", _nav);
+    const currQuestionIndex = state.questions.findIndex(item => item.index == state.currentExerciseQuestion.index);
+    if(currQuestionIndex != -1) {
+      if(_nav == QUESTION_NAV.NEXT){
+        state.currentExerciseQuestion = state.questions[currQuestionIndex + 1];
+      } else if(_nav == QUESTION_NAV.BACK) {
+        state.currentExerciseQuestion = state.questions[currQuestionIndex - 1];
+      }
+    }
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION](
+    state,
+    _submission
+  ) {
+    console.log("[SET_STUDY_EXERCISE_SUBMISSION]", _submission);
+    const updatedAnswer = _submission.answers;
+    const updatedStartTime = _submission.start_time;
+    const updatedExerciseId = _submission.exercise_id;
+    
+    if(!!updatedStartTime){
+      state.submission = {...state.submission, start_time: updatedStartTime}
+    }
+    if(!!updatedExerciseId){
+      state.submission = {...state.submission, exercise_id: updatedExerciseId}
+    }
+    if(!!updatedAnswer){
+      let currAnsers = [...state.submission.answers];
+      const currAnswerIndex =  currAnsers.findIndex(item => item.question_id == updatedAnswer.question_id);
+      if(currAnswerIndex == -1){
+        currAnsers = [...currAnsers, updatedAnswer];
+      }else {
+        currAnsers[currAnswerIndex] = updatedAnswer;
+      }
+      state.submission = { ...state.submission, answers: currAnsers };
+    }
+
+    console.log("[SET_STUDY_EXERCISE_SUBMISSION] state.submission", state.submission);
+  },
+
+  // [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_ANSWER](
+  //   state,
+  //   _answer
+  // ) {
+  //   console.log("[SET_STUDY_EXERCISE_ANSWER]", answer);
+  //   // state.currentExerciseAnswer = {...state.currentExerciseAnswer, _answer};
+  // },
 };
 
 export default {

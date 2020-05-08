@@ -22,7 +22,11 @@
               </span>
               <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
             </div>
-            <app-button class="app-upload__btn-choose-file" square>Chọn file</app-button>
+
+            <app-button class="app-upload__btn-choose-file btn--color-disabled">
+              <IconAttachFile24px class="mr-2"/>
+              Chọn file
+            </app-button>
           </div>
           <slot name="hint"></slot>
         </div>
@@ -32,7 +36,13 @@
 </template>
 
 <script>
+import IconAttachFile24px from '~/assets/svg/v2-icons/attach_file_24px.svg?inline';
+
 export default {
+  components: {
+    IconAttachFile24px
+  },
+
   inheritAttrs: false,
 
   props: {

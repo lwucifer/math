@@ -7,7 +7,9 @@
       </div>
       <div class="col-md-9">
         <div class="wrap-content-create-notify__ElearningManagerInteractive">
-          <h5 class="notify-title"><ArrowLeft class="mr-3"/> Tạo thông báo</h5>
+          <h5 class="notify-title">
+            <ArrowLeft class="mr-3" />Tạo thông báo
+          </h5>
 
           <div class="notify-content">
             <div class="d-flex flex-column">
@@ -17,7 +19,8 @@
                 placeholder="Chọn"
                 searchable
                 clearable
-                class="content-select__ElearningManagerInteractive"></app-select>
+                class="content-select__ElearningManagerInteractive"
+              ></app-select>
             </div>
 
             <div class="form">
@@ -42,7 +45,12 @@
       </div>
     </div>
 
-    <AppNotifyModal v-if="showModal" message="Tạo thông báo thành công!" :show="true" @close="showModal = false"/>
+    <app-modal-notify
+      v-if="showModal"
+      type="success"
+      title="Tạo thông báo thành công!"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
@@ -50,7 +58,6 @@
 import IconClose from "~/assets/svg/design-icons/multiply.svg?inline";
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import ArrowLeft from "~/assets/svg/v2-icons/arrow_left_black.svg?inline";
-import AppNotifyModal from "~/components/common/modal/AppNotifyModal"
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 export default {
@@ -59,14 +66,13 @@ export default {
   components: {
     ElearningManagerSide,
     IconClose,
-    ArrowLeft,
-    AppNotifyModal
+    ArrowLeft
   },
   data() {
     return {
       tab: 1,
       isAuthenticated: true,
-      showModal: true
+      showModal: false
     };
   },
   computed: {

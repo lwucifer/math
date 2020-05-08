@@ -38,13 +38,13 @@
                         </li>
                         <li>
                             <n-link to>
-                                <IconHeartAlt class='icon' />
+                                <IconCardsHeart class='icon' />
                                 Bỏ yêu thích
                             </n-link>
                         </li>
                         <li>
                             <n-link to>
-                                <IconArchiveAlt class='icon' />
+                                <IconUnArchive class='icon' />
                                 Bỏ lưu trữ
                             </n-link>
                         </li>
@@ -58,16 +58,16 @@
 
 <script>
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
-import IconHeartAlt from '~/assets/svg/design-icons/heart-alt.svg?inline';
+import IconCardsHeart from '~/assets/svg/v2-icons/cards-heart.svg?inline';
 import IconShare24px from '~/assets/svg/v2-icons/share_24px.svg?inline';
-import IconArchiveAlt from '~/assets/svg/design-icons/archive-alt.svg?inline';
+import IconUnArchive from '~/assets/svg/v2-icons/un-archive.svg?inline';
 import { get } from "lodash";
 export default {
     components:{
         IconDots,
-        IconHeartAlt,
+        IconCardsHeart,
         IconShare24px,
-        IconArchiveAlt
+        IconUnArchive
     },
     data(){
         return{
@@ -140,14 +140,25 @@ export default {
         text-overflow: ellipsis;
         text-decoration: none;
     }
+    .app-dropdown__content{
+        right: -16px !important;
+    }
     .link--dropdown__ElearningItem{
         list-style: none;
         padding:18px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         li{
-            margin:14px 0px;
             a{
                 text-decoration: none;
+                display: flex;
+                align-items: center;
+                svg{
+                    margin-right: 10px;
+                }
             }
+        }
+        li:nth-child(2){
+            margin: 14px 0px;
         }
     }
 }

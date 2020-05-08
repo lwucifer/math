@@ -20,6 +20,7 @@
       v-else-if="status === EXERCISE_STATUS.FAILED"
       color="secondary"
       size="sm"
+      @click.prevent="handleDoExercise"
       >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
     >
 

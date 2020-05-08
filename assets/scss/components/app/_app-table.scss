@@ -22,6 +22,9 @@
             border-bottom: 1px solid $color-border;
         }
         th {
+            border-top: 1px solid $color-border;
+        }
+        th {
             color: #222;
             text-align: left;
             font-weight: bold;
@@ -121,6 +124,7 @@
                     display: inline-flex;
                     align-items: center;
                     padding: 1rem;
+                    line-height: 1;
                     +button {
                         margin-left: 3rem;
                     }
@@ -151,4 +155,8 @@
     .status-item--fail {
         background-color: $color-error;
     }
+}
+
+.none-decoration {
+    text-decoration: none;
 }

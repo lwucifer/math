@@ -40,3 +40,22 @@
         fill: #fff;
     }
 }
+
+
+.cc-panel {
+    .cc-panel__title {
+        height: 50px;
+        background: #F9F9F9;
+    }
+
+    .cc-panel__body {
+        .cgi-form-group {
+            
+
+            /deep/ .v-select {
+                width: 70%;
+            }
+        }
+    }
+}
+
