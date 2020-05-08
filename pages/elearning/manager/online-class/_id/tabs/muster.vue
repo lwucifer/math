@@ -278,7 +278,7 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 .class-info {
-  margin: 0 2rem;
+  margin: 0;
   padding: 1rem 1.5rem 1.5rem;
   background: #f8f8f8;
   .class-info-content {

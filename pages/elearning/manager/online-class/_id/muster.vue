@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="5" />
@@ -9,13 +10,6 @@
           Phòng học online
         </h5>
         <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <p class="pt-3 pl-4">
-              Phòng học online > Phòng học online số 1 > Danh sách điểm danh >
-              <strong>{{lessonInfo.name}}</strong>
-            </p>
-            <hr class="mt-3 mb-3"/>
-          </div>
 
           <div class="elearning-manager-content__main pt-3">
             <div class="elearning-wrapper">
@@ -370,7 +364,7 @@ export default {
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 
 .class-info {
-  margin: 0 2rem;
+  margin: 0;
   padding: 1rem 1.5rem 1.5rem;
   background: #f8f8f8;
   .class-info-content {

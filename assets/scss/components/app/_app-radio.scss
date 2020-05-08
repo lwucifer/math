@@ -37,3 +37,15 @@
 .app-radio__text {
     line-height: 2rem;
 }
+
+.app-radio__input:checked {
+    + .app-radio__decor {
+      border-color: $color-primary;
+      .app-radio__decor__inner {
+        background-color: $color-primary;
+      }
+      + .app-radio__text {
+        color: $color-primary;
+      }
+    }
+  }

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="5" />
@@ -14,7 +15,6 @@
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Danh sách đã mời</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Danh sách điểm danh</a>
             </div>
-            <hr class />
           </div>
 
           <div class="elearning-manager-content__main pt-3">

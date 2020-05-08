@@ -69,18 +69,19 @@
           >{{row.online_class_name}}</n-link>
         </td>
       </template>
-      <template v-slot:cell(privacy)="{row}">
-        <td>
-          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
-          <span class="text-secondary" v-else>Riêng tư</span>
-        </td>
-      </template>
       <template v-slot:cell(time)="{row}">
         <td>
           <span>{{row.time.time}}</span>
           <br />
           <span>{{row.time.day}}</span>
         </td>
+      </template>
+
+      <template v-slot:actions="{row}">
+        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
+          <IconCalendar class="fill-blue mr-2"/>Chỉnh sửa
+        </n-link>
+        <button @click="deleteRows(row.online_class_id)"><IconCalendar class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
@@ -127,11 +128,6 @@ export default {
         {
           name: "elearning_name",
           text: "Thuộc khóa học",
-          sort: true
-        },
-        {
-          name: "privacy",
-          text: "Hiển thị",
           sort: true
         },
         {

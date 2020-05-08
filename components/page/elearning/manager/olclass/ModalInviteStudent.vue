@@ -1,5 +1,7 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'invite-student-modal': true }">
+  <app-modal centered :width="420" :component-class="{ 'invite-student-modal': true }"
+    :footer="false" :header="false"
+  >
     <div slot="content">
       <div class="text-center">
         <h5 class="color-primary mb-2">Mời thêm học sinh</h5>
