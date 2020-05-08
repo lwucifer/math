@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-9">
         <h5 class="page-title">
-          Phòng học online
+          Phòng học online số 1
         </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
@@ -15,6 +15,10 @@
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Danh sách đã mời</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Danh sách điểm danh</a>
             </div>
+            <!-- <a class="btn btn--size-sm btn--color-info btn--square btn-right" @click="openModal = true">
+              <IconPlusCircle class="mr-2 "/>
+              <span class="color-white">Mời thêm học sinh</span>
+            </a> -->
           </div>
 
           <div class="elearning-manager-content__main pt-3">
@@ -29,7 +33,10 @@
 </template>
 
 <script>
-  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+  import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
+  import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
+  import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
+
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
 
@@ -43,12 +50,14 @@
       ElearningManagerSide,
       InvitedTab,
       MusterTab,
+      IconPlusCircle,
+      ModalInviteStudent
     },
 
     data() {
       return {
         tab: 1,
-        isAuthenticated: true,
+        openModal: false,
       }
     },
     computed: {

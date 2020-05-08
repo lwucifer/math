@@ -1,13 +1,12 @@
 <template>
   <app-modal centered :width="420" :component-class="{ 'invite-student-modal': true }"
-    :footer="false" :header="false"
+     :footer="false" title="Mời thêm học sinh"
   >
     <div slot="content">
-      <div class="text-center">
-        <h5 class="color-primary mb-2">Mời thêm học sinh</h5>
-        <p>Gửi lời mời tham gia bài giảng/ khoá học của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
-        <div class="mt-4 d-flex-center justify-content-center">
-          <span class="pr-4">Chọn lớp</span>
+      <div>
+        <p>Gửi lời mời tham gia <b>Phòng học online số 1</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
+        <div class="mt-4 d-flex-center">
+          <strong class="pr-4">Chọn lớp</strong>
           <app-vue-select
             class="app-vue-select filter-form__item__selection"
             style="width: 19rem"
@@ -190,5 +189,8 @@ export default {
       vertical-align: middle;
     }
   }
+}
+strong {
+  color: #222;
 }
 </style>

@@ -76,7 +76,7 @@
               <div class="form-item">
                 <p><strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)</p>
 
-                <div class="box22 border mt-3">
+                <div class="box22 border mt-3" v-for="(item, index) in timeArray" :key="index">
                   <div class="">
                     <h6 class="mb-3">Giờ học</h6>
                     <div class="d-flex-center">
@@ -212,10 +212,17 @@
             </div>
 
             <div class="mt-4 mb-4">
-              <app-button color="info" class="mr-3" @click="fnCancel">Hủy</app-button>
-              <app-button @click="fnSave" :disabled="!fullParams">Thêm lịch học</app-button>
+              <app-button color="info" class="mr-3" @click="cancelTime">Hủy</app-button>
+              <app-button @click="saveTime">Thêm lịch học</app-button>
+              <button class="d-flex-center color-primary bold" @click="addTime"><IconPlus class="fill-primary mr-2" /> Thêm lịch học</button>
             </div>
           </div>
+
+          <div class="mt-4 mb-4 text-right">
+              <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
+              <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
+              <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
+            </div>
         </div>
       </div>
     </div>
@@ -253,6 +260,7 @@
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
+import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 
@@ -267,6 +275,7 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 function initialState (){
   return {
     tab: 1,
+    timeArray: [{}],
     message: "",
     fullParams: false,
     sendMess: "0",
@@ -498,6 +507,7 @@ export default {
   components: {
     HeaderCreate,
     IconAngleUp,
+    IconPlus,
     IconAngleDown,
     IconCalendar,
     ElearningManagerSide
@@ -537,6 +547,15 @@ export default {
   },
 
   methods: {
+    addTime() {
+      this.timeArray.push({});
+    },
+    saveTime() {
+      
+    },
+    cancelTime() {
+      
+    },
     changeName(e) {
       if (e.target.value.length < 61) {
         this.params.name =  e.target.value;
@@ -573,6 +592,9 @@ export default {
     },
 
     fnSave() {
+      this.showModalConfirm = true;
+    },
+    fnSave2() {
       this.showModalConfirm = true;
     },
     
