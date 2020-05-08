@@ -4,11 +4,11 @@
     :class="get(lesson, 'completes', 0) ? 'active' : ''"
   >
     <div class="lesson-title mb-2">
-      <app-checkbox :checked="lesson.status == lessonCompleted" :disabled="true" />
-      <p
-        class="text-uppercase pl-1 text-clickable"
-        @click="handleStuty"
-      >
+      <app-checkbox
+        :checked="lesson.status == lessonCompleted"
+        :disabled="true"
+      />
+      <p class="text-uppercase pl-1 text-clickable" @click="handleStuty">
         {{ get(lesson, "name", "") }}
       </p>
     </div>
@@ -52,13 +52,13 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import {
-  STUDY_LESSON_TYPE_VIDEO,
-  STUDY_LESSON_TYPE_IMAGE
-} from "~/utils/event-type";
 import StudyService from "~/services/elearning/study/Study";
 import { mapActions, mapMutations } from "vuex";
-import { EXERCISE_CATEGORIES, STUDY_MODE, LESSION_STATUS } from "~/utils/constants";
+import {
+  EXERCISE_CATEGORIES,
+  STUDY_MODE,
+  LESSION_STATUS,
+} from "~/utils/constants";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       lessonCompleted: LESSION_STATUS.COMPLETED,
-    }
+    };
   },
   components: {
     IconPlay,
@@ -75,49 +75,45 @@ export default {
     IconFileClock,
     IconFileCheckAlt,
     IconFileEditAlt,
-    IconFileCheck
+    IconFileCheck,
   },
   props: {
-    lesson: Object
+    lesson: Object,
   },
   methods: {
     get,
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList"
+      "elearningSudyElearningExerciseList",
     ]),
 
-    ...mapMutations("event", ["setStudyMode"]),
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
 
     async handleStuty() {
       console.log(this.lesson);
 
-      // display video playing
-      this.setStudyMode(STUDY_MODE.VIDEO_PLAYING); // change display exercise list instead of video_playing
-
-      if (get(this, "lesson.format", "") === "HTML") {
+      if (get(this, "lesson.type", "") === "ARTICLE") {
         const payload = {
           name: STUDY_LESSON_TYPE_IMAGE,
-          data: ""
+          data: "",
         };
         this.$store.dispatch("event/pushEvent", payload);
         return;
       }
 
-      const elearning_id = get(this, "$router.history.current.params.id", "");
-      const lesson_id = get(this, "lesson.id", "");
-      const res = await new StudyService(this.$axios)["studyLesson"](
-        elearning_id,
-        lesson_id
-      );
-      if (get(res, "success", false)) {
-        const payload = {
-          name: STUDY_LESSON_TYPE_VIDEO,
-          data: get(res, "data", null)
-        };
-        this.$store.dispatch("event/pushEvent", payload);
-        return;
+      if (get(this, "lesson.type", "") === "VIDEO") {
+        const elearning_id = get(this, "$router.history.current.params.id", "");
+        const lesson_id = get(this, "lesson.id", "");
+        const res = await new StudyService(this.$axios)["studyLesson"](
+          elearning_id,
+          lesson_id
+        );
+        if (get(res, "success", false)) {
+          this.setStudyMode(STUDY_MODE.VIDEO_PLAYING);
+          this.setPayload(get(res, "data", null));
+          return;
+        }
+        this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
       }
-      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
     // get list exercise of elearning lession
@@ -130,7 +126,7 @@ export default {
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
-    }
+    },
   },
   computed: {
     completes() {
@@ -151,7 +147,7 @@ export default {
       } else if (this.completes < this.exercises) {
         return "red";
       }
-    }
-  }
+    },
+  },
 };
 </script>

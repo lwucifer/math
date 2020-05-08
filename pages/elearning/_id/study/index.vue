@@ -7,24 +7,22 @@
         <div class="row">
           <div class="col-md-8">
             <div class="box22">
-
               <!-- VIDEO STREAMING -->
-              <div class="elearning-lesson_image" v-if="studyMode == videoMode">
+              <div class="elearning-lesson_image">
                 <Streaming
-                  v-if="type_study_lesson === 'video'"
-                  :url="url_video_streaming"
+                  :url="get(payload, 'stream_urls.hls_url', '')"
+                  v-if="studyMode == videoMode"
                 />
                 <img
                   src="https://picsum.photos/750/422"
                   alt
-                  v-if="type_study_lesson === 'image'"
+                  v-if="studyMode === ''"
                 />
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-else/>
+              <ElearningExercise v-if="studyMode == exerciseMode" />
 
-              
               <div class="elearning-lesson__main-nav">
                 <a
                   :class="{ active: type === 'summary' }"
@@ -78,17 +76,14 @@ import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
-import {
-  STUDY_LESSON_TYPE_VIDEO,
-  STUDY_LESSON_TYPE_IMAGE,
-} from "~/utils/event-type";
-import { STUDY_MODE } from '~/utils/constants';
+import { STUDY_MODE } from "~/utils/constants";
+import { useEffect } from "~/utils/common";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
 export default {
   name: "Elearning",
-  layout: "no-header",
+  layout: "studying",
 
   components: {
     ElearningCourseSide,
@@ -98,11 +93,20 @@ export default {
     ElearningInfo,
     ElearningQuestion,
     Streaming,
-    ElearningExercise
+    ElearningExercise,
   },
 
-  created() {
+  mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
+  },
+
+  watch: {
+    payload: {
+      handler: function() {
+        console.log(this.payload);
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -160,43 +164,14 @@ export default {
       info: null,
       interactive_questions: null,
       progress: null,
-      type_study_lesson: "image",
-      url_video_streaming: "",
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
     };
   },
 
-  watch: {
-    event_study_lesson: {
-      handler: function() {
-        const type = get(this, "event_study_lesson.name", "");
-
-        if (type === STUDY_LESSON_TYPE_VIDEO) {
-          const url = get(
-            this,
-            "event_study_lesson.data.stream_urls.hls_url",
-            ""
-          );
-          this.type_study_lesson = "video";
-          this.url_video_streaming = url;
-        }
-
-        if (type === STUDY_LESSON_TYPE_IMAGE) {
-          this.type_study_lesson = "image";
-          this.url_video_streaming = "";
-        }
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("event", [
-      { event_study_lesson: "payload" },
-      'studyMode',
-    ]),
+    ...mapState("event", ["payload", "studyMode"]),
   },
 };
 </script>
