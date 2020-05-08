@@ -79,6 +79,7 @@ export const EXERCISE_CATEGORIES = {
 };
 
 export const STUDY_MODE = {
+    DEFAULT: '',
     VIDEO_PLAYING: 'VIDEO_PLAYING',
     DO_EXERCISE: 'DO_EXERCISE',
     DO_EXERCISE_BEFORE_BEGIN: 'DO_EXERCISE_BEFORE_BEGIN',
@@ -97,6 +98,11 @@ export const EXERCISE_STATUS = {
 export const LESSION_STATUS = {
     NOT_COMPLETE: 0,
     COMPLETED: 1
+}
+
+export const QUESTION_NAV = {
+    NEXT: 1,
+    BACK: -1
 }
 
 export const SUBMISSION_RESULTS = {

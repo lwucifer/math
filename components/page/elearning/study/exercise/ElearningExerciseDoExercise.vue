@@ -20,9 +20,10 @@
         <span class="text-secondary e-exercise-do-exercise__countdown">00:30:15</span>
       </span>
     </div>
-
-    <ElearningExerciseDoExerciseChoice v-if="type === EXERCISE_TYPES.CHOICE" />
-    <ElearningExerciseDoExerciseEssay v-else />
+    <div v-if="!!currentExerciseQuestion">
+      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" />
+      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" />
+    </div>
   </div>
 </template>
 
@@ -57,7 +58,7 @@ export default {
   methods: {},
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["currentExercise"])
+    ...mapState("elearning/study/study-exercise", ["currentExercise", "currentExerciseQuestion"])
   }
 };
 </script>

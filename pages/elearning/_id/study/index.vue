@@ -16,12 +16,12 @@
                 <img
                   src="https://picsum.photos/750/422"
                   alt
-                  v-if="studyMode === ''"
+                  v-if="studyMode === defaultMode"
                 />
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-if="studyMode == exerciseMode" />
+              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
 
               <div class="elearning-lesson__main-nav">
                 <a
@@ -166,6 +166,7 @@ export default {
       progress: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
+      defaultMode: STUDY_MODE.DEFAULT,
     };
   },
 

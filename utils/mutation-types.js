@@ -347,6 +347,10 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
     SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
     SET_STUDY_EXERCISE_CURRENT: "setStudyExerciseCurrent",
+    SET_STUDY_EXERCISE_QUESTION_NAV: "setStudyExerciseQuestionNav",
+    SET_STUDY_EXERCISE_QUESTION_CHANGE: "setStudyExerciseQuestionChange",
+    SET_STUDY_EXERCISE_SUBMISSION: "setStudyExerciseSubmission",
+    // SET_STUDY_EXERCISE_ANSWER: "setStudyExerciseAnswer",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
