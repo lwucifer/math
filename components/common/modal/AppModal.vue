@@ -4,10 +4,11 @@
       <div class="app-modal-root">
         <div class="app-modal-overlay"></div>
         <div
+          v-bind="$attrs"
+          v-scroll-lock="true"
           class="app-modal-wrapper"
           tabindex="-1"
           role="dialog"
-          v-bind="$attrs"
           :class="{...classes, ...componentClass}"
           @click.self="$emit('close')"
         >
