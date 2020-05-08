@@ -3,18 +3,28 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
       <div>
         Câu hỏi số
-        <app-select v-model="questionNo" class="ml-3" :options="questionNoOpts" size="sm" />
+        <app-select
+          v-model="questionNo"
+          class="ml-3"
+          :options="questionNoOpts"
+          size="sm"
+          @change="handleChangedQuestionNumber"
+        />
       </div>
 
       <a
         href
         class="text-decoration-none ml-5"
         @click.prevent="modalListQuestions = true"
-      >Danh sách câu hỏi</a>
+        >Danh sách câu hỏi</a
+      >
     </div>
 
     <div class="e-exercise-choose bg-white pa-3 mb-4">
-      <h3 class="e-exercise-choose__question heading-6 mb-15" v-html="currentExerciseQuestion.content"></h3>
+      <h3
+        class="e-exercise-choose__question heading-6 mb-15"
+        v-html="currentExerciseQuestion.content"
+      ></h3>
       <app-radio-group
         v-model="answer"
         class="e-exercise-choose__answers d-flex flex-column align-items-start"
@@ -23,7 +33,9 @@
           v-for="(ans, index) in currentExerciseQuestion.answers"
           :key="index"
           :value="ans.id"
-        >{{ ans.content }}</app-radio>
+          :checked="ans.id == answer"
+          >{{ ans.content }}</app-radio
+        >
         <!-- <app-radio>Đáp án số 2</app-radio>
         <app-radio>Đáp án số 3</app-radio>
         <app-radio :value="3">Đáp án số 4</app-radio>-->
@@ -41,20 +53,36 @@
         >
           <IconArrowBack class="icon fill-opacity-1 body-1 mr-2" />Quay lại
         </app-button>
-        <app-button size="sm" @click.prevent="handleQuestionContinue" :disabled="isDisableNext">
+        <app-button
+          size="sm"
+          @click.prevent="handleQuestionContinue"
+          :disabled="isDisableNext"
+        >
           Tiếp tục
           <IconArrowForward class="icon fill-opacity-1 body-1 ml-2" />
         </app-button>
       </div>
 
-      <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
-      <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
+      <app-button
+        size="sm"
+        color="info"
+        @click.prevent="handleQuestionSubmission"
+      >
+        <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
     </div>
 
-    <app-modal v-if="modalListQuestions" title="Danh sách câu hỏi" :footer="false" @close="modalListQuestions = false">
-      <ElearingExerciseListQuestions slot="content" :type="EXERCISE_TYPES.CHOICE" />
+    <app-modal
+      v-if="modalListQuestions"
+      title="Danh sách câu hỏi"
+      :footer="false"
+      @close="modalListQuestions = false"
+    >
+      <ElearingExerciseListQuestions
+        slot="content"
+        :type="EXERCISE_TYPES.CHOICE"
+      />
     </app-modal>
 
     <app-modal-confirm
@@ -96,9 +124,9 @@ export default {
 
     return {
       // questionNoOpts,
-      // EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
+      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       // questionNoOpts,
-      questionNo: 1,
+      questionNo: '',
       answer: null,
       modalListQuestions: false,
       modalConfirmSubmit: false
@@ -108,7 +136,8 @@ export default {
   computed: {
     ...mapState("elearning/study/study-exercise", [
       "currentExerciseQuestion",
-      "submission"
+      "submission",
+      "currentExerciseAnswers"
     ]),
 
     ...mapGetters("elearning/study/study-exercise", [
@@ -129,20 +158,31 @@ export default {
   methods: {
     ...mapMutations("elearning/study/study-exercise", [
       "setStudyExerciseQuestionNav",
-      "setStudyExerciseSubmission"
+      "setStudyExerciseSubmission",
+      "setStudyExerciseCurrentByNo"
     ]),
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd"
     ]),
 
     handleQuestionBack() {
-      console.log("[handleQuestionBack]", this.currentExerciseQuestion);
       this.setStudyExerciseQuestionNav(QUESTION_NAV.BACK);
+      console.log(
+        "[handleQuestionBack]",
+        this.currentExerciseQuestion,
+        this.currentExerciseAnswers
+      );
+      this.setAnswered();
     },
 
     handleQuestionContinue() {
-      console.log("[handleQuestionContinue]", this.currentExerciseQuestion);
       this.setStudyExerciseQuestionNav(QUESTION_NAV.NEXT);
+      console.log(
+        "[handleQuestionContinue]",
+        this.currentExerciseQuestion,
+        this.currentExerciseAnswers
+      );
+      this.setAnswered();
     },
 
     handleQuestionSubmission() {
@@ -165,7 +205,29 @@ export default {
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
-      this.elearningSudyExerciseSubmissionAdd(submissionReq);
+      // this.elearningSudyExerciseSubmissionAdd(submissionReq);
+    },
+
+    handleChangedQuestionNumber() {
+      console.log("[handleChangedQuestionNumber]", this.questionNo);
+      this.setStudyExerciseCurrentByNo(this.questionNo);
+      this.setAnswered();
+    },
+
+    setAnswered() {
+
+      // set current answered you checked
+      const answered = this.currentExerciseAnswers.find(
+        an => an.question_id == this.currentExerciseQuestion.id
+      );
+      if (answered && answered.choise_answer_id) {
+        this.answer = answered.choise_answer_id;
+      } else {
+        this.answer = null;
+      }
+
+      // set current question Option
+      // this.questionNo = this.currentExerciseQuestion.id;
     }
   },
 
@@ -181,10 +243,15 @@ export default {
       if (_newVal != _oldVal) {
         this.setStudyExerciseSubmission({ answers });
       }
+    },
+
+    currentExerciseQuestion(_newVal) {
+      console.log("[currentExerciseQuestion]", _newVal)
+      // set current question Option
+      this.questionNo = _newVal.id;
     }
   }
 };
 </script>
 
-<style>
-</style>
+<style></style>

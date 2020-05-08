@@ -45,12 +45,13 @@ export default {
       this.elearningSudyExerciseQuestionList({
         exercise_id: this.currentExercise.id
       });
-
+      
       // set start_time of submission
       this.setStudyExerciseSubmission({
         start_time: new Date(),
         exercise_id: this.currentExercise.id
       });
+
     }
   }
 };
