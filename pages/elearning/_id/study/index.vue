@@ -7,24 +7,39 @@
         <div class="row">
           <div class="col-md-8">
             <div class="box22">
-
-              <!-- VIDEO STREAMING -->
-              <div class="elearning-lesson_image" v-if="studyMode == videoMode">
-                <Streaming
-                  v-if="type_study_lesson === 'video'"
-                  :url="url_video_streaming"
-                />
+              <div class="elearning-lesson_image">
                 <img
-                  src="https://picsum.photos/750/422"
+                  :src="
+                    get(info, 'cover_url.high', '') ||
+                      '/images/adefltu - course - image.png'
+                  "
+                  width="750"
+                  height="422"
                   alt
-                  v-if="type_study_lesson === 'image'"
+                  v-if="studyMode === defaultMode"
                 />
+                <Streaming
+                  :url="get(payload, 'stream_urls.hls_url', '')"
+                  v-if="studyMode == videoMode"
+                />
+                <a :href="get(payload, 'link', '')" v-if="studyMode == docMode"
+                  >Download</a
+                >
+                <img
+                  :src="get(payload, 'link', '')"
+                  alt
+                  v-if="studyMode === imageMode"
+                />
+                <iframe
+                  style="width: 712px"
+                  :src="get(payload, 'link', '')"
+                  v-if="studyMode == articleMode"
+                ></iframe>
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-else/>
+              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
 
-              
               <div class="elearning-lesson__main-nav">
                 <a
                   :class="{ active: type === 'summary' }"
@@ -66,7 +81,7 @@ import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 // Import faked data
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
 
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -78,17 +93,14 @@ import ElearningInfo from "~/components/page/elearning/study/ElearningInfo";
 import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
-import {
-  STUDY_LESSON_TYPE_VIDEO,
-  STUDY_LESSON_TYPE_IMAGE,
-} from "~/utils/event-type";
-import { STUDY_MODE } from '~/utils/constants';
+import { STUDY_MODE } from "~/utils/constants";
+import { useEffect } from "~/utils/common";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
 export default {
   name: "Elearning",
-  layout: "no-header",
+  layout: "studying",
 
   components: {
     ElearningCourseSide,
@@ -98,11 +110,20 @@ export default {
     ElearningInfo,
     ElearningQuestion,
     Streaming,
-    ElearningExercise
+    ElearningExercise,
   },
 
-  created() {
+  mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
+  },
+
+  watch: {
+    payload: {
+      handler: function() {
+        console.log(this.payload);
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -134,6 +155,8 @@ export default {
         getProgress(),
       ]);
 
+      console.log(data);
+
       this.loading = false;
 
       this.info = get(data, "0.data", null);
@@ -151,6 +174,7 @@ export default {
       });
       this.interactive_questions = get(res, "data", null);
     },
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
   },
 
   data() {
@@ -160,43 +184,23 @@ export default {
       info: null,
       interactive_questions: null,
       progress: null,
-      type_study_lesson: "image",
-      url_video_streaming: "",
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
+      defaultMode: STUDY_MODE.DEFAULT,
+      docMode: STUDY_MODE.DOCS,
+      articleMode: STUDY_MODE.ARTICLE,
+      imageMode: STUDY_MODE.IMAGE,
     };
   },
 
-  watch: {
-    event_study_lesson: {
-      handler: function() {
-        const type = get(this, "event_study_lesson.name", "");
-
-        if (type === STUDY_LESSON_TYPE_VIDEO) {
-          const url = get(
-            this,
-            "event_study_lesson.data.stream_urls.hls_url",
-            ""
-          );
-          this.type_study_lesson = "video";
-          this.url_video_streaming = url;
-        }
-
-        if (type === STUDY_LESSON_TYPE_IMAGE) {
-          this.type_study_lesson = "image";
-          this.url_video_streaming = "";
-        }
-      },
-      deep: true,
-    },
+  destroyed() {
+    this.setStudyMode("");
+    this.setPayload(null);
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
-    ...mapState("event", [
-      { event_study_lesson: "payload" },
-      'studyMode',
-    ]),
+    ...mapState("event", ["payload", "studyMode"]),
   },
 };
 </script>

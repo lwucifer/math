@@ -153,11 +153,11 @@
         <app-button color="primary" square fullWidth @click="modalConfirmEmail = false">Xác nhận</app-button>
       </div>
     </app-modal>
-    <app-notify-modal
-      :show="notify.showNotify"
-      :message="notify.message"
-      :link="notify.redirectLink"
+    <app-modal-notify
+      v-if="notify.showNotify"
+      :title="notify.message"
       @close="closeNotify"
+      @ok="$router.push(notify.redirectLink)"
     />
   </div>
 </template>

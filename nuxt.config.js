@@ -75,7 +75,8 @@ module.exports = {
         { src: "@/plugins/sticky.js", ssr: false },
         { src: "@/plugins/tooltip.js", ssr: false },
         { src: "@/plugins/vue-input-number.js" },
-        { src: '@/plugins/streaming.js', ssr: false }
+        { src: '@/plugins/streaming.js', ssr: false },
+        { src: '@/plugins/v-scroll-lock.js', ssr: false },
     ],
     /**
      * Global middleware

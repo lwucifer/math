@@ -45,10 +45,10 @@
       </div>
     </div>
 
-    <AppNotifyModal
+    <app-modal-notify
       v-if="showModal"
-      message="Tạo thông báo thành công!"
-      :show="true"
+      type="success"
+      title="Tạo thông báo thành công!"
       @close="showModal = false"
     />
   </div>
@@ -58,7 +58,6 @@
 import IconClose from "~/assets/svg/design-icons/multiply.svg?inline";
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import ArrowLeft from "~/assets/svg/v2-icons/arrow_left_black.svg?inline";
-import AppNotifyModal from "~/components/common/modal/AppNotifyModal";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 export default {
@@ -67,8 +66,7 @@ export default {
   components: {
     ElearningManagerSide,
     IconClose,
-    ArrowLeft,
-    AppNotifyModal
+    ArrowLeft
   },
   data() {
     return {

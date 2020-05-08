@@ -43,6 +43,7 @@ export default {
     url: {
       handler: function() {
         console.log(this.url);
+        this.playerOptions.sources[0].src = this.url;
         this.$forceUpdate();
       },
       deep: true,
@@ -82,6 +83,9 @@ export default {
   },
   mounted() {
     console.log("this is current player instance object", this.myVideoPlayer);
+    console.log("playerOptions", this.playerOptions);
+    this.playerOptions.sources[0].src = this.url;
+    this.$forceUpdate();
   },
   methods: {
     // listen event
