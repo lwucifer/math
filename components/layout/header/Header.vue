@@ -201,14 +201,10 @@ export default {
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
-    isAuthenticated() {
-      return this.$store.getters["auth/isAuthenticated"];
-    },
-    isStudentRole() {
-      if(!this.isAuthenticated) return false;
-      const accountRole = this.$store.getters['auth/roles'].map(r => r.authority);
-      return accountRole.includes(USER_ROLES.ROLE_USER)
-    },
+    ...mapGetters("auth", [
+      "isAuthenticated",
+      "isStudentRole",
+    ]),
     ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {

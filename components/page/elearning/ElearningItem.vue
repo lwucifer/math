@@ -5,7 +5,7 @@
       <IconVideo2 />
     </div>
     <div class="content">
-      <n-link class="title" to>{{data.name}}</n-link>
+      <n-link class="title">{{data.name}}</n-link>
       <div class="name">
         <app-avatar :src="data.avatar" :size="20" class="mr-2" />
         <span>{{data.username}}</span>

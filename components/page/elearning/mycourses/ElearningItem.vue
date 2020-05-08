@@ -4,7 +4,7 @@
           <img  :src="avatar ? avatar : 'https://picsum.photos/20/206'" />
       </div>
       <div class="wrap-content_Elearning">
-          <p class="name_elearning-item">{{name}}</p>
+          <n-link class="name_elearning-item" :to="`/elearning/${elearning_id}`">{{name}}</n-link>
           <div class="d-flex align-items-center my-3">
             <app-avatar
                 :src="teacher.avatar ? teacher.avatar : 'https://picsum.photos/20/206'"
@@ -72,6 +72,7 @@ export default {
     data(){
         return{
             menuDropdown:false,
+            id:"",
             name:"",
             avatar:"",
             teacher:{
@@ -88,6 +89,8 @@ export default {
         }
     },
     created(){
+        console.log("[props] elearning", this.elearning)
+        this.elearning_id = get(this,"elearning.elearning_id","")
         this.name = get(this,"elearning.name","")
         this.avatar = get(this,"elearning.avatar.low","")
         this.teacher.avatar = get(this,"elearning.teacher.avatar","")
@@ -134,7 +137,8 @@ export default {
         line-height: 20px;
         color: #222222;
         overflow: hidden;
-        text-overflow: ellipsis
+        text-overflow: ellipsis;
+        text-decoration: none;
     }
     .link--dropdown__ElearningItem{
         list-style: none;
