@@ -83,7 +83,7 @@ import { useEffect } from "~/utils/common";
 
 export default {
   name: "Elearning",
-  layout: "no-header",
+  layout: "studying",
 
   components: {
     ElearningCourseSide,

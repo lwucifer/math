@@ -1,7 +1,7 @@
 <template>
   <div class="e-exercise-before-begin text-center">
     <h1 class="heading-3 text-dark-2 mt-3 mb-4">
-      {{ currentExercise.name }} - {{ currentExercise.type }}
+      {{ currentExercise.name }} - {{ currentExercise.type | getExerciseTypeText }}
     </h1>
     <div class="text-center font-weight-semi-bold heading-5 mb-6">
       <span>Số câu hỏi: <span class="text-secondary mr-6">5</span></span>

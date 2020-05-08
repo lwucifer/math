@@ -195,6 +195,15 @@ export function convertBreadcrumText(str = "", elearningInfo) {
   return breadcrumTxt;
 }
 
+
+export function getExerciseTypeText(type="") {
+  if (type === EXERCISE_TYPES.CHOICE) {
+    return "Bài tập trắc nghiệm";
+  } else if (type === EXERCISE_TYPES.ESSAY) {
+    return "Bài tập tự luận";
+  }
+}
+
 const filters = {
   toThousandFilter,
   numeralFormat,
@@ -205,7 +214,8 @@ const filters = {
   subResult2Txt,
   withdrawalStatus2Txt,
   transactionStatus2Txt,
-  convertBreadcrumText
+  convertBreadcrumText,
+  getExerciseTypeText,
 };
 
 // register global utility filters
