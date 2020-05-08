@@ -39,6 +39,7 @@ img {
 }
 
 a {
+  color: $color-brand;
   transition: color 0.3s;
   cursor: pointer;
 
@@ -46,12 +47,6 @@ a {
     color: inherit;
   }
 
-  &:any-link:not(.btn) {
-    &,
-    &:hover {
-      color: $color-brand;
-    }
-  }
   &.link-gray {
     color: #666;
     text-decoration: none;
