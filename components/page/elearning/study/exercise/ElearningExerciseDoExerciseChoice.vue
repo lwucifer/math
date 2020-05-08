@@ -14,7 +14,7 @@
     </div>
 
     <div class="e-exercise-choose bg-white pa-3 mb-4">
-      <h3 class="e-exercise-choose__question heading-6 mb-15">{{ currentExerciseQuestion.content }}</h3>
+      <h3 class="e-exercise-choose__question heading-6 mb-15" v-html="currentExerciseQuestion.content"></h3>
       <app-radio-group
         v-model="answer"
         class="e-exercise-choose__answers d-flex flex-column align-items-start"
