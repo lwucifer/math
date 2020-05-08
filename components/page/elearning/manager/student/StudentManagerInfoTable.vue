@@ -8,12 +8,12 @@
       :loading="loading"
     >
       <template v-slot:cell(action)>
-        <td>
+        <td class="text-primary">
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/students/1`">
-            <IconArrow height="13"/>
+            :to="`/elearning/manager/students`">
+            Xem chi tiết
           </n-link>
         </td>
       </template>
