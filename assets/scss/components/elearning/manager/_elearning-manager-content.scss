@@ -7,11 +7,17 @@
 
         .app-table table {
             th {
+                &:first-child {
+                    padding-left: 1.5rem;
+                }
+                div {
+                    white-space: nowrap !important;
+                }
                 .btn-sort {
                     height: 18px;
                     width: 18px;
                     position: absolute;
-                    right: 0;
+                    right: -4px;
                     top: calc(50% - 9px);
                 }
             }

@@ -1,8 +1,8 @@
 <template>
-  <filter-form>
+  <filter-form class="mb-4">
     <div class="d-flex">
       <div
-        class="filter-form__item filter-form__item--search border-0"
+        class="filter-form__item filter-form__item--search border-0 ml-0"
         style="max-width: 36rem; min-width: 30rem;"
       >
         <app-search
@@ -22,19 +22,6 @@
           Lọc kết quả
         </filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="types"
-          :reduce="item => item.value"
-          v-model="filters.type"
-          label="text"
-          placeholder="Thể loại"
-          searchable
-          clearable
-          @input="handleSelectType"
-        />
-      </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
         <app-vue-select
           class="app-vue-select w-100"
@@ -46,6 +33,19 @@
           searchable
           clearable
           @input="handleSelectRate"
+        />
+      </div>
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="types"
+          :reduce="item => item.value"
+          v-model="filters.type"
+          label="text"
+          placeholder="Thể loại"
+          searchable
+          clearable
+          @input="handleSelectType"
         />
       </div>
     </div>

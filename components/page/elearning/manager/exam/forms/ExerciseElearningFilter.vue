@@ -1,8 +1,8 @@
 <template>
-  <filter-form class="">
+  <filter-form class="mb-4">
     <div class="d-flex">
       <div
-        class="filter-form__item filter-form__item--search border-0"
+        class="filter-form__item filter-form__item--search border-0 ml-0"
         style="max-width: 36rem; min-width: 30rem;"
       >
         <app-search

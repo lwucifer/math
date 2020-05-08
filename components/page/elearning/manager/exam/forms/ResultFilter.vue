@@ -1,48 +1,53 @@
 <template>
-  <div class="filter-form filter-form--participant">
-    <div class="filter-form__item">
-      <app-button
-        color="primary"
-        class="filter-form__item__btn filter-form__item__btn--submit"
-        :size="'sm'"
-        @click="submit"
-      >
-        <IconFilter />
-        <span>Lọc kết quả</span>
-      </app-button>
-    </div>
-    
-    <app-select-class
-      class-name="filter-form__item"
-      :class-style="{ 'min-width': '115px' }"
-      class-year-name="filter-form__item"
-      :year-style="{ 'min-width': '110px' }"
-      @changedClass="handleChangedClass"
-    />
-
-    <app-select-submission-result
-      v-model="filters.result"
-      @input="handleChangedResult"
-    >
-    </app-select-submission-result>
-
-    <!--Right form-->
-    <div class="filter-form__right">
-      <div class="filter-form__item filter-form__item--search border-0">
-        <app-search
-          class="w-100"
-          size="sm"
-          placeholder="Nhập để tìm kiếm"
-          v-model="filters.query"
-          @input="handleChangedSearch"
-          @keyup.enter.native="handleSubmitSearch"
-          @submit="submit"
+  <div>
+    <filter-form class="">
+      <div class="d-flex">
+        <div
+          class="filter-form__item filter-form__item--search border-0"
+          style="max-width: 25rem; min-width: 20rem;"
         >
-        </app-search>
+          <app-search
+            class="w-100"
+            size="sm"
+            placeholder="Nhập để tìm kiếm"
+            v-model="filters.query"
+            @input="handleChangedSearch"
+            @keyup.enter.native="handleSubmitSearch"
+            @submit="submit"
+            color="primary"
+          >
+          </app-search>
+        </div>
+        <div class="filter-form__item">
+          <filter-button @click="clickSubmit">
+            Lọc kết quả
+          </filter-button>
+        </div>
+        <app-select-class
+          v-if="filterSelect"
+          style="margin-left: 0.6rem;"
+          class-name="filter-form__item"
+          :class-style="{ 'min-width': '11rem', 'margin-right': '0.6rem' }"
+          class-year-name="filter-form__item"
+          :year-style="{ 'min-width': '7rem' }"
+          @changedClass="handleChangedClass"
+          placeholder="Lớp"
+        />
+        <app-select-submission-result
+          v-if="filterSelect"
+          style="min-width: 12.5rem;"
+          v-model="filters.result"
+          @input="handleChangedResult"
+          class="filter-form__item"
+          placeholder="Trạng thái"
+        >
+        </app-select-submission-result>
       </div>
-    </div><!--End right form-->
-
+    </filter-form>
+  
+    
   </div>
+  
 </template>
 
 <script>
@@ -59,6 +64,7 @@
     },
     data() {
       return {
+        filterSelect:false,
         filters: {
           query: null,
           class_id: null,
@@ -72,26 +78,6 @@
           {
             value: 2,
             text: 'Tự luận'
-          },
-        ],
-        classes: [
-          {
-            value: 1,
-            text: '10B'
-          },
-          {
-            value: 2,
-            text: '11C'
-          },
-        ],
-        results: [
-          {
-            value: 1,
-            text: '4/10'
-          },
-          {
-            value: 2,
-            text: '9/10'
           },
         ],
         initStatus: true
@@ -124,6 +110,22 @@
       },
       handleSubmitSearch(e) {
         this.$emit('submitSearch', e.target.value)
+      },
+      clickSubmit() {
+        if (this.filterSelect) {
+          this.resetForm()
+          this.filterSelect = false
+          if (!this.initStatus) {
+            this.$emit('submitFilter', this.filters)
+          }
+        } else {
+          this.filterSelect = true
+        }
+      },
+      resetForm() {
+        this.filters.query = null
+        this.filters.class_id = null
+        this.filters.result = null
       }
     }
   }

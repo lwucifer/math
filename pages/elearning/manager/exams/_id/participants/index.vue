@@ -2,12 +2,37 @@
   <!--UI 1302-->
   <div class="container">
     <breadcrumb />
-    
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="3"/>
       </div>
       <div class="col-md-9">
+        <sub-block-section
+          title="Danh sách làm bài"
+          has-icon
+        >
+          <template v-slot:content>
+            <div class="elearning-manager-content p-0">
+              <div class="elearning-manager-content__main py-2">
+                <participant-filter-form
+                  @submitFilter="submitFilter"
+                  @changedClass="handleChangedClass"
+                  @changedResult="handleChangedResult"
+                  @submitSearch="handleSubmitSearch"
+                />
+  
+                <!--Table-->
+                <participant-table
+                  :list.sync="list"
+                  :pagination="pagination"
+                  :loading="loading"
+                  @changedPagination="updatePagination"
+                />
+              </div>
+            </div>
+          </template>
+        </sub-block-section>
+        
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
             <header-breadcrumb

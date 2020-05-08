@@ -50,10 +50,11 @@
       <template v-slot:cell(action)="{row}">
         <td>
           <n-link
-            v-if="isPending(row) || isMarked(row)"
             class
-            :to="`/elearning/manager/exams/${$route.params.id}/results?student_id=${row.student_id}&user_id=${row.id}`">
-            Xem chi tiết
+            v-if="isPending(row) || isMarked(row)"
+            title="Chi tiết"
+            :to="`/elearning/manager/exams/${$route.params.id}/results?user_id=${row.id}&student_id=${row.student_id ? row.student_id: ''}`">
+            <IconArrow height="13"/>
           </n-link>
         </td>
       </template>
@@ -63,10 +64,12 @@
 
 <script>
   import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
+  import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import { get } from "lodash"
 
   export default {
     components: {
+      IconArrow
     },
 
     props: {

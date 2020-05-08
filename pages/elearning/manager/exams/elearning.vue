@@ -24,21 +24,6 @@
                 <keep-alive>
                   <component v-bind:is="currentTabComponent"></component>
                 </keep-alive>
-                
-                <!--<div>-->
-                  <!--&lt;!&ndash;Filter form&ndash;&gt;-->
-                  <!--<elearning-manager-filter-form-->
-                    <!--@submitFilter="submitFilter"-->
-                    <!--@changedType="handleChangedType"-->
-                    <!--@submitSearch="handleSubmitSearch"-->
-                  <!--/>-->
-                  <!--<elearning-manager-filter-table-->
-                    <!--:pagination="pagination"-->
-                    <!--:list="list"-->
-                    <!--:loading="loading"-->
-                    <!--@changedPagination="updatePagination"-->
-                  <!--/>-->
-                <!--</div>-->
               </div>
             </div>
           </template>
@@ -178,6 +163,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>
