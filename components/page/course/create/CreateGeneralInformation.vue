@@ -105,6 +105,7 @@
     </div>
 
     <create-action
+      class="mt-5"
       @handleCLickSave="handleCLickSave"
       :isSubmit="isSubmit"
       @handleDelete="handleReset"

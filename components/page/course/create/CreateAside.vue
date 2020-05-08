@@ -12,12 +12,9 @@
         <app-checkbox-circle
           :value="item.key"
           :checked="item.checked"
-          :disabled="false"
-        >
+          :disabled="false">
           {{ item.title }}
-          <span v-if="item.optional" class="cca-sub-text text-sub"
-            >(Tùy chọn)</span
-          >
+          <span v-if="item.optional" class="cca-sub-text text-sub">(Tùy chọn)</span>
         </app-checkbox-circle>
       </li>
     </ul>
@@ -52,7 +49,7 @@ const menu = [
     key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: false,
+    checked: true,
   },
   {
     key: "content",
@@ -84,7 +81,7 @@ export default {
   data() {
     return {
       menu,
-      active: "",
+      active: "general",
       showModalConfirm: false,
       confirmLoading: false,
     };

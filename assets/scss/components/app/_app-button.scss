@@ -28,16 +28,16 @@
         fill-opacity: 1;
     }
     
-     &:hover, &:focus {
+    &:hover, &:focus {
         outline: none;
         box-shadow: $shadow-hover;
-     }
+    }
 
     &.disabled, &[disabled] {
         pointer-events: none;
-        background-color: $color-text-sub !important;
-        border-color: $color-disabled !important;
-        color: $color-gray !important;
+        background-color: $color-text-sub;
+        border-color: $color-disabled;
+        color: $color-gray;
     }
 }
 
@@ -92,8 +92,8 @@
 
 // Type of button
 .btn--flat {
-    background-color: transparent !important;
-    border: none !important;
+    background-color: transparent;
+    border: none;
 }
 
 
@@ -101,7 +101,7 @@
 @each $name, $color in $colors {
     .btn--color-#{$name} {
         background-color: $color;
-        color: #fff !important;
+        color: #fff;
     }
 }
 
@@ -113,19 +113,19 @@
 
 .btn--color-white {
     background-color: #fff;
-    color: $color-primary !important;
+    color: $color-primary;
     &:hover {
-        color: $color-primary-3 !important;
+        color: $color-primary-3;
         background-color: #fff;
     }
 }
 
 .btn--color-disabled {
-    color: $color-gray !important;
+    color: $color-gray;
 }
 
 .btn--color-gray {
-    color: #999 !important;
+    color: #999;
 }
 
 .btn--color-default {
@@ -135,14 +135,14 @@
 
 .btn--color-red {
     background-color: #fff;
-    color: $color-red !important;
+    color: $color-red;
     border: 1px solid $color-red;
 }
 
 .btn--color-transparent {
     background-color: transparent;
     color: $color-primary;
-    box-shadow: none !important;
+    box-shadow: none;
     &:hover {
         color: $color-primary-3;
         background-color: transparent;
@@ -170,28 +170,28 @@
 
 // Button outline
 .btn-outline {
-    background-color: transparent !important;
+    background-color: transparent;
     border: 1px solid $color-text;
-    color: $color-text !important;
+    color: $color-text;
 }
 
 // Color of button
 @each $name, $color in $colors {
     .btn-outline--color-#{$name} {
         border-color: $color;
-        color: $color !important;
+        color: $color;
     }
 }
 
 .btn-outline--color-white {
     background-color: transparent;
-    color: #fff !important;
+    color: #fff;
     border-color: #fff;
 }
 
 .btn-outline--color-default {
     border: 1px solid $color-disabled;
-    color: $color-primary !important;
+    color: $color-primary;
 }
 
 // Loading state

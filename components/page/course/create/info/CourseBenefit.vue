@@ -27,21 +27,29 @@
     </div>
 
     <div v-if="benefit.length < 10">
+      <button class="d-flex align-items-center text-primary" 
+        v-if="showBtn"
+        @click="showInputBenefit"><IconAdd class="mr-2"/> Thêm lợi ích</button>
+
       <app-editor-menu-bubble
+      v-if="showBenefit"
         class="bg-input-gray mb-3 flex-grow"
         placeholder="Nhập lợi ích từ khoá học"
         v-model="benefitEditorValue"
         @onBlur="handleBlur"/>
       
-      <div class="text-right">
+     
+      <div class="text-right" v-if="showBenefit">
         <app-button outline
-        color="error"
-        class="mr-3">Hủy</app-button>
-      
+          square
+          color="error"
+          class="mr-3"
+          @click="cancelInputBenefit">Hủy</app-button>
+    
         <app-button
           square
-          class="font-weight-normal body-2"
-          @click="addBenefit(benefitEditorValue)">Thêm lợi ích</app-button>
+          @click="addBenefit(benefitEditorValue)"
+          class="font-weight-normal body-2">Thêm lợi ích</app-button>
       </div>
     </div>
     <span class="text-error">{{ error }}</span>
@@ -55,10 +63,13 @@ const IconCheckCircle = () =>
 const IconTrashAlt = () =>
   import("~/assets/svg/v2-icons/delete_sweep.svg?inline");
 
+const IconAdd = () => import ("~/assets/svg/v2-icons/add_green.svg?inline");
+
 export default {
   components: {
     IconCheckCircle,
     IconTrashAlt,
+    IconAdd
   },
 
   props: {
@@ -76,6 +87,8 @@ export default {
     return {
       benefitEditorValue: "",
       error: "",
+      showBenefit: false,
+      showBtn: true
     };
   },
 
@@ -105,12 +118,22 @@ export default {
       this.$emit("removeBenefit", index);
     },
 
+    showInputBenefit() {
+      this.showBenefit= true;
+      this.showBtn = false;
+    },
+
     addBenefit(html) {
       if (this.benefit.length < 10 && this.benefitEditorValue) {
         this.$emit("addBenefit", html);
         this.benefitEditorValue = "";
       }
     },
+
+    cancelInputBenefit() {
+      this.showBenefit= false;
+      this.showBtn = true;
+    }
   },
 };
 </script>

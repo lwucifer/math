@@ -1,6 +1,6 @@
 <template>
   <label class="app-checkbox">
-    <input type="checkbox" class="app-checkbox__input" hidden v-bind="$attrs" :checked="checked" @change="handleChange" />
+    <input type="checkbox" class="app-checkbox__input" hidden v-bind="$attrs" checked @change="handleChange" />
     <div class="app-checkbox__checkmark">
       <IconCheck class='icon' />
     </div>
