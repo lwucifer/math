@@ -52,10 +52,6 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import {
-  STUDY_LESSON_TYPE_VIDEO,
-  STUDY_LESSON_TYPE_IMAGE,
-} from "~/utils/event-type";
 import StudyService from "~/services/elearning/study/Study";
 import { mapActions, mapMutations } from "vuex";
 import {
