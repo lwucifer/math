@@ -15,7 +15,7 @@ import TheHeaderManager from "~/components/layout/header/HeaderManager";
 import Footer from "~/components/layout/footer/Footer";
 
 export default {
-  middleware: ["authenticated", "teacher-role"],
+  middleware: ["teacher-role"],
   
   components: {
     TheHeaderManager,
