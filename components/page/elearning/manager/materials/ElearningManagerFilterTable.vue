@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapfilterbar__ElearningManagerFilterTable">
+  <div>
     <elearning-manager-filter-form
       @changedFilter="updateFilter"
       @submitFilter="submitFilter"
@@ -7,10 +7,9 @@
       @changedQuery="handleChangedSearch"
       @changedStatus="handleChangedStatus"
       @submitSearch="handleSubmitSearch"
-      class="mb-4 px-0"
+      class="px-0"
     />
-    <div>
-      
+    <div class="mb-4">
       <v-popover
         :disabled="additionalActions.delete"
         trigger="hover"
@@ -23,8 +22,7 @@
           normal
           :disabled="!additionalActions.delete"
           :color="additionalActions.delete ? 'secondary' : 'disabled'"
-          @click="visible.delete = true"
-          class="bntRemoveList__ElearningManagerFilterTable"
+          @click="handleDelete"
         >
           <IconTrashAlt style="fill: #fff; height: 16px;"/>
           <span>Xóa tài liệu</span>
@@ -37,47 +35,55 @@
       
     </div>
 
-    <div class="wrapTable__ElearningManagerFilterTable">
-      <app-table
-        :heads="heads"
-        :pagination="pagination"
-        :data.sync="list"
-        :opts="[
-          { value: 10, text: '10' },
-          { value: 25, text: '25' },
-          { value: 50, text: '50' },
-          { value: 100, text: '100' }]"
-        multiple-selection
-        @pagechange="onPageChange"
-        @selectionChange="selectRow"
-        class="tableUploadFile__ElearningManagerFilterTable"
-        :loading="updating"
-      >
-        <template v-slot:cell(status)="{row}">
-          <td>
-            {{ get(row, 'used', false ) | statusFilter }}
-          </td>
-        </template>
-        <template v-slot:cell(size)="{row}">
-          <td>
-            {{ get(row, 'size', 0 ) }} MB
-          </td>
-        </template>
-        <template v-slot:cell(created_at)="{row}">
-          <td>
-            {{ get(row, 'created_at', '-') | moment("DD/MM/YYYY") }}
-          </td>
-        </template>
-      </app-table>
-    </div>
+    <app-table
+      :heads="heads"
+      :pagination="pagination"
+      :data.sync="list"
+      multiple-selection
+      @pagechange="onPageChange"
+      @selectionChange="selectRow"
+      :loading="updating"
+    >
+      <template v-slot:cell(status)="{row}">
+        <td>
+          {{ get(row, 'used', false ) | statusFilter }}
+        </td>
+      </template>
+      <template v-slot:cell(size)="{row}">
+        <td>
+          {{ get(row, 'size', 0 ) }} MB
+        </td>
+      </template>
+      <template v-slot:cell(created_at)="{row}">
+        <td>
+          {{ get(row, 'created_at', '-') | moment("DD/MM/YYYY") }}
+        </td>
+      </template>
+    </app-table>
 
     <app-modal-confirm
       v-if="visible.delete"
       @cancel="cancelDel"
       @ok="confirmDel"
+      title="Bạn chắc chắn muốn xóa tài liệu?"
+      description="Tài liệu bị xóa sẽ không thể khôi phục"
+      ok-text="Đồng ý"
     >
-      <b>Bạn có chắc muốn xóa tài liệu không?</b>
     </app-modal-confirm>
+    
+    <app-modal-notify
+      v-if="visible.canDelete"
+      type="warning"
+      title="Không thể xóa file này!"
+      width="545"
+      description="Bạn không thể xóa tài liệu đang được sử dụng."
+      @ok="visible.canDelete = false"
+      @close="visible.canDelete = false"
+    >
+      <template v-slot:icon>
+      
+      </template>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -156,7 +162,8 @@
         ],
         selectedItems: [],
         visible: {
-          delete: false
+          delete: false,
+          canDelete: false
         }
       }
     },
@@ -212,8 +219,8 @@
       async confirmDel() {
         this.visible.delete = false
         const res = await this.deleteItems(this.selectedItems)
-        this.$emit('deletedItems', res)
         if (get(res, "success", false)) {
+          this.$emit('deletedItems', res)
           this.selectedItems = []
         }
       },
@@ -222,6 +229,13 @@
       },
       resetData() {
         this.selectedItems = []
+      },
+      handleDelete() {
+        if (this.selectedItems.some(item => item.used == true)) {
+          this.visible.canDelete = true
+        } else {
+          this.visible.delete = true
+        }
       },
       get
     },

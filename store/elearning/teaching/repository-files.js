@@ -44,6 +44,7 @@ const actions = {
       return result;
     } catch (error) {
       console.log("[Creating repository] add.error", error);
+      throw error
     }
   },
 
