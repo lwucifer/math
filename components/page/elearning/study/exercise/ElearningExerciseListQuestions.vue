@@ -1,10 +1,6 @@
 <template>
   <ol class="e-exercise-list-questions">
     <ElearningExerciseListQuestionsItem v-for="(item, index) in mergeSubmissionQuestion" :key="index" :question="item"/>
-    <!-- <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/> -->
   </ol>
 </template>
 

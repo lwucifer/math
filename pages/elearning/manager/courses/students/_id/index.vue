@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    
+    <breadcrumb/>
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="2" />
@@ -63,7 +63,7 @@ export default {
     return {
         heads:[
             {
-                name:"title",
+                name:"name",
                 text:"Tiêu đề bài tập"
             },
             {
@@ -77,8 +77,16 @@ export default {
         ],
         list:[
             {
-                title:"Justice League",
+                name:"Justice League",
                 mark:10
+            },
+            {
+                name:"Justice League",
+                mark: 4
+            },
+            {
+                name:"Justice League",
+              
             }
         ],
         pagination: {

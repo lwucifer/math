@@ -4,7 +4,7 @@
       <ElearningExerciseList v-if="studyMode == studyModeDoExercise"/>
       <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode"/>
       <ElearningExerciseDoExercise v-else-if="studyMode == doingMode"/>
-      <ElearningExerciseResults v-else-if="studyMode == finishMode"/>
+      <ElearningExerciseResults v-else-if="studyMode == reviewMode"/>
     </div>
 
     <div class="e-exercise-bottom">
@@ -36,7 +36,7 @@ export default {
       studyModeDoExercise: STUDY_MODE.DO_EXERCISE,
       beforeBeginMode: STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN,
       doingMode: STUDY_MODE.DO_EXERCISE_DOING,
-      finishMode: STUDY_MODE.DO_EXERCISE_FINISH,
+      reviewMode: STUDY_MODE.REVIEW_EXERCISE_RESULT,
     }
   },
 

@@ -1,126 +1,133 @@
 <template>
-  <div>
+  <div class="mb-4">
     <div class="row">
       <div class="col-md-6">
         <h5 class="upload-repository__title">Upload file</h5>
-        <div class="wrapUploadFile__ElearningManager">
-          <div
-            class="wrapBtnUploadFile__ElearningManager upload-repository__box upload-repository__box--upload"
-            @drop="handleDrop"
-            @dragover="handleDragover"
-            @dragenter="handleDragover"
-          >
-            <!--Upload notification-->
-            <div class="upload-alert" v-show="isSuccess || isError">
-              <!--Upload fail-->
-              <div class="upload-alert--error" v-if="isError">
-                <div class="upload-alert--error__info mb-2">
-                  <div style="line-height: 100%;">
-                    <IconCloseOutline class="icon icon--close-alert"/>
-                  </div>
-                  <div>
-                    <span class="upload-alert--error__mess">{{ get(error, 'message', '') }}</span>
-                  </div>
+        <div
+          class="upload-repository__box upload-repository__box--upload"
+          @drop="handleDrop"
+          @dragover="handleDragover"
+          @dragenter="handleDragover"
+        >
+          <!--Upload notification-->
+          <div class="upload-alert" v-show="isSuccess || isError">
+            <!--Upload fail-->
+            <div class="upload-alert--error" v-if="isError">
+              <div class="upload-alert--error__info mb-2">
+                <div style="line-height: 100%;">
+                  <IconCloseOutline class="icon icon--close-alert"/>
                 </div>
-          
-                <div class="upload-alert--error__status">
-                  {{ get(error, 'reason', '') }}
-                </div>
-              </div>
-        
-              <!--Upload success-->
-              <div class="upload-alert--success" v-if="isSuccess">
-                <p class="upload-alert--success__title">
-                  <IconSuccess class="icon" width="30" height="30" style="height: 1.8rem; width: 1.8rem;"/>
-                  <span>
-                    Tải lên thành công
-                  </span>
-                </p>
-                <p class="file-name text-center">{{ currentFile.name }}</p>
-              </div>
-        
-              <!--Button continue uploading-->
-              <div class="text-center" v-show="isError || isSuccess">
-                <app-button
-                  @click="uploadOther"
-                  normal
-                  class="btn--other-file font-weight-medium px-4"
-                  size="sm"
-                >
-                  <slot name="icon">
-                    <IconUploadFile class="icon--btn icon--btn--pre" style="height: 17px;"/>
-                  </slot>
-                  <span>Tải lên một file khác</span>
-                </app-button>
-              </div>
-            </div>
-      
-            <!--Uploading-->
-            <div class="py-3" v-if="isUploading">
-              <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
-              <div class="mb-2" style="padding-right: 2.7rem; position: relative">
                 <div>
-                  <app-progress
-                    :percentage="uploadPercentage"
-                    rounded
-                    size="lg"
-                    :inner-options="{ 'background-color': '#6FDA44' }"
-                  >
-                  </app-progress>
+                  <span class="upload-alert--error__mess">{{ get(error, 'message', '') }}</span>
                 </div>
-                <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
               </div>
-              <p class="process--upload__status">
-                <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
-              </p>
+        
+              <div class="upload-alert--error__status">
+                {{ get(error, 'reason', '') }}
+              </div>
             </div>
       
-            <!--Drag & drop file-->
-            <div class="text-center" v-if="isInitial">
-              <p class="mb-3 text-instruction">Click để chọn tập tin hoặc kéo thả tập tin vào đây để tải lên.</p>
+            <!--Upload success-->
+            <div class="upload-alert--success" v-if="isSuccess">
+              <p class="upload-alert--success__title">
+                <IconSuccess class="icon" width="30" height="30" style="height: 1.8rem; width: 1.8rem;"/>
+                <span>
+                  Tải lên thành công
+                </span>
+              </p>
+              <p class="file-name text-center">{{ currentFile.name }}</p>
+            </div>
+      
+            <!--Button continue uploading-->
+            <div class="text-center" v-show="isError || isSuccess">
               <app-button
-                @click="handleUpload"
+                @click="uploadOther"
                 normal
-                class="font-weight-medium px-4 mb-3"
+                class="btn--other-file font-weight-medium px-4"
                 size="sm"
               >
                 <slot name="icon">
                   <IconUploadFile class="icon--btn icon--btn--pre" style="height: 17px;"/>
                 </slot>
-                <span>Tải lên</span>
+                <span>Tải lên một file khác</span>
               </app-button>
-              <p style="font-size: 1.1rem; opacity: 0.5; line-height: 1.3rem;">
-                <span>
-                  Xem các định dạng file được chấp nhận
-                  <v-popover
-                    class="d-inline"
-                    offset="10"
-                    trigger="hover"
-                    placement="top"
-                    popover-class="tooltip--hh"
-                  >
-                    <IconInfo class="" style="width: 1.3rem; height: 1.3rem; margin-bottom: -2px;"/>
-                    <template slot="popover" class="tooltip-detail">
-                      tfafjaljflajl
-                    </template>
-                  </v-popover>
-                </span>
-              </p>
-              <!--<div>-->
-                <!--<button-->
-                  <!--class="btnUploadFile__ElearningManager"-->
-                  <!--@click="handleUpload"-->
-                <!--&gt;-->
-                  <!--<IconUploadFile class="iconUploadFile__ElearningManager"/>-->
-                <!--</button>-->
-              <!--</div>-->
-              <input
-                ref="upload-input"
-                type="file"
-                accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
-                @change="handleClick"
-              />
             </div>
+          </div>
+    
+          <!--Uploading-->
+          <div class="py-3" v-if="isUploading">
+            <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
+            <div class="mb-2" style="padding-right: 2.7rem; position: relative">
+              <div>
+                <app-progress
+                  :percentage="uploadPercentage"
+                  rounded
+                  size="lg"
+                  :inner-options="{ 'background-color': '#6FDA44' }"
+                >
+                </app-progress>
+              </div>
+              <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
+            </div>
+            <p class="process--upload__status">
+              <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
+            </p>
+          </div>
+    
+          <!--Drag & drop file-->
+          <div class="text-center" v-if="isInitial">
+            <p class="mb-3 text-instruction">Click để chọn tập tin hoặc kéo thả tập tin vào đây để tải lên.</p>
+            <app-button
+              @click="handleUpload"
+              normal
+              class="font-weight-medium px-4 mb-3"
+              size="sm"
+            >
+              <slot name="icon">
+                <IconUploadFile class="icon--btn icon--btn--pre" style="height: 17px;"/>
+              </slot>
+              <span>Tải lên</span>
+            </app-button>
+            <p style="font-size: 1.1rem; opacity: 0.5; line-height: 1.3rem;">
+              <span>
+                Xem các định dạng file được chấp nhận
+                <v-popover
+                  class="d-inline"
+                  offset="10"
+                  trigger="hover"
+                  placement="top"
+                  popover-class="tooltip--available-file"
+                >
+                  <IconInfo class="" style="width: 1.3rem; height: 1.3rem; margin-bottom: -2px;"/>
+                  <template slot="popover" class="tooltip-detail">
+                    <div>
+                      <p class="mb-3">
+                        Định dạng file văn bản được chấp nhận:
+                        <span class="text-dark font-weight-semi-bold">.doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, odt, odp, .ods</span>
+                      </p>
+                      <p>
+                        Định dạng video được chấp nhận:
+                        <span class="text-dark font-weight-semi-bold">.mp4, .f4v, .mov, .m4a, .m4v, .mp4a, .mp4v, .3gp, .3g2, .flv, .smil</span>
+                      </p>
+                    </div>
+                  </template>
+                </v-popover>
+              </span>
+            </p>
+            <!--<div>-->
+              <!--<button-->
+                <!--class="btnUploadFile__ElearningManager"-->
+                <!--@click="handleUpload"-->
+              <!--&gt;-->
+                <!--<IconUploadFile class="iconUploadFile__ElearningManager"/>-->
+              <!--</button>-->
+            <!--</div>-->
+            <input
+              ref="upload-input"
+              type="file"
+              accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
+              @change="handleClick"
+            />
           </div>
         </div>
       </div>
@@ -138,7 +145,7 @@
             <app-progress
               class="storage-status__progress"
               :percentage="capcityPercentage"
-              rounded
+              normal
             ></app-progress>
           </div>
           <p class="storage-status__detail text-center">Đã sử dụng {{ usedCapacity*1024*1024 | fileSizeFilter }} trong tổng số {{ maxCapacity*1024*1024 | fileSizeFilter }}</p>
@@ -314,28 +321,32 @@
       },
 
       async upload(rawFile) {
-        this.currentStatus = STATUS['UPLOADING']
-        this.$refs['upload-input'].value = null // fix can't select the same excel
-
-        let res
-
-        if (!this.beforeUpload) {
-          res = await this.addFile(rawFile)
-        } else {
-          const before = this.beforeUpload(rawFile)
-          if (before) {
+        try {
+          this.currentStatus = STATUS['UPLOADING']
+          this.$refs['upload-input'].value = null // fix can't select the same excel
+  
+          let res
+  
+          if (!this.beforeUpload) {
             res = await this.addFile(rawFile)
+          } else {
+            const before = this.beforeUpload(rawFile)
+            if (before) {
+              res = await this.addFile(rawFile)
+            }
+          }
+          if (res && get(res, 'success', false)) {
+            this.currentStatus = STATUS['SUCCESS']
+            this.onSuccess && this.onSuccess(res)
+          } else {
+            let reason = res && get(res, "message", false) ? get(res, "message") : DEFAULT_ERROR_REASON
+            this.hasError(DEFAULT_ERROR_MESSAGE, reason)
+          }
+        } catch (e) {
+          if (!this.$axios.isCancel(e)) {
+            this.hasError(DEFAULT_ERROR_MESSAGE, DEFAULT_ERROR_REASON)
           }
         }
-        if (res && get(res, 'success', false)) {
-          this.currentStatus = STATUS['SUCCESS']
-          this.onSuccess && this.onSuccess(res)
-        } else {
-          console.log('upload function error: ', res)
-          let reason = res && get(res, "message", false) ? get(res, "message") : DEFAULT_ERROR_REASON
-          this.hasError(DEFAULT_ERROR_MESSAGE, reason)
-        }
-
       },
       handleDragover(e) {
         e.stopPropagation()
@@ -380,12 +391,10 @@
         const fileSize = file.size
         return this.availableCapcity * 1024 * 1024 > fileSize
       },
-      cancelUpload() {
-        console.log("cancel upload")
+      async cancelUpload() {
         if (this.isUploading) {
-          console.log('running ne')
+          await this.cancelUploadToken('Cancel upload file')
           this.resetUpload()
-          this.cancelUploadToken('Cancel upload file')
         }
       },
       resetUpload() {

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="2" />
@@ -18,10 +18,12 @@
                   :active.sync="tab"
                   @selectedItem="changeTab"
                 />
-                <n-link :to="'/elearning/manager/online-class/create'" class="btn btn--size-sm btn--color-info btn--square btn-right">
+                <app-button  class="btn btn--size-sm btn--color-info btn--square btn-right"
+                  @click="handleShowModalInvite"
+                >
                     <IconPlusCircle class="fill-white mr-2 icon"/>
                     <span class="color-white">Mời thêm học sinh</span>
-                </n-link>
+                </app-button>
               </div>
     
               <div class="elearning-manager-content__main">
@@ -34,12 +36,23 @@
         </sub-block-section>
       </div>
     </div>
+    <ModalInviteStudent 
+      v-if="showModalInvite"
+      @close="closeModalInvite"
+    />
+    <app-modal-notify
+      v-if="showModalNotify"
+      type="success"
+      title="Gửi lời mời thành công"
+      @close="closeModalNotify"
+    />
   </div>
 </template>
 
 <script>
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
 import HeadTabs from "~/components/page/elearning/HeadTab";
+import ModalInviteStudent from "~/components/page/elearning/manager/student/ModalInviteStudent"
 import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import { mapState } from "vuex"
 import { get } from "lodash"
@@ -55,11 +68,14 @@ export default {
     HeadTabs,
     ListJoinedTab,
     ListPendingTab,
-    IconPlusCircle
+    IconPlusCircle,
+    ModalInviteStudent
   },
 
   data() {
     return {
+      showModalInvite:false,
+      showModalNotify:false,
       tab: 'joined',
       tabs: [
         {
@@ -101,6 +117,17 @@ export default {
   methods: {
     changeTab(key) {
       this.tab = key
+    },
+    handleShowModalInvite(){
+      this.showModalInvite = true;
+      console.log('lol')
+    },
+    closeModalInvite(close){
+      this.showModalInvite = close;
+    },
+    closeModalNotify(){
+      this.showModalNotify = false;
+      console.log('lol')
     }   
   },
   created() {

@@ -60,7 +60,7 @@ export default {
     watch:{
         elearningStudyStudent:{
             handler: function(){
-                this.elearningList = get(this,"elearningStudyStudent.data.content",[])
+                this.elearningList = get(this,"elearningStudyStudent.content",[])
             }
         }
     },
@@ -107,60 +107,5 @@ export default {
 </script>
 
 <style lang="scss">
-.wrap-study-space{
-    width: 12rem;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .item{
-        text-decoration: none;
-        text-transform: uppercase;
-        display: inline-block;
-        width: 100%;
-        padding: 3rem 0;
-        display: block;
-        color: #656565;
-        svg path{ fill: #656565;}
-        &:hover{
-            svg path{ fill: $color-primary;}
-        }
-    }
-    .app-dropdown__content{
-        left: -50%;
-        top: 110%;
-        &::after {
-        content: "";
-        position: absolute;
-        bottom: 100%;  /* At the top of the tooltip */
-        left: 70%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: transparent transparent white transparent;
-        }
-            }
-    .link--dropdown__content{
-        width: 246px;
-        .proccess-bar-study-border{
-            height: 5px;
-            width: 100%;
-            background: #EEEEEE;
-            margin: 13px 0;
-            .percent-proccess{
-                background: #37A000;
-                height: 5px;
-            }
-        }
-    }
-    .avatar-elearning__study{
-        width: 62px;
-        height: 37px;
-    }
-    .name-elearning__study{
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 20px;
-    }
-}
+@import "~/assets/scss/components/app/_app-study-space.scss";
 </style>
