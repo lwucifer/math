@@ -33,7 +33,7 @@
 <script>
 import SchoolFilter from "~/components/page/school/SchoolFilter";
 import SchoolListBox from "~/components/page/school/SchoolListBox";
-import SchoolSlider from "~/components/page/school/SchoolLisSlider";
+import SchoolSlider from "~/components/page/school/SchoolListSlider";
 import { mapState } from "vuex";
 // Import faked data
 import {
