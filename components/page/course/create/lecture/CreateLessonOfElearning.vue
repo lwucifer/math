@@ -2,11 +2,11 @@
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <div class="cc-box__bg-gray px-5 pt-5 pb-5">
-      <h3 class="heading-6 mb-2 mt-3">Tên bài học</h3>
-      <app-input v-model="payload.name" placeholder="Tên bài học" :counter="60"/>
-      <span>Chọn loại bài học</span>
+      <h3 class="heading-5 mb-2 mt-3">Tên bài học <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span></h3>
+      <app-input v-model="payload.name" placeholder="Bài học số 1" :counter="60"/>
+      <p class="text-center mb-4">Chọn loại bài học</p>
 
-      <app-divider class="mt-3 mb-4" />
+      <!-- <app-divider class="mt-3 mb-4" /> -->
 
       <div class="clc-type-tabs">
         <a
