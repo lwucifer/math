@@ -18,7 +18,7 @@
       />
 
       <school-course-slider
-        :cources="lessons"
+        :cources="get(courses, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Khóa học của trường"
       />
@@ -102,7 +102,7 @@ export default {
         pagination: false,
         showName: true
       },
-      lessons: LESSONS,
+      // lessonss: LESSONS,
       // courses: COURSES
     };
   },
