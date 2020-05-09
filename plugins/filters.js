@@ -5,8 +5,11 @@ import {
   EXERCISE_TYPES,
   SUBMISSION_RESULTS,
   WITHDRAWAL_STATUSES,
-  TRANSACTION_STATUSES
+  TRANSACTION_STATUSES,
+  EXERCISE_STATUS
 } from "~/utils/constants";
+import { DATETIME_FULL_TEXT } from "~/utils/config";
+const moment = require("moment");
 
 /**
  * 10000 => "10.000"
@@ -186,7 +189,9 @@ export function convertBreadcrumText(str = "", elearningInfo) {
     case "participants":
       breadcrumTxt = "Học sinh tham gia";
       break;
-
+    case "students":
+      breadcrumTxt = "Danh sách học sinh";
+      break;
     default:
       breadcrumTxt = elearningInfo.subject.name;
       break;
@@ -196,13 +201,82 @@ export function convertBreadcrumText(str = "", elearningInfo) {
 }
 
 
-export function getExerciseTypeText(type="") {
+export function getExerciseTypeText(type = "") {
   if (type === EXERCISE_TYPES.CHOICE) {
     return "Bài tập trắc nghiệm";
   } else if (type === EXERCISE_TYPES.ESSAY) {
     return "Bài tập tự luận";
   }
 }
+
+
+export function getQuestionNoText(_index = "") {
+  let noText = '';
+  switch (_index) {
+    case 1:
+      noText = 'A';
+      break;
+    case 2:
+      noText = 'B';
+      break;
+    case 3:
+      noText = 'C';
+      break;
+    case 4:
+      noText = 'D';
+      break;
+    case 5:
+      noText = 'E';
+      break;
+    case 6:
+      noText = 'F';
+      break;
+    case 7:
+      noText = 'G';
+      break;
+    case 8:
+      noText = 'H';
+      break;
+
+    default:
+      break;
+  }
+
+  return noText;
+}
+
+
+export function getExerciseResultText(result = "") {
+  let resultText = '';
+  switch (result) {
+    case EXERCISE_STATUS.FAILED:
+      resultText = 'Chưa đạt';
+      break;
+    case EXERCISE_STATUS.NONE:
+      resultText = 'NONE';
+      break;
+    case EXERCISE_STATUS.PASSED:
+      resultText = 'Đạt';
+      break;
+    case EXERCISE_STATUS.PENDING:
+      resultText = 'Chờ chấm điểm';
+      break;
+
+
+    default:
+      break;
+  }
+
+  return resultText;
+}
+
+export function getDateTimeFullText(_utcDate="") {
+  if (!_utcDate) return;
+  const ts = moment.utc(_utcDate);
+  return ts.format(DATETIME_FULL_TEXT);
+}
+
+
 
 const filters = {
   toThousandFilter,
@@ -216,6 +290,8 @@ const filters = {
   transactionStatus2Txt,
   convertBreadcrumText,
   getExerciseTypeText,
+  getQuestionNoText,
+  getDateTimeFullText,
 };
 
 // register global utility filters

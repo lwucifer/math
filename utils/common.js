@@ -99,7 +99,7 @@ export function getDeviceID() {
                 .map((pair) => {
                     // console.log("[pair]", pair);
                     // get device name by userAgent
-                    if(pair.key == "userAgent"){
+                    if (pair.key == "userAgent") {
                         deviceOs = pair.value;
                     }
                     if (constants.FINGERPRINT_PROPS.includes(pair.key)) {
@@ -178,6 +178,6 @@ export const detectBrowser = () => {
 };
 
 export const isCommonElementIn2Array = (arr1, arr2) => {
-    if(!arr1 || !arr2) return false;
+    if (!arr1 || !arr2) return false;
     return !!arr2.filter(e => arr1.indexOf(e) > -1).length;
 }

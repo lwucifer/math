@@ -1,7 +1,6 @@
 <template>
   <div class="container">
       <student-manager-filter-form/>
-      <hr class="my-4">
       <student-manager-table
         :heads="heads"
         :list="list"
@@ -51,7 +50,14 @@ export default {
                     name:"Nguyễn Văn A",
                     class:"10B",
                     date:"19/10/2021",
-                    progress:"50",
+                    progress:"80",
+                    question: 0
+                },
+                {
+                    name:"Nguyễn Văn C",
+                    class:"10B",
+                    date:"19/10/2021",
+                    progress:"30",
                     question: 0
                 }
             ],
