@@ -11,15 +11,27 @@
         @handleChangeSearch="handleChangeSearch"
       >
       </school-filter>
+
+      
+      <div class="school-list-box__title">
+        <div>
+          <span class="school-list-box__title__name">Tất cả trường tiểu học</span>
+          <span class="school-list-box__title__description">
+            (
+            <b>10</b> trường học -
+            <b>0</b> giáo viên -
+            <b>0</b> học sinh )
+          </span>
+        </div>
+      </div>
+
       <!--Detail school types-->
-      <div v-for="(category, index) in categories" :key="index">
-        <SchoolSlider
-          :category="category"
+      <SchoolListBox
+          :category="categories[1]"
           @showAll="showAll"
           :schoolSearch="schoolSearch"
         >
-        </SchoolSlider>
-      </div>
+        </SchoolListBox>
     </div>
   </div>
 </template>

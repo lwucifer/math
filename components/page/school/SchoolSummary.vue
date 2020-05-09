@@ -15,16 +15,16 @@
           </h2>
           <div class="school-summary__info__contact">
             <p>
-              <span>Địa chỉ:</span><b> {{ get(school, "address", "") }}</b>
+              <i><IconLocation/></i><span> {{ get(school, "address", "") }}</span>
             </p>
             <p>
-              <span>Số điện thoại:</span><b> {{ get(school, "phone", "") }}</b>
+              <i><IconPhone/></i><span> {{ get(school, "phone", "") }}</span>
             </p>
             <p>
-              <span>Email:</span><b> {{ get(school, "email", "") }}</b>
+              <i><IconEmail/></i><span> {{ get(school, "email", "") }}</span>
             </p>
             <p>
-              <span>Mã trường:</span><b> {{ get(school, "code", "") }}</b>
+              <i><IconCode/></i><span> {{ get(school, "code", "") }}</span>
             </p>
           </div>
         </div>
@@ -77,21 +77,30 @@
       <div class="school-summary__intro">
         <h4>Giới thiệu</h4>
         <p>{{ get(school, "description", "") }}</p>
+        <div class="text-center mt-3">
+          <n-link to class="color-primary">Xem thêm</n-link>
+        </div>
       </div>
     </div>
     <!--End intro-->
-    <div class="line"></div>
   </div>
 </template>
 
 <script>
-import IconPoint from "~/assets/svg/icons/point.svg?inline";
+import IconLocation from '~/assets/svg/v2-icons/location_on_24px.svg?inline';
 import IconUser from "~/assets/svg/icons/user.svg?inline";
+import IconPhone from '~/assets/svg/v2-icons/local_phone_24px.svg?inline';
+import IconEmail from '~/assets/svg/v2-icons/email_24px.svg?inline';
+import IconCode from '~/assets/svg/v2-icons/code_24px.svg?inline';
+
 import { get } from "lodash";
 
 export default {
   components: {
-    IconPoint,
+    IconLocation,
+    IconCode,
+    IconPhone,
+    IconEmail,
     IconUser
   },
 

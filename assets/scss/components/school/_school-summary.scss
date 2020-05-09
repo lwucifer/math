@@ -31,13 +31,17 @@
             line-height: 27px;
         }
         &__contact {
-            p:not(:last-child) {
+            p {
+                display: flex;
+                align-items: center;
                 margin-bottom: 2rem;
                 font-size: 1.4rem;
                 line-height: 16px;
-            }
-            p span {
                 color: #999999;
+                svg {
+                    width: 2rem;
+                    margin-right: 0.5rem;
+                }
             }
         }
     }

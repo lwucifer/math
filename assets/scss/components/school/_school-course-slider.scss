@@ -1,11 +1,13 @@
 .school-course-slider {
-    padding: 2rem;
-    background: #fff;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
 
     &__title {
-        font-size: 1.6rem;
+        font-size: 2.4rem;
+        font-weight: normal;
         line-height: 22px;
-        color: #000;
+        color: #222;
+        margin-bottom: 2rem;
     }
 
     .swiper-slide {

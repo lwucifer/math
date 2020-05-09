@@ -34,7 +34,7 @@
             <app-stars :stars="Math.floor(get(cource, 'rate', 0))" />
           </div>
           <span class="text-right">
-            <strong>{{ get(cource, "rate", 0) }}</strong> <br />
+            <strong>{{ get(cource, "rate", 0) }}</strong>
             ({{ get(cource, "original_price", 0) }})
           </span>
         </div>

@@ -1,23 +1,10 @@
 <template>
   <div class="school-list-box">
-    <div class="school-list-box__title">
-      <div>
-        <span class="school-list-box__title__name">{{ category.name }}</span>
-        <span class="school-list-box__title__description">
-          (
-          <b>{{ schoolNum }}</b> trường học - <b>{{ teacherNum }}</b> giáo viên -
-          <b>{{ studentNum }}</b> học sinh )
-        </span>
-      </div>
-      <button square class="school-list-box__title__submit-btn" @click="showAll">
-        Xem tất cả <IconRight class="fill-primary"/>
-      </button>
-    </div>
     <!--List schools-->
     <div class="school-list-box__content">
       <div class="row row--school-list">
         <div
-          class="custom-col-lg-5 col-3 col-sm-6 col-xs-12"
+          class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-3"
           v-for="(school, index) in schools"
           :key="index"
         >
@@ -59,22 +46,6 @@ export default {
       console.log("[schoolList]", schoolList, type);
       return schoolList.filter(sc => sc.type == type) || [];
     },
-
-    schoolNum() {
-      return this.schools.length || 0;
-    },
-
-    studentNum() {
-      return this.schools.reduce((a, b) => {
-        return a + b.student_number;
-      }, 0);
-    },
-
-    teacherNum() {
-      return this.schools.reduce((a, b) => {
-        return a + b.teacher_number;
-      }, 0);
-    }
   },
 
   methods: {

@@ -28,6 +28,10 @@
             align-items: center;
             color: $color-primary;
             margin-left: auto;
+            text-decoration: none;
+            &:focus {
+                outline: none;
+            }
         }
     }
 
