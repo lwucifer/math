@@ -206,6 +206,43 @@ export function getExerciseTypeText(type="") {
   }
 }
 
+
+export function getQuestionNoText(_index="") {
+  let noText = '';
+  switch (_index) {
+      case 1:
+          noText = 'A';
+          break;
+      case 2:
+          noText = 'B';
+          break;
+      case 3:
+          noText = 'C';
+          break;
+      case 4:
+          noText = 'D';
+          break;
+      case 5:
+          noText = 'E';
+          break;
+      case 6:
+          noText = 'F';
+          break;
+      case 7:
+          noText = 'G';
+          break;
+      case 8:
+          noText = 'H';
+          break;
+
+      default:
+          break;
+  }
+
+  return noText;
+}
+
+
 const filters = {
   toThousandFilter,
   numeralFormat,
@@ -218,6 +255,7 @@ const filters = {
   transactionStatus2Txt,
   convertBreadcrumText,
   getExerciseTypeText,
+  getQuestionNoText,
 };
 
 // register global utility filters
