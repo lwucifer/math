@@ -186,7 +186,9 @@ export function convertBreadcrumText(str = "", elearningInfo) {
     case "participants":
       breadcrumTxt = "Học sinh tham gia";
       break;
-
+    case "students":
+      breadcrumTxt = "Danh sách học sinh";
+      break;
     default:
       breadcrumTxt = elearningInfo.subject.name;
       break;
