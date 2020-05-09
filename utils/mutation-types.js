@@ -343,6 +343,7 @@ export const ELEARNING_STUDY_ARCHIVE = {
 export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
     SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_ELEARNING_CURRENT_ID: "setStudyElearningCurrentId",
     SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
     SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
@@ -351,6 +352,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_CHANGE: "setStudyExerciseQuestionChange",
     SET_STUDY_EXERCISE_SUBMISSION: "setStudyExerciseSubmission",
     SET_STUDY_EXERCISE_CURRENT_BY_NO: "setStudyExerciseCurrentByNo",
+    SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {

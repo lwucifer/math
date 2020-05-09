@@ -127,6 +127,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyElearningCurrentId",
+    ]),
+    
     async getData(elearning_id) {
       const getInfo = () =>
         new InfoService(this.$axios)[actionTypes.BASE.LIST]({
@@ -162,6 +166,9 @@ export default {
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
       this.progress = get(data, "2.data", null);
+
+      // set current elearning to store
+      this.setStudyElearningCurrentId(this.progress.id);
     },
     get,
     async addQuestionSuccess() {

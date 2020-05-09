@@ -23,7 +23,7 @@
 
 .e-exercise-essay {
     &__question-name {
-        background: #FFFFFF;
+        background: $color-disabled;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         border-radius: 2px;
         padding: 1rem 1.5rem;
