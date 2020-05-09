@@ -7,22 +7,12 @@
       }}</n-link>
     </div>
     <div class="school-filter__form">
-      <!-- <div class="school-filter__form__item">
-        <app-button
-          color="primary"
-          @click="submit"
-          class="school-filter__btn-submit"
-        >
-          <IconFilter />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div> -->
 
-      <app-select-location
+      <!-- <app-select-location
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
-      />
+      /> -->
 
       <div class="school-filter__form__item" v-if="hasSchoolLevel">
         <app-vue-select
@@ -39,45 +29,58 @@
         </app-vue-select>
       </div>
 
-      <div class="school-filter__form--right">
-        <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
-          <app-search
-            class=""
-            :placeholder="'Nhập để tìm kiếm...'"
-            :counter="11"
-            v-model="filter.query"
-            :size="'sm'"
-            @input="handleChangeSearch"
-          >
-          </app-search>
-        </div>
-
-        <div class="school-filter__form__item" v-if="hasSort">
-          <label class="school-filter__form__item__title" for="">Sắp xếp</label>
-          <app-vue-select
-            class="app-vue-select"
-            :v-model="filter.order"
-            :options="[ { name: 'Số học sinh', value: 0 }, { name: 'Số giáo viên', value: 1 } ]"
-            label="name"
-            placeholder="Sắp xếp theo"
-            :reduce="value => value"
-            searchable
-            clearable
-            @input="handleChangedOrder"
-          >
-          </app-vue-select>
-        </div>
+      <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
+        <app-search
+          style="width: 40rem"
+          class=""
+          :placeholder="'Nhập để tìm kiếm...'"
+          :counter="11"
+          v-model="filter.query"
+          :size="'sm'"
+          @input="handleChangeSearch"
+        >
+        </app-search>
       </div>
-    </div>
+
+      <div class="filter-form__item">
+        <app-button
+          color="white"
+          square
+          class="filter-form__item__btn filter-form__item__btn--submit color-primary"
+          :size="'sm'"
+          @click="submit"
+        >
+          <IconHamberger class="fill-primary mr-3" />
+          <span>Lọc kết quả</span>
+        </app-button>
+      </div>
+
+      <div class="school-filter__form__item ml-auto" v-if="hasSort">
+        <label class="school-filter__form__item__title" for="">Sắp xếp theo</label>
+        <app-vue-select
+          style="width: 21rem"
+          class="app-vue-select"
+          :v-model="filter.order"
+          :options="[ { name: 'Có nhiều học sinh nhất', value: 0 }, { name: 'Có nhiều giáo viên nhất', value: 1 } ]"
+          label="name"
+          placeholder="Sắp xếp theo"
+          :reduce="value => value"
+          searchable
+          clearable
+          @input="handleChangedOrder"
+        >
+        </app-vue-select>
+      </div>
+  </div>
   </div>
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 
 export default {
   components: {
-    IconFilter
+    IconHamberger
   },
   props: {
     title: {
