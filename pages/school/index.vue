@@ -4,6 +4,7 @@
       <school-filter
         title="Danh sách trường học"
         :schoolTypes="schoolTypes"
+        :hasSort="true"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
@@ -18,6 +19,12 @@
           :schoolSearch="schoolSearch"
         >
         </school-list-box>
+        <SchoolSlider
+          :category="category"
+          @showAll="showAll"
+          :schoolSearch="schoolSearch"
+        >
+        </SchoolSlider>
       </div>
     </div>
   </div>
@@ -26,6 +33,7 @@
 <script>
 import SchoolFilter from "~/components/page/school/SchoolFilter";
 import SchoolListBox from "~/components/page/school/SchoolListBox";
+import SchoolSlider from "~/components/page/school/SchoolListSlider";
 import { mapState } from "vuex";
 // Import faked data
 import {
@@ -47,6 +55,7 @@ export default {
   components: {
     SchoolFilter,
     SchoolListBox,
+    SchoolSlider
   },
 
   async fetch({ params, query, store }) {
