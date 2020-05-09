@@ -76,7 +76,7 @@
               <div class="form-item">
                 <p><strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)</p>
 
-                <div class="box22 border mt-3" v-for="(item, index) in timeArray" :key="index">
+                <div class="box22 border mt-3" v-for="(item, index) in params.schedules" :key="index">
                   <div class="">
                     <h6 class="mb-3">Giờ học</h6>
                     <div class="d-flex-center">
@@ -85,22 +85,22 @@
                       <app-vue-select
                         style="width: 10rem"
                         class="app-vue-select form-item__selection mr-3"
-                        v-model="startTime.time"
+                        v-model="startTime[index].time"
                         :options="times"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedTime"
+                        @input="handleChangedTime(index)"
                       ></app-vue-select>
                       <app-vue-select
                         style="width: 9rem"
                         class="app-vue-select form-item__selection"
-                        v-model="startTime.type"
+                        v-model="startTime[index].type"
                         :options="timeTypes"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedTime"
+                        @input="handleChangedTime(index)"
                       ></app-vue-select>
                     </div>
                     <div class="d-flex-center  mb-4">
@@ -108,22 +108,22 @@
                       <app-vue-select
                         style="width: 9rem"
                         class="app-vue-select form-item__selection mr-2"
-                        v-model="duration.hours"
+                        v-model="duration[index].hours"
                         :options="hours"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedDuration"
+                        @input="handleChangedDuration(index)"
                       ></app-vue-select>
                       <app-vue-select
                         style="width: 10rem"
                         class="app-vue-select form-item__selection ml-3 mr-2"
-                        v-model="duration.minutes"
+                        v-model="duration[index].minutes"
                         :options="minutes"
                         label="text"
                         searchable
                         clearable
-                        @input="handleChangedDuration"
+                        @input="handleChangedDuration(index)"
                       ></app-vue-select>
                     </div>
                     </div>
@@ -135,38 +135,38 @@
                     </label>
                     <div class="d-flex-center mt-3">
                       <app-checkbox
-                        @change="check($event, 'MON')"
-                        :checked="selectedItems.includes('MON')"
+                        @change="check($event, 'MON', index)"
+                        :checked="selectedItems[index].includes('MON')"
                         label="Thứ 2"
                       ></app-checkbox>
                       <app-checkbox
-                        @change="check($event, 'TUE')"
-                        :checked="selectedItems.includes('TUE')"
+                        @change="check($event, 'TUE', index)"
+                        :checked="selectedItems[index].includes('TUE')"
                         label="Thứ 3"
                       />
                       <app-checkbox
-                        @change="check($event, 'WED')"
-                        :checked="selectedItems.includes('WED')"
+                        @change="check($event, 'WED', index)"
+                        :checked="selectedItems[index].includes('WED')"
                         label="Thứ 4"
                       />
                       <app-checkbox
-                        @change="check($event, 'THU')"
-                        :checked="selectedItems.includes('THU')"
+                        @change="check($event, 'THU', index)"
+                        :checked="selectedItems[index].includes('THU')"
                         label="Thứ 5"
                       />
                       <app-checkbox
-                        @change="check($event, 'FRI')"
-                        :checked="selectedItems.includes('FRI')"
+                        @change="check($event, 'FRI', index)"
+                        :checked="selectedItems[index].includes('FRI')"
                         label="Thứ 6"
                       />
                       <app-checkbox
-                        @change="check($event, 'SAT')"
-                        :checked="selectedItems.includes('SAT')"
+                        @change="check($event, 'SAT', index)"
+                        :checked="selectedItems[index].includes('SAT')"
                         label="Thứ 7"
                       />
                       <app-checkbox
-                        @change="check($event, 'SUN')"
-                        :checked="selectedItems.includes('SUN')"
+                        @change="check($event, 'SUN', index)"
+                        :checked="selectedItems[index].includes('SUN')"
                         label="Chủ nhật"
                       />
                     </div>
@@ -181,7 +181,7 @@
                         <label>Từ</label>
                         <app-date-picker
                           class="ml-3"
-                          v-model="params.schedules[0].from_date"
+                          v-model="params.schedules[index].from_date"
                           square
                           size="sm"
                           placeholder="dd/mm/yyyy"
@@ -195,7 +195,7 @@
                         <label>Đến</label>
                         <app-date-picker
                           class="ml-3"
-                          v-model="params.schedules[0].to_date"
+                          v-model="params.schedules[index].to_date"
                           square
                           size="sm"
                           placeholder="dd/mm/yyyy"
@@ -272,29 +272,14 @@ import { useEffect, getParamQuery } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
-function initialState (){
-  return {
-    tab: 1,
-    timeArray: [{}],
-    message: "",
-    fullParams: false,
-    sendMess: "0",
-    downloadVideo: "0",
-    showModalConfirm: false,
-    showNotify: false,
-    confirmLoading: false,
-    showBonus: false,
-    startTime: {
-      time: {
-        value: "1:00",
-        text: "1:00"
-      },
-      type: {
-        value: "AM",
-        text: "AM"
-      }
-    },
-    duration: {
+const initialSchedule = {
+            from_date: "",
+            to_date: "",
+            start_time: "1:30 AM",
+            duration: 90,
+            days_of_week: ""
+          };
+const initialDuration = {
       hours: {
         value: '1',
         text: '1 giờ'
@@ -303,7 +288,30 @@ function initialState (){
         value: '30',
         text: '30 phút'
       }
-    },
+    };
+const initialStartTime = {
+      time: {
+        value: "1:00",
+        text: "1:00"
+      },
+      type: {
+        value: "AM",
+        text: "AM"
+      }
+    };
+function initialState (){
+  return {
+    tab: 1,
+    message: "",
+    fullParams: false,
+    sendMess: "0",
+    downloadVideo: "0",
+    showModalConfirm: false,
+    showNotify: false,
+    confirmLoading: false,
+    showBonus: false,
+    startTime: [initialStartTime],
+    duration: [initialDuration],
     hours: [
       {
         value: "1",
@@ -480,7 +488,7 @@ function initialState (){
         text: "Riêng tư"
       }
     ],
-    selectedItems: [],
+    selectedItems: [[]],
     params: {
         elearning_id: "",
         name: "",
@@ -488,13 +496,7 @@ function initialState (){
         is_invite_all: false,
         is_allow_download: false,
         schedules: [
-          {
-            from_date: "",
-            to_date: "",
-            start_time: "1:30 AM",
-            duration: 90,
-            days_of_week: ""
-          }
+          initialSchedule
         ]
       }
   };
@@ -542,16 +544,18 @@ export default {
         newValue.schedules[0].days_of_week != "" ;
      },
      deep: true
-      
     },
   },
 
   methods: {
     addTime() {
-      this.timeArray.push({});
+      this.params.schedules.push(initialSchedule);
+      this.selectedItems.push([]);
+      this.duration.push(initialDuration);
+      this.startTime.push(initialStartTime);
     },
-    saveTime() {
-      
+    saveTime(index) {
+      let schedule = {};
     },
     cancelTime() {
       
@@ -626,13 +630,17 @@ export default {
       }
     },
 
-    handleChangedTime() {
-      this.params.schedules[0].start_time = this.startTime.time.value + ' ' +this.startTime.type.value;
+    handleChangedTime(index) {
+      this.params.schedules[index] = { ...this.params.schedules[index],
+        start_time : this.startTime[index].time.value + ' ' +this.startTime[index].type.value
+      };
     },
     
-    handleChangedDuration() {
-      let duration = parseInt(this.duration.hours.value) * 60 + parseInt(this.duration.minutes.value);
-      this.params.schedules[0].duration = parseInt(duration);
+    handleChangedDuration(index) {
+      let duration = parseInt(this.duration[index].hours.value) * 60 + parseInt(this.duration[index].minutes.value);
+      this.params.schedules[index] = { ...this.params.schedules[index],
+        duration : parseInt(duration)
+      };
     },
 
     handleChangedCourse() {
@@ -641,27 +649,31 @@ export default {
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;
     },
-    check(checked, item) {
+    check(checked, item, index) {
       if (checked) {
-        this.pushSelectedIndexes(item);
+        this.pushSelectedIndexes(item, index);
       } else {
-        this.popSelectedIndexes(item);
+        this.popSelectedIndexes(item, index);
       }
     },
-    popSelectedIndexes(item) {
-      if (_.some(this.selectedItems, item)) {
-        this.selectedItems = _.reject(
-          this.selectedItems,
+    popSelectedIndexes(item, index) {
+      if (_.some(this.selectedItems[index], item)) {
+        this.selectedItems[index] = _.reject(
+          this.selectedItems[index],
           ({ id }) => id === item.id
         );
       }
-      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
+      this.params.schedules[index] = { ...this.params.schedules[index],
+        days_of_week :this.arrayToString(this.selectedItems[index])
+      };
     },
-    pushSelectedIndexes(item) {
-      if (!_.some(this.selectedItems, item)) {
-        this.selectedItems.push(item);
+    pushSelectedIndexes(item, index) {
+      if (!_.some(this.selectedItems[index], item)) {
+        this.selectedItems[index].push(item);
       }
-      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
+      this.params.schedules[index] = { ...this.params.schedules[index],
+        days_of_week :this.arrayToString(this.selectedItems[index])
+      };
     },
 
     arrayToString(data) {

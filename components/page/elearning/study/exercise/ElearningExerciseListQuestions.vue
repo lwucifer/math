@@ -1,16 +1,17 @@
 <template>
   <ol class="e-exercise-list-questions">
+    <ElearningExerciseListQuestionsItem v-for="(item, index) in mergeSubmissionQuestion" :key="index" :question="item"/>
+    <!-- <ElearningExerciseListQuestionsItem v-bind="$props"/>
     <ElearningExerciseListQuestionsItem v-bind="$props"/>
     <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/>
-    <ElearningExerciseListQuestionsItem v-bind="$props"/>
+    <ElearningExerciseListQuestionsItem v-bind="$props"/> -->
   </ol>
 </template>
 
 <script>
 import { EXERCISE_TYPES } from "~/utils/constants";
 import ElearningExerciseListQuestionsItem from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestionsItem.vue";
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -23,6 +24,41 @@ export default {
       default: EXERCISE_TYPES.ESSAY,
       validator: value => Object.values(EXERCISE_TYPES).includes(value)
     }
+  },
+
+  computed: {
+    ...mapState("elearning/study/study-exercise", [
+      "submissions",
+      "questions",
+    ]),
+
+    mergeSubmissionQuestion() {
+      const tmp = this.questions.map((q, index) => {
+        const answered = this.submissions.find(s => s.question_id == q.id);
+        let correct_answer = null;
+        let student_answer = null;
+        let result = null;
+        let isUserTrue = false;
+        if(answered) {
+          correct_answer = q.answers.find(a => a.id == answered.correct_answer);
+          student_answer = q.answers.find(a => a.id == answered.student_answer);
+          result = answered.result;
+          isUserTrue = answered.correct_answer == answered.student_answer
+        }
+        return {
+          ...q,
+          // content: `${index + 1}.xxx${q.content}`,
+          correct_answer,
+          student_answer,
+          result,
+          isUserTrue,
+        }
+      });
+
+      console.log("[mergeSubmissionQuestion]", tmp);
+      return tmp;
+    }
+
   }
 };
 </script>

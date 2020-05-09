@@ -15,7 +15,7 @@ const state = () => ({
   elearningExercises: [],
   currentExercise: {},
   currentExerciseQuestion: null,
-  // currentExerciseAnswer: [],
+  currentExerciseAnswers: [],
   submission: {
     exercise_id: '',
     start_time: '',
@@ -124,7 +124,7 @@ const actions = {
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_EXERCISE_SUBMISSION_LIST,
-          result
+          result.data
         );
       }
 
@@ -208,7 +208,20 @@ const mutations = {
     _list
   ) {
     state.questions = _list;
-    state.currentExerciseQuestion = (_list && _list.length > 0) ? _list[0] : null;
+    state.currentExerciseQuestion = (_list && _list.length > 0) ? _list[0] : null; // set current question is the first
+
+    // reset submission state
+    state.submission = {
+      ...state.submission,
+      // exercise_id: '',
+      // start_time: new Date(),
+      duration: 0,
+      answers: [],
+      attachments: [],
+    }
+
+    // reset answer
+    state.currentExerciseAnswers = [];
 
   },
 
@@ -245,6 +258,16 @@ const mutations = {
     _curr
   ) {
     state.currentExercise = _curr;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT_BY_NO](
+    state,
+    _questionId
+  ) {
+    const currQuestion = state.questions.find(item => item.id == _questionId);
+    if(currQuestion){
+      state.currentExerciseQuestion = currQuestion;
+    }
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_NAV](
@@ -288,6 +311,7 @@ const mutations = {
         currAnsers[currAnswerIndex] = updatedAnswer;
       }
       state.submission = { ...state.submission, answers: currAnsers };
+      state.currentExerciseAnswers = [...state.submission.answers];
     }
     if(!!updatedAttachments){
       
@@ -297,13 +321,6 @@ const mutations = {
     console.log("[SET_STUDY_EXERCISE_SUBMISSION] state.submission", state.submission);
   },
 
-  // [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_ANSWER](
-  //   state,
-  //   _answer
-  // ) {
-  //   console.log("[SET_STUDY_EXERCISE_ANSWER]", answer);
-  //   // state.currentExerciseAnswer = {...state.currentExerciseAnswer, _answer};
-  // },
 };
 
 export default {
