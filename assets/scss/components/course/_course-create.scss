@@ -85,7 +85,7 @@
 }
 
 .cc-box__head {
-    border-bottom: 1px solid $color-border;
+    // border-bottom: 1px solid $color-border;
     display: flex;
     justify-content: space-between;
     margin-bottom: -1px;
@@ -123,14 +123,14 @@
     }
 }
 
-.cc-box__btn-edit {
-    visibility: hidden;
-    opacity: 0;
+// .cc-box__btn-edit {
+//     visibility: hidden;
+//     opacity: 0;
 
-    svg {
-        fill: $color-primary;
-    }
-}
+//     svg {
+//         fill: $color-primary;
+//     }
+// }
 
 .cc-box__btn-collapse {
     display: flex;

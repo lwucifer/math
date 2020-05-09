@@ -14,7 +14,6 @@
         <app-button
           class="clc-btn font-weight-semi-bold mr-4"
           size="sm"
-          color="disabled"
           square
           @click="handleCancelAddChapter"
           >Huỷ bỏ</app-button
@@ -24,7 +23,7 @@
           size="sm"
           square
           @click="handleAddChapter"
-          >Tạo chương</app-button
+          >Thêm chương</app-button
         >
       </div>
     </div>
