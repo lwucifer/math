@@ -1,43 +1,4 @@
-.wrapStorage__ElearningManager{
-    color: #333333;
-    font-size: 14px;
-    :first-child span:last-child{
-        color: #1481FE;
-        font-weight: bold;
-    }
-    div:first-child{
-        letter-spacing: 0.03em;
-        margin-bottom: 15px;
-    }
- }
- .processStorage__ElearningManager{
-     width: 190px;
-     height: 10px;
-     background: #EEEEEE;
-     border-radius: 20px;
- }
- .barStorage_ElearningManager{
-     
-     height: 10px;
-     background: #1481FE;
-     border-radius: 20px;
- }
- .titleUpload__ElearningManager{
-     font-weight: bold;
-     font-size: 14px;
-     line-height: 24px;
- 
- }
- .titleFormatFile__ElearningManager{
-     margin-bottom: .5rem;
-     span {
-         color: $color-blue;
-         font-size: 1.4rem;
-         line-height: 1.9rem;
-         font-style: italic;
-     }
- }
- .wrapBtnUploadFile__ElearningManager{
+ .upload-repository__box--upload{
      box-shadow: $shadow-1;
      border: 1px dashed $color-text-sub;
      padding: 1.5rem;
@@ -169,25 +130,6 @@
     }
 }
 
- .btnUploadFile__ElearningManager{
-     font-size: 1.3rem;
-     
-     //&:hover {
-     //    outline: none;
-     //    svg path {
-     //       fill: $color-primary;
-     //    }
-     //}
-     //
-     //&:focus {
-     //    outline: none;
-     //}
- }
- .iconUploadFile__ElearningManager{
-     height: 14px;
-     fill: #FFFFFF;
- }
- 
  .upload-repository__title {
      font-weight: 500;
      margin-bottom: 1.3rem;
@@ -221,4 +163,12 @@
          max-width: 83%;
          margin: 0 auto 1rem auto;
      }
+ }
+ 
+ .tooltip.tooltip--available-file {
+   max-width: 45.5rem;
+   .tooltip-inner {
+     letter-spacing: -0.01em;
+     line-height: 2.4rem;
+   }
  }
