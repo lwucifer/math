@@ -314,9 +314,29 @@ const mutations = {
       state.submission = { ...state.submission, answers: currAnsers };
       state.currentExerciseAnswers = [...state.submission.answers];
     }
-    if(!!updatedAttachments){
-      
-      state.submission = {...state.submission, attachments: [...state.submission.attachments, updatedAttachments]}
+
+    // update attachment files
+    const preAttachments = [...state.submission.attachments];
+    if(!!updatedQuestionId){
+      const uploadAttachBeforeIndex = preAttachments.findIndex(at => at.question_id == updatedQuestionId);
+      if(uploadAttachBeforeIndex != -1) {
+        preAttachments[uploadAttachBeforeIndex] = _submission;
+      }else {
+        preAttachments.push(_submission);
+      }
+
+      state.submission = {...state.submission, attachments: preAttachments}
+
+      // update attach_answer_index in state.submission.answers
+      const prevAnswers = state.submission.answers;
+      const attachQuestionIndex = prevAnswers.findIndex(at => at.question_id == updatedQuestionId);
+      if(attachQuestionIndex != -1){
+        const attachFileIndex = state.submission.attachments.findIndex(a => a.question_id == updatedQuestionId);
+        prevAnswers[attachQuestionIndex].attach_answer_index = attachFileIndex + 1; // base 1
+        state.submission.answers = prevAnswers;
+      }
+    }else {
+      preAttachments.push(null);
     }
 
     console.log("[SET_STUDY_EXERCISE_SUBMISSION] state.submission", state.submission);

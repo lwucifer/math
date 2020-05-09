@@ -107,7 +107,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
-import { RESPONSE_SUCCESS } from "../../../../../utils/config";
+import { RESPONSE_SUCCESS } from "~/utils/config";
 
 export default {
   components: {
@@ -241,8 +241,6 @@ export default {
         this.answer = null;
       }
 
-      // set current question Option
-      // this.questionNo = this.currentExerciseQuestion.id;
     }
   },
 

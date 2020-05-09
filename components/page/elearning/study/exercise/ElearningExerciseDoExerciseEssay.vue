@@ -2,16 +2,33 @@
   <div class="e-exercise-essay">
     <div class="mb-3">
       <div class="d-flex justify-content-between mb-2">
-        <span>Câu hỏi</span>
+        <div>
+          Câu hỏi số
+          <app-select
+            v-model="questionNo"
+            class="ml-3"
+            :options="questionNoOpts"
+            size="sm"
+            @change="handleChangedQuestionNumber"
+          />
+        </div>
         <a href class="text-decoration-none">In câu hỏi</a>
       </div>
 
-      <div class="e-exercise-essay__question-name" v-html="currentExerciseQuestion.content"></div>
+      <div
+        class="e-exercise-essay__question-name"
+        v-html="currentExerciseQuestion.content"
+      ></div>
     </div>
 
     <div class="mb-15">
       <label class="d-inline-block mb-2" for="essay-answer">Câu trả lời</label>
-      <app-input id="essay-answer" placeholder="Nhập câu trả lời" textarea v-model="answer"></app-input>
+      <app-input
+        id="essay-answer"
+        placeholder="Nhập câu trả lời"
+        textarea
+        v-model="answer"
+      ></app-input>
     </div>
 
     <div class="e-exercise-essay__bottom d-flex">
@@ -19,11 +36,16 @@
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu trả lời
       </app-button> -->
       <app-upload class="mr-auto" color="default" @change="handleUploadAnswer">
-          <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu trả lời
+        <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
+        trả lời
       </app-upload>
 
-      <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
-      <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
+      <app-button
+        size="sm"
+        color="info"
+        @click.prevent="handleQuestionSubmission"
+      >
+        <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
     </div>
@@ -46,6 +68,7 @@ import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
+import { RESPONSE_SUCCESS } from "../../../../../utils/config";
 
 export default {
   components: {
@@ -56,24 +79,43 @@ export default {
   data() {
     return {
       modalConfirmSubmit: false,
-      answer: '',
+      answer: null,
+      questionNo: "",
+      modalListQuestions: false
     };
   },
 
   computed: {
     ...mapState("elearning/study/study-exercise", [
       "currentExerciseQuestion",
-      "submission"
+      "submission",
+      "currentExerciseAnswers"
     ]),
 
+    ...mapGetters("elearning/study/study-exercise", [
+      "questionNoOpts",
+      "currentQuestionIndex",
+      "numOfQuestion"
+    ]),
+
+    isDisableBack() {
+      return this.currentQuestionIndex < 1;
+    },
+
+    isDisableNext() {
+      return this.currentQuestionIndex >= this.numOfQuestion - 1;
+    }
   },
 
   methods: {
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseSubmission"
+      "setStudyExerciseQuestionNav",
+      "setStudyExerciseSubmission",
+      "setStudyExerciseCurrentByNo"
     ]),
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyExerciseSubmissionAdd"
+      "elearningSudyExerciseSubmissionAdd",
+      "elearningSudyExerciseSubmissionList"
     ]),
 
     handleQuestionSubmission() {
@@ -84,28 +126,85 @@ export default {
         (new Date().getTime() - this.submission.start_time.getTime()) / 1000
       ); // in seconds
 
+      const attachments = this.submission.attachments.map(m => m.file);
+
       const submissionReq = createExerciseSubmissionReq({
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        attachments: this.submission.attachments,
+        attachments: attachments,
         duration: durationCost, // in seconds
-        start_time: fullDateTimeSlash(this.submission.start_time)
+        start_time: fullDateTimeSlash(this.submission.start_time),
       });
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        attachments: this.submission.attachments,
+        attachments: attachments,
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
-      this.elearningSudyExerciseSubmissionAdd(submissionReq);
+      // this.elearningSudyExerciseSubmissionAdd(submissionReq);
+    },
+
+    handleQuestionBack() {
+      this.setStudyExerciseQuestionNav(QUESTION_NAV.BACK);
+      console.log(
+        "[handleQuestionBack]",
+        this.currentExerciseQuestion,
+        this.currentExerciseAnswers
+      );
+      this.setAnswered();
+    },
+
+    handleQuestionContinue() {
+      this.setStudyExerciseQuestionNav(QUESTION_NAV.NEXT);
+      console.log(
+        "[handleQuestionContinue]",
+        this.currentExerciseQuestion,
+        this.currentExerciseAnswers
+      );
+      this.setAnswered();
     },
 
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
-      this.setStudyExerciseSubmission({ attachments: file, question_id:  this.currentExerciseQuestion.id});
+      this.setStudyExerciseSubmission({
+        file: file ? file[0] : null,
+        question_id: this.currentExerciseQuestion.id
+      });
+    },
+
+    handleShowListQuestion() {
+      console.log("[handleShowListQuestion]");
+
+      this.elearningSudyExerciseSubmissionList({
+        params: {
+          exercise_id: this.submission.exercise_id
+        }
+      }).then(res => {
+        if (res.success == RESPONSE_SUCCESS) {
+          this.modalListQuestions = true;
+        }
+      });
+    },
+
+    handleChangedQuestionNumber() {
+      console.log("[handleChangedQuestionNumber]", this.questionNo);
+      this.setStudyExerciseCurrentByNo(this.questionNo);
+      this.setAnswered();
+    },
+
+    setAnswered() {
+      // set current answered you checked
+      const answered = this.currentExerciseAnswers.find(
+        an => an.question_id == this.currentExerciseQuestion.id
+      );
+      if (answered && answered.choise_answer_id) {
+        this.answer = answered.choise_answer_id;
+      } else {
+        this.answer = null;
+      }
     }
   },
 
@@ -114,18 +213,22 @@ export default {
       const answers = {
         question_id: this.currentExerciseQuestion.id,
         choise_answer_id: null, // only incase choice
-        answer: this.answer, 
-        attach_answer_index: 1 
+        answer: this.answer,
+        // attach_answer_index: 1
       };
       console.log("[answer] watch", _newVal, _oldVal, answers);
       if (_newVal != _oldVal) {
         this.setStudyExerciseSubmission({ answers });
       }
+    },
+
+    currentExerciseQuestion(_newVal) {
+      console.log("[currentExerciseQuestion]", _newVal);
+      // set current question Option
+      this.questionNo = _newVal.id;
     }
   }
-
 };
 </script>
 
-<style>
-</style>
+<style></style>
