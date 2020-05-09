@@ -35,6 +35,7 @@
       v-else-if="status === EXERCISE_STATUS.PASSED"
       color="primary"
       size="sm"
+      @click.prevent="handleReviewResult"
       >Xem kết quả</app-button
     >
 
@@ -49,7 +50,7 @@ import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
 
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
@@ -99,6 +100,9 @@ export default {
     ...mapMutations("elearning/study/study-exercise", [
       "setStudyExerciseCurrent"
     ]),
+    ...mapActions("elearning/study/study-exercise", [
+      "elearningSudyExerciseResultList"
+    ]),
 
     ...mapMutations("event", ["setStudyMode"]),
 
@@ -117,15 +121,17 @@ export default {
       this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
     },
 
-    // getTypeText(type) {
-    //   if (type === EXERCISE_TYPES.CHOICE) {
-    //     return "Bài tập trắc nghiệm";
-    //   } else if (type === EXERCISE_TYPES.ESSAY) {
-    //     return "Bài tập tự luận";
-    //   }
-    // },
+    handleReviewResult() {
+      console.log("[handleReviewResult]");
+      // get review result
+      this.elearningSudyExerciseResultList({ exercise_id: this.id});
+      // show review result
+      this.setStudyMode(STUDY_MODE.REVIEW_EXERCISE_RESULT);
+    },
 
     getDurationText(time) {
+      if(!time) return "";
+      
       const hour = Math.floor(time / 60);
       const minute = time % 60;
       return `${hour} giờ ${minute} phút`;

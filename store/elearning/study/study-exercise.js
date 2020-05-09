@@ -9,7 +9,7 @@ import { QUESTION_NAV } from "~/utils/constants";
  */
 const state = () => ({
   questions: [],
-  results: [],
+  result: {},
   submissions: [],
   submissionAdd: {},
   elearningExercises: [],
@@ -94,7 +94,7 @@ const actions = {
       if (result.success == RESPONSE_SUCCESS) {
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST,
-          result
+          result.data
         );
       }
 
@@ -229,7 +229,7 @@ const mutations = {
     state,
     _list
   ) {
-    state.results = _list;
+    state.result = _list;
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_SUBMISSION_LIST](

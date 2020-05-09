@@ -16,6 +16,7 @@ export const DATE_YYYY_MM_DD = "YYYY/MM/DD";
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
+export const DATETIME_FULL_TEXT = "LLLL";
 export const DATE_SHORTCUT = [
   {
     text: 'Hôm nay',
