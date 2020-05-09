@@ -257,6 +257,7 @@ const mutations = {
     state,
     _curr
   ) {
+    console.log("[SET_STUDY_EXERCISE_CURRENT", _curr);
     state.currentExercise = _curr;
   },
 

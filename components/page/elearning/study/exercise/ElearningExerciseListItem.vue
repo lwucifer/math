@@ -61,6 +61,8 @@ export default {
     id: String,
     stared: Boolean,
     name: String,
+    result: String,
+    questions: Number,
     duration: Number,
     reworks: Number,
     works: Number,
@@ -115,6 +117,10 @@ export default {
         name: this.name,
         type: this.type,
         duration: this.duration,
+        questions: this.questions,
+        result: this.result,
+        reworks: this.reworks,
+        works: this.works,
       });
 
       // show befor begin exercise
@@ -131,7 +137,7 @@ export default {
 
     getDurationText(time) {
       if(!time) return "";
-      
+
       const hour = Math.floor(time / 60);
       const minute = time % 60;
       return `${hour} giờ ${minute} phút`;
