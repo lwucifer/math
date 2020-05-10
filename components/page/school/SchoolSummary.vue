@@ -91,7 +91,7 @@ import IconLocation from '~/assets/svg/v2-icons/location_on_24px.svg?inline';
 import IconUser from "~/assets/svg/icons/user.svg?inline";
 import IconPhone from '~/assets/svg/v2-icons/local_phone_24px.svg?inline';
 import IconEmail from '~/assets/svg/v2-icons/email_24px.svg?inline';
-import IconCode from '~/assets/svg/v2-icons/code_24px.svg?inline';
+import IconCode from '~/assets/svg/v2-icons/insert_link_24px.svg?inline';
 
 import { get } from "lodash";
 
@@ -101,7 +101,7 @@ export default {
     IconCode,
     IconPhone,
     IconEmail,
-    IconUser
+    IconUser,
   },
 
   props: {

@@ -11,7 +11,7 @@
         </span>
       </div>
       <n-link class="school-list-box__title__submit-btn" :to="'/school/all'">
-        Xem tất cả
+        Xem thêm
         <IconRight class="fill-primary" />
       </n-link>
     </div>
