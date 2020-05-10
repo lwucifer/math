@@ -1,7 +1,6 @@
 <template>
   <div class="elearning-manager-result">
     <mark-section
-      title="Kết quả bài làm"
       :is-pass="isPass"
       :result="result"
       :started-at="get(this, 'detail.start_time', '')"
@@ -11,19 +10,17 @@
       :correct-ans="get(this, 'detail.corrects', 0)"
       :has-mark="hasMark"
     />
-
-    <div class="py-3">
-      <submission-content
-        :contents="submissionContent"
-      />
-      <!--form-->
-      <mark-form-section
-        v-if="isPending"
-        @submit="handleMark"
-      />
-  
-    </div>
-  
+    <app-divider class="mt-0 mb-2"/>
+    
+    <submission-content
+      :contents="submissionContent"
+    />
+    <!--form-->
+    <mark-form-section
+      v-if="isPending"
+      @submit="handleMark"
+    />
+    
     <app-modal-confirm
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
