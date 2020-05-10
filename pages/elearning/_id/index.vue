@@ -35,7 +35,7 @@
       <div class="col-md-4">
         <ElearningRightSide
           v-sticky
-          sticky-offset="{ top: 90, bottom: 0 }"
+          sticky-offset="{ top: 90, bottom: 9 }"
           v-bind="{ info, program }"
         />
       </div>
