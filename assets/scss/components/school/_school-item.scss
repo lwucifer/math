@@ -6,15 +6,17 @@
     }
     .school-item__thumnail {
         text-align: center;
+        height: 15rem;
         img {
             width: 100%;
-            height: auto;
+            height: 100%;
         }
     }
 
     .school-item__info {
         padding: 1rem;
         margin-bottom: 1rem;
+        min-height: 16rem;
     }
 
     .school-item__info__title {
@@ -28,7 +30,7 @@
 
     .school-item__info__statistic-item {
         display: flex;
-
+        
         svg {
             fill: #656565;
             max-width: 18.5px;
