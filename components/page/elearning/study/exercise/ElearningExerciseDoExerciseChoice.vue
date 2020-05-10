@@ -108,8 +108,6 @@ import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-import ProgressService from "~/services/elearning/study/Progress";
-import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -151,6 +149,8 @@ export default {
       "currentElearningId"
     ]),
 
+    ...mapState("elearning/study/study-progress", ["progress"]),
+
     ...mapGetters("elearning/study/study-exercise", [
       "questionNoOpts",
       "currentQuestionIndex",
@@ -175,6 +175,10 @@ export default {
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
       "elearningSudyExerciseSubmissionList"
+    ]),
+
+    ...mapActions("elearning/study/study-progress", [
+      "elearningSudyProgressList"
     ]),
 
     handleQuestionBack() {
@@ -259,14 +263,13 @@ export default {
     },
 
     reNewGetElearningProgress() {
-      console.log("[reNewGetElearningProgress]", this.currentElearningId);
-      const getProgress = () =>
-        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id: this.currentElearningId
-          }
-        });
-      getProgress();
+      console.log("[reNewGetElearningProgress]", this.progress);
+      const elearning_id = this.progress.id;
+      this.elearningSudyProgressList({
+        params: {
+          elearning_id
+        }
+      });
     }
   },
 
