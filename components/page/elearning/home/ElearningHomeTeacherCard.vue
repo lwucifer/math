@@ -1,7 +1,7 @@
 <template>
   <div class="eh-teacher-card">
     <div class="eh-teacher-card__img">
-      <img :src="image" :alt="name" />
+      <img :src="image || require('~/assets/images/tmp/teacher-image.png')" :alt="name" />
     </div>
 
     <h3 class="eh-teacher-card__name heading-4">{{ name }}</h3>
