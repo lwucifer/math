@@ -363,6 +363,7 @@ export const ELEARNING_STUDY_EXERCISE = {
   SET_STUDY_EXERCISE_SUBMISSION: "setStudyExerciseSubmission",
   SET_STUDY_EXERCISE_CURRENT_BY_NO: "setStudyExerciseCurrentByNo",
   SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
+  SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
 };
 
 export const ELEARNING_STUDY_PROGRESS = {

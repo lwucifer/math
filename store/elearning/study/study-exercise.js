@@ -23,7 +23,8 @@ const state = () => ({
     duration: 0,
     answers: [],
     attachments: []
-  }
+  },
+  currentQuestionId: null,
 });
 
 /**
@@ -327,6 +328,8 @@ const mutations = {
       if (currAnswerIndex == -1) {
         currAnsers = [...currAnsers, updatedAnswer];
       } else {
+        // const mergedUpdatedAnswered = { ...currAnsers[currAnswerIndex], updatedAnswer};
+        // currAnsers[currAnswerIndex] = mergedUpdatedAnswered;
         currAnsers[currAnswerIndex] = updatedAnswer;
       }
       state.submission = { ...state.submission, answers: currAnsers };
@@ -375,6 +378,13 @@ const mutations = {
     _curr
   ) {
     state.currentElearningId = _curr;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_CURRENT](
+    state,
+    _currQuestionId
+  ) {
+    state.currentQuestionId = _currQuestionId;
   },
 };
 
