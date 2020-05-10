@@ -20,7 +20,7 @@
         <span class="clc-type-tab-item__icon">
           <IconRadioButtonChecked class="icon mr-2"/>
           <IconVideo class="icon mr-2"/>
-          <span>Video</span>
+          <span class="clc-type-tab-item__text">Video</span>
         </span>
         <!-- <span class="clc-type-tab-item__text">Video</span> -->
       </a>
@@ -34,7 +34,7 @@
         <span class="clc-type-tab-item__icon">
           <IconDefaultAsideMenu class="icon mr-2" style="width: 24px; height: 24px"/>
           <IconFileBlank class="icon" />
-          <span>Văn bản</span>
+          <span class="clc-type-tab-item__text">Văn bản</span>
         </span>
         <!-- <span class="clc-type-tab-item__text"></span> -->
       </a>
@@ -55,9 +55,10 @@
 
     <div class="d-flex justify-content-end mt-4">
       <app-button
-        class="clc-btn font-weight-semi-bold mr-4"
+        class="clc-btn font-weight-semi-bold text-secondary mr-4"
         size="sm"
-        color="disabled"
+        color="default"
+        outline
         square
         @click="handleCancel"
         >Huỷ bỏ</app-button
