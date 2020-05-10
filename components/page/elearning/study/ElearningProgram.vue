@@ -19,7 +19,7 @@
 
     <!-- Bai TEST -->
     <div class="elearning-lesson-side__course">
-      <div class="color-yellow">
+      <div class="color-yellow" style="display: flex;">
         <IconFileAlt class="mr-2 fill-yellow" height="16" width="16" />
         <span>Làm bài kiểm tra</span>
       </div>
