@@ -24,6 +24,14 @@ export function toThousandFilter(num, separator = ".") {
 }
 
 /**
+ * Upper case first char
+ * @param {String} string
+ */
+export function uppercaseFirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+/**
  * 10000 => "10.000" by numeral
  * @param {Number} num
  * @param {String} format
@@ -280,6 +288,7 @@ export function getDateTimeFullText(_utcDate="") {
 
 const filters = {
   toThousandFilter,
+  uppercaseFirst,
   numeralFormat,
   fileSizeFilter,
   truncStrFilter,
