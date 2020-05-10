@@ -11,12 +11,19 @@
           <school-item :school="school" />
         </div>
       </div>
+
+      <app-pagination
+        :pagination="pagination"
+        @pagechange="onPageChange"
+        :opts="opts"
+        class="mt-3"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import IconRight from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
+import IconRight from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
 
 import SchoolItem from "~/components/page/school/SchoolItem";
 import { get, toNumber } from "lodash";
@@ -39,16 +46,38 @@ export default {
     }
   },
 
+  data() {
+    return {
+      pagination: { 
+        totalPages: 5,
+        size: 10,
+        totalElements: 50,
+        first: 1,
+        last: 5,
+        number: 1
+      },
+      opts: [
+        { value: 10, text: "10" },
+        { value: 20, text: "20" },
+        { value: 30, text: "30" },
+        { value: 50, text: "50" }
+      ]
+    };
+  },
+
   computed: {
     schools() {
       const type = get(this, "category.type", "");
       const schoolList = get(this, `schoolSearch.data.content`, []);
       console.log("[schoolList]", schoolList, type);
       return schoolList.filter(sc => sc.type == type) || [];
-    },
+    }
   },
 
   methods: {
+    onPageChange(e) {
+      this.$emit("pagechange", e);
+    },
     showAll() {
       this.$emit("showAll", this.id);
     }
