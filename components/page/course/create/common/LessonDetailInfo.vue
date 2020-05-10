@@ -1,12 +1,12 @@
 <template>
   <div class="clc-video">
     <div class="clc-video__image">
-      <img src="~/assets/images/create-course/default-course-image.png" alt />
+      <img src="~/assets/images/create-course/thumnail-video.png" alt />
     </div>
     <div class="clc-video__right">
-      <h4 class="clc-video__name heading-6 mb-3">
-        Bài {{ (index+1)+ ": " + get(lesson, "name", "") }}
-      </h4>
+      
+      <span class="clc-video__name heading-6 mb-3 font-weight-bold">Bài {{ (index+1) + ": "}}</span>  <span>{{get(lesson, "name", "") }}</span>
+      
       <div class="clc-video__time text-gray mb-3">
         {{ get(lesson, "duration", "") }}
       </div>
@@ -16,14 +16,14 @@
           class="clc-video__btn-edit text-primary mr-5"
           @click="handleEditLesson($event)"
         >
-          <IconEditAlt class="icon" />Sửa nội dung
+          <IconEditAlt class="icon" />
         </a>
         <a
           href
           class="clc-video__btn-delete text-secondary"
           @click="handleDeleteLesson($event)"
         >
-          <IconTrashAlt class="icon" />Xoá nội dung
+          <IconTrashAlt class="icon" />
         </a>
       </div>
     </div>

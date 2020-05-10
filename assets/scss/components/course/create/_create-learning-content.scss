@@ -16,7 +16,7 @@
 }
 
 .clc-type-tab-item {
-    width: 9rem;
+    width: 16rem;
     text-align: center;
     margin: 0 2.5rem;
     text-decoration: none;
@@ -30,7 +30,9 @@
         height: 6.4rem;
         border-bottom: 0;
         transition: border .3s;
-        border: 2px solid $color-disabled;
+        border: 1px solid $color-disabled;
+        border-radius: 2px;
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 
         svg {
             font-size: 3.6rem;
@@ -39,12 +41,12 @@
     }
 
     &__text {
-        display: block;
-        color: #fff;
-        padding: 4px 2px;
-        font-weight: 600;
-        transition: background-color .3s;
-        background-color: $color-disabled;
+        // display: block;
+        // color: #fff;
+        // padding: 4px 2px;
+        // font-weight: 600;
+        // transition: background-color .3s;
+        // background-color: $color-disabled;
     }
 
     &.active {
@@ -56,9 +58,9 @@
             }
         }
 
-        #{$this}__text {
-            background-color: $color-primary;
-        }
+        // #{$this}__text {
+        //     background-color: $color-primary;
+        // }
     }
 }
 
