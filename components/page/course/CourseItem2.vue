@@ -30,7 +30,7 @@
 
       <div class="course-item-2__rating">
         <app-stars class="d-inline-flex" :stars="averageRate" :size="size === 'sm' ? 12 : 14" />
-        <span>
+        <span class="text-dark">
           <strong>{{ averageRate }}</strong>
           ({{ totalReview }})
         </span>

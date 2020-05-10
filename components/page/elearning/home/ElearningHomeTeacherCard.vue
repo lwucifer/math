@@ -17,7 +17,7 @@
       </div>
       <div class="eh-teacher-card__rating">
         <div class="text-dark mb-1">
-          <b>{{ averageRate }}</b>({{ totalReview }})
+          <b>{{ averageRate }}</b>&nbsp;({{ totalReview }})
         </div>
         <app-stars :size="13" :stars="averageRate" />
       </div>
