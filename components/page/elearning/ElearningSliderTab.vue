@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-slider-tab">
-    <h3 class="elearning-slider-tab__title mb-4" v-if="title">{{ title }}</h3>
+    <h3 class="elearning-slider-tab__title mb-3" v-if="title">{{ title }}</h3>
 
     <div
       v-show="content.length"
