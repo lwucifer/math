@@ -164,7 +164,7 @@ export default {
 
       this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
-      this.progress = get(data, "2.data", null);
+      // this.progress = get(data, "2.data", null);
 
       // set current elearning to store
       this.setStudyElearningCurrentId(this.progress.id);
@@ -189,7 +189,7 @@ export default {
       loading: true,
       info: null,
       interactive_questions: null,
-      progress: null,
+      // progress: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -207,6 +207,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
+    ...mapState("elearning/study/study-progress", ["progress"]),
   },
 };
 </script>
