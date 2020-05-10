@@ -16,7 +16,7 @@
           </div>
           <p class="title-either_auth">hoặc</p>
           <div>
-            <p>Đăng ký nhanh với</p>
+            <p>Đăng nhập nhanh với</p>
             <div class="mt-3 mb-15">
               <app-button class="btn-social btn-facebook">
                 <IconFacebook class="mr-2" />Facebook
@@ -25,14 +25,12 @@
                 <IconGoogle class="mr-2" />Google
               </app-button>
             </div>
-            <div>
-              <span>Đã có tài khoản?</span>
-              <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+            <div class="mb-4">
+              <span>Chưa có tài khoản?</span>
+              <n-link :to="'/auth/signup'" class="color-primary bold text-decoration-none">Đăng ký</n-link>
             </div>
           </div>
-          <!--
             <n-link :to="'/auth/forgot'" class="color-blue text-decoration-none mb-4">Quên mật khẩu?</n-link>
-          -->
         </div>
       </div>
       <div class="col-md-6 text-center">

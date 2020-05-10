@@ -9,7 +9,13 @@
         :message="errorMessage.email"
         :validate="validateProps.email"
         @input="handleEmail"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconMail24px/>
+          </div>
+        </template>
+      </app-input>
       <app-input
         type="password"
         v-model="password"
@@ -19,7 +25,23 @@
         :validate="validateProps.password"
         autocomplete="new-password"
         @input="handlePassword"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconLock24px/>
+          </div>
+        </template>
+      </app-input>
+      <app-input
+        type="password"
+        placeholder="Nhập lại mật khẩu"
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconLock24px/>
+          </div>
+        </template>
+      </app-input>
       <app-input
         type="text"
         v-model="fullname"
@@ -29,7 +51,13 @@
         :message="errorMessage.fullname"
         :validate="validateProps.fullname"
         @input="handleFullname"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconPerson24px/>
+          </div>
+        </template>
+      </app-input>
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorRegister}}</p>
     </div>
     <app-button
@@ -76,8 +104,15 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-
+import IconMail24px from '~/assets/svg/v2-icons/mail_24px.svg?inline';
+import IconLock24px from '~/assets/svg/v2-icons/lock_24px.svg?inline';
+import IconPerson24px from '~/assets/svg/v2-icons/person_24px.svg?inline';
 export default {
+  components:{
+    IconMail24px,
+    IconLock24px,
+    IconPerson24px
+  },
   data() {
     return {
       email: "",
