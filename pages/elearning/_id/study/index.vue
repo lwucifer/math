@@ -38,7 +38,9 @@
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
+              <ElearningExercise
+                v-if="studyMode !== videoMode && studyMode !== defaultMode"
+              />
 
               <div class="elearning-lesson__main-nav">
                 <a
@@ -130,33 +132,30 @@ export default {
     ...mapMutations("elearning/study/study-exercise", [
       "setStudyElearningCurrentId",
     ]),
-    
+
     async getData(elearning_id) {
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
       const getInfo = () =>
-        new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
+        new InfoService(this.$axios)[actionTypes.BASE.LIST](options);
       const getInteractiveQuestion = () =>
-        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
-      const getProgress = () =>
-        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
+        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
+          options
+        );
+      const getProgress = this.$store.dispatch(
+        `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
+        options
+      );
 
       this.loading = true;
 
       const data = await Promise.all([
         getInfo(),
         getInteractiveQuestion(),
-        getProgress(),
+        getProgress,
       ]);
 
       console.log(data);
