@@ -11,7 +11,7 @@
         </span>
       </div>
       <n-link class="school-list-box__title__submit-btn" :to="'/school/all'">
-        Xem tất cả
+        Xem thêm
         <IconRight class="fill-primary" />
       </n-link>
     </div>
@@ -32,7 +32,7 @@
         </div>
         <div
           class="swiper-button-custom swiper-button-prev--circle"
-          v-if="currentSwiperOptions.navigation"
+          v-if="currentSwiperOptions.navigation && schools.length > 0"
           slot="button-prev"
           @click="mySwiper.slidePrev()"
         >
@@ -40,7 +40,7 @@
         </div>
         <div
           class="swiper-button-custom swiper-button-next--circle"
-          v-if="currentSwiperOptions.navigation"
+          v-if="currentSwiperOptions.navigation && schools.length > 0"
           slot="button-next"
           @click="mySwiper.slideNext()"
         >

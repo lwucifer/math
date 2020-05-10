@@ -13,8 +13,8 @@
       </school-filter>
 
       
-      <div class="school-list-box__title">
-        <div>
+      <div class="school-list-box mb-0">
+        <div class="school-list-box__title">
           <span class="school-list-box__title__name">Tất cả trường tiểu học</span>
           <span class="school-list-box__title__description">
             (

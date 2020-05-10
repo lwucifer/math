@@ -7,7 +7,7 @@
     }
 
     &__item {
-        margin: 0 0.6rem 2rem 0.6rem;
+        margin: 0 0.6rem 1.5rem 0.6rem;
         display: flex;
         align-items: center;
         &.flex-1 {
@@ -99,4 +99,10 @@
     &__right {
         margin-left: auto; // To float all content to right
     }
+}
+
+.button-delete {
+    background-color: #EB5757;
+    color: #fff;
+    border-radius: 2px;
 }

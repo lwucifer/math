@@ -38,7 +38,9 @@
               </div>
 
               <!-- DO EXERCISE -->
-              <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
+              <ElearningExercise
+                v-if="studyMode !== videoMode && studyMode !== defaultMode"
+              />
 
               <div class="elearning-lesson__main-nav">
                 <a
@@ -64,7 +66,7 @@
             </div>
           </div>
           <div class="col-md-4">
-            <ElearningCourseSide :info="info" :progress="progress" />
+            <ElearningCourseSide />
           </div>
         </div>
       </div>
@@ -85,7 +87,7 @@ import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
-import ProgressService from "~/services/elearning/study/Progress";
+// import ProgressService from "~/services/elearning/study/Progress";
 import { get } from "lodash";
 import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
@@ -127,48 +129,40 @@ export default {
   },
 
   methods: {
-    ...mapMutations("elearning/study/study-exercise", [
-      "setStudyElearningCurrentId",
-    ]),
-    
+
     async getData(elearning_id) {
-      const getInfo = () =>
-        new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
+      const getInfo = this.$store.dispatch(
+        `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
+        options
+      );
       const getInteractiveQuestion = () =>
-        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
-      const getProgress = () =>
-        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id,
-          },
-        });
+        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
+          options
+        );
+      const getProgress = this.$store.dispatch(
+        `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
+        options
+      );
 
       this.loading = true;
 
       const data = await Promise.all([
-        getInfo(),
+        getInfo,
         getInteractiveQuestion(),
-        getProgress(),
+        getProgress,
       ]);
 
       console.log(data);
 
       this.loading = false;
 
-      this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
-      this.progress = get(data, "2.data", null);
 
-      // set current elearning to store
-      this.setStudyElearningCurrentId(this.progress.id);
     },
     get,
     async addQuestionSuccess() {
@@ -188,9 +182,7 @@ export default {
     return {
       type: "summary",
       loading: true,
-      info: null,
       interactive_questions: null,
-      progress: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -208,6 +200,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
+    ...mapState("elearning/study/study-info", ["info"]),
   },
 };
 </script>

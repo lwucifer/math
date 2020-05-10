@@ -23,7 +23,7 @@
           @click="submit"
         >
           <IconHamberger class="fill-white mr-2" />
-          <span>Lọc kết quả</span>
+          <span class="color-white">Lọc kết quả</span>
         </app-button>
       </div>
 
@@ -43,11 +43,11 @@
     <!--End filter form-->
 
     <!--Options group-->
-    <div class="filter-form mb-3">
+    <div class="filter-form">
       <div class="filter-form__item" @click="deleteRows">
-        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
-          <IconTrash />
-          <span class="ml-3">Hủy lớp</span>
+        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+          <IconTrash class="fill-white"/>
+          <span class="ml-3 color-white">Hủy lớp</span>
         </app-button>
       </div>
     </div>
@@ -81,23 +81,23 @@
 
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <a class="color-primary" @click="openModal(row.online_class_id)">Vào phòng học</a>
+          <a class="color-primary" @click="openModal(row)">Vào phòng học</a>
         </td>
       </template>
 
       <template v-slot:actions="{row}">
-        <a class @click="openModal(row.online_class_id)">
-          <IconCalendar class="fill-primary mr-2"/>Vào phòng học
+        <a class @click="openModal(row)">
+          <IconAdjust class="fill-primary mr-2"/>Vào phòng học
         </a>
         <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconCalendar class="fill-blue mr-2"/>Xem danh sách học sinh
+          <IconUsersAlt class="fill-blue mr-2"/>Xem danh sách học sinh
         </n-link>
-        <button @click="deleteRows(row.online_class_id)"><IconCalendar class="fill-secondary mr-2"/>Huỷ lớp</button>
+        <button @click="deleteRows(row.online_class_id)"><IconTimesCircle class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
 
-    <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false"/>
+    <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false" :info="modalData"/>
   </div>
 </template>
 
@@ -108,6 +108,9 @@ import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
+import IconAdjust from '~/assets/svg/v2-icons/adjust_24px.svg?inline';
+import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
 
 import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass";
 
@@ -123,12 +126,15 @@ export default {
   layout: "manage",
 
   components: {
+    IconTimesCircle,
+    IconAdjust,
     IconFilter,
     IconSearch,
     IconArrow,
     IconCalendar,
     IconTrash,
     IconHamberger,
+    IconUsersAlt,
     ModalJoinClass
   },
 
@@ -136,6 +142,7 @@ export default {
     return {
       rowClassId: null,
       modalShow: false,
+      modalData: {},
       tab: 1,
       heads: [
         {
@@ -319,8 +326,9 @@ export default {
       }
     },
 
-    openModal(id) {
-      this.rowClassId = id;
+    openModal(row) {
+      this.rowClassId = row.online_class_id;
+      this.modalData = row;
       this.modalShow = true;
     },
 

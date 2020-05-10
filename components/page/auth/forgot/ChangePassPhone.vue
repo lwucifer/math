@@ -1,7 +1,7 @@
 <template>
   <div class="auth__main">
     <h3 class="text-primary">Quên mật khẩu?</h3>
-    <div class="auth_content mt-5">
+    <div class="auth_content mt-5 px-2 d-flex flex-column">
       <app-input
         maxlength="6"
         type="text"
@@ -34,14 +34,16 @@
         @input="handleCoPassword"
       />
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorChange}}</p>
-      <app-button
-        color="primary"
-        square
-        fullWidth
-        @click="acceptResetPass"
-        class="mb-3 mt-4"
-        :disabled="disabledBtnForgot"
-      >Xác nhận</app-button>
+      <div>
+        <app-button
+          color="primary"
+          square
+          @click="acceptResetPass"
+          class="mb-3 mt-4"
+          style="width:293px"
+          :disabled="disabledBtnForgot"
+        >Xác nhận</app-button>
+      </div>
       <a
         @click="sendOTP"
         :class="countDown === 0 ? '' : 'disable'"
