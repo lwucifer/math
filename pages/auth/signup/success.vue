@@ -6,7 +6,7 @@
                 <IconSuccess class="mb-3 fill-primary"/>
                 <h3 class="text-primary">Xác thực thành công</h3>
                 <p class="my-4">Tài khoản của bạn đã được xác thực</p>
-                <app-button class="mt-2" square 
+                <app-button class="mt-2 btn-confirm" square 
                             :to="'/auth/signin'"
                             nuxt
                 >

@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-md-6">
         <div class="wrap-success-auth px-4">
-          <h3>Xác thực tài khoản</h3>
-          <div class="auth_content mt-4">
+          <h3 class="text-primary">Xác thực tài khoản</h3>
+          <div class="auth_content mt-4 px-5">
             <app-input type="text" v-model="otp" placeholder="Nhập mã OTP"/>
           </div>
-          <app-button color="primary" square fullWidth @click="confirmOtp">
+          <app-button color="primary" square class="btn-confirm"  @click="confirmOtp">
               Xác thực tài khoản
           </app-button>
         </div>

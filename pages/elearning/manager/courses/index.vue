@@ -7,61 +7,88 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
+        <h5 class="page-title">Bài giảng và khóa học</h5>
         <div class="elearning-history__main">
           <div class="pl-4 pr-4">
-            <h5 class="color-primary mb-3">Bài giảng và khóa học</h5>
             <div class="elearning-manager__tab">
-              <a
-                @click="tab = 'APPROVED'"
-                :class="tab == 'APPROVED' ? 'active' : ''"
-                >Đã đăng</a
+              <div class="nav">
+                <a @click="tab = 'APPROVED'" :class="tab == 'APPROVED' ? 'active' : ''">Đã đăng</a>
+                <a @click="tab = 'PENDING'" :class="tab == 'PENDING' ? 'active' : ''">Đang soạn</a>
+                <a
+                  @click="tab = 'WAITING_FOR_APPROVE'"
+                  :class="tab == 'WAITING_FOR_APPROVE' ? 'active' : ''"
+                >Chờ duyệt</a>
+                <a @click="tab = 'REJECTED'" :class="tab == 'REJECTED' ? 'active' : ''">Bị từ chối</a>
+                <a @click="tab = ''" :class="tab == '' ? 'active' : ''">Danh sách ẩn</a>
+              </div>
+              <n-link
+                :to="'/elearning/manager/courses/create'"
+                class="btn btn--size-sm btn--color-primary btn--square btn-right"
               >
-              <a
-                @click="tab = 'PENDING'"
-                :class="tab == 'PENDING' ? 'active' : ''"
-                >Đang soạn</a
-              >
-              <a
-                @click="tab = 'WAITING_FOR_APPROVE'"
-                :class="tab == 'WAITING_FOR_APPROVE' ? 'active' : ''"
-                >Chờ duyệt</a
-              >
-              <a
-                @click="tab = 'REJECTED'"
-                :class="tab == 'REJECTED' ? 'active' : ''"
-                >Bị từ chối</a
-              >
-              <a @click="tab = ''" :class="tab == '' ? 'active' : ''"
-                >Danh sách ẩn</a
-              >
+                <IconPlusCircle class="fill-white mr-2" />
+                <span class="color-white">Tạo bài giảng - khóa học</span>
+              </n-link>
             </div>
-            <div class="elearning-manager__serch">
-              <app-button
-                rounded
-                size="sm"
-                class="mr-4"
-                normal
-                @click="getList"
-              >
-                <IconFilter />Lọc kết quả
-              </app-button>
-              <app-select :options="free" v-model="params.free" size="sm" />
-              <app-select :options="types" v-model="params.type" size="sm" />
-              <app-select
-                :options="privacies"
-                v-model="params.privacy"
-                size="sm"
-              />
-              <app-input
-                class="mb-0"
-                size="sm"
-                placeholder="Nhập để tìm kiếm..."
-                v-model="params.keyword"
-              >
-                <a class="d-flex" slot="unit">
-                  <IconSearch width="17" height="17" />
-                </a>
-              </app-input>
+            <div class="d-flex-center">
+              <div class="filter-form__item flex-1" style="max-width: 36rem">
+                <div style="width: 100%">
+                  <app-search
+                    class
+                    :placeholder="'Nhập để tìm kiếm...'"
+                    v-model="params.query"
+                    :size="'sm'"
+                  ></app-search>
+                </div>
+              </div>
+
+              <div class="filter-form__item">
+                <app-button color="white" square :size="'sm'" @click="getList">
+                  <IconHamberger class="fill-primary mr-2" />
+                  <span class="color-primary">Lọc kết quả</span>
+                </app-button>
+              </div>
+
+              <div class="d-flex-center">
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectType"
+                    :options="types"
+                    label="text"
+                    placeholder="Thể loại"
+                    searchable
+                    clearable
+                    @input="handleChangedType"
+                  ></app-vue-select>
+                </div>
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectPrivacy"
+                    :options="privacies"
+                    label="text"
+                    placeholder="Hiển thị"
+                    searchable
+                    clearable
+                    @input="handleChangedPrivacy"
+                  ></app-vue-select>
+                </div>
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectFree"
+                    :options="free"
+                    label="text"
+                    placeholder="Học phí"
+                    searchable
+                    clearable
+                    @input="handleChangedFree"
+                  ></app-vue-select>
+                </div>
+              </div>
             </div>
             <app-button
               square
@@ -71,14 +98,10 @@
               @click="restoreRows"
               v-if="tab == ''"
             >
-              <IconTrashAlt
-                height="15"
-                width="15"
-                class="fill-white mr-2"
-              />Khôi phục
+              <IconRestore height="15" width="15" class="fill-white mr-2" />Khôi phục
             </app-button>
             <app-button
-              color="secondary"
+              color="pink"
               square
               size="sm"
               normal
@@ -86,8 +109,7 @@
               @click="deleteRows"
               v-else
             >
-              <IconTrashAlt height="15" width="15" class="fill-white mr-2" />Xoá
-              khỏi danh sách
+              <IconRemove height="15" width="15" class="fill-white mr-2" />Đưa vào danh sách ẩn
             </app-button>
           </div>
 
@@ -100,13 +122,13 @@
             :data="elearningList"
             multiple-selection
           >
-            <template v-slot:cell(name)="{ row }">
+            <!-- <template v-slot:cell(name)="{ row }">
               <td>
                 <div class="table-avatar">
                   <div class="left">
                     <img
                       :src="row.avatar.high"
-                      alt=""
+                      alt
                       @click="handleEditElearning(row)"
                       style="cursor:pointer"
                     />
@@ -117,7 +139,7 @@
                   </div>
                 </div>
               </td>
-            </template>
+            </template> -->
             <template v-slot:cell(hide)="{ row }">
               <td>
                 <span v-if="row.hide" class="color-red">Riêng tư</span>
@@ -125,9 +147,7 @@
               </td>
             </template>
             <template v-slot:cell(price)="{ row }">
-              <td>
-                {{ row.price.original_price }}
-              </td>
+              <td>{{ row.price.original_price }}</td>
             </template>
             <template v-slot:cell(vote)="{ row }">
               <td>
@@ -141,11 +161,35 @@
                 <span v-else>Miễn phí</span>
               </td>
             </template>
-            <template v-slot:cell(participants)="{ row }">
-              <td>
-                <span v-if="row.participants > 0">{{ row.participants }}</span>
-                <n-link v-else to>Thêm học sinh</n-link>
-              </td>
+            <template v-slot:cell(created)="{ row }">
+              <td>{{formatAMPM(row.created)}}</td>
+            </template>
+
+            <template v-slot:actions="{row}">
+              <n-link
+                :to="'/elearning/' + row.id"
+                class="link"
+              >
+                <IconNote class="fill-primary mr-2" />Xem chi tiết
+              </n-link>
+              <n-link
+                :to="'/elearning/' + row.id + ''"
+                class="link"
+              >
+                <IconEdit class="fill-purple mr-2" />Chỉnh sửa
+              </n-link>
+              <n-link
+                :to="'/elearning/' + row.id + ''"
+                class="link"
+              >
+                <IconEye class="fill-blue mr-2" />Xem preview
+              </n-link>
+              <n-link
+                :to="'/elearning/manager/courses/students'"
+                class="link"
+              >
+                <IconPeople class="fill-yellow mr-2" />Xem danh sách học sinh
+              </n-link>
             </template>
           </app-table>
           <!--End table-->
@@ -161,6 +205,14 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
+import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
+import IconNote from '~/assets/svg/v2-icons/note_24px.svg?inline';
+import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
+import IconEye from '~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline';
+import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
+import IconRestore from '~/assets/svg/v2-icons/restore_24px.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -179,6 +231,14 @@ export default {
     IconTrashAlt,
     IconFilter,
     IconTick,
+    IconHamberger,
+    IconPlusCircle,
+    IconRemove,
+    IconNote,
+    IconEdit,
+    IconEye,
+    IconPeople,
+    IconRestore
   },
 
   data() {
@@ -186,105 +246,91 @@ export default {
       tab: "APPROVED",
       ids: [],
       heads: [
-        {
+        -{
           name: "",
           text: "",
-          selectAll: true,
+          selectAll: true
         },
         {
           name: "name",
           text: "Bài giảng và khóa học",
-          sort: true,
+          sort: true
         },
         {
           name: "price",
           text: "Học phí",
-          sort: true,
+          sort: true
         },
         {
           name: "hide",
-          text: "Hiển thị",
+          text: "Hiển thị"
         },
         {
           name: "created",
           text: "Ngày đăng",
-          sort: true,
-        },
-        {
-          name: "views",
-          text: "Lượt xem",
-          sort: true,
+          sort: true
         },
         {
           name: "participants",
-          text: "Số học sinh<br>tham gia",
-          sort: true,
-        },
-        {
-          name: "vote",
-          text: "Đánh giá",
-          sort: true,
-        },
-        // {
-        //   name: "content",
-        //   text: "Lý do bị từ chối"
-        // }
+          text: "Học sinh tham gia",
+          sort: true
+        }
       ],
       heads2: [
         {
           name: "",
           text: "",
-          selectAll: true,
+          selectAll: true
         },
         {
           name: "name",
           text: "Bài giảng và khóa học",
-          sort: true,
+          sort: true
         },
         {
           name: "price",
           text: "Học phí",
-          sort: true,
+          sort: true
         },
         {
           name: "hide",
-          text: "Hiển thị",
+          text: "Hiển thị"
         },
         {
           name: "created",
-          text: "Ngày đăng",
-          sort: true,
-        },
+          text: "Ngày tạo",
+          sort: true
+        }
       ],
       heads3: [
         {
           name: "",
           text: "",
-          selectAll: true,
+          selectAll: true
         },
         {
           name: "name",
           text: "Bài giảng và khóa học",
-          sort: true,
+          sort: true
         },
         {
           name: "price",
           text: "Học phí",
-          sort: true,
+          sort: true
         },
         {
           name: "hide",
-          text: "Hiển thị",
+          text: "Hiển thị"
         },
         {
           name: "created",
-          text: "Ngày đăng",
-          sort: true,
+          text: "Ngày tạo",
+          sort: true
         },
         {
           name: "content",
-          text: "Lý do bị từ chối",
-        },
+          text: "Lý do bị từ chối"
+        }
       ],
       currentHeads: [],
       pagination: {
@@ -293,33 +339,33 @@ export default {
         size: 10,
         totalElements: 0,
         first: 0,
-        last: 0,
+        last: 0
       },
       isTeacher: true,
       time1: null,
       time2: null,
       selectType: null,
       types: [
-        { value: null, text: "Theo loại" },
+        { value: "", text: "Tất cả" },
         { value: "COURSE", text: "Khóa học" },
-        { value: "LECTURE", text: "Bài giảng" },
+        { value: "LECTURE", text: "Bài giảng" }
       ],
       selectPrivacy: null,
       privacies: [
-        { value: null, text: "Theo hiển thị" },
+        { value: "", text: "Tất cả" },
         { value: "PUBLIC", text: "Công khai" },
-        { value: "PRIVATE", text: "Riêng tư" },
+        { value: "PRIVATE", text: "Riêng tư" }
       ],
       selectFree: null,
       free: [
-        { value: null, text: "Theo học phí" },
+        { value: "", text: "Tất cả" },
         { value: true, text: "Miễn phí" },
-        { value: false, text: "Có phí" },
+        { value: false, text: "Có phí" }
       ],
       teacher: {
         id: "1",
         name: "Savannah Mckinney",
-        avatar: "https://picsum.photos/125/125",
+        avatar: "https://picsum.photos/125/125"
       },
       elearningList: [],
       params: {
@@ -328,16 +374,16 @@ export default {
         free: null,
         privacy: null,
         type: null,
-        keyword: null,
-      },
+        keyword: null
+      }
     };
   },
 
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateElearnings: "elearnings",
-    }),
+      stateElearnings: "elearnings"
+    })
   },
 
   watch: {
@@ -349,10 +395,10 @@ export default {
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
           break;
+        case "":
         case "APPROVED":
           this.currentHeads = [...this.heads];
           break;
-        case "":
         case "REJECTED":
           this.currentHeads = [...this.heads3];
           break;
@@ -360,11 +406,29 @@ export default {
           this.currentHeads = [...this.heads];
           break;
       }
+      this.params.query = "";
       this.getList();
-    },
+    }
   },
 
   methods: {
+    formatAMPM(time) {
+      const date = new Date(time);
+      var strTime =
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+      return strTime;
+    },
+
+    handleChangedType() {
+      this.params.type = this.selectType.value;
+    },
+    handleChangedFree() {
+      this.params.free = this.selectFree.value;
+    },
+    handleChangedPrivacy() {
+      this.params.privacy = this.selectPrivacy.value;
+    },
+
     handleEditElearning(elearning) {
       // console.log(this.tab, elearning);
       this.$router.history.push(
@@ -453,7 +517,7 @@ export default {
     async restoreRows() {
       let params = {
         hide: false,
-        ids: [...this.ids],
+        ids: [...this.ids]
       };
       const doRestore = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.HIDE}`,
@@ -467,7 +531,7 @@ export default {
       }
     },
 
-    get,
+    get
   },
 
   beforeMount() {
@@ -476,7 +540,7 @@ export default {
 
   created() {
     this.getList();
-  },
+  }
 };
 </script>
 
