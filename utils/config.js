@@ -17,6 +17,7 @@ export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
+export const DATETIME_FULL_WEEK_DAY = "dddd, DD/MM/YYYY, h:mm A";
 export const DATE_SHORTCUT = [
   {
     text: 'Hôm nay',
