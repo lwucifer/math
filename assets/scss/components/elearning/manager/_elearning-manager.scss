@@ -7,23 +7,35 @@
 }
 .elearning-manager__tab {
     margin-bottom: 2rem;
-    border-bottom: 1px solid $color-border;
-    a:not(.active) {
-        color: #999;
-        cursor: pointer;
-    }
-    a.active {
-        font-weight: bold;
-        color: #333;
-        border-bottom: 2px solid $color-primary;
-    }
-    a {
-        display: inline-block;
-        margin-right: 5rem;
-        padding: 1rem 0;
-        &:last-child {
-            margin-right: 0;
+    display: flex;
+    .nav {
+        a {
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 19px;
+            display: inline-block;
+            cursor: pointer;
+            padding: 0.7rem 1rem;
+            margin: 0 0.5rem;
+            color: $color-text-dark;
+            &:first-child {
+                margin-left: 0;
+            }
+            &:last-child {
+                margin-right: 0;
+            }
         }
+
+        a.active,
+        a:hover {
+            font-weight: 500;
+            border-bottom: 3px solid $color-primary;
+            color: $color-primary;
+        }
+    }
+    .btn-right {
+        margin-left: auto;
     }
 }
 .text-desc {

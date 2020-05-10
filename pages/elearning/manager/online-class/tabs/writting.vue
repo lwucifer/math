@@ -97,7 +97,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
 import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
-import IconEdit from '~/assets/svg/v2-icons/edit.svg?inline';
+import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
