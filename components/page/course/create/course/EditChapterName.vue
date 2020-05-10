@@ -1,7 +1,7 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
     <div class="mr-3">
-      Chương {{ this.defaultName.index }}:
+      <strong>Chương</strong> {{ this.defaultName.index }}:
       <input
         v-if="isEditChaperName"
         v-model="chaperNameModel"
@@ -40,7 +40,7 @@
         class="ce-item__action delete mr-3"
         @click.prevent="handleDeleteChapter"
       >
-        <IconTrashAlt class="icon d-block subheading fill-secondary" />
+        <IconTrashAlt class="fill-secondary d-block subheading" width="16px" height="16px"/>
       </a>
     </template>
     <app-modal-confirm
@@ -55,9 +55,8 @@
 <script>
 import { string } from "yup";
 import { get, toNumber } from "lodash";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
-const IconTrashAlt = () =>
-  import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
+import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";

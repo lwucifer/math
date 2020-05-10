@@ -16,14 +16,10 @@
           href
           class="text-decoration-none"
           @click.prevent="handleShowListQuestion"
-          >Xem danh sách câu hỏi</a
-        >
+        >Xem danh sách câu hỏi</a>
       </div>
 
-      <div
-        class="e-exercise-essay__question-name bg-gray"
-        v-html="currentExerciseQuestion.content"
-      ></div>
+      <div class="e-exercise-essay__question-name bg-gray" v-html="currentExerciseQuestion.content"></div>
     </div>
 
     <div class="mb-15">
@@ -37,12 +33,7 @@
         trả lời
       </app-upload>
 
-      <app-input
-        id="essay-answer"
-        placeholder="Nhập câu trả lời"
-        textarea
-        v-model="answer"
-      ></app-input>
+      <app-input id="essay-answer" placeholder="Nhập câu trả lời" textarea v-model="answer"></app-input>
     </div>
 
     <div class="e-exercise-essay__bottom d-flex">
@@ -56,20 +47,12 @@
         >
           <IconArrowBack class="icon fill-opacity-1 body-1 mr-2" />Quay lại
         </app-button>
-        <app-button
-          size="sm"
-          @click.prevent="handleQuestionContinue"
-          :disabled="isDisableNext"
-        >
+        <app-button size="sm" @click.prevent="handleQuestionContinue" :disabled="isDisableNext">
           Tiếp tục
           <IconArrowForward class="icon fill-opacity-1 body-1 ml-2" />
         </app-button>
       </div>
-      <app-button
-        size="sm"
-        color="info"
-        @click.prevent="handleQuestionSubmission"
-      >
+      <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
@@ -97,8 +80,6 @@ import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissi
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import { QUESTION_NAV, STUDY_MODE } from "~/utils/constants";
-import ProgressService from "~/services/elearning/study/Progress";
-import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -132,6 +113,8 @@ export default {
       "currentElearningId"
     ]),
 
+    ...mapState("elearning/study/study-progress", ["progress"]),
+
     ...mapState("event", ["studyMode"]),
 
     ...mapGetters("elearning/study/study-exercise", [
@@ -158,6 +141,10 @@ export default {
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
       "elearningSudyExerciseSubmissionList"
+    ]),
+
+    ...mapActions("elearning/study/study-progress", [
+      "elearningSudyProgressList"
     ]),
 
     handleQuestionSubmission() {
@@ -223,7 +210,7 @@ export default {
     },
 
     handleShowListQuestion() {
-      console.log("[handleShowListQuestion]");
+      console.log("[handleShowListQuestion]", this.submission);
 
       this.elearningSudyExerciseSubmissionList({
         params: {
@@ -255,15 +242,13 @@ export default {
     },
 
     reNewGetElearningProgress() {
-      console.log("[reNewGetElearningProgress]", this.currentElearningId);
-      const getProgress = () =>
-        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
-          params: {
-            elearning_id: this.currentElearningId
-          }
-        });
-
-      getProgress();
+      console.log("[reNewGetElearningProgress]", this.progress);
+      const elearning_id = this.progress.id;
+      this.elearningSudyProgressList({
+        params: {
+          elearning_id
+        }
+      });
     }
   },
 
@@ -287,12 +272,12 @@ export default {
       this.questionNo = _newVal.id;
     },
 
-    studyMode(_newVal) {
-      console.log("[studyMode] watch 2", _newVal, this.currentExerciseQuestion);
-      if (_newVal == STUDY_MODE.DO_EXERCISE_DOING) {
-        this.questionNo = this.currentExerciseQuestion.id;
-      }
-    }
+    // studyMode(_newVal) {
+    //   console.log("[studyMode] watch 2", _newVal, this.currentExerciseQuestion);
+    //   if (_newVal == STUDY_MODE.DO_EXERCISE_DOING) {
+    //     this.questionNo = this.currentExerciseQuestion.id;
+    //   }
+    // }
   }
 };
 </script>

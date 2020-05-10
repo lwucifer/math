@@ -18,9 +18,11 @@
         @click.prevent="changeTabType('video')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconVideo class="icon" />
+          <IconRadioButtonChecked class="icon mr-2"/>
+          <IconVideo class="icon mr-2"/>
+          <span>Video</span>
         </span>
-        <span class="clc-type-tab-item__text">Video</span>
+        <!-- <span class="clc-type-tab-item__text">Video</span> -->
       </a>
 
       <a
@@ -30,9 +32,11 @@
         @click.prevent="changeTabType('document')"
       >
         <span class="clc-type-tab-item__icon">
+          <IconDefaultAsideMenu class="icon mr-2" style="width: 24px; height: 24px"/>
           <IconFileBlank class="icon" />
+          <span>Văn bản</span>
         </span>
-        <span class="clc-type-tab-item__text">Văn bản</span>
+        <!-- <span class="clc-type-tab-item__text"></span> -->
       </a>
     </div>
 
@@ -84,11 +88,15 @@ import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+import IconRadioButtonChecked from '~/assets/svg/design-icons/radio_button_checked.svg?inline';
+import IconDefaultAsideMenu from '~/assets/svg/icons/default-aside-menu.svg?inline';
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+
+
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonSelectVideo from "~/components/page/course/create/common/LessonSelectVideo";
 import LessonSelectDocument from "~/components/page/course/create/common/LessonSelectDocument";
@@ -108,7 +116,9 @@ export default {
     IconTrashAlt,
     CreateAction,
     LessonSelectVideo,
-    LessonSelectDocument
+    LessonSelectDocument,
+    IconRadioButtonChecked,
+    IconDefaultAsideMenu
   },
 
   props: {

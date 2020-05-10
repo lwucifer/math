@@ -87,7 +87,7 @@ import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
-import ProgressService from "~/services/elearning/study/Progress";
+// import ProgressService from "~/services/elearning/study/Progress";
 import { get } from "lodash";
 import ProgramService from "~/services/elearning/public/Program";
 import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
@@ -129,9 +129,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations("elearning/study/study-exercise", [
-      "setStudyElearningCurrentId",
-    ]),
 
     async getData(elearning_id) {
       const options = {
@@ -166,8 +163,6 @@ export default {
       this.interactive_questions = get(data, "1.data", null);
       // this.progress = get(data, "2.data", null);
 
-      // set current elearning to store
-      this.setStudyElearningCurrentId(this.progress.id);
     },
     get,
     async addQuestionSuccess() {

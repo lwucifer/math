@@ -27,7 +27,7 @@
     </div>
 
     <div v-if="benefit.length < 10">
-      <button class="d-flex align-items-center text-primary" 
+      <button class="d-flex align-items-center text-primary mt-2" 
         v-if="showBtn"
         @click="showInputBenefit"><IconAdd class="mr-2"/> Thêm lợi ích</button>
 
