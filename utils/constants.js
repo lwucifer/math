@@ -103,6 +103,12 @@ export const LESSION_STATUS = {
     COMPLETED: 1
 }
 
+export const LESSION_ONLINE_STATUS = {
+    COMING: 0,
+    LIVE: 1,
+    FINISH: 1,
+}
+
 export const QUESTION_NAV = {
     NEXT: 1,
     BACK: -1
