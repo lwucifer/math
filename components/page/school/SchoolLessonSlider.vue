@@ -21,17 +21,6 @@
         v-if="currentSwiperOptions.pagination"
       ></div>
     </div>
-    <div class="school-lesson-slider__footer">
-      <div class="text-center">
-        <app-button
-          square
-          class="mt-2 school-lesson-slider__footer__submit-btn"
-          @click="showAll"
-        >
-          <span class="">Xem tất cả</span>
-        </app-button>
-      </div>
-    </div>
   </div>
 </template>
 

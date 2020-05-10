@@ -16,6 +16,14 @@
     <div v-else>
       <ElearningProgramItem :lesson="get(progress, 'programs.0.lessons.0', null)" />
     </div>
+
+    <!-- Bai TEST -->
+    <div class="elearning-lesson-side__course">
+      <div class="color-yellow">
+        <IconFileAlt class="mr-2 fill-yellow" height="16" width="16" />
+        <span>Làm bài kiểm tra</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,25 +34,29 @@ import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
+import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import { get } from "lodash";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
 import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
+
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconPlay,
     IconDownO,
     IconUpO,
-    IconFileClock,
+    // IconFileClock,
     IconFileCheckAlt,
     IconFileEditAlt,
     IconFileCheck,
+    IconFileAlt,
     ElearningProgramItem,
-    ElearningProgramCourse,
+    ElearningProgramCourse
   },
-  props: {
-    progress: {},
+
+  computed: {
+    ...mapState("elearning/study/study-progress", ["progress"])
   },
 
   created() {
@@ -55,6 +67,6 @@ export default {
     console.log(this.progress);
   },
 
-  methods: { get },
+  methods: { get }
 };
 </script>

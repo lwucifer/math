@@ -32,7 +32,7 @@
             <app-stars :stars="Math.floor(get(lesson, 'rate', 0))" />
           </div>
           <span class="text-right">
-            <strong>{{ get(lesson, "rate", 0) }}</strong> <br />
+            <strong>{{ get(lesson, "rate", 0) }}</strong>
             ({{ get(lesson, "vote_number", 0) }})
           </span>
         </div>

@@ -103,7 +103,7 @@ export default {
       required: false,
       default: () => {
         return {
-          total: 0,
+          totalPages: 0,
           size: 10,
           totalElements: 0,
           first: 1,

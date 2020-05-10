@@ -1,10 +1,11 @@
 <template>
   <div class="container">
     <div>
-      <school-filter
+      <school-filter class="mb-3"
         title="Danh sách trường học"
         :schoolTypes="schoolTypes"
         :hasSort="true"
+        :hasLocation="true"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
@@ -12,14 +13,12 @@
       >
       </school-filter>
       <!--Detail school types-->
-      <div v-for="(category, index) in categories" :key="index">
-        <SchoolSlider
-          :category="category"
+      <SchoolListBox
+          :category="categories[1]"
           @showAll="showAll"
           :schoolSearch="schoolSearch"
         >
-        </SchoolSlider>
-      </div>
+        </SchoolListBox>
     </div>
   </div>
 </template>

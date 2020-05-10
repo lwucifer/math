@@ -4,8 +4,8 @@
     <div class="filter-form">
        <div class="filter-form__item top" @click="openModal = true">
         <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="mr-2"/>
-          <span>Mời thêm học sinh</span>
+          <IconPlusCircle class="mr-2 fill-white"/>
+          <span class="color-white">Mời thêm học sinh</span>
         </app-button>
       </div>
     </div>
@@ -45,7 +45,7 @@
           @click="submit"
         >
           <IconHamberger class="fill-white mr-2" />
-          <span>Lọc kết quả</span>
+          <span class="color-white">Lọc kết quả</span>
         </app-button>
       </div>
 
@@ -286,6 +286,9 @@ export default {
     display: table;
     .item {
       display: table-cell;
+      + .item {
+        padding-left: 1.5rem;
+      } 
     }
   }
 }

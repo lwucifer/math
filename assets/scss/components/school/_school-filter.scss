@@ -39,6 +39,10 @@
             .vs__selected-options {
               min-width: 133px;
             }
+            &.school-filter__form__item--search {
+                flex: 1;
+                max-width: 40rem;
+            }
         }
         &__item:first-child {
             min-width: unset;

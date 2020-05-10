@@ -8,12 +8,6 @@
     </div>
     <div class="school-filter__form">
 
-      <!-- <app-select-location
-        @handleChangeProvince="handleChangeProvince"
-        @handleChangedDistrict="handleChangedDistrict"
-        @handleChangedWard="handleChangedWard"
-      /> -->
-
       <div class="school-filter__form__item" v-if="hasSchoolLevel">
         <app-vue-select
           class="app-vue-select"
@@ -31,8 +25,7 @@
 
       <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
         <app-search
-          style="width: 40rem"
-          class=""
+          style="width: 100%"
           :placeholder="'Nhập để tìm kiếm...'"
           :counter="11"
           v-model="filter.query"
@@ -55,8 +48,15 @@
         </app-button>
       </div>
 
+      <app-select-location
+        @handleChangeProvince="handleChangeProvince"
+        @handleChangedDistrict="handleChangedDistrict"
+        @handleChangedWard="handleChangedWard"
+        v-if="hasLocation"
+      />
+
       <div class="school-filter__form__item ml-auto" v-if="hasSort">
-        <label class="school-filter__form__item__title" for="">Sắp xếp theo</label>
+        <label class="school-filter__form__item__title pl-3" for="">Sắp xếp theo</label>
         <app-vue-select
           style="width: 21rem"
           class="app-vue-select"
@@ -104,6 +104,10 @@ export default {
       default: true
     },
     hasSchoolLevel: {
+      type: Boolean,
+      default: false
+    },
+    hasLocation: {
       type: Boolean,
       default: false
     },

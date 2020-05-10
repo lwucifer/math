@@ -10,44 +10,49 @@
           <b>{{ studentNum }}</b> học sinh )
         </span>
       </div>
-      <button square class="school-list-box__title__submit-btn" @click="showAll">
-        Xem tất cả
+      <n-link class="school-list-box__title__submit-btn" :to="'/school/all'">
+        Xem thêm
         <IconRight class="fill-primary" />
-      </button>
+      </n-link>
     </div>
     <!--List schools-->
     <div class="school-list-box__content">
       <div class="row row--school-list">
+        <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide post-slider-container"
+              v-for="(school, index) in schools"
+              :key="index"
+            >
+              <school-item :school="school" />
+            </div>
+          </div>
+          <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
+        </div>
         <div
-          class="custom-col-lg-5 col-3 col-sm-6 col-xs-12"
-          v-for="(school, index) in schools"
-          :key="index"
+          class="swiper-button-custom swiper-button-prev--circle"
+          v-if="currentSwiperOptions.navigation && schools.length > 0"
+          slot="button-prev"
+          @click="mySwiper.slidePrev()"
         >
-          <school-item :school="school" />
+          <IconChevronLeft />
+        </div>
+        <div
+          class="swiper-button-custom swiper-button-next--circle"
+          v-if="currentSwiperOptions.navigation && schools.length > 0"
+          slot="button-next"
+          @click="mySwiper.slideNext()"
+        >
+          <IconChevronRight />
         </div>
       </div>
-
-      <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide post-slider-container" v-for="(item, index) in posts" :key="index">
-                    <school-item :school="school" />
-                </div>
-            </div>
-
-            <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
-                <IconChevronLeft/>
-            </div>
-            <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
-                <IconChevronRight/>
-            </div>
-            <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
-        </div>
     </div>
   </div>
 </template>
 
 <script>
-import {assignIn} from "lodash";
+import { assignIn } from "lodash";
 import IconRight from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
 import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
@@ -71,10 +76,6 @@ export default {
     schoolSearch: {
       type: Object,
       default: () => {}
-    },
-    swiperOptions: {
-      type: Object,
-      default: () => {}
     }
   },
 
@@ -82,17 +83,49 @@ export default {
     const defaultSwiperOptions = {
       slidesPerView: "auto",
       spaceBetween: 4,
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
-      },
+      navigation: true,
       pagination: false,
-      showName: false
+      showName: false,
+      loop: true,
+      breakpoints: {
+        4000: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        1366: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        }
+      }
     };
 
     return {
       defaultSwiperOptions,
-      currentSwiperOptions: assignIn(defaultSwiperOptions, this.swiperOptions)
+      currentSwiperOptions: assignIn(defaultSwiperOptions, this.sliderOptions),
+      sliderOptions: {
+        spaceBetween: 20,
+        slidesPerView: 5,
+        setWrapperSize: true,
+        autoHeight: false,
+        watchOverflow: true,
+        showName: true
+      }
     };
   },
 
@@ -131,4 +164,56 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/school/_school-list-box.scss";
+
+.post-slider {
+  .swiper-button-custom {
+    $background-disable: #e1e1e1;
+    position: absolute;
+    width: 4rem;
+    height: 4rem;
+    background-color: $background-disable;
+    text-align: center;
+    line-height: 4rem;
+    z-index: 10;
+    display: inline-block;
+    cursor: pointer;
+    background-image: none !important;
+
+    &:hover,
+    &:visited,
+    &:focus {
+      background-color: $color-primary;
+      outline: none;
+    }
+
+    svg {
+      width: 0.6rem;
+      height: 1.2rem;
+      fill: #fff;
+    }
+
+    &.swiper-button-disabled {
+      background-color: $background-disable;
+    }
+  }
+}
+.row--school-list {
+  position: relative;
+}
+
+.swiper-button-next--circle {
+  border-radius: 50%;
+  top: 50%;
+  margin-top: -2rem;
+  right: -2rem;
+  left: auto;
+}
+
+.swiper-button-prev--circle {
+  border-radius: 50%;
+  top: 50%;
+  margin-top: -2rem;
+  left: -2rem;
+  right: auto;
+}
 </style>

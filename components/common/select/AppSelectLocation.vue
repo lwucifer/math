@@ -2,11 +2,12 @@
   <fragment>
     <div class="school-filter__form__item">
       <app-vue-select
+        style="width: 12rem"
         class="app-vue-select"
         v-model="province"
         :options="provinces"
         label="name"
-        placeholder="Theo tỉnh thành"
+        placeholder="Tỉnh thành"
         :reduce="value => value"
         searchable
         clearable
@@ -17,12 +18,13 @@
 
     <div class="school-filter__form__item">
       <app-vue-select
+        style="width: 12rem"
         class="app-vue-select"
         v-model="district"
         :options="districts"
         label="name"
         :reduce="value => value"
-        placeholder="Theo quận huyện"
+        placeholder="Quận huyện"
         searchable
         clearable
         @input="handleChangedDistrict"
@@ -32,12 +34,13 @@
 
     <div class="school-filter__form__item">
       <app-vue-select
+        style="width: 12rem"
         class="app-vue-select"
         v-model="ward"
         :options="wards"
         label="name"
         :reduce="value => value"
-        placeholder="Theo xã phường"
+        placeholder="Xã phường"
         searchable
         clearable
         @input="handleChangedWard"

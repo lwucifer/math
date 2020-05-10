@@ -9,8 +9,8 @@
             <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">Yêu thích ({{total.favourites}})</a>
             <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
         </div>
-        <div style="width: 267px;margin-left:auto" placeholder="Tìm kiếm">
-            <app-search/>
+        <div style="width: 267px;margin-left:auto">
+            <app-search placeholder="Tìm kiếm"/>
         </div>
     </div>
     <ElearningList 
@@ -92,6 +92,7 @@ export default {
     methods:{
         changeTab(tab){
             this.tab = tab;
+            this.params.size = "8"
             if(tab===1){
                 this.params.type = "ALL"
                 this.fetchElearningList()
@@ -122,7 +123,7 @@ export default {
             const payload = {
                 params :{
                     type: this.params.type,
-                    size: this.params.size,
+                    size: 8,
                     page: this.params.page
                 }
             }
@@ -143,23 +144,6 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
-.wrap__study-space{
-    .title__study-space{
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 28px;
-        letter-spacing: -0.01em;
-        color: #222222;
-    }
-    .elearning-manager-content__title__nav{
-        a{
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 20px;
-            letter-spacing: -0.01em;
-            text-transform: uppercase;
-        }
-    }
-}
+@import "~/assets/scss/components/elearning/_elearning-my-courses";
 
 </style>

@@ -145,7 +145,7 @@
             <app-progress
               class="storage-status__progress"
               :percentage="capcityPercentage"
-              rounded
+              normal
             ></app-progress>
           </div>
           <p class="storage-status__detail text-center">Đã sử dụng {{ usedCapacity*1024*1024 | fileSizeFilter }} trong tổng số {{ maxCapacity*1024*1024 | fileSizeFilter }}</p>

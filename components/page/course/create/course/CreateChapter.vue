@@ -5,17 +5,18 @@
         Chương {{ get(chapters, "data.length", 0) + 1 }}
       </h3>
       <app-input
-        :counter="80"
+        :counter="60"
         placeholder="Tên chương"
         v-model="payload.name"
       />
 
       <div class="d-flex justify-content-end mt-4">
         <app-button
-          class="clc-btn font-weight-semi-bold mr-4"
+          class="clc-btn font-weight-semi-bold mr-4 text-secondary"
           size="sm"
-          color="disabled"
           square
+          color="default"
+          outline
           @click="handleCancelAddChapter"
           >Huỷ bỏ</app-button
         >
@@ -24,7 +25,7 @@
           size="sm"
           square
           @click="handleAddChapter"
-          >Tạo chương</app-button
+          >Thêm chương</app-button
         >
       </div>
     </div>

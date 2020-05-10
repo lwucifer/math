@@ -1,9 +1,6 @@
 <template>
   <li class="e-exercise-list-questions__item">
-    <h5
-      class="e-exercise-list-questions__question"
-      v-html="question.content"
-    ></h5>
+    <h5 class="e-exercise-list-questions__question" v-html="question.content"></h5>
 
     <div
       v-if="question.type === EXERCISE_TYPES.ESSAY"
@@ -23,7 +20,7 @@
       <div
         v-if="expand"
         class="e-exercise-list-questions__answer-content"
-        v-html="question.correct_answer ? question.correct_answer.content : ''"
+        v-html="correct_answer_content"
       ></div>
     </div>
 
@@ -43,11 +40,9 @@
       </a>
       <span v-if="expand">
         <!-- IF USER'S ANSWER IS TRUE -->
-        <span
-          class="d-inline-flex align-items-center text-primary"
-          v-if="question.isUserTrue"
-        >
-          Câu trả lời: A. Câu trả lời số 1
+        <span class="d-inline-flex align-items-center text-primary" v-if="question.isUserTrue">
+          Câu trả lời: {{student_answer_index | getQuestionNoText }}.
+          {{ student_answer_content }}
           <IconCheck class="icon fill-opacity-1 heading-3 ml-2" />
         </span>
         <!-- IF USER'S ANSWER IS TRUE -->
@@ -56,15 +51,15 @@
         <span v-else>
           <span class="d-inline-flex align-items-center text-secondary">
             Câu trả lời:
-            {{ question.student_answer ? question.student_answer.index : "" }}.
-            {{ question.student_answer ? question.student_answer.content : "" }}
+            {{student_answer_index | getQuestionNoText }}
+            {{ student_answer_content }}
             <IconCancel class="icon fill-opacity-1 heading-3 ml-2" />
           </span>
 
           <span class="d-inline-flex align-items-center text-primary ml-4">
             Đáp án đúng:
-            {{ question.correct_answer ? question.correct_answer.index : "" }}.
-            {{ question.correct_answer ? question.correct_answer.content : "" }}
+            {{student_answer_index | getQuestionNoText }}
+            {{ correct_answer_content }}
           </span>
         </span>
         <!-- IF USER'S ANSWER IS FALSE -->
@@ -105,6 +100,22 @@ export default {
     toggleExpand() {
       this.expand = !this.expand;
     }
-  }
+  },
+
+  computed: {
+    correct_answer_content() {
+      return this.question.correct_answer ? this.question.correct_answer.content : '';
+    },
+    correct_answer_index() {
+      return this.question.correct_answer ? this.question.correct_answer.index : '';
+    },
+
+    student_answer_content() {
+      return this.question.student_answer ? this.question.student_answer.content : "";
+    },
+    student_answer_index() {
+      return this.question.student_answer ? this.question.student_answer.index : '';
+    },
+  },
 };
 </script>
