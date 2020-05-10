@@ -6,7 +6,7 @@
     <h3 class="heading-6 mb-2 mt-3">Tên bài học số {{ noLesson + 1 }}</h3>
     <app-input :counter="60" placeholder="Tên bài học" v-model="payload.name" />
 
-    <span>Chọn loại bài học</span>
+    <span>Chọn loại bài học xccc</span>
 
     <app-divider class="mt-3 mb-4" />
 
