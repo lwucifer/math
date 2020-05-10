@@ -18,10 +18,9 @@
             <div class="cc-box__head-right">
               <a
                 @click="handleAddLesson($event)"
-                href
-                v-if="!get(lessons, 'data.length', 0)"
-                >Thêm nội dung bài giảng</a
-              >
+                class="d-flex align-items-center text-primary"
+                v-if="!get(lessons, 'data.length', 0)"><IconAdd width="14px" height="14px" class="mr-2"/> Thêm chương</a>
+
               <button
                 class="cc-box__btn cc-box__btn-collapse"
                 @click="isShowDetailLesson = !isShowDetailLesson"
@@ -72,6 +71,8 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
+const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
+
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
@@ -98,7 +99,8 @@ export default {
     CreateLessonOfElearning,
     LessonDetail,
     EditCourseName,
-    IconAngleUp
+    IconAngleUp,
+    IconAdd
   },
 
   data() {

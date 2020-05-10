@@ -8,7 +8,10 @@
         :checked="lesson.status == lessonCompleted"
         :disabled="lesson.status == lessonCompleted"
       />
-      <p class="text-uppercase pl-1 text-clickable" @click="handleStuty">
+      <p
+        class="text-uppercase pl-1 text-clickable"
+        @click="handleStuty(lesson)"
+      >
         {{ get(lesson, "name", "") }}
       </p>
     </div>
@@ -59,6 +62,7 @@ import {
   STUDY_MODE,
   LESSION_STATUS,
 } from "~/utils/constants";
+import { redirectWithParams, getParamQuery } from "~/utils/common";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -80,6 +84,14 @@ export default {
   props: {
     lesson: Object,
   },
+
+  mounted() {
+    const lesson_id = getParamQuery("lesson_id");
+    if (lesson_id && lesson_id === this.lesson.id) {
+      this.handleStuty(this.lesson);
+    }
+  },
+
   methods: {
     get,
     ...mapActions("elearning/study/study-exercise", [
@@ -88,30 +100,31 @@ export default {
 
     ...mapMutations("event", ["setStudyMode", "setPayload"]),
 
-    async handleStuty() {
-      console.log(this.lesson);
+    async handleStuty(lesson) {
 
-      if (get(this, "lesson.type", "") === "DOCS") {
+      redirectWithParams({ lesson_id: get(lesson, "id", "") });
+
+      if (get(lesson, "type", "") === "DOCS") {
         this.setStudyMode(STUDY_MODE.DOCS);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "ARTICLE") {
+      if (get(lesson, "type", "") === "ARTICLE") {
         this.setStudyMode(STUDY_MODE.ARTICLE);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "IMAGE") {
+      if (get(lesson, "type", "") === "IMAGE") {
         this.setStudyMode(STUDY_MODE.IMAGE);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "VIDEO") {
+      if (get(lesson, "type", "") === "VIDEO") {
         const elearning_id = get(this, "$router.history.current.params.id", "");
-        const lesson_id = get(this, "lesson.id", "");
+        const lesson_id = get(lesson, "id", "");
         const res = await new StudyService(this.$axios)["studyLesson"](
           elearning_id,
           lesson_id

@@ -107,7 +107,9 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
-import { RESPONSE_SUCCESS } from "../../../../../utils/config";
+import { RESPONSE_SUCCESS } from "~/utils/config";
+import ProgressService from "~/services/elearning/study/Progress";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -115,6 +117,13 @@ export default {
     IconArrowForward,
     IconSend,
     ElearningExerciseListQuestions
+  },
+
+  props: {
+    questionId: {
+      type: String,
+      default: ""
+    }
   },
 
   data() {
@@ -127,7 +136,7 @@ export default {
       // questionNoOpts,
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       // questionNoOpts,
-      questionNo: "",
+      questionNo: this.questionId,
       answer: null,
       modalListQuestions: false,
       modalConfirmSubmit: false
@@ -138,7 +147,8 @@ export default {
     ...mapState("elearning/study/study-exercise", [
       "currentExerciseQuestion",
       "submission",
-      "currentExerciseAnswers"
+      "currentExerciseAnswers",
+      "currentElearningId"
     ]),
 
     ...mapGetters("elearning/study/study-exercise", [
@@ -207,7 +217,13 @@ export default {
         duration: durationCost,
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
-      this.elearningSudyExerciseSubmissionAdd(submissionReq);
+
+      this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
+        // renew list progress
+        if (res.success == RESPONSE_SUCCESS) {
+          this.reNewGetElearningProgress();
+        }
+      });
     },
 
     handleShowListQuestion() {
@@ -240,9 +256,17 @@ export default {
       } else {
         this.answer = null;
       }
+    },
 
-      // set current question Option
-      // this.questionNo = this.currentExerciseQuestion.id;
+    reNewGetElearningProgress() {
+      console.log("[reNewGetElearningProgress]", this.currentElearningId);
+      const getProgress = () =>
+        new ProgressService(this.$axios)[actionTypes.BASE.LIST]({
+          params: {
+            elearning_id: this.currentElearningId
+          }
+        });
+      getProgress();
     }
   },
 

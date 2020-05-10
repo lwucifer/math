@@ -21,8 +21,8 @@
       </span>
     </div>
     <div v-if="!!currentExerciseQuestion">
-      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" />
-      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" />
+      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" :questionId="currentExerciseQuestion.id"/>
+      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" :questionId="currentExerciseQuestion.id"/>
     </div>
   </div>
 </template>
