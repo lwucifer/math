@@ -15,7 +15,20 @@
           :key="index"
         >
           <div class="slider-item" @click="$emit('click-item', item, index)">
-            <ElearningItem2 :item="item" />
+            <CourseItem2
+              size="sm"
+              :to="`/elearning/${item.id}`"
+              :image="get(item, 'avatar.medium', '')"
+              :livestream="item && item.livestream && item.livestream.time"
+              :name="item.name"
+              :teacher="item.teacher"
+              :averageRate="get(item, 'rates.average_rate', 0)"
+              :totalReview="get(item, 'rates.total_review', 0)"
+              :price="get(item, 'price.price')"
+              :originalPrice="get(item, 'price.original_price')"
+              :free="item.free"
+              :discount="calcDiscount(item)"
+            />
           </div>
         </div>
       </div>
@@ -34,8 +47,8 @@
 </template>
 
 <script>
-import { assignIn } from "lodash";
-import ElearningItem2 from "~/components/page/elearning/ElearningItem2";
+import { get, assignIn } from "lodash";
+import CourseItem2 from "~/components/page/course/CourseItem2.vue";
 import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
 import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
@@ -47,7 +60,7 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    ElearningItem2
+    CourseItem2
   },
 
   props: {
@@ -80,6 +93,17 @@ export default {
       list: []
     };
   },
+  
+  methods: {
+    get,
+
+    calcDiscount(elearning) {
+      const { price = {} } = elearning;
+      const currentPrice = price.price || 0;
+      const originPrice = price.original_price || 0;
+      return (currentPrice / originPrice) * 100;
+    }
+  }
 };
 </script>
 

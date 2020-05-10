@@ -1,5 +1,5 @@
 <template>
-  <div class="course-item-2">
+  <div class="course-item-2" :class="{ 'course-item-2--size-sm': this.size === 'sm' }">
     <div class="course-item-2__img">
       <n-link :to="to">
         <img :src="image" :alt="name" class="d-block w-100" />
@@ -24,12 +24,12 @@
       </h3>
 
       <div class="course-item-2__teacher">
-        <app-avatar :src="get(teacher, 'avatar.low', '')" :size="24" />
+        <app-avatar :src="get(teacher, 'avatar.low', '')" :size="size === 'sm' ? 22 : 24" />
         <span>{{ get(teacher, 'name', '') }}</span>
       </div>
 
       <div class="course-item-2__rating">
-        <app-stars class="d-inline-flex" :stars="averageRate" :size="14" />
+        <app-stars class="d-inline-flex" :stars="averageRate" :size="size === 'sm' ? 12 : 14" />
         <span>
           <strong>{{ averageRate }}</strong>
           ({{ totalReview }})
@@ -40,8 +40,8 @@
         <b v-if="free" class="text-primary body-1 font-weight-bold">Miễn phí</b>
 
         <template v-else>
-          <s class="body-3">519.000đ</s>
-          <b class="text-primary body-1 font-weight-bold ml-2">219.000đ</b>
+          <s class="body-3" v-if="originalPrice != price">{{ originalPrice | numeralFormat }}đ</s>
+          <b class="text-primary body-1 font-weight-bold ml-2">{{ price | numeralFormat }}đ</b>
         </template>
       </div>
     </div>
@@ -62,6 +62,11 @@ export default {
   },
 
   props: {
+    size: {
+      type: String,
+      default: 'md',
+      validator: value => ['sm', 'md'].includes(value)
+    },
     to: {
       type: String,
       default: ""

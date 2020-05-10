@@ -4,10 +4,12 @@
     transition: box-shadow .3s;
     box-shadow: $shadow-1;
 
+    $this: &;
+
     &__img {
         position: relative;
         background-color: $color-image-placeholder;
-        min-height: 160px;
+        min-height: 14.2rem;
     }
 
     &__bottom {
@@ -107,5 +109,24 @@
 
     &:hover {
         box-shadow: $shadow-hover;
+    }
+
+    &--size-sm {
+        #{$this}__bottom {
+            padding: 1.3rem 1.5rem;
+        }
+
+        #{$this}__name {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        #{$this}__teacher {
+            margin-bottom: 1rem;
+        }
+
+        #{$this}__rating {
+            margin-bottom: 1rem;
+        }
     }
 }
