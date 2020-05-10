@@ -70,7 +70,7 @@
       </li>
       <li>
         <IconInsertComment class="icon" />
-        Số bài giảng: {{ get(info, "lessons", 0) }} bài
+        Số bài học: {{ get(info, "lessons", 0) }} bài
       </li>
       <li>
         <IconTimer class="icon" />
