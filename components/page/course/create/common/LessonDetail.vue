@@ -33,16 +33,20 @@
       @handleRefreshDocs="handleRefreshDocs"
     />
 
-    <app-button
+    <!-- <app-button
       size="sm"
       outline
       square
       class="font-weight-semi-bold clc-btn-add-docs"
-      v-if="isShowButtonAddDocument"
-      @click="handleAddDocument"
+      
     >
-      <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
-    </app-button>
+      
+    </app-button> -->
+
+    <button 
+      class="text-primary mt-3"
+      v-if="isShowButtonAddDocument"
+      @click="handleAddDocument"><IconPlus class="mr-3"></IconPlus>Thêm tài liệu</button>
   </div>
 </template>
 
@@ -50,7 +54,7 @@
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import IconPlus from "~/assets/svg/v2-icons/add_green.svg?inline";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
