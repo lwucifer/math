@@ -5,37 +5,22 @@
         <label for="" class="content-title">Nhận xét chi biết bài làm của học sinh</label>
         <app-editor id="comment" v-model="$v.formData.note.$model"/>
       </div>
-      <div class="item">
+      <div class="item" v-if="pending">
         <label for="" class="content-title" style="font-size: 1.5rem;">Chấm điểm cả bài</label>
         <point-choice
-          :score-to-pass="8"
+          :score-to-pass="scoreToPass"
           @changedPoint="updatePoint"
         >
         </point-choice>
       </div>
-      <!--<div class="item">-->
-        <!--<app-input-->
-          <!--class="d-inline-block"-->
-          <!--type="number"-->
-          <!--min="0"-->
-          <!--max="10"-->
-          <!--v-model="$v.formData.mark.$model"-->
-          <!--:disabled="formData.to_passed"-->
-          <!--:validate="getValidationCode('formData.mark')"-->
-          <!--:message="'Giá trị không hợp lệ'"-->
-          <!--label="Chấm điểm"-->
-          <!--labelBold-->
-        <!--&gt;-->
-        <!--</app-input>-->
-      <!--</div>-->
       
       <div class="item mt-4">
         <app-checkbox
           v-model="$v.formData.to_passed.$model"
           label="Cho qua"
           style="color: #333;"
-          :disabled="formData.mark != ''"
-          :class="{ 'disabled': formData.mark != '', 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
+          :disabled="formData.mark != '' && formData.mark != null && failed == false"
+          :class="{ 'disabled': formData.mark != '' && formData.mark != null, 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
         >
         </app-checkbox>
         <p class="form--note">
@@ -47,11 +32,25 @@
         <app-button
           normal
           @click="submit"
+          :disabled="$v.$invalid"
         >
           Xác nhận
         </app-button>
       </div>
     </div>
+  
+    <app-modal-notify
+      v-if="visible.error"
+      type="warning"
+      title="Chấm điểm thất bại!"
+      :description="notiMes"
+      @ok="visible.error = false"
+      @close="visible.error = false"
+    >
+      <template v-slot:icon>
+    
+      </template>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -77,6 +76,18 @@
     components: {
       PointChoice
     },
+    props: {
+      pending: {
+        type: Boolean
+      },
+      failed: {
+        type: Boolean
+      },
+      scoreToPass: {
+        type: Number | String,
+        required: true
+      }
+    },
     data() {
       return {
         isPass: null,
@@ -86,6 +97,10 @@
           note: '',
           to_passed: false
         },
+        visible: {
+          error: false
+        },
+        notiMes: ''
       }
     },
     validations: {
@@ -116,7 +131,10 @@
     methods: {
       submit() {
         if (this.$v.$invalid) {
-          console.log('[Mark Essay Form] submission.error')
+          this.notiMes = 'Vui lòng nhập đủ thông tin!'
+          this.$nextTick(() => {
+            this.visible.error = true
+          })
         } else {
           this.$emit('submit', this.formData)
         }
@@ -128,7 +146,12 @@
         return this.VALIDATE_STATUS_CODE.DEFAULT
       },
       updatePoint(point) {
-        console.log('update point: ', point)
+        this.formData.mark = point
+      },
+      resetForm() {
+        this.formData.mark = ''
+        this.formData.note = ''
+        this.formData.to_passed = false
       },
       get
     }

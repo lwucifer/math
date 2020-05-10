@@ -6,10 +6,10 @@
           <div class="content-box-peer content-box-peer--solid student-profile h-100">
             <div class="d-flex align-items-center">
               <div class="mr-3">
-                <img src="https://picsum.photos/80/80" alt="avatar">
+                <img :src="studentAva" alt="avatar">
               </div>
               <div>
-                <p class="mb-3"><span class="h4">Nguyễn Hoàng Nhật Minh</span></p>
+                <p class="mb-3"><span class="h4">{{ studentName }}</span></p>
                 <p><span class="font-weight-normal">Lớp 10B</span></p>
               </div>
             </div>
@@ -79,6 +79,7 @@
           </div>
         </div>
       </div>
+      <app-divider class="mt-3 mb-0"/>
     </div>
   </div>
 </template>
@@ -88,6 +89,14 @@
   
   export default {
     props: {
+      studentName: {
+        type: String,
+        required: true
+      },
+      studentAva: {
+        type: String,
+        required: true
+      },
       isPass: {
         type: Boolean,
         default: false

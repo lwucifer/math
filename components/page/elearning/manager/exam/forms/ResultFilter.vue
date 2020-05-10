@@ -44,8 +44,6 @@
         </app-select-submission-result>
       </div>
     </filter-form>
-  
-    
   </div>
   
 </template>

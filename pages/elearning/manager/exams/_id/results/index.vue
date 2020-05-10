@@ -25,31 +25,6 @@
         </sub-block-section>
       </div>
     </div>
-    
-    <!--<div class="row">-->
-      <!--<div class="col-md-3">-->
-        <!--<ElearningManagerSide active="3"/>-->
-      <!--</div>-->
-      <!--<div class="col-md-9">-->
-        <!--<div class="elearning-manager-content">-->
-          <!--<div class="elearning-manager-content__title">-->
-            <!--&lt;!&ndash;<header-breadcrumb&ndash;&gt;-->
-              <!--&lt;!&ndash;title="Bài tập và bài kiểm tra"&ndash;&gt;-->
-              <!--&lt;!&ndash;:breadcrumb="breadcrumb"&ndash;&gt;-->
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-          <!--</div>-->
-          <!---->
-          <!--<div class="elearning-manager-content__main">-->
-            <!--&lt;!&ndash;<component&ndash;&gt;-->
-              <!--&lt;!&ndash;:is="currentComponent"&ndash;&gt;-->
-              <!--&lt;!&ndash;:detail="result"&ndash;&gt;-->
-              <!--&lt;!&ndash;@refreshSubmission="refreshData"&ndash;&gt;-->
-            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;</component>&ndash;&gt;-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
   </div>
 </template>
 

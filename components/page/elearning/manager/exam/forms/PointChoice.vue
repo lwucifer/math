@@ -74,8 +74,12 @@
         }
       },
       selectPoint(point) {
-        this.point = point
-        this.$emit('changedPoint', point)
+        if (this.point == point) {
+          this.point = null
+        } else {
+          this.point = point
+        }
+        this.$emit('changedPoint', this.point)
       }
     },
   }
