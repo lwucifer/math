@@ -54,7 +54,7 @@
             v-if="isPending(row) || isMarked(row)"
             title="Chi tiết"
             :to="`/elearning/manager/exams/${$route.params.id}/results?user_id=${row.id}&student_id=${row.student_id ? row.student_id: ''}`">
-            <IconArrow height="13"/>
+            <IconArrow height="13" style="height: 1.5rem;"/>
           </n-link>
         </td>
       </template>

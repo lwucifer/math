@@ -30,7 +30,7 @@
             <template slot="popover" class="tooltip-detail">
               <div>
                 <rate-status
-                  :total="get(row, 'total_students', 0)"
+                  :total="get(row, 'participants', 0)"
                   :passed="get(row, 'passed', 0)"
                   :failed="get(row, 'failed', 0)"
                   :pending="get(row, 'pending', 0)"

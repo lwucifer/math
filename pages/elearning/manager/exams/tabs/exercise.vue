@@ -1,4 +1,5 @@
 <template>
+  <!--List of exericses of an elearning-->
   <div>
     <!--Filter form-->
     <filter-form
