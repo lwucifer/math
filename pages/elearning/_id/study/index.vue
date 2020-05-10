@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="col-md-4">
-            <ElearningCourseSide :info="info" :progress="progress" />
+            <ElearningCourseSide />
           </div>
         </div>
       </div>
@@ -136,8 +136,10 @@ export default {
           elearning_id,
         },
       };
-      const getInfo = () =>
-        new InfoService(this.$axios)[actionTypes.BASE.LIST](options);
+      const getInfo = this.$store.dispatch(
+        `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
+        options
+      );
       const getInteractiveQuestion = () =>
         new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
           options
@@ -150,7 +152,7 @@ export default {
       this.loading = true;
 
       const data = await Promise.all([
-        getInfo(),
+        getInfo,
         getInteractiveQuestion(),
         getProgress,
       ]);
@@ -159,9 +161,7 @@ export default {
 
       this.loading = false;
 
-      this.info = get(data, "0.data", null);
       this.interactive_questions = get(data, "1.data", null);
-      // this.progress = get(data, "2.data", null);
 
     },
     get,
@@ -182,9 +182,7 @@ export default {
     return {
       type: "summary",
       loading: true,
-      info: null,
       interactive_questions: null,
-      // progress: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -202,7 +200,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
-    ...mapState("elearning/study/study-progress", ["progress"]),
+    ...mapState("elearning/study/study-info", ["info"]),
   },
 };
 </script>

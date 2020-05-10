@@ -426,6 +426,10 @@ export const ELEARNING_STUDY_PROGRESS = {
   LIST: "elearningSudyProgressList",
 };
 
+export const ELEARNING_STUDY_INFO = {
+  LIST: "elearningSudyInfoList",
+};
+
 export const ELEARNING_STUDY_STATISTIC = {
   LIST: "elearningStudyStatistic",
 };

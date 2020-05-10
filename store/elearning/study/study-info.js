@@ -1,4 +1,4 @@
-import ProgressService from "~/services/elearning/study/Progress";
+import InfoService from "~/services/elearning/study/Info";
 import * as actionTypes from "~/utils/action-types";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import * as mutationTypes from "~/utils/mutation-types";
@@ -7,7 +7,7 @@ import * as mutationTypes from "~/utils/mutation-types";
  * initial state
  */
 const state = () => ({
-  progress: null,
+  info: null,
 });
 
 /**
@@ -18,14 +18,14 @@ const getters = {
 };
 
 const actions = {
-  async [actionTypes.ELEARNING_STUDY_PROGRESS.LIST]({ commit }, payload) {
+  async [actionTypes.ELEARNING_STUDY_INFO.LIST]({ commit }, payload) {
     try {
-      const result = await new ProgressService(this.$axios)[
+      const result = await new InfoService(this.$axios)[
         actionTypes.BASE.LIST
       ](payload);
       if (result.success == RESPONSE_SUCCESS) {
         commit(
-          mutationTypes.ELEARNING_STUDY_PROGRESS.SET_STUDY_PROGRESS_LIST,
+          mutationTypes.ELEARNING_INFO.SET_ELEARNING_INFO,
           result.data
         );
       }
@@ -40,11 +40,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  [mutationTypes.ELEARNING_STUDY_PROGRESS.SET_STUDY_PROGRESS_LIST](
+  [mutationTypes.ELEARNING_INFO.SET_ELEARNING_INFO](
     state,
-    _list
+    _info
   ) {
-    state.progress = _list;
+    state.info = _info;
   },
 };
 

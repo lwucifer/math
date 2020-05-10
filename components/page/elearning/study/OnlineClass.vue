@@ -27,14 +27,16 @@
 <script>
 import IconPlay from "~/assets/svg/icons/play.svg?inline";
 import { get } from "lodash";
+import { mapState } from 'vuex';
+
 
 export default {
   components: {
     IconPlay,
   },
 
-  props: {
-    info: Object,
+  computed: {
+    ...mapState("elearning/study/study-info", ["info"]),
   },
 
   methods: { get },

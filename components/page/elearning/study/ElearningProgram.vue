@@ -31,6 +31,8 @@ import { get } from "lodash";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
 import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
 
+import { mapState } from 'vuex';
+
 export default {
   components: {
     IconPlay,
@@ -43,8 +45,9 @@ export default {
     ElearningProgramItem,
     ElearningProgramCourse,
   },
-  props: {
-    progress: {},
+
+  computed: {
+    ...mapState("elearning/study/study-progress", ["progress"]),
   },
 
   created() {
