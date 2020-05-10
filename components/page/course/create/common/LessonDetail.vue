@@ -15,7 +15,9 @@
       v-else
     />
 
-    <app-divider class="my-4" />
+    <!-- <app-divider class="my-4" /> -->
+
+    <p class="mt-4 mb-3 heading-4">Tài liệu tham khảo</p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"

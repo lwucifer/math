@@ -4,7 +4,7 @@
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">
-          Nội dung học tập 2
+          Nội dung học tập
         </h4>
       </div>
 

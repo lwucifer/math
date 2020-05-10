@@ -148,6 +148,12 @@
     }
 }
 
+.clc-video__time {
+    svg {
+        vertical-align: top;
+    }
+}
+
 .clc-video__btn-edit {
     svg {
         fill: $color-primary;
@@ -162,5 +168,7 @@
 
 .clc-choosen-doc-item {
     padding: 1rem 1.5rem;
-    background-color: #FBFBFB;
+    background-color: #F9F9F9;
+    border: 1px solid $color-text-sub;
+    border-radius: 2px;
 }
