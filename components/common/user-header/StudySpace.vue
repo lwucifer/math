@@ -57,13 +57,6 @@ export default {
     components:{
         IconArrowDropDown24px
     },
-    watch:{
-        elearningStudyStudent:{
-            handler: function(){
-                this.elearningListHeader = get(this,"elearningStudyStudent.content",[])
-            }
-        }
-    },
     methods:{
         fetchElearningList(){
             const payload = {
@@ -102,6 +95,7 @@ export default {
         this.fetchElearningList();
         await this.fetchProfile();
         this.checRoleStudent()
+        this.elearningListHeader = get(this,"elearningStudyStudent.content",[])
     },
 }
 </script>

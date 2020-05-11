@@ -27,19 +27,19 @@
     .app-dropdown__content{
         left: -50%;
         top: 110%;
+        }
+    .link--dropdown__content{
+        width: 246px;
         &::after {
             content: "";
             position: absolute;
             bottom: 100%;  /* At the top of the tooltip */
-            left: 70%;
+            right:  20%;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
             border-color: transparent transparent white transparent;
         }
-        }
-    .link--dropdown__content{
-        width: 246px;
         .proccess-bar-study-border{
             height: 5px;
             width: 100%;
