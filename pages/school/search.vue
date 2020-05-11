@@ -3,9 +3,13 @@
     <div>
       <school-filter class="mb-3"
         title="Danh sách trường học"
+        :resultSpan="resultSummary"
         :schoolTypes="schoolTypes"
         :hasSort="true"
         :hasLocation="true"
+        :hasSchoolLevel="true"
+        :hasSearch="false"
+        :hasSearchTitle="true"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
@@ -76,6 +80,10 @@ export default {
     ...mapState("elearning/public/public-category", {
       categories: "categories",
     }),
+
+    resultSummary() {
+      return "(50 trường - 100 giáo viên - 1000 học sinh)"
+    }
   },
 
   created() {

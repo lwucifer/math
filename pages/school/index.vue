@@ -4,11 +4,15 @@
       <school-filter
         title="Danh sách trường học"
         :schoolTypes="schoolTypes"
-        :hasSort="true"
+        :hasSort="false"
+        :hasSearch="true"
+        :hasSchoolLevel="false"
+        :hasLocation="false"
+        :hasFilterBtn="false"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
-        @handleChangeSearch="handleChangeSearch"
+        @handleSubmitSearch="handleSubmitSearch"
       >
       </school-filter>
       <!--Detail school types-->
@@ -101,8 +105,9 @@ export default {
     handleChangeProvince(province) {
       this.province_id = get(province, "id", "");
     },
-    handleChangeSearch(keyword) {
+    handleSubmitSearch(keyword) {
       this.keyword = keyword;
+      this.$router.push(`/school/search?q=${this.keyword}`);
     },
     handleGetSchoolsByLocation() {
       let params = {};
