@@ -19,7 +19,6 @@
               :class="{ 'score--pass': isPass, 'score--fail': (hasMark && !isPass), 'score--empty': !hasMark }"
             >
               <p class="score__num">{{ result }}</p>
-              <!--<p class="score__note">Số lần làm bài còn lại: <span>1</span></p>-->
               <p v-if="hasMark && !isPass && resultDesc" class="score__note">{{ resultDesc }}</p>
             </div>
           </div>
@@ -110,10 +109,7 @@
         required: true
       },
       resultDesc: {
-        type: String,
-        validator: value => {
-          return !this.isPass
-        }
+        type: String
       },
       startedAt: {
         type: String
