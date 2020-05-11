@@ -10,7 +10,7 @@
           <b>{{ studentNum }}</b> học sinh )
         </span>
       </div>
-      <n-link class="school-list-box__title__submit-btn" :to="'/school/all'">
+      <n-link class="school-list-box__title__submit-btn" :to="`/school/search?type=${category.type}`">
         Xem thêm
         <IconRight class="fill-primary" />
       </n-link>
