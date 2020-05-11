@@ -78,10 +78,9 @@
     border-radius: 2px;
     background-color: #fff;
     display: flex;
+    transition: box-shadow .3s, border-color .3s;
     box-shadow: $shadow-1;
-    -moz-box-shadow: $shadow-1;
-    -o-box-shadow: $shadow-1;
-    -webkit-box-shadow: $shadow-1;
+    border: 1px solid $color-disabled;
     
     input {
         border: 0;
@@ -256,8 +255,8 @@
 
 .app-input--focused {
     .app-input__input {
-        border:1px solid $color-primary;
-        box-shadow: $shadow-1;
+        border: 1px solid $color-primary !important;
+        box-shadow: $shadow-hover;
     }
 }
 
