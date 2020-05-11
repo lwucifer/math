@@ -8,7 +8,7 @@ import { redirectWithParams } from "~/utils/common";
  * initial state
  */
 const state = () => ({
-  general: null
+  general: null,
 });
 
 /**
@@ -21,22 +21,31 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_GENERAL.LIST]({ commit }, options) {
-    commit(
-      mutationTypes.ELEARNING_CREATING_GENERAL
-        .SET_ELEARNING_CREATING_GENERAL_LIST,
-      null
-    );
     try {
       const result = await new General(this.$axios)[actionTypes.BASE.LIST](
         options
       );
+      if (result.success) {
+        commit(
+          mutationTypes.ELEARNING_CREATING_GENERAL
+            .SET_ELEARNING_CREATING_GENERAL_LIST,
+          result.data
+        );
+        return result;
+      }
       commit(
         mutationTypes.ELEARNING_CREATING_GENERAL
           .SET_ELEARNING_CREATING_GENERAL_LIST,
-        result.data
+        null
       );
+      return result;
     } catch (error) {
-      console.log("[Creating general] list.error", error);
+      commit(
+        mutationTypes.ELEARNING_CREATING_GENERAL
+          .SET_ELEARNING_CREATING_GENERAL_LIST,
+        null
+      );
+      return error;
     }
   },
 
@@ -73,7 +82,7 @@ const actions = {
     } catch (error) {
       console.log("[Creating general] delete.error", error);
     }
-  }
+  },
 };
 
 /**
@@ -83,7 +92,7 @@ const mutations = {
   [mutationTypes.ELEARNING_CREATING_GENERAL
     .SET_ELEARNING_CREATING_GENERAL_LIST](state, general) {
     state.general = general;
-  }
+  },
 };
 
 export default {
@@ -91,5 +100,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
