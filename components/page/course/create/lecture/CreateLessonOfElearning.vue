@@ -224,6 +224,7 @@ export default {
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
+        window.scrollTo(0, 0);
         return;
       }
       this.$toasted.error(
