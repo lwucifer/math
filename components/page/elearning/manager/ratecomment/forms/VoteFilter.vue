@@ -48,7 +48,7 @@
       <app-select-voted-elearnings
         v-if="filterSelect"
         class="filter-form__item"
-        style="min-width: 19rem"
+        style="min-width: 18.5rem"
         @input="handleChangedElearning"
         v-model="filters.elearning_id"
       />
