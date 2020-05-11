@@ -1,4 +1,5 @@
 <template>
+  <!--List of exam into an elearning-->
   <div>
     <app-table
       :heads="heads"
@@ -15,7 +16,7 @@
             placement="top"
             popover-class="tooltip--rate"
           >
-            <div>
+            <div class="nowrap">
               <span class="status-item status-item--success d-inline-block">
                 {{get(row, 'passed_percent', 0)}}%
               </span>
@@ -30,7 +31,7 @@
             <template slot="popover" class="tooltip-detail">
               <div>
                 <rate-status
-                  :total="get(row, 'total_students', 0)"
+                  :total="get(row, 'participants', 0)"
                   :passed="get(row, 'passed', 0)"
                   :failed="get(row, 'failed', 0)"
                   :pending="get(row, 'pending', 0)"
@@ -50,7 +51,7 @@
             title="Chi tiết"
             :to="`/elearning/manager/exams/${row.id}/participants`"
           >
-            <IconArrow />
+            <IconArrow height="13"/>
           </n-link>
         </td>
       </template>
@@ -58,6 +59,12 @@
       <template v-slot:cell(type)="{row}">
         <td>
           {{ get(row, 'type', '') | exType2Txt }}
+        </td>
+      </template>
+  
+      <template v-slot:cell(participants)="{row}">
+        <td>
+          {{ get(row, 'participants', 0) | toThousandFilter }}
         </td>
       </template>
       

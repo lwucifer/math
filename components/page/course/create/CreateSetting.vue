@@ -5,98 +5,103 @@
     </div>
 
     <div class="cc-panel__body">
-      <div class="row align-items-center mb-4">
-        <div class="col-md-3">Chế độ hiển thị</div>
-        <div class="col-md-9">
-          <app-select
-            class="cc-select"
-            @change="handleChangePrivacy"
-            :value="payload.privacy"
-            :options="[
-              { value: '', text: 'Chọn chế độ hiển thị' },
-              { value: 'PUBLIC', text: 'Công khai' },
-              { value: 'PRIVATE', text: 'Riêng tư' },
-            ]"
-            placeholder="Chọn chế độ hiển thị"
+      <div class="mb-4">
+        <h5 class="mb-2">Chế độ hiển thị</h5>
+
+        <app-select
+          class="cc-select"
+          @change="handleChangePrivacy"
+          :value="payload.privacy"
+          :options="[
+            { value: '', text: 'Chọn chế độ hiển thị' },
+            { value: 'PUBLIC', text: 'Công khai' },
+            { value: 'PRIVATE', text: 'Riêng tư' },
+          ]"
+          placeholder="Chọn chế độ hiển thị"
+        >
+          <template slot="placeholder-icon">
+            <IconAngleDown class="icon" />
+          </template>
+        </app-select>
+      </div>
+
+      <div class="mb-4">
+        <h5 class="mb-3">Cho phép bình luận tại khóa học</h5>
+        <app-radio-group v-model="payload.comment_allow">
+          <app-radio
+            value="1"
+            class="mr-4"
+            :checked="payload.comment_allow === true"
+            >Có</app-radio
           >
-            <template slot="placeholder-icon">
-              <IconAngleDown class="icon" />
-            </template>
-          </app-select>
-        </div>
-      </div>
-
-      <div class="row align-items-center mb-4">
-        <div class="col-md-4">Cho phép bình luận tại bài giảng</div>
-        <div class="col-md-8">
-          <app-radio-group v-model="payload.comment_allow">
-            <app-radio
-              value="1"
-              class="mr-4"
-              :checked="payload.comment_allow === true"
-              >Có</app-radio
-            >
-            <app-radio value="0" :checked="payload.comment_allow === false"
-              >Không</app-radio
-            >
-          </app-radio-group>
-        </div>
-      </div>
-
-      <div class="row align-items-center mb-4">
-        <div class="col-md-3">Học phí</div>
-        <div class="col-md-9">
-          <app-select
-            class="cc-select"
-            @change="handleChangeFree"
-            :value="free"
-            :options="[
-              { value: '', text: 'Chọn học phí' },
-              { value: 1, text: 'Trả phí' },
-              { value: 2, text: 'Miễn phí' },
-            ]"
-            placeholder="Chọn học phí"
+          <app-radio value="0" :checked="payload.comment_allow === false"
+            >Không</app-radio
           >
-            <template slot="placeholder-icon">
-              <IconAngleDown class="icon" />
-            </template>
-          </app-select>
-        </div>
+        </app-radio-group>
       </div>
 
-      <div class="row align-items-center mb-4" v-if="this.free == 1">
-        <div class="col-md-3">Giá bán</div>
-        <div class="col-md-4">
-          <div class="app-input mb-0 app-input--size-md">
-            <div class="app-input__input">
-              <currency-input v-model="payload.fee" />
-            </div>
+      <div class="mb-4">
+        <h5 class="mb-2">Học phí</h5>
+
+        <app-select
+          class="cc-select"
+          @change="handleChangeFree"
+          :value="free"
+          :options="[
+            { value: '', text: 'Chọn học phí' },
+            { value: 1, text: 'Trả phí' },
+            { value: 2, text: 'Miễn phí' },
+          ]"
+          placeholder="Chọn học phí"
+        >
+          <template slot="placeholder-icon">
+            <IconAngleDown class="icon" />
+          </template>
+        </app-select>
+      </div>
+
+      <div class="mb-4" v-if="this.free == 1">
+        <h5 class="mb-2">Giá bán</h5>
+
+        <app-input 
+          v-model="payload.fee" 
+          type="number" 
+          class="text-primary font-weight-semi-bold w-170">
+          <template #unit>đ</template>
+        </app-input>
+
+        <!-- <div class="app-input mb-0 app-input--size-md">
+          <div class="app-input__input">
+            <currency-input v-model="payload.fee" />
           </div>
-          <!-- <app-input v-model="payload.fee" type="text" class="mb-0"></app-input> -->
-        </div>
+        </div> -->
       </div>
 
-      <div class="row align-items-center mb-4" v-if="this.free == 1">
-        <div class="col-md-3">Giá sau khuyến mại</div>
-        <div class="col-md-4">
-          <div class="app-input mb-0 app-input--size-md">
+      <div class="mb-4" v-if="this.free == 1">
+        <h5 class="mb-2">Giá sau khuyến mại</h5>
+
+        <div class="d-flex align-item-center">
+          <app-input 
+            v-model="payload.price" 
+            type="number" 
+            class="text-primary font-weight-semi-bold w-170 mb-0">
+            <template #unit>đ</template>
+          </app-input>
+
+          <!-- <div class="app-input mb-0 app-input--size-md">
             <div class="app-input__input">
               <currency-input v-model="payload.price" />
             </div>
+          </div> -->
+
+          <div class="percent_price__ElearningCreate bg-primary text-white ml-3" v-if="percent_price">
+            {{ percent_price }}
           </div>
-          <!-- <app-input
-            v-model="payload.price"
-            type="text"
-            class="mb-0"
-          ></app-input> -->
-        </div>
-        <div class="percent_price__ElearningCreate" v-if="percent_price">
-          <span>{{ percent_price }}</span>
         </div>
       </div>
-
-      <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" />
     </div>
+
+    <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" class="pt-5"/>
 
     <app-modal-confirm
       v-if="showModalConfirm"
@@ -284,11 +289,7 @@ export default {
 
 <style lang="scss">
 .percent_price__ElearningCreate {
-  background: #32af85;
-  span {
-    color: #ffffff;
-    display: block;
-    padding: 5px;
-  }
+  border-radius: 2px;
+  padding: 10px;
 }
 </style>

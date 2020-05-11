@@ -9,12 +9,12 @@
     >
       <template v-slot:cell(mark)="{row}">
         <td>
-          <v-popover
-            offset="10"
-            trigger="hover"
-          >
+          <!--<v-popover-->
+            <!--offset="10"-->
+            <!--trigger="hover"-->
+          <!--&gt;-->
             <span
-              class="font-weight-bold"
+              class="font-weight-semi-bold nowrap"
               :class="{
                 'score--pass': (get(row, 'result', '') == SUBMISSION_RESULTS.PASSED),
                 'score--fail': (get(row, 'result', '') == SUBMISSION_RESULTS.FAILED),
@@ -29,15 +29,21 @@
               <span v-if="isPending(row)">Chưa chấm điểm</span>
               <span v-if="isMarked(row)">
                 {{ get(row, 'mark', 0)}}/{{ get(row, 'points', 10) }}
+                ({{ get(row, 'result')  | subResult2Txt }})
               </span>
           </span>
     
-            <template slot="popover">
-              {{ get(row, 'result')  | subResult2Txt }}
-            </template>
+            <!--<template slot="popover">-->
+              <!--{{ get(row, 'result')  | subResult2Txt }}-->
+            <!--</template>-->
   
-          </v-popover>
+          <!--</v-popover>-->
           
+        </td>
+      </template>
+      <template v-slot:cell(year)="{row}">
+        <td>
+          {{ get(row, 'year', '--') }}
         </td>
       </template>
       <template v-slot:cell(submission)="{row}">
@@ -54,7 +60,7 @@
             v-if="isPending(row) || isMarked(row)"
             title="Chi tiết"
             :to="`/elearning/manager/exams/${$route.params.id}/results?user_id=${row.id}&student_id=${row.student_id ? row.student_id: ''}`">
-            <IconArrow height="13"/>
+            <IconArrow height="13" style="height: 1.5rem;"/>
           </n-link>
         </td>
       </template>
@@ -102,32 +108,30 @@
           {
             name: "name",
             text: "Học sinh",
-            sort: false
           },
           {
             name: "class_name",
             text: "Lớp",
-            sort: false
+          },
+          {
+            name: "year",
+            text: "Năm học",
           },
           {
             name: "mark",
             text: "Kết quả",
-            sort: false
           },
           {
             name: "reworks",
             text: "Số lần làm bài",
-            sort: false
           },
           {
             name: "submission",
             text: "Thời gian nộp bài",
-            sort: false
           },
           {
             name: "action",
             text: "",
-            sort: false
           },
         ],
         SUBMISSION_RESULTS: SUBMISSION_RESULTS

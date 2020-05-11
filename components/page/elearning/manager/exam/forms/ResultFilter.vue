@@ -1,10 +1,10 @@
 <template>
   <div>
-    <filter-form class="">
+    <filter-form>
       <div class="d-flex">
         <div
           class="filter-form__item filter-form__item--search border-0"
-          style="max-width: 25rem; min-width: 20rem;"
+          style="max-width: 30rem; min-width: 25rem;"
         >
           <app-search
             class="w-100"
@@ -27,9 +27,9 @@
           v-if="filterSelect"
           style="margin-left: 0.6rem;"
           class-name="filter-form__item"
-          :class-style="{ 'min-width': '11rem', 'margin-right': '0.6rem' }"
+          :class-style="{ 'min-width': '7.5rem', 'margin-right': '0.6rem' }"
           class-year-name="filter-form__item"
-          :year-style="{ 'min-width': '7rem' }"
+          :year-style="{ 'min-width': '11.5rem' }"
           @changedClass="handleChangedClass"
           placeholder="Lớp"
         />
@@ -44,8 +44,6 @@
         </app-select-submission-result>
       </div>
     </filter-form>
-  
-    
   </div>
   
 </template>

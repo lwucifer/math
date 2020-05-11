@@ -1,54 +1,62 @@
 <template>
   <div class="writting-test-score">
-    <!--<label class="title" for="">Chấm điểm</label>-->
     <div class="writting-test-score__form">
       <div class="item">
         <label for="" class="content-title">Nhận xét chi biết bài làm của học sinh</label>
         <app-editor id="comment" v-model="$v.formData.note.$model"/>
       </div>
-      <div class="item">
-        <app-input
-          class="d-inline-block"
-          type="number"
-          min="0"
-          max="10"
-          v-model="$v.formData.mark.$model"
-          :disabled="formData.to_passed"
-          :validate="getValidationCode('formData.mark')"
-          :message="'Giá trị không hợp lệ'"
-          label="Chấm điểm"
-          labelBold
+      <div class="item" v-if="pending">
+        <label for="" class="content-title" style="font-size: 1.5rem;">Chấm điểm cả bài</label>
+        <point-choice
+          :score-to-pass="scoreToPass"
+          @changedPoint="updatePoint"
         >
-        </app-input>
+        </point-choice>
       </div>
       
-      <div class="item">
+      <div class="item mt-4">
         <app-checkbox
           v-model="$v.formData.to_passed.$model"
           label="Cho qua"
-          :disabled="formData.mark != ''"
-          :class="{ 'disabled': formData.mark != '', 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
+          style="color: #333;"
+          :disabled="formData.mark != '' && formData.mark != null && failed == false"
+          :class="{ 'disabled': formData.mark != '' && formData.mark != null, 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
         >
         </app-checkbox>
-        <p class="form--note mt-2">
+        <p class="form--note">
           <i>*Học sinh này đã vượt quá số lần làm bài cho phép. Bạn có đồng ý cho phép học sinh này hoàn thành bài tập với số điểm tối thiểu?</i>
         </p>
       </div>
 
       <div class="item text-center">
         <app-button
-          square
           normal
           @click="submit"
+          :disabled="$v.$invalid"
         >
           Xác nhận
         </app-button>
       </div>
     </div>
+  
+    <app-modal-notify
+      v-if="visible.error"
+      type="warning"
+      title="Chấm điểm thất bại!"
+      :description="notiMes"
+      @ok="visible.error = false"
+      @close="visible.error = false"
+    >
+      <template v-slot:icon>
+    
+      </template>
+    </app-modal-notify>
   </div>
 </template>
 
 <script>
+  import PointChoice from "~/components/page/elearning/manager/exam/forms/PointChoice"
+  
   import {
     required,
     requiredIf,
@@ -66,7 +74,19 @@
 
   export default {
     components: {
-
+      PointChoice
+    },
+    props: {
+      pending: {
+        type: Boolean
+      },
+      failed: {
+        type: Boolean
+      },
+      scoreToPass: {
+        type: Number | String,
+        required: true
+      }
     },
     data() {
       return {
@@ -77,6 +97,10 @@
           note: '',
           to_passed: false
         },
+        visible: {
+          error: false
+        },
+        notiMes: ''
       }
     },
     validations: {
@@ -107,7 +131,10 @@
     methods: {
       submit() {
         if (this.$v.$invalid) {
-          console.log('[Mark Essay Form] submission.error')
+          this.notiMes = 'Vui lòng nhập đủ thông tin!'
+          this.$nextTick(() => {
+            this.visible.error = true
+          })
         } else {
           this.$emit('submit', this.formData)
         }
@@ -117,6 +144,14 @@
           return this.VALIDATE_STATUS_CODE.ERROR
         }
         return this.VALIDATE_STATUS_CODE.DEFAULT
+      },
+      updatePoint(point) {
+        this.formData.mark = point
+      },
+      resetForm() {
+        this.formData.mark = ''
+        this.formData.note = ''
+        this.formData.to_passed = false
       },
       get
     }

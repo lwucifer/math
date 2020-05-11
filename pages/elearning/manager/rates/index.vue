@@ -7,30 +7,32 @@
         <ElearningManagerSide active="8"/>
       </div>
       <div class="col-md-9">
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <h5 class="color-primary mb-3">Đánh giá và bình luận</h5>
-            <hr class/>
-          </div>
-          <div class="elearning-manager-content__main">
-            <filter-form
-              @submitFilter="submitFilter"
-              @changedCmt="handleChangedCmt"
-              @changedRate="handleChangedRate"
-              @changedClass="handleChangedClass"
-              @changedElearning="handleChangedElearning"
-            >
-            </filter-form>
-    
-            <list-table
-              :pagination="pagination"
-              :list.sync="list"
-              :loading="loading"
-              @changedPagination="updatePagination"
-            >
-            </list-table>
-          </div>
-        </div>
+        <sub-block-section
+          title="Đánh giá và bình luận"
+        >
+          <template v-slot:content>
+            <div class="elearning-manager-content p-0">
+              <div class="elearning-manager-content__main py-2">
+                <filter-form
+                  @submitFilter="submitFilter"
+                  @changedCmt="handleChangedCmt"
+                  @changedRate="handleChangedRate"
+                  @changedClass="handleChangedClass"
+                  @changedElearning="handleChangedElearning"
+                >
+                </filter-form>
+  
+                <list-table
+                  :pagination="pagination"
+                  :list.sync="list"
+                  :loading="loading"
+                  @changedPagination="updatePagination"
+                >
+                </list-table>
+              </div>
+            </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>

@@ -10,7 +10,7 @@
           <b>{{ studentNum }}</b> học sinh )
         </span>
       </div>
-      <n-link class="school-list-box__title__submit-btn" :to="'/school/all'">
+      <n-link class="school-list-box__title__submit-btn" :to="'/school/search'">
         Xem thêm
         <IconRight class="fill-primary" />
       </n-link>
@@ -133,8 +133,8 @@ export default {
     schools() {
       const type = get(this, "category.type", "");
       const schoolList = get(this, `schoolSearch.data.content`, []);
-      console.log("[schoolList]", schoolList, type);
-      return schoolList.filter(sc => sc.type == type) || [];
+      console.log("[schools]", type, schoolList, schoolList.filter(sc => sc.type == type))
+      return schoolList.filter(sc => sc.type == type);
     },
 
     schoolNum() {

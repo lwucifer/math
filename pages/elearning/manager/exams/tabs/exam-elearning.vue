@@ -1,4 +1,5 @@
 <template>
+  <!--List elearnings that have exam-->
   <div>
     <!--Filter form-->
     <elearning-manager-filter-form
