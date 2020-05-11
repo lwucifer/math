@@ -17,7 +17,6 @@
     </div>
     <!--List schools-->
     <div class="school-list-box__content">
-      <div class="row row--school-list">
         <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
           <template slot="default" slot-scope="{ classes }">
             <div
@@ -29,7 +28,6 @@
             </div>
           </template>
         </app-carousel>
-      </div>
     </div>
   </div>
 </template>
