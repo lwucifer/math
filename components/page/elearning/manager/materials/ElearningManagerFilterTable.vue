@@ -44,9 +44,15 @@
       @selectionChange="selectRow"
       :loading="updating"
     >
+      <template v-slot:cell(name)="{row}">
+        <td>
+          {{ get(row, 'name', '' ) | truncStrFilter(40) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(status)="{row}">
         <td>
-          {{ get(row, 'used', false ) | statusFilter }}
+          <span class="nowrap">{{ get(row, 'used', false ) | statusFilter }}</span>
         </td>
       </template>
       <template v-slot:cell(size)="{row}">
@@ -66,6 +72,7 @@
       @cancel="cancelDel"
       @ok="confirmDel"
       title="Bạn chắc chắn muốn xóa tài liệu?"
+      width="595"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
       centered
