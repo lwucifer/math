@@ -16,6 +16,7 @@
                     <app-progress
                         :percentage="25"
                         size="lg"
+                        rounded
                     />
                 </div>
           </div>
