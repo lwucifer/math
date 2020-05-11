@@ -1,28 +1,30 @@
 <template>
   <div class="school-filter">
     <div class="school-filter__title" v-if="title.length || link">
-      <h3 class="aside-box__title" v-if="title.length">{{ title }}</h3>
-      <n-link v-if="link" :to="link || ''" class="aside-box__link">{{
+      <h3 class="aside-box__title" v-if="title.length">
+        {{ title }}
+        <span v-if="!!resultSpan">{{resultSpan}}</span>
+      </h3>
+      <n-link v-if="link" :to="link || ''" class="aside-box__link">
+        {{
         linkText
-      }}</n-link>
+        }}
+      </n-link>
+
+      <div class="school-filter__form__item school-filter__form__item--search__inline">
+        <app-search
+          v-if="hasSearchTitle"
+          style="width: 100%"
+          :placeholder="'Nhập để tìm kiếm...'"
+          :counter="11"
+          v-model="filter.query"
+          :size="'sm'"
+          @input="handleChangeSearch"
+          @submit="handleSubmitSearch"
+        ></app-search>
+      </div>
     </div>
     <div class="school-filter__form">
-
-      <div class="school-filter__form__item" v-if="hasSchoolLevel">
-        <app-vue-select
-          class="app-vue-select"
-          :v-model="filter.level"
-          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
-          label="name"
-          placeholder="Theo cấp học"
-          :reduce="value => value"
-          searchable
-          clearable
-          @input="handleChangedLevel"
-        >
-        </app-vue-select>
-      </div>
-
       <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
         <app-search
           style="width: 100%"
@@ -32,8 +34,7 @@
           :size="'sm'"
           @input="handleChangeSearch"
           @submit="handleSubmitSearch"
-        >
-        </app-search>
+        ></app-search>
       </div>
 
       <div class="filter-form__item" v-if="hasFilterBtn">
@@ -49,6 +50,20 @@
         </app-button>
       </div>
 
+      <div class="school-filter__form__item" v-if="hasSchoolLevel">
+        <app-vue-select
+          class="app-vue-select"
+          :v-model="filter.level"
+          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
+          label="name"
+          placeholder="Theo cấp học"
+          :reduce="value => value"
+          searchable
+          clearable
+          @input="handleChangedLevel"
+        ></app-vue-select>
+      </div>
+
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
@@ -57,7 +72,7 @@
       />
 
       <div class="school-filter__form__item ml-auto" v-if="hasSort">
-        <label class="school-filter__form__item__title pl-3" for="">Sắp xếp theo</label>
+        <label class="school-filter__form__item__title pl-3" for>Sắp xếp theo</label>
         <app-vue-select
           style="width: 21rem"
           class="app-vue-select"
@@ -69,15 +84,14 @@
           searchable
           clearable
           @input="handleChangedOrder"
-        >
-        </app-vue-select>
+        ></app-vue-select>
       </div>
-  </div>
+    </div>
   </div>
 </template>
 
 <script>
-import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 
 export default {
   components: {
@@ -87,7 +101,11 @@ export default {
     title: {
       type: String,
       required: true,
-      default: "Danh sách các trường học"
+      default: "Danh sách"
+    },
+    resultSpan: {
+      type: String,
+      default: ""
     },
     link: {
       type: [String, Object]
@@ -103,6 +121,10 @@ export default {
     hasSearch: {
       type: Boolean,
       default: true
+    },
+    hasSearchTitle: {
+      type: Boolean,
+      default: false
     },
     hasSchoolLevel: {
       type: Boolean,
@@ -147,10 +169,10 @@ export default {
       this.$emit("handleChangedWard", ward);
     },
     handleChangeSearch(val) {
-      this.$emit('handleChangeSearch', val)
+      this.$emit("handleChangeSearch", val);
     },
     handleSubmitSearch(val) {
-      this.$emit('handleSubmitSearch', val)
+      this.$emit("handleSubmitSearch", val);
     },
     handleChangedLevel(level) {
       this.$emit("handleChangedLevel", level);

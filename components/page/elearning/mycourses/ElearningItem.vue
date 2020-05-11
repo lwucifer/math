@@ -4,7 +4,13 @@
           <img  :src="avatar ? avatar : 'https://picsum.photos/20/206'" />
       </div>
       <div class="wrap-content_Elearning">
-          <n-link class="name_elearning-item" :to="`/elearning/${elearning_id}`">{{name}}</n-link>
+          <n-link 
+            class="name_elearning-item" 
+            :to="`/elearning/${elearning_id}`"
+            :title="name"
+        >
+            {{name}}
+          </n-link>
           <div class="d-flex align-items-center my-3">
             <app-avatar
                 :src="teacher.avatar ? teacher.avatar : 'https://picsum.photos/20/206'"
@@ -93,7 +99,7 @@ export default {
         this.elearning_id = get(this,"elearning.elearning_id","")
         this.name = get(this,"elearning.name","")
         this.avatar = get(this,"elearning.avatar.low","")
-        this.teacher.avatar = get(this,"elearning.teacher.avatar","")
+        this.teacher.avatar = get(this,"elearning.teacher.avatar.low","")
         this.teacher.name = get(this,"elearning.teacher.name","")
         this.progress = get(this,"elearning.progress","")
 
