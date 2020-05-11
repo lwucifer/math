@@ -1,10 +1,13 @@
 <template>
-  <div
-    class="cc-box__bg-gray px-5 pt-4 pb-4"
-    id="create-lesson-of-chapter"
-  >
+  <div class="cc-box__bg-gray px-5 pt-4 pb-4" id="create-lesson-of-chapter">
     <h3 class="heading-6 mb-2 mt-3">Tên bài học số {{ noLesson + 1 }}</h3>
-    <app-input :counter="60" placeholder="Tên bài học" v-model="payload.name" />
+    <app-input
+      @handleBlur="handleBlurNameInput"
+      :counter="60"
+      placeholder="Tên bài học"
+      v-model="payload.name"
+    />
+    <span v-show="error_name" class="error">{{ error_name }}</span>
 
     <span>Chọn loại bài học xccc</span>
 
@@ -18,8 +21,8 @@
         @click.prevent="changeTabType('video')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconRadioButtonChecked class="icon mr-2"/>
-          <IconVideo class="icon mr-2"/>
+          <IconRadioButtonChecked class="icon mr-2" />
+          <IconVideo class="icon mr-2" />
           <span class="clc-type-tab-item__text">Video</span>
         </span>
         <!-- <span class="clc-type-tab-item__text">Video</span> -->
@@ -32,7 +35,10 @@
         @click.prevent="changeTabType('document')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconDefaultAsideMenu class="icon mr-2" style="width: 24px; height: 24px"/>
+          <IconDefaultAsideMenu
+            class="icon mr-2"
+            style="width: 24px; height: 24px"
+          />
           <IconFileBlank class="icon" />
           <span class="clc-type-tab-item__text">Văn bản</span>
         </span>
@@ -67,6 +73,7 @@
         class="clc-btn font-weight-semi-bold"
         size="sm"
         square
+        :disabled="!submit"
         @click="handleAddContent"
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
@@ -89,14 +96,13 @@ import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
-import IconRadioButtonChecked from '~/assets/svg/design-icons/radio_button_checked.svg?inline';
-import IconDefaultAsideMenu from '~/assets/svg/icons/default-aside-menu.svg?inline';
+import IconRadioButtonChecked from "~/assets/svg/design-icons/radio_button_checked.svg?inline";
+import IconDefaultAsideMenu from "~/assets/svg/icons/default-aside-menu.svg?inline";
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonSelectVideo from "~/components/page/course/create/common/LessonSelectVideo";
@@ -119,23 +125,24 @@ export default {
     LessonSelectVideo,
     LessonSelectDocument,
     IconRadioButtonChecked,
-    IconDefaultAsideMenu
+    IconDefaultAsideMenu,
   },
 
   props: {
     chapter: {
       type: Object,
-      default: null
+      default: null,
     },
     lesson: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
     return {
       tabType: "video",
+      error_name: "",
       showModalConfirm: false,
       confirmLoading: false,
       noLesson: get(this, "chapter.lessons", "").length,
@@ -146,8 +153,8 @@ export default {
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
         repository_file_id: "",
         article_content: "",
-        id: get(this, "lesson.id", "")
-      }
+        id: get(this, "lesson.id", ""),
+      },
     };
   },
 
@@ -161,17 +168,27 @@ export default {
           this.payload.id = get(this, "lesson.id", "");
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     edit() {
       return !!get(this, "lesson.id", "");
-    }
+    },
+    submit() {
+      return !this.error_name;
+    },
   },
 
   methods: {
+    handleBlurNameInput() {
+      if (!this.payload.name) {
+        this.error_name = "Chưa nhập tên bài học";
+        return;
+      }
+      this.error_name = "";
+    },
     changeTabType(type) {
       this.tabType = type;
     },
@@ -233,7 +250,7 @@ export default {
       this.$emit("handleCancel");
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

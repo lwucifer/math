@@ -74,6 +74,7 @@
         >
         <app-button
           @click="handleAddContent"
+          :disabled="!submit"
           class="clc-btn font-weight-semi-bold"
           size="sm"
           square
@@ -146,19 +147,26 @@ export default {
       payload: {
         elearning_id: getParamQuery("elearning_id"),
         lesson: "",
-        name: "",
+        name: get(this, "lesson.name", ""),
         type: "VIDEO", // VIDEO | ARTICLE | PDF | DOC | TXT
         repository_file_id: "",
         article_content: "",
-        id: "",
+        id: get(this, "lesson.id", ""),
       },
     };
+  },
+
+  mounted() {
+    console.log(this.lesson);
   },
 
   computed: {
     ...mapState("elearning/creating/creating-general", {
       general: "general",
     }),
+    submit() {
+      return !this.error_name;
+    },
   },
 
   watch: {
