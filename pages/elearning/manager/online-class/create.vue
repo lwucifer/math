@@ -91,7 +91,7 @@
                           <app-vue-select
                             style="width: 10rem"
                             class="app-vue-select form-item__selection mr-3"
-                            :value="startTime[index].time"
+                            :value="startTime[index].time.value"
                             :options="times"
                             label="text"
                             searchable
@@ -101,7 +101,7 @@
                           <app-vue-select
                             style="width: 9rem"
                             class="app-vue-select form-item__selection"
-                            :value="startTime[index].type"
+                            :value="startTime[index].type.value"
                             :options="timeTypes"
                             label="text"
                             searchable
