@@ -66,7 +66,7 @@
       <app-button
         size="sm"
         color="info"
-        @click.prevent="handleQuestionSubmission"
+        @click.prevent="modalConfirmSubmit=true"
       >
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
@@ -81,6 +81,7 @@
     >
       <ElearningExerciseListQuestions
         slot="content"
+        :isAnswer="false"
         :type="EXERCISE_TYPES.CHOICE"
       />
     </app-modal>
@@ -90,7 +91,7 @@
       title="Xác nhận nộp bài"
       description="Bạn có chắc chắn muốn nộp bài?"
       @cancel="modalConfirmSubmit = false"
-      @ok="modalConfirmSubmit = false"
+      @ok="handleQuestionSubmission"
       @close="modalConfirmSubmit = false"
     ></app-modal-confirm>
   </div>
@@ -146,7 +147,8 @@ export default {
       "currentExerciseQuestion",
       "submission",
       "currentExerciseAnswers",
-      "currentElearningId"
+      "currentElearningId",
+      "currentQuestionId",
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -225,6 +227,7 @@ export default {
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
+          this.modalConfirmSubmit = false;
           this.reNewGetElearningProgress();
         }
       });
@@ -232,20 +235,24 @@ export default {
 
     handleShowListQuestion() {
       console.log("[handleShowListQuestion]");
-
-      this.elearningSudyExerciseSubmissionList({
-        params: {
-          exercise_id: this.submission.exercise_id
-        }
-      }).then(res => {
-        if (res.success == RESPONSE_SUCCESS) {
-          this.modalListQuestions = true;
-        }
-      });
+      this.modalListQuestions = true;
+      // this.elearningSudyExerciseSubmissionList({
+      //   params: {
+      //     exercise_id: this.submission.exercise_id
+      //   }
+      // }).then(res => {
+      //   if (res.success == RESPONSE_SUCCESS) {
+      //     this.modalListQuestions = true;
+      //   }
+      // });
     },
 
-    handleChangedQuestionNumber() {
-      console.log("[handleChangedQuestionNumber]", this.questionNo);
+    handleChangedQuestionNumber(_questionIdByNav) {
+      console.log("[handleChangedQuestionNumber]", _questionIdByNav);
+      if(_questionIdByNav) {
+        // nav to question from modal list question
+        this.questionNo = _questionIdByNav;
+      }
       this.setStudyExerciseCurrentByNo(this.questionNo);
       this.setAnswered();
     },
@@ -291,6 +298,14 @@ export default {
       console.log("[currentExerciseQuestion]", _newVal);
       // set current question Option
       this.questionNo = _newVal.id;
+    },
+
+    currentQuestionId(_newVal) {
+      console.log("[currentQuestionId] watch", _newVal);
+      if(_newVal) {
+        this.handleChangedQuestionNumber(_newVal);
+        this.modalListQuestions = false;
+      }
     }
   }
 };

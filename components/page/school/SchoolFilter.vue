@@ -31,11 +31,12 @@
           v-model="filter.query"
           :size="'sm'"
           @input="handleChangeSearch"
+          @submit="handleSubmitSearch"
         >
         </app-search>
       </div>
 
-      <div class="filter-form__item">
+      <div class="filter-form__item" v-if="hasFilterBtn">
         <app-button
           color="white"
           square
@@ -114,6 +115,10 @@ export default {
     hasSort: {
       type: Boolean,
       default: false
+    },
+    hasFilterBtn: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -143,6 +148,9 @@ export default {
     },
     handleChangeSearch(val) {
       this.$emit('handleChangeSearch', val)
+    },
+    handleSubmitSearch(val) {
+      this.$emit('handleSubmitSearch', val)
     },
     handleChangedLevel(level) {
       this.$emit("handleChangedLevel", level);
