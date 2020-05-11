@@ -9,7 +9,7 @@
       @submitSearch="handleSubmitSearch"
       class="px-0"
     />
-    <div class="mb-4">
+    <div class="mb-4" v-if="additionalActions.delete">
       <v-popover
         :disabled="additionalActions.delete"
         trigger="hover"
@@ -44,9 +44,15 @@
       @selectionChange="selectRow"
       :loading="updating"
     >
+      <template v-slot:cell(name)="{row}">
+        <td>
+          {{ get(row, 'name', '' ) | truncStrFilter(40) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(status)="{row}">
         <td>
-          {{ get(row, 'used', false ) | statusFilter }}
+          <span class="nowrap">{{ get(row, 'used', false ) | statusFilter }}</span>
         </td>
       </template>
       <template v-slot:cell(size)="{row}">
@@ -66,8 +72,10 @@
       @cancel="cancelDel"
       @ok="confirmDel"
       title="Bạn chắc chắn muốn xóa tài liệu?"
+      width="595"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
+      centered
     >
     </app-modal-confirm>
     
@@ -79,6 +87,7 @@
       description="Bạn không thể xóa tài liệu đang được sử dụng."
       @ok="visible.canDelete = false"
       @close="visible.canDelete = false"
+      centered
     >
       <template v-slot:icon>
       
@@ -131,7 +140,7 @@
     filters: {
       statusFilter: function(val) {
         if (val) return 'Đã sử dụng'
-        return '-'
+        return '- -'
       }
     },
 

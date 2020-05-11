@@ -88,7 +88,7 @@
               </slot>
               <span>Tải lên</span>
             </app-button>
-            <p style="font-size: 1.1rem; opacity: 0.5; line-height: 1.3rem;">
+            <div style="font-size: 1.1rem; opacity: 0.5; line-height: 1.3rem;">
               <span>
                 Xem các định dạng file được chấp nhận
                 <v-popover
@@ -113,7 +113,7 @@
                   </template>
                 </v-popover>
               </span>
-            </p>
+            </div>
             <!--<div>-->
               <!--<button-->
                 <!--class="btnUploadFile__ElearningManager"-->
@@ -253,6 +253,7 @@
     },
     watch: {
       uploadPercentage: function(newVal, oldVal) {
+        console.log('change upload percentage: ', newVal)
       },
       uploadTimestamp: function(newVal, oldVal) {
         this.diffTimestamp = newVal - oldVal
@@ -388,10 +389,13 @@
         return isLtSize
       },
       isAvailableStorage(file) {
-        const fileSize = file.size
-        return this.availableCapcity * 1024 * 1024 > fileSize
+        // temp config
+        return true;
+        // const fileSize = file.size
+        // return this.availableCapcity * 1024 * 1024 > fileSize
       },
       async cancelUpload() {
+        console.log('[Upload warehouse] Cancal upload')
         if (this.isUploading) {
           await this.cancelUploadToken('Cancel upload file')
           this.resetUpload()
