@@ -9,7 +9,7 @@
       @submitSearch="handleSubmitSearch"
       class="px-0"
     />
-    <div class="mb-4">
+    <div class="mb-4" v-if="additionalActions.delete">
       <v-popover
         :disabled="additionalActions.delete"
         trigger="hover"
@@ -68,6 +68,7 @@
       title="Bạn chắc chắn muốn xóa tài liệu?"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
+      centered
     >
     </app-modal-confirm>
     
@@ -79,6 +80,7 @@
       description="Bạn không thể xóa tài liệu đang được sử dụng."
       @ok="visible.canDelete = false"
       @close="visible.canDelete = false"
+      centered
     >
       <template v-slot:icon>
       
@@ -131,7 +133,7 @@
     filters: {
       statusFilter: function(val) {
         if (val) return 'Đã sử dụng'
-        return '-'
+        return '- -'
       }
     },
 
