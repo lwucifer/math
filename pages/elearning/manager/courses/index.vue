@@ -139,7 +139,7 @@
                   </div>
                 </div>
               </td>
-            </template> -->
+            </template>-->
             <template v-slot:cell(hide)="{ row }">
               <td>
                 <span v-if="row.hide" class="color-red">Riêng tư</span>
@@ -166,26 +166,17 @@
             </template>
 
             <template v-slot:actions="{row}">
-              <n-link
-                :to="'/elearning/' + row.id"
-                class="link"
-              >
+              <n-link :to="'/elearning/' + row.id" class="link">
                 <IconNote class="fill-primary mr-2" />Xem chi tiết
               </n-link>
-              <n-link
-                :to="'/elearning/' + row.id + ''"
-                class="link"
-              >
+              <n-link :to="'/elearning/' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" />Chỉnh sửa
               </n-link>
-              <n-link
-                :to="'/elearning/' + row.id + ''"
-                class="link"
-              >
+              <n-link :to="'/elearning/' + row.id + ''" class="link">
                 <IconEye class="fill-blue mr-2" />Xem preview
               </n-link>
               <n-link
-                :to="'/elearning/manager/courses/students'"
+                :to="`/elearning/manager/courses/students?elearning_id=${row.id}`"
                 class="link"
               >
                 <IconPeople class="fill-yellow mr-2" />Xem danh sách học sinh
@@ -208,11 +199,11 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
-import IconNote from '~/assets/svg/v2-icons/note_24px.svg?inline';
-import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
-import IconEye from '~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
-import IconRestore from '~/assets/svg/v2-icons/restore_24px.svg?inline';
+import IconNote from "~/assets/svg/v2-icons/note_24px.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
+import IconEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
+import IconPeople from "~/assets/svg/v2-icons/people_24px.svg?inline";
+import IconRestore from "~/assets/svg/v2-icons/restore_24px.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
