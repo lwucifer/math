@@ -52,11 +52,24 @@
           <IconArrowForward class="icon fill-opacity-1 body-1 ml-2" />
         </app-button>
       </div>
-      <app-button size="sm" color="info" @click.prevent="handleQuestionSubmission">
+      <app-button size="sm" color="info" @click.prevent="modalConfirmSubmit=true">
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
     </div>
+
+    <app-modal
+      v-if="modalListQuestions"
+      title="Danh sách câu hỏi"
+      :footer="false"
+      @close="modalListQuestions = false"
+    >
+      <ElearningExerciseListQuestions
+        slot="content"
+        :isAnswer="false"
+        :type="EXERCISE_TYPES.CHOICE"
+      />
+    </app-modal>
 
     <app-modal-confirm
       v-if="modalConfirmSubmit"
@@ -74,19 +87,24 @@ import IconCloudUpload from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline"
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
+import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
+
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import { QUESTION_NAV, STUDY_MODE } from "~/utils/constants";
+import { EXERCISE_TYPES } from "~/utils/constants";
+
 
 export default {
   components: {
     IconSend,
     IconCloudUpload,
     IconArrowForward,
-    IconArrowBack
+    IconArrowBack,
+    ElearningExerciseListQuestions,
   },
 
   props: {
@@ -98,6 +116,7 @@ export default {
 
   data() {
     return {
+      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       modalConfirmSubmit: false,
       answer: null,
       questionNo: this.questionId,
@@ -110,7 +129,8 @@ export default {
       "currentExerciseQuestion",
       "submission",
       "currentExerciseAnswers",
-      "currentElearningId"
+      "currentElearningId",
+      "currentQuestionId",
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -176,6 +196,7 @@ export default {
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
+          this.modalConfirmSubmit = false;
           this.reNewGetElearningProgress();
         }
       });
@@ -211,31 +232,37 @@ export default {
 
     handleShowListQuestion() {
       console.log("[handleShowListQuestion]", this.submission);
+      this.modalListQuestions = true;
 
-      this.elearningSudyExerciseSubmissionList({
-        params: {
-          exercise_id: this.submission.exercise_id
-        }
-      }).then(res => {
-        if (res.success == RESPONSE_SUCCESS) {
-          this.modalListQuestions = true;
-        }
-      });
+      // this.elearningSudyExerciseSubmissionList({
+      //   params: {
+      //     exercise_id: this.submission.exercise_id
+      //   }
+      // }).then(res => {
+      //   if (res.success == RESPONSE_SUCCESS) {
+      //     this.modalListQuestions = true;
+      //   }
+      // });
     },
 
-    handleChangedQuestionNumber() {
-      console.log("[handleChangedQuestionNumber]", this.questionNo);
+    handleChangedQuestionNumber(_questionIdByNav) {
+      console.log("[handleChangedQuestionNumber]", _questionIdByNav);
+      if(_questionIdByNav) {
+        // nav to question from modal list question
+        this.questionNo = _questionIdByNav;
+      }
       this.setStudyExerciseCurrentByNo(this.questionNo);
       this.setAnswered();
     },
 
     setAnswered() {
       // set current answered you checked
+      console.log("[setAnswered]", this.currentExerciseAnswers, this.currentExerciseQuestion)
       const answered = this.currentExerciseAnswers.find(
         an => an.question_id == this.currentExerciseQuestion.id
       );
-      if (answered && answered.choise_answer_id) {
-        this.answer = answered.choise_answer_id;
+      if (answered && answered.answer) {
+        this.answer = answered.answer;
       } else {
         this.answer = null;
       }
@@ -257,8 +284,8 @@ export default {
       const answers = {
         question_id: this.currentExerciseQuestion.id,
         choise_answer_id: null, // only incase choice
-        answer: this.answer
-        // attach_answer_index: 1
+        answer: this.answer,
+        // attach_answer_index: null,
       };
       console.log("[answer] watch", _newVal, _oldVal, answers);
       if (_newVal != _oldVal) {
@@ -272,12 +299,13 @@ export default {
       this.questionNo = _newVal.id;
     },
 
-    // studyMode(_newVal) {
-    //   console.log("[studyMode] watch 2", _newVal, this.currentExerciseQuestion);
-    //   if (_newVal == STUDY_MODE.DO_EXERCISE_DOING) {
-    //     this.questionNo = this.currentExerciseQuestion.id;
-    //   }
-    // }
+    currentQuestionId(_newVal) {
+      console.log("[currentQuestionId] watch", _newVal);
+      if(_newVal) {
+        this.handleChangedQuestionNumber(_newVal);
+        this.modalListQuestions = false;
+      }
+    }
   }
 };
 </script>

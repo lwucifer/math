@@ -181,3 +181,20 @@ export const isCommonElementIn2Array = (arr1, arr2) => {
     if (!arr1 || !arr2) return false;
     return !!arr2.filter(e => arr1.indexOf(e) > -1).length;
 }
+
+/**
+ * 
+ * @param {*} val : number (s)
+ * return 00:09:03 (hh:mm:ss)
+ */
+export function getCountdown_HH_MM_SS(val) {
+    const h = Math.floor(val / 60 / 60);
+    const m = Math.floor((val - 60 * 60 * h) / 60);
+    const s = val - 60 * 60 * h - 60 * m;
+    let str = ''
+    str += (h >= 10 ? `${h}:` : `0${h}:`);
+    str += (m >= 10 ? `${m}:` : `0${m}:`);
+    str += (s >= 10 ? `${s}` : `0${s}`);
+    // console.log("[getCountdown_HH_MM_SS]", str, h, m, s);
+    return str
+}
