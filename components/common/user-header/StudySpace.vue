@@ -3,16 +3,16 @@
         <app-dropdown
             position="left"
             v-model="dropdownCourse"
-            :content-width="'20rem'"
             class="link--dropdown link--dropdown-course"
+            open-on-click
         >
-            <n-link slot="activator" to="/elearning/mycourses" class="item">
+            <button to slot="activator" class="item" slot-scope="{ on }" v-on="on">
                 Góc học tập
-                <IconCaretDown width="10" height="10" />
-            </n-link>
-            <div class="link--dropdown__content">
+                <IconArrowDropDown24px />
+            </button>
+            <div class="link--dropdown__content wrap-arrow__content">
                 <ul>
-                    <li v-for="(elearning,index) in elearningList"
+                    <li v-for="(elearning,index) in elearningListHeader"
                         :key="index"
                     >
                         <n-link :to="'/elearning/'+ elearning.elearning_id">
@@ -22,11 +22,11 @@
                                     <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
                                 </div>
                                 <div class="proccess-bar-study-border">
-                                    <div class="percent-proccess" v-bind:style="{width: 10 +'%'}"></div>
+                                    <div class="percent-proccess" v-bind:style="{width: elearning.progress +'%'}"></div>
                                 </div>
                                 <div>
                                     <span>Đã hoàn thành:</span>
-                                    <strong class="color-primary">10%</strong>
+                                    <strong class="color-primary">{{elearning.progress}}%</strong>
                                 </div>
                             </div>
                         </n-link>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
+import IconArrowDropDown24px from '~/assets/svg/v2-icons/arrow_drop_down_24px.svg?inline';
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -51,18 +51,11 @@ export default {
     data(){
         return{
             dropdownCourse: false,
-            elearningList:[]
+            elearningListHeader:[]
         }
     },
     components:{
-        IconCaretDown
-    },
-    watch:{
-        elearningStudyStudent:{
-            handler: function(){
-                this.elearningList = get(this,"elearningStudyStudent.content",[])
-            }
-        }
+        IconArrowDropDown24px
     },
     methods:{
         fetchElearningList(){
@@ -102,6 +95,7 @@ export default {
         this.fetchElearningList();
         await this.fetchProfile();
         this.checRoleStudent()
+        this.elearningListHeader = get(this,"elearningStudyStudent.content",[])
     },
 }
 </script>
