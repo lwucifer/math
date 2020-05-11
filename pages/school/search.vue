@@ -5,7 +5,7 @@
         class="mb-3"
         title="Danh sách trường học"
         :resultSpan="resultSummary"
-        :schoolTypes="categories"
+        :schoolTypes="categoryOpts"
         :hasSort="true"
         :hasLocation="true"
         :hasSchoolLevel="true"
@@ -31,7 +31,7 @@ import SchoolSlider from "~/components/page/school/SchoolListSlider";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, addAllOptionSelect } from "~/utils/common";
 
 export default {
   name: "School",
@@ -91,9 +91,13 @@ export default {
       return `${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh`;
     },
 
+    categoryOpts() {
+      return addAllOptionSelect(this.categories);
+    },
+
     selectedCategory() {
-      if(this.type) return this.categories.find(c => c.type == this.type);
-      return this.categories[0];
+      if (this.type) return this.categories.find(c => c.type == this.type);
+      return {};
     },
 
     selectedType() {
@@ -116,7 +120,8 @@ export default {
       console.log("[Page School] show all a type of school: ", id);
     },
     handleChangedLevel(level) {
-      this.type = get(level, "value", "");
+      console.log("[handleChangedLevel] level", level);
+      this.type = get(level, "type", "");
     },
     handleChangedWard(ward) {
       this.ward_id = get(ward, "id", "");
@@ -128,6 +133,7 @@ export default {
       this.province_id = get(province, "id", "");
     },
     handleChangeSearch(keyword) {
+      console.log("[handleChangeSearch]", keyword);
       this.keyword = keyword;
     },
     handleGetSchoolsByLocation() {
@@ -137,6 +143,11 @@ export default {
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
+      // params.province_id = this.province_id
+      // params.district_id = this.district_id
+      // params.ward_id = this.ward_id
+      // params.keyword = this.keyword
+      // params.type = this.type
 
       const options = { params };
       this.$store.dispatch(

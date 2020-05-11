@@ -35,20 +35,19 @@
         ></app-search>
       </div>
 
-      <div class="filter-form__item" v-if="hasFilterBtn">
+      <div class="filter-form__item" v-if="hasFilterBtn" @click="isShowFilter = !isShowFilter">
         <app-button
           color="white"
           square
           class="filter-form__item__btn filter-form__item__btn--submit color-primary"
           :size="'sm'"
-          @click="submit"
         >
           <IconHamberger class="fill-primary mr-3" />
           <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="school-filter__form__item" v-if="hasSchoolLevel">
+      <div class="school-filter__form__item" v-if="hasSchoolLevel && isShowFilter">
         <app-vue-select
           class="app-vue-select"
           :v-model="filter.level"
@@ -57,7 +56,7 @@
           placeholder="Cấp học"
           :reduce="value => value"
           searchable
-          clearable
+          :clearable="false"
           @input="handleChangedLevel"
         ></app-vue-select>
       </div>
@@ -66,7 +65,7 @@
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
-        v-if="hasLocation"
+        v-if="hasLocation && isShowFilter"
       />
 
       <div class="school-filter__form__item ml-auto" v-if="hasSort">
@@ -90,6 +89,7 @@
 
 <script>
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+
 
 export default {
   components: {
@@ -154,7 +154,8 @@ export default {
         village: null,
         level: this.selectedType,
         query: null
-      }
+      },
+      isShowFilter: false
     };
   },
   methods: {
