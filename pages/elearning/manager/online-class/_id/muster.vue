@@ -62,7 +62,7 @@
                     @click="submit"
                   >
                     <IconHamberger class="fill-white mr-2" />
-                    <span>Lọc kết quả</span>
+                    <span class="color-white">Lọc kết quả</span>
                   </app-button>
                 </div>
 
