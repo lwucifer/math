@@ -49,11 +49,11 @@
         </td>
       </template>
   
-      <template v-slot:cell(class)="{row}">
-        <td>
-          {{ get(row, 'student.class_name', '') }}
-        </td>
-      </template>
+      <!--<template v-slot:cell(class)="{row}">-->
+        <!--<td>-->
+          <!--{{ get(row, 'student.class_name', '') }}-->
+        <!--</td>-->
+      <!--</template>-->
     
       <template v-slot:cell(course)="{row}">
         <td>
@@ -91,10 +91,10 @@
             name: "creator",
             text: "Người đánh giá",
           },
-          {
-            name: "class",
-            text: "Lớp",
-          },
+          // {
+          //   name: "class",
+          //   text: "Lớp",
+          // },
           {
             name: "course",
             text: "Bình luận tại",
