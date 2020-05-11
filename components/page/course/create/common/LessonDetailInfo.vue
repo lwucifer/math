@@ -31,7 +31,9 @@
         </div>
       </div>
 
-      <div class="clc-video__name text-dark mt-2">filevideobaigiang.mp4</div>
+      <div class="clc-video__name text-dark mt-2">
+        Định dạng: {{ get(lesson, "type", "") }}
+      </div>
 
       <div class="clc-video__time text-gray mb-3 mt-3">
         <IconClock width="14px" height="14px" class="mr-2" />
