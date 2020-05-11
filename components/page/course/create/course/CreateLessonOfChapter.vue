@@ -9,7 +9,7 @@
     />
     <span v-show="error_name" class="error">{{ error_name }}</span>
 
-    <span>Chọn loại bài học xccc</span>
+    <span>Chọn loại bài học</span>
 
     <app-divider class="mt-3 mb-4" />
 
