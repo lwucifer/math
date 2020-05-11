@@ -11,22 +11,23 @@
 
     <app-button
       class="font-weight-semi-bold"
-      color="secondary"
-      size="sm"
-      square
+      color="primary"
+      size="md"
       @click="$emit('handleClick')"
-      >{{ text }}</app-button
+      ><IconPlus2 class="mr-2"/>{{ text }}</app-button
     >
   </div>
 </template>
 
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
+import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
 import { get } from "lodash";
 
 export default {
   components: {
-    IconInfoCircle
+    IconInfoCircle,
+    IconPlus2
   },
 
   props: {

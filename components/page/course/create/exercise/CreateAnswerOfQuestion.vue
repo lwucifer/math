@@ -1,7 +1,7 @@
 <template>
   <div class="row mb-4">
     <div class="col-md-3">
-      <label class="d-inline-block mb-3" for="answer-a">Đáp án đúng</label>
+      <label class="d-inline-block mb-3 font-weight-bold" for="answer-a">Chọn đáp án đúng</label>
       <div>
         <app-radio
           @click="$emit('handleSelectAnswerTrue', index)"
@@ -35,7 +35,7 @@
     </div>
     <div class="d-flex align-items-center cc-box__head">
       <button class="cc-box__btn cc-box__btn-edit" @click="handleDeleteAnswer">
-        <IconTrashAlt class="icon d-block subheading fill-secondary" />
+        <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px"/>
       </button>
     </div>
   </div>
