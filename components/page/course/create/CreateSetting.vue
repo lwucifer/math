@@ -199,22 +199,7 @@ export default {
   watch: {
     setting: {
       handler: function() {
-        this.payload.elearning_id = getParamQuery("elearning_id");
-        this.payload.comment_allow = get(this, "setting.comment_allow", "");
-        this.payload.price = get(this, "setting.price", 0);
-        this.payload.fee = get(this, "setting.fee", 0);
-        this.payload.privacy = get(this, "setting.privacy", "");
-        const fee = toNumber(get(this, "setting.fee", ""));
-        const price = toNumber(get(this, "setting.price", ""));
-        if (fee) {
-          this.percent_price = numeral((price - fee) / fee).format("0%");
-        }
-        if (fee > 0) {
-          this.free = 1;
-        }
-        if (toNumber(get(this, "setting.fee", "-1")) === 0) {
-          this.free = 2;
-        }
+        this.handleChangeSetting();
       },
       deep: true,
     },
@@ -230,6 +215,25 @@ export default {
   },
 
   methods: {
+    handleChangeSetting() {
+      this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.comment_allow = get(this, "setting.comment_allow", "");
+      this.payload.comment_allow = this.payload.comment_allow === true ? 1 : 0;
+      this.payload.price = get(this, "setting.price", 0);
+      this.payload.fee = get(this, "setting.fee", 0);
+      this.payload.privacy = get(this, "setting.privacy", "");
+      const fee = toNumber(get(this, "setting.fee", ""));
+      const price = toNumber(get(this, "setting.price", ""));
+      if (fee) {
+        this.percent_price = numeral((price - fee) / fee).format("0%");
+      }
+      if (fee > 0) {
+        this.free = 1;
+      }
+      if (toNumber(get(this, "setting.fee", "-1")) === 0) {
+        this.free = 2;
+      }
+    },
     handleCheckSubmit() {
       this.handleSetPercent();
       if (this.payload.comment_allow === "") return (this.is_submit = false);
@@ -282,7 +286,6 @@ export default {
     },
 
     async handleCLickSave(type_save) {
-      return console.log(this.payload);
       this.type_save = type_save;
       this.showModalConfirm = true;
     },
@@ -304,6 +307,9 @@ export default {
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
+        if (this.type_save === "next") {
+          this.$emit("nextStep", "exercise");
+        }
         return;
       }
       this.$toasted.error(
@@ -330,6 +336,11 @@ export default {
     },
 
     handleReset() {
+      if (this.setting) {
+        this.handleChangeSetting();
+        return;
+      }
+
       this.payload = {
         comment_allow: "",
         price: 0,

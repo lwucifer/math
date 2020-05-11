@@ -15,7 +15,7 @@
         />
         <CreateLearningContentCourse v-if="formActive === 'content-course'" />
         <CreateLearningContentLecture v-if="formActive === 'content-lecture'" />
-        <CreateSetting v-if="formActive === 'settings'" />
+        <CreateSetting v-if="formActive === 'settings'" @nextStep="nextStep" />
         <CreateExercise v-if="formActive === 'exercise'" />
         <CreateExam v-if="formActive === 'exam'" />
       </div>
