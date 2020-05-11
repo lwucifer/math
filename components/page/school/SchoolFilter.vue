@@ -20,7 +20,6 @@
           v-model="filter.query"
           :size="'sm'"
           @input="handleChangeSearch"
-          @submit="handleSubmitSearch"
         ></app-search>
       </div>
     </div>
@@ -32,7 +31,6 @@
           :counter="11"
           v-model="filter.query"
           :size="'sm'"
-          @input="handleChangeSearch"
           @submit="handleSubmitSearch"
         ></app-search>
       </div>
@@ -54,9 +52,9 @@
         <app-vue-select
           class="app-vue-select"
           :v-model="filter.level"
-          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
+          :options="schoolTypes"
           label="name"
-          placeholder="Theo cấp học"
+          placeholder="Cấp học"
           :reduce="value => value"
           searchable
           clearable
@@ -141,6 +139,10 @@ export default {
     hasFilterBtn: {
       type: Boolean,
       default: true
+    },
+    selectedType: {
+      type: String,
+      default: ""
     }
   },
 
@@ -150,7 +152,7 @@ export default {
         province: null,
         district: null,
         village: null,
-        schoolType: null,
+        level: this.selectedType,
         query: null
       }
     };

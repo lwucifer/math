@@ -107,7 +107,7 @@ export default {
     },
     handleSubmitSearch(keyword) {
       this.keyword = keyword;
-      this.$router.push(`/school/search?q=${this.keyword}`);
+      this.$router.push(`/school/search?keyword=${this.keyword}`);
     },
     handleGetSchoolsByLocation() {
       let params = {};
