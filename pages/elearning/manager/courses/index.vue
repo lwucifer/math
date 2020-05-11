@@ -139,11 +139,11 @@
                   </div>
                 </div>
               </td>
-            </template> -->
+            </template>-->
             <template v-slot:cell(privacy)="{ row }">
               <td>
                 <span v-if="row.privacy == 'PUBLIC'" class="color-primary">Công khai</span>
-                <span v-else  class="color-red">Riêng tư</span>
+                <span v-else class="color-red">Riêng tư</span>
               </td>
             </template>
             <template v-slot:cell(price)="{ row }">
@@ -173,32 +173,31 @@
               >
                 <IconNote class="fill-primary mr-2" />Xem chi tiết
               </n-link>
-              <n-link
-                :to="'/elearning/' + row.id + ''"
-                class="link"
-              >
+              <n-link :to="'/elearning/' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" />Chỉnh sửa
               </n-link>
 
-              <button @click="preview(row)"><IconEye class="fill-blue mr-2" />Xem preview</button>
+              <button @click="preview(row)">
+                <IconEye class="fill-blue mr-2" />Xem preview
+              </button>
 
-              <n-link
-                :to="'/elearning/' + row.id"
-                class="link"
-                v-if="tab == 'REJECTED'"
-              >
+              <n-link :to="'/elearning/' + row.id" class="link" v-if="tab == 'REJECTED'">
                 <IconMessage class="fill-yellow mr-2" />Xem lý do từ chối
               </n-link>
 
               <n-link
-                :to="'/elearning/manager/courses/students'"
+                :to="`/elearning/manager/courses/students?elearning_id=${row.id}`"
                 class="link"
                 v-if="tab == 'APPROVED' || tab == null"
               >
                 <IconPeople class="fill-yellow mr-2" />Xem danh sách học sinh
               </n-link>
-              <button @click="deleteRows(row.id)" v-if="tab == 'WAITING_FOR_APPROVE' || tab == 'REJECTED'">
-                <IconTimesCircle class="fill-secondary mr-2"/>Xóa</button>
+              <button
+                @click="deleteRows(row.id)"
+                v-if="tab == 'WAITING_FOR_APPROVE' || tab == 'REJECTED'"
+              >
+                <IconTimesCircle class="fill-secondary mr-2" />Xóa
+              </button>
             </template>
           </app-table>
           <!--End table-->
@@ -206,7 +205,11 @@
       </div>
     </div>
 
-    <ModalElearningPreview :previewData="previewInfo" v-if="showPreview" @close="showPreview = false"/>
+    <ModalElearningPreview
+      :previewData="previewInfo"
+      v-if="showPreview"
+      @close="showPreview = false"
+    />
   </div>
 </template>
 
@@ -220,13 +223,13 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
-import IconNote from '~/assets/svg/v2-icons/note_24px.svg?inline';
-import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
-import IconEye from '~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
-import IconRestore from '~/assets/svg/v2-icons/restore_24px.svg?inline';
-import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconMessage from '~/assets/svg/v2-icons/message_24px.svg?inline';
+import IconNote from "~/assets/svg/v2-icons/note_24px.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
+import IconEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
+import IconPeople from "~/assets/svg/v2-icons/people_24px.svg?inline";
+import IconRestore from "~/assets/svg/v2-icons/restore_24px.svg?inline";
+import IconTimesCircle from "~/assets/svg/design-icons/times-circle.svg?inline";
+import IconMessage from "~/assets/svg/v2-icons/message_24px.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -389,7 +392,7 @@ export default {
       elearningList: [],
       params: {
         page: 1,
-        limit: 10,
+        limit: 10
         // free: null,
         // privacy: null,
         // type: null,
@@ -476,7 +479,7 @@ export default {
         let params = { ...this.params };
         params.status = this.tab;
         params.hide = this.tab == null;
-        
+
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
           params

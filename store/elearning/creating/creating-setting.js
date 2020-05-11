@@ -6,7 +6,7 @@ import Setting from "~/services/elearning/creating/Setting";
  * initial state
  */
 const state = () => ({
-  setting: null
+  setting: null,
 });
 
 /**
@@ -24,11 +24,13 @@ const actions = {
       const result = await new Setting(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      commit(
-        mutationTypes.ELEARNING_CREATING_SETTING
-          .SET_ELEARNING_CREATING_SETTING_LIST,
-        result.data
-      );
+      if (result.success) {
+        commit(
+          mutationTypes.ELEARNING_CREATING_SETTING
+            .SET_ELEARNING_CREATING_SETTING_LIST,
+          result.data
+        );
+      }
     } catch (error) {
       console.log("[Creating general] list.error", error);
     }
@@ -47,7 +49,7 @@ const actions = {
 
   [actionTypes.BASE.RESET]({ commit }) {
     commit(mutationTypes.BASE.RESET);
-  }
+  },
 };
 
 /**
@@ -61,7 +63,7 @@ const mutations = {
 
   [mutationTypes.BASE.RESET]: function(state) {
     this.setting = null;
-  }
+  },
 };
 
 export default {
@@ -69,5 +71,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
