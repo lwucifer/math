@@ -19,7 +19,7 @@
                   :class="tab == 'WAITING_FOR_APPROVE' ? 'active' : ''"
                 >Chờ duyệt</a>
                 <a @click="tab = 'REJECTED'" :class="tab == 'REJECTED' ? 'active' : ''">Bị từ chối</a>
-                <a @click="tab = ''" :class="tab == '' ? 'active' : ''">Danh sách ẩn</a>
+                <a @click="tab = null" :class="tab == null ? 'active' : ''">Danh sách ẩn</a>
               </div>
               <n-link
                 :to="'/elearning/manager/courses/create'"
@@ -35,7 +35,7 @@
                   <app-search
                     class
                     :placeholder="'Nhập để tìm kiếm...'"
-                    v-model="params.query"
+                    v-model="params.keyword"
                     :size="'sm'"
                   ></app-search>
                 </div>
@@ -95,8 +95,8 @@
               size="sm"
               normal
               class="mb-4 btn-color-blue"
-              @click="restoreRows"
-              v-if="tab == ''"
+              @click="hideRows(true)"
+              v-if="tab == null"
             >
               <IconRestore height="15" width="15" class="fill-white mr-2" />Khôi phục
             </app-button>
@@ -106,7 +106,7 @@
               size="sm"
               normal
               class="mb-4"
-              @click="deleteRows"
+              @click="hideRows(false)"
               v-else
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Đưa vào danh sách ẩn
@@ -139,11 +139,11 @@
                   </div>
                 </div>
               </td>
-            </template> -->
-            <template v-slot:cell(hide)="{ row }">
+            </template>-->
+            <template v-slot:cell(privacy)="{ row }">
               <td>
-                <span v-if="row.hide" class="color-red">Riêng tư</span>
-                <span v-else class="color-primary">Công khai</span>
+                <span v-if="row.privacy == 'PUBLIC'" class="color-primary">Công khai</span>
+                <span v-else class="color-red">Riêng tư</span>
               </td>
             </template>
             <template v-slot:cell(price)="{ row }">
@@ -162,44 +162,59 @@
               </td>
             </template>
             <template v-slot:cell(created)="{ row }">
-              <td>{{formatAMPM(row.created)}}</td>
+              <td>{{convertDate(row.created)}}</td>
             </template>
 
             <template v-slot:actions="{row}">
               <n-link
                 :to="'/elearning/' + row.id"
                 class="link"
+                v-if="tab == 'APPROVED' || tab == null"
               >
                 <IconNote class="fill-primary mr-2" />Xem chi tiết
               </n-link>
-              <n-link
-                :to="'/elearning/' + row.id + ''"
-                class="link"
-              >
+              <n-link :to="'/elearning/' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" />Chỉnh sửa
               </n-link>
-              <n-link
-                :to="'/elearning/' + row.id + ''"
-                class="link"
-              >
+
+              <button @click="preview(row)">
                 <IconEye class="fill-blue mr-2" />Xem preview
+              </button>
+
+              <n-link :to="'/elearning/' + row.id" class="link" v-if="tab == 'REJECTED'">
+                <IconMessage class="fill-yellow mr-2" />Xem lý do từ chối
               </n-link>
+
               <n-link
-                :to="'/elearning/manager/courses/students'"
+                :to="`/elearning/manager/courses/students?elearning_id=${row.id}`"
                 class="link"
+                v-if="tab == 'APPROVED' || tab == null"
               >
                 <IconPeople class="fill-yellow mr-2" />Xem danh sách học sinh
               </n-link>
+              <button
+                @click="deleteRows(row.id)"
+                v-if="tab == 'WAITING_FOR_APPROVE' || tab == 'REJECTED'"
+              >
+                <IconTimesCircle class="fill-secondary mr-2" />Xóa
+              </button>
             </template>
           </app-table>
           <!--End table-->
         </div>
       </div>
     </div>
+
+    <ModalElearningPreview
+      :previewData="previewInfo"
+      v-if="showPreview"
+      @close="showPreview = false"
+    />
   </div>
 </template>
 
 <script>
+import ModalElearningPreview from "~/components/page/elearning/ModalElearningPreview";
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
@@ -208,11 +223,13 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
-import IconNote from '~/assets/svg/v2-icons/note_24px.svg?inline';
-import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
-import IconEye from '~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
-import IconRestore from '~/assets/svg/v2-icons/restore_24px.svg?inline';
+import IconNote from "~/assets/svg/v2-icons/note_24px.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
+import IconEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
+import IconPeople from "~/assets/svg/v2-icons/people_24px.svg?inline";
+import IconRestore from "~/assets/svg/v2-icons/restore_24px.svg?inline";
+import IconTimesCircle from "~/assets/svg/design-icons/times-circle.svg?inline";
+import IconMessage from "~/assets/svg/v2-icons/message_24px.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -226,8 +243,11 @@ export default {
   name: "ManageCourse",
 
   components: {
+    ModalElearningPreview,
     ElearningManagerSide,
+    IconTimesCircle,
     IconSearch,
+    IconMessage,
     IconTrashAlt,
     IconFilter,
     IconTick,
@@ -244,6 +264,8 @@ export default {
   data() {
     return {
       tab: "APPROVED",
+      showPreview: false,
+      previewInfo: {},
       ids: [],
       heads: [
         -{
@@ -262,7 +284,7 @@ export default {
           sort: true
         },
         {
-          name: "hide",
+          name: "privacy",
           text: "Hiển thị"
         },
         {
@@ -346,19 +368,19 @@ export default {
       time2: null,
       selectType: null,
       types: [
-        { value: "", text: "Tất cả" },
+        { value: null, text: "Tất cả" },
         { value: "COURSE", text: "Khóa học" },
         { value: "LECTURE", text: "Bài giảng" }
       ],
       selectPrivacy: null,
       privacies: [
-        { value: "", text: "Tất cả" },
+        { value: null, text: "Tất cả" },
         { value: "PUBLIC", text: "Công khai" },
         { value: "PRIVATE", text: "Riêng tư" }
       ],
       selectFree: null,
       free: [
-        { value: "", text: "Tất cả" },
+        { value: null, text: "Tất cả" },
         { value: true, text: "Miễn phí" },
         { value: false, text: "Có phí" }
       ],
@@ -370,11 +392,11 @@ export default {
       elearningList: [],
       params: {
         page: 1,
-        limit: 10,
-        free: null,
-        privacy: null,
-        type: null,
-        keyword: null
+        limit: 10
+        // free: null,
+        // privacy: null,
+        // type: null,
+        // keyword: null
       }
     };
   },
@@ -395,7 +417,7 @@ export default {
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
           break;
-        case "":
+        case null:
         case "APPROVED":
           this.currentHeads = [...this.heads];
           break;
@@ -406,13 +428,16 @@ export default {
           this.currentHeads = [...this.heads];
           break;
       }
-      this.params.query = "";
       this.getList();
     }
   },
 
   methods: {
-    formatAMPM(time) {
+    preview(row) {
+      this.previewInfo = row;
+      this.showPreview = true;
+    },
+    convertDate(time) {
       const date = new Date(time);
       var strTime =
         date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
@@ -430,7 +455,6 @@ export default {
     },
 
     handleEditElearning(elearning) {
-      // console.log(this.tab, elearning);
       this.$router.history.push(
         `/elearning/manager/courses/create?elearning_id=${elearning.id}`
       );
@@ -454,6 +478,8 @@ export default {
         this.loading = true;
         let params = { ...this.params };
         params.status = this.tab;
+        params.hide = this.tab == null;
+
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
           params
@@ -500,23 +526,24 @@ export default {
       }
     },
 
-    async deleteRows() {
-      let ids = { ids: [...this.ids] };
+    async deleteRows(id) {
+      let ids = id ? { ids: [id] } : { ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.DELETE}`,
         JSON.stringify(ids)
       );
 
       if (doDelete.success) {
+        this.ids = [];
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);
       }
     },
 
-    async restoreRows() {
+    async hideRows(status) {
       let params = {
-        hide: false,
+        hide: !status,
         ids: [...this.ids]
       };
       const doRestore = await this.$store.dispatch(
@@ -525,6 +552,7 @@ export default {
       );
 
       if (doRestore.success) {
+        this.ids = [];
         this.getList();
       } else {
         this.$toasted.error(doRestore.message);

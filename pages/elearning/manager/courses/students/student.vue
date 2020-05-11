@@ -6,26 +6,20 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <sub-block-section
-          title="Bài giảng đại số lớp 10"
-          has-icon
-        >
+        <sub-block-section title="Bài giảng đại số lớp 10" has-icon>
           <template v-slot:content>
             <div class="elearning-manager-content p-0">
               <div class="elearning-manager-content__title">
-                <head-tabs
-                  :tabs="tabs"
-                  :active.sync="tab"
-                  @selectedItem="changeTab"
-                />
-                <app-button  class="btn btn--size-sm btn--color-info btn--square btn-right"
+                <head-tabs :tabs="tabs" :active.sync="tab" @selectedItem="changeTab" />
+                <app-button
+                  class="btn btn--size-sm btn--color-info btn--square btn-right"
                   @click="handleShowModalInvite"
                 >
-                    <IconPlusCircle class="fill-white mr-2 icon"/>
-                    <span class="color-white">Mời thêm học sinh</span>
+                  <IconPlusCircle class="fill-white mr-2 icon" />
+                  <span class="color-white">Mời thêm học sinh</span>
                 </app-button>
               </div>
-    
+
               <div class="elearning-manager-content__main">
                 <keep-alive>
                   <component v-bind:is="currentTabComponent"></component>
@@ -36,10 +30,7 @@
         </sub-block-section>
       </div>
     </div>
-    <ModalInviteStudent 
-      v-if="showModalInvite"
-      @close="closeModalInvite"
-    />
+    <ModalInviteStudent v-if="showModalInvite" @close="closeModalInvite" />
     <app-modal-notify
       v-if="showModalNotify"
       type="success"
@@ -50,16 +41,17 @@
 </template>
 
 <script>
-import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import HeadTabs from "~/components/page/elearning/HeadTab";
-import ModalInviteStudent from "~/components/page/elearning/manager/student/ModalInviteStudent"
-import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
-import { mapState } from "vuex"
-import { get } from "lodash"
-import * as actionTypes from "~/utils/action-types"
+import ModalInviteStudent from "~/components/page/elearning/manager/student/ModalInviteStudent";
+import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
+import { mapState } from "vuex";
+import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 
 const ListJoinedTab = () => import("./tabs/ListJoined");
 const ListPendingTab = () => import("./tabs/ListPending");
+
 export default {
   layout: "manage",
 
@@ -74,18 +66,18 @@ export default {
 
   data() {
     return {
-      showModalInvite:false,
-      showModalNotify:false,
-      tab: 'joined',
+      showModalInvite: false,
+      showModalNotify: false,
+      tab: "joined",
       tabs: [
         {
-          key: 'joined',
-          text: 'Danh sách học sinh tham gia'
+          key: "joined",
+          text: "Danh sách học sinh tham gia"
         },
         {
-          key: 'pending',
-          text: 'Danh sách học sinh chờ duyệt'
-        },
+          key: "pending",
+          text: "Danh sách học sinh chờ duyệt"
+        }
       ],
       pagination: {
         totalElements: 0,
@@ -94,7 +86,7 @@ export default {
         last: false,
         size: 10,
         number: 0,
-        first: true,
+        first: true
       },
       params: {
         page: 1,
@@ -102,33 +94,33 @@ export default {
       },
       list: [],
       loading: false
-    }
+    };
   },
   computed: {
     currentTabComponent: function() {
       const MATCHED_TABS = {
-        joined: 'ListJoinedTab',
-        pending: 'ListPendingTab'
-      }
-      return MATCHED_TABS[this.tab]
+        joined: "ListJoinedTab",
+        pending: "ListPendingTab"
+      };
+      return MATCHED_TABS[this.tab];
     }
   },
 
   methods: {
     changeTab(key) {
-      this.tab = key
+      this.tab = key;
     },
-    handleShowModalInvite(){
+    handleShowModalInvite() {
       this.showModalInvite = true;
-      console.log('lol')
+      console.log("lol");
     },
-    closeModalInvite(close){
+    closeModalInvite(close) {
       this.showModalInvite = close;
     },
-    closeModalNotify(){
+    closeModalNotify() {
       this.showModalNotify = false;
-      console.log('lol')
-    }   
+      console.log("lol");
+    }
   },
   created() {
     // this.getList()
