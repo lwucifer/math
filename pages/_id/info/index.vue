@@ -6,13 +6,11 @@
       </div>
       <div class="col-md-9">
         <div class="school-account__main">
-          <block-section
-            title="Thông tin tài khoản"
-          >
+          <block-section title="Thông tin tài khoản">
             <template v-slot:content>
               <general-info />
-              <school-info />
-              <department-info />
+              <school-info v-if="isStudentRole" />
+              <department-info v-if="isTeacherRole" />
             </template>
           </block-section>
         </div>
@@ -28,9 +26,9 @@ import GeneralInfo from "~/components/page/account/Info/GeneralInfo";
 import SchoolInfo from "~/components/page/account/Info/SchoolInfo";
 import DepartmentInfo from "~/components/page/account/Info/DepartmentInfo";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
-import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
+import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal";
 import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 import { get } from "lodash";
@@ -40,8 +38,8 @@ import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 import { SCHOOL } from "~/server/fakedata/school/test";
 
 export default {
-  layout: 'account-info',
-  
+  layout: "account-info",
+
   components: {
     IconPhoto,
     IconPlus,
@@ -62,43 +60,43 @@ export default {
       sex: "",
       birthday: "",
       showChangePass: false,
-      accountLink:{
+      accountLink: {
         showModal: false,
-        list:""
+        list: ""
       },
-      profileInfo:""
+      profileInfo: ""
     };
   },
-  watch:{
+  watch: {
     profileList: {
-        handler: function() {
-          this.name = get(this,"profileList.fullname","");
-          this.phone = get(this,"profileList.phone","");
-          this.email = get(this,"profileList.email","");
-          this.address = get(this,"profileList.address","");
-          this.sex = get(this,"profileList.sex","") === "MALE" ? "Nam" : "Nữ";
-          this.birthday = getDateBirthDay(get(this,"profileList.birthday",""));
-          this.accountLink.list = get(this,"linkList.data",{});
-          this.profileInfo = get(this,"profileList",{});
-        }
+      handler: function() {
+        this.name = get(this, "profileList.fullname", "");
+        this.phone = get(this, "profileList.phone", "");
+        this.email = get(this, "profileList.email", "");
+        this.address = get(this, "profileList.address", "");
+        this.sex = get(this, "profileList.sex", "") === "MALE" ? "Nam" : "Nữ";
+        this.birthday = getDateBirthDay(get(this, "profileList.birthday", ""));
+        this.accountLink.list = get(this, "linkList.data", {});
+        this.profileInfo = get(this, "profileList", {});
       }
+    }
   },
   methods: {
-    async fetchProfile(){
+    async fetchProfile() {
       await Promise.all([
         this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
         this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
-      ])
+      ]);
     },
     closeNotify() {
       this.notify.showNotify = false;
     },
-    closeLinkModal(){
+    closeLinkModal() {
       this.accountLink.showModal = false;
     },
-    async handleRefresh(){
+    async handleRefresh() {
       this.fetchProfile();
-    },
+    }
   },
   computed: {
     ...mapState("account", {
@@ -106,7 +104,8 @@ export default {
     }),
     ...mapState("account", {
       linkList: "linkList"
-    })
+    }),
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"])
   },
   created() {
     this.fetchProfile();
