@@ -19,7 +19,7 @@
               <a
                 @click="handleAddLesson($event)"
                 class="d-flex align-items-center text-primary"
-                v-if="!get(lessons, 'data.length', 0)"><IconAdd width="14px" height="14px" class="mr-2"/> Thêm chương</a>
+                v-if="!get(lessons, 'data.length', 0)"><IconAdd width="14px" height="14px" class="mr-2"/> Thêm bài học</a>
 
               <button
                 class="cc-box__btn cc-box__btn-collapse"
