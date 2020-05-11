@@ -2,11 +2,11 @@
   <div class="container">
       <div class="row">
         <div class="col-md-6">
-            <div class="wrap-success-auth">
+            <div class="wrap-success-auth px-5">
                 <IconSuccess class="mb-3 fill-primary"/>
                 <h3 class="text-primary">Gửi yêu cầu thành công</h3>
                 <p class="my-4">Vui lòng kiểm tra email của bạn để xác thực việc thay đổi mật khẩu</p>
-                <app-button class="mt-2" square 
+                <app-button class="mt-2 btn-confirm" square 
                             :to="'/auth/signin'"
                             nuxt
                 >

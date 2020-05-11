@@ -1,5 +1,5 @@
 <template>
-  <filter-form class="mb-4">
+  <filter-form>
     <div class="d-flex">
       <div
         class="filter-form__item filter-form__item--search border-0 ml-0"

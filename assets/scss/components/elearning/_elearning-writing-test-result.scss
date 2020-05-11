@@ -1,37 +1,54 @@
 .elearning-writting-test-result {
-  padding-left: 2rem;
-  padding-right: 2rem;
   
   .item {
     margin-bottom: 1rem;
     
     .content-title {
       font-size: 1.4rem;
-      font-weight: bold;
+      font-weight: 600;
       line-height: 4rem;
-      color: #333;
+      color: $color-primary;
       display: block;
     }
     .test-content {
-      border: 1px solid #EEEEEE;
-      min-height: 5rem;
-      padding: 1rem
+    }
+    .writing-answer {
+      background-color: #F9F9F9;
+      border-radius: 2px;
+      padding: 2rem;
+      margin: 0 0.5rem;
+      
+      .test-content-answer {
+        max-height: 20rem;
+        overflow-y: auto;
+        margin-left: -2rem;
+        margin-right: -1.5rem;
+        padding: 0 2rem;
+  
+        &::-webkit-scrollbar {
+          height: 5px;
+          width: 5px;
+        }
+  
+        &::-webkit-scrollbar-track { // bg color of scrollbar
+          -webkit-box-shadow: inset 0 0 6px $color-scrollbar-track;
+        }
+  
+        &::-webkit-scrollbar-thumb { // track point
+          background-color: #C4C4C4;
+          border-radius: 5px;
+          //background-color: red;
+          //outline: 1px solid #708090;
+        }
+        &::-webkit-scrollbar-track-piece {
+          background-color: #F9F9F9;
+        }
+      }
     }
   }
 }
 
 .writting-test-score {
-  padding-left: 2rem;
-  padding-right: 2rem;
-  
-  //.content-title {
-  //  //font-size: 1.4rem;
-  //  font-weight: bold;
-  //  line-height: 1.9rem;
-  //  //color: #666666;
-  //  display: block;
-  //  margin-bottom: 1rem;
-  //}
   
   &__form {
     .item {
@@ -61,6 +78,63 @@
       .app-checkbox__checkmark {
         border-color: $color-red;
       }
+    }
+    
+    .point-choice {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+      
+      button.btn {
+        box-shadow: none;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #fff;
+        padding: 0.5rem 1rem;
+        width: 5rem;
+        height: 3rem;
+        border-color: inherit;
+        font-weight: normal;
+        &.text-error {
+          &:hover,
+          &.actived {
+            color: #fff !important;
+            background-color: $color-red;
+          }
+        }
+  
+        &.text-warning {
+          &:hover,
+          &.actived {
+            color: #fff !important;
+            background-color: $color-yellow;
+          }
+        }
+  
+        &.text-primary {
+          &:hover,
+          &.actived {
+            color: #fff !important;
+            background-color: $color-green;
+          }
+        }
+        
+        &.actived {
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .final-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid $color-text-sub;
+      box-shadow: $shadow-1;
+      padding: 2rem;
+      justify-content: center;
+      height: 100%;
+      max-width: 23rem;
     }
   }
 }

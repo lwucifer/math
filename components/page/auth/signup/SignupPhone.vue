@@ -9,7 +9,13 @@
         :message="errorMessage.phone"
         :validate="validateProps.phone"
         @input="handlePhone"
-      />
+      >
+      <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconPhoneIphone24px/>
+          </div>
+        </template>
+      </app-input>
       <app-input
         type="password"
         v-model="password"
@@ -19,7 +25,23 @@
         :validate="validateProps.password"
         autocomplete="new-password"
         @input="handlePassword"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconLock24px/>
+          </div>
+        </template>
+      </app-input>
+      <app-input
+        type="password"
+        placeholder="Nhập lại mật khẩu"
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconLock24px/>
+          </div>
+        </template>
+      </app-input>
       <app-input
         type="text"
         v-model="fullname"
@@ -29,7 +51,13 @@
         :message="errorMessage.fullname"
         :validate="validateProps.fullname"
         @input="handleFullname"
-      />
+      >
+      <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconPerson24px/>
+          </div>
+        </template>
+      </app-input>
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorRegister}}</p>
     </div>
     <app-button
@@ -63,8 +91,15 @@ import { createSignupWithPhone } from "~/models/auth/Signup";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
 import { ERRORS } from "~/utils/error-code";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-
+import IconPhoneIphone24px from '~/assets/svg/v2-icons/phone_iphone_24px.svg?inline';
+import IconLock24px from '~/assets/svg/v2-icons/lock_24px.svg?inline';
+import IconPerson24px from '~/assets/svg/v2-icons/person_24px.svg?inline';
 export default {
+  components:{
+    IconPhoneIphone24px,
+    IconLock24px,
+    IconPerson24px
+  },
   data() {
     return {
       phone: "",

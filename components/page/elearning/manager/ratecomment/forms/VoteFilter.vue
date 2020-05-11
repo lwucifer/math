@@ -1,79 +1,78 @@
 <template>
-  <div class="filter-form">
-    <div class="filter-form__item align-items-md-start">
-      <app-button
-        color="primary"
-        class="filter-form__item__btn filter-form__item__btn--submit"
-        :size="'sm'"
-        @click="submit"
+  <filter-form class="">
+    <div class="d-flex">
+      <div
+        class="ml-0 filter-form__item filter-form__item--search border-0"
+        style="max-width: 10rem; min-width: 8rem;"
       >
-        <IconFilter />
-        <span>Lọc kết quả</span>
-      </app-button>
-    </div>
-  
-    <div class="">
-      <div class="filter-form flex-wrap">
-        <div class="filter-form__item" style="min-width: 105px;">
-          <app-checkbox
-            v-model="filters.has_cmt"
-            @change="handleChangedCmt"
-          >
-            Có bình luận
-          </app-checkbox>
-        </div>
-        <div class="filter-form__item" style="min-width: 120px;">
-          <app-vue-select
-            class="app-vue-select w-100"
-            :options="rates"
-            v-model="filters.rate"
-            :reduce="item => item.value"
-            label="text"
-            placeholder="Đánh giá"
-            searchable
-            clearable
-            @input="handleChangedRate"
-          >
-          </app-vue-select>
-        </div>
-        <app-select-class
-          @changedClass="handleChangedClass"
-          placeholder="Lớp"
-          class-name="filter-form__item"
-          :class-style="{ 'min-width': '170px' }"
-          class-year-name="filter-form__item"
-          :year-style="{ 'min-width': '150px' }"
-          v-model="filters.class_id"
+        <app-search
+          class="w-100"
+          size="sm"
+          :placeholder="truncStrFilter('Nhập để tìm kiếm', 7)"
+          v-model="filters.query"
+          @input="handleChangedSearch"
+          @keyup.enter.native="handleSubmitSearch"
+          @submit="submit"
+          color="primary"
         >
-        </app-select-class>
-  
-        <app-select-voted-elearnings
-          class="filter-form__item"
-          style="min-width: 245px"
-          @input="handleChangedElearning"
-          v-model="filters.elearning_id"
-        />
+        </app-search>
       </div>
+      <div class="filter-form__item">
+        <filter-button @click="clickSubmit">
+          Lọc kết quả
+        </filter-button>
+      </div>
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11.5rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="rates"
+          v-model="filters.rate"
+          :reduce="item => item.value"
+          label="text"
+          placeholder="Đánh giá"
+          searchable
+          @input="handleChangedRate"
+        >
+        </app-vue-select>
+      </div>
+      <app-select-class
+        v-if="filterSelect"
+        style="margin-left: 0.6rem;"
+        class-name="filter-form__item"
+        :class-style="{ 'min-width': '7.5rem !important', 'margin-right': '0.6rem' }"
+        class-year-name="filter-form__item"
+        :year-style="{ 'min-width': '11.5rem' }"
+        @changedClass="handleChangedClass"
+        placeholder="Lớp"
+      />
+      <app-select-voted-elearnings
+        v-if="filterSelect"
+        class="filter-form__item"
+        style="min-width: 19rem"
+        @input="handleChangedElearning"
+        v-model="filters.elearning_id"
+      />
     </div>
-  </div>
+  </filter-form>
 </template>
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-
+  import { truncStrFilter } from "~/plugins/filters.js"
+  
   export default {
     components: {
       IconFilter,
     },
     data() {
       return {
+        filterSelect:false,
         filters: {
           has_cmt: null,
           rate: null,
           class_id: null,
           elearning_id: null
         },
-        
         rates: [
           {
             value: 1,
@@ -125,12 +124,33 @@
       handleChangedClass(val) {
         this.$emit('changedClass', val)
       },
+      handleChangedSearch(val) {
+        this.$emit('changedQuery', val)
+      },
       handleChangedElearning(val) {
         this.$emit('changedElearning', val)
       },
       handleChangedCmt(val) {
         this.$emit('changedCmt', val)
       },
+      clickSubmit() {
+        if (this.filterSelect) {
+          this.resetForm()
+          this.filterSelect = false
+          if (!this.initStatus) {
+            this.$emit('submitFilter', this.filters)
+          }
+        } else {
+          this.filterSelect = true
+        }
+      },
+      resetForm() {
+        this.filters.has_cmt = null
+        this.filters.rate = null
+        this.filters.class_id = null
+        this.filters.elearning_id_id = null
+      },
+      truncStrFilter
     }
   }
 </script>

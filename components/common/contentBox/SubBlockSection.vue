@@ -5,7 +5,13 @@
     >
       <slot name="title">
         <h4 class="sub-block-section__title--main">
-          <icon-left-arrow v-if="hasIcon" class="sub-block-section__icon-title" /><span>{{ title }}</span>
+          <span @click="clickBack">
+            <icon-left-arrow
+            v-if="hasIcon"
+            class="sub-block-section__icon-title"
+            
+          /></span>
+          <span>{{ title }}</span>
         </h4>
       </slot>
     </div>
@@ -32,9 +38,22 @@
         type: String,
         default: ''
       },
+      actionClick: { // Action when click arrow icon
+        type: Function
+      },
       hasIcon: {
         type: Boolean,
         default: false
+      }
+    },
+    methods: {
+      clickBack() {
+        if (this.actionClick) {
+          this.actionClick()
+        } else {
+          this.$router.go("-1")
+        }
+        console.log('go back')
       }
     }
   };

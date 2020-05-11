@@ -1,113 +1,165 @@
 <template>
-  <div class="container">
-    <h1>
-      Tìm kiếm từ khóa “Tiếng anh” có
-      <span class="color-primary">50 kết quả</span>
+  <div class="elearning-search container">
+    <h1 class="elearning-search__heading heading-3">
+      <span class="font-weight-semi-bold">Toán học</span>
+      <span class="body-2 font-weight-normal">
+        (
+        <b>50</b> bài giảng -
+        <b>20</b> khoá học)
+      </span>
     </h1>
-    <div class="elearning-search__toolbar mb-5 mt-4">
-      <app-button rounded size="sm" class="mr-4">
-        <IconFilter class="mr-2" />Lọc kết quả
+
+    <div class="elearning-search__toolbar">
+      <app-button :color="isFilter ? 'primary' : 'default'" size="sm" @click="isFilter = !isFilter">
+        <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
       </app-button>
-      <label>
-        <input type="checkbox" v-model="free" />
-        Miễn phí
-      </label>
-      <!-- <app-select v-model="opt1" :options="opts1" /> -->
-      <CourseSelectSubject
-        @handleChangeSubject="handleChangeSubject"
-        :defaultValue="payload.subject"
-      />
-      <app-select v-model="opt2" :options="opts2" />
-      <app-select v-model="opt3" :options="opts3" />
-      <app-select v-model="opt4" :options="opts4" />
+
+      <template v-if="isFilter">
+        <app-select v-model="fee" :options="feeOpts" placeholder="Học phí" size="sm" />
+        <app-select v-model="time" :options="timeOpts" placeholder="Thời lượng" size="sm" />
+        <app-select v-model="level" :options="levelOpts" placeholder="Trình độ" size="sm" />
+      </template>
+
       <div class="ml-auto">
-        <strong>Sắp xếp</strong>
-        <app-select v-model="opt5" :options="opts5" />
+        <span class="text-dark body-3 mr-3">Sắp xếp</span>
+        <app-select v-model="sort" :options="sortOpts" placeholder size="sm" />
       </div>
     </div>
 
-    <div class="row">
-      <div
-        class="custom-col-lg-5 col-3 col-sm-6 col-xs-12"
-        v-for="(item, index) in lessons"
-        :key="index"
-      >
-        <ElearningItem2 :item="item" />
-      </div>
+    <div class="elearing-search__tabs">
+      <a
+        v-for="item in tabs"
+        :key="item.tab"
+        :href="`#${item.tab}`"
+        :class="['elearning-search__tab', tab === item.tab && 'active']"
+        @click.prevent="tab = item.tab"
+      >{{ item.text }}</a>
     </div>
+
+    <template v-for="item in tabs">
+      <div
+        v-show="item.tab === tab"
+        class="elearning-search__tab-pane"
+        :key="item.tab"
+        :id="item.tab"
+      >
+        <div class="row">
+          <div class="col-md-3 elearning-search__col" v-for="item in lessons" :key="item.id">
+            <CourseItem2
+              class="my-0"
+              :to="`/elearning/${item.id}`"
+              :image="get(item, 'avatar.medium', '')"
+              :livestream="item && item.livestream && item.livestream.time"
+              :name="item.name"
+              :teacher="item.teacher"
+              :averageRate="get(item, 'rates.average_rate', 0)"
+              :totalReview="get(item, 'rates.total_review', 0)"
+              :price="get(item, 'price.price')"
+              :originalPrice="get(item, 'price.original_price')"
+              :free="item.free"
+              :discount="calcDiscount(item)"
+            />
+          </div>
+        </div>
+
+        <app-pagination
+          :pagination="{
+            first: true,
+            last: false,
+            number: 0,
+            numberOfElements: 10,
+            size: 10,
+            totalElements: 65,
+            totalPages: 7,
+          }"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import ElearningItem2 from "~/components/page/elearning/ElearningItem2";
+import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
-import { useEffect } from "~/utils/common";
-import { get } from "lodash";
-import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
+
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import CourseItem2 from "~/components/page/course/CourseItem2";
 
 export default {
-  name: "E-learning",
+  name: "ELearningSearch",
 
   components: {
-    ElearningItem2,
-    IconFilter,
-    CourseSelectSubject,
+    IconHamberger,
+    CourseItem2
   },
 
-  async created() {
-    useEffect(this, this.getLessons.bind(this), ["payload"]);
+  created() {
+    this.getLessons();
   },
 
   data() {
     return {
-      isAuthenticated: true,
-      free: false,
-      opt1: "",
-      opts1: [
-        { value: "", text: "Theo môn học" },
-        { value: "1", text: "Theo tiến độ" },
-        { value: "2", text: "Theo tên giáo viên" },
+      fee: null,
+      feeOpts: [
+        { value: 0, text: "Học phí 1" },
+        { value: 1, text: "Học phí 2" },
+        { value: 2, text: "Học phí 3" },
+        { value: 3, text: "Học phí 4" }
       ],
-      opt2: "",
-      opts2: [
-        { value: "1", text: "Theo môn học" },
-        { value: "", text: "Theo tiến độ" },
-        { value: "2", text: "Theo tên giáo viên" },
+      fee: null,
+      feeOpts: [
+        { value: 0, text: "Học phí 1" },
+        { value: 1, text: "Học phí 2" },
+        { value: 2, text: "Học phí 3" },
+        { value: 3, text: "Học phí 4" }
       ],
-      opt3: "",
-      opts3: [
-        { value: "2", text: "Theo môn học" },
-        { value: "1", text: "Theo tiến độ" },
-        { value: "", text: "Theo tên giáo viên" },
+      time: null,
+      timeOpts: [
+        { value: 0, text: "Thời lượng 1" },
+        { value: 1, text: "Thời lượng 2" },
+        { value: 2, text: "Thời lượng 3" },
+        { value: 3, text: "Thời lượng 4" }
       ],
-      opt4: "",
-      opts4: [
-        { value: "2", text: "Bài giảng" },
-        { value: "1", text: "Khóa học" },
-        { value: "", text: "Tất cả" },
+      level: null,
+      levelOpts: [
+        { value: 0, text: "Trình độ 1" },
+        { value: 1, text: "Trình độ 2" },
+        { value: 2, text: "Trình độ 3" },
+        { value: 3, text: "Trình độ 4" }
       ],
-      opt5: "1",
-      opts5: [
-        { value: "2", text: "Rẻ nhất" },
-        { value: "1", text: "Mới nhất" },
+      sort: 0,
+      sortOpts: [
+        { value: 0, text: "Mới nhất" },
+        { value: 1, text: "Liên quan nhất" },
+        { value: 2, text: "Đánh giá cao nhất" },
+        { value: 3, text: "Nhiều bình luận nhất" },
+        { value: 4, text: "Giá thấp nhất" },
+        { value: 5, text: "Giá cao nhất" }
       ],
+      isFilter: false,
       lessons: [],
-      active_el: 0,
+      tab: "lecture",
+      tabs: [
+        {
+          tab: "lecture",
+          text: "Bài giảng"
+        },
+        {
+          tab: "course",
+          text: "Khoá học"
+        }
+      ],
       payload: {
-        subject: "",
-      },
+        subject: ""
+      }
     };
   },
-  computed: {
-    ...mapState("auth", ["loggedUser"]),
-  },
-
-  watch: {},
 
   methods: {
+    get,
+
     async getLessons() {
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
         this.payload
@@ -115,10 +167,13 @@ export default {
       this.lessons = get(res, "data.content", []);
     },
 
-    handleChangeSubject(subject) {
-      console.log(subject);
-    },
-  },
+    calcDiscount(elearning) {
+      const { price = {} } = elearning;
+      const currentPrice = price.price || 0;
+      const originPrice = price.original_price || 0;
+      return (currentPrice / originPrice) * 100;
+    }
+  }
 };
 </script>
 
