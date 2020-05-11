@@ -7,6 +7,7 @@
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
         :disabled="lesson.status == lessonCompleted"
+        @change="handleCompleteStudy($event)"
       />
       <p
         class="text-uppercase pl-1 text-clickable"
@@ -63,6 +64,8 @@ import {
   LESSION_STATUS,
 } from "~/utils/constants";
 import { redirectWithParams, getParamQuery } from "~/utils/common";
+import ProgressService from "~/services/elearning/study/Progress";
+import * as actionTypes from "~/utils/action-types";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -93,6 +96,31 @@ export default {
   },
 
   methods: {
+    getProgress() {
+      const elearning_id = get(this, "$router.history.current.params.id", "");
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
+      this.$store.dispatch(
+        `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
+        options
+      );
+    },
+    async handleCompleteStudy() {
+      const payload = {
+        completed: true,
+        lesson_id: get(this, "lesson.id", ""),
+      };
+      const res = await new ProgressService(this.$axios)["add"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.getProgress();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
     get,
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyElearningExerciseList",
@@ -101,7 +129,6 @@ export default {
     ...mapMutations("event", ["setStudyMode", "setPayload"]),
 
     async handleStuty(lesson) {
-
       redirectWithParams({ lesson_id: get(lesson, "id", "") });
 
       if (get(lesson, "type", "") === "DOCS") {
