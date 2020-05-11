@@ -5,7 +5,9 @@
         color: #fff;
     }
     .school-filter__title {
-        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2.2rem;
         h3 {
             color: #333;
             font-size: 2rem;
@@ -41,6 +43,11 @@
             }
             &.school-filter__form__item--search {
                 flex: 1;
+                max-width: 40rem;
+            }
+            &.school-filter__form__item--search__inline {
+                display: inline-block;
+                width: 30%;
                 max-width: 40rem;
             }
         }

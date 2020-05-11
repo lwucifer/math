@@ -1,6 +1,9 @@
 <template>
   <div class="app-editor" :class="classes" sticky-container>
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
+    <editor-menu-bar
+      :editor="editor"
+      v-slot="{ commands, isActive, getMarkAttrs }"
+    >
       <div class="app-editor__menubar" v-sticky :sticky-offset="stickyOffset">
         <div class="app-editor__menubar__toolbar">
           <button class="app-editor__menubar__button" @click="commands.undo">
@@ -63,19 +66,25 @@
             class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 1 }) }"
             @click="commands.heading({ level: 1 })"
-          >H1</button>
+          >
+            H1
+          </button>
 
           <button
             class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
-          >H2</button>
+          >
+            H2
+          </button>
 
           <button
             class="app-editor__menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 3 }) }"
             @click="commands.heading({ level: 3 })"
-          >H3</button>
+          >
+            H3
+          </button>
 
           <button
             class="app-editor__menubar__button"
@@ -111,39 +120,69 @@
 
           <button
             class="app-editor__menubar__button"
-            @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
+            @click="
+              commands.createTable({
+                rowsCount: 3,
+                colsCount: 3,
+                withHeaderRow: false,
+              })
+            "
           >
             <IconTable class="icon" />
           </button>
 
           <template v-if="isActive.table()">
-            <button class="app-editor__menubar__button" @click="commands.deleteTable">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.deleteTable"
+            >
               <icon name="delete_table" />
               <IconTableDelete class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.addColumnBefore">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.addColumnBefore"
+            >
               <IconTableAddColBefore class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.addColumnAfter">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.addColumnAfter"
+            >
               <IconTableAddColAfter class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.deleteColumn">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.deleteColumn"
+            >
               <IconTableDeleteCol class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.addRowBefore">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.addRowBefore"
+            >
               <IconTableAddRowBefore class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.addRowAfter">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.addRowAfter"
+            >
               <IconTableAddRowAfter class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.deleteRow">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.deleteRow"
+            >
               <IconTableDeleteRow class="icon" />
             </button>
-            <button class="app-editor__menubar__button" @click="commands.toggleCellMerge">
+            <button
+              class="app-editor__menubar__button"
+              @click="commands.toggleCellMerge"
+            >
               <IconTableCombineCells class="icon" />
             </button>
           </template>
-          
+
           <form
             class="app-editor__menubar__form"
             v-if="linkMenuIsActive"
@@ -196,7 +235,13 @@
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble, Extension } from "tiptap";
+import {
+  Editor,
+  EditorContent,
+  EditorMenuBar,
+  EditorMenuBubble,
+  Extension,
+} from "tiptap";
 import {
   Blockquote,
   CodeBlock,
@@ -218,7 +263,7 @@ import {
   Strike,
   Underline,
   History,
-  Placeholder
+  Placeholder,
 } from "tiptap-extensions";
 const IconUndo = () => import("~/assets/svg/text-editor/undo.svg?inline");
 const IconRedo = () => import("~/assets/svg/text-editor/redo.svg?inline");
@@ -282,30 +327,30 @@ export default {
     IconTableCombineCells,
     IconLinkAlt,
     IconTimes,
-    IconCheck
+    IconCheck,
   },
 
   model: {
     event: "input",
-    prop: "value"
+    prop: "value",
   },
 
   props: {
     value: {
       type: [String, Object],
-      default: null
+      default: null,
     },
     minHeight: {
-      type: [String, Number]
+      type: [String, Number],
     },
     placeholder: {
       type: String,
-      default: ""
+      default: "",
     },
     stickyOffset: {
       type: String,
-      default: "{ top: 0, bottom: 0 }"
-    }
+      default: "{ top: 0, bottom: 0 }",
+    },
   },
 
   data() {
@@ -314,14 +359,14 @@ export default {
       isEditorFocused: false,
       emitAfterOnUpdate: false,
       linkUrl: null,
-      linkMenuIsActive: false
+      linkMenuIsActive: false,
     };
   },
 
   computed: {
     classes() {
       return {
-        "app-editor--is-focused": this.isEditorFocused
+        "app-editor--is-focused": this.isEditorFocused,
       };
     },
 
@@ -331,9 +376,9 @@ export default {
           ? typeof this.minHeight === "number"
             ? this.minHeight + "px"
             : this.minHeight
-          : null
+          : null,
       };
-    }
+    },
   },
 
   watch: {
@@ -344,7 +389,7 @@ export default {
       }
 
       this.editor.setContent(newValue);
-    }
+    },
   },
 
   mounted() {
@@ -353,7 +398,7 @@ export default {
         new Placeholder({
           showOnlyCurrent: true,
           showOnlyWhenEditable: true,
-          emptyNodeText: this.placeholder
+          emptyNodeText: this.placeholder,
         }),
         new Blockquote(),
         new BulletList(),
@@ -372,7 +417,7 @@ export default {
         new Underline(),
         new History(),
         new Table({
-          resizable: true
+          resizable: true,
         }),
         new TableHeader(),
         new TableCell(),
@@ -390,7 +435,7 @@ export default {
                   .scrollIntoView();
                 view.dispatch(transaction);
                 return true;
-              }
+              },
             };
           }
         })(),
@@ -404,8 +449,9 @@ export default {
         this.isEditorFocused = true;
       },
       onBlur: () => {
+        this.$emit("onBlur");
         this.isEditorFocused = false;
-      }
+      },
     });
   },
 
@@ -430,8 +476,8 @@ export default {
     setLinkUrl(command, url) {
       command({ href: url });
       this.hideLinkMenu();
-    }
-  }
+    },
+  },
 };
 </script>
 

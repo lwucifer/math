@@ -27,14 +27,18 @@
 
       <div class="mb-4">
         <h5 class="mb-3">Cho phép bình luận tại khóa học</h5>
-        <app-radio-group v-model="payload.comment_allow">
+        <app-radio-group>
           <app-radio
             value="1"
             class="mr-4"
-            :checked="payload.comment_allow === true"
+            :checked="payload.comment_allow === 1"
+            @click="payload.comment_allow = 1"
             >Có</app-radio
           >
-          <app-radio value="0" :checked="payload.comment_allow === false"
+          <app-radio
+            value="0"
+            :checked="payload.comment_allow === 0"
+            @click="payload.comment_allow = 0"
             >Không</app-radio
           >
         </app-radio-group>
@@ -63,10 +67,11 @@
       <div class="mb-4" v-if="this.free == 1">
         <h5 class="mb-2">Giá bán</h5>
 
-        <app-input 
-          v-model="payload.fee" 
-          type="number" 
-          class="text-primary font-weight-semi-bold w-170">
+        <app-input
+          v-model="payload.fee"
+          type="number"
+          class="text-primary font-weight-semi-bold w-170"
+        >
           <template #unit>đ</template>
         </app-input>
 
@@ -81,10 +86,11 @@
         <h5 class="mb-2">Giá sau khuyến mại</h5>
 
         <div class="d-flex align-item-center">
-          <app-input 
-            v-model="payload.price" 
-            type="number" 
-            class="text-primary font-weight-semi-bold w-170 mb-0">
+          <app-input
+            v-model="payload.price"
+            type="number"
+            class="text-primary font-weight-semi-bold w-170 mb-0"
+          >
             <template #unit>đ</template>
           </app-input>
 
@@ -94,14 +100,44 @@
             </div>
           </div> -->
 
-          <div class="percent_price__ElearningCreate bg-primary text-white ml-3" v-if="percent_price">
+          <div
+            class="percent_price__ElearningCreate bg-primary text-white ml-3"
+            v-if="percent_price"
+          >
             {{ percent_price }}
           </div>
         </div>
       </div>
     </div>
 
-    <create-action @handleCLickSave="handleCLickSave" :isSubmit="is_submit" class="pt-5"/>
+    <div class="create-action pt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <app-button
+          outline
+          class="mr-4"
+          @click="handleReset"
+          square
+          color="error"
+          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+        >
+        <app-button
+          @click="handleCLickSave('draft')"
+          class="mr-4"
+          color="primary"
+          square
+          outline
+          :disabled="!is_submit"
+          ><IconSave class="mr-2" /> Lưu nháp</app-button
+        >
+        <app-button
+          @click="handleCLickSave('next')"
+          class="create-action__btn mr-4"
+          square
+          :disabled="!is_submit"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
+      </div>
+    </div>
 
     <app-modal-confirm
       v-if="showModalConfirm"
@@ -123,11 +159,19 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { validatePrice } from "~/utils/validations";
 import * as yup from "yup";
+import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 export default {
   components: {
     IconAngleDown,
     CreateAction,
+    IconArrowLeft,
+    IconDelete,
+    IconSave,
+    Forward,
   },
 
   data() {
@@ -135,6 +179,7 @@ export default {
       percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
+      type_save: "",
       free: "",
       is_submit: false,
       payload: {
@@ -146,7 +191,7 @@ export default {
       },
     };
   },
-  created() {
+  mounted() {
     this.fetchSetting();
     useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
@@ -154,22 +199,7 @@ export default {
   watch: {
     setting: {
       handler: function() {
-        this.payload.elearning_id = getParamQuery("elearning_id");
-        this.payload.comment_allow = get(this, "setting.comment_allow", "");
-        this.payload.price = get(this, "setting.price", 0);
-        this.payload.fee = get(this, "setting.fee", 0);
-        this.payload.privacy = get(this, "setting.privacy", "");
-        const fee = toNumber(get(this, "setting.fee", ""));
-        const price = toNumber(get(this, "setting.price", ""));
-        if (fee) {
-          this.percent_price = numeral((price - fee) / fee).format("0%");
-        }
-        if (fee > 0) {
-          this.free = 1;
-        }
-        if (toNumber(get(this, "setting.fee", "-1")) === 0) {
-          this.free = 2;
-        }
+        this.handleChangeSetting();
       },
       deep: true,
     },
@@ -185,6 +215,25 @@ export default {
   },
 
   methods: {
+    handleChangeSetting() {
+      this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.comment_allow = get(this, "setting.comment_allow", "");
+      this.payload.comment_allow = this.payload.comment_allow === true ? 1 : 0;
+      this.payload.price = get(this, "setting.price", 0);
+      this.payload.fee = get(this, "setting.fee", 0);
+      this.payload.privacy = get(this, "setting.privacy", "");
+      const fee = toNumber(get(this, "setting.fee", ""));
+      const price = toNumber(get(this, "setting.price", ""));
+      if (fee) {
+        this.percent_price = numeral((price - fee) / fee).format("0%");
+      }
+      if (fee > 0) {
+        this.free = 1;
+      }
+      if (toNumber(get(this, "setting.fee", "-1")) === 0) {
+        this.free = 2;
+      }
+    },
     handleCheckSubmit() {
       this.handleSetPercent();
       if (this.payload.comment_allow === "") return (this.is_submit = false);
@@ -236,7 +285,8 @@ export default {
       }
     },
 
-    async handleCLickSave() {
+    async handleCLickSave(type_save) {
+      this.type_save = type_save;
       this.showModalConfirm = true;
     },
 
@@ -257,6 +307,9 @@ export default {
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
+        if (this.type_save === "next") {
+          this.$emit("nextStep", "exercise");
+        }
         return;
       }
       this.$toasted.error(
@@ -280,6 +333,22 @@ export default {
         `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
         options
       );
+    },
+
+    handleReset() {
+      if (this.setting) {
+        this.handleChangeSetting();
+        return;
+      }
+
+      this.payload = {
+        comment_allow: "",
+        price: 0,
+        elearning_id: get(this, "general.id", ""),
+        fee: 0,
+        privacy: "",
+      };
+      this.free = "";
     },
 
     numeral,

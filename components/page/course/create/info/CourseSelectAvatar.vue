@@ -14,6 +14,9 @@
               fixed
               autoCrop
               full
+              :canScale="false"
+              :fixedBox="true"
+              :canMoveBox="false"
               infoTrue
             ></vueCropper>
           </client-only>
