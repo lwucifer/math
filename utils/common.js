@@ -49,7 +49,7 @@ export function redirectWithParams(params = {}) {
         currentUrlParams.set(key, value);
     });
 
-    window.history.pushState({},
+    window.history.replaceState({},
         "",
         window.location.pathname + "?" + currentUrlParams.toString()
     );
