@@ -31,18 +31,6 @@
             </sub-block-section>
           </template>
         </block-section>
-        
-        <!--<h5 class="color-primary mb-4">Cài đặt chung</h5>-->
-        <!--<div class="elearning-manager-content__title__nav">-->
-        <!--<a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Cài đặt thông báo</a>-->
-        <!--<a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Cài đặt thanh toán</a>-->
-        <!--</div>-->
-        <!--<hr class />-->
-        <!--<div class="elearning-manager-content__main">-->
-        <!--<keep-alive>-->
-        <!--<component v-bind:is="currentTabComponent"></component>-->
-        <!--</keep-alive>-->
-        <!--</div>-->
       </div>
     </div>
   </div>
@@ -65,7 +53,7 @@
     },
     data() {
       return {
-        tab: 'notify',
+        tab: 'payment',
         isAuthenticated: true,
         tabs: [
           {

@@ -12,9 +12,9 @@
     <div>
       <h4 class="color-primary mb-2">MẠNG XÃ HỘI</h4>
       <div class="setting-notify-content__account-info">
-        <div v-for="notify in socials" :key="notify.title">
-          <FormNotify :notify="notify"/>
-        </div>
+        <FormNotify
+          v-for="notify in socials" :key="notify.title"
+          :notify="notify"/>
       </div>
     </div>
   </div>
