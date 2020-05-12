@@ -6,9 +6,17 @@
 
     <div class="cc-panel__body">
       <div class="mb-4">
-        <div class="noti-setting d-flex justify-content-between align-items-center">
-          <div class="noti-setting__text text-warning"><IconWarning class="mr-2"/> Vui lòng hoàn thành <n-link to="" class="text-warning">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</div>
-          <button class="noti-setting__close"><IconClose fill="#E6A01E"/></button>
+        <div
+          class="noti-setting d-flex justify-content-between align-items-center"
+        >
+          <div class="noti-setting__text text-warning">
+            <IconWarning class="mr-2" /> Vui lòng hoàn thành
+            <n-link to="" class="text-warning">hồ sơ cá nhân</n-link> trước khi
+            cài đặt học phí cho bài giảng, khóa học của bạn.
+          </div>
+          <button class="noti-setting__close">
+            <IconClose fill="#E6A01E" />
+          </button>
         </div>
         <!-- <app-alert type="warning" class="mb-4" show-close>
           <template slot="icon">
@@ -174,8 +182,8 @@ import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
-import IconClose from '~/assets/svg/icons/close.svg?inline';
-import IconWarning from '~/assets/svg/icons/warning.svg?inline';
+import IconClose from "~/assets/svg/icons/close.svg?inline";
+import IconWarning from "~/assets/svg/icons/warning.svg?inline";
 
 export default {
   components: {
@@ -186,7 +194,7 @@ export default {
     IconSave,
     Forward,
     IconClose,
-    IconWarning
+    IconWarning,
   },
 
   data() {
@@ -233,7 +241,12 @@ export default {
     handleChangeSetting() {
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.comment_allow = get(this, "setting.comment_allow", "");
-      this.payload.comment_allow = this.payload.comment_allow === true ? 1 : 0;
+      if (this.payload.comment_allow === true) {
+        this.payload.comment_allow === 1;
+      }
+      if (this.payload.comment_allow === false) {
+        this.payload.comment_allow === 0;
+      }
       this.payload.price = get(this, "setting.price", 0);
       this.payload.fee = get(this, "setting.fee", 0);
       this.payload.privacy = get(this, "setting.privacy", "");
@@ -373,8 +386,8 @@ export default {
 
 <style lang="scss">
 .noti-setting {
-  background: #FCF8E3;
-  border: 1px solid #CDC52D;
+  background: #fcf8e3;
+  border: 1px solid #cdc52d;
   border-radius: 2px;
   height: 40px;
   padding: 0 1.5rem;
