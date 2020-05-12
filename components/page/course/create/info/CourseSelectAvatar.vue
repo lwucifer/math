@@ -8,11 +8,13 @@
           <client-only>
             <vueCropper
               ref="cropper"
+              mode="100% auto"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
               :fixedNumber="[340, 204]"
               fixed
               autoCrop
+              :canScale="false"
               full
               infoTrue
             ></vueCropper>
