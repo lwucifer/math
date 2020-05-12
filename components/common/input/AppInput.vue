@@ -10,6 +10,7 @@
       <textarea
         v-if="textarea"
         v-bind="$attrs"
+        v-textarea-autosize
         ref="input"
         :rows="rows"
         :type="type"

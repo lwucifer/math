@@ -5,7 +5,7 @@
         <div class="col-md-8">
           <div class="box11">
             <ElearningEssayQuestion />
-            <div class="elearning-lesson__main-nav">
+            <div class="elearning-study-tabs">
               <n-link :to="'/elearning/course'">Tổng quan</n-link>
               <n-link :to="'/elearning/course/question'">Hỏi đáp</n-link>
               <a class="active">Thông báo</a>
@@ -73,5 +73,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/course/_elearning-course.scss";
+@import "~/assets/scss/pages/elearning/_study.scss";
 </style>

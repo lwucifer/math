@@ -1,0 +1,42 @@
+.elearning-study-tabs {
+    margin: 1rem 0 2rem;
+
+    a {
+        position: relative;
+        display: inline-block;
+        padding: 1.3rem .5rem;
+        text-decoration: none;
+        color: $color-text-dark;
+        text-transform: uppercase;
+        font-weight: 500;
+        cursor: pointer;
+
+        + a {
+            margin-left: 4rem;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: .3rem;
+            background-color: $color-primary;
+            transition: transform .3s;
+            transform: scale(0)
+        }
+        
+        &:hover {
+            color: $color-primary;
+        }
+
+        &.active {
+            color: $color-primary;
+            
+            &:after {
+                transform: scale(1);
+            }
+        }
+    }
+}

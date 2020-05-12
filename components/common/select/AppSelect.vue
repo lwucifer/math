@@ -104,11 +104,11 @@
 
         <div
           v-for="option in options"
-          :class="['app-select__option', option.value === value && 'active']"
+          :class="['app-select__option', option.value === localValue && 'active']"
           :key="option.value"
           @click="handleClickOption(option)"
         >
-          <span v-if="option.value === value" class="app-select__checked-icon">
+          <span v-if="option.value === localValue" class="app-select__checked-icon">
             <IconTick class="icon" />
           </span>
           <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
@@ -156,8 +156,14 @@ export default {
       validator: value =>
         value.every(option => ["value", "text"].every(key => key in option))
     },
-    value: [String, Number, Array, Boolean],
-    defaultValue: [String, Number, Array, Boolean],
+    value: {
+      type: [String, Number, Array, Boolean],
+      default: null
+    },
+    defaultValue: {
+      type: [String, Number, Array, Boolean],
+      default: null
+    },
     mode: {
       type: String,
       default: "" // '' | 'tags'
