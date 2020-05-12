@@ -46,25 +46,28 @@
       </a>
       <span v-if="expand">
         <!-- IF USER'S ANSWER IS TRUE -->
-        <span class="d-inline-flex align-items-center text-primary" v-if="question.isUserTrue">
-          Câu trả lời: {{student_answer_index | getQuestionNoText }}.
+        <span
+          class="d-inline-flex align-items-center text-primary"
+          v-if="question.isUserTrue"
+        >
+          Câu trả lời: {{ student_answer_index | getQuestionNoText }}.
           {{ student_answer_content }}
           <IconCheck class="icon fill-opacity-1 heading-3 ml-2" />
         </span>
         <!-- IF USER'S ANSWER IS TRUE -->
 
         <!-- IF USER'S ANSWER IS FALSE -->
-        <span v-else>
+        <span v-else style="display: flex;">
           <span class="d-inline-flex align-items-center text-secondary">
             Câu trả lời:
-            {{student_answer_index | getQuestionNoText }}
+            {{ student_answer_index | getQuestionNoText }}.
             {{ student_answer_content }}
             <IconCancel class="icon fill-opacity-1 heading-3 ml-2" />
           </span>
 
           <span class="d-inline-flex align-items-center text-primary ml-4">
             Đáp án đúng:
-            {{student_answer_index | getQuestionNoText }}
+            {{ correct_answer_index | getQuestionNoText }}.
             {{ correct_answer_content }}
           </span>
         </span>
@@ -76,7 +79,7 @@
 
 <script>
 import { EXERCISE_TYPES } from "~/utils/constants";
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 const IconAngleDown = () =>
   import("~/assets/svg/design-icons/angle-down.svg?inline");
 const IconCheck = () => import("~/assets/svg/v2-icons/check_24px.svg?inline");
@@ -109,11 +112,11 @@ export default {
 
   methods: {
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseQuestionCurrent",
+      "setStudyExerciseQuestionCurrent"
     ]),
 
     navToQuestion() {
-      console.log("[navToQuestion]",this.question);
+      console.log("[navToQuestion]", this.question);
       this.setStudyExerciseQuestionCurrent(this.question.id);
     },
 

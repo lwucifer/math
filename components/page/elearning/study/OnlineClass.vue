@@ -19,16 +19,16 @@
         />
       </div>
       <div class="d-flex-left mt-3">
-        <div class="color-999 d-flex-center" v-if="item.status == liveStatus">
-          <IconCam24 class="mr-2" />
+        <div class="d-flex-center color-red ml-auto" v-if="item.status == finishStatus">
+          <IconCam24 class="mr-2 fill-red" height="18" width="18" />
           <span>Đang diễn ra</span>
         </div>
         <div class="d-flex-center color-yellow ml-auto" v-else-if="item.next_time">
           <IconCam24 class="mr-2 fill-yellow" height="18" width="18" />
           <span>Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
-        <div class="d-flex-center color-red ml-auto" v-else-if="item.status == finishStatus">
-          <IconCam24 class="mr-2 fill-red" height="18" width="18" />
+        <div class="color-999 d-flex-center" v-else-if="item.status == liveStatus">
+          <IconCam24 class="mr-2" />
           <span>Đã kết thúc</span>
         </div>
       </div>
