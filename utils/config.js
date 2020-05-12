@@ -18,6 +18,7 @@ export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
 export const DATETIME_FULL_WEEK_DAY = "dddd, DD/MM/YYYY, h:mm A";
+export const DATETIME_HH_MM_DD_MM_YY = "HH:mm, DD/MM/YYYY";
 export const DATE_SHORTCUT = [
   {
     text: 'Hôm nay',
@@ -62,6 +63,15 @@ export const DATE_SHORTCUT = [
       return [start, end];
     },
   },
+  {
+    text: 'Tùy chọn',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      return [start, end];
+    },
+  }
 ];
 
 export const UNAUTHORIZE_API = ["user/public/renew", "user/public/login"];
