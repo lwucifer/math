@@ -18,13 +18,13 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST]({ commit }) {
+  async [actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST]({ commit }, options) {
     try {
-      const result = await new Summary(this.$axios)[actionTypes.BASE.LIST]();
+      const result = await new Summary(this.$axios)[actionTypes.BASE.LIST](options);
       commit(
         mutationTypes.ELEARNING_SCHOOL_SUMMARY
           .SET_ELEARNING_SCHOOL_SUMMARY_LIST,
-        result
+        result.data
       );
     } catch (error) {
       console.log(error);
