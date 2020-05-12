@@ -98,7 +98,7 @@ import { debounce, isEmpty, get, uniq } from "lodash";
 import tippy from "tippy.js";
 import "tippy.js/themes/light.css";
 import { Editor, EditorContent } from "tiptap";
-import { Placeholder, HardBreak, Mention } from "tiptap-extensions";
+import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 import EmojiButton from "@joeattardi/emoji-button";
 
@@ -222,6 +222,7 @@ export default {
           emptyNodeText: "Viết bình luận"
         }),
         new HardBreak(),
+        new History(),
         new EnterHandler({
           onEnter: this.enterHandler
         }),

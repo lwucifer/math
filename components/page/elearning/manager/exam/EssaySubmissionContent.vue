@@ -16,7 +16,12 @@
           </div>
         </div>
       </div>
-      
+    </div>
+    <div class="item" v-if="note">
+      <label for="" class="text-dark content-title">Nhận xét chi biết bài làm của học sinh</label>
+      <div class="content--note">
+        <div v-html="note"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +35,9 @@
         type: Array,
         required: true,
         validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
+      },
+      note: {
+        type: String
       }
     },
     computed: {

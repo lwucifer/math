@@ -38,7 +38,7 @@
         class="cc-box__btn cc-box__btn-edit"
         @click="handleDeleteExercise"
       >
-        <IconTrashAlt class="icon d-block subheading fill-secondary" />
+        <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px"/>
       </button>
     </template>
     <app-modal-confirm
@@ -52,7 +52,7 @@
 
 <script>
 import { get } from "lodash";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import { getParamQuery } from "~/utils/common";

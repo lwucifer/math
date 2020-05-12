@@ -11,18 +11,22 @@
         Quay lại
     </app-button>-->
 
-    <div class="create-action__right d-flex align-items-center" v-if="isShowAction">
-      <app-button outline
-        class="mr-4" 
-        square
-        color="error"><IconDelete class="mr-2"/> Thiết lập lại</app-button>
-
+    <div
+      class="create-action__right d-flex align-items-center"
+      v-if="isShowAction"
+    >
       <app-button
-        class="mr-4"
-        color="primary"
-        square
         outline
-        ><IconSave class="mr-2"/> Lưu nháp</app-button>
+        class="mr-4"
+        @click="$emit('handleReset')"
+        square
+        color="error"
+        ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+      >
+
+      <app-button class="mr-4" color="primary" square outline
+        ><IconSave class="mr-2" /> Lưu nháp</app-button
+      >
 
       <!-- <app-button
         class="create-action__btn"
@@ -36,7 +40,8 @@
         class="create-action__btn mr-4"
         square
         :disabled="!isSubmit"
-        ><Forward class="mr-2"/> Lưu & Tiếp tục</app-button>
+        ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+      >
     </div>
   </div>
 </template>
@@ -54,7 +59,7 @@ export default {
     IconArrowLeft,
     IconDelete,
     IconSave,
-    Forward
+    Forward,
   },
 
   props: {

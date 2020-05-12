@@ -15,52 +15,48 @@
             value="LECTURE"
             @click="handleSelectType"
             :checked="payload.type === 'LECTURE'"
-            :class="{ 'mr-6': true, 'disabled-input': disable_type }"
-            :disabled="disable_type"
+            :class="{ 'mr-6': true, 'disabled-input': general }"
+            :disabled="general"
             >Bài giảng</app-radio
           >
           <app-radio
             name="type"
             @click="handleSelectType"
             value="COURSE"
-            :class="{ 'disabled-input': disable_type }"
-            :disabled="disable_type"
+            :class="{ 'disabled-input': general }"
+            :disabled="general"
             :checked="payload.type === 'COURSE'"
             >Khoá học</app-radio
           >
         </div>
 
         <div class="row">
-          <div class="col-md-4">
-            <div class="cgi-form-group mb-4 d-flex justify-content-between align-items-center">
-              <h2 class="cgi-form-title heading-6">Trình độ</h2>
-              <CourseSelectLevel
-                :defaultValue="payload.level"
-                @handleChangeLevel="handleChangeLevel"
-              />
-            </div>
-          </div>
-          
+          <CourseSelectLevel
+            :defaultValue="payload.level"
+            @handleChangeLevel="handleChangeLevel"
+          />
 
-          <div class="col-md-4 ml-5">
-            <div class="cgi-form-group mb-4 d-flex justify-content-between align-items-center">
-              <h2 class="cgi-form-title heading-6">Môn học</h2>
-              <CourseSelectSubject
-                :defaultValue="payload.subject"
-                @handleChangeSubject="handleChangeSubject"
-              />
-            </div>
-          </div>
+          <CourseSelectSubject
+            :defaultValue="payload.subject"
+            @handleChangeSubject="handleChangeSubject"
+          />
         </div>
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
             Tên {{ name }}
-            <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span>
+            <span class="caption text-sub font-weight-normal"
+              >(Tối đa 60 ký tự)</span
+            >
           </h2>
-          <app-input 
+          <app-input
             placeholder="Nhập tiêu đề của khóa học"
-            :counter="60" v-model="payload.name" />
+            :counter="60"
+            v-model="payload.name"
+            @input="handleChangeName($event)"
+            @handleBlur="handleBlurName($event)"
+          />
+          <app-error :error="get(error, 'name', '')"></app-error>
         </div>
 
         <CourseBenefit
@@ -68,20 +64,25 @@
           :benefit="payload.benefit"
           @removeBenefit="removeBenefit"
           @addBenefit="addBenefit"
+          @cancelInputBenefit="cancelInputBenefit"
         />
+        <app-error :error="get(error, 'benefit', '')"></app-error>
 
         <div class="cgi-form-group mb-4">
-          <h2 class="cgi-form-title heading-6 mb-3">Mô tả tổng quát
-             <span class="text-sub caption font-weight-normal">(Tối thiểu tổng 300 ký tự)</span>
+          <h2 class="cgi-form-title heading-6 mb-3">
+            Mô tả tổng quát
+            <span class="text-sub caption font-weight-normal"
+              >(Tối thiểu tổng 300 ký tự)</span
+            >
           </h2>
           <app-editor
             class="bg-input-gray mb-3"
             :sticky-offset="`{ top: 70, bottom: 0 }`"
             v-model="payload.description"
+            @input="handleChangeDescription($event)"
+            @onBlur="handleBlurDescription"
           />
-          <span class="text-error" v-if="error.description">{{
-            error.description
-          }}</span>
+          <app-error :error="get(error, 'description', '')"></app-error>
           <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
@@ -100,16 +101,38 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
-        :title="title"
+        :title="title_confirm"
       />
     </div>
 
-    <create-action
-      class="mt-5"
-      @handleCLickSave="handleCLickSave"
-      :isSubmit="isSubmit"
-      @handleDelete="handleReset"
-    />
+    <div class="create-action mt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <app-button
+          outline
+          class="mr-4"
+          @click="handleReset"
+          square
+          color="error"
+          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+        >
+        <app-button
+          class="mr-4"
+          color="primary"
+          square
+          outline
+          @click="handleCLickSave('draft')"
+          :disabled="!submit"
+          ><IconSave class="mr-2" /> Lưu nháp</app-button
+        >
+        <app-button
+          @click="handleCLickSave('next')"
+          class="create-action__btn mr-4"
+          square
+          :disabled="!submit"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -138,39 +161,10 @@ import CourseSelectSubject from "~/components/page/course/create/info/CourseSele
 import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
 import CourseSelectCover from "~/components/page/course/create/info/CourseSelectCover";
 import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
-
-const schema = yup.object().shape({
-  avatar: yup.string().required(),
-  benefit: yup.string().required(),
-  description: yup
-    .string()
-    .min(300)
-    .max(2000)
-    .required(),
-  level: yup.string().required(),
-  name: yup
-    .string()
-    .max(60)
-    .required(),
-  subject: yup.string().required(),
-  type: yup.string().required(),
-});
-
-const schema_update = yup.object().shape({
-  benefit: yup.string().required(),
-  description: yup
-    .string()
-    .min(300)
-    .max(2000)
-    .required(),
-  level: yup.string().required(),
-  name: yup
-    .string()
-    .max(60)
-    .required(),
-  subject: yup.string().required(),
-  type: yup.string().required(),
-});
+import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 export default {
   components: {
@@ -183,17 +177,19 @@ export default {
     IconTrashAlt,
     CourseBenefit,
     CourseSelectCover,
+    IconArrowLeft,
+    IconDelete,
+    IconSave,
+    Forward,
   },
 
   data() {
     return {
-      isSubmit: false,
-      disable_type: false,
       error: {
         description: "",
+        name: "",
+        benefit: "",
       },
-      title:
-        "Xác nhận? Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu",
       payload: {
         avatar: "",
         benefit: [],
@@ -206,45 +202,16 @@ export default {
       },
       showModalConfirm: false,
       confirmLoading: false,
+      type_save: "",
     };
   },
 
-  created() {
-    this.handleFetchElearningGeneral();
+  mounted() {
+    const elearning_id = getParamQuery("elearning_id");
+    this.handleFetchElearningGeneral(elearning_id);
   },
 
   watch: {
-    payload: {
-      handler: function() {
-        let that = this;
-        const elearning_id = getParamQuery("elearning_id");
-        let payload = cloneDeep(this.payload);
-        payload.description = payload.description.replace("<p></p>", "");
-
-        if (
-          payload.description.length > 0 &&
-          payload.description.length < 300
-        ) {
-          this.error.description = "Bạn chưa nhập đủ 300 ký tự";
-        } else if (payload.description.length > 2000) {
-          this.error.description = "Bạn nhập quá số ký tự cho phép";
-        } else {
-          this.error.description = "";
-        }
-
-        if (elearning_id) {
-          schema_update.isValid(payload).then(function(valid) {
-            that.isSubmit = valid;
-          });
-          return;
-        }
-
-        schema.isValid(payload).then(function(valid) {
-          that.isSubmit = valid;
-        });
-      },
-      deep: true,
-    },
     general: {
       handler: function() {
         this.payload.benefit = [...get(this, "general.benefit", [])];
@@ -253,11 +220,7 @@ export default {
         this.payload.subject = get(this, "general.subject.id", "");
         this.payload.level = get(this, "general.level", "");
         this.payload.type = get(this, "general.type", "");
-        if (get(this, "general.id", "")) {
-          this.title = "Xác nhận?";
-          this.disable_type = true;
-          this.payload.elearning_id = get(this, "general.id", "");
-        }
+        this.payload.elearning_id = get(this, "general.id", "");
       },
       deep: true,
     },
@@ -270,9 +233,77 @@ export default {
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
+    submit() {
+      if (!get(this, "payload.name", "")) return false;
+      if (!get(this, "payload.benefit.length", 0)) return false;
+      if (!get(this, "payload.description", "")) return false;
+      if (!get(this, "payload.subject", "")) return false;
+      if (!get(this, "payload.level", "")) return false;
+      if (!get(this, "payload.type", "")) return false;
+      if (!get(this, "payload.avatar", "") && !this.general) return false;
+      if (!get(this, "payload.cover_image", "") && !this.general) return false;
+
+      const length_name = get(this, "payload.name", 0);
+      if (length_name > 60) {
+        return false;
+      }
+
+      const lengh_description = get(this, "payload.description.length", 0);
+      if (lengh_description > 0 && lengh_description < 300) {
+        return false;
+      }
+      if (lengh_description > 2000) {
+        return false;
+      }
+
+      return true;
+    },
+    title_confirm() {
+      let title =
+        "Xác nhận? Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu";
+      if (get(this, "general.id", "")) {
+        title = "Xác nhận?";
+      }
+      return title;
+    },
   },
 
   methods: {
+    handleBlurName(e) {
+      this.handleChangeName(e.target.value);
+    },
+    handleBlurDescription() {
+      this.handleChangeDescription(this.payload.description);
+    },
+    handleChangeDescription(value) {
+      value = value.replace("<p></p>", "");
+      if (!value) {
+        this.error.description = "Bạn cần nhập mô tả khóa học";
+        return;
+      }
+      if (value.length < 300) {
+        this.error.description = "Mô tả không được ít hơn 300 ký tự";
+        return;
+      }
+      if (value.length > 2000) {
+        this.error.description = "Mô tả vượt quá số ký tự cho phép";
+        return;
+      }
+      this.error.description = "";
+    },
+
+    handleChangeName(value) {
+      if (!value) {
+        this.error.name = "Bạn cần nhập tên khoá học";
+        return;
+      }
+      if (value.length > 60) {
+        this.error.name = "Tên khoá học vượt quá số ký tự cho phép";
+        return;
+      }
+      this.error.name = "";
+    },
+
     handleReset() {
       this.payload.benefit = [...get(this, "general.benefit", [])];
       this.payload.description = get(this, "general.description", "");
@@ -283,29 +314,40 @@ export default {
       this.error = {};
     },
 
+    checkShowErrorBenefit() {
+      if (!this.payload.benefit.length) {
+        this.error.benefit = "Bạn cần thêm lợi ích cho khoá học";
+        return;
+      }
+      this.error.benefit = "";
+    },
+
     removeBenefit(index) {
       this.payload.benefit = this.payload.benefit.filter(
         (item, i) => i !== index
       );
+      this.checkShowErrorBenefit();
+    },
+
+    cancelInputBenefit() {
+      this.checkShowErrorBenefit();
     },
 
     addBenefit(html) {
       this.payload.benefit.push(html);
+      this.checkShowErrorBenefit();
     },
 
-    handleFetchElearningGeneral() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        const options = {
-          params: {
-            elearning_id,
-          },
-        };
-        this.$store.dispatch(
-          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-          options
-        );
-      }
+    handleFetchElearningGeneral(elearning_id) {
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
+      this.$store.dispatch(
+        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+        options
+      );
     },
 
     handleChangeLevel(level) {
@@ -328,44 +370,43 @@ export default {
       this.payload.subject = get(subject, "id", "");
     },
 
-    handleCLickSave() {
+    handleCLickSave(type_save) {
+      this.type_save = type_save;
       this.showModalConfirm = true;
     },
 
     async handleOk() {
       this.confirmLoading = true;
-      this.isSubmit = false;
       let payload = createPayloadAddCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
 
-      this.isSubmit = true;
       this.confirmLoading = false;
       this.showModalConfirm = false;
 
       if (get(result, "success", false)) {
-        const params = {
-          elearning_id: get(result, "data.elearning_id", ""),
-        };
-        const options = {
-          params,
-        };
-        await this.$store.dispatch(
-          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-          options
-        );
-        redirectWithParams(params);
-        this.getProgress();
+        const elearning_id = get(result, "data.elearning_id", "");
+        this.handleFetchElearningGeneral(elearning_id);
+        redirectWithParams({ elearning_id });
+        this.getProgress(elearning_id);
         this.$toasted.success(get(result, "message", ""));
+        if (this.type_save === "next") {
+          if (this.payload.type === "LECTURE") {
+            this.$emit("nextStep", "content-lecture");
+          }
+          if (this.payload.type === "COURSE") {
+            this.$emit("nextStep", "content-course");
+          }
+        }
+
         return;
       }
       this.$toasted.error(get(result, "message", ""));
     },
 
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
+    getProgress(elearning_id) {
       const options = {
         params: {
           elearning_id,

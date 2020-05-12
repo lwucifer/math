@@ -7,7 +7,7 @@
             <div class="elearning-lesson_image">
               <img src="https://picsum.photos/750/422" alt />
             </div>
-            <div class="elearning-lesson__main-nav">
+            <div class="elearning-study-tabs">
               <n-link :to="'/elearning/course'">Tổng quan</n-link>
               <a class="active">Hỏi đáp</a>
               <n-link :to="'/elearning/course/notify'">Thông báo</n-link>
@@ -91,5 +91,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/course/_elearning-course.scss";
+@import "~/assets/scss/pages/elearning/_study.scss";
 </style>

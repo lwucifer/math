@@ -5,13 +5,12 @@
         class="mb-3"
         title="Danh sách trường học"
         :resultSpan="resultSummary"
-        :schoolTypes="categories"
+        :schoolTypes="categoryOpts"
         :hasSort="true"
         :hasLocation="true"
         :hasSchoolLevel="true"
         :hasSearch="false"
         :hasSearchTitle="true"
-        :selectedType="selectedType"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedLevel="handleChangedLevel"
         @handleChangedDistrict="handleChangedDistrict"
@@ -19,7 +18,7 @@
         @handleChangeSearch="handleChangeSearch"
       ></school-filter>
       <!--Detail school types-->
-      <SchoolListBox :category="selectedCategory" @showAll="showAll" :schoolSearch="schoolSearch"></SchoolListBox>
+      <SchoolListBox :category="selectedCategory"></SchoolListBox>
     </div>
   </div>
 </template>
@@ -31,7 +30,8 @@ import SchoolSlider from "~/components/page/school/SchoolListSlider";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, addAllOptionSelect } from "~/utils/common";
+import { PAGE_SIZE } from '~/utils/constants';
 
 export default {
   name: "School",
@@ -69,31 +69,32 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch"
+    ...mapState("elearning/school/school-summary", {
+      schoolSummary: "elearningSchoolSummary"
     }),
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
 
     schools() {
-      return get(this, `schoolSearch.data.content`, []);
+      return get(this, `schoolSummary.data.content`, []);
     },
 
     resultSummary() {
-      const schoolNum = this.schools.length || 0;
-      const studentNum = this.schools.reduce((a, b) => {
-        return a + b.student_number;
-      }, 0);
-      const teacherNum = this.schools.reduce((a, b) => {
-        return a + b.teacher_number;
-      }, 0);
-      return `${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh`;
+      const schoolNum = this.schoolSummary.total_school;
+      const studentNum = this.schoolSummary.total_student;
+      const teacherNum = this.schoolSummary.total_teacher;
+
+      return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
+    },
+
+    categoryOpts() {
+      return addAllOptionSelect(this.categories);
     },
 
     selectedCategory() {
-      if(this.type) return this.categories.find(c => c.type == this.type);
-      return this.categories[0];
+      if (this.type) return this.categories.find(c => c.type == this.type);
+      return {};
     },
 
     selectedType() {
@@ -116,7 +117,8 @@ export default {
       console.log("[Page School] show all a type of school: ", id);
     },
     handleChangedLevel(level) {
-      this.type = get(level, "value", "");
+      console.log("[handleChangedLevel] level", level);
+      this.type = get(level, "type", "");
     },
     handleChangedWard(ward) {
       this.ward_id = get(ward, "id", "");
@@ -128,6 +130,7 @@ export default {
       this.province_id = get(province, "id", "");
     },
     handleChangeSearch(keyword) {
+      console.log("[handleChangeSearch]", keyword);
       this.keyword = keyword;
     },
     handleGetSchoolsByLocation() {
@@ -137,10 +140,11 @@ export default {
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
+      params.size = PAGE_SIZE.SCHOOL_16;
 
       const options = { params };
       this.$store.dispatch(
-        `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
+        `elearning/school/school-summary/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`,
         options
       );
     }

@@ -8,13 +8,19 @@
           <client-only>
             <vueCropper
               ref="cropper"
+              mode="100% auto"
               :img="avatarChoosen"
               :outputType="cropperOutputType"
               :fixedNumber="[340, 204]"
               fixed
               autoCrop
               full
+              :canScale="false"
+              :fixedBox="true"
+              :canMoveBox="true"
               infoTrue
+              :autoCropWidth="340"
+              :autoCropHeight="204"
             ></vueCropper>
           </client-only>
         </div>
@@ -39,8 +45,9 @@
       <div class="col csa-col csa-col--right mb-4">
         <p class="csa-desc caption text-gray">
           Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
-          <strong>340x204</strong> pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
-          .png. Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
+          <strong>340x204</strong> pixels. Định dạng cho phép là .jpg, .jpeg,
+          .jpg, .bmp, hoặc .png. Chúng tôi khuyến cáo không nên chèn chữ lên
+          hình ảnh đại diện
         </p>
 
         <div class="mt-4">

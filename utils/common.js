@@ -198,3 +198,13 @@ export function getCountdown_HH_MM_SS(val) {
     // console.log("[getCountdown_HH_MM_SS]", str, h, m, s);
     return str
 }
+
+export const addAllOptionSelect = (arr) => {
+
+    const allOpt = {
+        id: 0,
+        name: 'Tất cả',
+        type: ''
+    }
+    return [allOpt, ...arr];
+}
