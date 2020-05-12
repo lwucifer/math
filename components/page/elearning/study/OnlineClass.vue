@@ -7,14 +7,16 @@
       class="elearning-lesson-side__class"
     >
       <div class="d-flex">
-        <span>{{ index + 1 }}. {{ item.name }}</span>
+        <span
+          class="text-clickable"
+          @click.prevent="handleOlClassSignin(item)"
+        >{{ index + 1 }}. {{ item.name }}</span>
         <IconCalendarAlt
           class="ml-2 fill-blue text-clickable"
           height="18"
           width="18"
-          @click.prevent="handleOlClassSignin(item)"
+          title="Thời khoá biểu"
         />
-        <!-- <app-checkbox v-model="item.status" class="ml-auto" /> -->
       </div>
       <div class="d-flex-left mt-3">
         <div class="color-999 d-flex-center" v-if="item.status == liveStatus">
@@ -31,8 +33,12 @@
         </div>
       </div>
     </div>
+
+    <ModalWaitingOlClass v-if="modalShow" @close="modalShow = false" :info="{recent_schedule: '', recent_schedule: ''}" :id="''"/>
   </div>
 </template>
+
+
 
 <script>
 import IconCam24 from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
@@ -41,17 +47,21 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import { LESSION_ONLINE_STATUS } from "~/utils/constants";
 
+import ModalWaitingOlClass from "~/components/page/elearning/study/ModalWaitingOlClass";
+
 export default {
   data() {
     return {
       // comingStatus: LESSION_ONLINE_STATUS.COMING,
       liveStatus: LESSION_ONLINE_STATUS.LIVE,
-      finishStatus: LESSION_ONLINE_STATUS.FINISH
+      finishStatus: LESSION_ONLINE_STATUS.FINISH,
+      modalShow: false,
     };
   },
   components: {
     IconCam24,
-    IconCalendarAlt
+    IconCalendarAlt,
+    ModalWaitingOlClass,
   },
 
   computed: {
