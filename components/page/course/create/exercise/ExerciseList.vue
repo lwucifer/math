@@ -1,6 +1,6 @@
 <template>
   <div class="cc-panel__body">
-    <div class="cc-box">
+    <div class="cc-box" >
       <div class="cc-box__head">
         <div class="cc-box__head-left">
           <EditExerciseName
@@ -11,9 +11,8 @@
         </div>
 
         <div class="cc-box__head-right">
-          <a href @click.prevent="handleAddQuestion" class="text-secondary"
-            >Thêm câu hỏi</a
-          >
+          <button @click.prevent="handleAddQuestion" class="text-primary d-flex align-items-center"
+            ><IconPlus2 class="mr-3 fill-primary"/> Thêm câu hỏi</button>
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
@@ -24,7 +23,7 @@
         </div>
       </div>
 
-      <div class="cc-box__body">
+      <div class="cc-box__body" style="background: #F9F9F9">
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
@@ -60,6 +59,8 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
+import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
+
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
@@ -80,7 +81,8 @@ export default {
     CreateQuestionChoice,
     ListQuestion,
     EditExerciseName,
-    IconAngleUp
+    IconAngleUp,
+    IconPlus2
   },
 
   props: {

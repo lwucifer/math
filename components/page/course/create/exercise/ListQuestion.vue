@@ -14,7 +14,7 @@
         </button>
 
         <button class="mr-4" @click="handleDeleteQuestion">
-          <IconTrashAlt class="icon d-block subheading fill-secondary" />
+          <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
         </button>
 
         <!-- <button>
@@ -50,7 +50,7 @@
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
