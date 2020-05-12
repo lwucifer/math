@@ -242,10 +242,10 @@ export default {
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.comment_allow = get(this, "setting.comment_allow", "");
       if (this.payload.comment_allow === true) {
-        this.payload.comment_allow === 1;
+        this.payload.comment_allow = 1;
       }
       if (this.payload.comment_allow === false) {
-        this.payload.comment_allow === 0;
+        this.payload.comment_allow = 0;
       }
       this.payload.price = get(this, "setting.price", 0);
       this.payload.fee = get(this, "setting.fee", 0);
