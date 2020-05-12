@@ -15,27 +15,27 @@
             <!--@mouseleave="closeCmt"-->
         <!--&gt;-->
         <td class="cmt-content">
-          <v-popover
-            class=""
-            trigger="hover"
-            offset="10"
-          >
-            <div>
-              {{ row.content | truncStrFilter(30, false) }}
-            </div>
-    
-            <template slot="popover">
-              <!--<div v-if="loadingQuestion" class="text-center">-->
-                <!--<app-spin></app-spin>-->
+          <!--<v-popover-->
+            <!--class=""-->
+            <!--trigger="hover"-->
+            <!--offset="10"-->
+          <!--&gt;-->
+            <!--<div>-->
+              <!--{{ row.content | truncStrFilter(30, false) }}-->
+            <!--</div>-->
+    <!---->
+            <!--<template slot="popover">-->
+              <!--&lt;!&ndash;<div v-if="loadingQuestion" class="text-center">&ndash;&gt;-->
+                <!--&lt;!&ndash;<app-spin></app-spin>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--<div class="">-->
+                <!--<div v-html="row.content"></div>-->
               <!--</div>-->
-              <div class="">
-                <div v-html="row.content"></div>
-              </div>
-            </template>
-          </v-popover>
+            <!--</template>-->
+          <!--</v-popover>-->
           
           <!--<div class="cmt-detail" v-if="currentIndex && (row.id == currentIndex)">-->
-            <!--<div v-html="row.content"></div>-->
+            <div v-html="row.content"></div>
           <!--</div>-->
         </td>
       </template>
@@ -49,11 +49,11 @@
         </td>
       </template>
   
-      <template v-slot:cell(class)="{row}">
-        <td>
-          {{ get(row, 'student.class_name', '') }}
-        </td>
-      </template>
+      <!--<template v-slot:cell(class)="{row}">-->
+        <!--<td>-->
+          <!--{{ get(row, 'student.class_name', '') }}-->
+        <!--</td>-->
+      <!--</template>-->
     
       <template v-slot:cell(course)="{row}">
         <td>
@@ -91,10 +91,10 @@
             name: "creator",
             text: "Người đánh giá",
           },
-          {
-            name: "class",
-            text: "Lớp",
-          },
+          // {
+          //   name: "class",
+          //   text: "Lớp",
+          // },
           {
             name: "course",
             text: "Bình luận tại",

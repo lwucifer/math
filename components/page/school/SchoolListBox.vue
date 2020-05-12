@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      pagination: { 
+      pagination: {
         totalPages: 5,
         size: 10,
         totalElements: 50,
@@ -69,7 +69,8 @@ export default {
     schools() {
       const type = get(this, "category.type", "");
       const schoolList = get(this, `schoolSearch.data.content`, []);
-      console.log("[schoolList]", schoolList, type);
+      // console.log("[schoolList]", schoolList, type);
+      if (!type) return schoolList;
       return schoolList.filter(sc => sc.type == type) || [];
     }
   },

@@ -13,8 +13,12 @@
               :fixedNumber="[730, 410]"
               fixed
               autoCrop
-              full
+              :canScale="false"
+              :fixedBox="true"
+              :canMoveBox="true"
               infoTrue
+              :autoCropWidth="730"
+              :autoCropHeight="410"
             ></vueCropper>
           </client-only>
         </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="d-inline-block mb-3" for="question-editor"
+    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
       >Nội dung câu hỏi</label
     >
 
@@ -19,8 +19,9 @@
 
     <div class="d-flex justify-content-end mt-5">
       <app-button
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
+        color="default"
+        outline
+        class="font-weight-semi-bold mr-4 text-secondary"
         size="sm"
         square
         @click="$emit('handleCancelAddQuestion')"

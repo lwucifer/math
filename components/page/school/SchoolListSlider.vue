@@ -1,5 +1,5 @@
 <template>
-  <div class="school-list-box">
+  <div class="school-list-box" v-if="schools.length > 0">
     <div class="school-list-box__title">
       <div>
         <span class="school-list-box__title__name">{{ category.name }}</span>
@@ -10,43 +10,24 @@
           <b>{{ studentNum }}</b> học sinh )
         </span>
       </div>
-      <n-link class="school-list-box__title__submit-btn" :to="'/school/search'">
+      <n-link class="school-list-box__title__submit-btn" :to="`/school/search?type=${category.type}`">
         Xem thêm
         <IconRight class="fill-primary" />
       </n-link>
     </div>
     <!--List schools-->
     <div class="school-list-box__content">
-      <div class="row row--school-list">
-        <div v-swiper:mySwiper="currentSwiperOptions" class="post-slider" v-on="$listeners">
-          <div class="swiper-wrapper">
+        <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
+          <template slot="default" slot-scope="{ classes }">
             <div
-              class="swiper-slide post-slider-container"
               v-for="(school, index) in schools"
               :key="index"
+              :class="classes"
             >
               <school-item :school="school" />
             </div>
-          </div>
-          <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
-        </div>
-        <div
-          class="swiper-button-custom swiper-button-prev--circle"
-          v-if="currentSwiperOptions.navigation && schools.length > 0"
-          slot="button-prev"
-          @click="mySwiper.slidePrev()"
-        >
-          <IconChevronLeft />
-        </div>
-        <div
-          class="swiper-button-custom swiper-button-next--circle"
-          v-if="currentSwiperOptions.navigation && schools.length > 0"
-          slot="button-next"
-          @click="mySwiper.slideNext()"
-        >
-          <IconChevronRight />
-        </div>
-      </div>
+          </template>
+        </app-carousel>
     </div>
   </div>
 </template>
@@ -164,56 +145,8 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/school/_school-list-box.scss";
-
-.post-slider {
-  .swiper-button-custom {
-    $background-disable: #e1e1e1;
-    position: absolute;
-    width: 4rem;
-    height: 4rem;
-    background-color: $background-disable;
-    text-align: center;
-    line-height: 4rem;
-    z-index: 10;
-    display: inline-block;
-    cursor: pointer;
-    background-image: none !important;
-
-    &:hover,
-    &:visited,
-    &:focus {
-      background-color: $color-primary;
-      outline: none;
-    }
-
-    svg {
-      width: 0.6rem;
-      height: 1.2rem;
-      fill: #fff;
-    }
-
-    &.swiper-button-disabled {
-      background-color: $background-disable;
-    }
-  }
-}
-.row--school-list {
+.app-carousel-wrapper {
+  width: 100%;
   position: relative;
-}
-
-.swiper-button-next--circle {
-  border-radius: 50%;
-  top: 50%;
-  margin-top: -2rem;
-  right: -2rem;
-  left: auto;
-}
-
-.swiper-button-prev--circle {
-  border-radius: 50%;
-  top: 50%;
-  margin-top: -2rem;
-  left: -2rem;
-  right: auto;
 }
 </style>

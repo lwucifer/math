@@ -5,15 +5,14 @@
         style="width: 12rem"
         class="app-vue-select"
         v-model="province"
-        :options="provinces"
+        :options="provinceOpts"
         label="name"
         placeholder="Tỉnh thành"
         :reduce="value => value"
         searchable
-        clearable
+        :clearable="false"
         @input="handleChangeProvince"
-      >
-      </app-vue-select>
+      ></app-vue-select>
     </div>
 
     <div class="school-filter__form__item">
@@ -21,15 +20,14 @@
         style="width: 12rem"
         class="app-vue-select"
         v-model="district"
-        :options="districts"
+        :options="districtOpts"
         label="name"
         :reduce="value => value"
         placeholder="Quận huyện"
         searchable
-        clearable
+        :clearable="false"
         @input="handleChangedDistrict"
-      >
-      </app-vue-select>
+      ></app-vue-select>
     </div>
 
     <div class="school-filter__form__item">
@@ -37,15 +35,14 @@
         style="width: 12rem"
         class="app-vue-select"
         v-model="ward"
-        :options="wards"
+        :options="wardOpts"
         label="name"
         :reduce="value => value"
         placeholder="Xã phường"
         searchable
-        clearable
+        :clearable="false"
         @input="handleChangedWard"
-      >
-      </app-vue-select>
+      ></app-vue-select>
     </div>
   </fragment>
 </template>
@@ -54,6 +51,7 @@
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
+import { addAllOptionSelect } from "~/utils/common";
 
 export default {
   created() {
@@ -66,7 +64,17 @@ export default {
       "provinces",
       "districts",
       "wards"
-    ])
+    ]),
+
+    provinceOpts() {
+      return addAllOptionSelect(this.provinces);
+    },
+    districtOpts() {
+      return addAllOptionSelect(this.districts);
+    },
+    wardOpts() {
+      return addAllOptionSelect(this.wards);
+    }
   },
   data() {
     return {

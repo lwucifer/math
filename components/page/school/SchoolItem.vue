@@ -3,7 +3,7 @@
     <div class="school-item__thumnail">
       <n-link :to="'/school/' + school.id">
         <img
-          :src="get(school, 'avatar.medium', '')"
+          :src="get(school, 'cover.high', '')"
           :alt="get(school, 'name', '')"
         />
       </n-link>
@@ -54,7 +54,7 @@ export default {
   },
 
   created() {
-    console.log(this.school);
+    // console.log(this.school);
   },
 
   methods: {

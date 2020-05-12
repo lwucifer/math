@@ -3,12 +3,12 @@
     <div class="d-flex">
       <div
         class="ml-0 filter-form__item filter-form__item--search border-0"
-        style="max-width: 10rem; min-width: 8rem;"
+        style="max-width: 35rem; min-width: 34rem;"
       >
         <app-search
           class="w-100"
           size="sm"
-          :placeholder="truncStrFilter('Nhập để tìm kiếm', 7)"
+          placeholder="Nhập để tìm kiếm"
           v-model="filters.query"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
@@ -35,20 +35,20 @@
         >
         </app-vue-select>
       </div>
-      <app-select-class
-        v-if="filterSelect"
-        style="margin-left: 0.6rem;"
-        class-name="filter-form__item"
-        :class-style="{ 'min-width': '7.5rem !important', 'margin-right': '0.6rem' }"
-        class-year-name="filter-form__item"
-        :year-style="{ 'min-width': '11.5rem' }"
-        @changedClass="handleChangedClass"
-        placeholder="Lớp"
-      />
+      <!--<app-select-class-->
+        <!--v-if="filterSelect"-->
+        <!--style="margin-left: 0.6rem;"-->
+        <!--class-name="filter-form__item"-->
+        <!--:class-style="{ 'min-width': '7.5rem !important', 'margin-right': '0.6rem' }"-->
+        <!--class-year-name="filter-form__item"-->
+        <!--:year-style="{ 'min-width': '11.5rem' }"-->
+        <!--@changedClass="handleChangedClass"-->
+        <!--placeholder="Lớp"-->
+      <!--/>-->
       <app-select-voted-elearnings
         v-if="filterSelect"
         class="filter-form__item"
-        style="min-width: 19rem"
+        style="min-width: 18.5rem"
         @input="handleChangedElearning"
         v-model="filters.elearning_id"
       />
@@ -132,6 +132,9 @@
       },
       handleChangedCmt(val) {
         this.$emit('changedCmt', val)
+      },
+      handleSubmitSearch(e) {
+        this.$emit('submitSearch', e.target.value)
       },
       clickSubmit() {
         if (this.filterSelect) {

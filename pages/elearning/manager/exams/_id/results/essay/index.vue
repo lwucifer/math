@@ -5,6 +5,7 @@
       :student-ava="get(this, 'detail.avatar.low', '')"
       :is-pass="isPass"
       :result="result"
+      :result-desc="resultDesc"
       :started-at="get(this, 'detail.start_time', '')"
       :finished-at="get(this, 'detail.timestamp', '')"
       :duration="get(this, 'detail.duration', 0)"
@@ -15,6 +16,7 @@
     
     <submission-content
       :contents="submissionContent"
+      :note="note"
     />
     <!--form-->
     <mark-form-section
@@ -123,8 +125,14 @@
           }
         }
       },
+      resultDesc() {
+        return `Số lần làm bài còn lại: ${get(this, 'detail.remain_works', 0)}`
+      },
       submissionContent: function() {
         return get(this, 'detail.question_list', [])
+      },
+      note: function() {
+        return get(this, 'detail.note', null)
       }
     },
 
