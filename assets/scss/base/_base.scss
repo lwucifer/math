@@ -78,6 +78,7 @@ button {
   box-shadow: none;
   cursor: pointer;
   line-height: inherit;
+  color: inherit;
 
   &[disabled] {
     pointer-events: none;

@@ -183,3 +183,8 @@ export const TRANSACTION_STATUSES = {
     CANCEL: '2',
     CANCEL_SUCCESS: '-2',
 }
+
+export const PAGE_SIZE = {
+    DEFAULT: 10,
+    SCHOOL_16: 16,
+}
