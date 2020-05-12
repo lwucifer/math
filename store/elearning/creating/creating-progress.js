@@ -19,13 +19,16 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.ELEARNING_CREATING_PROGRESS]({ commit }, options) {
+    commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, []);
     try {
       const result = await new Progress(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, result);
+      if (result.success) {
+        commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, result);
+      }
     } catch (error) {
-      commit(mutationTypes.SET_ELEARNING_CREATING_PROGRESS, []);
+      //
     }
   },
 };

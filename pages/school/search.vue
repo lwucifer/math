@@ -11,7 +11,6 @@
         :hasSchoolLevel="true"
         :hasSearch="false"
         :hasSearchTitle="true"
-        :selectedType="selectedType"
         @handleChangeProvince="handleChangeProvince"
         @handleChangedLevel="handleChangedLevel"
         @handleChangedDistrict="handleChangedDistrict"
@@ -19,7 +18,7 @@
         @handleChangeSearch="handleChangeSearch"
       ></school-filter>
       <!--Detail school types-->
-      <SchoolListBox :category="selectedCategory" @showAll="showAll" :schoolSearch="schoolSearch"></SchoolListBox>
+      <SchoolListBox :category="selectedCategory"></SchoolListBox>
     </div>
   </div>
 </template>
@@ -32,6 +31,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, addAllOptionSelect } from "~/utils/common";
+import { PAGE_SIZE } from '~/utils/constants';
 
 export default {
   name: "School",
@@ -69,26 +69,23 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch"
+    ...mapState("elearning/school/school-summary", {
+      schoolSummary: "elearningSchoolSummary"
     }),
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
 
     schools() {
-      return get(this, `schoolSearch.data.content`, []);
+      return get(this, `schoolSummary.data.content`, []);
     },
 
     resultSummary() {
-      const schoolNum = this.schools.length || 0;
-      const studentNum = this.schools.reduce((a, b) => {
-        return a + b.student_number;
-      }, 0);
-      const teacherNum = this.schools.reduce((a, b) => {
-        return a + b.teacher_number;
-      }, 0);
-      return `${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh`;
+      const schoolNum = this.schoolSummary.total_school;
+      const studentNum = this.schoolSummary.total_student;
+      const teacherNum = this.schoolSummary.total_teacher;
+
+      return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
     },
 
     categoryOpts() {
@@ -143,15 +140,11 @@ export default {
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
-      // params.province_id = this.province_id
-      // params.district_id = this.district_id
-      // params.ward_id = this.ward_id
-      // params.keyword = this.keyword
-      // params.type = this.type
+      params.size = PAGE_SIZE.SCHOOL_16;
 
       const options = { params };
       this.$store.dispatch(
-        `elearning/school/school-search/${actionTypes.ELEARNING_SCHOOL_SEARCH.LIST}`,
+        `elearning/school/school-summary/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`,
         options
       );
     }

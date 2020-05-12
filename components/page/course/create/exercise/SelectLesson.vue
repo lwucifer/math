@@ -6,8 +6,8 @@
       :options="lessons"
       placeholder="Chọn bài học"
       label="name"
-      size="sm"
-      style="width: 112px"
+      size="md"
+      style="width: 100%"
       @input="handleSelectLesson"
     >
       <template slot="placeholder-icon">

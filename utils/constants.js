@@ -104,9 +104,9 @@ export const LESSION_STATUS = {
 }
 
 export const LESSION_ONLINE_STATUS = {
-    COMING: 0,
+    // COMING: 2,
     LIVE: 1,
-    FINISH: 1,
+    FINISH: 0,
 }
 
 export const QUESTION_NAV = {
@@ -182,4 +182,9 @@ export const TRANSACTION_STATUSES = {
     PENDING: '0',
     CANCEL: '2',
     CANCEL_SUCCESS: '-2',
+}
+
+export const PAGE_SIZE = {
+    DEFAULT: 10,
+    SCHOOL_16: 16,
 }
