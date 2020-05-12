@@ -6,7 +6,7 @@
 
     <div class="cc-panel__body">
       <div class="mb-4">
-        <div
+        <!-- <div
           class="noti-setting d-flex justify-content-between align-items-center"
         >
           <div class="noti-setting__text text-warning">
@@ -17,7 +17,7 @@
           <button class="noti-setting__close">
             <IconClose fill="#E6A01E" />
           </button>
-        </div>
+        </div> -->
         <!-- <app-alert type="warning" class="mb-4" show-close>
           <template slot="icon">
             <IconWarning class=""/>
