@@ -1,11 +1,22 @@
 <template>
   <div class="cc-panel bg-white mb-4">
     <div class="cc-panel__title">
-      <h1 class="cc-panel__heading heading-5 text-primary">Cài đặt</h1>
+      <h4 class="cc-panel__headin">Cài đặt</h4>
     </div>
 
     <div class="cc-panel__body">
       <div class="mb-4">
+        <div class="noti-setting d-flex justify-content-between align-items-center">
+          <div class="noti-setting__text text-warning"><IconWarning class="mr-2"/> Vui lòng hoàn thành <n-link to="" class="text-warning">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</div>
+          <button class="noti-setting__close"><IconClose fill="#E6A01E"/></button>
+        </div>
+        <!-- <app-alert type="warning" class="mb-4" show-close>
+          <template slot="icon">
+            <IconWarning class=""/>
+          </template>
+          <p class="text-warning">Vui lòng hoàn thành <n-link to="" class="text-warning font-weight-bold">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</p>
+        </app-alert> -->
+
         <h5 class="mb-2">Chế độ hiển thị</h5>
 
         <app-select
@@ -163,6 +174,8 @@ import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
+import IconClose from '~/assets/svg/icons/close.svg?inline';
+import IconWarning from '~/assets/svg/icons/warning.svg?inline';
 
 export default {
   components: {
@@ -172,6 +185,8 @@ export default {
     IconDelete,
     IconSave,
     Forward,
+    IconClose,
+    IconWarning
   },
 
   data() {
@@ -357,6 +372,21 @@ export default {
 </script>
 
 <style lang="scss">
+.noti-setting {
+  background: #FCF8E3;
+  border: 1px solid #CDC52D;
+  border-radius: 2px;
+  height: 40px;
+  padding: 0 1.5rem;
+  margin: 1rem 0 3rem 0;
+
+  &__text {
+    a {
+      font-weight: 600;
+      text-decoration: none;
+    }
+  }
+}
 .percent_price__ElearningCreate {
   border-radius: 2px;
   padding: 10px;
