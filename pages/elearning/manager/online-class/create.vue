@@ -106,7 +106,7 @@
                             label="text"
                             searchable
                             clearable
-                            @input="(e)=>handleChangedTime(e,index)"
+                            @input="(e)=>handleChangedTime(e,index, true)"
                           ></app-vue-select>
                         </div>
                         <div class="d-flex-center mb-4">
@@ -222,7 +222,7 @@
                             class="mr-4 color-red border"
                             @click="cancelTime(index)"
                           >Hủy</app-button>
-                          <app-button @click="saveTime(index)">
+                          <app-button @click="saveTime(index)" :disabled="!checkSchedule">
                             <span v-if="index == indexEdit">Cập nhật</span>
                             <span v-else>Thêm lịch học</span>
                           </app-button>
@@ -345,6 +345,7 @@ const initialStartTime = {
 };
 function initialState() {
   return {
+    //checkSchedule: false,
     indexEdit: null,
     indexShow: 0,
     tab: 1,
@@ -570,10 +571,20 @@ export default {
       stateLessons: "Lessons"
     }),
     fullParams() {
-      return this.params.elearning_id != "" &&
-          this.params.name != "" &&
+      return this.params.elearning_id  &&
+          this.params.name  &&
           this.indexShow === null &&
           this.indexEdit === null
+    },
+    checkSchedule() {
+      let index = this.indexEdit ? this.indexEdit : this.indexShow;
+      const item = this.params.schedules[index];
+      const xxx = this.params.schedules.length;
+      return this.params.schedules[index].from_date  &&
+             this.params.schedules[index].to_date &&
+             this.params.schedules[index].start_time  &&
+             this.params.schedules[index].duration != 0 &&
+             this.params.schedules[index].days_of_week;
     },
   },
 
@@ -583,7 +594,7 @@ export default {
     },
     downloadVideo(newValue, oldValue) {
       this.params.is_allow_download = newValue == "1";
-    },
+    }
   },
 
   methods: {
@@ -695,32 +706,43 @@ export default {
       }
     },
 
-    handleChangedTime(e, index) {
-      console.log('startTime: ', index, this.startTime, e);
-      let xxx = {
-          value: e.value,
-          text: e.value
-        };
-      this.startTime[index] = { ...this.startTime[index],
-        time: xxx
+    handleChangedTime(e, index, type = false) {
+      let post = {
+        value: e.value,
+        text: e.value
+      };
+
+      if (type) {
+        this.startTime.splice(index, 1, { ...this.startTime[index],
+          type: post
+        })
+      } else {
+        this.startTime.splice(index, 1, { ...this.startTime[index],
+          time: post
+        })
       }
-      this.params.schedules[index] = {
+
+      this.params.schedules.splice(index, 1, {
         ...this.params.schedules[index],
         start_time:
           this.startTime[index].time.value +
           " " +
           this.startTime[index].type.value
-      };
+      })
     },
 
     handleChangedDuration(index) {
       let duration =
         parseInt(this.duration[index].hours.value) * 60 +
         parseInt(this.duration[index].minutes.value);
-      this.params.schedules[index] = {
+      
+      this.duration.splice(index, 1, { ...this.duration[index],
+        time: post
+      })
+      this.params.schedules.splice(index, 1, {
         ...this.params.schedules[index],
         duration: parseInt(duration)
-      };
+      });
     },
 
     handleChangedCourse() {
@@ -738,24 +760,23 @@ export default {
     },
     popSelectedIndexes(item, index) {
       if (_.some(this.selectedItems[index], item)) {
-        this.selectedItems[index] = _.reject(
-          this.selectedItems[index],
-          ({ id }) => id === item.id
-        );
+        this.selectedItems[index] = [...this.selectedItems[index]].filter(i => {
+          return i !== item
+        })
+        this.params.schedules.splice(index, 1, {
+          ...this.params.schedules[index],
+          days_of_week: this.arrayToString(this.selectedItems[index])
+        });
       }
-      this.params.schedules[index] = {
-        ...this.params.schedules[index],
-        days_of_week: this.arrayToString(this.selectedItems[index])
-      };
     },
     pushSelectedIndexes(item, index) {
       if (!_.some(this.selectedItems[index], item)) {
         this.selectedItems[index].push(item);
+        this.params.schedules.splice(index, 1, {
+          ...this.params.schedules[index],
+          days_of_week: this.arrayToString(this.selectedItems[index])
+        });
       }
-      this.params.schedules[index] = {
-        ...this.params.schedules[index],
-        days_of_week: this.arrayToString(this.selectedItems[index])
-      };
     },
 
     arrayToString(data) {
