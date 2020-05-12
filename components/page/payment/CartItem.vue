@@ -13,12 +13,12 @@
       </p>
     </div>
     <div class="ml-auto">
-      <h6 class="text-right">{{ get(item, "price", "") }} đ</h6>
+      <h6 class="text-right">{{ numeral(get(item, "price", "")).format() }} đ</h6>
       <div class="d-flex mt-3">
         <span class="price-cart_payment"
-          >{{ get(item, "original_price", "") }}đ</span
+          >{{ numeral(get(item, "original_price", "")).format() }}đ</span
         >
-        <h6 class="ml-2">{{ get(item, "discount", "") }}%</h6>
+        <h6 class="ml-2">{{ numeral(get(item, "discount", "")).format('0,0.00') }}%</h6>
       </div>
     </div>
   </div>
@@ -28,6 +28,7 @@
 import { mapActions } from "vuex";
 import { get } from "lodash";
 import { getDeviceID } from "~/utils/common";
+import numeral from "numeral";
 
 export default {
   name: "CartItem",
@@ -47,6 +48,7 @@ export default {
     ...mapActions("cart", ["cartDelete"]),
     ...mapActions("cart", ["cartList"]),
     get,
+    numeral,
 
     handleClickCartItem(item) {
       const elearning_id = get(item, "elearning_id", "");

@@ -1,17 +1,56 @@
 <template>
-  <div class="cc-panel__body">
+  <div  class="cc-panel__body">
     <div class="mb-4">
-      <label for="title" class="text-sub mb-2 d-inline-block"
-        >Tiêu đề {{ title }}</label
+      <h5 for="title" class="mb-3 d-inline-block"
+        >Tiêu đề {{ title }} <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span></h5
       >
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
-    <div class="row align-items-center mb-4">
-      <div class="col-md-2">
-        <label for="require" class="text-gray caption">Loại {{ title }}</label>
-      </div>
-      <div class="col-md-10">
+    <div class="mb-4" v-show="category === 'EXERCISE'">
+      <h5 for="require" class="mb-3">{{ title_required }}</h5>
+
+      <app-radio-group>
+        <app-radio
+          name="group1"
+          value="1"
+          class="mr-4"
+          :checked="payload.required === 1"
+          @click="payload.required = 1"
+          >Có</app-radio
+        >
+        <app-radio
+          name="group1"
+          value="0"
+          :checked="payload.required === 0"
+          @click="payload.required = 0"
+          >Không</app-radio
+        >
+      </app-radio-group>
+    </div>
+
+    <div class="mb-4">
+      <h5 for="require" class="mb-3">Loại {{ title }}</h5>
+
+      <app-radio-group>
+        <app-radio
+          name="group2"
+          value="CHOICE"
+          class="mr-4"
+          :checked="payload.type === 'CHOICE'"
+          @click="payload.type = 'CHOICE'"
+          >Trắc nghiệm</app-radio
+        >
+        <app-radio
+          name="group2"
+          value="ESSAY"
+          :checked="payload.type === 'ESSAY'"
+          @click="payload.type = 'ESSAY'"
+          >Tự luận</app-radio
+        >
+      </app-radio-group>
+
+      <!-- <div class="col-md-10">
         <app-select
           class="cc-select"
           id="require"
@@ -29,45 +68,17 @@
             <IconAngleDown class="icon" />
           </template>
         </app-select>
-      </div>
+      </div> -->
     </div>
 
-    <div class="row align-items-center mb-4" v-show="category === 'EXERCISE'">
-      <div class="col-md-2">
-        <label for="require" class="text-gray caption">{{
-          title_required
-        }}</label>
-      </div>
-      <div class="col-md-10">
-        <app-select
-          class="cc-select"
-          id="require"
-          :options="[
-            { value: '', text: 'Chọn' },
-            { value: 1, text: 'Có' },
-            { value: 0, text: 'Không' },
-          ]"
-          placeholder="Bắt buộc"
-          size="sm"
-          style="width: 112px"
-          v-model="payload.required"
-        >
-          <template slot="placeholder-icon">
-            <IconAngleDown class="icon" />
-          </template>
-        </app-select>
-      </div>
-    </div>
 
     <div class="row align-items-center mb-4" v-show="payload.required">
-      <div class="col-md-2">
-        <label for="time" class="text-gray caption">Thời gian làm bài</label>
-      </div>
+      <div class="col-12 col-md-4">
+        <label for="time" class="heading-5 font-weight-bold">Thời gian làm bài</label>
 
-      <div class="col-md-10">
         <app-input
           type="number"
-          class="mb-0 ce-input-with-unit"
+          class="mb-0 ce-input-with-unit mt-3"
           id="time"
           size="sm"
           style="width: 112px"
@@ -76,22 +87,15 @@
           <div slot="unit">Phút</div>
         </app-input>
       </div>
-    </div>
 
-    <div
-      class="row align-items-center mb-4"
-      v-show="payload.required"
-    >
-      <div class="col-md-2">
-        <label for="point" class="text-gray caption">Điểm đạt</label>
-      </div>
+      <div class="col-12 col-md-4">
+        <label for="point" class="heading-5 font-weight-bold">Điểm đạt</label>
 
-      <div class="col-md-10">
         <app-input
           type="number"
           min="0"
           max="10"
-          class="mb-0 ce-input-with-unit"
+          class="mb-0 ce-input-with-unit mt-3"
           id="point"
           size="sm"
           style="width: 102px"
@@ -100,17 +104,13 @@
           <div slot="unit">/10</div>
         </app-input>
       </div>
-    </div>
 
-    <div class="row align-items-center mb-4" v-show="payload.required">
-      <div class="col-md-2">
-        <label for="count" class="text-gray caption">Số lần làm bài</label>
-      </div>
+      <div class="col-12 col-md-4">
+        <label for="count" class="heading-5 font-weight-bold">Số lần làm bài</label>
 
-      <div class="col-md-10">
         <app-input
           type="number"
-          class="mb-0"
+          class="mb-0 mt-3"
           id="count"
           size="sm"
           style="width: 49px"
@@ -122,8 +122,9 @@
     <div class="d-flex justify-content-end">
       <app-button
         size="sm"
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
+        color="default"
+        outline
+        class="font-weight-semi-bold mr-4 text-secondary"
         square
         @click="$emit('handleCancel')"
         >Huỷ bỏ</app-button

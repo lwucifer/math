@@ -15,12 +15,14 @@
         </strong>
       </div>
       <div class="col-auto">
-        Số bài giảng:
+        Số bài học:
         <strong class="color-primary">{{ get(info, "lessons", "0") }}</strong>
       </div>
       <div class="col-auto">
         Thời lượng:
-        <strong class="color-primary">{{ get(info, "duration", "--") }}</strong>
+        <strong
+          class="color-primary"
+        >{{ [info.duration && info.duration != "0:0" ? info.duration : "1:0", "m:s"] | moment("mm:ss") }}</strong>
       </div>
     </div>
 

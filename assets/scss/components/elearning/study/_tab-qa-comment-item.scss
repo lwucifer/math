@@ -1,0 +1,64 @@
+.tab-qa-comment-item {
+    display: flex;
+    padding: 2rem 0;
+    border-bottom: 1px solid $color-disabled;
+
+    $this: &;
+
+    &__right {
+        flex-grow: 1;
+        max-width: calc(100% - 4.8rem);
+        margin-left: .8rem;
+    }
+    
+    &__top {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 1.2rem;
+    }
+
+    &__time {
+        font-size: map-get($text-size, 'caption');
+
+        .icon {
+            font-size: map-get($text-size, 'body-1');
+        }
+    }
+
+    &__content {
+        margin-bottom: 1.5rem;
+    }
+
+    &__actions {
+        margin-top: 1.5rem;
+        font-size: map-get($text-size, 'caption');
+    }
+    
+    &__like {
+        margin-right: 1.1rem;
+
+        .icon {
+            font-size: map-get($text-size, 'body-1');
+        }
+    }
+    
+    &__reply {
+        font-weight: 700;
+    }
+
+    &__img {
+        margin-top: 1.2rem;
+        border-radius: 2px;
+    }
+
+    &--level-2 {
+        border-bottom: 0;
+        padding: 0;
+        margin-top: 2rem;
+        
+        #{$this}__right {
+            max-width: calc(100% - 3.8rem);
+        }
+    }
+}
