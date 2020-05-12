@@ -13,21 +13,23 @@
       <div class="link--dropdown__content wrap-arrow__content">
         <ul>
           <li v-for="(elearning,index) in elearningListHeader" :key="index">
-            <n-link :to="'/elearning/'+ elearning.elearning_id" v-if="index < 3">
-              <div>
-                <div class="d-flex">
-                  <img :src="elearning.avatar.low" class="avatar-elearning__study" />
-                  <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
-                </div>
-                <div class="proccess-bar-study-border">
-                  <div class="percent-proccess" v-bind:style="{width: elearning.progress +'%'}"></div>
-                </div>
+            <template v-if="index < 3">
+              <n-link :to="'/elearning/'+ elearning.elearning_id">
                 <div>
-                  <span>Đã hoàn thành:</span>
-                  <strong class="color-primary">{{elearning.progress}}%</strong>
+                  <div class="d-flex">
+                    <img :src="elearning.avatar.low" class="avatar-elearning__study" />
+                    <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
+                  </div>
+                  <div class="proccess-bar-study-border">
+                    <div class="percent-proccess" v-bind:style="{width: elearning.progress +'%'}"></div>
+                  </div>
+                  <div>
+                    <span>Đã hoàn thành:</span>
+                    <strong class="color-primary">{{elearning.progress}}%</strong>
+                  </div>
                 </div>
-              </div>
-            </n-link>
+              </n-link>
+            </template>
           </li>
           <li class="text-center">
             <n-link to="/elearning/mycourses">Xem thêm</n-link>
