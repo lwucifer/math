@@ -1,37 +1,95 @@
+.form-dropdown {
+  border: 1px solid $color-text-sub;
+  padding: 2rem;
+  margin-bottom: 0;
+  
+  &__title {
+    position: relative;
+  }
+  
+  .fd__title-main {
+    font-weight: 600;
+    color: $color-dark;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  
+  .fd__title-des {
+    font-size: 1.3rem;
+    color: $color-gray;
+  }
+  
+  &__indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    outline: none;
+    svg {
+      width: 8px;
+      path {
+        fill: currentColor;
+      }
+    }
+  }
+  
+  &__expand {
+    padding-top: 2rem;
+  }
+}
+
 .setting-notify-content__account-info{
-    border: 1px solid #EEEEEE;
-    box-sizing: border-box;
-    border-radius: 10px;
-    padding:20px;
-    .btn-show-form__account-info{
-        svg path{ fill: #999999;}
-        margin-left: auto;
-        width: 2.4rem;
-        height: 2.4rem;
-    }
-    div{
-        p:first-child{
-            font-size: 14px;
-            line-height: 19px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333333;
-        }
-        p{
-            color: #999999;
-            font-size: 12px;
-            line-height: 16px;
-            margin-bottom: 20px;
-        }
-    }
+  .form-dropdown {
+    border-bottom: 0;
+  }
+  .form-dropdown:first-child {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+  }
+  .form-dropdown:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom: 1px solid $color-text-sub;
+  }
+    //border: 1px solid $color-text-sub;
+    //border-radius: 2px;
+    //padding:20px;
+    //.btn-show-form__account-info{
+    //    outline: none;
+    //    svg {
+    //      width: 1rem;
+    //      path{ fill: #999999;}
+    //    }
+    //    margin-left: auto;
+    //    //width: 2.4rem;
+    //    //height: 2.4rem;
+    //}
+    //div{
+    //    p:first-child{
+    //        font-size: 14px;
+    //        line-height: 19px;
+    //        font-weight: bold;
+    //        margin-bottom: 10px;
+    //        color: #333333;
+    //    }
+        //p{
+        //    color: #999999;
+        //    font-size: 12px;
+        //    line-height: 16px;
+        //    margin-bottom: 20px;
+        //}
+    //}
     .icon-title__account-info{
         display: flex;
         justify-items: center;
         align-items: center;
-        color: #999999;
-        font-size: 14px;
+        color: $color-text-gray;
         margin: 10px;
-        svg path{ fill: #999999;}
+        svg {
+          margin-right: 2rem;
+          path {
+            fill: currentColor;
+          }
+        }
     }
 }
 .wrap-payment__account-info-setting{

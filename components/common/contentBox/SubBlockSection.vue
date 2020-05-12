@@ -1,9 +1,11 @@
 <template>
-  <div class="sub-block-section">
-    <div class="sub-block-section__title"
-       v-if="hasTitle"
+  <div class="sub-block-section" :class="blockCls">
+    <div
+      v-if="hasTitle"
+      class="sub-block-section__title"
+      :class="titleCls"
     >
-      <slot name="title">
+      <slot name="title" class="sub-block-section__title">
         <h4 class="sub-block-section__title--main">
           <span @click="clickBack">
             <icon-left-arrow
@@ -30,9 +32,17 @@
       IconLeftArrow
     },
     props: {
+      blockCls: {
+        type: Object,
+        default: () => {}
+      },
       hasTitle: {
         type: Boolean,
         default: true
+      },
+      titleCls: {
+        type: Object,
+        default: () => {}
       },
       title: {
         type: String,
@@ -44,6 +54,11 @@
       hasIcon: {
         type: Boolean,
         default: false
+      }
+    },
+    computed: {
+      classes: function () {
+      
       }
     },
     methods: {
