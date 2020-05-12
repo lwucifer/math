@@ -15,28 +15,25 @@
             <!--@mouseleave="closeCmt"-->
         <!--&gt;-->
         <td class="cmt-content">
-          <!--<v-popover-->
-            <!--class=""-->
-            <!--trigger="hover"-->
-            <!--offset="10"-->
-          <!--&gt;-->
-            <!--<div>-->
-              <!--{{ row.content | truncStrFilter(30, false) }}-->
-            <!--</div>-->
-    <!---->
-            <!--<template slot="popover">-->
-              <!--&lt;!&ndash;<div v-if="loadingQuestion" class="text-center">&ndash;&gt;-->
-                <!--&lt;!&ndash;<app-spin></app-spin>&ndash;&gt;-->
-              <!--&lt;!&ndash;</div>&ndash;&gt;-->
-              <!--<div class="">-->
-                <!--<div v-html="row.content"></div>-->
+          <v-popover
+            class=""
+            trigger="hover"
+            offset="10"
+            placement="top"
+          >
+            <div>
+              {{ row.content | truncStrFilter(30, false) }}
+            </div>
+    
+            <template slot="popover">
+              <!--<div v-if="loadingQuestion" class="text-center">-->
+                <!--<app-spin></app-spin>-->
               <!--</div>-->
-            <!--</template>-->
-          <!--</v-popover>-->
-          
-          <!--<div class="cmt-detail" v-if="currentIndex && (row.id == currentIndex)">-->
-            <div v-html="row.content"></div>
-          <!--</div>-->
+              <div class="">
+                <div v-html="row.content"></div>
+              </div>
+            </template>
+          </v-popover>
         </td>
       </template>
     

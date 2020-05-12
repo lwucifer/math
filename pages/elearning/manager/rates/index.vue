@@ -107,7 +107,7 @@
         this.updateFilter({ elearning_id: val })
       },
       handleSubmitSearch(val) {
-        this.updateFilter({ query: val })
+        this.updateFilter({ keyword: val })
       },
       updatePagination(val) {
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1
