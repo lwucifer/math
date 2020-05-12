@@ -1,7 +1,7 @@
 <template>
   <div class="clc-video">
     <div class="clc-video__image">
-      <img src="/images/thumnail-video.png" alt />
+     <n-link to=""><img src="/images/thumnail-video.png" alt /></n-link>
     </div>
 
     <div class="clc-video__right w-100">

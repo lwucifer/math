@@ -15,9 +15,10 @@
               autoCrop
               :canScale="false"
               :fixedBox="true"
-              :canMoveBox="false"
-              full
+              :canMoveBox="true"
               infoTrue
+              :autoCropWidth="730"
+              :autoCropHeight="410"
             ></vueCropper>
           </client-only>
         </div>

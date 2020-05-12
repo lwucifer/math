@@ -100,7 +100,7 @@ const mutations = {
         state,
         _profileList
     ) {
-        console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
+        // console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
         state.profileList = _profileList;
     },
     [mutationTypes.ACCOUNT_BANKS.SET_ACCOUNT_BANKS_LIST](

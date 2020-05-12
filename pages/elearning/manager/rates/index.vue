@@ -19,6 +19,7 @@
                   @changedRate="handleChangedRate"
                   @changedClass="handleChangedClass"
                   @changedElearning="handleChangedElearning"
+                  @submitSearch="handleSubmitSearch"
                 >
                 </filter-form>
   
@@ -51,8 +52,8 @@
   const STORE_NAMESPACE = 'elearning/teaching/vote'
 
   export default {
-    layout: "manage",
-    
+    // layout: "manage",
+    middleware: ["teacher-role"],
     components: {
       ElearningManagerSide,
       FilterForm,
@@ -104,6 +105,9 @@
       },
       handleChangedElearning(val) {
         this.updateFilter({ elearning_id: val })
+      },
+      handleSubmitSearch(val) {
+        this.updateFilter({ query: val })
       },
       updatePagination(val) {
         this.params.size !== val.size ? this.params.page = 1 : this.params.page = val.number + 1

@@ -74,7 +74,7 @@
           style="width: 21rem"
           class="app-vue-select"
           :v-model="filter.order"
-          :options="[ { name: 'Có nhiều học sinh nhất', value: 0 }, { name: 'Có nhiều giáo viên nhất', value: 1 } ]"
+          :options="[ { name: 'Có nhiều học sinh nhất', value: 0 }, { name: 'Có nhiều giáo viên nhất', value: 1 }, { name: 'Có nhiều bài giảng nhất', value: 2 }, { name: 'Có nhiều khoá học nhất', value: 3 } ]"
           label="name"
           placeholder="Sắp xếp theo"
           :reduce="value => value"
@@ -89,6 +89,7 @@
 
 <script>
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import {get} from 'lodash';
 
 
 export default {
@@ -152,12 +153,16 @@ export default {
         province: null,
         district: null,
         village: null,
-        level: this.selectedType,
-        query: null
+        level: get(this.$route, "query.type", ""),
+        query: get(this.$route, "query.keyword", ""),
       },
       isShowFilter: false
     };
   },
+  created() {
+    console.log("[mounted] SchoolFilter query", get(this.$route, "query", {}))
+  },
+
   methods: {
     submit() {
       console.log("[Component] SchoolFilter: submitted");
@@ -173,12 +178,18 @@ export default {
     },
     handleChangeSearch(val) {
       this.$emit("handleChangeSearch", val);
+      this.filter.query = val;
     },
     handleSubmitSearch(val) {
       this.$emit("handleSubmitSearch", val);
+      this.filter.query = val;
     },
     handleChangedLevel(level) {
       this.$emit("handleChangedLevel", level);
+      const levelObj = this.schoolTypes.find(s => s.type == level);
+      if(levelObj){
+        this.filter.level = levelObj;
+      }
     },
     handleChangedOrder(order) {
       this.$emit("handleChangedOrder", order);
