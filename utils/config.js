@@ -63,6 +63,15 @@ export const DATE_SHORTCUT = [
       return [start, end];
     },
   },
+  {
+    text: 'Tùy chọn',
+    onClick() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      return [start, end];
+    },
+  }
 ];
 
 export const UNAUTHORIZE_API = ["user/public/renew", "user/public/login"];

@@ -12,6 +12,7 @@
       :range="range"
       :range-separator="rangeSeparator"
       :shortcuts="shortcuts"
+      :popup-class="popupClass"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -72,6 +73,10 @@ export default {
     shortcuts: {
       type: Array,
       default: () => []
+    },
+    popupClass:{
+      type: String,
+      default:''
     }
   },
 
