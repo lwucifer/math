@@ -2,7 +2,9 @@
   <div class="wrap-cart-side_payment">
     <div class="d-flex">
       <h5>Tổng tiền</h5>
-      <h5 class="text-secondary ml-auto">{{ cartCheckout.cost }}</h5>
+      <h5 class="text-secondary ml-auto">
+        {{ numeral(get(cartCheckout, "cost", 0)).format() }}
+      </h5>
     </div>
     <app-button
       square
@@ -29,13 +31,14 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import qs from "qs";
-
 import IconBookOpen from "~/assets/svg/design-icons/book-open.svg?inline";
 import IconDollar from "~/assets/svg/icons/dollar.svg?inline";
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
+import { get } from "lodash";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -49,6 +52,8 @@ export default {
   },
 
   methods: {
+    get,
+    numeral,
     ...mapActions("payment", ["postOder", "postHashKeyGenerate"]),
 
     handleCheckout() {
