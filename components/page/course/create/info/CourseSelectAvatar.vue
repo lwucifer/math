@@ -14,7 +14,6 @@
               :fixedNumber="[340, 204]"
               fixed
               autoCrop
-              :canScale="false"
               full
               :canScale="false"
               :fixedBox="true"
