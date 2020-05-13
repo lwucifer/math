@@ -364,19 +364,7 @@ export default {
     },
 
     handleReset() {
-      if (this.setting) {
-        this.handleChangeSetting();
-        return;
-      }
-
-      this.payload = {
-        comment_allow: "",
-        price: 0,
-        elearning_id: get(this, "general.id", ""),
-        fee: 0,
-        privacy: "",
-      };
-      this.free = "";
+      this.handleChangeSetting();
     },
 
     numeral,
