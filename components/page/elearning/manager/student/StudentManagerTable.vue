@@ -9,31 +9,41 @@
     >
       <template v-slot:cell(action)="{row}">
         <td>
-          <n-link class title="Chi tiết" :to="`/elearning/manager/students/${row.student_id}`">
+          <n-link
+            class
+            title="Chi tiết"
+            :to="`/elearning/manager/courses/students/${row.user_id}?elearning_id=${filterElearningId}`"
+          >
             <IconArrow height="13" />
           </n-link>
         </td>
       </template>
 
-      <template v-slot:cell(confirm)>
+      <template v-slot:cell(confirm)="{row}">
         <td style="width:32%;">
-          <app-button square size="sm" color="transparent">
+          <app-button square size="sm" color="transparent" @click="acceptStudent(row.user_id)">
             <IconCheckGreen class="icon mr-2" />Xác nhận
           </app-button>
-          <app-button square size="sm" color="transparent" class="text-secondary">
+          <app-button
+            square
+            size="sm"
+            color="transparent"
+            class="text-secondary"
+            @click="rejectStudent(row.user_id)"
+          >
             <IconClear24px class="icon mr-2" />Từ chối
           </app-button>
         </td>
       </template>
 
       <template v-slot:cell(name)="{row}">
-        <td style="width:30%">{{ get(row, 'name', '') }}</td>
+        <td style="width:30%">{{ get(row, 'user_name', '') }}</td>
       </template>
       <template v-slot:cell(class)="{row}">
         <td style="width:30%">{{ get(row, 'class_name', '') }}</td>
       </template>
       <template v-slot:cell(date)="{row}">
-        <td style="width:25%">{{ get(row, 'submission', '') | moment("DD/MM/YYYY") }}</td>
+        <td style="width:25%">{{ get(row, 'join_date', '') | moment("DD/MM/YYYY") }}</td>
       </template>
       <template v-slot:cell(progress)="{row}">
         <td>
@@ -57,7 +67,7 @@ import RateStatus from "~/components/page/elearning/manager/exam/RateStatus";
 import { ELEARNING_TYPES } from "~/utils/constants";
 import IconClear24px from "~/assets/svg/v2-icons/clear_24px.svg?inline";
 import IconCheckGreen from "~/assets/svg/v2-icons/check_green.svg?inline";
-
+const STORE_TEACHING_ACCEPT = "elearning/teaching/accept";
 export default {
   components: {
     IconArrow,
@@ -110,12 +120,41 @@ export default {
     return {};
   },
 
-  computed: {},
+  computed: {
+    filterElearningId() {
+      return this.$route.query && this.$route.query.elearning_id
+        ? this.$route.query.elearning_id
+        : "";
+    }
+  },
   methods: {
+    ...mapActions(STORE_TEACHING_ACCEPT, ["teachingElearningAccept"]),
+    get,
     onPageChange(e) {
       this.$emit("changedPagination", e);
     },
-    get
+    acceptStudent(_id) {
+      const data = {
+        elearning_id: this.filterElearningId,
+        user_id: _id,
+        accept: true
+      };
+      this.teachingElearningAccept(data).then(result => {
+        if (result && result.success == true) {
+        }
+      });
+    },
+    rejectStudent(_id) {
+      const data = {
+        elearning_id: this.filterElearningId,
+        user_id: _id,
+        accept: false
+      };
+      this.teachingElearningAccept(data).then(result => {
+        if (result && result.success == true) {
+        }
+      });
+    }
   }
 };
 </script>
