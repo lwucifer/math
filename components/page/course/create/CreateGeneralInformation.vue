@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="initApp">
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">
@@ -66,7 +66,7 @@
           @addBenefit="addBenefit"
           @cancelInputBenefit="cancelInputBenefit"
         />
-        <app-error :error="get(error, 'benefit', '')"></app-error>
+        <app-error class="mb-4" :error="get(error, 'benefit', '')"></app-error>
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
@@ -86,14 +86,26 @@
           <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
-        <CourseSelectAvatar
-          :defaultAvatar="get(general, 'avatar.medium', '')"
-          @handleSelectAvatar="handleSelectAvatar"
+        <CourseSelectImage
+          :default_image="
+            get(general, 'avatar.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectAvatar"
+          :minWidth="340"
+          :minHeight="204"
+          title="Hình đại diện cho bài giảng"
+          id="avatar"
         />
 
-        <CourseSelectCover
-          :defaultImg="get(general, 'cover_url.medium', '')"
-          @handleSelect="handleSelectCover"
+        <CourseSelectImage
+          :default_image="
+            get(general, 'cover_url.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectCover"
+          :minWidth="730"
+          :minHeight="410"
+          title="Hình minh hoạ cho bài giảng"
+          id="cover"
         />
       </div>
       <app-modal-confirm
@@ -158,8 +170,7 @@ const IconTrashAlt = () =>
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
-import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
-import CourseSelectCover from "~/components/page/course/create/info/CourseSelectCover";
+import CourseSelectImage from "~/components/page/course/create/info/CourseSelectImage";
 import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
@@ -172,11 +183,10 @@ export default {
     CreateAction,
     CourseSelectLevel,
     CourseSelectSubject,
-    CourseSelectAvatar,
+    CourseSelectImage,
     IconCheckCircle,
     IconTrashAlt,
     CourseBenefit,
-    CourseSelectCover,
     IconArrowLeft,
     IconDelete,
     IconSave,
@@ -185,6 +195,7 @@ export default {
 
   data() {
     return {
+      initApp: true,
       error: {
         description: "",
         name: "",
@@ -192,13 +203,13 @@ export default {
       },
       payload: {
         avatar: "",
-        benefit: [],
-        description: "",
-        level: "",
-        name: "",
-        subject: "",
+        benefit: [...get(this, "general.benefit", [])],
+        description: get(this, "general.description", ""),
+        level: get(this, "general.level", ""),
+        name: get(this, "general.name", ""),
+        subject: get(this, "general.subject.id", ""),
         cover_image: "",
-        type: "",
+        type: get(this, "general.type", ""),
       },
       showModalConfirm: false,
       confirmLoading: false,
@@ -305,13 +316,10 @@ export default {
     },
 
     handleReset() {
-      this.payload.benefit = [...get(this, "general.benefit", [])];
-      this.payload.description = get(this, "general.description", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "");
-      this.error = {};
+      this.initApp = false;
+      this.$nextTick().then(() => {
+        Object.assign(this.$data, this.$options.data.call(this));
+      });
     },
 
     checkShowErrorBenefit() {

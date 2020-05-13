@@ -1,40 +1,46 @@
 <template>
-  <div class="container">
-    <div id="label-verify-phone"></div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="wrap-form_auth">
-          <div class="head-form_auth">
-            <h3>Đăng ký</h3>
-            <div class="auth__nav-v2">
-              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
-              <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+  <div>
+    <SignupOtp v-if="!byEmail && checkOtp" />
+    <div class="container" v-else>
+      <div id="label-verify-phone"></div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="wrap-form_auth">
+            <div class="head-form_auth">
+              <h3>Đăng ký</h3>
+              <div class="auth__nav-v2">
+                <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
+                <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+              </div>
             </div>
-          </div>
-          <div class="px-4 pt-3">
-            <SignupEmail v-show="byEmail" />
-            <SignupPhone v-show="!byEmail" />
-          </div>
-          <p class="title-either_auth">hoặc</p>
-          <div>
-            <p>Đăng ký nhanh với</p>
-            <div class="mt-3 mb-15">
-              <app-button class="btn-social btn-facebook">
-                <IconFacebook class="mr-2" />Facebook
-              </app-button>
-              <app-button class="btn-social btn-google">
-                <IconGoogle class="mr-2" />Google
-              </app-button>
+            <div class="px-4 pt-3">
+              <SignupEmail v-show="byEmail" />
+              <SignupPhone v-show="!byEmail && !checkOtp" @hanldeCheckOtp="hanldeCheckOtp" />
             </div>
+            <p class="title-either_auth">hoặc</p>
             <div>
-              <span>Đã có tài khoản?</span>
-              <n-link :to="'/auth/signin'" class="color-primary bold text-decoration-none">Đăng nhập</n-link>
+              <p>Đăng ký nhanh với</p>
+              <div class="mt-3 mb-15">
+                <app-button class="btn-social btn-facebook">
+                  <IconFacebook class="mr-2" />Facebook
+                </app-button>
+                <app-button class="btn-social btn-google">
+                  <IconGoogle class="mr-2" />Google
+                </app-button>
+              </div>
+              <div>
+                <span>Đã có tài khoản?</span>
+                <n-link
+                  :to="'/auth/signin'"
+                  class="color-primary bold text-decoration-none"
+                >Đăng nhập</n-link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-6 text-center">
-        <ImageAuth/>
+        <div class="col-md-6 text-center">
+          <ImageAuth />
+        </div>
       </div>
     </div>
   </div>
@@ -53,14 +59,16 @@ import {
 import { formatPhoneNumber } from "~/utils/validations";
 import SignupEmail from "~/components/page/auth/signup/SignupEmail";
 import SignupPhone from "~/components/page/auth/signup/SignupPhone";
-import ImageAuth  from "~/components/page/auth/ImageAuth";
+import SignupOtp from "./otp";
+import ImageAuth from "~/components/page/auth/ImageAuth";
 export default {
   components: {
     IconFacebook,
     IconGoogle,
     SignupEmail,
     SignupPhone,
-    ImageAuth
+    ImageAuth,
+    SignupOtp
   },
 
   data() {
@@ -77,7 +85,8 @@ export default {
       otp: "",
       verify_token: "",
       modalConfirmEmail: "",
-      modalConfirmOTC: ""
+      modalConfirmOTC: "",
+      checkOtp: false
     };
   },
   async mounted() {
@@ -109,6 +118,9 @@ export default {
     },
     redirectSignin() {
       this.$router.push("/auth/signin");
+    },
+    hanldeCheckOtp() {
+      this.checkOtp = true;
     }
   }
 };

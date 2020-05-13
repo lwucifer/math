@@ -5,14 +5,16 @@
         type="text"
         v-model="phone"
         placeholder="Số điện thoại"
+        maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
         :validate="validateProps.phone"
+        :onlyNumber="true"
         @input="handlePhone"
       >
-      <template v-slot:prepend-inner>
+        <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconPhoneIphone24px/>
+            <IconPhoneIphone24px />
           </div>
         </template>
       </app-input>
@@ -28,17 +30,22 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconLock24px/>
+            <IconLock24px />
           </div>
         </template>
       </app-input>
       <app-input
         type="password"
+        v-model="CfmPassword"
         placeholder="Nhập lại mật khẩu"
+        :error="$v.CfmPassword.$invalid"
+        :message="errorMessage.CfmPassword"
+        :validate="validateProps.CfmPassword"
+        @input="handleCfmPassword"
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconLock24px/>
+            <IconLock24px />
           </div>
         </template>
       </app-input>
@@ -52,9 +59,9 @@
         :validate="validateProps.fullname"
         @input="handleFullname"
       >
-      <template v-slot:prepend-inner>
+        <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconPerson24px/>
+            <IconPerson24px />
           </div>
         </template>
       </app-input>
@@ -67,14 +74,14 @@
       :disabled="disabledBtnRegister"
       @click.prevent="hanldeShowModalOTP"
     >Đăng ký</app-button>
-    <app-modal-otp
+    <!-- <app-modal-otp
       :visible="modalOtp.showModalOTP"
       :error="modalOtp.errorOtp"
       :message="modalOtp.messageErrorOtp"
       @submit="submitOtp"
       @change="hanldeOtp"
       @close="closeModalOtp"
-    />
+    />-->
     <app-modal-notify
       v-if="notify.showNotify"
       :title="notify.message"
@@ -86,16 +93,21 @@
 
 <script>
 import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import { createSignupWithPhone } from "~/models/auth/Signup";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
 import { ERRORS } from "~/utils/error-code";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import IconPhoneIphone24px from '~/assets/svg/v2-icons/phone_iphone_24px.svg?inline';
-import IconLock24px from '~/assets/svg/v2-icons/lock_24px.svg?inline';
-import IconPerson24px from '~/assets/svg/v2-icons/person_24px.svg?inline';
+import {
+  required,
+  minLength,
+  maxLength,
+  sameAs
+} from "vuelidate/lib/validators";
+import IconPhoneIphone24px from "~/assets/svg/v2-icons/phone_iphone_24px.svg?inline";
+import IconLock24px from "~/assets/svg/v2-icons/lock_24px.svg?inline";
+import IconPerson24px from "~/assets/svg/v2-icons/person_24px.svg?inline";
 export default {
-  components:{
+  components: {
     IconPhoneIphone24px,
     IconLock24px,
     IconPerson24px
@@ -105,6 +117,7 @@ export default {
       phone: "",
       password: "",
       fullname: "",
+      CfmPassword: "",
       error: "",
       otp: "",
       modalOtp: {
@@ -115,9 +128,10 @@ export default {
       errorMessage: {
         phone: "",
         password: "",
-        fullname: ""
+        fullname: "",
+        CfmPassword: ""
       },
-      validateProps: { password: "", phone: "", fullname: "" },
+      validateProps: { password: "", phone: "", fullname: "", CfmPassword: "" },
       validate: { password: true },
       errorRespon: false,
       messageErrorRegister: "",
@@ -131,7 +145,8 @@ export default {
   validations: {
     phone: { required, minLength: minLength(10) },
     password: { required },
-    fullname: { required, minLength: minLength(8), maxLength: maxLength(32) }
+    fullname: { required, minLength: minLength(2), maxLength: maxLength(32) },
+    CfmPassword: { required, sameAsPassword: sameAs("password") }
   },
   computed: {
     disabledBtnRegister() {
@@ -141,6 +156,7 @@ export default {
   },
   methods: {
     ...mapActions("auth", ["register", "sendotp", "status", "verifiOtp"]),
+    ...mapMutations("auth", ["savePhonePass"]),
     async submitRegister() {
       try {
         const token = await this.$recaptcha.execute("register");
@@ -182,46 +198,24 @@ export default {
             };
             this.sendotp(data).then(result => {
               if (!result.code) {
-                this.modalOtp.showModalOTP = true;
+                this.savePhonePass({
+                  phone: this.phone,
+                  password: this.password,
+                  fullname: this.fullname
+                });
+                // this.$router.push(`/auth/signup/otp`);
+                this.$emit("hanldeCheckOtp");
               } else {
                 this.errorRespon = true;
                 this.messageErrorRegister =
                   "Số điện thoại bạn nhập không chính xác";
               }
             });
+          } else {
+            this.errorRespon = true;
+            this.messageErrorRegister = "Số điện thoại bạn nhập đã đăng ký";
           }
-          // else {
-          //   this.errorRespon = true;
-          //   this.messageErrorRegister = "Số điện thoại bạn nhập đã đăng ký";
-          // }
         });
-      }
-    },
-    async acceptOTP() {
-      await this.verifiOtp(this.otp).then(result => {
-        console.log("result huydv", result);
-        if (result && result.user) {
-          this.verify_token = result.user ? result.user.ma : "";
-          console.log("result huydv11111", result);
-          this.submitRegister();
-        } else {
-          this.showErrorOtp(result);
-        }
-      });
-    },
-    submitOtp(_otp) {
-      console.log("otp", _otp);
-      this.otp = _otp;
-      this.acceptOTP();
-    },
-    showErrorOtp(error) {
-      this.modalOtp.errorOtp = true;
-      if (error.code == "auth/invalid-verification-code") {
-        this.modalOtp.messageErrorOtp = "Mã OTP bạn nhập không đúng";
-      } else if (error.code == "auth/code-expired") {
-        this.modalOtp.messageErrorOtp = "Mã OTP của bạn nhập đã hết hạn";
-      } else {
-        this.modalOtp.messageErrorOtp = "Có lỗi. Xin vui lòng thử lại";
       }
     },
     handlePhone() {
@@ -236,6 +230,7 @@ export default {
         this.errorMessage.phone = "Số bạn nhập không phải là số điện thoại";
       } else {
         this.validateProps.phone = 1;
+        this.errorMessage.phone = "";
       }
     },
     handlePassword(_password) {
@@ -248,10 +243,26 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
           "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
+      }
+    },
+    handleCfmPassword() {
+      this.errorRespon = false;
+      this.validate.CfmPassword = true;
+      this.validateProps.CfmPassword = "";
+      if (!this.$v.CfmPassword.required) {
+        this.validateProps.CfmPassword = 2;
+        this.errorMessage.CfmPassword = "Trường này là bắt buộc";
+      } else if (!this.$v.CfmPassword.sameAsPassword) {
+        this.validateProps.CfmPassword = 2;
+        this.errorMessage.CfmPassword = "Mật khẩu không khớp nhau";
+      } else {
+        this.validateProps.CfmPassword = 1;
+        this.errorMessage.CfmPassword = "";
       }
     },
     handleFullname() {
@@ -263,13 +274,14 @@ export default {
       } else if (!this.$v.fullname.minLength) {
         this.validateProps.fullname = 2;
         this.errorMessage.fullname =
-          "Họ và tên phải có ít nhất 8 ký tự và nhiều nhất là 32 ký tự";
+          "Họ và tên phải có ít nhất 2 ký tự và nhiều nhất là 32 ký tự";
       } else if (!this.$v.fullname.maxLength) {
         this.validateProps.fullname = 2;
         this.errorMessage.fullname =
-          "Họ và tên phải có ít nhất 8 ký tự và nhiều nhất là 32 ký tự";
+          "Họ và tên phải có ít nhất 2 ký tự và nhiều nhất là 32 ký tự";
       } else {
         this.validateProps.fullname = 1;
+        this.errorMessage.fullname = "";
       }
     },
     hanldeOtp() {

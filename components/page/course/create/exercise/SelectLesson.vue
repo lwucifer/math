@@ -1,5 +1,5 @@
 <template>
-  <div class="cc-panel__body">
+  <div class="">
     <app-vue-select
       class="cc-select"
       id="require"
@@ -7,7 +7,7 @@
       placeholder="Chọn bài học"
       label="name"
       size="md"
-      style="width: 100%"
+      style="width: 100%; height: 40px"
       @input="handleSelectLesson"
     >
       <template slot="placeholder-icon">

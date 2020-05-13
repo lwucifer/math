@@ -42,12 +42,9 @@
 
       <div class="col csa-col csa-col--right mb-4">
         <p class="csa-desc caption text-gray">
-          - Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
-          730x410 pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
-          .png
-        </p>
-        <p class="csa-desc caption text-gray">
-          - Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
+          Để được chấp nhận, hình đại diện phải có kích thước nhỏ nhất là
+          <strong>730x410</strong> pixels. Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc
+          .png. Chúng tôi khuyến cáo không nên chèn chữ lên hình ảnh đại diện
         </p>
 
         <div class="mt-4">
@@ -71,7 +68,7 @@
             <div v-show="false" class="text-error caption">
               <IconExclamationTriangle class="icon mr-1" />Ảnh bản vừa tải lên
               có thích thước quá nhỏ. Kích thước ảnh nhỏ nhất được chấp nhận là
-              750x422 px. Hãy tải ảnh khác có kích thước lớn hơn.
+              <strong>750x422</strong> px. Hãy tải ảnh khác có kích thước lớn hơn.
             </div>
           </template>
         </div>

@@ -130,35 +130,13 @@ export default {
         this.pagination = get(this, "elearningStudyFavourite.page", {});
       }
     },
-    tab(_tab) {
-      this.params.size = 8;
-      if (_tab === 1) {
-        this.params.type = "ALL";
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (_tab === 2) {
-        this.params.type = "LECTURE";
-        this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (_tab === 3) {
-        this.params.type = "COURSE";
-        this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (_tab === 4) {
-        this.fetchElearningFavourite();
-        this.list = get(this, "elearningStudyFavourite.content", []);
-        this.pagination = get(this, "elearningStudyFavourite.page", {});
-      } else if (_tab === 5) {
-        this.fetchElearningArchive();
+    elearningStudyArchive: {
+      handler: function() {
         this.list = get(this, "elearningStudyArchive.content", []);
         this.pagination = get(this, "elearningStudyArchive.page", {});
       }
     },
+    tab(_tab) {},
     pagination(_newVal) {
       this.pagination.size = _newVal.size;
       this.pagination.first = _newVal.first;
@@ -180,12 +158,39 @@ export default {
     ]),
     changeTab(tab) {
       this.tab = tab;
+      this.params.size = 10;
+      if (tab === 1) {
+        this.params.type = "ALL";
+        this.fetchElearningList();
+        this.list = get(this, "elearningStudyStudent.content", []);
+        this.pagination = get(this, "elearningStudyStudent.page", {});
+      } else if (tab === 2) {
+        this.params.type = "LECTURE";
+        this.params.page = 1;
+        this.fetchElearningList();
+        this.list = get(this, "elearningStudyStudent.content", []);
+        this.pagination = get(this, "elearningStudyStudent.page", {});
+      } else if (tab === 3) {
+        this.params.type = "COURSE";
+        this.params.page = 1;
+        this.fetchElearningList();
+        this.list = get(this, "elearningStudyStudent.content", []);
+        this.pagination = get(this, "elearningStudyStudent.page", {});
+      } else if (tab === 4) {
+        this.fetchElearningFavourite();
+        this.list = get(this, "elearningStudyFavourite.content", []);
+        this.pagination = get(this, "elearningStudyFavourite.page", {});
+      } else if (tab === 5) {
+        this.fetchElearningArchive();
+        this.list = get(this, "elearningStudyArchive.content", []);
+        this.pagination = get(this, "elearningStudyArchive.page", {});
+      }
     },
     fetchElearningList() {
       const payload = {
         params: {
           type: this.params.type,
-          size: 8,
+          size: 10,
           page: this.params.page
         }
       };
@@ -235,7 +240,7 @@ export default {
         const payload = {
           params: {
             type: this.params.type,
-            size: 8,
+            size: 10,
             page: this.params.page
           }
         };
@@ -260,7 +265,7 @@ export default {
         const payload = {
           params: {
             type: this.params.type,
-            size: 8,
+            size: 10,
             page: this.params.page
           }
         };
@@ -283,7 +288,7 @@ export default {
         const payload = {
           params: {
             type: this.params.type,
-            size: 8,
+            size: 10,
             page: this.params.page
           }
         };
