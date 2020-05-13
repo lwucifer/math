@@ -9,7 +9,7 @@
       <div class="d-flex">
         <span
           class="text-clickable"
-          @click.prevent="handleOlClassSignin(item)"
+          @click.prevent="handlJoinOlClass(item)"
         >{{ index + 1 }}. {{ item.name }}</span>
         <IconCalendarAlt
           class="ml-2 fill-blue text-clickable"
@@ -20,23 +20,31 @@
         />
       </div>
       <div class="d-flex-left mt-3">
-        <div
-          class="d-flex-center color-red ml-auto"
-          v-if="item.status == liveStatus"
-          @click.prevent="handleLiveClass(item)"
-        >
-          <IconCam24 class="mr-2 fill-red text-clickable" height="18" width="18" />
-          <span class="text-clickable">Đang diễn ra</span>
+        <div class="d-flex-center color-red ml-auto" v-if="item.status == liveStatus">
+          <IconCam24
+            class="mr-2 fill-red text-clickable"
+            height="18"
+            width="18"
+            @click.prevent="handlJoinOlClass(item)"
+          />
+          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)">Đang diễn ra</span>
         </div>
         <div
           class="d-flex-center color-yellow ml-auto"
-          v-else-if="item.next_time"
-          @click.prevent="handleComingClass(item)"
+          v-else-if="item.status == finishStatus && item.next_time"
         >
-          <IconCam24 class="mr-2 fill-yellow text-clickable" height="18" width="18" />
-          <span class="text-clickable">Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
+          <IconCam24
+            class="mr-2 fill-yellow text-clickable"
+            height="18"
+            width="18"
+            @click.prevent="handlJoinOlClass(item)"
+          />
+          <span
+            class="text-clickable"
+            @click.prevent="handlJoinOlClass(item)"
+          >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
-        <div class="color-999 d-flex-center" v-else-if="item.status == finishStatus">
+        <div class="color-999 d-flex-center" v-else>
           <IconCam24 class="mr-2" />
           <span>Đã kết thúc</span>
         </div>
@@ -92,45 +100,36 @@ export default {
       "teachingOlclassLessonSessionsList"
     ]),
 
-    handleOlClassSignin(item) {
-      console.log("[handleOlClassSignin]", item);
-    },
-
-    handleLiveClass(item) {
-      console.log("[handleLiveClass]", item);
+    handlJoinOlClass(item) {
+      console.log("[handlJoinOlClass]", item);
       this.teachingOlclassLessonSessionsList({
         params: { online_class_id: item.id }
       }).then(res => {
         console.log("[teachingOlclassLessonSessionsList] res", res);
         if (res.success == RESPONSE_SUCCESS) {
-          const {data} = res;
-          if (data.is_started == true) {
-            const sessions = data.sessions || [];
-            const zoom = sessions.find(
-              s => s.position == data.session_starting_position
-            );
-            if (!zoom) return;
+          const { data } = res;
+          if (item.status == LESSION_ONLINE_STATUS.LIVE) {
+            // lessiong is living => open zoom
+            if (data.is_started == true) {
+              const sessions = data.sessions || [];
+              const zoom = sessions.find(
+                s => s.position == data.session_starting_position
+              );
+              if (!zoom) return;
 
-            // check user role is teach or student to open start_url or join_url
-            if (this.isTeacherRole) {
-              window.open(zoom.start_url);
-            } else if (this.isStudentRole) {
-              window.open(zoom.join_url);
+              // student open start_url or join_url
+              if (this.isStudentRole) {
+                window.open(zoom.join_url);
+              }
             }
-          }
-        }
-      });
-    },
 
-    handleComingClass(item) {
-      console.log("[handleComingClass]", item);
-      this.teachingOlclassLessonSessionsList({
-        params: { online_class_id: item.id }
-      }).then(res => {
-        console.log("[teachingOlclassLessonSessionsList] res", res);
-        this.modalShow = true;
-        if (res.success == RESPONSE_SUCCESS) {
-          this.targetClass = { data };
+            this.modalShow = true;
+            this.targetClass = data;
+          } else if (item.status == LESSION_ONLINE_STATUS.FINISH && item.next_time) {
+            // lession is coming => show modal Waiting
+            this.modalShow = true;
+            this.targetClass = data;
+          }
         }
       });
     }

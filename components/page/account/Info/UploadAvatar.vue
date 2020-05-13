@@ -5,10 +5,12 @@
         :src="avatarSrc"
         :size="96"
         shape="square"
+        style="border-radius: 4px;"
+        class="d-flex flex-column"
       />
     </div>
     <div>
-      <p class="mb-2"><b>Thay ảnh đại diện</b></p>
+      <p class="mb-3"><b>Thay ảnh đại diện</b></p>
       <p class="mb-4">Định dạng hình ảnh cho phép là .jpg, .jpeg, .bmp hoặc .png</p>
       <app-upload class="" @change="handleUploadAvatar">
         <template>
@@ -16,6 +18,7 @@
             <app-button
               normal
               size="sm"
+              color="white"
             >
               Upload
             </app-button>

@@ -33,7 +33,7 @@ export function remove_unicode(str) {
 
 export function useEffect(that, watcher, props) {
     watcher();
-    const iterator = function (prop) {
+    const iterator = function(prop) {
         that.$watch(prop, {
             handler: watcher,
             deep: true,
@@ -45,7 +45,7 @@ export function useEffect(that, watcher, props) {
 export function redirectWithParams(params = {}) {
     let currentUrlParams = new URLSearchParams(window.location.search);
 
-    forEach(params, function (value, key) {
+    forEach(params, function(value, key) {
         currentUrlParams.set(key, value);
     });
 
@@ -140,7 +140,7 @@ export const detectBrowser = () => {
     // Safari 3.0+ "[object HTMLElementConstructor]"
     let isSafari =
         /constructor/i.test(window.HTMLElement) ||
-        (function (p) {
+        (function(p) {
             return p.toString() === "[object SafariRemoteNotification]";
         })(!window["safari"] ||
             (typeof safari !== "undefined" && safari.pushNotification)
@@ -213,6 +213,7 @@ export function getCountdown_MM_SS(val) {
     console.log("[getCountdown_MM_SS]", str, m, s);
     return str
 }
+
 
 
 export const addAllOptionSelect = (arr) => {

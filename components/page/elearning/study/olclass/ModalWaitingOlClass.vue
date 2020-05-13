@@ -12,33 +12,41 @@
         <h6 class="color-primary mb-3">Phòng học online số 1</h6>
         <div class="box12 border mb-4">
           <p class="mb-3">
+            Tên phòng:
+            <b>{{ get(targetClass, "extra_info.online_class_name", "--")}}</b>
+          </p>
+          <p class="mb-3">
             Giáo viên:
-            <b>Trần Văn Nam</b>
+            <b>{{ get(targetClass, "extra_info.teacher_name", "--")}}</b>
           </p>
           <p class="mb-3">
             Giờ bắt đầu:
-            <b>11:30 AM</b>
+            <b>{{ get(targetClass, "extra_info.start_time", "--:--")}}</b>
           </p>
           <p>
             Thời lượng:
-            <b>1 giờ 30 phút</b>
+            <b>{{ get(targetClass, "extra_info.duration", 0) | formatHour}}</b>
           </p>
         </div>
 
-        <p class="mb-3">
+        <!-- <p class="mb-3">
           Hãy nhấn nút
           <b>"Vào phòng học"</b> dưới đây để vào phòng.
           <b
             class="color-red"
           >Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
-        </p>
-        <!-- <p class="mb-3" v-if="dataLength > 1">
-          <i>*Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy quay lại màn hình này để vào học tiếp tiết học thứ 2</i>
         </p>-->
-        <!-- <p class="mb-4" v-if="dataLength > 1"> -->
-        <p class="mb-4">
-          <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
+        <p class="mb-3" v-if="dataLength > 1">
+          <i>
+            Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc,
+            hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo.
+            Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.
+          </i>
         </p>
+        <!-- <p class="mb-4" v-if="dataLength > 1"> -->
+        <!-- <p class="mb-4">
+          <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
+        </p>-->
 
         <div class="mt-4 text-center">
           <div class="mb-10">
@@ -55,11 +63,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
-import { getCountdown_HH_MM_SS } from "~/utils/common";
+import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
@@ -84,29 +91,52 @@ export default {
 
     close(invite) {
       // this.$emit("close", invite);
-      this.$emit('close');
+      this.$emit("close");
     },
 
     setCountdown() {
-      let seconds = (this.targetClass.duration || 0) * 60; // in seconds
+      let seconds = this.targetClass.time_count_down || 0; // in seconds
+      const duration = get(this.targetClass, "extra_info.duration", 0);
+
       this.interval = setInterval(() => {
         console.log("[setCountdown]", seconds);
         this.countdown = getCountdown_HH_MM_SS(seconds);
         if (seconds <= 0) {
           // auto join to room
+          const sessions = this.targetClass.sessions || [];
+          const zoom = sessions.find(
+            s => s.position == this.targetClass.session_starting_position
+          );
+          if (!zoom) return;
+
+          // student open start_url or join_url
+          if (this.isStudentRole) {
+            window.open(zoom.join_url);
+          }
 
           clearInterval(this.countdown);
-          this.$emit('close');
+          // this.$emit("close");
         }
         seconds -= 1;
       }, 1000);
     }
   },
 
-  computed: {},
+  computed: {
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
+
+    dataLength() {
+      return this.targetClass.sessions.length || 0;
+    }
+  },
 
   mounted() {
-    // this.setCountdown();
+    console.log("[targetClass]", this.targetClass);
+    this.setCountdown();
+  },
+
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 };
 </script>

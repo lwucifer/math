@@ -57,7 +57,7 @@
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, formatHour } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
@@ -75,7 +75,7 @@ export default {
       dataLength: 0,
       loading: false,
       startTime: this.formatAMPM(this.info.recent_schedule.start_time),
-      duration: this.formatHour(this.info.recent_schedule.duration)
+      duration: formatHour(this.info.recent_schedule.duration)
     };
   },
 
@@ -96,12 +96,12 @@ export default {
       return strTime;
     },
 
-    formatHour(time) {
-      let minutes = time % 60;
-      let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
-      let strTime = hours + " giờ " + minutes + " phút";
-      return strTime;
-    },
+    // formatHour(time) {
+    //   let minutes = time % 60;
+    //   let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
+    //   let strTime = hours + " giờ " + minutes + " phút";
+    //   return strTime;
+    // },
 
     async getList() {
       const self = this;
