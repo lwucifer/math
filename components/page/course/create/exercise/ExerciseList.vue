@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="cc-box__body" style="background: #F9F9F9">
+      <div class="cc-box__body" :class="{'add-background': isAddQuestionForm}">
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
@@ -124,3 +124,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.add-background {
+  background: #F9F9F9;
+}
+</style>

@@ -12,9 +12,9 @@
       <table class="clc-table">
         <thead>
           <tr>
-            <th>Tên file</th>
-            <th>Loại</th>
-            <th>Ngày tháng</th>
+            <th class="font-weight-bold text-dark">Tên file</th>
+            <th class="font-weight-bold text-dark">Loại</th>
+            <th class="font-weight-bold text-dark">Ngày tháng</th>
             <th></th>
           </tr>
         </thead>

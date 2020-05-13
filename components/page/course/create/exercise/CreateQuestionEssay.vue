@@ -1,17 +1,25 @@
 <template>
   <div>
-    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
+    <div>
+      <label class="d-inline-block mb-3 font-weight-semi-bold" for="question-editor">Điểm câu này</label>
+      <div class="d-flex align-items-center justify-content-start mb-4">
+        <app-input  class="mb-0 mr-4 w-150 ce-input-with-unit" v-model="payload.points">
+          <template #unit><span class="text-dark">/10</span> </template>
+        </app-input>
+
+        <p class="text-primary">* Một bài tập hợp lệ phải có <strong>tổng điểm các câu hỏi là 10</strong></p>
+      </div>
+    </div>
+
+    <label class="d-inline-block mb-3 font-weight-semi-bold mb-2" for="question-editor"
       >Nội dung câu hỏi</label
     >
-    <app-editor v-model="payload.content" />
-    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
-      >Nội dung câu trả lời</label
-    >
-    <app-editor v-model="payload.answers[0].content" />
-    <div>
-      <label class="d-inline-block mb-3 font-weight-bold" for="question-editor">Điểm</label>
-      <app-input v-model="payload.points" />
-    </div>
+    <app-editor class="mb-4" v-model="payload.content" />
+
+
+    <label class="d-flex mb-3 font-weight-semi-bold" for="question-editor"><app-checkbox class="mr-2"/> Nội dung câu trả lời</label>
+    <app-editor class="ml-5" v-model="payload.answers[0].content" />
+  
     <div class="d-flex justify-content-end mt-5">
       <app-button
         color="default"
