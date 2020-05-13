@@ -9,6 +9,7 @@ export const AUTH = {
     SET_ACCOUNT_STATUS: "setAccountStatus",
     SET_FIREBASE_TOKEN: "setFirebaseToken",
     SET_CURRENT_DEVICE: "setCurrentDevice",
+    SAVE_PHONE_PASS: "savePhonePass",
 };
 
 export const BASE = {

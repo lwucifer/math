@@ -58,35 +58,28 @@
         />
       </div>
 
-      <div v-if="counter" class="app-input__counter">
-        {{ `${localValue.toString().length}/${counter}` }}
-      </div>
+      <div
+        v-if="counter"
+        class="app-input__counter"
+      >{{ `${localValue.toString().length}/${counter}` }}</div>
     </div>
 
     <div
       class="app-input__default"
       v-if="message && localValidate == VALIDATE_STATUS.DEFAULT"
-    >
-      {{ message }}
-    </div>
+    >{{ message }}</div>
     <div
       class="app-input__success"
       v-if="message && localValidate == VALIDATE_STATUS.SUCCESS"
-    >
-      {{ message }}
-    </div>
+    >{{ message }}</div>
     <div
       class="app-input__error"
       v-else-if="message && localValidate == VALIDATE_STATUS.ERROR"
-    >
-      {{ message }}
-    </div>
+    >{{ message }}</div>
     <div
       class="app-input__warning"
       v-else-if="message && localValidate == VALIDATE_STATUS.WARNING"
-    >
-      {{ message }}
-    </div>
+    >{{ message }}</div>
   </div>
 </template>
 
@@ -102,45 +95,45 @@ export default {
   components: {
     IconSuccess,
     IconError,
-    IconWarning,
+    IconWarning
   },
 
   model: {
     prop: "value",
-    event: "input",
+    event: "input"
   },
 
   props: {
     value: {
       type: [String, Number],
       required: false,
-      default: "",
+      default: ""
     },
     placeholder: {
       type: String,
       required: false,
-      default: "",
+      default: ""
     },
     type: {
       type: String,
       required: false,
-      default: "text",
+      default: "text"
     },
     size: {
       type: String,
       required: false,
-      default: "",
+      default: ""
     },
     disabled: Boolean,
     validate: {
       type: [String, Number],
       required: false,
-      default: VALIDATE_STATUS.DEFAULT,
+      default: VALIDATE_STATUS.DEFAULT
     },
     message: {
       type: String,
       required: false,
-      default: "",
+      default: ""
     },
     label: String,
     labelFixed: Boolean,
@@ -149,12 +142,16 @@ export default {
     rows: {
       type: [String, Number],
       required: false,
-      default: 6,
+      default: 6
     },
     counter: {
-      type: Number,
+      type: Number
     },
     subLabel: String,
+    onlyNumber: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -162,7 +159,7 @@ export default {
       VALIDATE_STATUS: Object.freeze(VALIDATE_STATUS),
       localValue: this.value,
       localValidate: this.validate,
-      isFocus: false,
+      isFocus: false
     };
   },
 
@@ -173,13 +170,13 @@ export default {
 
     classSize() {
       const disableClass = {
-        disabled: this.disabled,
+        disabled: this.disabled
       };
       const classSize = {
         "app-input--size-xs": this.size === "xs",
         "app-input--size-sm": this.size === "sm",
         "app-input--size-md": this.size === "md" || !this.size,
-        "app-input--size-lg": this.size === "lg",
+        "app-input--size-lg": this.size === "lg"
       };
       return {
         ...classSize,
@@ -189,21 +186,21 @@ export default {
         "app-input--success": this.localValidate === VALIDATE_STATUS.SUCCESS,
         "app-input--warning": this.localValidate === VALIDATE_STATUS.WARNING,
         "app-input--focused": this.isFocus,
-        "app-input--textarea": this.textarea,
+        "app-input--textarea": this.textarea
       };
     },
 
     classLabel() {
       const labelBold = {
-        "app-input__label--bold": this.labelBold,
+        "app-input__label--bold": this.labelBold
       };
       const labelFixed = {
-        "app-input__label--fixed": this.labelFixed,
+        "app-input__label--fixed": this.labelFixed
       };
       return {
         "app-input__label": true,
         ...labelBold,
-        ...labelFixed,
+        ...labelFixed
       };
     },
 
@@ -218,12 +215,12 @@ export default {
         // behavior of some listeners.
         {
           // This ensures that the component works with v-model
-          input: (event) => this.updateInput(event),
-          blur: (event) => this.handleBlur(event),
-          focus: (event) => this.handleFocus(event),
+          input: event => this.updateInput(event),
+          blur: event => this.handleBlur(event),
+          focus: event => this.handleFocus(event)
         }
       );
-    },
+    }
   },
 
   watch: {
@@ -239,13 +236,18 @@ export default {
 
     validate(newValue) {
       this.localValidate = newValue;
-    },
+    }
   },
 
   methods: {
     updateInput: function(event) {
-      this.localValue = event.target.value;
-      this.$emit("input", event.target.value);
+      if (this.onlyNumber == true) {
+        this.localValue = event.target.value.replace(/[^\d]/g, "");
+        this.$emit("input", this.localValue);
+      } else {
+        this.localValue = event.target.value;
+        this.$emit("input", event.target.value);
+      }
     },
 
     handleFocus(event) {
@@ -270,8 +272,8 @@ export default {
 
     focus() {
       this.$refs.input.focus();
-    },
-  },
+    }
+  }
 };
 </script>
 

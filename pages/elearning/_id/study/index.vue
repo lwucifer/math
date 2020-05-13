@@ -43,6 +43,8 @@
 
             <TabSummary :info="info" v-if="type === 'summary'" />
             <TabQA v-if="type === 'qa'" />
+            <TabNotification v-if="type === 'notification'" />
+            <TabReview v-if="type === 'review'" />
             <!-- <ElearningQuestion
               v-if="type === 'qa'"
               :interactive_questions="interactive_questions"
@@ -79,8 +81,10 @@ import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 
 import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
-import TabSummary from "~/components/page/elearning/study/tab-summary/TabSummary.vue";
-import TabQA from "~/components/page/elearning/study/tab-qa/TabQA.vue";
+import TabSummary from "~/components/page/elearning/study/tab-summary/TabSummary";
+import TabQA from "~/components/page/elearning/study/tab-qa/TabQA";
+import TabNotification from "~/components/page/elearning/study/tab-notification/TabNotification";
+import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
@@ -99,6 +103,8 @@ export default {
     HeaderCourse,
     TabSummary,
     TabQA,
+    TabNotification,
+    TabReview,
     // ElearningQuestion,
     Streaming,
     ElearningExercise
