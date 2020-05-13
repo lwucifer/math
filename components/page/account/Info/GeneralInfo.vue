@@ -6,31 +6,18 @@
   
       <div class="form--normal">
         <div class="row">
-          <div class="col-12">
-            <div class="d-flex">
-              <app-button
-                square
-                class="btnAccountLink_account-info"
-                v-if="!accountLink.list.linked"
-                v-on:click="accountLink.showModal=true"
-              >
-                <IconPlus class="icon"/>
-                <span class="ml-3">Liên kết trường học</span>
-              </app-button>
-    
-              <AccountLinkModal
-                :visible="accountLink.showModal"
-                @click-close="closeLinkModal"
-                @handleRefresh="handleRefresh"
-              />
-            </div>
-          </div>
-          
           <div class="col-md-3"><label for="" class="form--normal__title">Ảnh đại diện</label></div>
           <div class="col-md-9">
             <div class="app-input app-input--size-md">
               <upload-avatar :av-srt="avatarSrc"></upload-avatar>
             </div>
+            <app-button
+              nuxt
+              style="position: absolute; right: 0.5rem; bottom: 2rem;"
+              size="sm"
+              :to="accountInfo ? '/' + accountInfo.id + '/info/change_pwd' : '/'">
+              <span class="">Thay đổi mật khẩu</span>
+            </app-button>
           </div>
           <div class="col-md-3"><label for="" class="form--normal__title">Họ và tên</label></div>
           <div class="col-md-9">
@@ -56,22 +43,41 @@
           <div class="col-md-3"></div>
           <div class="col-md-9">
             <app-button
-              nuxt
-              :to="accountInfo ? '/' + accountInfo.id + '/info/change_pwd' : '/'"
+              square
+              class="btnAccountLink_account-info"
+              v-if="!accountLink.list.linked"
+              v-on:click="visible.addLink=true"
             >
-              <span class="">Thay đổi mật khẩu</span>
-            </app-button>
+            <slot name="icon">
+              <IconPlus class="icon icon--btn icon--btn--pre"/>
+            </slot>
+            <span>Liên kết trường học</span>
+          </app-button>
           </div>
         </div>
       </div>
-  
+      <!--<div class="d-flex mt-4">-->
+        <!--<app-button class="ml-auto" square>Lưu thay đổi</app-button>-->
+      <!--</div>-->
+      
       <AccountChangePasswordModal
         :visible="showChangePass"
         @click-close="showChangePass = false"
       />
-      <div class="d-flex mt-4">
-        <app-button class="ml-auto" square>Lưu thay đổi</app-button>
-      </div>
+      <account-link-modal
+        :visible="visible.addLink"
+        @cancel="closeLinkModal"
+        @handleRefresh="handleRefresh"
+        @ok="submitAddLink"
+        @close="closeLinkModal"
+      />
+      <app-modal-notify
+        v-if="visible.notify"
+        :title="modalMes.notify"
+        :type="modalStatus"
+        @close="() => { visible.notify = false }"
+        @ok="() => { visible.notify = false }"
+      />
     </template>
   </sub-block-section>
 </template>
@@ -85,11 +91,9 @@ import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import IconPlus from "~/assets/svg/v2-icons/alert/add_24px.svg?inline";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
-// Import faked data
-import { SCHOOL } from "~/server/fakedata/school/test";
 import { getToken } from "~/utils/auth";
 
 export default {
@@ -105,7 +109,6 @@ export default {
   data() {
     return {
       isAuthenticated: true,
-      school: SCHOOL,
       name: "",
       phone: "",
       email: "",
@@ -113,12 +116,24 @@ export default {
       birthday: "",
       showChangePass: false,
       accountLink:{
-        showModal: false,
-        list:""
+        list:"",
       },
       avatar: [],
       avatarSrc: "https://picsum.photos/170/170",
-      profileInfo:""
+      profileInfo:"",
+      visible: {
+        notify: false,
+        addLink: false
+      },
+      modalMes: {
+        notify: ''
+      },
+      modalStatus: 'success',
+      payload:{
+        code:"",
+        g_recaptcha_response:""
+      },
+      success:false
     };
   },
   watch:{
@@ -150,11 +165,42 @@ export default {
       this.notify.showNotify = false;
     },
     closeLinkModal(){
-      this.accountLink.showModal = false;
+      this.visible.addLink = false;
     },
     async handleRefresh(){
       this.fetchProfile();
     },
+    async submitAddLink(code){
+      this.payload.g_recaptcha_response = await this.$recaptcha.execute()
+      this.payload.code = code
+      const payload = this.payload
+      const res = await this.$store.dispatch(
+        `account/${actionTypes.ACCOUNT_LINK.ADD}`,
+        payload
+      );
+      if(get(res, "success", false)){
+        this.modalStatus = 'success'
+        this.modalMes.notify = 'Liên kết thành công!'
+        this.$nextTick(() => {
+          this.resetCode()
+          this.visible.addLink = false
+          this.visible.notify = true
+        })
+      } else {
+        this.modalStatus = 'error'
+        this.modalMes.notify = 'Liên kết không thành công!'
+        this.$nextTick(() => {
+          this.resetCode()
+          this.visible.addLink = false
+          this.visible.notify = true
+        })
+      }
+      this.handleRefresh()
+    },
+    resetCode() {
+      this.payload.code = ""
+      this.payload.g_recaptcha_response = ""
+    }
   },
   computed: {
     ...mapState("account", ["personalList"]),
