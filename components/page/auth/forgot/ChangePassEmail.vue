@@ -121,6 +121,7 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
@@ -137,6 +138,7 @@ export default {
         this.errorMessage.coPassword = "Xác nhận mật khẩu không khớp";
       } else {
         this.validateProps.coPassword = 1;
+        this.errorMessage.coPassword = "";
       }
     },
     showErrorChangePass(error) {

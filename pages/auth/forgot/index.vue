@@ -45,7 +45,7 @@
         </app-modal>
       </div>
       <div class="col-md-6 text-center">
-        <ImageAuth/>
+        <ImageAuth />
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@ import { formatPhoneNumber } from "~/utils/validations";
 import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
 import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
-import ImageAuth  from "~/components/page/auth/ImageAuth";
+import ImageAuth from "~/components/page/auth/ImageAuth";
 export default {
   components: { ImageAuth },
 
@@ -113,7 +113,7 @@ export default {
         let resetModel = createResetWithEmail(this.email, token);
         const doAdd = this.resetPasswordRequest(resetModel).then(result => {
           if (result.success == true) {
-            this.modalConfirmEmail = true;
+            this.$router.push("/auth/forgot/confirmsuccess");
           } else {
             this.showErrorForgot(result);
           }
@@ -142,7 +142,7 @@ export default {
               this.validateForgot = VALIDATE_STATUS.ERROR;
               this.errorForgot = true;
               if (result && result.code == "auth/invalid-phone-number") {
-                this.messageErrorForgot = "Số điện thoại bạn nhập không đúng";
+                this.messageErrorForgot = "Số điện thoại bạn nhập không hợp lệ";
               } else {
                 this.messageErrorForgot = "Có lỗi. Xin vui lòng thử lại";
               }
