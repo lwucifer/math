@@ -93,7 +93,7 @@ $bg-colors: (
     gray: #FBFCFE,
     input-gray: #FBFBFB,
     white: #fff,
-    black: #000
+    black: #000,
 ) !default;
 
 // Typo
@@ -113,7 +113,7 @@ $text-size: (
 ) !default;
 
 // 
-$border-radius-common: 12px !default;
+$border-radius-common: 2px !default;
 
 
 // use in include-media mixin

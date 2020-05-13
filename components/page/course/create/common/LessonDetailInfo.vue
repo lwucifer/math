@@ -1,30 +1,43 @@
 <template>
   <div class="clc-video">
     <div class="clc-video__image">
-      <img src="~/assets/images/create-course/default-course-image.png" alt />
+     <n-link to=""><img src="/images/thumnail-video.png" alt /></n-link>
     </div>
-    <div class="clc-video__right">
-      <h4 class="clc-video__name heading-6 mb-3">
-        Bài {{ (index+1)+ ": " + get(lesson, "name", "") }}
-      </h4>
-      <div class="clc-video__time text-gray mb-3">
-        {{ get(lesson, "duration", "") }}
+
+    <div class="clc-video__right w-100">
+      <div class="d-flex justify-content-between">
+        <p>
+          <span class="clc-video__name heading-6 mb-3 font-weight-bold"
+            >Bài {{ index + 1 + ": " }}</span
+          >
+          <span>{{ get(lesson, "name", "") }}</span>
+        </p>
+
+        <div class="clc-video__actions">
+          <a
+            href
+            class="clc-video__btn-edit text-primary mr-2"
+            @click="handleEditLesson($event)"
+          >
+            <IconEditAlt class="icon" />
+          </a>
+          <a
+            href
+            class="clc-video__btn-delete text-secondary"
+            @click="handleDeleteLesson($event)"
+          >
+            <IconTrashAlt class="icon" />
+          </a>
+        </div>
       </div>
-      <div class="clc-video__actions">
-        <a
-          href
-          class="clc-video__btn-edit text-primary mr-5"
-          @click="handleEditLesson($event)"
-        >
-          <IconEditAlt class="icon" />Sửa nội dung
-        </a>
-        <a
-          href
-          class="clc-video__btn-delete text-secondary"
-          @click="handleDeleteLesson($event)"
-        >
-          <IconTrashAlt class="icon" />Xoá nội dung
-        </a>
+
+      <div class="clc-video__name text-dark mt-2">
+        Định dạng: {{ get(lesson, "type", "") }}
+      </div>
+
+      <div class="clc-video__time text-gray mb-3 mt-3">
+        <IconClock width="14px" height="14px" class="mr-2" />
+        {{ get(lesson, "duration", "") }}
       </div>
     </div>
     <app-modal-confirm
@@ -37,33 +50,36 @@
 </template>
 
 <script>
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import IconClock from "~/assets/svg/icons/clock.svg?inline";
+
 import { get, defaultTo } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
     IconEditAlt,
-    IconTrashAlt
+    IconTrashAlt,
+    IconClock,
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null
+      default: null,
     },
-    index:{
+    index: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
     return {
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -82,8 +98,8 @@ export default {
       this.confirmLoading = true;
       const options = {
         data: {
-          id: get(this, "lesson.id", "")
-        }
+          id: get(this, "lesson.id", ""),
+        },
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
@@ -105,7 +121,7 @@ export default {
       this.confirmLoading = false;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

@@ -6,7 +6,7 @@ import Search from "~/services/elearning/school/Search";
  * initial state
  */
 const state = () => ({
-  elearningSchoolSearch: {}
+  elearningSchoolSearch: {},
 });
 
 /**
@@ -25,12 +25,13 @@ const actions = {
       );
       commit(
         mutationTypes.ELEARNING_SCHOOL_SEARCH.SET_ELEARNING_SCHOOL_SEARCH_LIST,
-        result
+        result.data
       );
     } catch (error) {
       console.log(error);
     }
-  }
+  },
+
 };
 
 /**
@@ -43,7 +44,8 @@ const mutations = {
   ) {
     console.log("[SET_ELEARNING_SCHOOL_SEARCH_LIST]", elearningSchoolSearch)
     state.elearningSchoolSearch = elearningSchoolSearch;
-  }
+  },
+
 };
 
 export default {

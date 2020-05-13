@@ -87,8 +87,8 @@ export const STUDY_MODE = {
     DO_EXERCISE: 'DO_EXERCISE',
     DO_EXERCISE_BEFORE_BEGIN: 'DO_EXERCISE_BEFORE_BEGIN',
     DO_EXERCISE_DOING: 'DO_EXERCISE_DOING',
-    DO_EXERCISE_FINISH: 'DO_EXERCISE_FINISH',
-    DO_TEST: 'DO_TEST',
+    REVIEW_EXERCISE_RESULT: 'REVIEW_EXERCISE_RESULT',
+    // DO_TEST: 'DO_TEST',
 }
 
 export const EXERCISE_STATUS = {
@@ -101,6 +101,12 @@ export const EXERCISE_STATUS = {
 export const LESSION_STATUS = {
     NOT_COMPLETE: 0,
     COMPLETED: 1
+}
+
+export const LESSION_ONLINE_STATUS = {
+    // COMING: 2,
+    LIVE: 1,
+    FINISH: 0,
 }
 
 export const QUESTION_NAV = {
@@ -176,4 +182,9 @@ export const TRANSACTION_STATUSES = {
     PENDING: '0',
     CANCEL: '2',
     CANCEL_SUCCESS: '-2',
+}
+
+export const PAGE_SIZE = {
+    DEFAULT: 10,
+    SCHOOL_16: 16,
 }

@@ -1,25 +1,53 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'join-class-modal': true }"
-    :footer="false" :header="false"
+  <app-modal
+    centered
+    :width="750"
+    :component-class="{ 'join-class-modal': true }"
+    :footer="false"
+    title="Phòng đợi"
+    @close="close()"
   >
-    <div slot="content" class="text-center box22">
-      <div class="title-modal mb-4">
-        <h3>Phòng đợi</h3>
-      </div>
+    <div slot="content" class="text-center">
       <div class="text-left">
-        <!-- <p>Tên phòng học: {{data.online_class_name}}</p>
-        <p>Giáo viên: {{data.online_class_name}}</p>
-        <p>Thời lượng: {{data.recent_schedule.duration}} phút</p>
-
-        <div>Phòng học bắt đầu lúc {{data.recent_schedule.start_time}}</div> -->
-
-        <div v-for="(item, index) in data" :key="index" class="mb-3">
-          <span class="pr-3">Tiết học {{index + 1}}</span>
-          <a :href="item.start_url" target="blank" class="btn btn--color-primary btn--square">Vào phòng học</a>
+        <h6 class="color-primary mb-3">{{info.online_class_name}}</h6>
+        <div class="box12 border mb-4">
+          <p class="mb-3">
+            Giáo viên:
+            <b>{{info.online_class_name}}</b>
+          </p>
+          <p class="mb-3">
+            Giờ bắt đầu:
+            <b>{{startTime}}</b>
+          </p>
+          <p>
+            Thời lượng:
+            <b>{{duration}}</b>
+          </p>
         </div>
-      </div>
-      <div class="text-center mt-4">
-        <app-button size="sm" color="info" class="mr-3" square @click="close()">Đóng</app-button>
+
+        <p class="mb-3">
+          Hãy nhấn nút
+          <b>"Vào phòng học"</b> dưới đây để vào phòng.
+          <b class="color-red">Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
+        </p>
+        <p class="mb-3" v-if="dataLength > 1">
+          <i>*Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy quay lại màn hình này để vào học tiếp tiết học thứ 2</i>
+        </p>
+        <p class="mb-4" v-if="dataLength > 1">
+          <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
+        </p>
+        <hr />
+        <div class="mt-4 text-center" style="max-height: 400px; overflow-y: auto">
+          <div v-for="(item, index) in data" :key="index" class="mb-4">
+            <b class="pr-3">Tiết học {{index + 1}}</b>
+            <a
+              :href="item.start_url"
+              target="blank"
+              class="btn btn--color-primary btn--square"
+              :disabled="item.status != 'waiting'"
+            >Vào phòng học</a>
+          </div>
+        </div>
       </div>
     </div>
   </app-modal>
@@ -37,19 +65,42 @@ export default {
   components: {},
 
   props: {
-    id: null
+    id: null,
+    info: Object
   },
 
   data() {
     return {
       data: [],
-      loading: false
+      dataLength: 0,
+      loading: false,
+      startTime: this.formatAMPM(this.info.recent_schedule.start_time),
+      duration: this.formatHour(this.info.recent_schedule.duration)
     };
   },
 
   methods: {
     close(invite) {
       this.$emit("close", invite);
+    },
+
+    formatAMPM(time) {
+      const date = new Date("2000-01-01 " + time);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
+
+    formatHour(time) {
+      let minutes = time % 60;
+      let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
+      let strTime = hours + " giờ " + minutes + " phút";
+      return strTime;
     },
 
     async getList() {
@@ -63,6 +114,7 @@ export default {
         );
 
         self.data = self.get(self.stateClass, "data", []);
+        self.dataLength = self.data.length;
       } catch (e) {
       } finally {
         this.loading = false;
@@ -76,7 +128,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateClass: "LessonSessions"
-    }),
+    })
   },
 
   created() {
@@ -88,6 +140,9 @@ export default {
 <style lang="scss">
 .invite-student-modal .app-modal-content {
   padding: 2rem 1.5rem;
+}
+strong {
+  color: #222;
 }
 .student-list {
   background: #fbfbfb;

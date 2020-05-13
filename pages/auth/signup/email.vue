@@ -1,35 +1,47 @@
 <template>
   <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-            <div class="wrap-success-auth px-4">
-                <IconSuccess class="mb-3"/>
-                <h3>Đăng ký thành công</h3>
-                <p class="my-4">Cảm ơn bạn đã tạo tài khoản Schoolly. Để hoàn tất việc đăng ký, vui lòng xác thực tài khoản qua email datpt262@gmail.com</p>
-                <app-button class="mt-2" square 
-                            :to="'/auth/signin'"
-                            nuxt
-                >
-                Xác thực tài khoản
-                </app-button>
-            </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="wrap-success-auth px-4">
+          <IconSuccess class="mb-3 fill-primary" />
+          <h3>Đăng ký thành công</h3>
+          <p class="my-4">
+            Cảm ơn bạn đã tạo tài khoản Schoolly. Để hoàn tất việc đăng ký, vui lòng xác thực tài khoản qua email
+            <a>{{email}}</a>
+          </p>
+          <app-button
+            class="mt-2 btn-confirm"
+            square
+            :to="'/auth/signin'"
+            nuxt
+          >Xác thực tài khoản</app-button>
         </div>
-        <div class="col-md-6 text-center">
-            <ImageAuth/>
-        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <ImageAuth />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import ImageAuth  from "~/components/page/auth/ImageAuth";
-import IconSuccess from '~/assets/svg/icons/success.svg?inline';
+import ImageAuth from "~/components/page/auth/ImageAuth";
+import IconSuccess from "~/assets/svg/icons/success.svg?inline";
 export default {
-    components:{
-        ImageAuth,
-        IconSuccess
-    }
-}
+  components: {
+    ImageAuth,
+    IconSuccess
+  },
+  data() {
+    return {
+      email: ""
+    };
+  },
+  mounted() {
+    this.email = this.$route.query.email ? this.$route.query.email : "";
+    console.log("huydv email", this.email);
+  }
+};
 </script>
 
 <style lang="scss">

@@ -1,7 +1,7 @@
 <template>
   <div class="auth__main">
     <h3 class="text-primary">Quên mật khẩu?</h3>
-    <div class="auth_content mt-5">
+    <div class="auth_content mt-5 px-2 d-flex flex-column">
       <app-input
         maxlength="6"
         type="text"
@@ -34,14 +34,16 @@
         @input="handleCoPassword"
       />
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorChange}}</p>
-      <app-button
-        color="primary"
-        square
-        fullWidth
-        @click="acceptResetPass"
-        class="mb-3 mt-4"
-        :disabled="disabledBtnForgot"
-      >Xác nhận</app-button>
+      <div>
+        <app-button
+          color="primary"
+          square
+          @click="acceptResetPass"
+          class="mb-3 mt-4"
+          style="width:293px"
+          :disabled="disabledBtnForgot"
+        >Xác nhận</app-button>
+      </div>
       <a
         @click="sendOTP"
         :class="countDown === 0 ? '' : 'disable'"
@@ -100,7 +102,7 @@ export default {
 
   async mounted() {
     this.phone = this.$route.query.phone ? this.$route.query.phone : "";
-    console.log("huydv phone", this.phone);
+    // console.log("huydv phone", this.phone);
   },
 
   computed: {
@@ -164,6 +166,7 @@ export default {
         this.errorMessage.otp = "Mã OTP có 6 ký tự";
       } else {
         this.validateProps.otp = 1;
+        this.errorMessage.otp = "";
       }
     },
     handlePassword(_password) {
@@ -176,6 +179,7 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
@@ -192,6 +196,7 @@ export default {
         this.errorMessage.coPassword = "Xác nhận mật khẩu không khớp";
       } else {
         this.validateProps.coPassword = 1;
+        this.errorMessage.coPassword = "";
       }
     },
     sendOTP() {

@@ -111,9 +111,18 @@
     }
 }
 
+.btn--color-pink {
+    background: #EB5757;
+    color: #fff;
+    &:hover, &:focus {
+        
+    }
+}
+
 .btn--color-white {
     background-color: #fff;
     color: $color-primary;
+    border: 1px solid #E0E0E0;
     &:hover {
         color: $color-primary-3;
         background-color: #fff;

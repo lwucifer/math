@@ -9,12 +9,6 @@
       @pagechange="onPageChange"
       class=""
     >
-      <template v-slot:cell(vote)="{row}">
-        <td>
-          <app-stars :stars="row.vote" :size="16" class="mt-2 mb-2"/>
-        </td>
-      </template>
-    
       <template v-slot:cell(content)="{row}">
         <!--<td class="cmt-content"-->
             <!--@mouseover="showCmt(row)"-->
@@ -25,6 +19,7 @@
             class=""
             trigger="hover"
             offset="10"
+            placement="top"
           >
             <div>
               {{ row.content | truncStrFilter(30, false) }}
@@ -38,27 +33,24 @@
                 <div v-html="row.content"></div>
               </div>
             </template>
-  
           </v-popover>
-          
-          
-          <!--<div class="cmt-detail" v-if="currentIndex && (row.id == currentIndex)">-->
-            <!--<div v-html="row.content"></div>-->
-          <!--</div>-->
         </td>
       </template>
     
       <template v-slot:cell(creator)="{row}">
         <td>
           {{ get(row, 'student.name', '') }}
+          <p>
+            <app-stars :stars="row.vote" :size="13" class="mt-3 mb-2"/>
+          </p>
         </td>
       </template>
   
-      <template v-slot:cell(class)="{row}">
-        <td>
-          {{ get(row, 'student.class_name', '') }}
-        </td>
-      </template>
+      <!--<template v-slot:cell(class)="{row}">-->
+        <!--<td>-->
+          <!--{{ get(row, 'student.class_name', '') }}-->
+        <!--</td>-->
+      <!--</template>-->
     
       <template v-slot:cell(course)="{row}">
         <td>
@@ -89,10 +81,6 @@
         currentIndex: null,
         heads: [
           {
-            name: "vote",
-            text: "Đánh giá",
-          },
-          {
             name: "content",
             text: "Bình luận",
           },
@@ -100,10 +88,10 @@
             name: "creator",
             text: "Người đánh giá",
           },
-          {
-            name: "class",
-            text: "Lớp",
-          },
+          // {
+          //   name: "class",
+          //   text: "Lớp",
+          // },
           {
             name: "course",
             text: "Bình luận tại",

@@ -11,8 +11,8 @@
           class="cc-box__btn cc-box__btn-collapse"
           @click="isShowLesson = !isShowLesson"
         >
-          <IconAngleDown class="icon" v-if="!isShowLesson" />
-          <IconAngleUp class="icon" v-else />
+          <IconAngleDown class="fill-primary" v-if="!isShowLesson" />
+          <IconAngleUp class="fill-primary" v-else />
         </button>
       </div>
     </div>

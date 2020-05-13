@@ -1,10 +1,13 @@
 .school-filter {
     padding: 1rem 0;
-    border-bottom: 1px solid #eeeeee;
-    margin-bottom: 1.4rem;
-
+    .app-search__input .submit-btn{
+        background-color: $color-primary;
+        color: #fff;
+    }
     .school-filter__title {
-        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2.2rem;
         h3 {
             color: #333;
             font-size: 2rem;
@@ -37,6 +40,15 @@
             }
             .vs__selected-options {
               min-width: 133px;
+            }
+            &.school-filter__form__item--search {
+                flex: 1;
+                max-width: 40rem;
+            }
+            &.school-filter__form__item--search__inline {
+                display: inline-block;
+                width: 30%;
+                max-width: 40rem;
             }
         }
         &__item:first-child {

@@ -1,20 +1,21 @@
 <template>
   <div class="container course-create">
     <breadcrumb />
-    
+
     <div class="row">
       <div class="col-md-3">
-        <CreateAside @click-item="setFormActive" />
+        <CreateAside @click-item="setFormActive" :formActive="formActive" />
       </div>
 
       <div class="col-md-9">
         <CreateGeneralInformation
           v-if="formActive === 'general'"
           class="mb-5"
+          @nextStep="nextStep"
         />
         <CreateLearningContentCourse v-if="formActive === 'content-course'" />
         <CreateLearningContentLecture v-if="formActive === 'content-lecture'" />
-        <CreateSetting v-if="formActive === 'settings'" />
+        <CreateSetting v-if="formActive === 'settings'" @nextStep="nextStep" />
         <CreateExercise v-if="formActive === 'exercise'" />
         <CreateExam v-if="formActive === 'exam'" />
       </div>
@@ -77,6 +78,10 @@ export default {
   },
 
   methods: {
+    nextStep(active) {
+      this.formActive = active;
+      window.scrollTo(0, 0);
+    },
     preventNav(event) {
       event.preventDefault();
       event.returnValue = "";

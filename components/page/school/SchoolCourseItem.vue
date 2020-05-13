@@ -1,7 +1,7 @@
 <template>
   <div class="school-course-item">
     <div class="school-course-item__image">
-      <img :src="get(cource, 'avatar', '')" alt />
+      <img :src="get(cource, 'avatar.medium', '')" alt />
       <div
         class="status-online"
         v-if="
@@ -34,7 +34,7 @@
             <app-stars :stars="Math.floor(get(cource, 'rate', 0))" />
           </div>
           <span class="text-right">
-            <strong>{{ get(cource, "rate", 0) }}</strong> <br />
+            <strong>{{ get(cource, "rate", 0) }}</strong>
             ({{ get(cource, "original_price", 0) }})
           </span>
         </div>
@@ -66,20 +66,20 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    IconVideo3
+    IconVideo3,
   },
 
   props: {
     cource: {
       type: Object,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   methods: {
-    get
-  }
+    get,
+  },
 };
 </script>
 

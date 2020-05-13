@@ -70,11 +70,11 @@
       </li>
       <li>
         <IconInsertComment class="icon" />
-        Số bài giảng: {{ get(info, "lessons", 0) }} bài
+        Số bài học: {{ get(info, "lessons", 0) }} bài
       </li>
       <li>
         <IconTimer class="icon" />
-        Thời lượng: {{ get(info, "duration", "") }}
+        Thời lượng: {{ [info.duration && info.duration != "0:0" ? info.duration : "1:0", "m:s"] | moment("mm:ss") }}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,

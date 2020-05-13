@@ -22,7 +22,7 @@
           @click="submit"
         >
           <IconHamberger class="fill-white mr-2" />
-          <span>Lọc kết quả</span>
+          <span class="color-white">Lọc kết quả</span>
         </app-button>
       </div>
 
@@ -42,11 +42,11 @@
     <!--End filter form-->
 
     <!--Options group-->
-    <div class="filter-form mb-3">
+    <div class="filter-form">
       <div class="filter-form__item" @click="deleteRows">
-        <app-button color="secondary" class="filter-form__item__btn" square :size="'sm'">
-          <IconTrash />
-          <span class="ml-3">Hủy lớp</span>
+        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+          <IconTrash class="fill-white"/>
+          <span class="ml-3 color-white">Hủy lớp</span>
         </app-button>
       </div>
     </div>
@@ -79,9 +79,9 @@
 
       <template v-slot:actions="{row}">
         <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconCalendar class="fill-blue mr-2"/>Chỉnh sửa
+          <IconEdit class="fill-blue mr-2"/>Chỉnh sửa
         </n-link>
-        <button @click="deleteRows(row.online_class_id)"><IconCalendar class="fill-secondary mr-2"/>Huỷ lớp</button>
+        <button @click="deleteRows(row.online_class_id)"><IconTimesCircle class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
@@ -95,6 +95,9 @@ import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
+import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -108,11 +111,14 @@ export default {
   layout: "manage",
 
   components: {
+    IconEdit,
     IconFilter,
     IconSearch,
     IconArrow,
     IconCalendar,
     IconTrash,
+    IconTimesCircle,
+    IconUsersAlt,
     IconHamberger
   },
 

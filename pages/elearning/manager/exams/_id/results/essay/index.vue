@@ -1,9 +1,11 @@
 <template>
   <div class="elearning-manager-result">
     <mark-section
-      title="Kết quả bài làm"
+      :student-name="get(this, 'detail.name', '')"
+      :student-ava="get(this, 'detail.avatar.low', '')"
       :is-pass="isPass"
       :result="result"
+      :result-desc="resultDesc"
       :started-at="get(this, 'detail.start_time', '')"
       :finished-at="get(this, 'detail.timestamp', '')"
       :duration="get(this, 'detail.duration', 0)"
@@ -11,26 +13,44 @@
       :correct-ans="get(this, 'detail.corrects', 0)"
       :has-mark="hasMark"
     />
-
-    <div class="py-3">
-      <submission-content
-        :contents="submissionContent"
-      />
-      <!--form-->
-      <mark-form-section
-        v-if="isPending"
-        @submit="handleMark"
-      />
-  
-    </div>
+    
+    <submission-content
+      :contents="submissionContent"
+      :note="note"
+    />
+    <!--form-->
+    <mark-form-section
+      ref="markForm"
+      v-if="isPending || isFail"
+      :score-to-pass="get(this, 'detail.pass_score', 5)"
+      :pending="isPending"
+      :failed="isFail"
+      @submit="handleMark"
+    />
   
     <app-modal-confirm
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Bạn muốn chấm điểm?"
+      description="Bạn sẽ không thể thay đổi được kết quả sau khi đã chấm điểm"
+      ok-text="Xác nhận"
       @ok="confirmMark"
       @cancel="cancelMark"
     >
     </app-modal-confirm>
+  
+    <app-modal-notify
+      v-if="showModalError"
+      type="warning"
+      title="Chấm điểm thất bại!"
+      description="Có lỗi xảy ra, vui lòng thử lại."
+      @ok="showModalError = false"
+      @close="showModalError = false"
+    >
+      <template v-slot:icon>
+    
+      </template>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -65,6 +85,7 @@
     data() {
       return {
         showModalConfirm: false,
+        showModalError: false,
         confirmLoading: false,
         payload: {
           exercise_id: this.$route.params.id,
@@ -74,6 +95,10 @@
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
+      isFail: function() {
+        return get(this, 'detail.result', false) &&
+          (get(this, 'detail.result', SUBMISSION_RESULTS.PASSED) == SUBMISSION_RESULTS.FAILED)
+      },
       isPass: function() {
         return get(this, 'detail.result', false) &&
           (get(this, 'detail.result', SUBMISSION_RESULTS.FAILED) == SUBMISSION_RESULTS.PASSED)
@@ -100,8 +125,14 @@
           }
         }
       },
+      resultDesc() {
+        return `Số lần làm bài còn lại: ${get(this, 'detail.remain_works', 0)}`
+      },
       submissionContent: function() {
         return get(this, 'detail.question_list', [])
+      },
+      note: function() {
+        return get(this, 'detail.note', null)
       }
     },
 
@@ -126,15 +157,14 @@
           payload
         )
         if (get(res, "success", false)) {
+          this.$refs['markForm'].resetForm()
           this.$emit("refreshSubmission")
           this.$toasted.success(
             get(res, "message", "")
           );
           return
         }
-        this.$toasted.error(
-          get(res, "message", "")
-        );
+        this.showModalError = true
       },
       get,
       getParamQuery

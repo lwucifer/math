@@ -38,3 +38,45 @@
         }
     }
 }
+$primary-color: #37A000;
+@import '~vue2-datepicker/scss/index.scss';
+    .datepicker-range-v2.mx-datepicker-main{
+        background: none !important;
+        box-shadow:none !important;
+        border: none !important;
+        display: flex;
+        font-family: "Montserrat", sans-serif !important;
+        .mx-datepicker-sidebar {
+            background: #fff;
+            width: 194px;
+        }
+        .mx-datepicker-sidebar + .mx-datepicker-content{
+            border-left: none !important;
+            background: #fff;
+            box-shadow: 0px 8px 32px rgba(108, 115, 141, 0.12);
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .mx-calendar-content{
+            .cell{
+                &.active{
+                    border-radius: 10px;
+                }
+            }
+        }
+        .mx-btn-shortcut{
+            border-radius: 2px;
+            width: 100%;
+            background: #F9F9F9;
+            margin-bottom: 6px;
+            padding: 6px 11px;
+            &.active {
+                background: $primary-color;
+            }
+        }
+        .mx-calendar:last-child{
+            border-left: none !important;
+            margin-left: 20px;
+        }
+    }
+

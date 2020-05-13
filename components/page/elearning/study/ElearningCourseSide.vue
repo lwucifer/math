@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-lesson-side">
-    <OnlineClass :info="info" />
-    <ElearningProgram :progress="progress" />
+    <OnlineClass />
+    <ElearningProgram />
   </div>
 </template>
 <script>

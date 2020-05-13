@@ -3,7 +3,7 @@
     <div class="school-item__thumnail">
       <n-link :to="'/school/' + school.id">
         <img
-          :src="get(school, 'avatar.medium', '')"
+          :src="get(school, 'cover.high', '')"
           :alt="get(school, 'name', '')"
         />
       </n-link>
@@ -22,11 +22,11 @@
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUser /></span>
-        <span class="value">{{ school.teacher_number }} giáo viên </span>
+        <span class="value">{{ get(school, 'teacher_number', '') }} giáo viên </span>
       </div>
       <div class="school-item__info__statistic-item">
         <span><IconUserGroup /></span>
-        <span class="value">{{ school.student_number }} học sinh </span>
+        <span class="value">{{ get(school, 'student_number', '') }} học sinh </span>
       </div>
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
   },
 
   created() {
-    console.log(this.school);
+    // console.log(this.school);
   },
 
   methods: {

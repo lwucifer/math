@@ -12,9 +12,12 @@
         <app-checkbox-circle
           :value="item.key"
           :checked="item.checked"
-          :disabled="false">
+          :disabled="false"
+        >
           {{ item.title }}
-          <span v-if="item.optional" class="cca-sub-text text-sub">(Tùy chọn)</span>
+          <span v-if="item.optional" class="cca-sub-text text-sub"
+            >(Tùy chọn)</span
+          >
         </app-checkbox-circle>
       </li>
     </ul>
@@ -81,10 +84,14 @@ export default {
   data() {
     return {
       menu,
-      active: "general",
+      active: this.formActive,
       showModalConfirm: false,
       confirmLoading: false,
     };
+  },
+
+  props: {
+    formActive: String,
   },
 
   computed: {
@@ -103,7 +110,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     const elearning_id = getParamQuery("elearning_id");
     const options = {
       params: {
@@ -132,6 +139,20 @@ export default {
       },
       deep: true,
     },
+    formActive: {
+      handler: function() {
+        if (this.formActive === "content-lecture") {
+          this.active = "content";
+          return;
+        }
+        if (this.formActive === "content-course") {
+          this.active = "content";
+          return;
+        }
+        this.active = this.formActive;
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -156,7 +177,7 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$router.push('/elearning/manager/courses');
+        this.$router.push("/elearning/manager/courses");
         return;
       }
 
@@ -175,7 +196,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.general_status", false) == 1) return;
+      if (get(this, "progress.data.general_status", false) != 1) return;
 
       if (key === "content") {
         this.active = key;
@@ -190,7 +211,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.content_status", false) == 1) return;
+      if (get(this, "progress.data.content_status", false) != 1) return;
 
       if (key === "settings") {
         this.active = key;
@@ -198,11 +219,11 @@ export default {
         return;
       }
 
+      if (get(this, "progress.data.setting_status", false) != 1) return;
+
       this.active = key;
       this.$emit("click-item", key);
     },
   },
 };
 </script>
-
-

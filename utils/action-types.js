@@ -422,9 +422,17 @@ export const ELEARNING_STUDY_EXERCISE = {
     ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",
 };
 
+export const ELEARNING_STUDY_PROGRESS = {
+    LIST: "elearningSudyProgressList",
+};
+
+export const ELEARNING_STUDY_INFO = {
+    LIST: "elearningSudyInfoList",
+};
+
 export const ELEARNING_STUDY_STATISTIC = {
-    LIST: "elearningStudyStatistic"
-}
+    LIST: "elearningStudyStatistic",
+};
 
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
@@ -513,10 +521,34 @@ export const ACCOUNT_BANKS = {
     LIST: "accountBanksList",
     ADD: "accountBankAdd",
     EDIT: "accountBankEdit",
-    DELETE : "accountBankDelete",
-    VALIDATE: "accountBankValidate"
-}
+    DELETE: "accountBankDelete",
+    VALIDATE: "accountBankValidate",
+};
 
 export const PUBLIC_BANK = {
-    LIST: "publicBankList"
-}
+    LIST: "publicBankList",
+};
+
+export const TEACHING_ELEARNING_PARTICIPANT = {
+    LIST: "teachingElearningList",
+};
+
+export const TEACHING_ELEARNING_BANNED = {
+    ADD: "teachingElearningBanned",
+};
+
+export const TEACHING_STUDENT_PROGRESS = {
+    LIST: "teachingStudentProGressList",
+};
+
+export const TEACHING_ELEARNING_REQUESTS = {
+    LIST: "teachingElearningRequestsList",
+};
+
+export const TEACHING_ELEARNING_ACCEPT = {
+    ADD: "teachingElearningAccept",
+};
+
+export const TEACHING_ELEARNING_INVITES = {
+    LIST: "teachingElearningInvitesList",
+};

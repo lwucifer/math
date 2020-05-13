@@ -9,6 +9,7 @@ export const AUTH = {
     SET_ACCOUNT_STATUS: "setAccountStatus",
     SET_FIREBASE_TOKEN: "setFirebaseToken",
     SET_CURRENT_DEVICE: "setCurrentDevice",
+    SAVE_PHONE_PASS: "savePhonePass",
 };
 
 export const BASE = {
@@ -320,8 +321,8 @@ export const ELEARNING_STUDY_STUDENT = {
 };
 
 export const ELEARNING_STUDY_STATISTIC = {
-    SET_ELEARNING_STUDY_STATISTIC : "setElearningStudyStatistic"
-}
+    SET_ELEARNING_STUDY_STATISTIC: "setElearningStudyStatistic",
+};
 
 export const ELEARNING_STUDY_FAVOURITE = {
     SET_ELEARNING_STUDY_FAVOURITE_LIST: "setElearningStudyFavouriteList",
@@ -343,6 +344,7 @@ export const ELEARNING_STUDY_ARCHIVE = {
 export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
     SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_ELEARNING_CURRENT_ID: "setStudyElearningCurrentId",
     SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
     SET_STUDY_EXERCISE_SUBMISSION_ADD: "setStudyExerciseSumissionAdd",
@@ -350,7 +352,13 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_NAV: "setStudyExerciseQuestionNav",
     SET_STUDY_EXERCISE_QUESTION_CHANGE: "setStudyExerciseQuestionChange",
     SET_STUDY_EXERCISE_SUBMISSION: "setStudyExerciseSubmission",
-    // SET_STUDY_EXERCISE_ANSWER: "setStudyExerciseAnswer",
+    SET_STUDY_EXERCISE_CURRENT_BY_NO: "setStudyExerciseCurrentByNo",
+    SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
+    SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
+};
+
+export const ELEARNING_STUDY_PROGRESS = {
+    SET_STUDY_PROGRESS_LIST: "setStudyProgressList",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
@@ -426,4 +434,20 @@ export const SOCIAL_FRIEND = {
 export const SOCIAL_PHOTO = {
     SET_SOCIAL_POST_PHOTO_LIST: "setPostPhotoList",
     SET_SOCIAL_POST_TAG_PHOTO_LIST: "setPostTagPhotoList",
+};
+
+export const TEACHING_ELEARNING_PARTICIAPANT = {
+    SET_TEACHING_ELEARNING_PARTICIPANT_LIST: "setTeachingElearningParticipantList",
+};
+
+export const TEACHING_STUDENT_PROGRESS = {
+    SET_TEACHING_STUDENT_PROGRESS_LIST: "setTeachingStudentProgressList",
+};
+
+export const TEACHING_ELEARNING_REQUESTS = {
+    SET_TEACHING_ELEARNING_REQUESTS_LIST: "setTeachingStudentRequestList",
+};
+
+export const TEACHING_ELEARNING_INVITES = {
+    SET_TEACHING_ELEARNING_INVITES_LIST: "setTeachingElearningInvitesList",
 };

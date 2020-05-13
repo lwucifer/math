@@ -1,13 +1,13 @@
 <template>
   <div class="elearning-manager-result__section">
-    <h4 class="content-title">{{ title }}</h4>
+    <h5 class="font-weight-bold text-primary mb-3">{{ title }}</h5>
     <app-table
       class="table--objective-test"
       :heads="heads"
       :data="list"
       :need-pagination="false"
     >
-      <template v-slot:cell(num)="{row, index}">
+      <template v-slot:cell(question)="{row, index}">
         <!--<td-->
           <!--class="table&#45;&#45;question-test__question-index"-->
           <!--title="Chi tiết"-->
@@ -15,7 +15,6 @@
         <!--&gt;-->
         <td
           class="table--question-test__question-index"
-          title="Chi tiết"
         >
           
           <!--<v-popover-->
@@ -29,7 +28,7 @@
             trigger="hover"
           >
             <div>
-              <span>{{ get(row, 'index') }}</span>
+              <div v-html="get(row, 'content', '')"></div>
             </div>
             
             <template slot="popover" class="tooltip-detail">
@@ -74,7 +73,7 @@
   import ChoiceQuestionDetail from "~/components/page/elearning/manager/exam/ChoiceQuestionDetail"
   import { get } from "lodash"
 
-  const ANS_KEYS = ['A', 'B', 'C', 'D', 'E']
+  const ANS_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
   export default {
     components: {
@@ -97,7 +96,7 @@
       ansKey(info) {
         const opts = info.answers
         const optsLeng = opts.length
-        const ans = info.student.answer
+        const ans = get(info, 'student.answer', '')
   
         for(let i = 0; i < optsLeng; i++) {
           const tmp = opts[i]
@@ -116,7 +115,7 @@
       list: {
         type: Array,
         default: () => [],
-        validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
+        // validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
       },
       loading: {
         type: Boolean,
@@ -127,7 +126,7 @@
       return {
         heads: [
           {
-            name: "num",
+            name: "question",
             text: "Câu hỏi",
           },
           {

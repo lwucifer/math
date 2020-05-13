@@ -1,7 +1,6 @@
 <template>
   <div class="container">
       <student-manager-filter-form/>
-      <hr class="my-4">
       <student-manager-table
         :heads="heads"
         :list="list"
@@ -33,16 +32,9 @@ export default {
                     name: "date",
                     text: "Ngày tham gia"
                  },
+                 
                  {
-                    name: "progress",
-                    text: "Tiến độ học tập"
-                 },
-                 {
-                    name: "question",
-                    text: "Câu hỏi cho giáo viên"
-                 },
-                 {
-                    name: "action",
+                    name: "confirm",
                     text: "",
                  }
             ],

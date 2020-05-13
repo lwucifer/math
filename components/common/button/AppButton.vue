@@ -41,6 +41,7 @@ export default {
       };
 
       const colorClasses = {
+        "btn--color-pink": this.color === "pink",
         "btn--color-primary": this.color === "primary",
         "btn--color-secondary": this.color === "secondary",
         "btn--color-info": this.color === "info",

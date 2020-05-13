@@ -413,7 +413,7 @@ const mutations = {
         state,
         _profileList
     ) {
-        console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
+        // console.log("SET_ACCOUNT_PROFILE_LIST", _profileList);
         state.profileList = _profileList;
     },
     [mutationTypes.SOCIAL_FRIEND.SET_SOCIAL_FRIEND_INVITE_LIST](

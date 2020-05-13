@@ -53,7 +53,7 @@
                         <div class="item">
                           <p class="title">Hôm nay</p>
                           <span class="value">
-                            <strong>{{ today_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            <strong class="text-primary">{{ today_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -61,7 +61,7 @@
                         <div class="item">
                           <p class="title">Tuần này</p>
                           <span class="value">
-                            <strong>{{ week_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            <strong class="color-blue">{{ week_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -69,7 +69,7 @@
                         <div class="item">
                           <p class="title">Tháng này</p>
                           <span class="value">
-                            <strong>{{ month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            <strong class="color-yellow">{{ month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -111,6 +111,7 @@
                           >
                             <app-date-picker
                               class="w-100"
+                              popupClass="datepicker-range-v2"
                               v-model="dateDefault"
                               square
                               range
@@ -124,11 +125,6 @@
                               <!--<IconCalendar />-->
                               <!--</template>-->
                             </app-date-picker>
-                          </div>
-                          <div class="filter-form__item d-flex">
-                            <filter-button @click="filterSelect= !filterSelect">
-                              Lọc kết quả
-                            </filter-button>
                           </div>
                         </div>
                       </filter-form>
@@ -149,10 +145,16 @@
                       <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
                     </template>
                     <template v-slot:cell(fee)="{row}">
-                      <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+                      <td class="text-primary">{{ formatFee(get(row, 'fee', ''))}}%</td>
                     </template>
                     <template v-slot:cell(total)="{row}">
                       <td>{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                    </template>
+                    <template v-slot:cell(timestamp)="{row}">
+                      <td> {{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
+                    </template>
+                    <template v-slot:cell(desc)="{row}">
+                      <td style="width:30%"> {{ get(row, 'desc', '-') }}</td>
                     </template>
                   </app-table>
                 </template>

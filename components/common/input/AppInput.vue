@@ -10,6 +10,7 @@
       <textarea
         v-if="textarea"
         v-bind="$attrs"
+        v-textarea-autosize
         ref="input"
         :rows="rows"
         :type="type"
@@ -62,23 +63,23 @@
         class="app-input__counter"
       >{{ `${localValue.toString().length}/${counter}` }}</div>
     </div>
-  
+
     <div
       class="app-input__default"
       v-if="message && localValidate == VALIDATE_STATUS.DEFAULT"
-    >{{message}}</div>
+    >{{ message }}</div>
     <div
       class="app-input__success"
       v-if="message && localValidate == VALIDATE_STATUS.SUCCESS"
-    >{{message}}</div>
+    >{{ message }}</div>
     <div
       class="app-input__error"
       v-else-if="message && localValidate == VALIDATE_STATUS.ERROR"
-    >{{message}}</div>
+    >{{ message }}</div>
     <div
       class="app-input__warning"
       v-else-if="message && localValidate == VALIDATE_STATUS.WARNING"
-    >{{message}}</div>
+    >{{ message }}</div>
   </div>
 </template>
 
@@ -236,7 +237,7 @@ export default {
 
   methods: {
     updateInput: function(event) {
-      this.localValue = event.target.value;
+      // this.localValue = event.target.value;
       this.$emit("input", event.target.value);
     },
 
@@ -245,6 +246,7 @@ export default {
     },
 
     handleBlur(event) {
+      this.$emit("handleBlur", event);
       this.isFocus = false;
     },
 

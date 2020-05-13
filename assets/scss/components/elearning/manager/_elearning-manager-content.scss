@@ -6,6 +6,9 @@
         padding: 2rem 0;
 
         .app-table table {
+            td:first-child {
+                padding-left: 1.5rem;
+            }
             th {
                 &:first-child {
                     padding-left: 1.5rem;
@@ -183,4 +186,21 @@
 
 .tooltip--rate {
     max-width: 34rem;
+}
+
+.content-box-peer {
+    border-radius: 2px;
+    border-width: 1px;
+    border-color: $color-text-sub;
+    box-shadow: $shadow-1;
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.content-box-peer--solid {
+    border-style: solid;
+}
+
+.content-box-peer--dashed {
+    border-style: dashed;
 }

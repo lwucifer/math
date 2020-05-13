@@ -5,15 +5,23 @@
       :key="index"
     >
       <div class="item">
-        <label class="content-title">Câu hỏi {{ get(item, 'index') }}</label>
+        <label class="content-title">Câu hỏi {{ get(item, 'index', '*') }}</label>
         <div class="test-content" v-html="get(item, 'content', '')"></div>
       </div>
       <div class="item">
-        <label class="content-title">Câu trả lời</label>
-        <div class="test-content" v-html="get(item, 'student.answer', '')"></div>
+        <div class="writing-answer">
+          <label class="font-weight-semi-bold text-dark mb-2 d-block">Câu trả lời</label>
+          <div class="test-content-answer">
+            <div v-html="get(item, 'student.answer', '')"></div>
+          </div>
+        </div>
       </div>
-      
-      <app-divider v-if="hasManyQues"/>
+    </div>
+    <div class="item" v-if="note">
+      <label for="" class="text-dark content-title">Nhận xét chi biết bài làm của học sinh</label>
+      <div class="content--note">
+        <div v-html="note"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +35,9 @@
         type: Array,
         required: true,
         validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
+      },
+      note: {
+        type: String
       }
     },
     computed: {

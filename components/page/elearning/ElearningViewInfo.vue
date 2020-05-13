@@ -22,6 +22,8 @@
         lượt xem
       </div>
     </div>
+
+    <img class="d-block w-100 mt-4" :src="get(info, 'cover_url.high', '')" alt="">
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="cc-tab-panel">
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-start">
       <app-input
         placeholder="Nhập để tìm kiếm..."
         style="width: 260px"

@@ -1,29 +1,28 @@
 <template>
   <div class="container">
-    <breadcrumb />
-    
+    <!--<breadcrumb />-->
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="3"/>
       </div>
       <div class="col-md-9">
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <header-breadcrumb
-              title="Bài tập và bài kiểm tra"
-              :breadcrumb="breadcrumb"
-            />
-          </div>
-          
-          <div class="elearning-manager-content__main">
-            <component
-              :is="currentComponent"
-              :detail="result"
-              @refreshSubmission="refreshData"
-            >
-            </component>
-          </div>
-        </div>
+        <sub-block-section
+          title="Kết quả làm bài"
+          has-icon
+        >
+          <template v-slot:content>
+            <div class="elearning-manager-content p-0">
+              <div class="elearning-manager-content__main py-2">
+                <component
+                  :is="currentComponent"
+                  :detail="result"
+                  @refreshSubmission="refreshData"
+                >
+                </component>
+              </div>
+            </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>
@@ -73,7 +72,7 @@
           [EXERCISE_TYPES.ESSAY]: "EssaySubmission",
         }
         
-        return MATCHED_COMPONENTS[get(this, 'exercise.type', EXERCISE_TYPES.CHOICE)]
+        return MATCHED_COMPONENTS[get(this, 'result.type')]
       },
       breadcrumb: function() {
         let data = [
@@ -119,7 +118,7 @@
       },
       refreshData() {
         this.getDetail()
-        this.getExerciseDetail()
+        // this.getExerciseDetail()
       },
       get
     },

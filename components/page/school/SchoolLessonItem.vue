@@ -1,10 +1,12 @@
 <template>
   <div class="school-lesson-item">
     <div class="school-lesson-item__image">
-      <img :src="get(lesson, 'avatar', '')" alt />
+      <img :src="get(lesson, 'avatar.medium', '')" alt />
       <div
         class="status-online"
-        v-if="get(lesson, 'onlineStatus', '') && get(lesson, 'online', '') === 1"
+        v-if="
+          get(lesson, 'onlineStatus', '') && get(lesson, 'online', '') === 1
+        "
       >
         {{ get(lesson, "onlineStatus", "") }}
       </div>
@@ -32,7 +34,7 @@
             <app-stars :stars="Math.floor(get(lesson, 'rate', 0))" />
           </div>
           <span class="text-right">
-            <strong>{{ get(lesson, "rate", 0) }}</strong> <br />
+            <strong>{{ get(lesson, "rate", 0) }}</strong>
             ({{ get(lesson, "vote_number", 0) }})
           </span>
         </div>
@@ -64,20 +66,20 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    IconVideo3
+    IconVideo3,
   },
 
   props: {
     lesson: {
       type: Object,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   methods: {
-    get
-  }
+    get,
+  },
 };
 </script>
 

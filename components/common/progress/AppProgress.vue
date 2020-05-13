@@ -39,6 +39,9 @@
       },
       square: {
         type: Boolean,
+      },
+      normal: {
+        type: Boolean
       }
     },
     computed: {
@@ -52,6 +55,7 @@
         const styleClasses = {
           'app-progress--rounded': this.rounded,
           'app-progress--square': this.square,
+          'app-progress--normal': this.normal,
         }
         
         const colorClasses = {

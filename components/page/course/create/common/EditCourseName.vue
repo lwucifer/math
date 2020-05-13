@@ -7,8 +7,11 @@
       class="cc-box__input-title bg-input-gray mb-0"
       type="text"
     />
-    <h2 v-else class="cc-box__title heading-6">
-      {{ courseNameModel }}
+    <h2 v-else class="cc-box__title heading-5">
+      Tiêu đề: {{ courseNameModel }}
+      <button  class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
+        <IconEdit class="ml-2"/>
+      </button>
     </h2>
 
     <template v-if="isEditCourseName">
@@ -22,17 +25,14 @@
         Huỷ
       </button>
     </template>
-
-    <button v-else class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
-      <IconEditAlt class="icon" />
-    </button>
   </div>
 </template>
 
 <script>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+const IconEdit = () => import ("~/assets/svg/v2-icons/edit.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
+
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -42,7 +42,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 export default {
   components: {
     IconCheck,
-    IconEditAlt,
+    IconEdit,
     IconTimes
   },
 

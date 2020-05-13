@@ -1,11 +1,19 @@
 <template>
-  <div class="sub-block-section">
-    <div class="sub-block-section__title"
-       v-if="hasTitle"
+  <div class="sub-block-section" :class="blockCls">
+    <div
+      v-if="hasTitle"
+      class="sub-block-section__title"
+      :class="titleCls"
     >
-      <slot name="title">
+      <slot name="title" class="sub-block-section__title">
         <h4 class="sub-block-section__title--main">
-          <icon-left-arrow v-if="hasIcon" class="sub-block-section__icon-title" /><span>{{ title }}</span>
+          <span @click="clickBack">
+            <icon-left-arrow
+            v-if="hasIcon"
+            class="sub-block-section__icon-title"
+            
+          /></span>
+          <span>{{ title }}</span>
         </h4>
       </slot>
     </div>
@@ -24,17 +32,43 @@
       IconLeftArrow
     },
     props: {
+      blockCls: {
+        type: Object,
+        default: () => {}
+      },
       hasTitle: {
         type: Boolean,
         default: true
+      },
+      titleCls: {
+        type: Object,
+        default: () => {}
       },
       title: {
         type: String,
         default: ''
       },
+      actionClick: { // Action when click arrow icon
+        type: Function
+      },
       hasIcon: {
         type: Boolean,
         default: false
+      }
+    },
+    computed: {
+      classes: function () {
+      
+      }
+    },
+    methods: {
+      clickBack() {
+        if (this.actionClick) {
+          this.actionClick()
+        } else {
+          this.$router.go("-1")
+        }
+        console.log('go back')
       }
     }
   };

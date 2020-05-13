@@ -5,8 +5,8 @@
     <div class="filter-form">
       <div class="filter-form__item top" @click="openModal = true">
         <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="mr-2"/>
-          <span>Mời thêm học sinh</span>
+          <IconPlusCircle class="mr-2 fill-white"/>
+          <span class="color-white">Mời thêm học sinh</span>
         </app-button>
       </div>
 
@@ -30,7 +30,7 @@
           @click="submit"
         >
           <IconHamberger class="fill-white mr-2" />
-          <span>Lọc kết quả</span>
+          <span class="color-white">Lọc kết quả</span>
         </app-button>
       </div>
 
@@ -58,10 +58,10 @@
       @pagechange="onPageChange"
       :data="students"
     >
-      <template v-slot:cell(is_block_on_next_lesson)="{row}">
+      <template v-slot:cell(banned)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.invitation_id, row.student_id,row.is_block_on_next_lesson)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.is_block_on_next_lesson" width="16" height="16"/>
+          <button type="button" @click="block(row.invitation_id, row.student_id, row.banned)">
+            <IconLockOpenAlt class="fill-primary" v-if="!row.banned" width="16" height="16"/>
             <IconLock2 v-else width="16" height="16"/>
           </button>
         </td>
@@ -145,7 +145,7 @@ export default {
           sort: true
         },
         {
-          name: "is_block_on_next_lesson",
+          name: "banned",
           text: ""
         }
       ],
@@ -218,16 +218,22 @@ export default {
         online_class_id: online_class_id,
         student_id: studentId
       };
+      let doDo;
       if (isBlock) {
-        await this.$store.dispatch(
+        doDo = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.UNBLOCK}`,
           params
         );
       } else {
-        await this.$store.dispatch(
+        doDo = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.BLOCK}`,
           params
         );
+      }
+      if (doDo.success) {
+        this.getList();
+      } else {
+        this.$toasted.error(doDo.message);
       }
     },
 

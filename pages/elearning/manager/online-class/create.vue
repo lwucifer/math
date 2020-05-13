@@ -1,16 +1,14 @@
 <template>
   <div>
     <div class="container">
-    <breadcrumb />
-    
-    <div class="row">
-      <div class="col-md-3">
-        <ElearningManagerSide active="5" />
-      </div>
-      <div class="col-md-9">
-          <h5 class="page-title">
-            Tạo phòng học online
-          </h5>
+      <breadcrumb />
+
+      <div class="row">
+        <div class="col-md-3">
+          <ElearningManagerSide active="5" />
+        </div>
+        <div class="col-md-9">
+          <h5 class="page-title">Tạo phòng học online</h5>
           <div class="olclasses-create-main box">
             <div class="mt-4">
               <div class="form-item">
@@ -35,7 +33,7 @@
                   <strong>Tên phòng học</strong> (Tối đa 60 ký tự)
                 </label>
                 <div class="input-limit">
-                  <input type="text" :value="params.name" @input="changeName"/>
+                  <input type="text" :value="params.name" @input="changeName" />
                   <span class="limit">{{params.name.length}}</span>
                 </div>
               </div>
@@ -71,158 +69,199 @@
                 </label>
                 <app-radio name="dơwnloadvideo" value="1" class="mr-6" v-model="downloadVideo">Có</app-radio>
                 <app-radio name="dơwnloadvideo" value="0" v-model="downloadVideo">Không</app-radio>
-              </div> -->
+              </div>-->
 
               <div class="form-item">
-                <p><strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)</p>
+                <p>
+                  <strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)
+                </p>
 
-                <div class="box22 border mt-3" v-for="(item, index) in timeArray" :key="index">
-                  <div class="">
-                    <h6 class="mb-3">Giờ học</h6>
-                    <div class="d-flex-center">
-                    <div class="d-flex-center mb-4 mr-6">
-                      <label class="mr-3">Bắt đầu vào lúc</label>
-                      <app-vue-select
-                        style="width: 10rem"
-                        class="app-vue-select form-item__selection mr-3"
-                        v-model="startTime.time"
-                        :options="times"
-                        label="text"
-                        searchable
-                        clearable
-                        @input="handleChangedTime"
-                      ></app-vue-select>
-                      <app-vue-select
-                        style="width: 9rem"
-                        class="app-vue-select form-item__selection"
-                        v-model="startTime.type"
-                        :options="timeTypes"
-                        label="text"
-                        searchable
-                        clearable
-                        @input="handleChangedTime"
-                      ></app-vue-select>
-                    </div>
-                    <div class="d-flex-center  mb-4">
-                      <label class="mr-3">Thời lượng</label>
-                      <app-vue-select
-                        style="width: 9rem"
-                        class="app-vue-select form-item__selection mr-2"
-                        v-model="duration.hours"
-                        :options="hours"
-                        label="text"
-                        searchable
-                        clearable
-                        @input="handleChangedDuration"
-                      ></app-vue-select>
-                      <app-vue-select
-                        style="width: 10rem"
-                        class="app-vue-select form-item__selection ml-3 mr-2"
-                        v-model="duration.minutes"
-                        :options="minutes"
-                        label="text"
-                        searchable
-                        clearable
-                        @input="handleChangedDuration"
-                      ></app-vue-select>
-                    </div>
-                    </div>
-                  </div>
-
-                  <div class="form-item mb-5">
-                    <label>
-                      <strong>Ngày học trong tuần</strong>
-                    </label>
-                    <div class="d-flex-center mt-3">
-                      <app-checkbox
-                        @change="check($event, 'MON')"
-                        :checked="selectedItems.includes('MON')"
-                        label="Thứ 2"
-                      ></app-checkbox>
-                      <app-checkbox
-                        @change="check($event, 'TUE')"
-                        :checked="selectedItems.includes('TUE')"
-                        label="Thứ 3"
-                      />
-                      <app-checkbox
-                        @change="check($event, 'WED')"
-                        :checked="selectedItems.includes('WED')"
-                        label="Thứ 4"
-                      />
-                      <app-checkbox
-                        @change="check($event, 'THU')"
-                        :checked="selectedItems.includes('THU')"
-                        label="Thứ 5"
-                      />
-                      <app-checkbox
-                        @change="check($event, 'FRI')"
-                        :checked="selectedItems.includes('FRI')"
-                        label="Thứ 6"
-                      />
-                      <app-checkbox
-                        @change="check($event, 'SAT')"
-                        :checked="selectedItems.includes('SAT')"
-                        label="Thứ 7"
-                      />
-                      <app-checkbox
-                        @change="check($event, 'SUN')"
-                        :checked="selectedItems.includes('SUN')"
-                        label="Chủ nhật"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="form-item">
-                    <label>
-                      <strong>Thời gian áp dụng</strong>
-                    </label>
-                    <div class="d-flex-center mt-15">
-                      <div class="d-flex-center mr-4">
-                        <label>Từ</label>
-                        <app-date-picker
-                          class="ml-3"
-                          v-model="params.schedules[0].from_date"
-                          square
-                          size="sm"
-                          placeholder="dd/mm/yyyy"
-                        >
-                          <template v-slot:icon-calendar>
-                            <IconCalendar />
-                          </template>
-                        </app-date-picker>
-                      </div>
+                <div
+                  class="box22 border mt-3"
+                  v-for="(item, index) in params.schedules"
+                  :key="index"
+                >
+                  
+                  <div v-if="indexEdit === index || indexShow === index">
+                    <div class>
+                      <h6 class="mb-3">Giờ học</h6>
                       <div class="d-flex-center">
-                        <label>Đến</label>
-                        <app-date-picker
-                          class="ml-3"
-                          v-model="params.schedules[0].to_date"
-                          square
-                          size="sm"
-                          placeholder="dd/mm/yyyy"
-                        >
-                          <template v-slot:icon-calendar>
-                            <IconCalendar />
-                          </template>
-                        </app-date-picker>
+                        <div class="d-flex-center mb-4 mr-6">
+                          <label class="mr-3">Bắt đầu vào lúc</label>
+                          <app-vue-select
+                            style="width: 10rem"
+                            class="app-vue-select form-item__selection mr-3"
+                            :value="startTime[index].time.value"
+                            :options="times"
+                            label="text"
+                            searchable
+                            clearable
+                            @input="(e)=>handleChangedTime(e,index)"
+                          ></app-vue-select>
+                          <app-vue-select
+                            style="width: 9rem"
+                            class="app-vue-select form-item__selection"
+                            :value="startTime[index].type.value"
+                            :options="timeTypes"
+                            label="text"
+                            searchable
+                            clearable
+                            @input="(e)=>handleChangedTime(e,index, true)"
+                          ></app-vue-select>
+                        </div>
+                        <div class="d-flex-center mb-4">
+                          <label class="mr-3">Thời lượng</label>
+                          <app-vue-select
+                            style="width: 9rem"
+                            class="app-vue-select form-item__selection mr-2"
+                            v-model="duration[index].hours"
+                            :options="hours"
+                            label="text"
+                            searchable
+                            clearable
+                            @input="(e)=>handleChangedDuration(e,index)"
+                          ></app-vue-select>
+                          <app-vue-select
+                            style="width: 10rem"
+                            class="app-vue-select form-item__selection ml-3 mr-2"
+                            v-model="duration[index].minutes"
+                            :options="minutes"
+                            label="text"
+                            searchable
+                            clearable
+                            @input="handleChangedDuration(index)"
+                          ></app-vue-select>
+                        </div>
                       </div>
+                    </div>
+
+                    <div class="form-item mb-5">
+                      <label>
+                        <strong>Ngày học trong tuần</strong>
+                      </label>
+                      <div class="d-flex-center mt-3">
+                        <app-checkbox
+                          @change="check($event, 'MON', index)"
+                          :checked="selectedItems[index].includes('MON')"
+                          label="Thứ 2"
+                        ></app-checkbox>
+                        <app-checkbox
+                          @change="check($event, 'TUE', index)"
+                          :checked="selectedItems[index].includes('TUE')"
+                          label="Thứ 3"
+                        />
+                        <app-checkbox
+                          @change="check($event, 'WED', index)"
+                          :checked="selectedItems[index].includes('WED')"
+                          label="Thứ 4"
+                        />
+                        <app-checkbox
+                          @change="check($event, 'THU', index)"
+                          :checked="selectedItems[index].includes('THU')"
+                          label="Thứ 5"
+                        />
+                        <app-checkbox
+                          @change="check($event, 'FRI', index)"
+                          :checked="selectedItems[index].includes('FRI')"
+                          label="Thứ 6"
+                        />
+                        <app-checkbox
+                          @change="check($event, 'SAT', index)"
+                          :checked="selectedItems[index].includes('SAT')"
+                          label="Thứ 7"
+                        />
+                        <app-checkbox
+                          @change="check($event, 'SUN', index)"
+                          :checked="selectedItems[index].includes('SUN')"
+                          label="Chủ nhật"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="form-item mb-0">
+                      <label>
+                        <strong>Thời gian áp dụng</strong>
+                      </label>
+                      <div>
+                        <div class="d-flex-center mt-15">
+                          <div class="d-flex-center mr-4">
+                            <label>Từ</label>
+                            <app-date-picker
+                              class="ml-3"
+                              v-model="params.schedules[index].from_date"
+                              square
+                              size="sm"
+                              placeholder="yyyy-mm-dd"
+                              valueFormat="YYYY-MM-DD"
+                            >
+                              <template v-slot:icon-calendar>
+                                <IconCalendar />
+                              </template>
+                            </app-date-picker>
+                          </div>
+                          <div class="d-flex-center">
+                            <label>Đến</label>
+                            <app-date-picker
+                              class="ml-3"
+                              v-model="params.schedules[index].to_date"
+                              square
+                              size="sm"
+                              placeholder="yyyy-mm-dd"
+                              valueFormat="YYYY-MM-DD"
+                            >
+                              <template v-slot:icon-calendar>
+                                <IconCalendar />
+                              </template>
+                            </app-date-picker>
+                          </div>
+                        </div>
+
+                        <div class="mt-5">
+                          <app-button
+                            color="white"
+                            class="mr-4 color-red border"
+                            @click="cancelTime(index)"
+                          >Hủy</app-button>
+                          <app-button @click="saveTime(index)" :disabled="!checkSchedule">
+                            <span v-if="index == indexEdit">Cập nhật</span>
+                            <span v-else>Thêm lịch học</span>
+                          </app-button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-else class="d-flex-center">
+                    <div>
+                      {{item.start_time}} - {{item.duration}}
+                    </div>
+                    <div>
+                      Hàng tuần vào thứ {{item.days_of_week}}
+                    </div>
+                    <div>
+                      {{item.from_date}} - {{item.to_date}}
+                    </div>
+                    <div class="ml-auto">
+                      <button @click="editSchedule(index)"><IconCreate class="fill-primary"/></button>
+                      <button @click="removeSchedule(index)"><IconTrashAlt class="fill-red"/></button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="mt-4 mb-4">
-              <app-button color="info" class="mr-3" @click="cancelTime">Hủy</app-button>
-              <app-button @click="saveTime">Thêm lịch học</app-button>
-              <button class="d-flex-center color-primary bold" @click="addTime"><IconPlus class="fill-primary mr-2" /> Thêm lịch học</button>
+            <div class="mt-4 mb-4" v-if="indexEdit === null && indexShow === null">
+              <button class="d-flex-center color-primary bold" @click="addTime">
+                <IconPlus class="fill-primary mr-2" />Thêm lịch học
+              </button>
             </div>
           </div>
 
           <div class="mt-4 mb-4 text-right">
-              <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-              <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
-              <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
-            </div>
+            <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
+            <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
+            <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
+          </div>
         </div>
       </div>
     </div>
@@ -232,26 +271,28 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
-      :footer="false" :header="false"
+      :footer="false"
+      :header="false"
     />
 
     <app-modal
-        centered
-        :width="408"
-        :component-class="{ 'app-modal-confirm': true }"
-        @close="$router.push('/')"
-        v-if="showNotify"
-        :footer="false" :header="false"
+      centered
+      :width="408"
+      :component-class="{ 'app-modal-confirm': true }"
+      @close="$router.push('/')"
+      v-if="showNotify"
+      :footer="false"
+      :header="false"
     >
-        <div slot="content">
-          <div class="text-center pt-4 pb-4">
-            <a class="btn-close" @click="showNotify = false">X</a>
-            <p class="title mb-4">{{message}}</p>
-            <div class="text-center">
-                <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
-            </div>
-            </div>
+      <div slot="content">
+        <div class="text-center pt-4 pb-4">
+          <a class="btn-close" @click="showNotify = false">X</a>
+          <p class="title mb-4">{{message}}</p>
+          <div class="text-center">
+            <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
+          </div>
         </div>
+      </div>
     </app-modal>
   </div>
 </template>
@@ -261,8 +302,11 @@ import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
+import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
+import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+
 import HeaderCreate from "~/components/layout/header/HeaderCreate";
-import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
+import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import { get, reject } from "lodash";
 import { mapState } from "vuex";
@@ -272,38 +316,48 @@ import { useEffect, getParamQuery } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
-function initialState (){
+const initialSchedule = {
+  from_date: "",
+  to_date: "",
+  start_time: "1:30 AM",
+  duration: 90,
+  days_of_week: ""
+};
+const initialDuration = {
+  hours: {
+    value: "1",
+    text: "1 giờ"
+  },
+  minutes: {
+    value: "30",
+    text: "30 phút"
+  }
+};
+const initialStartTime = {
+  time: {
+    value: "1:00",
+    text: "1:00"
+  },
+  type: {
+    value: "AM",
+    text: "AM"
+  }
+};
+function initialState() {
   return {
+    //checkSchedule: false,
+    indexEdit: null,
+    indexShow: 0,
     tab: 1,
-    timeArray: [{}],
     message: "",
-    fullParams: false,
     sendMess: "0",
     downloadVideo: "0",
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
     showBonus: false,
-    startTime: {
-      time: {
-        value: "1:00",
-        text: "1:00"
-      },
-      type: {
-        value: "AM",
-        text: "AM"
-      }
-    },
-    duration: {
-      hours: {
-        value: '1',
-        text: '1 giờ'
-      },
-      minutes: {
-        value: '30',
-        text: '30 phút'
-      }
-    },
+    startTime: [initialStartTime],
+    duration: [initialDuration],
     hours: [
       {
         value: "1",
@@ -336,7 +390,7 @@ function initialState (){
       {
         value: "8",
         text: "8 giờ"
-      },
+      }
     ],
     minutes: [
       {
@@ -480,23 +534,16 @@ function initialState (){
         text: "Riêng tư"
       }
     ],
-    selectedItems: [],
+    selectedItems: [[]],
+    schedules: [],
     params: {
-        elearning_id: "",
-        name: "",
-        enable: true,
-        is_invite_all: false,
-        is_allow_download: false,
-        schedules: [
-          {
-            from_date: "",
-            to_date: "",
-            start_time: "1:30 AM",
-            duration: 90,
-            days_of_week: ""
-          }
-        ]
-      }
+      elearning_id: "",
+      name: "",
+      enable: true,
+      is_invite_all: false,
+      is_allow_download: false,
+      schedules: [initialSchedule]
+    }
   };
 }
 
@@ -510,6 +557,8 @@ export default {
     IconPlus,
     IconAngleDown,
     IconCalendar,
+    IconTrashAlt,
+    IconCreate,
     ElearningManagerSide
   },
 
@@ -520,45 +569,76 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_PUBLIC_SEARCH, {
       stateLessons: "Lessons"
-    })
+    }),
+    fullParams() {
+      return this.params.elearning_id  &&
+          this.params.name  &&
+          this.indexShow === null &&
+          this.indexEdit === null
+    },
+    checkSchedule() {
+      let index = this.indexEdit ? this.indexEdit : this.indexShow;
+      const item = this.params.schedules[index];
+      const xxx = this.params.schedules.length;
+      return this.params.schedules[index].from_date  &&
+             this.params.schedules[index].to_date &&
+             this.params.schedules[index].start_time  &&
+             this.params.schedules[index].duration != 0 &&
+             this.params.schedules[index].days_of_week;
+    },
   },
 
   watch: {
     sendMess(newValue, oldValue) {
-      this.params.is_invite_all = newValue == '1';
+      this.params.is_invite_all = newValue == "1";
     },
     downloadVideo(newValue, oldValue) {
-      this.params.is_allow_download = newValue == '1';
-    },
-    params: {
-      handler(newValue){
-        this.fullParams =
-        newValue.elearning_id != "" &&
-        newValue.name != "" &&
-        newValue.schedules[0].to_date != "" &&
-        newValue.schedules[0].from_date != "" &&
-        newValue.schedules[0].start_time != "" &&
-        newValue.schedules[0].duration != "" &&
-        newValue.schedules[0].days_of_week != "" ;
-     },
-     deep: true
-      
-    },
+      this.params.is_allow_download = newValue == "1";
+    }
   },
 
   methods: {
+    removeSchedule(index){
+      this.params.schedules = _.reject([...this.params.schedules], (i, inx) => inx === index);
+      if (this.params.schedules.length === 0 ) {
+        this.params.schedules.push(initialSchedule);
+        this.indexShow = 0;
+      }
+    },
+    editSchedule(index){
+      this.indexEdit = index;
+      this.indexShow = null;
+    },
+
     addTime() {
-      this.timeArray.push({});
+      this.indexEdit = null;
+      this.indexShow = this.params.schedules.length;
+      this.params.schedules.push(initialSchedule);
+      this.selectedItems.push([]);
+      this.duration.push(initialDuration);
+      this.startTime.push(initialStartTime);
+      //this.schedules = [...this.params.schedules];
     },
-    saveTime() {
-      
+
+    cancelTime(index) {
+      if (this.params.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
+        this.params.schedules.pop();
+        this.indexShow = null;
+      } else {
+        let old = this.schedules[index];
+        this.params.schedules[index] = old;
+      }
     },
-    cancelTime() {
-      
+    saveTime(index) {
+      this.indexEdit = null;
+      this.indexShow = null;
+      this.schedules = [...this.params.schedules];
+      console.log(this.params.schedules);
     },
+
     changeName(e) {
       if (e.target.value.length < 61) {
-        this.params.name =  e.target.value;
+        this.params.name = e.target.value;
       } else {
         e.target.value = this.params.name;
       }
@@ -573,7 +653,7 @@ export default {
         );
         if (doCreate.success) {
           this.fnCancel();
-          this.message = "Tạo phòng học thành công!"
+          this.message = "Tạo phòng học thành công!";
           this.showNotify = true;
         }
       } catch (e) {
@@ -597,7 +677,7 @@ export default {
     fnSave2() {
       this.showModalConfirm = true;
     },
-    
+
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
@@ -626,13 +706,43 @@ export default {
       }
     },
 
-    handleChangedTime() {
-      this.params.schedules[0].start_time = this.startTime.time.value + ' ' +this.startTime.type.value;
+    handleChangedTime(e, index, type = false) {
+      let post = {
+        value: e.value,
+        text: e.value
+      };
+
+      if (type) {
+        this.startTime.splice(index, 1, { ...this.startTime[index],
+          type: post
+        })
+      } else {
+        this.startTime.splice(index, 1, { ...this.startTime[index],
+          time: post
+        })
+      }
+
+      this.params.schedules.splice(index, 1, {
+        ...this.params.schedules[index],
+        start_time:
+          this.startTime[index].time.value +
+          " " +
+          this.startTime[index].type.value
+      })
     },
-    
-    handleChangedDuration() {
-      let duration = parseInt(this.duration.hours.value) * 60 + parseInt(this.duration.minutes.value);
-      this.params.schedules[0].duration = parseInt(duration);
+
+    handleChangedDuration(index) {
+      let duration =
+        parseInt(this.duration[index].hours.value) * 60 +
+        parseInt(this.duration[index].minutes.value);
+      
+      this.duration.splice(index, 1, { ...this.duration[index],
+        time: post
+      })
+      this.params.schedules.splice(index, 1, {
+        ...this.params.schedules[index],
+        duration: parseInt(duration)
+      });
     },
 
     handleChangedCourse() {
@@ -641,42 +751,47 @@ export default {
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;
     },
-    check(checked, item) {
+    check(checked, item, index) {
       if (checked) {
-        this.pushSelectedIndexes(item);
+        this.pushSelectedIndexes(item, index);
       } else {
-        this.popSelectedIndexes(item);
+        this.popSelectedIndexes(item, index);
       }
     },
-    popSelectedIndexes(item) {
-      if (_.some(this.selectedItems, item)) {
-        this.selectedItems = _.reject(
-          this.selectedItems,
-          ({ id }) => id === item.id
-        );
+    popSelectedIndexes(item, index) {
+      if (_.some(this.selectedItems[index], item)) {
+        this.selectedItems[index] = [...this.selectedItems[index]].filter(i => {
+          return i !== item
+        })
+        this.params.schedules.splice(index, 1, {
+          ...this.params.schedules[index],
+          days_of_week: this.arrayToString(this.selectedItems[index])
+        });
       }
-      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
     },
-    pushSelectedIndexes(item) {
-      if (!_.some(this.selectedItems, item)) {
-        this.selectedItems.push(item);
+    pushSelectedIndexes(item, index) {
+      if (!_.some(this.selectedItems[index], item)) {
+        this.selectedItems[index].push(item);
+        this.params.schedules.splice(index, 1, {
+          ...this.params.schedules[index],
+          days_of_week: this.arrayToString(this.selectedItems[index])
+        });
       }
-      this.params.schedules[0].days_of_week = this.arrayToString(this.selectedItems);
     },
 
     arrayToString(data) {
       return data.reduce((result, item) => {
-        const com = result ? ',' : '';
-        return result = result + com + item;
-      }, '')
+        const com = result ? "," : "";
+        return (result = result + com + item);
+      }, "");
     },
 
     get
   },
 
-  created () {
+  created() {
     this.getLessons();
-  },
+  }
 };
 </script>
 
@@ -688,7 +803,7 @@ strong {
 .input-limit {
   position: relative;
   input {
-    border: 1px solid #E0E0E0;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
     height: 4rem;
     width: 100%;

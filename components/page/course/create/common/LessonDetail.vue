@@ -8,14 +8,24 @@
       :index="index"
     />
 
-    <CreateLessonOfChapter
-      :lesson="lesson"
-      @handleCancel="handleCancel"
-      @refreshLessons="refreshLessons"
-      v-else
-    />
+    <div v-else>
+      <CreateLessonOfChapter
+        :lesson="lesson"
+        @handleCancel="handleCancel"
+        @refreshLessons="refreshLessons"
+        v-if="get(general, 'type', '') === 'COURSE'"
+      />
+      <CreateLessonOfElearning
+        @refreshLessons="refreshLessons"
+        @handleCancel="handleCancel"
+        :lesson="lesson"
+        v-if="get(general, 'type', '') === 'LECTURE'"
+      />
+    </div>
 
-    <app-divider class="my-4" />
+    <!-- <app-divider class="my-4" /> -->
+
+    <p class="mt-4 mb-3 heading-4">Tài liệu tham khảo</p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"
@@ -31,16 +41,23 @@
       @handleRefreshDocs="handleRefreshDocs"
     />
 
-    <app-button
+    <!-- <app-button
       size="sm"
       outline
       square
       class="font-weight-semi-bold clc-btn-add-docs"
+      
+    >
+      
+    </app-button> -->
+
+    <button
+      class="text-primary mt-3"
       v-if="isShowButtonAddDocument"
       @click="handleAddDocument"
     >
-      <IconPlus class="icon"></IconPlus>Thêm tài liệu giảng dạy
-    </app-button>
+      <IconPlus class="mr-3"></IconPlus>Thêm tài liệu
+    </button>
   </div>
 </template>
 
@@ -48,7 +65,7 @@
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import IconPlus from "~/assets/svg/v2-icons/add_green.svg?inline";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
@@ -60,6 +77,7 @@ import CreateLessonOfChapter from "~/components/page/course/create/course/Create
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
+import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
 
 export default {
   components: {
@@ -71,25 +89,36 @@ export default {
     IconFileBlank,
     DocumentDetail,
     CreateLessonOfChapter,
-    LessonDetailInfo
+    LessonDetailInfo,
+    CreateLessonOfElearning,
   },
 
   data() {
     return {
       isShowFormAddDocument: false,
       isShowButtonAddDocument: true,
-      isShowDetailLesson: true
+      isShowDetailLesson: true,
     };
+  },
+
+  mounted() {
+    console.log(this.lesson);
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null
+      default: null,
     },
-    index:{
+    index: {
       type: Number,
-      default: null
+      default: null,
     },
   },
 
@@ -121,7 +150,7 @@ export default {
       this.isShowDetailLesson = false;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

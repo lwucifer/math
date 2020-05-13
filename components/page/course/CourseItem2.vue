@@ -1,51 +1,48 @@
 <template>
-  <div class="course-item2">
-    <div class="course-item2__image">
-      <img :src="get(item, 'avatar.medium', '')" alt class="w-100" />
-      <div
-        class="status-online"
-        v-if="get(item, 'onlineStatus', '') && get(item, 'online', 0) === 1"
-      >
-        {{ get(item, "onlineStatus", "") }}
-      </div>
-      <div class="online" v-if="get(item, 'online', 0)">Trực tiếp</div>
-      <div class="video" v-if="get(item, 'video', '')">
-        <IconVideo3 />
-      </div>
-    </div>
-    <div class="bottom">
-      <n-link
-        class="title"
-        v-if="get(item, 'name', '')"
-        :to="'/elearning/' + get(item, 'id', '')"
-        >{{ get(item, "name", "") }}</n-link
-      >
+  <div class="course-item-2" :class="{ 'course-item-2--size-sm': this.size === 'sm' }">
+    <div class="course-item-2__img">
+      <n-link :to="to">
+        <img :src="image" :alt="name" class="d-block w-100" />
 
-      <div class="course-item2_teacher">
-        <div>
-          <app-avatar
-            :src="get(item, 'teacher.avatar.medium', '')"
-            :size="20"
-          />
-          <span class="name">{{ get(item, "teacher.name", "") }}</span>
+        <div v-if="livestream" class="course-item-2__livestream">
+          <IconCameraOnline class="icon" />Trực tiếp
         </div>
-        <div>
-          <div class="stars">
-            <app-stars :stars="get(item, 'review_rate', 0)" />
-          </div>
-          <span>
-            <strong>{{ get(item, "review_rate", 0) }}</strong>
-            ({{ get(item, "review_count", 0) }})
-          </span>
-        </div>
-        <div class="price-wrapper">
-          <span v-if="get(item, 'price.original_price', 0)" class="price">
-            {{ numeral(get(item, "price.original_price", 0)).format() }}đ
-          </span>
-          <span v-else class="price price--free">
-            Miễn phí
-          </span>
-        </div>
+
+        <div v-if="livestream" class="course-item-2__label-livestream">Lớp học đang diễn ra</div>
+
+        <div v-if="discount" class="course-item-2__discount">{{ discount }}%</div>
+      </n-link>
+
+      <!-- <div class="video" v-if="get(item, 'video', '')">
+        <IconVideo3 />
+      </div>-->
+    </div>
+
+    <div class="course-item-2__bottom">
+      <h3 class="course-item-2__name">
+        <n-link class="title" :to="to" :title="name">{{ name }}</n-link>
+      </h3>
+
+      <div class="course-item-2__teacher">
+        <app-avatar :src="get(teacher, 'avatar.low', '')" :size="size === 'sm' ? 22 : 24" />
+        <span>{{ get(teacher, 'name', '') }}</span>
+      </div>
+
+      <div class="course-item-2__rating">
+        <app-stars class="d-inline-flex" :stars="averageRate" :size="size === 'sm' ? 12 : 14" />
+        <span class="text-dark">
+          <strong>{{ averageRate }}</strong>
+          ({{ totalReview }})
+        </span>
+      </div>
+
+      <div class="course-item-2__price-wrapper">
+        <b v-if="free" class="text-primary body-1 font-weight-bold">Miễn phí</b>
+
+        <template v-else>
+          <s class="body-3" v-if="originalPrice != price">{{ originalPrice | numeralFormat }}đ</s>
+          <b class="text-primary body-1 font-weight-bold ml-2">{{ price | numeralFormat }}đ</b>
+        </template>
       </div>
     </div>
   </div>
@@ -53,28 +50,40 @@
 
 <script>
 import { assignIn, get } from "lodash";
-import IconChevronLeft from "~/assets/svg/icons/chevron-left.svg?inline";
-import IconChevronRight from "~/assets/svg/icons/chevron-right.svg?inline";
-import IconBooks from "~/assets/svg/icons/books.svg?inline";
-import IconNote from "~/assets/svg/icons/note.svg?inline";
-import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
 import numeral from "numeral";
+
+import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
+import IconCameraOnline from "assets/svg/icons/camera-online.svg?inline";
 
 export default {
   components: {
-    IconChevronLeft,
-    IconChevronRight,
-    IconBooks,
-    IconNote,
-    IconVideo3
+    IconVideo3,
+    IconCameraOnline
   },
 
   props: {
-    item: {
+    size: {
+      type: String,
+      default: 'md',
+      validator: value => ['sm', 'md'].includes(value)
+    },
+    to: {
+      type: String,
+      default: ""
+    },
+    image: String,
+    livestream: Boolean,
+    discount: Number,
+    name: String,
+    teacher: {
       type: Object,
-      required: true,
-      default: () => {}
-    }
+      validator: value => ["id", "avatar", "name"].every(key => key in value)
+    },
+    averageRate: Number,
+    totalReview: Number,
+    price: Number,
+    originalPrice: Number,
+    free: Boolean
   },
 
   methods: {
@@ -85,5 +94,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/course/_course-item2.scss";
+@import "~/assets/scss/components/course/_course-item-2.scss";
 </style>

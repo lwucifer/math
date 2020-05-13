@@ -1,4 +1,5 @@
 <template>
+  <!--List of elearnings that have exercises.-->
   <div>
     <!--Filter form-->
     <elearning-manager-filter-form

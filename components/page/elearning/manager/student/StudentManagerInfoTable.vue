@@ -10,7 +10,7 @@
       <template v-slot:cell(action)>
         <td class="text-primary">
           <n-link
-            class
+            class="text-decoration-none"
             title="Chi tiết"
             :to="`/elearning/manager/students`">
             Xem chi tiết
@@ -18,51 +18,18 @@
         </td>
       </template>
       
-      <template v-slot:cell(type)="{row}">
-        <td>
-          {{ get(row, 'type', '') | exerciseTypeFilter }}
+      <template v-slot:cell(name)="{row}">
+        <td style="width:60%">
+          {{ get(row, 'name', '')  }}
         </td>
       </template>
       
-      <template v-slot:cell(rate)="{row}">
-        <td>
-          <v-popover
-            offset="10"
-            trigger="hover"
-            placement="top"
-            popover-class="tooltip--rate"
-          >
-            <div>
-              <span class="status-item status-item--success d-inline-block">
-                {{get(row, 'passed_percent', 0)}}%
-              </span>
-              <span class="status-item status-item--fail d-inline-block">
-                {{get(row, 'failed_percent', 0)}}%
-              </span>
-              <span class="status-item status-item--pending d-inline-block">
-                {{get(row, 'pending_percent', 0)}}%
-              </span>
-            </div>
-            
-            <template slot="popover" class="tooltip-detail">
-              <div>
-                <rate-status
-                  total="1000"
-                  passed="200"
-                  failed="300"
-                  pending="500"
-                >
-                </rate-status>
-              </div>
-            </template>
-          
-          </v-popover>
-        </td>
-      </template>
       
-      <template v-slot:cell(created)="{row}">
-        <td>
-          {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
+      <template v-slot:cell(mark)="{row}">
+        <td style="width:25%">
+          <span v-if="!row.mark" class="text-warning">Chưa chấm điểm</span>
+          <span v-else-if="row.mark > 6" class="text-primary">{{ get(row, 'mark', '')  }}/10</span>
+          <span v-else-if="row.mark < 6" class="text-secondary">{{ get(row, 'mark', '')  }}/10</span>
         </td>
       </template>
     </app-table><!--End table-->

@@ -3,10 +3,23 @@
     <create-action :isShowAction="false" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
-        <h1 class="cc-panel__heading heading-5 text-primary">Bài tập</h1>
+        <h4 class="cc-panel__heading">Bài tập</h4>
+      </div>
+
+      <div class="cc-panel__body">
+        <app-alert type="success" class="mb-4" show-close>
+          Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
+          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
+          gửi lên để được xét duyệt.
+        </app-alert>
+
+        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
+          Chọn bài học liên quan
+        </h5>
       </div>
 
       <SelectLesson
+        class="mb-4"
         v-if="get(general, 'type', '') === 'COURSE'"
         :lessons="lessons"
         @handleSelectLesson="handleSelectLesson"
@@ -48,6 +61,8 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
+import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
+
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
@@ -72,6 +87,8 @@ export default {
     FormCreateExercise,
     ExerciseList,
     SelectLesson,
+    IconPlus2,
+    IconAngleDown,
   },
 
   data() {

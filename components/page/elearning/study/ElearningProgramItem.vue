@@ -7,8 +7,12 @@
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
         :disabled="lesson.status == lessonCompleted"
+        @change="handleCompleteStudy($event)"
       />
-      <p class="text-uppercase pl-1 text-clickable" @click="handleStuty">
+      <p
+        class="text-uppercase pl-1 text-clickable"
+        @click="handleStuty(lesson)"
+      >
         {{ get(lesson, "name", "") }}
       </p>
     </div>
@@ -59,6 +63,9 @@ import {
   STUDY_MODE,
   LESSION_STATUS,
 } from "~/utils/constants";
+import { redirectWithParams, getParamQuery } from "~/utils/common";
+import ProgressService from "~/services/elearning/study/Progress";
+import * as actionTypes from "~/utils/action-types";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -80,7 +87,40 @@ export default {
   props: {
     lesson: Object,
   },
+
+  mounted() {
+    const lesson_id = getParamQuery("lesson_id");
+    if (lesson_id && lesson_id === this.lesson.id) {
+      this.handleStuty(this.lesson);
+    }
+  },
+
   methods: {
+    getProgress() {
+      const elearning_id = get(this, "$router.history.current.params.id", "");
+      const options = {
+        params: {
+          elearning_id,
+        },
+      };
+      this.$store.dispatch(
+        `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
+        options
+      );
+    },
+    async handleCompleteStudy() {
+      const payload = {
+        completed: true,
+        lesson_id: get(this, "lesson.id", ""),
+      };
+      const res = await new ProgressService(this.$axios)["add"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.getProgress();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
     get,
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyElearningExerciseList",
@@ -88,30 +128,30 @@ export default {
 
     ...mapMutations("event", ["setStudyMode", "setPayload"]),
 
-    async handleStuty() {
-      console.log(this.lesson);
+    async handleStuty(lesson) {
+      redirectWithParams({ lesson_id: get(lesson, "id", "") });
 
-      if (get(this, "lesson.type", "") === "DOCS") {
+      if (get(lesson, "type", "") === "DOCS") {
         this.setStudyMode(STUDY_MODE.DOCS);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "ARTICLE") {
+      if (get(lesson, "type", "") === "ARTICLE") {
         this.setStudyMode(STUDY_MODE.ARTICLE);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "IMAGE") {
+      if (get(lesson, "type", "") === "IMAGE") {
         this.setStudyMode(STUDY_MODE.IMAGE);
-        this.setPayload(this.lesson);
+        this.setPayload(lesson);
         return;
       }
 
-      if (get(this, "lesson.type", "") === "VIDEO") {
+      if (get(lesson, "type", "") === "VIDEO") {
         const elearning_id = get(this, "$router.history.current.params.id", "");
-        const lesson_id = get(this, "lesson.id", "");
+        const lesson_id = get(lesson, "id", "");
         const res = await new StudyService(this.$axios)["studyLesson"](
           elearning_id,
           lesson_id

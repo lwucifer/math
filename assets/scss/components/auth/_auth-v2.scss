@@ -25,8 +25,8 @@
                 font-size: 1.6rem;
                 color: white;
                 &.active {
-                    color: $color-primary;
-                    border-bottom: .4rem solid $color-primary;
+                    color: $color-primary-1;
+                    border-bottom: .4rem solid $color-primary-1;
                 }
                 &:not(.active) {
                     cursor: pointer;
@@ -102,4 +102,7 @@
     margin: 100px auto;
     text-align: center;
     padding: 40px 0;
+    .btn-confirm{
+        width: 212px;
+    }
 }

@@ -1,9 +1,11 @@
 <template>
   <div class="elearning-manager-result">
     <mark-section
-      title="Kết quả bài làm"
+      :student-name="get(this, 'detail.name', '')"
+      :student-ava="get(this, 'detail.avatar.low', '')"
       :is-pass="isPass"
       :result="result"
+      :result-desc="resultDesc"
       :started-at="get(this, 'detail.start_time', '')"
       :finished-at="get(this, 'detail.timestamp', '')"
       :duration="get(this, 'detail.duration', 0)"
@@ -11,25 +13,42 @@
       :correct-ans="get(this, 'detail.corrects', 0)"
       :has-mark="hasMark"
     />
-    <!--Form-->
-    <mark-form-section
-      v-if="isFailed"
-      @submit="handleMark"
-    />
-  
     <!--Table-->
     <result-table-section
       class="py-3"
       :list.sync="submissionContent"
     />
   
+    <!--Form-->
+    <mark-form-section
+      class="mt-4"
+      v-if="isFailed"
+      @submit="handleMark"
+    />
+  
     <app-modal-confirm
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Bạn muốn chấm điểm?"
+      description="Bạn sẽ không thể thay đổi được kết quả sau khi đã chấm điểm"
+      ok-text="Xác nhận"
       @ok="confirmMark"
       @cancel="cancelMark"
     >
     </app-modal-confirm>
+  
+    <app-modal-notify
+      v-if="showModalError"
+      type="warning"
+      title="Chấm điểm thất bại!"
+      description="Có lỗi xảy ra, vui lòng thử lại."
+      @ok="showModalError = false"
+      @close="showModalError = false"
+    >
+      <template v-slot:icon>
+    
+      </template>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -64,6 +83,7 @@
     data() {
       return {
         showModalConfirm: false,
+        showModalError: false,
         confirmLoading: false,
         payload: {
           exercise_id: this.$route.params.id,
@@ -102,6 +122,9 @@
           }
         }
       },
+      resultDesc() {
+        return `Số lần làm bài còn lại: ${get(this, 'detail.remain_works', 0)}`
+      },
       submissionContent: function() {
         return get(this, 'detail.question_list', [])
       }
@@ -134,9 +157,7 @@
           );
           return
         }
-        this.$toasted.error(
-          get(res, "message", "")
-        );
+        this.showModalError = true
       },
       get,
       getParamQuery

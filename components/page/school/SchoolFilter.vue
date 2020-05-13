@@ -1,89 +1,110 @@
 <template>
   <div class="school-filter">
     <div class="school-filter__title" v-if="title.length || link">
-      <h3 class="aside-box__title" v-if="title.length">{{ title }}</h3>
-      <n-link v-if="link" :to="link || ''" class="aside-box__link">{{
+      <h3 class="aside-box__title" v-if="title.length">
+        {{ title }}
+        <span v-if="!!resultSpan">{{resultSpan}}</span>
+      </h3>
+      <n-link v-if="link" :to="link || ''" class="aside-box__link">
+        {{
         linkText
-      }}</n-link>
+        }}
+      </n-link>
+
+      <div class="school-filter__form__item school-filter__form__item--search__inline">
+        <app-search
+          v-if="hasSearchTitle"
+          style="width: 100%"
+          :placeholder="'Nhập để tìm kiếm...'"
+          :counter="11"
+          v-model="filter.query"
+          :size="'sm'"
+          @input="handleChangeSearch"
+        ></app-search>
+      </div>
     </div>
     <div class="school-filter__form">
-      <!-- <div class="school-filter__form__item">
+      <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
+        <app-search
+          style="width: 100%"
+          :placeholder="'Nhập để tìm kiếm...'"
+          :counter="11"
+          v-model="filter.query"
+          :size="'sm'"
+          @submit="handleSubmitSearch"
+        ></app-search>
+      </div>
+
+      <div class="filter-form__item" v-if="hasFilterBtn" @click="isShowFilter = !isShowFilter">
         <app-button
-          color="primary"
-          @click="submit"
-          class="school-filter__btn-submit"
+          color="white"
+          square
+          class="filter-form__item__btn filter-form__item__btn--submit color-primary"
+          :size="'sm'"
         >
-          <IconFilter />
+          <IconHamberger class="fill-primary mr-3" />
           <span>Lọc kết quả</span>
         </app-button>
-      </div> -->
+      </div>
+
+      <div class="school-filter__form__item" v-if="hasSchoolLevel && isShowFilter">
+        <app-vue-select
+          class="app-vue-select"
+          :v-model="filter.level"
+          :options="schoolTypes"
+          label="name"
+          placeholder="Cấp học"
+          :reduce="value => value"
+          searchable
+          :clearable="false"
+          @input="handleChangedLevel"
+        ></app-vue-select>
+      </div>
 
       <app-select-location
         @handleChangeProvince="handleChangeProvince"
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
+        v-if="hasLocation && isShowFilter"
       />
 
-      <div class="school-filter__form__item" v-if="hasSchoolLevel">
+      <div class="school-filter__form__item ml-auto" v-if="hasSort">
+        <label class="school-filter__form__item__title pl-3" for>Sắp xếp theo</label>
         <app-vue-select
+          style="width: 21rem"
           class="app-vue-select"
-          :v-model="filter.level"
-          :options="[ { name: 'Cấp 1', value: 0 }, { name: 'Cấp 2', value: 1 }, { name: 'Cấp 3', value: 2 } ]"
+          :v-model="filter.order"
+          :options="[ { name: 'Có nhiều học sinh nhất', value: 0 }, { name: 'Có nhiều giáo viên nhất', value: 1 }, { name: 'Có nhiều bài giảng nhất', value: 2 }, { name: 'Có nhiều khoá học nhất', value: 3 } ]"
           label="name"
-          placeholder="Theo cấp học"
+          placeholder="Sắp xếp theo"
           :reduce="value => value"
           searchable
           clearable
-          @input="handleChangedLevel"
-        >
-        </app-vue-select>
-      </div>
-
-      <div class="school-filter__form--right">
-        <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
-          <app-search
-            class=""
-            :placeholder="'Nhập để tìm kiếm...'"
-            :counter="11"
-            v-model="filter.query"
-            :size="'sm'"
-            @input="handleChangeSearch"
-          >
-          </app-search>
-        </div>
-
-        <div class="school-filter__form__item" v-if="hasSort">
-          <label class="school-filter__form__item__title" for="">Sắp xếp</label>
-          <app-vue-select
-            class="app-vue-select"
-            :v-model="filter.order"
-            :options="[ { name: 'Số học sinh', value: 0 }, { name: 'Số giáo viên', value: 1 } ]"
-            label="name"
-            placeholder="Sắp xếp theo"
-            :reduce="value => value"
-            searchable
-            clearable
-            @input="handleChangedOrder"
-          >
-          </app-vue-select>
-        </div>
+          @input="handleChangedOrder"
+        ></app-vue-select>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import {get} from 'lodash';
+
 
 export default {
   components: {
-    IconFilter
+    IconHamberger
   },
   props: {
     title: {
       type: String,
       required: true,
-      default: "Danh sách các trường học"
+      default: "Danh sách"
+    },
+    resultSpan: {
+      type: String,
+      default: ""
     },
     link: {
       type: [String, Object]
@@ -100,13 +121,29 @@ export default {
       type: Boolean,
       default: true
     },
+    hasSearchTitle: {
+      type: Boolean,
+      default: false
+    },
     hasSchoolLevel: {
+      type: Boolean,
+      default: false
+    },
+    hasLocation: {
       type: Boolean,
       default: false
     },
     hasSort: {
       type: Boolean,
       default: false
+    },
+    hasFilterBtn: {
+      type: Boolean,
+      default: true
+    },
+    selectedType: {
+      type: String,
+      default: ""
     }
   },
 
@@ -116,11 +153,16 @@ export default {
         province: null,
         district: null,
         village: null,
-        schoolType: null,
-        query: null
-      }
+        level: get(this.$route, "query.type", ""),
+        query: get(this.$route, "query.keyword", ""),
+      },
+      isShowFilter: false
     };
   },
+  created() {
+    console.log("[mounted] SchoolFilter query", get(this.$route, "query", {}))
+  },
+
   methods: {
     submit() {
       console.log("[Component] SchoolFilter: submitted");
@@ -135,10 +177,19 @@ export default {
       this.$emit("handleChangedWard", ward);
     },
     handleChangeSearch(val) {
-      this.$emit('handleChangeSearch', val)
+      this.$emit("handleChangeSearch", val);
+      this.filter.query = val;
+    },
+    handleSubmitSearch(val) {
+      this.$emit("handleSubmitSearch", val);
+      this.filter.query = val;
     },
     handleChangedLevel(level) {
       this.$emit("handleChangedLevel", level);
+      const levelObj = this.schoolTypes.find(s => s.type == level);
+      if(levelObj){
+        this.filter.level = levelObj;
+      }
     },
     handleChangedOrder(order) {
       this.$emit("handleChangedOrder", order);

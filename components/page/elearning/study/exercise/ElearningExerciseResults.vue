@@ -2,90 +2,135 @@
   <div class="e-exercise-results">
     <h1
       class="heading-3 text-dark-2 mt-3 mb-4 text-center"
-    >1.Bài giảng đại số lớp 10 - Bài tập trắc nghiệm</h1>
+    >{{ result.name }} - {{ result.type | getExerciseTypeText }}</h1>
 
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
-      <template v-if="status === EXERCISE_STATUS.PASSED">
+      <template v-if="result.result === EXERCISE_STATUS.PASSED">
         Kết quả làm bài:
-        <span class="text-primary">50/100 (Đạt)</span>
+        <span class="text-primary">{{ resultRate }}</span>
       </template>
 
       <template v-else>
         <span>
           Kết quả làm bài:
-          <span class="text-secondary mr-6">40/100 (Chưa đạt)</span>
+          <span class="text-secondary mr-6">{{ resultRate }}</span>
         </span>
         <span>
           Số lần làm còn lại:
-          <span class="text-secondary">0</span>
+          <span class="text-secondary">{{ result.reworks - result.works}}</span>
         </span>
       </template>
 
       <!-- <span class="d-inline-flex align-items-center text-primary">
         <IconCheckCircleOutline class="icon heading-3 fill-opacity-1 mr-3" />
         <b>Nộp bài thành công</b>
-      </span> -->
+      </span>-->
     </div>
 
     <div class="e-exercise-results__pane mb-4">
       <div class="row">
         <div class="col-5">Thời gian bắt đầu làm bài</div>
-        <div class="col-7">Thứ 4, 18 tháng 10 năm 2019, 11:00 AM</div>
+        <div class="col-7">{{ result.start_time | getDateTimeFullText }}</div>
       </div>
       <div class="row">
         <div class="col-5">Tổng thời gian làm bài</div>
-        <div class="col-7">10 phút 15 giây</div>
+        <div class="col-7">{{ result.working_time }} giây</div>
       </div>
       <div class="row">
         <div class="col-5">Số câu hỏi</div>
-        <div class="col-7">22</div>
+        <div class="col-7">{{ result.questions }}</div>
       </div>
       <div class="row">
         <div class="col-5">Số đáp án đúng</div>
-        <div class="col-7">20</div>
+        <div class="col-7">{{ result.corrects }}</div>
       </div>
       <div class="row">
         <div class="col-5">Bỏ qua</div>
-        <div class="col-7">2</div>
+        <div class="col-7">{{ result.ignores }}</div>
       </div>
     </div>
 
     <div class="text-center">
-      <app-button v-if="status === EXERCISE_STATUS.PASSED">Xem đáp án</app-button>
-      <app-button v-else-if="status === EXERCISE_STATUS.FAILED && reworks">Làm lại bài tập</app-button>
+      <app-button
+        v-if="result.result === EXERCISE_STATUS.PASSED"
+        @click.prevent="handleShowListQuestion"
+      >Xem đáp án</app-button>
+      <app-button
+        v-else-if="result.result === EXERCISE_STATUS.FAILED && (result.reworks - result.works > 0)"
+      >Làm lại bài tập</app-button>
     </div>
+
+    <app-modal
+      v-if="modalListQuestions"
+      title="Danh sách câu hỏi"
+      :footer="false"
+      @close="modalListQuestions = false"
+    >
+      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer"/>
+    </app-modal>
   </div>
 </template>
 
 <script>
 import { EXERCISE_TYPES, EXERCISE_STATUS } from "~/utils/constants";
+import { getExerciseResultText } from "~/plugins/filters";
+import { mapActions } from "vuex";
+
+import { mapState } from "vuex";
+import { RESPONSE_SUCCESS } from "~/utils/config";
 const IconCheckCircleOutline = () =>
   import("~/assets/svg/v2-icons/check_circle_outline_24px.svg?inline");
+import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
 
 export default {
   components: {
-    IconCheckCircleOutline
-  },
-
-  props: {
-    reworks: Number,
-    type: {
-      type: String,
-      default: EXERCISE_TYPES.ESSAY,
-      validator: value => Object.values(EXERCISE_TYPES).includes(value)
-    },
-    status: {
-      type: String,
-      default: EXERCISE_STATUS.NONE,
-      validator: value => Object.values(EXERCISE_STATUS).includes(value)
-    }
+    IconCheckCircleOutline,
+    ElearningExerciseListQuestions
   },
 
   data() {
     return {
       EXERCISE_STATUS: Object.freeze(EXERCISE_STATUS),
-      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES)
+      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
+      modalListQuestions: false,
+      isAnswer: true,
     };
+  },
+
+  computed: {
+    ...mapState("elearning/study/study-exercise", ["result"]),
+
+    resultRate() {
+      return `${this.result.corrects}/${
+        this.result.questions
+      } (${getExerciseResultText(this.result.result)})`;
+    }
+  },
+
+  methods: {
+    ...mapActions("elearning/study/study-exercise", [
+      "elearningSudyExerciseSubmissionList"
+    ]),
+    ...mapActions("elearning/study/study-exercise", [
+      "elearningSudyExerciseQuestionList"
+    ]),
+
+    handleShowListQuestion() {
+      console.log("[handleShowListQuestion]");
+      const exercise_id = this.result.id;
+
+      this.elearningSudyExerciseSubmissionList({
+        params: {
+          exercise_id
+        }
+      }).then(res => {
+        this.elearningSudyExerciseQuestionList({ exercise_id }).then(result => {
+          if (res.success == RESPONSE_SUCCESS) {
+            this.modalListQuestions = true;
+          }
+        });
+      });
+    }
   }
 };
 </script>

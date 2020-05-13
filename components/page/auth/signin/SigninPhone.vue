@@ -9,7 +9,13 @@
         :message="errorMessage.phone"
         :validate="validateProps.phone"
         @input="handlePhone"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconPhoneIphone24px />
+          </div>
+        </template>
+      </app-input>
       <app-input
         type="password"
         v-model="password"
@@ -20,7 +26,13 @@
         :validate="validateProps.password"
         autocomplete="new-password"
         @input="handlePassword"
-      />
+      >
+        <template v-slot:prepend-inner>
+          <div class="icon-inner-input">
+            <IconLock24px />
+          </div>
+        </template>
+      </app-input>
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorLogin}}</p>
     </div>
 
@@ -41,9 +53,14 @@ import { mapState, mapActions } from "vuex";
 import { createSigninWithPhone } from "~/models/auth/Signin";
 import { formatPhoneNumber, validatePassword } from "~/utils/validations";
 import { ERRORS } from "~/utils/error-code";
-import { required, minLength } from "vuelidate/lib/validators";
-
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import IconPhoneIphone24px from "~/assets/svg/v2-icons/phone_iphone_24px.svg?inline";
+import IconLock24px from "~/assets/svg/v2-icons/lock_24px.svg?inline";
 export default {
+  components: {
+    IconPhoneIphone24px,
+    IconLock24px
+  },
   data() {
     return {
       phone: "",
@@ -60,7 +77,7 @@ export default {
     };
   },
   validations: {
-    phone: { required, minLength: minLength(10) },
+    phone: { required, minLength: minLength(10), maxLength: maxLength(11) },
     password: { required }
   },
   computed: {
@@ -103,8 +120,12 @@ export default {
       } else if (!this.$v.phone.minLength) {
         this.validateProps.phone = 2;
         this.errorMessage.phone = "Số bạn nhập không phải là số điện thoại";
+      } else if (!this.$v.phone.maxLength) {
+        this.validateProps.phone = 2;
+        this.errorMessage.phone = "Số bạn nhập không phải là số điện thoại";
       } else {
         this.validateProps.phone = 1;
+        this.errorMessage.phone = "";
       }
     },
     handlePassword(_password) {
@@ -117,6 +138,7 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =

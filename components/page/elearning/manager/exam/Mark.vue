@@ -1,37 +1,51 @@
 <template>
   <div class="elearning-manager-result__section">
-    <h4 v-if="title" class="content-title">{{ title }}</h4>
     <div class="mark-section">
-      <div class="mark-section__detail row">
-        <div class="col-md-4 score"
-             :class="{ 'score--pass': isPass, 'score--fail': (hasMark && !isPass), 'score--empty': !hasMark }">
-          <p class="font-weight-bold score__num">{{ result }}</p>
-          <!--<p class="score__note">Số lần làm bài còn lại: <span>1</span></p>-->
-          <p v-if="hasMark && !isPass && resultDesc" class="score__note">{{ resultDesc }}</p>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="content-box-peer content-box-peer--solid student-profile h-100">
+            <div class="d-flex align-items-center">
+              <div class="mr-3">
+                <img :src="studentAva" alt="avatar">
+              </div>
+              <div>
+                <p class="mb-3"><span class="h4">{{ studentName }}</span></p>
+                <p><span class="font-weight-normal">Lớp 10B</span></p>
+              </div>
+            </div>
+            <app-divider class="mt-15 mb-15"/>
+            <div
+              class="score"
+              :class="{ 'score--pass': isPass, 'score--fail': (hasMark && !isPass), 'score--empty': !hasMark }"
+            >
+              <p class="score__num">{{ result }}</p>
+              <p v-if="hasMark && !isPass && resultDesc" class="score__note">{{ resultDesc }}</p>
+            </div>
+          </div>
         </div>
-        <div class="col-md-8">
-          <div class="description">
+        <div class="col-md-6 mb-3">
+          <div class="content-box-peer content-box-peer--solid h-100 description">
             <div class="row item">
               <div class="col-md-5 col-sm-4 label">
-                Thời gian bắt đầu làm bài
+                Giờ bắt đầu làm bài
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ startedAt }}
+                {{ startedAt | moment(DATETIME_FULL_WEEK_DAY) | uppercaseFirst }}
               </div>
             </div>
             <div class="row item">
               <div class="col-md-5 col-sm-4 label">
-                Thời gian nộp bài
+                Giờ nộp bài
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ finishedAt }}
+                {{ finishedAt | moment(DATETIME_FULL_WEEK_DAY) | uppercaseFirst }}
               </div>
             </div>
             <div class="row item">
               <div class="col-md-5 col-sm-4 label">
-                Tổng thời gian làm bài
+                Thời gian làm bài
               </div>
               <div class="col-md-7 col-sm-8 value">
                 {{ duration | durationTime }}
@@ -39,7 +53,7 @@
             </div>
             <div class="row item">
               <div class="col-md-5 col-sm-4 label">
-                Số câu hỏi
+                Tổng số câu hỏi
               </div>
               <div class="col-md-7 col-sm-8 value">
                 {{ questionNum }}
@@ -47,7 +61,7 @@
             </div>
             <div class="row item" v-if="correctAns">
               <div class="col-md-5 col-sm-4 label">
-                Đáp án đúng
+                Số đáp án đúng
               </div>
               <div class="col-md-7 col-sm-8 value">
                 {{ correctAns }}
@@ -64,15 +78,23 @@
           </div>
         </div>
       </div>
+      <app-divider class="mt-3 mb-0"/>
     </div>
   </div>
 </template>
 
 <script>
+  import { DATETIME_FULL_WEEK_DAY } from "~/utils/config";
+  
   export default {
     props: {
-      title: {
-        type: String
+      studentName: {
+        type: String,
+        required: true
+      },
+      studentAva: {
+        type: String,
+        required: true
       },
       isPass: {
         type: Boolean,
@@ -87,10 +109,7 @@
         required: true
       },
       resultDesc: {
-        type: String,
-        validator: value => {
-          return !this.isPass
-        }
+        type: String
       },
       startedAt: {
         type: String
@@ -130,6 +149,11 @@
           str += s + ' giây'
         }
         return str
+      }
+    },
+    data() {
+      return {
+        DATETIME_FULL_WEEK_DAY
       }
     }
   }

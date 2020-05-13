@@ -6,7 +6,7 @@
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
       <span>
         Số câu hỏi:
-        <span class="text-secondary mr-6">5</span>
+        <span class="text-secondary mr-6">{{ currentExercise.questions}}</span>
       </span>
 
       <!-- v-if -->
@@ -17,12 +17,13 @@
       <!-- v-else -->
       <span>
         Thời gian còn lại:
-        <span class="text-secondary e-exercise-do-exercise__countdown">00:30:15</span>
+        <!-- countdown clock here -->
+        <span class="text-secondary e-exercise-do-exercise__countdown">{{ countdown }}</span>
       </span>
     </div>
     <div v-if="!!currentExerciseQuestion">
-      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" />
-      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" />
+      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" :questionId="currentExerciseQuestion.id"/>
+      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" :questionId="currentExerciseQuestion.id"/>
     </div>
   </div>
 </template>
@@ -31,6 +32,7 @@
 import { mapState } from "vuex";
 
 import { EXERCISE_TYPES } from "~/utils/constants";
+import { getCountdown_HH_MM_SS } from "~/utils/common";
 
 import ElearningExerciseDoExerciseChoice from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseChoice";
 import ElearningExerciseDoExerciseEssay from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseEssay";
@@ -51,14 +53,39 @@ export default {
 
   data() {
     return {
-      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES)
+      EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
+      countdown: "--:--:--",
+      interval: 0,
     };
   },
 
-  methods: {},
+  created() {
+    this.setCountdown();
+  },
+
+  methods: {
+    setCountdown() {
+      let seconds = (this.currentExercise.duration || 0) * 60; // in seconds
+      this.interval = setInterval(() => {
+        // console.log("[setCountdown]", seconds)
+        this.countdown = getCountdown_HH_MM_SS(seconds);
+        seconds -= 1;
+      }, 1000);
+    }
+  },
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["currentExercise", "currentExerciseQuestion"])
+    ...mapState("elearning/study/study-exercise", ["currentExercise", "currentExerciseQuestion"]),
+
+  },
+
+  mounted() {
+    // this.setCountdown();
+  },
+
+  beforeDestroy() {
+    console.log("[beforeDestroy]", this.interval)
+    clearInterval(this.interval);
   }
 };
 </script>

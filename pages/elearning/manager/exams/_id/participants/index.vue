@@ -1,5 +1,5 @@
 <template>
-  <!--UI 1302-->
+  <!--List of students that do exercise/exam-->
   <div class="container">
     <breadcrumb />
     <div class="row">
@@ -32,33 +32,6 @@
             </div>
           </template>
         </sub-block-section>
-        
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__title">
-            <header-breadcrumb
-              title="Bài tập và bài kiểm tra"
-              :breadcrumb="breadcrumb"
-            />
-          </div>
-
-          <div class="elearning-manager-content__main">
-            <!--Filter form-->
-            <participant-filter-form
-              @submitFilter="submitFilter"
-              @changedClass="handleChangedClass"
-              @changedResult="handleChangedResult"
-              @submitSearch="handleSubmitSearch"
-            />
-
-            <!--Table-->
-            <participant-table
-              :list.sync="list"
-              :pagination="pagination"
-              :loading="loading"
-              @changedPagination="updatePagination"
-            />
-          </div>
-        </div>
       </div>
     </div>
   </div>
