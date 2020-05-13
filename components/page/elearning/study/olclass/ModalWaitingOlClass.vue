@@ -32,19 +32,20 @@
             class="color-red"
           >Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
         </p>
-        <p class="mb-3" v-if="dataLength > 1">
+        <!-- <p class="mb-3" v-if="dataLength > 1">
           <i>*Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy quay lại màn hình này để vào học tiếp tiết học thứ 2</i>
-        </p>
-        <p class="mb-4" v-if="dataLength > 1">
+        </p>-->
+        <!-- <p class="mb-4" v-if="dataLength > 1"> -->
+        <p class="mb-4">
           <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
         </p>
 
         <div class="mt-4 text-center">
-          <div class="mb-10">Phòng học bắt đầu sau <span class="color-primary">15:01</span></div>
-          <a
-              target="blank"
-              class="btn color-primary btn--square"
-            >Thoát phòng đợi</a>
+          <div class="mb-10">
+            Phòng học bắt đầu sau
+            <span class="color-primary">{{ countdown }}</span>
+          </div>
+          <a href class="btn color-primary btn--square" @click.prevent="exitRoom">Thoát phòng đợi</a>
         </div>
 
         <!-- <hr /> -->
@@ -58,81 +59,54 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
+import { getCountdown_HH_MM_SS } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
 export default {
-  components: {},
-
   props: {
-    id: null,
-    info: Object
+    targetClass: Object
   },
 
   data() {
     return {
-      data: [],
-      dataLength: 0,
-      loading: false,
-      startTime: this.formatAMPM(this.info.recent_schedule.start_time),
-      duration: this.formatHour(this.info.recent_schedule.duration)
+      duration: 30, // in minutes
+      countdown: "--:--"
     };
   },
 
   methods: {
+    get,
+
+    exitRoom() {
+      console.log("[exitRoom]", this.targetClass);
+    },
+
     close(invite) {
-      this.$emit("close", invite);
+      // this.$emit("close", invite);
+      this.$emit('close');
     },
 
-    formatAMPM(time) {
-      const date = new Date("2000-01-01 " + time);
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
+    setCountdown() {
+      let seconds = (this.targetClass.duration || 0) * 60; // in seconds
+      this.interval = setInterval(() => {
+        console.log("[setCountdown]", seconds);
+        this.countdown = getCountdown_HH_MM_SS(seconds);
+        if (seconds <= 0) {
+          // auto join to room
 
-    formatHour(time) {
-      let minutes = time % 60;
-      let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
-      let strTime = hours + " giờ " + minutes + " phút";
-      return strTime;
-    },
-
-    async getList() {
-      const self = this;
-      try {
-        self.loading = true;
-        let params = { online_class_id: this.id };
-        await self.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_SESSIONS.LIST}`,
-          { params }
-        );
-
-        self.data = self.get(self.stateClass, "data", []);
-        self.dataLength = self.data.length;
-      } catch (e) {
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    get
+          clearInterval(this.countdown);
+          this.$emit('close');
+        }
+        seconds -= 1;
+      }, 1000);
+    }
   },
 
-  computed: {
-    ...mapState("auth", ["loggedUser"]),
-    ...mapState(STORE_NAMESPACE, {
-      stateClass: "LessonSessions"
-    })
-  },
+  computed: {},
 
-  created() {
-    this.getList();
+  mounted() {
+    // this.setCountdown();
   }
 };
 </script>
