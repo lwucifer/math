@@ -1,6 +1,7 @@
 <template>
   <app-modal centered :width="922" :component-class="{ 'time-table-modal': true }"
      :footer="false" title="Thời khóa biểu"
+     @close="$emit('close')"
   >
     <div slot="content">
         <div class="table_schedule">
