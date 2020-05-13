@@ -66,7 +66,7 @@
       :footer="false"
       @close="modalListQuestions = false"
     >
-      <ElearningExerciseListQuestions slot="content" :type="EXERCISE_TYPES.CHOICE" />
+      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer"/>
     </app-modal>
   </div>
 </template>
@@ -92,7 +92,8 @@ export default {
     return {
       EXERCISE_STATUS: Object.freeze(EXERCISE_STATUS),
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
-      modalListQuestions: false
+      modalListQuestions: false,
+      isAnswer: true,
     };
   },
 

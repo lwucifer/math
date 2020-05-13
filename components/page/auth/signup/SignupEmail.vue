@@ -12,7 +12,7 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconMail24px/>
+            <IconMail24px />
           </div>
         </template>
       </app-input>
@@ -28,17 +28,22 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconLock24px/>
+            <IconLock24px />
           </div>
         </template>
       </app-input>
       <app-input
         type="password"
+        v-model="CfmPassword"
         placeholder="Nhập lại mật khẩu"
+        :error="$v.CfmPassword.$invalid"
+        :message="errorMessage.CfmPassword"
+        :validate="validateProps.CfmPassword"
+        @input="handleCfmPassword"
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconLock24px/>
+            <IconLock24px />
           </div>
         </template>
       </app-input>
@@ -54,7 +59,7 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconPerson24px/>
+            <IconPerson24px />
           </div>
         </template>
       </app-input>
@@ -68,13 +73,14 @@
       :disabled="disabledBtnRegister"
       @click.prevent="registerEmail"
     >Đăng ký</app-button>
-    <app-modal
+    <!-- <app-modal
       centered
-      :width="400"
+      :width="450"
+      :footer="false"
       :component-class="{ 'auth-modal': true }"
       v-if="modalConfirmEmail"
     >
-      <h3 class="color-primary" slot="header">Đăng ký thành công</h3>
+      <h3 class="color-primary header-modal-success" slot="header">Đăng ký thành công</h3>
 
       <div slot="content">
         <p class="line-height-2">
@@ -88,7 +94,7 @@
           class="color-white btn btn--size-md btn--full-width btn--color-primary btn--square"
         >Xác thực tài khoản</n-link>
       </div>
-    </app-modal>
+    </app-modal>-->
   </div>
 </template>
 
@@ -102,13 +108,14 @@ import {
   required,
   email,
   minLength,
-  maxLength
+  maxLength,
+  sameAs
 } from "vuelidate/lib/validators";
-import IconMail24px from '~/assets/svg/v2-icons/mail_24px.svg?inline';
-import IconLock24px from '~/assets/svg/v2-icons/lock_24px.svg?inline';
-import IconPerson24px from '~/assets/svg/v2-icons/person_24px.svg?inline';
+import IconMail24px from "~/assets/svg/v2-icons/mail_24px.svg?inline";
+import IconLock24px from "~/assets/svg/v2-icons/lock_24px.svg?inline";
+import IconPerson24px from "~/assets/svg/v2-icons/person_24px.svg?inline";
 export default {
-  components:{
+  components: {
     IconMail24px,
     IconLock24px,
     IconPerson24px
@@ -118,14 +125,16 @@ export default {
       email: "",
       password: "",
       fullname: "",
+      CfmPassword: "",
       error: "",
       modalConfirmEmail: false,
       errorMessage: {
         email: "",
         password: "",
-        fullname: ""
+        fullname: "",
+        CfmPassword: ""
       },
-      validateProps: { password: "", email: "", fullname: "" },
+      validateProps: { password: "", email: "", fullname: "", CfmPassword: "" },
       validate: { password: true },
       errorRespon: false,
       messageErrorRegister: ""
@@ -134,7 +143,8 @@ export default {
   validations: {
     email: { required, email },
     password: { required },
-    fullname: { required, minLength: minLength(8), maxLength: maxLength(32) }
+    fullname: { required, minLength: minLength(8), maxLength: maxLength(32) },
+    CfmPassword: { required, sameAsPassword: sameAs("password") }
   },
   computed: {
     disabledBtnRegister() {
@@ -156,7 +166,8 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
-            this.modalConfirmEmail = true;
+            // this.modalConfirmEmail = true;
+            this.$router.push(`/auth/signup/email?email=${this.email}`);
           } else {
             this.showErrorWhenRegister(result);
           }
@@ -176,6 +187,7 @@ export default {
         this.errorMessage.email = "Email không hợp lệ";
       } else {
         this.validateProps.email = 1;
+        this.errorMessage.email = "";
       }
     },
     handlePassword(_password) {
@@ -188,10 +200,26 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
           "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
+      }
+    },
+    handleCfmPassword() {
+      this.errorRespon = false;
+      this.validate.CfmPassword = true;
+      this.validateProps.CfmPassword = "";
+      if (!this.$v.CfmPassword.required) {
+        this.validateProps.CfmPassword = 2;
+        this.errorMessage.CfmPassword = "Trường này là bắt buộc";
+      } else if (!this.$v.CfmPassword.sameAsPassword) {
+        this.validateProps.CfmPassword = 2;
+        this.errorMessage.CfmPassword = "Mật khẩu không khớp nhau";
+      } else {
+        this.validateProps.CfmPassword = 1;
+        this.errorMessage.CfmPassword = "";
       }
     },
     handleFullname() {
@@ -210,6 +238,7 @@ export default {
           "Họ và tên phải có ít nhất 8 ký tự và nhiều nhất là 32 ký tự";
       } else {
         this.validateProps.fullname = 1;
+        this.errorMessage.fullname = "";
       }
     },
     showErrorWhenRegister(error) {

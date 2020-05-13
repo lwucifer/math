@@ -102,7 +102,7 @@ export default {
 
   async mounted() {
     this.phone = this.$route.query.phone ? this.$route.query.phone : "";
-    console.log("huydv phone", this.phone);
+    // console.log("huydv phone", this.phone);
   },
 
   computed: {
@@ -166,6 +166,7 @@ export default {
         this.errorMessage.otp = "Mã OTP có 6 ký tự";
       } else {
         this.validateProps.otp = 1;
+        this.errorMessage.otp = "";
       }
     },
     handlePassword(_password) {
@@ -178,6 +179,7 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
@@ -194,6 +196,7 @@ export default {
         this.errorMessage.coPassword = "Xác nhận mật khẩu không khớp";
       } else {
         this.validateProps.coPassword = 1;
+        this.errorMessage.coPassword = "";
       }
     },
     sendOTP() {

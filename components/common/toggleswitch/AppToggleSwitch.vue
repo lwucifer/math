@@ -5,6 +5,7 @@
             :checked="checked" 
             @change="handleChange"
             :value="value"
+            :disabled="disabled"
             />
         <span class="app-slider"></span>
     </label>
@@ -24,6 +25,10 @@ export default {
         value: {
             type: String,
             default: ""
+        },
+        disabled:{
+            type: Boolean,
+            default: false
         }
     },
     methods: {

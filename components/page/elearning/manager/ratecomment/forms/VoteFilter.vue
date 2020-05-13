@@ -9,7 +9,7 @@
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.query"
+          v-model="filters.keyword"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
@@ -18,7 +18,10 @@
         </app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="clickSubmit">
+        <filter-button
+          @click="clickSubmit"
+          :color="filterSelect ? 'primary': 'white'"
+        >
           Lọc kết quả
         </filter-button>
       </div>
@@ -71,7 +74,8 @@
           has_cmt: null,
           rate: null,
           class_id: null,
-          elearning_id: null
+          elearning_id: null,
+          keyword: null
         },
         rates: [
           {

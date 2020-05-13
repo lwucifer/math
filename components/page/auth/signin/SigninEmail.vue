@@ -12,7 +12,7 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconMail24px/>
+            <IconMail24px />
           </div>
         </template>
       </app-input>
@@ -29,7 +29,7 @@
       >
         <template v-slot:prepend-inner>
           <div class="icon-inner-input">
-            <IconLock24px/>
+            <IconLock24px />
           </div>
         </template>
       </app-input>
@@ -58,10 +58,10 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-import IconMail24px from '~/assets/svg/v2-icons/mail_24px.svg?inline';
-import IconLock24px from '~/assets/svg/v2-icons/lock_24px.svg?inline';
+import IconMail24px from "~/assets/svg/v2-icons/mail_24px.svg?inline";
+import IconLock24px from "~/assets/svg/v2-icons/lock_24px.svg?inline";
 export default {
-  components:{
+  components: {
     IconMail24px,
     IconLock24px
   },
@@ -103,8 +103,8 @@ export default {
         );
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
-            this.$emit('signin', true);
-            
+            this.$emit("signin", true);
+
             this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
@@ -125,6 +125,7 @@ export default {
         this.errorMessage.email = "Email không hợp lệ";
       } else {
         this.validateProps.email = 1;
+        this.errorMessage.email = "";
       }
     },
     handlePassword(_password) {
@@ -137,6 +138,7 @@ export default {
       } else if (validatePassword(_password)) {
         this.validateProps.password = 1;
         this.validate.password = false;
+        this.errorMessage.password = "";
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =

@@ -4,7 +4,7 @@
       <div class="row">
         <!--Thumnail-->
         <div class="school-summary__thumnail">
-          <img :src="get(school, 'avatar', '')" alt />
+          <img :src="get(school, 'avatar.medium', '')" alt />
         </div>
         <!--End Thumnail-->
 
@@ -15,16 +15,17 @@
           </h2>
           <div class="school-summary__info__contact">
             <p>
-              <i><IconLocation/></i><span> {{ get(school, "address", "") }}</span>
+              <i><IconLocation /></i
+              ><span> {{ get(school, "address", "") }}</span>
             </p>
             <p>
-              <i><IconPhone/></i><span> {{ get(school, "phone", "") }}</span>
+              <i><IconPhone /></i><span> {{ get(school, "phone", "") }}</span>
             </p>
             <p>
-              <i><IconEmail/></i><span> {{ get(school, "email", "") }}</span>
+              <i><IconEmail /></i><span> {{ get(school, "email", "") }}</span>
             </p>
             <p>
-              <i><IconCode/></i><span> {{ get(school, "code", "") }}</span>
+              <i><IconCode /></i><span> {{ get(school, "code", "") }}</span>
             </p>
           </div>
         </div>
@@ -35,7 +36,7 @@
           <div class="school-summary__figure__item text-center">
             <div>
               <span class="text-primary">{{
-                get(school, "teacher_number", 0)
+                numeral(get(school, "teacher_number", 0)).format()
               }}</span>
               <p>Giáo viên</p>
             </div>
@@ -44,7 +45,7 @@
           <div class="school-summary__figure__item text-center">
             <div>
               <span class="text-primary">{{
-                get(school, "student_number", 0)
+                numeral(get(school, "student_number", 0)).format()
               }}</span>
               <p>Học sinh</p>
             </div>
@@ -53,7 +54,7 @@
           <div class="school-summary__figure__item text-center">
             <div>
               <span class="text-primary">{{
-                get(school, "lession_number", 0)
+                numeral(get(school, "lession_number", 0)).format()
               }}</span>
               <p>Bài giảng</p>
             </div>
@@ -62,7 +63,7 @@
           <div class="school-summary__figure__item text-center">
             <div>
               <span class="text-primary">{{
-                get(school, "elearning_number", 0)
+                numeral(get(school, "elearning_number", 0)).format()
               }}</span>
               <p>Khóa học</p>
             </div>
@@ -76,9 +77,9 @@
     <div class="partial">
       <div class="school-summary__intro">
         <h4>Giới thiệu</h4>
-        <p>{{ get(school, "description", "") }}</p>
-        <div class="text-center mt-3">
-          <n-link to class="color-primary">Xem thêm</n-link>
+        <p>{{ description }}</p>
+        <div class="text-center mt-3" v-if="load_more">
+          <a @click="handleLoadMore" to class="color-primary">Xem thêm</a>
         </div>
       </div>
     </div>
@@ -87,13 +88,15 @@
 </template>
 
 <script>
-import IconLocation from '~/assets/svg/v2-icons/location_on_24px.svg?inline';
+import IconLocation from "~/assets/svg/v2-icons/location_on_24px.svg?inline";
 import IconUser from "~/assets/svg/icons/user.svg?inline";
-import IconPhone from '~/assets/svg/v2-icons/local_phone_24px.svg?inline';
-import IconEmail from '~/assets/svg/v2-icons/email_24px.svg?inline';
-import IconCode from '~/assets/svg/v2-icons/insert_link_24px.svg?inline';
-
+import IconPhone from "~/assets/svg/v2-icons/local_phone_24px.svg?inline";
+import IconEmail from "~/assets/svg/v2-icons/email_24px.svg?inline";
+import IconCode from "~/assets/svg/v2-icons/insert_link_24px.svg?inline";
 import { get } from "lodash";
+import numeral from "numeral";
+
+const lengthDescription = 300;
 
 export default {
   components: {
@@ -108,17 +111,40 @@ export default {
     school: {
       type: Object,
       required: true,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
 
   data() {
-    return {};
+    return {
+      description: get(this, "school.description", "").substring(
+        0,
+        lengthDescription
+      ),
+      load_more: get(this, "school.description.length", 0) > lengthDescription,
+    };
+  },
+
+  watch: {
+    school: {
+      handler: function() {
+        this.description = get(this, "school.description", "").substring(
+          0,
+          lengthDescription
+        );
+      },
+      deep: true,
+    },
   },
 
   methods: {
-    get
-  }
+    get,
+    numeral,
+    handleLoadMore() {
+      this.load_more = false;
+      this.description = get(this, "school.description", "");
+    },
+  },
 };
 </script>
 

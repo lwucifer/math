@@ -3,16 +3,11 @@
     <div class="app-pagination-2" v-if="type === 2">
       <div class="left">
         <span>Số dòng trên một trang</span>
-        <app-select
-          v-model="pager"
-          :options="opts"
-          class="select-pager"
-          @change="goTo(current)"
-        />
-        <span
-          >{{ from }}-{{ to }} của tổng số
-          {{ pages.totalElements }}</span
-        >
+        <app-select v-model="pager" :options="opts" class="select-pager" @change="goTo(current)" />
+        <span>
+          {{ from }}-{{ to }} của tổng số
+          {{ pages.totalElements }}
+        </span>
       </div>
       <div class="right">
         <span>Đi đến trang</span>
@@ -23,28 +18,16 @@
           @change="e => goTo(parseInt(e.target.value ), e.target.value >  pagination.totalPages || e.target.value <= 0)"
         />
         <ul>
-          <li
-            @click="goTo(1, current == 1)"
-            :class="current == 1 ? 'disable' : ''"
-          >
+          <li @click="goTo(1, current == 1)" :class="current == 1 ? 'disable' : ''">
             <IconPrevious />
           </li>
-          <li
-            @click="goTo(prev, current == 1)"
-            :class="current == 1 ? 'disable' : ''"
-          >
+          <li @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
             <IconAngleLeft />
           </li>
-          <li
-            @click="goTo(next, current == total)"
-            :class="current == total ? 'disable' : ''"
-          >
+          <li @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
             <IconAngleRight />
           </li>
-          <li
-            @click="goTo(total, current == total)"
-            :class="current == total ? 'disable' : ''"
-          >
+          <li @click="goTo(total, current == total)" :class="current == total ? 'disable' : ''">
             <IconStepForward />
           </li>
         </ul>
@@ -53,12 +36,7 @@
 
     <ul class="app-pagination" v-else-if="total < 8">
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
-        <a
-          class="link"
-          :class="i == current ? 'active' : ''"
-          @click="goTo(i)"
-          >{{ i }}</a
-        >
+        <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{ i }}</a>
       </li>
     </ul>
 
@@ -86,12 +64,7 @@
         <a class="link" @click="goTo(3)">3</a>
       </li>
       <li v-if="total - current > 2 && total > 4">
-        <a
-          class="link"
-          @click="goTo(4)"
-          v-if="total - current == 3 || total == 5"
-          >{{ total - 1 }}</a
-        >
+        <a class="link" @click="goTo(4)" v-if="total - current == 3 || total == 5">{{ total - 1 }}</a>
         <a class="link bold disable" v-else>...</a>
       </li>
       <li v-if="total - current > 1">
@@ -118,7 +91,7 @@ export default {
 
   data() {
     return {
-      pager: toNumber(get(this, 'pagination.size', 10)),
+      pager: toNumber(get(this, "pagination.size", 10))
     };
   },
 
@@ -140,7 +113,7 @@ export default {
           first: 1,
           last: 1,
           number: 0
-        }
+        };
       }
     },
     opts: {
@@ -151,7 +124,7 @@ export default {
           { value: 20, text: "20" },
           { value: 30, text: "30" },
           { value: 50, text: "50" }
-        ]
+        ];
       }
     }
   },
@@ -169,10 +142,10 @@ export default {
       return this.pagination;
     },
     current() {
-      return toNumber(get(this, 'pagination.number', 0)) + 1;
+      return toNumber(get(this, "pagination.number", 0)) + 1;
     },
     total() {
-      return toNumber(get(this, 'pagination.totalPages', 0));
+      return toNumber(get(this, "pagination.totalPages", 0));
     },
     prev() {
       return this.current > 1 ? this.current - 1 : null;
@@ -181,10 +154,13 @@ export default {
       return this.current < this.total ? this.current + 1 : null;
     },
     from() {
-      return this.pagination.number * this.pagination.size + 1
+      return this.pagination.number * this.pagination.size + 1;
     },
     to() {
-      return this.pagination.number * this.pagination.size + this.pagination.numberOfElements
+      return (
+        this.pagination.number * this.pagination.size +
+        this.pagination.numberOfElements
+      );
     }
   }
 };

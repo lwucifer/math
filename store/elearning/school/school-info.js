@@ -6,7 +6,7 @@ import Info from "~/services/elearning/school/Info";
  * initial state
  */
 const state = () => ({
-  schoolInfo: {}
+  schoolInfo: {},
 });
 
 /**
@@ -19,17 +19,19 @@ const getters = {};
  */
 const actions = {
   async [actionTypes.SCHOOL_INFO.INFO]({ commit }, params) {
+    commit(mutationTypes.SCHOOL_INFO.SET_SCHOOL_INFO, {});
     try {
       const options = { params };
       const result = await new Info(this.$axios)[actionTypes.BASE.LIST](
         options
       );
-      // set to mutation
-      commit(mutationTypes.SCHOOL_INFO.SET_SCHOOL_INFO, result.data);
+      if (result.success) {
+        commit(mutationTypes.SCHOOL_INFO.SET_SCHOOL_INFO, result.data);
+      }
     } catch (error) {
       console.log("[School Info] info.error", error);
     }
-  }
+  },
 };
 
 /**
@@ -38,7 +40,7 @@ const actions = {
 const mutations = {
   [mutationTypes.SCHOOL_INFO.SET_SCHOOL_INFO](state, schoolInfo) {
     state.schoolInfo = schoolInfo;
-  }
+  },
 };
 
 export default {
@@ -46,5 +48,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

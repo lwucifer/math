@@ -27,7 +27,9 @@ import IconRight from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?in
 
 import SchoolItem from "~/components/page/school/SchoolItem";
 import { get, toNumber } from "lodash";
-import { SCHOOL_TYPE } from "~/server/fakedata/school/test";
+import { mapState, mapActions } from "vuex";
+import { PAGE_SIZE } from '~/utils/constants';
+
 
 export default {
   components: {
@@ -39,23 +41,11 @@ export default {
     category: {
       type: Object,
       required: true
-    },
-    schoolSearch: {
-      type: Object,
-      default: () => {}
     }
   },
 
   data() {
     return {
-      pagination: {
-        totalPages: 5,
-        size: 10,
-        totalElements: 50,
-        first: 1,
-        last: 5,
-        number: 1
-      },
       opts: [
         { value: 10, text: "10" },
         { value: 20, text: "20" },
@@ -66,21 +56,55 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/school/school-summary", ["elearningSchoolSummary"]),
+
     schools() {
-      const type = get(this, "category.type", "");
-      const schoolList = get(this, `schoolSearch.data.content`, []);
+      const type = get(this.$route, "query.type", "");
+      const schoolList = get(this, `elearningSchoolSummary.schools.content`, []);
       // console.log("[schoolList]", schoolList, type);
       if (!type) return schoolList;
       return schoolList.filter(sc => sc.type == type) || [];
+    },
+    pagination() {
+      const pagination = {
+        totalPages: get(this.elearningSchoolSummary, "schools.total_pages", 0),
+        size: get(this.elearningSchoolSummary, "schools.size", 10),
+        totalElements: get(this.elearningSchoolSummary, "schools.total_elements", 0),
+        first: get(this.elearningSchoolSummary, "schools.first", false),
+        last: get(this.elearningSchoolSummary, "schools.last", false),
+        number: get(this.elearningSchoolSummary, "schools.number", 0)
+      };
+
+      console.log("[pagination]", pagination, this.elearningSchoolSummary);
+      return pagination;
     }
   },
 
   methods: {
+    ...mapActions("elearning/school/school-summary", [
+      "elearningSchoolSummaryList"
+    ]),
+
     onPageChange(e) {
-      this.$emit("pagechange", e);
+      // this.$emit("pagechange", e);
+      console.log("[onPageChange]", e);
+
+      const params = {};
+      const type = get(this.$route, "query.type", "");
+      const keyword = get(this.$route, "query.keyword", "");
+      const page = e.number + 1;
+      const size = e.size;
+      if (type) params.type = type;
+      if (keyword) params.keyword = keyword;
+      if (page) params.page = page;
+      if (size) params.size = size;
+      params.size = PAGE_SIZE.SCHOOL_16;
+
+      this.elearningSchoolSummaryList({ params });
     },
     showAll() {
-      this.$emit("showAll", this.id);
+      // this.$emit("showAll", this.id);
+      console.log("[showAll]", e);
     }
   }
 };
