@@ -86,14 +86,26 @@
           <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
-        <CourseSelectAvatar
-          :defaultAvatar="get(general, 'avatar.medium', '')"
-          @handleSelectAvatar="handleSelectAvatar"
+        <CourseSelectImage
+          :default_image="
+            get(general, 'avatar.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectAvatar"
+          :minWidth="340"
+          :minHeight="204"
+          title="Hình đại diện cho bài giảng"
+          id="avatar"
         />
 
-        <CourseSelectCover
-          :defaultImg="get(general, 'cover_url.medium', '')"
-          @handleSelect="handleSelectCover"
+        <CourseSelectImage
+          :default_image="
+            get(general, 'cover_url.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectCover"
+          :minWidth="730"
+          :minHeight="410"
+          title="Hình minh hoạ cho bài giảng"
+          id="cover"
         />
       </div>
       <app-modal-confirm
@@ -158,8 +170,7 @@ const IconTrashAlt = () =>
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
-import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
-import CourseSelectCover from "~/components/page/course/create/info/CourseSelectCover";
+import CourseSelectImage from "~/components/page/course/create/info/CourseSelectImage";
 import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
@@ -172,11 +183,10 @@ export default {
     CreateAction,
     CourseSelectLevel,
     CourseSelectSubject,
-    CourseSelectAvatar,
+    CourseSelectImage,
     IconCheckCircle,
     IconTrashAlt,
     CourseBenefit,
-    CourseSelectCover,
     IconArrowLeft,
     IconDelete,
     IconSave,
@@ -359,6 +369,7 @@ export default {
     },
 
     handleSelectAvatar(avatar) {
+      console.log(avatar);
       this.payload.avatar = avatar;
     },
 
