@@ -21,6 +21,7 @@
         v-model="password"
         placeholder="Mật khẩu"
         class="mb-2"
+        maxlength="127"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
