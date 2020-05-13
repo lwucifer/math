@@ -1,20 +1,21 @@
 <template>
-    <div class="wrap-account">
-      <p>Ngân hàng: <strong>{{get(this,"bank.bank_name","")}}</strong></p>
-      <p>Chi nhánh: <strong>{{get(this,"bank.branch","")}}</strong></p>
-      <p>Tên chủ tài khoản: <strong>{{get(this,"bank.account_name","")}}</strong></p>
-      <p>Số tài khoản: <strong>{{get(this,"bank.account_number","")}}</strong></p>
-      <div class="d-flex justify-content-center">
-        <button 
-          class="cc-box__btn cc-box__btn-edit mr-4"
+    <div class="box-bank-card">
+      <p class="title">Ngân hàng: <span class="value">{{get(this,"bank.bank_name","")}}</span></p>
+      <p class="title">Chi nhánh: <span class="value">{{get(this,"bank.branch","")}}</span></p>
+      <p class="title">Tên chủ tài khoản: <span class="value">{{get(this,"bank.account_name","")}}</span></p>
+      <p class="title">Số tài khoản: <span class="value">{{get(this,"bank.account_number","")}}</span></p>
+      <div class="action-group">
+        <button
+          class=""
+          style="margin-right: 3.7rem;"
           @click="handleRefreshAccountBank"
           >
-          <IconEditAlt class="icon d-block subheading fill-primary" />
+          <IconEditAlt class="icon" />
         </button>
-        <button class="cc-box__btn cc-box__btn-edit"
+        <button class=""
            @click="handleDeleteAccountBank"
         >
-          <IconTrashAlt class="icon d-block subheading fill-secondary" />
+          <IconTrashAlt class="icon fill-secondary" />
         </button>
       </div>
     </div>

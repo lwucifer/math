@@ -1,35 +1,36 @@
 <template>
-    <div>
-        <div class="d-flex">
-            <div>
-                <p>{{ notify.title }}</p>
-                <p>{{handleNotify()}}</p>
-            </div>
-            <button class="btn-show-form__account-info" @click.prevent="showFormNotify=!showFormNotify">
+    <div class="form-dropdown">
+        <!--<div class="d-flex">-->
+        <div class="form-dropdown__title">
+            <p class="fd__title-main">{{ notify.title }}</p>
+            <p class="fd__title-des">{{handleNotify()}}</p>
+            <button class="form-dropdown__indicator" @click.prevent="showFormNotify=!showFormNotify">
                 <IconCaretUp class="icon" v-if="showFormNotify"/>
                 <IconCaretDown class="icon" v-else/>
             </button>
         </div>
-        <div v-show="showFormNotify">
-            <p class="text-gray font-weight-normal">{{ notify.describe }}</p>
+        <div v-show="showFormNotify" class="form-dropdown__expand">
+            <p class="fd__title-des mb-4">{{ notify.describe }}</p>
             <div class="ml-4">
-                <p>Hình thức nhận thông báo</p>
+                <p class="fd__title-main">Hình thức nhận thông báo</p>
                 <div class="icon-title__account-info">
                     <IconDatabase/>
-                    <span class="ml-2">Thông báo đầy</span>
-                <app-toggle-switch class="ml-auto" 
-                                    :value="'Thông báo đầy'"
-                                    :checked="checkNotify"
-                                    @change="handleChange"
-                />
+                    <span class="">Thông báo đầy</span>
+                    <app-toggle-switch
+                        class="ml-auto"
+                        :value="'Thông báo đầy'"
+                        :checked="checkNotify"
+                        @change="handleChange"
+                    />
                 </div>
                 <div class="icon-title__account-info">
                     <IconEnvelope/>
-                    <span class="ml-2">Email</span>
-                    <app-toggle-switch class="ml-auto" 
-                                       :value="'Email'"
-                                       :checked="checkEmail"
-                                       @change="handleChange"
+                    <span class="">Email</span>
+                    <app-toggle-switch
+                        class="ml-auto"
+                        :value="'Email'"
+                        :checked="checkEmail"
+                        @change="handleChange"
                     />
                 </div>
             </div>

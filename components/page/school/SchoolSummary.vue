@@ -4,7 +4,7 @@
       <div class="row">
         <!--Thumnail-->
         <div class="school-summary__thumnail">
-          <img :src="get(school, 'cover.medium', '')" alt />
+          <img :src="get(school, 'avatar.medium', '')" alt />
         </div>
         <!--End Thumnail-->
 

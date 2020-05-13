@@ -13,6 +13,14 @@
         color: #333;
         background: #f9f9f9;
         border-bottom: 1px solid #E0E0E0;
+        .elearning-manager-content {
+            background-color: transparent !important;
+            &__title__nav {
+                a {
+                    font-weight: 600;
+                }
+            }
+        }
     }
     
     &__title--main {
