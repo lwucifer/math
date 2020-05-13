@@ -20,6 +20,7 @@
         type="password"
         v-model="password"
         placeholder="Mật khẩu"
+        maxlength="127"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
@@ -143,7 +144,7 @@ export default {
   validations: {
     email: { required, email },
     password: { required },
-    fullname: { required, minLength: minLength(8), maxLength: maxLength(32) },
+    fullname: { required, minLength: minLength(2), maxLength: maxLength(32) },
     CfmPassword: { required, sameAsPassword: sameAs("password") }
   },
   computed: {
@@ -231,11 +232,11 @@ export default {
       } else if (!this.$v.fullname.minLength) {
         this.validateProps.fullname = 2;
         this.errorMessage.fullname =
-          "Họ và tên phải có ít nhất 8 ký tự và nhiều nhất là 32 ký tự";
+          "Họ và tên phải có ít nhất 2 ký tự và nhiều nhất là 32 ký tự";
       } else if (!this.$v.fullname.maxLength) {
         this.validateProps.fullname = 2;
         this.errorMessage.fullname =
-          "Họ và tên phải có ít nhất 8 ký tự và nhiều nhất là 32 ký tự";
+          "Họ và tên phải có ít nhất 2 ký tự và nhiều nhất là 32 ký tự";
       } else {
         this.validateProps.fullname = 1;
         this.errorMessage.fullname = "";
