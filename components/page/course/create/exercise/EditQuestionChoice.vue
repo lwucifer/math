@@ -51,11 +51,20 @@ import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/Cre
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconTrashAlt,
     CreateAnswerOfQuestion,
+  },
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
 
   props: {
@@ -95,7 +104,15 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -115,31 +132,31 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-    handleAddAnswer(index){
+    handleAddAnswer(index) {
       const answer = {
         correct: false,
         content: "",
-      }
-      if(index == this.payload.answers.length && index<6){
-        this.payload.answers.push(answer)
-      }
-    },
-    handleDeleteAnswer(index){
-      if(this.payload.answers.length> 2){
-        this.payload.answers.splice(index,1)
-      }else{
-        this.$toasted.error("Tối thiểu là 2 đáp án")
+      };
+      if (index == this.payload.answers.length && index < 6) {
+        this.payload.answers.push(answer);
       }
     },
-    handleCheckAnswers(){
+    handleDeleteAnswer(index) {
+      if (this.payload.answers.length > 2) {
+        this.payload.answers.splice(index, 1);
+      } else {
+        this.$toasted.error("Tối thiểu là 2 đáp án");
+      }
+    },
+    handleCheckAnswers() {
       var lastanswer = this.payload.answers.slice(-1)[0];
       const answer = {
         correct: false,
-        content: ""
-      }
-      const check = _.isEqual(lastanswer, answer)
-      if(this.payload.answers.length > 2 && check){
-        this.payload.answers.pop()
+        content: "",
+      };
+      const check = _.isEqual(lastanswer, answer);
+      if (this.payload.answers.length > 2 && check) {
+        this.payload.answers.pop();
       }
     },
     get,

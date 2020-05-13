@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import IconClose24px from '~/assets/svg/v2-icons/close_24px.svg?inline';
+import IconClose24px from "~/assets/svg/v2-icons/close_24px.svg?inline";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import { get, defaultTo } from "lodash";
@@ -30,49 +30,53 @@ import * as actionTypes from "~/utils/action-types";
 export default {
   components: {
     IconClose24px,
-    IconFileBlank
+    IconFileBlank,
   },
 
   props: {
     doc: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   data() {
     return {
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
   methods: {
     async handleDeleteDoc(e) {
       e.preventDefault();
-      this.showModalConfirm = true
+      this.showModalConfirm = true;
     },
 
     async handleOk() {
-      this.confirmLoading  =true
+      this.confirmLoading = true;
       const doc_id = get(this, "doc.id", "");
       const options = {
         data: {
-          id: doc_id
-        }
+          id: doc_id,
+        },
       };
       const result = await this.$store.dispatch(
         `elearning/creating/creating-doc/${actionTypes.ELEARNING_CREATING_DOC.DELETE}`,
         options
       );
 
-      this.handleCancelModal()
+      this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$toasted.success(defaultTo(get(result, "message", ""), "Thành công"));
-        this.$emit("handleRefreshDocs");
+        this.$toasted.success(
+          defaultTo(get(result, "message", ""), "Thành công")
+        );
+        this.$store.dispatch(`elearning/create/getContent`);
         return;
       }
-      this.$toasted.error(defaultTo(get(result, "message", ""), "Có lỗi xảy ra"));
+      this.$toasted.error(
+        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
+      );
     },
 
     handleCancelModal() {
@@ -80,7 +84,7 @@ export default {
       this.confirmLoading = false;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

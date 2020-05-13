@@ -95,46 +95,59 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
-    }),
-    ...mapState("elearning/creating/creating-progress", {
       progress: "progress",
+      lessons_lecture: "lessons_lecture",
+      chapters: "chapters",
     }),
     is_submit() {
       return (
-        get(this, "progress.data.general_status", -1) == 1 &&
-        get(this, "progress.data.content_status", -1) == 1 &&
-        get(this, "progress.data.setting_status", -1) == 1
+        get(this, "progress.general_status", -1) == 1 &&
+        get(this, "progress.content_status", -1) == 1 &&
+        get(this, "progress.setting_status", -1) == 1
       );
     },
   },
 
+  updated() {
+    //
+  },
+
   mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        elearning_id,
-      },
-    };
-    this.$store.dispatch(
-      `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-      options
-    );
+    this.getProgress();
   },
 
   watch: {
+    general: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
+    chapters: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
+    lessons_lecture: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
     progress: {
       handler: function() {
-        let checked = get(this, "progress.data.general_status", false) == 1;
+        let checked = get(this, "progress.general_status", false) == 1;
         this.menu[0]["checked"] = checked;
-        checked = get(this, "progress.data.content_status", false) == 1;
+        checked = get(this, "progress.content_status", false) == 1;
         this.menu[1]["checked"] = checked;
-        checked = get(this, "progress.data.setting_status", false) == 1;
+        checked = get(this, "progress.setting_status", false) == 1;
         this.menu[2]["checked"] = checked;
-        checked = get(this, "progress.data.exercise_status", false) == 1;
+        checked = get(this, "progress.exercise_status", false) == 1;
         this.menu[3]["checked"] = checked;
-        checked = get(this, "progress.data.test_status", false) == 1;
+        checked = get(this, "progress.test_status", false) == 1;
         this.menu[4]["checked"] = checked;
       },
       deep: true,
@@ -156,6 +169,10 @@ export default {
   },
 
   methods: {
+    getProgress() {
+      this.$store.dispatch(`elearning/create/getProgress`);
+    },
+
     handlePublishCourse() {
       this.showModalConfirm = true;
     },
@@ -196,7 +213,7 @@ export default {
         return;
       }
 
-      if (get(this, "progress.data.general_status", false) != 1) return;
+      if (get(this, "progress.general_status", false) != 1) return;
 
       if (key === "content") {
         this.active = key;
@@ -211,7 +228,7 @@ export default {
         return;
       }
 
-      if (get(this, "progress.data.content_status", false) != 1) return;
+      if (get(this, "progress.content_status", false) != 1) return;
 
       if (key === "settings") {
         this.active = key;
@@ -219,7 +236,7 @@ export default {
         return;
       }
 
-      if (get(this, "progress.data.setting_status", false) != 1) return;
+      if (get(this, "progress.setting_status", false) != 1) return;
 
       this.active = key;
       this.$emit("click-item", key);

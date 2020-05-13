@@ -238,7 +238,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     name() {
@@ -352,10 +352,7 @@ export default {
           elearning_id,
         },
       };
-      this.$store.dispatch(
-        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-        options
-      );
+      this.$store.dispatch(`elearning/create/getGeneral`, options);
     },
 
     handleChangeLevel(level) {
@@ -398,7 +395,6 @@ export default {
         const elearning_id = get(result, "data.elearning_id", "");
         this.handleFetchElearningGeneral(elearning_id);
         redirectWithParams({ elearning_id });
-        this.getProgress(elearning_id);
         this.$toasted.success(get(result, "message", ""));
         if (this.type_save === "next") {
           if (this.payload.type === "LECTURE") {
@@ -412,18 +408,6 @@ export default {
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    },
-
-    getProgress(elearning_id) {
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
     },
 
     handleCancel() {

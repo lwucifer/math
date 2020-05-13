@@ -1,55 +1,53 @@
 <template>
-  <div>
-    <create-action :isShowAction="false" />
-    <div class="cc-panel bg-white mb-4">
-      <div class="cc-panel__title">
-        <h4 class="cc-panel__heading">
-          Nội dung học tập
-        </h4>
-      </div>
+  <div class="cc-panel bg-white mb-4">
+    <div class="cc-panel__title">
+      <h4 class="cc-panel__heading">
+        Nội dung học tập
+      </h4>
+    </div>
 
-      <div class="cc-panel__body">
-        <div class="cc-box">
-          <div class="cc-box__head">
-            <div class="cc-box__head-left flex-grow">
-              <EditCourseName :defaultName="get(this, 'general.name', '')" />
-            </div>
-
-            <div class="cc-box__head-right">
-              <a
-                @click="handleAddLesson($event)"
-                class="d-flex align-items-center text-primary"
-                v-if="!get(lessons, 'data.length', 0)"><IconAdd width="14px" height="14px" class="mr-2"/> Thêm bài học</a>
-
-              <button
-                class="cc-box__btn cc-box__btn-collapse"
-                @click="isShowDetailLesson = !isShowDetailLesson"
-                v-if="get(lessons, 'data.length', 0)"
-              >
-                <IconAngleDown class="icon" v-if="!isShowDetailLesson" />
-                <IconAngleUp class="icon" v-else />
-              </button>
-            </div>
+    <div class="cc-panel__body">
+      <div class="cc-box">
+        <div class="cc-box__head">
+          <div class="cc-box__head-left flex-grow">
+            <EditCourseName :defaultName="get(this, 'general.name', '')" />
           </div>
 
-          <div class="cc-box__body">
-            <CreateLessonOfElearning
-              v-if="isShowFormAddLesson"
-              @refreshLessons="refreshLessons"
-              @handleCancel="handleCancel"
+          <div class="cc-box__head-right">
+            <a
+              @click="handleAddLesson($event)"
+              class="d-flex align-items-center text-primary"
+              v-if="!get(lessons, 'data.length', 0)"
+              ><IconAdd width="14px" height="14px" class="mr-2" /> Thêm bài
+              học</a
+            >
+
+            <button
+              class="cc-box__btn cc-box__btn-collapse"
+              @click="isShowDetailLesson = !isShowDetailLesson"
+              v-if="get(lessons, 'data.length', 0)"
+            >
+              <IconAngleDown class="icon" v-if="!isShowDetailLesson" />
+              <IconAngleUp class="icon" v-else />
+            </button>
+          </div>
+        </div>
+
+        <div class="cc-box__body">
+          <CreateLessonOfElearning
+            v-if="isShowFormAddLesson"
+            @toggleShowAddLesson="toggleShowAddLesson"
+            :lesson="lesson"
+          />
+
+          <fragment v-if="isShowDetailLesson">
+            <LessonDetail
+              v-for="lesson in lessons"
+              :key="lesson.id"
               :lesson="lesson"
+              @handleEditLesson="handleEditLesson"
             />
-
-            <fragment v-if="isShowDetailLesson">
-              <LessonDetail
-                v-for="lesson in get(lessons, 'data', [])"
-                :key="lesson.id"
-                :lesson="lesson"
-                @handleEditLesson="handleEditLesson"
-                @refreshLessons="refreshLessons"
-              />
-            </fragment>
-          </div>
+          </fragment>
         </div>
       </div>
     </div>
@@ -72,7 +70,6 @@ const IconTrashAlt = () =>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
-
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
@@ -100,7 +97,7 @@ export default {
     LessonDetail,
     EditCourseName,
     IconAngleUp,
-    IconAdd
+    IconAdd,
   },
 
   data() {
@@ -116,18 +113,22 @@ export default {
       isShowDetailLesson: false,
       isEditCourseName: false,
       courseNameModel: "",
-      lesson: null
+      lesson: null,
     };
   },
 
-  created() {
-    this.fetchLesson();
+  mounted() {
+    this.$store.dispatch(`elearning/create/getContent`);
+  },
+
+  updated() {
+    console.log(this.lessons);
   },
 
   watch: {
     lessons: {
       handler: function() {
-        if (get(this, "lessons.data.length", 0)) {
+        if (get(this, "lessons.length", 0)) {
           this.isShowButtonAddLesson = false;
           this.isShowFormAddLesson = false;
           this.isShowDetailLesson = true;
@@ -137,23 +138,25 @@ export default {
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = false;
       },
-      deep: true
+      deep: true,
     },
     general: {
       handler: function() {
+        this.$store.dispatch(`elearning/create/getContent`);
         this.courseNameModel = get(this, "general.name", "");
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons"
+    // ...mapState("elearning/creating/creating-lesson", {
+    //   lessons: "lessons",
+    // }),
+    ...mapState("elearning/create", {
+      general: "general",
+      lessons: "lessons_lecture",
     }),
-    ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
   },
 
   methods: {
@@ -162,7 +165,7 @@ export default {
     async handleSaveCourseName() {
       const data = {
         name: this.courseNameModel,
-        elearning_id: getParamQuery("elearning_id")
+        elearning_id: getParamQuery("elearning_id"),
       };
       const payload = createPayloadAddCourse(data);
       const result = await this.$store.dispatch(
@@ -175,13 +178,10 @@ export default {
         this.isEditCourseName = false;
         const options = {
           params: {
-            elearning_id: getParamQuery("elearning_id")
-          }
+            elearning_id: getParamQuery("elearning_id"),
+          },
         };
-        this.$store.dispatch(
-          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-          options
-        );
+        this.$store.dispatch(`elearning/create/getGeneral`, options);
         return;
       }
       this.$toasted.error(get(result, "message", ""));
@@ -195,37 +195,8 @@ export default {
       this.isShowButtonEditNameCourse = true;
     },
 
-    refreshLessons() {
-      this.fetchLesson();
-      this.getProgress();
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    },
-
-    fetchLesson() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        const options = {
-          params: {
-            elearning_id
-          }
-        };
-        this.$store.dispatch(
-          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-          options
-        );
-      }
+    getLesson() {
+      this.$store.dispatch(`elearning/create/getContent`);
     },
 
     handleEditLesson(lesson) {
@@ -238,7 +209,7 @@ export default {
     handleUploadChange(event) {
       this.avatar = Array.from(event.target.files);
 
-      getBase64(this.avatar[0], src => {
+      getBase64(this.avatar[0], (src) => {
         this.avatarSrc = src;
       });
     },
@@ -268,9 +239,9 @@ export default {
       this.isShowFormAddLesson = !this.isShowFormAddLesson;
     },
 
-    handleCancel() {
+    toggleShowAddLesson() {
       const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id && get(this, "lessons.data.length", 0)) {
+      if (elearning_id && get(this, "lessons.length", 0)) {
         this.isShowButtonAddLesson = false;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
@@ -289,8 +260,8 @@ export default {
         this.$refs.inputCourseName.focus();
         clearTimeout(timeout);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

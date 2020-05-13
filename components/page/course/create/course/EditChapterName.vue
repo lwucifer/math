@@ -1,7 +1,7 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
     <div class="mr-3">
-      <strong>Chương</strong> {{ this.defaultName.index }}:
+      <strong>Chương</strong> {{ index + 1 }}:
       <input
         v-if="isEditChaperName"
         v-model="chaperNameModel"
@@ -11,7 +11,7 @@
       />
 
       <h3 v-else class="d-inline-block body-2 mr-3">
-        <span class="font-weight-normal">{{ this.defaultName.name }}</span>
+        <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
       </h3>
     </div>
 
@@ -40,7 +40,11 @@
         class="ce-item__action delete mr-3"
         @click.prevent="handleDeleteChapter"
       >
-        <IconTrashAlt class="fill-secondary d-block subheading" width="16px" height="16px"/>
+        <IconTrashAlt
+          class="fill-secondary d-block subheading"
+          width="16px"
+          height="16px"
+        />
       </a>
     </template>
     <app-modal-confirm
@@ -56,7 +60,7 @@
 import { string } from "yup";
 import { get, toNumber } from "lodash";
 import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
-import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
@@ -66,10 +70,11 @@ export default {
     IconTrashAlt,
   },
   props: {
-    defaultName: {
+    chapter: {
       type: Object,
       default: null,
     },
+    index: {},
   },
   data() {
     return {
@@ -79,12 +84,13 @@ export default {
       confirmLoading: false,
     };
   },
-  created() {
-    useEffect(this, this.handleChangeDefaultName.bind(this), ["defaultName"]);
+  mounted() {
+    useEffect(this, this.handleChangeDefaultName.bind(this), ["chapter"]);
   },
   methods: {
+    get,
     handleChangeDefaultName() {
-      this.chaperNameModel = this.defaultName.name;
+      this.chaperNameModel = this.chapter.name;
     },
     async handleDeleteChapter() {
       this.showModalConfirm = true;
@@ -108,7 +114,7 @@ export default {
       this.handleCancelModal();
 
       if (get(res, "success", false)) {
-        this.$emit("handleRefreshChapters");
+        this.$store.dispatch(`elearning/create/getContent`);
         this.$toasted.success(get(res, "message", "Thành công"));
         return;
       }

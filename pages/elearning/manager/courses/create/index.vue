@@ -13,8 +13,8 @@
           class="mb-5"
           @nextStep="nextStep"
         />
-        <CreateLearningContentCourse v-if="formActive === 'content-course'" />
-        <CreateLearningContentLecture v-if="formActive === 'content-lecture'" />
+        <ContentCourse v-if="formActive === 'content-course'" />
+        <ContentLecture v-if="formActive === 'content-lecture'" />
         <CreateSetting v-if="formActive === 'settings'" @nextStep="nextStep" />
         <CreateExercise v-if="formActive === 'exercise'" />
         <CreateExam v-if="formActive === 'exam'" />
@@ -29,9 +29,10 @@ import CreateGeneralInformation from "~/components/page/course/create/CreateGene
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExercise from "~/components/page/course/create/CreateExercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
-import CreateLearningContentLecture from "~/components/page/course/create/lecture/CreateLearningContentLecture";
-import CreateLearningContentCourse from "~/components/page/course/create/course/CreateLearningContentCourse";
+import ContentLecture from "~/components/page/course/create/lecture/ContentLecture";
+import ContentCourse from "~/components/page/course/create/course/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
+import { getParamQuery } from "~/utils/common";
 
 export default {
   layout: "exercise",
@@ -39,11 +40,11 @@ export default {
   components: {
     CreateAside,
     CreateGeneralInformation,
-    CreateLearningContentCourse,
+    ContentLecture,
     CreateSetting,
     CreateExercise,
     CreateExam,
-    CreateLearningContentLecture,
+    ContentLecture,
   },
 
   // async fetch({ params, query, store }) {
@@ -60,7 +61,7 @@ export default {
       formActive: "general",
     };
   },
-
+  
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);
   },
@@ -88,6 +89,7 @@ export default {
     },
 
     setFormActive(key) {
+      console.log(key);
       this.formActive = key;
     },
   },

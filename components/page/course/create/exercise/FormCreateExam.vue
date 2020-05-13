@@ -2,7 +2,10 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block"
-        >Tiêu đề {{ title }} <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span></label
+        >Tiêu đề {{ title }}
+        <span class="caption text-sub font-weight-normal"
+          >(Tối đa 60 ký tự)</span
+        ></label
       >
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
@@ -53,7 +56,9 @@
 
     <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-12 col-md-4">
-        <label for="time" class="heading-5 font-weight-bold">Thời gian làm bài</label>
+        <label for="time" class="heading-5 font-weight-bold"
+          >Thời gian làm bài</label
+        >
 
         <app-input
           type="number"
@@ -85,7 +90,9 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <label for="count" class="heading-5 font-weight-bold">Số lần làm bài</label>
+        <label for="count" class="heading-5 font-weight-bold"
+          >Số lần làm bài</label
+        >
 
         <app-input
           type="number"
@@ -101,26 +108,14 @@
     <div class="mb-4">
       <h5 class="font-weight-bold mb-4">Cài đặt thời gian mở đề</h5>
       <app-radio-group class="mb-4">
-        <app-radio
-          name="group3"
-          value="1"
-          class="mr-4"
-          >Có</app-radio
-        >
-        <app-radio
-          name="group3"
-          value="0"
-          >Không</app-radio
-        >
+        <app-radio name="group3" value="1" class="mr-4">Có</app-radio>
+        <app-radio name="group3" value="0">Không</app-radio>
       </app-radio-group>
 
-      <app-date-picker/>
+      <app-date-picker />
 
-      <app-date-picker type="time" value-format="h:mm A"/>
+      <app-date-picker type="time" value-format="h:mm A" />
     </div>
-   
-
-    
 
     <div class="d-flex justify-content-end">
       <app-button
@@ -167,6 +162,15 @@ export default {
       type: String,
       default: "",
     },
+  },
+
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
 
   computed: {
@@ -217,7 +221,15 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.$emit("handleRefreshExcercises");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
 

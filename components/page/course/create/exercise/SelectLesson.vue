@@ -19,23 +19,25 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
-    IconAngleDown
+    IconAngleDown,
   },
 
   props: {
     lessons: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
 
   methods: {
     handleSelectLesson(lesson) {
-      this.$emit("handleSelectLesson", lesson);
-    }
-  }
+      this.$store.dispatch(`elearning/create/getLesson`, get(lesson, "id", ""));
+    },
+  },
 };
 </script>

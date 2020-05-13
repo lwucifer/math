@@ -51,18 +51,19 @@ import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/Cre
 import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion
+    CreateAnswerOfQuestion,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
@@ -76,15 +77,23 @@ export default {
         answers: [
           {
             correct: false,
-            content: ""
+            content: "",
           },
           {
             correct: false,
-            content: ""
-          }
-        ]
-      }
+            content: "",
+          },
+        ],
+      },
     };
+  },
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
 
   methods: {
@@ -105,7 +114,15 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -129,7 +146,7 @@ export default {
     handleAddAnswer(index) {
       const answer = {
         correct: false,
-        content: ""
+        content: "",
       };
       if (index == this.payload.answers.length && index < 6) {
         this.payload.answers.push(answer);
@@ -141,18 +158,18 @@ export default {
         this.payload.answers.splice(index, 1);
       }
     },
-    handleCheckAnswers(){
+    handleCheckAnswers() {
       var lastanswer = this.payload.answers.slice(-1)[0];
       const answer = {
         correct: false,
-        content: ""
-      }
-      const check = _.isEqual(lastanswer, answer)
-      if(this.payload.answers.length > 2 && check){
-        this.payload.answers.pop()
+        content: "",
+      };
+      const check = _.isEqual(lastanswer, answer);
+      if (this.payload.answers.length > 2 && check) {
+        this.payload.answers.pop();
       }
     },
-    get
-  }
+    get,
+  },
 };
 </script>

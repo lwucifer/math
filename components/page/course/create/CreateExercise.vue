@@ -21,7 +21,6 @@
           style="margin-bottom: -2rem"
           v-if="get(general, 'type', '') === 'COURSE'"
           :lessons="lessons"
-          @handleSelectLesson="handleSelectLesson"
         />
       </div>
 
@@ -36,17 +35,15 @@
           v-if="isShowFormAdd"
           @handleCancel="handleCancelAddCreate"
           :lesson="lesson"
-          @handleRefreshExcercises="handleRefreshExcercises"
           :category="category"
         />
 
         <ExerciseList
           v-for="(exercise, index) in get(lesson, 'exercises', [])"
           :key="exercise.id"
+          :lesson="lesson"
           :index="index"
           :exercise="exercise"
-          @handleRefreshQuestion="handleRefreshQuestion"
-          @handleRefreshExcercises="handleRefreshExcercises"
         />
       </div>
     </div>
@@ -96,7 +93,7 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       lessons: [],
-      lesson: null,
+      // lesson: null,
       category: "EXERCISE",
     };
   },
@@ -105,10 +102,17 @@ export default {
     ...mapState("elearning/creating/creating-general", {
       general: "general",
     }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
 
-  created() {
+  mounted() {
     this.getLessons();
+  },
+
+  updated() {
+    console.log(this.lesson);
   },
 
   methods: {
@@ -117,23 +121,20 @@ export default {
       this.getLesson(get(this, "lesson.id", ""));
     },
 
-    async getLesson(lesson_id) {
-      if (lesson_id) {
-        const res = await this.$store.dispatch(
-          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
-          lesson_id
-        );
-        if (get(res, "success", false)) {
-          this.lesson = get(res, "data", null);
-          return;
-        }
-      }
-      this.lesson = null;
+    getLesson(lesson_id) {
+      this.$store.dispatch(`elearning/create/getLesson`, lesson_id);
     },
 
     handleRefreshExcercises() {
-      this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
+      const options = {
+        lesson_id: get(this, "lesson.id", ""),
+        progress: {
+          params: {
+            elearning_id: getParamQuery("elearning_id"),
+          },
+        },
+      };
+      this.$store.dispatch(`elearning/create/update`, options);
       this.isShowFormAdd = false;
       this.isShowButtonCreate = true;
     },
@@ -141,10 +142,6 @@ export default {
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
-    },
-
-    handleSelectLesson(lesson) {
-      this.getLesson(get(lesson, "id", ""));
     },
 
     handleCancelAddCreate() {

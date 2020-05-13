@@ -18,13 +18,13 @@
         class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
         @click="handleSaveExerciseName"
       >
-        <IconSave24px class="mr-2 fill-primary"/> Lưu
+        <IconSave24px class="mr-2 fill-primary" /> Lưu
       </button>
       <button
         class="cc-box__btn mr-3 text-secondary d-flex align-items-center w-50"
         @click="cancelEditExerciseName"
       >
-        <IconClose class="mr-2 fill-secondary"/> Huỷ
+        <IconClose class="mr-2 fill-secondary" /> Huỷ
       </button>
     </template>
     <template v-else>
@@ -38,7 +38,11 @@
         class="cc-box__btn cc-box__btn-edit"
         @click="handleDeleteExercise"
       >
-        <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px"/>
+        <IconTrashAlt
+          class="d-block subheading fill-secondary"
+          width="20px"
+          height="20px"
+        />
       </button>
     </template>
     <app-modal-confirm
@@ -55,10 +59,9 @@ import { get } from "lodash";
 import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-
-import IconClose from '~/assets/svg/icons/close.svg?inline';
-import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
-
+import IconClose from "~/assets/svg/icons/close.svg?inline";
+import IconSave24px from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import { mapState } from "vuex";
 import { getParamQuery } from "~/utils/common";
 import { createPayloadExercise } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -68,24 +71,32 @@ export default {
     IconEditAlt,
     IconTrashAlt,
     IconClose,
-    IconSave24px
+    IconSave24px,
   },
   props: {
     exercise: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+  },
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
   data() {
     return {
       isEditExerciseName: false,
       exerciseNameModel: get(this, "exercise.title", ""),
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
   watch: {
@@ -93,8 +104,8 @@ export default {
       handler: function() {
         this.exerciseNameModel = this.exercise.title;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     get,
@@ -112,7 +123,7 @@ export default {
     async handleSaveExerciseName() {
       const data = {
         id: get(this, "exercise.id", ""),
-        title: this.exerciseNameModel
+        title: this.exerciseNameModel,
       };
       const payload = createPayloadExercise(data);
       const result = await this.$store.dispatch(
@@ -122,7 +133,15 @@ export default {
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.isEditExerciseName = false;
-        this.$emit("handleRefreshExcercises");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
       this.$toasted.error(get(result, "message", ""));
@@ -138,8 +157,8 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "exercise.id", "")
-        }
+          id: get(this, "exercise.id", ""),
+        },
       };
       const result = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
@@ -152,8 +171,8 @@ export default {
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    }
-  }
+    },
+  },
 };
 </script>
 

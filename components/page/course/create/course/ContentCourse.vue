@@ -1,7 +1,5 @@
 <template>
   <div>
-    <create-action :isShowAction="false" />
-
     <!-- STEP 1 -->
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
@@ -23,7 +21,8 @@
                 href
                 @click.prevent="handleShowAddChapter"
               >
-                <IconAdd width="14px" height="14px" class="mr-2" />&nbsp;Thêm chương
+                <IconAdd width="14px" height="14px" class="mr-2" />&nbsp;Thêm
+                chương
               </a>
             </div>
           </div>
@@ -35,7 +34,7 @@
               @handleCreateChapterSuccess="handleCreateChapterSuccess"
             />
 
-            <ListChapter @handleAddLesson="handleAddLesson" />
+            <ListChapter />
           </div>
         </div>
       </div>
@@ -88,7 +87,7 @@ export default {
     ListChapter,
     EditCourseName,
     IconAngleUp,
-    IconAdd
+    IconAdd,
   },
 
   data() {
@@ -98,15 +97,8 @@ export default {
     };
   },
 
-  created() {
-    //
-  },
-
   computed: {
-    ...mapState("elearning/creating/creating-lesson", {
-      lessons: "lessons",
-    }),
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
   },
@@ -116,16 +108,6 @@ export default {
 
     handleCreateChapterSuccess() {
       this.isShowFormAddChapter = false;
-    },
-
-    handleAddLesson(chapter) {
-      this.chapter = chapter;
-      this.isShowCreateLessonOfChapter = true;
-    },
-
-    handleCancelAddLesson() {
-      this.isShowCreateLessonOfChapter = false;
-      this.chapter = null;
     },
 
     handleShowAddChapter() {

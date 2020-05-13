@@ -1,7 +1,7 @@
 <template>
   <div class="clc-video">
     <div class="clc-video__image">
-     <n-link to=""><img src="/images/thumnail-video.png" alt /></n-link>
+      <n-link to=""><img src="/images/thumnail-video.png" alt/></n-link>
     </div>
 
     <div class="clc-video__right w-100">
@@ -110,7 +110,7 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success(defaultTo(get(res, "message", ""), "Thành công"));
-        this.$emit("refreshLessons");
+        this.$store.dispatch(`elearning/create/getContent`);
         return;
       }
       this.$toasted.error(defaultTo(get(res, "message", ""), "Có lỗi xảy ra"));
