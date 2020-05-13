@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
@@ -84,6 +84,9 @@ export default {
 
   methods: {
     get,
+    ...mapMutations("elearning/study/study-progress", [
+      "setStudyProgressNextSession",
+    ]),
 
     exitRoom() {
       console.log("[exitRoom]", this.targetClass);
@@ -114,8 +117,14 @@ export default {
             window.open(zoom.join_url);
           }
 
-          clearInterval(this.countdown);
+          clearInterval(this.interval);
           // this.$emit("close");
+          if (
+            sessions.filter(s => s.session_starting_position != zoom.position)
+          ) {
+            // set next session
+            this.setStudyProgressNextSession(zoom);
+          }
         }
         seconds -= 1;
       }, 1000);

@@ -78,7 +78,8 @@ export default {
       finishStatus: LESSION_ONLINE_STATUS.FINISH,
       modalShow: false,
       isShowTimetable: false,
-      targetClass: null
+      targetClass: null,
+      currentSession: null,
     };
   },
   components: {
@@ -90,6 +91,7 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-info", ["info"]),
+    ...mapState("elearning/study/study-progress", ["currentSession"]),
 
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"])
   },
@@ -102,6 +104,8 @@ export default {
 
     handlJoinOlClass(item) {
       console.log("[handlJoinOlClass]", item);
+      this.currentSession = item;
+
       this.teachingOlclassLessonSessionsList({
         params: { online_class_id: item.id }
       }).then(res => {
@@ -133,6 +137,16 @@ export default {
         }
       });
     }
+  },
+
+  watch: {
+    currentSession(_newVal, _oldVal) {
+      console.log("[currentSession]", _newVal, _oldVal);
+      if(_newVal != _oldVal && _oldVal != null) {
+        // this.handlJoinOlClass(this.currentSession);
+      }
+    }
   }
+
 };
 </script>

@@ -359,6 +359,7 @@ export const ELEARNING_STUDY_EXERCISE = {
 
 export const ELEARNING_STUDY_PROGRESS = {
     SET_STUDY_PROGRESS_LIST: "setStudyProgressList",
+    SET_STUDY_PROGRESS_NEXT_SESSION: "setStudyProgressNextSession",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
