@@ -25,16 +25,16 @@
           v-if="item.status == liveStatus"
           @click.prevent="handleLiveClass(item)"
         >
-          <IconCam24 class="mr-2 fill-red" height="18" width="18" />
-          <span>Đang diễn ra</span>
+          <IconCam24 class="mr-2 fill-red text-clickable" height="18" width="18" />
+          <span class="text-clickable">Đang diễn ra</span>
         </div>
         <div
-          class="d-flex-center color-yellow ml-auto text-clickable"
+          class="d-flex-center color-yellow ml-auto"
           v-else-if="item.next_time"
           @click.prevent="handleComingClass(item)"
         >
-          <IconCam24 class="mr-2 fill-yellow" height="18" width="18" />
-          <span>Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
+          <IconCam24 class="mr-2 fill-yellow text-clickable" height="18" width="18" />
+          <span class="text-clickable">Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
         <div class="color-999 d-flex-center" v-else-if="item.status == finishStatus">
           <IconCam24 class="mr-2" />
@@ -103,11 +103,11 @@ export default {
       }).then(res => {
         console.log("[teachingOlclassLessonSessionsList] res", res);
         if (res.success == RESPONSE_SUCCESS) {
-          const liveClass = { res };
-          if (liveClass.is_started == true) {
-            const sessions = liveClass.sessions || [];
+          const {data} = res;
+          if (data.is_started == true) {
+            const sessions = data.sessions || [];
             const zoom = sessions.find(
-              s => s.position == liveClass.session_starting_position
+              s => s.position == data.session_starting_position
             );
             if (!zoom) return;
 
