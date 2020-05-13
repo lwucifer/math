@@ -147,7 +147,11 @@ export default {
     counter: {
       type: Number
     },
-    subLabel: String
+    subLabel: String,
+    onlyNumber: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -237,8 +241,13 @@ export default {
 
   methods: {
     updateInput: function(event) {
-      // this.localValue = event.target.value;
-      this.$emit("input", event.target.value);
+      if (this.onlyNumber == true) {
+        this.localValue = event.target.value.replace(/[^\d]/g, "");
+        this.$emit("input", this.localValue);
+      } else {
+        this.localValue = event.target.value;
+        this.$emit("input", event.target.value);
+      }
     },
 
     handleFocus(event) {
