@@ -4,17 +4,24 @@
 
     <div class="tab-qa-comment-item__right">
       <div class="tab-qa-comment-item__top">
-        <h6 class="tab-qa-comment-item__name">Brandon Simmmons</h6>
+        <div class="tab-qa-comment-item__top-left">
+          <h6 class="tab-qa-comment-item__name">Brandon Simmmons</h6>
+          <app-stars v-if="showStars" class="tab-qa-comment-item__rate ml-2" :stars="stars" />
+        </div>
+        
         <span class="tab-qa-comment-item__time">
           <IconAccessTime class="icon mr-2" />16:48 20/08/2019
         </span>
       </div>
 
+      <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div>
+      
+
       <div
         class="tab-qa-comment-item__content"
       >
         <p>Good communication, please put extra attention to detail on requests. Overall great design work, satisfied with the work, result and communication.</p>
-        <img class="tab-qa-comment-item__img d-block" src="~assets/images/tmp/study-comment-demo.jpg" alt="">
+        <img v-if="image" class="tab-qa-comment-item__img d-block" src="~assets/images/tmp/study-comment-demo.jpg" alt="">
       </div>
       <div class="tab-qa-comment-item__actions">
         <button class="tab-qa-comment-item__like">
@@ -43,7 +50,16 @@ export default {
       type: Number,
       default: 1,
       validator: value => [1, 2].includes(value)
-    }
+    },
+    name: String,
+    avatar: String,
+    content: String,
+    time: String,
+    stars: Number,
+    showStars: Boolean,
+    title: String,
+    showTitle: Boolean,
+    image: String
   },
 
   computed: {

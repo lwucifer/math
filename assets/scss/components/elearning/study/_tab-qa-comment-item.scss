@@ -52,6 +52,20 @@
         border-radius: 2px;
     }
 
+    &__time {
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    &__title {
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    &__name, &__rate {
+        display: inline-block;
+    }
+
     &--level-2 {
         border-bottom: 0;
         padding: 0;
