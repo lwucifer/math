@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="initApp">
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">
@@ -195,6 +195,7 @@ export default {
 
   data() {
     return {
+      initApp: true,
       error: {
         description: "",
         name: "",
@@ -202,13 +203,13 @@ export default {
       },
       payload: {
         avatar: "",
-        benefit: [],
-        description: "",
-        level: "",
-        name: "",
-        subject: "",
+        benefit: [...get(this, "general.benefit", [])],
+        description: get(this, "general.description", ""),
+        level: get(this, "general.level", ""),
+        name: get(this, "general.name", ""),
+        subject: get(this, "general.subject.id", ""),
         cover_image: "",
-        type: "",
+        type: get(this, "general.type", ""),
       },
       showModalConfirm: false,
       confirmLoading: false,
@@ -315,13 +316,10 @@ export default {
     },
 
     handleReset() {
-      this.payload.benefit = [...get(this, "general.benefit", [])];
-      this.payload.description = get(this, "general.description", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "");
-      this.error = {};
+      this.initApp = false;
+      this.$nextTick().then(() => {
+        Object.assign(this.$data, this.$options.data.call(this));
+      });
     },
 
     checkShowErrorBenefit() {
@@ -369,7 +367,6 @@ export default {
     },
 
     handleSelectAvatar(avatar) {
-      console.log(avatar);
       this.payload.avatar = avatar;
     },
 

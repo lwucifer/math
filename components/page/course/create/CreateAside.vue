@@ -6,7 +6,7 @@
       <li
         v-for="item in menu"
         :key="item.key"
-        :class="{ active: item.key === active }"
+        :class="{ active: item.checked }"
         @click="handleClickMenuItem(item)"
       >
         <app-checkbox-circle

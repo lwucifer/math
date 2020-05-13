@@ -45,7 +45,7 @@
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.required = 'ESSAY'"
+          @click="payload.type = 'ESSAY'"
           >Tự luận</app-radio
         >
       </app-radio-group>
