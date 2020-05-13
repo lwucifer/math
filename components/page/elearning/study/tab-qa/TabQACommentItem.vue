@@ -24,7 +24,7 @@
         <img v-if="image" class="tab-qa-comment-item__img d-block" src="~assets/images/tmp/study-comment-demo.jpg" alt="">
       </div>
       <div class="tab-qa-comment-item__actions">
-        <button class="tab-qa-comment-item__like">
+        <button class="tab-qa-comment-item__like" :class="{ 'active': liked }">
           <IconThumbUp class="icon" />&nbsp;150
         </button>
         <button class="tab-qa-comment-item__reply">Phản hồi</button>
@@ -59,7 +59,8 @@ export default {
     showStars: Boolean,
     title: String,
     showTitle: Boolean,
-    image: String
+    image: String,
+    liked: Boolean
   },
 
   computed: {
