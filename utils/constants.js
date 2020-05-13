@@ -104,9 +104,9 @@ export const LESSION_STATUS = {
 }
 
 export const LESSION_ONLINE_STATUS = {
-    COMING: 0,
+    // COMING: 2,
     LIVE: 1,
-    FINISH: 1,
+    FINISH: 0,
 }
 
 export const QUESTION_NAV = {

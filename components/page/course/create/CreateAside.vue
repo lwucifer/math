@@ -196,7 +196,7 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.general_status", false) == 1) return;
+      if (get(this, "progress.data.general_status", false) != 1) return;
 
       if (key === "content") {
         this.active = key;
@@ -211,13 +211,15 @@ export default {
         return;
       }
 
-      if (!get(this, "progress.data.content_status", false) == 1) return;
+      if (get(this, "progress.data.content_status", false) != 1) return;
 
       if (key === "settings") {
         this.active = key;
         this.$emit("click-item", key);
         return;
       }
+
+      if (get(this, "progress.data.setting_status", false) != 1) return;
 
       this.active = key;
       this.$emit("click-item", key);

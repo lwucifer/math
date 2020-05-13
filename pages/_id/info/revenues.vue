@@ -111,6 +111,7 @@
                           >
                             <app-date-picker
                               class="w-100"
+                              popupClass="datepicker-range-v2"
                               v-model="dateDefault"
                               square
                               range

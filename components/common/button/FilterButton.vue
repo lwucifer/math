@@ -36,7 +36,7 @@
     props: {
       color: {
         type: String,
-        default: "primary" // 'primary' | 'white', ...
+        default: "white" // 'primary' | 'white', ...
       },
       size: {
         type: String,
