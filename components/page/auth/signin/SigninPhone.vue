@@ -5,9 +5,11 @@
         type="text"
         v-model="phone"
         placeholder="Số điện thoại"
+        maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
         :validate="validateProps.phone"
+        :onlyNumber="true"
         @input="handlePhone"
       >
         <template v-slot:prepend-inner>
@@ -21,6 +23,7 @@
         v-model="password"
         placeholder="Mật khẩu"
         class="mb-2"
+        maxlength="127"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
