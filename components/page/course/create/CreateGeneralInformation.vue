@@ -66,7 +66,7 @@
           @addBenefit="addBenefit"
           @cancelInputBenefit="cancelInputBenefit"
         />
-        <app-error :error="get(error, 'benefit', '')"></app-error>
+        <app-error class="mb-4" :error="get(error, 'benefit', '')"></app-error>
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">

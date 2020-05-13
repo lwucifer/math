@@ -15,16 +15,16 @@
     </div>
     <template v-if="isEditExerciseName">
       <button
-        class="cc-box__btn mr-3 text-success"
+        class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
         @click="handleSaveExerciseName"
       >
-        Lưu
+        <IconSave24px class="mr-2 fill-primary"/> Lưu
       </button>
       <button
-        class="cc-box__btn mr-3 text-gray-2"
+        class="cc-box__btn mr-3 text-secondary d-flex align-items-center w-50"
         @click="cancelEditExerciseName"
       >
-        Huỷ
+        <IconClose class="mr-2 fill-secondary"/> Huỷ
       </button>
     </template>
     <template v-else>
@@ -55,6 +55,10 @@ import { get } from "lodash";
 import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+
+import IconClose from '~/assets/svg/icons/close.svg?inline';
+import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
+
 import { getParamQuery } from "~/utils/common";
 import { createPayloadExercise } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -62,7 +66,9 @@ import * as actionTypes from "~/utils/action-types";
 export default {
   components: {
     IconEditAlt,
-    IconTrashAlt
+    IconTrashAlt,
+    IconClose,
+    IconSave24px
   },
   props: {
     exercise: {
