@@ -116,7 +116,6 @@ export default {
     },
 
     removeImage() {
-      console.log(this.id)
       let image = document.getElementById(this.id);
       image.src = this.default_image;
       this.cropper = null;
