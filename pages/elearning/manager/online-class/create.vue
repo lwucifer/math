@@ -81,7 +81,6 @@
                   v-for="(item, index) in params.schedules"
                   :key="index"
                 >
-                  
                   <div v-if="indexEdit === index || indexShow === index">
                     <div class>
                       <h6 class="mb-3">Giờ học</h6>
@@ -114,22 +113,22 @@
                           <app-vue-select
                             style="width: 9rem"
                             class="app-vue-select form-item__selection mr-2"
-                            v-model="duration[index].hours"
+                            :value="duration[index].hours.value"
                             :options="hours"
                             label="text"
                             searchable
                             clearable
-                            @input="(e)=>handleChangedDuration(e,index)"
+                            @input="(e)=>handleChangedDuration(e, index)"
                           ></app-vue-select>
                           <app-vue-select
                             style="width: 10rem"
                             class="app-vue-select form-item__selection ml-3 mr-2"
-                            v-model="duration[index].minutes"
+                            :value="duration[index].minutes.value"
                             :options="minutes"
                             label="text"
                             searchable
                             clearable
-                            @input="handleChangedDuration(index)"
+                            @input="(e) => handleChangedDuration(e, index, true)"
                           ></app-vue-select>
                         </div>
                       </div>
@@ -242,8 +241,8 @@
                       {{item.from_date}} - {{item.to_date}}
                     </div>
                     <div class="ml-auto">
-                      <button @click="editSchedule(index)"><IconCreate class="fill-primary"/></button>
-                      <button @click="removeSchedule(index)"><IconTrashAlt class="fill-red"/></button>
+                      <button v-on:click="(e) => editSchedule(e,index)"><IconCreate class="fill-primary"/></button>
+                      <button v-on:click="(e) => removeSchedule(e,index)"><IconTrashAlt class="fill-red"/></button>
                     </div>
                   </div>
                 </div>
@@ -534,7 +533,7 @@ function initialState() {
         text: "Riêng tư"
       }
     ],
-    selectedItems: [[]],
+    selectedItems: {0:[]},
     schedules: [],
     params: {
       elearning_id: "",
@@ -577,9 +576,8 @@ export default {
           this.indexEdit === null
     },
     checkSchedule() {
-      let index = this.indexEdit ? this.indexEdit : this.indexShow;
+      let index = this.indexEdit != null ? this.indexEdit : this.indexShow;
       const item = this.params.schedules[index];
-      const xxx = this.params.schedules.length;
       return this.params.schedules[index].from_date  &&
              this.params.schedules[index].to_date &&
              this.params.schedules[index].start_time  &&
@@ -605,7 +603,7 @@ export default {
         this.indexShow = 0;
       }
     },
-    editSchedule(index){
+    editSchedule: function (e, index){
       this.indexEdit = index;
       this.indexShow = null;
     },
@@ -614,7 +612,7 @@ export default {
       this.indexEdit = null;
       this.indexShow = this.params.schedules.length;
       this.params.schedules.push(initialSchedule);
-      this.selectedItems.push([]);
+      this.selectedItems = {...this.selectedItems, [this.indexShow]: []};
       this.duration.push(initialDuration);
       this.startTime.push(initialStartTime);
       //this.schedules = [...this.params.schedules];
@@ -654,6 +652,9 @@ export default {
         if (doCreate.success) {
           this.fnCancel();
           this.message = "Tạo phòng học thành công!";
+          this.showNotify = true;
+        } else if (doCreate.message) {
+          this.message = e;
           this.showNotify = true;
         }
       } catch (e) {
@@ -731,14 +732,25 @@ export default {
       })
     },
 
-    handleChangedDuration(index) {
+    handleChangedDuration(e, index, minutes = false) {
+      let post = {
+        value: e.value,
+        text: e.value
+      };
+
+      if (minutes) {
+        this.duration.splice(index, 1, { ...this.duration[index],
+          minutes: post
+        })
+      } else {
+        this.duration.splice(index, 1, { ...this.duration[index],
+          hours: post
+        })
+      }
       let duration =
         parseInt(this.duration[index].hours.value) * 60 +
         parseInt(this.duration[index].minutes.value);
       
-      this.duration.splice(index, 1, { ...this.duration[index],
-        time: post
-      })
       this.params.schedules.splice(index, 1, {
         ...this.params.schedules[index],
         duration: parseInt(duration)
@@ -759,14 +771,17 @@ export default {
       }
     },
     popSelectedIndexes(item, index) {
-      if (_.some(this.selectedItems[index], item)) {
-        this.selectedItems[index] = [...this.selectedItems[index]].filter(i => {
+      if (this.selectedItems[index].includes(item)) {
+        let xxx = [...this.selectedItems[index]].filter(i => {
           return i !== item
-        })
+        });
+        this.selectedItems = {...this.selectedItems, [index] : xxx};
+
         this.params.schedules.splice(index, 1, {
           ...this.params.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
+        console.log(this.selectedItems[index], xxx)
       }
     },
     pushSelectedIndexes(item, index) {
@@ -777,6 +792,7 @@ export default {
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
       }
+      //console.log(this.selectedItems[index])
     },
 
     arrayToString(data) {
