@@ -45,61 +45,61 @@
 </template>
 
 <script>
-  import IconCiclePlus from '~/assets/svg/design-icons/plus-circle.svg?inline';
-  import IconCheck from '~/assets/svg/design-icons/check.svg?inline';
-  import AddBankForm from "~/components/page/account/forms/AddBank"
-  import {mapState} from "vuex";
-  import * as actionTypes from "~/utils/action-types";
-  import {get} from "lodash";
-  import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
+import IconCiclePlus from '~/assets/svg/design-icons/plus-circle.svg?inline';
+import IconCheck from '~/assets/svg/design-icons/check.svg?inline';
+import AddBankForm from "~/components/page/account/forms/AddBank"
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
 
-  export default {
-    
-    layout: 'account-info',
-    
-    components: {
-      IconCiclePlus,
-      IconCheck,
-      AccountPaymentItem,
-      AddBankForm
-    },
-    data() {
-      return ({
-        showAddPayment: false,
-        opts: []
-      })
-    },
-    watch: {
-      bankList: {
-        handler: function () {
-          this.opts = get(this, "bankList", [])
-        }
+export default {
+
+  layout: 'account-info',
+  
+  components:{
+    IconCiclePlus,
+    IconCheck,
+    AccountPaymentItem,
+    AddBankForm
+  },
+  data() {
+    return ({
+      showAddPayment: false,
+      opts:[]
+    })
+  },
+  watch:{
+    bankList:{
+      handler: function(){
+        this.opts = get(this,"bankList",[])
       }
-    },
-    computed: {
-      ...mapState("auth", ["loggedUser"]),
-      ...mapState("bank", {
-        bankList: "bankList",
-        accountBankList: "accountBankList",
-      }),
-    },
-    methods: {
-      fetchPublicBank() {
-        this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`)
-      },
-      fetchAccountBank(){
-        this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`)
-      },
-      handleRefresh(){
-        this.fetchAccountBank();
-      },
-    },
-    created() {
-      this.fetchPublicBank();
-      this.fetchAccountBank();
     }
-    
+  },
+  computed: {
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("bank", {
+      bankList: "bankList",
+      accountBankList: "accountBankList",
+    })
+  },
+  methods:{
+    fecthPublicBank(){
+      this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`)
+    },
+    fetchAccountBank(){
+      this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`)
+    },
+    handleRefresh(){
+      this.fetchAccountBank();
+    },
+  },
+  created(){
+    this.fecthPublicBank();
+    this.fetchAccountBank();
   }
+
+}
 </script>
 
 <style lang="scss">

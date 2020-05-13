@@ -49,10 +49,50 @@
               v-on:click="visible.addLink=true"
             >
             <slot name="icon">
-              <IconPlus class="icon icon--btn icon--btn--pre"/>
+              <IconPlusProtect class="icon icon--btn icon--btn--pre"/>
             </slot>
             <span>Liên kết trường học</span>
           </app-button>
+          </div>
+          <div class="col-md-3">
+            <label for="" class="form--normal__title">Tiểu sử</label>
+          </div>
+          <div class="col-md-9">
+            <div v-if="story == null">
+              <app-button
+                color="transparent"
+                flat
+                square
+                style="box-shadow: none;"
+                class="p-0"
+                @click="addStory"
+              >
+                <slot name="icon"><IconPlus class="icon--btn icon--btn--pre fill-opacity-1" style="height: 1.6rem; width: 1.6rem;"/></slot>
+                <span class="text-primary">Thêm tiểu sử</span>
+              </app-button>
+            </div>
+            <div v-else>
+              <div>
+                <div class="box-content-fixed-height mb-4">
+                  <div class="overflow-y-scroll" v-html="story" style="max-height: 16rem; overflow-y: auto; margin-right: -5px;"></div>
+                </div>
+                <div class="d-flex">
+                  <button class="btn-transparent btn--success mr-4" @click="editStory">
+                    <IconEdit class=""/>
+                    <span>Chỉnh sửa</span>
+                  </button>
+                  <button class="btn-transparent btn--danger">
+                    <IconTrashAlt class=""/>
+                    <span>Xóa</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <account-story-form
+              v-if="editingStory"
+              :story="story"
+            >
+            </account-story-form>
           </div>
         </div>
       </div>
@@ -88,10 +128,14 @@ import AccountInfoStudent from "~/components/page/account/Info/AccountInfoStuden
 import UploadAvatar from "~/components/page/account/Info/UploadAvatar";
 import AccountChangePasswordModal from "~/components/page/account/AccountChangePasswordModal";
 import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal"
+import AccountStoryForm from "~/components/page/account/forms/AddAccountStory";
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconPlus from "~/assets/svg/v2-icons/alert/add_24px.svg?inline";
+import IconPlusProtect from "~/assets/svg/v2-icons/alert/add_24px.svg?inline";
+import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline"
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 import { getToken } from "~/utils/auth";
@@ -100,11 +144,15 @@ export default {
   components: {
     IconPhoto,
     IconPlus,
+    IconPlusProtect,
+    IconEdit,
+    IconTrashAlt,
     SchoolAccountSide,
     AccountInfoStudent,
     AccountChangePasswordModal,
     AccountLinkModal,
-    UploadAvatar
+    UploadAvatar,
+    AccountStoryForm
   },
   data() {
     return {
@@ -118,8 +166,10 @@ export default {
       accountLink:{
         list:"",
       },
+      editingStory: false,
       avatar: [],
       avatarSrc: "https://picsum.photos/170/170",
+      story: null,
       profileInfo:"",
       visible: {
         notify: false,
@@ -147,6 +197,7 @@ export default {
         this.birthday = getDateBirthDay(get(this,"profileList.birthday",""));
         this.accountLink.list = get(this,"linkList.data",{});
         this.profileInfo = get(this,"profileList",{});
+        this.story = get(this,"profileList.intro",null);
       }
     }
   },
@@ -200,6 +251,12 @@ export default {
     resetCode() {
       this.payload.code = ""
       this.payload.g_recaptcha_response = ""
+    },
+    addStory() {
+      this.editingStory = true
+    },
+    editStory() {
+      this.editingStory = true
     }
   },
   computed: {
@@ -224,6 +281,4 @@ export default {
 </script>
 
 <style lang="scss">
-  /*@import "~/assets/scss/components/school/_school-account.scss";*/
-  /*@import "~/assets/scss/components/account/_account-info.scss";*/
 </style>
