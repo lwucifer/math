@@ -139,6 +139,7 @@ export default {
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
         payload
       );
+      this.handleCancel();
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.$emit("handleRefreshExcercises");

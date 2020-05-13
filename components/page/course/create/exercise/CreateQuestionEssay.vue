@@ -8,8 +8,10 @@
       >Nội dung câu trả lời</label
     >
     <app-editor v-model="payload.answers[0].content" />
-    <div>
-      <label class="d-inline-block mb-3 font-weight-bold" for="question-editor">Điểm</label>
+    <div v-if="get(exercise, 'category', '') === 'TEST'">
+      <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
+        >Điểm</label
+      >
       <app-input v-model="payload.points" />
     </div>
     <div class="d-flex justify-content-end mt-5">
@@ -64,7 +66,7 @@ export default {
         exercise_id: get(this, "exercise.id", ""),
         type: "ESSAY",
         content: "",
-        points: '',
+        points: "",
         answers: [
           {
             correct: true,
@@ -103,7 +105,7 @@ export default {
       (this.showModalConfirm = false), (this.confirmLoading = false);
     },
 
-    get
+    get,
   },
 };
 </script>
