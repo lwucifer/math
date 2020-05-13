@@ -19,8 +19,9 @@
 
     <div class="d-flex justify-content-end mt-5">
       <app-button
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
+        color="default"
+        class="font-weight-semi-bold mr-4 text-secondary"
+        outline
         size="sm"
         square
         @click="$emit('handleCancelAddQuestion')"

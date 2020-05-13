@@ -18,12 +18,6 @@
             <IconClose fill="#E6A01E" />
           </button>
         </div> -->
-        <!-- <app-alert type="warning" class="mb-4" show-close>
-          <template slot="icon">
-            <IconWarning class=""/>
-          </template>
-          <p class="text-warning">Vui lòng hoàn thành <n-link to="" class="text-warning font-weight-bold">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</p>
-        </app-alert> -->
 
         <h5 class="mb-2">Chế độ hiển thị</h5>
 
