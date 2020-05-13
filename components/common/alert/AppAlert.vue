@@ -61,6 +61,7 @@ export default {
         "app-alert--warning": this.type === "warning",
         "app-alert--light": this.type === "light",
         "app-alert--dark": this.type === "dark",
+         "app-alert--info": this.type === "info",
         // Options classes
         "app-alert--has-close": this.showClose,
         "app-alert--size-sm": this.size === "sm"

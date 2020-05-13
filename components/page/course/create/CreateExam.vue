@@ -24,6 +24,7 @@
         :exercise="exercise"
         :index="index"
         @handleRefreshQuestion="handleRefreshQuestion"
+        @handleRefreshExcercises="handleRefreshExcercises"
       />
     </div>
   </div>

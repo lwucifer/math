@@ -199,6 +199,22 @@ export function getCountdown_HH_MM_SS(val) {
     return str
 }
 
+/**
+ * 
+ * @param {*} val : number (s)
+ * return 00:09:03 (hh:mm:ss)
+ */
+export function getCountdown_MM_SS(val) {
+    const m = Math.floor(val / 60);
+    const s = val - 60 * m;
+    let str = ''
+    str += (m >= 10 ? `${m}:` : `0${m}:`);
+    str += (s >= 10 ? `${s}` : `0${s}`);
+    console.log("[getCountdown_MM_SS]", str, m, s);
+    return str
+}
+
+
 export const addAllOptionSelect = (arr) => {
 
     const allOpt = {

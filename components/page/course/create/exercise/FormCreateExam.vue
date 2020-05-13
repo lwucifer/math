@@ -45,7 +45,7 @@
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.required = 'ESSAY'"
+          @click="payload.type = 'ESSAY'"
           >Tự luận</app-radio
         >
       </app-radio-group>
@@ -96,6 +96,27 @@
           v-model="payload.reworks"
         ></app-input>
       </div>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="font-weight-bold mb-4">Cài đặt thời gian mở đề</h5>
+      <app-radio-group class="mb-4">
+        <app-radio
+          name="group3"
+          value="1"
+          class="mr-4"
+          >Có</app-radio
+        >
+        <app-radio
+          name="group3"
+          value="0"
+          >Không</app-radio
+        >
+      </app-radio-group>
+
+      <app-date-picker/>
+
+      <app-date-picker type="time" value-format="h:mm A"/>
     </div>
    
 
