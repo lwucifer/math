@@ -99,7 +99,7 @@ export default {
     ElearningViewInfo,
     ElearningMainMenu,
     ElearningIntroduce,
-    ElearningContent,
+    ElearningContent
     // Breadcrumb,
   },
 
@@ -120,8 +120,8 @@ export default {
         spaceBetween: 20,
         slidesPerView: 3,
         setWrapperSize: true,
-        watchOverflow: true,
-      },
+        watchOverflow: true
+      }
     };
   },
 
@@ -141,7 +141,7 @@ export default {
             break;
         }
       }
-    },
+    }
   },
 
   mounted() {
@@ -166,8 +166,8 @@ export default {
         const teacher_id = get(this, "info.teacher.id", "");
         const options = {
           params: {
-            teacher_id,
-          },
+            teacher_id
+          }
         };
         const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
           options
@@ -177,8 +177,8 @@ export default {
           return;
         }
         this.teacherEls = [];
-      },
-    },
+      }
+    }
   },
 
   methods: {
@@ -189,21 +189,22 @@ export default {
 
       const params = {
         elearning_id,
-        token: "true",
+        token: "true"
       };
 
-      // const getInfo = () =>
-      //   new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-      //     params,
-      //   });
-      const getInfo = () => this.$store.dispatch(`elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`, params);
+      const getInfo = () =>
+        this.$store.dispatch(
+          `elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
+          params
+        );
+
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
+          params
         });
       const getRelatedCourses = () =>
         new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
+          params
         });
 
       this.loading = true;
@@ -211,7 +212,7 @@ export default {
       const data = await Promise.all([
         getInfo(),
         getProgram(),
-        getRelatedCourses(),
+        getRelatedCourses()
       ]);
 
       this.loading = false;
@@ -227,7 +228,7 @@ export default {
       } else {
         setTimeout(getDeviceID, 500);
       }
-    },
+    }
 
     // bindScrollStatus(event) {
     //   const navLink = document.querySelector(".elearning-view__main-nav");
@@ -249,7 +250,7 @@ export default {
     //     }
     //   }
     // },
-  },
+  }
 };
 </script>
 

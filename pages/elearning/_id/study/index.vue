@@ -9,9 +9,9 @@
             <img
               v-if="studyMode === defaultMode"
               :src="
-                    get(info, 'cover_url.high', '') ||
-                      '/images/adefltu - course - image.png'
-                  "
+                get(info, 'cover_url.high', '') ||
+                  '/images/adefltu - course - image.png'
+              "
               width="750"
               height="422"
               alt
@@ -20,8 +20,14 @@
               v-if="studyMode == videoMode"
               :url="get(payload, 'stream_urls.hls_url', '')"
             />
-            <a v-if="studyMode == docMode" :href="get(payload, 'link', '')">Download</a>
-            <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
+            <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
+              >Download</a
+            >
+            <img
+              v-if="studyMode === imageMode"
+              :src="get(payload, 'link', '')"
+              alt
+            />
             <iframe
               v-if="studyMode == articleMode"
               style="width: 712px"
@@ -29,16 +35,27 @@
             ></iframe>
 
             <!-- DO EXERCISE -->
-            <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
+            <ElearningExercise
+              v-if="studyMode !== videoMode && studyMode !== defaultMode"
+            />
 
             <div class="elearning-study-tabs">
-              <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-              <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+              <a
+                :class="{ active: type === 'summary' }"
+                @click="type = 'summary'"
+                >Tổng quan</a
+              >
+              <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                >Hỏi đáp</a
+              >
               <a
                 :class="{ active: type === 'notification' }"
                 @click="type = 'notification'"
-              >Thông báo</a>
-              <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                >Thông báo</a
+              >
+              <a :class="{ active: type === 'review' }" @click="type = 'review'"
+                >Đánh giá</a
+              >
             </div>
 
             <TabSummary :info="info" v-if="type === 'summary'" />
@@ -65,7 +82,7 @@
 import { get } from "lodash";
 import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { STUDY_MODE } from "~/utils/constants";
+import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { useEffect } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -159,6 +176,14 @@ export default {
         `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
         options
       );
+      const getTest = this.$store.dispatch(
+        `elearning/study/study-exercise/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`,
+        {
+          elearning_id: elearning_id,
+          category: EXERCISE_CATEGORIES.TEST
+        }
+      );
+
       const getInteractiveQuestion = () =>
         new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
           options
@@ -172,6 +197,7 @@ export default {
 
       const data = await Promise.all([
         getInfo,
+        getTest,
         getInteractiveQuestion(),
         getProgress
       ]);

@@ -391,6 +391,7 @@ export const SCHOOL_TEACHERS = {
 
 export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
+    LIST_TIMETABLE: "elearningStudyListTimetable",
 };
 
 export const ELEARNING_STUDY_STUDENT = {

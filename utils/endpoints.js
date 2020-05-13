@@ -124,6 +124,9 @@ export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
+export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
+
+
 /**
  * SCHOOL
  */

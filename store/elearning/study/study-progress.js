@@ -48,11 +48,11 @@ const mutations = {
     state.progress = _list;
   },
 
-  [mutationTypes.ELEARNING_STUDY_PROGRESS.SET_STUDY_PROGRESS_NEXT_SESSION](
+  [mutationTypes.ELEARNING_STUDY_PROGRESS.SET_STUDY_PROGRESS_CURRENT_SESSION](
     state,
     _currSession
   ) {
-    console.log("[SET_STUDY_PROGRESS_NEXT_SESSION]", _currSession);
+    console.log("[SET_STUDY_PROGRESS_CURRENT_SESSION]", _currSession);
     state.currentSession = _currSession;
   },
 };

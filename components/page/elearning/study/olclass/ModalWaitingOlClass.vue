@@ -13,19 +13,19 @@
         <div class="box12 border mb-4">
           <p class="mb-3">
             Tên phòng:
-            <b>{{ get(targetClass, "extra_info.online_class_name", "--")}}</b>
+            <b>{{ get(targetClass, "extra_info.online_class_name", "--") }}</b>
           </p>
           <p class="mb-3">
             Giáo viên:
-            <b>{{ get(targetClass, "extra_info.teacher_name", "--")}}</b>
+            <b>{{ get(targetClass, "extra_info.teacher_name", "--") }}</b>
           </p>
           <p class="mb-3">
             Giờ bắt đầu:
-            <b>{{ get(targetClass, "extra_info.start_time", "--:--")}}</b>
+            <b>{{ get(targetClass, "extra_info.start_time", "--:--") }}</b>
           </p>
           <p>
             Thời lượng:
-            <b>{{ get(targetClass, "extra_info.duration", 0) | formatHour}}</b>
+            <b>{{ get(targetClass, "extra_info.duration", 0) | formatHour }}</b>
           </p>
         </div>
 
@@ -38,9 +38,10 @@
         </p>-->
         <p class="mb-3" v-if="dataLength > 1">
           <i>
-            Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc,
-            hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo.
-            Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.
+            Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học
+            thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động
+            chuyển sang tiết học tiếp theo. Bạn không nên đóng cửa sổ này cho
+            đến khi buổi học kết thúc.
           </i>
         </p>
         <!-- <p class="mb-4" v-if="dataLength > 1"> -->
@@ -53,7 +54,12 @@
             Phòng học bắt đầu sau
             <span class="color-primary">{{ countdown }}</span>
           </div>
-          <a href class="btn color-primary btn--square" @click.prevent="exitRoom">Thoát phòng đợi</a>
+          <a
+            href
+            class="btn color-primary btn--square"
+            @click.prevent="exitRoom"
+            >Thoát phòng đợi</a
+          >
         </div>
 
         <!-- <hr /> -->
@@ -68,7 +74,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
 
-const STORE_NAMESPACE = "elearning/teaching/olclass";
+let interval = null;
 
 export default {
   props: {
@@ -78,52 +84,55 @@ export default {
   data() {
     return {
       duration: 30, // in minutes
-      countdown: "--:--"
+      countdown: "--:--",
+      seconds: null,
+      currentZoom: null,
     };
   },
 
   methods: {
     get,
     ...mapMutations("elearning/study/study-progress", [
-      "setStudyProgressNextSession",
+      "setStudyProgressCurrentSession"
     ]),
 
     exitRoom() {
       console.log("[exitRoom]", this.targetClass);
     },
 
-    close(invite) {
-      // this.$emit("close", invite);
+    close() {
+      console.log("[close]", interval);
+      clearInterval(interval);
       this.$emit("close");
     },
 
     setCountdown() {
       let seconds = this.targetClass.time_count_down || 0; // in seconds
       const duration = get(this.targetClass, "extra_info.duration", 0);
+      // const session_starting_position = get(this.targetClass, "session_starting_position", 0);
+      const session_starting_position = 1;
+      const isStudentRole = this.isStudentRole;
 
-      this.interval = setInterval(() => {
+      interval = setInterval(() => {
         console.log("[setCountdown]", seconds);
         this.countdown = getCountdown_HH_MM_SS(seconds);
+        this.seconds = seconds;
+
         if (seconds <= 0) {
           // auto join to room
           const sessions = this.targetClass.sessions || [];
           const zoom = sessions.find(
-            s => s.position == this.targetClass.session_starting_position
+            s => s.position == session_starting_position
           );
+
           if (!zoom) return;
+          this.currentZoom = zoom;
+
+          clearInterval(interval);
 
           // student open start_url or join_url
-          if (this.isStudentRole) {
+          if (isStudentRole) {
             window.open(zoom.join_url);
-          }
-
-          clearInterval(this.interval);
-          // this.$emit("close");
-          if (
-            sessions.filter(s => s.session_starting_position != zoom.position)
-          ) {
-            // set next session
-            this.setStudyProgressNextSession(zoom);
           }
         }
         seconds -= 1;
@@ -144,8 +153,17 @@ export default {
     this.setCountdown();
   },
 
+  watch: {
+    seconds(_newVal) {
+      console.log("[seconds] _newVal", _newVal);
+      if(_newVal <= 0){
+        this.setStudyProgressCurrentSession(this.currentZoom);
+      }
+    }
+  },
+
   beforeDestroy() {
-    clearInterval(this.interval);
+    clearInterval(interval);
   }
 };
 </script>

@@ -14,14 +14,18 @@
       />
     </div>
     <div v-else>
-      <ElearningProgramItem :lesson="get(progress, 'programs.0.lessons.0', null)" />
+      <ElearningProgramItem
+        :lesson="get(progress, 'programs.0.lessons.0', null)"
+      />
     </div>
 
     <!-- Bai TEST -->
-    <div class="elearning-lesson-side__course">
+    <div class="elearning-lesson-side__course" v-if="tests">
       <div class="color-yellow" style="display: flex;">
         <IconFileAlt class="mr-2 fill-yellow" height="16" width="16" />
-        <span class="text-clickable" @click.prevent="handleDoTest">Làm bài kiểm tra</span>
+        <span class="text-clickable" @click.prevent="handleDoTest"
+          >Làm bài kiểm tra</span
+        >
       </div>
     </div>
   </div>
@@ -39,8 +43,8 @@ import { get } from "lodash";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
 import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
 
-import { mapState, mapMutations, mapActions } from "vuex";
-import { STUDY_MODE, EXERCISE_CATEGORIES} from "~/utils/constants";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 
 export default {
   components: {
@@ -56,7 +60,8 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study-progress", ["progress"])
+    ...mapState("elearning/study/study-progress", ["progress"]),
+    ...mapGetters("elearning/study/study-exercise", ["tests"])
   },
 
   methods: {
@@ -65,7 +70,7 @@ export default {
     ...mapMutations("event", ["setStudyMode"]),
 
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList",
+      "elearningSudyElearningExerciseList"
     ]),
 
     handleDoTest() {
@@ -73,13 +78,6 @@ export default {
 
       // emit studyMode=DO_EXERCISE
       this.setStudyMode(STUDY_MODE.DO_EXERCISE);
-
-      // get list TEST
-      const testReq = {
-        elearning_id: this.progress.id,
-        category: EXERCISE_CATEGORIES.TEST,
-      }
-      this.elearningSudyElearningExerciseList(testReq);
     }
   }
 };
