@@ -12,7 +12,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/courses/students/${row.user_id}?elearning_id=${filterElearningId}`"
+            :to="`/elearning/manager/courses/students/${row.student_id}?elearning_id=${filterElearningId}`"
           >
             <IconArrow height="13" />
           </n-link>
@@ -21,7 +21,7 @@
 
       <template v-slot:cell(confirm)="{row}">
         <td style="width:32%;">
-          <app-button square size="sm" color="transparent" @click="acceptStudent(row.user_id)">
+          <app-button square size="sm" color="transparent" @click="acceptStudent(row.student_id)">
             <IconCheckGreen class="icon mr-2" />Xác nhận
           </app-button>
           <app-button
@@ -29,7 +29,7 @@
             size="sm"
             color="transparent"
             class="text-secondary"
-            @click="rejectStudent(row.user_id)"
+            @click="rejectStudent(row.student_id)"
           >
             <IconClear24px class="icon mr-2" />Từ chối
           </app-button>
@@ -37,13 +37,16 @@
       </template>
 
       <template v-slot:cell(name)="{row}">
-        <td style="width:30%">{{ get(row, 'user_name', '') }}</td>
+        <td style="width:30%">{{ get(row, 'student_name', '') }}</td>
       </template>
       <template v-slot:cell(class)="{row}">
         <td style="width:30%">{{ get(row, 'class_name', '') }}</td>
       </template>
       <template v-slot:cell(date)="{row}">
         <td style="width:25%">{{ get(row, 'join_date', '') | moment("DD/MM/YYYY") }}</td>
+      </template>
+      <template v-slot:cell(question)="{row}">
+        <td style="width:25%">{{ get(row, 'questions', '') }}</td>
       </template>
       <template v-slot:cell(progress)="{row}">
         <td>
@@ -67,6 +70,7 @@ import RateStatus from "~/components/page/elearning/manager/exam/RateStatus";
 import { ELEARNING_TYPES } from "~/utils/constants";
 import IconClear24px from "~/assets/svg/v2-icons/clear_24px.svg?inline";
 import IconCheckGreen from "~/assets/svg/v2-icons/check_green.svg?inline";
+import { mapState, mapActions } from "vuex";
 const STORE_TEACHING_ACCEPT = "elearning/teaching/accept";
 export default {
   components: {
