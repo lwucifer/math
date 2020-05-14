@@ -9,7 +9,9 @@
       </template>
     </div>
 
-    <span v-else-if="!get(info, 'benefits', [])" class="caption text-sub">Chưa có nội dung</span>
+    <span v-else-if="!get(info, 'benefits', [])" class="caption text-sub"
+      >Chưa có nội dung</span
+    >
 
     <div v-else class="row">
       <div
@@ -23,7 +25,10 @@
     </div>
 
     <h4 class="my-4">Mô tả tổng quát</h4>
-    <div v-if="get(info, 'description', '')" v-html="get(info, 'description', '')"></div>
+    <div
+      v-if="get(info, 'description', '')"
+      v-html="get(info, 'description', '')"
+    ></div>
     <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
     <div class="text-center mt-3">
       <a class="btn-load-more">Xem thêm</a>
@@ -34,13 +39,11 @@
 <script>
 import { get } from "lodash";
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
+import { mapState } from "vuex";
 
 export default {
   components: {
-    IconCheck
-  },
-  props: {
-    info: {}
+    IconCheck,
   },
   computed: {
     title() {
@@ -54,8 +57,11 @@ export default {
         default:
           break;
       }
-    }
+    },
+    ...mapState("elearning/detail", {
+      info: "info",
+    }),
   },
-  methods: { get }
+  methods: { get },
 };
 </script>

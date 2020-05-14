@@ -9,7 +9,7 @@
           <div
             class="footer__brand-desc"
           >Cuộc cách mạng khẳng định TẦM NHÌN – TRÍ TUỆ Việt trong kỷ nguyên công nghệ 4.0. Ứng dụng kết nối thông minh trong lĩnh vực Giáo dục</div>
-          <img src="~assets/images/footer/bo-cong-thuong.png" width="147" alt="Đã đăng ký bộ công thương">
+          <img src="/images/bo-cong-thuong.png" width="147" alt="Đã đăng ký bộ công thương">
         </div>
 
         <div class="col-md-4 footer__col">
@@ -27,10 +27,10 @@
           <h2 class="footer__title">Tải ngay App Schoolly</h2>
           <div class="footer__download">
             <span>
-              <img src="~assets/images/footer/playstore.png" width="171" alt="">
+              <img src="/images/playstore.png" width="171" alt="">
             </span>
             <span>
-              <img src="~assets/images/footer/appstore.png" width="176" alt="">
+              <img src="/images/appstore.png" width="176" alt="">
             </span>
           </div>
         </div>

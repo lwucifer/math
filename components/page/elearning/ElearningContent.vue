@@ -9,9 +9,7 @@
       <div class="col-auto">
         Môn học:
         <strong class="color-primary">
-          {{
-          get(info, "subject.name", "")
-          }}
+          {{ get(info, "subject.name", "") }}
         </strong>
       </div>
       <div class="col-auto">
@@ -20,18 +18,18 @@
       </div>
       <div class="col-auto">
         Thời lượng:
-        <strong
-          class="color-primary"
-        >{{ [info.duration && info.duration != "0:0" ? info.duration : "1:0", "m:s"] | moment("mm:ss") }}</strong>
+        <strong class="color-primary">{{
+          [
+            info.duration && info.duration != "0:0" ? info.duration : "1:0",
+            "m:s",
+          ] | moment("mm:ss")
+        }}</strong>
       </div>
     </div>
 
-    <ElearningContentLecture
-      v-if="get(info, 'type', '') === 'LECTURE'"
-      :lesson="get(program, '0.lessons.0', null)"
-    />
+    <ElearningContentLecture v-if="get(info, 'type', '') === 'LECTURE'" />
 
-    <ElearningContentCourse :program="program" v-if="get(info, 'type', '') === 'COURSE'" />
+    <ElearningContentCourse v-if="get(info, 'type', '') === 'COURSE'" />
   </section>
 </template>
 
@@ -48,6 +46,7 @@ import { useEffect } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import ElearningContentLecture from "~/components/page/elearning/ElearningContentLecture";
 import ElearningContentCourse from "~/components/page/elearning/ElearningContentCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -57,15 +56,9 @@ export default {
     IconAngleDown,
     IconPlayCircle,
     ElearningContentLecture,
-    ElearningContentCourse
+    ElearningContentCourse,
   },
-  props: {
-    program: {},
-    info: {}
-  },
-  created() {
-    useEffect(this, this.handleGetLesson.bind(this), ["$route.params.id"]);
-  },
+
   computed: {
     title() {
       switch (get(this, "info.type", "")) {
@@ -78,21 +71,14 @@ export default {
         default:
           break;
       }
-    }
+    },
+    ...mapState("elearning/detail", {
+      info: "info",
+      program: "program",
+    }),
   },
   methods: {
     get,
-    async handleGetLesson() {
-      const options = {
-        params: {
-          elearning_id: get(this, "$route.params.id", "")
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-    }
-  }
+  },
 };
 </script>

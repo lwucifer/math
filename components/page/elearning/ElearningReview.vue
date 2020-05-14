@@ -76,19 +76,13 @@ import ElearningStars from "~/components/page/elearning/ElearningStars";
 import ElearningReviewComment from "~/components/page/elearning/ElearningReviewComment";
 import ElearningReviewButton from "~/components/page/elearning/ElearningReviewButton";
 import { ELEARNING_TYPES } from "~/utils/constants";
+import { mapState } from "vuex";
 
 export default {
   components: {
     ElearningStars,
     ElearningReviewComment,
     ElearningReviewButton,
-  },
-
-  props: {
-    info: {
-      type: Object,
-      default: () => ({}),
-    },
   },
 
   computed: {
@@ -106,6 +100,9 @@ export default {
         }
       }
     },
+    ...mapState("elearning/detail", {
+      info: "info",
+    }),
   },
 
   data() {

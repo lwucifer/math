@@ -23,18 +23,25 @@
       </div>
     </div>
 
-    <img class="d-block w-100 mt-4" :src="get(info, 'cover_url.high', '')" alt="">
+    <img
+      class="d-block w-100 mt-4"
+      :src="get(info, 'cover_url.high', '')"
+      alt=""
+    />
   </div>
 </template>
 
 <script>
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   name: "E-learningDetail",
 
-  props: {
-    info: {},
+  computed: {
+    ...mapState("elearning/detail", {
+      info: "info",
+    }),
   },
 
   methods: {
