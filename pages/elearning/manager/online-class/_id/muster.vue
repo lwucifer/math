@@ -97,11 +97,13 @@
               </div>
               <!--End filter form-->
 
-              <div class="d-flex mb-15">
-                <button class="color-primary bold">Cập nhật kết quả điểm danh</button>
-                <i class="ml-auto">*Kết quả điểm danh được cập nhật lần cuối vào lúc 10:00 AM, 18/10/2020</i>
+              <div class="d-flex-center mb-15">
+                <button class="color-primary bold d-flex-center" @click="getList">
+                  <IconRefresh class="fill-primary mr-2"/>
+                  Cập nhật kết quả điểm danh
+                </button>
+                <i class="ml-auto">*Kết quả điểm danh được cập nhật lần cuối vào lúc {{formatAMPM(currentTime, true)}}</i>
               </div>
-
               <!--Table-->
               <app-table
                 :heads="heads"
@@ -112,10 +114,10 @@
                 <template v-slot:cell(attendance_status)="{row, index}">
                   <td>
                     <div class="div-table">
-                      <app-checkbox :checked="row.attendance_status == 'M'" @change="updateStatus(row.online_attendance_id, 'M', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'K'" @change="updateStatus(row.online_attendance_id, 'K', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'P'" @change="updateStatus(row.online_attendance_id, 'P', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'C'" @change="updateStatus(row.online_attendance_id, 'C', index)"/>
+                      <app-checkbox label="M" :checked="row.attendance_status == 'M'" @change="updateStatus(row.online_attendance_id, 'M', index)"/>
+                      <app-checkbox label="K" :checked="row.attendance_status == 'K'" @change="updateStatus(row.online_attendance_id, 'K', index)"/>
+                      <app-checkbox label="P" :checked="row.attendance_status == 'P'" @change="updateStatus(row.online_attendance_id, 'P', index)"/>
+                      <app-checkbox label="C" :checked="row.attendance_status == 'C'" @change="updateStatus(row.online_attendance_id, 'C', index)"/>
                     </div>
                   </td>
                 </template>
@@ -159,6 +161,8 @@ import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconRefresh from '~/assets/svg/v2-icons/refresh_24px.svg?inline';
+
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import { mapState } from "vuex";
@@ -173,6 +177,7 @@ export default {
   layout: "manage",
     
   components: {
+    IconRefresh,
     IconHamberger,
     IconFilter,
     IconSearch,
@@ -187,6 +192,7 @@ export default {
 
   data() {
     return {
+      currentTime: new Date,
       lessonInfo: {},
       openModal: false,
       heads: [
@@ -202,7 +208,7 @@ export default {
         },
         {
           name: "attendance_status",
-          text: "<p class='text-center'>Điểm danh</p><div class='bottom'><span>M</span><span>K</span><span>P</span><span>C</span></div>",
+          text: "Điểm danh",
           sort: true
         },
         {
@@ -310,6 +316,7 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
           { params, id: lesson_id, after: 'attendances'}
         );
+        this.currentTime = new Date;
         this.lessons = this.get(this.stateAttendances, 'data.attendance_list.content', [])
         this.pagination.size = this.get(this.stateAttendances, 'data.attendance_list.size', 10)
         this.pagination.first = this.get(this.stateAttendances, 'data.attendance_list.first', 1)

@@ -92,9 +92,8 @@
       
       <template v-slot:actions="{row}">
         <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconUsersAlt class="fill-blue mr-2"/>Xem danh sách học sinh
+          <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
         </n-link>
-        <button @click="deleteRows(row.online_class_id)"><IconTimesCircle class="fill-secondary mr-2"/>Xóa</button>
       </template>
     </app-table>
     <!--End table-->
@@ -109,7 +108,7 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -128,7 +127,7 @@ export default {
     IconArrow,
     IconCalendar,
     IconTrash,
-    IconUsersAlt,
+    IconPeople,
     IconTimesCircle,
     IconHamberger
   },
