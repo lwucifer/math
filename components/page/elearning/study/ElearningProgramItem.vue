@@ -145,7 +145,7 @@ export default {
       "elearningSudyElearningExerciseList",
     ]),
 
-    ...mapMutations("event", ["setStudyMode", "setPayload"]),
+    ...mapMutations("event", ["setStudyMode", "setPayload", "setExerciseLoading"]),
 
     async handleStuty(lesson) {
       redirectWithParams({ lesson_id: get(lesson, "id", "") });
@@ -153,18 +153,21 @@ export default {
       if (get(lesson, "type", "") === "DOCS") {
         this.setStudyMode(STUDY_MODE.DOCS);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
       if (get(lesson, "type", "") === "ARTICLE") {
         this.setStudyMode(STUDY_MODE.ARTICLE);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
       if (get(lesson, "type", "") === "IMAGE") {
         this.setStudyMode(STUDY_MODE.IMAGE);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
