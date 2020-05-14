@@ -12,7 +12,7 @@
         >Yêu thích ({{total.favourites}})</a>
         <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
       </div>
-      <div style="width: 267px;margin-left:auto">
+      <div class="search__mycourses">
         <app-search placeholder="Tìm kiếm" />
       </div>
     </div>
