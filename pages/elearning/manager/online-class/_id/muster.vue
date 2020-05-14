@@ -16,7 +16,8 @@
               <!--Info group-->
               <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
               <div class="class-info mb-4 border">
-                <strong>
+                <strong class="d-flex-center mr-2">
+                  <IconClock/>
                   {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
                 </strong>
                 <div class="class-info-content mt-3">
@@ -133,7 +134,7 @@
             <div class="bottom-content">
               <div class="top">
                 <i >
-                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>{{lessonInfo.name}}</b> theo yêu cầu của giáo viên
                 </i>
               </div>
               <div class="bottom">
@@ -162,6 +163,7 @@ import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconRefresh from '~/assets/svg/v2-icons/refresh_24px.svg?inline';
+import IconClock from '~/assets/svg/icons/clock.svg?inline';
 
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
@@ -177,6 +179,7 @@ export default {
   layout: "manage",
     
   components: {
+    IconClock,
     IconRefresh,
     IconHamberger,
     IconFilter,
