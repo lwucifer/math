@@ -17,7 +17,7 @@
           <div class="slider-item" @click="$emit('click-item', item, index)">
             <CourseItem2
               size="sm"
-              :to="`/elearning/${item.id}`"
+              :to="`/elearning/${item.elearning_id}`"
               :image="get(item, 'avatar.medium', '')"
               :livestream="item && item.livestream && item.livestream.time"
               :name="item.name"
