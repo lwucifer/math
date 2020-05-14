@@ -44,7 +44,7 @@ export default {
     CreateSetting,
     CreateExercise,
     CreateExam,
-    ContentLecture,
+    ContentCourse,
   },
 
   // async fetch({ params, query, store }) {
@@ -61,7 +61,15 @@ export default {
       formActive: "general",
     };
   },
-  
+
+  mounted() {
+    console.log(this.formActive);
+  },
+
+  updated() {
+    console.log(this.formActive);
+  },
+
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);
   },
@@ -89,7 +97,6 @@ export default {
     },
 
     setFormActive(key) {
-      console.log(key);
       this.formActive = key;
     },
   },

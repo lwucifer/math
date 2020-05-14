@@ -106,9 +106,9 @@ export default {
     this.$store.dispatch("elearning/create/getLessons");
   },
 
-  updated() {
-    console.log(this.lesson, this.lessons);
-  },
+  // updated() {
+  //   console.log(this.lesson, this.lessons);
+  // },
 
   methods: {
     handleShowFormAdd() {

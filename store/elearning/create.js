@@ -53,10 +53,7 @@ const actions = {
         lessons.push(lesson);
       });
 
-      if (
-        get(state, "general.type", "") === "LECTURE" &&
-        get(lessons, "length", 0) === 1
-      ) {
+      if (get(lessons, "length", 0) === 1) {
         const res_lesson = await Service.getLesson(
           this.$axios,
           get(lessons, "0.id", "")

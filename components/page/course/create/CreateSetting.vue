@@ -254,7 +254,7 @@ export default {
         this.free = 2;
       }
     },
-    
+
     handleCheckSubmit() {
       this.handleSetPercent();
       if (this.payload.comment_allow === "") return (this.is_submit = false);
@@ -328,6 +328,8 @@ export default {
     },
 
     handleReset() {
+      console.log(1);
+      this.free = '';
       this.handleChangeSetting();
     },
 

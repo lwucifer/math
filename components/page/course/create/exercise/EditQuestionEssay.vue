@@ -101,8 +101,6 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
-    }),
-    ...mapState("elearning/create", {
       lesson: "lesson",
     }),
   },
@@ -134,7 +132,8 @@ export default {
         if (get(this, "exercise.category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");
         } else {
-          this.$store.dispatch("elearning/create/getLessons");
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
         }
 
         return;

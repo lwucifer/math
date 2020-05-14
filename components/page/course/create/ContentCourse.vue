@@ -19,7 +19,7 @@
               <a
                 class="text-decoration-none d-inline-flex align-items-center"
                 href
-                @click.prevent="handleShowAddChapter"
+                @click.prevent="toggleAddChapter"
               >
                 <IconAdd width="14px" height="14px" class="mr-2" />&nbsp;Thêm
                 chương
@@ -30,8 +30,7 @@
           <div class="cc-box__body">
             <CreateChapter
               v-if="isShowFormAddChapter"
-              @handleCancelAddChapter="handleCancelAddChapter"
-              @handleCreateChapterSuccess="handleCreateChapterSuccess"
+              @cancel="toggleAddChapter"
             />
 
             <ListChapter />
@@ -110,16 +109,8 @@ export default {
   methods: {
     get,
 
-    handleCreateChapterSuccess() {
-      this.isShowFormAddChapter = false;
-    },
-
-    handleShowAddChapter() {
+    toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-    },
-
-    handleCancelAddChapter() {
-      this.isShowFormAddChapter = false;
     },
   },
 };
