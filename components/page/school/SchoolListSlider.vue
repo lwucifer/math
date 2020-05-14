@@ -5,9 +5,9 @@
         <span class="school-list-box__title__name">{{ category.name }}</span>
         <span class="school-list-box__title__description">
           (
-          <b>{{ schoolNum }}</b> trường học -
-          <b>{{ teacherNum }}</b> giáo viên -
-          <b>{{ studentNum }}</b> học sinh )
+          <b>{{ totalSchool }}</b> trường học -
+          <b>{{ totalTeacher }}</b> giáo viên -
+          <b>{{ totalStudent }}</b> học sinh )
         </span>
       </div>
       <n-link class="school-list-box__title__submit-btn" :to="`/school/search?type=${category.type}`">
@@ -17,17 +17,17 @@
     </div>
     <!--List schools-->
     <div class="school-list-box__content">
-        <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
-          <template slot="default" slot-scope="{ classes }">
-            <div
-              v-for="(school, index) in schools"
-              :key="index"
-              :class="classes"
-            >
-              <school-item :school="school" />
-            </div>
-          </template>
-        </app-carousel>
+      <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
+        <template slot="default" slot-scope="{ classes }">
+          <div
+            v-for="(school, index) in schools"
+            :key="index"
+            :class="classes"
+          >
+            <school-item :school="school" />
+          </div>
+        </template>
+      </app-carousel>
     </div>
   </div>
 </template>
@@ -54,9 +54,21 @@ export default {
       type: Object,
       required: true
     },
-    schoolSearch: {
-      type: Object,
-      default: () => {}
+    schools: {
+      type: Array,
+      default: () => []
+    },
+    totalSchool: {
+      type: String | Number,
+      default: 0
+    },
+    totalTeacher: {
+      type: String | Number,
+      default: 0
+    },
+    totalStudent: {
+      type: String | Number,
+      default: 0
     }
   },
 
@@ -111,12 +123,12 @@ export default {
   },
 
   computed: {
-    schools() {
-      const type = get(this, "category.type", "");
-      const schoolList = get(this, `schoolSearch.data.content`, []);
-      console.log("[schools]", type, schoolList, schoolList.filter(sc => sc.type == type))
-      return schoolList.filter(sc => sc.type == type);
-    },
+    // schools() {
+    //   const type = get(this, "category.type", "");
+    //   const schoolList = get(this, `schoolSearch.data.content`, []);
+    //   console.log("[schools]", type, schoolList, schoolList.filter(sc => sc.type == type))
+    //   return schoolList.filter(sc => sc.type == type);
+    // },
 
     schoolNum() {
       return this.schools.length || 0;

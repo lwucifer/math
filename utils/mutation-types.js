@@ -372,6 +372,10 @@ export const ELEARNING_SCHOOL_SEARCH = {
     SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList",
 };
 
+export const ELEARNING_SCHOOL_STANDALONE = {
+    SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
+};
+
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
     SET_GROUP_LIST: "setGroupList",
