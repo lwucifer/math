@@ -33,15 +33,26 @@
       </div>
     </template>
 
-    <app-button
-      v-if="
-        get(info, 'is_study', false) || get(info, 'elearning_price.free', false)
-      "
-      fullWidth
-      class="text-uppercase body-2 font-weight-bold mb-4"
-      @click="handleStudy"
-      >Tham gia học</app-button
-    >
+    <div v-if="get(info, 'elearning_price.free', false)">
+      <app-button
+        @click="handleStudy"
+        v-if="get(info, 'is_study', false)"
+        color="primary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+      >
+        Vào học ngay
+      </app-button>
+      <app-button
+        v-else
+        fullWidth
+        class="text-uppercase body-2 font-weight-bold mb-4"
+        @click="handleStudy"
+        >Tham gia học</app-button
+      >
+    </div>
+
     <app-button
       v-else
       fullWidth
@@ -50,24 +61,14 @@
       >CHỌN MUA</app-button
     >
 
-    <app-button
+    <!-- <app-button
       color="primary"
       fullWidth
       square
       class="text-uppercase mt-3 mb-3"
     >
-      Vào học ngay
-    </app-button>
-
-    <app-button
-      color="primary"
-      fullWidth
-      square
-      class="text-uppercase mt-3 mb-3"
-    >
-      <IconDone24px /> &nbsp;
-      BÀI GIẢNG ĐÃ HOÀN THÀNH
-    </app-button>
+      <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+    </app-button> -->
 
     <app-alert
       v-if="get(info, 'is_study', false)"
@@ -93,7 +94,13 @@
       </li>
       <li>
         <IconTimer class="icon" />
-        Thời lượng: {{ [info.duration && info.duration != "0:0" ? info.duration : "1:0", "m:s"] | moment("mm:ss") }}
+        Thời lượng:
+        {{
+          [
+            info.duration && info.duration != "0:0" ? info.duration : "1:0",
+            "m:s",
+          ] | moment("mm:ss")
+        }}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -137,9 +144,9 @@ import IconInsertComment from "~/assets/svg/v2-icons/insert_comment_24px.svg?inl
 import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
-import IconDone24px from '~/assets/svg/v2-icons/done_24px.svg?inline';
+import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
 
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
@@ -158,14 +165,7 @@ export default {
     IconRemoveRedEye,
     IconBxsShare,
     PaymentModal,
-    IconDone24px
-  },
-  props: {
-    info: {
-      type: Object,
-      default: () => ({}),
-    },
-    program: {},
+    IconDone24px,
   },
 
   data() {
@@ -177,10 +177,10 @@ export default {
 
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
-  },
-
-  created() {
-    console.log("this.info", this.info);
+    ...mapState("elearning/detail", {
+      info: "info",
+      program: "program",
+    }),
   },
 
   methods: {
