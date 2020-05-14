@@ -204,6 +204,7 @@ export default {
     },
     handleChangedCourse(val) {
       this.filter.course = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},

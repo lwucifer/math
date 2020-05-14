@@ -219,6 +219,7 @@ export default {
     },
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},

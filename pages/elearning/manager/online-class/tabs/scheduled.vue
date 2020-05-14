@@ -238,6 +238,7 @@ export default {
 
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
+      this.getList();
     },
 
     selectRow(data) {
