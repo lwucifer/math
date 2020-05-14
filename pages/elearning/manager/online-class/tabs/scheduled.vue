@@ -22,24 +22,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 19rem">
+      <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -56,7 +56,7 @@
 
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item" @click="deleteRows">
+      <div class="filter-form__item" @click="showModalConfirm = true">
         <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
           <IconTrash class="fill-white"/>
           <span class="ml-3 color-white">Hủy lớp</span>
@@ -102,6 +102,18 @@
       </template>
     </app-table>
     <!--End table-->
+
+    <app-modal-confirm
+        v-if="showModalConfirm"
+        :confirmLoading="confirmLoading"
+        @ok="deleteRows"
+        :width="550"
+        @cancel="showModalConfirm = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn hủy lớp học?"
+        description="Bạn sẽ không thể khôi phục lớp học bị xóa."
+      />
   </div>
 </template>
 
@@ -139,6 +151,8 @@ export default {
 
   data() {
     return {
+      showFilter: false,
+      showModalConfirm: false,
       rowClassId: null,
       tab: 1,
       heads: [
@@ -199,6 +213,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          elearning_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -291,14 +316,16 @@ export default {
       }
     },
 
-    async deleteRows(id = null) {
-      let ids = id ? { online_class_ids: [id] } : { online_class_ids: [...this.ids] };
+    async deleteRows() {
+      let ids = { online_class_ids: [...this.ids] };
+      
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
         JSON.stringify(ids)
       );
 
       if (doDelete.success) {
+        this.showModalConfirm = false;
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);

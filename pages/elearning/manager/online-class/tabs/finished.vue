@@ -22,24 +22,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 19rem">
+      <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -134,6 +134,7 @@ export default {
 
   data() {
     return {
+      showFilter: false,
       tab: 1,
       heads: [
         {
@@ -192,6 +193,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          elearning_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
