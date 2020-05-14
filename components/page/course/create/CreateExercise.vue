@@ -1,17 +1,16 @@
 <template>
   <div>
-    <create-action :isShowAction="false" />
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">Bài tập</h4>
       </div>
 
       <div class="pt-4 pl-4 pr-4">
-        <app-alert type="info" class="mb-2" show-close>
+        <!-- <app-alert type="info" class="mb-2" show-close>
           Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
           bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
           gửi lên để được xét duyệt.
-        </app-alert>
+        </app-alert> -->
 
         <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
           Chọn bài học liên quan
@@ -33,7 +32,7 @@
 
         <FormCreateExercise
           v-if="isShowFormAdd"
-          @handleCancel="handleCancelAddCreate"
+          @cancel="handleCancelAddCreate"
           :lesson="lesson"
           :category="category"
         />
@@ -59,7 +58,6 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
-
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
@@ -92,53 +90,27 @@ export default {
     return {
       isShowButtonCreate: true,
       isShowFormAdd: false,
-      lessons: [],
-      // lesson: null,
       category: "EXERCISE",
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
     ...mapState("elearning/create", {
+      general: "general",
       lesson: "lesson",
+      lessons: "lessons",
     }),
   },
 
   mounted() {
-    this.getLessons();
+    this.$store.dispatch("elearning/create/getLessons");
   },
 
   updated() {
-    console.log(this.lesson);
+    console.log(this.lesson, this.lessons);
   },
 
   methods: {
-    handleRefreshQuestion() {
-      this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
-    },
-
-    getLesson(lesson_id) {
-      this.$store.dispatch(`elearning/create/getLesson`, lesson_id);
-    },
-
-    handleRefreshExcercises() {
-      const options = {
-        lesson_id: get(this, "lesson.id", ""),
-        progress: {
-          params: {
-            elearning_id: getParamQuery("elearning_id"),
-          },
-        },
-      };
-      this.$store.dispatch(`elearning/create/update`, options);
-      this.isShowFormAdd = false;
-      this.isShowButtonCreate = true;
-    },
-
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
@@ -147,45 +119,6 @@ export default {
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    async getLessons() {
-      const elearning_id = get(this, "general.id", "");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        let lessons = [];
-        get(res, "data", []).map((lesson) => {
-          lesson.value = lesson.id;
-          lesson.text = lesson.name;
-          lessons.push(lesson);
-        });
-        this.lessons = lessons;
-        if (get(this, "general.type", "") === "LECTURE") {
-          this.getLesson(get(lessons, "0.id", ""));
-        }
-      }
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
     },
 
     get,

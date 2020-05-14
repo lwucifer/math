@@ -132,7 +132,7 @@
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         square
-        @click="$emit('handleCancel')"
+        @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -225,15 +225,8 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+        this.$store.dispatch("elearning/create/getLessons");
+        this.$emit("cancel");
         return;
       }
 

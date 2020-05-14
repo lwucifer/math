@@ -29,8 +29,8 @@ import CreateGeneralInformation from "~/components/page/course/create/CreateGene
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExercise from "~/components/page/course/create/CreateExercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
-import ContentLecture from "~/components/page/course/create/lecture/ContentLecture";
-import ContentCourse from "~/components/page/course/create/course/ContentCourse";
+import ContentLecture from "~/components/page/course/create/ContentLecture";
+import ContentCourse from "~/components/page/course/create/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 

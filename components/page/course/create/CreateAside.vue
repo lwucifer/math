@@ -100,6 +100,9 @@ export default {
       progress: "progress",
       lessons_lecture: "lessons_lecture",
       chapters: "chapters",
+      setting: "setting",
+      lessons: "lessons",
+      exams: "exams",
     }),
     is_submit() {
       return (
@@ -120,6 +123,24 @@ export default {
 
   watch: {
     general: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
+    exams: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
+    lessons: {
+      handler: function() {
+        this.getProgress();
+      },
+      deep: true,
+    },
+    setting: {
       handler: function() {
         this.getProgress();
       },

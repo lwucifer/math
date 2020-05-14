@@ -10,7 +10,7 @@
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
-    <div class="mb-4" v-show="category === 'TEST'">
+    <!-- <div class="mb-4" v-show="category === 'TEST'">
       <h5 for="require" class="mb-3">{{ title_required }}</h5>
 
       <app-radio-group>
@@ -30,7 +30,7 @@
           >Không</app-radio
         >
       </app-radio-group>
-    </div>
+    </div> -->
 
     <div class="mb-4">
       <h5 for="require" class="mb-3">Loại {{ title }}</h5>
@@ -108,13 +108,32 @@
     <div class="mb-4">
       <h5 class="font-weight-bold mb-4">Cài đặt thời gian mở đề</h5>
       <app-radio-group class="mb-4">
-        <app-radio name="group3" value="1" class="mr-4">Có</app-radio>
-        <app-radio name="group3" value="0">Không</app-radio>
+        <app-radio
+          :checked="is_open === 1"
+          @click="is_open = 1"
+          name="group3"
+          value="1"
+          class="mr-4"
+          >Có</app-radio
+        >
+        <app-radio
+          :checked="is_open === 0"
+          @click="is_open = 0"
+          name="group3"
+          value="0"
+          >Không</app-radio
+        >
       </app-radio-group>
 
-      <app-date-picker />
+      <div v-show="is_open">
+        <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
 
-      <app-date-picker type="time" value-format="h:mm A" />
+        <app-date-picker
+          @input="handleSelectTime"
+          type="time"
+          value-format="hh:mm:ss"
+        />
+      </div>
     </div>
 
     <div class="d-flex justify-content-end">
@@ -123,7 +142,7 @@
         color="disabled"
         class="font-weight-semi-bold mr-4"
         square
-        @click="$emit('handleCancel')"
+        @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -165,15 +184,6 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
-    ...mapState("elearning/create", {
-      lesson: "lesson",
-    }),
-  },
-
-  computed: {
     title() {
       return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
     },
@@ -182,13 +192,17 @@ export default {
         ? "Bài kiểm tra bắt buộc?"
         : "Bài tập bắt buộc?";
     },
+    ...mapState("elearning/create", {
+      general: "general",
+      lesson: "lesson",
+    }),
   },
 
   data() {
     return {
       payload: {
         index: 1,
-        elearning_id: getParamQuery("elearning_id"),
+        elearning_id: '',
         required: get(this, "category", "") === "TEST" ? 1 : "",
         title: "",
         type: "",
@@ -196,9 +210,13 @@ export default {
         reworks: 0,
         duration: 0,
         category: this.category,
+        open_time: "",
       },
       showModalConfirm: false,
       confirmLoading: false,
+      is_open: 0,
+      date: "",
+      time: "",
     };
   },
 
@@ -207,10 +225,21 @@ export default {
       this.showModalConfirm = true;
     },
 
+    handleSelectDate(date) {
+      this.date = date;
+    },
+
+    handleSelectTime(time) {
+      this.time = time;
+    },
+
     async handleOk() {
       this.confirmLoading = true;
 
-      this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.elearning_id = get(this, "general.id", "");
+      if (this.is_open == 1) {
+        this.payload.open_time = `${this.date} ${this.time}`;
+      }
 
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
@@ -221,15 +250,8 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+        this.$store.dispatch("elearning/create/getExams");
+        this.$emit("cancel");
         return;
       }
 

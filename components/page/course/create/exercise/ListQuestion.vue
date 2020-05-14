@@ -35,15 +35,13 @@
     <div v-else>
       <EditQuestionChoice
         v-if="get(question, 'type', '') === 'CHOICE'"
-        @handleCancelAddQuestion="handleCancelAddQuestion"
-        @handleRefreshQuestion="handleRefreshQuestion"
+        @cancel="toggleAddQuestion"
         :question="question"
         :exercise="exercise"
       />
       <EditQuestionEssay
         v-else
-        @handleCancelAddQuestion="handleCancelAddQuestion"
-        @handleRefreshQuestion="handleRefreshQuestion"
+        @cancel="toggleAddQuestion"
         :question="question"
         :exercise="exercise"
       />
@@ -109,7 +107,7 @@ export default {
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
     },
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     ...mapState("elearning/create", {
@@ -136,15 +134,13 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          this.$store.dispatch("elearning/create/getLessons");
+        }
+
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -155,13 +151,8 @@ export default {
       this.confirmLoading = false;
     },
 
-    handleCancelAddQuestion() {
-      this.isShowEditQuestion = false;
-    },
-
-    handleRefreshQuestion() {
-      this.isShowEditQuestion = false;
-      this.$emit("handleRefreshQuestion");
+    toggleAddQuestion() {
+      this.isShowEditQuestion = !this.isShowEditQuestion;
     },
 
     get,

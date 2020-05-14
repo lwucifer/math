@@ -26,10 +26,6 @@ export default {
     ChapterItem,
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
-
   computed: {
     ...mapState("elearning/create", {
       chapters: "chapters",
