@@ -1,11 +1,13 @@
 <template>
   <div class="e-exercise">
-    <div class="e-exercise-components">
+    <div class="e-exercise-components" v-if="!loadingExercise">
       <ElearningExerciseList v-if="studyMode == studyModeDoExercise"/>
       <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode"/>
       <ElearningExerciseDoExercise v-else-if="studyMode == doingMode"/>
       <ElearningExerciseResults v-else-if="studyMode == reviewMode"/>
     </div>
+  
+    <div class="text-center w-100 pt-md" v-if="loadingExercise"><app-spin /></div>
 
     <div class="e-exercise-bottom">
       <button class="e-exercise-bottom__button" type="button">
@@ -37,6 +39,7 @@ export default {
       beforeBeginMode: STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN,
       doingMode: STUDY_MODE.DO_EXERCISE_DOING,
       reviewMode: STUDY_MODE.REVIEW_EXERCISE_RESULT,
+      // loading: true,
     }
   },
 
@@ -52,7 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapState("event", ['studyMode'])
+    ...mapState("event", ['studyMode', 'loadingExercise'])
   },
 
   watch: {

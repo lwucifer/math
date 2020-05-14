@@ -61,7 +61,7 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    ...mapGetters("elearning/study/study-exercise", ["tests"])
+    ...mapGetters("elearning/study/study-exercise", ["tests"]),
   },
 
   methods: {
@@ -78,6 +78,13 @@ export default {
 
       // emit studyMode=DO_EXERCISE
       this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+
+      // get list TEST
+      const testReq = {
+        elearning_id: this.progress.id,
+        category: EXERCISE_CATEGORIES.TEST,
+      }
+      this.elearningSudyElearningExerciseList(testReq);
     }
   }
 };
