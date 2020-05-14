@@ -29,8 +29,8 @@ import CreateGeneralInformation from "~/components/page/course/create/CreateGene
 import CreateSetting from "~/components/page/course/create/CreateSetting";
 import CreateExercise from "~/components/page/course/create/CreateExercise";
 import CreateExam from "~/components/page/course/create/CreateExam";
-import ContentLecture from "~/components/page/course/create/lecture/ContentLecture";
-import ContentCourse from "~/components/page/course/create/course/ContentCourse";
+import ContentLecture from "~/components/page/course/create/ContentLecture";
+import ContentCourse from "~/components/page/course/create/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 
@@ -44,7 +44,7 @@ export default {
     CreateSetting,
     CreateExercise,
     CreateExam,
-    ContentLecture,
+    ContentCourse,
   },
 
   // async fetch({ params, query, store }) {
@@ -61,7 +61,15 @@ export default {
       formActive: "general",
     };
   },
-  
+
+  mounted() {
+    //
+  },
+
+  updated() {
+    console.log(this.formActive);
+  },
+
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);
   },
@@ -89,7 +97,6 @@ export default {
     },
 
     setFormActive(key) {
-      console.log(key);
       this.formActive = key;
     },
   },

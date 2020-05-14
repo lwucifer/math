@@ -160,6 +160,10 @@ class Exercise {
     if (payload.category) {
       this.category = payload.category;
     }
+
+    if (payload.open_time) {
+      this.open_time = payload.open_time;
+    }
   }
 }
 

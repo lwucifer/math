@@ -82,6 +82,7 @@
 
         <app-input
           v-model="payload.fee"
+          @onFocus="(event) => event.target.select()"
           type="number"
           class="text-primary font-weight-semi-bold w-170"
         >
@@ -101,6 +102,7 @@
         <div class="d-flex align-item-center">
           <app-input
             v-model="payload.price"
+            @onFocus="(event) => event.target.select()"
             type="number"
             class="text-primary font-weight-semi-bold w-170 mb-0"
           >
@@ -209,7 +211,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchSetting();
+    this.$store.dispatch(`elearning/create/getSetting`);
     useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 
@@ -223,11 +225,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-setting", {
-      setting: "setting",
-    }),
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
+      setting: "setting",
     }),
   },
 
@@ -256,6 +256,7 @@ export default {
         this.free = 2;
       }
     },
+
     handleCheckSubmit() {
       this.handleSetPercent();
       if (this.payload.comment_allow === "") return (this.is_submit = false);
@@ -270,21 +271,6 @@ export default {
         }
       }
       this.is_submit = true;
-    },
-
-    fetchSetting() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        const options = {
-          params: {
-            elearning_id,
-          },
-        };
-        this.$store.dispatch(
-          `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
-          options
-        );
-      }
     },
 
     handleChangePrivacy(privacy) {
@@ -324,8 +310,7 @@ export default {
       this.handleCancelSetting();
 
       if (get(result, "success", false)) {
-        this.getProgress();
-        this.fetchSetting();
+        this.$store.dispatch(`elearning/create/getSetting`);
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -344,20 +329,9 @@ export default {
       this.confirmLoading = false;
     },
 
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    },
-
     handleReset() {
+      this.percent_price = "";
+      this.free = "";
       this.handleChangeSetting();
     },
 

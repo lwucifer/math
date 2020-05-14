@@ -18,8 +18,7 @@
 <script>
 const IconExclamationTriangle = () =>
   import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
-const IconInfoCircle = () =>
-  import("~/assets/svg/design-icons/info-circle.svg?inline");
+const IconAlert = () => import("~/assets/svg/v2-icons/alert/error_24px.svg?inline")
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
@@ -37,7 +36,7 @@ export default {
       type: String,
       default: "primary",
       validator: value =>
-        ["primary", "secondary", "success", "danger", "warning"].includes(value)
+        ["primary", "secondary", "success", "danger", "warning", "info"].includes(value)
     },
     size: {
       type: String,
@@ -61,7 +60,7 @@ export default {
         "app-alert--warning": this.type === "warning",
         "app-alert--light": this.type === "light",
         "app-alert--dark": this.type === "dark",
-         "app-alert--info": this.type === "info",
+        "app-alert--info": this.type === "info",
         // Options classes
         "app-alert--has-close": this.showClose,
         "app-alert--size-sm": this.size === "sm"
@@ -75,7 +74,7 @@ export default {
           break;
 
         case "warning":
-          return IconInfoCircle;
+          return IconAlert;
           break;
 
         default:

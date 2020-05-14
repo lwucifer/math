@@ -17,7 +17,7 @@
             <a
               @click="handleAddLesson($event)"
               class="d-flex align-items-center text-primary"
-              v-if="!get(lessons, 'data.length', 0)"
+              v-if="!get(lessons, 'length', 0)"
               ><IconAdd width="14px" height="14px" class="mr-2" /> Thêm bài
               học</a
             >
@@ -25,7 +25,7 @@
             <button
               class="cc-box__btn cc-box__btn-collapse"
               @click="isShowDetailLesson = !isShowDetailLesson"
-              v-if="get(lessons, 'data.length', 0)"
+              v-if="get(lessons, 'length', 0)"
             >
               <IconAngleDown class="icon" v-if="!isShowDetailLesson" />
               <IconAngleUp class="icon" v-else />
@@ -169,7 +169,7 @@ export default {
       };
       const payload = createPayloadAddCourse(data);
       const result = await this.$store.dispatch(
-        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
+        `elearning/create/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
         payload
       );
 

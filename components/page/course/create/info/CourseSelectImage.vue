@@ -12,11 +12,7 @@
             @error="handleError"
             :id="id"
           />
-          <span
-            v-if="!cropper"
-            class="cgi-upload-avt-close-preview"
-            @click.stop="removeImage"
-          >
+          <span class="cgi-upload-avt-close-preview" @click.stop="removeImage">
             <IconClose />
           </span>
         </div>
@@ -118,6 +114,10 @@ export default {
     removeImage() {
       let image = document.getElementById(this.id);
       image.src = this.default_image;
+      if (this.cropper) {
+        this.cropper.destroy();
+      }
+      this.error = false;
       this.cropper = null;
       this.$emit("onSelectFile", "");
     },
@@ -140,6 +140,7 @@ export default {
       this.cropper = new Cropper(image, {
         aspectRatio: that.minWidth / that.minHeight,
         zoomable: false,
+        movable: false,
         autoCropArea: 1,
         crop(event) {
           that.error = false;

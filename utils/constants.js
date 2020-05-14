@@ -188,3 +188,9 @@ export const PAGE_SIZE = {
     DEFAULT: 10,
     SCHOOL_16: 16,
 }
+
+export const DAY_SECTION = {
+    MORNING: 1,
+    AFTERNOON: 2,
+    EVENING: 3,
+}

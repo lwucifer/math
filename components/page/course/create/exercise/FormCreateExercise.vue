@@ -81,7 +81,8 @@
         >
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           class="mb-0 ce-input-with-unit mt-3"
           id="time"
           size="sm"
@@ -96,7 +97,8 @@
         <label for="point" class="heading-5 font-weight-bold">Điểm đạt</label>
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           min="0"
           max="10"
           class="mb-0 ce-input-with-unit mt-3"
@@ -115,8 +117,9 @@
         >
 
         <app-input
-          type="number"
+          type="text"
           class="mb-0 mt-3"
+          @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
           style="width: 49px"
@@ -132,7 +135,7 @@
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         square
-        @click="$emit('handleCancel')"
+        @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -225,15 +228,15 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+
+        if (get(this, "category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
+        this.$emit("cancel");
         return;
       }
 

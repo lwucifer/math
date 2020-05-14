@@ -8,7 +8,7 @@ import Study from "~/services/elearning/study/Study";
  */
 const state = () => ({
   elearningStudy: [],
-  timetable: [],
+  timetables: [],
 });
 
 /**
@@ -60,7 +60,7 @@ const mutations = {
     state,
     _timetable
   ) {
-    state.timetable = _timetable;
+    state.timetables = _timetable;
   }
 };
 

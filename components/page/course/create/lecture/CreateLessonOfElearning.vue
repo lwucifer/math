@@ -161,7 +161,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     submit() {

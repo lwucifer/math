@@ -25,6 +25,7 @@ const state = () => ({
     attachments: []
   },
   currentQuestionId: null,
+  autoSubmission: null,
 });
 
 /**
@@ -388,6 +389,13 @@ const mutations = {
     _currQuestionId
   ) {
     state.currentQuestionId = _currQuestionId;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_AUTO_SUBMISSION](
+    state,
+    _auto
+  ) {
+    state.autoSubmission = _auto;
   },
 };
 

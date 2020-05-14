@@ -103,7 +103,7 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "defaultName.id", ""),
+          id: get(this, "chapter.id", ""),
         },
       };
       const res = await this.$store.dispatch(
@@ -132,7 +132,7 @@ export default {
     },
     async handleEditChaperName() {
       const data = {
-        id: get(this, "defaultName.id", ""),
+        id: get(this, "chapter.id", ""),
         name: this.chaperNameModel,
       };
       const payload = createPayloadAddContentCourse(data);
