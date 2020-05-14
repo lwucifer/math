@@ -13,6 +13,7 @@
         v-if="school.name"
         class="school-item__info__title"
         :to="'/school/' + school.id"
+        :title="school.name"
       >
         {{ school.name }}
       </n-link>
