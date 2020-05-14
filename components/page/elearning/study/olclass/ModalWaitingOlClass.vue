@@ -109,8 +109,8 @@ export default {
     setCountdown() {
       let seconds = this.targetClass.time_count_down || 0; // in seconds
       const duration = get(this.targetClass, "extra_info.duration", 0);
-      // const session_starting_position = get(this.targetClass, "session_starting_position", 0);
-      const session_starting_position = 1;
+      const session_starting_position = get(this.targetClass, "session_starting_position", 0);
+      // const session_starting_position = 1;
       const isStudentRole = this.isStudentRole;
 
       interval = setInterval(() => {
@@ -121,9 +121,7 @@ export default {
         if (seconds <= 0) {
           // auto join to room
           const sessions = this.targetClass.sessions || [];
-          const zoom = sessions.find(
-            s => s.position == session_starting_position
-          );
+          const zoom = sessions[session_starting_position];
 
           if (!zoom) return;
           this.currentZoom = zoom;
