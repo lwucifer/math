@@ -33,15 +33,6 @@ export default {
     }),
   },
 
-  watch: {
-    general: {
-      handler: function() {
-        this.$store.dispatch(`elearning/create/getContent`);
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     get,
   },
