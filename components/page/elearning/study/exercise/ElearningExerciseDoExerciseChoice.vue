@@ -16,8 +16,7 @@
         href
         class="text-decoration-none ml-5"
         @click.prevent="handleShowListQuestion"
-        >Danh sách câu hỏi</a
-      >
+      >Danh sách câu hỏi</a>
     </div>
 
     <div class="e-exercise-choose bg-white pa-3 mb-4">
@@ -34,8 +33,7 @@
           :key="index"
           :value="ans.id"
           :checked="ans.id == answer"
-          >{{ ans.content }}</app-radio
-        >
+        >{{ ans.content }}</app-radio>
         <!-- <app-radio>Đáp án số 2</app-radio>
         <app-radio>Đáp án số 3</app-radio>
         <app-radio :value="3">Đáp án số 4</app-radio>-->
@@ -53,21 +51,13 @@
         >
           <IconArrowBack class="icon fill-opacity-1 body-1 mr-2" />Quay lại
         </app-button>
-        <app-button
-          size="sm"
-          @click.prevent="handleQuestionContinue"
-          :disabled="isDisableNext"
-        >
+        <app-button size="sm" @click.prevent="handleQuestionContinue" :disabled="isDisableNext">
           Tiếp tục
           <IconArrowForward class="icon fill-opacity-1 body-1 ml-2" />
         </app-button>
       </div>
 
-      <app-button
-        size="sm"
-        color="info"
-        @click.prevent="modalConfirmSubmit=true"
-      >
+      <app-button size="sm" color="info" @click.prevent="modalConfirmSubmit=true">
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
@@ -94,6 +84,13 @@
       @ok="handleQuestionSubmission"
       @close="modalConfirmSubmit = false"
     ></app-modal-confirm>
+
+    <app-modal-notify
+      v-if="isShowResultCompleteStudy"
+      title="Chúc mừng bạn đã hoàn thành bài tập"
+      :footer="false"
+      @ok="isShowResultCompleteStudy = false"
+    ></app-modal-notify>
   </div>
 </template>
 
@@ -138,7 +135,8 @@ export default {
       questionNo: this.questionId,
       answer: null,
       modalListQuestions: false,
-      modalConfirmSubmit: false
+      modalConfirmSubmit: false,
+      isShowResultCompleteStudy: false
     };
   },
 
@@ -149,6 +147,8 @@ export default {
       "currentExerciseAnswers",
       "currentElearningId",
       "currentQuestionId",
+      "autoSubmission",
+      "currentExercise"
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -228,6 +228,7 @@ export default {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;
+          this.isShowResultCompleteStudy = true;
           this.reNewGetElearningProgress();
         }
       });
@@ -249,7 +250,7 @@ export default {
 
     handleChangedQuestionNumber(_questionIdByNav) {
       console.log("[handleChangedQuestionNumber]", _questionIdByNav);
-      if(_questionIdByNav) {
+      if (_questionIdByNav) {
         // nav to question from modal list question
         this.questionNo = _questionIdByNav;
       }
@@ -302,10 +303,17 @@ export default {
 
     currentQuestionId(_newVal) {
       console.log("[currentQuestionId] watch", _newVal);
-      if(_newVal) {
+      if (_newVal) {
         this.handleChangedQuestionNumber(_newVal);
         this.modalListQuestions = false;
       }
+    },
+
+    autoSubmission(_newVal) {
+      console.log("[autoSubmission]", _newVal);
+      // if (this.currentExercise.id == _newVal.id) {
+      //   this.handleQuestionSubmission();
+      // }
     }
   }
 };
