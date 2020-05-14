@@ -140,6 +140,7 @@ export default {
       this.cropper = new Cropper(image, {
         aspectRatio: that.minWidth / that.minHeight,
         zoomable: false,
+        movable: false,
         autoCropArea: 1,
         crop(event) {
           that.error = false;

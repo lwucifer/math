@@ -61,7 +61,8 @@
         >
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           class="mb-0 ce-input-with-unit mt-3"
           id="time"
           size="sm"
@@ -76,7 +77,8 @@
         <label for="point" class="heading-5 font-weight-bold">Điểm đạt</label>
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           min="0"
           max="10"
           class="mb-0 ce-input-with-unit mt-3"
@@ -95,8 +97,9 @@
         >
 
         <app-input
-          type="number"
+          type="text"
           class="mb-0 mt-3"
+          @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
           style="width: 49px"
@@ -202,7 +205,7 @@ export default {
     return {
       payload: {
         index: 1,
-        elearning_id: '',
+        elearning_id: "",
         required: get(this, "category", "") === "TEST" ? 1 : "",
         title: "",
         type: "",

@@ -82,6 +82,7 @@
 
         <app-input
           v-model="payload.fee"
+          @onFocus="(event) => event.target.select()"
           type="number"
           class="text-primary font-weight-semi-bold w-170"
         >
@@ -101,6 +102,7 @@
         <div class="d-flex align-item-center">
           <app-input
             v-model="payload.price"
+            @onFocus="(event) => event.target.select()"
             type="number"
             class="text-primary font-weight-semi-bold w-170 mb-0"
           >
@@ -328,8 +330,8 @@ export default {
     },
 
     handleReset() {
-      console.log(1);
-      this.free = '';
+      this.percent_price = "";
+      this.free = "";
       this.handleChangeSetting();
     },
 
