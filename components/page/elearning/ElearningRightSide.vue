@@ -47,8 +47,27 @@
       fullWidth
       class="text-uppercase body-2 font-weight-bold mb-4"
       @click.prevent="handleAddToCart"
-      >Chọn mua</app-button
+      >CHỌN MUA</app-button
     >
+
+    <app-button
+      color="primary"
+      fullWidth
+      square
+      class="text-uppercase mt-3 mb-3"
+    >
+      Vào học ngay
+    </app-button>
+
+    <app-button
+      color="primary"
+      fullWidth
+      square
+      class="text-uppercase mt-3 mb-3"
+    >
+      <IconDone24px /> &nbsp;
+      BÀI GIẢNG ĐÃ HOÀN THÀNH
+    </app-button>
 
     <app-alert
       v-if="get(info, 'is_study', false)"
@@ -118,6 +137,7 @@ import IconInsertComment from "~/assets/svg/v2-icons/insert_comment_24px.svg?inl
 import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
+import IconDone24px from '~/assets/svg/v2-icons/done_24px.svg?inline';
 
 import { mapActions, mapGetters } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
@@ -138,6 +158,7 @@ export default {
     IconRemoveRedEye,
     IconBxsShare,
     PaymentModal,
+    IconDone24px
   },
   props: {
     info: {
@@ -159,7 +180,7 @@ export default {
   },
 
   created() {
-    console.log(this.info);
+    console.log("this.info", this.info);
   },
 
   methods: {

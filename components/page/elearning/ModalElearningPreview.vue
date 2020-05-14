@@ -10,7 +10,7 @@
     <div slot="content">
       <div class="elearning-view" v-if="loading">Loading...</div>
       <div class="elearning-view" v-else>
-        <ElearningViewInfo :info="info" :previewInfo="previewData"/>
+        <ElearningViewInfo :info="info" :previewInfo="previewData" style="padding: 0"/>
 
         <ElearningIntroduce :info="info" />
 
@@ -259,7 +259,7 @@ export default {
   }
 }
 
-.elearning-id-box {
-  padding: 0;
-} 
+// .elearning-id-box {
+//   padding: 0;
+// } 
 </style>
