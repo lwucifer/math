@@ -18,8 +18,7 @@
 <script>
 const IconExclamationTriangle = () =>
   import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
-const IconInfoCircle = () =>
-  import("~/assets/svg/design-icons/info-circle.svg?inline");
+const IconAlert = () => import("~/assets/svg/v2-icons/alert/error_24px.svg?inline")
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
@@ -75,7 +74,7 @@ export default {
           break;
 
         case "warning":
-          return IconInfoCircle;
+          return IconAlert;
           break;
 
         default:

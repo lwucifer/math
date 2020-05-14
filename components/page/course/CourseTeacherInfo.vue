@@ -33,7 +33,7 @@
         <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
         <!-- <div class="text-center mt-3">
           <n-link class="text-decoration-none" to="">Xem thêm</n-link>
-        </div>-->
+        </div> -->
       </div>
     </div>
   </section>
