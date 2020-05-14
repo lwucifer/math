@@ -6,13 +6,12 @@
           <EditExerciseName
             :exercise="get(this, 'exercise', {})"
             :index="index"
-            @handleRefreshExcercises="handleRefreshExcercises"
           />
         </div>
 
         <div class="cc-box__head-right">
           <button
-            @click.prevent="handleAddQuestion"
+            @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
           >
             <IconPlus2 class="mr-3 fill-primary" /> Thêm câu hỏi
@@ -34,14 +33,12 @@
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
-          @handleCancelAddQuestion="handleCancelAddQuestion"
-          @handleRefreshQuestion="handleRefreshQuestion"
+          @cancel="toggleFormAdd"
         />
         <CreateQuestionEssay
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
           :exercise="exercise"
-          @handleRefreshQuestion="handleRefreshQuestion"
-          @handleCancelAddQuestion="handleCancelAddQuestion"
+          @cancel="toggleFormAdd"
         />
         <fragment v-if="isShowExercise">
           <ListQuestion
@@ -50,7 +47,6 @@
             :index="index"
             :question="question"
             :exercise="exercise"
-            @handleRefreshQuestion="handleRefreshQuestion"
           />
         </fragment>
       </div>
@@ -113,31 +109,10 @@ export default {
   },
 
   methods: {
-    handleRefreshQuestion() {
-      this.isAddQuestionForm = false;
-      const options = {
-        lesson_id: get(this, "lesson.id", ""),
-        progress: {
-          params: {
-            elearning_id: getParamQuery("elearning_id"),
-          },
-        },
-      };
-      this.$store.dispatch(`elearning/create/update`, options);
-    },
-
-    handleCancelAddQuestion() {
-      this.isAddQuestionForm = false;
-    },
-
-    get,
-
-    handleAddQuestion() {
+    toggleFormAdd() {
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
-    handleRefreshExcercises() {
-      this.$emit("handleRefreshExcercises");
-    },
+    get,
   },
 };
 </script>

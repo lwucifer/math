@@ -84,12 +84,18 @@ export default {
     },
   },
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     ...mapState("elearning/create", {
       lesson: "lesson",
     }),
+  },
+  mounted() {
+    console.log(this.exercise);
+  },
+  updated() {
+    console.log(this.exercise);
   },
   data() {
     return {
@@ -133,15 +139,13 @@ export default {
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.isEditExerciseName = false;
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          this.$store.dispatch("elearning/create/getLessons");
+        }
+
         return;
       }
       this.$toasted.error(get(result, "message", ""));
@@ -167,7 +171,14 @@ export default {
       this.handleCancel();
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
-        this.$emit("handleRefreshExcercises");
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
         return;
       }
       this.$toasted.error(get(result, "message", ""));

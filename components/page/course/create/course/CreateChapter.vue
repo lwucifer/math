@@ -17,7 +17,7 @@
           square
           color="default"
           outline
-          @click="handleCancelAddChapter"
+          @click="$emit('cancel')"
           >Huỷ bỏ</app-button
         >
         <app-button
@@ -86,11 +86,8 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", "Thành công"));
         this.payload.name = "";
-        this.$emit("handleCreateChapterSuccess");
-        this.$store.dispatch(
-          `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-          options
-        );
+        this.$emit("cancel");
+        this.$store.dispatch(`elearning/create/getContent`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -99,10 +96,6 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    },
-
-    handleCancelAddChapter() {
-      this.$emit("handleCancelAddChapter");
     },
 
     get,

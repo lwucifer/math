@@ -7,7 +7,7 @@
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
         :disabled="lesson.status == lessonCompleted"
-        @change="handleCompleteStudy($event)"
+        @change="isShowCompleteStudy = true"
       />
       <p
         class="text-uppercase pl-1 text-clickable"
@@ -44,6 +44,19 @@
         <span>Chờ chấm điểm</span>
       </div> -->
     </div>
+
+    <app-modal-confirm
+      v-if="isShowCompleteStudy"
+      title="Hoàn thành bài học"
+      :footer="false"
+      description="Bạn có chắc là bạn muốn hoàn thành bài học này"
+      @close="isShowCompleteStudy = false"
+      @cancel="isShowCompleteStudy = false"
+      @ok="handleCompleteStudy"
+    >
+    </app-modal-confirm>
+
+    
   </div>
 </template>
 
@@ -73,6 +86,8 @@ export default {
   data() {
     return {
       lessonCompleted: LESSION_STATUS.COMPLETED,
+      isShowCompleteStudy: false,
+      
     };
   },
   components: {
@@ -114,8 +129,12 @@ export default {
         lesson_id: get(this, "lesson.id", ""),
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
+      console.log("[handleCompleteStudy]", res)
       if (get(res, "success", false)) {
-        this.$toasted.success("Thành công");
+        // this.$toasted.success("Thành công");
+        // close modal confirm
+        this.isShowCompleteStudy = false;
+
         this.getProgress();
         return;
       }

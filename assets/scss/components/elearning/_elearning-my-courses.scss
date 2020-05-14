@@ -61,8 +61,17 @@
                 text-decoration: none;
                 display: flex;
                 align-items: center;
+                color: #656565;
                 svg{
                     margin-right: 10px;
+                }
+                &:hover{
+                    color: $color-primary;
+                }
+            }
+            .text-primary{
+                &:hover{
+                    color: #656565 !important;
                 }
             }
         }
@@ -93,5 +102,17 @@
     }
     .btn--color-white {
         border: none;
+    }
+    .search__mycourses{
+        width: 267px;
+        margin-left: auto;
+        .app-search{
+            width: 100%;
+        }
+        .app-search__submit{
+            background: transparent;
+            box-shadow: none;
+            svg path { fill:  #656565;}
+        }
     }
 }

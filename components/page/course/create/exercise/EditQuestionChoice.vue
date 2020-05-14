@@ -24,7 +24,7 @@
         outline
         size="sm"
         square
-        @click="$emit('handleCancelAddQuestion')"
+        @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
       <app-button
@@ -59,16 +59,18 @@ export default {
     CreateAnswerOfQuestion,
   },
   computed: {
-    ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
     ...mapState("elearning/create", {
+      general: "general",
       lesson: "lesson",
     }),
   },
 
   props: {
     question: {
+      type: Object,
+      default: null,
+    },
+    exercise: {
       type: Object,
       default: null,
     },
@@ -104,15 +106,15 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        const options = {
-          lesson_id: get(this, "lesson.id", ""),
-          progress: {
-            params: {
-              elearning_id: getParamQuery("elearning_id"),
-            },
-          },
-        };
-        this.$store.dispatch(`elearning/create/update`, options);
+        this.$emit("cancel");
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -137,8 +139,9 @@ export default {
         correct: false,
         content: "",
       };
-      if (index == this.payload.answers.length && index < 6) {
-        this.payload.answers.push(answer);
+      if (index == get(this, "payload.answers.length", 0) && index < 6) {
+        let answers = this.payload.answers.concat([answer]);
+        this.payload.answers = answers;
       }
     },
     handleDeleteAnswer(index) {

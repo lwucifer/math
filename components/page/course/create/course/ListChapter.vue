@@ -26,24 +26,11 @@ export default {
     ChapterItem,
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
-
   computed: {
     ...mapState("elearning/create", {
       chapters: "chapters",
       general: "general",
     }),
-  },
-
-  watch: {
-    general: {
-      handler: function() {
-        this.$store.dispatch(`elearning/create/getContent`);
-      },
-      deep: true,
-    },
   },
 
   methods: {
