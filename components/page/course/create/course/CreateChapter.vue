@@ -2,7 +2,7 @@
   <fragment>
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
-        Chương {{ get(chapters, "data.length", 0) + 1 }}
+        Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
       </h3>
       <app-input
         :counter="60"
@@ -13,8 +13,7 @@
       <div class="d-flex justify-content-end mt-4">
         <app-button
           class="clc-btn font-weight-semi-bold mr-4 text-secondary"
-          size="sm"
-          square
+          size="md"
           color="default"
           outline
           @click="$emit('cancel')"
@@ -22,8 +21,7 @@
         >
         <app-button
           class="clc-btn font-weight-semi-bold"
-          size="sm"
-          square
+          size="md"
           @click="handleAddChapter"
           >Thêm chương</app-button
         >

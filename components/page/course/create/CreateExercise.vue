@@ -12,7 +12,7 @@
           gửi lên để được xét duyệt.
         </app-alert>
 
-        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
+        <!-- <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
           Chọn bài học liên quan
         </h5>
 
@@ -20,7 +20,7 @@
           style="margin-bottom: -2rem"
           v-if="get(general, 'type', '') === 'COURSE'"
           :lessons="lessons"
-        />
+        /> -->
       </div>
 
       <div v-if="lesson">
@@ -46,6 +46,27 @@
         />
       </div>
     </div>
+
+    <div class="create-action pt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <app-button
+          outline
+          class="mr-4"
+          color="error"
+          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+        >
+        <app-button
+          class="mr-4"
+          color="primary"
+          outline
+          ><IconSave class="mr-2" /> Lưu nháp</app-button
+        >
+        <app-button
+          class="create-action__btn mr-4"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,6 +79,10 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
+
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
@@ -84,6 +109,9 @@ export default {
     SelectLesson,
     IconPlus2,
     IconAngleDown,
+    IconDelete,
+    IconDelete,
+    Forward
   },
 
   data() {
