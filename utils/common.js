@@ -33,7 +33,7 @@ export function remove_unicode(str) {
 
 export function useEffect(that, watcher, props) {
     watcher();
-    const iterator = function (prop) {
+    const iterator = function(prop) {
         that.$watch(prop, {
             handler: watcher,
             deep: true,
@@ -45,7 +45,7 @@ export function useEffect(that, watcher, props) {
 export function redirectWithParams(params = {}) {
     let currentUrlParams = new URLSearchParams(window.location.search);
 
-    forEach(params, function (value, key) {
+    forEach(params, function(value, key) {
         currentUrlParams.set(key, value);
     });
 
@@ -140,7 +140,7 @@ export const detectBrowser = () => {
     // Safari 3.0+ "[object HTMLElementConstructor]"
     let isSafari =
         /constructor/i.test(window.HTMLElement) ||
-        (function (p) {
+        (function(p) {
             return p.toString() === "[object SafariRemoteNotification]";
         })(!window["safari"] ||
             (typeof safari !== "undefined" && safari.pushNotification)
@@ -198,6 +198,23 @@ export function getCountdown_HH_MM_SS(val) {
     // console.log("[getCountdown_HH_MM_SS]", str, h, m, s);
     return str
 }
+
+/**
+ * 
+ * @param {*} val : number (s)
+ * return 00:09:03 (hh:mm:ss)
+ */
+export function getCountdown_MM_SS(val) {
+    const m = Math.floor(val / 60);
+    const s = val - 60 * m;
+    let str = ''
+    str += (m >= 10 ? `${m}:` : `0${m}:`);
+    str += (s >= 10 ? `${s}` : `0${s}`);
+    console.log("[getCountdown_MM_SS]", str, m, s);
+    return str
+}
+
+
 
 export const addAllOptionSelect = (arr) => {
 

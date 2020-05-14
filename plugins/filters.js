@@ -278,13 +278,24 @@ export function getExerciseResultText(result = "") {
   return resultText;
 }
 
-export function getDateTimeFullText(_utcDate="") {
+export function getDateTimeFullText(_utcDate = "") {
   if (!_utcDate) return;
   const ts = moment.utc(_utcDate);
   return ts.format(DATETIME_FULL_TEXT);
 }
 
 
+/**
+ * convert seconds to text: hh giờ mm phút
+ */
+export function formatHour(val = "") {
+  const h = Math.floor(val / 60 / 60);
+  const m = Math.floor((val - 60 * 60 * h) / 60);
+  // const s = val - 60 * 60 * h - 60 * m;
+
+  let strTime = h + " giờ " + m + " phút";
+  return strTime;
+}
 
 const filters = {
   toThousandFilter,
@@ -301,6 +312,7 @@ const filters = {
   getExerciseTypeText,
   getQuestionNoText,
   getDateTimeFullText,
+  formatHour,
 };
 
 // register global utility filters

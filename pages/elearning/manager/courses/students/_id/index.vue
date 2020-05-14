@@ -35,7 +35,7 @@ import StudentManagerInfoTable from "~/components/page/elearning/manager/student
 import { mapState } from "vuex";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-
+const STORE_TEACHING_PROGRESS = "elearning/teaching/progress";
 export default {
   layout: "manage",
 
@@ -44,6 +44,22 @@ export default {
     StudentManagerInfo,
     IconBlock24px,
     StudentManagerInfoTable
+  },
+  async fetch({ params, query, store, route }) {
+    const elearningId = query.elearning_id;
+    const userId = params.id;
+    const listQuery = {
+      params: {
+        elearning_id: elearningId,
+        user_id: userId
+      }
+    };
+    await Promise.all([
+      store.dispatch(
+        `${STORE_TEACHING_PROGRESS}/${actionTypes.TEACHING_STUDENT_PROGRESS.LIST}`,
+        listQuery
+      )
+    ]);
   },
 
   data() {

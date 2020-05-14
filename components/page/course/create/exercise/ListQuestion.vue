@@ -14,7 +14,11 @@
         </button>
 
         <button class="mr-4" @click="handleDeleteQuestion">
-          <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
+          <IconTrashAlt
+            class="d-block subheading fill-secondary"
+            width="20px"
+            height="20px"
+          />
         </button>
 
         <!-- <button>
@@ -60,6 +64,7 @@ import CreateQuestionEssay from "~/components/page/course/create/exercise/Create
 import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
 import EditQuestionEssay from "~/components/page/course/create/exercise/EditQuestionEssay";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -104,6 +109,12 @@ export default {
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
     },
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
   },
 
   methods: {
@@ -125,7 +136,15 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

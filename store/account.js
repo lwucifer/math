@@ -29,6 +29,7 @@ const state = () => ({
     inviteList: {},
     withdrawalsList: {},
     forceGetTransactions: false,
+    timetable: [],
 });
 
 /**

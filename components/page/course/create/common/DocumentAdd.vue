@@ -151,7 +151,7 @@ export default {
         return;
       }
       this.$emit("handleCloseAdd");
-      this.$emit("handleRefreshDocs");
+      this.$store.dispatch(`elearning/create/getContent`);
       this.$toasted.success(
         defaultTo(get(result, "message", ""), "Thành công")
       );

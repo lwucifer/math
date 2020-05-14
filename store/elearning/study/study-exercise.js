@@ -50,6 +50,9 @@ const getters = {
         });
     console.log("[questionNoOpts]", questionNoOpts, state.questions);
     return questionNoOpts;
+  },
+  tests: state => {
+    return (state.elearningExercises) ? state.elearningExercises.length > 0 : false;
   }
 };
 

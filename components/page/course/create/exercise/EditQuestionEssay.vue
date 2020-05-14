@@ -45,6 +45,7 @@ import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/Cre
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -76,6 +77,14 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState("elearning/creating/creating-general", {
+      general: "general",
+    }),
+    ...mapState("elearning/create", {
+      lesson: "lesson",
+    }),
+  },
 
   methods: {
     handleAddQuestion() {
@@ -99,7 +108,15 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        const options = {
+          lesson_id: get(this, "lesson.id", ""),
+          progress: {
+            params: {
+              elearning_id: getParamQuery("elearning_id"),
+            },
+          },
+        };
+        this.$store.dispatch(`elearning/create/update`, options);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

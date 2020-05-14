@@ -314,6 +314,7 @@ export const SCHOOL_TEACHERS = {
 
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
+    SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -359,6 +360,7 @@ export const ELEARNING_STUDY_EXERCISE = {
 
 export const ELEARNING_STUDY_PROGRESS = {
     SET_STUDY_PROGRESS_LIST: "setStudyProgressList",
+    SET_STUDY_PROGRESS_CURRENT_SESSION: "setStudyProgressCurrentSession",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {

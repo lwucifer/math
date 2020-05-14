@@ -43,7 +43,7 @@ const mutations = {
         .SET_TEACHING_ELEARNING_PARTICIPANT_LIST
     ](state, data) {
         console.log("SET_ELEARNING_TEACHING_ELEARNING_PARTICIPANT_LIST", data);
-        state.participants = data;
+        state.elearningParti = data;
     },
 };
 

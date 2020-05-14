@@ -18,12 +18,6 @@
             <IconClose fill="#E6A01E" />
           </button>
         </div> -->
-        <!-- <app-alert type="warning" class="mb-4" show-close>
-          <template slot="icon">
-            <IconWarning class=""/>
-          </template>
-          <p class="text-warning">Vui lòng hoàn thành <n-link to="" class="text-warning font-weight-bold">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</p>
-        </app-alert> -->
 
         <h5 class="mb-2">Chế độ hiển thị</h5>
 
@@ -364,19 +358,7 @@ export default {
     },
 
     handleReset() {
-      if (this.setting) {
-        this.handleChangeSetting();
-        return;
-      }
-
-      this.payload = {
-        comment_allow: "",
-        price: 0,
-        elearning_id: get(this, "general.id", ""),
-        fee: 0,
-        privacy: "",
-      };
-      this.free = "";
+      this.handleChangeSetting();
     },
 
     numeral,

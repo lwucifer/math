@@ -1,6 +1,6 @@
 <template>
   <div class="cc-panel__body">
-    <div class="cc-box" >
+    <div class="cc-box">
       <div class="cc-box__head">
         <div class="cc-box__head-left">
           <EditExerciseName
@@ -11,8 +11,12 @@
         </div>
 
         <div class="cc-box__head-right">
-          <button @click.prevent="handleAddQuestion" class="text-primary d-flex align-items-center"
-            ><IconPlus2 class="mr-3 fill-primary"/> Thêm câu hỏi</button>
+          <button
+            @click.prevent="handleAddQuestion"
+            class="text-primary d-flex align-items-center"
+          >
+            <IconPlus2 class="mr-3 fill-primary" /> Thêm câu hỏi
+          </button>
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
@@ -23,7 +27,10 @@
         </div>
       </div>
 
-      <div class="cc-box__body" style="background: #F9F9F9">
+      <div
+        class="cc-box__body"
+        :class="{ 'add-background': isAddQuestionForm }"
+      >
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
@@ -59,7 +66,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
-import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
+import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
@@ -67,6 +74,7 @@ import CreateQuestionChoice from "~/components/page/course/create/exercise/Creat
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -82,31 +90,40 @@ export default {
     ListQuestion,
     EditExerciseName,
     IconAngleUp,
-    IconPlus2
+    IconPlus2,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+    lesson: Object,
   },
 
   data() {
     return {
       isAddQuestionForm: false,
-      isShowExercise: true
+      isShowExercise: true,
     };
   },
 
   methods: {
     handleRefreshQuestion() {
       this.isAddQuestionForm = false;
-      this.$emit("handleRefreshQuestion");
+      const options = {
+        lesson_id: get(this, "lesson.id", ""),
+        progress: {
+          params: {
+            elearning_id: getParamQuery("elearning_id"),
+          },
+        },
+      };
+      this.$store.dispatch(`elearning/create/update`, options);
     },
 
     handleCancelAddQuestion() {
@@ -120,7 +137,13 @@ export default {
     },
     handleRefreshExcercises() {
       this.$emit("handleRefreshExcercises");
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style lang="scss">
+.add-background {
+  background: #f9f9f9;
+}
+</style>

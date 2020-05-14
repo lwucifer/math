@@ -223,7 +223,8 @@ export default {
       this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$emit("refreshLessons");
+        this.$emit("toggleShowAddLesson");
+        this.$store.dispatch(`elearning/create/getContent`);
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -247,7 +248,7 @@ export default {
     },
 
     handleCancel() {
-      this.$emit("handleCancel");
+      this.$emit("toggleShowAddLesson");
     },
 
     get,

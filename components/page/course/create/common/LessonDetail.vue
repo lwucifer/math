@@ -3,7 +3,6 @@
     <LessonDetailInfo
       v-if="isShowDetailLesson"
       @handleEditLesson="handleEditLesson"
-      @refreshLessons="refreshLessons"
       :lesson="lesson"
       :index="index"
     />
@@ -11,13 +10,11 @@
     <div v-else>
       <CreateLessonOfChapter
         :lesson="lesson"
-        @handleCancel="handleCancel"
-        @refreshLessons="refreshLessons"
+        @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
       />
       <CreateLessonOfElearning
-        @refreshLessons="refreshLessons"
-        @handleCancel="handleCancel"
+        @toggleShowAddLesson="toggleShowLesson"
         :lesson="lesson"
         v-if="get(general, 'type', '') === 'LECTURE'"
       />
@@ -31,14 +28,12 @@
       v-for="doc in get(lesson, 'lesson_docs', [])"
       :key="doc.id"
       :doc="doc"
-      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <DocumentAdd
       :lesson="lesson"
       v-if="isShowFormAddDocument"
       @handleCloseAdd="handleCloseAdd"
-      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <!-- <app-button
@@ -102,11 +97,11 @@ export default {
   },
 
   mounted() {
-    console.log(this.lesson);
+    // console.log(this.lesson);
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
   },
@@ -123,17 +118,8 @@ export default {
   },
 
   methods: {
-    handleRefreshDocs() {
-      this.$emit("refreshLessons");
-    },
-
-    refreshLessons() {
-      this.$emit("refreshLessons");
-      this.isShowDetailLesson = true;
-    },
-
-    handleCancel() {
-      this.isShowDetailLesson = true;
+    toggleShowLesson() {
+      this.isShowDetailLesson = !this.isShowDetailLesson;
     },
 
     handleCloseAdd() {
@@ -148,6 +134,10 @@ export default {
 
     handleEditLesson() {
       this.isShowDetailLesson = false;
+    },
+
+    handleCancel() {
+      //
     },
 
     get,

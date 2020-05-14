@@ -220,7 +220,14 @@ export default {
       this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$emit("refreshLessons");
+        const elearning_id = getParamQuery("elearning_id");
+        const options = {
+          params: {
+            elearning_id,
+          },
+        };
+        this.$store.dispatch(`elearning/create/getContent`);
+        this.$emit("toggleShowAddLesson");
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
@@ -245,7 +252,7 @@ export default {
     },
 
     handleCancel() {
-      this.$emit("handleCancel");
+      this.$emit("toggleShowAddLesson");
     },
 
     get,

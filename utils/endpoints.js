@@ -124,6 +124,9 @@ export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
+export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
+
+
 /**
  * SCHOOL
  */
@@ -167,12 +170,12 @@ export const TEACHING_INTERACTIVE = `/elearning/teaching/interactive/questions`;
 export const TEACHING_STUDENTS = `/elearning/teaching/students`;
 export const TEACHING_INVITE = `/elearning/teaching/invites`;
 export const TEACHING_VOTES = `/elearning/teaching/votes`;
-export const TEACHING_ELEARNING_PARTICIPANT = `/teaching/elearning/participants`;
-export const TEACHING_ELEARNING_BANNED = `/teaching/elearning/banned`;
-export const TEACHING_STUDENT_PROGESS = `/teaching/student/progess`;
-export const TEACHING_ELEARNING_REQUESTS = `/teaching/elearning/requests`;
-export const TEACHING_ELEARNING_ACCEPT = `/teaching/elearning/accept`;
-export const TEACHING_ELEARNING_INVITES = `/teaching/elearning/invites`;
+export const TEACHING_ELEARNING_PARTICIPANT = `/elearning/teaching/elearning/participants`;
+export const TEACHING_ELEARNING_BANNED = `/elearning/teaching/elearning/banned`;
+export const TEACHING_STUDENT_PROGESS = `/elearning/teaching/student/progress`;
+export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/requests`;
+export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
+export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invites`;
 /**
  * PAYMENT
  */
