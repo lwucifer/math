@@ -6,11 +6,11 @@
       </div>
 
       <div class="pt-4 pl-4 pr-4">
-        <!-- <app-alert type="info" class="mb-2" show-close>
+        <app-alert type="info" class="mb-2" show-close>
           Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
           bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
           gửi lên để được xét duyệt.
-        </app-alert> -->
+        </app-alert>
 
         <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
           Chọn bài học liên quan
