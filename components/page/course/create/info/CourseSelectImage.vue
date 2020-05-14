@@ -117,6 +117,7 @@ export default {
       if (this.cropper) {
         this.cropper.destroy();
       }
+      this.error = false;
       this.cropper = null;
       this.$emit("onSelectFile", "");
     },
