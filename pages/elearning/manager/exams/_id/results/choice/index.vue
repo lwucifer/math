@@ -67,7 +67,7 @@
   const STORE_NAMESPACE = 'elearning/teaching/evaluation'
 
   export default {
-    layout: "exercise",
+    // layout: "exercise",
     
     components: {
       MarkSection,
