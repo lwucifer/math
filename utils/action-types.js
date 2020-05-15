@@ -556,4 +556,9 @@ export const TEACHING_ELEARNING_ACCEPT = {
 
 export const TEACHING_ELEARNING_INVITES = {
     LIST: "teachingElearningInvitesList",
+    ADD: "teachingElearningInvitesAdd",
+};
+
+export const ACCOUNT_BIOGRAPHY = {
+    ADD: "accountBiographyAdd",
 };

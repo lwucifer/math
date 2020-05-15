@@ -14,6 +14,7 @@ import Photos from "~/services/social/photos";
 import TagPhotos from "~/services/social/tagPhoto";
 import Withdrawals from "~/services/account/Withdrawals";
 import Friend from "~/services/social/friend";
+import Biography from "~/services/account/Biography";
 // import FriendInvite from "~/services/social/Friendinvite";
 
 /**
@@ -360,6 +361,18 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_BIOGRAPHY.ADD]({ commit }, payload) {
+        try {
+            const result = await new Biography(this.$axios)[actionTypes.BASE.ADD](
+                payload
+            );
+            console.log("[Biography] add", result);
+            return result;
+        } catch (err) {
+            console.log("[Biography] add.err", err);
+            return err;
+        }
+    },
 };
 
 /**
@@ -380,9 +393,7 @@ const mutations = {
         console.log("SET_ACCOUNT_TRANSACTIONS_LIST", _transactionsList);
         state.transactionsList = _transactionsList;
     },
-    [mutationTypes.ACCOUNT_TRANSACTIONS.SET_FORCE_GET_TRANSACTIONS_LIST](
-        state,
-    ) {
+    [mutationTypes.ACCOUNT_TRANSACTIONS.SET_FORCE_GET_TRANSACTIONS_LIST](state) {
         console.log("SET_FORCE_GET_TRANSACTIONS_LIST");
         state.forceGetTransactions = !state.forceGetTransactions;
     },
