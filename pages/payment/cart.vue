@@ -23,7 +23,7 @@
       <div class="text-center my-4">
         <img src="~assets/images/payment/undraw_empty_xct9 (1) 1.png" />
         <p class="my-4">Không có sản phẩm nào trong giỏ hàng của bạn.</p>
-        <app-button square>Tiếp tục mua hàng</app-button>
+        <app-button square to="/elearning" nuxt>Tiếp tục mua hàng</app-button>
       </div>
     </div>
   </div>

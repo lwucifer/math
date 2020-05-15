@@ -189,6 +189,27 @@ export const PAGE_SIZE = {
     SCHOOL_16: 16,
 }
 
+export const SUBJECT_CODE = {
+    MUSIC: "AM",
+    TECHNOLOGY: "CN",
+    MORAL: "DD",
+    GEOGPRAPHY: "DL",
+    CIVIC_EDUCATION: "GDCD",
+    CHEMISTRY: "HH",
+    SCIENCE: "KH",
+    HISTORY: "LS",
+    FINE_ART: "MT",
+    FOREIGN_LANGUAGE: "NN",
+    LITERATURE: "NV",
+    BIOLOGY: "SH",
+    PHYSICAL_EDUCATION: "TD",
+    VIETNAMESES: "TV",
+    INFORMATICS: "TH",
+    MATHS: "Toan",
+    NATURAL_SOCIAL: "TNXH",
+    PHYSICS: "VL"
+}
+
 export const DAY_SECTION = {
     MORNING: 1,
     AFTERNOON: 2,
