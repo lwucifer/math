@@ -12,7 +12,8 @@
         <div class="cc-box">
           <div
             class="cc-box__head"
-            style="border-bottom: 1px solid #E0E0E0; padding: 1.5rem"
+            style="padding: 1.5rem"
+            :class="{ 'add-border': addBorder }"
           >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
@@ -125,6 +126,7 @@ export default {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
+      addBorder: false,
     };
   },
 
@@ -153,6 +155,7 @@ export default {
 
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
+      this.addBorder = !this.addBorder;
     },
   },
 };

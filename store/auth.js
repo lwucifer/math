@@ -226,6 +226,9 @@ const mutations = {
     [mutationTypes.AUTH.SAVE_PHONE_PASS](state, _phonePass) {
         state.phonePass = _phonePass;
     },
+    [mutationTypes.AUTH.SAVE_PHONE_STATE](state, _phoneSave) {
+        state.phoneSave = _phoneSave;
+    },
 };
 
 export default {

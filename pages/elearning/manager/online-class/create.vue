@@ -269,30 +269,24 @@
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
+      :width="550"
       @cancel="handleCancelModal"
       :footer="false"
       :header="false"
+      title="Bạn muốn tạo phòng học này?"
+      description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
 
-    <app-modal
-      centered
-      :width="408"
-      :component-class="{ 'app-modal-confirm': true }"
-      @close="$router.push('/')"
+    <app-modal-notify
+      :width="550"
+      @ok="showNotify = false"
       v-if="showNotify"
       :footer="false"
       :header="false"
+      title=""
+      :description="message"
     >
-      <div slot="content">
-        <div class="text-center pt-4 pb-4">
-          <a class="btn-close" @click="showNotify = false">X</a>
-          <p class="title mb-4">{{message}}</p>
-          <div class="text-center">
-            <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
-          </div>
-        </div>
-      </div>
-    </app-modal>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -646,23 +640,23 @@ export default {
       this.selectedItems = {...this.selectedItems, [this.indexShow]: []};
       this.duration.push(initialDuration);
       this.startTime.push(initialStartTime);
-      //this.schedules = [...this.params.schedules];
     },
 
     cancelTime(index) {
       if (this.params.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
         this.params.schedules.pop();
         this.indexShow = null;
-      } else {
+      } else if (this.params.schedules.length > 1){
         this.indexShow = null;
         this.indexEdit = null;
+      } else {
+        //this.params.schedules[0] = initialSchedule;
       }
     },
     saveTime(index) {
       this.indexEdit = null;
       this.indexShow = null;
       this.schedules = [...this.params.schedules];
-      console.log(this.params.schedules);
     },
 
     changeName(e) {

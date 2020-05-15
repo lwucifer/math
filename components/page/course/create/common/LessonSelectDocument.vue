@@ -35,7 +35,7 @@
        
       </app-upload>
 
-      <p class="text-base caption"><span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file</p>
+      <p class="text-base caption mt-2"><span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file</p>
     </div>
 
     <DocumentSelectDoc

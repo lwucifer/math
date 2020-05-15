@@ -9,7 +9,7 @@
     />
     <h2 v-else class="cc-box__title heading-5">
       Tiêu đề: {{ courseNameModel }}
-      <button  class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
+      <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName">
         <IconEdit class="ml-2"/>
       </button>
     </h2>
