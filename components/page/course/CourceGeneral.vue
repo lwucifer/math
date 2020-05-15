@@ -74,7 +74,7 @@ export default {
     IconSuccess
   },
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       elearning_general: "general"
     })
   },

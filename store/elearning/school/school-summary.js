@@ -38,9 +38,9 @@ const actions = {
 const mutations = {
   [mutationTypes.ELEARNING_SCHOOL_SUMMARY.SET_ELEARNING_SCHOOL_SUMMARY_LIST](
     state,
-    elearningSchoolSummary
+    data
   ) {
-    state.elearningSchoolSummary = elearningSchoolSummary;
+    state.elearningSchoolSummary = data;
   }
 };
 

@@ -27,6 +27,9 @@
         }
 
         .app-search {
+            &.app-input {
+                width: 100%;
+            }
             .app-search__input input {
                 max-width: 100%;
             }

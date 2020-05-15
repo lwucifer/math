@@ -464,6 +464,10 @@ export const ELEARNING_SCHOOL_SEARCH = {
     LIST: "elearningSchoolSearchList",
 };
 
+export const ELEARNING_SCHOOL_STANDALONE = {
+    LIST: "elearningSchoolStandaloneList",
+};
+
 export const MESSAGE_GROUP = {
     ADD_MEMBER: "addMember",
     EDIT_AVATAR_GROUP: "editAvatarGroup",

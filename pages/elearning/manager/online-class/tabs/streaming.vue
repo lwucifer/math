@@ -10,24 +10,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 19rem">
+      <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -79,20 +79,13 @@
         </td>
       </template>
 
-      <template v-slot:cell(action)="{row}">
-        <td class="nowrap">
-          <a class="color-primary" @click="openModal(row)">Vào phòng học</a>
-        </td>
-      </template>
-
       <template v-slot:actions="{row}">
         <a class @click="openModal(row)">
-          <IconAdjust class="fill-primary mr-2"/>Vào phòng học
+          <IconSwapHorizontalCircle class="fill-primary mr-2"/>Vào phòng học
         </a>
         <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconUsersAlt class="fill-blue mr-2"/>Xem danh sách học sinh
+          <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
         </n-link>
-        <button @click="deleteRows(row.online_class_id)"><IconTimesCircle class="fill-secondary mr-2"/>Huỷ lớp</button>
       </template>
     </app-table>
     <!--End table-->
@@ -109,8 +102,8 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconAdjust from '~/assets/svg/v2-icons/adjust_24px.svg?inline';
-import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
+import IconSwapHorizontalCircle from '~/assets/svg/v2-icons/swap_horizontal_circle_24px.svg?inline';
 
 import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass";
 
@@ -127,20 +120,21 @@ export default {
 
   components: {
     IconTimesCircle,
-    IconAdjust,
     IconFilter,
     IconSearch,
     IconArrow,
     IconCalendar,
     IconTrash,
     IconHamberger,
-    IconUsersAlt,
+    IconPeople,
+    IconSwapHorizontalCircle,
     ModalJoinClass
   },
 
   data() {
     return {
       rowClassId: null,
+      showFilter: false,
       modalShow: false,
       modalData: {},
       tab: 1,
@@ -152,7 +146,7 @@ export default {
         },
         {
           name: "elearning_name",
-          text: "Thuộc khóa học",
+          text: "Thuộc bài giảng<br>/khóa học",
           sort: true
         },
         {
@@ -162,13 +156,9 @@ export default {
         },
         {
           name: "num_invitation",
-          text: "Số học sinh đã mời",
+          text: "Số học sinh<br>đã mời",
           sort: true
         },
-        {
-          name: "action",
-          text: ""
-        }
       ],
       filterCourse: null,
       courses: [],
@@ -206,6 +196,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          elearning_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -218,6 +219,7 @@ export default {
     },
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},

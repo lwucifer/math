@@ -1,5 +1,6 @@
 .app-editor {
     border: 1px solid $color-border;
+    border-radius: 2px;
 
     &--is-focused {
         border-color: $color-primary;

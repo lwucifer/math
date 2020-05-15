@@ -2,7 +2,7 @@
   <fragment>
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
-        Chương {{ get(chapters, "data.length", 0) + 1 }}
+        Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
       </h3>
       <app-input
         :counter="60"
@@ -13,17 +13,15 @@
       <div class="d-flex justify-content-end mt-4">
         <app-button
           class="clc-btn font-weight-semi-bold mr-4 text-secondary"
-          size="sm"
-          square
+          size="md"
           color="default"
           outline
-          @click="handleCancelAddChapter"
+          @click="$emit('cancel')"
           >Huỷ bỏ</app-button
         >
         <app-button
           class="clc-btn font-weight-semi-bold"
-          size="sm"
-          square
+          size="md"
           @click="handleAddChapter"
           >Thêm chương</app-button
         >
@@ -86,11 +84,8 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", "Thành công"));
         this.payload.name = "";
-        this.$emit("handleCreateChapterSuccess");
-        this.$store.dispatch(
-          `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-          options
-        );
+        this.$emit("cancel");
+        this.$store.dispatch(`elearning/create/getContent`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -99,10 +94,6 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    },
-
-    handleCancelAddChapter() {
-      this.$emit("handleCancelAddChapter");
     },
 
     get,

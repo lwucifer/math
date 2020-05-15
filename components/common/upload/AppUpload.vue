@@ -13,7 +13,7 @@
       <slot>
         <div class="app-upload__default-slot">
           <div class="app-upload__control">
-            <div class="app-upload__text">
+            <div class="app-upload__text" v-if="inputText">
               <span class="app-upload__file-name" v-if="localFileList.length">
                 <slot
                   name="fileName"
@@ -54,6 +54,11 @@ export default {
     placeholder: {
       type: String
     },
+    
+    inputText: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {

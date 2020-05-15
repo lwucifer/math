@@ -131,6 +131,8 @@ export default {
       "currentExerciseAnswers",
       "currentElearningId",
       "currentQuestionId",
+      "autoSubmission",
+      "currentExercise",
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -305,6 +307,13 @@ export default {
         this.handleChangedQuestionNumber(_newVal);
         this.modalListQuestions = false;
       }
+    },
+
+    autoSubmission(_newVal) {
+      console.log("[autoSubmission]", _newVal);
+      // if(this.currentExercise.id == _newVal.id) {
+      //   this.handleQuestionSubmission();
+      // }
     }
   }
 };

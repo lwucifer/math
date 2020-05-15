@@ -36,7 +36,7 @@ export default {
 
   methods: {
     handleSelectLesson(lesson) {
-      this.$store.dispatch(`elearning/create/getLesson`, get(lesson, "id", ""));
+      this.$store.dispatch("elearning/create/getLesson", get(lesson, "id", ""));
     },
   },
 };

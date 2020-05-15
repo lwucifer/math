@@ -42,7 +42,7 @@
 
             <ul class="link--dropdown__ElearningItem">
               <li>
-                <n-link to class="text-gray">
+                <n-link to>
                   <IconShare24px class="icon" />Chia sẻ
                 </n-link>
               </li>
@@ -55,7 +55,7 @@
                 </n-link>
               </li>
               <li v-else @click.prevent="handleDeleteFavourite(elearning.elearning_id)">
-                <n-link to>
+                <n-link to class="text-primary">
                   <IconCardsHeart class="icon" />Bỏ yêu thích
                 </n-link>
               </li>
@@ -64,11 +64,11 @@
                 @click.prevent="handleArchive(elearning.elearning_id)"
               >
                 <n-link to>
-                  <IconUnArchive class="icon" />Lưu trữ
+                  <IconArchive class="icon" />Lưu trữ
                 </n-link>
               </li>
               <li v-else @click.prevent="handleDeleteArchive(elearning.elearning_id)">
-                <n-link to>
+                <n-link to class="text-primary">
                   <IconUnArchive class="icon" />Bỏ lưu trữ
                 </n-link>
               </li>
@@ -85,6 +85,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconCardsHeart from "~/assets/svg/v2-icons/cards-heart.svg?inline";
 import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
+import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -92,7 +93,8 @@ export default {
     IconDots,
     IconCardsHeart,
     IconShare24px,
-    IconUnArchive
+    IconUnArchive,
+    IconArchive
   },
   data() {
     return {
@@ -120,15 +122,19 @@ export default {
   },
   methods: {
     handleFavourite(id) {
+      this.menuDropdown = false;
       this.$emit("handleFavourite", id);
     },
     handleDeleteFavourite(id) {
+      this.menuDropdown = false;
       this.$emit("handleDeleteFavourite", id);
     },
     handleArchive(id) {
+      this.menuDropdown = false;
       this.$emit("handleArchive", id);
     },
     handleDeleteArchive(id) {
+      this.menuDropdown = false;
       this.$emit("handleDeleteArchive", id);
     }
   },

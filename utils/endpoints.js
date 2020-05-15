@@ -138,6 +138,7 @@ export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
 export const SCHOOL_CLASSES = `/elearning/school/admin/classes`;
 export const SCHOOL_SUMMARY = `/elearning/school/summary`;
 export const SCHOOL_SEARCH = `/elearning/school/search`;
+export const SCHOOL_STANDALONE = `/elearning/school/list`;
 export const SCHOOL_INFO = `/elearning/school/info`;
 export const SCHOOL_ELEARNING = `/elearning/school/elearnings`;
 export const SCHOOL_PROFESSIONAL = `/elearning/school/admin/professional`;

@@ -29,13 +29,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 import { EXERCISE_TYPES } from "~/utils/constants";
 import { getCountdown_HH_MM_SS } from "~/utils/common";
 
 import ElearningExerciseDoExerciseChoice from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseChoice";
 import ElearningExerciseDoExerciseEssay from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseEssay";
+
+let interval = null;
 
 export default {
   components: {
@@ -55,7 +57,7 @@ export default {
     return {
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       countdown: "--:--:--",
-      interval: 0,
+      // interval: 0,
     };
   },
 
@@ -64,12 +66,22 @@ export default {
   },
 
   methods: {
+    ...mapMutations("elearning/study/study-exercise", ["setStudyExerciseAutoSubmission"]),
+
     setCountdown() {
       let seconds = (this.currentExercise.duration || 0) * 60; // in seconds
-      this.interval = setInterval(() => {
-        // console.log("[setCountdown]", seconds)
-        this.countdown = getCountdown_HH_MM_SS(seconds);
-        seconds -= 1;
+      interval = setInterval(() => {
+        console.log("[setCountdown]", seconds)
+        if(seconds > 0) {
+          this.countdown = getCountdown_HH_MM_SS(seconds);
+          seconds -= 1;
+        } else {
+          // clear interval
+          clearInterval(interval);
+
+          // auto submission
+          this.setStudyExerciseAutoSubmission(this.currentExercise);
+        }
       }, 1000);
     }
   },
@@ -84,8 +96,8 @@ export default {
   },
 
   beforeDestroy() {
-    console.log("[beforeDestroy]", this.interval)
-    clearInterval(this.interval);
+    console.log("[beforeDestroy]", interval)
+    clearInterval(interval);
   }
 };
 </script>

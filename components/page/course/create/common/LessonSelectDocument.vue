@@ -32,13 +32,10 @@
 
     <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
       <app-upload @change="handleSelectFile" class="clc-upload-video">
-        <div slot="hint" class="mt-2 caption">
-          <b class="text-gray">Lưu ý:</b>
-          <span class="text-sub">{{
-            `Dung lượng không quá 1GB cho 1 file, định dạng doc, docx, txt, ppt`
-          }}</span>
-        </div>
+       
       </app-upload>
+
+      <p class="text-base caption mt-2"><span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file</p>
     </div>
 
     <DocumentSelectDoc

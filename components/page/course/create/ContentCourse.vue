@@ -10,7 +10,7 @@
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div class="cc-box__head">
+          <div class="cc-box__head" style="padding: 1.5rem" :class="{'add-border': addBorder}">
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
@@ -19,7 +19,7 @@
               <a
                 class="text-decoration-none d-inline-flex align-items-center"
                 href
-                @click.prevent="handleShowAddChapter"
+                @click.prevent="toggleAddChapter"
               >
                 <IconAdd width="14px" height="14px" class="mr-2" />&nbsp;Thêm
                 chương
@@ -30,12 +30,32 @@
           <div class="cc-box__body">
             <CreateChapter
               v-if="isShowFormAddChapter"
-              @handleCancelAddChapter="handleCancelAddChapter"
-              @handleCreateChapterSuccess="handleCreateChapterSuccess"
+              @cancel="toggleAddChapter"
             />
 
             <ListChapter />
           </div>
+        </div>
+      </div>
+
+      <div class="create-action pt-5">
+        <div class="create-action__right d-flex align-items-center">
+          <app-button
+            outline
+            class="mr-4"
+            color="error"
+            ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+          >
+          <app-button
+            class="mr-4"
+            color="primary"
+            outline
+            ><IconSave class="mr-2" /> Lưu nháp</app-button
+          >
+          <app-button
+            class="create-action__btn mr-4"
+            ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+          >
         </div>
       </div>
     </div>
@@ -58,6 +78,9 @@ const IconTrashAlt = () =>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
@@ -88,13 +111,21 @@ export default {
     EditCourseName,
     IconAngleUp,
     IconAdd,
+    IconDelete,
+    IconSave,
+    Forward
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
+      addBorder: false
     };
+  },
+
+  mounted() {
+    this.$store.dispatch(`elearning/create/getContent`);
   },
 
   computed: {
@@ -106,16 +137,9 @@ export default {
   methods: {
     get,
 
-    handleCreateChapterSuccess() {
-      this.isShowFormAddChapter = false;
-    },
-
-    handleShowAddChapter() {
+    toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-    },
-
-    handleCancelAddChapter() {
-      this.isShowFormAddChapter = false;
+      this.addBorder = !this.addBorder
     },
   },
 };

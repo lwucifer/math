@@ -209,3 +209,9 @@ export const SUBJECT_CODE = {
     NATURAL_SOCIAL: "TNXH",
     PHYSICS: "VL"
 }
+
+export const DAY_SECTION = {
+    MORNING: 1,
+    AFTERNOON: 2,
+    EVENING: 3,
+}

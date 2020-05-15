@@ -37,18 +37,19 @@
                     :placeholder="'Nhập để tìm kiếm...'"
                     v-model="params.keyword"
                     :size="'sm'"
+                    @submit="getList"
                   ></app-search>
                 </div>
               </div>
 
               <div class="filter-form__item">
-                <app-button color="white" square :size="'sm'" @click="getList">
-                  <IconHamberger class="fill-primary mr-2" />
-                  <span class="color-primary">Lọc kết quả</span>
+                <app-button :color="showFilter ? 'primary' : 'white'" square :size="'sm'" @click="toggleFilter">
+                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                  <span>Lọc kết quả</span>
                 </app-button>
               </div>
 
-              <div class="d-flex-center">
+              <div class="d-flex-center ml-3" v-if="showFilter">
                 <div class="filter-form__item">
                   <app-vue-select
                     style="width: 11rem"
@@ -122,24 +123,6 @@
             :data="elearningList"
             multiple-selection
           >
-            <!-- <template v-slot:cell(name)="{ row }">
-              <td>
-                <div class="table-avatar">
-                  <div class="left">
-                    <img
-                      :src="row.avatar.high"
-                      alt
-                      @click="handleEditElearning(row)"
-                      style="cursor:pointer"
-                    />
-                  </div>
-                  <div class="right">
-                    <h6 class="mb-2">{{ row.name }}</h6>
-                    <p>{{ row.subject }}</p>
-                  </div>
-                </div>
-              </td>
-            </template>-->
             <template v-slot:cell(privacy)="{ row }">
               <td>
                 <span v-if="row.privacy == 'PUBLIC'" class="color-primary">Công khai</span>
@@ -171,18 +154,18 @@
                 class="link"
                 v-if="tab == 'APPROVED' || tab == null"
               >
-                <IconNote class="fill-primary mr-2" />Xem chi tiết
+                <IconNote height='18' width='18' class="fill-primary mr-2" />Xem chi tiết
               </n-link>
               <n-link :to="'/elearning/' + row.id + ''" class="link">
-                <IconEdit class="fill-purple mr-2" />Chỉnh sửa
+                <IconEdit class="fill-purple mr-2" height='16' width='16'/>Chỉnh sửa
               </n-link>
 
               <button @click="preview(row)">
-                <IconEye class="fill-blue mr-2" />Xem preview
+                <IconEye class="fill-blue mr-2"  height='16' width='16'/>Xem preview
               </button>
 
               <n-link :to="'/elearning/' + row.id" class="link" v-if="tab == 'REJECTED'">
-                <IconMessage class="fill-yellow mr-2" />Xem lý do từ chối
+                <IconMessage height='16' width='16' class="fill-yellow mr-2" />Xem lý do từ chối
               </n-link>
 
               <n-link
@@ -223,13 +206,13 @@ import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
-import IconNote from "~/assets/svg/v2-icons/note_24px.svg?inline";
-import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
 import IconEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconPeople from "~/assets/svg/v2-icons/people_24px.svg?inline";
 import IconRestore from "~/assets/svg/v2-icons/restore_24px.svg?inline";
 import IconTimesCircle from "~/assets/svg/design-icons/times-circle.svg?inline";
 import IconMessage from "~/assets/svg/v2-icons/message_24px.svg?inline";
+import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
+import IconEdit from "~/assets/svg/icons/edit.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -264,6 +247,7 @@ export default {
   data() {
     return {
       tab: "APPROVED",
+      showFilter: false,
       showPreview: false,
       previewInfo: {},
       ids: [],
@@ -356,7 +340,7 @@ export default {
       ],
       currentHeads: [],
       pagination: {
-        total: 0,
+        totalPages: 0,
         number: 0,
         size: 10,
         totalElements: 0,
@@ -393,10 +377,6 @@ export default {
       params: {
         page: 1,
         limit: 10
-        // free: null,
-        // privacy: null,
-        // type: null,
-        // keyword: null
       }
     };
   },
@@ -429,10 +409,25 @@ export default {
           break;
       }
       this.getList();
-    }
+    },
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.selectType = null;
+        this.selectPrivacy = null;
+        this.selectFree = null;
+        this.params = {...this.params,
+          type: null,
+          privacy: null,
+          free: null,
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     preview(row) {
       this.previewInfo = row;
       this.showPreview = true;
@@ -446,12 +441,15 @@ export default {
 
     handleChangedType() {
       this.params.type = this.selectType.value;
+      this.getList();
     },
     handleChangedFree() {
       this.params.free = this.selectFree.value;
+      this.getList();
     },
     handleChangedPrivacy() {
       this.params.privacy = this.selectPrivacy.value;
+      this.getList();
     },
 
     handleEditElearning(elearning) {
@@ -520,6 +518,8 @@ export default {
           "data.page.number_of_elements",
           0
         );
+
+        console.log('xxxxxxxxx',this.pagination)
       } catch (e) {
       } finally {
         this.loading = false;
@@ -589,5 +589,8 @@ export default {
 }
 .btn-color-blue {
   background-color: #1481fe;
+}
+.app-table table th {
+  white-space: nowrap;
 }
 </style>

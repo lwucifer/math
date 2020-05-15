@@ -1,6 +1,7 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'invite-student-modal': true }"
+  <app-modal centered :width="600" :component-class="{ 'invite-student-modal': true }"
      :footer="false" title="Mời thêm học sinh"
+     @close="close(false)"
   >
     <div slot="content">
       <div>
@@ -36,7 +37,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <app-button size="sm" color="info" class="mr-3" square @click="close(false)">Hủy</app-button>
+        <app-button size="sm" color="white" class="mr-3" square @click="close(false)">Hủy</app-button>
         <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
       </div>
     </div>
@@ -178,6 +179,8 @@ export default {
   background: #fbfbfb;
   padding: 1.2rem 1.5rem;
   margin-top: 2rem;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
   .item {
     display: block;
     margin-bottom: 1rem;

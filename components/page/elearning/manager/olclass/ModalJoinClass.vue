@@ -12,6 +12,10 @@
         <h6 class="color-primary mb-3">{{info.online_class_name}}</h6>
         <div class="box12 border mb-4">
           <p class="mb-3">
+            Tên phòng:
+            <b>{{info.online_class_name}}</b>
+          </p>
+          <p class="mb-3">
             Giáo viên:
             <b>{{info.online_class_name}}</b>
           </p>
@@ -25,30 +29,40 @@
           </p>
         </div>
 
-        <p class="mb-3">
-          Hãy nhấn nút
-          <b>"Vào phòng học"</b> dưới đây để vào phòng.
-          <b class="color-red">Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
+        <p class="mb-3" v-if="dataLength === 1">
+          <b>Chú ý:</b> buổi học sẽ được bắt đầu sau giây lát. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
-        <p class="mb-3" v-if="dataLength > 1">
-          <i>*Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy quay lại màn hình này để vào học tiếp tiết học thứ 2</i>
+        <p class="mb-3" v-else>
+          <b>Chú ý:</b> buổi học này được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
-        <p class="mb-4" v-if="dataLength > 1">
-          <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
-        </p>
-        <hr />
         <div class="mt-4 text-center" style="max-height: 400px; overflow-y: auto">
-          <div v-for="(item, index) in data" :key="index" class="mb-4">
-            <b class="pr-3">Tiết học {{index + 1}}</b>
+          <p>Phòng học bắt đầu sau: <b class="h5 color-blue">15:01</b></p>
+          <div class="mb-4 mt-4"> 
             <a
               :href="item.start_url"
               target="blank"
-              class="btn btn--color-primary btn--square"
+              class="btn btn--color-primary btn--square mr-3"
               :disabled="item.status != 'waiting'"
             >Vào phòng học</a>
+            <app-button color="white" size="lg">Thoát phòng đợi</app-button>
+          </div>
+          <div v-for="(item, index) in data" :key="index" class="mb-4">
+            <b class="pr-3">Tiết học {{index + 1}}</b>
           </div>
         </div>
       </div>
+
+      <app-modal-confirm
+        v-if="showModalConfirm"
+        :confirmLoading="confirmLoading"
+        @ok="close()"
+        :width="550"
+        @cancel="showModalConfirm = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn thoát?"
+        description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
+      />
     </div>
   </app-modal>
 </template>
@@ -57,7 +71,7 @@
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect, formatHour } from "~/utils/common";
+import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
@@ -71,11 +85,12 @@ export default {
 
   data() {
     return {
+      showModalConfirm: false,
       data: [],
       dataLength: 0,
       loading: false,
       startTime: this.formatAMPM(this.info.recent_schedule.start_time),
-      duration: formatHour(this.info.recent_schedule.duration)
+      duration: this.formatHour(this.info.recent_schedule.duration)
     };
   },
 
@@ -96,12 +111,12 @@ export default {
       return strTime;
     },
 
-    // formatHour(time) {
-    //   let minutes = time % 60;
-    //   let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
-    //   let strTime = hours + " giờ " + minutes + " phút";
-    //   return strTime;
-    // },
+    formatHour(time) {
+      let minutes = time % 60;
+      let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
+      let strTime = hours + " giờ " + minutes + " phút";
+      return strTime;
+    },
 
     async getList() {
       const self = this;

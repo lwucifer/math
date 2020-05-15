@@ -1,39 +1,46 @@
 <template>
   <div class="container">
-    <div>
-      <school-filter
-        title="Danh sách trường học"
-        :schoolTypes="schoolTypes"
-        :hasSort="false"
-        :hasSearch="true"
-        :hasSchoolLevel="false"
-        :hasLocation="false"
-        :hasFilterBtn="false"
-        @handleChangeProvince="handleChangeProvince"
-        @handleChangedDistrict="handleChangedDistrict"
-        @handleChangedWard="handleChangedWard"
-        @handleSubmitSearch="handleSubmitSearch"
+    <school-filter
+      title="Danh sách trường học"
+      :schoolTypes="schoolTypes"
+      :hasSort="false"
+      :hasSearch="true"
+      :hasSchoolLevel="false"
+      :hasLocation="false"
+      :hasFilterBtn="false"
+      @handleChangeProvince="handleChangeProvince"
+      @handleChangedDistrict="handleChangedDistrict"
+      @handleChangedWard="handleChangedWard"
+      @handleSubmitSearch="handleSubmitSearch"
+    >
+    </school-filter>
+    <!--Detail school types-->
+    <!--v-for="(category, index) in categories" :key="index"-->
+    <div
+      v-for="(value, name, index) in list"
+      :key="index"
+    >
+      <SchoolSlider
+        :category="{ name: get(value, 'name', ''), type: get(value, 'name_en', '') }"
+        :total-school="get(value, 'total_school', 0)"
+        :total-teacher="get(value, 'total_teacher', 0)"
+        :total-student="get(value, 'total_student', 0)"
+        @showAll="showAll"
+        :schools="get(value, 'schools', [])"
       >
-      </school-filter>
-      <!--Detail school types-->
-      <div v-for="(category, index) in categories" :key="index">
-        <SchoolSlider
-          :category="category"
-          @showAll="showAll"
-          :schoolSearch="schoolSearch"
-        >
-        </SchoolSlider>
-      </div>
+      </SchoolSlider>
     </div>
   </div>
 </template>
 
 <script>
-import SchoolFilter from "~/components/page/school/SchoolFilter";
-import SchoolListBox from "~/components/page/school/SchoolListBox";
-import SchoolSlider from "~/components/page/school/SchoolListSlider";
-import { mapState } from "vuex";
-// Import faked data
+import SchoolFilter from "~/components/page/school/SchoolFilter"
+import SchoolListBox from "~/components/page/school/SchoolListBox"
+import SchoolSlider from "~/components/page/school/SchoolListSlider"
+import { mapState } from "vuex"
+import * as actionTypes from "~/utils/action-types"
+import { get } from "lodash"
+import { useEffect, addAllOptionSelect } from "~/utils/common"
 import {
   VILLAGES,
   DISTRICTS,
@@ -41,9 +48,8 @@ import {
   SCHOOL_TYPES,
   SCHOOL_TYPE_DETAILS,
 } from "~/server/fakedata/school/test";
-import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+
+const NAMESPACE_SCHOOL_STANDALONE = 'elearning/school/school-standalone'
 
 export default {
   name: "School",
@@ -58,7 +64,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+      `${NAMESPACE_SCHOOL_STANDALONE}/${actionTypes.ELEARNING_SCHOOL_STANDALONE.LIST}`, { size: 16 }
     );
   },
 
@@ -75,21 +81,45 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/school/school-search", {
-      schoolSearch: "elearningSchoolSearch",
+    ...mapState(NAMESPACE_SCHOOL_STANDALONE, {
+      list: "standaloneSchools",
     }),
     ...mapState("elearning/public/public-category", {
       categories: "categories",
     }),
+    ...mapState("elearning/school/school-summary", {
+      schoolSummary: "elearningSchoolSummary"
+    }),
+    schools() {
+      return get(this, `schoolSummary.data.content`, []);
+    },
+    resultSummary() {
+      const schoolNum = this.schoolSummary.total_school;
+      const studentNum = this.schoolSummary.total_student;
+      const teacherNum = this.schoolSummary.total_teacher;
+    
+      return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
+    },
+    categoryOpts() {
+      return addAllOptionSelect(this.categories);
+    },
+    selectedCategory() {
+      if (this.type) return this.categories.find(c => c.type == this.type);
+      return {};
+    },
+  
+    selectedType() {
+      return this.type;
+    }
   },
 
   created() {
-    useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
-      "province_id",
-      "district_id",
-      "ward_id",
-      "keyword",
-    ]);
+    // useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
+    //   "province_id",
+    //   "district_id",
+    //   "ward_id",
+    //   "keyword",
+    // ]);
   },
 
   methods: {
@@ -121,6 +151,7 @@ export default {
         options
       );
     },
+    get
   },
 };
 </script>

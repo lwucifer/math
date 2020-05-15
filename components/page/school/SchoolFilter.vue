@@ -16,7 +16,6 @@
           v-if="hasSearchTitle"
           style="width: 100%"
           :placeholder="'Nhập để tìm kiếm...'"
-          :counter="11"
           v-model="filter.query"
           :size="'sm'"
           @input="handleChangeSearch"
@@ -27,8 +26,8 @@
       <div v-if="hasSearch" class="school-filter__form__item school-filter__form__item--search">
         <app-search
           style="width: 100%"
+          class="mb-0"
           :placeholder="'Nhập để tìm kiếm...'"
-          :counter="11"
           v-model="filter.query"
           :size="'sm'"
           @submit="handleSubmitSearch"

@@ -1,6 +1,6 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
-    <div class="mr-3">
+    <div class="mr-3 mb-3">
       <strong>Chương</strong> {{ index + 1 }}:
       <input
         v-if="isEditChaperName"
@@ -17,22 +17,23 @@
 
     <template v-if="isEditChaperName">
       <button
-        class="cc-box__btn mr-3 text-success"
+        class="cc-box__btn mr-3 text-success d-flex align-items-center w-50"
         @click="handleEditChaperName"
       >
-        Lưu
+        <IconSave24px class="mr-2 fill-primary"/> Lưu
       </button>
       <button
-        class="cc-box__btn mr-3 text-gray-2"
+        class="cc-box__btn mr-3 text-secondary d-flex align-items-center w-50"
         @click="cancelEditChapterName"
       >
-        Huỷ
+        <IconClose24px class="mr-2 fill-secondary"/>Huỷ
       </button>
     </template>
 
     <template v-else>
       <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
-        <IconEditAlt class="icon d-block subheading fill-primary" />
+        <IconBorderColor24px width="16px"
+          height="16px" class="d-block subheading fill-primary" />
       </a>
 
       <a
@@ -59,15 +60,21 @@
 <script>
 import { string } from "yup";
 import { get, toNumber } from "lodash";
-import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
+import IconBorderColor24px from '~/assets/svg/v2-icons/border_color_24px.svg?inline';
 import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
+import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
+import IconClose24px from '~/assets/svg/v2-icons/close_24px.svg?inline';
+
+
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
 export default {
   components: {
-    IconEditAlt,
+    IconBorderColor24px,
     IconTrashAlt,
+    IconSave24px,
+    IconClose24px
   },
   props: {
     chapter: {
@@ -103,7 +110,7 @@ export default {
       this.confirmLoading = true;
       const payload = {
         data: {
-          id: get(this, "defaultName.id", ""),
+          id: get(this, "chapter.id", ""),
         },
       };
       const res = await this.$store.dispatch(
@@ -132,7 +139,7 @@ export default {
     },
     async handleEditChaperName() {
       const data = {
-        id: get(this, "defaultName.id", ""),
+        id: get(this, "chapter.id", ""),
         name: this.chaperNameModel,
       };
       const payload = createPayloadAddContentCourse(data);

@@ -1,10 +1,10 @@
 <template>
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
-    <div class="cc-box__bg-gray px-5 pt-5 pb-5">
+    <div class="cc-box__bg-gray px-2 py-2">
       <h3 class="heading-5 mb-2 mt-3">
         Tên bài học
-        <span class="caption text-sub font-weight-normal"
+        <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         >
       </h3>
@@ -15,71 +15,76 @@
         :counter="60"
       />
       <span v-show="error_name" class="error">{{ error_name }}</span>
-      <p class="text-center mb-4">Chọn loại bài học</p>
 
-      <!-- <app-divider class="mt-3 mb-4" /> -->
 
-      <div class="clc-type-tabs">
-        <a
-          href
-          class="clc-type-tab-item"
-          :class="{ active: tabType === 'video' }"
-          @click.prevent="changeTabType('video')"
-        >
-          <span class="clc-type-tab-item__icon">
-            <IconRadioButtonChecked class="icon mr-2" />
-            <IconVideo class="icon mr-2" />
-            <span class="clc-type-tab-item__text">Video</span>
-          </span>
-        </a>
+      <div class="cc-box__bg-disable">
+        <p class="text-center my-4">Chọn loại bài học</p>
 
-        <a
-          href
-          class="clc-type-tab-item"
-          :class="{ active: tabType === 'document' }"
-          @click.prevent="changeTabType('document')"
-        >
-          <span class="clc-type-tab-item__icon">
-            <IconDefaultAsideMenu
-              class="icon mr-2"
-              style="width: 24px; height: 24px"
-            />
-            <IconFileBlank class="icon" />
-            <span class="clc-type-tab-item__text">Văn bản</span>
-          </span>
-        </a>
-      </div>
+        <!-- <app-divider class="mt-3 mb-4" /> -->
 
-      <app-divider class="my-4" />
+        <div class="clc-type-tabs my-5">
+          <a
+            href
+            class="clc-type-tab-item"
+            :class="{ active: tabType === 'video' }"
+            @click.prevent="changeTabType('video')"
+          >
+            <span class="clc-type-tab-item__icon">
+              <IconRadioButtonChecked class="icon mr-2" />
+              <IconVideo class="icon mr-2" />
+              <span class="clc-type-tab-item__text">Video</span>
+            </span>
+          </a>
 
-      <LessonSelectVideo
-        @handleSelectFile="handleSelectFile"
-        @handleSelectUrl="handleSelectUrl"
-        v-if="tabType === 'video'"
-      />
+          <a
+            href
+            class="clc-type-tab-item"
+            :class="{ active: tabType === 'document' }"
+            @click.prevent="changeTabType('document')"
+          >
+            <span class="clc-type-tab-item__icon">
+              <IconRadioButtonChecked
+                class="icon mr-2"
+                style="width: 24px; height: 24px"
+              />
+              <IconFileBlank class="icon" />
+              <span class="clc-type-tab-item__text">Văn bản</span>
+            </span>
+          </a>
+        </div>
 
-      <LessonSelectDocument
-        v-if="tabType === 'document'"
-        @handleSelectDocument="handleSelectDocument"
-      />
+        <!-- <app-divider class="my-4" /> -->
 
-      <div class="d-flex justify-content-end mt-4">
-        <app-button
-          class="clc-btn font-weight-semi-bold mr-4"
-          size="sm"
-          color="disabled"
-          square
-          @click="handleCancel"
-          >Huỷ bỏ</app-button
-        >
-        <app-button
-          @click="handleAddContent"
-          :disabled="!submit"
-          class="clc-btn font-weight-semi-bold"
-          size="sm"
-          square
-          >{{ lesson ? "Sửa nội dung" : "Thêm nội dung" }}</app-button
-        >
+        <LessonSelectVideo
+          @handleSelectFile="handleSelectFile"
+          @handleSelectUrl="handleSelectUrl"
+          v-if="tabType === 'video'"
+        />
+
+        <LessonSelectDocument
+          v-if="tabType === 'document'"
+          @handleSelectDocument="handleSelectDocument"
+        />
+
+        <div class="d-flex justify-content-end mt-4">
+          <!-- <app-button
+            class="clc-btn font-weight-semi-bold mr-4 text-secondary"
+            size="sm"
+            color="default"
+            outline
+            square
+            @click="handleCancel"
+            >Huỷ bỏ</app-button> -->
+
+          <app-button
+            @click="handleAddContent"
+            :disabled="!submit"
+            class="clc-btn font-weight-semi-bold"
+            size="md"
+            square
+            >{{ lesson ? "Sửa nội dung" : "Thêm nội dung" }}</app-button
+          >
+        </div>
       </div>
     </div>
     <app-modal-confirm
@@ -161,7 +166,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     submit() {
@@ -251,9 +256,9 @@ export default {
       this.payload.article_content = article_content;
     },
 
-    handleCancel() {
-      this.$emit("toggleShowAddLesson");
-    },
+    // handleCancel() {
+    //   this.$emit("toggleShowAddLesson");
+    // },
 
     get,
   },

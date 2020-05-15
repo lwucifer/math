@@ -10,7 +10,8 @@
             opacity: 0;
             visibility: hidden;
             height: 18px;
-            width: 18px;
+            width: 12px;
+            text-align: right;
             position: absolute;
             right: 0;
             top: calc(50% - 9px);
@@ -118,15 +119,16 @@
                 display: flex;
                 flex-wrap: nowrap;
                 align-items: center;
-                padding: 1rem 3rem;
+                padding: 1rem 2rem 1rem 5rem;
                 background: rgba(255, 255, 255, 0.9);
                 button, a {
                     display: inline-flex;
                     align-items: center;
                     padding: 1rem;
                     line-height: 1;
+                    + a,
                     +button {
-                        margin-left: 3rem;
+                        margin-left: 4rem;
                     }
                 }
             }

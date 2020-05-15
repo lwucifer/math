@@ -25,6 +25,8 @@ const state = () => ({
     attachments: []
   },
   currentQuestionId: null,
+  autoSubmission: null,
+  
 });
 
 /**
@@ -76,6 +78,10 @@ const actions = {
             .SET_STUDY_EXERCISE_QUESTION_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
+        
       }
 
       return result;
@@ -105,6 +111,10 @@ const actions = {
           mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
+        
       }
 
       return result;
@@ -135,6 +145,10 @@ const actions = {
             .SET_STUDY_EXERCISE_SUBMISSION_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
+        
       }
 
       return result;
@@ -165,6 +179,9 @@ const actions = {
             .SET_STUDY_EXERCISE_SUBMISSION_ADD,
           result.data
         );
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
+
         return result;
       }
 
@@ -196,6 +213,9 @@ const actions = {
             .SET_STUDY_ELEARNING_EXERCISE_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
       }
 
       return result;
@@ -274,6 +294,7 @@ const mutations = {
     state.currentExerciseQuestion = null;
 
     state.currentExercise = _curr;
+
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT_BY_NO](
@@ -389,6 +410,15 @@ const mutations = {
   ) {
     state.currentQuestionId = _currQuestionId;
   },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_AUTO_SUBMISSION](
+    state,
+    _auto
+  ) {
+    state.autoSubmission = _auto;
+  },
+
+  
 };
 
 export default {

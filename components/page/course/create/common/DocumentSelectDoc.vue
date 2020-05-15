@@ -5,7 +5,9 @@
         placeholder="Nhập để tìm kiếm..."
         style="width: 260px"
         @input="handleChangeSearch"
-      ></app-input>
+      >
+        <template #append-inner><IconSearch2 style="margin: auto 2rem" width="20px" height="20px"/></template>
+      </app-input>
     </div>
 
     <div class="clc-table-wrapper">
@@ -43,11 +45,11 @@
         </tbody>
       </table>
       <app-modal-confirm
-                v-if="showModalConfirm"
-                :confirmLoading="confirmLoading"
-                @ok="handleOk"
-                @cancel="handleCancelModal"
-              />
+          v-if="showModalConfirm"
+          :confirmLoading="confirmLoading"
+          @ok="handleOk"
+          @cancel="handleCancelModal"
+        />
     </div>
   </div>
 </template>
@@ -55,6 +57,8 @@
 <script>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import IconSearch2 from '~/assets/svg/icons/search2.svg?inline';
+
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { get, defaultTo } from "lodash";
@@ -62,7 +66,8 @@ import { useEffect } from "~/utils/common";
 
 export default {
   components: {
-    IconTrashAlt
+    IconTrashAlt,
+    IconSearch2
   },
 
   props: {

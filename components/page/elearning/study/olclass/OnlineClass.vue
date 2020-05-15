@@ -7,9 +7,10 @@
       class="elearning-lesson-side__class"
     >
       <div class="d-flex">
-        <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
-          >{{ index + 1 }}. {{ item.name }}</span
-        >
+        <span
+          class="text-clickable"
+          @click.prevent="handlJoinOlClass(item)"
+        >{{ index + 1 }}. {{ item.name }}</span>
         <IconCalendarAlt
           class="ml-2 fill-blue text-clickable"
           height="18"
@@ -19,19 +20,14 @@
         />
       </div>
       <div class="d-flex-left mt-3">
-        <div
-          class="d-flex-center color-red ml-auto"
-          v-if="item.status == liveStatus"
-        >
+        <div class="d-flex-center color-red ml-auto" v-if="item.status == liveStatus">
           <IconCam24
             class="mr-2 fill-red text-clickable"
             height="18"
             width="18"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
-            >Đang diễn ra</span
-          >
+          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)">Đang diễn ra</span>
         </div>
         <div
           class="d-flex-center color-yellow ml-auto"
@@ -43,9 +39,10 @@
             width="18"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
-            >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span
-          >
+          <span
+            class="text-clickable"
+            @click.prevent="handlJoinOlClass(item)"
+          >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
         <div class="color-999 d-flex-center" v-else>
           <IconCam24 class="mr-2" />
@@ -54,11 +51,7 @@
       </div>
     </div>
 
-    <ModalWaitingOlClass
-      v-if="modalShow"
-      @close="modalShow = false"
-      :targetClass="targetClass"
-    />
+    <ModalWaitingOlClass v-if="modalShow" @close="modalShow = false" :targetClass="targetClass" />
     <Timetable
       v-if="isShowTimetable"
       @close="isShowTimetable = false"
@@ -72,7 +65,7 @@ import IconCam24 from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
 import IconCalendarAlt from "~/assets/svg/design-icons/calendar-alt.svg?inline";
 import { get } from "lodash";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
-import { LESSION_ONLINE_STATUS } from "~/utils/constants";
+import { LESSION_ONLINE_STATUS, DAY_SECTION } from "~/utils/constants";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import { TEACHING_OLCLASS_LESSON_SESSIONS } from "~/utils/action-types";
 
@@ -101,21 +94,43 @@ export default {
   computed: {
     ...mapState("elearning/study/study-info", ["info"]),
     ...mapState("elearning/study/study-progress", ["currentSession"]),
-    ...mapState("elearning/study/study", ["timetable"]),
+    ...mapState("elearning/study/study", ["timetables"]),
 
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
 
     convertedTimetables() {
-      return this.timetable.map(tt => {
+      return this.timetables.map(tt => {
         const schedules = [];
+        const times = {};
+        const timeMorning = {};
+        const timeAfternoon = {};
+        const timeEvening = {};
         for (const s in tt.schedules) {
           const arrTime = tt.schedules[s];
-          schedules.push({
-            [s]: arrTime.map(a => {
-              return `${a.start_time}-${a.end_time}`;
-            })
-          });
+          if (!arrTime || arrTime.length < 1) {
+            timeMorning[s] = "";
+            timeAfternoon[s] = "";
+            timeEvening[s] = "";
+          } else {
+            arrTime.map(a => {
+              const checkWhichTimeInDay = this.checkWhichTimeInDay(a.end_time);
+              const value = `${a.start_time}-${a.end_time}`;
+              if (checkWhichTimeInDay == DAY_SECTION.MORNING) {
+                timeMorning[s] = value;
+              } else if (checkWhichTimeInDay == DAY_SECTION.AFTERNOON) {
+                timeAfternoon[s] = value;
+              } else if (checkWhichTimeInDay == DAY_SECTION.EVENING) {
+                timeEvening[s] = value;
+              }
+            });
+            timeMorning["day"] = DAY_SECTION.MORNING;
+            timeAfternoon["day"] = DAY_SECTION.AFTERNOON;
+            timeEvening["day"] = DAY_SECTION.EVENING;
+          }
         }
+        schedules.push(timeMorning);
+        schedules.push(timeAfternoon);
+        schedules.push(timeEvening);
         return {
           from_date: tt.from_date,
           to_date: tt.to_date,
@@ -150,9 +165,7 @@ export default {
             // lessiong is living => open zoom
             if (data.is_started == true) {
               const sessions = data.sessions || [];
-              const zoom = sessions.find(
-                s => s.position == data.session_starting_position
-              );
+              const zoom = sessions[data.session_starting_position];
               if (!zoom) return;
 
               // student open start_url or join_url
@@ -162,8 +175,8 @@ export default {
             }
 
             // fake to test coming lesson
-            this.modalShow = true;
-            this.targetClass = data;
+            // this.modalShow = true;
+            // this.targetClass = data;
           } else if (
             item.status == LESSION_ONLINE_STATUS.FINISH &&
             item.next_time
@@ -186,6 +199,23 @@ export default {
           this.isShowTimetable = !this.isShowTimetable;
         }
       });
+    },
+
+    /**
+     * @param: hh:mm
+     * return 1: morning, 2: afternoon, 3: evening
+     */
+    checkWhichTimeInDay(time) {
+      if (!time) return 1;
+      const splits = time.split(":");
+      const hh = parseInt(splits[0]);
+      if (hh >= 0 && hh <= 12) {
+        return DAY_SECTION.MORNING;
+      } else if (hh > 12 && hh <= 18) {
+        return DAY_SECTION.AFTERNOON;
+      } else if (hh > 18 && hh <= 24) {
+        return DAY_SECTION.EVENING;
+      }
     }
   },
 

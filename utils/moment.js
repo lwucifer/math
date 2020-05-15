@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD } from "../utils/config";
+import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM } from "../utils/config";
 const moment = require("moment");
 
 export const getDateBirthDay = _utcDate => {
@@ -37,6 +37,7 @@ export const getDateTimeHH_MM_D_M_Y = _utcDate => {
     const ts = moment.utc(_utcDate);
     return ts.format(DATETIME_HH_MM_DD_MM_YY);
 }
+
 
 Vue.filter("getDateBirthDay", function(_utcDate) {
     return getDateBirthDay(_utcDate);

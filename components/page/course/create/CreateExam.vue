@@ -13,18 +13,15 @@
 
       <FormCreateExam
         v-if="isShowFormAdd"
-        @handleCancel="handleCancelAddCreate"
-        @handleRefreshExcercises="handleRefreshExcercises"
+        @cancel="handleHideFormAdd"
         :category="category"
       />
 
       <ExerciseList
-        v-for="(exercise, index) in exams"
+        v-for="(exercise, index) in get(exams, 'content', [])"
         :key="exercise.id"
         :exercise="exercise"
         :index="index"
-        @handleRefreshQuestion="handleRefreshQuestion"
-        @handleRefreshExcercises="handleRefreshExcercises"
       />
     </div>
   </div>
@@ -69,45 +66,28 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       category: "TEST",
-      exams: [],
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
+      exams: "exams",
     }),
   },
 
-  created() {
-    this.getExams();
+  updated() {
+    console.log(this.exams);
+  },
+
+  mounted() {
+    this.$store.dispatch("elearning/create/getExams");
   },
 
   methods: {
     handleRefreshQuestion() {
       this.getProgress();
-      this.getExams();
-    },
-
-    async getExams() {
-      const options = {
-        params: {
-          elearning_id: getParamQuery("elearning_id"),
-          category: "TEST",
-        },
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
-        options
-      );
-      this.exams = get(res, "data.content", []);
-    },
-
-    handleRefreshExcercises() {
-      this.getProgress();
-      this.getExams();
-      this.isShowFormAdd = false;
-      this.isShowButtonCreate = true;
+      this.$store.dispatch("elearning/create/getExams");
     },
 
     handleShowFormAdd() {
@@ -115,7 +95,7 @@ export default {
       this.isShowFormAdd = true;
     },
 
-    handleCancelAddCreate() {
+    handleHideFormAdd() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },
