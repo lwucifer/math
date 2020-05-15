@@ -29,11 +29,11 @@ export default {
       ),
       store.dispatch(
         `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+      ),
+      store.dispatch(
+        `${STORE_TEACHING_REQUEST}/${actionTypes.TEACHING_ELEARNING_REQUESTS.LIST}`,
+        listQuery
       )
-      // store.dispatch(
-      //   `${STORE_TEACHING_REQUEST}/${actionTypes.TEACHING_ELEARNING_REQUESTS.LIST}`,
-      //   listQuery
-      // )
     ]);
   },
 

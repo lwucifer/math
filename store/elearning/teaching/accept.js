@@ -1,7 +1,6 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import Banned from "~/services/elearning/teaching/Banned";
-import Accept from "~/services/elearning/teaching/Invites";
+import Accept from "~/services/elearning/teaching/Accept";
 
 /**
  * initial state
@@ -17,7 +16,7 @@ const getters = {};
  * initial actions
  */
 const actions = {
-    async [actionTypes.TEACHING_ELEARNING_ACCEPT.ADD]({ commit }, { payload }) {
+    async [actionTypes.TEACHING_ELEARNING_ACCEPT.ADD]({ commit }, payload) {
         try {
             const result = await new Accept(this.$axios)[actionTypes.BASE.ADD](
                 payload
