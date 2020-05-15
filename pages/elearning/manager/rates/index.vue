@@ -28,6 +28,7 @@
                   :list.sync="list"
                   :loading="loading"
                   @changedPagination="updatePagination"
+                  @changedSort="handleChangedSort"
                 >
                 </list-table>
               </div>
@@ -105,6 +106,15 @@
       },
       handleChangedElearning(val) {
         this.updateFilter({ elearning_id: val })
+      },
+      handleChangedSort(val) {
+        if (val.sortBy == 'created_at') {
+          if (val.order == 'asc') {
+            this.updateFilter({ sort: 1 })
+          } else {
+            this.updateFilter({ sort: 0 })
+          }
+        }
       },
       handleSubmitSearch(val) {
         this.updateFilter({ keyword: val })

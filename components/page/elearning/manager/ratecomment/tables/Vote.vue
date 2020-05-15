@@ -145,7 +145,7 @@
         this.currentIndex = null
       },
       sortTable(info) {
-        console.log('sort by ', info)
+        this.$emit('changedSort', info)
       },
       get
     },
