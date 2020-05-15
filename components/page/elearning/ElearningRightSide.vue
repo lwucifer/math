@@ -124,7 +124,10 @@
       <a class="text-info d-flex-center">
         <IconBxsShare class="icon subheading mr-2" />Chia sẻ
       </a>
-      <a class="text-primary ml-auto d-flex-center">
+      <a
+        class="text-primary ml-auto d-flex-center"
+        @click="handleAddFavouriteElearning"
+      >
         <IconFavorite
           v-if="info && info.is_favourite"
           class="icon subheading mr-2"
@@ -155,7 +158,7 @@ import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
 import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
-
+import Favourite from "~/services/elearning/study/Favourite";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
@@ -216,17 +219,54 @@ export default {
     },
   },
 
-  // mounted() {
-  //   console.log(
-  //     this.isBuyElearning,
-  //     this.isStartElearning,
-  //     this.isStudyElearning,
-  //     this.isDoneElearning
-  //   );
-  // },
-
   methods: {
     get,
+
+    async handleAddFavouriteElearning() {
+      if (!get(this, "info.is_favourite", true)) {
+        this.addFavourite();
+        return;
+      }
+      this.removeFavourite();
+    },
+
+    async removeFavourite() {
+      const payload = {
+        elearning_ids: [get(this, "info.id", "")],
+      };
+      const res = await new Favourite(this.$axios)["deletePayload"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async addFavourite() {
+      const payload = {
+        elearning_id: get(this, "info.id", ""),
+      };
+      const res = await new Favourite(this.$axios)["add"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
