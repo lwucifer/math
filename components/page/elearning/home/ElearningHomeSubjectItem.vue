@@ -1,5 +1,5 @@
 <template>
-  <n-link to class="eh-subject-item">
+  <n-link :to="to" class="eh-subject-item">
     <div class="eh-subject-item__icon">
       <slot name="icon"></slot>
     </div>

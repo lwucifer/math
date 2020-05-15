@@ -49,8 +49,6 @@
   const STORE_NAMESPACE = "elearning/teaching/exercise"
   
   export default {
-    layout: "manage",
-    
     components: {
       HeadTabs,
       ElearningManagerSide,

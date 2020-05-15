@@ -3,7 +3,7 @@
     <div class="mb-4">
       <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block"
         >Tiêu đề {{ title }}
-        <span class="caption text-sub font-weight-normal"
+        <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         ></label
       >

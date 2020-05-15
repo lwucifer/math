@@ -4,10 +4,18 @@
 
 .app-upload__button {
     display: inline-block;
+
+    &:focus{
+        outline: none;
+    }
 }
 
 .app-upload {
     cursor: pointer;
+    
+    &:focus{
+        outline: none;
+    }
 }
 
 .app-upload__control {
@@ -18,6 +26,11 @@
 .app-upload__btn-choose-file {
     font-weight: 600;
     font-size: 1.4rem;
+
+    &:hover, &:active {
+        background-color: $color-disabled !important;
+        outline: none;
+    }
 }
 
 .app-upload__text {
@@ -29,6 +42,7 @@
     letter-spacing: 0.01em;
     border: 1px solid $color-border;
     border-right: 0;
+    background-color: #fff;
 }
 
 .app-upload__placeholder {

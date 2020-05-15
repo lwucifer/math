@@ -1,6 +1,11 @@
 <template>
   <div class="app-upload">
-    <span role="button" tabindex="0" class="app-upload__button" @click="triggerClickInput">
+    <span
+      role="button"
+      tabindex="0"
+      class="app-upload__button"
+      @click="triggerClickInput"
+    >
       <input
         v-if="input"
         ref="inputFile"
@@ -13,19 +18,20 @@
       <slot>
         <div class="app-upload__default-slot">
           <div class="app-upload__control">
-            <div class="app-upload__text">
+            <div class="app-upload__text" v-if="inputText">
               <span class="app-upload__file-name" v-if="localFileList.length">
-                <slot
-                  name="fileName"
-                  :localFileList="localFileList"
-                >{{ localFileList[0] ? localFileList[0].name : '' }}</slot>
+                <slot name="fileName" :localFileList="localFileList">{{
+                  localFileList[0] ? localFileList[0].name : ""
+                }}</slot>
               </span>
-              <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
+              <span class="app-upload__placeholder" v-else>{{
+                placeholder || "No file selected"
+              }}</span>
             </div>
 
             <app-button class="app-upload__btn-choose-file btn--color-disabled">
-              <IconAttachFile24px class="mr-2"/>
-              Chọn file
+              <IconAttachFile24px class="mr-2" />
+              {{ title }}
             </app-button>
           </div>
           <slot name="hint"></slot>
@@ -36,11 +42,11 @@
 </template>
 
 <script>
-import IconAttachFile24px from '~/assets/svg/v2-icons/attach_file_24px.svg?inline';
+import IconAttachFile24px from "~/assets/svg/v2-icons/attach_file_24px.svg?inline";
 
 export default {
   components: {
-    IconAttachFile24px
+    IconAttachFile24px,
   },
 
   inheritAttrs: false,
@@ -49,17 +55,26 @@ export default {
     multiple: Boolean,
     fileList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     placeholder: {
-      type: String
+      type: String,
+    },
+
+    inputText: {
+      type: Boolean,
+      default: true,
+    },
+    title: {
+      type: String,
+      default: "Chọn file",
     },
   },
 
   data() {
     return {
       input: true,
-      localFileList: this.fileList
+      localFileList: this.fileList,
     };
   },
 
@@ -81,25 +96,25 @@ export default {
             vm.input = false;
             const timeout = setTimeout(() => {
               vm.input = true;
-              clearTimeout(timeout)
+              clearTimeout(timeout);
             });
-          }
+          },
         }
       );
-    }
+    },
   },
 
   watch: {
     fileList(newValue) {
       this.localFileList = this.fileList;
-    }
+    },
   },
 
   methods: {
     triggerClickInput() {
       this.$refs.inputFile.click();
-    }
-  }
+    },
+  },
 };
 </script>
 

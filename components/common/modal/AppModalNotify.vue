@@ -82,7 +82,7 @@ export default {
     },
     title: {
       type: String,
-      default: "Thông báo"
+      default: "báo"
     },
     description: String,
     okText: {

@@ -1,13 +1,11 @@
 <template>
   <div class="clc-video">
-    <div class="clc-video__image">
-      <n-link to=""><img src="/images/thumnail-video.png" alt/></n-link>
-    </div>
+    <div class="clc-video__image"><img :src="thumnail" alt /></div>
 
     <div class="clc-video__right w-100">
-      <div class="d-flex justify-content-between">
-        <p>
-          <span class="clc-video__name heading-6 mb-3 font-weight-bold"
+      <div class="d-flex justify-content-between clc-video__name">
+        <p class="mb-3">
+          <span class="heading-6 mb-3 font-weight-bold"
             >Bài {{ index + 1 + ": " }}</span
           >
           <span>{{ get(lesson, "name", "") }}</span>
@@ -19,7 +17,7 @@
             class="clc-video__btn-edit text-primary mr-2"
             @click="handleEditLesson($event)"
           >
-            <IconEditAlt class="icon" />
+            <IconBorderColor24px class="icon" />
           </a>
           <a
             href
@@ -31,7 +29,7 @@
         </div>
       </div>
 
-      <div class="clc-video__name text-dark mt-2">
+      <div class="clc-video__type text-dark mt-2">
         Định dạng: {{ get(lesson, "type", "") }}
       </div>
 
@@ -50,7 +48,7 @@
 </template>
 
 <script>
-import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
+import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
@@ -60,7 +58,7 @@ import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
-    IconEditAlt,
+    IconBorderColor24px,
     IconTrashAlt,
     IconClock,
   },
@@ -73,6 +71,14 @@ export default {
     index: {
       type: Number,
       default: null,
+    },
+  },
+
+  computed: {
+    thumnail() {
+      return get(this, "lesson.type", "") === "VIDEO"
+        ? "/images/thumnail-video.png"
+        : "/images/thumnail-doc.png";
     },
   },
 

@@ -3,7 +3,7 @@
     <div class="mb-4">
       <h5 for="title" class="mb-3 d-inline-block">
         Tiêu đề {{ title }}
-        <span class="caption text-sub font-weight-normal"
+        <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         >
       </h5>

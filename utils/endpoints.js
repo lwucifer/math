@@ -26,6 +26,7 @@ export const UPDATE_COVER = `/social/api/user/updateCover`;
 export const CHECK_EMAIL = `/social/api/user/checkEmail`;
 export const VERIFY_OTP_EMAIL = `/social/api/user/verifyOtp`;
 export const UPDATE_PHONE = `/social/api/user/updatePhone`;
+export const ACCOUNT_PROFILE_BIOGRAPHY = `/user/account/profile/biography`;
 
 /**
  * SOCIALS
@@ -88,6 +89,11 @@ export const ELEARNING_CREATING_PROGRESS = `/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `/elearning/creating/publish`;
 export const ELEARNING_JOIN = `/elearning/join`;
+export const ELEARNING_PUBLIC_WHAT_NEXTS = `/elearning/public/what_nexts`;
+export const ELEARNING_PUBLIC_FOR_YOU = `/elearning/public/for_you`;
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects`;
+export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 
 /**
  * ONLINE CLASS
@@ -125,7 +131,6 @@ export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
-
 
 /**
  * SCHOOL
@@ -176,7 +181,7 @@ export const TEACHING_ELEARNING_BANNED = `/elearning/teaching/elearning/banned`;
 export const TEACHING_STUDENT_PROGESS = `/elearning/teaching/student/progress`;
 export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/requests`;
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
-export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invites`;
+export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
 /**
  * PAYMENT
  */

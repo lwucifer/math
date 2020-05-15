@@ -36,7 +36,17 @@
       >{{ item.text }}</a>
     </div>
 
-    <template v-for="item in tabs">
+    <div v-if="pageLoading" class="container mt-6">
+      <div class="row">
+        <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+          <div class="bg-white py-6 px-3">
+            <VclList />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template v-for="item in tabs" v-else>
       <div
         v-show="item.tab === tab"
         class="elearning-search__tab-pane"
@@ -87,12 +97,15 @@ import Search from "~/services/elearning/public/Search";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 
+import { VclList } from "vue-content-loading";
+
 export default {
   name: "ELearningSearch",
 
   components: {
     IconHamberger,
-    CourseItem2
+    CourseItem2,
+    VclList
   },
 
   created() {
@@ -153,8 +166,14 @@ export default {
       ],
       payload: {
         subject: ""
-      }
+      },
+
+      pageLoading: true,
     };
+  },
+
+  mounted() {
+    this.pageLoading = false;
   },
 
   methods: {

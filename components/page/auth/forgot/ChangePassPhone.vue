@@ -106,7 +106,7 @@ export default {
   },
 
   computed: {
-    ...mapState("auth", ["firebaseToken"]),
+    ...mapState("auth", ["firebaseToken", "phoneSave"]),
     disabledBtnForgot() {
       const btnDisabled = this.$v.$invalid || this.validate.password;
       return btnDisabled;
@@ -124,7 +124,7 @@ export default {
           if (result && result.user) {
             this.verify_token = result.user.ma;
             const resetPassModelPhone = createResetPassWithPhone(
-              `+${formatPhoneNumber(this.phone)}`,
+              `+${formatPhoneNumber(this.phoneSave)}`,
               this.verify_token,
               this.password,
               token
@@ -155,7 +155,7 @@ export default {
       }
     },
     handleOtp() {
-      this.errorRespon = false;
+      this.clearError();
       this.otp = this.otp.replace(/\D/g, "");
       this.validateProps.otp = "";
       if (!this.$v.otp.required) {
@@ -170,7 +170,7 @@ export default {
       }
     },
     handlePassword(_password) {
-      this.errorRespon = false;
+      this.clearError();
       this.validate.password = true;
       this.validateProps.password = "";
       if (!this.$v.password.required) {
@@ -187,7 +187,7 @@ export default {
       }
     },
     handleCoPassword() {
-      this.errorRespon = false;
+      this.clearError();
       if (!this.$v.coPassword.required) {
         this.validateProps.coPassword = 2;
         this.errorMessage.coPassword = "Trường này là bắt buộc";
@@ -202,7 +202,7 @@ export default {
     sendOTP() {
       const that = this;
       const data = {
-        phone: `+${formatPhoneNumber(this.phone)}`,
+        phone: `+${formatPhoneNumber(this.phoneSave)}`,
         appVerifier: window.recaptchaVerifier
       };
       this.sendotp(data);
@@ -237,6 +237,10 @@ export default {
           break;
       }
       this.messageErrorChange = message;
+    },
+    clearError() {
+      this.errorRespon = false;
+      this.messageErrorChange = "";
     }
   },
 

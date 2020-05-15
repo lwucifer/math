@@ -2,7 +2,7 @@
   <div class="container">
     <school-filter
       title="Danh sách trường học"
-      :schoolTypes="schoolTypes"
+      :schoolTypes="[]"
       :hasSort="false"
       :hasSearch="true"
       :hasSchoolLevel="false"
@@ -12,14 +12,20 @@
       @handleChangedDistrict="handleChangedDistrict"
       @handleChangedWard="handleChangedWard"
       @handleSubmitSearch="handleSubmitSearch"
-    >
-    </school-filter>
+    ></school-filter>
     <!--Detail school types-->
     <!--v-for="(category, index) in categories" :key="index"-->
-    <div
-      v-for="(value, name, index) in list"
-      :key="index"
-    >
+    <div v-if="pageLoading" class="container mt-6">
+      <div class="row">
+        <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+          <div class="bg-white py-6 px-3">
+            <VclList />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-for="(value, name, index) in list" :key="index" v-else>
       <SchoolSlider
         :category="{ name: get(value, 'name', ''), type: get(value, 'name_en', '') }"
         :total-school="get(value, 'total_school', 0)"
@@ -27,29 +33,22 @@
         :total-student="get(value, 'total_student', 0)"
         @showAll="showAll"
         :schools="get(value, 'schools', [])"
-      >
-      </SchoolSlider>
+      ></SchoolSlider>
     </div>
   </div>
 </template>
 
 <script>
-import SchoolFilter from "~/components/page/school/SchoolFilter"
-import SchoolListBox from "~/components/page/school/SchoolListBox"
-import SchoolSlider from "~/components/page/school/SchoolListSlider"
-import { mapState } from "vuex"
-import * as actionTypes from "~/utils/action-types"
-import { get } from "lodash"
-import { useEffect, addAllOptionSelect } from "~/utils/common"
-import {
-  VILLAGES,
-  DISTRICTS,
-  PROVINCES,
-  SCHOOL_TYPES,
-  SCHOOL_TYPE_DETAILS,
-} from "~/server/fakedata/school/test";
+import SchoolFilter from "~/components/page/school/SchoolFilter";
+import SchoolListBox from "~/components/page/school/SchoolListBox";
+import SchoolSlider from "~/components/page/school/SchoolListSlider";
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import { useEffect, addAllOptionSelect } from "~/utils/common";
+import { VclList } from "vue-content-loading";
 
-const NAMESPACE_SCHOOL_STANDALONE = 'elearning/school/school-standalone'
+const NAMESPACE_SCHOOL_STANDALONE = "elearning/school/school-standalone";
 
 export default {
   name: "School",
@@ -59,33 +58,34 @@ export default {
   components: {
     SchoolFilter,
     SchoolListBox,
-    SchoolSlider
+    SchoolSlider,
+    VclList,
   },
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `${NAMESPACE_SCHOOL_STANDALONE}/${actionTypes.ELEARNING_SCHOOL_STANDALONE.LIST}`, { size: 16 }
+      `${NAMESPACE_SCHOOL_STANDALONE}/${actionTypes.ELEARNING_SCHOOL_STANDALONE.LIST}`,
+      { size: 16 }
     );
   },
 
   data() {
     return {
       isAuthenticated: true,
-      schoolTypes: SCHOOL_TYPES,
-      // list: SCHOOL_TYPE_DETAILS,
+      pageLoading: true,
       province_id: "",
       district_id: "",
       ward_id: "",
-      keyword: "",
+      keyword: ""
     };
   },
 
   computed: {
     ...mapState(NAMESPACE_SCHOOL_STANDALONE, {
-      list: "standaloneSchools",
+      list: "standaloneSchools"
     }),
     ...mapState("elearning/public/public-category", {
-      categories: "categories",
+      categories: "categories"
     }),
     ...mapState("elearning/school/school-summary", {
       schoolSummary: "elearningSchoolSummary"
@@ -97,7 +97,7 @@ export default {
       const schoolNum = this.schoolSummary.total_school;
       const studentNum = this.schoolSummary.total_student;
       const teacherNum = this.schoolSummary.total_teacher;
-    
+
       return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
     },
     categoryOpts() {
@@ -107,7 +107,7 @@ export default {
       if (this.type) return this.categories.find(c => c.type == this.type);
       return {};
     },
-  
+
     selectedType() {
       return this.type;
     }
@@ -120,6 +120,10 @@ export default {
     //   "ward_id",
     //   "keyword",
     // ]);
+  },
+
+  mounted() {
+    this.pageLoading = false;
   },
 
   methods: {
@@ -140,6 +144,9 @@ export default {
       this.$router.push(`/school/search?keyword=${this.keyword}`);
     },
     handleGetSchoolsByLocation() {
+      console.log("[handleGetSchoolsByLocation]")
+      this.pageLoading = true;
+
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;
@@ -152,7 +159,7 @@ export default {
       );
     },
     get
-  },
+  }
 };
 </script>
 

@@ -13,7 +13,7 @@
           <app-button
             size="xl"
             nuxt
-            :to="'/' + accountInfo.id + '/info'"
+            :to="'/' + token.id + '/info'"
           >
             Quay lại trang trước
           </app-button>
@@ -26,7 +26,7 @@
 <script>
 import ImageAuth  from "~/components/page/auth/ImageAuth";
 import IconSuccess from '~/assets/svg/icons/success.svg?inline';
-import { getToken } from "~/utils/auth";
+import { mapState } from 'vuex';
 
 export default {
   components:{
@@ -34,9 +34,9 @@ export default {
     IconSuccess
   },
   computed: {
-    accountInfo() {
-      return getToken()
-    }
+    ...mapState("auth", [
+      "token",
+    ]),
   }
 }
 </script>
