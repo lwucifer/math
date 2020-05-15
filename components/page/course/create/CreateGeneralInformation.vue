@@ -45,9 +45,7 @@
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-5 mb-3">
             Tên {{ name }}
-            <span class="text-base font-weight-normal"
-              >(Tối đa 60 ký tự)</span
-            >
+            <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
           </h2>
           <app-input
             :placeholder="`Nhập tiêu đề của` + ' ' + name"
@@ -120,7 +118,7 @@
 
     <div class="create-action mt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
+        <!-- <app-button
           outline
           class="mr-4"
           @click="handleReset"
@@ -134,9 +132,9 @@
           @click="handleCLickSave('draft')"
           :disabled="!submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
+        > -->
         <app-button
-          @click="handleCLickSave('next')"
+          @click="handleCLickSave"
           class="create-action__btn mr-4"
           :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
@@ -211,7 +209,6 @@ export default {
       },
       showModalConfirm: false,
       confirmLoading: false,
-      type_save: "",
     };
   },
 
@@ -268,8 +265,7 @@ export default {
       return true;
     },
     title_confirm() {
-      let title =
-        "Xác nhận?";
+      let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
         title = "Xác nhận?";
       }
@@ -287,7 +283,7 @@ export default {
     handleChangeDescription(value) {
       value = value.replace("<p></p>", "");
       if (!value) {
-        this.error.description = "Bạn cần nhập mô tả" + ' ' + this.name;
+        this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
         return;
       }
       if (value.length < 300) {
@@ -303,7 +299,7 @@ export default {
 
     handleChangeName(value) {
       if (!value) {
-        this.error.name = "Bạn cần nhập tên" + ' ' + this.name;
+        this.error.name = "Bạn cần nhập tên" + " " + this.name;
         return;
       }
       if (value.length > 60) {
@@ -313,16 +309,9 @@ export default {
       this.error.name = "";
     },
 
-    handleReset() {
-      this.initApp = false;
-      this.$nextTick().then(() => {
-        Object.assign(this.$data, this.$options.data.call(this));
-      });
-    },
-
     checkShowErrorBenefit() {
       if (!this.payload.benefit.length) {
-        this.error.benefit = "Bạn cần thêm lợi ích cho"  + ' ' + this.name;
+        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
         return;
       }
       this.error.benefit = "";
@@ -373,8 +362,7 @@ export default {
       this.payload.subject = get(subject, "id", "");
     },
 
-    handleCLickSave(type_save) {
-      this.type_save = type_save;
+    handleCLickSave() {
       this.showModalConfirm = true;
     },
 
@@ -394,13 +382,11 @@ export default {
         this.handleFetchElearningGeneral(elearning_id);
         redirectWithParams({ elearning_id });
         this.$toasted.success(get(result, "message", ""));
-        if (this.type_save === "next") {
-          if (this.payload.type === "LECTURE") {
-            this.$emit("nextStep", "content-lecture");
-          }
-          if (this.payload.type === "COURSE") {
-            this.$emit("nextStep", "content-course");
-          }
+        if (this.payload.type === "LECTURE") {
+          this.$emit("nextStep", "content-lecture");
+        }
+        if (this.payload.type === "COURSE") {
+          this.$emit("nextStep", "content-course");
         }
 
         return;

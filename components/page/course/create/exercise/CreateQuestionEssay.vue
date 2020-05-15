@@ -9,7 +9,7 @@
     >
     <app-editor v-model="payload.answers[0].content" />
 
-    <div v-if="get(exercise, 'category', '') === 'TEST'">
+    <div v-if="showAddPoint">
       <!-- <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
         >Điểm</label
       >
@@ -112,6 +112,10 @@ export default {
     };
   },
 
+  mounted() {
+    console.log(this.exercise);
+  },
+
   computed: {
     ...mapState("elearning/create", {
       general: "general",
@@ -119,6 +123,12 @@ export default {
     ...mapState("elearning/create", {
       lesson: "lesson",
     }),
+    showAddPoint() {
+      return (
+        get(this, "exercise.category", "") === "TEST" ||
+        get(this, "exercise.required", "") === true
+      );
+    },
   },
 
   methods: {
