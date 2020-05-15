@@ -12,12 +12,14 @@
       <school-summary :school="school" />
 
       <school-lesson-slider
+        v-if="get(lessons, 'content', []).length > 0"
         :lessons="get(lessons, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Bài giảng của trường"
       />
 
       <school-course-slider
+        v-if="get(courses, 'content', []).length > 0"
         :cources="get(courses, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Khóa học của trường"
@@ -32,12 +34,6 @@ import SchoolLessonSlider from "~/components/page/school/SchoolLessonSlider";
 import SchoolCourseSlider from "~/components/page/school/SchoolCourseSlider";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-// Import faked data
-import {
-  SCHOOL_SUMMARY,
-  LESSONS,
-  COURSES,
-} from "~/server/fakedata/school/test";
 import { get } from "lodash";
 
 export default {
@@ -60,8 +56,7 @@ export default {
       params: {
         school_id,
         elearning_type: "COURSE",
-        size: 5,
-        // status: "ACCEPTED",
+        size: 16,
       },
     };
     await store.dispatch(
@@ -72,7 +67,7 @@ export default {
       params: {
         school_id,
         elearning_type: "LECTURE",
-        size: 5,
+        size: 16,
         // status: "ACCEPTED",
       },
     };
@@ -86,7 +81,6 @@ export default {
     return {
       isAuthenticated: true,
       isDepartment: true,
-      // school: SCHOOL_SUMMARY,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
@@ -94,14 +88,9 @@ export default {
         autoHeight: true,
         watchOverflow: false,
         navigation: false,
-        // pagination: {
-        //     el: ".swiper-pagination"
-        // },
         pagination: false,
         showName: true,
       },
-      // lessonss: LESSONS,
-      // courses: COURSES
     };
   },
   computed: {
