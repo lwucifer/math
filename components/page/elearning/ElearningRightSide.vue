@@ -189,10 +189,12 @@ export default {
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
 
-      if (
-        get(this, "info.is_study", false) ||
-        !get(this, "info.elearning_price.free", true)
-      ) {
+      if (get(this, "info.is_study", false)) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
+
+      if (!get(this, "info.elearning_price.free", true)) {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
@@ -204,6 +206,11 @@ export default {
       const res = await new JoinService(this.$axios)["add"](payload);
 
       if (get(res, "success", false)) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
+
+      if (get(res, "code", "") === "SCLC_1127") {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }

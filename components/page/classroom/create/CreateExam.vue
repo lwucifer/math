@@ -365,6 +365,27 @@
         </div>
       </template>
     </create-content-box>
+
+    <div class="create-action pt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <app-button
+          outline
+          class="mr-4"
+          color="error"
+          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+        >
+        <app-button
+          class="mr-4"
+          color="primary"
+          outline
+          ><IconSave class="mr-2" /> Lưu nháp</app-button
+        >
+        <app-button
+          class="create-action__btn mr-4"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -377,6 +398,9 @@
   import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
   import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
   import IconUpload from "~/assets/svg/design-icons/upload.svg?inline";
+  import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+  import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+  import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
   export default {
     components: {
@@ -388,6 +412,9 @@
       IconFileCheck,
       IconClipboardNotes,
       IconUpload,
+      IconDelete,
+      IconSave,
+      Forward
     },
     data() {
       return {

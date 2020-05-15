@@ -40,13 +40,13 @@
         v-if="showBtn"
         @click="showInputBenefit"
       >
-        <IconAdd class="mr-2" /> Thêm lợi ích
+        <IconAdd class="mr-2" /> <span class="font-weight-semi-bold">Thêm lợi ích</span>
       </button>
 
       <app-editor-menu-bubble
         v-if="showBenefit"
         class="bg-input-gray mb-3 flex-grow"
-        placeholder="Nhập lợi ích từ khoá học"
+        :placeholder="`Nhập lợi ích từ` + ' ' + name"
         v-model="benefitEditorValue"
       />
 
