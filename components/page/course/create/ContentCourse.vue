@@ -10,7 +10,11 @@
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div class="cc-box__head">
+          <div
+            class="cc-box__head"
+            style="padding: 1.5rem"
+            :class="{ 'add-border': addBorder }"
+          >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
@@ -37,6 +41,29 @@
           </div>
         </div>
       </div>
+
+      <div class="create-action pt-5">
+        <div class="create-action__right d-flex align-items-center">
+          <!-- <app-button
+            outline
+            class="mr-4"
+            color="error"
+            ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+          >
+          <app-button
+            class="mr-4"
+            color="primary"
+            outline
+            ><IconSave class="mr-2" /> Lưu nháp</app-button
+          > -->
+          <app-button
+            class="create-action__btn mr-4"
+            @click="handleNextStep"
+            :disabled="!isNextStep"
+            ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,6 +84,9 @@ const IconTrashAlt = () =>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
@@ -87,12 +117,16 @@ export default {
     EditCourseName,
     IconAngleUp,
     IconAdd,
+    IconDelete,
+    IconSave,
+    Forward,
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
+      addBorder: false,
     };
   },
 
@@ -103,14 +137,25 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      progress: "progress",
     }),
+    isNextStep() {
+      if (get(this, "progress.general_status", false) != 1) return false;
+      if (get(this, "progress.content_status", false) != 1) return false;
+      return true;
+    },
   },
 
   methods: {
     get,
 
+    handleNextStep() {
+      this.$emit("nextStep", "settings");
+    },
+
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
+      this.addBorder = !this.addBorder;
     },
   },
 };

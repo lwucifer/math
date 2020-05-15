@@ -155,7 +155,8 @@ import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
-import { getToken } from "~/utils/auth";
+import { getToken, getDeviceId } from "~/utils/auth";
+import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
 
 export default {
   components: {
@@ -210,7 +211,7 @@ export default {
         this.phone = get(this, "profileList.phone", "");
         this.email = get(this, "profileList.email", "");
         this.address = get(this, "profileList.address", "");
-        this.sex = get(this, "profileList.sex", "") === "MALES" ? "Nam" : "Nữ";
+        this.sex = get(this, "profileList.sex", "") === "MALE" ? "Nam" : "Nữ";
         this.birthday = getDateBirthDay(get(this, "profileList.birthday", ""));
         this.accountLink.list = get(this, "linkList.data", {});
         this.profileInfo = get(this, "profileList", {});
@@ -224,6 +225,8 @@ export default {
       "accountPersonalList",
       "accountBiographyAdd"
     ]),
+    ...mapActions("auth", ["logout"]),
+
     async fetchProfile() {
       await Promise.all([
         this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
@@ -249,12 +252,23 @@ export default {
       );
       if (get(res, "success", false)) {
         this.modalStatus = "success";
-        this.modalMes.notify = "Liên kết thành công!";
+        this.modalMes.notify = "Liên kết thành công! Vui lòng đăng nhập lại";
         this.$nextTick(() => {
           this.resetCode();
           this.visible.addLink = false;
           this.visible.notify = true;
         });
+
+        setTimeout(() => {
+          // logout here
+          const device_id = getDeviceId();
+          this.logout({ device_id }).then(result => {
+            console.log("[handleLogout] result", result, device_id);
+            if (result.success == RESPONSE_SUCCESS) {
+              this.$router.push("/auth/signin");
+            }
+          });
+        }, TIMEOUT.NOTIFY);
       } else {
         this.modalStatus = "error";
         this.modalMes.notify = "Liên kết không thành công!";

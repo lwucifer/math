@@ -1,6 +1,6 @@
 <template>
-  <div class="cc-box__bg-gray px-5 pt-4 pb-4" id="create-lesson-of-chapter">
-    <h3 class="heading-6 mb-2 mt-3">Tên bài học số {{ noLesson + 1 }}</h3>
+  <div class="cc-box__bg-disable" id="create-lesson-of-chapter">
+    <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span></h3> 
     <app-input
       @handleBlur="handleBlurNameInput"
       :counter="60"
@@ -62,17 +62,15 @@
     <div class="d-flex justify-content-end mt-4">
       <app-button
         class="clc-btn font-weight-semi-bold text-secondary mr-4"
-        size="sm"
+        size="md"
         color="default"
         outline
-        square
         @click="handleCancel"
         >Huỷ bỏ</app-button
       >
       <app-button
         class="clc-btn font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         :disabled="!submit"
         @click="handleAddContent"
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button

@@ -85,6 +85,7 @@ export default {
     handleSigninSuccess(isSuccess) {
       console.log("[handleSigninSuccess]", isSuccess);
       this.getFirebaseToken(this.registerDevice);
+      this.$router.go(-1); // back to previous
     },
 
     tabPhone() {

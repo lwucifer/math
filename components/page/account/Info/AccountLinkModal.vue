@@ -12,8 +12,8 @@
         <app-input
           v-model="code"
           placeholder="Nhập mã liên kết trường học"
-          validate="2"
-          message="Something message...."
+          :validate="isValidCode"
+          :message="messageCode"
         />
         <div class="account-link-school-modal__actions">
           <app-button
@@ -34,34 +34,47 @@
         </div>
       </div>
       <button class="account-link-school-modal__close" @click="$emit('close')">
-        <IconClose class="icon d-block fill-opacity-1"/>
+        <IconClose class="icon d-block fill-opacity-1" />
       </button>
     </div>
   </app-modal>
 </template>
 
 <script>
-  import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
-  
-  export default {
-    components: {
-      IconClose
-    },
-    data() {
-      return ({
-        code: "",
-        success: false
-      })
-    },
-    props: {
-      visible: Boolean,
-    },
-    methods: {
-    
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
+
+export default {
+  components: {
+    IconClose
+  },
+  data() {
+    return {
+      code: "",
+      success: false,
+      messageCode: "",
+    };
+  },
+  props: {
+    visible: Boolean
+  },
+  computed: {
+    isValidCode() {
+      if (this.code && this.code.length == 9) {
+        return VALIDATE_STATUS.SUCCESS;
+      } else if(this.code){
+        this.messageCode = "Mã liên kết không hợp lệ";
+        return VALIDATE_STATUS.ERROR;
+      } else {
+        this.messageCode = "";
+      }
     }
-  }
+  },
+
+  methods: {}
+};
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/account/_account-link-school-modal.scss";
+@import "~/assets/scss/components/account/_account-link-school-modal.scss";
 </style>

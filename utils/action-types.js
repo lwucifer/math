@@ -191,6 +191,27 @@ export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
     LIST: "elearningPublicSchoolYearList",
 };
 
+export const ELEARNING_PUBLIC_WHAT_NEXTS = {
+    LIST: "elearningPublicWhatNextsList"
+};
+
+export const ELEARNING_PUBLIC_FOR_YOU = {
+    LIST: "elearningPublicForYouList"
+};
+
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
+    LIST: "elearningPublicVotedSubjectsList"
+};
+
+export const ELEARNING_PUBLIC_NEWEST = {
+    LIST_LECTURE: "elearningPublicNewestLecture",
+    LIST_COURSE: "elearningPublicNewestCourse",
+};
+
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
+    LIST: "elearningPublicHighlightTeachers"
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",

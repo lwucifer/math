@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="ce-item d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between">
       <EditChapterName :chapter="chapter" :index="index" />
+
+      
       <div class="ce-item__right d-flex">
         <a href @click.prevent="toggleShowAddLesson">Thêm bài học</a>
         <button
