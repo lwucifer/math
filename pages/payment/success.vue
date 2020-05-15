@@ -2,7 +2,7 @@
   <div class="wrap-success_payment">
       <IconSuccess/>
       <h5 class="my-4">Thanh toán thành công</h5>
-      <app-button square class="mb-4">Góc học tập</app-button>
+      <app-button square class="mb-4" nuxt to="/elearning/mycourses">Góc học tập</app-button>
       <p class="my-4">Tải ứng dụng Schoolly để học tập đơn giản</p>
       <div>
         <span class="mr-4">

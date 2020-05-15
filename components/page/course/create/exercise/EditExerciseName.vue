@@ -160,9 +160,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        data: {
-          id: get(this, "exercise.id", ""),
-        },
+        id: get(this, "exercise.id", ""),
       };
       const result = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
