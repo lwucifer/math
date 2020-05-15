@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-3">
+  <div class="col-md-5">
     <div
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
