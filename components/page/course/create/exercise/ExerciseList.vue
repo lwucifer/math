@@ -20,8 +20,8 @@
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
           >
-            <IconAngleDown class="icon" v-if="!isShowExercise" />
-            <IconAngleUp class="icon" v-else />
+            <IconAngleDown  width="20px" height="20px" class="icon" v-if="!isShowExercise" />
+            <IconAngleUp  width="20px" height="20px" class="icon" v-else />
           </button>
         </div>
       </div>
