@@ -22,24 +22,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 19rem">
+      <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -92,9 +92,8 @@
       
       <template v-slot:actions="{row}">
         <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconUsersAlt class="fill-blue mr-2"/>Xem danh sách học sinh
+          <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
         </n-link>
-        <button @click="deleteRows(row.online_class_id)"><IconTimesCircle class="fill-secondary mr-2"/>Xóa</button>
       </template>
     </app-table>
     <!--End table-->
@@ -109,7 +108,7 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconUsersAlt from '~/assets/svg/design-icons/users-alt.svg?inline';
+import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -128,13 +127,14 @@ export default {
     IconArrow,
     IconCalendar,
     IconTrash,
-    IconUsersAlt,
+    IconPeople,
     IconTimesCircle,
     IconHamberger
   },
 
   data() {
     return {
+      showFilter: false,
       tab: 1,
       heads: [
         {
@@ -193,6 +193,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          elearning_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -205,6 +216,7 @@ export default {
     },
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {},
     handleBlurSearchInput() {},

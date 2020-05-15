@@ -8,11 +8,7 @@
     @close="$emit('close')"
   >
     <div slot="content">
-      <div
-        class="table_schedule"
-        v-for="(timetable, index) in timetables"
-        :key="index"
-      >
+      <div class="table_schedule" v-for="(timetable, index) in timetables" :key="index">
         <h5 class="text-primary mb-4">
           Thời gian từ ngày {{ timetable.from_date }} đến
           {{ timetable.to_date }}
@@ -109,8 +105,7 @@ export default {
     }
   },
 
-  computed: {
-  },
+  computed: {},
 
   created() {
     console.log("[timetables]", this.timetables);
@@ -134,6 +129,11 @@ export default {
   }
   tr {
     border: 1px solid red;
+  }
+  .today-task {
+    background: #d50000;
+    opacity: 0.2;
+    border: 1px solid #eeeeee;
   }
 }
 </style>

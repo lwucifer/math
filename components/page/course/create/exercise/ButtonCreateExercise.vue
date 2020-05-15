@@ -40,8 +40,8 @@ export default {
   computed: {
     text() {
       return get(this, "category", "") === "EXERCISE"
-        ? "Tạo bài tập"
-        : "Tạo bài kiểm tra";
+        ? "Tạo bài kiểm tra"
+        : "Tạo bài tập";
     }
   }
 };

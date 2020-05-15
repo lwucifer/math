@@ -10,6 +10,7 @@ export const AUTH = {
     SET_FIREBASE_TOKEN: "setFirebaseToken",
     SET_CURRENT_DEVICE: "setCurrentDevice",
     SAVE_PHONE_PASS: "savePhonePass",
+    SAVE_PHONE_STATE: "savePhoneState",
 };
 
 export const BASE = {
@@ -356,6 +357,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_CURRENT_BY_NO: "setStudyExerciseCurrentByNo",
     SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
     SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
+    SET_STUDY_EXERCISE_AUTO_SUBMISSION: "setStudyExerciseAutoSubmission",
 };
 
 export const ELEARNING_STUDY_PROGRESS = {
@@ -369,6 +371,10 @@ export const ELEARNING_SCHOOL_SUMMARY = {
 
 export const ELEARNING_SCHOOL_SEARCH = {
     SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList",
+};
+
+export const ELEARNING_SCHOOL_STANDALONE = {
+    SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
 
 export const MESSAGE_GROUP = {

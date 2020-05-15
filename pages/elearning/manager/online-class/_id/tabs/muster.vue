@@ -71,10 +71,21 @@
       @pagechange="onPageChange"
       :data="lessons"
     >
+      <template v-slot:cell(start_time)="{row}">
+        <td>
+          <div v-html="convertTime(row)">
+          </div>
+        </td>
+      </template>
+      <template v-slot:cell(num_students)="{row}">
+        <td class="color-blue">
+          {{row.participants}}/{{row.num_students}}
+        </td>
+      </template>
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'" class="color-blue none-decoration">
-          50/100
+          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'" class="none-decoration">
+          <IconArrowRight/>
           </n-link>
         </td>
       </template>
@@ -98,6 +109,7 @@ import ModalInviteStudent from "~/components/page/elearning/manager/olclass/Moda
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconArrowRight from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -119,6 +131,7 @@ export default {
     IconLock2,
     IconLockOpenAlt,
     IconHamberger,
+    IconArrowRight,
     ModalInviteStudent
   },
 
@@ -149,8 +162,12 @@ export default {
           sort: true
         },
         {
-          name: "action",
+          name: "num_students",
           text: "Số học sinh có mặt"
+        },
+        {
+          name: "action",
+          text: ""
         }
       ],
       indexs: [
@@ -220,6 +237,25 @@ export default {
       this.params.lesson_index = this.filterIndex.value;
     },
 
+    formatAMPM(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
+    convertTime (item) {
+      const duration = parseInt(item.duration) * 60 * 1000;
+      const date = new Date(item.start_time);
+      const end = this.formatAMPM(new Date(date.getTime() + duration));
+      let strTime = date.getDate() + '/' + (date.getMonth() +1) + '/' + date.getFullYear();
+      strTime = this.formatAMPM(date) + " - " + end + '<br>' + strTime;
+      return strTime;
+    },
+
     async getList() {
       try {
         this.loading = true;
@@ -230,7 +266,7 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
           { params}
         );
-        this.lessons = this.get(this.stateLessons, 'data.content', [])
+        this.lessons = this.get(this.stateLessons, 'data.content', []);
         this.pagination.size = this.get(this.stateLessons, 'data.size', 10)
         this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
         this.pagination.last = this.get(this.stateLessons, 'data.last', 1)

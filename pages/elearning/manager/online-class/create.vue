@@ -231,18 +231,18 @@
                   </div>
 
                   <div v-else class="d-flex-center">
-                    <div>
-                      {{item.start_time}} - {{item.duration}}
+                    <div class="mr-4">
+                      {{item.start_time}} - {{getEndTime(index)}}
                     </div>
-                    <div>
-                      Hàng tuần vào thứ {{item.days_of_week}}
+                    <div class="mr-4">
+                      {{convertDay(index)}}
                     </div>
                     <div>
                       {{item.from_date}} - {{item.to_date}}
                     </div>
                     <div class="ml-auto">
-                      <button v-on:click="(e) => editSchedule(e,index)"><IconCreate class="fill-primary"/></button>
-                      <button v-on:click="(e) => removeSchedule(e,index)"><IconTrashAlt class="fill-red"/></button>
+                      <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
+                      <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
                     </div>
                   </div>
                 </div>
@@ -269,30 +269,24 @@
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
+      :width="550"
       @cancel="handleCancelModal"
       :footer="false"
       :header="false"
+      title="Bạn muốn tạo phòng học này?"
+      description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
 
-    <app-modal
-      centered
-      :width="408"
-      :component-class="{ 'app-modal-confirm': true }"
-      @close="$router.push('/')"
+    <app-modal-notify
+      :width="550"
+      @ok="showNotify = false"
       v-if="showNotify"
       :footer="false"
       :header="false"
+      title=""
+      :description="message"
     >
-      <div slot="content">
-        <div class="text-center pt-4 pb-4">
-          <a class="btn-close" @click="showNotify = false">X</a>
-          <p class="title mb-4">{{message}}</p>
-          <div class="text-center">
-            <app-button color="primary" size="sm" square @click="showNotify = false">OK</app-button>
-          </div>
-        </div>
-      </div>
-    </app-modal>
+    </app-modal-notify>
   </div>
 </template>
 
@@ -596,6 +590,37 @@ export default {
   },
 
   methods: {
+    convertDay(index) {
+      const items = this.selectedItems[index];
+      return items.reduce((result, item, index) => {
+        let text = '';
+        switch (item) {
+          case 'MON': text = '2'; break;
+          case 'TUE': text = '3'; break;
+          case 'WED': text = '4'; break;
+          case 'THU': text = '5'; break;
+          case 'FRI': text = '6'; break;
+          case 'SAT': text = '7'; break;
+          case 'SUN': text = 'CN'; break;
+        }
+        const com = index > 0 ? ", " : "";
+        return (result = result + com + text);
+      }, "Hàng tuần vào thứ ");
+    },
+    getEndTime(index) {
+      const date = new Date(
+        "2000-01-01 " + this.params.schedules[index].start_time
+      );
+      const endDate = new Date(date.getTime() + this.params.schedules[index].duration*60000);
+      var hours = endDate.getHours();
+      var minutes = endDate.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
     removeSchedule(index){
       this.params.schedules = _.reject([...this.params.schedules], (i, inx) => inx === index);
       if (this.params.schedules.length === 0 ) {
@@ -603,7 +628,7 @@ export default {
         this.indexShow = 0;
       }
     },
-    editSchedule: function (e, index){
+    editSchedule: function (index){
       this.indexEdit = index;
       this.indexShow = null;
     },
@@ -615,23 +640,23 @@ export default {
       this.selectedItems = {...this.selectedItems, [this.indexShow]: []};
       this.duration.push(initialDuration);
       this.startTime.push(initialStartTime);
-      //this.schedules = [...this.params.schedules];
     },
 
     cancelTime(index) {
       if (this.params.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
         this.params.schedules.pop();
         this.indexShow = null;
+      } else if (this.params.schedules.length > 1){
+        this.indexShow = null;
+        this.indexEdit = null;
       } else {
-        let old = this.schedules[index];
-        this.params.schedules[index] = old;
+        //this.params.schedules[0] = initialSchedule;
       }
     },
     saveTime(index) {
       this.indexEdit = null;
       this.indexShow = null;
       this.schedules = [...this.params.schedules];
-      console.log(this.params.schedules);
     },
 
     changeName(e) {
@@ -654,7 +679,7 @@ export default {
           this.message = "Tạo phòng học thành công!";
           this.showNotify = true;
         } else if (doCreate.message) {
-          this.message = e;
+          this.message = doCreate.message;
           this.showNotify = true;
         }
       } catch (e) {

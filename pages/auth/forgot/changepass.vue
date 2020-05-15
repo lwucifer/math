@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-6 ">
+      <div class="col-md-6">
         <div id="label-verify-phone"></div>
         <div class="wrap-change-psw">
-          <ChangePassEmail v-show="checkEmail" />
-          <ChangePassPhone v-show="!checkEmail" />
+          <ChangePassEmail />
+          <!-- <ChangePassPhone v-show="!checkEmail" /> -->
         </div>
         <!-- <div class="auth__main">
           <h3>Quên mật khẩu?</h3>
@@ -61,7 +61,7 @@
         <!-- </div> -->
       </div>
       <div class="col-md-6 text-center">
-        <ImageAuth/>
+        <ImageAuth />
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@ import { ERRORS } from "~/utils/error-code";
 import firebase from "@/services/firebase/FirebaseInit";
 import ChangePassEmail from "~/components/page/auth/forgot/ChangePassEmail";
 import ChangePassPhone from "~/components/page/auth/forgot/ChangePassPhone";
-import ImageAuth  from "~/components/page/auth/ImageAuth";
+import ImageAuth from "~/components/page/auth/ImageAuth";
 export default {
   components: {
     ChangePassEmail,

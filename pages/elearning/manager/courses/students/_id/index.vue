@@ -6,18 +6,28 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <sub-block-section title="Nguyễn Văn Nam" has-icon>
+        <sub-block-section :title="progress.name" has-icon>
           <template v-slot:content>
             <div class="d-flex">
               <h5 class="text-primary">Thông tin học sinh</h5>
-              <app-button square color="secondary" size="sm" class="btn-block__manager-student">
+              <app-button
+                square
+                color="secondary"
+                size="sm"
+                class="btn-block__manager-student"
+                @click="bannedStudent"
+              >
                 <IconBlock24px class="icon mr-2" />Cấm học sinh này
               </app-button>
             </div>
             <StudentManagerInfo />
             <div class="mt-4">
               <h5 class="text-primary mb-3">Điểm đánh giá</h5>
-              <StudentManagerInfoTable :heads="heads" :list="list" :pagination="pagination" />
+              <StudentManagerInfoTable
+                :heads="heads"
+                :list="filterListExercises"
+                :pagination="pagination"
+              />
             </div>
           </template>
         </sub-block-section>
@@ -31,11 +41,12 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 import StudentManagerInfo from "~/components/page/elearning/manager/student/StudentManagerInfo";
 import IconBlock24px from "~/assets/svg/v2-icons/block_24px.svg?inline";
 import StudentManagerInfoTable from "~/components/page/elearning/manager/student/StudentManagerInfoTable";
-
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import { createBannedStudent } from "~/models/elearning/BannedStudent";
 const STORE_TEACHING_PROGRESS = "elearning/teaching/progress";
+const STORE_TEACHING_BANNED = "elearning/teaching/banned";
 export default {
   layout: "manage",
 
@@ -47,11 +58,11 @@ export default {
   },
   async fetch({ params, query, store, route }) {
     const elearningId = query.elearning_id;
-    const userId = params.id;
+    const studentId = params.id;
     const listQuery = {
       params: {
         elearning_id: elearningId,
-        user_id: userId
+        student_id: studentId
       }
     };
     await Promise.all([
@@ -102,9 +113,33 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(STORE_TEACHING_PROGRESS, ["progress"]),
+    filterListExercises() {
+      return this.progress && this.progress.exercises
+        ? this.progress.exercises
+        : [];
+    }
+  },
 
-  methods: {},
+  methods: {
+    ...mapActions(STORE_TEACHING_BANNED, ["teachingElearningBanned"]),
+    bannedStudent() {
+      const data = createBannedStudent({
+        elearning_id:
+          this.$route.query && this.$route.query.elearning_id
+            ? this.$route.query.elearning_id
+            : "",
+        student_id:
+          this.$route.params && this.$route.params.id
+            ? this.$route.params.id
+            : "",
+        banned: true
+      });
+      console.log("data", data);
+      this.teachingElearningBanned(data).then(result => {});
+    }
+  },
   created() {
     // this.getList()
   }

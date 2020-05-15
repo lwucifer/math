@@ -21,6 +21,9 @@
 
 .cgi-upload-avt-preview {
     position: relative;
+    #avatar {
+        border-radius: 2px;
+    }
 }
 
 .cgi-upload-avt-close-preview {
@@ -50,10 +53,13 @@
 
     .cc-panel__body {
         .cgi-form-group {
-            
-
             /deep/ .v-select {
-                width: 70%;
+                width: 75%;
+                height: 32px;
+                
+                .vs__dropdown-toggle {
+                    border-radius: 2px;
+                }
             }
         }
     }
