@@ -96,8 +96,6 @@ import IconCode from "~/assets/svg/v2-icons/insert_link_24px.svg?inline";
 import { get } from "lodash";
 import numeral from "numeral";
 
-const lengthDescription = 300;
-
 export default {
   components: {
     IconLocation,
@@ -117,23 +115,22 @@ export default {
 
   data() {
     return {
-      description: get(this, "school.description", "").substring(
-        0,
-        lengthDescription
-      ),
-      load_more: get(this, "school.description.length", 0) > lengthDescription,
+      lengthDescription: 300,
     };
   },
 
-  watch: {
-    school: {
-      handler: function() {
-        this.description = get(this, "school.description", "").substring(
+  computed: {
+    description() {
+      if (this.load_more) {
+        return get(this, "school.description", "").substring(
           0,
-          lengthDescription
+          this.lengthDescription
         );
-      },
-      deep: true,
+      }
+      return get(this, "school.description", "");
+    },
+    load_more() {
+      return get(this, "school.description.length", 0) > this.lengthDescription;
     },
   },
 
@@ -141,8 +138,7 @@ export default {
     get,
     numeral,
     handleLoadMore() {
-      this.load_more = false;
-      this.description = get(this, "school.description", "");
+      this.lengthDescription = get(this, "info.description.length", 0);
     },
   },
 };
