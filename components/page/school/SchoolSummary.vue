@@ -4,13 +4,13 @@
       <div class="row">
         <!--Thumnail-->
         <div class="school-summary__thumnail">
-          <img :src="get(school, 'avatar.medium', '')" alt />
+          <img :src="get(school, 'cover.medium', '')" alt />
         </div>
         <!--End Thumnail-->
 
         <!--Contact-->
         <div class="school-summary__info">
-          <h2 class="school-summary__info__title text-primary">
+          <h2 class="school-summary__info__title text-primary h4">
             {{ get(school, "name", "") }}
           </h2>
           <div class="school-summary__info__contact">
@@ -76,7 +76,7 @@
     <!--Intro-->
     <div class="partial">
       <div class="school-summary__intro">
-        <h4>Giới thiệu</h4>
+        <h5 class="font-weight-normal color-text-dark">Giới thiệu</h5>
         <p>{{ description }}</p>
         <div class="text-center mt-3" v-if="load_more">
           <a @click="handleLoadMore" to class="color-primary">Xem thêm</a>

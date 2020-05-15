@@ -144,6 +144,9 @@ export default {
       this.$router.push(`/school/search?keyword=${this.keyword}`);
     },
     handleGetSchoolsByLocation() {
+      console.log("[handleGetSchoolsByLocation]")
+      this.pageLoading = true;
+
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;

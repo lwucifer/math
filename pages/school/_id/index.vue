@@ -7,17 +7,19 @@
             <span class>Quản lý trường học</span>
           </n-link>
         </app-button>
-      </div> -->
+      </div>-->
 
       <school-summary :school="school" />
 
       <school-lesson-slider
+        v-if="get(lessons, 'content', []).length > 0"
         :lessons="get(lessons, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Bài giảng của trường"
       />
 
       <school-course-slider
+        v-if="get(courses, 'content', []).length > 0"
         :cources="get(courses, 'content', [])"
         :swiperOptions="sliderOptions"
         title="Khóa học của trường"
@@ -35,12 +37,6 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { VclFacebook } from "vue-content-loading";
 
-// Import faked data
-import {
-  SCHOOL_SUMMARY,
-  LESSONS,
-  COURSES,
-} from "~/server/fakedata/school/test";
 import { get } from "lodash";
 
 export default {
@@ -50,7 +46,7 @@ export default {
     SchoolSummary,
     SchoolLessonSlider,
     SchoolCourseSlider,
-    VclFacebook,
+    VclFacebook
   },
 
   async fetch({ params, query, store }) {
@@ -64,9 +60,8 @@ export default {
       params: {
         school_id,
         elearning_type: "COURSE",
-        size: 5,
-        // status: "ACCEPTED",
-      },
+        size: 16
+      }
     };
     await store.dispatch(
       `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -76,9 +71,9 @@ export default {
       params: {
         school_id,
         elearning_type: "LECTURE",
-        size: 5,
+        size: 16
         // status: "ACCEPTED",
-      },
+      }
     };
     await store.dispatch(
       `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -90,7 +85,6 @@ export default {
     return {
       isAuthenticated: true,
       isDepartment: true,
-      // school: SCHOOL_SUMMARY,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 5,
@@ -98,15 +92,10 @@ export default {
         autoHeight: true,
         watchOverflow: false,
         navigation: false,
-        // pagination: {
-        //     el: ".swiper-pagination"
-        // },
         pagination: false,
-        showName: true,
+        showName: true
       },
-      pageLoading: true,
-      // lessonss: LESSONS,
-      // courses: COURSES
+      pageLoading: true
     };
   },
   computed: {
@@ -114,8 +103,8 @@ export default {
     ...mapState("elearning/school/school-info", { school: "schoolInfo" }),
     ...mapState(`elearning/school/school-elearning`, {
       courses: "course",
-      lessons: "lecture",
-    }),
+      lessons: "lecture"
+    })
   },
 
   mounted() {
@@ -131,15 +120,15 @@ export default {
       const options_showAll = {
         params: {
           school_id: this.$route.params.id,
-          elearning_type: "COURSE",
-        },
+          elearning_type: "COURSE"
+        }
       };
       this.$store.dispatch(
         `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
         options_showAll
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
