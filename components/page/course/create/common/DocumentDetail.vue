@@ -72,6 +72,7 @@ export default {
           defaultTo(get(result, "message", ""), "Thành công")
         );
         this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
       this.$toasted.error(

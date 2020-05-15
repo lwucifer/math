@@ -86,6 +86,7 @@ export default {
         this.payload.name = "";
         this.$emit("cancel");
         this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

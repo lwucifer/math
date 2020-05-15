@@ -113,51 +113,7 @@ export default {
     },
   },
 
-  updated() {
-    //
-  },
-
-  mounted() {
-    this.getProgress();
-  },
-
   watch: {
-    general: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
-    exams: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
-    lessons: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
-    setting: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
-    chapters: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
-    lessons_lecture: {
-      handler: function() {
-        this.getProgress();
-      },
-      deep: true,
-    },
     progress: {
       handler: function() {
         let checked = get(this, "progress.general_status", false) == 1;
@@ -190,10 +146,6 @@ export default {
   },
 
   methods: {
-    getProgress() {
-      this.$store.dispatch(`elearning/create/getProgress`);
-    },
-
     handlePublishCourse() {
       this.showModalConfirm = true;
     },

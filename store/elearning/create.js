@@ -121,7 +121,9 @@ const actions = {
       };
       const res = await Service.getProgress(this.$axios, payload);
       commit("progress", res);
+      return;
     }
+    commit("progress", null);
   },
 
   reset({ commit }) {

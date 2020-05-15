@@ -130,9 +130,9 @@ export default {
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
+  // mounted() {
+  //   this.$store.dispatch(`elearning/create/getContent`);
+  // },
 
   computed: {
     ...mapState("elearning/create", {
