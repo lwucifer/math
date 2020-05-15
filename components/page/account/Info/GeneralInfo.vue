@@ -151,8 +151,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 import { getToken, getDeviceId } from "~/utils/auth";
-import { RESPONSE_SUCCESS } from "~/utils/config";
-
+import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
 
 export default {
   components: {
@@ -254,14 +253,16 @@ export default {
           this.visible.notify = true;
         });
 
-        // logout here
-        const device_id = getDeviceId();
-        this.logout({ device_id }).then(result => {
-          console.log("[handleLogout] result", result, device_id);
-          if (result.success == RESPONSE_SUCCESS) {
-            this.$router.push("/auth/signin");
-          }
-        });
+        setTimeout(() => {
+          // logout here
+          const device_id = getDeviceId();
+          this.logout({ device_id }).then(result => {
+            console.log("[handleLogout] result", result, device_id);
+            if (result.success == RESPONSE_SUCCESS) {
+              this.$router.push("/auth/signin");
+            }
+          });
+        }, TIMEOUT.NOTIFY);
       } else {
         this.modalStatus = "error";
         this.modalMes.notify = "Liên kết không thành công!";
