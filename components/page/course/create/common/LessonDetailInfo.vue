@@ -1,8 +1,6 @@
 <template>
   <div class="clc-video">
-    <div class="clc-video__image">
-      <n-link to=""><img src="/images/thumnail-video.png" alt/></n-link>
-    </div>
+    <div class="clc-video__image"><img :src="thumnail" alt /></div>
 
     <div class="clc-video__right w-100">
       <div class="d-flex justify-content-between clc-video__name">
@@ -50,7 +48,7 @@
 </template>
 
 <script>
-import IconBorderColor24px from '~/assets/svg/v2-icons/border_color_24px.svg?inline';
+import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
@@ -73,6 +71,14 @@ export default {
     index: {
       type: Number,
       default: null,
+    },
+  },
+
+  computed: {
+    thumnail() {
+      return get(this, "lesson.type", "") === "VIDEO"
+        ? "/images/thumnail-video.png"
+        : "/images/thumnail-doc.png";
     },
   },
 

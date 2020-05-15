@@ -67,14 +67,14 @@
         />
 
         <div class="d-flex justify-content-end mt-4">
-          <!-- <app-button
+          <app-button
             class="clc-btn font-weight-semi-bold mr-4 text-secondary"
-            size="sm"
+            size="md"
             color="default"
             outline
             square
             @click="handleCancel"
-            >Huỷ bỏ</app-button> -->
+            >Huỷ bỏ</app-button>
 
           <app-button
             @click="handleAddContent"
@@ -256,9 +256,9 @@ export default {
       this.payload.article_content = article_content;
     },
 
-    // handleCancel() {
-    //   this.$emit("toggleShowAddLesson");
-    // },
+    handleCancel() {
+      this.$emit("toggleShowAddLesson");
+    },
 
     get,
   },

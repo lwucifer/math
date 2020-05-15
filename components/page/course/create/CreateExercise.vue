@@ -12,7 +12,7 @@
           gửi lên để được xét duyệt.
         </app-alert>
 
-        <!-- <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
+        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
           Chọn bài học liên quan
         </h5>
 
@@ -20,7 +20,7 @@
           style="margin-bottom: -2rem"
           v-if="get(general, 'type', '') === 'COURSE'"
           :lessons="lessons"
-        /> -->
+        />
       </div>
 
       <div v-if="lesson">
@@ -49,7 +49,7 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
+        <!-- <app-button
           outline
           class="mr-4"
           color="error"
@@ -60,9 +60,8 @@
           color="primary"
           outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
-        <app-button
-          class="create-action__btn mr-4"
+        > -->
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -111,7 +110,8 @@ export default {
     IconAngleDown,
     IconDelete,
     IconDelete,
-    Forward
+    Forward,
+    IconSave,
   },
 
   data() {
@@ -134,9 +134,9 @@ export default {
     this.$store.dispatch("elearning/create/getLessons");
   },
 
-  // updated() {
-  //   console.log(this.lesson, this.lessons);
-  // },
+  updated() {
+    console.log(this.lesson, this.lessons);
+  },
 
   methods: {
     handleShowFormAdd() {
@@ -147,6 +147,10 @@ export default {
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
+    },
+
+    handleNextStep() {
+      this.$emit("nextStep", "exam");
     },
 
     get,

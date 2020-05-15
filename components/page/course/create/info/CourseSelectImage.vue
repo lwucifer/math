@@ -12,7 +12,11 @@
             @error="handleError"
             :id="id"
           />
-          <span class="cgi-upload-avt-close-preview" @click.stop="removeImage" v-if="cropper">
+          <span
+            class="cgi-upload-avt-close-preview"
+            @click.stop="removeImage"
+            v-if="cropper"
+          >
             <IconClose />
           </span>
         </div>
@@ -27,8 +31,11 @@
         </p>
 
         <p class="csa-desc text-gray" v-else>
-          Bạn có thể tải lên hình ảnh minh họa cho bài giảng của bạn. Hình ảnh minh họa phải có kích thước nhỏ nhất là <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. 
-          Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Việc tải lên ảnh này là không bắt buộc.
+          Bạn có thể tải lên hình ảnh minh họa cho bài giảng của bạn. Hình ảnh
+          minh họa phải có kích thước nhỏ nhất là
+          <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. Định dạng cho
+          phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Việc tải lên ảnh này là
+          không bắt buộc.
         </p>
 
         <div class="mt-4">
@@ -38,7 +45,7 @@
             :loading="savingCrop"
             :disabled="error"
             @click="saveCrop"
-            ><IconCrop24px class="mr-2 fill-white"/> Crop Ảnh</app-button
+            ><IconCrop24px class="mr-2 fill-white" /> Crop Ảnh</app-button
           >
 
           <template v-else>
@@ -71,7 +78,7 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconExclamationTriangle = () =>
   import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
 
-import IconCrop24px from '~/assets/svg/v2-icons/crop_24px.svg?inline';
+import IconCrop24px from "~/assets/svg/v2-icons/crop_24px.svg?inline";
 import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
 
@@ -79,7 +86,7 @@ export default {
   components: {
     IconClose,
     IconExclamationTriangle,
-    IconCrop24px
+    IconCrop24px,
   },
 
   props: {
@@ -90,8 +97,8 @@ export default {
     id: "",
     isCompel: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
