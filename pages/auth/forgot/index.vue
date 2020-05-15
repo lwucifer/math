@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
+    <div class="row" v-if="checkRowHide">
       <div class="col-md-6 d-flex align-items-center">
         <div id="label-verify-phone"></div>
         <div class="wrap-forgot-psw">
@@ -48,12 +48,22 @@
         <ImageAuth />
       </div>
     </div>
+    <div class="row" v-else>
+      <div class="col-md-6">
+        <div class="wrap-change-psw">
+          <ChangePassPhone />
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <ImageAuth />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import {
   createResetWithPhone,
   createResetWithEmail
@@ -63,9 +73,12 @@ import firebase from "@/services/firebase/FirebaseInit";
 import { ERRORS } from "~/utils/error-code";
 import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
 import ImageAuth from "~/components/page/auth/ImageAuth";
+import ChangePassPhone from "~/components/page/auth/forgot/ChangePassPhone";
 export default {
-  components: { ImageAuth },
-
+  components: { ImageAuth, ChangePassPhone },
+  async asyncData({ store, query }) {
+    return { checkEmail: query.email ? true : false };
+  },
   data() {
     return {
       phone: "",
@@ -78,7 +91,8 @@ export default {
       errorRespon: false,
       messageErrorForgot: "",
       errorForgot: false,
-      validateForgot: ""
+      validateForgot: "",
+      checkRowHide: true
     };
   },
 
@@ -100,6 +114,7 @@ export default {
 
   methods: {
     ...mapActions("auth", ["resetPasswordRequest", "sendotp"]),
+    ...mapMutations("auth", ["savePhoneState"]),
     hanldeEmail() {
       this.errorForgot = false;
       this.validateForgot = "";
@@ -129,6 +144,7 @@ export default {
           "Vui lòng nhập email hoặc số điện thoại cần khôi phục";
       } else {
         if (!this.email.includes("@")) {
+          this.savePhoneState(this.email);
           const data = {
             phone: `+${formatPhoneNumber(this.email)}`,
             appVerifier: window.recaptchaVerifier
@@ -137,7 +153,8 @@ export default {
             console.log("result huydv", result);
             if (!result.code) {
               console.log("result huydv11111", result);
-              this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
+              this.checkRowHide = false;
+              // this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
             } else {
               this.validateForgot = VALIDATE_STATUS.ERROR;
               this.errorForgot = true;
@@ -163,7 +180,7 @@ export default {
             "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
           break;
         case ERRORS.FORGOT_PASSWORD.USER_NOT_FOUND:
-          message = "User not found";
+          message = "Tài khoản không tồn tại";
           break;
         default:
           message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";

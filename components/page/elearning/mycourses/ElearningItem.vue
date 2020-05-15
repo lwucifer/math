@@ -85,7 +85,7 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconCardsHeart from "~/assets/svg/v2-icons/cards-heart.svg?inline";
 import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
-import IconArchive from '~/assets/svg/design-icons/archive.svg?inline';
+import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -122,15 +122,19 @@ export default {
   },
   methods: {
     handleFavourite(id) {
+      this.menuDropdown = false;
       this.$emit("handleFavourite", id);
     },
     handleDeleteFavourite(id) {
+      this.menuDropdown = false;
       this.$emit("handleDeleteFavourite", id);
     },
     handleArchive(id) {
+      this.menuDropdown = false;
       this.$emit("handleArchive", id);
     },
     handleDeleteArchive(id) {
+      this.menuDropdown = false;
       this.$emit("handleDeleteArchive", id);
     }
   },
