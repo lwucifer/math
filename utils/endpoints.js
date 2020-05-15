@@ -88,6 +88,11 @@ export const ELEARNING_CREATING_PROGRESS = `/elearning/creating/progress`;
 export const ELEARNING_PUBLIC_SEARCH = `/elearning/public/search`;
 export const ELEARNING_CREATING_PUBLISH = `/elearning/creating/publish`;
 export const ELEARNING_JOIN = `/elearning/join`;
+export const ELEARNING_PUBLIC_WHAT_NEXTS = `/elearning/public/what_nexts`;
+export const ELEARNING_PUBLIC_FOR_YOU = `/elearning/public/for_you`;
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects`;
+export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 
 /**
  * ONLINE CLASS
