@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center justify-content-between mb-3 ce-item--modifer">
       <EditChapterName :chapter="chapter" :index="index" />
 
-      <div class="ce-item__right d-flex">
-        <a href @click.prevent="toggleShowAddLesson">Thêm bài học</a>
+      <div class="ce-item__right d-flex align-items-center">
+        <a  @click.prevent="toggleShowAddLesson">Thêm bài học</a>
         <button
           class="cc-box__btn cc-box__btn-collapse"
           @click="isShowLesson = !isShowLesson"
@@ -21,8 +21,9 @@
       @toggleShowAddLesson="toggleShowAddLesson"
     />
 
-    <div v-if="isShowLesson" class="list-lesson">
+    <div v-if="isShowLesson">
       <LessonDetail
+        class="list-lesson"
         v-for="(lesson, index) in get(chapter, 'lessons', [])"
         :key="lesson.id"
         :index="index"
