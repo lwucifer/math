@@ -17,9 +17,9 @@
       </p>
     </div>
     <div class="bottom d-flex">
-      <div>
+      <div v-if="isShowDuration">
         <IconPlay class="mr-2" />
-        <span>{{ get(lesson, "duration", "00:00") }}</span>
+        <span>{{ durationTimes }}</span>
       </div>
       <!-- <div class="color-primary ml-auto" v-if="get(lesson, 'completes', 0)">
         <IconFileCheckAlt class="mr-2 fill-primary" height="16" width="16" />
@@ -75,8 +75,9 @@ import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
+  LESSION_TYPE,
 } from "~/utils/constants";
-import { redirectWithParams, getParamQuery } from "~/utils/common";
+import { redirectWithParams, getParamQuery, getCountdown_MM_SS } from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
 
@@ -220,6 +221,15 @@ export default {
         return "red";
       }
     },
+
+    isShowDuration() {
+      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    },
+
+    durationTimes() {
+      const duration = get(this.lesson, "duration", 0);
+      return getCountdown_MM_SS(duration);
+    }
   },
 };
 </script>
