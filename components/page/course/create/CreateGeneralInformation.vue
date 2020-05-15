@@ -213,8 +213,18 @@ export default {
   },
 
   mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    this.handleFetchElearningGeneral(elearning_id);
+    this.payload = {
+      avatar: "",
+      benefit: [...get(this, "general.benefit", [])],
+      description: get(this, "general.description", ""),
+      level: get(this, "general.level", ""),
+      name: get(this, "general.name", ""),
+      subject: get(this, "general.subject.id", ""),
+      cover_image: "",
+      type: get(this, "general.type", ""),
+    };
+    // const elearning_id = getParamQuery("elearning_id");
+    // this.handleFetchElearningGeneral(elearning_id);
   },
 
   watch: {

@@ -80,16 +80,11 @@ export default {
     console.log(this.exams);
   },
 
-  mounted() {
-    this.$store.dispatch("elearning/create/getExams");
-  },
+  // mounted() {
+  //   this.$store.dispatch("elearning/create/getExams");
+  // },
 
   methods: {
-    handleRefreshQuestion() {
-      this.getProgress();
-      this.$store.dispatch("elearning/create/getExams");
-    },
-
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
@@ -98,19 +93,6 @@ export default {
     handleHideFormAdd() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
     },
 
     get,

@@ -154,6 +154,7 @@ export default {
       }
       this.$emit("handleCloseAdd");
       this.$store.dispatch(`elearning/create/getContent`);
+      this.$store.dispatch(`elearning/create/getProgress`);
       this.$toasted.success(
         defaultTo(get(result, "message", ""), "Thành công")
       );

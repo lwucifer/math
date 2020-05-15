@@ -39,6 +39,7 @@ import ContentLecture from "~/components/page/course/create/ContentLecture";
 import ContentCourse from "~/components/page/course/create/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
+import { mapState } from "vuex";
 
 export default {
   layout: "exercise",
@@ -53,15 +54,6 @@ export default {
     ContentCourse,
   },
 
-  // async fetch({ params, query, store }) {
-  //   await store.dispatch(
-  //     `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
-  //   );
-  //   await store.dispatch(
-  //     `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
-  //   );
-  // },
-
   data() {
     return {
       formActive: "general",
@@ -69,11 +61,13 @@ export default {
   },
 
   mounted() {
-    //
-  },
-
-  updated() {
-    console.log(this.formActive);
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id,
+      },
+    };
+    this.$store.dispatch(`elearning/create/getGeneral`, options);
   },
 
   beforeMount() {
@@ -84,11 +78,28 @@ export default {
     window.removeEventListener("beforeunload", this.preventNav);
   },
 
+  computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+      progress: "progress",
+      lessons_lecture: "lessons_lecture",
+      chapters: "chapters",
+      setting: "setting",
+      lessons: "lessons",
+      exams: "exams",
+    }),
+  },
+
   watch: {
-    "$route.query.elearning_id": {
+    general: {
       handler: function() {
-        window.location.reload();
+        this.$store.dispatch(`elearning/create/getProgress`);
+        this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch("elearning/create/getLessons");
+        this.$store.dispatch("elearning/create/getExams");
+        this.$store.dispatch(`elearning/create/getSetting`);
       },
+      deep: true,
     },
   },
 

@@ -232,6 +232,7 @@ export default {
           },
         };
         this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         this.$emit("toggleShowAddLesson");
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")

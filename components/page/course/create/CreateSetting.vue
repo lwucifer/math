@@ -210,7 +210,8 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch(`elearning/create/getSetting`);
+    this.handleChangeSetting();
+    // this.$store.dispatch(`elearning/create/getSetting`);
     useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 
@@ -309,6 +310,7 @@ export default {
 
       if (get(result, "success", false)) {
         this.$store.dispatch(`elearning/create/getSetting`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
