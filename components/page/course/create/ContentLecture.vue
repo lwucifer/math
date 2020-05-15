@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <div class="cc-box__body">
+        <div class="cc-box__body" style="border-top: 1px solid #E0E0E0">
           <CreateLessonOfElearning
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"

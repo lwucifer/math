@@ -13,8 +13,8 @@
           class="mb-5"
           @nextStep="nextStep"
         />
-        <ContentCourse v-if="formActive === 'content-course'" />
         <ContentLecture v-if="formActive === 'content-lecture'" />
+        <ContentCourse v-if="formActive === 'content-course'" />
         <CreateSetting v-if="formActive === 'settings'" @nextStep="nextStep" />
         <CreateExercise v-if="formActive === 'exercise'" />
         <CreateExam v-if="formActive === 'exam'" />

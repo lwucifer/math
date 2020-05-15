@@ -23,7 +23,7 @@
               <span class="app-upload__placeholder" v-else>{{ placeholder || 'No file selected' }}</span>
             </div>
 
-            <app-button class="app-upload__btn-choose-file btn--color-disabled">
+            <app-button class="app-upload__btn-choose-file btn--color-disabled" color="disable" size="md">
               <IconAttachFile24px class="mr-2"/>
               Chọn file
             </app-button>
