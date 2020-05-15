@@ -10,7 +10,7 @@
 
         <!--Contact-->
         <div class="school-summary__info">
-          <h2 class="school-summary__info__title text-primary h4 font-weight-medium">
+          <h2 class="school-summary__info__title text-primary h4">
             {{ get(school, "name", "") }}
           </h2>
           <div class="school-summary__info__contact">
