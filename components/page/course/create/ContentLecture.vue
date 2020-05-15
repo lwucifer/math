@@ -15,9 +15,9 @@
 
           <div class="cc-box__head-right">
             <!-- <a
-             
               class="d-flex align-items-center text-primary"
-              v-if="!get(lessons, 'length', 0)"
+              v-if="isShowButtonAddLesson"
+              @click="isShowButtonAddLesson = false"
               ><IconAdd width="14px" height="14px" class="mr-2" /> Thêm bài
               học</a
             > -->
@@ -35,6 +35,7 @@
 
         <div class="cc-box__body">
           <CreateLessonOfElearning
+            v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"
           />
@@ -53,20 +54,16 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
-          outline
-          class="mr-4"
-          color="error"
+        <!-- <app-button outline class="mr-4" color="error"
           ><IconDelete class="mr-2" /> Thiết lập lại</app-button
         >
-        <app-button
-          class="mr-4"
-          color="primary"
-          outline
+        <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
+        > -->
         <app-button
           class="create-action__btn mr-4"
+          :disabled="!isNextStep"
+          @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -124,7 +121,7 @@ export default {
     IconAdd,
     IconDelete,
     IconSave,
-    Forward
+    Forward,
   },
 
   data() {
@@ -135,7 +132,6 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowButtonAddLesson: false,
       isShowFormAddLesson: false,
       isShowDetailLesson: false,
       isEditCourseName: false,
@@ -156,12 +152,10 @@ export default {
     lessons: {
       handler: function() {
         if (get(this, "lessons.length", 0)) {
-          this.isShowButtonAddLesson = false;
           this.isShowFormAddLesson = false;
           this.isShowDetailLesson = true;
           return;
         }
-        this.isShowButtonAddLesson = true;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = false;
       },
@@ -177,17 +171,24 @@ export default {
   },
 
   computed: {
-    // ...mapState("elearning/creating/creating-lesson", {
-    //   lessons: "lessons",
-    // }),
     ...mapState("elearning/create", {
       general: "general",
       lessons: "lessons_lecture",
+      progress: "progress",
     }),
+    isNextStep() {
+      if (get(this, "progress.general_status", false) != 1) return false;
+      if (get(this, "progress.content_status", false) != 1) return false;
+      return true;
+    },
   },
 
   methods: {
     get,
+
+    handleNextStep() {
+      this.$emit("nextStep", "settings");
+    },
 
     async handleSaveCourseName() {
       const data = {
@@ -227,7 +228,6 @@ export default {
     },
 
     handleEditLesson(lesson) {
-      this.isShowButtonAddLesson = false;
       this.isShowFormAddLesson = true;
       this.isShowDetailLesson = false;
       this.lesson = lesson;
@@ -269,12 +269,10 @@ export default {
     toggleShowAddLesson() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id && get(this, "lessons.length", 0)) {
-        this.isShowButtonAddLesson = false;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
         return;
       }
-      this.isShowButtonAddLesson = true;
       this.isShowFormAddLesson = false;
       this.isShowDetailLesson = false;
     },

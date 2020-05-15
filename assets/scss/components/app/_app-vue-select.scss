@@ -47,7 +47,7 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
 
 @import "~vue-select/src/scss/vue-select.scss";
 
-.app-vue-select {
+.app-vue-select, .v-select {
     .vs__dropdown-toggle {
         box-shadow: $shadow-1;
         background: #fff;
@@ -64,6 +64,10 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
     //min-width: 10rem;
     
     .vs__actions {
+        button {
+            display: none;
+            visibility: hidden;
+        }
         svg path {
             fill: $color-primary;
             fill-opacity: 1;

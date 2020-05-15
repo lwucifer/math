@@ -39,7 +39,7 @@ export default {
 
   computed: {
     text() {
-      return get(this, "category", "") === "EXERCISE"
+      return get(this, "category", "") === "TEST"
         ? "Tạo bài kiểm tra"
         : "Tạo bài tập";
     }

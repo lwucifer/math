@@ -1,15 +1,29 @@
 <template>
   <div class="course-right-side">
     <div>
-      <img :src="get(favourites, 'content.0.avatar', 'https://picsum.photos/330/204')" alt class="w-100" />
+      <img
+        :src="
+          get(favourites, 'content.0.avatar', 'https://picsum.photos/330/204')
+        "
+        alt
+        class="w-100"
+      />
     </div>
     <div class="price">
       <div class="d-flex justify-content-around" v-if="showPaiedPrice">
         <span class="text-secondary price--primary">
-          {{ numeral(get(favourites, "content.0.price.original_price", 0)).format() | toThousandFilter }}đ
+          {{
+            numeral(
+              get(favourites, "content.0.price.original_price", 0)
+            ).format() | toThousandFilter
+          }}đ
         </span>
         <span class="price--secondary">
-          {{ numeral(get(favourites, "content.0.price.original_price", 0)).format() | toThousandFilter }}đ
+          {{
+            numeral(
+              get(favourites, "content.0.price.original_price", 0)
+            ).format() | toThousandFilter
+          }}đ
         </span>
       </div>
       <div v-if="showFreePrice">
@@ -58,8 +72,7 @@
         square
         class="text-uppercase mt-3 mb-3"
       >
-        <IconTickCircle /> &nbsp;
-        BÀI GIẢNG ĐÃ HOÀN THÀNH
+        <IconTickCircle /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
       </app-button>
     </slot>
 
@@ -123,25 +136,25 @@ export default {
     IconLessons,
     IconSubject,
     IconBook,
-    IconTickCircle
+    IconTickCircle,
   },
   props: {
     date: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     isJoined: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isDone: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isBuyed: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   created() {
@@ -150,30 +163,34 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-favourite", {
-      favourites: "favourites"
+      favourites: "favourites",
     }),
     isFree: function() {
-      return numeral(get(this.favourites, 'content.0.price.original_price', 0)).format() == 0
+      return (
+        numeral(
+          get(this.favourites, "content.0.price.original_price", 0)
+        ).format() == 0
+      );
     },
     showFreePrice: function() {
-      return this.isFree && !this.isJoined
+      return this.isFree && !this.isJoined;
     },
     showPaiedPrice: function() {
-      let checked = (!this.isFree) && !this.isDone
-      return checked
+      let checked = !this.isFree && !this.isDone;
+      return checked;
     },
     showBtnJoin: function() {
-      return !this.isJoined
+      return !this.isJoined;
     },
     showBtnStartLearning: function() {
-      return this.isJoined && !this.isDone
+      return this.isJoined && !this.isDone;
     },
     showBtnDone: function() {
-      return this.isDone
+      return this.isDone;
     },
     showBtnBuy: function() {
-      return (!this.isBuyed) && (!this.isFree)
-    }
+      return !this.isBuyed && !this.isFree;
+    },
   },
 
   watch: {
@@ -182,8 +199,8 @@ export default {
         this.fetchStudyFavourite();
       },
       deep: true,
-      immediate: false
-    }
+      immediate: false,
+    },
   },
 
   data() {
@@ -196,7 +213,7 @@ export default {
     async handleFavourite() {
       const elearning_id = get(this, "$route.params.id", "");
       const options = {
-        elearning_id
+        elearning_id,
       };
       await this.$store.dispatch(
         `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.ADD}`,
@@ -210,8 +227,8 @@ export default {
       const elearning_id = get(this, "$route.params.id", "");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/study/study-favourite/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
@@ -219,15 +236,15 @@ export default {
       );
     },
     join() {
-      this.$emit('joinCourse')
+      this.$emit("joinCourse");
     },
     learn() {
-      this.$emit('startLearn')
+      this.$emit("startLearn");
     },
     buy() {
-      this.$emit('buy')
-    }
-  }
+      this.$emit("buy");
+    },
+  },
 };
 </script>
 

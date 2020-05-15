@@ -10,7 +10,11 @@
 
       <div class="cc-panel__body">
         <div class="cc-box">
-          <div class="cc-box__head" style="padding: 1.5rem" :class="{'add-border': addBorder}">
+          <div
+            class="cc-box__head"
+            style="padding: 1.5rem"
+            :class="{ 'add-border': addBorder }"
+          >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
             </div>
@@ -40,7 +44,7 @@
 
       <div class="create-action pt-5">
         <div class="create-action__right d-flex align-items-center">
-          <app-button
+          <!-- <app-button
             outline
             class="mr-4"
             color="error"
@@ -51,9 +55,11 @@
             color="primary"
             outline
             ><IconSave class="mr-2" /> Lưu nháp</app-button
-          >
+          > -->
           <app-button
             class="create-action__btn mr-4"
+            @click="handleNextStep"
+            :disabled="!isNextStep"
             ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
           >
         </div>
@@ -113,14 +119,14 @@ export default {
     IconAdd,
     IconDelete,
     IconSave,
-    Forward
+    Forward,
   },
 
   data() {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
-      addBorder: false
+      addBorder: false,
     };
   },
 
@@ -131,15 +137,25 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      progress: "progress",
     }),
+    isNextStep() {
+      if (get(this, "progress.general_status", false) != 1) return false;
+      if (get(this, "progress.content_status", false) != 1) return false;
+      return true;
+    },
   },
 
   methods: {
     get,
 
+    handleNextStep() {
+      this.$emit("nextStep", "settings");
+    },
+
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-      this.addBorder = !this.addBorder
+      this.addBorder = !this.addBorder;
     },
   },
 };

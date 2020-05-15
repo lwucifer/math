@@ -12,7 +12,11 @@
             @error="handleError"
             :id="id"
           />
-          <span class="cgi-upload-avt-close-preview" @click.stop="removeImage" v-if="cropper">
+          <span
+            class="cgi-upload-avt-close-preview"
+            @click.stop="removeImage"
+            v-if="cropper"
+          >
             <IconClose />
           </span>
         </div>
@@ -27,8 +31,11 @@
         </p>
 
         <p class="csa-desc text-gray" v-else>
-          Bạn có thể tải lên hình ảnh minh họa cho bài giảng của bạn. Hình ảnh minh họa phải có kích thước nhỏ nhất là <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. 
-          Định dạng cho phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Việc tải lên ảnh này là không bắt buộc.
+          Bạn có thể tải lên hình ảnh minh họa cho bài giảng của bạn. Hình ảnh
+          minh họa phải có kích thước nhỏ nhất là
+          <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. Định dạng cho
+          phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Việc tải lên ảnh này là
+          không bắt buộc.
         </p>
 
         <div class="mt-4">
@@ -38,7 +45,7 @@
             :loading="savingCrop"
             :disabled="error"
             @click="saveCrop"
-            ><IconCrop24px class="mr-2 fill-white"/> Crop Ảnh</app-button
+            ><IconCrop24px class="mr-2 fill-white" /> Crop Ảnh</app-button
           >
 
           <template v-else>
@@ -49,6 +56,7 @@
               class="cgi-upload-avt mb-3"
               @change="handleUploadChange"
               :inputText="false"
+              :title="text"
             ></app-upload>
           </template>
 
@@ -70,16 +78,27 @@ import { getBase64 } from "~/utils/common";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconExclamationTriangle = () =>
   import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
-
-import IconCrop24px from '~/assets/svg/v2-icons/crop_24px.svg?inline';
+import { mapState } from "vuex";
+import IconCrop24px from "~/assets/svg/v2-icons/crop_24px.svg?inline";
 import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
+import { get } from "lodash";
 
 export default {
   components: {
     IconClose,
     IconExclamationTriangle,
-    IconCrop24px
+    IconCrop24px,
+  },
+
+  computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+    }),
+    text() {
+      if (get(this, "general", null) || this.file) return "Thay đổi ảnh";
+      return;
+    },
   },
 
   props: {
@@ -90,8 +109,8 @@ export default {
     id: "",
     isCompel: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
@@ -130,6 +149,7 @@ export default {
       }
       this.error = false;
       this.cropper = null;
+      this.file = "";
       this.$emit("onSelectFile", "");
     },
 

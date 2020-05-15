@@ -127,7 +127,7 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
+        <!-- <app-button
           outline
           class="mr-4"
           @click="handleReset"
@@ -143,9 +143,9 @@
           outline
           :disabled="!is_submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
+        > -->
         <app-button
-          @click="handleCLickSave('next')"
+          @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
           :disabled="!is_submit"
@@ -198,7 +198,6 @@ export default {
       percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
-      type_save: "",
       free: "",
       is_submit: false,
       payload: {
@@ -294,7 +293,6 @@ export default {
     },
 
     async handleCLickSave(type_save) {
-      this.type_save = type_save;
       this.showModalConfirm = true;
     },
 
@@ -314,9 +312,7 @@ export default {
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
-        if (this.type_save === "next") {
-          this.$emit("nextStep", "exercise");
-        }
+        this.$emit("nextStep", "exercise");
         return;
       }
       this.$toasted.error(
