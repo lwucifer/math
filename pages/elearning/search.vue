@@ -93,6 +93,7 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
+import { ELEARNING_TYPES_VALUE } from "~/utils/constants";
 
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import CourseItem2 from "~/components/page/course/CourseItem2";
@@ -156,19 +157,20 @@ export default {
       tab: "lecture",
       tabs: [
         {
-          tab: "lecture",
+          tab: ELEARNING_TYPES_VALUE.LECTURE,
           text: "Bài giảng"
         },
         {
-          tab: "course",
+          tab: ELEARNING_TYPES_VALUE.COURSE,
           text: "Khoá học"
         }
       ],
       payload: {
-        subject: ""
+        subject: "",
+        type: ELEARNING_TYPES_VALUE.LECTURE
       },
 
-      pageLoading: true,
+      pageLoading: true
     };
   },
 
@@ -180,10 +182,13 @@ export default {
     get,
 
     async getLessons() {
+      this.pageLoading = true;
+
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
         this.payload
       );
       this.lessons = get(res, "data.content", []);
+      this.pageLoading = false;
     },
 
     calcDiscount(elearning) {
@@ -191,6 +196,16 @@ export default {
       const currentPrice = price.price || 0;
       const originPrice = price.original_price || 0;
       return (currentPrice / originPrice) * 100;
+    }
+  },
+
+  watch: {
+    tab(_newVal, _oldVal) {
+      console.log("[tab] watch", _newVal, _oldVal);
+      if (_newVal != _oldVal) {
+        this.payload.type = _newVal.tab;
+        this.getLessons();
+      }
     }
   }
 };

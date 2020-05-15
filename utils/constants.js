@@ -47,6 +47,11 @@ export const ELEARNING_TYPES = {
     LECTURE: "LECTURE",
 };
 
+export const ELEARNING_TYPES_VALUE = {
+    COURSE: "course",
+    LECTURE: "lecture",
+};
+
 export const ELEARNING_STATUSES = {
     PASSED: "PASSED",
     FAILED: "FAILED",
