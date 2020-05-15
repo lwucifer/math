@@ -17,7 +17,7 @@
           <div class="slider-item" @click="$emit('click-item', item, index)">
             <CourseItem2
               size="sm"
-              :to="`/elearning/${item.id}`"
+              :to="`/elearning/${item.elearning_id}`"
               :image="get(item, 'avatar.medium', '')"
               :livestream="item && item.livestream && item.livestream.time"
               :name="item.name"
@@ -39,10 +39,15 @@
       <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
         <IconChevronRight class="icon" />
       </div>
-      <div class="swiper-pagination" v-if="currentSwiperOptions.pagination"></div>
+      <div
+        class="swiper-pagination"
+        v-if="currentSwiperOptions.pagination"
+      ></div>
     </div>
 
-    <div v-show="!content.length" class="text-center text-sub">Không có dữ liệu</div>
+    <div v-show="!content.length" class="text-center text-sub">
+      Không có dữ liệu
+    </div>
   </div>
 </template>
 
@@ -60,19 +65,19 @@ export default {
     IconChevronRight,
     IconBooks,
     IconNote,
-    CourseItem2
+    CourseItem2,
   },
 
   props: {
     content: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     swiperOptions: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
-    title: { type: String }
+    title: { type: String },
   },
 
   data() {
@@ -81,19 +86,19 @@ export default {
       spaceBetween: 4,
       navigation: {
         nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
+        prevEl: ".swiper-button-prev",
       },
-      pagination: false
+      pagination: false,
     };
 
     return {
       defaultSwiperOptions,
       currentSwiperOptions: assignIn(defaultSwiperOptions, this.swiperOptions),
       tab: 1,
-      list: []
+      list: [],
     };
   },
-  
+
   methods: {
     get,
 
@@ -102,8 +107,8 @@ export default {
       const currentPrice = price.price || 0;
       const originPrice = price.original_price || 0;
       return (currentPrice / originPrice) * 100;
-    }
-  }
+    },
+  },
 };
 </script>
 

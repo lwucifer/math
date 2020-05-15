@@ -40,7 +40,7 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-    [mutationTypes.TEACHING_STUDENT_PROGRESS.SET_TEACHING_STUDENT_PROGESS_LIST](
+    [mutationTypes.TEACHING_STUDENT_PROGRESS.SET_TEACHING_STUDENT_PROGRESS_LIST](
         state,
         data
     ) {

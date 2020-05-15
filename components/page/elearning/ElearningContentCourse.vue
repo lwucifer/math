@@ -71,6 +71,7 @@ import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 const IconPlayCircle = () =>
   import("~/assets/svg/design-icons/play-circle.svg?inline");
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -81,18 +82,18 @@ export default {
     IconDownload,
   },
 
+  computed: {
+    ...mapState("elearning/detail", {
+      program: "program",
+    }),
+  },
+
   data() {
     return {
       is_show_lesson: true,
     };
   },
 
-  props: {
-    program: {},
-  },
-  updated() {
-    console.log(this.program);
-  },
   methods: {
     get,
   },

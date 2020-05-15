@@ -30,21 +30,24 @@
 // import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconLibraryBooks from "~/assets/svg/icons/library-books.svg?inline";
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
     // IconFileAlt,
     // IconAngleDown,
-    IconLibraryBooks
-  },
-  props: {
-    lesson: {}
-  },
-  updated() {
-    // console.log(this.lesson);
+    IconLibraryBooks,
   },
   methods: {
-    get
-  }
+    get,
+  },
+  computed: {
+    ...mapState("elearning/detail", {
+      program: "program",
+    }),
+    lesson() {
+      return get(this, "program.0.lessons.0", null);
+    },
+  },
 };
 </script>
