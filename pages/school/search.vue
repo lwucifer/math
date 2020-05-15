@@ -16,6 +16,7 @@
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
         @handleChangeSearch="handleChangeSearch"
+        @handleChangedOrder="handleChangeSort"
       ></school-filter>
       <!--Detail school types-->
       <SchoolListBox :category="selectedCategory"></SchoolListBox>
@@ -79,6 +80,7 @@ export default {
       type: this.get(this.$router, 'query.type', ''),
       ward_id: null,
       loading: false,
+      sort_by: null
     };
   },
 
@@ -117,7 +119,8 @@ export default {
       "province_id",
       "district_id",
       "ward_id",
-      "keyword"
+      "keyword",
+      "sort_by"
     ]);
   },
 
@@ -140,14 +143,17 @@ export default {
       this.$router.push({ path: '/school/search', query: { keyword: keyword, type: this.type }})
       this.keyword = keyword;
     },
+    handleChangeSort(order) {
+      this.sort_by = get(order, 'value')
+    },
     handleGetSchoolsByLocation() {
-      console.log('call api')
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
+      if (this.sort_by) params.sort_by = this.sort_by;
       params.size = PAGE_SIZE.SCHOOL_16;
 
       const options = { params };
