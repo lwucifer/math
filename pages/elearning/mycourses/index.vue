@@ -51,7 +51,7 @@ const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 
 export default {
-  middleware: ["student-role"],
+  middleware: ["authenticated"],
   components: {
     ElearningList,
     ElearningItem
