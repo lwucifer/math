@@ -35,12 +35,27 @@
     </div>
 
     <ul class="app-pagination" v-else-if="total < 8">
+      <li v-if="prev">
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
+        <IconAngleLeft />
+        </a>
+      </li>
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
         <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{ i }}</a>
+      </li>
+      <li v-if="next">
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
+          <IconAngleRight />
+        </a>
       </li>
     </ul>
 
     <ul class="app-pagination" v-else-if="total > 1">
+      <li v-if="prev">
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
+        <IconAngleLeft />
+        </a>
+      </li>
       <li v-if="prev && prev != 1">
         <a class="link" @click="goTo(1)">1</a>
       </li>
@@ -70,13 +85,18 @@
       <li v-if="total - current > 1">
         <a class="link" @click="goTo(total)">{{ total }}</a>
       </li>
+      <li v-if="next">
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
+          <IconAngleRight />
+        </a>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
-import IconAngleLeft from "~/assets/svg/design-icons/angle-left.svg?inline";
-import IconAngleRight from "~/assets/svg/design-icons/angle-right.svg?inline";
+import IconAngleRight from '~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline';
+import IconAngleLeft from '~/assets/svg/v2-icons/arrow_back_ios_24px.svg?inline';
 import IconPrevious from "~/assets/svg/design-icons/previous.svg?inline";
 import IconStepForward from "~/assets/svg/design-icons/step-forward.svg?inline";
 import { toNumber, get } from "lodash";
