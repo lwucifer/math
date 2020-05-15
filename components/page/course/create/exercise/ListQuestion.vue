@@ -121,9 +121,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        data: {
-          id: get(this, "question.id", ""),
-        },
+        id: get(this, "question.id", ""),
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
