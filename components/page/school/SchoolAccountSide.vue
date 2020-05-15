@@ -9,7 +9,6 @@ import { mapState } from "vuex";
 import { USER_ROLES } from "~/utils/constants";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import { getToken } from "~/utils/auth";
 
 
 
@@ -27,9 +26,12 @@ export default {
   },
   computed: {
     ...mapState("account", { profile: "profileList" }),
+    ...mapState("auth", [
+      "token",
+    ]),
 
     getConstantMenu() {
-      const accountObj = getToken();
+      const accountObj = this.token;
       if (!!accountObj) {
         return [
           {
@@ -61,7 +63,7 @@ export default {
     },
 
     getAuthMenu() {
-      const accountObj = getToken();
+      const accountObj = this.token;
       if (!!accountObj) {
         return [
           {

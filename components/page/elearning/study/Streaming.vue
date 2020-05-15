@@ -76,7 +76,7 @@ export default {
 
       // videojs options
       playerOptions: {
-        muted: true,
+        muted: false,
         fluid: true,
         // responsive: true,
         language: "vi",
@@ -87,7 +87,11 @@ export default {
             src: this.url
           }
         ],
-        poster: this.thumbnail
+        poster: this.thumbnail,
+        preload: "metadata",
+        liveui: true,
+        playbackRates: [0.5, 1, 1.5, 2],
+        height: 422
       }
     };
   },

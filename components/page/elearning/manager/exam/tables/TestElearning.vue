@@ -19,7 +19,7 @@
       </template>
       
       <template v-slot:cell(type)="{row}">
-        <td>
+        <td class="nowrap">
           {{ get(row, 'type', '') | exerciseTypeFilter }}
         </td>
       </template>
@@ -32,15 +32,15 @@
             placement="top"
             popover-class="tooltip--rate"
           >
-            <div>
+            <div class="nowrap">
               <span class="status-item status-item--success d-inline-block">
-                {{get(row, 'passed_percent', 0)}}%
+                {{get(row, 'passed_percent', 0) | numeralFormat('0.0')}}%
               </span>
               <span class="status-item status-item--fail d-inline-block">
-                {{get(row, 'failed_percent', 0)}}%
+                {{get(row, 'failed_percent', 0) | numeralFormat('0.0')}}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{get(row, 'pending_percent', 0)}}%
+                {{get(row, 'pending_percent', 0) | numeralFormat('0.0')}}%
               </span>
             </div>
             
@@ -130,7 +130,7 @@
             text: "Thể loại",
           },
           {
-            name: "exercises",
+            name: "tests",
             text: "Số bài tập",
             sort: true
           },

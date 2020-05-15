@@ -130,9 +130,9 @@ export default {
     }),
   },
 
-  mounted() {
-    this.$store.dispatch("elearning/create/getLessons");
-  },
+  // mounted() {
+  //   this.$store.dispatch("elearning/create/getLessons");
+  // },
 
   updated() {
     console.log(this.lesson, this.lessons);

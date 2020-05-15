@@ -25,13 +25,10 @@
     </div>
 
     <h4 class="my-4">Mô tả tổng quát</h4>
-    <div
-      v-if="get(info, 'description', '')"
-      v-html="get(info, 'description', '')"
-    ></div>
+    <div v-if="description" v-html="description"></div>
     <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
-    <div class="text-center mt-3">
-      <a class="btn-load-more">Xem thêm</a>
+    <div class="text-center mt-3" v-if="load_more">
+      <a @click="handleLoadMore" class="btn-load-more">Xem thêm</a>
     </div>
   </section>
 </template>
@@ -45,6 +42,13 @@ export default {
   components: {
     IconCheck,
   },
+
+  data() {
+    return {
+      lengthDescription: 300,
+    };
+  },
+
   computed: {
     title() {
       switch (get(this, "info.type", "")) {
@@ -61,7 +65,25 @@ export default {
     ...mapState("elearning/detail", {
       info: "info",
     }),
+    description() {
+      if (this.load_more) {
+        return get(this, "info.description", "").substring(
+          0,
+          this.lengthDescription
+        );
+      }
+      return get(this, "info.description", "");
+    },
+    load_more() {
+      return get(this, "info.description.length", 0) > this.lengthDescription;
+    },
   },
-  methods: { get },
+
+  methods: {
+    get,
+    handleLoadMore() {
+      this.lengthDescription = get(this, "info.description.length", 0);
+    },
+  },
 };
 </script>

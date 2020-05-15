@@ -176,7 +176,7 @@
         >
           <template slot="default" slot-scope="{ classes }">
             <div
-              v-for="item in newestCourse && newestLecture.content || []"
+              v-for="item in newestCourse && newestCourse.content || []"
               :key="item.id"
               :class="classes"
             >
@@ -207,6 +207,7 @@
             <div v-for="item in highlightTeachers && highlightTeachers.content || []" :key="item.teacher_id" :class="classes">
               <ElearningHomeTeacherCard
                 to
+                :image="get(item, 'avatar.medium', '')"
                 :name="item.name"
                 school-name="Trường trung học cơ sở Nguyễn Trãi"
                 :num-of-lecture="item.lectures"

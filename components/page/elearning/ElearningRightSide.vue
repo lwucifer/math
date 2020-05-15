@@ -129,7 +129,7 @@
         @click="handleAddFavouriteElearning"
       >
         <IconFavorite
-          v-if="info && info.is_favourite"
+          v-if="get(info, 'is_favourite', false)"
           class="icon subheading mr-2"
         />
         <IconFavoriteBorder v-else class="icon subheading mr-2" />

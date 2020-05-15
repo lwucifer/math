@@ -14,7 +14,7 @@
               nuxt
               style="position: absolute; right: 0.5rem; bottom: 2rem;"
               size="sm"
-              :to="accountInfo ? '/' + accountInfo.id + '/info/change_pwd' : '/'"
+              :to="token ? '/' + token.id + '/info/change_pwd' : '/'"
             >
               <span class>Thay đổi mật khẩu</span>
             </app-button>
@@ -155,7 +155,7 @@ import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
-import { getToken, getDeviceId } from "~/utils/auth";
+import { getDeviceId } from "~/utils/auth";
 import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
 
 export default {
@@ -311,9 +311,10 @@ export default {
     ...mapState("account", {
       linkList: "linkList"
     }),
-    accountInfo() {
-      return getToken();
-    },
+
+    ...mapState("auth", [
+      "token",
+    ]),
     filterAvatarSrc() {
       return this.personalList && this.personalList.avatar
         ? this.personalList.avatar.low

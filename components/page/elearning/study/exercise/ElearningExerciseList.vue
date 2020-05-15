@@ -65,13 +65,6 @@ export default {
     ElearningExerciseListItem
   },
 
-  // props: {
-  //   exercises: {
-  //     type: Array,
-  //     default: () => fakeExercises
-  //   }
-  // },
-
   computed: {
     ...mapState("elearning/study/study-exercise", [
       "elearningExercises",

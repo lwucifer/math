@@ -6,38 +6,43 @@
       <div class="row">
         <div class="col-md-8">
           <div class="box22">
-            <img
-              v-if="studyMode === defaultMode"
-              :src="
-                get(info, 'cover_url.high', '') ||
-                  '/images/adefltu - course - image.png'
-              "
-              width="750"
-              height="422"
-              alt
-            />
+            <div class="lession-screen">
+              <img
+                v-if="studyMode === defaultMode"
+                :src="
+                  get(info, 'cover_url.high', '') ||
+                    '/images/adefltu - course - image.png'
+                "
+                width="750"
+                alt
+              />
+            </div>
             <Streaming
               v-if="studyMode == videoMode"
               :url="get(payload, 'stream_urls.hls_url', '')"
+              :thumbnail="
+                get(info, 'cover_url.high', '') ||
+                  '/images/adefltu - course - image.png'
+              "
             />
-            <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
-              >Download</a
-            >
-            <img
-              v-if="studyMode === imageMode"
-              :src="get(payload, 'link', '')"
-              alt
-            />
-            <iframe
-              v-if="studyMode == articleMode"
-              style="width: 712px"
-              :src="get(payload, 'link', '')"
-            ></iframe>
+            <div class="lession-screen">
+              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
+                >Download</a
+              >
+            </div>
+            <div class="lession-screen" v-if="studyMode === imageMode">
+              <img :src="get(payload, 'link', '')" alt />
+            </div>
+
+            <div class="lession-screen" v-if="studyMode == articleMode">
+              <iframe
+                style="width: 712px"
+                :src="get(payload, 'link', '')"
+              ></iframe>
+            </div>
 
             <!-- DO EXERCISE -->
-            <ElearningExercise
-              v-if="studyMode !== videoMode && studyMode !== defaultMode"
-            />
+            <ElearningExercise v-if="isExerciseMode" />
 
             <div class="elearning-study-tabs">
               <a
@@ -68,7 +73,6 @@
               @addQuestionSuccess="addQuestionSuccess"
             /> -->
           </div>
-          
         </div>
 
         <div class="col-md-4">
@@ -145,7 +149,21 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
-    ...mapState("elearning/study/study-info", ["info"])
+    ...mapState("elearning/study/study-info", ["info"]),
+
+    isExerciseMode() {
+      const isExerciseScreen =
+        this.studyMode &&
+        [
+          STUDY_MODE.DO_EXERCISE,
+          STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN,
+          STUDY_MODE.DO_EXERCISE_DOING,
+          STUDY_MODE.REVIEW_EXERCISE_RESULT
+        ].includes(this.studyMode);
+
+      console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
+      return isExerciseScreen;
+    }
   },
 
   mounted() {
@@ -229,4 +247,17 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/pages/elearning/_study.scss";
+</style>
+
+<style scoped>
+.lession-screen {
+  display: flex;
+  justify-content: center;
+}
+
+.lession-screen img,
+iframe,
+a {
+  height: 42.6rem;
+}
 </style>

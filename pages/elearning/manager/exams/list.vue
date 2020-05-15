@@ -38,8 +38,6 @@ const ExerciseTab = () => import("./tabs/exercise");
 const ExamTab = () => import("./tabs/exam");
 
 export default {
-  layout: "manage",
-
   components: {
     ElearningManagerSide,
     ExerciseTab,
