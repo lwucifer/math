@@ -61,10 +61,9 @@ export default {
   computed: {
     isValidCode() {
       if (this.code && this.code.length == 9) {
-        this.messageCode = "";
         return VALIDATE_STATUS.SUCCESS;
       } else if(this.code){
-        this.messageCode = "Mã liên kết gồm 9 ký tự";
+        this.messageCode = "Mã liên kết không hợp lệ";
         return VALIDATE_STATUS.ERROR;
       } else {
         this.messageCode = "";
