@@ -33,10 +33,17 @@
       </div>
     </template>
 
-    <div v-if="get(info, 'elearning_price.free', false)">
+    <div v-if="isBuyElearning">
+      <app-button
+        v-if="isStartElearning"
+        fullWidth
+        class="text-uppercase body-2 font-weight-bold mb-4"
+        @click="handleStudy"
+        >Tham gia học</app-button
+      >
       <app-button
         @click="handleStudy"
-        v-if="get(info, 'is_study', false)"
+        v-if="isStudyElearning"
         color="primary"
         fullWidth
         square
@@ -45,12 +52,15 @@
         Vào học ngay
       </app-button>
       <app-button
-        v-else
-        fullWidth
-        class="text-uppercase body-2 font-weight-bold mb-4"
+        color="primary"
         @click="handleStudy"
-        >Tham gia học</app-button
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        v-if="isDoneElearning"
       >
+        <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+      </app-button>
     </div>
 
     <app-button
@@ -181,7 +191,39 @@ export default {
       info: "info",
       program: "program",
     }),
+    isBuyElearning() {
+      if (get(this, "info.elearning_price.free", false)) return true;
+      if (get(this, "info.is_study", false)) return true;
+      return false;
+    },
+    isStartElearning() {
+      if (get(this, "info.is_progress", 0) == 0) return true;
+      return false;
+    },
+    isStudyElearning() {
+      if (
+        get(this, "info.is_progress", "-1") > 0 &&
+        get(this, "info.is_progress", "-1") < 100
+      ) {
+        return true;
+      }
+
+      return false;
+    },
+    isDoneElearning() {
+      if (get(this, "info.is_progress", "-1") == 100) return true;
+      return false;
+    },
   },
+
+  // mounted() {
+  //   console.log(
+  //     this.isBuyElearning,
+  //     this.isStartElearning,
+  //     this.isStudyElearning,
+  //     this.isDoneElearning
+  //   );
+  // },
 
   methods: {
     get,
@@ -189,20 +231,9 @@ export default {
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
 
-      if (get(this, "info.is_study", false)) {
-        this.$router.push(`/elearning/${elearning_id}/study`);
-        return;
-      }
-
-      if (!get(this, "info.elearning_price.free", true)) {
-        this.$router.push(`/elearning/${elearning_id}/study`);
-        return;
-      }
-
       const payload = {
         elearning_id,
       };
-
       const res = await new JoinService(this.$axios)["add"](payload);
 
       if (get(res, "success", false)) {
@@ -214,7 +245,6 @@ export default {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
-
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 

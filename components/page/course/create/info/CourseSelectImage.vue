@@ -56,6 +56,7 @@
               class="cgi-upload-avt mb-3"
               @change="handleUploadChange"
               :inputText="false"
+              :title="text"
             ></app-upload>
           </template>
 
@@ -77,16 +78,27 @@ import { getBase64 } from "~/utils/common";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 const IconExclamationTriangle = () =>
   import("~/assets/svg/design-icons/exclamation-triangle.svg?inline");
-
+import { mapState } from "vuex";
 import IconCrop24px from "~/assets/svg/v2-icons/crop_24px.svg?inline";
 import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
+import { get } from "lodash";
 
 export default {
   components: {
     IconClose,
     IconExclamationTriangle,
     IconCrop24px,
+  },
+
+  computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+    }),
+    text() {
+      if (get(this, "general", null) || this.file) return "Thay đổi ảnh";
+      return;
+    },
   },
 
   props: {
@@ -137,6 +149,7 @@ export default {
       }
       this.error = false;
       this.cropper = null;
+      this.file = "";
       this.$emit("onSelectFile", "");
     },
 
