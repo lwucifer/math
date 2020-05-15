@@ -1,13 +1,13 @@
 <template>
   <div class="container mb-6">
-    <div>
+    <div v-if="!pageLoading">
       <!-- <div class="top" v-if="isDepartment">
         <app-button square class="btn_link_manager">
           <n-link :to="'/school/manager/' + get(school, 'id', '')">
             <span class>Quản lý trường học</span>
           </n-link>
         </app-button>
-      </div> -->
+      </div>-->
 
       <school-summary :school="school" />
 
@@ -25,6 +25,7 @@
         title="Khóa học của trường"
       />
     </div>
+    <VclFacebook v-else />
   </div>
 </template>
 
@@ -34,6 +35,8 @@ import SchoolLessonSlider from "~/components/page/school/SchoolLessonSlider";
 import SchoolCourseSlider from "~/components/page/school/SchoolCourseSlider";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { VclFacebook } from "vue-content-loading";
+
 import { get } from "lodash";
 
 export default {
@@ -43,6 +46,7 @@ export default {
     SchoolSummary,
     SchoolLessonSlider,
     SchoolCourseSlider,
+    VclFacebook
   },
 
   async fetch({ params, query, store }) {
@@ -56,8 +60,8 @@ export default {
       params: {
         school_id,
         elearning_type: "COURSE",
-        size: 16,
-      },
+        size: 16
+      }
     };
     await store.dispatch(
       `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -67,9 +71,9 @@ export default {
       params: {
         school_id,
         elearning_type: "LECTURE",
-        size: 16,
+        size: 16
         // status: "ACCEPTED",
-      },
+      }
     };
     await store.dispatch(
       `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -89,8 +93,9 @@ export default {
         watchOverflow: false,
         navigation: false,
         pagination: false,
-        showName: true,
+        showName: true
       },
+      pageLoading: true
     };
   },
   computed: {
@@ -98,12 +103,13 @@ export default {
     ...mapState("elearning/school/school-info", { school: "schoolInfo" }),
     ...mapState(`elearning/school/school-elearning`, {
       courses: "course",
-      lessons: "lecture",
-    }),
+      lessons: "lecture"
+    })
   },
 
   mounted() {
     console.log(this.school, this.courses, this.lessons);
+    this.pageLoading = false;
   },
 
   watch: {},
@@ -114,15 +120,15 @@ export default {
       const options_showAll = {
         params: {
           school_id: this.$route.params.id,
-          elearning_type: "COURSE",
-        },
+          elearning_type: "COURSE"
+        }
       };
       this.$store.dispatch(
         `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
         options_showAll
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
