@@ -11,13 +11,24 @@
             <div class="d-flex">
               <h5 class="text-primary">Thông tin học sinh</h5>
               <app-button
+                v-if="!progress.is_banned"
                 square
                 color="secondary"
                 size="sm"
                 class="btn-block__manager-student"
-                @click="bannedStudent"
+                @click="bannedStudent(progress.is_banned)"
               >
                 <IconBlock24px class="icon mr-2" />Cấm học sinh này
+              </app-button>
+              <app-button
+                v-else
+                square
+                color="primary"
+                size="sm"
+                class="btn-unblock__manager-student"
+                @click="bannedStudent"
+              >
+                <IconBlock24px class="icon mr-2" />Bỏ cấm học sinh này
               </app-button>
             </div>
             <StudentManagerInfo />
@@ -124,7 +135,8 @@ export default {
 
   methods: {
     ...mapActions(STORE_TEACHING_BANNED, ["teachingElearningBanned"]),
-    bannedStudent() {
+    ...mapActions(STORE_TEACHING_PROGRESS, ["teachingStudentProGressList"]),
+    bannedStudent(isBanned) {
       const data = createBannedStudent({
         elearning_id:
           this.$route.query && this.$route.query.elearning_id
@@ -134,10 +146,26 @@ export default {
           this.$route.params && this.$route.params.id
             ? this.$route.params.id
             : "",
-        banned: true
+        banned: !isBanned
       });
       console.log("data", data);
-      this.teachingElearningBanned(data).then(result => {});
+      const dataQuery = {
+        params: {
+          elearning_id:
+            this.$route.query && this.$route.query.elearning_id
+              ? this.$route.query.elearning_id
+              : "",
+          student_id:
+            this.$route.params && this.$route.params.id
+              ? this.$route.params.id
+              : ""
+        }
+      };
+      this.teachingElearningBanned(data).then(result => {
+        if (result.success == true) {
+          this.teachingStudentProGressList(dataQuery);
+        }
+      });
     }
   },
   created() {
@@ -150,6 +178,9 @@ export default {
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 .btn-block__manager-student {
   background: #eb5757;
+  margin-left: auto;
+}
+.btn-unblock__manager-student {
   margin-left: auto;
 }
 </style>

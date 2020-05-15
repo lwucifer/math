@@ -1,6 +1,6 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import Invites from "~/services/elearning/teaching/OlclassInvites";
+import ElearningInvites from "~/services/elearning/teaching/Invites";
 
 /**
  * initial state
@@ -20,15 +20,32 @@ const getters = {};
 const actions = {
     async [actionTypes.TEACHING_ELEARNING_INVITES.LIST]({ commit }, payload) {
         try {
-            const result = await new Invites(this.$axios)[actionTypes.BASE.LIST](
-                payload
-            );
+            const result = await new ElearningInvites(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
             // set to mutation
             commit(
                 mutationTypes.TEACHING_ELEARNING_INVITES
                 .SET_TEACHING_ELEARNING_INVITES_LIST,
                 result.data
             );
+            return result;
+        } catch (error) {
+            console.log("[Progress] list.error", error);
+        }
+    },
+    async [actionTypes.TEACHING_ELEARNING_INVITES.ADD]({ commit }, payload) {
+        try {
+            const result = await new ElearningInvites(this.$axios)[
+                actionTypes.BASE.ADD
+            ](payload);
+            // set to mutation
+            // commit(
+            //     mutationTypes.TEACHING_ELEARNING_INVITES
+            //     .SET_TEACHING_ELEARNING_INVITES_LIST,
+            //     result.data
+            // );
+            return result;
         } catch (error) {
             console.log("[Progress] list.error", error);
         }

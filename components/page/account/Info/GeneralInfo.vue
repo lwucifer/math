@@ -8,7 +8,7 @@
           </div>
           <div class="col-md-9">
             <div class="app-input app-input--size-md">
-              <upload-avatar :av-srt="avatarSrc"></upload-avatar>
+              <upload-avatar :av-src="filterAvatarSrc"></upload-avatar>
             </div>
             <app-button
               nuxt
@@ -107,7 +107,12 @@
                 </div>
               </div>
             </div>
-            <account-story-form v-if="editingStory" :story="story"></account-story-form>
+            <account-story-form
+              v-if="editingStory"
+              :story="story"
+              @cancel="cancel"
+              @submit="submitStory"
+            ></account-story-form>
           </div>
         </div>
       </div>
@@ -181,7 +186,7 @@ export default {
       },
       editingStory: false,
       avatar: [],
-      avatarSrc: "https://picsum.photos/170/170",
+      avatarSrc: "",
       story: null,
       profileInfo: "",
       visible: {
@@ -217,7 +222,8 @@ export default {
   methods: {
     ...mapActions("account", [
       "accountPersonalEditAvatar",
-      "accountPersonalList"
+      "accountPersonalList",
+      "accountBiographyAdd"
     ]),
     ...mapActions("auth", ["logout"]),
 
@@ -283,6 +289,18 @@ export default {
     },
     editStory() {
       this.editingStory = true;
+    },
+    submitStory() {
+      const data = {
+        biography: "aaa"
+      };
+      this.accountBiographyAdd(data).then(result => {
+        if (result.success) {
+        }
+      });
+    },
+    cancel() {
+      this.editingStory = false;
     }
   },
   computed: {
@@ -297,12 +315,18 @@ export default {
     ...mapState("auth", [
       "token",
     ]),
+    filterAvatarSrc() {
+      return this.personalList && this.personalList.avatar
+        ? this.personalList.avatar.low
+        : "https://picsum.photos/170/170";
+    }
   },
   created() {
     this.fetchProfile();
-    this.avatarSrc = this.personalList.avatar
-      ? this.personalList.avatar.low
-      : "https://picsum.photos/170/170";
+    // this.avatarSrc =
+    //   this.personalList && this.personalList.avatar
+    //     ? this.personalList.avatar.low
+    //     : "https://picsum.photos/170/170";
   }
 };
 </script>
