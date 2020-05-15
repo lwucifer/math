@@ -1,17 +1,16 @@
 <template>
   <div>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mb-3">
       <EditChapterName :chapter="chapter" :index="index" />
 
-      
       <div class="ce-item__right d-flex">
         <a href @click.prevent="toggleShowAddLesson">Thêm bài học</a>
         <button
           class="cc-box__btn cc-box__btn-collapse"
           @click="isShowLesson = !isShowLesson"
         >
-          <IconAngleDown class="fill-primary" v-if="!isShowLesson" />
-          <IconAngleUp class="fill-primary" v-else />
+          <IconAngleDown class="fill-primary" width="20px" height="20px" v-if="!isShowLesson" />
+          <IconAngleUp class="fill-primary" width="20px" height="20px" v-else />
         </button>
       </div>
     </div>
@@ -22,7 +21,7 @@
       @toggleShowAddLesson="toggleShowAddLesson"
     />
 
-    <div v-if="isShowLesson">
+    <div v-if="isShowLesson" class="list-lesson">
       <LessonDetail
         v-for="(lesson, index) in get(chapter, 'lessons', [])"
         :key="lesson.id"
@@ -119,3 +118,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_chapter-item.scss";
+</style>

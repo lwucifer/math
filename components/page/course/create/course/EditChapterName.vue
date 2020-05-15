@@ -1,6 +1,6 @@
 <template>
-  <div class="ce-item__left d-flex align-items-center">
-    <div class="mr-3 mb-3">
+  <div class="ce-item--modifer ce-item__left d-flex align-items-center">
+    <div class="mr-3">
       <strong>Chương</strong> {{ index + 1 }}:
       <input
         v-if="isEditChaperName"

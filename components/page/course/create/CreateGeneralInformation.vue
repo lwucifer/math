@@ -265,7 +265,7 @@ export default {
       }
 
       const lengh_description = get(this, "payload.description.length", 0);
-      if (lengh_description > 0 && lengh_description < 300) {
+      if (lengh_description > 0 && lengh_description < 100) {
         return false;
       }
       if (lengh_description > 2000) {
