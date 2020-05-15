@@ -8,7 +8,7 @@
           <IconCameraOnline class="icon" />Trực tiếp
         </div>
 
-        <div v-if="livestream" class="course-item-2__label-livestream">Lớp học đang diễn ra</div>
+        <div v-if="onlineClass" class="course-item-2__online-class">Lớp học đang diễn ra</div>
 
         <div v-if="discount" class="course-item-2__discount">{{ discount }}%</div>
       </n-link>
@@ -52,12 +52,12 @@
 import { assignIn, get } from "lodash";
 import numeral from "numeral";
 
-import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
+// import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
 import IconCameraOnline from "assets/svg/icons/camera-online.svg?inline";
 
 export default {
   components: {
-    IconVideo3,
+    // IconVideo3,
     IconCameraOnline
   },
 
@@ -83,7 +83,8 @@ export default {
     totalReview: Number,
     price: Number,
     originalPrice: Number,
-    free: Boolean
+    free: Boolean,
+    onlineClass: Boolean
   },
 
   methods: {

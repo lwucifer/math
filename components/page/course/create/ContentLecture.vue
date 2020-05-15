@@ -14,13 +14,13 @@
           </div>
 
           <div class="cc-box__head-right">
-            <a
-              @click="handleAddLesson($event)"
+            <!-- <a
               class="d-flex align-items-center text-primary"
-              v-if="!get(lessons, 'length', 0)"
+              v-if="isShowButtonAddLesson"
+              @click="isShowButtonAddLesson = false"
               ><IconAdd width="14px" height="14px" class="mr-2" /> Thêm bài
               học</a
-            >
+            > -->
 
             <button
               class="cc-box__btn cc-box__btn-collapse"
@@ -35,7 +35,7 @@
 
         <div class="cc-box__body">
           <CreateLessonOfElearning
-            v-if="isShowFormAddLesson"
+            v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"
           />
@@ -49,6 +49,23 @@
             />
           </fragment>
         </div>
+      </div>
+    </div>
+
+    <div class="create-action pt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <!-- <app-button outline class="mr-4" color="error"
+          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
+        >
+        <app-button class="mr-4" color="primary" outline
+          ><IconSave class="mr-2" /> Lưu nháp</app-button
+        > -->
+        <app-button
+          class="create-action__btn mr-4"
+          :disabled="!isNextStep"
+          @click="handleNextStep"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
       </div>
     </div>
   </div>
@@ -70,6 +87,10 @@ const IconTrashAlt = () =>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
 const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
+
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
@@ -98,6 +119,9 @@ export default {
     EditCourseName,
     IconAngleUp,
     IconAdd,
+    IconDelete,
+    IconSave,
+    Forward,
   },
 
   data() {
@@ -108,7 +132,6 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowButtonAddLesson: false,
       isShowFormAddLesson: false,
       isShowDetailLesson: false,
       isEditCourseName: false,
@@ -129,12 +152,10 @@ export default {
     lessons: {
       handler: function() {
         if (get(this, "lessons.length", 0)) {
-          this.isShowButtonAddLesson = false;
           this.isShowFormAddLesson = false;
           this.isShowDetailLesson = true;
           return;
         }
-        this.isShowButtonAddLesson = true;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = false;
       },
@@ -150,17 +171,24 @@ export default {
   },
 
   computed: {
-    // ...mapState("elearning/creating/creating-lesson", {
-    //   lessons: "lessons",
-    // }),
     ...mapState("elearning/create", {
       general: "general",
       lessons: "lessons_lecture",
+      progress: "progress",
     }),
+    isNextStep() {
+      if (get(this, "progress.general_status", false) != 1) return false;
+      if (get(this, "progress.content_status", false) != 1) return false;
+      return true;
+    },
   },
 
   methods: {
     get,
+
+    handleNextStep() {
+      this.$emit("nextStep", "settings");
+    },
 
     async handleSaveCourseName() {
       const data = {
@@ -200,7 +228,6 @@ export default {
     },
 
     handleEditLesson(lesson) {
-      this.isShowButtonAddLesson = false;
       this.isShowFormAddLesson = true;
       this.isShowDetailLesson = false;
       this.lesson = lesson;
@@ -234,20 +261,18 @@ export default {
       this.tabAddDocument = type;
     },
 
-    handleAddLesson(e) {
-      e.preventDefault();
-      this.isShowFormAddLesson = !this.isShowFormAddLesson;
-    },
+    // handleAddLesson(e) {
+    //   e.preventDefault();
+    //   this.isShowFormAddLesson = !this.isShowFormAddLesson;
+    // },
 
     toggleShowAddLesson() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id && get(this, "lessons.length", 0)) {
-        this.isShowButtonAddLesson = false;
         this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
         return;
       }
-      this.isShowButtonAddLesson = true;
       this.isShowFormAddLesson = false;
       this.isShowDetailLesson = false;
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-study-space" v-if="checRoleStudent()">
+  <div class="wrap-study-space" >
     <app-dropdown
       position="left"
       v-model="dropdownCourse"
@@ -12,7 +12,7 @@
       </button>
       <div class="link--dropdown__content wrap-arrow__content">
         <ul>
-          <li v-for="(elearning,index) in elearningListHeader" :key="index">
+          <li v-for="(elearning,index) in filterElearningStudy" :key="index">
             <template v-if="index < 3">
               <n-link :to="'/elearning/'+ elearning.elearning_id">
                 <div>
@@ -31,8 +31,9 @@
               </n-link>
             </template>
           </li>
-          <li class="text-center">
-            <n-link to="/elearning/mycourses">Xem thêm</n-link>
+          <li class="text-center" @click.prevent="pushMycourses">
+            <!-- <n-link to="/elearning/mycourses">Xem thêm</n-link> -->
+            <n-link to>Xem thêm</n-link>
           </li>
         </ul>
       </div>
@@ -56,6 +57,21 @@ export default {
   },
   components: {
     IconArrowDropDown24px
+  },
+  async fetch({ params, query, store }) {
+    const payload = {
+      params: {
+        types: "ALL",
+        size: 3,
+        page: 1
+      }
+    };
+    await Promise.all([
+      store.dispatch(
+        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
+        payload
+      )
+    ]);
   },
   methods: {
     fetchElearningList() {
@@ -83,6 +99,10 @@ export default {
       ]);
       return isValid;
     },
+    pushMycourses() {
+      this.dropdownCourse = false;
+      this.$router.push("/elearning/mycourses");
+    },
     get
   },
   computed: {
@@ -92,13 +112,18 @@ export default {
     ...mapState("account", { profile: "profileList" }),
     userRoles() {
       return this.get(this, "profile.role.authority", false) || [];
+    },
+    filterElearningStudy() {
+      return this.elearningStudyStudent && this.elearningStudyStudent.content
+        ? this.elearningStudyStudent.content
+        : [];
     }
   },
   async created() {
     this.fetchElearningList();
     await this.fetchProfile();
     this.checRoleStudent();
-    this.elearningListHeader = get(this, "elearningStudyStudent.content", []);
+    // this.elearningListHeader = get(this, "elearningStudyStudent.content", []);
   }
 };
 </script>

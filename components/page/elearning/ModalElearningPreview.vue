@@ -12,13 +12,13 @@
       <div class="elearning-view" v-else>
         <ElearningViewInfo :info="info" :previewInfo="previewData" style="padding: 0"/>
 
-        <ElearningIntroduce :info="info" />
+        <ElearningIntroduce/>
 
-        <ElearningContent :program="program" :info="info" />
+        <ElearningContent/>
 
-        <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" />
+        <CourseTeacherInfo />
 
-        <ElearningReview :info="info" />
+        <ElearningReview/>
       </div>
     </div>
   </app-modal>
@@ -91,30 +91,30 @@ export default {
     },
   },
 
-  created() {
-    this.getData();
-  },
-
   data() {
     return {
-      info: null,
+      // info: null,
       loading: true,
-      levels: [],
-      subjects: [],
-      program: [],
-      relatedCourses: [],
-      teacherEls: [],
+      // levels: [],
+      // subjects: [],
+      // program: [],
+      // relatedCourses: [],
+      // teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 3,
         setWrapperSize: true,
-        watchOverflow: true
-      }
+        watchOverflow: true,
+      },
     };
   },
 
   computed: {
-    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/detail", {
+      info: "info",
+      lectures_of_teacher: "lectures_of_teacher",
+      lectures_related: "lectures_related",
+    }),
 
     typeText() {
       if (this.info) {
@@ -129,13 +129,32 @@ export default {
             break;
         }
       }
-    }
+    },
   },
 
-  mounted() {
-    // check whether device_id is set or not?
+  updated() {
+    console.log(this.lectures_related);
+  },
+
+  async mounted() {
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
+
+    this.loading = true;
+    const options = {
+      params: {
+        elearning_id: get(this, "previewData.id", ""),
+        token: "true",
+      },
+    };
+    await this.$store.dispatch("elearning/detail/getInfo", options);
+    // await this.$store.dispatch("elearning/detail/getLectureOfTeacher");
+    // await this.$store.dispatch("elearning/detail/getLecturesRelated");
+    // await this.$store.dispatch("elearning/detail/getTeacher");
+    this.loading = false;
+    // this.getData();
+
+    // check whether device_id is set or not?
 
     // window.addEventListener("scroll", this.bindScrollStatus);
     // if (this.$route.hash && process.browser) {
@@ -149,58 +168,47 @@ export default {
   // },
 
   watch: {
-    "info.teacher.id": {
+    info: {
       handler: async function() {
-        const teacher_id = get(this, "info.teacher.id", "");
-        const options = {
-          params: {
-            teacher_id
-          }
-        };
-        const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
-          options
-        );
-        if (get(res, "success", false) === true) {
-          this.teacherEls = get(res, "data.content", []);
-          return;
-        }
-        this.teacherEls = [];
-      }
-    }
+        this.loading = true;
+        await this.$store.dispatch("elearning/detail/getLectureOfTeacher");
+        await this.$store.dispatch("elearning/detail/getLecturesRelated");
+        await this.$store.dispatch("elearning/detail/getTeacher");
+        await this.$store.dispatch("elearning/detail/getProgram");
+        this.loading = false;
+      },
+      deep: true,
+    },
   },
 
   methods: {
     get,
 
-    close(invite) {
-      this.$emit("close", invite);
+    close() {
+      this.$emit("close");
     },
 
     async getData() {
-      console.log('xxxxxxxxxxxxx', this.previewData)
-      const elearning_id = this.previewData.id;
+      const elearning_id = get(this, "previewData.id", "");
 
       const params = {
         elearning_id,
-        token: "true"
+        token: "true",
       };
 
-      // const getInfo = () =>
-      //   new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-      //     params,
-      //   });
       const getInfo = () =>
         this.$store.dispatch(
           `elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
           params
         );
+
       const getProgram = () =>
         new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params
+          params,
         });
       const getRelatedCourses = () =>
         new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params
+          params,
         });
 
       this.loading = true;
@@ -208,7 +216,7 @@ export default {
       const data = await Promise.all([
         getInfo(),
         getProgram(),
-        getRelatedCourses()
+        getRelatedCourses(),
       ]);
 
       this.loading = false;
@@ -224,7 +232,7 @@ export default {
       } else {
         setTimeout(getDeviceID, 500);
       }
-    }
+    },
 
     // bindScrollStatus(event) {
     //   const navLink = document.querySelector(".elearning-view__main-nav");
@@ -246,7 +254,7 @@ export default {
     //     }
     //   }
     // },
-  }
+  },
 };
 </script>
 

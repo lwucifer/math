@@ -8,7 +8,7 @@
       >Nội dung câu trả lời</label
     >
     <app-editor v-model="payload.answers[0].content" />
-    <div v-if="get(exercise, 'category', '') === 'TEST'">
+    <div v-if="showAddPoint">
       <!-- <label class="d-inline-block mb-3" for="question-editor">Điểm</label>
       <app-input v-model="payload.points" /> -->
 
@@ -103,6 +103,12 @@ export default {
       general: "general",
       lesson: "lesson",
     }),
+    showAddPoint() {
+      return (
+        get(this, "exercise.category", "") === "TEST" ||
+        get(this, "exercise.required", "") === true
+      );
+    },
   },
 
   methods: {

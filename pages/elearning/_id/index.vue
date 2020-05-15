@@ -140,9 +140,9 @@ export default {
     },
   },
 
-  updated() {
-    console.log(this.lectures_related);
-  },
+  // updated() {
+  //   console.log(this.lectures_related);
+  // },
 
   async mounted() {
     const isDeviceIdExist = !!getDeviceID();
@@ -156,34 +156,16 @@ export default {
       },
     };
     await this.$store.dispatch("elearning/detail/getInfo", options);
-    // await this.$store.dispatch("elearning/detail/getLectureOfTeacher");
-    // await this.$store.dispatch("elearning/detail/getLecturesRelated");
-    // await this.$store.dispatch("elearning/detail/getTeacher");
     this.loading = false;
-    // this.getData();
-
-    // check whether device_id is set or not?
-
-    // window.addEventListener("scroll", this.bindScrollStatus);
-    // if (this.$route.hash && process.browser) {
-    //   const hashEl = document.querySelector(this.$route.hash);
-    //   hashEl && this.scrollTo(this.$route.hash);
-    // }
   },
-
-  // beforeDestroy() {
-  //   window.removeEventListener("scroll", this.bindScrollStatus);
-  // },
 
   watch: {
     info: {
-      handler: async function() {
-        this.loading = true;
-        await this.$store.dispatch("elearning/detail/getLectureOfTeacher");
-        await this.$store.dispatch("elearning/detail/getLecturesRelated");
-        await this.$store.dispatch("elearning/detail/getTeacher");
-        await this.$store.dispatch("elearning/detail/getProgram");
-        this.loading = false;
+      handler: function() {
+        this.$store.dispatch("elearning/detail/getLectureOfTeacher");
+        this.$store.dispatch("elearning/detail/getLecturesRelated");
+        this.$store.dispatch("elearning/detail/getTeacher");
+        this.$store.dispatch("elearning/detail/getProgram");
       },
       deep: true,
     },

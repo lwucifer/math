@@ -16,8 +16,8 @@
               <!--Info group-->
               <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
               <div class="class-info mb-4 border">
-                <strong class="d-flex-center mr-2">
-                  <IconClock/>
+                <strong class="d-flex-center">
+                  <IconClock class="mr-3"/>
                   {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
                 </strong>
                 <div class="class-info-content mt-3">
@@ -67,7 +67,7 @@
                   </app-button>
                 </div>
 
-                <div class="filter-form__item" style="min-width: 12rem">
+                <div class="filter-form__item" style="min-width: 13rem">
                   <app-vue-select
                     class="app-vue-select filter-form__item__selection"
                     v-model="filterCourse"
@@ -77,22 +77,18 @@
                     searchable
                     clearable
                     @input="handleChangedCourse"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item" style="min-width: 12rem">
+                <div class="filter-form__item" style="min-width: 13rem">
                   <app-vue-select
                     class="app-vue-select filter-form__item__selection"
-                    v-model="filterCourse"
-                    :options="courses"
+                    v-model="filterStatus"
+                    :options="statuses"
                     label="text"
                     placeholder="Điểm danh"
                     searchable
                     clearable
-                    @input="handleChangedCourse"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
+                    @input="handleChangedStatus"
                   ></app-vue-select>
                 </div>
               </div>
@@ -228,6 +224,25 @@ export default {
       },
       courses: [],
       filterCourse: null,
+      filterStatus: null,
+      statuses: [
+        {
+          value: 'M',
+          text: 'M',
+        },
+        {
+          value: 'K',
+          text: 'K',
+        },
+        {
+          value: 'P',
+          text: 'P',
+        },
+        {
+          value: 'C',
+          text: 'C',
+        },
+      ],
       pagination: {
         total: 0,
         number: 0,
@@ -241,6 +256,7 @@ export default {
         page: 1,
         size: 10,
         class_id: null,
+        attendance_status: null,
         query: null
       },
       loading: false,
@@ -270,6 +286,9 @@ export default {
     },
     handleChangedCourse(val) {
       this.params.class_id = this.filterCourse.value;
+    },
+    handleChangedStatus(val) {
+      this.params.attendance_status = this.filterStatus.value;
     },
     handleFocusSearchInput() {
     },

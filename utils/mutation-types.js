@@ -10,6 +10,7 @@ export const AUTH = {
     SET_FIREBASE_TOKEN: "setFirebaseToken",
     SET_CURRENT_DEVICE: "setCurrentDevice",
     SAVE_PHONE_PASS: "savePhonePass",
+    SAVE_PHONE_STATE: "savePhoneState",
 };
 
 export const BASE = {
@@ -114,6 +115,27 @@ export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
 
 export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
     SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST: "setElearningPublicSchoolYearList",
+};
+
+export const ELEARNING_PUBLIC_WHAT_NEXTS = {
+    SET_WHAT_NEXTS: 'setElearningPublicWhatNexts'
+};
+
+export const ELEARNING_PUBLIC_FOR_YOU = {
+    SET_FOR_YOU: 'setElearningPublicForYou'
+};
+
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
+    SET_VOTED_SUBJECTS: 'setElearningPublicVotedSubjects'
+};
+
+export const ELEARNING_PUBLIC_NEWEST = {
+    SET_NEWEST_LECTURE: 'setElearningPublicNewestLecture',
+    SET_NEWEST_COURSE: 'setElearningPublicNewestCourse',
+};
+
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
+    SET_HIGHLIGHT_TEACHERS: 'setElearningPublicHighlightTeachers'
 };
 
 export const ELEARNING = {

@@ -33,10 +33,17 @@
       </div>
     </template>
 
-    <div v-if="get(info, 'elearning_price.free', false)">
+    <div v-if="isBuyElearning">
+      <app-button
+        v-if="isStartElearning"
+        fullWidth
+        class="text-uppercase body-2 font-weight-bold mb-4"
+        @click="handleStudy"
+        >Tham gia học</app-button
+      >
       <app-button
         @click="handleStudy"
-        v-if="get(info, 'is_study', false)"
+        v-if="isStudyElearning"
         color="primary"
         fullWidth
         square
@@ -45,12 +52,15 @@
         Vào học ngay
       </app-button>
       <app-button
-        v-else
-        fullWidth
-        class="text-uppercase body-2 font-weight-bold mb-4"
+        color="primary"
         @click="handleStudy"
-        >Tham gia học</app-button
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        v-if="isDoneElearning"
       >
+        <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+      </app-button>
     </div>
 
     <app-button
@@ -114,7 +124,10 @@
       <a class="text-info d-flex-center">
         <IconBxsShare class="icon subheading mr-2" />Chia sẻ
       </a>
-      <a class="text-primary ml-auto d-flex-center">
+      <a
+        class="text-primary ml-auto d-flex-center"
+        @click="handleAddFavouriteElearning"
+      >
         <IconFavorite
           v-if="info && info.is_favourite"
           class="icon subheading mr-2"
@@ -145,7 +158,7 @@ import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
 import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
-
+import Favourite from "~/services/elearning/study/Favourite";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
@@ -181,26 +194,86 @@ export default {
       info: "info",
       program: "program",
     }),
+    isBuyElearning() {
+      if (get(this, "info.elearning_price.free", false)) return true;
+      if (get(this, "info.is_study", false)) return true;
+      return false;
+    },
+    isStartElearning() {
+      if (get(this, "info.is_progress", 0) == 0) return true;
+      return false;
+    },
+    isStudyElearning() {
+      if (
+        get(this, "info.is_progress", "-1") > 0 &&
+        get(this, "info.is_progress", "-1") < 100
+      ) {
+        return true;
+      }
+
+      return false;
+    },
+    isDoneElearning() {
+      if (get(this, "info.is_progress", "-1") == 100) return true;
+      return false;
+    },
   },
 
   methods: {
     get,
 
-    async handleStudy() {
-      const elearning_id = get(this, "info.id", "");
-
-      if (
-        get(this, "info.is_study", false) ||
-        !get(this, "info.elearning_price.free", true)
-      ) {
-        this.$router.push(`/elearning/${elearning_id}/study`);
+    async handleAddFavouriteElearning() {
+      if (!get(this, "info.is_favourite", true)) {
+        this.addFavourite();
         return;
       }
+      this.removeFavourite();
+    },
+
+    async removeFavourite() {
+      const payload = {
+        elearning_ids: [get(this, "info.id", "")],
+      };
+      const res = await new Favourite(this.$axios)["deletePayload"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async addFavourite() {
+      const payload = {
+        elearning_id: get(this, "info.id", ""),
+      };
+      const res = await new Favourite(this.$axios)["add"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async handleStudy() {
+      const elearning_id = get(this, "info.id", "");
 
       const payload = {
         elearning_id,
       };
-
       const res = await new JoinService(this.$axios)["add"](payload);
 
       if (get(res, "success", false)) {
@@ -208,6 +281,10 @@ export default {
         return;
       }
 
+      if (get(res, "code", "") === "SCLC_1127") {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
