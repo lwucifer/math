@@ -296,8 +296,8 @@ export default {
         this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
         return;
       }
-      if (value.length < 300) {
-        this.error.description = "Mô tả không được ít hơn 300 ký tự";
+      if (value.length < 100) {
+        this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";
         return;
       }
       if (value.length > 2000) {

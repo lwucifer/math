@@ -49,7 +49,7 @@
           color="default"
           outline
           @click="handleCloseAdd($event)"
-          >Huỷ bỏ</app-button
+          >Hủy</app-button
         >
         <app-button
           class="clc-btn font-weight-semi-bold"

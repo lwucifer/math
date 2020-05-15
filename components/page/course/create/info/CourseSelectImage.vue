@@ -50,6 +50,7 @@
 
           <template v-else>
             <p class="mb-3 font-weight-normal">Chọn file đính kèm</p>
+            
             <app-upload
               accept=".jpg, .jpeg, .jpg, .bmp, .png"
               :fileList="[]"

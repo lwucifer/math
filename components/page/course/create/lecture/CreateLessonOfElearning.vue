@@ -2,7 +2,7 @@
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <div class="cc-box__bg-gray px-2 py-2">
-      <h3 class="heading-5 mb-2 mt-3">
+      <h3 class="heading-5 my-3">
         Tên bài học
         <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
@@ -14,7 +14,7 @@
         placeholder="Bài học số 1"
         :counter="60"
       />
-      <span v-show="error_name" class="error">{{ error_name }}</span>
+      <span v-show="error_name" class="error mb-3">{{ error_name }}</span>
 
 
       <div class="cc-box__bg-disable">
@@ -82,7 +82,7 @@
             class="clc-btn font-weight-semi-bold"
             size="md"
             square
-            >{{ lesson ? "Sửa nội dung" : "Thêm nội dung" }}</app-button
+            >{{ lesson ? "Sửa nội dung" : "Thêm bài học" }}</app-button
           >
         </div>
       </div>
@@ -189,7 +189,7 @@ export default {
   methods: {
     handleBlurNameInput() {
       if (!this.payload.name) {
-        this.error_name = "Chưa nhập tên bài học";
+        this.error_name = "Bạn chưa nhập tên bài học";
         return;
       }
       this.error_name = "";
