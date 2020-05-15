@@ -82,6 +82,6 @@ export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 4096; // MB
 export const CURRENCY = 'đ';
 
 export const TIMEOUT = {
-  NOTIFY: 5000,
+  NOTIFY: 3000,
 }
 

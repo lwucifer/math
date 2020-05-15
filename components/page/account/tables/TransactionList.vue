@@ -1,30 +1,38 @@
 <template>
-  <app-table
-    :heads="heads"
-    :pagination="pagination"
-    @pagechange="onPageChange"
-    :data="list"
-    style="margin-left: -1.5rem; margin-right: -1.5rem;"
-  >
-    <template v-slot:cell(status)="{row}">
-      <td v-if="row.status != statusPending">
-        <span
-          :class="statusClass(row.status)"
-        >{{ row.status | transactionStatus2Txt }}</span>
-      </td>
-      <td v-else>
-        <span
-          :class="statusClass(row.status, 'repay')"
-          @click.prevent="handleRepayOrder(row)"
-        >{{ row.status | transactionStatus2Txt }}</span>
+  <div>
+    <app-table
+      :heads="heads"
+      :pagination="pagination"
+      @pagechange="onPageChange"
+      :data="list"
+      style="margin-left: -1.5rem; margin-right: -1.5rem;"
+    >
+      <template v-slot:cell(status)="{row}">
+        <td v-if="row.status != statusPending">
+          <span :class="statusClass(row.status)">{{ row.status | transactionStatus2Txt }}</span>
+        </td>
+        <td v-else>
+          <span
+            :class="statusClass(row.status, 'repay')"
+            @click.prevent="handleRepayOrder(row)"
+          >{{ row.status | transactionStatus2Txt }}</span>
 
-        <span
-          :class="statusClass(row.status, 'cancel')"
-          @click.prevent="handleCancelOrder(row)"
-        >{{ statusCancel | transactionStatus2Txt }}</span>
-      </td>
-    </template>
-  </app-table>
+          <span
+            :class="statusClass(row.status, 'cancel')"
+            @click.prevent="handleCancelOrder(row)"
+          >{{ statusCancel | transactionStatus2Txt }}</span>
+        </td>
+      </template>
+    </app-table>
+    <app-modal-notify
+      v-if="notify.isShowNotify"
+      :type="notify.type"
+      title
+      :description="notify.description"
+      @close="notify.isShowNotify = false"
+      @ok="notify.isShowNotify = false"
+    />
+  </div>
 </template>
 
 <script>
@@ -96,13 +104,16 @@ export default {
       ],
       statusPending: TRANSACTION_STATUSES.PENDING,
       statusCancel: TRANSACTION_STATUSES.CANCEL,
+      notify: {
+        type: "",
+        description: "",
+        isShowNotify: false
+      }
     };
   },
   methods: {
     ...mapActions("payment", ["postRepay", "cancelPay"]),
-    ...mapMutations("account", [
-      "setForceGetTransactionList",
-    ]),
+    ...mapMutations("account", ["setForceGetTransactionList"]),
 
     handleRepayOrder(item) {
       console.log("[handleRepayOrder]", item);
@@ -130,6 +141,11 @@ export default {
           window.location.href = onepayUrlWithParams;
         } else {
           console.log("[dosomething else]");
+          this.notify = {
+            type: "error",
+            description: "Thanh toán lại thất bại",
+            isShowNotify: true
+          };
         }
       });
     },
@@ -138,10 +154,21 @@ export default {
       console.log("[handleCancelOrder]", item);
       this.cancelPay(item.tx_id).then(result => {
         console.log("[cancelPay]", result);
-        if(result.success == RESPONSE_SUCCESS) {
+        if (result.success == RESPONSE_SUCCESS) {
+          this.notify = {
+            type: "success",
+            description: "Huỷ giao dịch thành công",
+            isShowNotify: true
+          };
           this.setForceGetTransactionList();
+        } else {
+          this.notify = {
+            type: "error",
+            description: "Huỷ giao dịch thất bại",
+            isShowNotify: true
+          };
         }
-      })
+      });
     },
 
     onPageChange(e) {
@@ -151,14 +178,14 @@ export default {
       if (type == TRANSACTION_STATUSES.SUCCESS) {
         return { "text-success": true };
       } else if (type == TRANSACTION_STATUSES.PENDING) {
-        if(action == 'repay'){
+        if (action == "repay") {
           return { "text-success": true, "text-clickable": true }; // allow to click to repay
         } else {
-          return { "text-error": true, "text-clickable": true, 'ml-10': true, }; // allow to click to cancel
+          return { "text-error": true, "text-clickable": true, "ml-10": true }; // allow to click to cancel
         }
       } else if (type == TRANSACTION_STATUSES.FAILED) {
         return { "text-error": true };
-      }  else if (type == TRANSACTION_STATUSES.CANCEL_SUCCESS) {
+      } else if (type == TRANSACTION_STATUSES.CANCEL_SUCCESS) {
         return { "text-default": true };
       } else {
         return {};
