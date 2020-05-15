@@ -45,10 +45,13 @@ export default {
   },
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
+    ...mapGetters("auth", [
+      "isAuthenticated",
+    ]),
   },
   mounted() {
     // console.log("detectBrowser", detectBrowser());
-    this.cartList();
+    this.isAuthenticated && this.cartList();
   },
   methods: {
     get,
