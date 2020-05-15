@@ -6,8 +6,6 @@
 import ElearningList from './elearning'
 
 export default {
-  layout: "manage",
-
   components: {
     ElearningList,
   },

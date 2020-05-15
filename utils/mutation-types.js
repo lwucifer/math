@@ -75,6 +75,10 @@ export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
 
+export const ELEARNING_SEARCH = {
+    SET_ELEARNING_SEARCH_LIST: "setElearningPublicElearningList",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList",
 };

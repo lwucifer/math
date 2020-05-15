@@ -31,6 +31,7 @@
           v-model="filter.query"
           :size="'sm'"
           @submit="handleSubmitSearch"
+          @keyup.enter.native="handleEnterSearch"
         ></app-search>
       </div>
 
@@ -73,7 +74,7 @@
           style="width: 21rem"
           class="app-vue-select"
           :v-model="filter.order"
-          :options="[ { name: 'Có nhiều học sinh nhất', value: 0 }, { name: 'Có nhiều giáo viên nhất', value: 1 }, { name: 'Có nhiều bài giảng nhất', value: 2 }, { name: 'Có nhiều khoá học nhất', value: 3 } ]"
+          :options="[ { name: 'Có nhiều học sinh nhất', value: 'MOST_STUDENT' }, { name: 'Có nhiều giáo viên nhất', value: 'MOST_TEACHER ' } ]"
           label="name"
           placeholder="Sắp xếp theo"
           :reduce="value => value"
@@ -189,6 +190,11 @@ export default {
       if(levelObj){
         this.filter.level = levelObj;
       }
+    },
+    handleEnterSearch(e) {
+      const query = e.target.value
+      this.filter.query = query;
+      this.$emit("handleSubmitSearch", query);
     },
     handleChangedOrder(order) {
       this.$emit("handleChangedOrder", order);

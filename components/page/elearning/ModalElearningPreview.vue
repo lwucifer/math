@@ -187,7 +187,6 @@ export default {
     close() {
       this.$emit("close");
     },
-
     async getData() {
       const elearning_id = get(this, "previewData.id", "");
 
