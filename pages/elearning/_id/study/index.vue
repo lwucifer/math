@@ -25,9 +25,11 @@
                   '/images/adefltu - course - image.png'
               "
             />
-            <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
-              >Download</a
-            >
+            <div class="lession-screen">
+              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
+                >Download</a
+              >
+            </div>
             <div class="lession-screen" v-if="studyMode === imageMode">
               <img :src="get(payload, 'link', '')" alt />
             </div>
@@ -254,7 +256,8 @@ export default {
 }
 
 .lession-screen img,
-iframe {
+iframe,
+a {
   height: 42.6rem;
 }
 </style>
