@@ -1,6 +1,6 @@
 <template>
   <div class="container mb-6">
-    <div>
+    <div v-if="!pageLoading">
       <!-- <div class="top" v-if="isDepartment">
         <app-button square class="btn_link_manager">
           <n-link :to="'/school/manager/' + get(school, 'id', '')">
@@ -23,6 +23,7 @@
         title="Khóa học của trường"
       />
     </div>
+    <VclFacebook v-else />
   </div>
 </template>
 
@@ -32,6 +33,8 @@ import SchoolLessonSlider from "~/components/page/school/SchoolLessonSlider";
 import SchoolCourseSlider from "~/components/page/school/SchoolCourseSlider";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { VclFacebook } from "vue-content-loading";
+
 // Import faked data
 import {
   SCHOOL_SUMMARY,
@@ -47,6 +50,7 @@ export default {
     SchoolSummary,
     SchoolLessonSlider,
     SchoolCourseSlider,
+    VclFacebook,
   },
 
   async fetch({ params, query, store }) {
@@ -100,6 +104,7 @@ export default {
         pagination: false,
         showName: true,
       },
+      pageLoading: true,
       // lessonss: LESSONS,
       // courses: COURSES
     };
@@ -115,6 +120,7 @@ export default {
 
   mounted() {
     console.log(this.school, this.courses, this.lessons);
+    this.pageLoading = false;
   },
 
   watch: {},

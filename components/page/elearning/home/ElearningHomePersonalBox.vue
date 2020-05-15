@@ -32,7 +32,7 @@
       <div class="eh-personal-box__desc" v-if="description">{{ description }}</div>
 
       <div class="eh-personal-box__bottom">
-        <app-button class="mr-4">Xem chi tiết</app-button>
+        <app-button class="mr-4" nuxt :to="to">Xem chi tiết</app-button>
         <div>
           <s>519.000đ</s>
           <b class="text-primary heading-3 ml-3">219.000đ</b>
