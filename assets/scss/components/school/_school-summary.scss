@@ -33,16 +33,15 @@
         &__contact {
             p {
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 margin-bottom: 2rem;
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 line-height: 16px;
-                color: #999999;
                 i {
                     line-height: 1;
                 }
                 svg {
-                    width: 2rem;
+                    height: 1.6rem;
                     margin-right: 0.5rem;
                 }
             }
