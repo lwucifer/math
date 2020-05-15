@@ -13,7 +13,7 @@
 
   export default {
 
-    // middleware: ["student-role"],
+    middleware: ["authenticated"],
     
     components: {
       Footer

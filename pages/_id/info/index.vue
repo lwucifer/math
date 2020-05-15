@@ -51,6 +51,12 @@ export default {
     SchoolInfo,
     DepartmentInfo
   },
+  async fetch({ params, query, store, route }) {
+    const userId = params.id;
+    await Promise.all([
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+    ]);
+  },
   data() {
     return {
       isAuthenticated: true,
