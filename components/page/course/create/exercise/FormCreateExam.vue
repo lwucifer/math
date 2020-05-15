@@ -254,6 +254,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
         this.$store.dispatch("elearning/create/getExams");
+        this.$store.dispatch(`elearning/create/getProgress`);
         this.$emit("cancel");
         return;
       }

@@ -29,9 +29,9 @@
               }}</span>
             </div>
 
-            <app-button class="app-upload__btn-choose-file btn--color-disabled">
-              <IconAttachFile24px class="mr-2" />
-              {{ title }}
+            <app-button class="app-upload__btn-choose-file btn--color-disabled" color="disable" size="md">
+              <IconAttachFile24px class="mr-2"/>
+              Chọn file
             </app-button>
           </div>
           <slot name="hint"></slot>

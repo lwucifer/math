@@ -5,6 +5,8 @@
       :width="606"
       :component-class="{ 'account-edit-modal': true }"
       v-if="visible"
+      :footer="false"
+      :header="false"
     >
       <!-- @close="$router.push('/')" -->
       <div slot="content">
@@ -22,7 +24,14 @@
             />
           </div>
           <div class="col-6">
-            <app-input labelBold type="date" v-model="birthday" label="Ngày sinh" />
+            <app-input
+              labelBold
+              labelFixed
+              type="date"
+              class="input-date"
+              v-model="birthday"
+              label="Ngày sinh"
+            />
           </div>
         </div>
         <app-input
@@ -37,7 +46,7 @@
           @input="hanldeAddress"
         />
         <div class="form-group">
-          <label>Giới tính</label>
+          <label class="app-input__label app-input__label--bold app-input__label--fixed">Giới tính</label>
           <app-select-sex v-model="sex" :sex="sex" class="form-control max-w-170" />
         </div>
 
@@ -51,7 +60,7 @@
       v-if="notify.showNotify"
       :title="notify.message"
       @close="closeNotify"
-      @ok="$router.push(notify.redirectLink)"
+      @ok="closeNotify"
     />
   </div>
 </template>
@@ -157,6 +166,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/components/account/_account-edit-modal.scss";
 </style>

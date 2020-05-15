@@ -49,7 +49,7 @@
           color="default"
           outline
           @click="handleCloseAdd($event)"
-          >Huỷ bỏ</app-button
+          >Hủy</app-button
         >
         <app-button
           class="clc-btn font-weight-semi-bold"
@@ -154,6 +154,7 @@ export default {
       }
       this.$emit("handleCloseAdd");
       this.$store.dispatch(`elearning/create/getContent`);
+      this.$store.dispatch(`elearning/create/getProgress`);
       this.$toasted.success(
         defaultTo(get(result, "message", ""), "Thành công")
       );

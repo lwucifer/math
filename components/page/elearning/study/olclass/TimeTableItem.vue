@@ -11,7 +11,7 @@
             <tr v-for="(itemList,a) in list" :key="a">
               <th class="day">{{a | day2Txt}}</th>
               <th v-for="(head,index) in heads" :key="index">
-                  {{convertArray(itemList[head.name])}}
+                  <p v-for="(time,t) in itemList[head.name]" :key="t">{{time}}</p>
               </th>
             </tr>
           </tbody>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { get, join, map, transform } from "lodash";
+import { get, map, transform } from "lodash";
 export default {
     filters: {
         day2Txt(str ="") {
@@ -49,13 +49,18 @@ export default {
           afternoon:{
             mon: ["9:00 - 10:00","11:00 - 12:00"],
             tue: ["9:00 - 10:00"],
-            thu: ["9:00 - 10:00"],
+            thu: ["9:30 - 10:00"],
             fri: ["9:00 - 10:00"],
             sat: ["9:00 - 10:00"],
             sun: ["9:00 - 10:00"]
           },
           evening:{
-            
+            mon: ["9:00 - 10:00","11:00 - 12:00"],
+            tue: ["9:00 - 10:00"],
+            thu: ["9:30 - 10:00"],
+            fri: ["9:00 - 10:00"],
+            sat: ["9:00 - 10:00"],
+            sun: ["9:00 - 10:00"]
           }
       },
       heads: [
@@ -90,31 +95,25 @@ export default {
           text: "Chủ nhật"
         }
       ]
-    }
-
+    };
   },
     methods:{
         get,
-        convertArray(list){
-            let convert = _.map(list).join('\r\n')
-            return convert
-        },
-    
+       
     },
-  props: {
-    timetables: {
-      type: Array,
-      default: () => []
+    props: {
+        timetables: {
+        type: Array,
+        default: () => []
+        }
+    },
+
+    computed: {
+    },
+
+    created() {
+        console.log("[timetables]", this.timetables);
     }
-  },
-
-  computed: {
-  },
-
-  created() {
-    console.log("[timetables]", this.timetables);
-    this.sortList();
-  }
 };
 </script>
 
@@ -124,6 +123,7 @@ export default {
     width: 100%;
     border: 1px solid #eeeeee;
     text-align: center;
+    margin-bottom: 40px;
   }
   th,
   td {
@@ -131,14 +131,15 @@ export default {
     font-style: normal;
     font-weight: normal;
     font-size: 13px;
-    line-height: 16px;
-  }
-  th {
     width: 108px;
     height: 60px;
   }
   thead, .day{
       background: #FBFBFB;
+  }
+  .active{
+      background: rgba(214, 0, 0, 0.2);
+      color: #D50000;
   }
 }
 

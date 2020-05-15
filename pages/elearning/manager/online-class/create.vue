@@ -718,6 +718,7 @@ export default {
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
           { userId }
         );
+        console.log(this.get(this.stateLessons, "data.content", []));
         let lessonList = this.get(this.stateLessons, "data.content", []);
         let list = [];
         lessonList.forEach(element => {

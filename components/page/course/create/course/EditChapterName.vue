@@ -122,6 +122,7 @@ export default {
 
       if (get(res, "success", false)) {
         this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(get(res, "message", "Thành công"));
         return;
       }

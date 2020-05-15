@@ -9,23 +9,23 @@
   >
     <div slot="content" class="text-center">
       <div class="text-left">
-        <h6 class="color-primary mb-3">{{info.online_class_name}}</h6>
+        <h6 class="color-primary mb-3">{{get(data,'extra_info.online_class_name', '')}}</h6>
         <div class="box12 border mb-4">
           <p class="mb-3">
             Tên phòng:
-            <b>{{info.online_class_name}}</b>
+            <b>{{get(data,'extra_info.online_class_name', '')}}</b>
           </p>
           <p class="mb-3">
             Giáo viên:
-            <b>{{info.online_class_name}}</b>
+            <b>{{get(data,'extra_info.teacher_name', '')}}</b>
           </p>
           <p class="mb-3">
             Giờ bắt đầu:
-            <b>{{startTime}}</b>
+            <b>{{get(data,'extra_info.start_time', '')}}</b>
           </p>
           <p>
             Thời lượng:
-            <b>{{duration}}</b>
+            <b>{{get(data,'extra_info.duration', '')}}</b>
           </p>
         </div>
 
@@ -36,17 +36,17 @@
           <b>Chú ý:</b> buổi học này được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
         <div class="mt-4 text-center" style="max-height: 400px; overflow-y: auto">
-          <p>Phòng học bắt đầu sau: <b class="h5 color-blue">15:01</b></p>
+          <p>Phòng học bắt đầu sau: <b class="h5 color-blue">{{data.time_count_down}}</b></p>
           <div class="mb-4 mt-4"> 
             <a
-              :href="item.start_url"
+              :href="get(data,'sessions[0].start_url', '')"
               target="blank"
               class="btn btn--color-primary btn--square mr-3"
-              :disabled="item.status != 'waiting'"
+              :v-if="data.is_started"
             >Vào phòng học</a>
             <app-button color="white" size="lg">Thoát phòng đợi</app-button>
           </div>
-          <div v-for="(item, index) in data" :key="index" class="mb-4">
+          <div v-for="(item, index) in data.sessions" :key="index" class="mb-4">
             <b class="pr-3">Tiết học {{index + 1}}</b>
           </div>
         </div>

@@ -8,13 +8,13 @@
           </div>
           <div class="col-md-9">
             <div class="app-input app-input--size-md">
-              <upload-avatar :av-srt="avatarSrc"></upload-avatar>
+              <upload-avatar :av-src="filterAvatarSrc"></upload-avatar>
             </div>
             <app-button
               nuxt
               style="position: absolute; right: 0.5rem; bottom: 2rem;"
               size="sm"
-              :to="accountInfo ? '/' + accountInfo.id + '/info/change_pwd' : '/'"
+              :to="token ? '/' + token.id + '/info/change_pwd' : '/'"
             >
               <span class>Thay đổi mật khẩu</span>
             </app-button>
@@ -107,7 +107,12 @@
                 </div>
               </div>
             </div>
-            <account-story-form v-if="editingStory" :story="story"></account-story-form>
+            <account-story-form
+              v-if="editingStory"
+              :story="story"
+              @cancel="cancel"
+              @submit="submitStory"
+            ></account-story-form>
           </div>
         </div>
       </div>
@@ -150,7 +155,7 @@ import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
-import { getToken, getDeviceId } from "~/utils/auth";
+import { getDeviceId } from "~/utils/auth";
 import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
 
 export default {
@@ -181,7 +186,7 @@ export default {
       },
       editingStory: false,
       avatar: [],
-      avatarSrc: "https://picsum.photos/170/170",
+      avatarSrc: "",
       story: null,
       profileInfo: "",
       visible: {
@@ -217,7 +222,8 @@ export default {
   methods: {
     ...mapActions("account", [
       "accountPersonalEditAvatar",
-      "accountPersonalList"
+      "accountPersonalList",
+      "accountBiographyAdd"
     ]),
     ...mapActions("auth", ["logout"]),
 
@@ -283,6 +289,18 @@ export default {
     },
     editStory() {
       this.editingStory = true;
+    },
+    submitStory() {
+      const data = {
+        biography: "aaa"
+      };
+      this.accountBiographyAdd(data).then(result => {
+        if (result.success) {
+        }
+      });
+    },
+    cancel() {
+      this.editingStory = false;
     }
   },
   computed: {
@@ -293,15 +311,22 @@ export default {
     ...mapState("account", {
       linkList: "linkList"
     }),
-    accountInfo() {
-      return getToken();
+
+    ...mapState("auth", [
+      "token",
+    ]),
+    filterAvatarSrc() {
+      return this.personalList && this.personalList.avatar
+        ? this.personalList.avatar.low
+        : "https://picsum.photos/170/170";
     }
   },
   created() {
     this.fetchProfile();
-    this.avatarSrc = this.personalList.avatar
-      ? this.personalList.avatar.low
-      : "https://picsum.photos/170/170";
+    // this.avatarSrc =
+    //   this.personalList && this.personalList.avatar
+    //     ? this.personalList.avatar.low
+    //     : "https://picsum.photos/170/170";
   }
 };
 </script>

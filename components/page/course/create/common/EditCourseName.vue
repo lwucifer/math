@@ -4,15 +4,18 @@
       v-if="isEditCourseName"
       v-model="courseNameModel"
       ref="inputCourseName"
+      maxlength="60"
       class="cc-box__input-title bg-input-gray mb-0"
       type="text"
     />
     <h2 v-else class="cc-box__title heading-5">
-      Tiêu đề: {{ courseNameModel }}
-      <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName">
+      Tiêu đề: {{ courseNameModel }} 
+      
+    </h2>
+
+    <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName" v-if="!isEditCourseName">
         <IconEdit class="ml-2"/>
       </button>
-    </h2>
 
     <template v-if="isEditCourseName">
       <button

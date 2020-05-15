@@ -16,9 +16,19 @@
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
         @handleChangeSearch="handleChangeSearch"
+        @handleChangedOrder="handleChangeSort"
       ></school-filter>
       <!--Detail school types-->
-      <SchoolListBox :category="selectedCategory"></SchoolListBox>
+      <div v-if="pageLoading" class="container mt-6">
+        <div class="row">
+          <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+            <div class="bg-white py-6 px-3">
+              <VclList />
+            </div>
+          </div>
+        </div>
+      </div>
+      <SchoolListBox v-else :category="selectedCategory"></SchoolListBox>
     </div>
   </div>
 </template>
@@ -31,9 +41,10 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, addAllOptionSelect } from "~/utils/common";
-import { PAGE_SIZE } from '~/utils/constants';
+import { PAGE_SIZE } from "~/utils/constants";
+import { VclList } from "vue-content-loading";
 
-const SCHOOL_SUMMARY_NAMESPACE = 'elearning/school/school-summary'
+const SCHOOL_SUMMARY_NAMESPACE = "elearning/school/school-summary";
 
 export default {
   name: "School",
@@ -43,7 +54,8 @@ export default {
   components: {
     SchoolFilter,
     SchoolListBox,
-    SchoolSlider
+    SchoolSlider,
+    VclList
   },
 
   async asyncData({ store, query }) {
@@ -68,17 +80,18 @@ export default {
     // )
     await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
-    )
+    );
   },
 
   data() {
     return {
-      keyword: this.get(this.$router, 'query.keyword', ''),
+      keyword: this.get(this.$router, "query.keyword", ""),
       district_id: null,
       province_id: null,
-      type: this.get(this.$router, 'query.type', ''),
+      type: this.get(this.$router, "query.type", ""),
       ward_id: null,
-      loading: false,
+      pageLoading: true,
+      sort_by: null
     };
   },
 
@@ -117,14 +130,22 @@ export default {
       "province_id",
       "district_id",
       "ward_id",
-      "keyword"
+      "keyword",
+      "sort_by"
     ]);
+  },
+
+  mounted() {
+    this.pageLoading = false;
   },
 
   methods: {
     handleChangedLevel(level) {
       this.type = get(level, "type", "");
-      this.$router.push({ path: '/school/search', query: { keyword: this.keyword, type: this.type }})
+      this.$router.push({
+        path: "/school/search",
+        query: { keyword: this.keyword, type: this.type }
+      });
     },
     handleChangedWard(ward) {
       this.ward_id = get(ward, "id", "");
@@ -137,17 +158,23 @@ export default {
     },
     handleChangeSearch(keyword) {
       // this.$router.query.keyword = keyword;
-      this.$router.push({ path: '/school/search', query: { keyword: keyword, type: this.type }})
+      this.$router.push({
+        path: "/school/search",
+        query: { keyword: keyword, type: this.type }
+      });
       this.keyword = keyword;
     },
+    handleChangeSort(order) {
+      this.sort_by = get(order, 'value')
+    },
     handleGetSchoolsByLocation() {
-      console.log('call api')
       let params = {};
       if (this.province_id) params.province_id = this.province_id;
       if (this.district_id) params.district_id = this.district_id;
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
+      if (this.sort_by) params.sort_by = this.sort_by;
       params.size = PAGE_SIZE.SCHOOL_16;
 
       const options = { params };
