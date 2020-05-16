@@ -67,6 +67,10 @@ export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
 };
 
+export const ACCOUNT_BALANCE = {
+    SET_ACCOUNT_BALANCE: "setAccountBalance",
+};
+
 export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
