@@ -45,11 +45,11 @@
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-5 mb-3">
             Tên {{ name }}
-            <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
+            <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
           <app-input
             :placeholder="`Nhập tiêu đề của` + ' ' + name"
-            :counter="60"
+            :counter="150"
             v-model="payload.name"
             @input="handleChangeName($event)"
             @handleBlur="handleBlurName($event)"
@@ -260,7 +260,7 @@ export default {
       // if (!get(this, "payload.cover_image", "") && !this.general) return false;
 
       const length_name = get(this, "payload.name", 0);
-      if (length_name > 60) {
+      if (length_name > 150) {
         return false;
       }
 

@@ -50,7 +50,7 @@
 
           <template v-else>
             <p class="mb-3 font-weight-normal">Chọn file đính kèm</p>
-            
+
             <app-upload
               accept=".jpg, .jpeg, .jpg, .bmp, .png"
               :fileList="[]"
@@ -175,9 +175,16 @@ export default {
         movable: false,
         autoCropArea: 1,
         crop(event) {
-          that.error = false;
-          if (event.detail.width < that.minWidth) that.error = true;
-          if (event.detail.height < that.minHeight) that.error = true;
+          try {
+            that.error = false;
+            if (Math.ceil(event.detail.width) < that.minWidth)
+              that.error = true;
+            if (Math.ceil(event.detail.height) < that.minHeight)
+              that.error = true;
+          } catch (error) {
+            console.log(error);
+            that.error = false;
+          }
         },
       });
     },
