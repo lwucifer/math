@@ -389,9 +389,17 @@ export default {
 
       if (get(result, "success", false)) {
         const elearning_id = get(result, "data.elearning_id", "");
-        this.handleFetchElearningGeneral(elearning_id);
+        const options = {
+          params: {
+            elearning_id,
+          },
+        };
+        await this.$store.dispatch(`elearning/create/getGeneral`, options);
+        await this.$store.dispatch(`elearning/create/getProgress`);
         redirectWithParams({ elearning_id });
+
         this.$toasted.success(get(result, "message", ""));
+
         if (this.payload.type === "LECTURE") {
           this.$emit("nextStep", "content-lecture");
         }
