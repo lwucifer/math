@@ -21,20 +21,23 @@
         class="cc-box__btn mr-3 text-success d-flex align-items-center w-50"
         @click="handleEditChaperName"
       >
-        <IconSave24px class="mr-2 fill-primary"/> Lưu
+        <IconSave24px class="mr-2 fill-primary" /> Lưu
       </button>
       <button
         class="cc-box__btn mr-3 text-secondary d-flex align-items-center w-50"
         @click="cancelEditChapterName"
       >
-        <IconClose24px class="mr-2 fill-secondary"/>Huỷ
+        <IconClose24px class="mr-2 fill-secondary" />Huỷ
       </button>
     </template>
 
     <template v-else>
       <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
-        <IconBorderColor24px width="16px"
-          height="16px" class="d-block subheading fill-primary" />
+        <IconBorderColor24px
+          width="16px"
+          height="16px"
+          class="d-block subheading fill-primary"
+        />
       </a>
 
       <a
@@ -61,11 +64,10 @@
 <script>
 import { string } from "yup";
 import { get, toNumber } from "lodash";
-import IconBorderColor24px from '~/assets/svg/v2-icons/border_color_24px.svg?inline';
+import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
-import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
-import IconClose24px from '~/assets/svg/v2-icons/close_24px.svg?inline';
-
+import IconSave24px from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import IconClose24px from "~/assets/svg/v2-icons/close_24px.svg?inline";
 
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
@@ -75,7 +77,7 @@ export default {
     IconBorderColor24px,
     IconTrashAlt,
     IconSave24px,
-    IconClose24px
+    IconClose24px,
   },
   props: {
     chapter: {
@@ -110,9 +112,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        data: {
-          id: get(this, "chapter.id", ""),
-        },
+        id: get(this, "chapter.id", ""),
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.DELETE}`,
@@ -144,18 +144,21 @@ export default {
         id: get(this, "chapter.id", ""),
         name: this.chaperNameModel,
       };
+
       const payload = createPayloadAddContentCourse(data);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.EDIT}`,
         payload
       );
+
       if (get(result, "success", false)) {
-        this.$emit("handleRefreshChapters");
+        this.$store.dispatch(`elearning/create/getContent`);
         this.$toasted.success(get(result, "message", "Thành công"));
         this.isEditChaperName = false;
-      } else {
-        this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
+        return;
       }
+
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
   },
 };

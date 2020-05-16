@@ -80,9 +80,9 @@ export default {
     console.log(this.exams);
   },
 
-  // mounted() {
-  //   this.$store.dispatch("elearning/create/getExams");
-  // },
+  mounted() {
+    this.$store.dispatch("elearning/create/getExams");
+  },
 
   methods: {
     handleShowFormAdd() {

@@ -230,6 +230,9 @@ export default {
 .invite-student-modal .app-modal-content {
   padding: 2rem 1.5rem;
 }
+</style>
+
+<style lang="scss" scope>
 .student-list {
   background: #fbfbfb;
   padding: 1.2rem 1.5rem;

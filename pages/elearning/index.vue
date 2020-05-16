@@ -112,7 +112,7 @@
             >
               <ElearningHomeSubjectItem
                 :title="item.name"
-                :to="`/elearning/search?subject=${item.id}`"
+                :to="`/elearning/search?subject=${item.code}&subject_name=${item.name}`"
               >
                 <component slot="icon" :is="checkSubjectIcon(item.code)" />
               </ElearningHomeSubjectItem>
