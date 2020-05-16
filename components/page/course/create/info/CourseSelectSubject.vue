@@ -10,7 +10,7 @@
         placeholder="Chọn môn học"
         @change="handleChangeSubject"
         label="name"
-        :value="subject.id"
+        :value="subject && subject.id"
       >
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      subject: null,
+      subject: {},
     };
   },
 
