@@ -1,28 +1,42 @@
 <template>
   <label class="app-checkbox">
-    <input type="checkbox" class="app-checkbox__input" hidden v-bind="$attrs" :checked="checked" @change="handleChange" />
-    <div class="app-checkbox__checkmark">
-      <IconCheck class='icon' />
-    </div>
-    <div class="app-checkbox__text">
+    <input
+      type="checkbox"
+      class="app-checkbox__input"
+      hidden
+      v-bind="$attrs"
+      :checked="checked"
+      @change="handleChange"
+    />
+    <span class="app-checkbox__checkmark">
+      <IconCheckBox class="app-checkbox__icon app-checkbox__icon--checked icon fill-opacity-1" />
+      <IconCheckBoxOutlineBlank
+        class="app-checkbox__icon app-checkbox__icon--unchecked icon fill-opacity-1"
+      />
+    </span>
+    <span v-if="label || $slots.default" class="app-checkbox__text">
       <slot>{{ label }}</slot>
-    </div>
+    </span>
   </label>
 </template>
 
 <script>
-import IconCheck from '~/assets/svg/design-icons/check.svg?inline';
+const IconCheckBox = () =>
+  import("~/assets/svg/v2-icons/check_box_24px.svg?inline");
+const IconCheckBoxOutlineBlank = () =>
+  import("~/assets/svg/v2-icons/check_box_outline_blank_24px.svg?inline");
 
 export default {
   inheritAttrs: false,
 
   components: {
-    IconCheck
+    IconCheckBox,
+    IconCheckBoxOutlineBlank
   },
 
   model: {
-    prop: 'checked',
-    event: 'change'
+    prop: "checked",
+    event: "change"
   },
 
   props: {
@@ -31,7 +45,7 @@ export default {
     },
     label: {
       type: String,
-      default: ''
+      default: ""
     }
   },
 

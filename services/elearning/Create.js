@@ -10,6 +10,7 @@ export async function getExams($axios, options) {
   try {
     const result = await new Exercise($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return null;
   }
@@ -19,6 +20,7 @@ export async function getLessons($axios, options) {
   try {
     const result = await new Lesson($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return [];
   }
@@ -28,6 +30,7 @@ export async function getSetting($axios, options) {
   try {
     const result = await new Setting($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return null;
   }
@@ -37,6 +40,7 @@ export async function getChaptersOfElearning($axios, options) {
   try {
     const result = await new Chapter($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return [];
   }
@@ -46,6 +50,7 @@ export async function getLessonsOfLecture($axios, options) {
   try {
     const result = await new Lesson($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return [];
   }
@@ -55,6 +60,7 @@ export async function getGeneral($axios, options) {
   try {
     const result = await new General($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return null;
   }
@@ -64,6 +70,7 @@ export async function getLesson($axios, lesson_id) {
   try {
     const result = await new Lesson($axios)[actionTypes.BASE.DETAIL](lesson_id);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return null;
   }
@@ -73,6 +80,7 @@ export async function getProgress($axios, options) {
   try {
     const result = await new Progress($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
+    return null;
   } catch (error) {
     return null;
   }

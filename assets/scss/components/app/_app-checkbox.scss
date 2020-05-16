@@ -1,5 +1,5 @@
 .app-checkbox {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     cursor: pointer;
 }
@@ -8,28 +8,40 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
-    flex: 0 0 16px;
-    border-radius: 2px;
-    margin-right: 5px;
-    border: 1px solid $color-text;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: 0 0 2.4rem;
+    font-size: 2.4rem;
+}
 
-    svg {
-        display: none;
-        fill: $color-text;
-    }
+.app-checkbox__text {
+    margin-left: .5rem;
+}
+
+.app-checkbox__icon--checked {
+    display: none;
+}
+
+.app-checkbox__icon--unchecked {
+    display: block;
 }
 
 .app-checkbox__input {
     &:checked {
         + .app-checkbox__checkmark {
-            border-color: $color-primary;
-
-            svg {
+            .app-checkbox__icon--checked {
                 display: block;
-                fill: $color-primary;
             }
+            
+            .app-checkbox__icon--unchecked {
+                display: none;
+            }
+        }
+    }
+
+    &:disabled {
+        + .app-checkbox__checkmark {
+            color: $color-disabled;
         }
     }
 }
