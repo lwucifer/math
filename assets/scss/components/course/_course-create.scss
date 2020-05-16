@@ -205,7 +205,7 @@
 }
 
 .cc-select {
-    width: 65%;
+    // width: 65%;
     .app-select__selected {
         border: 1px solid $color-border;
     }
@@ -218,6 +218,7 @@
         svg {
             font-size: 1.6rem;
             fill: $color-primary;
+            vertical-align: middle;
         }
     }
 }

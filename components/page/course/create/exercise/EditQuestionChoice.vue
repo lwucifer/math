@@ -17,7 +17,7 @@
       @handleDeleteAnswer="handleDeleteAnswer"
     />
 
-    <div class="d-flex justify-content-end mt-5">
+    <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
         color="default"
         class="font-weight-semi-bold mr-4 text-secondary"

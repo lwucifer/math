@@ -21,7 +21,7 @@
 
             <div class="cc-box__head-right">
               <a
-                class="text-decoration-none d-inline-flex align-items-center"
+                class="text-decoration-none d-inline-flex align-items-center font-weight-semi-bold"
                 href
                 @click.prevent="toggleAddChapter"
               >
