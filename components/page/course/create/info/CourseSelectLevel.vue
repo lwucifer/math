@@ -4,9 +4,9 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-select
+      <app-vue-select
         class="cc-select"
-        :options="levelOption"
+        :options="levels"
         placeholder="Chọn lớp"
         @input="handleChangeLevel"
         label="name"
@@ -15,7 +15,7 @@
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-select>
+      </app-vue-select>
     </div>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.defaultValue)
     this.$store.dispatch(
       `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
     );
@@ -52,6 +53,10 @@ export default {
       "defaultValue",
       "levels",
     ]);
+  },
+
+  updated() {
+    console.log(this.levels)
   },
 
   computed: {
