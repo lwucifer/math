@@ -129,13 +129,11 @@ export default {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
-      addBorder: false,
     };
   },
 
   mounted() {
     this.$store.dispatch(`elearning/create/getContent`);
-    console.log(this.chapters);
   },
 
   computed: {
@@ -160,7 +158,6 @@ export default {
 
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-      this.addBorder = true;
     },
   },
 };
