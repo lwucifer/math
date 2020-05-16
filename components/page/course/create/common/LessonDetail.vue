@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 py-4">
+  <div class="">
     <LessonDetailInfo
       v-if="isShowDetailLesson"
       @handleEditLesson="handleEditLesson"
@@ -22,7 +22,7 @@
 
     <!-- <app-divider class="my-4" /> -->
 
-    <p class="mt-4 mb-3 heading-4" v-if="get(general, 'type', '') === 'COURSE'">Tài liệu tham khảo</p>
+    <p class="mt-4 mb-3 heading-6" v-if="get(general, 'type', '') === 'COURSE'">Tài liệu tham khảo</p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"
@@ -144,3 +144,4 @@ export default {
   },
 };
 </script>
+

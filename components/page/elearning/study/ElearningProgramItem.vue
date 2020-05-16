@@ -16,9 +16,9 @@
       >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
 
       <div class="e-program-item__bottom">
-        <span class="d-inline-flex align-items-center mr-5">
+        <span v-if="isShowDuration" class="d-inline-flex align-items-center mr-5">
           <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
-          <span>{{ get(lesson, "duration", "00:00") }}</span>
+          <span>{{ durationTimes }}</span>
         </span>
 
         <a
@@ -69,14 +69,21 @@ import { mapActions, mapMutations } from "vuex";
 import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
-  LESSION_STATUS
+  LESSION_STATUS,
+  LESSION_TYPE
 } from "~/utils/constants";
-import { redirectWithParams, getParamQuery } from "~/utils/common";
+import {
+  redirectWithParams,
+  getParamQuery,
+  getCountdown_MM_SS
+} from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
 
-const IconFileCheckAlt = () => ("~/assets/svg/design-icons/file-check-alt.svg?inline");
-const IconFileDownloadAlt = () => ("~/assets/svg/design-icons/file-download-alt.svg?inline");
+const IconFileCheckAlt = () =>
+  "~/assets/svg/design-icons/file-check-alt.svg?inline";
+const IconFileDownloadAlt = () =>
+  "~/assets/svg/design-icons/file-download-alt.svg?inline";
 import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
 import StudyService from "~/services/elearning/study/Study";
 
@@ -118,7 +125,7 @@ export default {
       return `${this.completes}/${this.exercises}`;
     },
 
-    // return primary|red
+    // return primary|secondary
     classExerciseStatus() {
       // debugger;
       if (this.completes == this.exercises) {
@@ -126,6 +133,15 @@ export default {
       } else if (this.completes < this.exercises) {
         return "secondary";
       }
+    },
+
+    isShowDuration() {
+      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    },
+
+    durationTimes() {
+      const duration = get(this.lesson, "duration", 0);
+      return getCountdown_MM_SS(duration);
     }
   },
 

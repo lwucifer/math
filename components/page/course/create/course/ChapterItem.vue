@@ -1,17 +1,23 @@
 <template>
   <div>
-    <div class="d-flex align-items-center justify-content-between">
+    <div
+      class="d-flex align-items-center justify-content-between mb-3 ce-item--modifer"
+    >
       <EditChapterName :chapter="chapter" :index="index" />
 
-      
-      <div class="ce-item__right d-flex">
-        <a href @click.prevent="toggleShowAddLesson">Thêm bài học</a>
+      <div class="ce-item__right d-flex align-items-center">
+        <a @click.prevent="toggleShowAddLesson">Thêm bài học</a>
         <button
           class="cc-box__btn cc-box__btn-collapse"
           @click="isShowLesson = !isShowLesson"
         >
-          <IconAngleDown class="fill-primary" v-if="!isShowLesson" />
-          <IconAngleUp class="fill-primary" v-else />
+          <IconAngleDown
+            class="fill-primary"
+            width="20px"
+            height="20px"
+            v-if="!isShowLesson"
+          />
+          <IconAngleUp class="fill-primary" width="20px" height="20px" v-else />
         </button>
       </div>
     </div>
@@ -24,7 +30,8 @@
 
     <div v-if="isShowLesson">
       <LessonDetail
-        v-for="(lesson, index) in get(chapter, 'lessons', [])"
+        class="list-lesson"
+        v-for="(lesson, index) in lessons"
         :key="lesson.id"
         :index="index"
         :lesson="lesson"
@@ -40,7 +47,7 @@ import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import { getParamQuery } from "~/utils/common";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import { get, toNumber } from "lodash";
+import { get, toNumber, cloneDeep, orderBy } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 import EditChapterName from "~/components/page/course/create/course/EditChapterName";
@@ -63,7 +70,6 @@ export default {
   data() {
     return {
       isShowCreateLessonOfChapter: false,
-      indexCreateLesson: 0,
       isShowLesson: true,
     };
   },
@@ -72,20 +78,10 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
-  },
-
-  created() {
-    this.indexCreateLesson = this.setIndex(get(this, "chapter.lessons", []));
-  },
-
-  watch: {
-    chapter: {
-      handler: function() {
-        this.indexCreateLesson = this.setIndex(
-          get(this, "chapter.lessons", [])
-        );
-      },
-      deep: true,
+    lessons() {
+      let lessons = cloneDeep(get(this, "chapter.lessons", []));
+      lessons = orderBy(lessons, "index", "asc");
+      return lessons;
     },
   },
 
@@ -119,3 +115,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_chapter-item.scss";
+</style>

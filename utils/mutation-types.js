@@ -371,6 +371,7 @@ export const ELEARNING_STUDY_ARCHIVE = {
 export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
     SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_ELEARNING_EXERCISE_TEST_LIST: "setStudyElearningExerciseTestList",
     SET_STUDY_ELEARNING_CURRENT_ID: "setStudyElearningCurrentId",
     SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",

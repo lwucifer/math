@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <student-manager-filter-form />
-    <student-manager-table :heads="heads" :list="list" :pagination="pagination" />
+    <student-manager-table
+      :heads="heads"
+      :list="filterElearningRequest"
+      :pagination="filterPagination"
+    />
   </div>
 </template>
 
@@ -27,7 +31,7 @@ export default {
           text: "Lớp"
         },
         {
-          name: "date",
+          name: "request_date",
           text: "Ngày tham gia"
         },
 
@@ -57,7 +61,44 @@ export default {
     };
   },
   computed: {
-    ...mapState(STORE_TEACHING_REQUEST, ["elearningRequest"])
+    ...mapState(STORE_TEACHING_REQUEST, ["elearningRequest"]),
+    filterElearningRequest() {
+      return this.elearningRequest && this.elearningRequest.content
+        ? this.elearningRequest.content
+        : [];
+    },
+    filterPagination() {
+      return {
+        size:
+          this.elearningRequest && this.elearningRequest.size
+            ? this.elearningRequest.size
+            : 10,
+        totalPages:
+          this.elearningRequest && this.elearningRequest.totalPages
+            ? this.elearningRequest.totalPages
+            : 1,
+        totalElements:
+          this.elearningRequest && this.elearningRequest.total_elements
+            ? this.elearningRequest.total_elements
+            : 0,
+        first:
+          this.elearningRequest && this.elearningRequest.first
+            ? this.elearningRequest.first
+            : 1,
+        last:
+          this.elearningRequest && this.elearningRequest.last
+            ? this.elearningRequest.last
+            : 1,
+        numberOfElements:
+          this.elearningRequest && this.elearningRequest.number_of_elements
+            ? this.elearningRequest.number_of_elements
+            : 0,
+        number:
+          this.elearningRequest && this.elearningRequest.number
+            ? this.elearningRequest.number
+            : 0
+      };
+    }
   }
 };
 </script>

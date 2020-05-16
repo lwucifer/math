@@ -220,3 +220,8 @@ export const DAY_SECTION = {
     AFTERNOON: 2,
     EVENING: 3,
 }
+
+export const LESSION_TYPE = {
+    VIDEO: "VIDEO",
+    
+}
