@@ -4,9 +4,9 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-vue-select
+      <app-select
         class="cc-select"
-        :options="levels"
+        :options="levelOpt"
         placeholder="Chọn lớp"
         @input="handleChangeLevel"
         label="name"
@@ -15,7 +15,7 @@
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-vue-select>
+      </app-select>
     </div>
   </div>
 </template>
@@ -64,13 +64,13 @@ export default {
       levels: "levels",
     }),
 
-    levelOption() {
+    levelOpt() {
       return this.levels.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.name
-      }));
-    }
+          ...item,
+          value: item.id,
+          text: item.name
+      }))
+    },
   },
 
   methods: {
