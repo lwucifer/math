@@ -40,6 +40,7 @@
           <a
             slot="activator"
             download
+            target="_blank"
             :href="lesson.link"
             class="d-inline-flex align-items-center text-decoration-none"
           >

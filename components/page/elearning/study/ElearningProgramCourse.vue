@@ -6,7 +6,7 @@
           Chương {{ index + 1 }}:
           <span class="text-base">{{ get(program, "chapter", "") }}</span>
         </h5>
-        <span class="caption">3/9 | 3 giờ 55 phút</span>
+        <span class="caption">{{ lessionCompleted }} | 3 giờ 55 phút</span>
       </div>
       <span
         v-if="get(program, 'lessons', []).length"
@@ -33,6 +33,7 @@ import { get } from "lodash";
 
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
+import { LESSION_STATUS } from '../../../../utils/constants';
 
 export default {
   components: {
@@ -52,12 +53,13 @@ export default {
     };
   },
 
-  created() {
-    console.log(this.program);
-  },
-
-  updated() {
-    console.log(this.program);
+  computed: {
+    lessionCompleted() {
+      const lessons = get(this.program, "lessons", []);
+      const total_lessons = get(this.program, "total_lessons", 0);
+      const completed = lessons.filter( l => l.status == LESSION_STATUS.COMPLETED) || [];
+      return `${completed.length}/${total_lessons}`;
+    }
   },
 
   methods: {

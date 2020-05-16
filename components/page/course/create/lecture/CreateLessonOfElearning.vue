@@ -5,14 +5,14 @@
       <h3 class="heading-5 my-3">
         Tên bài học
         <span class="caption text-base font-weight-normal"
-          >(Tối đa 60 ký tự)</span
+          >(Tối đa 150 ký tự)</span
         >
       </h3>
       <app-input
         @handleBlur="handleBlurNameInput"
         v-model="payload.name"
         placeholder="Bài học số 1"
-        :counter="60"
+        :counter="150"
       />
       <span v-show="error_name" class="error mb-3">{{ error_name }}</span>
 

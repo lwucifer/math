@@ -192,15 +192,15 @@ export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
 };
 
 export const ELEARNING_PUBLIC_WHAT_NEXTS = {
-    LIST: "elearningPublicWhatNextsList"
+    LIST: "elearningPublicWhatNextsList",
 };
 
 export const ELEARNING_PUBLIC_FOR_YOU = {
-    LIST: "elearningPublicForYouList"
+    LIST: "elearningPublicForYouList",
 };
 
 export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
-    LIST: "elearningPublicVotedSubjectsList"
+    LIST: "elearningPublicVotedSubjectsList",
 };
 
 export const ELEARNING_PUBLIC_NEWEST = {
@@ -209,7 +209,7 @@ export const ELEARNING_PUBLIC_NEWEST = {
 };
 
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
-    LIST: "elearningPublicHighlightTeachers"
+    LIST: "elearningPublicHighlightTeachers",
 };
 
 export const ELEARNING = {
@@ -582,4 +582,8 @@ export const TEACHING_ELEARNING_INVITES = {
 
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
+};
+
+export const TEACHING_INTERACTIVE_LISTQUESTION = {
+    LIST: "teachingInteractiveListquestion",
 };

@@ -182,6 +182,7 @@ export const TEACHING_STUDENT_PROGESS = `/elearning/teaching/student/progress`;
 export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/requests`;
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
+export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
 /**
  * PAYMENT
  */
