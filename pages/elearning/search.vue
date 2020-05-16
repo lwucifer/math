@@ -267,7 +267,10 @@ export default {
   },
 
   mounted() {
-    this.pageLoading = false;
+    // this.pageLoading = true;
+    // setTimeout(() => {
+    //   this.pageLoading = false;
+    // }, 5000);
   },
 
   methods: {
