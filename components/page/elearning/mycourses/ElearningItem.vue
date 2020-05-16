@@ -41,10 +41,18 @@
             </button>
 
             <ul class="link--dropdown__ElearningItem">
-              <li>
-                <n-link to>
+              <li class="item-share__ElearningItem" @click.prevent="shareDropdown=!shareDropdown">
+                <n-link to >
                   <IconShare24px class="icon" />Chia sẻ
                 </n-link>
+                <ul class="share-dropdowm__ElearningItem" v-if="shareDropdown">
+                  <li>
+                    <a>Facebook</a>
+                  </li>
+                  <li>
+                    <a>Schoolly</a>
+                  </li>
+                </ul>
               </li>
               <li
                 v-if="elearning && !elearning.is_favourite"
@@ -99,6 +107,7 @@ export default {
   data() {
     return {
       menuDropdown: false,
+      shareDropdown: false,
       id: "",
       name: "",
       avatar: "",
