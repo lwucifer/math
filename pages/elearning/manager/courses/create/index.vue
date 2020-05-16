@@ -13,8 +13,14 @@
           class="mb-5"
           @nextStep="nextStep"
         />
-        <ContentLecture v-if="formActive === 'content-lecture'" />
-        <ContentCourse v-if="formActive === 'content-course'" />
+        <ContentLecture
+          v-if="formActive === 'content-lecture'"
+          @nextStep="nextStep"
+        />
+        <ContentCourse
+          v-if="formActive === 'content-course'"
+          @nextStep="nextStep"
+        />
         <CreateSetting v-if="formActive === 'settings'" @nextStep="nextStep" />
         <CreateExercise v-if="formActive === 'exercise'" @nextStep="nextStep" />
         <CreateExam v-if="formActive === 'exam'" />
@@ -54,20 +60,11 @@ export default {
     };
   },
 
-  async mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        elearning_id,
-      },
-    };
-    await this.$store.dispatch(`elearning/create/getGeneral`, options);
-    this.$store.dispatch(`elearning/create/getProgress`);
-    this.$store.dispatch(`elearning/create/getContent`);
-    this.$store.dispatch("elearning/create/getLessons");
-    this.$store.dispatch("elearning/create/getExams");
-    this.$store.dispatch(`elearning/create/getSetting`);
-  },
+  // async mounted() {
+  //   this.$store.dispatch("elearning/create/getLessons");
+  //   this.$store.dispatch("elearning/create/getExams");
+  //   this.$store.dispatch(`elearning/create/getSetting`);
+  // },
 
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);

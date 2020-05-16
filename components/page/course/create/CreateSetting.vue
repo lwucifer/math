@@ -211,7 +211,7 @@ export default {
   },
   mounted() {
     this.handleChangeSetting();
-    // this.$store.dispatch(`elearning/create/getSetting`);
+    this.$store.dispatch(`elearning/create/getSetting`);
     useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 

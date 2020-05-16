@@ -90,6 +90,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.$store.dispatch(`elearning/create/getProgress`);
+  },
+
   props: {
     formActive: String,
   },
@@ -114,6 +118,42 @@ export default {
   },
 
   watch: {
+    general: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    lessons_lecture: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    chapters: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    setting: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    lessons: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    exams: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
     progress: {
       handler: function() {
         let checked = get(this, "progress.general_status", false) == 1;
@@ -180,6 +220,7 @@ export default {
     },
 
     handleClickMenuItem({ key }) {
+      console.log(key, this.general, this.progress);
       if (key === "general") {
         this.active = key;
         this.$emit("click-item", key);
