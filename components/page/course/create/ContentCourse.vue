@@ -13,7 +13,10 @@
           <div
             class="cc-box__head"
             style="padding: 1.5rem"
-            :class="{ 'add-border-bottom': addBorder }"
+            :class="{
+              'add-border-bottom':
+                isShowFormAddChapter || get(chapters, 'length', 0),
+            }"
           >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
@@ -132,12 +135,14 @@ export default {
 
   mounted() {
     this.$store.dispatch(`elearning/create/getContent`);
+    console.log(this.chapters);
   },
 
   computed: {
     ...mapState("elearning/create", {
       general: "general",
       progress: "progress",
+      chapters: "chapters",
     }),
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
