@@ -4,9 +4,9 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-select
+      <app-vue-select
         class="cc-select"
-        :options="levelOpt"
+        :options="levels"
         placeholder="Chọn lớp"
         @input="handleChangeLevel"
         label="name"
@@ -15,7 +15,7 @@
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-select>
+      </app-vue-select>
     </div>
   </div>
 </template>
