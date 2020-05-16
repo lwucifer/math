@@ -97,8 +97,18 @@ export default {
       general: "general",
     }),
     text() {
-      if (get(this, "general", null) || this.file) return "Thay đổi ảnh";
-      return;
+      if (this.id === "avatar") {
+        if (get(this, "general.avatar.low", "") || this.file) {
+          return "Thay đổi ảnh";
+        }
+        return "Chọn file";
+      }
+      if (this.id === "cover") {
+        if (get(this, "general.cover_url.low", "") || this.file) {
+          return "Thay đổi ảnh";
+        }
+        return "Chọn file";
+      }
     },
   },
 
