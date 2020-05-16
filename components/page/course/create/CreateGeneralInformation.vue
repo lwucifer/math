@@ -353,7 +353,7 @@ export default {
     },
 
     handleChangeLevel(level) {
-      this.payload.level = get(level, "id", "");
+      this.payload.level = level;
     },
 
     handleSelectType(e) {
@@ -369,7 +369,7 @@ export default {
     },
 
     handleChangeSubject(subject) {
-      this.payload.subject = get(subject, "id", "");
+      this.payload.subject = subject;
     },
 
     handleCLickSave() {
