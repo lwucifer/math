@@ -188,6 +188,10 @@ export default {
     };
   },
 
+  mounted() {
+    console.log(this.info);
+  },
+
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
     ...mapState("elearning/detail", {
@@ -200,13 +204,13 @@ export default {
       return false;
     },
     isStartElearning() {
-      if (get(this, "info.is_progress", 0) == 0) return true;
+      if (get(this, "info.progress", 0) == 0) return true;
       return false;
     },
     isStudyElearning() {
       if (
-        get(this, "info.is_progress", "-1") > 0 &&
-        get(this, "info.is_progress", "-1") < 100
+        get(this, "info.progress", "-1") > 0 &&
+        get(this, "info.progress", "-1") < 100
       ) {
         return true;
       }
@@ -214,7 +218,7 @@ export default {
       return false;
     },
     isDoneElearning() {
-      if (get(this, "info.is_progress", "-1") == 100) return true;
+      if (get(this, "info.progress", "-1") == 100) return true;
       return false;
     },
   },
@@ -271,6 +275,18 @@ export default {
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
 
+      if (get(this, "info.is_study", false)) {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
+
+      if (get(this, "info.elearning_price.free", false)) {
+        this.handleJoinElearning(elearning_id);
+        return;
+      }
+    },
+
+    async handleJoinElearning(elearning_id) {
       const payload = {
         elearning_id,
       };

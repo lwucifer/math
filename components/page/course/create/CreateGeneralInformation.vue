@@ -247,13 +247,13 @@ export default {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
     submit() {
-      if (!get(this, "payload.name", "")) return false;
-      if (!get(this, "payload.benefit.length", 0)) return false;
-      if (!get(this, "payload.description", "")) return false;
-      if (!get(this, "payload.subject", "")) return false;
-      if (!get(this, "payload.level", "")) return false;
-      if (!get(this, "payload.type", "")) return false;
-      if (!get(this, "payload.avatar", "") && !this.general) return false;
+      if (!get(this, "payload.name", true)) return false;
+      if (!get(this, "payload.benefit.length", true)) return false;
+      if (!get(this, "payload.description", true)) return false;
+      if (!get(this, "payload.subject", true)) return false;
+      if (!get(this, "payload.level", true)) return false;
+      if (!get(this, "payload.type", true)) return false;
+      if (!get(this, "payload.avatar", true) && !this.general) return false;
       // if (!get(this, "payload.cover_image", "") && !this.general) return false;
 
       const length_name = get(this, "payload.name.length", 0);
