@@ -16,7 +16,7 @@
       >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
 
       <div class="e-program-item__bottom">
-        <span v-if="isShowDuration" class="d-inline-flex align-items-center mr-5">
+        <span v-if="isShowDuration" class="d-inline-flex align-items-center">
           <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
           <span>{{ durationTimes }}</span>
         </span>
@@ -34,7 +34,7 @@
 
         <app-dropdown
           v-if="lesson.link"
-          class="e-program-item__download-tooltip ml-4"
+          class="e-program-item__download-tooltip"
           position="topCenter"
         >
           <a
@@ -81,9 +81,9 @@ import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
 
 const IconFileCheckAlt = () =>
-  "~/assets/svg/design-icons/file-check-alt.svg?inline";
+  import("~/assets/svg/design-icons/file-check-alt.svg?inline");
 const IconFileDownloadAlt = () =>
-  "~/assets/svg/design-icons/file-download-alt.svg?inline";
+  import("~/assets/svg/design-icons/file-download-alt.svg?inline");
 import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
 import StudyService from "~/services/elearning/study/Study";
 
