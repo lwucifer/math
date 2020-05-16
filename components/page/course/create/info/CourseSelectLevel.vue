@@ -64,13 +64,13 @@ export default {
       levels: "levels",
     }),
 
-    levelOption() {
+    levelOpt() {
       return this.levels.map(item => ({
-        ...item,
-        value: item.id,
-        text: item.name
-      }));
-    }
+          ...item,
+          value: item.id,
+          text: item.name
+      }))
+    },
   },
 
   methods: {
