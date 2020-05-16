@@ -1,14 +1,5 @@
 <template>
-  <div>
-    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
-      >Nội dung câu hỏi</label
-    >
-    <app-editor v-model="payload.content" />
-    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
-      >Nội dung câu trả lời</label
-    >
-    <app-editor v-model="payload.answers[0].content" />
-
+  <div class="mb-4">
     <div v-if="showAddPoint">
       <!-- <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
         >Điểm</label
@@ -35,6 +26,17 @@
         </div>
       </div>
     </div>
+    
+    <label class="d-inline-block mb-3 font-weight-semi-bold" for="question-editor"
+      >Nội dung câu hỏi</label
+    >
+    <app-editor v-model="payload.content" class="mb-4" />
+
+    <label class="d-flex align-items-center mb-3 font-weight-semi-bold" for="question-editor"
+      ><app-checkbox class="mr-2 fill-primary" checked/> Nội dung câu trả lời <span class="text-base ml-2 font-weight-normal">(không bắt buộc)</span></label
+    >
+    <app-editor v-model="payload.answers[0].content"  class="mb-4 ml-4"/>
+
 
     <!-- <label
       class="d-inline-block mb-3 font-weight-semi-bold mb-2"
@@ -54,7 +56,6 @@
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         size="sm"
-        square
         @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
@@ -62,12 +63,12 @@
         color="primary"
         class="font-weight-semi-bold"
         size="sm"
-        square
         @click="handleAddQuestion"
         >Lưu câu hỏi</app-button
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

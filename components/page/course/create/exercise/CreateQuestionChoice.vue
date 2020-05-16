@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-4">
     <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
       >Nội dung câu hỏi</label
     >
@@ -37,6 +37,7 @@
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

@@ -1,7 +1,7 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
-    <div class="mr-3">
-      <strong>Chương</strong> {{ index + 1 }}:
+    <div class="mr-3 d-flex align-items-center">
+      <strong>Chương {{ index + 1 }}:</strong> 
       <input
         v-if="isEditChaperName"
         v-model="chaperNameModel"
@@ -11,7 +11,7 @@
         maxlength="60"
       />
 
-      <h3 v-else class="d-inline-block body-2 mr-3">
+      <h3 v-else class="d-inline-block body-2 mx-3 cc-box__title">
         <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
       </h3>
     </div>
@@ -53,6 +53,7 @@
       </a>
     </template>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
