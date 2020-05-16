@@ -90,6 +90,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.$store.dispatch(`elearning/create/getProgress`);
+  },
+
   props: {
     formActive: String,
   },
@@ -180,7 +184,7 @@ export default {
     },
 
     handleClickMenuItem({ key }) {
-      console.log(key, this.general, this.progress)
+      console.log(key, this.general, this.progress);
       if (key === "general") {
         this.active = key;
         this.$emit("click-item", key);

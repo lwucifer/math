@@ -199,13 +199,13 @@ export default {
       },
       payload: {
         avatar: "",
-        benefit: [...get(this, "general.benefit", [])],
-        description: get(this, "general.description", ""),
-        level: get(this, "general.level", ""),
-        name: get(this, "general.name", ""),
-        subject: get(this, "general.subject.id", ""),
+        benefit: [],
+        description: "",
+        level: "",
+        name: "",
+        subject: "",
         cover_image: "",
-        type: get(this, "general.type", ""),
+        type: "",
       },
       showModalConfirm: false,
       confirmLoading: false,
@@ -213,16 +213,13 @@ export default {
   },
 
   mounted() {
-    this.payload = {
-      avatar: "",
-      benefit: [...get(this, "general.benefit", [])],
-      description: get(this, "general.description", ""),
-      level: get(this, "general.level", ""),
-      name: get(this, "general.name", ""),
-      subject: get(this, "general.subject.id", ""),
-      cover_image: "",
-      type: get(this, "general.type", ""),
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id,
+      },
     };
+    this.$store.dispatch(`elearning/create/getGeneral`, options);
     // const elearning_id = getParamQuery("elearning_id");
     // this.handleFetchElearningGeneral(elearning_id);
   },
