@@ -52,7 +52,7 @@ const menu = [
     key: "general",
     title: "Thông tin chung",
     optional: false,
-    checked: true,
+    checked: false,
   },
   {
     key: "content",
