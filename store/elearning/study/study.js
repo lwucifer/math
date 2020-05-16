@@ -9,6 +9,7 @@ import Study from "~/services/elearning/study/Study";
 const state = () => ({
   elearningStudy: [],
   timetables: [],
+  expand: false
 });
 
 /**
@@ -61,6 +62,10 @@ const mutations = {
     _timetable
   ) {
     state.timetables = _timetable;
+  },
+  
+  [mutationTypes.ELEARNING_STUDY.SET_EXPAND](state, expand) {
+    state.expand = expand;
   }
 };
 

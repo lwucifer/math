@@ -15,6 +15,7 @@ function delayResize(event) {
 
 Vue.directive('textarea-autosize', {
   inserted: function(el, binding, vnode) {
+    if (!binding.value) return;
     resize({ target: el });
 
     el.addEventListener('change', resize, true);
@@ -25,6 +26,7 @@ Vue.directive('textarea-autosize', {
   },
 
   unbind: function(el, binding, vnode) {
+    if (!binding.value) return;
     el.removeEventListener('change', resize, true);
     el.removeEventListener('cut', delayResize, true);
     el.removeEventListener('paste', delayResize, true);

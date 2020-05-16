@@ -341,6 +341,7 @@ export const SCHOOL_TEACHERS = {
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
+    SET_EXPAND: "setElearningStudyExpand"
 };
 
 export const ELEARNING_STUDY_STUDENT = {
