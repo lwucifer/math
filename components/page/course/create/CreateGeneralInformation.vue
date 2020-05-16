@@ -259,7 +259,7 @@ export default {
       if (!get(this, "payload.avatar", "") && !this.general) return false;
       // if (!get(this, "payload.cover_image", "") && !this.general) return false;
 
-      const length_name = get(this, "payload.name", 0);
+      const length_name = get(this, "payload.name.length", 0);
       if (length_name > 150) {
         return false;
       }
