@@ -1,42 +1,44 @@
 <template>
-  <div class="box11 mb-4 pb-0">
-    <h6>Phòng học online</h6>
+  <div class="bg-white mb-4 shadow-1">
+    <div class="box bg-light-2">
+      <h6>Phòng học online</h6>
+    </div>
+    <app-divider v-if="info.ol_classes && info.ol_classes.length" class="my-0" color="disabled" />
+    <div v-if="!get(info, 'ol_classes', []).length" class="box caption">Không có phòng học online.</div>
     <div
       v-for="(item, index) in get(info, 'ol_classes', [])"
       :key="index"
-      class="elearning-lesson-side__class"
+      class="elearning-lesson-side__class box"
     >
       <div class="d-flex">
         <span
-          class="text-clickable"
+          class="body-3 text-clickable"
           @click.prevent="handlJoinOlClass(item)"
         >{{ index + 1 }}. {{ item.name }}</span>
         <IconCalendarAlt
-          class="ml-2 fill-blue text-clickable"
+          class="ml-2 icon body-2 text-info text-clickable"
           height="18"
           width="18"
           title="Thời khoá biểu"
           @click.prevent="getTimetable(item)"
         />
       </div>
-      <div class="d-flex-left mt-3">
+
+      <div class="d-flex-left mt-2 caption">
         <div class="d-flex-center color-red ml-auto" v-if="item.status == liveStatus">
-          <IconCam24
-            class="mr-2 fill-red text-clickable"
-            height="18"
-            width="18"
+          <IconCameraDot
+            class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
           <span class="text-clickable" @click.prevent="handlJoinOlClass(item)">Đang diễn ra</span>
         </div>
+
         <div
-          class="d-flex-center color-yellow ml-auto"
+          class="d-flex-center text-warning ml-auto"
           v-else-if="item.status == finishStatus && item.next_time"
         >
           <IconCam24
-            class="mr-2 fill-yellow text-clickable"
-            height="18"
-            width="18"
+            class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
           <span
@@ -44,6 +46,20 @@
             @click.prevent="handlJoinOlClass(item)"
           >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
+
+        <!-- <div
+          class="d-flex-center ml-auto"
+        >
+          <IconCam24
+            class="mr-2 icon heading-3 text-clickable"
+            @click.prevent="handlJoinOlClass(item)"
+          />
+          <span
+            class="text-clickable"
+            @click.prevent="handlJoinOlClass(item)"
+          >Thời gian học kế tiếp - {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
+        </div> -->
+
         <div class="color-999 d-flex-center" v-else>
           <IconCam24 class="mr-2" />
           <span>Đã kết thúc</span>
@@ -63,6 +79,7 @@
 <script>
 import IconCam24 from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
 import IconCalendarAlt from "~/assets/svg/design-icons/calendar-alt.svg?inline";
+import IconCameraDot from '~/assets/svg/icons/camera-dot.svg?inline';
 import { get } from "lodash";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { LESSION_ONLINE_STATUS, DAY_SECTION } from "~/utils/constants";
@@ -87,6 +104,7 @@ export default {
   components: {
     IconCam24,
     IconCalendarAlt,
+    IconCameraDot,
     ModalWaitingOlClass,
     Timetable
   },

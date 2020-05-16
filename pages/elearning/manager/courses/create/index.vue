@@ -60,19 +60,8 @@ export default {
     };
   },
 
-  async mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        elearning_id,
-      },
-    };
-    await this.$store.dispatch(`elearning/create/getGeneral`, options);
-    this.$store.dispatch(`elearning/create/getProgress`);
-    this.$store.dispatch(`elearning/create/getContent`);
-    this.$store.dispatch("elearning/create/getLessons");
-    this.$store.dispatch("elearning/create/getExams");
-    this.$store.dispatch(`elearning/create/getSetting`);
+  mounted() {
+    // this.$store.dispatch("elearning/create/reset");
   },
 
   beforeMount() {
