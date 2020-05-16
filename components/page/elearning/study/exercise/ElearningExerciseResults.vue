@@ -53,8 +53,8 @@
     <div class="text-center">
       <app-button
         v-if="result.result === EXERCISE_STATUS.PASSED"
-        @click.prevent="handleShowListQuestion"
-      >Xem đáp án</app-button>
+        @click.prevent="handleShowComment"
+      >Xem nhận xét</app-button>
       <app-button
         v-else-if="result.result === EXERCISE_STATUS.FAILED && (result.reworks - result.works > 0)"
       >Làm lại bài tập</app-button>
@@ -132,6 +132,11 @@ export default {
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseQuestionList"
     ]),
+
+    handleShowComment() {
+      console.log("[handleShowComment]");
+      this.modalComments = true;
+    },
 
     handleShowListQuestion() {
       console.log("[handleShowListQuestion]");
