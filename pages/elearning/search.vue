@@ -136,8 +136,8 @@ export default {
       fee: null,
       feeOpts: [
         { value: -1, text: "Tất cả" },
-        { value: 0, text: "Miễn phí" },
-        { value: 1, text: "Có phí" }
+        { value: 1, text: "Miễn phí" },
+        { value: 0, text: "Có phí" }
         // { value: 0, text: "Từ 0 đến 100k" },
         // { value: 1, text: "Từ 100k đến 200k" },
         // { value: 2, text: "Từ 200k đến 500k" },
@@ -185,7 +185,7 @@ export default {
         type: ELEARNING_TYPES_VALUE.LECTURE,
         duration: -1,
         level: -1,
-        fee: -1,
+        free: -1,
         page: 1,
         size: PAGE_SIZE.DEFAULT
       },
@@ -260,8 +260,8 @@ export default {
           delete this.payload[k];
         }
       });
-      if (this.payload.fee != undefined) {
-        this.payload.fee = !!this.payload.fee;
+      if (this.payload.free != undefined) {
+        this.payload.free = !!this.payload.free;
       }
 
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
@@ -283,24 +283,28 @@ export default {
 
     handleChangeFee(_newVal, _selectedVal) {
       console.log("[handleChangeFee]", _newVal, _selectedVal);
-      this.payload.fee = _newVal;
+      this.payload.page = 1;
+      this.payload.free = _newVal;
       this.getLessons();
     },
 
     handleChangeTimes(_newVal, _selectedVal) {
       console.log("[handleChangeTimes]", _newVal, _selectedVal);
+      this.payload.page = 1;
       this.payload.duration = _newVal;
       this.getLessons();
     },
 
     handleChangeLevel(_newVal, _selectedVal) {
       console.log("[handleChangeLevel]", _newVal, _selectedVal);
+      this.payload.page = 1;
       this.payload.level = _newVal;
       this.getLessons();
     },
 
     handleChangeTab(_newVal) {
       console.log("[handleChangeTab]", _newVal);
+      this.payload.page = 1;
       this.tab = _newVal;
       this.payload.type = _newVal;
       this.getLessons();
