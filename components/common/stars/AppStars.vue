@@ -41,7 +41,7 @@ export default {
 
   computed: {
     loopNumber: function() {
-      return Math.ceil(parseFloat(this.stars)) - 1
+      return Math.ceil(parseFloat(this.stars))
     },
     unstart: function() {
       return 5 - Math.ceil(parseFloat(this.stars))
