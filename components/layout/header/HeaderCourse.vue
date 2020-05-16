@@ -12,7 +12,7 @@
       </div>
 
       <div class="the-header__right">
-        <div v-if="isAuthenticated" class="d-flex-center">
+        <div class="d-flex-center">
           <div class="percent mr-3">
             <svg viewBox="0 0 36 36" class="circular-chart">
               <path
@@ -31,50 +31,39 @@
               />
             </svg>
             <div class="percent-cup">
-              <IconCup/>
+              <IconCup />
             </div>
           </div>
+
           <div class="header-dropbox">
             <div class="top">
               <strong class="color-primary">Tiến độ học tập</strong>
-              <IconCaretDown class="fill-primary" height="10" width="10"/>
+              <IconCaretDown class="fill-primary" height="10" width="10" />
             </div>
             <div class="content">
-              <IconCaretUp class="fill-white icon-up"/>
+              <IconCaretUp class="fill-white icon-up" />
               <div>
-                <IconTick class="mr-3"/>
-                Đã hoàn thành 1/20 bài giảng
+                <IconTick class="mr-3" />Đã hoàn thành 1/20 bài giảng
               </div>
             </div>
           </div>
         </div>
 
-        <div v-if="isAuthenticated">
-          <user-header />
-        </div>
-
-        <div v-else class="d-flex">
-          <app-button class="mr-3 btn-login" @click.prevent="redirectSignin">Đăng nhập</app-button>
-          <n-link
-            class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
-            :to="'/auth/signup'"
-          >Đăng ký</n-link>
-        </div>
-
-        <ModalSigninByPhone :visible="showLogin" @click-close="showLogin = false" />
+        <app-button class="the-header-btn-exit" @click="$emit('exit')">
+          <IconClose class="icon fill-opacity-1 mr-2" /> Thoát
+        </app-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ModalSigninByPhone from "~/components/page/auth/ModalSigninByPhone";
-import UserHeader from "~/components/common/user-header/UserHeader";
 import IconCup from "~/assets/svg/icons/cup.svg?inline";
-import IconCaretDown from '~/assets/svg/icons/caret-down.svg?inline';
-import IconCaretUp from '~/assets/svg/icons/caret-up.svg?inline';
-import IconTick from '~/assets/svg/icons/tick.svg?inline';
+import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
+import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline";
+import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
+import IconClose from '~/assets/svg/v2-icons/close_24px.svg?inline';
 
 export default {
   components: {
@@ -83,8 +72,7 @@ export default {
     IconCaretUp,
     IconTick,
     Logo,
-    UserHeader,
-    ModalSigninByPhone
+    IconClose
   },
 
   props: {
@@ -95,12 +83,6 @@ export default {
     showLogin: false,
     percent: 69
   }),
-  computed: {
-    isAuthenticated() {
-      return true;
-      return this.$store.getters["auth/isAuthenticated"];
-    }
-  },
   methods: {
     redirectSignin() {
       this.$router.push("/auth/signin");
@@ -130,7 +112,7 @@ export default {
     width: 29rem;
     opacity: 0;
     visibility: hidden;
-    >div {
+    > div {
       margin-top: 20px;
       background: #fff;
       padding: 2rem;
@@ -173,6 +155,16 @@ export default {
     position: relative;
     z-index: 1;
     animation: progress 200ms ease-out forwards;
+  }
+}
+
+.the-header-btn-exit {
+  font-weight: 500;
+  margin-left: 2.1em;
+  height: 3.7rem;
+
+  .icon {
+    font-size: 2rem;
   }
 }
 

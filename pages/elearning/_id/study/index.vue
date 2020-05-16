@@ -1,10 +1,10 @@
 <template>
   <div>
-    <HeaderCourse />
+    <HeaderCourse @exit="exitStudy" />
     <div class="container" v-if="loading">Loading...</div>
     <div class="container" v-else>
       <div class="row">
-        <div class="col-md-8">
+        <div :class="expand ? 'col-md-12' : 'col-md-8'">
           <div class="box22">
             <div class="lession-screen">
               <img
@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div :class="expand ? 'col-md-12' : 'col-md-4'">
           <ElearningCourseSide />
         </div>
       </div>
@@ -136,6 +136,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
     ...mapState("elearning/study/study-info", ["info"]),
+    ...mapState("elearning/study/study", ["expand"]),
 
     isExerciseMode() {
       const isExerciseScreen =
@@ -223,6 +224,10 @@ export default {
         }
       });
       this.interactive_questions = get(res, "data", null);
+    },
+
+    exitStudy() {
+      this.$router.go(-1);
     },
 
     get,
