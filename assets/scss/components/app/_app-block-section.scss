@@ -52,5 +52,11 @@
     
     &__icon-title {
         margin: 0 1.5rem 0 1rem;
+        &:hover {
+            cursor: pointer;
+            path {
+                fill: $color-primary;
+            }
+        }
     }
 }

@@ -143,6 +143,7 @@ export const ACCOUNT_EARNING = {
 
 export const ACCOUNT_WITHDRAWALS = {
     LIST: "accountWithdrawalsList",
+    ADD: "accountWithdrawalsAdd",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
@@ -549,6 +550,14 @@ export const ACCOUNT_BANKS = {
     EDIT: "accountBankEdit",
     DELETE: "accountBankDelete",
     VALIDATE: "accountBankValidate",
+};
+
+export const ACCOUNT_BALANCE = {
+    LIST: "accountBalance",
+};
+
+export const ACCOUNT_WITHDRAW = {
+    ADD: "accountWithdrawAdd",
 };
 
 export const PUBLIC_BANK = {
