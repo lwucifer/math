@@ -122,24 +122,24 @@ export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
 };
 
 export const ELEARNING_PUBLIC_WHAT_NEXTS = {
-    SET_WHAT_NEXTS: 'setElearningPublicWhatNexts'
+    SET_WHAT_NEXTS: "setElearningPublicWhatNexts",
 };
 
 export const ELEARNING_PUBLIC_FOR_YOU = {
-    SET_FOR_YOU: 'setElearningPublicForYou'
+    SET_FOR_YOU: "setElearningPublicForYou",
 };
 
 export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
-    SET_VOTED_SUBJECTS: 'setElearningPublicVotedSubjects'
+    SET_VOTED_SUBJECTS: "setElearningPublicVotedSubjects",
 };
 
 export const ELEARNING_PUBLIC_NEWEST = {
-    SET_NEWEST_LECTURE: 'setElearningPublicNewestLecture',
-    SET_NEWEST_COURSE: 'setElearningPublicNewestCourse',
+    SET_NEWEST_LECTURE: "setElearningPublicNewestLecture",
+    SET_NEWEST_COURSE: "setElearningPublicNewestCourse",
 };
 
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
-    SET_HIGHLIGHT_TEACHERS: 'setElearningPublicHighlightTeachers'
+    SET_HIGHLIGHT_TEACHERS: "setElearningPublicHighlightTeachers",
 };
 
 export const ELEARNING = {
@@ -484,4 +484,8 @@ export const TEACHING_ELEARNING_REQUESTS = {
 
 export const TEACHING_ELEARNING_INVITES = {
     SET_TEACHING_ELEARNING_INVITES_LIST: "setTeachingElearningInvitesList",
+};
+
+export const TEACHING_INTERACTIVE_LISTQUESTION = {
+    SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
 };
