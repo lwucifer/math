@@ -1,9 +1,9 @@
 <template>
   <div class="cc-box__bg-disable" id="create-lesson-of-chapter">
-    <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span></h3> 
+    <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span></h3> 
     <app-input
       @handleBlur="handleBlurNameInput"
-      :counter="60"
+      :counter="80"
       placeholder="Tên bài học"
       v-model="payload.name"
     />

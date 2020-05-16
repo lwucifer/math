@@ -32,7 +32,7 @@
           @input="handleSelectType"
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
+      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="rates"
@@ -44,7 +44,7 @@
           clearable
           @input="handleSelectRate"
         />
-      </div>
+      </div>-->
     </div>
   </filter-form>
 </template>
@@ -108,6 +108,10 @@ export default {
           text: item.name
         };
       });
+      // data.push({
+      //   value: "Khác",
+      //   text: "Khác"
+      // });
       return data;
     }
   },

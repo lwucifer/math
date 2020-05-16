@@ -1,48 +1,55 @@
 <template>
-  <div
-    class="content elearning-lesson-side__lesson"
-    :class="get(lesson, 'completes', 0) ? 'active' : ''"
-  >
-    <div class="lesson-title mb-2">
+  <div class="e-program-item" :class="get(lesson, 'completes', 0) ? 'active' : ''">
+    <div class="e-program-item__left">
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
-        :disabled="lesson.status == lessonCompleted"
+        :style="{ 'pointer-events': lesson.status == lessonCompleted ? 'none' : 'inherit' }"
         @change="isShowCompleteStudy = true"
       />
-      <p
-        class="text-uppercase pl-1 text-clickable"
-        @click="handleStuty(lesson)"
-      >
-        {{ get(lesson, "name", "") }}
-      </p>
     </div>
-    <div class="bottom d-flex">
-      <div v-if="isShowDuration">
-        <IconPlay class="mr-2" />
-        <span>{{ durationTimes }}</span>
+
+    <div class="e-program-item__right">
+      <a
+        href
+        class="e-program-item__title"
+        @click.prevent="handleStuty(lesson)"
+      >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
+
+      <div class="e-program-item__bottom">
+        <span v-if="isShowDuration" class="d-inline-flex align-items-center">
+          <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
+          <span>{{ durationTimes }}</span>
+        </span>
+
+        <a
+          href
+          class="d-inline-flex align-items-center text-decoration-none"
+          :class="`text-${classExerciseStatus}`"
+          v-if="get(lesson, 'exercises', 0)"
+          @click.prevent="handleGetExercises"
+        >
+          <IconFileCheckAlt class="icon body-1 mr-1" />
+          <span>Bài tập({{ completeExecerciseRate }})</span>
+        </a>
+
+        <app-dropdown
+          v-if="lesson.link"
+          class="e-program-item__download-tooltip"
+          position="topCenter"
+        >
+          <a
+            slot="activator"
+            download
+            target="_blank"
+            :href="lesson.link"
+            class="d-inline-flex align-items-center text-decoration-none"
+          >
+            <IconFileDownloadAlt class="icon body-1 text-info" />
+          </a>
+
+          <span>Tải tài liệu</span>
+        </app-dropdown>
       </div>
-      <!-- <div class="color-primary ml-auto" v-if="get(lesson, 'completes', 0)">
-        <IconFileCheckAlt class="mr-2 fill-primary" height="16" width="16" />
-        <span>Xem kết quả</span>
-      </div> -->
-      <div
-        class="ml-auto text-clickable"
-        :class="`color-${classExerciseStatus}`"
-        v-if="get(lesson, 'exercises', 0)"
-        @click.prevent="handleGetExercises"
-      >
-        <IconFileEditAlt
-          class="mr-2"
-          :class="`fill-${classExerciseStatus}`"
-          height="16"
-          width="16"
-        />
-        <span>Bài tập({{ completeExecerciseRate }})</span>
-      </div>
-      <!-- <div class="color-yellow ml-auto" v-else>
-        <IconFileClock class="mr-2 fill-yellow" height="16" width="16" />
-        <span>Chờ chấm điểm</span>
-      </div> -->
     </div>
 
     <app-modal-confirm
@@ -53,55 +60,52 @@
       @close="isShowCompleteStudy = false"
       @cancel="isShowCompleteStudy = false"
       @ok="handleCompleteStudy"
-    >
-    </app-modal-confirm>
-
-    
+    ></app-modal-confirm>
   </div>
 </template>
 
 <script>
-import IconPlay from "~/assets/svg/icons/play.svg?inline";
-import IconUpO from "~/assets/svg/icons/up-o.svg?inline";
-import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
-import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
-import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
-import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import StudyService from "~/services/elearning/study/Study";
 import { mapActions, mapMutations } from "vuex";
 import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
-  LESSION_TYPE,
+  LESSION_TYPE
 } from "~/utils/constants";
-import { redirectWithParams, getParamQuery, getCountdown_MM_SS } from "~/utils/common";
+import {
+  redirectWithParams,
+  getParamQuery,
+  getCountdown_MM_SS
+} from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
+
+const IconFileCheckAlt = () =>
+  import("~/assets/svg/design-icons/file-check-alt.svg?inline");
+const IconFileDownloadAlt = () =>
+  import("~/assets/svg/design-icons/file-download-alt.svg?inline");
+import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
+import StudyService from "~/services/elearning/study/Study";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
 export default {
+  components: {
+    IconFileCheckAlt,
+    IconSlowMotionVideo,
+    IconFileDownloadAlt
+  },
+
+  props: {
+    lesson: Object
+  },
+
   data() {
     return {
       lessonCompleted: LESSION_STATUS.COMPLETED,
-      isShowCompleteStudy: false,
-      
+      isShowCompleteStudy: false
     };
-  },
-  components: {
-    IconPlay,
-    IconDownO,
-    IconUpO,
-    IconFileClock,
-    IconFileCheckAlt,
-    IconFileEditAlt,
-    IconFileCheck,
-  },
-  props: {
-    lesson: Object,
   },
 
   mounted() {
@@ -111,13 +115,44 @@ export default {
     }
   },
 
+  computed: {
+    completes() {
+      return get(this.lesson, "completes", 0);
+    },
+    exercises() {
+      return get(this.lesson, "exercises", 0);
+    },
+    completeExecerciseRate() {
+      return `${this.completes}/${this.exercises}`;
+    },
+
+    // return primary|secondary
+    classExerciseStatus() {
+      // debugger;
+      if (this.completes == this.exercises) {
+        return "primary";
+      } else if (this.completes < this.exercises) {
+        return "secondary";
+      }
+    },
+
+    isShowDuration() {
+      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    },
+
+    durationTimes() {
+      const duration = get(this.lesson, "duration", 0);
+      return getCountdown_MM_SS(duration);
+    }
+  },
+
   methods: {
     getProgress() {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
         params: {
-          elearning_id,
-        },
+          elearning_id
+        }
       };
       this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
@@ -127,10 +162,10 @@ export default {
     async handleCompleteStudy() {
       const payload = {
         completed: true,
-        lesson_id: get(this, "lesson.id", ""),
+        lesson_id: get(this, "lesson.id", "")
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
-      console.log("[handleCompleteStudy]", res)
+      console.log("[handleCompleteStudy]", res);
       if (get(res, "success", false)) {
         // this.$toasted.success("Thành công");
         // close modal confirm
@@ -143,10 +178,14 @@ export default {
     },
     get,
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList",
+      "elearningSudyElearningExerciseList"
     ]),
 
-    ...mapMutations("event", ["setStudyMode", "setPayload", "setExerciseLoading"]),
+    ...mapMutations("event", [
+      "setStudyMode",
+      "setPayload",
+      "setExerciseLoading"
+    ]),
 
     async handleStuty(lesson) {
       redirectWithParams({ lesson_id: get(lesson, "id", "") });
@@ -198,38 +237,11 @@ export default {
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
-    },
-  },
-
-  computed: {
-    completes() {
-      return get(this.lesson, "completes", 0);
-    },
-    exercises() {
-      return get(this.lesson, "exercises", 0);
-    },
-    completeExecerciseRate() {
-      return `${this.completes}/${this.exercises}`;
-    },
-
-    // return primary|red
-    classExerciseStatus() {
-      // debugger;
-      if (this.completes == this.exercises) {
-        return "primary";
-      } else if (this.completes < this.exercises) {
-        return "red";
-      }
-    },
-
-    isShowDuration() {
-      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
-    },
-
-    durationTimes() {
-      const duration = get(this.lesson, "duration", 0);
-      return getCountdown_MM_SS(duration);
     }
-  },
+  }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/study/_elearning-program-item.scss";
+</style>

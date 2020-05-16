@@ -103,9 +103,9 @@ export default {
       categories: "categories"
     }),
     resultSummary() {
-      const schoolNum = this.schoolSummary.total_school;
-      const studentNum = this.schoolSummary.total_student;
-      const teacherNum = this.schoolSummary.total_teacher;
+      const schoolNum = this.schoolSummary.total_school || 0;
+      const studentNum = this.schoolSummary.total_student || 0;
+      const teacherNum = this.schoolSummary.total_teacher || 0;
 
       return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
     },

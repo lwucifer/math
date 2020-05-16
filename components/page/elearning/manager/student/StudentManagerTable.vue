@@ -20,7 +20,7 @@
       </template>
 
       <template v-slot:cell(confirm)="{row}">
-        <td style="width:32%;">
+        <td style="width:40%;">
           <app-button square size="sm" color="transparent" @click="acceptStudent(row.student_id)">
             <IconCheckGreen class="icon mr-2" />Xác nhận
           </app-button>
@@ -40,13 +40,19 @@
         <td style="width:30%">{{ get(row, 'student_name', '') }}</td>
       </template>
       <template v-slot:cell(class)="{row}">
-        <td style="width:30%">{{ get(row, 'class_name', '') }}</td>
+        <td style="width:10%">{{ get(row, 'class_name', '') }}</td>
       </template>
       <template v-slot:cell(date)="{row}">
         <td style="width:25%">{{ get(row, 'join_date', '') | moment("DD/MM/YYYY") }}</td>
       </template>
       <template v-slot:cell(question)="{row}">
         <td style="width:25%">{{ get(row, 'questions', '') }}</td>
+      </template>
+      <template v-slot:cell(question)="{row}">
+        <td style="width:25%">{{ get(row, 'questions', '') }}</td>
+      </template>
+      <template v-slot:cell(request_date)="{row}">
+        <td style="width:25%">{{ get(row, 'request_date', '') | moment("DD/MM/YYYY") }}</td>
       </template>
       <template v-slot:cell(progress)="{row}">
         <td>
@@ -72,6 +78,7 @@ import IconClear24px from "~/assets/svg/v2-icons/clear_24px.svg?inline";
 import IconCheckGreen from "~/assets/svg/v2-icons/check_green.svg?inline";
 import { mapState, mapActions } from "vuex";
 const STORE_TEACHING_ACCEPT = "elearning/teaching/accept";
+const STORE_TEACHING_REQUEST = "elearning/teaching/request";
 export default {
   components: {
     IconArrow,
@@ -133,6 +140,7 @@ export default {
   },
   methods: {
     ...mapActions(STORE_TEACHING_ACCEPT, ["teachingElearningAccept"]),
+    ...mapActions(STORE_TEACHING_REQUEST, ["teachingElearningRequestsList"]),
     get,
     onPageChange(e) {
       this.$emit("changedPagination", e);
@@ -140,22 +148,32 @@ export default {
     acceptStudent(_id) {
       const data = {
         elearning_id: this.filterElearningId,
-        user_id: _id,
+        student_id: _id,
         accept: true
       };
       this.teachingElearningAccept(data).then(result => {
         if (result && result.success == true) {
+          this.teachingElearningRequestsList({
+            params: {
+              elearning_id: this.filterElearningId
+            }
+          });
         }
       });
     },
     rejectStudent(_id) {
       const data = {
         elearning_id: this.filterElearningId,
-        user_id: _id,
+        student_id: _id,
         accept: false
       };
       this.teachingElearningAccept(data).then(result => {
         if (result && result.success == true) {
+          this.teachingElearningRequestsList({
+            params: {
+              elearning_id: this.filterElearningId
+            }
+          });
         }
       });
     }

@@ -4,7 +4,7 @@
       v-if="isEditCourseName"
       v-model="courseNameModel"
       ref="inputCourseName"
-      maxlength="60"
+      maxlength="150"
       class="cc-box__input-title bg-input-gray mb-0"
       type="text"
     />

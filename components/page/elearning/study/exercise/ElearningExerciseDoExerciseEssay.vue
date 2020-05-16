@@ -79,6 +79,15 @@
       @ok="handleQuestionSubmission"
       @close="modalConfirmSubmit = false"
     ></app-modal-confirm>
+
+    <app-modal-notify
+      v-if="notify.isShowNotify"
+      :type="notify.type"
+      :title="notify.title"
+      @close="notify.isShowNotify = false"
+      @ok="notify.isShowNotify = false"
+    />
+
   </div>
 </template>
 
@@ -120,7 +129,12 @@ export default {
       modalConfirmSubmit: false,
       answer: null,
       questionNo: this.questionId,
-      modalListQuestions: false
+      modalListQuestions: false,
+      notify: {
+        type: "",
+        description: "",
+        isShowNotify: false
+      }
     };
   },
 
@@ -199,7 +213,19 @@ export default {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;
+          this.notify = {
+            type: "success",
+            title: "Chúc mừng bạn đã hoàn thành bài tập",
+            isShowNotify: true,
+          }
           this.reNewGetElearningProgress();
+        }else {
+          this.modalConfirmSubmit = false;
+          this.notify = {
+            type: "error",
+            title: res.message,
+            isShowNotify: true,
+          }
         }
       });
     },

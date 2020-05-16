@@ -45,11 +45,11 @@
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-5 mb-3">
             Tên {{ name }}
-            <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
+            <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
           <app-input
             :placeholder="`Nhập tiêu đề của` + ' ' + name"
-            :counter="60"
+            :counter="150"
             v-model="payload.name"
             @input="handleChangeName($event)"
             @handleBlur="handleBlurName($event)"
@@ -199,13 +199,13 @@ export default {
       },
       payload: {
         avatar: "",
-        benefit: [...get(this, "general.benefit", [])],
-        description: get(this, "general.description", ""),
-        level: get(this, "general.level", ""),
-        name: get(this, "general.name", ""),
-        subject: get(this, "general.subject.id", ""),
+        benefit: [],
+        description: "",
+        level: "",
+        name: "",
+        subject: "",
         cover_image: "",
-        type: get(this, "general.type", ""),
+        type: "",
       },
       showModalConfirm: false,
       confirmLoading: false,
@@ -213,16 +213,13 @@ export default {
   },
 
   mounted() {
-    this.payload = {
-      avatar: "",
-      benefit: [...get(this, "general.benefit", [])],
-      description: get(this, "general.description", ""),
-      level: get(this, "general.level", ""),
-      name: get(this, "general.name", ""),
-      subject: get(this, "general.subject.id", ""),
-      cover_image: "",
-      type: get(this, "general.type", ""),
+    const elearning_id = getParamQuery("elearning_id");
+    const options = {
+      params: {
+        elearning_id,
+      },
     };
+    this.$store.dispatch(`elearning/create/getGeneral`, options);
     // const elearning_id = getParamQuery("elearning_id");
     // this.handleFetchElearningGeneral(elearning_id);
   },
@@ -250,17 +247,17 @@ export default {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
     submit() {
-      if (!get(this, "payload.name", "")) return false;
-      if (!get(this, "payload.benefit.length", 0)) return false;
-      if (!get(this, "payload.description", "")) return false;
-      if (!get(this, "payload.subject", "")) return false;
-      if (!get(this, "payload.level", "")) return false;
-      if (!get(this, "payload.type", "")) return false;
-      if (!get(this, "payload.avatar", "") && !this.general) return false;
+      if (!get(this, "payload.name", true)) return false;
+      if (!get(this, "payload.benefit.length", true)) return false;
+      if (!get(this, "payload.description", true)) return false;
+      if (!get(this, "payload.subject", true)) return false;
+      if (!get(this, "payload.level", true)) return false;
+      if (!get(this, "payload.type", true)) return false;
+      if (!get(this, "payload.avatar", true) && !this.general) return false;
       // if (!get(this, "payload.cover_image", "") && !this.general) return false;
 
-      const length_name = get(this, "payload.name", 0);
-      if (length_name > 60) {
+      const length_name = get(this, "payload.name.length", 0);
+      if (length_name > 150) {
         return false;
       }
 
@@ -353,7 +350,7 @@ export default {
     },
 
     handleChangeLevel(level) {
-      this.payload.level = get(level, "id", "");
+      this.payload.level = level;
     },
 
     handleSelectType(e) {
@@ -369,7 +366,7 @@ export default {
     },
 
     handleChangeSubject(subject) {
-      this.payload.subject = get(subject, "id", "");
+      this.payload.subject = subject;
     },
 
     handleCLickSave() {
@@ -389,9 +386,17 @@ export default {
 
       if (get(result, "success", false)) {
         const elearning_id = get(result, "data.elearning_id", "");
-        this.handleFetchElearningGeneral(elearning_id);
+        const options = {
+          params: {
+            elearning_id,
+          },
+        };
+        await this.$store.dispatch(`elearning/create/getGeneral`, options);
+        await this.$store.dispatch(`elearning/create/getProgress`);
         redirectWithParams({ elearning_id });
+
         this.$toasted.success(get(result, "message", ""));
+
         if (this.payload.type === "LECTURE") {
           this.$emit("nextStep", "content-lecture");
         }
