@@ -4,18 +4,18 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-vue-select
+      <app-select
         class="cc-select"
-        :options="levels"
+        :options="levelOpt"
         placeholder="Chọn lớp"
-        @input="handleChangeLevel"
+        @change="handleChangeLevel"
         label="name"
-        :value="level"
+        :value="level && level.id"
       >
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-vue-select>
+      </app-select>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
 
   data() {
     return {
-      level: null,
+      level: {},
     };
   },
 
@@ -53,10 +53,6 @@ export default {
       "defaultValue",
       "levels",
     ]);
-  },
-
-  updated() {
-    console.log(this.levels)
   },
 
   computed: {

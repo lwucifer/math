@@ -4,18 +4,18 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Môn học</h2>
-      <app-vue-select
+      <app-select
         class="cc-select"
-        :options="subjects"
+        :options="subjectsOpt"
         placeholder="Chọn môn học"
-        @input="handleChangeSubject"
+        @change="handleChangeSubject"
         label="name"
-        v-model="subject"
+        :value="subject && subject.id"
       >
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-vue-select>
+      </app-select>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      subject: null,
+      subject: {},
     };
   },
 
