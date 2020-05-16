@@ -81,9 +81,10 @@
         <h5 class="mb-2">Giá bán</h5>
 
         <app-input
-          v-model="payload.fee"
+          :value="numeral(payload.fee).format()"
           @onFocus="(event) => event.target.select()"
-          type="number"
+          type="text"
+          @input="handleChangeFee"
           class="text-primary font-weight-semi-bold w-170"
         >
           <template #unit>đ</template>
@@ -101,9 +102,10 @@
 
         <div class="d-flex align-item-center">
           <app-input
-            v-model="payload.price"
+            :value="numeral(payload.price).format()"
             @onFocus="(event) => event.target.select()"
-            type="number"
+            type="text"
+            @input="handleChangePrice"
             class="text-primary font-weight-semi-bold w-170 mb-0"
           >
             <template #unit>đ</template>
@@ -252,6 +254,12 @@ export default {
   },
 
   methods: {
+    handleChangePrice(e) {
+      this.payload.price = numeral(e).format();
+    },
+    handleChangeFee(e) {
+      this.payload.fee = numeral(e).format();
+    },
     handleChangeSetting() {
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.comment_allow = get(this, "setting.comment_allow", "");
@@ -304,6 +312,8 @@ export default {
     async handleSaveSetting() {
       this.confirmLoading = true;
       this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.fee = numeral(this.payload.fee).value();
+      this.payload.price = numeral(this.payload.price).value();
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
