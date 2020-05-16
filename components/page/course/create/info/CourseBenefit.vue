@@ -17,8 +17,8 @@
           class="cgi-demo-benefit d-flex justify-content-between align-items-center"
         >
           <div class="cgi-demo-text d-flex align-items-center">
-            <IconCheckCircle class="mr-2" />
-            <p v-html="item" />
+            <IconCheckCircle class="mr-2"/>
+            <p class="text-benefit" v-html="item" />
           </div>
 
           <div class="cgi-demo-btn">

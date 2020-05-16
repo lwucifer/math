@@ -1,11 +1,12 @@
 <template>
   <div class="col-md-5 ml-5">
     <div
-      class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
+      class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
     >
-      <h2 class="cgi-form-title heading-6">Môn học</h2>
+      <h2 class="cgi-form-title heading-6 mr-4">Môn học</h2>
       <app-select
         class="cc-select"
+        style="width: 60%"
         :options="subjectsOpt"
         placeholder="Chọn môn học"
         @change="handleChangeSubject"
