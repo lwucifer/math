@@ -16,7 +16,8 @@
         href
         class="text-decoration-none ml-5"
         @click.prevent="handleShowListQuestion"
-      >Danh sách câu hỏi</a>
+        >Danh sách câu hỏi</a
+      >
     </div>
 
     <div class="e-exercise-choose bg-white pa-3 mb-4">
@@ -33,7 +34,8 @@
           :key="index"
           :value="ans.id"
           :checked="ans.id == answer"
-        >{{ ans.content }}</app-radio>
+          >{{ ans.content }}</app-radio
+        >
         <!-- <app-radio>Đáp án số 2</app-radio>
         <app-radio>Đáp án số 3</app-radio>
         <app-radio :value="3">Đáp án số 4</app-radio>-->
@@ -51,13 +53,21 @@
         >
           <IconArrowBack class="icon fill-opacity-1 body-1 mr-2" />Quay lại
         </app-button>
-        <app-button size="sm" @click.prevent="handleQuestionContinue" :disabled="isDisableNext">
+        <app-button
+          size="sm"
+          @click.prevent="handleQuestionContinue"
+          :disabled="isDisableNext"
+        >
           Tiếp tục
           <IconArrowForward class="icon fill-opacity-1 body-1 ml-2" />
         </app-button>
       </div>
 
-      <app-button size="sm" color="info" @click.prevent="modalConfirmSubmit=true">
+      <app-button
+        size="sm"
+        color="info"
+        @click.prevent="modalConfirmSubmit = true"
+      >
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
       </app-button>
@@ -86,16 +96,17 @@
     ></app-modal-confirm>
 
     <app-modal-notify
-      v-if="isShowResultCompleteStudy"
-      title="Chúc mừng bạn đã hoàn thành bài tập"
-      :footer="false"
-      @ok="isShowResultCompleteStudy = false"
-    ></app-modal-notify>
+      v-if="notify.isShowNotify"
+      :type="notify.type"
+      :title="notify.title"
+      @close="notify.isShowNotify = false"
+      @ok="notify.isShowNotify = false"
+    />
   </div>
 </template>
 
 <script>
-import { EXERCISE_TYPES } from "~/utils/constants";
+import { EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
@@ -106,6 +117,7 @@ import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
+import {get} from 'lodash';
 
 export default {
   components: {
@@ -136,7 +148,11 @@ export default {
       answer: null,
       modalListQuestions: false,
       modalConfirmSubmit: false,
-      isShowResultCompleteStudy: false
+      notify: {
+        type: "",
+        description: "",
+        isShowNotify: false
+      }
     };
   },
 
@@ -174,6 +190,7 @@ export default {
       "setStudyExerciseSubmission",
       "setStudyExerciseCurrentByNo"
     ]),
+
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
       "elearningSudyExerciseSubmissionList"
@@ -228,8 +245,21 @@ export default {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;
-          this.isShowResultCompleteStudy = true;
+          this.notify = {
+            type: "success",
+            title: "Chúc mừng bạn đã hoàn thành bài tập",
+            isShowNotify: true
+          };
           this.reNewGetElearningProgress();
+
+          // show learning screen
+        } else {
+          this.modalConfirmSubmit = false;
+          this.notify = {
+            type: "error",
+            title: res.message,
+            isShowNotify: true
+          };
         }
       });
     },

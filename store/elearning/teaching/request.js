@@ -1,6 +1,5 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import ELearningParticipant from "~/services/elearning/teaching/ElearningParticipant";
 import Requests from "~/services/elearning/teaching/Requests";
 
 /**
@@ -30,6 +29,7 @@ const actions = {
                 .SET_TEACHING_ELEARNING_REQUESTS_LIST,
                 result.data
             );
+            return result;
         } catch (error) {
             console.log("[Request] list.error", error);
         }
@@ -43,7 +43,7 @@ const mutations = {
     [mutationTypes.TEACHING_ELEARNING_REQUESTS
         .SET_TEACHING_ELEARNING_REQUESTS_LIST
     ](state, data) {
-        console.log("SET_ELEARNING_TEACHING_ELEARNING_PARTICIPANT_LIST", data);
+        console.log("SET_TEACHING_ELEARNING_REQUESTS_LIST", data);
         state.elearningRequest = data;
     },
 };

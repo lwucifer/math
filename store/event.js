@@ -6,7 +6,8 @@ import { STUDY_MODE } from "~/utils/constants";
 const state = () => ({
   payload: null,
   studyMode: "", // defaul display video playing, options: VIDEO_PLAYING|DO_EXCERCISE|BEFORE_BEGIN -> DOING -> FINISH|DO_TEST
-  loadingExercise: false
+  loadingExercise: false,
+  
 });
 
 /**

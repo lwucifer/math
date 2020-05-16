@@ -1,21 +1,22 @@
 <template>
-  <div class="col-md-5">
+  <div class="col-md-4">
     <div
-      class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
+      class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
     >
-      <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-vue-select
+      <h2 class="cgi-form-title heading-6 mr-4">Trình độ</h2>
+      <app-select
+        style="width: 60%"
         class="cc-select"
-        :options="levels"
+        :options="levelOpt"
         placeholder="Chọn lớp"
-        @input="handleChangeLevel"
+        @change="handleChangeLevel"
         label="name"
-        :value="level"
+        :value="level && level.id"
       >
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-vue-select>
+      </app-select>
     </div>
   </div>
 </template>
@@ -40,11 +41,12 @@ export default {
 
   data() {
     return {
-      level: null,
+      level: {},
     };
   },
 
   mounted() {
+    console.log(this.defaultValue)
     this.$store.dispatch(
       `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
     );
@@ -58,6 +60,14 @@ export default {
     ...mapState("elearning/public/public-levels", {
       levels: "levels",
     }),
+
+    levelOpt() {
+      return this.levels.map(item => ({
+          ...item,
+          value: item.id,
+          text: item.name
+      }))
+    },
   },
 
   methods: {

@@ -1,23 +1,43 @@
 <template>
   <div class="elearning-search container">
     <h1 class="elearning-search__heading heading-3">
-      <span class="font-weight-semi-bold">Toán học</span>
+      <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
       <span class="body-2 font-weight-normal">
-        (
-        <b>50</b> bài giảng -
-        <b>20</b> khoá học)
+        (<b>{{ totalSummary }}</b> {{ lessonType }})
       </span>
     </h1>
 
     <div class="elearning-search__toolbar">
-      <app-button :color="isFilter ? 'primary' : 'default'" size="sm" @click="isFilter = !isFilter">
+      <app-button
+        :color="isFilter ? 'primary' : 'default'"
+        size="sm"
+        @click="isFilter = !isFilter"
+      >
         <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
       </app-button>
 
       <template v-if="isFilter">
-        <app-select v-model="fee" :options="feeOpts" placeholder="Học phí" size="sm" />
-        <app-select v-model="time" :options="timeOpts" placeholder="Thời lượng" size="sm" />
-        <app-select v-model="level" :options="levelOpts" placeholder="Trình độ" size="sm" />
+        <app-select
+          v-model="fee"
+          @change="handleChangeFee"
+          :options="feeOpts"
+          placeholder="Học phí"
+          size="sm"
+        />
+        <app-select
+          v-model="time"
+          @change="handleChangeTimes"
+          :options="timeOpts"
+          placeholder="Thời lượng"
+          size="sm"
+        />
+        <app-select
+          v-model="level"
+          @change="handleChangeLevel"
+          :options="categoryOpts"
+          placeholder="Trình độ"
+          size="sm"
+        />
       </template>
 
       <div class="ml-auto">
@@ -32,8 +52,9 @@
         :key="item.tab"
         :href="`#${item.tab}`"
         :class="['elearning-search__tab', tab === item.tab && 'active']"
-        @click.prevent="tab = item.tab"
-      >{{ item.text }}</a>
+        @click.prevent="handleChangeTab(item.tab)"
+        >{{ item.text }}</a
+      >
     </div>
 
     <div v-if="pageLoading" class="container mt-6">
@@ -54,7 +75,11 @@
         :id="item.tab"
       >
         <div class="row">
-          <div class="col-md-3 elearning-search__col" v-for="item in lessons" :key="item.id">
+          <div
+            class="col-md-3 elearning-search__col"
+            v-for="item in lessons"
+            :key="item.id"
+          >
             <CourseItem2
               class="my-0"
               :to="`/elearning/${item.id}`"
@@ -73,15 +98,10 @@
         </div>
 
         <app-pagination
-          :pagination="{
-            first: true,
-            last: false,
-            number: 0,
-            numberOfElements: 10,
-            size: 10,
-            totalElements: 65,
-            totalPages: 7,
-          }"
+          :pagination="pagination"
+          @pagechange="onPageChange"
+          :opts="opts"
+          class="mt-3"
         />
       </div>
     </template>
@@ -93,7 +113,12 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
-import { ELEARNING_TYPES_VALUE } from "~/utils/constants";
+import {
+  ELEARNING_TYPES_VALUE,
+  PAGE_SIZE,
+  ELEARNING_TYPES_TEXT
+} from "~/utils/constants";
+import { addAllOptionSelect } from "~/utils/common";
 
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import CourseItem2 from "~/components/page/course/CourseItem2";
@@ -109,40 +134,33 @@ export default {
     VclList
   },
 
-  created() {
-    this.getLessons();
-  },
-
   data() {
     return {
       fee: null,
       feeOpts: [
-        { value: 0, text: "Học phí 1" },
-        { value: 1, text: "Học phí 2" },
-        { value: 2, text: "Học phí 3" },
-        { value: 3, text: "Học phí 4" }
-      ],
-      fee: null,
-      feeOpts: [
-        { value: 0, text: "Học phí 1" },
-        { value: 1, text: "Học phí 2" },
-        { value: 2, text: "Học phí 3" },
-        { value: 3, text: "Học phí 4" }
+        { value: -1, text: "Tất cả" },
+        { value: 1, text: "Miễn phí" },
+        { value: 0, text: "Có phí" }
+        // { value: 0, text: "Từ 0 đến 100k" },
+        // { value: 1, text: "Từ 100k đến 200k" },
+        // { value: 2, text: "Từ 200k đến 500k" },
+        // { value: 3, text: "Lơn hơn 500k" }
       ],
       time: null,
       timeOpts: [
-        { value: 0, text: "Thời lượng 1" },
-        { value: 1, text: "Thời lượng 2" },
-        { value: 2, text: "Thời lượng 3" },
-        { value: 3, text: "Thời lượng 4" }
+        { value: -1, text: "Tất cả" },
+        { value: 0, text: "10 phút" },
+        { value: 1, text: "20 phút" },
+        { value: 2, text: "1 giờ" },
+        { value: 3, text: "3 giờ" }
       ],
       level: null,
-      levelOpts: [
-        { value: 0, text: "Trình độ 1" },
-        { value: 1, text: "Trình độ 2" },
-        { value: 2, text: "Trình độ 3" },
-        { value: 3, text: "Trình độ 4" }
-      ],
+      // levelOpts: [
+      //   { value: 0, text: "Trình độ 1" },
+      //   { value: 1, text: "Trình độ 2" },
+      //   { value: 2, text: "Trình độ 3" },
+      //   { value: 3, text: "Trình độ 4" }
+      // ],
       sort: 0,
       sortOpts: [
         { value: 0, text: "Mới nhất" },
@@ -166,12 +184,78 @@ export default {
         }
       ],
       payload: {
-        subject: "",
-        type: ELEARNING_TYPES_VALUE.LECTURE
+        subject: this.subject,
+        type: ELEARNING_TYPES_VALUE.LECTURE,
+        duration: -1,
+        level: -1,
+        free: -1,
+        page: 1,
+        size: PAGE_SIZE.DEFAULT
       },
+
+      pagination: {
+        first: true,
+        last: false,
+        number: 0,
+        numberOfElements: 0,
+        size: 10,
+        totalElements: 0,
+        totalPages: 0
+      },
+
+      opts: [
+        { value: 10, text: "10" },
+        { value: 20, text: "20" },
+        { value: 30, text: "30" },
+        { value: 50, text: "50" }
+      ],
 
       pageLoading: true
     };
+  },
+
+  async asyncData({ store, query }) {
+    const { subject, subject_name } = query; // get keyword, type from url
+
+    return {
+      subject,
+      subject_name
+    };
+  },
+
+  async fetch({ params, query, store }) {
+    await store.dispatch(
+      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+    );
+  },
+
+  created() {
+    this.getLessons();
+  },
+
+  computed: {
+    ...mapState("elearning/public/public-category", {
+      categories: "categories"
+    }),
+
+    categoryOpts() {
+      const alls = addAllOptionSelect(this.categories);
+      return alls.map(c => {
+        return {
+          value: c.id,
+          text: c.name
+        };
+      });
+    },
+
+    totalSummary() {
+      return get(this, "pagination.totalElements", 0);
+    },
+    lessonType() {
+      const lessionType = this.payload.type;
+      console.log("[lessonType]", lessionType);
+      return ELEARNING_TYPES_TEXT[lessionType];
+    }
   },
 
   mounted() {
@@ -183,12 +267,67 @@ export default {
 
     async getLessons() {
       this.pageLoading = true;
+      Object.keys(this.payload).map(k => {
+        if (this.payload[k] == -1) {
+          delete this.payload[k];
+        }
+      });
+      if (this.payload.free != undefined) {
+        this.payload.free = !!this.payload.free;
+      }
 
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
         this.payload
       );
       this.lessons = get(res, "data.content", []);
+      this.pagination = {
+        totalPages: get(res, "data.page.total_pages", 0),
+        size: get(res, "data.page.size", 10),
+        totalElements: get(res, "data.page.total_elements", 0),
+        first: get(res, "data.page.first", false),
+        last: get(res, "data.page.last", false),
+        number: get(res, "data.page.number", 0)
+      };
+      console.log("[this.pagination]", this.pagination);
+
       this.pageLoading = false;
+    },
+
+    handleChangeFee(_newVal, _selectedVal) {
+      console.log("[handleChangeFee]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.free = _newVal;
+      this.getLessons();
+    },
+
+    handleChangeTimes(_newVal, _selectedVal) {
+      console.log("[handleChangeTimes]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.duration = _newVal;
+      this.getLessons();
+    },
+
+    handleChangeLevel(_newVal, _selectedVal) {
+      console.log("[handleChangeLevel]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.level = _newVal;
+      this.getLessons();
+    },
+
+    handleChangeTab(_newVal) {
+      console.log("[handleChangeTab]", _newVal);
+      this.payload.page = 1;
+      this.tab = _newVal;
+      this.payload.type = _newVal;
+      this.getLessons();
+    },
+
+    onPageChange(e) {
+      console.log("[onPageChange]", e);
+      this.payload.page = e.number + 1;
+      this.payload.size = PAGE_SIZE.DEFAULT;
+
+      this.getLessons();
     },
 
     calcDiscount(elearning) {
@@ -196,16 +335,6 @@ export default {
       const currentPrice = price.price || 0;
       const originPrice = price.original_price || 0;
       return (currentPrice / originPrice) * 100;
-    }
-  },
-
-  watch: {
-    tab(_newVal, _oldVal) {
-      console.log("[tab] watch", _newVal, _oldVal);
-      if (_newVal != _oldVal) {
-        this.payload.type = _newVal.tab;
-        this.getLessons();
-      }
     }
   }
 };

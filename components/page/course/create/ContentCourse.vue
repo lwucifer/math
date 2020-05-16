@@ -13,7 +13,10 @@
           <div
             class="cc-box__head"
             style="padding: 1.5rem"
-            :class="{ 'add-border-bottom': addBorder }"
+            :class="{
+              'add-border-bottom':
+                isShowFormAddChapter || get(chapters, 'length', 0),
+            }"
           >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
@@ -21,7 +24,7 @@
 
             <div class="cc-box__head-right">
               <a
-                class="text-decoration-none d-inline-flex align-items-center"
+                class="text-decoration-none d-inline-flex align-items-center font-weight-semi-bold"
                 href
                 @click.prevent="toggleAddChapter"
               >
@@ -126,18 +129,18 @@ export default {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
-      addBorder: false,
     };
   },
 
-  // mounted() {
-  //   this.$store.dispatch(`elearning/create/getContent`);
-  // },
+  mounted() {
+    this.$store.dispatch(`elearning/create/getContent`);
+  },
 
   computed: {
     ...mapState("elearning/create", {
       general: "general",
       progress: "progress",
+      chapters: "chapters",
     }),
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
@@ -155,7 +158,6 @@ export default {
 
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-      this.addBorder = true;
     },
   },
 };

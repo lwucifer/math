@@ -11,7 +11,7 @@
         <form class="the-header__search__form" @submit.prevent>
           <input type="text" placeholder="Tìm kiếm" />
           <button type="submit">
-            <IconSearch width="15" height="15" class="fill-white" />
+            <IconSearch width="15" height="15" class="fill-primary" />
           </button>
         </form>
       </div>
@@ -142,13 +142,13 @@
 
       <div v-else class="d-flex">
         <n-link
-          class="btn btn--size-md btn--color-primary btn--square mr-3"
-          :to="'/auth/signin'"
-        >Đăng nhập</n-link>
-        <n-link
-          class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
+          class="btn-signup__header"
           :to="'/auth/signup'"
         >Đăng ký</n-link>
+        <n-link
+          class="btn-signin__header"
+          :to="'/auth/signin'"
+        >Đăng nhập</n-link>
       </div>
     </div>
   </div>

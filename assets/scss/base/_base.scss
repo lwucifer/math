@@ -512,6 +512,9 @@ input:-webkit-autofill:active {
 .w-50 {
   width: 5rem !important;
 }
+.w-80 {
+  width: 8rem !important;
+}
 .w-170 {
   width: 17rem !important;
 }
@@ -528,4 +531,6 @@ input:-webkit-autofill:active {
 
 .vs--single .vs__selected {
   white-space: nowrap;
+.shadow-1 {
+  box-shadow: $shadow-1;
 }

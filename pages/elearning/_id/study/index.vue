@@ -1,10 +1,10 @@
 <template>
   <div>
-    <HeaderCourse />
+    <HeaderCourse @exit="exitStudy" />
     <div class="container" v-if="loading">Loading...</div>
     <div class="container" v-else>
       <div class="row">
-        <div class="col-md-8">
+        <div :class="expand ? 'col-md-12' : 'col-md-8'">
           <div class="box22">
             <div class="lession-screen">
               <img
@@ -26,41 +26,27 @@
               "
             />
             <div class="lession-screen">
-              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
-                >Download</a
-              >
+              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')">Download</a>
             </div>
             <div class="lession-screen" v-if="studyMode === imageMode">
               <img :src="get(payload, 'link', '')" alt />
             </div>
 
             <div class="lession-screen" v-if="studyMode == articleMode">
-              <iframe
-                style="width: 712px"
-                :src="get(payload, 'link', '')"
-              ></iframe>
+              <iframe style="width: 712px" :src="get(payload, 'link', '')"></iframe>
             </div>
 
             <!-- DO EXERCISE -->
             <ElearningExercise v-if="isExerciseMode" />
 
             <div class="elearning-study-tabs">
-              <a
-                :class="{ active: type === 'summary' }"
-                @click="type = 'summary'"
-                >Tổng quan</a
-              >
-              <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
-                >Hỏi đáp</a
-              >
+              <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
+              <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
               <a
                 :class="{ active: type === 'notification' }"
                 @click="type = 'notification'"
-                >Thông báo</a
-              >
-              <a :class="{ active: type === 'review' }" @click="type = 'review'"
-                >Đánh giá</a
-              >
+              >Thông báo</a>
+              <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
             </div>
 
             <TabSummary :info="info" v-if="type === 'summary'" />
@@ -71,11 +57,11 @@
               v-if="type === 'qa'"
               :interactive_questions="interactive_questions"
               @addQuestionSuccess="addQuestionSuccess"
-            /> -->
+            />-->
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div :class="expand ? 'col-md-12' : 'col-md-4'">
           <ElearningCourseSide />
         </div>
       </div>
@@ -150,6 +136,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
     ...mapState("elearning/study/study-info", ["info"]),
+    ...mapState("elearning/study/study", ["expand"]),
 
     isExerciseMode() {
       const isExerciseScreen =
@@ -239,6 +226,10 @@ export default {
       this.interactive_questions = get(res, "data", null);
     },
 
+    exitStudy() {
+      this.$router.go(-1);
+    },
+
     get,
     ...mapMutations("event", ["setStudyMode", "setPayload"])
   }
@@ -249,15 +240,17 @@ export default {
 @import "~/assets/scss/pages/elearning/_study.scss";
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .lession-screen {
   display: flex;
   justify-content: center;
 }
 
-.lession-screen img,
-iframe,
-a {
-  height: 42.6rem;
+.lession-screen {
+  img,
+  iframe,
+  a {
+    height: 42.6rem;
+  }
 }
 </style>
