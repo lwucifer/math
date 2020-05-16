@@ -1,12 +1,12 @@
 <template>
-  <div class="col-md-5">
+  <div class="col-md-4">
     <div
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Trình độ</h2>
-      <app-vue-select
+      <app-select
         class="cc-select"
-        :options="levels"
+        :options="levelOption"
         placeholder="Chọn lớp"
         @input="handleChangeLevel"
         label="name"
@@ -15,7 +15,7 @@
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-vue-select>
+      </app-select>
     </div>
   </div>
 </template>
@@ -58,6 +58,14 @@ export default {
     ...mapState("elearning/public/public-levels", {
       levels: "levels",
     }),
+
+    levelOption() {
+      return this.levels.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.name
+      }));
+    }
   },
 
   methods: {
