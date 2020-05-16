@@ -66,7 +66,16 @@
       :footer="false"
       @close="modalListQuestions = false"
     >
-      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer"/>
+      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer" />
+    </app-modal>
+
+    <app-modal
+      v-if="modalComments"
+      title="Xem nhận xét"
+      :footer="false"
+      @close="modalComments = false"
+    >
+      <ElearningExerciseComments slot="content" />
     </app-modal>
   </div>
 </template>
@@ -80,12 +89,20 @@ import { mapState } from "vuex";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 const IconCheckCircleOutline = () =>
   import("~/assets/svg/v2-icons/check_circle_outline_24px.svg?inline");
-import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
+const ElearningExerciseListQuestions = () =>
+  import(
+    "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions"
+  );
+const ElearningExerciseComments = () =>
+  import(
+    "~/components/page/elearning/study/exercise/ElearningExerciseComments.vue"
+  );
 
 export default {
   components: {
     IconCheckCircleOutline,
-    ElearningExerciseListQuestions
+    ElearningExerciseListQuestions,
+    ElearningExerciseComments
   },
 
   data() {
@@ -94,6 +111,7 @@ export default {
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       modalListQuestions: false,
       isAnswer: true,
+      modalComments: false
     };
   },
 
