@@ -1,9 +1,11 @@
 <template>
-  <div class="box11">
-    <p class="mb-3">
-      <strong>{{ get(progress, "total_lessons", 0) }} Bài giảng</strong>
+  <div class="e-program bg-white shadow-1">
+    <div class="box bg-light-2">
+      <strong>{{ get(progress, "total_lessons", 0) }} Bài học</strong>
       ({{ get(progress, "duration", "") }})
-    </p>
+    </div>
+
+    <app-divider class="my-0" color="disabled" />
 
     <div v-if="progress.type === 'COURSE'">
       <ElearningProgramCourse
@@ -14,46 +16,27 @@
       />
     </div>
     <div v-else>
-      <ElearningProgramItem
-        :lesson="get(progress, 'programs.0.lessons.0', null)"
-      />
+      <ElearningProgramItem :lesson="get(progress, 'programs.0.lessons.0', null)" />
     </div>
 
     <!-- Bai TEST -->
-    <div class="elearning-lesson-side__course" v-if="tests">
-      <div class="color-yellow" style="display: flex;">
-        <IconFileAlt class="mr-2 fill-yellow" height="16" width="16" />
-        <span class="text-clickable" @click.prevent="handleDoTest"
-          >Làm bài kiểm tra</span
-        >
-      </div>
-    </div>
+    <a v-if="tests" class="e-program__test" href @click.prevent="handleDoTest">
+      <IconFileAlt class="icon" />&nbsp;Làm bài kiểm tra
+    </a>
   </div>
 </template>
 
 <script>
-import IconPlay from "~/assets/svg/icons/play.svg?inline";
-import IconUpO from "~/assets/svg/icons/up-o.svg?inline";
-import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
-import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
-import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
-import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import { get } from "lodash";
-import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
-import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
-
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 
+import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
+import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
+import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
+
 export default {
   components: {
-    IconPlay,
-    IconDownO,
-    IconUpO,
-    IconFileCheckAlt,
-    IconFileEditAlt,
-    IconFileCheck,
     IconFileAlt,
     ElearningProgramItem,
     ElearningProgramCourse
@@ -61,7 +44,7 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    ...mapGetters("elearning/study/study-exercise", ["tests"]),
+    ...mapGetters("elearning/study/study-exercise", ["tests"])
   },
 
   methods: {
@@ -82,10 +65,14 @@ export default {
       // get list TEST
       const testReq = {
         elearning_id: this.progress.id,
-        category: EXERCISE_CATEGORIES.TEST,
-      }
+        category: EXERCISE_CATEGORIES.TEST
+      };
       this.elearningSudyElearningExerciseList(testReq);
     }
   }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/study/_elearning-program.scss";
+</style>

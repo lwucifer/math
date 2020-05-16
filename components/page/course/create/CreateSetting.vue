@@ -81,9 +81,10 @@
         <h5 class="mb-2">Giá bán</h5>
 
         <app-input
-          v-model="payload.fee"
+          :value="numeral(payload.fee).format()"
           @onFocus="(event) => event.target.select()"
-          type="number"
+          type="text"
+          @input="handleChangeFee"
           class="text-primary font-weight-semi-bold w-170"
         >
           <template #unit>đ</template>
@@ -101,9 +102,10 @@
 
         <div class="d-flex align-item-center">
           <app-input
-            v-model="payload.price"
+            :value="numeral(payload.price).format()"
             @onFocus="(event) => event.target.select()"
-            type="number"
+            type="text"
+            @input="handleChangePrice"
             class="text-primary font-weight-semi-bold w-170 mb-0"
           >
             <template #unit>đ</template>
@@ -148,7 +150,7 @@
           @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
-          :disabled="!is_submit"
+          :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -195,11 +197,9 @@ export default {
 
   data() {
     return {
-      percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
       free: "",
-      is_submit: false,
       payload: {
         comment_allow: "",
         price: 0,
@@ -211,8 +211,7 @@ export default {
   },
   mounted() {
     this.handleChangeSetting();
-    // this.$store.dispatch(`elearning/create/getSetting`);
-    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
+    this.$store.dispatch(`elearning/create/getSetting`);
   },
 
   watch: {
@@ -229,9 +228,38 @@ export default {
       general: "general",
       setting: "setting",
     }),
+    submit() {
+      if (this.payload.comment_allow === "") return false;
+      if (this.payload.privacy === "") return false;
+      if (this.free === "") return false;
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return false;
+        }
+        // if (!this.payload.price) {
+        //   return false;
+        // }
+      }
+      return true;
+    },
+    percent_price() {
+      let percent_price = "";
+      const _fee = numeral(get(this, "payload.fee", 0)).value();
+      const _price = numeral(get(this, "payload.price", 0)).value();
+      if (_fee && _price) {
+        percent_price = numeral((_price - _fee) / _fee).format("0%");
+      }
+      return percent_price;
+    },
   },
 
   methods: {
+    handleChangePrice(e) {
+      this.payload.price = numeral(e).format();
+    },
+    handleChangeFee(e) {
+      this.payload.fee = numeral(e).format();
+    },
     handleChangeSetting() {
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.comment_allow = get(this, "setting.comment_allow", "");
@@ -255,22 +283,6 @@ export default {
       if (toNumber(get(this, "setting.fee", "-1")) === 0) {
         this.free = 2;
       }
-    },
-
-    handleCheckSubmit() {
-      this.handleSetPercent();
-      if (this.payload.comment_allow === "") return (this.is_submit = false);
-      if (this.payload.privacy === "") return (this.is_submit = false);
-      if (this.free === "") return (this.is_submit = false);
-      if (this.free == 1) {
-        if (!this.payload.fee) {
-          return (this.is_submit = false);
-        }
-        if (!this.payload.price) {
-          return (this.is_submit = false);
-        }
-      }
-      this.is_submit = true;
     },
 
     handleChangePrivacy(privacy) {
@@ -300,6 +312,8 @@ export default {
     async handleSaveSetting() {
       this.confirmLoading = true;
       this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.fee = numeral(this.payload.fee).value();
+      this.payload.price = numeral(this.payload.price).value();
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
