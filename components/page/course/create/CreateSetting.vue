@@ -148,7 +148,7 @@
           @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
-          :disabled="!is_submit"
+          :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -195,11 +195,9 @@ export default {
 
   data() {
     return {
-      percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
       free: "",
-      is_submit: false,
       payload: {
         comment_allow: "",
         price: 0,
@@ -212,7 +210,6 @@ export default {
   mounted() {
     this.handleChangeSetting();
     this.$store.dispatch(`elearning/create/getSetting`);
-    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
   },
 
   watch: {
@@ -229,6 +226,29 @@ export default {
       general: "general",
       setting: "setting",
     }),
+    submit() {
+      if (this.payload.comment_allow === "") return false;
+      if (this.payload.privacy === "") return false;
+      if (this.free === "") return false;
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return false;
+        }
+        // if (!this.payload.price) {
+        //   return false;
+        // }
+      }
+      return true;
+    },
+    percent_price() {
+      let percent_price = "";
+      const _fee = numeral(get(this, "payload.fee", 0)).value();
+      const _price = numeral(get(this, "payload.price", 0)).value();
+      if (_fee && _price) {
+        percent_price = numeral((_price - _fee) / _fee).format("0%");
+      }
+      return percent_price;
+    },
   },
 
   methods: {
@@ -255,22 +275,6 @@ export default {
       if (toNumber(get(this, "setting.fee", "-1")) === 0) {
         this.free = 2;
       }
-    },
-
-    handleCheckSubmit() {
-      this.handleSetPercent();
-      if (this.payload.comment_allow === "") return (this.is_submit = false);
-      if (this.payload.privacy === "") return (this.is_submit = false);
-      if (this.free === "") return (this.is_submit = false);
-      if (this.free == 1) {
-        if (!this.payload.fee) {
-          return (this.is_submit = false);
-        }
-        if (!this.payload.price) {
-          return (this.is_submit = false);
-        }
-      }
-      this.is_submit = true;
     },
 
     handleChangePrivacy(privacy) {
