@@ -37,7 +37,13 @@
       </div>
     </div>
 
-    <app-modal-confirm :width="476" v-if="inputCode" @cancel="closeModalInput">
+    <app-modal-confirm 
+      centered
+      :width="476" 
+      v-if="inputCode" 
+      @cancel="closeModalInput"
+      >
+      
       <template #title>
         <h4 class="mb-3">Bài giảng riêng tư</h4>
       </template>
@@ -73,6 +79,7 @@
 
 
     <app-modal-notify 
+      centered
       v-if="inputCodeSuccess"
       type="success" 
       title="Gửi yêu cầu thành công!"
