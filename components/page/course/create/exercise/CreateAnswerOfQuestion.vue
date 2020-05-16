@@ -61,6 +61,10 @@ export default {
     }
   },
 
+  mounted() {
+    console.log(this.answer)
+  },
+
   computed: {
     text() {
       if (get(this, "index", "") === 0) return "A";

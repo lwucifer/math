@@ -8,7 +8,7 @@
 
     <CreateAnswerOfQuestion
       v-for="(answer, index) in get(payload, 'answers', [])"
-      :key="index"
+      :key="answer.id"
       :answer="answer"
       :index="index"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
