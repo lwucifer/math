@@ -525,3 +525,7 @@ input:-webkit-autofill:active {
   opacity: 0.4;
   filter: alpha(opacity=40); /* For IE8 and earlier */
 }
+
+.vs--single .vs__selected {
+  white-space: nowrap;
+}

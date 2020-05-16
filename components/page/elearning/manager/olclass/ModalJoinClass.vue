@@ -153,26 +153,5 @@ export default {
 </script>
 
 <style lang="scss">
-.invite-student-modal .app-modal-content {
-  padding: 2rem 1.5rem;
-}
-strong {
-  color: #222;
-}
-.student-list {
-  background: #fbfbfb;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
-  .item {
-    display: block;
-    margin-bottom: 1rem;
-    .app-checkbox {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    span {
-      vertical-align: middle;
-    }
-  }
-}
+@import "~/assets/scss/components/elearning/olclass/join-class.scss";
 </style>

@@ -66,7 +66,9 @@
     <!--Options group-->
 
     <!--Table-->
+    <div v-if="loading" class="pl-4">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -134,6 +136,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       showFilter: false,
       tab: 1,
       heads: [
@@ -179,7 +182,6 @@ export default {
         query_date: null,
         search_type: null
       },
-      loading: false
     };
   },
   computed: {

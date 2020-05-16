@@ -172,28 +172,5 @@ export default {
 </script>
 
 <style lang="scss">
-.invite-student-modal .app-modal-content {
-  padding: 2rem 1.5rem;
-}
-.student-list {
-  background: #fbfbfb;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
-  max-height: calc(100vh - 300px);
-  overflow-y: auto;
-  .item {
-    display: block;
-    margin-bottom: 1rem;
-    .app-checkbox {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    span {
-      vertical-align: middle;
-    }
-  }
-}
-strong {
-  color: #222;
-}
+@import "~/assets/scss/components/elearning/olclass/invite-student.scss";
 </style>
