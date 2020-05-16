@@ -227,7 +227,7 @@ export default {
     },
 
     exitStudy() {
-      this.$router.go(-1);
+      this.$router.push('/elearning/mycourses');
     },
 
     get,

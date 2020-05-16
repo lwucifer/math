@@ -42,7 +42,13 @@
 
       <div class="ml-auto">
         <span class="text-dark body-3 mr-3">Sắp xếp</span>
-        <app-select v-model="sort" :options="sortOpts" placeholder size="sm" />
+        <app-select
+          v-model="sort"
+          :options="sortOpts"
+          @change="handleChangeSort"
+          placeholder
+          size="sm"
+        />
       </div>
     </div>
 
@@ -116,7 +122,8 @@ import Search from "~/services/elearning/public/Search";
 import {
   ELEARNING_TYPES_VALUE,
   PAGE_SIZE,
-  ELEARNING_TYPES_TEXT
+  ELEARNING_TYPES_TEXT,
+  SORT_ELEARNING
 } from "~/utils/constants";
 import { addAllOptionSelect } from "~/utils/common";
 
@@ -136,7 +143,7 @@ export default {
 
   data() {
     return {
-      fee: null,
+      fee: -1,
       feeOpts: [
         { value: -1, text: "Tất cả" },
         { value: 1, text: "Miễn phí" },
@@ -146,7 +153,7 @@ export default {
         // { value: 2, text: "Từ 200k đến 500k" },
         // { value: 3, text: "Lơn hơn 500k" }
       ],
-      time: null,
+      time: -1,
       timeOpts: [
         { value: -1, text: "Tất cả" },
         { value: 0, text: "10 phút" },
@@ -154,21 +161,21 @@ export default {
         { value: 2, text: "1 giờ" },
         { value: 3, text: "3 giờ" }
       ],
-      level: null,
+      level: -1,
       // levelOpts: [
       //   { value: 0, text: "Trình độ 1" },
       //   { value: 1, text: "Trình độ 2" },
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      sort: 0,
+      sort: SORT_ELEARNING.RELATED,
       sortOpts: [
-        { value: 0, text: "Mới nhất" },
-        { value: 1, text: "Liên quan nhất" },
-        { value: 2, text: "Đánh giá cao nhất" },
-        { value: 3, text: "Nhiều bình luận nhất" },
-        { value: 4, text: "Giá thấp nhất" },
-        { value: 5, text: "Giá cao nhất" }
+        { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
+        { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
+        { value: SORT_ELEARNING.COMMENT, text: "Nhiều bình luận nhất" },
+        { value: SORT_ELEARNING.NEWEST, text: "Mới nhất" },
+        { value: SORT_ELEARNING.PRICE_ASC, text: "Giá thấp nhất" },
+        { value: SORT_ELEARNING.PRICE_DESC, text: "Giá cao nhất" }
       ],
       isFilter: false,
       lessons: [],
@@ -190,7 +197,8 @@ export default {
         level: -1,
         free: -1,
         page: 1,
-        size: PAGE_SIZE.DEFAULT
+        size: PAGE_SIZE.DEFAULT,
+        sort: SORT_ELEARNING.RELATED
       },
 
       pagination: {
@@ -319,6 +327,13 @@ export default {
       this.payload.page = 1;
       this.tab = _newVal;
       this.payload.type = _newVal;
+      this.getLessons();
+    },
+
+    handleChangeSort(_newVal, _selectedVal) {
+      console.log("[handleChangeSort]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.sort = _newVal;
       this.getLessons();
     },
 

@@ -227,3 +227,12 @@ export const DAY_SECTION = {
 export const LESSION_TYPE = {
   VIDEO: "VIDEO"
 };
+
+export const SORT_ELEARNING = {
+  RELATED: "RELATED",
+  RATE: "RATE",
+  COMMENT: "COMMENT",
+  NEWEST: "NEWEST",
+  PRICE_ASC: "PRICE_ASC",
+  PRICE_DESC: "PRICE_DESC",
+}

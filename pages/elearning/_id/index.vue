@@ -156,8 +156,8 @@ export default {
         setWrapperSize: true,
         watchOverflow: true,
       },
-      inputCode: true,
-      inputCodeSuccess: true
+      inputCode: false,
+      inputCodeSuccess: false,
     };
   },
 
