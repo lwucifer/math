@@ -60,11 +60,9 @@ export default {
     };
   },
 
-  // async mounted() {
-  //   this.$store.dispatch("elearning/create/getLessons");
-  //   this.$store.dispatch("elearning/create/getExams");
-  //   this.$store.dispatch(`elearning/create/getSetting`);
-  // },
+  mounted() {
+    // this.$store.dispatch("elearning/create/reset");
+  },
 
   beforeMount() {
     window.addEventListener("beforeunload", this.preventNav);
