@@ -12,7 +12,7 @@
         <div class="evlc-item__head-right d-flex align-items-center ml-auto">
           <span class="mr-3">{{ get(chapter, "lessons.length", 0) }} Bài</span>
           <button class="evlc-item__btn evlc-item__btn-collapse active">
-            <IconAngleDown class="icon" />
+            <IconAngleDown class="icon fill-primary" />
           </button>
         </div>
       </div>
@@ -25,7 +25,7 @@
         >
           <div class="d-flex align-items-center py-3">
             <div class="d-flex align-items-center mr-4">
-              <IconPlayCircle class="icon subheading mr-2 text-primary" />Bài
+              <IconPlay class="icon subheading mr-2 fill-primary" />Bài
               {{ index_lesson + 1 }}: {{ get(lesson, "name", "") }}
             </div>
             <div class="ml-auto">{{ get(lesson, "duration", "") }}</div>
@@ -69,15 +69,14 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import { get } from "lodash";
 import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
-const IconPlayCircle = () =>
-  import("~/assets/svg/design-icons/play-circle.svg?inline");
+import IconPlay from '~/assets/svg/icons/play.svg?inline';
 import { mapState } from "vuex";
 
 export default {
   components: {
     IconFileAlt,
     IconAngleDown,
-    IconPlayCircle,
+    IconPlay,
     IconBooks,
     IconDownload,
   },
