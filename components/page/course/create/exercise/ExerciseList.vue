@@ -14,7 +14,7 @@
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
           >
-            <IconPlus2 class="mr-3 fill-primary" /> Thêm câu hỏi
+            <IconPlus2 class="mr-3 fill-primary font-weight-semi-bold" /> Thêm câu hỏi
           </button>
           <button
             class="cc-box__btn cc-box__btn-collapse"
