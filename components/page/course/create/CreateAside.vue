@@ -118,6 +118,42 @@ export default {
   },
 
   watch: {
+    general: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    lessons_lecture: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    chapters: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    setting: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    lessons: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
+    exams: {
+      handler: function() {
+        this.$store.dispatch(`elearning/create/getProgress`);
+      },
+      deep: true,
+    },
     progress: {
       handler: function() {
         let checked = get(this, "progress.general_status", false) == 1;
