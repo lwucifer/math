@@ -26,7 +26,7 @@ const state = () => ({
     attachments: []
   },
   currentQuestionId: null,
-  autoSubmission: null
+  autoSubmission: null,
 });
 
 /**
@@ -427,7 +427,8 @@ const mutations = {
     _auto
   ) {
     state.autoSubmission = _auto;
-  }
+  },
+
 };
 
 export default {

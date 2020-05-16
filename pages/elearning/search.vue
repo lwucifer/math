@@ -3,8 +3,7 @@
     <h1 class="elearning-search__heading heading-3">
       <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
       <span class="body-2 font-weight-normal">
-        (
-        <b>50</b> bài giảng - <b>20</b> khoá học)
+        (<b>{{ totalSummary }}</b> {{ lessonType }})
       </span>
     </h1>
 
@@ -114,7 +113,11 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
-import { ELEARNING_TYPES_VALUE, PAGE_SIZE } from "~/utils/constants";
+import {
+  ELEARNING_TYPES_VALUE,
+  PAGE_SIZE,
+  ELEARNING_TYPES_TEXT
+} from "~/utils/constants";
 import { addAllOptionSelect } from "~/utils/common";
 
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
@@ -243,6 +246,15 @@ export default {
           text: c.name
         };
       });
+    },
+
+    totalSummary() {
+      return get(this, "pagination.totalElements", 0);
+    },
+    lessonType() {
+      const lessionType = this.payload.type;
+      console.log("[lessonType]", lessionType);
+      return ELEARNING_TYPES_TEXT[lessionType];
     }
   },
 

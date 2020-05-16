@@ -1,19 +1,23 @@
 <template>
-  <div class="e-program-item" :class="get(lesson, 'completes', 0) ? 'active' : ''">
+  <div
+    class="e-program-item"
+    :class="get(lesson, 'completes', 0) ? 'active' : ''"
+  >
     <div class="e-program-item__left">
       <app-checkbox
         :checked="lesson.status == lessonCompleted"
-        :style="{ 'pointer-events': lesson.status == lessonCompleted ? 'none' : 'inherit' }"
+        :style="{
+          'pointer-events':
+            lesson.status == lessonCompleted ? 'none' : 'inherit'
+        }"
         @change="isShowCompleteStudy = true"
       />
     </div>
 
     <div class="e-program-item__right">
-      <a
-        href
-        class="e-program-item__title"
-        @click.prevent="handleStuty(lesson)"
-      >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
+      <a href class="e-program-item__title" @click.prevent="handleStuty(lesson)"
+        >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a
+      >
 
       <div class="e-program-item__bottom">
         <span v-if="isShowDuration" class="d-inline-flex align-items-center">
@@ -66,7 +70,7 @@
 
 <script>
 import { get } from "lodash";
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
@@ -116,6 +120,8 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/study/study-exercise", ["isReloadExerciseList"]),
+
     completes() {
       return get(this.lesson, "completes", 0);
     },
@@ -237,6 +243,15 @@ export default {
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
+    }
+  },
+
+  watch: {
+    isReloadExerciseList(_newVal) {
+      console.log("[isReloadExerciseList]", _newVal);
+      if (_newVal) {
+        this.handleGetExercises();
+      }
     }
   }
 };
