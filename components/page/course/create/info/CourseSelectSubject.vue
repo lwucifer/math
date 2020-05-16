@@ -4,9 +4,9 @@
       class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
     >
       <h2 class="cgi-form-title heading-6">Môn học</h2>
-      <app-select
+      <app-vue-select
         class="cc-select"
-        :options="subjectsOpt"
+        :options="subjects"
         placeholder="Chọn môn học"
         @input="handleChangeSubject"
         label="name"
@@ -15,7 +15,7 @@
         <template slot="placeholder-icon">
           <IconAngleDown class="icon" />
         </template>
-      </app-select>
+      </app-vue-select>
     </div>
   </div>
 </template>
