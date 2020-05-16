@@ -1,0 +1,17 @@
+.e-program {}
+
+.e-program__test {
+    display: flex;
+    align-items: center;
+    color: $color-warning;
+    text-decoration: none;
+    padding: 2rem 1.5rem;
+
+    .icon {
+        font-size: 2rem;
+    }
+
+    &:hover {
+        background-color: $color-text-light-2;
+    }
+}
