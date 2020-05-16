@@ -213,8 +213,18 @@ export default {
   },
 
   mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    this.handleFetchElearningGeneral(elearning_id);
+    this.payload = {
+      avatar: "",
+      benefit: [...get(this, "general.benefit", [])],
+      description: get(this, "general.description", ""),
+      level: get(this, "general.level", ""),
+      name: get(this, "general.name", ""),
+      subject: get(this, "general.subject.id", ""),
+      cover_image: "",
+      type: get(this, "general.type", ""),
+    };
+    // const elearning_id = getParamQuery("elearning_id");
+    // this.handleFetchElearningGeneral(elearning_id);
   },
 
   watch: {
@@ -255,7 +265,7 @@ export default {
       }
 
       const lengh_description = get(this, "payload.description.length", 0);
-      if (lengh_description > 0 && lengh_description < 300) {
+      if (lengh_description > 0 && lengh_description < 100) {
         return false;
       }
       if (lengh_description > 2000) {
@@ -286,8 +296,8 @@ export default {
         this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
         return;
       }
-      if (value.length < 300) {
-        this.error.description = "Mô tả không được ít hơn 300 ký tự";
+      if (value.length < 100) {
+        this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";
         return;
       }
       if (value.length > 2000) {

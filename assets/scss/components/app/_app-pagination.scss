@@ -18,7 +18,23 @@
         padding: 0 1.2rem;
         line-height: 3.2rem;
         text-align: center;
-
+        &.link-arrow {
+            height: 2.2rem;
+            width: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0px 1px 5px rgba(86, 86, 86, 0.25);
+            border: 1px solid $color-border;
+            svg {
+                height: 8px;
+                width: 8px;
+                path {
+                    fill: $color-primary;
+                }
+            }
+        }
         &:not(.active):not(.disable) {
             cursor: pointer;
             &:hover {

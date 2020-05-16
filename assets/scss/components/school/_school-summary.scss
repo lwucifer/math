@@ -24,7 +24,7 @@
 
     .school-summary__info {
         padding-left: 2rem;
-        width: 25%;
+        width: 30%;
         &__title {
             font-size: 2rem;
             margin-bottom: 2rem;
@@ -33,16 +33,15 @@
         &__contact {
             p {
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 margin-bottom: 2rem;
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 line-height: 16px;
-                color: #999999;
                 i {
                     line-height: 1;
                 }
                 svg {
-                    width: 2rem;
+                    height: 1.6rem;
                     margin-right: 0.5rem;
                 }
             }
@@ -57,7 +56,7 @@
         justify-content: flex-end;
         align-items: baseline;
         align-content: stretch;
-        width: 50%;
+        width: 45%;
 
         &__item {
             background: #fbfbfb;

@@ -123,7 +123,7 @@ export default {
   watch: {
     profileList: {
       handler: function() {
-        this.organization.code = get(this, "profileList.organization.code", "");
+        this.organization.code = get(this, "profileList.code", "");
         this.organization.name = get(this, "profileList.organization.name", "");
         this.organization.phone = get(
           this,

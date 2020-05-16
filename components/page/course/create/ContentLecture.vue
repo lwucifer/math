@@ -27,13 +27,13 @@
               @click="isShowDetailLesson = !isShowDetailLesson"
               v-if="get(lessons, 'length', 0)"
             >
-              <IconAngleDown class="icon" v-if="!isShowDetailLesson" />
-              <IconAngleUp class="icon" v-else />
+              <IconAngleDown class="icon"  width="20px" height="20px" v-if="!isShowDetailLesson" />
+              <IconAngleUp class="icon"  width="20px" height="20px" v-else />
             </button>
           </div>
         </div>
 
-        <div class="cc-box__body">
+        <div class="cc-box__body" style="border-top: 1px solid #E0E0E0">
           <CreateLessonOfElearning
             v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
@@ -132,38 +132,35 @@ export default {
       tabVideo: "upload",
       tabDocument: "typing",
       tabAddDocument: "upload",
-      isShowFormAddLesson: false,
-      isShowDetailLesson: false,
+      isShowDetailLesson: true,
       isEditCourseName: false,
       courseNameModel: "",
       lesson: null,
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
+  // mounted() {
+  //   this.$store.dispatch(`elearning/create/getContent`);
+  // },
 
-  updated() {
-    console.log(this.lessons);
-  },
+  // updated() {
+  //   console.log(this.lessons);
+  // },
 
   watch: {
     lessons: {
       handler: function() {
         if (get(this, "lessons.length", 0)) {
-          this.isShowFormAddLesson = false;
           this.isShowDetailLesson = true;
           return;
         }
-        this.isShowFormAddLesson = false;
         this.isShowDetailLesson = false;
       },
       deep: true,
     },
     general: {
       handler: function() {
-        this.$store.dispatch(`elearning/create/getContent`);
+        // this.$store.dispatch(`elearning/create/getContent`);
         this.courseNameModel = get(this, "general.name", "");
       },
       deep: true,
@@ -228,7 +225,6 @@ export default {
     },
 
     handleEditLesson(lesson) {
-      this.isShowFormAddLesson = true;
       this.isShowDetailLesson = false;
       this.lesson = lesson;
     },
@@ -263,17 +259,14 @@ export default {
 
     // handleAddLesson(e) {
     //   e.preventDefault();
-    //   this.isShowFormAddLesson = !this.isShowFormAddLesson;
     // },
 
     toggleShowAddLesson() {
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id && get(this, "lessons.length", 0)) {
-        this.isShowFormAddLesson = false;
         this.isShowDetailLesson = true;
         return;
       }
-      this.isShowFormAddLesson = false;
       this.isShowDetailLesson = false;
     },
 

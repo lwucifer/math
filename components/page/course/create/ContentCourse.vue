@@ -13,7 +13,7 @@
           <div
             class="cc-box__head"
             style="padding: 1.5rem"
-            :class="{ 'add-border': addBorder }"
+            :class="{ 'add-border-bottom': addBorder }"
           >
             <div class="cc-box__head-left flex-grow mr-4">
               <EditCourseName :defaultName="get(this, 'general.name', '')" />
@@ -130,9 +130,9 @@ export default {
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
+  // mounted() {
+  //   this.$store.dispatch(`elearning/create/getContent`);
+  // },
 
   computed: {
     ...mapState("elearning/create", {
@@ -155,7 +155,7 @@ export default {
 
     toggleAddChapter() {
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
-      this.addBorder = !this.addBorder;
+      this.addBorder = true;
     },
   },
 };

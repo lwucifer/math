@@ -28,7 +28,7 @@
         </li>
       </ul>
       <div v-if="isAuthenticated" class="the-header__user">
-        <study-space v-if="isStudentRole"/>
+        <study-space />
 
         <button class="item" @click="redirectMessages">
           <IconMessager />
@@ -225,10 +225,10 @@ export default {
       this.checkPayload = true;
     });
     // console.log("detectBrowser", detectBrowser());
-    this.cartList();
+    this.isAuthenticated && this.cartList();
   },
   created() {
-    this.getNotiUnread();
+    this.isAuthenticated && this.getNotiUnread();
   },
   methods: {
     get,

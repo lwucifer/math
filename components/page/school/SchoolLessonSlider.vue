@@ -1,25 +1,18 @@
 <template>
   <div class="school-lesson-slider">
     <h3 class="school-lesson-slider__title" v-if="title">{{ title }}</h3>
-    <div v-swiper:mySwiper="currentSwiperOptions" class="" v-on="$listeners">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(lesson, index) in lessons" :key="index">
-          <div class="slider-item" @click="$emit('click-item', lesson, index)">
+    <div>
+      <app-carousel :options="defaultSwiperOptions">
+        <template slot="default" slot-scope="{ classes }">
+          <div
+            v-for="(lesson, index) in lessons"
+            :key="index"
+            :class="classes"
+          >
             <school-lesson-item :lesson="lesson" />
           </div>
-        </div>
-      </div>
-
-      <div class="swiper-button-prev" v-if="currentSwiperOptions.navigation">
-        <IconChevronLeft />
-      </div>
-      <div class="swiper-button-next" v-if="currentSwiperOptions.navigation">
-        <IconChevronRight />
-      </div>
-      <div
-        class="swiper-pagination"
-        v-if="currentSwiperOptions.pagination"
-      ></div>
+        </template>
+      </app-carousel>
     </div>
   </div>
 </template>
@@ -52,13 +45,31 @@ export default {
 
   data() {
     const defaultSwiperOptions = {
-      slidesPerView: "auto",
-      spaceBetween: 5,
-      // navigation: {
-      //   nextEl: ".swiper-button-next",
-      //   prevEl: ".swiper-button-prev"
-      // },
-      navigation: false,
+      slidesPerView: 4,
+      spaceBetween: 24,
+      breakpoints: {
+        1366: {
+          slidesPerView: 4,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+        },
+      },
+      navigation: true,
       pagination: false,
       showName: false
     };

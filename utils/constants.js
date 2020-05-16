@@ -47,6 +47,11 @@ export const ELEARNING_TYPES = {
     LECTURE: "LECTURE",
 };
 
+export const ELEARNING_TYPES_VALUE = {
+    COURSE: "course",
+    LECTURE: "lecture",
+};
+
 export const ELEARNING_STATUSES = {
     PASSED: "PASSED",
     FAILED: "FAILED",
@@ -214,4 +219,9 @@ export const DAY_SECTION = {
     MORNING: 1,
     AFTERNOON: 2,
     EVENING: 3,
+}
+
+export const LESSION_TYPE = {
+    VIDEO: "VIDEO",
+    
 }

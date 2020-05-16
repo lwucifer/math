@@ -4,13 +4,13 @@
       <div class="row">
         <!--Thumnail-->
         <div class="school-summary__thumnail">
-          <img :src="get(school, 'avatar.medium', '')" alt />
+          <img :src="get(school, 'cover.medium', '')" alt />
         </div>
         <!--End Thumnail-->
 
         <!--Contact-->
         <div class="school-summary__info">
-          <h2 class="school-summary__info__title text-primary">
+          <h2 class="school-summary__info__title text-primary h4">
             {{ get(school, "name", "") }}
           </h2>
           <div class="school-summary__info__contact">
@@ -76,7 +76,7 @@
     <!--Intro-->
     <div class="partial">
       <div class="school-summary__intro">
-        <h4>Giới thiệu</h4>
+        <h5 class="font-weight-normal color-text-dark">Giới thiệu</h5>
         <p>{{ description }}</p>
         <div class="text-center mt-3" v-if="load_more">
           <a @click="handleLoadMore" to class="color-primary">Xem thêm</a>
@@ -95,8 +95,6 @@ import IconEmail from "~/assets/svg/v2-icons/email_24px.svg?inline";
 import IconCode from "~/assets/svg/v2-icons/insert_link_24px.svg?inline";
 import { get } from "lodash";
 import numeral from "numeral";
-
-const lengthDescription = 300;
 
 export default {
   components: {
@@ -117,23 +115,22 @@ export default {
 
   data() {
     return {
-      description: get(this, "school.description", "").substring(
-        0,
-        lengthDescription
-      ),
-      load_more: get(this, "school.description.length", 0) > lengthDescription,
+      lengthDescription: 300,
     };
   },
 
-  watch: {
-    school: {
-      handler: function() {
-        this.description = get(this, "school.description", "").substring(
+  computed: {
+    description() {
+      if (this.load_more) {
+        return get(this, "school.description", "").substring(
           0,
-          lengthDescription
+          this.lengthDescription
         );
-      },
-      deep: true,
+      }
+      return get(this, "school.description", "");
+    },
+    load_more() {
+      return get(this, "school.description.length", 0) > this.lengthDescription;
     },
   },
 
@@ -141,8 +138,7 @@ export default {
     get,
     numeral,
     handleLoadMore() {
-      this.load_more = false;
-      this.description = get(this, "school.description", "");
+      this.lengthDescription = get(this, "info.description.length", 0);
     },
   },
 };

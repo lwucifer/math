@@ -1,6 +1,6 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
-    <div class="mr-3 mb-3">
+    <div class="mr-3">
       <strong>Chương</strong> {{ index + 1 }}:
       <input
         v-if="isEditChaperName"
@@ -8,6 +8,7 @@
         ref="inputChaperName"
         class="cc-box__input-title bg-input-gray mb-0"
         type="text"
+        maxlength="60"
       />
 
       <h3 v-else class="d-inline-block body-2 mr-3">
@@ -122,6 +123,7 @@ export default {
 
       if (get(res, "success", false)) {
         this.$store.dispatch(`elearning/create/getContent`);
+        this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(get(res, "message", "Thành công"));
         return;
       }

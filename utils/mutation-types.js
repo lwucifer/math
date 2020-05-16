@@ -75,6 +75,10 @@ export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
 
+export const ELEARNING_SEARCH = {
+    SET_ELEARNING_SEARCH_LIST: "setElearningPublicElearningList",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     SET_ELEARNING_PUBLIC_SUMMARY_LIST: "setElearningPublicSummaryList",
 };
@@ -367,6 +371,7 @@ export const ELEARNING_STUDY_ARCHIVE = {
 export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
     SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_ELEARNING_EXERCISE_TEST_LIST: "setStudyElearningExerciseTestList",
     SET_STUDY_ELEARNING_CURRENT_ID: "setStudyElearningCurrentId",
     SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
