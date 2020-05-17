@@ -32,14 +32,14 @@
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
-        size="sm"
+        size="md"
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Hủy</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
+        size="md"
         @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >

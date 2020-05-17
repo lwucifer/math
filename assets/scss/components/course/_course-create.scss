@@ -75,6 +75,10 @@
     padding: 2rem;
 }
 
+.cc-panel__body-modifer {
+    padding: 1rem 2rem;
+}
+
 .cc-box {
     background-color: #fff;
     border: 1px solid $color-border;
@@ -92,9 +96,10 @@
     margin-bottom: -1px;
 
     &:hover {
-        /deep/ .cc-box__btn-edit-hover {
-            visibility: visible;
-            opacity: 1;
+        .cc-box__btn-edit-hover {
+            // visibility: visible;
+            // opacity: 1;
+            display: block;
         }
     }
 }
@@ -140,8 +145,9 @@
 }
 
 .cc-box__btn-edit-hover {
-    visibility: hidden;
-    opacity: 0;
+    // visibility: hidden;
+    // opacity: 0;
+    display: none;
 
     svg {
         fill: $color-primary;

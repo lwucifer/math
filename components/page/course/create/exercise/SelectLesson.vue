@@ -1,19 +1,20 @@
 <template>
   <div class="">
-    <app-vue-select
+    <app-select
       class="cc-select"
       id="require"
-      :options="lessons"
+      :options="lessonsOpt"
       placeholder="Chọn bài học"
       label="name"
       size="md"
       style="width: 100%; height: 40px"
-      @input="handleSelectLesson"
+      @change="handleSelectLesson"
+      :defaultValue="defaultValue"
     >
       <template slot="placeholder-icon">
         <IconAngleDown class="icon" />
       </template>
-    </app-vue-select>
+    </app-select>
   </div>
 </template>
 
@@ -32,11 +33,25 @@ export default {
       type: Array,
       default: [],
     },
+    defaultValue: {
+      type: [Number, String],
+      default: null
+    }
+  },
+
+  computed: {
+    lessonsOpt() {
+      return this.lessons.map(item => ({
+          ...item,
+          value: item.id,
+          text: item.name
+      }))
+    }
   },
 
   methods: {
     handleSelectLesson(lesson) {
-      this.$store.dispatch("elearning/create/getLesson", get(lesson, "id", ""));
+      this.$store.dispatch("elearning/create/getLesson", lesson);
     },
   },
 };
