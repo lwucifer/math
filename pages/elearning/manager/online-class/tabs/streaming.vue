@@ -54,9 +54,8 @@
     <!--Options group-->
 
     <!--Table-->
-    <div v-if="loading" class="pl-4">Loading...</div>
     <app-table
-      v-else
+      :loading="loading"
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -255,7 +254,8 @@ export default {
       }
     },
 
-    formatAMPM(date) {
+    formatAMPM(time) {
+      let date = new Date(time.getTime() + 7*60*60*1000);
       var hours = date.getHours();
       var minutes = date.getMinutes();
       var ampm = hours >= 12 ? "PM" : "AM";

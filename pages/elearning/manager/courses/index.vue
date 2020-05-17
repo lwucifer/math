@@ -115,9 +115,8 @@
           </div>
 
           <!--Table-->
-          <div v-if="loading" class="pl-4">Loading...</div>
           <app-table
-            v-else
+            :loading="loading"
             :heads="currentHeads"
             :pagination="pagination"
             @pagechange="onPageChange"
@@ -146,8 +145,8 @@
                 <span v-else>Miễn phí</span>
               </td>
             </template>
-            <template v-slot:cell(created)="{ row }">
-              <td>{{convertDate(row.created)}}</td>
+            <template v-slot:cell(publish_date)="{ row }">
+              <td>{{convertDate(row.publish_date)}}</td>
             </template>
 
             <template v-slot:actions="{row}">
@@ -276,7 +275,7 @@ export default {
           text: "Hiển thị"
         },
         {
-          name: "created",
+          name: "publish_date",
           text: "Ngày đăng",
           sort: true
         },
@@ -303,11 +302,11 @@ export default {
           sort: true
         },
         {
-          name: "hide",
+          name: "privacy",
           text: "Hiển thị"
         },
         {
-          name: "created",
+          name: "publish_date",
           text: "Ngày tạo",
           sort: true
         }
@@ -329,11 +328,11 @@ export default {
           sort: true
         },
         {
-          name: "hide",
+          name: "privacy",
           text: "Hiển thị"
         },
         {
-          name: "created",
+          name: "publish_date",
           text: "Ngày tạo",
           sort: true
         },
