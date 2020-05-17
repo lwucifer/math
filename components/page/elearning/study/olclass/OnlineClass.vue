@@ -190,8 +190,12 @@ export default {
               // if (this.isStudentRole) {
                 // window.open(zoom.join_url);
               // }
+
               var windowReference = window.open();
-              windowReference.location = zoom.join_url;
+              const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
+
+              // alert(zoomLink)
+              windowReference.location = zoomLink;
             }
 
             // fake to test coming lesson
