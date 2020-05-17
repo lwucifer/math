@@ -191,7 +191,7 @@ export default {
                 // window.open(zoom.join_url);
               // }
 
-              var windowReference = window.open();
+              var windowReference = window.open('');
               const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
 
               // alert(zoomLink)

@@ -9,7 +9,8 @@ import {
   EXERCISE_STATUS
 } from "~/utils/constants";
 import { DATETIME_FULL_TEXT } from "~/utils/config";
-const moment = require("moment");
+// const moment = require("moment");
+import { getLocalDateTime } from '~/utils/moment';
 
 /**
  * 10000 => "10.000"
@@ -280,7 +281,8 @@ export function getExerciseResultText(result = "") {
 
 export function getDateTimeFullText(_utcDate = "") {
   if (!_utcDate) return;
-  const ts = moment.utc(_utcDate);
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
   return ts.format(DATETIME_FULL_TEXT);
 }
 
