@@ -44,7 +44,7 @@ export default class BaseService {
   }
 
   async [actionTypes.BASE.DETAIL](id) {
-    const { data } = await this.$axios.get(`${this.$api}/${id}`, {params: { page: 1, size: 9999 }});
+    const { data } = await this.$axios.get(`${this.$api}/${id}`);
 
     const result = data ? data : {};
 
