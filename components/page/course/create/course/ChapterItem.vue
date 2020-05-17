@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chapter-item">
     <div
       class="d-flex align-items-center justify-content-between mb-3 ce-item--modifer"
     >
