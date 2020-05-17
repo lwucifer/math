@@ -74,7 +74,7 @@
             outline
             square
             @click="handleCancel"
-            >Huỷ bỏ</app-button>
+            >Huỷ</app-button>
 
           <app-button
             @click="handleAddContent"

@@ -7,6 +7,12 @@
       :data="list"
       :loading="loading"
     >
+      <template v-slot:cell(name)="{row}">
+        <td :title="get(row, 'name', '')">
+          {{ get(row, 'name', '') | truncStrFilter(30) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(action)="{row}">
         <td>
           <n-link

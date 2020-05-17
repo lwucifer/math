@@ -5,15 +5,15 @@
         v-if="isEditExerciseName"
         v-model="exerciseNameModel"
         ref="inputExerciserName"
-        class="cc-box__input-title bg-input-gray mb-0"
+        class="cc-box__input-title bg-white mb-0"
         type="text"
         maxlength="80"
       />
       <h2 class="cc-box__title heading-6" v-else>
-        Bài {{ index + 1 }}:
-        <span style="font-weight: 400">{{ exerciseNameModel }}</span>
+        Bài {{ index + 1 }}: {{ exerciseNameModel }}
       </h2>
     </div>
+    
     <template v-if="isEditExerciseName">
       <button
         class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
@@ -28,6 +28,7 @@
         <IconClose class="mr-2 fill-secondary" /> Huỷ
       </button>
     </template>
+
     <template v-else>
       <button
         class="cc-box__btn cc-box__btn-edit mr-4"

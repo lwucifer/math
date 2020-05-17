@@ -459,6 +459,10 @@ export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
 };
 
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue"
+}
+
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
