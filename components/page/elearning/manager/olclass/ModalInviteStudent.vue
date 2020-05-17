@@ -37,8 +37,8 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <app-button size="sm" color="white" class="mr-3" square @click="close(false)">Hủy</app-button>
-        <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
+        <app-button color="white" class="mr-4 pl-5 pr-5" square @click="close(false)">Hủy</app-button>
+        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Mời</app-button>
       </div>
     </div>
   </app-modal>

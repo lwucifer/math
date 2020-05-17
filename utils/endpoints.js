@@ -200,6 +200,7 @@ export const PAYMENT_CANCEL = `/elearning/payment/cancel`;
 export const CART_LIST = `/elearning/cart`;
 
 export const TEACHING_STATISTIC_REVENUE = `/elearning/teaching/statistic/revenue`;
+export const TEACHING_CHART_STATISTIC_REVENUE = `/elearning/teaching/summary/revenue_chart`;
 /**
  * BANK
  */

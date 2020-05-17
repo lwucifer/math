@@ -42,7 +42,7 @@ import { getParamQuery } from "~/utils/common";
 import { mapState } from "vuex";
 
 export default {
-  layout: "exercise",
+  //layout: "exercise",
 
   components: {
     CreateAside,

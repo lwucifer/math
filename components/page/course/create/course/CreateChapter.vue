@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <div class="cc-box__bg-gray px-4 pt-3 pb-4">
+    <div class="cc-box__bg-gray pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
         Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
       </h3>
@@ -17,7 +17,7 @@
           color="default"
           outline
           @click="$emit('cancel')"
-          >Huỷ bỏ</app-button
+          >Huỷ</app-button
         >
         <app-button
           class="clc-btn font-weight-semi-bold"

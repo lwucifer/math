@@ -44,7 +44,7 @@ export default class BaseService {
   }
 
   async [actionTypes.BASE.DETAIL](id) {
-    const { data } = await this.$axios.get(`${this.$api}/${id}`);
+    const { data } = await this.$axios.get(`${this.$api}/${id}`, {params: { page: 1, size: 9999 }});
 
     const result = data ? data : {};
 
@@ -58,6 +58,16 @@ export default class BaseService {
     const { data } = await this.$axios.put(this.$api, payload);
 
     return data;
+  }
+
+  async getIDWithPayload (id, payload) {
+    const { data } = await this.$axios.get(`${this.$api}/${id}`, payload);
+
+    const result = data ? data : {};
+
+    // console.log("[BASE.DETAIL]", result);
+
+    return result;
   }
 
   async postWithFormData(payload) {

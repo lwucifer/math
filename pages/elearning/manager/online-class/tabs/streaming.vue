@@ -286,7 +286,7 @@ export default {
             ...item,
             time: {
               day: item.recent_schedule.day,
-              time: item.recent_schedule.start_time + " - " + end
+              time: self.formatAMPM(date) + " - " + end
             }
           };
         });

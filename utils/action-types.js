@@ -506,7 +506,13 @@ export const SOCIAL_FOLLOW = {
 
 export const TEACHING_SUMMARY = {
     INFO: "teachingSummary",
+    STATISTIC_REVENUE: 'teachingSummaryStatisticRevenue'
 };
+
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    INFO: 'teachingChartStatisticRevenue'
+}
+
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
     DELETE: "teachingElearningsDelete",

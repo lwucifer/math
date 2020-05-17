@@ -1,6 +1,6 @@
 <template>
   <div class="e-program-course">
-    <a href @click.prevent class="e-program-course__title box" @click="toggleExpand">
+    <a href @click.prevent class="e-program-course__title" @click="toggleExpand">
       <div class="e-program-course__heading-wrapper">
         <h5 class="e-program-course__heading">
           Chương {{ index + 1 }}:

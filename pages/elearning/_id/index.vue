@@ -1,5 +1,5 @@
 <template>
-  <div class="container elearning-view" v-if="loading">Loading...</div>
+  <VclFacebook v-if="pageLoading"></VclFacebook>
   <div class="container elearning-view" v-else>
     <breadcrumb />
 
@@ -111,6 +111,8 @@ import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
 // import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+  import { VclFacebook } from 'vue-content-loading';
+
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -146,12 +148,13 @@ export default {
     ElearningIntroduce,
     ElearningContent,
     // Breadcrumb,
+    VclFacebook,
   },
 
   data() {
     return {
       // info: null,
-      loading: true,
+      pageLoading: true,
       // levels: [],
       // subjects: [],
       // program: [],
@@ -199,7 +202,7 @@ export default {
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
 
-    this.loading = true;
+    this.pageLoading = true;
     const options = {
       params: {
         elearning_id: get(this, "$route.params.id", ""),
@@ -207,7 +210,7 @@ export default {
       },
     };
     await this.$store.dispatch("elearning/detail/getInfo", options);
-    this.loading = false;
+    this.pageLoading = false;
   },
 
   watch: {
@@ -248,7 +251,7 @@ export default {
           params,
         });
 
-      this.loading = true;
+      this.pageLoading = true;
 
       const data = await Promise.all([
         getInfo(),
@@ -256,7 +259,7 @@ export default {
         getRelatedCourses(),
       ]);
 
-      this.loading = false;
+      this.pageLoading = false;
 
       this.info = get(data, "0.data", {});
       this.program = get(data, "1.data", []);

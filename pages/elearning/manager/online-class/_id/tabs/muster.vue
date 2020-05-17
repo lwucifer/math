@@ -32,24 +32,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 22rem">
+      <div class="filter-form__item" style="min-width: 22rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterIndex"
@@ -65,7 +65,9 @@
     <!--End filter form-->
 
     <!--Table-->
+    <div v-if="loading">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -139,6 +141,7 @@ export default {
     return {
       tab: 1,
       openModal: false,
+      showFilter: false,
       summary: {},
       heads: [
         {
@@ -223,6 +226,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          lesson_index: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -235,6 +249,7 @@ export default {
     },
     handleChangedIndex() {
       this.params.lesson_index = this.filterIndex.value;
+      this.getList();
     },
 
     formatAMPM(date) {

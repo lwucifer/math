@@ -1,7 +1,18 @@
 <template>
   <div>
     <HeaderCourse @exit="exitStudy" />
-    <div class="container" v-if="loading">Loading...</div>
+
+    <div class="container" v-if="pageLoading">
+      <div class="row">
+        <div class="col-md-8">
+          <VclList />
+        </div>
+        <div class="col-md-4">
+          <VclList />
+        </div>
+      </div>
+    </div>
+
     <div class="container" v-else>
       <div class="row">
         <div :class="expand ? 'col-md-12' : 'col-md-8'">
@@ -26,27 +37,41 @@
               "
             />
             <div class="lession-screen">
-              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')">Download</a>
+              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
+                >Download</a
+              >
             </div>
             <div class="lession-screen" v-if="studyMode === imageMode">
               <img :src="get(payload, 'link', '')" alt />
             </div>
 
             <div class="lession-screen" v-if="studyMode == articleMode">
-              <iframe style="width: 712px" :src="get(payload, 'link', '')"></iframe>
+              <iframe
+                style="width: 712px"
+                :src="get(payload, 'link', '')"
+              ></iframe>
             </div>
 
             <!-- DO EXERCISE -->
             <ElearningExercise v-if="isExerciseMode" />
 
             <div class="elearning-study-tabs">
-              <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-              <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+              <a
+                :class="{ active: type === 'summary' }"
+                @click="type = 'summary'"
+                >Tổng quan</a
+              >
+              <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                >Hỏi đáp</a
+              >
               <a
                 :class="{ active: type === 'notification' }"
                 @click="type = 'notification'"
-              >Thông báo</a>
-              <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                >Thông báo</a
+              >
+              <a :class="{ active: type === 'review' }" @click="type = 'review'"
+                >Đánh giá</a
+              >
             </div>
 
             <TabSummary :info="info" v-if="type === 'summary'" />
@@ -96,6 +121,7 @@ import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import { VclList } from "vue-content-loading";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -115,13 +141,14 @@ export default {
     TabReview,
     // ElearningQuestion,
     Streaming,
-    ElearningExercise
+    ElearningExercise,
+    VclList
   },
 
   data() {
     return {
       type: "summary",
-      loading: true,
+      pageLoading: true,
       interactive_questions: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
@@ -199,7 +226,7 @@ export default {
         options
       );
 
-      this.loading = true;
+      this.pageLoading = true;
 
       const data = await Promise.all([
         getInfo,
@@ -210,7 +237,7 @@ export default {
 
       console.log(data);
 
-      this.loading = false;
+      this.pageLoading = false;
 
       this.interactive_questions = get(data, "1.data", null);
     },
@@ -227,7 +254,7 @@ export default {
     },
 
     exitStudy() {
-      this.$router.push('/elearning/mycourses');
+      this.$router.push("/elearning/mycourses");
     },
 
     get,

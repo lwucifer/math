@@ -27,8 +27,8 @@
               @click="isShowDetailLesson = !isShowDetailLesson"
               v-if="get(lessons, 'length', 0)"
             >
-              <IconAngleDown class="icon"  width="20px" height="20px" v-if="!isShowDetailLesson" />
-              <IconAngleUp class="icon"  width="20px" height="20px" v-else />
+              <IconAngleDown class="icon fill-primary"  width="20px" height="20px" v-if="!isShowDetailLesson" />
+              <IconAngleUp class="icon fill-primary"  width="20px" height="20px" v-else />
             </button>
           </div>
         </div>

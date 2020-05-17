@@ -1,20 +1,21 @@
 <template>
   <div class="list-question">
     <div
-      class="d-flex align-items-center mb-4"
+      class="d-flex align-items-center mb-3"
       v-if="!isShowEditQuestion"
     >
       <h3 class="body-2 mr-2 question-title">Câu {{ index + 1 }}:</h3>
-      <p class="body-2 mr-4 question-content" v-html="get(question, 'content', '')"></p>
+
+      <p class="body-2 mr-4 question-content font-weight-semi-bold text-dark" v-html="get(question, 'content', '')"></p>
 
       <span class="text-sub mr-4 question-type">{{ type }}</span>
 
-      <div class="d-flex align-items-center ml-auto ce-question-item__actions question-actions">
+      <div class="d-flex align-items-center justify-content-between ce-question-item__actions question-actions">
         <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
-        <button class="mr-4" @click="handleDeleteQuestion">
+        <button  @click="handleDeleteQuestion">
           <IconTrashAlt
             class="d-block subheading fill-secondary"
             width="20px"
@@ -26,6 +27,8 @@
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
       </button> -->
       </div>
+
+      
       <app-modal-confirm
         centered
         v-if="showModalConfirm"
@@ -34,6 +37,7 @@
         @cancel="handleCancel"
       />
     </div>
+
     <div v-else>
       <EditQuestionChoice
         v-if="get(question, 'type', '') === 'CHOICE'"

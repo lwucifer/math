@@ -1,11 +1,11 @@
 <template>
-  <div class="row mb-4">
-    <div class="col-md-3">
-      <label class="d-inline-block mb-3 font-weight-bold" for="answer-a">Chọn đáp án đúng</label>
+  <div class="row mb-6 justify-content-between">
+    <div class="col-md-3 d-flex align-items-center">
+      <!-- <label class="d-inline-block mb-3 font-weight-bold" for="answer-a">Chọn đáp án đúng</label> -->
       <div>
         <app-radio
           @click="$emit('handleSelectAnswerTrue', index)"
-          name="answer"
+          :name="id"
           :checked="get(answer, 'correct', false)"
           >{{ text }}</app-radio
         >
@@ -13,13 +13,14 @@
     </div>
 
     <div class="col-md-8">
-      <label class="d-inline-block mb-3" for="answer-editor"
+      <!-- <label class="d-inline-block mb-3" for="answer-editor"
         >Nội dung đáp án</label
-      >
+      > -->
       <div class="d-flex align-items-start">
         <div class="flex-grow mr-4">
           <!-- <app-editor id="answer-editor" /> -->
           <app-input
+            class="mb-0"
             @input="handleChangeContent"
             :value="get(answer, 'content', '')"
             @click="handleAddAnswer"
@@ -33,7 +34,7 @@
         </div> -->
       </div>
     </div>
-    <div class="d-flex align-items-center cc-box__head">
+    <div class="d-flex align-items-center pr-3">
       <button class="cc-box__btn cc-box__btn-edit" @click="handleDeleteAnswer">
         <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px"/>
       </button>
@@ -58,6 +59,10 @@ export default {
     index: {
       type: Number,
       default: 0
+    },
+    id:{
+      type: String,
+      default: null
     }
   },
 
