@@ -21,7 +21,7 @@
                   v-model="filterCourse"
                   :options="courses"
                   label="text"
-                  placeholder="Chọn"
+                  placeholder="Chọn bài giảng/khóa học"
                   searchable
                   clearable
                   @input="handleChangedCourse"
@@ -230,7 +230,7 @@
                       {{convertDay(index)}}
                     </div>
                     <div>
-                      {{item.from_date}} - {{item.to_date}}
+                      {{convertDate(item.from_date)}} - {{convertDate(item.to_date)}}
                     </div>
                     <div class="ml-auto">
                       <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
@@ -250,7 +250,7 @@
 
           <div class="mt-4 mb-4 text-right">
             <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
+            <app-button color="info" class="mr-3" @click="fnSave" :disabled="!fullParams">Lưu nháp</app-button>
             <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
           </div>
         </div>
@@ -268,10 +268,23 @@
       title="Bạn muốn tạo phòng học này?"
       description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
+    
+    <app-modal-confirm
+      v-if="showModalConfirmDraf"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      :width="550"
+      @cancel="handleCancelModal"
+      :footer="false"
+      :header="false"
+      title="Bạn muốn lưu bản nháp tạo phòng học này?"
+      description="Các thông tin phòng học sẽ được lưu thánh một bản nháp."
+    />
 
     <app-modal-notify
       :width="550"
       @ok="showNotify = false"
+      @close="showNotify = false"
       v-if="showNotify"
       :footer="false"
       :header="false"
@@ -336,6 +349,7 @@ function initialState() {
     message: "",
     sendMess: "0",
     downloadVideo: "0",
+    showModalConfirmDraf: false,
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
@@ -582,6 +596,13 @@ export default {
   },
 
   methods: {
+    convertDate(time) {
+      const date = new Date(time);
+      var strTime =
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+      return strTime;
+    },
+
     convertDay(index) {
       const items = this.selectedItems[index];
       return items.reduce((result, item, index) => {

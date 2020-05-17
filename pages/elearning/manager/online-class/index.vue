@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-9">
         <h5 class="page-title">
-          Lớp học online
+          Lịch học online
         </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
