@@ -37,7 +37,7 @@
     </div>
     <ProfileSliderTab
       v-else
-      :items="get(elearnings, 'content', 0)"
+      :items="get(elearnings, 'content', [])"
       :name="`Bài học và khóa giảng (${get(elearnings, 'page.total_elements', 0)})`"
     />
   </div>
