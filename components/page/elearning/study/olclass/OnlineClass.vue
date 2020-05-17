@@ -183,13 +183,15 @@ export default {
             // lessiong is living => open zoom
             if (data.is_started == true) {
               const sessions = data.sessions || [];
-              const zoom = sessions[data.session_starting_position];
+              const zoom = sessions.find(s => s.position == data.session_starting_position);
               if (!zoom) return;
 
               // student open start_url or join_url
-              if (this.isStudentRole) {
-                window.open(zoom.join_url);
-              }
+              // if (this.isStudentRole) {
+                // window.open(zoom.join_url);
+              // }
+              var windowReference = window.open();
+              windowReference.location = zoom.join_url;
             }
 
             // fake to test coming lesson

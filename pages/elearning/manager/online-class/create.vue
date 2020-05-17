@@ -318,8 +318,8 @@ const initialSchedule = {
 };
 const initialDuration = {
   hours: {
-    value: "1",
-    text: "1 giờ"
+    value: "0",
+    text: "0 giờ"
   },
   minutes: {
     value: "30",
@@ -351,6 +351,10 @@ function initialState() {
     startTime: [initialStartTime],
     duration: [initialDuration],
     hours: [
+      {
+        value: "0",
+        text: "0 giờ"
+      },
       {
         value: "1",
         text: "1 giờ"
