@@ -5,7 +5,7 @@
       <div>
         <app-radio
           @click="$emit('handleSelectAnswerTrue', index)"
-          name="answer"
+          :name="id"
           :checked="get(answer, 'correct', false)"
           >{{ text }}</app-radio
         >
@@ -58,6 +58,10 @@ export default {
     index: {
       type: Number,
       default: 0
+    },
+    id:{
+      type: String,
+      default: null
     }
   },
 
