@@ -756,6 +756,16 @@ export default {
       }
     },
 
+    formatAMPM(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
     handleChangedTime(e, index, type = false) {
       let post = {
         value: e.value,
@@ -772,12 +782,13 @@ export default {
         })
       }
 
+      let startTime = this.startTime[index].time.value + " " + this.startTime[index].type.value;
+      let date = new Date('2000-01-01 ' + startTime);
+      startTime = this.formatAMPM(new Date(date.getTime() - 7*60*60*1000));
+
       this.params.schedules.splice(index, 1, {
         ...this.params.schedules[index],
-        start_time:
-          this.startTime[index].time.value +
-          " " +
-          this.startTime[index].type.value
+        start_time: startTime
       })
     },
 
