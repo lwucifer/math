@@ -1,26 +1,4 @@
-.wrapProfileTeacher{
-    background: #FFFFFF;
-    padding: 20px;
-}
-.wrapInfoTeacher{
-    display: flex;
-    flex-direction: column;
-    padding:20px 0px;
-    strong{
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 22px;
-        padding-bottom: 10px;
-    }
-    span{
-        font-size: 14px;
-        line-height: 19px;
-        color: #666666;
-    }
-    a{
-        font-weight: bold;
-    }
-}
-.wrapSlider__ProfileTeacher{
-    padding-top:20px;
+.teacher-story {
+    line-height: 2rem;
+    margin-bottom: 1.2rem;
 }

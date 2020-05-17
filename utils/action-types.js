@@ -158,6 +158,10 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     LIST: "elearningPublicElearningTeacherList",
 };
 
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+  LIST: "elearningPublicElearningTeacherElsList",
+};
+
 export const ELEARNING_PUBLIC_INFO = {
     LIST: "elearningPublicInfoList",
 };
