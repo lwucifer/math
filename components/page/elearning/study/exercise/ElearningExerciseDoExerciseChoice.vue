@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
+import { EXERCISE_TYPES, STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
@@ -117,7 +117,7 @@ import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-import {get} from 'lodash';
+import { get } from "lodash";
 
 export default {
   components: {
@@ -164,7 +164,8 @@ export default {
       "currentElearningId",
       "currentQuestionId",
       "autoSubmission",
-      "currentExercise"
+      "currentExercise",
+      "currentLession",
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -190,10 +191,12 @@ export default {
       "setStudyExerciseSubmission",
       "setStudyExerciseCurrentByNo"
     ]),
+    ...mapMutations("event", ["setStudyMode"]),
 
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
-      "elearningSudyExerciseSubmissionList"
+      "elearningSudyExerciseSubmissionList",
+      "elearningSudyElearningExerciseList",
     ]),
 
     ...mapActions("elearning/study/study-progress", [
@@ -241,6 +244,7 @@ export default {
         start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
+
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
@@ -252,7 +256,17 @@ export default {
           };
           this.reNewGetElearningProgress();
 
-          // show learning screen
+          // emit studyMode=DO_EXERCISE
+          this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+          // get list EXERCISE
+          const lesson = this.currentLession; // get current lesson
+          const exerciseReq = {
+            elearning_id: this.progress.id,
+            category: EXERCISE_CATEGORIES.EXERCISE,
+            lesson_id: lesson ? lesson.id : null
+          };
+          console.log("[exerciseReq]", exerciseReq);
+          this.elearningSudyElearningExerciseList(exerciseReq);
         } else {
           this.modalConfirmSubmit = false;
           this.notify = {
