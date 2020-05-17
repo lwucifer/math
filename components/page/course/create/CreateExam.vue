@@ -5,6 +5,15 @@
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
+
+      <div class="px-4">
+        <app-alert type="info" class="mt-4" show-close>
+          Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
+          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
+          gửi lên để được xét duyệt.
+        </app-alert>
+      </div>
+
       <ButtonCreateExercise
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
