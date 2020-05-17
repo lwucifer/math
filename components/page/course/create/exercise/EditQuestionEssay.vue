@@ -1,13 +1,5 @@
 <template>
   <div>
-    <label class="d-inline-block mb-3" for="question-editor"
-      >Nội dung câu hỏi</label
-    >
-    <app-editor v-model="payload.content" />
-    <label class="d-inline-block mb-3" for="question-editor"
-      >Nội dung câu trả lời</label
-    >
-    <app-editor v-model="payload.answers[0].content" />
     <div v-if="showAddPoint">
       <!-- <label class="d-inline-block mb-3" for="question-editor">Điểm</label>
       <app-input v-model="payload.points" /> -->
@@ -33,20 +25,32 @@
         </div>
       </div>
     </div>
+
+    <label class="d-inline-block mb-3" for="question-editor"
+      >Nội dung câu hỏi</label
+    >
+    <app-editor v-model="payload.content" />
+
+    <!-- <label class="d-inline-block mb-3" for="question-editor"
+      >Nội dung câu trả lời</label
+    >
+    <app-editor v-model="payload.answers[0].content" /> -->
+
+
+    
     <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
-        size="sm"
-        square
+        class="font-weight-semi-bold mr-4 text-secondary"
+        size="md"
+        color="default"
+        outline
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Huỷ</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         @click="handleAddQuestion"
         >Lưu câu hỏi</app-button
       >
@@ -66,7 +70,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { createPayloadQuestion } from "~/models/course/AddCourseNoAnswer";
 import { mapState } from "vuex";
 
 export default {
@@ -90,12 +94,12 @@ export default {
         type: "ESSAY",
         content: get(this, "question.content", ""),
         points: get(this, "question.points", ""),
-        answers: [
-          {
-            correct: true,
-            content: get(this, "question.answers[0].content", ""),
-          },
-        ],
+        // answers: [
+        //   {
+        //     correct: true,
+        //     content: get(this, "question.answers[0].content", ""),
+        //   },
+        // ],
       },
     };
   },

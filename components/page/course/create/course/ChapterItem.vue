@@ -38,7 +38,7 @@
       />
     </div>
 
-    <app-divider class="my-0" />
+    <!-- <app-divider class="my-0" /> -->
   </div>
 </template>
 
