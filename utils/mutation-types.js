@@ -95,6 +95,10 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList",
 };
 
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+    SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST: "setElearningPublicElearningTeacherElsList"
+}
+
 export const ELEARNING_PUBLIC_INFO = {
     SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList",
 };
