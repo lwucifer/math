@@ -43,7 +43,8 @@
             <div class="content">
               <IconCaretUp class="fill-white icon-up" />
               <div>
-                <IconTick class="mr-3" />Đã hoàn thành 1/20 bài giảng
+                <IconTick class="mr-3" />Đã hoàn thành
+                {{ learningProgress }} bài giảng
               </div>
             </div>
           </div>
@@ -63,7 +64,9 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
-import IconClose from '~/assets/svg/v2-icons/close_24px.svg?inline';
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -86,6 +89,22 @@ export default {
   methods: {
     redirectSignin() {
       this.$router.push("/auth/signin");
+    }
+  },
+
+  computed: {
+    ...mapState("elearning/study/study-progress", ["progress"]),
+
+    learningProgress() {
+      console.log("[progress]", this.progress);
+      if (!this.progress) return `0/0`;
+      const completeLesson = this.progress.completes || 0;
+      const totalLessons =
+        this.progress.programs.reduce(
+          (acc, curr) => acc + curr.total_lessons,
+          0
+        ) || 0;
+      return `${completeLesson}/${totalLessons}`;
     }
   }
 };
