@@ -17,24 +17,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 18rem">
+      <div class="filter-form__item" style="min-width: 18rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -52,7 +52,9 @@
     <!--End filter form-->
 
     <!--Table-->
+    <div v-if="loading">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -138,6 +140,7 @@ export default {
   data() {
     return {
       openModal: false,
+      showFilter: false,
       heads: [
         {
           name: "student_name",
@@ -196,6 +199,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          class_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     closeModal(e) {
       this.openModal = false;
       if (e) this.getList();
@@ -213,6 +227,7 @@ export default {
     },
     handleChangedCourse() {
       this.params.class_id = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {
     },

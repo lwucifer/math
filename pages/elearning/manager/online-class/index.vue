@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-9">
         <h5 class="page-title">
-          Lớp học online
+          Lịch học online
         </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
@@ -46,9 +46,7 @@
   const Tab3 = () => import("./tabs/writting")
   const Tab4 = () => import("./tabs/finished")
 
-  export default {
-    layout: "manage",
-    
+  export default {    
     components: {
       ElearningManagerSide,
       IconPlusCircle,
@@ -58,10 +56,11 @@
       Tab4
     },
 
+    middleware: ["teacher-role"],
+
     data() {
       return {
         tab: 1,
-        isAuthenticated: true,
       }
     },
     computed: {

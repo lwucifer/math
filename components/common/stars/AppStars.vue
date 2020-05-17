@@ -15,7 +15,7 @@
     <IconStar class="star"
       :width="size"
       :height="size"
-      v-else 
+      v-if="!halfStar && loopNumber > 0"
     />
 
     <IconStarO class="star"
@@ -41,7 +41,7 @@ export default {
 
   computed: {
     loopNumber: function() {
-      return Math.ceil(parseFloat(this.stars))
+      return Math.ceil(parseFloat(this.stars)) > 1 ? Math.ceil(parseFloat(this.stars)) - 1 : 0
     },
     unstart: function() {
       return 5 - Math.ceil(parseFloat(this.stars))
