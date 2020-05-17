@@ -1,7 +1,7 @@
 <template>
   <div class="row mb-4">
     <div class="col-md-3">
-      <label class="d-inline-block mb-3 font-weight-bold" for="answer-a">Chọn đáp án đúng</label>
+      <!-- <label class="d-inline-block mb-3 font-weight-bold" for="answer-a">Chọn đáp án đúng</label> -->
       <div>
         <app-radio
           @click="$emit('handleSelectAnswerTrue', index)"
@@ -13,9 +13,9 @@
     </div>
 
     <div class="col-md-8">
-      <label class="d-inline-block mb-3" for="answer-editor"
+      <!-- <label class="d-inline-block mb-3" for="answer-editor"
         >Nội dung đáp án</label
-      >
+      > -->
       <div class="d-flex align-items-start">
         <div class="flex-grow mr-4">
           <!-- <app-editor id="answer-editor" /> -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="mb-4">
     <LessonDetailInfo
       v-if="isShowDetailLesson"
       @handleEditLesson="handleEditLesson"
@@ -22,7 +22,7 @@
 
     <!-- <app-divider class="my-4" /> -->
 
-    <!-- <p class="mt-4 mb-3 heading-6" v-if="get(general, 'type', '') === 'LECTURE'">Tài liệu tham khảo</p> -->
+    <p class="mt-4 mb-3 heading-6" v-if="lesson.lesson_docs && lesson.lesson_docs.length > 0 || lesson.lesson_videos && lesson.lesson_videos.length > 0">Tài liệu tham khảo</p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"

@@ -14,8 +14,9 @@
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
           >
-            <IconPlus2 class="mr-3 fill-primary font-weight-semi-bold" /> Thêm câu hỏi
+            <IconPlus2 class="mr-3 fill-primary" /> <span class="font-weight-semi-bold">Thêm câu hỏi</span>
           </button>
+          
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
@@ -120,5 +121,6 @@ export default {
 <style lang="scss">
 .add-background {
   background: #f9f9f9;
+  padding: 2rem !important;
 }
 </style>
