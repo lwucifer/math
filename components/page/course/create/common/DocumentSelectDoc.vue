@@ -28,7 +28,7 @@
           >
             <td>{{ get(file, "name", "") }}</td>
             <td>{{ get(file, "type", "") }}</td>
-            <td>{{ get(file, "created_at", "") }}</td>
+            <td>{{ get(file, "created_at", "") | moment("DD/MM/YYYY")}}</td>
             <td>
               <a
                 @click="handleSelectUrl(file, $event)"
@@ -45,6 +45,7 @@
         </tbody>
       </table>
       <app-modal-confirm
+          centered
           v-if="showModalConfirm"
           :confirmLoading="confirmLoading"
           @ok="handleOk"

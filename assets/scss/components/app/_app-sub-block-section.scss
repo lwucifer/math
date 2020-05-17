@@ -73,6 +73,13 @@
         font-size: 1.3rem;
         font-weight: normal;
     }
+    
+    .app-vue-select {
+        height: 4rem;
+        .vs__dropdown-toggle {
+            height: 100%;
+        }
+    }
 }
 
 .box-content-fixed-height {

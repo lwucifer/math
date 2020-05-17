@@ -128,14 +128,17 @@
         >
       </app-radio-group>
 
-      <div v-show="is_open">
+      <div v-show="is_open" class="d-flex align-items-center">
         <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
 
         <app-date-picker
           @input="handleSelectTime"
           type="time"
           value-format="hh:mm:ss"
+          class="mr-4"
         />
+
+        <IconEvent24px class="fill-primary"/>
       </div>
     </div>
 
@@ -158,6 +161,7 @@
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -168,6 +172,8 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconEvent24px from '~/assets/svg/v2-icons/event_24px.svg?inline';
+
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 import { get } from "lodash";
@@ -177,6 +183,7 @@ import { createPayloadExercise } from "~/models/course/AddCourse";
 export default {
   components: {
     IconAngleDown,
+    IconEvent24px
   },
 
   props: {

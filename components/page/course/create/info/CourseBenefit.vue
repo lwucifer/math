@@ -46,7 +46,7 @@
 
       <app-editor-menu-bubble
         v-if="showBenefit"
-        class="bg-input-gray mb-3 flex-grow"
+        class="bg-white mb-4 flex-grow"
         :placeholder="`Nhập lợi ích từ` + ' ' + name"
         v-model="benefitEditorValue"
       />
@@ -55,7 +55,6 @@
       <div class="text-right" v-if="showBenefit">
         <app-button
           outline
-          square
           color="error"
           class="mr-3"
           @click="cancelInputBenefit"
@@ -63,7 +62,6 @@
         >
 
         <app-button
-          square
           @click="addBenefit(benefitEditorValue)"
           class="font-weight-normal body-2"
           :disabled="!submit"

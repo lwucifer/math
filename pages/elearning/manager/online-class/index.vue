@@ -79,5 +79,6 @@
 </script>
 
 <style lang="scss">
+  @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
   @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 </style>

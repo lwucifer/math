@@ -15,6 +15,8 @@ import TagPhotos from "~/services/social/tagPhoto";
 import Withdrawals from "~/services/account/Withdrawals";
 import Friend from "~/services/social/friend";
 import Biography from "~/services/account/Biography";
+import Balance from "~/services/account/Balance";
+import Withdraw from "~/services/account/Withdraw";
 // import FriendInvite from "~/services/social/Friendinvite";
 
 /**
@@ -29,6 +31,7 @@ const state = () => ({
     profileList: {},
     inviteList: {},
     withdrawalsList: {},
+    balance: {},
     forceGetTransactions: false,
     timetable: [],
 });
@@ -238,6 +241,30 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.ACCOUNT_WITHDRAW.ADD]({ commit }, payload) {
+        try {
+            const result = await new Withdraw(this.$axios)[actionTypes.BASE.ADD](
+              payload
+            );
+            console.log("[Withdraw] add", result);
+            return result;
+        } catch (err) {
+            console.log("[Withdraw] add.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.ACCOUNT_BALANCE.LIST]({ commit }, payload) {
+        try {
+            const result = await new Balance(this.$axios)[actionTypes.BASE.LIST](
+              payload
+            );
+            console.log("[Balance] list", result);
+            commit(mutationTypes.ACCOUNT_BALANCE.SET_ACCOUNT_BALANCE, result);
+        } catch (err) {
+            console.log("[Withdrawals] add.err", err);
+            return err;
+        }
+    },
     async [actionTypes.ACCOUNT_PROFILE.LIST]({ commit }, payload) {
         try {
             const result = await new Profile(this.$axios)[actionTypes.BASE.LIST](
@@ -417,6 +444,13 @@ const mutations = {
     ) {
         console.log("SET_ACCOUNT_WITHDRAWALS", _withdrawalsList);
         state.withdrawalsList = _withdrawalsList;
+    },
+    [mutationTypes.ACCOUNT_BALANCE.SET_ACCOUNT_BALANCE](
+      state,
+      _data
+    ) {
+        console.log("SET_ACCOUNT_BALANCE", _data);
+        state.balance = _data;
     },
     [mutationTypes.ACCOUNT_LINK.SET_ACCOUNT_LINK_LIST](state, _linkList) {
         state.linkList = _linkList;

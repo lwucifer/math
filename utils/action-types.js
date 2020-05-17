@@ -143,6 +143,7 @@ export const ACCOUNT_EARNING = {
 
 export const ACCOUNT_WITHDRAWALS = {
     LIST: "accountWithdrawalsList",
+    ADD: "accountWithdrawalsAdd",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
@@ -505,7 +506,13 @@ export const SOCIAL_FOLLOW = {
 
 export const TEACHING_SUMMARY = {
     INFO: "teachingSummary",
+    STATISTIC_REVENUE: 'teachingSummaryStatisticRevenue'
 };
+
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    INFO: 'teachingChartStatisticRevenue'
+}
+
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
     DELETE: "teachingElearningsDelete",
@@ -549,6 +556,14 @@ export const ACCOUNT_BANKS = {
     EDIT: "accountBankEdit",
     DELETE: "accountBankDelete",
     VALIDATE: "accountBankValidate",
+};
+
+export const ACCOUNT_BALANCE = {
+    LIST: "accountBalance",
+};
+
+export const ACCOUNT_WITHDRAW = {
+    ADD: "accountWithdrawAdd",
 };
 
 export const PUBLIC_BANK = {

@@ -7,6 +7,12 @@
       :data="list"
       :loading="loading"
     >
+      <template v-slot:cell(title)="{row}">
+        <td :title="get(row, 'title', '')">
+          {{ get(row, 'title', '') | truncStrFilter(30) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(rate)="{row}">
         <td>
           <v-popover

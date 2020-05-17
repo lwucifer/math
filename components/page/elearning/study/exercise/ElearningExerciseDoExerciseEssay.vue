@@ -172,13 +172,13 @@ export default {
     ...mapMutations("elearning/study/study-exercise", [
       "setStudyExerciseQuestionNav",
       "setStudyExerciseSubmission",
-      "setStudyExerciseCurrentByNo"
+      "setStudyExerciseCurrentByNo",
     ]),
+
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
       "elearningSudyExerciseSubmissionList"
     ]),
-
     ...mapActions("elearning/study/study-progress", [
       "elearningSudyProgressList"
     ]),
@@ -219,6 +219,8 @@ export default {
             isShowNotify: true,
           }
           this.reNewGetElearningProgress();
+
+          // show learning screen
         }else {
           this.modalConfirmSubmit = false;
           this.notify = {

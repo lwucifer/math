@@ -5,12 +5,12 @@
       v-model="courseNameModel"
       ref="inputCourseName"
       maxlength="150"
-      class="cc-box__input-title bg-input-gray mb-0"
+      class="cc-box__input-title bg-white mb-0"
       type="text"
     />
     <h2 v-else class="cc-box__title heading-5">
-      Tiêu đề: {{ courseNameModel }} 
-      
+      <!-- Tiêu đề: {{ courseNameModel }}  -->
+      {{courseNameModel.length > 60 ? ('Tiêu đề: ' + courseNameModel.slice(0, 40) + '...') :  ('Tiêu đề: ' + courseNameModel) }}
     </h2>
 
     <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName" v-if="!isEditCourseName">

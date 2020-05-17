@@ -1,5 +1,5 @@
 <template>
-  <div class="container elearning-view" v-if="loading">Loading...</div>
+  <VclFacebook v-if="pageLoading"></VclFacebook>
   <div class="container elearning-view" v-else>
     <breadcrumb />
 
@@ -36,6 +36,55 @@
         <ElearningRightSide v-sticky sticky-offset="{ top: 90, bottom: 9 }" />
       </div>
     </div>
+
+    <app-modal-confirm 
+      centered
+      :width="476" 
+      v-if="inputCode" 
+      @cancel="closeModalInput"
+      >
+      
+      <template #title>
+        <h4 class="mb-3">Bài giảng riêng tư</h4>
+      </template>
+
+      <template #description>
+        <p class="text-center mb-3">Vui lòng nhập mã riêng tư vào ô dưới đây để truy cập bài giảng</p>
+
+        <app-input placeholder="Nhập mã"></app-input>
+      </template>
+
+      <template slot="actions" slot-scope="{ confirmLoading }">
+          <app-button
+            class="font-weight-semi-bold mr-3"
+            color="default"
+            outline
+            @click="inputCode = false"
+          >
+            Hủy
+          </app-button>
+
+          <app-button
+            class="font-weight-semi-bold"
+            color="primary"
+            :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
+          >
+            <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
+            Xác nhận
+          </app-button>
+
+          <div class="mt-4 mess text-secondary font-italic text-left">Nếu bạn chưa có mã riêng tư để truy cập, bạn có thể gửi yêu cầu tham gia bài giảng tại đây</div>
+      </template>
+    </app-modal-confirm>
+
+
+    <app-modal-notify 
+      centered
+      v-if="inputCodeSuccess"
+      type="success" 
+      title="Gửi yêu cầu thành công!"
+      @ok="inputCodeSuccess = false"
+      @close="closeModalNoti"/>
   </div>
 </template>
 
@@ -62,6 +111,8 @@ import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
 // import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+  import { VclFacebook } from 'vue-content-loading';
+
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -97,12 +148,13 @@ export default {
     ElearningIntroduce,
     ElearningContent,
     // Breadcrumb,
+    VclFacebook,
   },
 
   data() {
     return {
       // info: null,
-      loading: true,
+      pageLoading: true,
       // levels: [],
       // subjects: [],
       // program: [],
@@ -114,6 +166,8 @@ export default {
         setWrapperSize: true,
         watchOverflow: true,
       },
+      inputCode: false,
+      inputCodeSuccess: false,
     };
   },
 
@@ -148,7 +202,7 @@ export default {
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
 
-    this.loading = true;
+    this.pageLoading = true;
     const options = {
       params: {
         elearning_id: get(this, "$route.params.id", ""),
@@ -156,7 +210,7 @@ export default {
       },
     };
     await this.$store.dispatch("elearning/detail/getInfo", options);
-    this.loading = false;
+    this.pageLoading = false;
   },
 
   watch: {
@@ -197,7 +251,7 @@ export default {
           params,
         });
 
-      this.loading = true;
+      this.pageLoading = true;
 
       const data = await Promise.all([
         getInfo(),
@@ -205,7 +259,7 @@ export default {
         getRelatedCourses(),
       ]);
 
-      this.loading = false;
+      this.pageLoading = false;
 
       this.info = get(data, "0.data", {});
       this.program = get(data, "1.data", []);
@@ -240,6 +294,14 @@ export default {
     //     }
     //   }
     // },
+
+    closeModalNoti() {
+      this.inputCodeSuccess = false
+    },
+
+    closeModalInput() {
+      this.inputCode = false
+    }
   },
 };
 </script>

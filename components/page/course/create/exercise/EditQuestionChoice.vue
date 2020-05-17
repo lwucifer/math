@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <label class="d-inline-block mb-3" for="question-editor"
+  <div class="cc-box__bg-disable">
+    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
       >Nội dung câu hỏi</label
     >
 
@@ -11,6 +11,7 @@
       :key="answer.id"
       :answer="answer"
       :index="index"
+      :id="get(payload,'id','')"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
       @handleAddAnswer="handleAddAnswer"
@@ -37,6 +38,7 @@
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

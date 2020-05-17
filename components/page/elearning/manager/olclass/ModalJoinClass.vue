@@ -151,3 +151,7 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/olclass/join-class.scss";
+</style>

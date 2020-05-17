@@ -1,7 +1,7 @@
 <template>
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
-    <div class="cc-box__bg-gray px-2 py-2">
+    <div class="cc-box__bg-gray">
       <h3 class="heading-5 my-3">
         Tên bài học
         <span class="caption text-base font-weight-normal"
@@ -74,7 +74,7 @@
             outline
             square
             @click="handleCancel"
-            >Huỷ bỏ</app-button>
+            >Huỷ</app-button>
 
           <app-button
             @click="handleAddContent"
@@ -88,6 +88,7 @@
       </div>
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

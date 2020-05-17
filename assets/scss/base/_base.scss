@@ -529,6 +529,9 @@ input:-webkit-autofill:active {
   filter: alpha(opacity=40); /* For IE8 and earlier */
 }
 
+.vs--single .vs__selected {
+  white-space: nowrap;
+}
 .shadow-1 {
   box-shadow: $shadow-1;
 }

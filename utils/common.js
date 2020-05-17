@@ -219,7 +219,7 @@ export function getCountdown_MM_SS(val) {
 export const addAllOptionSelect = (arr) => {
 
     const allOpt = {
-        id: 0,
+        id: -1,
         name: 'Tất cả',
         type: ''
     }

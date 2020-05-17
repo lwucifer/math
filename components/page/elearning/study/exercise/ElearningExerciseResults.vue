@@ -1,8 +1,8 @@
 <template>
   <div class="e-exercise-results">
-    <h1
-      class="heading-3 text-dark-2 mt-3 mb-4 text-center"
-    >{{ result.name }} - {{ result.type | getExerciseTypeText }}</h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+      {{ result.name }} - {{ result.type | getExerciseTypeText }}
+    </h1>
 
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
       <template v-if="result.result === EXERCISE_STATUS.PASSED">
@@ -17,7 +17,9 @@
         </span>
         <span>
           Số lần làm còn lại:
-          <span class="text-secondary">{{ result.reworks - result.works}}</span>
+          <span class="text-secondary">{{
+            result.reworks - result.works
+          }}</span>
         </span>
       </template>
 
@@ -53,11 +55,16 @@
     <div class="text-center">
       <app-button
         v-if="result.result === EXERCISE_STATUS.PASSED"
-        @click.prevent="handleShowListQuestion"
-      >Xem đáp án</app-button>
+        @click.prevent="handleShowComment"
+        >{{ btnTextView }}</app-button
+      >
       <app-button
-        v-else-if="result.result === EXERCISE_STATUS.FAILED && (result.reworks - result.works > 0)"
-      >Làm lại bài tập</app-button>
+        v-else-if="
+          result.result === EXERCISE_STATUS.FAILED &&
+            result.reworks - result.works > 0
+        "
+        >Làm lại bài tập</app-button
+      >
     </div>
 
     <app-modal
@@ -122,6 +129,15 @@ export default {
       return `${this.result.corrects}/${
         this.result.questions
       } (${getExerciseResultText(this.result.result)})`;
+    },
+
+    btnTextView() {
+      const exerciseType = this.result.type;
+      if (exerciseType == EXERCISE_TYPES.CHOICE) {
+        return "Xem đáp án";
+      } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+        return "Xem nhận xét";
+      }
     }
   },
 
@@ -133,9 +149,10 @@ export default {
       "elearningSudyExerciseQuestionList"
     ]),
 
-    handleShowListQuestion() {
-      console.log("[handleShowListQuestion]");
+    handleShowComment() {
+      console.log("[handleShowComment]");
       const exercise_id = this.result.id;
+      const exerciseType = this.result.type;
 
       this.elearningSudyExerciseSubmissionList({
         params: {
@@ -144,7 +161,11 @@ export default {
       }).then(res => {
         this.elearningSudyExerciseQuestionList({ exercise_id }).then(result => {
           if (res.success == RESPONSE_SUCCESS) {
-            this.modalListQuestions = true;
+            if (exerciseType == EXERCISE_TYPES.CHOICE) {
+              this.modalListQuestions = true;
+            } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+              this.modalComments = true;
+            }
           }
         });
       });

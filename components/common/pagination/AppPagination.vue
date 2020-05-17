@@ -34,26 +34,26 @@
       </div>
     </div>
 
-    <ul class="app-pagination" v-else-if="total < 8">
-      <li v-if="prev">
-        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
-        <IconAngleLeft />
+    <ul class="app-pagination" v-else-if="total < 8 && total > 1">
+      <li>
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
+        <i><IconAngleLeft/></i>
         </a>
       </li>
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
         <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{ i }}</a>
       </li>
-      <li v-if="next">
-        <a class="link link-arrow" @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
-          <IconAngleRight />
+      <li>
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="next ? '' : 'disabled'">
+          <i><IconAngleRight /></i>
         </a>
       </li>
     </ul>
 
     <ul class="app-pagination" v-else-if="total > 1">
-      <li v-if="prev">
-        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="current == 1 ? 'disable' : ''">
-        <IconAngleLeft />
+      <li>
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
+        <i><IconAngleLeft/></i>
         </a>
       </li>
       <li v-if="prev && prev != 1">
@@ -85,8 +85,8 @@
       <li v-if="total - current > 1">
         <a class="link" @click="goTo(total)">{{ total }}</a>
       </li>
-      <li v-if="next">
-        <a class="link link-arrow" @click="goTo(next, current == total)" :class="current == total ? 'disable' : ''">
+      <li>
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="next ? '' : 'disabled'">
           <IconAngleRight />
         </a>
       </li>

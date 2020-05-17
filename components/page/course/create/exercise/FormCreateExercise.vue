@@ -134,7 +134,6 @@
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
-        square
         @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
@@ -142,12 +141,12 @@
         size="sm"
         color="primary"
         class="font-weight-semi-bold"
-        square
         @click="handleAddExcercise"
         >Tạo {{ title }}</app-button
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

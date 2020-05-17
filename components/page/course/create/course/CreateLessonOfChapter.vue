@@ -1,5 +1,5 @@
 <template>
-  <div class="cc-box__bg-disable" id="create-lesson-of-chapter">
+  <div class="cc-box__bg-disable mb-4" id="create-lesson-of-chapter">
     <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span></h3> 
     <app-input
       @handleBlur="handleBlurNameInput"
@@ -9,9 +9,9 @@
     />
     <span v-show="error_name" class="error">{{ error_name }}</span>
 
-    <span>Chọn loại bài học</span>
+    <p class="text-center mb-4">Chọn loại bài học</p>
 
-    <app-divider class="mt-3 mb-4" />
+    <!-- <app-divider class="mt-3 mb-4" /> -->
 
     <div class="clc-type-tabs">
       <a
@@ -66,7 +66,7 @@
         color="default"
         outline
         @click="handleCancel"
-        >Huỷ bỏ</app-button
+        >Hủy</app-button
       >
       <app-button
         class="clc-btn font-weight-semi-bold"
@@ -78,6 +78,7 @@
     </div>
 
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

@@ -67,6 +67,10 @@ export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
 };
 
+export const ACCOUNT_BALANCE = {
+    SET_ACCOUNT_BALANCE: "setAccountBalance",
+};
+
 export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
@@ -454,6 +458,10 @@ export const CART = {
 export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
 };
+
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue"
+}
 
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
