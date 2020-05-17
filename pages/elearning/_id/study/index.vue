@@ -1,7 +1,17 @@
 <template>
   <div>
     <HeaderCourse @exit="exitStudy" />
-    <VclFacebook v-if="pageLoading"></VclFacebook>
+
+    <div class="container" v-if="pageLoading">
+      <div class="row">
+        <div class="col-md-8">
+          <VclList />
+        </div>
+        <div class="col-md-4">
+          <VclList />
+        </div>
+      </div>
+    </div>
 
     <div class="container" v-else>
       <div class="row">
@@ -111,7 +121,7 @@ import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
-import { VclFacebook } from "vue-content-loading";
+import { VclList } from "vue-content-loading";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -132,7 +142,7 @@ export default {
     // ElearningQuestion,
     Streaming,
     ElearningExercise,
-    VclFacebook
+    VclList
   },
 
   data() {
