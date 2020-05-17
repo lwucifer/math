@@ -75,7 +75,13 @@
                 >
                   <div v-if="indexEdit === index || indexShow === index">
                     <div class>
-                      <h6 class="mb-3">Giờ học</h6>
+                      <div class="d-flex-center">
+                        <h6 class="mb-3">Giờ học</h6>
+                        <!-- <div class="ml-auto" v-if="indexEdit === index">
+                          <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
+                          <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                         </div> -->
+                      </div>
                       <div class="d-flex-center">
                         <div class="d-flex-center mb-4 mr-6">
                           <label class="mr-3">Bắt đầu vào lúc</label>
