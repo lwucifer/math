@@ -345,7 +345,7 @@ export const SCHOOL_TEACHERS = {
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
-    SET_EXPAND: "setElearningStudyExpand"
+    SET_EXPAND: "setElearningStudyExpand",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -493,4 +493,12 @@ export const TEACHING_ELEARNING_INVITES = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
+};
+
+export const TEACHING_PUBLIC_LIST = {
+    SET_TEACHING_PUBLIC_LIST: "setTeachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
 };

@@ -50,6 +50,7 @@ const QATab = () => import("./tabs/QA");
 const NotifyTab = () => import("./tabs/notify");
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
+const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 export default {
   layout: "manage",
 
@@ -60,14 +61,22 @@ export default {
     IconPlusCircle
   },
   async fetch({ params, store, query }) {
-    const userId = 14;
+    const userId = store.state.auth.token ? store.state.auth.token.id : "";
     await Promise.all([
       store.dispatch(
         `${STORE_NAME_INTERACTS}/${actionTypes.TEACHING_INTERACTIVE_LISTQUESTION.LIST}`
       ),
+      // store.dispatch(
+      //   `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
+      //   { userId }
+      // )
       store.dispatch(
-        `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-        { userId }
+        `${STORE_TEACHING_PUBLIC_LIST}/${actionTypes.TEACHING_PUBLIC_LIST.LIST}`,
+        {
+          params: {
+            teacher_id: userId
+          }
+        }
       )
     ]);
   },
@@ -80,6 +89,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
+    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
 
     currentTabComponent: function() {
       // List of tabs

@@ -93,6 +93,7 @@ import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
+const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 export default {
   layout: "manage",
 
@@ -182,7 +183,8 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAME_INTERACTS, ["listQuestions"]),
-    ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
+    // ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
+    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
     filterListQuestions() {
       return this.listQuestions && this.listQuestions.content
         ? this.listQuestions.content
@@ -221,8 +223,7 @@ export default {
       };
     },
     filterListLesson() {
-      const data =
-        this.Lessons && this.Lessons.data ? this.Lessons.data.content : [];
+      const data = this.teachingPublicList ? this.teachingPublicList : [];
       const filterData = data.map(item => {
         return {
           value: item.id,

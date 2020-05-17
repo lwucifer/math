@@ -54,6 +54,7 @@ import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { ELEARNING_TYPES, ELEARNING_STATUSES } from "~/utils/constants";
 import { mapState } from "vuex";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
+const STORE_PUBLIC_CLASSES = "elearning/teaching/public-classes";
 export default {
   components: {
     IconFilter
@@ -95,13 +96,14 @@ export default {
   },
   computed: {
     ...mapState(STORE_SCHOOL_CLASSES, ["schoolClasses"]),
+    ...mapState(STORE_PUBLIC_CLASSES, ["publicClassesList"]),
     filterSelectClass() {
-      const dataFilter =
-        this.schoolClasses &&
-        this.schoolClasses.data &&
-        this.schoolClasses.data.content
-          ? this.schoolClasses.data.content
-          : [];
+      const dataFilter = this.publicClassesList ? this.publicClassesList : [];
+      // this.schoolClasses &&
+      // this.schoolClasses.data &&
+      // this.schoolClasses.data.content
+      //   ? this.schoolClasses.data.content
+      //   : [];
       const data = dataFilter.map(item => {
         return {
           value: item.id,
