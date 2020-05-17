@@ -606,3 +606,11 @@ export const ACCOUNT_BIOGRAPHY = {
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     LIST: "teachingInteractiveListquestion",
 };
+
+export const TEACHING_PUBLIC_LIST = {
+    LIST: "teachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    LIST: "publicClassesList",
+};

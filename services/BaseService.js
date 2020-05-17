@@ -60,6 +60,16 @@ export default class BaseService {
     return data;
   }
 
+  async getIDWithPayload (id, payload) {
+    const { data } = await this.$axios.get(`${this.$api}/${id}`, payload);
+
+    const result = data ? data : {};
+
+    // console.log("[BASE.DETAIL]", result);
+
+    return result;
+  }
+
   async postWithFormData(payload) {
     let formData = new FormData();
     forEach(payload, function(value, key) {

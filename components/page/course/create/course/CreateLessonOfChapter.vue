@@ -1,5 +1,5 @@
 <template>
-  <div class="cc-box__bg-disable" id="create-lesson-of-chapter">
+  <div class="cc-box__bg-disable mb-4" id="create-lesson-of-chapter">
     <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span></h3> 
     <app-input
       @handleBlur="handleBlurNameInput"
@@ -9,9 +9,9 @@
     />
     <span v-show="error_name" class="error">{{ error_name }}</span>
 
-    <span>Chọn loại bài học</span>
+    <p class="text-center mb-4">Chọn loại bài học</p>
 
-    <app-divider class="mt-3 mb-4" />
+    <!-- <app-divider class="mt-3 mb-4" /> -->
 
     <div class="clc-type-tabs">
       <a
@@ -35,9 +35,8 @@
         @click.prevent="changeTabType('document')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconDefaultAsideMenu
-            class="icon mr-2"
-            style="width: 24px; height: 24px"
+          <IconRadioButtonChecked
+            class="icon mr-2" style="width: 24px; height: 24px"
           />
           <IconFileBlank class="icon" />
           <span class="clc-type-tab-item__text">Văn bản</span>
@@ -66,7 +65,7 @@
         color="default"
         outline
         @click="handleCancel"
-        >Huỷ bỏ</app-button
+        >Hủy</app-button
       >
       <app-button
         class="clc-btn font-weight-semi-bold"
@@ -96,7 +95,7 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import IconRadioButtonChecked from "~/assets/svg/design-icons/radio_button_checked.svg?inline";
-import IconDefaultAsideMenu from "~/assets/svg/icons/default-aside-menu.svg?inline";
+
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
@@ -123,8 +122,7 @@ export default {
     CreateAction,
     LessonSelectVideo,
     LessonSelectDocument,
-    IconRadioButtonChecked,
-    IconDefaultAsideMenu,
+    IconRadioButtonChecked
   },
 
   props: {

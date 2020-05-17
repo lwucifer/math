@@ -106,7 +106,11 @@
 </template>
 
 <script>
-import { EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
+import {
+  EXERCISE_TYPES,
+  STUDY_MODE,
+  EXERCISE_CATEGORIES
+} from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
@@ -117,7 +121,7 @@ import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
 import { fullDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-import {get} from 'lodash';
+import { get } from "lodash";
 
 export default {
   components: {
@@ -164,7 +168,8 @@ export default {
       "currentElearningId",
       "currentQuestionId",
       "autoSubmission",
-      "currentExercise"
+      "currentExercise",
+      "currentLession"
     ]),
 
     ...mapState("elearning/study/study-progress", ["progress"]),
@@ -190,10 +195,12 @@ export default {
       "setStudyExerciseSubmission",
       "setStudyExerciseCurrentByNo"
     ]),
+    ...mapMutations("event", ["setStudyMode"]),
 
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseSubmissionAdd",
-      "elearningSudyExerciseSubmissionList"
+      "elearningSudyExerciseSubmissionList",
+      "elearningSudyElearningExerciseList"
     ]),
 
     ...mapActions("elearning/study/study-progress", [
@@ -252,7 +259,24 @@ export default {
           };
           this.reNewGetElearningProgress();
 
-          // show learning screen
+          // emit studyMode=DO_EXERCISE
+          this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+          // get list EXERCISE
+          let exerciseReq = null;
+          if (this.currentLession) {
+            exerciseReq = {
+              elearning_id: this.progress.id,
+              category: EXERCISE_CATEGORIES.EXERCISE,
+              lesson_id: this.currentLession.id
+            };
+          } else {
+            exerciseReq = {
+              elearning_id: this.progress.id,
+              category: EXERCISE_CATEGORIES.TEST
+            };
+          }
+          console.log("[exerciseReq]", exerciseReq);
+          this.elearningSudyElearningExerciseList(exerciseReq);
         } else {
           this.modalConfirmSubmit = false;
           this.notify = {

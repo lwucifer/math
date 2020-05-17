@@ -11,6 +11,7 @@
       :key="answer.id"
       :answer="answer"
       :index="index"
+      :id="get(payload,'id','')"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
       @handleAddAnswer="handleAddAnswer"
@@ -22,16 +23,14 @@
         color="default"
         class="font-weight-semi-bold mr-4 text-secondary"
         outline
-        size="sm"
-        square
+        size="md"
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Huỷ</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >

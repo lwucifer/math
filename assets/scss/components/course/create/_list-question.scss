@@ -1,10 +1,28 @@
 .list-question {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid $color-disabled;
+    cursor: pointer;
+
+    &:hover {
+        .question-actions button {
+            display: block;
+        }
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:first-child {
+        padding-top: 2rem;
+    }
+
     .question-title {
-        width: 10%;
+        width: 7%;
     }
 
     .question-content {
-        width: 65%;
+        width: 58%;
 
         // @include set-line((
         //     'lineClamp': 3,
@@ -14,10 +32,20 @@
     }
 
     .question-type {
-        width: 15%;
+        width: 25%;
+    }
+
+    .question-point {
+        width: 8%;
     }
 
     .question-actions {
-        width: 10%;
+        max-width: 7%;
+        min-width: 60px;
+        height: 20px;
+        
+        button {
+            display: none;
+        }
     }
 }

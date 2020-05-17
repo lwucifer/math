@@ -21,7 +21,7 @@
                   v-model="filterCourse"
                   :options="courses"
                   label="text"
-                  placeholder="Chọn"
+                  placeholder="Chọn bài giảng/khóa học"
                   searchable
                   clearable
                   @input="handleChangedCourse"
@@ -30,7 +30,7 @@
 
               <div class="form-item">
                 <label>
-                  <strong>Tên phòng học</strong> (Tối đa 60 ký tự)
+                  <strong>Tên phòng học</strong> (Tối đa 150 ký tự)
                 </label>
                 <div class="input-limit">
                   <input type="text" :value="params.name" @input="changeName" />
@@ -63,14 +63,6 @@
                 <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
               </div>
 
-              <!-- <div class="form-item">
-                <label>
-                  <strong>Cho phép học sinh tải video bài giảng của bạn</strong>
-                </label>
-                <app-radio name="dơwnloadvideo" value="1" class="mr-6" v-model="downloadVideo">Có</app-radio>
-                <app-radio name="dơwnloadvideo" value="0" v-model="downloadVideo">Không</app-radio>
-              </div>-->
-
               <div class="form-item">
                 <p>
                   <strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)
@@ -83,7 +75,13 @@
                 >
                   <div v-if="indexEdit === index || indexShow === index">
                     <div class>
-                      <h6 class="mb-3">Giờ học</h6>
+                      <div class="d-flex-center">
+                        <h6 class="mb-3">Giờ học</h6>
+                        <!-- <div class="ml-auto" v-if="indexEdit === index">
+                          <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
+                          <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                         </div> -->
+                      </div>
                       <div class="d-flex-center">
                         <div class="d-flex-center mb-4 mr-6">
                           <label class="mr-3">Bắt đầu vào lúc</label>
@@ -238,7 +236,7 @@
                       {{convertDay(index)}}
                     </div>
                     <div>
-                      {{item.from_date}} - {{item.to_date}}
+                      {{convertDate(item.from_date)}} - {{convertDate(item.to_date)}}
                     </div>
                     <div class="ml-auto">
                       <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
@@ -258,7 +256,7 @@
 
           <div class="mt-4 mb-4 text-right">
             <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSave2" :disabled="!fullParams">Lưu nháp</app-button>
+            <app-button color="info" class="mr-3" @click="fnSave" :disabled="!fullParams">Lưu nháp</app-button>
             <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
           </div>
         </div>
@@ -276,10 +274,23 @@
       title="Bạn muốn tạo phòng học này?"
       description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
+    
+    <app-modal-confirm
+      v-if="showModalConfirmDraf"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      :width="550"
+      @cancel="handleCancelModal"
+      :footer="false"
+      :header="false"
+      title="Bạn muốn lưu bản nháp tạo phòng học này?"
+      description="Các thông tin phòng học sẽ được lưu thánh một bản nháp."
+    />
 
     <app-modal-notify
       :width="550"
       @ok="showNotify = false"
+      @close="showNotify = false"
       v-if="showNotify"
       :footer="false"
       :header="false"
@@ -318,8 +329,8 @@ const initialSchedule = {
 };
 const initialDuration = {
   hours: {
-    value: "1",
-    text: "1 giờ"
+    value: "0",
+    text: "0 giờ"
   },
   minutes: {
     value: "30",
@@ -344,6 +355,7 @@ function initialState() {
     message: "",
     sendMess: "0",
     downloadVideo: "0",
+    showModalConfirmDraf: false,
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
@@ -351,6 +363,10 @@ function initialState() {
     startTime: [initialStartTime],
     duration: [initialDuration],
     hours: [
+      {
+        value: "0",
+        text: "0 giờ"
+      },
       {
         value: "1",
         text: "1 giờ"
@@ -540,7 +556,6 @@ function initialState() {
 }
 
 export default {
-  layout: "default",
   name: "onlineclass",
 
   components: {
@@ -553,6 +568,8 @@ export default {
     IconCreate,
     ElearningManagerSide
   },
+
+  middleware: ["teacher-role"],
 
   data() {
     return initialState();
@@ -589,6 +606,13 @@ export default {
   },
 
   methods: {
+    convertDate(time) {
+      const date = new Date(time);
+      var strTime =
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+      return strTime;
+    },
+
     convertDay(index) {
       const items = this.selectedItems[index];
       return items.reduce((result, item, index) => {
@@ -659,7 +683,7 @@ export default {
     },
 
     changeName(e) {
-      if (e.target.value.length < 61) {
+      if (e.target.value.length < 151) {
         this.params.name = e.target.value;
       } else {
         e.target.value = this.params.name;
@@ -732,6 +756,16 @@ export default {
       }
     },
 
+    formatAMPM(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
+    },
     handleChangedTime(e, index, type = false) {
       let post = {
         value: e.value,
@@ -748,12 +782,13 @@ export default {
         })
       }
 
+      let startTime = this.startTime[index].time.value + " " + this.startTime[index].type.value;
+      let date = new Date('2000-01-01 ' + startTime);
+      startTime = this.formatAMPM(new Date(date.getTime() - 7*60*60*1000));
+
       this.params.schedules.splice(index, 1, {
         ...this.params.schedules[index],
-        start_time:
-          this.startTime[index].time.value +
-          " " +
-          this.startTime[index].type.value
+        start_time: startTime
       })
     },
 

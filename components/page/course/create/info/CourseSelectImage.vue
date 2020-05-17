@@ -31,7 +31,7 @@
         </p>
 
         <p class="csa-desc text-gray" v-else>
-          Bạn có thể tải lên hình ảnh minh họa cho bài giảng của bạn. Hình ảnh
+          Bạn có thể tải lên hình ảnh minh họa cho {{ name }} của bạn. Hình ảnh
           minh họa phải có kích thước nhỏ nhất là
           <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. Định dạng cho
           phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Việc tải lên ảnh này là
@@ -122,6 +122,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    name: {
+      type: String,
+      default: 'Bài giảng'
+    }
   },
 
   data() {

@@ -8,12 +8,17 @@
     align-items: flex-start;
     text-decoration: none;
     color: inherit;
+    padding: 1rem 1.5rem 2rem 1.5rem;
 }
 
 .e-program-course__heading {
     font-size: 1.5rem;
-    line-height: (24/15);
-    margin-bottom: 0.5rem;
+    // line-height: (24/15);
+    margin-bottom: 1rem;
+}
+
+.e-program-course__heading-wrapper {
+    margin-right: 1rem;
 }
 
 .e-program-course__icon-toggle {

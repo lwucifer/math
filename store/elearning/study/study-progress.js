@@ -15,7 +15,6 @@ const state = () => ({
  * initial getters
  */
 const getters = {
-  //
 };
 
 const actions = {

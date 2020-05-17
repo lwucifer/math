@@ -64,10 +64,10 @@
               <span>Liên kết trường học</span>
             </app-button>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3" v-if="isTeacherRole">
             <label for class="form--normal__title">Tiểu sử</label>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" v-if="isTeacherRole">
             <div v-if="story == null">
               <app-button
                 color="transparent"
@@ -95,7 +95,7 @@
                     style="max-height: 16rem; overflow-y: auto; margin-right: -5px;"
                   ></div>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex" v-if="!editingStory">
                   <button class="btn-transparent btn--success mr-4" @click="editStory">
                     <IconEdit class />
                     <span>Chỉnh sửa</span>
@@ -147,7 +147,7 @@ import AccountChangePasswordModal from "~/components/page/account/AccountChangeP
 import AccountLinkModal from "~/components/page/account/Info/AccountLinkModal";
 import AccountStoryForm from "~/components/page/account/forms/AddAccountStory";
 import * as actionTypes from "~/utils/action-types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconPlusProtect from "~/assets/svg/v2-icons/alert/add_24px.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
@@ -290,12 +290,14 @@ export default {
     editStory() {
       this.editingStory = true;
     },
-    submitStory() {
+    submitStory(_data) {
       const data = {
-        biography: "aaa"
+        biography: _data
       };
       this.accountBiographyAdd(data).then(result => {
         if (result.success) {
+          this.editingStory = false;
+          this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`);
         }
       });
     },
@@ -312,9 +314,8 @@ export default {
       linkList: "linkList"
     }),
 
-    ...mapState("auth", [
-      "token",
-    ]),
+    ...mapState("auth", ["token"]),
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     filterAvatarSrc() {
       return this.personalList && this.personalList.avatar
         ? this.personalList.avatar.low

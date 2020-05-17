@@ -44,7 +44,7 @@
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-5 mb-3">
-            Tên {{ name }}
+            Tiêu đề {{ name }}
             <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
           <app-input
@@ -90,7 +90,7 @@
           @onSelectFile="handleSelectAvatar"
           :minWidth="340"
           :minHeight="204"
-          title="Hình đại diện cho bài giảng"
+          :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
 
@@ -102,11 +102,13 @@
           @onSelectFile="handleSelectCover"
           :minWidth="730"
           :minHeight="410"
-          title="Hình minh hoạ cho bài giảng"
+          :title="'Hình minh hoạ cho ' + name"
           id="cover"
+          :name="name"
         />
       </div>
       <app-modal-confirm
+        centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="handleOk"
@@ -309,8 +311,8 @@ export default {
         this.error.name = "Bạn cần nhập tên" + " " + this.name;
         return;
       }
-      if (value.length > 60) {
-        this.error.name = "Tên khoá học vượt quá số ký tự cho phép";
+      if (value.length > 150) {
+        this.error.name = "Tên " + this.name + " vượt quá số ký tự cho phép";
         return;
       }
       this.error.name = "";

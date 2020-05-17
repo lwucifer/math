@@ -192,6 +192,9 @@ export default {
       "setPayload",
       "setExerciseLoading"
     ]),
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseCurrentLession",
+    ]),
 
     async handleStuty(lesson) {
       redirectWithParams({ lesson_id: get(lesson, "id", "") });
@@ -242,6 +245,7 @@ export default {
       const elearningReq = { elearning_id, lesson_id, category };
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
+      this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
     }
   },

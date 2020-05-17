@@ -56,7 +56,7 @@
       <app-button
         v-if="result.result === EXERCISE_STATUS.PASSED"
         @click.prevent="handleShowComment"
-        >Xem nhận xét</app-button
+        >{{ btnTextView }}</app-button
       >
       <app-button
         v-else-if="
@@ -82,9 +82,7 @@
       :footer="false"
       @close="modalComments = false"
     >
-      <ElearningExerciseComments
-        slot="content"
-      />
+      <ElearningExerciseComments slot="content" />
     </app-modal>
   </div>
 </template>
@@ -131,6 +129,15 @@ export default {
       return `${this.result.corrects}/${
         this.result.questions
       } (${getExerciseResultText(this.result.result)})`;
+    },
+
+    btnTextView() {
+      const exerciseType = this.result.type;
+      if (exerciseType == EXERCISE_TYPES.CHOICE) {
+        return "Xem đáp án";
+      } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+        return "Xem nhận xét";
+      }
     }
   },
 
@@ -145,6 +152,7 @@ export default {
     handleShowComment() {
       console.log("[handleShowComment]");
       const exercise_id = this.result.id;
+      const exerciseType = this.result.type;
 
       this.elearningSudyExerciseSubmissionList({
         params: {
@@ -153,7 +161,11 @@ export default {
       }).then(res => {
         this.elearningSudyExerciseQuestionList({ exercise_id }).then(result => {
           if (res.success == RESPONSE_SUCCESS) {
-            this.modalComments = true;
+            if (exerciseType == EXERCISE_TYPES.CHOICE) {
+              this.modalListQuestions = true;
+            } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+              this.modalComments = true;
+            }
           }
         });
       });
