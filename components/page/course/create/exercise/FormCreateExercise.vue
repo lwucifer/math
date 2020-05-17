@@ -113,18 +113,21 @@
 
       <div class="col-12 col-md-4">
         <label for="count" class="heading-5 font-weight-bold"
-          >Số lần làm bài</label
+          >Số lần làm bài tối đa</label
         >
 
         <app-input
           type="text"
-          class="mb-0 mt-3"
+          class="mb-0 ce-input-with-unit mt-3"
           @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
-          style="width: 49px"
+          style="width: 102px"
           v-model="payload.reworks"
-        ></app-input>
+          :value="1"
+        >
+          <div slot="unit">Lần</div>
+        </app-input>
       </div>
     </div>
 

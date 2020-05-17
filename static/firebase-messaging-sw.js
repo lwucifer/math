@@ -1,12 +1,9 @@
-const options = {"firebaseVersion":"7.8.0","config":{"apiKey":"AIzaSyBjG_rG7dp2-IqxI_28nUfG5MlcpiNpjmo","authDomain":"schoolly-37aa8.firebaseapp.com","databaseURL":"https:\u002F\u002Fschoolly-37aa8.firebaseio.com","projectId":"schoolly-37aa8","storageBucket":"schoolly-37aa8.appspot.com","messagingSenderId":"590078046901","appId":"1:590078046901:web:d30773daf7967d8d1b84fc","measurementId":"G-LN58DKHESW","fcmPublicVapidKey":"BBG4nnNh0FJ8epcWubtkEXbwFTeDUskL0muMatOllpVPJVPJVG_2Yl2Pk1nkxTMD7IhgXuVCnlU7v2sK127Frus"},"onFirebaseHosting":false}
-const version = options.firebaseVersion
-const onFirebaseHosting = options.onFirebaseHosting
 
 importScripts(
-  'https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js'
+  'https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js'
 )
 importScripts(
-  'https://www.gstatic.com/firebasejs/7.14.1/firebase-messaging.js'
+  'https://www.gstatic.com/firebasejs/7.14.3/firebase-messaging.js'
 )
 firebase.initializeApp({"apiKey":"AIzaSyBjG_rG7dp2-IqxI_28nUfG5MlcpiNpjmo","authDomain":"schoolly-37aa8.firebaseapp.com","databaseURL":"https:\u002F\u002Fschoolly-37aa8.firebaseio.com","projectId":"schoolly-37aa8","storageBucket":"schoolly-37aa8.appspot.com","messagingSenderId":"590078046901","appId":"1:590078046901:web:d30773daf7967d8d1b84fc","measurementId":"G-LN58DKHESW","fcmPublicVapidKey":"BBG4nnNh0FJ8epcWubtkEXbwFTeDUskL0muMatOllpVPJVPJVG_2Yl2Pk1nkxTMD7IhgXuVCnlU7v2sK127Frus"})
 
