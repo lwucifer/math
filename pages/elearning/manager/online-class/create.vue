@@ -30,7 +30,7 @@
 
               <div class="form-item">
                 <label>
-                  <strong>Tên phòng học</strong> (Tối đa 60 ký tự)
+                  <strong>Tên phòng học</strong> (Tối đa 150 ký tự)
                 </label>
                 <div class="input-limit">
                   <input type="text" :value="params.name" @input="changeName" />
@@ -62,14 +62,6 @@
                 <app-radio name="sendmess" value="1" class="mr-6" v-model="sendMess">Có</app-radio>
                 <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
               </div>
-
-              <!-- <div class="form-item">
-                <label>
-                  <strong>Cho phép học sinh tải video bài giảng của bạn</strong>
-                </label>
-                <app-radio name="dơwnloadvideo" value="1" class="mr-6" v-model="downloadVideo">Có</app-radio>
-                <app-radio name="dơwnloadvideo" value="0" v-model="downloadVideo">Không</app-radio>
-              </div>-->
 
               <div class="form-item">
                 <p>
@@ -540,7 +532,6 @@ function initialState() {
 }
 
 export default {
-  layout: "default",
   name: "onlineclass",
 
   components: {
@@ -553,6 +544,8 @@ export default {
     IconCreate,
     ElearningManagerSide
   },
+
+  middleware: ["teacher-role"],
 
   data() {
     return initialState();
@@ -659,7 +652,7 @@ export default {
     },
 
     changeName(e) {
-      if (e.target.value.length < 61) {
+      if (e.target.value.length < 151) {
         this.params.name = e.target.value;
       } else {
         e.target.value = this.params.name;

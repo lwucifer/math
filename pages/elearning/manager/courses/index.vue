@@ -224,9 +224,8 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/elearning";
 
 export default {
-  layout: "manage",
   name: "ManageCourse",
-
+  
   components: {
     ModalElearningPreview,
     ElearningManagerSide,
@@ -245,6 +244,8 @@ export default {
     IconPeople,
     IconRestore
   },
+
+  middleware: ["teacher-role"],
 
   data() {
     return {
