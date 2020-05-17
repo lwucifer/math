@@ -191,15 +191,15 @@ class Question {
     if (payload.content) {
       this.content = payload.content;
     }
-    let answers = [];
-    payload.answers.map(answer => {
-      let item = {
-        correct: answer.correct,
-        content: answer.content
-      };
-      answers.push(item);
-    });
-    this.answers = answers;
+    // let answers = [];
+    // payload.answers.map(answer => {
+    //   let item = {
+    //     correct: answer.correct,
+    //     content: answer.content
+    //   };
+    //   answers.push(item);
+    // });
+    // this.answers = answers;
   }
 }
 

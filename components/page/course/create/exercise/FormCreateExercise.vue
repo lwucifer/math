@@ -130,15 +130,15 @@
 
     <div class="d-flex justify-content-end">
       <app-button
-        size="sm"
+        size="md"
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Huỷ</app-button
       >
       <app-button
-        size="sm"
+        size="md"
         color="primary"
         class="font-weight-semi-bold"
         @click="handleAddExcercise"
@@ -146,6 +146,8 @@
       >
     </div>
     <app-modal-confirm
+      title="Bạn muốn tạo bài tập?"
+      description="Bạn sẽ không thể thay đổi loại bài tập sau khi tạo."
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
