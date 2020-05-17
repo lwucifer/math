@@ -31,11 +31,11 @@
         <study-space />
 
         <button class="item" @click="redirectMessages">
-          <IconMessager />
+          <IconCommentAltMessage />
           <span class="number">9</span>
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
-          <IconShoppingCartAlt />
+          <IconShoppingCart24px class="fill-gray"/>
           <span
             v-if="get(cartCheckout, 'orders.length', 0)"
             class="number"
@@ -50,7 +50,7 @@
           @visible-change="handleVisibleChange"
         >
           <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
-            <IconBell />
+            <IconNotifications24px class="fill-gray" />
             <span class="number" v-if="notiUnread > 0">{{ notiUnread }}</span>
           </button>
           <div class="link--dropdown__content">
@@ -159,9 +159,9 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
-import IconBell from "~/assets/svg/icons/bell.svg?inline";
-import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
-import IconMessager from "~/assets/svg/icons/messager.svg?inline";
+import IconNotifications24px from '~/assets/svg/v2-icons/notifications_24px.svg?inline';
+import IconShoppingCart24px from '~/assets/svg/v2-icons/shopping_cart_24px.svg?inline';
+import IconCommentAltMessage from '~/assets/svg/design-icons/comment-alt-message.svg?inline';
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
@@ -179,9 +179,9 @@ export default {
     IconSearch,
     IconGlobeNoti,
     IconCaretDown,
-    IconBell,
-    IconShoppingCartAlt,
-    IconMessager,
+    IconNotifications24px,
+    IconShoppingCart24px,
+    IconCommentAltMessage,
     AnnoucementItem,
     IconTrashAlt,
     IconEllipseAlt,

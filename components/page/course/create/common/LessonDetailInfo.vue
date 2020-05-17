@@ -8,7 +8,7 @@
           <span class="heading-6 mb-3 font-weight-bold"
             >Bài {{ index + 1 + ": " }}</span
           >
-          <span>{{ get(lesson, "name", "") }}</span>
+          <span>{{ get(lesson, "name", "").length > 60 ?  (get(lesson, "name", "").slice(0, 40) + '...') : get(lesson, "name", "")}}</span>
         </p>
 
         <div class="clc-video__actions">

@@ -11,6 +11,7 @@
       :key="answer.id"
       :answer="answer"
       :index="index"
+      :id="get(payload,'id','')"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
       @handleAddAnswer="handleAddAnswer"
