@@ -6,6 +6,16 @@
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
 
+    <div class="row">
+      <div class="col-md-3">
+        <label class="d-inline-block mb-3 font-weight-bold" for="answer">Chọn đáp án đúng</label>
+      </div>
+
+      <div class="col-md-8">
+        <label class="d-inline-block mb-3" for="answer-editor">Nội dung đáp án</label>
+      </div>
+    </div>
+
     <CreateAnswerOfQuestion
       v-for="(answer, index) in get(payload, 'answers', [])"
       :key="index"
@@ -23,7 +33,6 @@
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         size="sm"
-        square
         @click="$emit('cancel')"
         >Huỷ bỏ</app-button
       >
@@ -31,7 +40,6 @@
         color="primary"
         class="font-weight-semi-bold"
         size="sm"
-        square
         @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >
