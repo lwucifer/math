@@ -1,8 +1,8 @@
 <template>
   <div class="e-exercise-results">
-    <h1
-      class="heading-3 text-dark-2 mt-3 mb-4 text-center"
-    >{{ result.name }} - {{ result.type | getExerciseTypeText }}</h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+      {{ result.name }} - {{ result.type | getExerciseTypeText }}
+    </h1>
 
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
       <template v-if="result.result === EXERCISE_STATUS.PASSED">
@@ -17,7 +17,9 @@
         </span>
         <span>
           Số lần làm còn lại:
-          <span class="text-secondary">{{ result.reworks - result.works}}</span>
+          <span class="text-secondary">{{
+            result.reworks - result.works
+          }}</span>
         </span>
       </template>
 
@@ -54,10 +56,15 @@
       <app-button
         v-if="result.result === EXERCISE_STATUS.PASSED"
         @click.prevent="handleShowComment"
-      >Xem nhận xét</app-button>
+        >Xem nhận xét</app-button
+      >
       <app-button
-        v-else-if="result.result === EXERCISE_STATUS.FAILED && (result.reworks - result.works > 0)"
-      >Làm lại bài tập</app-button>
+        v-else-if="
+          result.result === EXERCISE_STATUS.FAILED &&
+            result.reworks - result.works > 0
+        "
+        >Làm lại bài tập</app-button
+      >
     </div>
 
     <app-modal
@@ -75,7 +82,9 @@
       :footer="false"
       @close="modalComments = false"
     >
-      <ElearningExerciseComments slot="content" />
+      <ElearningExerciseComments
+        slot="content"
+      />
     </app-modal>
   </div>
 </template>
@@ -135,11 +144,6 @@ export default {
 
     handleShowComment() {
       console.log("[handleShowComment]");
-      this.modalComments = true;
-    },
-
-    handleShowListQuestion() {
-      console.log("[handleShowListQuestion]");
       const exercise_id = this.result.id;
 
       this.elearningSudyExerciseSubmissionList({
@@ -149,7 +153,7 @@ export default {
       }).then(res => {
         this.elearningSudyExerciseQuestionList({ exercise_id }).then(result => {
           if (res.success == RESPONSE_SUCCESS) {
-            this.modalListQuestions = true;
+            this.modalComments = true;
           }
         });
       });
