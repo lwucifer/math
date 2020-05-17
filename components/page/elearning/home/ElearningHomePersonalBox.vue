@@ -20,8 +20,10 @@
       </h3>
 
       <div class="eh-personal-box__teacher">
-        <app-avatar :src="get(teacher, 'avatar.low', '')" :size="39" />
-        <span class="eh-personal-box__teacher-name ml-3">Lily Edwards</span>
+        <n-link :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`" class="profile-link" target="_blank">
+          <app-avatar :src="get(teacher, 'avatar.low', '')" :size="39" />
+          <span class="eh-personal-box__teacher-name ml-3">{{ get(teacher, 'name', '') }}</span>
+        </n-link>
         <app-stars :stars="averageRate || 0" class="ml-4 mr-3" />
         <span class="text-dark">
           <b>{{ averageRate || 0 }}</b>

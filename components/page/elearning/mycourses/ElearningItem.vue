@@ -12,13 +12,22 @@
         :title="elearning.name"
       >{{elearning && elearning.name}}</n-link>
       <div class="d-flex align-items-center my-3">
-        <app-avatar
-          :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
-          :size="20"
-        />
-        <span
-          class="ml-2"
-        >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+        <n-link :to="`/public/profile/teacher?user_id=${elearning.teacher.id}`" class="profile-link" target="_blank">
+          <app-avatar
+            :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
+            :size="20"
+          />
+          <span
+            class="ml-2"
+          >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+        </n-link>
+        <!--<app-avatar-->
+          <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
+          <!--:size="20"-->
+        <!--/>-->
+        <!--<span-->
+          <!--class="ml-2"-->
+        <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
       <div class="proccess-bar-study-border">
         <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
