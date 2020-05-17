@@ -35,9 +35,8 @@
         @click.prevent="changeTabType('document')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconDefaultAsideMenu
-            class="icon mr-2"
-            style="width: 24px; height: 24px"
+          <IconRadioButtonChecked
+            class="icon mr-2" style="width: 24px; height: 24px"
           />
           <IconFileBlank class="icon" />
           <span class="clc-type-tab-item__text">Văn bản</span>
@@ -96,7 +95,7 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import IconRadioButtonChecked from "~/assets/svg/design-icons/radio_button_checked.svg?inline";
-import IconDefaultAsideMenu from "~/assets/svg/icons/default-aside-menu.svg?inline";
+
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
@@ -123,8 +122,7 @@ export default {
     CreateAction,
     LessonSelectVideo,
     LessonSelectDocument,
-    IconRadioButtonChecked,
-    IconDefaultAsideMenu,
+    IconRadioButtonChecked
   },
 
   props: {

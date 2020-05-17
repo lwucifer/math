@@ -10,6 +10,8 @@
 
       <span class="text-sub mr-4 question-type">{{ type }}</span>
 
+      <span class="text-sub mr-4 question-point" v-if="get(question, 'type', '') === 'ESSAY'">{{ get(question, 'points', '') }} điểm</span>
+
       <div class="d-flex align-items-center justify-content-between ce-question-item__actions question-actions">
         <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />

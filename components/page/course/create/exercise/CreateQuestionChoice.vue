@@ -12,7 +12,7 @@
       </div>
 
       <div class="col-md-8">
-        <label class="d-inline-block mb-3" for="answer-editor">Nội dung đáp án</label>
+        <label class="d-inline-block mb-3" style="margin-left: 1.5rem" for="answer-editor">Nội dung đáp án</label>
       </div>
     </div>
 

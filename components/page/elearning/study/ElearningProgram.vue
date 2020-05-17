@@ -51,6 +51,9 @@ export default {
     get,
 
     ...mapMutations("event", ["setStudyMode"]),
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseCurrentLession",
+    ]),
 
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyElearningExerciseList"
@@ -61,6 +64,7 @@ export default {
 
       // emit studyMode=DO_EXERCISE
       this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+      this.setStudyExerciseCurrentLession(null);
 
       // get list TEST
       const testReq = {
