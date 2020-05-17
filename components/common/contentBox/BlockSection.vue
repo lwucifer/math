@@ -1,9 +1,14 @@
 <template>
-  <div class="block-section">
-    <div class="block-section__title">
+  <div class="block-section" :class="blockCls">
+    <div
+      class="block-section__title"
+      :class="titleCls"
+    >
       <slot name="title">
         <h3 class="block-section__title--main" @click="clickTitle">
-          <icon-left-arrow v-if="hasIcon" class="block-section__icon-title" />
+          <span @click="clickBack">
+            <icon-left-arrow v-if="hasIcon" class="block-section__icon-title" title="Quay lại"/>
+          </span>
           {{ title }}
         </h3>
       </slot>
@@ -27,14 +32,32 @@
         type: String,
         required: true
       },
+      actionClick: { // Action when click arrow icon
+        type: Function
+      },
       hasIcon: {
         type: Boolean,
         default: false
-      }
+      },
+      blockCls: {
+        type: Object,
+        default: () => {}
+      },
+      titleCls: {
+        type: Object,
+        default: () => {}
+      },
     },
     methods: {
       clickTitle() {
         this.$emit('click')
+      },
+      clickBack() {
+        if (this.actionClick) {
+          this.actionClick()
+        } else {
+          this.$router.go("-1")
+        }
       }
     }
   };

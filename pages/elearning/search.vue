@@ -3,8 +3,7 @@
     <h1 class="elearning-search__heading heading-3">
       <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
       <span class="body-2 font-weight-normal">
-        (
-        <b>50</b> bài giảng - <b>20</b> khoá học)
+        (<b>{{ totalSummary }}</b> {{ lessonType }})
       </span>
     </h1>
 
@@ -43,7 +42,13 @@
 
       <div class="ml-auto">
         <span class="text-dark body-3 mr-3">Sắp xếp</span>
-        <app-select v-model="sort" :options="sortOpts" placeholder size="sm" />
+        <app-select
+          v-model="sort"
+          :options="sortOpts"
+          @change="handleChangeSort"
+          placeholder
+          size="sm"
+        />
       </div>
     </div>
 
@@ -114,7 +119,12 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
-import { ELEARNING_TYPES_VALUE, PAGE_SIZE } from "~/utils/constants";
+import {
+  ELEARNING_TYPES_VALUE,
+  PAGE_SIZE,
+  ELEARNING_TYPES_TEXT,
+  SORT_ELEARNING
+} from "~/utils/constants";
 import { addAllOptionSelect } from "~/utils/common";
 
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
@@ -133,17 +143,17 @@ export default {
 
   data() {
     return {
-      fee: null,
+      fee: -1,
       feeOpts: [
         { value: -1, text: "Tất cả" },
-        { value: 0, text: "Miễn phí" },
-        { value: 1, text: "Có phí" }
+        { value: 1, text: "Miễn phí" },
+        { value: 0, text: "Có phí" }
         // { value: 0, text: "Từ 0 đến 100k" },
         // { value: 1, text: "Từ 100k đến 200k" },
         // { value: 2, text: "Từ 200k đến 500k" },
         // { value: 3, text: "Lơn hơn 500k" }
       ],
-      time: null,
+      time: -1,
       timeOpts: [
         { value: -1, text: "Tất cả" },
         { value: 0, text: "10 phút" },
@@ -151,21 +161,21 @@ export default {
         { value: 2, text: "1 giờ" },
         { value: 3, text: "3 giờ" }
       ],
-      level: null,
+      level: -1,
       // levelOpts: [
       //   { value: 0, text: "Trình độ 1" },
       //   { value: 1, text: "Trình độ 2" },
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      sort: 0,
+      sort: SORT_ELEARNING.RELATED,
       sortOpts: [
-        { value: 0, text: "Mới nhất" },
-        { value: 1, text: "Liên quan nhất" },
-        { value: 2, text: "Đánh giá cao nhất" },
-        { value: 3, text: "Nhiều bình luận nhất" },
-        { value: 4, text: "Giá thấp nhất" },
-        { value: 5, text: "Giá cao nhất" }
+        { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
+        { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
+        { value: SORT_ELEARNING.COMMENT, text: "Nhiều bình luận nhất" },
+        { value: SORT_ELEARNING.NEWEST, text: "Mới nhất" },
+        { value: SORT_ELEARNING.PRICE_ASC, text: "Giá thấp nhất" },
+        { value: SORT_ELEARNING.PRICE_DESC, text: "Giá cao nhất" }
       ],
       isFilter: false,
       lessons: [],
@@ -185,9 +195,10 @@ export default {
         type: ELEARNING_TYPES_VALUE.LECTURE,
         duration: -1,
         level: -1,
-        fee: -1,
+        free: -1,
         page: 1,
-        size: PAGE_SIZE.DEFAULT
+        size: PAGE_SIZE.DEFAULT,
+        sort: SORT_ELEARNING.RELATED
       },
 
       pagination: {
@@ -243,11 +254,23 @@ export default {
           text: c.name
         };
       });
+    },
+
+    totalSummary() {
+      return get(this, "pagination.totalElements", 0);
+    },
+    lessonType() {
+      const lessionType = this.payload.type;
+      console.log("[lessonType]", lessionType);
+      return ELEARNING_TYPES_TEXT[lessionType];
     }
   },
 
   mounted() {
-    this.pageLoading = false;
+    // this.pageLoading = true;
+    // setTimeout(() => {
+    //   this.pageLoading = false;
+    // }, 5000);
   },
 
   methods: {
@@ -260,8 +283,8 @@ export default {
           delete this.payload[k];
         }
       });
-      if (this.payload.fee != undefined) {
-        this.payload.fee = !!this.payload.fee;
+      if (this.payload.free != undefined) {
+        this.payload.free = !!this.payload.free;
       }
 
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
@@ -283,26 +306,37 @@ export default {
 
     handleChangeFee(_newVal, _selectedVal) {
       console.log("[handleChangeFee]", _newVal, _selectedVal);
-      this.payload.fee = _newVal;
+      this.payload.page = 1;
+      this.payload.free = _newVal;
       this.getLessons();
     },
 
     handleChangeTimes(_newVal, _selectedVal) {
       console.log("[handleChangeTimes]", _newVal, _selectedVal);
+      this.payload.page = 1;
       this.payload.duration = _newVal;
       this.getLessons();
     },
 
     handleChangeLevel(_newVal, _selectedVal) {
       console.log("[handleChangeLevel]", _newVal, _selectedVal);
+      this.payload.page = 1;
       this.payload.level = _newVal;
       this.getLessons();
     },
 
     handleChangeTab(_newVal) {
       console.log("[handleChangeTab]", _newVal);
+      this.payload.page = 1;
       this.tab = _newVal;
       this.payload.type = _newVal;
+      this.getLessons();
+    },
+
+    handleChangeSort(_newVal, _selectedVal) {
+      console.log("[handleChangeSort]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.sort = _newVal;
       this.getLessons();
     },
 

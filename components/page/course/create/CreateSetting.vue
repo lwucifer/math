@@ -157,6 +157,7 @@
     </div>
 
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleSaveSetting"

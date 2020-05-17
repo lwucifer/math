@@ -54,7 +54,9 @@
     <!--Options group-->
 
     <!--Table-->
+    <div v-if="loading" class="pl-4">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"

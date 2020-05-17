@@ -7,6 +7,7 @@
         ref="inputExerciserName"
         class="cc-box__input-title bg-input-gray mb-0"
         type="text"
+        maxlength="80"
       />
       <h2 class="cc-box__title heading-6" v-else>
         Bài {{ index + 1 }}:
@@ -46,6 +47,7 @@
       </button>
     </template>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

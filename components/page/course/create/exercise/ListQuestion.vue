@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="list-question">
     <div
-      class="ce-question-item d-flex align-items-center"
+      class="d-flex align-items-center mb-4"
       v-if="!isShowEditQuestion"
     >
-      <h3 class="body-2 mr-1">Câu {{ index + 1 }}:</h3>
-      <p class="body-2 mr-4" v-html="get(question, 'content', '')"></p>
-      <span class="text-sub mr-4">{{ type }}</span>
+      <h3 class="body-2 mr-2 question-title">Câu {{ index + 1 }}:</h3>
+      <p class="body-2 mr-4 question-content" v-html="get(question, 'content', '')"></p>
 
-      <div class="d-flex align-items-center ml-auto ce-question-item__actions">
+      <span class="text-sub mr-4 question-type">{{ type }}</span>
+
+      <div class="d-flex align-items-center ml-auto ce-question-item__actions question-actions">
         <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
@@ -26,6 +27,7 @@
       </button> -->
       </div>
       <app-modal-confirm
+        centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="handleOk"
@@ -157,3 +159,8 @@ export default {
   },
 };
 </script>
+
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_list-question.scss";
+</style>

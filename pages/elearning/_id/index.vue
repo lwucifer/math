@@ -36,6 +36,55 @@
         <ElearningRightSide v-sticky sticky-offset="{ top: 90, bottom: 9 }" />
       </div>
     </div>
+
+    <app-modal-confirm 
+      centered
+      :width="476" 
+      v-if="inputCode" 
+      @cancel="closeModalInput"
+      >
+      
+      <template #title>
+        <h4 class="mb-3">Bài giảng riêng tư</h4>
+      </template>
+
+      <template #description>
+        <p class="text-center mb-3">Vui lòng nhập mã riêng tư vào ô dưới đây để truy cập bài giảng</p>
+
+        <app-input placeholder="Nhập mã"></app-input>
+      </template>
+
+      <template slot="actions" slot-scope="{ confirmLoading }">
+          <app-button
+            class="font-weight-semi-bold mr-3"
+            color="default"
+            outline
+            @click="inputCode = false"
+          >
+            Hủy
+          </app-button>
+
+          <app-button
+            class="font-weight-semi-bold"
+            color="primary"
+            :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
+          >
+            <app-spin v-if="confirmLoading" class="mr-3" color="white" size="small" />
+            Xác nhận
+          </app-button>
+
+          <div class="mt-4 mess text-secondary font-italic text-left">Nếu bạn chưa có mã riêng tư để truy cập, bạn có thể gửi yêu cầu tham gia bài giảng tại đây</div>
+      </template>
+    </app-modal-confirm>
+
+
+    <app-modal-notify 
+      centered
+      v-if="inputCodeSuccess"
+      type="success" 
+      title="Gửi yêu cầu thành công!"
+      @ok="inputCodeSuccess = false"
+      @close="closeModalNoti"/>
   </div>
 </template>
 
@@ -114,6 +163,8 @@ export default {
         setWrapperSize: true,
         watchOverflow: true,
       },
+      inputCode: false,
+      inputCodeSuccess: false,
     };
   },
 
@@ -240,6 +291,14 @@ export default {
     //     }
     //   }
     // },
+
+    closeModalNoti() {
+      this.inputCodeSuccess = false
+    },
+
+    closeModalInput() {
+      this.inputCode = false
+    }
   },
 };
 </script>

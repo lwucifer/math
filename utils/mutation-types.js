@@ -67,6 +67,10 @@ export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
 };
 
+export const ACCOUNT_BALANCE = {
+    SET_ACCOUNT_BALANCE: "setAccountBalance",
+};
+
 export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
@@ -122,24 +126,24 @@ export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
 };
 
 export const ELEARNING_PUBLIC_WHAT_NEXTS = {
-    SET_WHAT_NEXTS: 'setElearningPublicWhatNexts'
+    SET_WHAT_NEXTS: "setElearningPublicWhatNexts",
 };
 
 export const ELEARNING_PUBLIC_FOR_YOU = {
-    SET_FOR_YOU: 'setElearningPublicForYou'
+    SET_FOR_YOU: "setElearningPublicForYou",
 };
 
 export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
-    SET_VOTED_SUBJECTS: 'setElearningPublicVotedSubjects'
+    SET_VOTED_SUBJECTS: "setElearningPublicVotedSubjects",
 };
 
 export const ELEARNING_PUBLIC_NEWEST = {
-    SET_NEWEST_LECTURE: 'setElearningPublicNewestLecture',
-    SET_NEWEST_COURSE: 'setElearningPublicNewestCourse',
+    SET_NEWEST_LECTURE: "setElearningPublicNewestLecture",
+    SET_NEWEST_COURSE: "setElearningPublicNewestCourse",
 };
 
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
-    SET_HIGHLIGHT_TEACHERS: 'setElearningPublicHighlightTeachers'
+    SET_HIGHLIGHT_TEACHERS: "setElearningPublicHighlightTeachers",
 };
 
 export const ELEARNING = {
@@ -341,6 +345,7 @@ export const SCHOOL_TEACHERS = {
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
+    SET_EXPAND: "setElearningStudyExpand"
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -484,4 +489,8 @@ export const TEACHING_ELEARNING_REQUESTS = {
 
 export const TEACHING_ELEARNING_INVITES = {
     SET_TEACHING_ELEARNING_INVITES_LIST: "setTeachingElearningInvitesList",
+};
+
+export const TEACHING_INTERACTIVE_LISTQUESTION = {
+    SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
 };

@@ -1,10 +1,11 @@
 <template>
   <div class="col-md-4">
     <div
-      class="cgi-form-group mb-4 d-flex justify-content-between align-items-center"
+      class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
     >
-      <h2 class="cgi-form-title heading-6">Trình độ</h2>
+      <h2 class="cgi-form-title heading-6 mr-4">Trình độ</h2>
       <app-select
+        style="width: 60%"
         class="cc-select"
         :options="levelOpt"
         placeholder="Chọn lớp"

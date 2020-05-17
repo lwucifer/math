@@ -68,16 +68,6 @@ export default {
   },
 
   async fetch({ params, query, store }) {
-    // const { keyword, type } = query; // get keyword, type from url
-    // console.log('fetch function: ', type)
-    // await store.dispatch(
-    //   `${SCHOOL_SUMMARY_NAMESPACE}/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`,{
-    //     page: 1,
-    //     size: PAGE_SIZE.SCHOOL_16,
-    //     keyword: keyword,
-    //     type: type
-    //   }
-    // )
     await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );

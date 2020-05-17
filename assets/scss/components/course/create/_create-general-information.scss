@@ -62,3 +62,16 @@
     }
 }
 
+.cgi-demo-text {
+    max-width: 80%;
+    @include text-overflow;
+
+    p {
+        @include text-overflow;
+    }
+
+    svg {
+        width: 25px;
+    }
+}
+

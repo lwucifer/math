@@ -10,7 +10,7 @@
       <textarea
         v-if="textarea"
         v-bind="$attrs"
-        v-textarea-autosize
+        v-textarea-autosize="autosize"
         ref="input"
         :rows="rows"
         :type="type"
@@ -159,6 +159,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    autosize: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {

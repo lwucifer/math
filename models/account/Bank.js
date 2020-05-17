@@ -23,3 +23,23 @@ class AddBank{
 export function createPayloadAddBank(payload) {
     return Object.freeze(new AddBank(payload));
   }
+
+class Withdraw{
+    constructor(payload) {
+        if (payload.user_bank_id) {
+            this.user_bank_id = payload.user_bank_id;
+        }
+        
+        if (payload.note) {
+            this.note = payload.note;
+        }
+    
+        if (payload.amount) {
+            this.amount = payload.amount;
+        }
+    }
+}
+
+export function createPayloadWithdraw(payload) {
+    return Object.freeze(new Withdraw(payload));
+}

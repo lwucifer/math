@@ -1,18 +1,18 @@
 <template>
   <fragment>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
-    <div class="cc-box__bg-gray px-2 py-2">
+    <div class="cc-box__bg-gray">
       <h3 class="heading-5 my-3">
         Tên bài học
         <span class="caption text-base font-weight-normal"
-          >(Tối đa 60 ký tự)</span
+          >(Tối đa 150 ký tự)</span
         >
       </h3>
       <app-input
         @handleBlur="handleBlurNameInput"
         v-model="payload.name"
         placeholder="Bài học số 1"
-        :counter="60"
+        :counter="150"
       />
       <span v-show="error_name" class="error mb-3">{{ error_name }}</span>
 
@@ -88,6 +88,7 @@
       </div>
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

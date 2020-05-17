@@ -2,10 +2,10 @@
   <fragment>
     <div class="cc-box__bg-gray px-4 pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
-        Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 60 ký tự)</span>
+        Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
       </h3>
       <app-input
-        :counter="60"
+        :counter="80"
         placeholder="Tên chương"
         v-model="payload.name"
       />
@@ -28,6 +28,7 @@
       </div>
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"

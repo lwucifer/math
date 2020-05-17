@@ -338,7 +338,6 @@ const initialStartTime = {
 };
 function initialState() {
   return {
-    //checkSchedule: false,
     indexEdit: null,
     indexShow: 0,
     tab: 1,

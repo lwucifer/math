@@ -30,7 +30,7 @@
               </n-link>
             </div>
             <div class="d-flex-center">
-              <div class="filter-form__item flex-1" style="max-width: 36rem">
+              <div class="filter-form__item flex-1 mb-15" style="max-width: 36rem">
                 <div style="width: 100%">
                   <app-search
                     class
@@ -115,7 +115,9 @@
           </div>
 
           <!--Table-->
+          <div v-if="loading" class="pl-4">Loading...</div>
           <app-table
+            v-else
             :heads="currentHeads"
             :pagination="pagination"
             @pagechange="onPageChange"
@@ -156,7 +158,7 @@
               >
                 <IconNote height='18' width='18' class="fill-primary mr-2" />Xem chi tiết
               </n-link>
-              <n-link :to="'/elearning/' + row.id + ''" class="link">
+              <n-link :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" height='16' width='16'/>Chỉnh sửa
               </n-link>
 
@@ -246,6 +248,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       tab: "APPROVED",
       showFilter: false,
       showPreview: false,
@@ -518,8 +521,6 @@ export default {
           "data.page.number_of_elements",
           0
         );
-
-        console.log('xxxxxxxxx',this.pagination)
       } catch (e) {
       } finally {
         this.loading = false;
@@ -573,9 +574,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
-
 .table-avatar {
   display: flex;
   .left {

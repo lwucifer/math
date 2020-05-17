@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-end mt-5">
+    <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
         color="disabled"
         class="font-weight-semi-bold mr-4"
@@ -52,6 +52,7 @@
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
