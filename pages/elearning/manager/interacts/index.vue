@@ -52,7 +52,7 @@ const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 export default {
-  layout: "manage",
+  //layout: "manage",
 
   components: {
     ElearningManagerSide,
