@@ -468,6 +468,10 @@ export const TEACHING_CHART_STATISTIC_REVENUE = {
     SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue"
 }
 
+export const TEACHING_STATISTIC_HIGHLIGHT_ELS = {
+    SET_TEACHING_STATISTIC_HIGHLIGHT_ELS_LIST: "setTeachingStatisticHighlightElsList",
+};
+
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",

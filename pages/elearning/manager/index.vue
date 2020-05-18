@@ -96,16 +96,21 @@
             <div class="elearning-manager__dashboard elearning-manager__revenue mt-15">
               <app-table
                 :heads="tableHeads"
-                :data="elearningList"
+                :data="highlightElearnings"
                 :need-pagination="false"
               >
-                <!--<template v-slot:cell(status)="{row}">-->
-                  <!--<td>-->
-                      <!--<span class="status-item d-inline-block" :class="statusClass(row.status)" style="min-width: 10.1rem;">-->
-                        <!--{{ row.status | withdrawalStatus2Txt}}-->
-                      <!--</span>-->
-                  <!--</td>-->
-                <!--</template>-->
+                <template v-slot:cell(rate)="{row}">
+                  <td>
+                    <div class="nowrap">
+                      <app-stars
+                        class="d-inline-block"
+                        :stars="get(row, 'rate', 0.0)"
+                        :size="13"
+                      />
+                      <span class="text-dark font-weight-bold">{{ get(row, 'rate', 0.0) }}</span>
+                    </div>
+                  </td>
+                </template>
               </app-table>
             </div>
           </div>
@@ -159,6 +164,7 @@ export default {
     const room_id = route.params.id;
     await Promise.all([
       store.dispatch(`elearning/teaching/statistic/revenue/${actionTypes.TEACHING_CHART_STATISTIC_REVENUE.INFO}`),
+      store.dispatch(`elearning/teaching/statistic/highlight-els/${actionTypes.TEACHING_CHART_STATISTIC_HIGHLIGHT_ELS.LIST}`),
     ]);
   },
   data() {
@@ -216,11 +222,11 @@ export default {
       DATE_SHORTCUT: DATE_SHORTCUT,
       tableHeads: [
         {
-          name: "title",
+          name: "name",
           text: "Tiêu đề",
         },
         {
-          name: "view",
+          name: "views",
           text: "Lượt xem",
         },
         {
@@ -232,7 +238,6 @@ export default {
           text: "Đánh giá",
         },
       ],
-      elearningList: []
     };
   },
 
@@ -243,6 +248,9 @@ export default {
     }),
     ...mapState('elearning/teaching/statistic/revenue', {
       revenueChart: "revenueChart"
+    }),
+    ...mapState('elearning/teaching/statistic/highlight-els', {
+      highlightElearnings: "elearnings"
     }),
     chartData() {
       let tmp = [
