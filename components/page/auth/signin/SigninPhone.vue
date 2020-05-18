@@ -110,10 +110,12 @@ export default {
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
+            this.loadingBtn = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+        this.loadingBtn = false;
       } finally {
         this.loadingBtn = false;
       }

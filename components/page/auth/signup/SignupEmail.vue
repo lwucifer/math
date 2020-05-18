@@ -175,6 +175,7 @@ export default {
             this.$router.push(`/auth/signup/email?email=${this.email}`);
           } else {
             this.showErrorWhenRegister(result);
+            this.loading = false;
           }
         });
       } catch (error) {
