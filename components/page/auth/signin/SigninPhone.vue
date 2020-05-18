@@ -40,6 +40,7 @@
     </div>
 
     <app-button
+      :loading="loading"
       color="primary"
       square
       fullWidth
@@ -76,7 +77,8 @@ export default {
       validateProps: { password: "", phone: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loading: false
     };
   },
   validations: {
@@ -92,6 +94,7 @@ export default {
   methods: {
     ...mapActions("auth", ["login"]),
     async SubmitLoginPhone() {
+      this.loading = true;
       try {
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
@@ -103,10 +106,11 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-
+            this.loading = false;
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
+            this.loading = false;
           }
         });
       } catch (error) {

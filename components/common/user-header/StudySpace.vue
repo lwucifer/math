@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-study-space" >
+  <div class="wrap-study-space">
     <app-dropdown
       position="left"
       v-model="dropdownCourse"

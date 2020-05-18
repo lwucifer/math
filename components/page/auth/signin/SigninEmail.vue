@@ -41,6 +41,7 @@
       color="primary"
       square
       fullWidth
+      :loading="loading"
       @click.prevent="SubmitLoginEmail"
       class="mb-3"
     >Đăng nhập</app-button>
@@ -78,7 +79,8 @@ export default {
       validateProps: { password: "", email: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loading: false
     };
   },
   validations: {
@@ -94,6 +96,7 @@ export default {
   methods: {
     ...mapActions("auth", ["login"]),
     async SubmitLoginEmail() {
+      this.loading = true;
       try {
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
@@ -105,10 +108,11 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-
+            this.loading = false;
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
+            this.loading = false;
           }
         });
       } catch (error) {
