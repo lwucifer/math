@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="phone"
-        placeholder="Số điện thoại"
+        placeholder="Nhập số điện thoại"
         maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
@@ -21,7 +21,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         class="mb-2"
         maxlength="127"
         :error="$v.password.$invalid || validate.password"
@@ -40,6 +40,7 @@
     </div>
 
     <app-button
+      :loading="loadingBtn"
       color="primary"
       square
       fullWidth
@@ -76,7 +77,8 @@ export default {
       validateProps: { password: "", phone: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loadingBtn: false
     };
   },
   validations: {
@@ -93,6 +95,8 @@ export default {
     ...mapActions("auth", ["login"]),
     async SubmitLoginPhone() {
       try {
+        this.loadingBtn = true;
+
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         const loginModel = createSigninWithPhone(
@@ -103,7 +107,6 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
@@ -111,6 +114,8 @@ export default {
         });
       } catch (error) {
         console.log("Login error:", error);
+      } finally {
+        this.loadingBtn = false;
       }
     },
     handlePhone() {

@@ -88,6 +88,7 @@ import { TEACHING_OLCLASS_LESSON_SESSIONS } from "~/utils/action-types";
 
 import ModalWaitingOlClass from "~/components/page/elearning/study/olclass/ModalWaitingOlClass";
 import Timetable from "~/components/page/elearning/study/olclass/Timetable";
+import { convertLocalTimeForTimetable } from '~/utils/moment';
 
 export default {
   data() {
@@ -123,6 +124,15 @@ export default {
         const timeMorning = {};
         const timeAfternoon = {};
         const timeEvening = {};
+
+        // const gmtSchedules = tt.schedules.map (item => {
+        //   return {
+        //     ...item,
+        //     start_time: convertLocalTimeForTimetable(item.start_time),
+        //     end_time: convertLocalTimeForTimetable(item.end_time),
+        //   }
+        // })
+        // const gmtSchedules = {...tt.schedules};
         for (const s in tt.schedules) {
           const arrTime = tt.schedules[s];
           if (!arrTime || arrTime.length < 1) {
@@ -131,8 +141,11 @@ export default {
             timeEvening[s] = "";
           } else {
             arrTime.map(a => {
-              const checkWhichTimeInDay = this.checkWhichTimeInDay(a.end_time);
-              const value = `${a.start_time}-${a.end_time}`;
+              const start_time = convertLocalTimeForTimetable(a.start_time);
+              const end_time = convertLocalTimeForTimetable(a.end_time);
+
+              const checkWhichTimeInDay = this.checkWhichTimeInDay(end_time);
+              const value = `${start_time}-${end_time}`;
               if (checkWhichTimeInDay == DAY_SECTION.MORNING) {
                 timeMorning[s] = value;
               } else if (checkWhichTimeInDay == DAY_SECTION.AFTERNOON) {

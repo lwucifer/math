@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="phone"
-        placeholder="Số điện thoại"
+        placeholder="Nhập số điện thoại"
         maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
@@ -21,7 +21,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
@@ -68,6 +68,7 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorRegister}}</p>
     </div>
     <app-button
+      :loading="loading"
       color="primary"
       square
       fullWidth
@@ -139,7 +140,8 @@ export default {
         redirectLink: "",
         message: "",
         showNotify: false
-      }
+      },
+      loading: false
     };
   },
   validations: {
@@ -170,6 +172,7 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
+            // this.loading = false;
             this.notify = {
               redirectLink: "/auth/signin",
               message: "Đăng kí tài khoản thành công",
@@ -184,6 +187,7 @@ export default {
       }
     },
     async hanldeShowModalOTP() {
+      this.loading = true;
       if (this.phone != "" && this.password != "" && this.fullname != "") {
         const tokenCheckPhone = await this.$recaptcha.execute("status");
         const dataChecKPhone = {
@@ -198,6 +202,7 @@ export default {
             };
             this.sendotp(data).then(result => {
               if (!result.code) {
+                this.loading = false;
                 this.savePhonePass({
                   phone: this.phone,
                   password: this.password,

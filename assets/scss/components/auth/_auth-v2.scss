@@ -7,7 +7,7 @@
     text-align: center;
     .head-form_auth{
         background: #1D4354;
-        h3{
+        h2{
             color: white;
             padding-top:16px;
 
@@ -17,12 +17,15 @@
             width: 100%;
             margin: 0.8rem 0 2rem;
             >a {
+                text-transform: uppercase;
                 font-style: normal;
                 display: table-cell;
                 text-align: center;
                 padding: 1rem;
                 width: 50%;
-                font-size: 1.6rem;
+                font-weight: 600;
+                font-size: 1.4rem;
+                line-height: 20px;
                 color: white;
                 &.active {
                     color: $color-primary-1;
@@ -44,10 +47,14 @@
         }
     }
     .btn-facebook {
-        background-color: #3A559F;;
+        background-color: #3A559F;
+        width: 117px;
+        height: 40px;
     }
     .btn-google {
-        background-color: #DF322F;;;
+        background-color: #DF322F;
+        width: 117px;
+        height: 40px;
     }
     .title-either_auth{
         color: #656565;
@@ -55,10 +62,10 @@
         align-items: center;
         justify-content: center;
         padding: 0 5px;
-        margin: 10px auto;
+        margin: 22px auto;
         &::before{
             content: '';
-            border-bottom: 1px solid #656565;
+            border-bottom: 1px solid #E0E0E0;
             width: 151px;
             height: 1px;
             display: inline-block;
@@ -67,12 +74,19 @@
         }
         &::after{
             content: '';
-            border-bottom: 1px solid #656565;
+            border-bottom: 1px solid #E0E0E0;
             width: 151px;
             height: 1px;
             display: inline-block;
             top: 50%;
             margin-left: 10px;
+        }
+    }
+    .bnt-auth{
+        text-decoration: none;
+        color: $color-primary;
+        &:hover{
+            color: $color-primary-3;
         }
     }
 }
@@ -102,7 +116,19 @@
     margin: 100px auto;
     text-align: center;
     padding: 40px 0;
+    svg {
+        width: 70px;
+        height: 70px;
+    }
+    a:first-child{
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
     .btn-confirm{
         width: 212px;
+        height: 41px;
+        font-weight: 600;
+        font-size: 1.3rem;
     }
 }

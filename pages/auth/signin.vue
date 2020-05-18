@@ -4,11 +4,9 @@
       <div class="col-md-6">
         <div class="wrap-form_auth">
           <div class="head-form_auth">
-            <h3>Đăng nhập</h3>
+            <h2>Đăng nhập</h2>
             <div class="auth__nav-v2">
-              <a :class="byEmail ? '' : 'active'" @click="tabPhone"
-                >Số điện thoại</a
-              >
+              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
               <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
             </div>
           </div>
@@ -17,7 +15,7 @@
             <SigninPhone v-show="!byEmail" @signin="handleSigninSuccess" />
           </div>
           <p class="title-either_auth">hoặc</p>
-          <div>
+          <div class="text-dark">
             <p>Đăng nhập nhanh với</p>
             <div class="mt-3 mb-15">
               <app-button class="btn-social btn-facebook">
@@ -29,18 +27,10 @@
             </div>
             <div class="mb-4">
               <span>Chưa có tài khoản?</span>
-              <n-link
-                :to="'/auth/signup'"
-                class="color-primary bold text-decoration-none"
-                >Đăng ký</n-link
-              >
+              <n-link :to="'/auth/signup'" class="bnt-auth">Đăng ký</n-link>
             </div>
           </div>
-          <n-link
-            :to="'/auth/forgot'"
-            class="color-blue text-decoration-none mb-4"
-            >Quên mật khẩu?</n-link
-          >
+          <n-link :to="'/auth/forgot'" class="text-dark text-decoration-none mb-4">Quên mật khẩu?</n-link>
         </div>
       </div>
       <div class="col-md-6 text-center">
@@ -105,7 +95,13 @@ export default {
       console.log("[handleSigninSuccess]", isSuccess);
       this.getFirebaseToken(this.registerDevice);
       // this.$router.go(-1); // back to previous
-      if (!this.prevRoute || this.prevRoute == "/") {
+      if (
+        !this.prevRoute ||
+        this.prevRoute == "/" ||
+        this.prevRoute == "/auth/signup/email" ||
+        this.prevRoute == "/auth/signup/success" ||
+        this.prevRoute == "/auth/verify-account"
+      ) {
         this.$router.push("/");
       } else {
         this.$router.go(-1);

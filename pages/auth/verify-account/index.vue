@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-6" v-if="!activeAccount">
+      <div class="col-md-6" v-if="activeAccount">
         <div class="wrap-success-auth">
           <IconSuccess class="mb-3 fill-primary" />
           <h3 class="text-primary">Xác thực thành công</h3>
