@@ -57,7 +57,7 @@ export default {
         "app-alert--secondary": this.type === "secondary",
         "app-alert--success": this.type === "success",
         "app-alert--danger": this.type === "danger",
-        "app-alert--warning": this.type === "warning",
+        "app-alert--warning-2": this.type === "warning",
         "app-alert--light": this.type === "light",
         "app-alert--dark": this.type === "dark",
         "app-alert--info": this.type === "info",
