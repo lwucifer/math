@@ -536,6 +536,6 @@ input:-webkit-autofill:active {
   box-shadow: $shadow-1;
 }
 
-.app-vue-select:hover{
+.app-vue-select:hover .vs__search{
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 }
