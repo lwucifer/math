@@ -118,7 +118,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(defaultTo(get(res, "message", ""), "Thành công"));
         this.$store.dispatch(`elearning/create/getContent`);
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
       this.$toasted.error(defaultTo(get(res, "message", ""), "Có lỗi xảy ra"));

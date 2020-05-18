@@ -206,7 +206,7 @@
           <template slot="default" slot-scope="{ classes }">
             <div v-for="item in highlightTeachers && highlightTeachers.content || []" :key="item.teacher_id" :class="classes">
               <ElearningHomeTeacherCard
-                to
+                :to="`/public/profile/teacher?user_id=${get(item, 'teacher_id', '')}`"
                 :image="get(item, 'avatar.medium', '')"
                 :name="item.name"
                 school-name="Trường trung học cơ sở Nguyễn Trãi"
@@ -236,6 +236,7 @@ import IconSubjectPhysical from "~/assets/svg/icons/subject-physical.svg?inline"
 import IconSubjectChemistry from "~/assets/svg/icons/subject-chemistry.svg?inline";
 import IconSubjectForeignLanguage from "~/assets/svg/icons/subject-foreign-language.svg?inline";
 import IconSubjectLiterature from "~/assets/svg/icons/subject-literature.svg?inline";
+import IconDefaultSubject from '~/assets/svg/icons/default-subject.svg?inline';
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
 import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
@@ -324,7 +325,7 @@ export default {
         },
         {
           value: ELEARNING_TYPES.COURSE,
-          text: "Khóa học nổi bậtt"
+          text: "Khóa học nổi bật"
         }
       ]
     };
@@ -378,7 +379,7 @@ export default {
           return IconSubjectLiterature;
           break;
         default:
-          return IconSubjectLiterature;
+          return IconDefaultSubject;
           break;
       }
     },

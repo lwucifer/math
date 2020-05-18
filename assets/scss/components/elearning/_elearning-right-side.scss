@@ -24,6 +24,12 @@
             }
         }
     }
+
+    .app-alert {
+        /deep/ .app-alert__content {
+            color: $color-dark;
+        }
+    }
 }
 
 .elearning-right-side__img {

@@ -34,6 +34,13 @@ const actions = {
       };
       const res = await Service.getExams(this.$axios, payload);
       commit("exams", res);
+      const _payload = {
+        params: {
+          elearning_id: get(state, "general.id", ""),
+        },
+      };
+      const _res = await Service.getProgress(this.$axios, _payload);
+      commit("progress", _res);
     }
   },
 
@@ -65,6 +72,13 @@ const actions = {
       }
 
       commit("lessons", lessons);
+      const _payload = {
+        params: {
+          elearning_id: get(state, "general.id", ""),
+        },
+      };
+      const _res = await Service.getProgress(this.$axios, _payload);
+      commit("progress", _res);
     }
   },
 
@@ -77,6 +91,13 @@ const actions = {
       };
       const res = await Service.getSetting(this.$axios, payload);
       commit("setting", res);
+      const _payload = {
+        params: {
+          elearning_id: get(state, "general.id", ""),
+        },
+      };
+      const _res = await Service.getProgress(this.$axios, _payload);
+      commit("progress", _res);
     }
   },
 
@@ -89,6 +110,13 @@ const actions = {
       };
       const res = await Service.getLessonsOfLecture(this.$axios, payload);
       commit("lessons_lecture", res);
+      const _payload = {
+        params: {
+          elearning_id: get(state, "general.id", ""),
+        },
+      };
+      const _res = await Service.getProgress(this.$axios, _payload);
+      commit("progress", _res);
     }
 
     if (get(state, "general.type", "") === "COURSE") {
@@ -99,17 +127,38 @@ const actions = {
       };
       const res = await Service.getChaptersOfElearning(this.$axios, payload);
       commit("chapters", res);
+      const _payload = {
+        params: {
+          elearning_id: get(state, "general.id", ""),
+        },
+      };
+      const _res = await Service.getProgress(this.$axios, _payload);
+      commit("progress", _res);
     }
   },
 
-  async getGeneral({ commit }, options) {
+  async getGeneral({ commit, state }, options) {
     const res = await Service.getGeneral(this.$axios, options);
     commit("general", res);
+    const _payload = {
+      params: {
+        elearning_id: get(state, "general.id", ""),
+      },
+    };
+    const _res = await Service.getProgress(this.$axios, _payload);
+    commit("progress", _res);
   },
 
-  async getLesson({ commit }, lesson_id) {
+  async getLesson({ commit, state }, lesson_id) {
     const res = await Service.getLesson(this.$axios, lesson_id);
     commit("lesson", res);
+    const _payload = {
+      params: {
+        elearning_id: get(state, "general.id", ""),
+      },
+    };
+    const _res = await Service.getProgress(this.$axios, _payload);
+    commit("progress", _res);
   },
 
   async getProgress({ commit, state }, options = {}) {

@@ -124,7 +124,6 @@
           size="sm"
           style="width: 102px"
           v-model="payload.reworks"
-          :value="1"
         >
           <div slot="unit">Lần</div>
         </app-input>
@@ -204,7 +203,7 @@ export default {
         title: "",
         type: "",
         pass_score: 0,
-        reworks: 0,
+        reworks: 1,
         duration: 0,
         category: this.category,
       },
@@ -232,7 +231,7 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");

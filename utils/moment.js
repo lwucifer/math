@@ -4,6 +4,11 @@ const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
 
+export const getLocalOffsetHours = () => {
+    const offsetMinutes = moment().utcOffset(); // (-240, -120, -60, 0, 60, 120, 240, etc.)
+    return parseInt(Math.floor(offsetMinutes/60)) || 7;
+}
+
 export const getDateBirthDay = _utcDate => {
     if (!_utcDate) return;
     // const ts = moment.utc(_utcDate);
@@ -97,6 +102,22 @@ export const hoursToMinutes = (_time) => {
     return momenttimezone.duration(_time).asMinutes();
 };
 
+
+/**
+ * 
+ * @param {hh:mm} _time 
+ * return hh + GMT
+ */
+export const convertLocalTimeForTimetable = (_time) => {
+    
+    if(!_time) return "";
+    const splits = _time.split(":");
+    const hh = parseInt(splits[0]);
+    const mm = splits[1];
+    const gmt = getLocalOffsetHours();
+    // console.log("[convertLocalTimeForTimetable] _time", hh, gmt, mm, _time);
+    return `${hh + gmt}:${mm}`;
+}
 
 
 Vue.filter("getDateBirthDay", function(_utcDate) {

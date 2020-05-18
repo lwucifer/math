@@ -7,7 +7,7 @@
         <div class="col-md-6">
           <div class="wrap-form_auth">
             <div class="head-form_auth">
-              <h3>Đăng ký</h3>
+              <h2>Tạo tài khoản</h2>
               <div class="auth__nav-v2">
                 <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
                 <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
@@ -18,7 +18,7 @@
               <SignupPhone v-show="!byEmail && !checkOtp" @hanldeCheckOtp="hanldeCheckOtp" />
             </div>
             <p class="title-either_auth">hoặc</p>
-            <div>
+            <div class="text-dark">
               <p>Đăng ký nhanh với</p>
               <div class="mt-3 mb-15">
                 <app-button class="btn-social btn-facebook">
@@ -32,7 +32,7 @@
                 <span>Đã có tài khoản?</span>
                 <n-link
                   :to="'/auth/signin'"
-                  class="color-primary bold text-decoration-none"
+                  class="bnt-auth"
                 >Đăng nhập</n-link>
               </div>
             </div>

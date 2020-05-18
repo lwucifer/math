@@ -47,10 +47,17 @@
     }
 
     &__teacher {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1.2rem;
-
+        .profile-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            text-decoration: none;
+            color: $color-text;
+            &:hover {
+                color: $color-secondary;
+            }
+        }
+        
         .app-avatar {
             margin-right: 0.6rem;
         }

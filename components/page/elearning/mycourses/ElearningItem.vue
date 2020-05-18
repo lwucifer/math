@@ -12,13 +12,26 @@
         :title="elearning.name"
       >{{elearning && elearning.name}}</n-link>
       <div class="d-flex align-items-center my-3">
-        <app-avatar
-          :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
-          :size="20"
-        />
-        <span
-          class="ml-2"
-        >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+        <n-link
+          :to="`/public/profile/teacher?user_id=${elearning.teacher.id}`"
+          class="profile-link"
+          target="_blank"
+        >
+          <app-avatar
+            :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
+            :size="20"
+          />
+          <span
+            class="ml-2"
+          >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+        </n-link>
+        <!--<app-avatar-->
+        <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
+        <!--:size="20"-->
+        <!--/>-->
+        <!--<span-->
+        <!--class="ml-2"-->
+        <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
       <div class="proccess-bar-study-border">
         <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
@@ -42,14 +55,14 @@
 
             <ul class="link--dropdown__ElearningItem">
               <li class="item-share__ElearningItem" @click.prevent="shareDropdown=!shareDropdown">
-                <n-link to >
+                <n-link to>
                   <IconShare24px class="icon" />Chia sẻ
                 </n-link>
                 <ul class="share-dropdowm__ElearningItem" v-if="shareDropdown">
-                  <li>
+                  <li @click.prevent="shareFb(elearning.elearning_id)">
                     <a>Facebook</a>
                   </li>
-                  <li>
+                  <li @click.prevent="shareSchool(elearning.elearning_id)">
                     <a>Schoolly</a>
                   </li>
                 </ul>
@@ -96,6 +109,7 @@ import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
 export default {
   components: {
     IconDots,
@@ -145,6 +159,26 @@ export default {
     handleDeleteArchive(id) {
       this.menuDropdown = false;
       this.$emit("handleDeleteArchive", id);
+    },
+    shareFb(id) {
+      const url =
+        "https://facebook.com/sharer.php?display=popup&u=" +
+        window.origin +
+        `elearning/${id}`;
+      window.open(url, "sharer", "_blank");
+    },
+    async shareSchool(id) {
+      const link = window.origin + `/elearning/${id}`;
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        { link: link }
+      );
+      if (doAdd.success) {
+        this.menuDropdown = false;
+        this.$toasted.show("Đã chia sẻ thành công.");
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
     }
   },
   created() {

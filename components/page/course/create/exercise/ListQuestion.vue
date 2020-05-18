@@ -1,23 +1,29 @@
 <template>
   <div class="list-question">
-    <div
-      class="d-flex align-items-center mb-3"
-      v-if="!isShowEditQuestion"
-    >
+    <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
       <h3 class="body-2 mr-2 question-title">Câu {{ index + 1 }}:</h3>
 
-      <p class="body-2 mr-4 question-content font-weight-semi-bold text-dark" v-html="get(question, 'content', '')"></p>
+      <p
+        class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
+        v-html="get(question, 'content', '')"
+      ></p>
 
       <span class="text-sub mr-4 question-type">{{ type }}</span>
 
-      <span class="text-sub mr-4 question-point" v-if="get(question, 'type', '') === 'ESSAY'">{{ get(question, 'points', '') }} điểm</span>
+      <span
+        class="text-sub mr-4 question-point"
+        v-if="get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')"
+        >{{ get(question, "points", "") }} điểm</span
+      >
 
-      <div class="d-flex align-items-center justify-content-between ce-question-item__actions question-actions">
+      <div
+        class="d-flex align-items-center justify-content-between ce-question-item__actions question-actions"
+      >
         <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
-        <button  @click="handleDeleteQuestion">
+        <button @click="handleDeleteQuestion">
           <IconTrashAlt
             class="d-block subheading fill-secondary"
             width="20px"
@@ -30,7 +36,6 @@
       </button> -->
       </div>
 
-      
       <app-modal-confirm
         centered
         v-if="showModalConfirm"
@@ -109,6 +114,10 @@ export default {
     };
   },
 
+  mounted() {
+    console.log(this.question)
+  },
+
   computed: {
     type() {
       return get(this, "question.type", "") === "CHOICE"
@@ -138,7 +147,7 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "exercise.category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");
@@ -165,7 +174,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "~assets/scss/components/course/create/_list-question.scss";

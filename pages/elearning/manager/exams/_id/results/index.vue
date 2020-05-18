@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!--<breadcrumb />-->
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="3"/>

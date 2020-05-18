@@ -1,7 +1,7 @@
 <template>
   <div class="container teacher-profile">
-    <div v-if="pageLoading" class="teacher-profile__overview">
-      <div class="bg-white py-6 px-3"><VclFacebook :height="100"/></div>
+    <div v-if="pageLoading" class="teacher-profile__overview mb-3">
+      <div class="bg-white px-3"><VclFacebook :height="100"/></div>
     </div>
     
     <div v-else class="teacher-profile__overview">
@@ -10,7 +10,7 @@
       <div class="">
         <p class="mb-3"><span class="h5">Thông tin giáo viên</span></p>
         <div>
-          <p v-if="!readMoreActivated" class="teacher-story">{{infoTeacher.slice(0,300)}}</p>
+          <p v-if="!readMoreActivated" class="teacher-story">{{get(teacher, 'biography', '').slice(0,300)}}</p>
           <p class="text-center">
             <a
               v-if="!readMoreActivated"
@@ -20,14 +20,24 @@
               Xem thêm
             </a>
           </p>
-          <p v-if="readMoreActivated" class="teacher-story" v-html="infoTeacher"></p>
+          <p v-if="readMoreActivated" class="teacher-story" v-html="get(teacher, 'biography', '')"></p>
         </div>
       </div>
     </div>
     
     <!--slide-->
+    <div v-if="pageLoading" class="container">
+      <div class="row">
+        <div v-for="i in 4" :key="i" class="col-md-3 mb-6">
+          <div class="bg-white py-6 px-3">
+            <VclList/>
+          </div>
+        </div>
+      </div>
+    </div>
     <ProfileSliderTab
-      :items="get(elearnings, 'content', 0)"
+      v-else
+      :items="get(elearnings, 'content', [])"
       :name="`Bài học và khóa giảng (${get(elearnings, 'page.total_elements', 0)})`"
     />
   </div>
@@ -37,7 +47,7 @@
   import ProfileTeacherHead from "~/components/page/profile/teacher/ProfileTeacherHead";
   import ProfileSliderTab from "~/components/page/profile/ProfileSliderTab";
   import CourseItem2 from "~/components/page/course/CourseItem2";
-  import {VclFacebook} from "vue-content-loading";
+  import {VclFacebook, VclList} from "vue-content-loading";
   import {mapState} from "vuex";
   import * as actionTypes from "~/utils/action-types";
   import {get} from "lodash"
@@ -54,7 +64,6 @@
     },
     async fetch({params, query, store}) {
       const userId = query.user_id
-      console.log('this.infoteacher: ', this.infoTeacher)
       const getProfile = () =>
         store.dispatch(
           `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,
@@ -86,7 +95,8 @@
       ProfileTeacherHead,
       ProfileSliderTab,
       CourseItem2,
-      VclFacebook
+      VclFacebook,
+      VclList
     },
     computed: {
       ...mapState("elearning/public/public-elearning-teacher", ["teacher"]),

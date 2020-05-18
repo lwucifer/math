@@ -201,6 +201,7 @@ export const CART_LIST = `/elearning/cart`;
 
 export const TEACHING_STATISTIC_REVENUE = `/elearning/teaching/statistic/revenue`;
 export const TEACHING_CHART_STATISTIC_REVENUE = `/elearning/teaching/summary/revenue_chart`;
+export const TEACHING_STATISTIC_HIGHLIGHT_ELS = `/elearning/teaching/summary/highlights`;
 /**
  * BANK
  */

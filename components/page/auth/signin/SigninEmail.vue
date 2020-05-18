@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <form @submit.prevent="SubmitLoginEmail">
     <div class="auth_content mb-4">
       <app-input
         type="text"
         v-model="email"
-        placeholder="Email"
+        placeholder="Nhập email"
         :error="$v.email.$invalid"
         :message="errorMessage.email"
         :validate="validateProps.email"
@@ -19,7 +19,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         class="mb-2"
         maxlength="127"
         :error="$v.password.$invalid || validate.password"
@@ -37,14 +37,15 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorLogin}}</p>
     </div>
     <app-button
+      type="submit"
       :disabled="disabledBtnLogin"
       color="primary"
       square
       fullWidth
-      @click.prevent="SubmitLoginEmail"
       class="mb-3"
+      :loading="loadingBtn"
     >Đăng nhập</app-button>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -78,7 +79,8 @@ export default {
       validateProps: { password: "", email: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loadingBtn: false
     };
   },
   validations: {
@@ -95,6 +97,8 @@ export default {
     ...mapActions("auth", ["login"]),
     async SubmitLoginEmail() {
       try {
+        this.loadingBtn = true;
+
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         const loginModel = createSigninWithEmail(
@@ -105,14 +109,18 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-
+            this.loadingBtn = false;
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
+            this.loadingBtn = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+        this.loadingBtn = false;
+      } finally {
+        this.loadingBtn = false;
       }
     },
     handleEmail() {

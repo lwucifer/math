@@ -9,17 +9,7 @@
         ref="profileElearningsCarousel"
       >
         <template slot="default" slot-scope="{ classes }">
-          <div v-if="pageLoading" class="container">
-            <div class="row">
-              <div v-for="i in 4" :key="i" class="col-md-3 mb-6">
-                <div class="bg-white py-6 px-3">
-                  <VclList/>
-                </div>
-              </div>
-            </div>
-          </div>
           <div
-            v-else
             v-for="(item, index) in items"
             :key="index"
             :class="classes"
