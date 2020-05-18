@@ -394,7 +394,7 @@ export default {
           },
         };
         await this.$store.dispatch(`elearning/create/getGeneral`, options);
-        await this.$store.dispatch(`elearning/create/getProgress`);
+        // await this.$store.dispatch(`elearning/create/getProgress`);
         redirectWithParams({ elearning_id });
 
         this.$toasted.success(get(result, "message", ""));

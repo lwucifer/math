@@ -142,7 +142,7 @@ export default {
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.isEditExerciseName = false;
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "exercise.category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");
@@ -173,7 +173,7 @@ export default {
       this.handleCancel();
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "exercise.category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");
