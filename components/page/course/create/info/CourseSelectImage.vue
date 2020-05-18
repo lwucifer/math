@@ -9,7 +9,6 @@
             :src="default_image"
             alt
             class="d-block w-100"
-            @error="handleError"
             :id="id"
           />
           <span

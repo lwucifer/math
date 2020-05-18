@@ -10,7 +10,7 @@
       <div class="">
         <p class="mb-3"><span class="h5">Thông tin giáo viên</span></p>
         <div>
-          <p v-if="!readMoreActivated" class="teacher-story">{{infoTeacher.slice(0,300)}}</p>
+          <p v-if="!readMoreActivated" class="teacher-story">{{get(teacher, 'biography', '').slice(0,300)}}</p>
           <p class="text-center">
             <a
               v-if="!readMoreActivated"
@@ -20,7 +20,7 @@
               Xem thêm
             </a>
           </p>
-          <p v-if="readMoreActivated" class="teacher-story" v-html="infoTeacher"></p>
+          <p v-if="readMoreActivated" class="teacher-story" v-html="get(teacher, 'biography', '')"></p>
         </div>
       </div>
     </div>
@@ -64,7 +64,6 @@
     },
     async fetch({params, query, store}) {
       const userId = query.user_id
-      console.log('this.infoteacher: ', this.infoTeacher)
       const getProfile = () =>
         store.dispatch(
           `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,

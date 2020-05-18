@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="hanldeShowModalOTP">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -73,7 +73,7 @@
       square
       fullWidth
       :disabled="disabledBtnRegister"
-      @click.prevent="hanldeShowModalOTP"
+      type="submit"
     >Đăng ký</app-button>
     <!-- <app-modal-otp
       :visible="modalOtp.showModalOTP"
@@ -89,7 +89,7 @@
       @close="closeNotify"
       @ok="$router.push(notify.redirectLink)"
     />
-  </div>
+  </form>
 </template>
 
 <script>

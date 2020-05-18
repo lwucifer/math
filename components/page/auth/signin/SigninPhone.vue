@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="SubmitLoginPhone">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -45,10 +45,10 @@
       square
       fullWidth
       :disabled="disabledBtnLogin"
-      @click.prevent="SubmitLoginPhone"
+      type="submit"
       class="mb-3"
     >Đăng nhập</app-button>
-  </div>
+  </form>
 </template>
 
 <script>
