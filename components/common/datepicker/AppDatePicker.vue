@@ -13,6 +13,9 @@
       :range-separator="rangeSeparator"
       :shortcuts="shortcuts"
       :popup-class="popupClass"
+      :minute-step="minuteStep"
+      :value-type="valueType"
+      :hour-options="hourOptions"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -43,6 +46,9 @@ export default {
       required: false,
       default: false
     },
+    minuteStep: [String, Number],
+    valueType: String,
+    hourOptions: Array,
     placeholder: {
       type: String,
       required: false,
