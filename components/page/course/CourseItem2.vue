@@ -24,8 +24,12 @@
       </h3>
 
       <div class="course-item-2__teacher">
-        <app-avatar :src="get(teacher, 'avatar.low', '')" :size="size === 'sm' ? 22 : 24" />
-        <span>{{ get(teacher, 'name', '') }}</span>
+        <n-link :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`" class="profile-link" target="_blank">
+          <app-avatar :src="get(teacher, 'avatar.low', '')" :size="size === 'sm' ? 22 : 24" />
+          <span>{{ get(teacher, 'name', '') }}</span>
+        </n-link>
+        <!--<app-avatar :src="get(teacher, 'avatar.low', '')" :size="size === 'sm' ? 22 : 24" />-->
+        <!--<span>{{ get(teacher, 'name', '') }}</span>-->
       </div>
 
       <div class="course-item-2__rating">
