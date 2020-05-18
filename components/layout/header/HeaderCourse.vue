@@ -1,11 +1,15 @@
 <template>
-  <div class="the-header">
+  <div class="the-header the-header--course">
     <div class="container-fluid the-header__content">
       <div class="the-header__logo">
         <n-link to="/">
           <Logo />
         </n-link>
       </div>
+      
+      <app-divider class="the-header__divider" color="disabled" direction="vertical" />
+
+      <h1 class="the-header__course-title">{{ title }}</h1>
 
       <div class="the-header__function-menu">
         <slot name="functionMenu"></slot>
@@ -105,6 +109,11 @@ export default {
           0
         ) || 0;
       return `${completeLesson}/${totalLessons}`;
+    },
+
+    title() {
+      const info = this.$store.state.elearning.study['study-info'].info;
+      return info && info.name;
     }
   }
 };
@@ -112,84 +121,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/header-frame/_header-frame.scss";
-.the-header {
-  padding: 0;
-}
-.header-dropbox {
-  position: relative;
-  padding: 2rem 0;
-  &:hover {
-    .content {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-  .content {
-    position: absolute;
-    right: -1.5rem;
-    top: 100%;
-    width: 29rem;
-    opacity: 0;
-    visibility: hidden;
-    > div {
-      margin-top: 20px;
-      background: #fff;
-      padding: 2rem;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.06);
-    }
-    .icon-up {
-      float: right;
-      margin-right: 1rem;
-      margin-top: 11px;
-    }
-  }
-}
-.percent {
-  position: relative;
-  height: 3.2rem;
-  width: 3.2rem;
-  .percent-cup {
-    position: absolute;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%, -50%);
-  }
-}
-.circular-chart {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-}
-
-.circle {
-  stroke: #4cc790;
-  fill: none;
-  stroke-width: 2.8;
-  stroke-linecap: round;
-  animation: progress 1s ease-out forwards;
-  position: relative;
-  z-index: 9;
-  &.circle-bg {
-    stroke: #e0e0e0;
-    position: relative;
-    z-index: 1;
-    animation: progress 200ms ease-out forwards;
-  }
-}
-
-.the-header-btn-exit {
-  font-weight: 500;
-  margin-left: 2.1em;
-  height: 3.7rem;
-
-  .icon {
-    font-size: 2rem;
-  }
-}
-
-@keyframes progress {
-  0% {
-    stroke-dasharray: 0 100;
-  }
-}
+@import "~/assets/scss/components/header-course/_header-course.scss";
 </style>

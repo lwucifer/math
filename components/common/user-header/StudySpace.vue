@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-study-space" >
+  <div class="wrap-study-space">
     <app-dropdown
       position="left"
       v-model="dropdownCourse"
@@ -12,8 +12,8 @@
       </button>
       <div class="link--dropdown__content wrap-arrow__content">
         <ul>
-          <li v-for="(elearning,index) in filterElearningStudy" :key="index">
-            <template v-if="index < 3">
+          <li v-for="(elearning,index) in filterElearningStudy" :key="index" v-if="index < 3">
+            <template>
               <n-link :to="'/elearning/'+ elearning.elearning_id">
                 <div>
                   <div class="d-flex">
@@ -58,21 +58,21 @@ export default {
   components: {
     IconArrowDropDown24px
   },
-  async fetch({ params, query, store }) {
-    const payload = {
-      params: {
-        types: "ALL",
-        size: 3,
-        page: 1
-      }
-    };
-    await Promise.all([
-      store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
-        payload
-      )
-    ]);
-  },
+  // async fetch({ params, query, store }) {
+  //   const payload = {
+  //     params: {
+  //       types: "ALL",
+  //       size: 3,
+  //       page: 1
+  //     }
+  //   };
+  //   await Promise.all([
+  //     store.dispatch(
+  //       `elearning/study/study-student-space/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
+  //       payload
+  //     )
+  //   ]);
+  // },
   methods: {
     fetchElearningList() {
       const payload = {
@@ -83,7 +83,7 @@ export default {
         }
       };
       this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
+        `elearning/study/study-student-space/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
         payload
       );
     },
@@ -106,7 +106,7 @@ export default {
     get
   },
   computed: {
-    ...mapState("elearning/study/study-student", {
+    ...mapState("elearning/study/study-student-space", {
       elearningStudyStudent: "elearningStudyStudent"
     }),
     ...mapState("account", { profile: "profileList" }),
