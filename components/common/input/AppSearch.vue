@@ -29,7 +29,7 @@ export default {
     },
     buttonProps: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   },
 
