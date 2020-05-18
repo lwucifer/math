@@ -69,7 +69,7 @@ export const convertLocalTimeForTimetable = (_time) => {
     const hh = parseInt(splits[0]);
     const mm = splits[1];
     const gmt = getLocalOffsetHours();
-    console.log("[convertLocalTimeForTimetable] _time", hh, gmt, mm, _time);
+    // console.log("[convertLocalTimeForTimetable] _time", hh, gmt, mm, _time);
     return `${hh + gmt}:${mm}`;
 }
 
