@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-6 d-flex">
+      <div class="col-md-6 d-flex">
         <div class="mr-4">
           <app-avatar shape="square" :src="get(info, 'avatar.low')" :size="127"/>
         </div>
@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-md-6">
         <div class="teacher-profile__figure">
           <div>
             <div class="icon-label"><IconLaptop /></div>
