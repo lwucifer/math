@@ -8,7 +8,7 @@
 
       <div class="px-4">
         <app-alert type="info" class="mt-4" show-close>
-          Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
+          Bạn có thể tạo bài tập cho bài giảng/ khóa học của bạn tại đây. Nếu khóa học của
           bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
           gửi lên để được xét duyệt.
         </app-alert>

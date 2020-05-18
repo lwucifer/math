@@ -229,3 +229,9 @@
         }
     }
 }
+
+button {
+    &:active, &:focus {
+        outline: none;
+    }
+}
