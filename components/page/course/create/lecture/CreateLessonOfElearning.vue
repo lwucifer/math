@@ -94,6 +94,18 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
     />
+
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmVideo"
+      :confirmLoading="confirmLoadingVideo"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      title="Upload video bài học"
+      :description="chagingDescription"
+    />
   </fragment>
 </template>
 
@@ -148,7 +160,9 @@ export default {
     return {
       tabType: "video",
       showModalConfirm: false,
+      showModalConfirmVideo: false,
       confirmLoading: false,
+      confirmLoadingVideo: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -173,6 +187,20 @@ export default {
     submit() {
       return !this.error_name;
     },
+    
+    chagingDescription() {
+      if(this.confirmLoadingVideo){
+        return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này."
+      }
+      return "Bạn có chắc chắn muốn tải video này lên hệ thống?"
+    },
+
+    chagingBtnOk() {
+      if(this.confirmLoadingVideo){
+        return "Đang tải"
+      }
+      return "Xác nhận"
+    }
   },
 
   watch: {
@@ -212,11 +240,21 @@ export default {
     },
 
     async handleAddContent() {
-      this.showModalConfirm = true;
+      if(this.payload.type == "VIDEO"){
+        this.showModalConfirmVideo = true
+      } else {
+        this.showModalConfirm = true;
+      }
+      
     },
 
     async handleOk() {
-      this.confirmLoading = true;
+      if(this.payload.type == "VIDEO"){
+        this.confirmLoadingVideo = true
+      }else {
+        this.confirmLoading = true;
+      }
+      
       const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
@@ -249,6 +287,8 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+      this.showModalConfirmVideo = false;
+      this.confirmLoadingVideo = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {
