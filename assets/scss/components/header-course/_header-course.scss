@@ -91,11 +91,18 @@
     }
 
     .the-header__course-title {
+        @include text-overflow;
+        display: block;
         font-size: map-get($text-size, 'heading-3');
+        margin-right: 3rem;
     }
 
     .the-header__content {
         height: 7rem;
+    }
+
+    .the-header__right {
+        flex-shrink: 0;
     }
 }
 
