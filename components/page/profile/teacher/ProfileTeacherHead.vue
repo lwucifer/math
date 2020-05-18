@@ -14,8 +14,8 @@
           </div>
           <div class="">
             <app-stars class="d-inline-block mr-3" :stars="get(info, 'rate', 1)" :size="20"/>
-            <strong>{{ get(info, 'rate', 1) }}</strong>
-            <span> (2000)</span>
+            <strong>{{ get(info, 'rate', 0) }}</strong>
+            <span> ({{ get(info, 'rate_total', 0) }})</span>
           </div>
           <div class="d-flex align-items-center">
             <a href="#" class="text-gray mr-2">
@@ -40,7 +40,7 @@
           <div>
             <div class="icon-label"><IconCollectionBookmark /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'elearning_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'lesson_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Khóa học</span></p>
             </div>
           </div>
