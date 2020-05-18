@@ -14,6 +14,7 @@
         v-bind="$attrs"
         :multiple="multiple"
         v-on="uploadListeners"
+        :accept="accept"
       />
       <slot>
         <div class="app-upload__default-slot">
@@ -57,6 +58,10 @@ export default {
 
   props: {
     multiple: Boolean,
+    accept: {
+      type: String,
+      default: "",
+    },
     fileList: {
       type: Array,
       default: () => [],
