@@ -1,7 +1,7 @@
-.app-search.app-input {
+.app-search {
     display: inline-block;
     
-    .app-input__input {
+    &.app-input .app-input__input {
         border: 0;
         box-sizing: content-box;
 
