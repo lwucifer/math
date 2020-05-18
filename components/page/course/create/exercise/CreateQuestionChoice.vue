@@ -8,11 +8,18 @@
 
     <div class="row">
       <div class="col-md-3">
-        <label class="d-inline-block mb-3 font-weight-bold" for="answer">Chọn đáp án đúng</label>
+        <label class="d-inline-block mb-3 font-weight-bold" for="answer"
+          >Chọn đáp án đúng</label
+        >
       </div>
 
       <div class="col-md-8">
-        <label class="d-inline-block mb-3" style="margin-left: 1.5rem" for="answer-editor">Nội dung đáp án</label>
+        <label
+          class="d-inline-block mb-3"
+          style="margin-left: 1.5rem"
+          for="answer-editor"
+          >Nội dung đáp án</label
+        >
       </div>
     </div>
 
@@ -122,12 +129,14 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch(`elearning/create/getProgress`);
+          // this.$store.dispatch(`elearning/create/getProgress`);
+          this.$store.dispatch(`elearning/create/getExams`);
         } else {
           const lesson_id = get(this, "lesson.id", "");
+          // this.$store.dispatch(`elearning/create/getProgress`);
           this.$store.dispatch("elearning/create/getLesson", lesson_id);
         }
 

@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="email"
-        placeholder="Email"
+        placeholder="Nhập email"
         :error="$v.email.$invalid"
         :message="errorMessage.email"
         :validate="validateProps.email"
@@ -19,7 +19,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         maxlength="127"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"

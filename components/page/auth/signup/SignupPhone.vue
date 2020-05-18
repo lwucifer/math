@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="phone"
-        placeholder="Số điện thoại"
+        placeholder="Nhập số điện thoại"
         maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
@@ -21,7 +21,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"

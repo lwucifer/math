@@ -1,6 +1,6 @@
 <template>
   <div class="mt-4">
-      <h1 class="color-primary">Schoolly</h1>
+      <h1 class="color-primary" style="font-size:54px">Schoolly</h1>
       <h3 class="title_image-auth">Giải pháp học trực tuyến</h3>
       <img :src="image">
   </div>

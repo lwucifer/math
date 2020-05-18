@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="email"
-        placeholder="Email"
+        placeholder="Nhập email"
         :error="$v.email.$invalid"
         :message="errorMessage.email"
         :validate="validateProps.email"
@@ -19,7 +19,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         class="mb-2"
         maxlength="127"
         :error="$v.password.$invalid || validate.password"
@@ -43,6 +43,7 @@
       fullWidth
       @click.prevent="SubmitLoginEmail"
       class="mb-3"
+      :loading="loadingBtn"
     >Đăng nhập</app-button>
   </div>
 </template>
@@ -78,7 +79,8 @@ export default {
       validateProps: { password: "", email: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loadingBtn: false,
     };
   },
   validations: {
@@ -95,6 +97,8 @@ export default {
     ...mapActions("auth", ["login"]),
     async SubmitLoginEmail() {
       try {
+        this.loadingBtn = true;
+        
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         const loginModel = createSigninWithEmail(
@@ -113,6 +117,8 @@ export default {
         });
       } catch (error) {
         console.log("Login error:", error);
+      } finally {
+        this.loadingBtn = false;
       }
     },
     handleEmail() {

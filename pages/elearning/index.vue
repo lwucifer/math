@@ -236,6 +236,7 @@ import IconSubjectPhysical from "~/assets/svg/icons/subject-physical.svg?inline"
 import IconSubjectChemistry from "~/assets/svg/icons/subject-chemistry.svg?inline";
 import IconSubjectForeignLanguage from "~/assets/svg/icons/subject-foreign-language.svg?inline";
 import IconSubjectLiterature from "~/assets/svg/icons/subject-literature.svg?inline";
+import IconDefaultSubject from '~/assets/svg/icons/default-subject.svg?inline';
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
 import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
@@ -324,7 +325,7 @@ export default {
         },
         {
           value: ELEARNING_TYPES.COURSE,
-          text: "Khóa học nổi bậtt"
+          text: "Khóa học nổi bật"
         }
       ]
     };
@@ -378,7 +379,7 @@ export default {
           return IconSubjectLiterature;
           break;
         default:
-          return IconSubjectLiterature;
+          return IconDefaultSubject;
           break;
       }
     },
