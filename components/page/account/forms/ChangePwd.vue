@@ -1,11 +1,11 @@
 <template>
-  <sub-block-section
-    :has-title="false"
-  >
+  <sub-block-section :has-title="false">
     <template v-slot:content>
       <div class="form--normal">
         <div class="row">
-          <div class="col-md-3"><label for="" class="form--normal__title">Mật khẩu cũ</label></div>
+          <div class="col-md-3">
+            <label for class="form--normal__title">Mật khẩu cũ</label>
+          </div>
           <div class="col-md-9">
             <app-input
               v-model="oldPassword"
@@ -18,7 +18,9 @@
               placeholder="Nhập mât khẩu cũ"
             />
           </div>
-          <div class="col-md-3"><label for="" class="form--normal__title">Mật khẩu mới</label></div>
+          <div class="col-md-3">
+            <label for class="form--normal__title">Mật khẩu mới</label>
+          </div>
           <div class="col-md-9">
             <app-input
               v-model="newPassword"
@@ -29,7 +31,9 @@
               @input="handleNewPassword"
             />
           </div>
-          <div class="col-md-3"><label for="" class="form--normal__title">Xác nhận mật khẩu</label></div>
+          <div class="col-md-3">
+            <label for class="form--normal__title">Xác nhận mật khẩu</label>
+          </div>
           <div class="col-md-9">
             <app-input
               v-model="coNewPassword"
@@ -42,12 +46,7 @@
           </div>
           <div class="col-md-3"></div>
           <div class="col-md-9">
-            <app-button
-              @click="save"
-              size="lg"
-            >
-              Thay đổi mật khẩu
-            </app-button>
+            <app-button @click="save" size="lg">Thay đổi mật khẩu</app-button>
           </div>
         </div>
       </div>
@@ -56,125 +55,129 @@
 </template>
 
 <script>
-  import IconTick from "~/assets/svg/icons/tick.svg?inline";
-  import { mapState, mapActions } from "vuex";
-  import { ERRORS } from "~/utils/error-code";
-  import {
-    required,
-    minLength,
-    sameAs,
-    maxLength
-  } from "vuelidate/lib/validators";
-  import { validatePassword } from "~/utils/validations";
+import IconTick from "~/assets/svg/icons/tick.svg?inline";
+import { mapState, mapActions } from "vuex";
+import { ERRORS } from "~/utils/error-code";
+import {
+  required,
+  minLength,
+  sameAs,
+  maxLength
+} from "vuelidate/lib/validators";
+import { validatePassword } from "~/utils/validations";
 
-  export default {
-    data() {
-      return {
+export default {
+  data() {
+    return {
+      oldPassword: "",
+      newPassword: "",
+      coNewPassword: "",
+      error: false,
+      error2: false,
+      error3: false,
+      success: false,
+      errorMessage: {
         oldPassword: "",
         newPassword: "",
-        coNewPassword: "",
-        error: false,
-        error2: false,
-        error3: false,
-        success: false,
-        errorMessage: {
-          oldPassword: "",
-          newPassword: "",
-          coNewPassword: ""
-        },
-        validateProps: { oldPassword: "", newPassword: "", coNewPassword: "" },
-        validate: { oldPassword: true, newPassword: true }
+        coNewPassword: ""
+      },
+      validateProps: { oldPassword: "", newPassword: "", coNewPassword: "" },
+      validate: { oldPassword: true, newPassword: true }
+    };
+  },
+  validations: {
+    oldPassword: { required },
+    newPassword: { required },
+    coNewPassword: { required, sameAsPassword: sameAs("newPassword") }
+  },
+  computed: {
+    disabledBtn() {
+      const btnDisabled =
+        this.$v.$invalid ||
+        this.validate.oldPassword ||
+        this.validate.newPassword;
+      return btnDisabled;
+    }
+  },
+  methods: {
+    ...mapActions("auth", ["changePassword"]),
+    save() {
+      const data = {
+        current_pwd: this.oldPassword,
+        new_pwd: this.newPassword,
+        verify_new_pass: this.coNewPassword
       };
-    },
-    validations: {
-      oldPassword: { required },
-      newPassword: { required },
-      coNewPassword: { required, sameAsPassword: sameAs("newPassword") }
-    },
-    computed: {
-      disabledBtn() {
-        const btnDisabled =
-          this.$v.$invalid ||
-          this.validate.oldPassword ||
-          this.validate.newPassword;
-        return btnDisabled;
-      }
-    },
-    methods: {
-      ...mapActions("auth", ["changePassword"]),
-      save() {
-        let data = {
-          current_pwd: this.oldPassword,
-          new_pwd: this.newPassword,
-          verify_new_pass: this.coNewPassword
-        };
-        const doAdd = this.changePassword(data).then(result => {
-          if (result.success == 1) {
-            this.success = true;
-            // this.$emit("click-close");
-          } else {
-            this.$toasted.error(result.message)
-          }
-        });
-      },
-      handleOldPassword(_password) {
-        this.validate.oldPassword = true;
-        this.validateProps.oldPassword = "";
-        if (!this.$v.oldPassword.required) {
-          this.validateProps.oldPassword = 2;
-          this.errorMessage.oldPassword = "Trường này là bắt buộc";
-        } else if (validatePassword(_password)) {
-          this.validateProps.oldPassword = 1;
-          this.validate.oldPassword = false;
-        } else if (!validatePassword(_password)) {
-          this.validateProps.oldPassword = 2;
-          this.errorMessage.oldPassword =
-            "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
-        }
-      },
-      handleNewPassword(_password) {
-        this.validate.newPassword = true;
-        this.validateProps.newPassword = "";
-        if (!this.$v.newPassword.required) {
-          this.validateProps.newPassword = 2;
-          this.errorMessage.newPassword = "Trường này là bắt buộc";
-        } else if (validatePassword(_password)) {
-          this.validateProps.newPassword = 1;
-          this.validate.newPassword = false;
-        } else if (!validatePassword(_password)) {
-          this.validateProps.newPassword = 2;
-          this.errorMessage.newPassword =
-            "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
-        }
-      },
-      handleCoNewPassword() {
-        if (!this.$v.coNewPassword.required) {
-          this.validateProps.coNewPassword = 2;
-          this.errorMessage.coNewPassword = "Trường này là bắt buộc";
-        } else if (!this.$v.coNewPassword.sameAsPassword) {
-          this.validateProps.coNewPassword = 2;
-          this.errorMessage.coNewPassword = "Xác nhận mật khẩu không khớp";
+      const doAdd = this.changePassword(data).then(result => {
+        if (result.success == 1) {
+          this.success = true;
+          this.$emit("success", true);
+          // this.$emit("click-close");
         } else {
-          this.validateProps.coNewPassword = 1;
+          this.$toasted.error(result.message);
         }
-      },
-      reset() {
-        const that = this;
-        that.oldPassword = "";
-        that.newPassword = "";
-        that.coNewPassword = "";
-        that.error = false;
-        that.error2 = false;
-        that.error3 = false;
-        that.success = false;
+      });
+    },
+    handleOldPassword(_password) {
+      this.validate.oldPassword = true;
+      this.validateProps.oldPassword = "";
+      if (!this.$v.oldPassword.required) {
+        this.validateProps.oldPassword = 2;
+        this.errorMessage.oldPassword = "Trường này là bắt buộc";
+      } else if (validatePassword(_password)) {
+        this.validateProps.oldPassword = 1;
+        this.validate.oldPassword = false;
+        this.errorMessage.oldPassword = "";
+      } else if (!validatePassword(_password)) {
+        this.validateProps.oldPassword = 2;
+        this.errorMessage.oldPassword =
+          "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
       }
     },
-    watch: {
-      visible() {
-        this.reset();
+    handleNewPassword(_password) {
+      this.validate.newPassword = true;
+      this.validateProps.newPassword = "";
+      if (!this.$v.newPassword.required) {
+        this.validateProps.newPassword = 2;
+        this.errorMessage.newPassword = "Trường này là bắt buộc";
+      } else if (validatePassword(_password)) {
+        this.validateProps.newPassword = 1;
+        this.errorMessage.newPassword = "";
+        this.validate.newPassword = false;
+      } else if (!validatePassword(_password)) {
+        this.validateProps.newPassword = 2;
+        this.errorMessage.newPassword =
+          "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
       }
+    },
+    handleCoNewPassword() {
+      if (!this.$v.coNewPassword.required) {
+        this.validateProps.coNewPassword = 2;
+        this.errorMessage.coNewPassword = "Trường này là bắt buộc";
+      } else if (!this.$v.coNewPassword.sameAsPassword) {
+        this.validateProps.coNewPassword = 2;
+        this.errorMessage.coNewPassword = "Xác nhận mật khẩu không khớp";
+      } else {
+        this.validateProps.coNewPassword = 1;
+        this.errorMessage.coNewPassword = "";
+      }
+    },
+    reset() {
+      const that = this;
+      that.oldPassword = "";
+      that.newPassword = "";
+      that.coNewPassword = "";
+      that.error = false;
+      that.error2 = false;
+      that.error3 = false;
+      that.success = false;
+    }
+  },
+  watch: {
+    visible() {
+      this.reset();
     }
   }
+};
 </script>
 
 <style lang="scss">
