@@ -4,7 +4,7 @@
       <app-input
         type="text"
         v-model="email"
-        placeholder="Email"
+        placeholder="Nhập email"
         :error="$v.email.$invalid"
         :message="errorMessage.email"
         :validate="validateProps.email"
@@ -19,7 +19,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         class="mb-2"
         maxlength="127"
         :error="$v.password.$invalid || validate.password"
@@ -41,9 +41,9 @@
       color="primary"
       square
       fullWidth
-      :loading="loading"
       @click.prevent="SubmitLoginEmail"
       class="mb-3"
+      :loading="loadingBtn"
     >Đăng nhập</app-button>
   </div>
 </template>
@@ -80,7 +80,7 @@ export default {
       validate: { password: true },
       errorRespon: false,
       messageErrorLogin: "",
-      loading: false
+      loadingBtn: false
     };
   },
   validations: {
@@ -96,8 +96,9 @@ export default {
   methods: {
     ...mapActions("auth", ["login"]),
     async SubmitLoginEmail() {
-      this.loading = true;
       try {
+        this.loadingBtn = true;
+
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         const loginModel = createSigninWithEmail(
@@ -108,15 +109,15 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-            this.loading = false;
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
-            this.loading = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+      } finally {
+        this.loadingBtn = false;
       }
     },
     handleEmail() {

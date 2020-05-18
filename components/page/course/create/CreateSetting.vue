@@ -325,7 +325,7 @@ export default {
 
       if (get(result, "success", false)) {
         this.$store.dispatch(`elearning/create/getSetting`);
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );

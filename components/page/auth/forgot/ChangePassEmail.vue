@@ -1,6 +1,6 @@
 <template>
   <div class="auth__main">
-    <h3 class="text-primary">Quên mật khẩu?</h3>
+    <h3 class="text-primary">Thay đổi mật khẩu</h3>
     <div class="auth_content mt-5">
       <app-input
         type="password"
@@ -27,7 +27,7 @@
       <app-button
         color="primary"
         square
-        fullWidth
+        style="width:293px;height:41px"
         @click="acceptResetPass"
         class="mb-3 mt-4"
         :disabled="disabledBtnForgot"

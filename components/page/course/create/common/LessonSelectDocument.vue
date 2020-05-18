@@ -31,11 +31,17 @@
     </div>
 
     <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
-      <app-upload @change="handleSelectFile" class="clc-upload-video">
-       
+      <app-upload
+        accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx"
+        @change="handleSelectFile"
+        class="clc-upload-video"
+      >
       </app-upload>
 
-      <p class="text-base caption mt-2"><span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file</p>
+      <p class="text-base caption mt-2">
+        <span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài
+        liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file
+      </p>
     </div>
 
     <DocumentSelectDoc

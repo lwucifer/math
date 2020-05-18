@@ -3,11 +3,12 @@
       <div class="row">
         <div class="col-md-6">
             <div class="wrap-success-auth">
-                <IconSuccess class="mb-3 fill-primary"/>
+                <IconSuccess70px class="mb-3 fill-primary"/>
                 <h3 class="text-primary">Đổi mật khẩu thành công</h3>
-                <p class="my-4">Tài khoản của bạn đã được cập nhật mật khẩu mới</p>
-                <app-button class="mt-2 btn-confirm" square 
+                <p class="my-4 mx-5">Tài khoản của bạn đã được cập nhật mật khẩu mới!</p>
+                <app-button class="mt-2" square 
                             :to="'/auth/signin'"
+                            style="width:293px;height:41px"
                             nuxt
                 >
                 Đăng nhập ngay
@@ -23,11 +24,11 @@
 
 <script>
 import ImageAuth  from "~/components/page/auth/ImageAuth";
-import IconSuccess from '~/assets/svg/icons/success.svg?inline';
+import IconSuccess70px from '~/assets/svg/icons/success_70px.svg?inline';
 export default {
     components:{
         ImageAuth,
-        IconSuccess
+        IconSuccess70px
     }
 }
 </script>
