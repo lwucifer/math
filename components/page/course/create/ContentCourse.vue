@@ -34,7 +34,7 @@
             </div>
           </div>
 
-          <div class="cc-box__body">
+          <div class="cc-box__body" :class="{'py-0': toggleAddChapter}">
             <CreateChapter
               v-if="isShowFormAddChapter"
               @cancel="toggleAddChapter"

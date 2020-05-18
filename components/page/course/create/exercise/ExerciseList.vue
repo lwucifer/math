@@ -1,7 +1,7 @@
 <template>
-  <div class="cc-panel__body">
+  <div class="cc-panel__body-modifer">
     <div class="cc-box">
-      <div class="cc-box__head">
+      <div class="cc-box__head" :class="{'add-border-bottom': get(exercise, 'questions', []).length > 0}">
         <div class="cc-box__head-left">
           <EditExerciseName
             :exercise="get(this, 'exercise', {})"
@@ -21,15 +21,16 @@
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
           >
-            <IconAngleDown  width="20px" height="20px" class="icon" v-if="!isShowExercise" />
-            <IconAngleUp  width="20px" height="20px" class="icon" v-else />
+            <IconAngleDown  width="20px" height="20px" class="icon fill-primary" v-if="!isShowExercise" />
+            <IconAngleUp  width="20px" height="20px" class="icon fill-primary" v-else />
           </button>
         </div>
       </div>
 
+
       <div
         class="cc-box__body"
-        :class="{ 'add-background': isAddQuestionForm }"
+        :class="{ 'add-background': isAddQuestionForm, 'py-0' : toggleFormAdd }"
       >
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
@@ -41,7 +42,7 @@
           :exercise="exercise"
           @cancel="toggleFormAdd"
         />
-        <fragment v-if="isShowExercise">
+        <template v-if="isShowExercise">
           <ListQuestion
             v-for="(question, index) in get(exercise, 'questions', [])"
             :key="question.id"
@@ -49,7 +50,7 @@
             :question="question"
             :exercise="exercise"
           />
-        </fragment>
+        </template>
       </div>
     </div>
   </div>

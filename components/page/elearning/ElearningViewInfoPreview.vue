@@ -7,14 +7,14 @@
       <div class="col-7">
         <h5>{{ get(info, "name", "") }}</h5>
         <div class="d-flex-center mt-4 mb-4">
-          <div class="d-flex-center box11 mr-3 color-white" v-if="get(info, 'elearning_price.free', false)" style="background: #14BFF4">
+          <div class="d-flex-center box11 mr-3 color-white" v-if="get(info, 'elearning_price.free', false)" style="background: #14BFF4; border-radius:2px">
             <IconPricetagAlt class="mr-2 fill-white" width="16" height="16"/>
             <span>Miễn phí</span>
           </div>
-          <div class="d-flex-center box11 mr-3 color-white" style="background: #E6A01E">
+          <div class="d-flex-center box11 mr-3 color-white" style="background: #E6A01E; border-radius:2px">
             <IconStarO class="mr-2 fill-white" width="16" height="16"/>{{ get(info, "rates.averageRate", 0) }}/5
           </div>
-          <div class="d-flex-center box11 mr-3 color-white" style="background: #37A000">
+          <div class="d-flex-center box11 mr-3 color-white" style="background: #37A000; border-radius:2px">
             <IconUsd class="mr-2 fill-white" width="16" height="16"/>{{ get(info, "elearning_price.original_price", 0) }}đ
           </div>
         </div>

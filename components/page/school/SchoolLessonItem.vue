@@ -24,7 +24,7 @@
         <div>
           <app-avatar :src="get(lesson, 'teacher_avatar', '')" :size="20" />
           <span>
-            <n-link class="name" to>
+            <n-link class="name" :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`" target="_blank">
               {{ get(lesson, "teacher_name", "") }}
             </n-link>
           </span>

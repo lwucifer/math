@@ -18,10 +18,10 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async [actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL]({ commit }, teacher_id) {
+  async [actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL]({ commit }, id) {
     try {
-      const result = await new Search(this.$axios)[actionTypes.BASE.DETAIL](
-        teacher_id.userId
+      const result = await new Search(this.$axios)['getIDWithPayload'](
+        id.userId, {params: {size: 9999}}
       );
       commit(
         mutationTypes.ELEARNING_PUBLIC_SEARCH

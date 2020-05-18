@@ -158,6 +158,10 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     LIST: "elearningPublicElearningTeacherList",
 };
 
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+  LIST: "elearningPublicElearningTeacherElsList",
+};
+
 export const ELEARNING_PUBLIC_INFO = {
     LIST: "elearningPublicInfoList",
 };
@@ -601,4 +605,12 @@ export const ACCOUNT_BIOGRAPHY = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     LIST: "teachingInteractiveListquestion",
+};
+
+export const TEACHING_PUBLIC_LIST = {
+    LIST: "teachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    LIST: "publicClassesList",
 };

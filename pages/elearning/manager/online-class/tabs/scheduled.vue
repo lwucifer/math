@@ -66,9 +66,8 @@
     <!--Options group-->
 
     <!--Table-->
-    <div v-if="loading" class="pl-4">Loading...</div>
     <app-table
-      v-else
+      :loading="loading"
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -272,14 +271,15 @@ export default {
       }
     },
 
-    formatAMPM(date) {
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let ampm = hours >= 12 ? 'PM' : 'AM';
+    formatAMPM(time) {
+      let date = new Date(time.getTime() + 7*60*60*1000);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12;
       hours = hours ? hours : 12;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      let strTime = hours + ':' + minutes + ' ' + ampm;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm;
       return strTime;
     },
     async getList() {
@@ -301,7 +301,7 @@ export default {
             ...item,
             time: {
               day: item.recent_schedule.day,
-              time: item.recent_schedule.start_time + ' - ' + end
+              time: self.formatAMPM(date) + ' - ' + end
             }
           };
         });

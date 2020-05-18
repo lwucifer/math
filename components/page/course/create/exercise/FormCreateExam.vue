@@ -109,7 +109,7 @@
     </div>
 
     <div class="mb-4">
-      <h5 class="font-weight-bold mb-4">Cài đặt thời gian mở đề</h5>
+      <h5 class="font-weight-bold mb-3">Cài đặt thời gian mở đề</h5>
       <app-radio-group class="mb-4">
         <app-radio
           :checked="is_open === 1"
@@ -128,7 +128,7 @@
         >
       </app-radio-group>
 
-      <div v-show="is_open" class="d-flex align-items-center">
+      <div v-if="is_open == 1" class="d-flex align-items-center">
         <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
 
         <app-date-picker
@@ -144,18 +144,17 @@
 
     <div class="d-flex justify-content-end">
       <app-button
-        size="sm"
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
-        square
+        size="md"
+        color="default"
+        outline
+        class="font-weight-semi-bold mr-4 text-secondary"
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Huỷ</app-button
       >
       <app-button
-        size="sm"
+        size="md"
         color="primary"
         class="font-weight-semi-bold"
-        square
         @click="handleAddExcercise"
         >Tạo {{ title }}</app-button
       >

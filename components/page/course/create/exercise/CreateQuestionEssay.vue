@@ -32,10 +32,10 @@
     >
     <app-editor v-model="payload.content" class="mb-4" />
 
-    <label class="d-flex align-items-center mb-3 font-weight-semi-bold" for="question-editor"
+    <!-- <label class="d-flex align-items-center mb-3 font-weight-semi-bold" for="question-editor"
       ><app-checkbox class="mr-2 fill-primary" checked/> Nội dung câu trả lời <span class="text-base ml-2 font-weight-normal">(không bắt buộc)</span></label
     >
-    <app-editor v-model="payload.answers[0].content"  class="mb-4 ml-4"/>
+    <app-editor v-model="payload.answers[0].content"  class="mb-4 ml-4"/> -->
 
 
     <!-- <label
@@ -55,14 +55,14 @@
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
-        size="sm"
+        size="md"
         @click="$emit('cancel')"
-        >Huỷ bỏ</app-button
+        >Huỷ</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
+        size="md"
         @click="handleAddQuestion"
         >Lưu câu hỏi</app-button
       >
@@ -82,7 +82,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { createPayloadQuestion } from "~/models/course/AddCourseNoAnswer";
 import { mapState } from "vuex";
 
 export default {
@@ -105,12 +105,12 @@ export default {
         points: "",
         answers: [
           {
-            correct: true,
+            correct: false,
             content: "",
           },
-        ],
-      },
-    };
+        ]
+      }
+    }
   },
 
   mounted() {

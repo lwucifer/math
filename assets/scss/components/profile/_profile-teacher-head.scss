@@ -1,46 +1,49 @@
-.wrapInfoTeach__Profile{
+.teacher-profile {
+  &__overview {
+    background-color: #fff;
+    padding: 1.5rem 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  &__figure {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    div:first-child span{
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 16px;
-    }
-    div:nth-child(2) span{
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        color: #666666;
-        margin: 14px 0px 22px 0px;
-        display:inline-block;
-    }
-    div:last-child{
-        strong{
-            margin-left:20px;
-        }
-    }
-}
-.wrapCourse__Profile{
-    display: flex;
-    justify-content: flex-end;
-    > div{
-        background:#EBF7F3;
-        border: 1px solid #EEEEEE;
-        box-sizing: border-box;
-        width: 100px;
-        height: 100px;
-        margin: 20px;
+    > div {
+      display: flex;
+      flex: 1;
+      .icon-label {
+        background-color: #F9F9F9;
+        border-radius: 2px;
+        height: 5.6rem;
+        width: 5.6rem;
+        padding: auto 1.5rem;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-    }
-    div span:first-child{
-            font-weight: bold;
-            font-size: 30px;
-            line-height: 41px;
-            color: #32AF85;
+        svg {
+          width: 100%;
+          path {
+            fill: $color-primary-3;
+            fill-opacity: 1;
+          }
         }
+      }
+    }
+    .figure-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .figure-num {
+      font-weight: bold;
+      font-size: 1.8rem;
+      color: $color-primary-3;
+      line-height: 1.9rem;
+    }
+    .figure-label {
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+  }
 }

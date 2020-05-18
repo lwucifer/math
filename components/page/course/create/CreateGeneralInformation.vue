@@ -90,7 +90,7 @@
           @onSelectFile="handleSelectAvatar"
           :minWidth="340"
           :minHeight="204"
-          title="Hình đại diện cho bài giảng"
+          :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
 
@@ -102,11 +102,13 @@
           @onSelectFile="handleSelectCover"
           :minWidth="730"
           :minHeight="410"
-          title="Hình minh hoạ cho bài giảng"
+          :title="'Hình minh hoạ cho ' + name"
           id="cover"
+          :name="name"
         />
       </div>
       <app-modal-confirm
+        centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="handleOk"

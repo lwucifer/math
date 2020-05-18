@@ -50,6 +50,17 @@
     align-items: center;
     flex-wrap: wrap;
     margin-bottom: 1.4rem;
+    
+    .profile-link {
+        display: flex;
+        align-items: center;
+        //margin-bottom: ;
+        text-decoration: none;
+        color: $color-text;
+        &:hover {
+            color: $color-secondary;
+        }
+    }
 }
 
 .eh-personal-box__desc {

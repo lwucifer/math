@@ -95,6 +95,10 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList",
 };
 
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+    SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST: "setElearningPublicElearningTeacherElsList"
+}
+
 export const ELEARNING_PUBLIC_INFO = {
     SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList",
 };
@@ -345,7 +349,7 @@ export const SCHOOL_TEACHERS = {
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
-    SET_EXPAND: "setElearningStudyExpand"
+    SET_EXPAND: "setElearningStudyExpand",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -389,6 +393,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
     SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
     SET_STUDY_EXERCISE_AUTO_SUBMISSION: "setStudyExerciseAutoSubmission",
+    SET_STUDY_EXERCISE_CURRENT_LESSION: "setStudyExerciseCurrentLession",
 };
 
 export const ELEARNING_STUDY_PROGRESS = {
@@ -497,4 +502,12 @@ export const TEACHING_ELEARNING_INVITES = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
+};
+
+export const TEACHING_PUBLIC_LIST = {
+    SET_TEACHING_PUBLIC_LIST: "setTeachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
 };

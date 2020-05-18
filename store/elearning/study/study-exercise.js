@@ -27,6 +27,8 @@ const state = () => ({
   },
   currentQuestionId: null,
   autoSubmission: null,
+  currentLession: null,
+
 });
 
 /**
@@ -427,6 +429,14 @@ const mutations = {
     _auto
   ) {
     state.autoSubmission = _auto;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT_LESSION](
+    state,
+    _lesson
+  ) {
+    console.log("[SET_STUDY_EXERCISE_CURRENT_LESSION]", _lesson);
+    state.currentLession = _lesson;
   },
 
 };

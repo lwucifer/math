@@ -183,6 +183,8 @@ export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/reques
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
 export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
+export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
+export const PUBLIC_CLASSES = `/elearning/public/classes`;
 /**
  * PAYMENT
  */

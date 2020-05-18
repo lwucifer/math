@@ -31,13 +31,13 @@
 
     <template v-else>
       <button
-        class="cc-box__btn cc-box__btn-edit mr-4"
+        class="cc-box__btn cc-box__btn-edit-hover mr-4"
         @click="editExerciseName"
       >
         <IconEditAlt class="icon d-block subheading fill-primary" />
       </button>
       <button
-        class="cc-box__btn cc-box__btn-edit"
+        class="cc-box__btn cc-box__btn-edit-hover"
         @click="handleDeleteExercise"
       >
         <IconTrashAlt

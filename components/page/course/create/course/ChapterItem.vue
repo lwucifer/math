@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chapter-item">
     <div
       class="d-flex align-items-center justify-content-between mb-3 ce-item--modifer"
     >
@@ -38,7 +38,7 @@
       />
     </div>
 
-    <app-divider class="my-0" />
+    <!-- <app-divider class="my-0" /> -->
   </div>
 </template>
 

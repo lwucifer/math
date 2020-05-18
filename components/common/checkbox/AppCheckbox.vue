@@ -9,7 +9,7 @@
       @change="handleChange"
     />
     <span class="app-checkbox__checkmark">
-      <IconCheckBox class="app-checkbox__icon app-checkbox__icon--checked icon fill-opacity-1" />
+      <IconCheckBox class="app-checkbox__icon app-checkbox__icon--checked icon fill-opacity-1 fill-primary" />
       <IconCheckBoxOutlineBlank
         class="app-checkbox__icon app-checkbox__icon--unchecked icon fill-opacity-1"
       />

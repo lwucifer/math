@@ -4,7 +4,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
-      :data="list"
+      :data="listWithLocalTime"
       style="margin-left: -1.5rem; margin-right: -1.5rem;"
     >
       <template v-slot:cell(status)="{row}">
@@ -42,6 +42,7 @@ import { mapActions, mapMutations } from "vuex";
 import qs from "qs";
 import { createRepayReq } from "~/models/payment/RepayReq";
 import { RESPONSE_SUCCESS } from "~/utils/config";
+import { fullDateTimeSlash } from '~/utils/moment';
 
 export default {
   props: {
@@ -111,6 +112,18 @@ export default {
       }
     };
   },
+
+  computed: {
+    listWithLocalTime() {
+      return this.list.map(item => {
+        return {
+          ...item,
+          timestamp: fullDateTimeSlash(item.timestamp)
+        }
+      })
+    }
+  },
+
   methods: {
     ...mapActions("payment", ["postRepay", "cancelPay"]),
     ...mapMutations("account", ["setForceGetTransactionList"]),

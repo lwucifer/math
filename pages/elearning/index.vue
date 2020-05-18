@@ -206,7 +206,7 @@
           <template slot="default" slot-scope="{ classes }">
             <div v-for="item in highlightTeachers && highlightTeachers.content || []" :key="item.teacher_id" :class="classes">
               <ElearningHomeTeacherCard
-                to
+                :to="`/public/profile/teacher?user_id=${get(item, 'teacher_id', '')}`"
                 :image="get(item, 'avatar.medium', '')"
                 :name="item.name"
                 school-name="Trường trung học cơ sở Nguyễn Trãi"

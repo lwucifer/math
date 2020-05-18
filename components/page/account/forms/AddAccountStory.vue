@@ -16,11 +16,19 @@ export default {
       default: ""
     }
   },
-  computed: {
-    detail: function() {
-      return this.story;
-    }
+  data() {
+    return {
+      detail: this.story
+    };
   },
+  computed: {
+    // detail: function() {
+    //   return this.story;
+    // }
+  },
+  // created() {
+  //   this.detail = this.story;
+  // },
   methods: {
     cancel() {
       console.log("[Cancel create story account]");
@@ -28,7 +36,7 @@ export default {
     },
     submit() {
       console.log("[Submit create story account]");
-      this.$emit("submit");
+      this.$emit("submit", this.detail);
     }
   }
 };
