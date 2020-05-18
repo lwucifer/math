@@ -52,7 +52,7 @@ const actions = {
             console.log("payload", payload);
             const result = await new Favourite(this.$axios)[
                 actionTypes.BASE.DELETE_PAYLOAD
-            ]({ data: payload });
+            ](payload);
             return result;
         } catch (error) {
             console.log(error);
