@@ -1,16 +1,16 @@
-.wrap-form_auth{
+.wrap-form_auth {
     background: white;
     width: 400px;
     margin: auto;
-    padding-bottom: 24px;;
+    padding-bottom: 24px;
+    ;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
     text-align: center;
-    .head-form_auth{
+    .head-form_auth {
         background: #1D4354;
-        h2{
+        h2 {
             color: white;
-            padding-top:16px;
-
+            padding-top: 16px;
         }
         .auth__nav-v2 {
             display: table;
@@ -42,7 +42,7 @@
         font-size: 1.4rem;
         font-weight: normal;
         width: 12rem;
-        + .btn-social { 
+        +.btn-social {
             margin-left: 1.8rem;
         }
     }
@@ -56,14 +56,14 @@
         width: 117px;
         height: 40px;
     }
-    .title-either_auth{
+    .title-either_auth {
         color: #656565;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0 5px;
         margin: 22px auto;
-        &::before{
+        &::before {
             content: '';
             border-bottom: 1px solid #E0E0E0;
             width: 151px;
@@ -72,7 +72,7 @@
             top: 50%;
             margin-right: 10px;
         }
-        &::after{
+        &::after {
             content: '';
             border-bottom: 1px solid #E0E0E0;
             width: 151px;
@@ -82,33 +82,36 @@
             margin-left: 10px;
         }
     }
-    .bnt-auth{
+    .bnt-auth {
         text-decoration: none;
         color: $color-primary;
-        &:hover{
+        &:hover {
             color: $color-primary-3;
         }
     }
 }
-.wrap-forgot-psw{
-    margin:100px auto;
-    padding:30px 55px;
+
+.wrap-forgot-psw {
+    margin: 100px auto;
+    padding: 30px 55px;
     width: 461px;
     background: #FFFFFF;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
     text-align: center;
-    .btn-restore{
+    .btn-restore {
         width: 293px;
     }
 }
-.wrap-change-psw{
-    margin:100px auto;
+
+.wrap-change-psw {
+    margin: 100px auto;
     width: 461px;
     background: #FFFFFF;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
     text-align: center;
 }
-.wrap-success-auth{
+
+.wrap-success-auth {
     width: 461px;
     background: #FFFFFF;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
@@ -116,16 +119,16 @@
     margin: 100px auto;
     text-align: center;
     padding: 40px 0;
-    svg {
-        width: 70px;
-        height: 70px;
-    }
-    a:first-child{
+    // svg {
+    //     width: 70px;
+    //     height: 70px;
+    // }
+    a:first-child {
         text-align: center;
         width: 100%;
         display: block;
     }
-    .btn-confirm{
+    .btn-confirm {
         width: 212px;
         height: 41px;
         font-weight: 600;
