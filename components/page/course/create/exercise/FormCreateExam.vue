@@ -93,18 +93,20 @@
 
       <div class="col-12 col-md-4">
         <label for="count" class="heading-5 font-weight-bold"
-          >Số lần làm bài</label
+          >Số lần làm bài tối đa</label
         >
 
         <app-input
           type="text"
-          class="mb-0 mt-3"
+          class="mb-0 mt-3 ce-input-with-unit"
           @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
-          style="width: 49px"
-          v-model="payload.reworks"
-        ></app-input>
+          style="width: 102px"
+          :value="1"
+        >
+          <div slot="unit">Lần</div>
+        </app-input>
       </div>
     </div>
 
@@ -129,16 +131,21 @@
       </app-radio-group>
 
       <div v-if="is_open == 1" class="d-flex align-items-center">
-        <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
+        <div class="mr-4">
+          <h6 class='mb-2'>Chọn ngày</h6>
+          <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
+        </div>
 
-        <app-date-picker
-          @input="handleSelectTime"
-          type="time"
-          value-format="hh:mm:ss"
-          class="mr-4"
-        />
+        <div class="mr-4">
+          <h6 class='mb-2'>Chọn giờ</h6>
+           <app-date-picker
+            @input="handleSelectTime"
+            type="time"
+            value-format="hh:mm:ss"
+          />
+        </div>
 
-        <IconEvent24px class="fill-primary"/>
+        <IconEvent24px class="fill-primary mt-4"/>
       </div>
     </div>
 

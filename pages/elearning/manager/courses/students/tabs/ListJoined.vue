@@ -125,13 +125,24 @@ export default {
       this.teachingElearningList(query);
     },
     changedType(classes) {
-      const query = {
-        params: {
-          class_id: classes,
-          elearning_id: this.$route.query.elearning_id
-        }
-      };
-      this.teachingElearningList(query);
+      console.log("classes", classes);
+      if (classes == "Khác") {
+        const query = {
+          params: {
+            khac: true,
+            elearning_id: this.$route.query.elearning_id
+          }
+        };
+        this.teachingElearningList(query);
+      } else {
+        const query = {
+          params: {
+            class_id: classes,
+            elearning_id: this.$route.query.elearning_id
+          }
+        };
+        this.teachingElearningList(query);
+      }
     }
   }
 };

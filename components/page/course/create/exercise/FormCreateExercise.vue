@@ -123,7 +123,6 @@
           id="count"
           size="sm"
           style="width: 102px"
-          v-model="payload.reworks"
           :value="1"
         >
           <div slot="unit">Lần</div>

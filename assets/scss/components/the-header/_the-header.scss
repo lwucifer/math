@@ -42,6 +42,8 @@
 .the-header__content {
   padding: 0 2rem;
   display: flex;
+  align-items: center;
+  height: 7rem;
   // align-items: stretch;
   >* {
     display: flex;
@@ -74,18 +76,19 @@
 
 .the-header__logo {
   flex-shrink: 0;
-  margin-right: 5.4rem;
+  margin-right: 4rem;
 
   svg {
     display: block;
-    width: 165px;
-    height: 47px;
+    width: 130px;
+    height: 40px;
   }
 }
 
 .the-header__menu {
   list-style-type: none;
   margin-right: 2.7rem;
+  margin-left: 3rem;
   white-space: nowrap;
   
 
@@ -155,46 +158,56 @@
 }
 
 .the-header__search {
-  width: 100%;
-}
-.the-header__search__form {
-  width: 100%;
-  max-width: 50rem;
-  height: 37px;
-  position: relative;
-  background: #FFFFFF;
-  border: 1px solid #E0E0E0;
-  box-sizing: border-box;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
-  margin-right: 2.5rem;
+  &.app-search {
+    width: 100%;
+    margin-bottom: 0;
+    margin-right: auto;
+    max-width: 39.8rem;
+    border: 1px solid $color-disabled;
 
-  input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: calc(100% - 35px);
-    padding-left: 10px;
-    border: none;
-    background: #FFFFFF;
-    &::placeholder {
-      color: #cccccc;
+    /deep/ .app-search__submit {
+      box-shadow: none !important;
     }
   }
-
-  button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-  }
 }
+// .the-header__search__form {
+//   width: 100%;
+//   max-width: 50rem;
+//   height: 37px;
+//   position: relative;
+//   background: #FFFFFF;
+//   border: 1px solid #E0E0E0;
+//   box-sizing: border-box;
+//   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+//   border-radius: 2px;
+//   margin-right: 2.5rem;
+
+//   input {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     height: 100%;
+//     width: calc(100% - 35px);
+//     padding-left: 10px;
+//     border: none;
+//     background: #FFFFFF;
+//     &::placeholder {
+//       color: #cccccc;
+//     }
+//   }
+
+//   button {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     width: 35px;
+//     height: 35px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     background-color: transparent;
+//   }
+// }
 
 .the-header__right {
   display: flex;

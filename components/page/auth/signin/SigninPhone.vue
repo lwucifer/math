@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="SubmitLoginPhone">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -40,15 +40,15 @@
     </div>
 
     <app-button
+      :loading="loadingBtn"
       color="primary"
       square
       fullWidth
       :disabled="disabledBtnLogin"
-      @click.prevent="SubmitLoginPhone"
+      type="submit"
       class="mb-3"
-      :loading="loadingBtn"
     >Đăng nhập</app-button>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -78,7 +78,7 @@ export default {
       validate: { password: true },
       errorRespon: false,
       messageErrorLogin: "",
-      loadingBtn: false,
+      loadingBtn: false
     };
   },
   validations: {
@@ -107,14 +107,15 @@ export default {
         const doAdd = this.login(loginModel).then(result => {
           if (result.success == true) {
             this.$emit("signin", true);
-
             // this.$router.push("/");
           } else {
             this.showErrorWhenLogin(result);
+            this.loadingBtn = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+        this.loadingBtn = false;
       } finally {
         this.loadingBtn = false;
       }
