@@ -103,7 +103,7 @@
           id="count"
           size="sm"
           style="width: 102px"
-          :value="1"
+          v-model="payload.reworks"
         >
           <div slot="unit">Lần</div>
         </app-input>
@@ -223,7 +223,7 @@ export default {
         title: "",
         type: "",
         pass_score: 0,
-        reworks: 0,
+        reworks: 1,
         duration: 0,
         category: this.category,
         open_time: "",
