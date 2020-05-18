@@ -1,7 +1,7 @@
 <template>
   <section class="elearning-id-box elearning-view__content">
     <h4 class="mb-4">Nội dung {{ title }}</h4>
-    <div class="row flex-wrap info body-3">
+    <div class="row flex-wrap info body-4">
       <div class="col-auto">
         Trình độ:
         <strong class="color-primary">{{ get(info, "level.name", "") }}</strong>

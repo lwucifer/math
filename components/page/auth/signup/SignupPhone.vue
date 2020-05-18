@@ -172,7 +172,7 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
-            // this.loading = false;
+            this.loading = false;
             this.notify = {
               redirectLink: "/auth/signin",
               message: "Đăng kí tài khoản thành công",
@@ -180,10 +180,12 @@ export default {
             };
           } else {
             this.showErrorWhenRegister(result);
+            this.loading = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+        this.loading = false;
       }
     },
     async hanldeShowModalOTP() {
@@ -202,7 +204,6 @@ export default {
             };
             this.sendotp(data).then(result => {
               if (!result.code) {
-                this.loading = false;
                 this.savePhonePass({
                   phone: this.phone,
                   password: this.password,

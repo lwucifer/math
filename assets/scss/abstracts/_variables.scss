@@ -60,6 +60,7 @@ $colors: (
     success: lighten($color-green, 10),
     error: $color-red,
     warning: darken($color-yellow, 10),
+    warning-2: #FFCA56,
     disabled: $color-disabled
 ) !default;
 
