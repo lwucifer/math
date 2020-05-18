@@ -232,7 +232,7 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
 
         if (get(this, "category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");

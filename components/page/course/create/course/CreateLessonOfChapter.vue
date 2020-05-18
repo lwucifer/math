@@ -1,13 +1,16 @@
 <template>
   <div class="cc-box__bg-disable mb-4" id="create-lesson-of-chapter">
-    <h3 class="heading-6 mb-2 mt-3">Tên bài học <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span></h3> 
+    <h3 class="heading-6 mb-2 mt-3">
+      Tên bài học
+      <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
+    </h3>
     <app-input
-      @handleBlur="handleBlurNameInput"
+      @onBlur="handleChangeName"
       :counter="80"
       placeholder="Tên bài học"
       v-model="payload.name"
     />
-    <span v-show="error_name" class="error">{{ error_name }}</span>
+    <app-error :error="get(error, 'name', '')"></app-error>
 
     <p class="text-center mb-4">Chọn loại bài học</p>
 
@@ -36,7 +39,8 @@
       >
         <span class="clc-type-tab-item__icon">
           <IconRadioButtonChecked
-            class="icon mr-2" style="width: 24px; height: 24px"
+            class="icon mr-2"
+            style="width: 24px; height: 24px"
           />
           <IconFileBlank class="icon" />
           <span class="clc-type-tab-item__text">Văn bản</span>
@@ -122,7 +126,7 @@ export default {
     CreateAction,
     LessonSelectVideo,
     LessonSelectDocument,
-    IconRadioButtonChecked
+    IconRadioButtonChecked,
   },
 
   props: {
@@ -139,7 +143,6 @@ export default {
   data() {
     return {
       tabType: "video",
-      error_name: "",
       showModalConfirm: false,
       confirmLoading: false,
       noLesson: get(this, "chapter.lessons", "").length,
@@ -151,6 +154,9 @@ export default {
         repository_file_id: "",
         article_content: "",
         id: get(this, "lesson.id", ""),
+      },
+      error: {
+        name: "",
       },
     };
   },
@@ -174,17 +180,17 @@ export default {
       return !!get(this, "lesson.id", "");
     },
     submit() {
-      return !this.error_name;
+      return true;
     },
   },
 
   methods: {
-    handleBlurNameInput() {
+    handleChangeName() {
       if (!this.payload.name) {
-        this.error_name = "Chưa nhập tên bài học";
-        return;
+        return (this.error.name = "Chưa nhập tên bài học");
       }
-      this.error_name = "";
+
+      this.error.name = "";
     },
     changeTabType(type) {
       this.tabType = type;
@@ -222,7 +228,7 @@ export default {
       if (get(result, "success", false)) {
         this.$emit("toggleShowAddLesson");
         this.$store.dispatch(`elearning/create/getContent`);
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(
           defaultTo(get(result, "message", ""), "Thành công")
         );
