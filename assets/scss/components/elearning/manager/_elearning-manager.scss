@@ -172,3 +172,23 @@
     text-decoration: none;
     color: #656565;
 }
+
+.elearning-courses {
+    .table-avatar {
+        display: flex;
+        .left {
+        width: 10rem;
+        margin-right: 1rem;
+        img {
+            width: 100%;
+            height: auto;
+        }
+        }
+    }
+    .btn-color-blue {
+        background-color: #1481fe;
+    }
+    .app-table table th {
+        white-space: nowrap;
+    }
+  }

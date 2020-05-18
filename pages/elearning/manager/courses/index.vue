@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container elearning-courses">
     <breadcrumb />
 
     <div class="row">
@@ -141,8 +141,8 @@
             </template>
             <template v-slot:cell(price)="{ row }">
               <td>
-                <span v-if="row.price > 0">{{ row.price }}Đ</span>
-                <span v-else>Miễn phí</span>
+                <span v-if="row.free">Miễn phí</span>
+                <span v-else>Trả phí</span>
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
@@ -255,7 +255,7 @@ export default {
       previewInfo: {},
       ids: [],
       heads: [
-        -{
+        {
           name: "",
           text: "",
           selectAll: true
@@ -577,21 +577,4 @@ export default {
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
-.table-avatar {
-  display: flex;
-  .left {
-    width: 10rem;
-    margin-right: 1rem;
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-}
-.btn-color-blue {
-  background-color: #1481fe;
-}
-.app-table table th {
-  white-space: nowrap;
-}
 </style>
