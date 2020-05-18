@@ -275,9 +275,9 @@ export default {
       this.payload.privacy = get(this, "setting.privacy", "");
       const fee = toNumber(get(this, "setting.fee", ""));
       const price = toNumber(get(this, "setting.price", ""));
-      if (fee) {
-        this.percent_price = numeral((price - fee) / fee).format("0%");
-      }
+      // if (fee) {
+      //   this.percent_price = numeral((price - fee) / fee).format("0%");
+      // }
       if (fee > 0) {
         this.free = 1;
       }
@@ -298,13 +298,13 @@ export default {
       }
     },
 
-    handleSetPercent() {
-      const _fee = numeral(get(this, "payload.fee", 0)).value();
-      const _price = numeral(get(this, "payload.price", 0)).value();
-      if (_fee && _price) {
-        this.percent_price = numeral((_price - _fee) / _fee).format("0%");
-      }
-    },
+    // handleSetPercent() {
+    //   const _fee = numeral(get(this, "payload.fee", 0)).value();
+    //   const _price = numeral(get(this, "payload.price", 0)).value();
+    //   if (_fee && _price) {
+    //     this.percent_price = numeral((_price - _fee) / _fee).format("0%");
+    //   }
+    // },
 
     async handleCLickSave(type_save) {
       this.showModalConfirm = true;
@@ -343,7 +343,7 @@ export default {
     },
 
     handleReset() {
-      this.percent_price = "";
+      // this.percent_price = "";
       this.free = "";
       this.handleChangeSetting();
     },
