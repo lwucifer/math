@@ -46,6 +46,7 @@
       :disabled="disabledBtnLogin"
       @click.prevent="SubmitLoginPhone"
       class="mb-3"
+      :loading="loadingBtn"
     >Đăng nhập</app-button>
   </div>
 </template>
@@ -76,7 +77,8 @@ export default {
       validateProps: { password: "", phone: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorLogin: ""
+      messageErrorLogin: "",
+      loadingBtn: false,
     };
   },
   validations: {
@@ -93,6 +95,8 @@ export default {
     ...mapActions("auth", ["login"]),
     async SubmitLoginPhone() {
       try {
+        this.loadingBtn = true;
+
         const token = await this.$recaptcha.execute("login");
         console.log("ReCaptcha token:", token);
         const loginModel = createSigninWithPhone(
@@ -111,6 +115,8 @@ export default {
         });
       } catch (error) {
         console.log("Login error:", error);
+      } finally {
+        this.loadingBtn = false;
       }
     },
     handlePhone() {
