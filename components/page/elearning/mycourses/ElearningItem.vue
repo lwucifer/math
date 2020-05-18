@@ -175,7 +175,7 @@ export default {
       );
       if (doAdd.success) {
         this.menuDropdown = false;
-        this.$toasted.show("success");
+        this.$toasted.show("Đã chia sẻ thành công.");
       } else {
         this.$toasted.error(doAdd.message);
       }
