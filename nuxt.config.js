@@ -94,7 +94,8 @@ module.exports = {
         "portal-vue/nuxt",
         "@nuxtjs/recaptcha",
         '@nuxtjs/pwa',
-        '@nuxtjs/firebase'
+        '@nuxtjs/firebase',
+        '@nuxtjs/device',
     ],
 
     buildModules: [

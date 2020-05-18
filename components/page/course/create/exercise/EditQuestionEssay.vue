@@ -124,9 +124,9 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
 
-      if (get(this, "exercise.category", "") === "EXERCISE") {
-        this.payload.points = "";
-      }
+      // if (get(this, "exercise.category", "") === "EXERCISE") {
+      //   this.payload.points = "";
+      // }
 
       const payload = createPayloadQuestion(this.payload);
       const res = await this.$store.dispatch(

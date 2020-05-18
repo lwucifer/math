@@ -517,6 +517,10 @@ export const TEACHING_CHART_STATISTIC_REVENUE = {
     INFO: 'teachingChartStatisticRevenue'
 }
 
+export const TEACHING_CHART_STATISTIC_HIGHLIGHT_ELS = {
+    LIST: 'teachingChartStatisticHighlightElsList'
+}
+
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
     DELETE: "teachingElearningsDelete",
