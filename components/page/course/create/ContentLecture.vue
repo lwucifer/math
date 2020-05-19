@@ -50,14 +50,14 @@
             :lesson="lesson"
           />
 
-          <fragment v-if="isShowDetailLesson">
+          <div v-if="isShowDetailLesson">
             <LessonDetail
               v-for="lesson in lessons"
               :key="lesson.id"
               :lesson="lesson"
               @handleEditLesson="handleEditLesson"
             />
-          </fragment>
+          </div>
         </div>
       </div>
     </div>
