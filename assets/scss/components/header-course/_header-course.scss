@@ -46,6 +46,12 @@
         top: 55%;
         transform: translate(-50%, -50%);
     }
+
+    &.complete {
+        .percent-cup svg path {
+            fill: $color-primary;
+        }
+    }
 }
 .circular-chart {
     display: block;
@@ -54,7 +60,7 @@
 }
 
 .circle {
-    stroke: #4cc790;
+    stroke: $color-primary;
     fill: none;
     stroke-width: 2.8;
     stroke-linecap: round;

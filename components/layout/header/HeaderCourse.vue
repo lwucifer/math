@@ -17,7 +17,7 @@
 
       <div class="the-header__right">
         <div class="d-flex-center">
-          <div class="percent mr-3">
+          <div class="percent mr-3" :class="{ 'complete': percent == 100 }">
             <svg viewBox="0 0 36 36" class="circular-chart">
               <path
                 class="circle-bg circle"
