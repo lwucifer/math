@@ -34,7 +34,7 @@
         <template v-slot:title>
           <div class="d-flex align-items-center">
             <h4>Giỏ hàng</h4>
-            <span class="text-gray">  (Ơ sản phẩm)</span>
+            <span class="text-gray">  (0 sản phẩm)</span>
           </div>
         </template>
          <template v-slot:content>
