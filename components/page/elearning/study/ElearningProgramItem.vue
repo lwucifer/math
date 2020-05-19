@@ -20,9 +20,13 @@
       >
 
       <div class="e-program-item__bottom">
-        <span v-if="isShowDuration" class="d-inline-flex align-items-center">
+        <span v-if="isShowVideoLesson" class="d-inline-flex align-items-center">
           <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
           <span>{{ durationTimes }}</span>
+        </span>
+
+        <span v-else class="d-inline-flex align-items-center">
+          <IconEventNote class="icon body-1 mr-1 text-primary" />
         </span>
 
         <a
@@ -65,6 +69,15 @@
       @cancel="isShowCompleteStudy = false"
       @ok="handleCompleteStudy"
     ></app-modal-confirm>
+
+    <app-modal-notify
+      v-if="notify.isShowNotify"
+      :type="notify.type"
+      :title="notify.title"
+      @close="notify.isShowNotify = false"
+      @ok="notify.isShowNotify = false"
+    />
+
   </div>
 </template>
 
@@ -90,6 +103,8 @@ const IconFileCheckAlt = () =>
 const IconFileDownloadAlt = () =>
   import("~/assets/svg/design-icons/file-download-alt.svg?inline");
 import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
+import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
+
 import StudyService from "~/services/elearning/study/Study";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
@@ -98,7 +113,8 @@ export default {
   components: {
     IconFileCheckAlt,
     IconSlowMotionVideo,
-    IconFileDownloadAlt
+    IconFileDownloadAlt,
+    IconEventNote,
   },
 
   props: {
@@ -108,7 +124,12 @@ export default {
   data() {
     return {
       lessonCompleted: LESSION_STATUS.COMPLETED,
-      isShowCompleteStudy: false
+      isShowCompleteStudy: false,
+      notify: {
+        type: "",
+        description: "",
+        isShowNotify: false
+      }
     };
   },
 
@@ -142,7 +163,7 @@ export default {
       }
     },
 
-    isShowDuration() {
+    isShowVideoLesson() {
       return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
     },
 
@@ -179,8 +200,16 @@ export default {
 
         this.getProgress();
         return;
+      } else {
+        this.getProgress();
+        this.isShowCompleteStudy = false;
+        this.notify = {
+            type: "error",
+            title: get(res, "message", "Có lỗi xảy ra"),
+            isShowNotify: true
+          };
       }
-      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+      // this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
     get,
     ...mapActions("elearning/study/study-exercise", [

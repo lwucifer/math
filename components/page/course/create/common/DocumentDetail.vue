@@ -24,7 +24,7 @@
 import IconClose24px from "~/assets/svg/v2-icons/close_24px.svg?inline";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -68,16 +68,12 @@ export default {
       this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
+        this.$toasted.success(get(result, "message", "Thành công"));
         this.$store.dispatch(`elearning/create/getContent`);
         // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {

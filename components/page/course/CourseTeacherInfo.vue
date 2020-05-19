@@ -23,13 +23,13 @@
             <strong class="color-primary">{{
               get(teacher, "elearning_total", 0)
             }}</strong>
-            Bài giảng/khoá học
+            Bài giảng
           </div>
           <div>
             <strong class="color-primary">{{
               get(teacher, "participant_total", 0)
             }}</strong>
-            Học viên
+            Khóa học
           </div>
         </div>
       </div>
@@ -63,6 +63,7 @@ export default {
     IconStar,
     IconStarO,
   },
+
 
   computed: {
     ...mapState("elearning/detail", {
