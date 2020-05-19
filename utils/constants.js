@@ -225,7 +225,12 @@ export const DAY_SECTION = {
 };
 
 export const LESSION_TYPE = {
-  VIDEO: "VIDEO"
+  VIDEO: "VIDEO",
+  DOC: "DOC",
+  ARTICLE: "ARTICLE",
+  PDF: "PDF",
+  TXT: "TXT",
+  IMAGE: "IMAGE"
 };
 
 export const SORT_ELEARNING = {

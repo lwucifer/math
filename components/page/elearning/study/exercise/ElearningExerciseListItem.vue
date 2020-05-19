@@ -10,7 +10,7 @@
 
     <app-button
       v-if="status === EXERCISE_STATUS.NONE"
-      color="orange"
+      color="yellow"
       size="sm"
       @click.prevent="handleDoExercise"
       >Làm bài tập</app-button
