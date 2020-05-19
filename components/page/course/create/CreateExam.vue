@@ -85,10 +85,6 @@ export default {
     }),
   },
 
-  updated() {
-    console.log(this.exams);
-  },
-
   mounted() {
     this.$store.dispatch("elearning/create/getExams");
   },
