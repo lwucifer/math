@@ -41,7 +41,7 @@
       </div>
 
       <div class="course-item-2__price-wrapper">
-        <b v-if="free" class="text-primary body-1 font-weight-bold">Miễn phí</b>
+        <b v-if="free || !originalPrice || !price" class="text-primary body-1 font-weight-bold">Miễn phí</b>
 
         <template v-else>
           <s class="body-3" v-if="originalPrice != price">{{ originalPrice | numeralFormat }}đ</s>
