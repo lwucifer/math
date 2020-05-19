@@ -15,7 +15,10 @@
     </div>
 
     <div class="e-program-item__right">
-      <a href class="e-program-item__title" @click.prevent="handleStuty(lesson)"
+      <a
+        href
+        class="e-program-item__title"
+        @click.prevent="handleStuty(lesson)"
         >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a
       >
 
@@ -35,6 +38,7 @@
           class="d-inline-flex align-items-center text-decoration-none"
           :class="`text-${classExerciseStatus}`"
           v-if="get(lesson, 'exercises', 0)"
+          v-scroll-to="'body'"
           @click.prevent="handleGetExercises"
         >
           <IconFileCheckAlt class="icon body-1 mr-1" />
@@ -106,7 +110,7 @@ import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.sv
 import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
 
 import StudyService from "~/services/elearning/study/Study";
-import { ERRORS } from '../../../../utils/error-code';
+import { ERRORS } from "../../../../utils/error-code";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -269,12 +273,13 @@ export default {
     handleResultCompleteStudy(res) {
       // if false
       if (!get(res, "success", false)) {
-        let msgErr = 'Có lỗi xảy ra';
+        let msgErr = "Có lỗi xảy ra";
         switch (res.code) {
           case ERRORS.EXERCISE.MUST_COMPLETE_ALL_REQUIRED_EXERCISES:
-            msgErr = 'Bạn phải hoàn thành tất cả các bài tập bắt buộc của bài học trước.'
+            msgErr =
+              "Bạn phải hoàn thành tất cả các bài tập bắt buộc của bài học trước.";
             break;
-        
+
           default:
             break;
         }

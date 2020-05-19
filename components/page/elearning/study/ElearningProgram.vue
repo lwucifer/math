@@ -22,7 +22,13 @@
     </div>
 
     <!-- Bai TEST -->
-    <a v-if="tests" class="e-program__test" href @click.prevent="handleDoTest">
+    <a
+      v-if="tests"
+      class="e-program__test"
+      href
+      @click.prevent="handleDoTest"
+      v-scroll-to="'body'"
+    >
       <IconFileAlt class="icon" />&nbsp;Làm bài kiểm tra
     </a>
   </div>
