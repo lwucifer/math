@@ -31,11 +31,11 @@
   
   export default {
     props: {
-      size: {
-        type: String,
-        default: "sm" // 'sm' | 'md' | 'lg'
-      },
-      all: {
+      // size: {
+      //   type: String,
+      //   default: "sm" // 'sm' | 'md' | 'lg'
+      // },
+      allOpt: {
         type: Object,
       }
     },
@@ -63,8 +63,8 @@
         return this.$refs['vueSelectItem'].isOptionSelected(option)
       },
       isSltedAll(option) {
-        if (this.all) {
-          return this.optionComparator(option, this.all)
+        if (this.allOpt) {
+          return this.optionComparator(option, this.allOpt)
         }
         return false
       },
