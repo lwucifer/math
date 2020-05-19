@@ -26,7 +26,7 @@
           Để được chấp nhận, ảnh phải có kích thước nhỏ nhất là
           <strong>{{ minWidth }}x{{ minHeight }} </strong> pixels. Định dạng cho
           phép là .jpg, .jpeg, .jpg, .bmp, hoặc .png. Chúng tôi khuyến cáo không
-          nên chèn chữ lên hình ảnh đại diện. Việc tải lên ảnh này là bắt buộc
+          nên chèn chữ lên hình ảnh đại diện. <strong>Việc tải lên ảnh này là bắt buộc</strong> .
         </p>
 
         <p class="csa-desc text-gray" v-else>

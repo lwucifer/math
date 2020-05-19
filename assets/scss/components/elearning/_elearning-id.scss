@@ -13,9 +13,22 @@
         margin-right: 2.3rem;
     }
 
+    .author {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: $color-text-dark;
+        margin-right: 2.3rem;
+        margin-top: 2px;
+    }
+
     .font-13px {
         font-size: 1.3rem;
     }
+}
+
+.img-info {
+    border-radius: 2px;
 }
 
 .elearning-view__content {
@@ -70,6 +83,12 @@
         display: flex;
         align-items: center;
         padding: 1rem 1.5rem;
+
+        button {
+            &:active, &:focus {
+                outline: none;
+            }
+        }
     }
 
     &__body {
