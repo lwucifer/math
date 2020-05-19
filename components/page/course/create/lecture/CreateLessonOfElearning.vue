@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <!-- <h3 class="heading-6 mb-2 mt-3">Bài giảng đại số lớp 10</h3> -->
     <div class="cc-box__bg-gray">
       <h3 class="heading-5 my-3">
@@ -106,7 +106,7 @@
       title="Upload video bài học"
       :description="chagingDescription"
     />
-  </fragment>
+  </div>
 </template>
 
 <script>
