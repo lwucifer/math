@@ -88,7 +88,7 @@
             </div>
             <div v-else>
               <div>
-                <div class="box-content-fixed-height mb-4">
+                <div class="box-content-fixed-height mb-4" v-if="!editingStory">
                   <div
                     class="overflow-y-scroll"
                     v-html="story"
