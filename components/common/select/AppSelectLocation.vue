@@ -12,6 +12,7 @@
         searchable
         :clearable="false"
         @input="handleChangeProvince"
+        :all-opt="allOpt"
       ></app-vue-select>
     </div>
 
@@ -27,6 +28,7 @@
         searchable
         :clearable="false"
         @input="handleChangedDistrict"
+        :all-opt="allOpt"
       ></app-vue-select>
     </div>
 
@@ -42,6 +44,7 @@
         searchable
         :clearable="false"
         @input="handleChangedWard"
+        :all-opt="allOpt"
       ></app-vue-select>
     </div>
   </fragment>
@@ -67,20 +70,28 @@ export default {
     ]),
 
     provinceOpts() {
-      return addAllOptionSelect(this.provinces);
+      return [ this.allOpt, ...this.provinces ]
+      // return addAllOptionSelect(this.provinces);
     },
     districtOpts() {
-      return addAllOptionSelect(this.districts);
+      return [ this.allOpt, ...this.districts ]
+      // return addAllOptionSelect(this.districts);
     },
     wardOpts() {
-      return addAllOptionSelect(this.wards);
+      return [ this.allOpt, ...this.wards ]
+      // return addAllOptionSelect(this.wards);
     }
   },
   data() {
     return {
       province: null,
       district: null,
-      ward: null
+      ward: null,
+      allOpt: {
+        id: null,
+        name: 'Tất cả',
+        type: ''
+      }
     };
   },
   methods: {
