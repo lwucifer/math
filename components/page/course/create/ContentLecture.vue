@@ -27,8 +27,18 @@
               @click="isShowDetailLesson = !isShowDetailLesson"
               v-if="get(lessons, 'length', 0)"
             >
-              <IconAngleDown class="icon fill-primary"  width="20px" height="20px" v-if="!isShowDetailLesson" />
-              <IconAngleUp class="icon fill-primary"  width="20px" height="20px" v-else />
+              <IconAngleDown
+                class="icon fill-primary"
+                width="20px"
+                height="20px"
+                v-if="!isShowDetailLesson"
+              />
+              <IconAngleUp
+                class="icon fill-primary"
+                width="20px"
+                height="20px"
+                v-else
+              />
             </button>
           </div>
         </div>
@@ -40,14 +50,14 @@
             :lesson="lesson"
           />
 
-          <fragment v-if="isShowDetailLesson">
+          <div v-if="isShowDetailLesson">
             <LessonDetail
               v-for="lesson in lessons"
               :key="lesson.id"
               :lesson="lesson"
               @handleEditLesson="handleEditLesson"
             />
-          </fragment>
+          </div>
         </div>
       </div>
     </div>
@@ -68,6 +78,15 @@
         >
       </div>
     </div>
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirm"
+      :confirmLoading="false"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      title="Xác nhận"
+      description="Xác nhận"
+    />
   </div>
 </template>
 
@@ -136,6 +155,7 @@ export default {
       isEditCourseName: false,
       courseNameModel: "",
       lesson: null,
+      showModalConfirm: false,
     };
   },
 
@@ -183,8 +203,17 @@ export default {
   methods: {
     get,
 
-    handleNextStep() {
+    handleCancel() {
+      this.showModalConfirm = false;
+    },
+
+    handleOk() {
+      this.showModalConfirm = false;
       this.$emit("nextStep", "settings");
+    },
+
+    handleNextStep() {
+      this.showModalConfirm = true;
     },
 
     async handleSaveCourseName() {

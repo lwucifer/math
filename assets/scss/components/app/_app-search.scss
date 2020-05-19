@@ -14,4 +14,15 @@
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
+
+    &--bordered {
+        border-radius: $border-radius-common;
+        box-shadow: $shadow-1;
+        transition: border .3s;
+        border: 1px solid $color-disabled;
+
+        &.app-input--focused {
+            border-color: $color-primary;
+        }
+    }
 }

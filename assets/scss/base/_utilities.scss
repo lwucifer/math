@@ -2,6 +2,9 @@
 .w-100 {
     width: 100% !important
 }
+.mw-4 {
+    width: 4rem !important
+}
 
 @each $key, $val in map-get($grid, 'breakpoints') {
     @if ($key == 'default') {

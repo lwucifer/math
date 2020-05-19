@@ -67,7 +67,7 @@ import IconSearch2 from "~/assets/svg/icons/search2.svg?inline";
 
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
 export default {
@@ -129,15 +129,11 @@ export default {
       this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
+        this.$toasted.success(get(result, "message", "Thành công"));
         this.handleGetFile();
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
     handleCancelModal() {
       this.showModalConfirm = false;

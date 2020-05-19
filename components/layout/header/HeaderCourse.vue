@@ -17,7 +17,7 @@
 
       <div class="the-header__right">
         <div class="d-flex-center">
-          <div class="percent mr-3">
+          <div class="percent mr-3" :class="{ 'complete': percent == 100 }">
             <svg viewBox="0 0 36 36" class="circular-chart">
               <path
                 class="circle-bg circle"
@@ -47,7 +47,7 @@
             <div class="content">
               <IconCaretUp class="fill-white icon-up" />
               <div>
-                <IconTick class="mr-3" />Đã hoàn thành
+                <IconDone class="icon heading-3 text-primary mr-3" />Đã hoàn thành
                 {{ learningProgress }} bài giảng
               </div>
             </div>
@@ -66,7 +66,7 @@
 import IconCup from "~/assets/svg/icons/cup.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline";
-import IconTick from "~/assets/svg/icons/tick.svg?inline";
+import IconDone from '~/assets/svg/v2-icons/done_24px.svg?inline';
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
 
@@ -77,7 +77,7 @@ export default {
     IconCup,
     IconCaretDown,
     IconCaretUp,
-    IconTick,
+    IconDone,
     Logo,
     IconClose
   },

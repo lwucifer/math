@@ -141,6 +141,11 @@
       :fail="AddCartFail"
       @close-modal="handleCloseModal"
     />
+    <ElearningRequestCode
+      :showRequestCode="showRequestCode"
+      @handleCancel="handleCancelRequestCode"
+      @handleSubmit="handleSubmitCode"
+    />
   </div>
 </template>
 
@@ -164,8 +169,9 @@ import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 import JoinService from "~/services/elearning/Join";
-
+import ElearningRequestCode from "~/components/page/elearning/ElearningRequestCode";
 import PaymentModal from "~/components/page/payment/PaymentModal";
+
 export default {
   components: {
     IconShare,
@@ -179,17 +185,15 @@ export default {
     IconBxsShare,
     PaymentModal,
     IconDone24px,
+    ElearningRequestCode,
   },
 
   data() {
     return {
       showModalPayment: false,
       AddCartFail: false,
+      showRequestCode: false,
     };
-  },
-
-  mounted() {
-    console.log(this.info);
   },
 
   computed: {
@@ -225,6 +229,19 @@ export default {
 
   methods: {
     get,
+
+    handleCancelRequestCode() {
+      this.showRequestCode = false;
+    },
+
+    handleSubmitCode(pass_code) {
+      const elearning_id = get(this, "info.id", "");
+      const payload = {
+        elearning_id,
+        pass_code,
+      };
+      this.handleJoinElearning(payload);
+    },
 
     async handleAddFavouriteElearning() {
       if (!get(this, "info.is_favourite", true)) {
@@ -280,16 +297,22 @@ export default {
         return;
       }
 
+      if (get(this, "info.privacy", false)) {
+        this.showRequestCode = true;
+        return;
+      }
+
       if (get(this, "info.elearning_price.free", false)) {
-        this.handleJoinElearning(elearning_id);
+        const payload = {
+          elearning_id,
+        };
+        this.handleJoinElearning(payload);
         return;
       }
     },
 
-    async handleJoinElearning(elearning_id) {
-      const payload = {
-        elearning_id,
-      };
+    async handleJoinElearning(payload) {
+      const elearning_id = get(this, "info.id", "");
       const res = await new JoinService(this.$axios)["add"](payload);
 
       if (get(res, "success", false)) {

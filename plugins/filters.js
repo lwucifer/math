@@ -6,7 +6,8 @@ import {
   SUBMISSION_RESULTS,
   WITHDRAWAL_STATUSES,
   TRANSACTION_STATUSES,
-  EXERCISE_STATUS
+  EXERCISE_STATUS,
+  ELEARNING_TYPES
 } from "~/utils/constants";
 import { DATETIME_FULL_TEXT } from "~/utils/config";
 // const moment = require("moment");
@@ -166,10 +167,10 @@ export function convertBreadcrumText(str = "", elearningInfo) {
   let breadcrumTxt = str;
   switch (str) {
     case "Elearning":
-      breadcrumTxt = "Elearning";
+      breadcrumTxt = "E-learning";
       break;
     case "manager":
-      breadcrumTxt = "Quản lý Elearning";
+      breadcrumTxt = "Quản lý E-learning";
       break;
     case "":
       breadcrumTxt = "Tổng Quan";
@@ -202,10 +203,11 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = "Danh sách học sinh";
       break;
     default:
-      breadcrumTxt = elearningInfo.subject.name;
+      const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
+      breadcrumTxt = `${lectureType} - ${elearningInfo.subject.name}`;
       break;
   }
-  console.log("convertBreadcrumText", str, breadcrumTxt);
+  console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
   return breadcrumTxt;
 }
 

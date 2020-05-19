@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <div class="info">
       <div class="info-item">
         Chapter:
@@ -57,7 +57,7 @@
         <IconDownload class="ml-2" />
       </strong>
     </div> -->
-  </fragment>
+  </div>
 </template>
 
 <script>

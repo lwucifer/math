@@ -15,7 +15,19 @@
       </span>
     </div>
 
-    <app-button @click.prevent="handleStartDoExercise"
+    <div
+      class="text-center font-weight-semi-bold heading-5 mb-6"
+      v-if="currentExercise.open_time"
+    >
+      <span>
+        Thời gian mở đề:
+        <span class="text-secondary">{{
+          currentExercise.open_time | fullDateTimeSlash
+        }}</span>
+      </span>
+    </div>
+
+    <app-button @click.prevent="handleStartDoExercise" v-if="isShowBtnStart"
       >Bắt đầu làm bài</app-button
     >
   </div>
@@ -25,10 +37,19 @@
 import { mapState, mapMutations, mapActions } from "vuex";
 import { STUDY_MODE } from "~/utils/constants";
 import { RESPONSE_SUCCESS } from "../../../../../utils/config";
+import { fullDateTimeSlash } from "~/utils/moment";
 
 export default {
   computed: {
-    ...mapState("elearning/study/study-exercise", ["currentExercise"])
+    ...mapState("elearning/study/study-exercise", ["currentExercise"]),
+
+    isShowBtnStart() {
+      if (!this.currentExercise.open_time) return true;
+      const openTime = fullDateTimeSlash(this.currentExercise.open_time);
+
+      console.log("[isShowBtnStart]", this.currentExercise, openTime, new Date());
+      return new Date().getTime() >= new Date(openTime).getTime();
+    }
   },
 
   methods: {
