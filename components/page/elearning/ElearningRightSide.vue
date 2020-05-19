@@ -86,7 +86,7 @@
       type="warning"
       size="sm"
       >Bạn đã mua bài giảng này vào ngày
-      {{ get(info, "join_date", "") }}</app-alert
+      {{ get(info, "join_date", "") | moment("DD/MM/YYYY") }}</app-alert
     >
 
     <ul class="info">

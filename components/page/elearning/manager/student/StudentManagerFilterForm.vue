@@ -110,10 +110,10 @@ export default {
           text: item.name
         };
       });
-      // data.push({
-      //   value: "Khác",
-      //   text: "Khác"
-      // });
+      data.push({
+        value: "Khác",
+        text: "Khác"
+      });
       return data;
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-6 d-flex">
+      <div class="col-md-6 d-flex">
         <div class="mr-4">
           <app-avatar shape="square" :src="get(info, 'avatar.low')" :size="127"/>
         </div>
@@ -14,8 +14,8 @@
           </div>
           <div class="">
             <app-stars class="d-inline-block mr-3" :stars="get(info, 'rate', 1)" :size="20"/>
-            <strong>{{ get(info, 'rate', 1) }}</strong>
-            <span> (2000)</span>
+            <strong>{{ get(info, 'rate', 0) }}</strong>
+            <span> ({{ get(info, 'rate_total', 0) }})</span>
           </div>
           <div class="d-flex align-items-center">
             <a href="#" class="text-gray mr-2">
@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-md-6">
         <div class="teacher-profile__figure">
           <div>
             <div class="icon-label"><IconLaptop /></div>
@@ -40,7 +40,7 @@
           <div>
             <div class="icon-label"><IconCollectionBookmark /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'elearning_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'lesson_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Khóa học</span></p>
             </div>
           </div>

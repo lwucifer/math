@@ -5,14 +5,14 @@
         <h4 class="cc-panel__heading">Bài tập</h4>
       </div>
 
-      <div class="pt-4 pl-4 pr-4">
-        <app-alert type="info" class="mb-4" show-close>
-          Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
+      <div class="px-4">
+        <app-alert type="info" class="mt-4" show-close>
+          Bạn có thể tạo bài tập cho bài giảng/ khóa học của bạn tại đây. Nếu khóa học của
           bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
           gửi lên để được xét duyệt.
         </app-alert>
 
-        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
+        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3 mt-4">
           Chọn bài học liên quan
         </h5>
 

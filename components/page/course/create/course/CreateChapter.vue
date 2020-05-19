@@ -2,13 +2,15 @@
   <fragment>
     <div class="cc-box__bg-gray pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
-        Chương {{ get(chapters, "data.length", 0) + 1 }} <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
+        Chương {{ get(chapters, "length", 0) + 1 }}
+        <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
       </h3>
       <app-input
         :counter="80"
         placeholder="Tên chương"
         v-model="payload.name"
       />
+      <app-error :error="error.name"></app-error>
 
       <div class="d-flex justify-content-end mt-4">
         <app-button
@@ -23,6 +25,7 @@
           class="clc-btn font-weight-semi-bold"
           size="md"
           @click="handleAddChapter"
+          :disabled="!submit"
           >Thêm chương</app-button
         >
       </div>
@@ -50,15 +53,42 @@ export default {
         elearning_id: "",
         name: "",
       },
+      error: {
+        name: "",
+      },
       showModalConfirm: false,
       confirmLoading: false,
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-chapter", {
+    ...mapState("elearning/create", {
       chapters: "chapters",
     }),
+    submit() {
+      return !!this.payload.name;
+    },
+  },
+
+  watch: {
+    "payload.name": {
+      handler: function() {
+        if (!this.payload.name) {
+          return (this.error.name = "Bạn cần nhập tên chương");
+        }
+
+        if (this.payload.name.length > 80) {
+          return (this.error.name = "Tên chương chỉ được tối đa 80 ký tự");
+        }
+
+        return (this.error.name = "");
+      },
+      deep: true,
+    },
+  },
+
+  mounted() {
+    console.log(this.chapters);
   },
 
   methods: {
@@ -87,7 +117,7 @@ export default {
         this.payload.name = "";
         this.$emit("cancel");
         this.$store.dispatch(`elearning/create/getContent`);
-        this.$store.dispatch(`elearning/create/getProgress`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

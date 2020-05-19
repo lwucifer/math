@@ -61,7 +61,7 @@ export default {
   },
 
   mounted() {
-    // this.$store.dispatch("elearning/create/reset");
+    this.$store.dispatch("elearning/create/reset");
   },
 
   beforeMount() {

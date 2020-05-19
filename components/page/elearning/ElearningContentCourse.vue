@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="evlc-item mt-3"
+      class="evlc-item mt-3 body-3"
       v-for="(chapter, index_chapter) in program"
       :key="chapter.chapter_id"
     >
@@ -9,7 +9,8 @@
         <div class="evlc-item__head-left mr-4">
           <b>Chương {{ index_chapter + 1 }}:</b> {{ get(chapter, "name", "") }}
         </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
+
+        <div class="evlc-item__head-right d-flex align-items-center ml-auto" @click="is_show_lesson = !is_show_lesson">
           <span class="mr-3">{{ get(chapter, "lessons.length", 0) }} Bài</span>
           <button class="evlc-item__btn evlc-item__btn-collapse active">
             <IconAngleDown class="icon fill-primary" />
@@ -17,22 +18,13 @@
         </div>
       </div>
 
-      <div v-if="is_show_lesson">
-        <div
-          class="evlc-item__body bg-input-gray"
-          v-for="(lesson, index_lesson) in get(chapter, 'lessons', [])"
-          :key="index_lesson"
-        >
-          <div class="d-flex align-items-center py-3">
-            <div class="d-flex align-items-center mr-4">
-              <IconPlay class="icon subheading mr-2 fill-primary" />Bài
-              {{ index_lesson + 1 }}: {{ get(lesson, "name", "") }}
-            </div>
-            <div class="ml-auto">{{ get(lesson, "duration", "") }}</div>
-          </div>
-          <app-divider class="my-0" />
-        </div>
-      </div>
+      <transition-group enter-active-class="animated faster fadeIn">
+        <ElearningContentCourseItem 
+          v-for="lesson in get(chapter, 'lessons', [])"
+          v-show="is_show_lesson"
+          :key="lesson.id"
+          :lesson="lesson"/>
+      </transition-group>
     </div>
 
     <!-- <div class="evlc-item mb-3">
@@ -69,16 +61,17 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import { get } from "lodash";
 import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
-import IconPlay from '~/assets/svg/icons/play.svg?inline';
+
+import ElearningContentCourseItem from '~/components/page/elearning/ElearningContentCourseItem'
 import { mapState } from "vuex";
 
 export default {
   components: {
     IconFileAlt,
     IconAngleDown,
-    IconPlay,
     IconBooks,
     IconDownload,
+    ElearningContentCourseItem
   },
 
   computed: {
@@ -89,7 +82,7 @@ export default {
 
   data() {
     return {
-      is_show_lesson: true,
+      is_show_lesson: false,
     };
   },
 

@@ -17,6 +17,7 @@
             />
           </div>
           <app-button
+            :loading="loading"
             color="primary"
             square
             class="btn-confirm"
@@ -63,7 +64,8 @@ export default {
       },
       validateProps: { otp: "" },
       errorRespon: false,
-      messageErrorRegister: ""
+      messageErrorRegister: "",
+      loading: false
     };
   },
   computed: {
@@ -92,9 +94,11 @@ export default {
         console.log("register-model", registerModel);
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
+            this.loading = false;
             this.$router.push("/auth/signup/success");
           } else {
             this.showErrorWhenRegister(result);
+            this.loading = false;
           }
         });
       } catch (error) {
@@ -102,6 +106,7 @@ export default {
       }
     },
     async acceptOTP() {
+      this.loading = true;
       await this.verifiOtp(this.otp).then(result => {
         // console.log("result huydv", result);
         if (result && result.user) {
@@ -110,6 +115,7 @@ export default {
           this.submitRegister();
         } else {
           this.showErrorOtp(result);
+          this.loading = false;
         }
       });
     },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="registerEmail">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -70,9 +70,9 @@
       color="primary"
       type="submit"
       square
+      :loading="loading"
       fullWidth
       :disabled="disabledBtnRegister"
-      @click.prevent="registerEmail"
     >Đăng ký</app-button>
     <!-- <app-modal
       centered
@@ -96,7 +96,7 @@
         >Xác thực tài khoản</n-link>
       </div>
     </app-modal>-->
-  </div>
+  </form>
 </template>
 
 <script>
@@ -138,7 +138,8 @@ export default {
       validateProps: { password: "", email: "", fullname: "", CfmPassword: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorRegister: ""
+      messageErrorRegister: "",
+      loading: false
     };
   },
   validations: {
@@ -156,6 +157,7 @@ export default {
   methods: {
     ...mapActions("auth", ["register"]),
     async registerEmail() {
+      this.loading = true;
       try {
         const token = await this.$recaptcha.execute("register");
         console.log("ReCaptcha token:", token);
@@ -168,9 +170,11 @@ export default {
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
             // this.modalConfirmEmail = true;
+            this.loading = false;
             this.$router.push(`/auth/signup/email?email=${this.email}`);
           } else {
             this.showErrorWhenRegister(result);
+            this.loading = false;
           }
         });
       } catch (error) {

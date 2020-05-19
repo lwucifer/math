@@ -7,14 +7,7 @@
         </n-link>
       </div>
 
-      <div class="the-header__search">
-        <form class="the-header__search__form" @submit.prevent>
-          <input type="text" placeholder="Tìm kiếm" />
-          <button type="submit">
-            <IconSearch width="15" height="15" class="fill-primary" />
-          </button>
-        </form>
-      </div>
+      <app-search class="the-header__search" :button-props="{ color: 'default' }" placeholder="Tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>
@@ -35,7 +28,7 @@
           <span class="number">9</span>
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
-          <IconShoppingCart24px class="fill-gray"/>
+          <IconShoppingCart24px class="fill-gray" />
           <span
             v-if="get(cartCheckout, 'orders.length', 0)"
             class="number"
@@ -141,14 +134,8 @@
       </div>
 
       <div v-else class="d-flex">
-        <n-link
-          class="btn-signup__header"
-          :to="'/auth/signup'"
-        >Đăng ký</n-link>
-        <n-link
-          class="btn-signin__header"
-          :to="'/auth/signin'"
-        >Đăng nhập</n-link>
+        <n-link class="btn-signup__header" :to="'/auth/signup'">Đăng ký</n-link>
+        <n-link class="btn-signin__header" :to="'/auth/signin'">Đăng nhập</n-link>
       </div>
     </div>
   </div>
@@ -159,9 +146,9 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
-import IconNotifications24px from '~/assets/svg/v2-icons/notifications_24px.svg?inline';
-import IconShoppingCart24px from '~/assets/svg/v2-icons/shopping_cart_24px.svg?inline';
-import IconCommentAltMessage from '~/assets/svg/design-icons/comment-alt-message.svg?inline';
+import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
+import IconShoppingCart24px from "~/assets/svg/v2-icons/shopping_cart_24px.svg?inline";
+import IconCommentAltMessage from "~/assets/svg/design-icons/comment-alt-message.svg?inline";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
@@ -201,10 +188,7 @@ export default {
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
-    ...mapGetters("auth", [
-      "isAuthenticated",
-      "isStudentRole",
-    ]),
+    ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
     ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {

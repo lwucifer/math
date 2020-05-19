@@ -1,6 +1,6 @@
 <template>
   <app-input class="app-search" v-bind="{ ...$attrs, ...$props }" @input="handleInput">
-    <app-button slot="append-inner" class="app-search__submit" :size="$attrs.size" @click="submit">
+    <app-button slot="append-inner" class="app-search__submit" :size="$attrs.size" v-bind="buttonProps" @click="submit">
       <IconSearch class="icon body-1" />
     </app-button>
   </app-input>
@@ -26,6 +26,10 @@ export default {
       type: [String, Number],
       required: false,
       default: ""
+    },
+    buttonProps: {
+      type: Object,
+      default: () => ({})
     }
   },
 
