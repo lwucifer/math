@@ -21,6 +21,10 @@
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.06);
         }
 
+        .icon {
+            vertical-align: middle;
+        }
+
         .icon-up {
             float: right;
             margin-right: 1rem;
@@ -35,6 +39,7 @@
         }
     }
 }
+
 .percent {
     position: relative;
     height: 3.2rem;
