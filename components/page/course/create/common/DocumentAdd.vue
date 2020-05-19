@@ -1,7 +1,9 @@
 <template>
   <div class="cc-box__bg-gray">
     <div class="cc-box__bg-disable">
-      <span class="heading-6 font-weight-semi-bold text-dark">Thêm tài liệu tham khảo</span>
+      <span class="heading-6 font-weight-semi-bold text-dark"
+        >Thêm tài liệu tham khảo</span
+      >
       <!-- <a href @click="handleCloseAdd($event)">
         <IconClose class="icon fill-gray" />
       </a> -->
@@ -76,7 +78,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import DocumentSelectFile from "~/components/page/course/create/common/DocumentSelectFile";
 import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddDocument } from "~/models/course/AddCourse";
 
@@ -85,14 +87,14 @@ export default {
     IconClose,
     IconTrashAlt,
     DocumentSelectFile,
-    DocumentSelectDoc
+    DocumentSelectDoc,
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
@@ -105,8 +107,8 @@ export default {
         lesson_id: get(this, "lesson.id", ""),
         name: "",
         format: "DOC",
-        url: ""
-      }
+        url: "",
+      },
     };
   },
 
@@ -147,23 +149,19 @@ export default {
       this.handleCancelModal();
 
       if (!get(result, "success", false)) {
-        this.$toasted.error(
-          defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-        );
+        this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
         return;
       }
       this.$emit("handleCloseAdd");
       this.$store.dispatch(`elearning/create/getContent`);
       // this.$store.dispatch(`elearning/create/getProgress`);
-      this.$toasted.success(
-        defaultTo(get(result, "message", ""), "Thành công")
-      );
+      this.$toasted.success(get(result, "message", "Thành công"));
     },
 
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    }
-  }
+    },
+  },
 };
 </script>
