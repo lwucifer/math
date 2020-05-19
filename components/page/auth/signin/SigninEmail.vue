@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="SubmitLoginEmail">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -37,15 +37,15 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorLogin}}</p>
     </div>
     <app-button
+      type="submit"
       :disabled="disabledBtnLogin"
       color="primary"
       square
       fullWidth
-      @click.prevent="SubmitLoginEmail"
       class="mb-3"
       :loading="loadingBtn"
     >Đăng nhập</app-button>
-  </div>
+  </form>
 </template>
 
 <script>

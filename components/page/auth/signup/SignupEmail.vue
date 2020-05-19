@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="registerEmail">
     <div class="auth_content mb-4">
       <app-input
         type="text"
@@ -73,7 +73,6 @@
       :loading="loading"
       fullWidth
       :disabled="disabledBtnRegister"
-      @click.prevent="registerEmail"
     >Đăng ký</app-button>
     <!-- <app-modal
       centered
@@ -97,7 +96,7 @@
         >Xác thực tài khoản</n-link>
       </div>
     </app-modal>-->
-  </div>
+  </form>
 </template>
 
 <script>

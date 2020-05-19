@@ -31,6 +31,7 @@
             @click.prevent="handlJoinOlClass(item)"
           />
           <span class="text-clickable" @click.prevent="handlJoinOlClass(item)">Đang diễn ra</span>
+          <!-- <span><a href="zoommtg://zoom.us/join?confno=96433623131&pwd=UkxkS0RhVEZJb0FvUkNxZHBMSGxadz09&uname=Trung Nguyen">Đang diễn ra</a></span> -->
         </div>
 
         <div
@@ -46,19 +47,6 @@
             @click.prevent="handlJoinOlClass(item)"
           >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
         </div>
-
-        <!-- <div
-          class="d-flex-center ml-auto"
-        >
-          <IconCam24
-            class="mr-2 icon heading-3 text-clickable"
-            @click.prevent="handlJoinOlClass(item)"
-          />
-          <span
-            class="text-clickable"
-            @click.prevent="handlJoinOlClass(item)"
-          >Thời gian học kế tiếp - {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
-        </div> -->
 
         <div class="color-999 d-flex-center" v-else>
           <IconCam24 class="mr-2" />
@@ -117,6 +105,18 @@ export default {
 
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
 
+    olclassLink() {
+      const olclasses = get(this.info, 'ol_classes', []);
+      const olclassLink = olclasses.map(item => {
+        let joinLink = '#';
+        
+        return {
+          ...item,
+          href: joinLink,
+        }
+      })
+    },
+
     convertedTimetables() {
       return this.timetables.map(tt => {
         const schedules = [];
@@ -125,14 +125,6 @@ export default {
         const timeAfternoon = {};
         const timeEvening = {};
 
-        // const gmtSchedules = tt.schedules.map (item => {
-        //   return {
-        //     ...item,
-        //     start_time: convertLocalTimeForTimetable(item.start_time),
-        //     end_time: convertLocalTimeForTimetable(item.end_time),
-        //   }
-        // })
-        // const gmtSchedules = {...tt.schedules};
         for (const s in tt.schedules) {
           const arrTime = tt.schedules[s];
           if (!arrTime || arrTime.length < 1) {
@@ -199,21 +191,14 @@ export default {
               const zoom = sessions.find(s => s.position == data.session_starting_position);
               if (!zoom) return;
 
-              // student open start_url or join_url
-              // if (this.isStudentRole) {
-                // window.open(zoom.join_url);
-              // }
-
+              const isDesktop = this.$device.isDesktop || true;
+              console.log("[isDesktop]", this.$device);
               var windowReference = window.open('');
-              const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
+              const zoomLink = isDesktop ? `${zoom.join_url_win_or_mac_zoom_us}` : `${zoom.join_url_ios_or_android_zoom_us}`;
+              // const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
 
-              // alert(zoomLink)
               windowReference.location = zoomLink;
             }
-
-            // fake to test coming lesson
-            // this.modalShow = true;
-            // this.targetClass = data;
           } else if (
             item.status == LESSION_ONLINE_STATUS.FINISH &&
             item.next_time

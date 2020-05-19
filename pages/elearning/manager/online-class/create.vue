@@ -85,49 +85,39 @@
                       <div class="d-flex-center">
                         <div class="d-flex-center mb-4 mr-6">
                           <label class="mr-3">Bắt đầu vào lúc</label>
-                          <app-vue-select
-                            style="width: 10rem"
-                            class="app-vue-select form-item__selection mr-3"
-                            :value="startTime[index].time.value"
-                            :options="times"
-                            label="text"
-                            searchable
-                            clearable
-                            @input="(e)=>handleChangedTime(e,index)"
-                          ></app-vue-select>
-                          <app-vue-select
-                            style="width: 9rem"
-                            class="app-vue-select form-item__selection"
-                            :value="startTime[index].type.value"
-                            :options="timeTypes"
-                            label="text"
-                            searchable
-                            clearable
-                            @input="(e)=>handleChangedTime(e,index, true)"
-                          ></app-vue-select>
+                          <app-date-picker
+                              class="ml-3"
+                              v-model="schedules[index].start_time"
+                              square
+                              size="sm"
+                              valueFormat="hh:mm a"
+                              placeholder="hh:mm a"
+                              type="time"
+                              :minuteStep="5"
+                            >
+                              <template v-slot:icon-calendar>
+                                <IconClock />
+                              </template>
+                            </app-date-picker>
                         </div>
                         <div class="d-flex-center mb-4">
                           <label class="mr-3">Thời lượng</label>
-                          <app-vue-select
-                            style="width: 9rem"
-                            class="app-vue-select form-item__selection mr-2"
-                            :value="duration[index].hours.value"
-                            :options="hours"
-                            label="text"
-                            searchable
-                            clearable
-                            @input="(e)=>handleChangedDuration(e, index)"
-                          ></app-vue-select>
-                          <app-vue-select
-                            style="width: 10rem"
-                            class="app-vue-select form-item__selection ml-3 mr-2"
-                            :value="duration[index].minutes.value"
-                            :options="minutes"
-                            label="text"
-                            searchable
-                            clearable
-                            @input="(e) => handleChangedDuration(e, index, true)"
-                          ></app-vue-select>
+                          <app-date-picker
+                              class="ml-3"
+                              v-model="schedules[index].duration"
+                              square
+                              size="sm"
+                              :minute-step="30"
+                              :hourOptions="hours"
+                              valueFormat="HH:mm"
+                              valueType="format"
+                              type="time"
+                              placeholder="HH:mm"
+                            >
+                              <template v-slot:icon-calendar>
+                                <IconClock />
+                              </template>
+                            </app-date-picker>
                         </div>
                       </div>
                     </div>
@@ -139,37 +129,37 @@
                       <div class="d-flex-center mt-3">
                         <app-checkbox
                           @change="check($event, 'MON', index)"
-                          :checked="selectedItems[index].includes('MON')"
+                          :checked="checkIncules(selectedItems[index],('MON'))"
                           label="Thứ 2"
                         ></app-checkbox>
                         <app-checkbox
                           @change="check($event, 'TUE', index)"
-                          :checked="selectedItems[index].includes('TUE')"
+                          :checked="checkIncules(selectedItems[index],('TUE'))"
                           label="Thứ 3"
                         />
                         <app-checkbox
                           @change="check($event, 'WED', index)"
-                          :checked="selectedItems[index].includes('WED')"
+                          :checked="checkIncules(selectedItems[index],('WED'))"
                           label="Thứ 4"
                         />
                         <app-checkbox
                           @change="check($event, 'THU', index)"
-                          :checked="selectedItems[index].includes('THU')"
+                          :checked="checkIncules(selectedItems[index],('THU'))"
                           label="Thứ 5"
                         />
                         <app-checkbox
                           @change="check($event, 'FRI', index)"
-                          :checked="selectedItems[index].includes('FRI')"
+                          :checked="checkIncules(selectedItems[index],('FRI'))"
                           label="Thứ 6"
                         />
                         <app-checkbox
                           @change="check($event, 'SAT', index)"
-                          :checked="selectedItems[index].includes('SAT')"
+                          :checked="checkIncules(selectedItems[index],('SAT'))"
                           label="Thứ 7"
                         />
                         <app-checkbox
                           @change="check($event, 'SUN', index)"
-                          :checked="selectedItems[index].includes('SUN')"
+                          :checked="checkIncules(selectedItems[index],('SUN'))"
                           label="Chủ nhật"
                         />
                       </div>
@@ -185,7 +175,7 @@
                             <label>Từ</label>
                             <app-date-picker
                               class="ml-3"
-                              v-model="params.schedules[index].from_date"
+                              v-model="schedules[index].from_date"
                               square
                               size="sm"
                               placeholder="yyyy-mm-dd"
@@ -200,7 +190,7 @@
                             <label>Đến</label>
                             <app-date-picker
                               class="ml-3"
-                              v-model="params.schedules[index].to_date"
+                              v-model="schedules[index].to_date"
                               square
                               size="sm"
                               placeholder="yyyy-mm-dd"
@@ -230,13 +220,13 @@
 
                   <div v-else class="d-flex-center">
                     <div class="mr-4">
-                      {{item.start_time}} - {{getEndTime(index)}}
+                      {{getTimeHH_MM_A(schedules[index].start_time)}} - {{ getEndTime(schedules[index].start_time, schedules[index].duration) }}
                     </div>
                     <div class="mr-4">
                       {{convertDay(index)}}
                     </div>
                     <div>
-                      {{convertDate(item.from_date)}} - {{convertDate(item.to_date)}}
+                      {{getDateBirthDay(item.from_date)}} - {{getDateBirthDay(item.to_date)}}
                     </div>
                     <div class="ml-auto">
                       <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
@@ -308,10 +298,19 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
-
-import HeaderCreate from "~/components/layout/header/HeaderCreate";
+import IconClock from '~/assets/svg/icons/clock.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
+import {
+  getDateBirthDay,
+  getLocalDateTime,
+  getUTCDateTime,
+  getTimeHH_MM_A,
+  getDateHH_MM_A,
+  getUTCDateTimeHH_MM_A,
+  getEndTime,
+  hoursToMinutes
+} from "~/utils/moment";
 import { get, reject } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -323,35 +322,17 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const initialSchedule = {
   from_date: "",
   to_date: "",
-  start_time: "1:30 AM",
-  duration: 90,
+  start_time: "",
+  duration: "",
   days_of_week: ""
 };
-const initialDuration = {
-  hours: {
-    value: "0",
-    text: "0 giờ"
-  },
-  minutes: {
-    value: "30",
-    text: "30 phút"
-  }
-};
-const initialStartTime = {
-  time: {
-    value: "1:00",
-    text: "1:00"
-  },
-  type: {
-    value: "AM",
-    text: "AM"
-  }
-};
+
 function initialState() {
   return {
     indexEdit: null,
     indexShow: 0,
     tab: 1,
+    hours: Array.from({ length: 9 }).map((_, i) => i),
     message: "",
     sendMess: "0",
     downloadVideo: "0",
@@ -360,172 +341,7 @@ function initialState() {
     showNotify: false,
     confirmLoading: false,
     showBonus: false,
-    startTime: [initialStartTime],
-    duration: [initialDuration],
-    hours: [
-      {
-        value: "0",
-        text: "0 giờ"
-      },
-      {
-        value: "1",
-        text: "1 giờ"
-      },
-      {
-        value: "2",
-        text: "2 giờ"
-      },
-      {
-        value: "3",
-        text: "3 giờ"
-      },
-      {
-        value: "4",
-        text: "4 giờ"
-      },
-      {
-        value: "5",
-        text: "5 giờ"
-      },
-      {
-        value: "6",
-        text: "6 giờ"
-      },
-      {
-        value: "7",
-        text: "7 giờ"
-      },
-      {
-        value: "8",
-        text: "8 giờ"
-      }
-    ],
-    minutes: [
-      {
-        value: "00",
-        text: "00 phút"
-      },
-      {
-        value: "15",
-        text: "15 phút"
-      },
-      {
-        value: "30",
-        text: "30 phút"
-      },
-      {
-        value: "45",
-        text: "45 phút"
-      }
-    ],
-    timeTypes: [
-      {
-        value: "AM",
-        text: "AM"
-      },
-      {
-        value: "PM",
-        text: "PM"
-      }
-    ],
-    times: [
-      {
-        value: "1:00",
-        text: "1:00"
-      },
-      {
-        value: "1:30",
-        text: "1:30"
-      },
-      {
-        value: "2:00",
-        text: "2:00"
-      },
-      {
-        value: "2:30",
-        text: "2:30"
-      },
-      {
-        value: "3:00",
-        text: "3:00"
-      },
-      {
-        value: "3:30",
-        text: "3:30"
-      },
-      {
-        value: "4:00",
-        text: "4:00"
-      },
-      {
-        value: "4:30",
-        text: "4:30"
-      },
-      {
-        value: "5:00",
-        text: "5:00"
-      },
-      {
-        value: "5:30",
-        text: "5:30"
-      },
-      {
-        value: "6:00",
-        text: "6:00"
-      },
-      {
-        value: "6:30",
-        text: "6:30"
-      },
-      {
-        value: "7:00",
-        text: "7:00"
-      },
-      {
-        value: "7:30",
-        text: "7:30"
-      },
-      {
-        value: "8:00",
-        text: "8:00"
-      },
-      {
-        value: "8:30",
-        text: "8:30"
-      },
-      {
-        value: "9:00",
-        text: "9:00"
-      },
-      {
-        value: "9:30",
-        text: "9:30"
-      },
-      {
-        value: "10:00",
-        text: "10:00"
-      },
-      {
-        value: "10:30",
-        text: "10:30"
-      },
-      {
-        value: "11:00",
-        text: "11:00"
-      },
-      {
-        value: "11:30",
-        text: "11:30"
-      },
-      {
-        value: "12:00",
-        text: "12:00"
-      },
-      {
-        value: "12:30",
-        text: "12:30"
-      }
-    ],
+    schedules: [initialSchedule],
     filterCourse: null,
     courses: [],
     filterPrivacy: {
@@ -542,8 +358,7 @@ function initialState() {
         text: "Riêng tư"
       }
     ],
-    selectedItems: {0:[]},
-    schedules: [],
+    selectedItems: [[]],
     params: {
       elearning_id: "",
       name: "",
@@ -559,7 +374,7 @@ export default {
   name: "onlineclass",
 
   components: {
-    HeaderCreate,
+    IconClock,
     IconAngleUp,
     IconPlus,
     IconAngleDown,
@@ -587,30 +402,48 @@ export default {
     },
     checkSchedule() {
       let index = this.indexEdit != null ? this.indexEdit : this.indexShow;
-      const item = this.params.schedules[index];
-      return this.params.schedules[index].from_date  &&
-             this.params.schedules[index].to_date &&
-             this.params.schedules[index].start_time  &&
-             this.params.schedules[index].duration != 0 &&
-             this.params.schedules[index].days_of_week;
+      const item = this.schedules[index];
+      return this.schedules[index].from_date  &&
+             this.schedules[index].to_date &&
+             this.schedules[index].start_time  &&
+             this.schedules[index].duration != 0 &&
+             this.schedules[index].days_of_week;
     },
   },
 
   watch: {
+
     sendMess(newValue, oldValue) {
       this.params.is_invite_all = newValue == "1";
     },
     downloadVideo(newValue, oldValue) {
       this.params.is_allow_download = newValue == "1";
+    },
+    
+    schedules: {
+      handler: function (newValue, oldValue) {
+        let schedules = [...this.schedules].reduce((result, item) => {
+          let start_time = getUTCDateTimeHH_MM_A(new Date ('2020-01-01 ' + item.start_time));
+          let duration = hoursToMinutes(item.duration);
+          result.push({...item, start_time: start_time, duration: duration});
+          return result;
+        }, []);
+
+        this.params = {...this.params, schedules: schedules};
+      },
+      deep: true
     }
+    
   },
 
   methods: {
-    convertDate(time) {
-      const date = new Date(time);
-      var strTime =
-        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-      return strTime;
+    getDateHH_MM_A,
+    getTimeHH_MM_A,
+    getDateBirthDay,
+    getEndTime,
+
+    checkIncules(list, val){
+      return list.includes(val)
     },
 
     convertDay(index) {
@@ -630,25 +463,16 @@ export default {
         return (result = result + com + text);
       }, "Hàng tuần vào thứ ");
     },
-    getEndTime(index) {
-      const date = new Date(
-        "2000-01-01 " + this.params.schedules[index].start_time
-      );
-      const endDate = new Date(date.getTime() + this.params.schedules[index].duration*60000);
-      var hours = endDate.getHours();
-      var minutes = endDate.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
+
     removeSchedule(index){
-      this.params.schedules = _.reject([...this.params.schedules], (i, inx) => inx === index);
-      if (this.params.schedules.length === 0 ) {
-        this.params.schedules.push(initialSchedule);
+      this.schedules = _.reject([...this.schedules], (i, inx) => inx === index);
+      this.selectedItems = _.reject([...this.selectedItems], (i, inx) => inx === index);
+      if (this.schedules.length === 0 ) {
+        this.schedules.push(initialSchedule);
         this.indexShow = 0;
+      } else {
+        if(this.indexShow != null && this.indexShow > index) this.indexShow = this.indexShow - 1;
+        if(this.indexEdit != null && this.indexEdit > index) this.indexEdit = this.indexEdit - 1;
       }
     },
     editSchedule: function (index){
@@ -658,28 +482,25 @@ export default {
 
     addTime() {
       this.indexEdit = null;
-      this.indexShow = this.params.schedules.length;
-      this.params.schedules.push(initialSchedule);
-      this.selectedItems = {...this.selectedItems, [this.indexShow]: []};
-      this.duration.push(initialDuration);
-      this.startTime.push(initialStartTime);
+      this.indexShow = this.schedules.length;
+      this.schedules.push(initialSchedule);
+      this.selectedItems.push([]);
     },
 
     cancelTime(index) {
-      if (this.params.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
-        this.params.schedules.pop();
+      if (this.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
+        this.schedules.pop();
         this.indexShow = null;
-      } else if (this.params.schedules.length > 1){
+      } else if (this.schedules.length > 1){
         this.indexShow = null;
         this.indexEdit = null;
       } else {
-        //this.params.schedules[0] = initialSchedule;
+        //this.schedules[0] = initialSchedule;
       }
     },
     saveTime(index) {
       this.indexEdit = null;
       this.indexShow = null;
-      this.schedules = [...this.params.schedules];
     },
 
     changeName(e) {
@@ -756,67 +577,6 @@ export default {
       }
     },
 
-    formatAMPM(date) {
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
-    handleChangedTime(e, index, type = false) {
-      let post = {
-        value: e.value,
-        text: e.value
-      };
-
-      if (type) {
-        this.startTime.splice(index, 1, { ...this.startTime[index],
-          type: post
-        })
-      } else {
-        this.startTime.splice(index, 1, { ...this.startTime[index],
-          time: post
-        })
-      }
-
-      let startTime = this.startTime[index].time.value + " " + this.startTime[index].type.value;
-      let date = new Date('2000-01-01 ' + startTime);
-      startTime = this.formatAMPM(new Date(date.getTime() - 7*60*60*1000));
-
-      this.params.schedules.splice(index, 1, {
-        ...this.params.schedules[index],
-        start_time: startTime
-      })
-    },
-
-    handleChangedDuration(e, index, minutes = false) {
-      let post = {
-        value: e.value,
-        text: e.value
-      };
-
-      if (minutes) {
-        this.duration.splice(index, 1, { ...this.duration[index],
-          minutes: post
-        })
-      } else {
-        this.duration.splice(index, 1, { ...this.duration[index],
-          hours: post
-        })
-      }
-      let duration =
-        parseInt(this.duration[index].hours.value) * 60 +
-        parseInt(this.duration[index].minutes.value);
-      
-      this.params.schedules.splice(index, 1, {
-        ...this.params.schedules[index],
-        duration: parseInt(duration)
-      });
-    },
-
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
     },
@@ -832,27 +592,30 @@ export default {
     },
     popSelectedIndexes(item, index) {
       if (this.selectedItems[index].includes(item)) {
-        let xxx = [...this.selectedItems[index]].filter(i => {
+        let temp = [...this.selectedItems[index]].filter(i => {
           return i !== item
         });
-        this.selectedItems = {...this.selectedItems, [index] : xxx};
+        //this.selectedItems = {...this.selectedItems, [index] : temp};
 
-        this.params.schedules.splice(index, 1, {
-          ...this.params.schedules[index],
+        this.selectedItems.splice(index, 1, temp);
+
+        this.schedules.splice(index, 1, {
+          ...this.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
-        console.log(this.selectedItems[index], xxx)
+        console.log('wwwwwwwwwwwwwwwww',this.schedules, this.selectedItems[index])
       }
     },
     pushSelectedIndexes(item, index) {
       if (!_.some(this.selectedItems[index], item)) {
         this.selectedItems[index].push(item);
-        this.params.schedules.splice(index, 1, {
-          ...this.params.schedules[index],
+        this.schedules.splice(index, 1, {
+          ...this.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
+        console.log('wwwwwwwwwwwwwwwww',this.schedules, this.selectedItems[index])
+
       }
-      //console.log(this.selectedItems[index])
     },
 
     arrayToString(data) {
