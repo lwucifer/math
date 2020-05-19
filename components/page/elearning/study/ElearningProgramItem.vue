@@ -138,6 +138,7 @@ export default {
     const lesson_id = getParamQuery("lesson_id");
     if (lesson_id && lesson_id === this.lesson.id) {
       this.handleStuty(this.lesson);
+      // window.scrollTo(0, 0);
     }
   },
 

@@ -28,6 +28,7 @@
       v-else-if="status === EXERCISE_STATUS.PENDING"
       color="yellow"
       size="sm"
+      :pointer="false"
       >Chờ chấm điểm</app-button
     >
 
