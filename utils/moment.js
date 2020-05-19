@@ -84,13 +84,28 @@ export const getDateHH_MM_A = (_date) => {
 
 export const getTimeHH_MM_A = (_time) => {
     if (!_time) return;
-    let date = new momenttimezone(new Date('2000-01-01 ' + _time));
+    let ts = new momenttimezone(new Date('2000-01-01 ' + _time));
+    return ts.lang("en").format(DATETIME_HH_MM_A);
+};
+
+export const getLocalTimeHH_MM_A = (_utcDate) => {
+    if (!_utcDate) return;
+    let ts = getLocalDateTime(_utcDate);
+    return ts.lang("en").format(DATETIME_HH_MM_A);
+};
+
+export const getLocalEndTime = (_startDate, _duration, type) => {
+    if (!_startDate) return;
+    let date = getLocalDateTime(_startDate);
+    if (_duration) {
+        date = date.add(_duration, type);
+    }
     return date.lang("en").format(DATETIME_HH_MM_A);
 };
 
-export const getEndTime = (_start, _duration) => {
-    if (!_start) return;
-    let date = getLocalDateTime(new Date('2000-01-01 ' + _start));
+export const getEndTime = (_startTime, _duration) => {
+    if (!_startTime) return;
+    let date = getLocalDateTime(new Date('2000-01-01 ' + _startTime));
     if (_duration) {
         date = date.add(momenttimezone.duration(_duration).asMinutes(), 'minutes');
     }
@@ -126,4 +141,8 @@ Vue.filter("getDateBirthDay", function(_utcDate) {
 
 Vue.filter("getDateTimeHH_MM_D_M_Y", function(_utcDate) {
     return getDateTimeHH_MM_D_M_Y(_utcDate);
+});
+
+Vue.filter("fullDateTimeSlash", function(_utcDate) {
+    return fullDateTimeSlash(_utcDate);
 });

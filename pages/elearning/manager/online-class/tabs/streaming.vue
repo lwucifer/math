@@ -74,9 +74,12 @@
 
       <template v-slot:cell(time)="{row}">
         <td>
-          <span>{{row.time.time}}</span>
-          <br />
-          <span>{{row.time.day}}</span>
+          <div>
+            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+          </div>
+          <div>
+            {{getDateBirthDay(row.start_time)}}
+          </div>
         </td>
       </template>
 
@@ -105,9 +108,12 @@ import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
 import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 import IconSwapHorizontalCircle from '~/assets/svg/v2-icons/swap_horizontal_circle_24px.svg?inline';
-
 import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass";
 
+import {
+  getDateBirthDay,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
@@ -197,6 +203,9 @@ export default {
   },
 
   methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
     toggleFilter() {
       if (this.showFilter) {
         this.filterCourse = null;
@@ -275,44 +284,29 @@ export default {
           { params }
         );
 
-        const classes = self.get(self.stateClass, "data.content", []);
-        self.classList = classes.map(function(item) {
-          const duration = parseInt(item.recent_schedule.duration) * 60 * 1000;
-          const date = new Date(
-            "2000-01-01 " + item.recent_schedule.start_time
-          );
-          const end = self.formatAMPM(new Date(date.getTime() + duration));
-          return {
-            ...item,
-            time: {
-              day: item.recent_schedule.day,
-              time: self.formatAMPM(date) + " - " + end
-            }
-          };
-        });
-
-        this.pagination.size = this.get(this.stateClass, "data.size", 10);
-        this.pagination.first = this.get(this.stateClass, "data.first", 1);
-        this.pagination.last = this.get(this.stateClass, "data.last", 1);
-        this.pagination.number = this.get(this.stateClass, "data.number", 0);
-        this.pagination.totalPages = this.get(
-          this.stateClass,
+        self.classList = self.get(self.stateClass, "data.content", []);
+        self.pagination.size = self.get(self.stateClass, "data.size", 10);
+        self.pagination.first = self.get(self.stateClass, "data.first", 1);
+        self.pagination.last = self.get(self.stateClass, "data.last", 1);
+        self.pagination.number = self.get(self.stateClass, "data.number", 0);
+        self.pagination.totalPages = self.get(
+          self.stateClass,
           "data.total_pages",
           0
         );
-        this.pagination.totalElements = this.get(
-          this.stateClass,
+        self.pagination.totalElements = self.get(
+          self.stateClass,
           "data.total_elements",
           0
         );
-        this.pagination.numberOfElements = this.get(
-          this.stateClass,
+        self.pagination.numberOfElements = self.get(
+          self.stateClass,
           "data.number_of_elements",
           0
         );
       } catch (e) {
       } finally {
-        this.loading = false;
+        self.loading = false;
       }
     },
 

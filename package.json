@@ -58,6 +58,7 @@
         "vue-google-charts": "^0.3.2",
         "vue-infinite-loading": "^2.4.4",
         "vue-moment": "^4.1.0",
+        "vue-scrollto": "^2.18.1",
         "vue-select": "^3.4.0",
         "vue-toasted": "^1.1.27",
         "vue2-datepicker": "^3.3.0",

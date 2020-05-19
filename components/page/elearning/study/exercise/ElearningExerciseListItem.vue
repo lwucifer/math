@@ -26,8 +26,9 @@
 
     <app-button
       v-else-if="status === EXERCISE_STATUS.PENDING"
-      color="orange"
+      color="yellow"
       size="sm"
+      :pointer="false"
       >Chờ chấm điểm</app-button
     >
 
@@ -62,6 +63,7 @@ export default {
     stared: Boolean,
     name: String,
     result: String,
+    open_time: String,
     questions: Number,
     duration: Number,
     reworks: Number,
@@ -121,6 +123,7 @@ export default {
         result: this.result,
         reworks: this.reworks,
         works: this.works,
+        open_time: this.open_time,
       });
 
       // show befor begin exercise

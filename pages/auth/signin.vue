@@ -6,8 +6,8 @@
           <div class="head-form_auth">
             <h2>Đăng nhập</h2>
             <div class="auth__nav-v2">
-              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
               <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+              <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
             </div>
           </div>
           <div class="px-4">
@@ -68,7 +68,7 @@ export default {
       email: "",
       password: "",
       error: false,
-      byEmail: false,
+      byEmail: true,
       prevRoute: null
     };
   },

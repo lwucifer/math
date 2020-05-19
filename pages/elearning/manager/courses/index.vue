@@ -108,9 +108,20 @@
               normal
               class="mb-4"
               @click="hideRows(false)"
-              v-else
+              v-else-if="tab == 'APPROVED'"
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Đưa vào danh sách ẩn
+            </app-button>
+            <app-button
+              color="pink"
+              square
+              size="sm"
+              normal
+              class="mb-4"
+              @click="deleteRows()"
+              v-else
+            >
+              <IconRemove height="15" width="15" class="fill-white mr-2" />Xóa khỏi danh sách
             </app-button>
           </div>
 
@@ -123,6 +134,7 @@
             @selectionChange="selectRow"
             :data="elearningList"
             multiple-selection
+            v-if="showTable"
           >
             <template v-slot:cell(privacy)="{ row }">
               <td>
@@ -146,18 +158,23 @@
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
-              <td>{{convertDate(row.publish_date)}}</td>
+              <td>{{getDateBirthDay(row.publish_date)}}</td>
             </template>
+            
+            <!-- <template v-slot:cell(participants)="{ row }">
+              <td>
+                <span v-if="row.participants > 0">{{row.participants}}</span>
+                <button @click="preview(row)" v-if="row.participants == 0">
+                  Mời thêm học sinh
+                </button>
+              </td>
+            </template> -->
 
             <template v-slot:actions="{row}">
-              <n-link
-                :to="'/elearning/' + row.id"
-                class="link"
-                v-if="tab == 'APPROVED' || tab == null"
-              >
+              <button @click="preview(row)" v-if="tab == 'APPROVED' || tab == null">
                 <IconNote height='18' width='18' class="fill-primary mr-2" />Xem chi tiết
-              </n-link>
-              <n-link :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
+              </button>
+              <n-link v-if="tab != 'APPROVED'" :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" height='16' width='16'/>Chỉnh sửa
               </n-link>
 
@@ -178,9 +195,9 @@
               </n-link>
               <button
                 @click="deleteRows(row.id)"
-                v-if="tab == 'WAITING_FOR_APPROVE' || tab == 'REJECTED'"
+                v-if="tab == 'WAITING_FOR_APPROVE' || tab == 'REJECTED' || tab == 'PENDING'"
               >
-                <IconTimesCircle class="fill-secondary mr-2" />Xóa
+                <IconTrashAlt class="fill-secondary mr-2" />Xóa
               </button>
             </template>
           </app-table>
@@ -194,14 +211,28 @@
       v-if="showPreview"
       @close="showPreview = false"
     />
+
+    <ModalInviteStudent @close="closeModalInvite" v-if="openModalInvite"/>
+
+    <app-modal-confirm
+      v-if="showModalConfirmHide"
+      :confirmLoading="confirmLoading"
+      @ok="handleHideRows"
+      :width="550"
+      @cancel="showModalConfirmHide = false"
+      :footer="false"
+      :header="false"
+      :title="titleModelConfirm"
+      :description="textModelConfirm"
+    />
   </div>
 </template>
 
 <script>
+import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
 import ModalElearningPreview from "~/components/page/elearning/ModalElearningPreview";
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconRemove from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
@@ -214,7 +245,11 @@ import IconTimesCircle from "~/assets/svg/design-icons/times-circle.svg?inline";
 import IconMessage from "~/assets/svg/v2-icons/message_24px.svg?inline";
 import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
 import IconEdit from "~/assets/svg/icons/edit.svg?inline";
+import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 
+import {
+  getDateBirthDay
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -226,6 +261,8 @@ export default {
   name: "ManageCourse",
   
   components: {
+    IconTrashAlt,
+    ModalInviteStudent,
     ModalElearningPreview,
     ElearningManagerSide,
     IconTimesCircle,
@@ -248,6 +285,12 @@ export default {
 
   data() {
     return {
+      showTable: true,
+      titleModelConfirm: '',
+      textModelConfirm: '',
+      showModalConfirmHide: false,
+      confirmLoading: false,
+      openModalInvite: false,
       loading: false,
       tab: "APPROVED",
       showFilter: false,
@@ -393,7 +436,8 @@ export default {
 
   watch: {
     tab(newValue, oldValue) {
-      this.ids = [];
+      this.showTable = false;
+      this.ids.length = 0;
       this.params.hide = newValue == "";
       switch (newValue) {
         case "PENDING":
@@ -411,11 +455,18 @@ export default {
           this.currentHeads = [...this.heads];
           break;
       }
+      this.showTable = true;
       this.getList();
     },
   },
 
   methods: {
+    getDateBirthDay,
+
+    closeModalInvite(e) {
+      this.openModal = false;
+      if (e) ;
+    },
     toggleFilter() {
       if (this.showFilter) {
         this.selectType = null;
@@ -434,12 +485,6 @@ export default {
     preview(row) {
       this.previewInfo = row;
       this.showPreview = true;
-    },
-    convertDate(time) {
-      const date = new Date(time);
-      var strTime =
-        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-      return strTime;
     },
 
     handleChangedType() {
@@ -523,12 +568,21 @@ export default {
         );
       } catch (e) {
       } finally {
+        this.ids.length = 0;
         this.loading = false;
       }
     },
 
-    async deleteRows(id) {
-      let ids = id ? { ids: [id] } : { ids: [...this.ids] };
+    deleteRows(id) {
+      if (this.ids.length == 0 && id == '') return;
+      this.titleModelConfirm = "Bạn muốn xóa bài giảng/khóa học này?";
+      this.textModelConfirm = "Các thông tin bài giảng/khóa học sẽ không thể khôi phục.";
+      this.showModalConfirmHide = true;
+      this.idDelete = id ? id : '';
+    },
+    
+    async handleDeleteRows() {
+      let ids = this.idDelete ? { ids: [this.idDelete] } : { ids: [...this.ids] };
       const doDelete = await this.$store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.DELETE}`,
         JSON.stringify(ids)
@@ -536,27 +590,44 @@ export default {
 
       if (doDelete.success) {
         this.ids = [];
+        this.showModalConfirmHide = false;
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);
       }
     },
 
-    async hideRows(status) {
-      let params = {
-        hide: !status,
-        ids: [...this.ids]
-      };
-      const doRestore = await this.$store.dispatch(
-        `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.HIDE}`,
-        params
-      );
+    hideRows(status) {
+      if (this.ids.length == 0) return;
+      this.titleModelConfirm = status ? 
+      "Bạn muốn khôi phục bài giảng/khóa học này?" : "Bạn muốn ẩn bài giảng/khóa học này?";
+      this.textModelConfirm = status ? 
+      "Các thông tin bài giảng/khóa học sẽ được hiển thị lại.":
+      "Các thông tin bài giảng/khóa học sẽ không được hiển thị.";
+      this.showModalConfirmHide = true;
+      this.statusHide = status;
+    },
 
-      if (doRestore.success) {
-        this.ids = [];
-        this.getList();
+    async handleHideRows() {
+      if( this.tab != 'APPROVED' && this.tab != null ) {
+        this.handleDeleteRows();
       } else {
-        this.$toasted.error(doRestore.message);
+        let params = {
+          hide: !this.statusHide,
+          ids: [...this.ids]
+        };
+        const doRestore = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.HIDE}`,
+          params
+        );
+
+        if (doRestore.success) {
+          this.ids = [];
+          this.showModalConfirmHide = false;
+          this.getList();
+        } else {
+          this.$toasted.error(doRestore.message);
+        } 
       }
     },
 
