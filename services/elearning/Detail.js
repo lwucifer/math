@@ -8,9 +8,7 @@ import Program from "~/services/elearning/public/Program";
 export async function getProgram($axios, options) {
   let res = null;
   try {
-    const result = await new Program($axios)[actionTypes.BASE.LIST](
-      options
-    );
+    const result = await new Program($axios)[actionTypes.BASE.LIST](options);
     if (result.success) res = result.data;
   } catch (error) {
     console.log(error);
