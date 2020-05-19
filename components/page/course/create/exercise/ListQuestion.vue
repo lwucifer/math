@@ -1,7 +1,7 @@
 <template>
   <div class="list-question">
     <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
-      <h3 class="body-2 mr-2 question-title">Câu {{ index + 1 }}:</h3>
+      <h3 class="body-2 mr-1 question-title">Câu {{ index + 1 }}:</h3>
 
       <p
         class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
@@ -17,9 +17,9 @@
       >
 
       <div
-        class="d-flex align-items-center justify-content-between ce-question-item__actions question-actions"
+        class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
       >
-        <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
+        <button class="mr-3" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
