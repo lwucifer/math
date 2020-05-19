@@ -1,7 +1,7 @@
 <template>
   <div class="e-program bg-white shadow-1">
     <div class="box bg-light-2">
-      <strong>{{ get(progress, "total_lessons", 0) }} Bài học</strong>
+      <strong>{{ totalLessons }} Bài học</strong>
       ({{ get(progress, "duration", "") }})
     </div>
 
@@ -16,11 +16,19 @@
       />
     </div>
     <div v-else>
-      <ElearningProgramItem :lesson="get(progress, 'programs.0.lessons.0', null)" />
+      <ElearningProgramItem
+        :lesson="get(progress, 'programs.0.lessons.0', null)"
+      />
     </div>
 
     <!-- Bai TEST -->
-    <a v-if="tests" class="e-program__test" href @click.prevent="handleDoTest">
+    <a
+      v-if="tests"
+      class="e-program__test"
+      href
+      @click.prevent="handleDoTest"
+      v-scroll-to="'body'"
+    >
       <IconFileAlt class="icon" />&nbsp;Làm bài kiểm tra
     </a>
   </div>
@@ -44,7 +52,18 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    ...mapGetters("elearning/study/study-exercise", ["tests"])
+    ...mapGetters("elearning/study/study-exercise", ["tests"]),
+
+    totalLessons() {
+      console.log("[progress]", this.progress);
+      if (!this.progress) return `0`;
+      return (
+        this.progress.programs.reduce(
+          (acc, curr) => acc + curr.total_lessons,
+          0
+        ) || 0
+      );
+    }
   },
 
   methods: {
@@ -52,7 +71,7 @@ export default {
 
     ...mapMutations("event", ["setStudyMode"]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession",
+      "setStudyExerciseCurrentLession"
     ]),
 
     ...mapActions("elearning/study/study-exercise", [

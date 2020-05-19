@@ -19,5 +19,8 @@ export const ERRORS = {
     SETTING_LINK: {
         ALREADY_ACCOUNT_LINKED: "SCLU_1007",
         CODE_NOT_FOUND: "SCLU_1008"
+    },
+    EXERCISE: {
+        MUST_COMPLETE_ALL_REQUIRED_EXERCISES: "SCLC_0057"
     }
 };

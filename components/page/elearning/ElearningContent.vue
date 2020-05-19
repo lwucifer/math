@@ -29,7 +29,14 @@
 
     <ElearningContentLecture v-if="get(info, 'type', '') === 'LECTURE'" />
 
-    <ElearningContentCourse v-if="get(info, 'type', '') === 'COURSE'" />
+    <div v-if="get(info, 'type', '') === 'COURSE'">
+      <div
+        v-for="(chapter, index_chapter) in program"
+        :key="chapter.chapter_id"
+      >
+        <ElearningContentCourse :index="index_chapter" :chapter="chapter" />
+      </div>
+    </div>
   </section>
 </template>
 

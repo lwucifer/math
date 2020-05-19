@@ -68,7 +68,7 @@
             <label for class="form--normal__title">Tiểu sử</label>
           </div>
           <div class="col-md-9" v-if="isTeacherRole">
-            <div v-if="story == null">
+            <div v-if="story == ''">
               <app-button
                 color="transparent"
                 flat
@@ -88,7 +88,7 @@
             </div>
             <div v-else>
               <div>
-                <div class="box-content-fixed-height mb-4">
+                <div class="box-content-fixed-height mb-4" v-if="!editingStory">
                   <div
                     class="overflow-y-scroll"
                     v-html="story"
@@ -100,7 +100,7 @@
                     <IconEdit class />
                     <span>Chỉnh sửa</span>
                   </button>
-                  <button class="btn-transparent btn--danger">
+                  <button class="btn-transparent btn--danger" @click="handleDeleteStory">
                     <IconTrashAlt class />
                     <span>Xóa</span>
                   </button>
@@ -211,7 +211,11 @@ export default {
         this.phone = get(this, "profileList.phone", "");
         this.email = get(this, "profileList.email", "");
         this.address = get(this, "profileList.address", "");
-        this.sex = get(this, "profileList.sex", "") === "MALE" ? "Nam" : "Nữ";
+        this.sex = get(this, "profileList.sex", "")
+          ? get(this, "profileList.sex", "") === "MALE"
+            ? "Nam"
+            : "Nữ"
+          : "";
         this.birthday = getDateBirthDay(get(this, "profileList.birthday", ""));
         this.accountLink.list = get(this, "linkList.data", {});
         this.profileInfo = get(this, "profileList", {});
@@ -303,6 +307,17 @@ export default {
     },
     cancel() {
       this.editingStory = false;
+    },
+    handleDeleteStory() {
+      const data = {
+        biography: ""
+      };
+      this.accountBiographyAdd(data).then(result => {
+        if (result.success) {
+          this.editingStory = false;
+          this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`);
+        }
+      });
     }
   },
   computed: {

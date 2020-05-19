@@ -77,6 +77,7 @@ module.exports = {
         { src: "@/plugins/vue-input-number.js" },
         { src: '@/plugins/streaming.js', ssr: false },
         { src: '@/plugins/v-scroll-lock.js', ssr: false },
+        { src: '@/plugins/scrollTo.js', ssr: false },
     ],
     /**
      * Global middleware
@@ -94,7 +95,9 @@ module.exports = {
         "portal-vue/nuxt",
         "@nuxtjs/recaptcha",
         '@nuxtjs/pwa',
-        '@nuxtjs/firebase'
+        '@nuxtjs/firebase',
+        '@nuxtjs/device',
+        ['vue-scrollto/nuxt', { duration: 300, easing: "ease", }],
     ],
 
     buildModules: [

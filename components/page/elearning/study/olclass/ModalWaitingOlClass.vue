@@ -86,7 +86,7 @@ export default {
       duration: 30, // in minutes
       countdown: "--:--",
       seconds: null,
-      currentZoom: null,
+      currentZoom: null
     };
   },
 
@@ -109,7 +109,11 @@ export default {
     setCountdown() {
       let seconds = this.targetClass.time_count_down || 0; // in seconds
       const duration = get(this.targetClass, "extra_info.duration", 0);
-      const session_starting_position = get(this.targetClass, "session_starting_position", 0);
+      const session_starting_position = get(
+        this.targetClass,
+        "session_starting_position",
+        0
+      );
       // const session_starting_position = 1;
       const isStudentRole = this.isStudentRole;
 
@@ -129,9 +133,16 @@ export default {
           clearInterval(interval);
 
           // student open start_url or join_url
-          if (isStudentRole) {
-            window.open(zoom.join_url);
-          }
+          // if (isStudentRole) {
+          //   window.open(zoom.join_url);
+          // }
+          var windowReference = window.open("");
+          const zoomLink = isDesktop
+            ? `${zoom.join_url_win_or_mac_zoom_us}`
+            : `${zoom.join_url_ios_or_android_zoom_us}`;
+          // const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
+
+          windowReference.location = zoomLink;
         }
         seconds -= 1;
       }, 1000);
@@ -154,7 +165,7 @@ export default {
   watch: {
     seconds(_newVal) {
       console.log("[seconds] _newVal", _newVal);
-      if(_newVal <= 0){
+      if (_newVal <= 0) {
         this.setStudyProgressCurrentSession(this.currentZoom);
       }
     }

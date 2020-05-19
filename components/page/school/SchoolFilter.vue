@@ -35,14 +35,13 @@
         ></app-search>
       </div>
 
-      <div class="filter-form__item" v-if="hasFilterBtn" @click="isShowFilter = !isShowFilter">
+      <div class="filter-form__item mr-2" v-if="hasFilterBtn" @click="isShowFilter = !isShowFilter">
         <app-button
-          color="white"
+          :color="isShowFilter ? 'primary' : 'default'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit color-primary"
           :size="'sm'"
         >
-          <IconHamberger class="fill-primary mr-3" />
+          <IconHamberger class="icon mr-2" />
           <span>Lọc kết quả</span>
         </app-button>
       </div>

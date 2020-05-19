@@ -85,31 +85,39 @@
     .row {
         align-items: stretch;
     }
-    .row .item >div {
+    .row .item > div {
         height: 100%;
         background-color: #fff;
         padding: 2rem 3rem;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         border-radius: 2px;
-        border: 1px solid #E0E0E0;
+        border: 1px solid #e0e0e0;
     }
     .item {
         margin-bottom: 2rem;
-        &:first-child >div {
-            border-left: 2px solid #37A000;
-            strong { color: #37A000}
+        &:first-child > div {
+            border-left: 2px solid #37a000;
+            strong {
+                color: #37a000;
+            }
         }
-        &:nth-child(2) >div {
-            border-left: 2px solid #2D9CDB;
-            strong { color: #2D9CDB}
+        &:nth-child(2) > div {
+            border-left: 2px solid #2d9cdb;
+            strong {
+                color: #2d9cdb;
+            }
         }
-        &:nth-child(3) >div {
-            border-left: 2px solid #EB5757;
-            strong { color: #EB5757}
+        &:nth-child(3) > div {
+            border-left: 2px solid #eb5757;
+            strong {
+                color: #eb5757;
+            }
         }
-        &:nth-child(4) >div {
-            border-left: 2px solid #E6A01E;
-            strong { color: #E6A01E}
+        &:nth-child(4) > div {
+            border-left: 2px solid #e6a01e;
+            strong {
+                color: #e6a01e;
+            }
         }
         .top {
             display: flex;
@@ -131,8 +139,8 @@
 .elearning-manager__revenue {
     margin: 5rem 0;
     .revenue {
-        background: #F2F2F2;
-        border: 1px solid #E0E0E0;
+        background: #f2f2f2;
+        border: 1px solid #e0e0e0;
         box-sizing: border-box;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         border-radius: 2px;
@@ -140,7 +148,7 @@
         display: inline-block;
         margin: 0 auto;
         text-align: center;
-        color: rgba($color: #D50000, $alpha: 0.7);
+        color: rgba($color: #d50000, $alpha: 0.7);
         font-size: 2.8rem;
         font-weight: bold;
     }
@@ -152,7 +160,7 @@
     padding: 1.5rem;
     color: #333;
     background: #f9f9f9;
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .elearning-manager__dashboard-filter {
@@ -171,4 +179,30 @@
 .app-table .link {
     text-decoration: none;
     color: #656565;
+}
+
+.elearning-courses {
+    .table-avatar {
+        display: flex;
+        .left {
+            width: 10rem;
+            margin-right: 1rem;
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+    .btn-color-blue {
+        background-color: #1481fe;
+    }
+    .app-table table {
+        thead th {
+            white-space: nowrap;
+        }
+        tbody td {
+            max-width: 300px;
+            overflow: hidden;
+        }
+    }
 }

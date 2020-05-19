@@ -170,7 +170,7 @@
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import { getParamQuery, useEffect } from "~/utils/common";
-import { get, toNumber, defaultTo } from "lodash";
+import { get, toNumber } from "lodash";
 import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -326,15 +326,11 @@ export default {
       if (get(result, "success", false)) {
         this.$store.dispatch(`elearning/create/getSetting`);
         // this.$store.dispatch(`elearning/create/getProgress`);
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
+        this.$toasted.success(get(result, "message", "Thành công"));
         this.$emit("nextStep", "exercise");
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelSetting() {

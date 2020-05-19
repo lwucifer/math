@@ -7,7 +7,7 @@
         </n-link>
       </div>
 
-      <app-search class="the-header__search" :button-props="{ color: 'default' }" placeholder="Tìm kiếm" />
+      <app-search class="the-header__search" :button-props="{ color: 'default' }" bordered placeholder="Tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>

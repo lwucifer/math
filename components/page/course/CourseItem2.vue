@@ -8,7 +8,7 @@
           <IconCameraOnline class="icon" />Trực tiếp
         </div>
 
-        <div v-if="onlineClass" class="course-item-2__online-class">Lớp học đang diễn ra</div>
+        <div v-if="livestream" class="course-item-2__online-class">Lớp học đang diễn ra</div>
 
         <div v-if="discount" class="course-item-2__discount">{{ discount }}%</div>
       </n-link>
@@ -41,7 +41,7 @@
       </div>
 
       <div class="course-item-2__price-wrapper">
-        <b v-if="free" class="text-primary body-1 font-weight-bold">Miễn phí</b>
+        <b v-if="free || !originalPrice || !price" class="text-primary body-1 font-weight-bold">Miễn phí</b>
 
         <template v-else>
           <s class="body-3" v-if="originalPrice != price">{{ originalPrice | numeralFormat }}đ</s>
