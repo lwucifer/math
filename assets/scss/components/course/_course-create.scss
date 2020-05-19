@@ -33,23 +33,23 @@
             background: url("~assets/images/create-course/line.png") no-repeat;
         }
 
-        &.active {
-            /deep/ .app-checkbox__checkmark {
-                border-color: $color-brand;
-            }
+        // &.active {
+        //     /deep/ .app-checkbox__checkmark {
+        //         border-color: $color-brand !important;
+        //     }
 
-            /deep/ .app-checkbox__input:checked +.app-checkbox__checkmark {
-                border-color: $color-brand !important;
-                svg {
-                    fill: $color-brand !important;
-                }
-            } 
+        //     /deep/ .app-checkbox__input:checked +.app-checkbox__checkmark {
+        //         border-color: $color-brand !important;
+        //         svg {
+        //             fill: $color-brand !important;
+        //         }
+        //     } 
 
-            /deep/ .app-checkbox__text {
-                color: $color-brand;
-                font-weight: 600;
-            }
-        }
+        //     /deep/ .app-checkbox__text {
+        //         color: $color-brand !important;
+        //         font-weight: 600;
+        //     }
+        // }
     }
 }
 
