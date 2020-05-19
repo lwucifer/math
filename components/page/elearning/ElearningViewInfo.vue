@@ -3,10 +3,10 @@
     <h2 class="mb-4">{{ get(info, "name", "") }}</h2>
 
     <div class="elearning-view__info">
-      <div class="author">
+      <n-link to="" class="author">
         <app-avatar :src="get(info, 'teacher.avatar.low', null)" :size="30" />
         <b class="name ml-3 font-13px">{{ get(info, "teacher.name", "") }}</b>
-      </div>
+      </n-link>
 
       <div class="stars">
         <app-stars
@@ -25,7 +25,7 @@
     </div>
 
     <img
-      class="d-block w-100 mt-4"
+      class="d-block w-100 mt-4 img-info"
       :src="get(info, 'cover_url.high', '')"
       alt=""
     />
