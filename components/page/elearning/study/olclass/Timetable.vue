@@ -15,9 +15,9 @@
         </h5>
         <app-table :heads="heads" :data="timetable.schedules">
           <template v-slot:cell(day)="{ row }">
-            <td v-if="row.day == 1">Sáng</td>
-            <td v-else-if="row.day == 2">Chiều</td>
-            <td v-else-if="row.day == 3">Tối</td>
+            <td v-if="row.day == 1" class="day">Sáng</td>
+            <td v-else-if="row.day == 2" class="day">Chiều</td>
+            <td v-else-if="row.day == 3" class="day">Tối</td>
           </template>
         </app-table>
       </div>
@@ -114,26 +114,5 @@ export default {
 </script>
 
 <style lang="scss">
-.table_schedule {
-  table {
-    width: 100%;
-    border: 1px solid #eeeeee;
-  }
-  th,
-  td {
-    border: 1px solid #eeeeee;
-  }
-  th {
-    width: 108px;
-    height: 60px;
-  }
-  tr {
-    border: 1px solid red;
-  }
-  .today-task {
-    background: #d50000;
-    opacity: 0.2;
-    border: 1px solid #eeeeee;
-  }
-}
+@import "~/assets/scss/components/elearning/olclass/time-table.scss";
 </style>

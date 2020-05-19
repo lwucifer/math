@@ -1,56 +1,37 @@
 <template>
   <div>
-    <div
-      class="evlc-item mt-3 body-3"
-      v-for="(chapter, index_chapter) in program"
-      :key="chapter.chapter_id"
-    >
+    <div class="evlc-item mt-3 body-3">
       <div class="evlc-item__head">
         <div class="evlc-item__head-left mr-4">
-          <b>Chương {{ index_chapter + 1 }}:</b> {{ get(chapter, "name", "") }}
+          <b>Chương {{ index + 1 }}:</b> {{ get(chapter, "name", "") }}
         </div>
 
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto" @click="is_show_lesson = !is_show_lesson">
+        <div
+          class="evlc-item__head-right d-flex align-items-center ml-auto"
+          @click="is_show_lesson = !is_show_lesson"
+        >
           <span class="mr-3">{{ get(chapter, "lessons.length", 0) }} Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse active">
+          <button
+            :class="{
+              active: is_show_lesson,
+              'evlc-item__btn': true,
+              'evlc-item__btn-collapse': true,
+            }"
+          >
             <IconAngleDown class="icon fill-primary" />
           </button>
         </div>
       </div>
 
       <transition-group enter-active-class="animated faster fadeIn">
-        <ElearningContentCourseItem 
+        <ElearningContentCourseItem
           v-for="lesson in get(chapter, 'lessons', [])"
           v-show="is_show_lesson"
           :key="lesson.id"
-          :lesson="lesson"/>
+          :lesson="lesson"
+        />
       </transition-group>
     </div>
-
-    <!-- <div class="evlc-item mb-3">
-      <div class="evlc-item__head">
-        <div class="evlc-item__head-left mr-4">
-          <b>Chương 2:</b> Tạo và tối ưu tài khoản Instagram trên máy tính
-        </div>
-        <div class="evlc-item__head-right d-flex align-items-center ml-auto">
-          <span class="mr-3">3 Bài</span>
-          <button class="evlc-item__btn evlc-item__btn-collapse">
-            <IconAngleDown class="icon" />
-          </button>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- <div class="download-item">
-      <IconBooks class="fill-primary mr-3" />Tài liệu đính kèm
-      <a
-        href
-        class="ml-auto color-primary d-flex-center font-weight-bold text-decoration-none"
-      >
-        Tải về
-        <IconDownload class="ml-2" />
-      </a>
-    </div> -->
   </div>
 </template>
 
@@ -62,7 +43,7 @@ import { get } from "lodash";
 import IconDownload from "~/assets/svg/icons/download.svg?inline";
 import IconBooks from "~/assets/svg/icons/books.svg?inline";
 
-import ElearningContentCourseItem from '~/components/page/elearning/ElearningContentCourseItem'
+import ElearningContentCourseItem from "~/components/page/elearning/ElearningContentCourseItem";
 import { mapState } from "vuex";
 
 export default {
@@ -71,7 +52,12 @@ export default {
     IconAngleDown,
     IconBooks,
     IconDownload,
-    ElearningContentCourseItem
+    ElearningContentCourseItem,
+  },
+
+  props: {
+    index: {},
+    chapter: {},
   },
 
   computed: {

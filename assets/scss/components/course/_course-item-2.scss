@@ -95,6 +95,11 @@
             width: 2rem;
             height: 1.5rem;
             margin-right: 4px;
+
+            circle {
+                animation: scaleDot 1s infinite;
+                transform-origin: center;
+            }
         }
     }
 
@@ -135,5 +140,15 @@
         #{$this}__rating {
             margin-bottom: 1rem;
         }
+    }
+}
+
+@keyframes scaleDot {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

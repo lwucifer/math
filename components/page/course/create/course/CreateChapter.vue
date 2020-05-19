@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <div class="cc-box__bg-gray pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
         Chương {{ get(chapters, "length", 0) + 1 }}
@@ -37,7 +37,7 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
     />
-  </fragment>
+  </div>
 </template>
 
 <script>

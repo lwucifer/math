@@ -142,3 +142,7 @@ Vue.filter("getDateBirthDay", function(_utcDate) {
 Vue.filter("getDateTimeHH_MM_D_M_Y", function(_utcDate) {
     return getDateTimeHH_MM_D_M_Y(_utcDate);
 });
+
+Vue.filter("fullDateTimeSlash", function(_utcDate) {
+    return fullDateTimeSlash(_utcDate);
+});

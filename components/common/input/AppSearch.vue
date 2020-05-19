@@ -1,6 +1,17 @@
 <template>
-  <app-input class="app-search" v-bind="{ ...$attrs, ...$props }" @input="handleInput">
-    <app-button slot="append-inner" class="app-search__submit" :size="$attrs.size" v-bind="buttonProps" @click="submit">
+  <app-input
+    class="app-search"
+    :class="{ 'app-search--bordered': bordered }"
+    v-bind="{ ...$attrs, ...$props }"
+    @input="handleInput"
+  >
+    <app-button
+      slot="append-inner"
+      class="app-search__submit"
+      :size="$attrs.size"
+      v-bind="buttonProps"
+      @click="submit"
+    >
       <IconSearch class="icon body-1" />
     </app-button>
   </app-input>
@@ -30,7 +41,8 @@ export default {
     buttonProps: {
       type: Object,
       default: () => ({})
-    }
+    },
+    bordered: Boolean
   },
 
   data() {
