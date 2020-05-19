@@ -111,7 +111,7 @@
 
 <script>
 import { getBase64, getParamQuery, useEffect } from "~/utils/common";
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
@@ -273,15 +273,11 @@ export default {
         this.$store.dispatch(`elearning/create/getContent`);
         // this.$store.dispatch(`elearning/create/getProgress`);
         this.$emit("toggleShowAddLesson");
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
+        this.$toasted.success(get(result, "message", "Thành công"));
         window.scrollTo(0, 0);
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {

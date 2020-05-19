@@ -8,7 +8,11 @@
           <span class="heading-6 mb-3 font-weight-bold"
             >Bài {{ index + 1 + ": " }}</span
           >
-          <span>{{ get(lesson, "name", "").length > 60 ?  (get(lesson, "name", "").slice(0, 40) + '...') : get(lesson, "name", "")}}</span>
+          <span>{{
+            get(lesson, "name", "").length > 60
+              ? get(lesson, "name", "").slice(0, 40) + "..."
+              : get(lesson, "name", "")
+          }}</span>
         </p>
 
         <div class="clc-video__actions">
@@ -54,7 +58,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
@@ -116,12 +120,12 @@ export default {
       this.handleCancelModal();
 
       if (get(res, "success", false)) {
-        this.$toasted.success(defaultTo(get(res, "message", ""), "Thành công"));
+        this.$toasted.success(get(res, "message", "Thành công"));
         this.$store.dispatch(`elearning/create/getContent`);
         // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
-      this.$toasted.error(defaultTo(get(res, "message", ""), "Có lỗi xảy ra"));
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {
