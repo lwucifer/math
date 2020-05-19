@@ -67,14 +67,14 @@
         />
 
         <div class="d-flex justify-content-end mt-4">
-          <app-button
+          <!-- <app-button
             class="clc-btn font-weight-semi-bold mr-4 text-secondary"
             size="md"
             color="default"
             outline
             square
             @click="handleCancel"
-            >Huỷ</app-button>
+            >Huỷ</app-button> -->
 
           <app-button
             @click="handleAddContent"
