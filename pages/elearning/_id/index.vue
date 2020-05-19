@@ -61,7 +61,6 @@ import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
-// import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
 import { VclFacebook } from "vue-content-loading";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
@@ -78,8 +77,7 @@ const IconPlayCircle = () =>
 
 export default {
   name: "E-learningDetail",
-  // layout: "manage",
-
+  
   components: {
     CourseTeacherInfo,
     ElearningSliderTab,
@@ -97,25 +95,18 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
-    // Breadcrumb,
     VclFacebook,
   },
 
   data() {
     return {
-      // info: null,
       pageLoading: true,
-      // levels: [],
-      // subjects: [],
-      // program: [],
-      // relatedCourses: [],
-      // teacherEls: [],
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 3,
         setWrapperSize: true,
         watchOverflow: true,
-      }
+      },
     };
   },
 
@@ -179,7 +170,6 @@ export default {
         setTimeout(getDeviceID, 500);
       }
     },
-
   },
 };
 </script>
