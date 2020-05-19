@@ -106,7 +106,7 @@ export default {
         doc: "",
         lesson_id: get(this, "lesson.id", ""),
         name: "",
-        format: "DOC",
+        format: "",
         url: "",
       },
     };
@@ -129,8 +129,8 @@ export default {
     },
 
     handleSelectUrl(file) {
-      this.payload.url = file.url;
-      this.payload.format = file.format;
+      this.payload.url = file.id;
+      // this.payload.format = file.format;
       this.payload.doc = "";
     },
 

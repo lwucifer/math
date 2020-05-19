@@ -86,7 +86,9 @@ class AddDocument {
     if (payload.format) {
       this.format = payload.format;
     }
-    this.name = payload.name;
+    if (payload.name) {
+      this.name = payload.name;
+    }
   }
 }
 
@@ -192,10 +194,10 @@ class Question {
       this.content = payload.content;
     }
     let answers = [];
-    payload.answers.map(answer => {
+    payload.answers.map((answer) => {
       let item = {
         correct: answer.correct,
-        content: answer.content
+        content: answer.content,
       };
       answers.push(item);
     });
