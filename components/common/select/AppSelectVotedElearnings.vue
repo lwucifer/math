@@ -4,12 +4,12 @@
       class="app-vue-select w-100"
       :options="list"
       searchable
-      clearable
       append-to-body
       v-model="selectedItem"
       :reduce="item => item.elearning_id"
       label="name"
       :placeholder="placeholder"
+      :all-opt="allFilter"
       @input="onChange"
       @open="onOpen"
       @close="onClose"
@@ -65,6 +65,7 @@
           size: 10,
           subject_id: this.subjectId,
         },
+        allFilter: { name: 'Tất cả', 'elearing_id': null},
         list: [],
         selectedItem: null,
       }
@@ -100,7 +101,7 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_VOTED_ELEARNING.LIST}`, { params }
           )
-          this.list = this.get(this.detailInfo, 'data.content', [])
+          this.list = [this.allFilter, ...this.get(this.detailInfo, 'data.content', [])]
           this.pagination = this.get(this.detailInfo, 'data.page', {})
         } catch (e) {
           console.log('Get voted elearnings ', e)

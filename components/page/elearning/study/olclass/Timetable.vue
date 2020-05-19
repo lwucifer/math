@@ -19,6 +19,9 @@
             <td v-else-if="row.day == 2" class="day">Chiều</td>
             <td v-else-if="row.day == 3" class="day">Tối</td>
           </template>
+          <!-- <template v-slot:cell(mon)="{ item, value }">
+            <td v-if="item == today" class="today">{{ value }}</td>
+          </template> -->
         </app-table>
       </div>
     </div>
@@ -94,7 +97,8 @@ export default {
           name: "sun",
           text: "Chủ nhật"
         }
-      ]
+      ],
+      today: 'mon',
     };
   },
 
@@ -115,4 +119,10 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/components/elearning/olclass/time-table.scss";
+</style>
+
+<style scoped>
+.today {
+  background-color: red;
+}
 </style>
