@@ -89,3 +89,14 @@ h6, .h6 {
 .nowrap {
     white-space: nowrap;
 }
+
+// Utils text
+.link-readmore {
+    text-decoration: none;
+    display: inline-flex;
+    align-self: flex-end;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
