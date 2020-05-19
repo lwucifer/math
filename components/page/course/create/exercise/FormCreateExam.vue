@@ -144,7 +144,7 @@
           <app-date-picker
             @input="handleSelectTime"
             type="time"
-            value-format="hh:mm:ss"
+            value-format="HH:mm:ss"
           />
         </div>
 
