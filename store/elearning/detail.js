@@ -29,7 +29,7 @@ const actions = {
         },
       };
       const res = await Service.getTeacher(this.$axios, payload);
-      commit("teacher", res);
+      return commit("teacher", res);
     }
     commit("teacher", null);
   },
@@ -43,7 +43,7 @@ const actions = {
         },
       };
       const res = await Service.getProgram(this.$axios, payload);
-      commit("program", res);
+      return commit("program", res);
     }
     commit("program", null);
   },
@@ -61,7 +61,7 @@ const actions = {
         },
       };
       const res = await Service.getLecturesOfTeacher(this.$axios, payload);
-      commit("lectures_of_teacher", res);
+      return commit("lectures_of_teacher", res);
     }
     commit("lectures_of_teacher", null);
   },
@@ -75,7 +75,7 @@ const actions = {
         },
       };
       const res = await Service.getLecturesRelated(this.$axios, payload);
-      commit("lectures_related", res);
+      return commit("lectures_related", res);
     }
     commit("lectures_related", null);
   },

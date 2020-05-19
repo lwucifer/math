@@ -142,10 +142,6 @@ export default {
     },
   },
 
-  // updated() {
-  //   console.log(this.lectures_related);
-  // },
-
   async mounted() {
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
@@ -176,44 +172,6 @@ export default {
   methods: {
     get,
 
-    async getData() {
-      const elearning_id = get(this, "$route.params.id", "");
-
-      const params = {
-        elearning_id,
-        token: "true",
-      };
-
-      const getInfo = () =>
-        this.$store.dispatch(
-          `elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`,
-          params
-        );
-
-      const getProgram = () =>
-        new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
-        });
-      const getRelatedCourses = () =>
-        new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
-        });
-
-      this.pageLoading = true;
-
-      const data = await Promise.all([
-        getInfo(),
-        getProgram(),
-        getRelatedCourses(),
-      ]);
-
-      this.pageLoading = false;
-
-      this.info = get(data, "0.data", {});
-      this.program = get(data, "1.data", []);
-      this.relatedCourses = get(data, "2.data.content", []);
-    },
-
     initFingerPrint() {
       if (window.requestIdleCallback) {
         requestIdleCallback(getDeviceID);
@@ -221,27 +179,6 @@ export default {
         setTimeout(getDeviceID, 500);
       }
     },
-
-    // bindScrollStatus(event) {
-    //   const navLink = document.querySelector(".elearning-view__main-nav");
-    //   const link = document.querySelectorAll('.scroll-link[href^="#"]');
-    //   const target = document.getElementsByClassName("scroll-target");
-    //   const scrollDistance = window.scrollY + navLink.clientHeight;
-
-    //   for (const el of target) {
-    //     const react = el.getBoundingClientRect();
-
-    //     if (window.scrollY + react.top <= scrollDistance + 1) {
-    //       Array.from(link).forEach((linkEl) => {
-    //         const activeLink = document.querySelector(
-    //           `.scroll-link[href="#${el.id}"]`
-    //         );
-    //         linkEl.classList.remove("active");
-    //         activeLink.classList.add("active");
-    //       });
-    //     }
-    //   }
-    // },
 
   },
 };
