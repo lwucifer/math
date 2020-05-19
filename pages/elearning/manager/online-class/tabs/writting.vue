@@ -72,9 +72,12 @@
       </template>
       <template v-slot:cell(time)="{row}">
         <td>
-          <span>{{row.time.time}}</span>
-          <br />
-          <span>{{row.time.day}}</span>
+          <div>
+            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+          </div>
+          <div>
+            {{getDateBirthDay(row.start_time)}}
+          </div>
         </td>
       </template>
 
@@ -98,6 +101,10 @@ import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
 import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
 
+import {
+  getDateBirthDay,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
@@ -181,6 +188,9 @@ export default {
   },
 
   methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
     toggleFilter() {
       if (this.showFilter) {
         this.filterCourse = null;
@@ -239,17 +249,7 @@ export default {
       }
     },
 
-    formatAMPM(time) {
-      let date = new Date(time.getTime() + 7*60*60*1000);
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
+    
     async getList() {
       const self = this;
       try {
@@ -260,22 +260,7 @@ export default {
           { params }
         );
 
-        const classes = self.get(self.stateClass, "data.content", []);
-        self.classList = classes.map(function(item) {
-          const duration = parseInt(item.recent_schedule.duration) * 60 * 1000;
-          const date = new Date(
-            "2000-01-01 " + item.recent_schedule.start_time
-          );
-          const end = self.formatAMPM(new Date(date.getTime() + duration));
-          return {
-            ...item,
-            time: {
-              day: item.recent_schedule.day,
-              time: self.formatAMPM(date) + " - " + end
-            }
-          };
-        });
-
+        this.classList = this.get(self.stateClass, "data.content", []);
         this.pagination.size = this.get(this.stateClass, "data.size", 10);
         this.pagination.first = this.get(this.stateClass, "data.first", 1);
         this.pagination.last = this.get(this.stateClass, "data.last", 1);

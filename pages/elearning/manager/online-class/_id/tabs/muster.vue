@@ -75,7 +75,11 @@
     >
       <template v-slot:cell(start_time)="{row}">
         <td>
-          <div v-html="convertTime(row)">
+          <div>
+            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+          </div>
+          <div>
+            {{getDateBirthDay(row.start_time)}}
           </div>
         </td>
       </template>
@@ -113,6 +117,10 @@ import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline'
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconArrowRight from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
 
+import {
+  getDateBirthDay,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -226,6 +234,9 @@ export default {
   },
 
   methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
     toggleFilter() {
       if (this.showFilter) {
         this.filterCourse = null;
@@ -250,25 +261,6 @@ export default {
     handleChangedIndex() {
       this.params.lesson_index = this.filterIndex.value;
       this.getList();
-    },
-
-    formatAMPM(date) {
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
-    convertTime (item) {
-      const duration = parseInt(item.duration) * 60 * 1000;
-      const date = new Date(item.start_time);
-      const end = this.formatAMPM(new Date(date.getTime() + duration));
-      let strTime = date.getDate() + '/' + (date.getMonth() +1) + '/' + date.getFullYear();
-      strTime = this.formatAMPM(date) + " - " + end + '<br>' + strTime;
-      return strTime;
     },
 
     async getList() {
