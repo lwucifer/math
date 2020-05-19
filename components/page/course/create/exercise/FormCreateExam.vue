@@ -132,20 +132,23 @@
 
       <div v-if="is_open == 1" class="d-flex align-items-center">
         <div class="mr-4">
-          <h6 class='mb-2'>Chọn ngày</h6>
-          <app-date-picker @input="handleSelectDate" value-format="YYYY-MM-DD" />
-        </div>
-
-        <div class="mr-4">
-          <h6 class='mb-2'>Chọn giờ</h6>
-           <app-date-picker
-            @input="handleSelectTime"
-            type="time"
-            value-format="hh:mm:ss"
+          <h6 class="mb-2">Chọn ngày</h6>
+          <app-date-picker
+            @input="handleSelectDate"
+            value-format="YYYY-MM-DD"
           />
         </div>
 
-        <IconEvent24px class="fill-primary mt-4"/>
+        <div class="mr-4">
+          <h6 class="mb-2">Chọn giờ</h6>
+          <app-date-picker
+            @input="handleSelectTime"
+            type="time"
+            value-format="HH:mm:ss"
+          />
+        </div>
+
+        <IconEvent24px class="fill-primary mt-4" />
       </div>
     </div>
 
@@ -178,8 +181,8 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import IconEvent24px from '~/assets/svg/v2-icons/event_24px.svg?inline';
-
+import IconEvent24px from "~/assets/svg/v2-icons/event_24px.svg?inline";
+import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 import { get } from "lodash";
@@ -189,7 +192,7 @@ import { createPayloadExercise } from "~/models/course/AddCourse";
 export default {
   components: {
     IconAngleDown,
-    IconEvent24px
+    IconEvent24px,
   },
 
   props: {
@@ -255,6 +258,9 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
       if (this.is_open == 1) {
         this.payload.open_time = `${this.date} ${this.time}`;
+        this.payload.open_time = moment(this.payload.open_time)
+          .utc()
+          .format("YYYY-MM-DD hh:mm:ss");
       }
 
       const payload = createPayloadExercise(this.payload);
@@ -267,7 +273,6 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
         this.$store.dispatch("elearning/create/getExams");
-        // this.$store.dispatch(`elearning/create/getProgress`);
         this.$emit("cancel");
         return;
       }
