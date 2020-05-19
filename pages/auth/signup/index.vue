@@ -9,8 +9,8 @@
             <div class="head-form_auth">
               <h2>Tạo tài khoản</h2>
               <div class="auth__nav-v2">
-                <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
                 <a :class="byEmail ? 'active' : ''" @click="tabEmail">Email</a>
+                <a :class="byEmail ? '' : 'active'" @click="tabPhone">Số điện thoại</a>
               </div>
             </div>
             <div class="px-4 pt-3">
@@ -78,7 +78,7 @@ export default {
       password: "",
       fullname: "",
       error: false,
-      byEmail: false,
+      byEmail: true,
       statusValidate: 1,
       showModalOTP: false,
       listQuery: {},

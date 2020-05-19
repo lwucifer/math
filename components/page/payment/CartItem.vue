@@ -4,22 +4,22 @@
       <img :src="get(item, 'images.low', '')" />
     </span>
     <div class="ml-3">
-      <p @click="handleClickCartItem(item)" style="cursor: pointer">
+      <h5 @click="handleClickCartItem(item)" style="cursor: pointer">
         {{ get(item, "elearning_name", "") }}
-      </p>
-      <p class="my-2 text-disabled">{{ get(item, "teacher_name", "") }}</p>
-      <p class="text-secondary">
-        <a @click.prevent="deleteCartItem">Xóa</a>
-      </p>
+      </h5>
+      <p class="my-2 text-gray">{{ get(item, "teacher_name", "") }}</p>
     </div>
     <div class="ml-auto">
-      <h6 class="text-right">{{ numeral(get(item, "price", "")).format() }} đ</h6>
+      <h5 class="text-right text-primary">{{ numeral(get(item, "price", "")).format() }} đ</h5>
       <div class="d-flex mt-3">
         <span class="price-cart_payment"
           >{{ numeral(get(item, "original_price", "")).format() }}đ</span
         >
         <h6 class="ml-2">{{ numeral(get(item, "discount", "")).format('0,0.00') }}%</h6>
       </div>
+      <p class="btn-delete_cart-item">
+        <a @click.prevent="deleteCartItem">Xoá khỏi giỏ hàng</a>
+      </p>
     </div>
   </div>
 </template>
