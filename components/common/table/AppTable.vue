@@ -159,7 +159,11 @@ export default {
   watch: {
     selectedItems: function (oldVal, newVal) {
       this.$emit("selectionChange", this.selectedItems);
-    }
+    },
+    loading: function (oldVal, newVal) {
+      this.selectedItems.length = 0;
+      this.selectAll= false;
+    },
   },
   methods: {
     check(checked, item) {
@@ -263,7 +267,7 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     // this.cats = [...this.data];
   }
 };

@@ -306,7 +306,6 @@ import {
   getLocalDateTime,
   getUTCDateTime,
   getTimeHH_MM_A,
-  getDateHH_MM_A,
   getUTCDateTimeHH_MM_A,
   getEndTime,
   hoursToMinutes
@@ -437,7 +436,6 @@ export default {
   },
 
   methods: {
-    getDateHH_MM_A,
     getTimeHH_MM_A,
     getDateBirthDay,
     getEndTime,
