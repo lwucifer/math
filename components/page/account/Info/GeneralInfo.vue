@@ -68,7 +68,7 @@
             <label for class="form--normal__title">Tiểu sử</label>
           </div>
           <div class="col-md-9" v-if="isTeacherRole">
-            <div v-if="story == null">
+            <div v-if="story == ''">
               <app-button
                 color="transparent"
                 flat
@@ -100,7 +100,7 @@
                     <IconEdit class />
                     <span>Chỉnh sửa</span>
                   </button>
-                  <button class="btn-transparent btn--danger">
+                  <button class="btn-transparent btn--danger" @click="handleDeleteStory">
                     <IconTrashAlt class />
                     <span>Xóa</span>
                   </button>
@@ -303,6 +303,17 @@ export default {
     },
     cancel() {
       this.editingStory = false;
+    },
+    handleDeleteStory() {
+      const data = {
+        biography: ""
+      };
+      this.accountBiographyAdd(data).then(result => {
+        if (result.success) {
+          this.editingStory = false;
+          this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`);
+        }
+      });
     }
   },
   computed: {
