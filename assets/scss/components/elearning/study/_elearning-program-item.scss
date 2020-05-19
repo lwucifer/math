@@ -8,7 +8,7 @@
         background-color: $color-text-light-2;
     }
 
-    &.active {
+    &.active, &.completed {
         background-color: rgba($color-primary-1, 0.05);
 
         #{$this}__title {

@@ -1,7 +1,7 @@
 <template>
   <div
     class="e-program-item"
-    :class="get(lesson, 'completes', 0) ? 'active' : ''"
+    :class="get(lesson, 'status', 0) ? 'completed' : ''"
   >
     <div class="e-program-item__left">
       <app-checkbox
@@ -27,6 +27,7 @@
 
         <span v-else class="d-inline-flex align-items-center">
           <IconEventNote class="icon body-1 mr-1 text-primary" />
+          <span class="mw-4">{{ durationTimes }}</span>
         </span>
 
         <a
@@ -65,8 +66,8 @@
       title="Hoàn thành bài học"
       :footer="false"
       description="Bạn có chắc là bạn muốn hoàn thành bài học này"
-      @close="isShowCompleteStudy = false"
-      @cancel="isShowCompleteStudy = false"
+      @close="closeConfirmCompleteStudy"
+      @cancel="closeConfirmCompleteStudy"
       @ok="handleCompleteStudy"
     ></app-modal-confirm>
 
@@ -77,7 +78,6 @@
       @close="notify.isShowNotify = false"
       @ok="notify.isShowNotify = false"
     />
-
   </div>
 </template>
 
@@ -106,6 +106,7 @@ import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.sv
 import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
 
 import StudyService from "~/services/elearning/study/Study";
+import { ERRORS } from '../../../../utils/error-code';
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -114,7 +115,7 @@ export default {
     IconFileCheckAlt,
     IconSlowMotionVideo,
     IconFileDownloadAlt,
-    IconEventNote,
+    IconEventNote
   },
 
   props: {
@@ -193,22 +194,8 @@ export default {
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
       console.log("[handleCompleteStudy]", res);
-      if (get(res, "success", false)) {
-        // this.$toasted.success("Thành công");
-        // close modal confirm
-        this.isShowCompleteStudy = false;
+      this.handleResultCompleteStudy(res);
 
-        this.getProgress();
-        return;
-      } else {
-        this.getProgress();
-        this.isShowCompleteStudy = false;
-        this.notify = {
-            type: "error",
-            title: get(res, "message", "Có lỗi xảy ra"),
-            isShowNotify: true
-          };
-      }
       // this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
     get,
@@ -222,7 +209,7 @@ export default {
       "setExerciseLoading"
     ]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession",
+      "setStudyExerciseCurrentLession"
     ]),
 
     async handleStuty(lesson) {
@@ -276,6 +263,35 @@ export default {
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
+    },
+
+    handleResultCompleteStudy(res) {
+      // if false
+      if (!get(res, "success", false)) {
+        let msgErr = 'Có lỗi xảy ra';
+        switch (res.code) {
+          case ERRORS.EXERCISE.MUST_COMPLETE_ALL_REQUIRED_EXERCISES:
+            msgErr = 'Bạn phải hoàn thành tất cả các bài tập bắt buộc của bài học trước.'
+            break;
+        
+          default:
+            break;
+        }
+        this.notify = {
+          type: "error",
+          title: msgErr,
+          isShowNotify: true
+        };
+      }
+
+      // always do these things
+      this.isShowCompleteStudy = false;
+      this.getProgress();
+    },
+
+    closeConfirmCompleteStudy() {
+      this.isShowCompleteStudy = false;
+      // this.getProgress();
     }
   },
 
