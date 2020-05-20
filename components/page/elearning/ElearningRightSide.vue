@@ -122,7 +122,22 @@
 
     <div class="py-3 d-flex">
       <a class="text-info d-flex-center">
-        <IconBxsShare class="icon subheading mr-2" />Chia sẻ
+        <ShareNetwork
+          network="facebook"
+          :url="
+            `https://schoolly.famtechvn.com/elearning/${get(
+              info,
+              'elearning_id',
+              ''
+            )}`
+          "
+          :title="get(info, 'name', '')"
+          :description="description"
+          :quote="description"
+          hashtags="schoolly"
+        >
+          <IconBxsShare class="icon subheading mr-2" />Chia sẻ
+        </ShareNetwork>
       </a>
       <a
         class="text-primary ml-auto d-flex-center"
@@ -225,6 +240,13 @@ export default {
       if (get(this, "info.progress", "-1") == 100) return true;
       return false;
     },
+    description() {
+      let html = get(this, "info.description", "");
+      let div = document.createElement("div");
+      div.innerHTML = html;
+      let text = div.textContent || div.innerText || "";
+      return text;
+    },
   },
 
   methods: {
@@ -297,7 +319,7 @@ export default {
         return;
       }
 
-      if (get(this, "info.privacy", false)) {
+      if (get(this, "info.is_private", false)) {
         this.showRequestCode = true;
         return;
       }
