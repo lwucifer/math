@@ -19,15 +19,16 @@
           </app-search>
         </div>
         <div class="filter-form__item">
-          <filter-button @click="clickSubmit">
-            Lọc kết quả
-          </filter-button>
+          <filter-button
+            @click="clickSubmit"
+            :color="filterSelect ? 'primary': 'white'"
+          ></filter-button>
         </div>
         <app-select-class
           v-if="filterSelect"
           style="margin-left: 0.6rem;"
           class-name="filter-form__item"
-          :class-style="{ 'min-width': '7.5rem', 'margin-right': '0.6rem' }"
+          :class-style="{ 'min-width': '8.5rem', 'margin-right': '0.6rem' }"
           class-year-name="filter-form__item"
           :year-style="{ 'min-width': '11.5rem' }"
           @changedClass="handleChangedClass"

@@ -149,23 +149,34 @@ export default {
   computed: {
     ...mapState("elearning/study/study-exercise", ["isReloadExerciseList"]),
 
-    completes() {
-      return get(this.lesson, "completes", 0);
+    passedExercise() {
+      return get(this.lesson, "passed", 0);
+    },
+    pendingExercise() {
+      return get(this.lesson, "pending", 0);
+    },
+    failedExercise() {
+      return get(this.lesson, "failed", 0);
     },
     exercises() {
       return get(this.lesson, "exercises", 0);
     },
     completeExecerciseRate() {
-      return `${this.completes}/${this.exercises}`;
+      const totalExDid = this.passedExercise + this.pendingExercise + this.failedExercise;
+      return `${totalExDid}/${this.exercises}`;
     },
 
     // return primary|secondary
     classExerciseStatus() {
       // debugger;
-      if (this.completes == this.exercises) {
+      if (this.passedExercise == this.exercises) {
         return "primary";
-      } else if (this.completes < this.exercises) {
+      } else if (this.failedExercise > 0) {
         return "secondary";
+      } else if (this.pendingExercise > 0) {
+        return "warning";
+      } else {
+        return "warning";
       }
     },
 

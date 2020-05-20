@@ -25,6 +25,16 @@
                 }
             }
         }
+        
+        .rate-result-wrapper {
+            .status-item {
+                width: 4rem;
+                padding: 0.1rem 0.4rem;
+                font-size: 1.3rem;
+                letter-spacing: -0.01em;
+                line-height: 2rem;
+            }
+        }
     }
 
     &__title {

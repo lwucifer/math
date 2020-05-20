@@ -120,9 +120,10 @@
 
     <app-divider class="elearning-right-side__divider my-0" />
 
-    <div class="py-3 d-flex">
-      <a class="text-info d-flex-center">
+    <div class="py-3 d-flex share-favourite">
+      <a class="text-info share">
         <ShareNetwork
+          class="d-flex-center"
           network="facebook"
           :url="
             `https://schoolly.famtechvn.com/elearning/${get(
@@ -139,8 +140,9 @@
           <IconBxsShare class="icon subheading mr-2" />Chia sẻ
         </ShareNetwork>
       </a>
+
       <a
-        class="text-primary ml-auto d-flex-center"
+        class="text-primary ml-auto d-flex-center favourite"
         @click="handleAddFavouriteElearning"
       >
         <IconFavorite

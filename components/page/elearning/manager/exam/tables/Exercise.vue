@@ -29,7 +29,7 @@
                 {{get(row, 'failed_percent', 0)}}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{get(row, 'pending_percent', 0)}}%
+                {{100 - numeralFormat(get(row, 'passed_percent', 0), '0') - numeralFormat(get(row, 'failed_percent', 0), '0')}}%
               </span>
             </div>
         
@@ -80,6 +80,7 @@
   import { get } from "lodash"
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
+  import { numeralFormat } from "~/plugins/filters";
 
   export default {
     components: {
@@ -151,6 +152,7 @@
       onPageChange(e) {
         this.$emit('changedPagination', e)
       },
+      numeralFormat,
       get
     },
   }

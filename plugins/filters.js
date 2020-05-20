@@ -126,7 +126,7 @@ export function subResult2Txt(str = "") {
   const MATCHED_DATA = {
     [SUBMISSION_RESULTS.PASSED]: "Đạt",
     [SUBMISSION_RESULTS.FAILED]: "Không đạt",
-    [SUBMISSION_RESULTS.PENDING]: "Chưa chấm điểm",
+    [SUBMISSION_RESULTS.PENDING]: "Chưa chấm",
     [SUBMISSION_RESULTS.NONE]: "Chưa làm bài"
   };
   if (MATCHED_DATA.hasOwnProperty(str)) return MATCHED_DATA[str];
@@ -203,8 +203,8 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = "Danh sách học sinh";
       break;
     default:
-      const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
-      breadcrumTxt = `${lectureType} - ${elearningInfo.subject.name}`;
+      // const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
+      breadcrumTxt = `${elearningInfo.subject.name}`;
       break;
   }
   console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);

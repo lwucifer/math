@@ -18,99 +18,39 @@
         </app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="clickSubmit">
-          Lọc kết quả
-        </filter-button>
+        <filter-button
+          @click="clickSubmit"
+          :color="filterSelect ? 'primary': 'white'"
+        ></filter-button>
       </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="fileTypes"
+          :options="fileTypeOpts"
           :reduce="item => item.value"
           v-model="filters.type"
           label="text"
           placeholder="Thể loại"
-          searchable
-          clearable
           @input="handleChangedType"
+          :all-opt="allOpt"
         >
         </app-vue-select>
       </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 12.5rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="statuses"
+          :options="statusOpts"
           :reduce="item => item.value"
           v-model="filters.used"
           label="text"
           placeholder="Trạng thái"
-          searchable
-          clearable
           @input="handleChangedStatus"
+          :all-opt="allOpt"
         >
         </app-vue-select>
       </div>
     </div>
   </filter-form>
-  
-  <!--<div class="filter-form">-->
-    <!--<div class="filter-form__item">-->
-      <!--<app-button-->
-        <!--color="primary"-->
-        <!--class="filter-form__item__btn filter-form__item__btn&#45;&#45;submit"-->
-        <!--:size="'sm'"-->
-        <!--@click="submit"-->
-      <!--&gt;-->
-        <!--<IconFilter/>-->
-        <!--<span>Lọc kết quả</span>-->
-      <!--</app-button>-->
-    <!--</div>-->
-    <!---->
-    <!--<div class="filter-form__item" style="min-width: 15.5rem;">-->
-      <!--<app-vue-select-->
-        <!--class="app-vue-select filter-form__item__selection w-100"-->
-        <!--:options="fileTypes"-->
-        <!--:reduce="item => item.value"-->
-        <!--v-model="filters.type"-->
-        <!--label="text"-->
-        <!--placeholder="Theo loại"-->
-        <!--searchable-->
-        <!--clearable-->
-        <!--@input="handleChangedType"-->
-      <!--&gt;-->
-      <!--</app-vue-select>-->
-    <!--</div>-->
-    <!--<div class="filter-form__item" style="min-width: 15.5rem">-->
-      <!--<app-vue-select-->
-        <!--class="app-vue-select filter-form__item__selection w-100"-->
-        <!--:options="statuses"-->
-        <!--:reduce="item => item.value"-->
-        <!--v-model="filters.used"-->
-        <!--label="text"-->
-        <!--placeholder="Theo trạng thái"-->
-        <!--searchable-->
-        <!--clearable-->
-        <!--@input="handleChangedStatus"-->
-      <!--&gt;-->
-      <!--</app-vue-select>-->
-    <!--</div>-->
-    <!---->
-    <!--&lt;!&ndash;Right form&ndash;&gt;-->
-    <!--<div class="filter-form__right">-->
-      <!--<div class="filter-form__item filter-form__item&#45;&#45;search border-0">-->
-        <!--<app-search-->
-          <!--class="w-100"-->
-          <!--size="sm"-->
-          <!--placeholder="Nhập để tìm kiếm"-->
-          <!--v-model="filters.name"-->
-          <!--@input="handleChangedSearch"-->
-          <!--@keyup.enter.native="handleSubmitSearch"-->
-          <!--@submit="submit"-->
-        <!--&gt;-->
-        <!--</app-search>-->
-      <!--</div>-->
-    <!--</div>&lt;!&ndash;End right form&ndash;&gt;-->
-  <!--</div>-->
 </template>
 
 <script>
@@ -127,6 +67,10 @@
     },
     data() {
       return {
+        allOpt: {
+          value: null,
+          text: 'Tất cả'
+        },
         filterSelect:false,
         filters: {
           type: null,
@@ -173,6 +117,14 @@
         deep: true
       }
     },
+    computed: {
+      fileTypeOpts() {
+        return [this.allOpt, ...this.fileTypes]
+      },
+      statusOpts() {
+        return [this.allOpt, ...this.statuses]
+      }
+    },
     methods: {
       submit() {
         if (!this.initStatus) {
@@ -205,6 +157,7 @@
             this.$emit('submitFilter', this.filters)
           }
         } else {
+          console.log('submit false')
           this.filterSelect = true
         }
       },

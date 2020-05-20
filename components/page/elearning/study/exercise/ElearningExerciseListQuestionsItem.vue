@@ -1,10 +1,10 @@
 <template>
   <li class="e-exercise-list-questions__item">
-    <h5
+    <div
       v-html="question.content"
       class="e-exercise-list-questions__question text-clickable"
       @click.prevent="navToQuestion"
-    ></h5>
+    ></div>
 
     <div
       v-if="question.type === EXERCISE_TYPES.ESSAY"
