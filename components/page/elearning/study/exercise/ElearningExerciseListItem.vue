@@ -21,7 +21,7 @@
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
-      @click.prevent="canDoExercise && handleDoExercise"
+      @click.prevent="handleDoExercise"
       >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
     >
 
@@ -117,6 +117,8 @@ export default {
 
     handleDoExercise() {
       console.log("[handleDoExercise]");
+
+      if(!this.canDoExercise) return;
 
       // set current exercise
       this.setStudyExerciseCurrent({
