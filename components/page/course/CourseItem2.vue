@@ -113,7 +113,7 @@ export default {
   },
 
   created() {
-    console.log("[created]", this.item);
+    // console.log("[created]", this.item);
   },
 
   methods: {

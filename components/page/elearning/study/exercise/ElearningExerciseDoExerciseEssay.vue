@@ -37,12 +37,14 @@
         trả lời
       </app-upload>
 
-      <app-input
+      <!-- <app-input
         id="essay-answer"
         placeholder="Nhập câu trả lời"
         textarea
         v-model="answer"
-      ></app-input>
+      ></app-input> -->
+      <app-editor class="mb-4" id="essay-answer" v-model="answer" />
+
     </div>
 
     <div class="e-exercise-essay__bottom d-flex">

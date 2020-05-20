@@ -203,8 +203,8 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = "Danh sách học sinh";
       break;
     default:
-      const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
-      breadcrumTxt = `${lectureType} - ${elearningInfo.subject.name}`;
+      // const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
+      breadcrumTxt = `${elearningInfo.subject.name}`;
       break;
   }
   console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
