@@ -1,7 +1,7 @@
 <template>
   <div class="eh-personal-box">
     <div class="eh-personal-box__img">
-      <n-link to>
+      <n-link :to="to">
         <img v-lazy="image" :alt="name" class="d-block w-100" />
 
         <div v-if="livestream" class="eh-personal-box__livestream">
@@ -16,7 +16,7 @@
 
     <div class="eh-personal-box__right">
       <h3 class="eh-personal-box__name">
-        <n-link to>{{ name }}</n-link>
+        <n-link :to="to">{{ name }}</n-link>
       </h3>
 
       <div class="eh-personal-box__teacher">
