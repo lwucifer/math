@@ -8,7 +8,10 @@
         <div class="elearning-history__main py-0" style="background: transparent;">
           <block-section title="Doanh thu">
             <template v-slot:content>
-              <sub-block-section class="mb-0">
+              <sub-block-section
+                :title-cls="{'border-0': true }"
+                class="mb-0"
+              >
                 <template v-slot:title>
                   <div class="row">
                     <div class="col-md-6 d-flex align-items-center">
@@ -30,7 +33,7 @@
                           color="transparent"
                           :disabled="!token"
                           :to="token ? '/' + token.id + '/info/withdrawals' : '/'"
-                          style="color: #656565; font-weight: normal;"
+                          style="color: #656565; font-weight: normal; box-shadow: none;"
                           class="px-0"
                         >
                           <slot name="icon">
@@ -93,7 +96,10 @@
 
           <block-section title="Chi tiết doanh thu">
             <template v-slot:content>
-              <sub-block-section>
+              <sub-block-section
+                :title-cls="{ 'border-0': true }"
+                :content-cls="{ 'px-0': true }"
+              >
                 <template v-slot:title>
                   <div class="row">
                     <div class="col-md-9 mb-3">
@@ -139,13 +145,12 @@
                     :pagination="pagination"
                     @pagechange="onPageChange"
                     :data="list"
-                    style="margin-left: -1.5rem; margin-right: -1.5rem;"
                   >
                     <!--<tr v-for="(item , index) in list" :key="index">-->
                     <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
                     <!--</tr>-->
                     <template v-slot:cell(cost)="{row}">
-                      <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                      <td class="nowrap">{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
                     </template>
                     <template v-slot:cell(fee)="{row}">
                       <td class="text-primary">{{ formatFee(get(row, 'fee', ''))}}%</td>
