@@ -77,7 +77,7 @@ const IconPlayCircle = () =>
 
 export default {
   name: "E-learningDetail",
-  
+
   components: {
     CourseTeacherInfo,
     ElearningSliderTab,

@@ -32,7 +32,7 @@
       <a @click="handleLoadMore" class="btn-load-more">Xem thêm</a>
     </div>
 
-    <div class="text-center mt-3" v-if="showCompact">
+    <div class="text-center mt-3" v-else>
       <a @click="handleCompact" class="btn-load-more">Rút gọn</a>
     </div>
   </section>
@@ -82,12 +82,6 @@ export default {
     load_more() {
       return get(this, "info.description.length", 0) > this.lengthDescription;
     },
-
-    showCompact() {
-      if(this.lengthDescription == get(this, 'info.description.length', 0)){
-        return true
-      }
-    }
   },
 
   methods: {
@@ -98,7 +92,7 @@ export default {
 
     handleCompact() {
       this.lengthDescription = 300;
-    }
+    },
   },
 };
 </script>

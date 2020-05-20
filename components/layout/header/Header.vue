@@ -7,7 +7,7 @@
         </n-link>
       </div>
 
-      <app-search class="the-header__search" :button-props="{ color: 'default' }" bordered placeholder="Tìm kiếm" />
+      <app-search class="the-header__search" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>
@@ -134,8 +134,8 @@
       </div>
 
       <div v-else class="d-flex">
-        <n-link class="btn-signup__header" :to="'/auth/signup'">Đăng ký</n-link>
-        <n-link class="btn-signin__header" :to="'/auth/signin'">Đăng nhập</n-link>
+        <app-button size="sm" color="white" nuxt to="/auth/signup" class="btn-signup__header">Đăng ký</app-button>
+        <app-button size="sm" nuxt to="/auth/signin" class="btn-signin__header">Đăng nhập</app-button>
       </div>
     </div>
   </div>
