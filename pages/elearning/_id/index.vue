@@ -32,14 +32,6 @@
         />
       </div>
 
-      <div id="fb-root"></div>
-      <script
-        async
-        defer
-        crossorigin="anonymous"
-        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v7.0"
-      ></script>
-
       <div class="col-md-4">
         <ElearningRightSide v-sticky sticky-offset="{ top: 90, bottom: 9 }" />
       </div>
