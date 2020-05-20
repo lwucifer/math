@@ -4,7 +4,7 @@
     <div class="e-exercise-list-item__desc mb-3">
       <span class="text-primary">{{ type | getExerciseTypeText }}</span>
       <app-divider class="e-exercise-list-item__divider" direction="vertical" />
-      <span class="text-gray">Thời gian làm bài:</span>
+      <span class="text-gray">Thời gian:</span>
       <b class="text-dark">{{ getDurationText(duration) }}</b>
     </div>
 
