@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="e-program-item"
-    :class="get(lesson, 'status', 0) ? 'completed' : ''"
-  >
+  <div class="e-program-item" :class="get(lesson, 'status', 0) ? 'completed' : ''">
     <div class="e-program-item__left">
       <app-checkbox
         v-model="lessonStatus"
@@ -20,49 +17,57 @@
         href
         class="e-program-item__title"
         @click.prevent="handleStuty(lesson)"
-        >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a
-      >
+      >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
 
       <div class="e-program-item__bottom">
-        <span v-if="isShowVideoLesson" class="d-inline-flex align-items-center">
-          <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
-          <span>{{ durationTimes }}</span>
-        </span>
-
-        <span v-else class="d-inline-flex align-items-center">
-          <IconEventNote class="icon body-1 mr-1 text-primary" />
-          <span class="mw-4">{{ durationTimes }}</span>
-        </span>
-
-        <a
-          href
-          class="d-inline-flex align-items-center text-decoration-none"
-          :class="`text-${classExerciseStatus}`"
-          v-if="get(lesson, 'exercises', 0)"
-          v-scroll-to="'body'"
-          @click.prevent="handleGetExercises"
-        >
-          <IconFileCheckAlt class="icon body-1 mr-1" />
-          <span>Bài tập({{ completeExecerciseRate }})</span>
-        </a>
-
-        <app-dropdown
-          v-if="lesson.link"
-          class="e-program-item__download-tooltip"
-          position="topCenter"
-        >
-          <a
-            slot="activator"
-            download
-            target="_blank"
-            :href="lesson.link"
-            class="d-inline-flex align-items-center text-decoration-none"
+        <div class="e-program-item__time">
+          <span
+            v-if="isShowVideoLesson"
+            class="d-inline-flex align-items-center"
           >
-            <IconFileDownloadAlt class="icon body-1 text-info" />
-          </a>
+            <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
 
-          <span>Tải tài liệu</span>
-        </app-dropdown>
+          <span v-else class="d-inline-flex align-items-center">
+            <IconEventNote class="icon body-1 mr-1 text-primary" />
+            <span class="mw-4">{{ durationTimes }}</span>
+          </span>
+        </div>
+
+        <div class="e-program-item__exercises">
+          <a
+            v-if="get(lesson, 'exercises', 0)"
+            href
+            class="d-inline-flex align-items-center text-decoration-none"
+            :class="`text-${classExerciseStatus}`"
+            v-scroll-to="'body'"
+            @click.prevent="handleGetExercises"
+          >
+            <IconFileCheckAlt class="icon body-1 mr-1" />
+            <span>Bài tập({{ completeExecerciseRate }})</span>
+          </a>
+        </div>
+
+        <div class="e-program-item__download">
+          <app-dropdown
+            v-if="lesson.link"
+            class="e-program-item__download-tooltip"
+            position="topCenter"
+          >
+            <a
+              slot="activator"
+              download
+              target="_blank"
+              :href="lesson.link"
+              class="d-inline-flex align-items-center text-decoration-none"
+            >
+              <IconFileDownloadAlt class="icon body-1 text-info" />
+            </a>
+
+            <span>Tải tài liệu</span>
+          </app-dropdown>
+        </div>
       </div>
     </div>
 
@@ -166,7 +171,8 @@ export default {
       return get(this.lesson, "exercises", 0);
     },
     completeExecerciseRate() {
-      const totalExDid = this.passedExercise + this.pendingExercise + this.failedExercise;
+      const totalExDid =
+        this.passedExercise + this.pendingExercise + this.failedExercise;
       return `${totalExDid}/${this.exercises}`;
     },
 

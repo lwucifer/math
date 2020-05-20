@@ -1,11 +1,10 @@
-.e-program {}
-
 .e-program__test {
     display: flex;
     align-items: center;
     color: $color-warning;
     text-decoration: none;
     padding: 2rem 1.5rem;
+    border-top: 1px solid $color-disabled;
 
     .icon {
         font-size: 2rem;
@@ -13,5 +12,11 @@
 
     &:hover {
         background-color: $color-text-light-2;
+    }
+}
+
+.e-program__item-lecture {
+    &:not(:last-child) {
+        border-bottom: 1px solid $color-disabled;
     }
 }
