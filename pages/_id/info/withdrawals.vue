@@ -67,11 +67,21 @@
                   :data="list"
                   style="margin-left: -1.5rem; margin-right: -1.5rem;"
                 >
+                  <template v-slot:cell(timestamp)="{row}">
+                    <td>
+                      {{ row.timestamp | moment("DD-MM-YYYY") }}
+                    </td>
+                  </template>
                   <template v-slot:cell(status)="{row}">
                     <td>
                       <span class="status-item d-inline-block" :class="statusClass(row.status)" style="min-width: 10.1rem;">
                         {{ row.status | withdrawalStatus2Txt}}
                       </span>
+                    </td>
+                  </template>
+                  <template v-slot:cell(amount)="{row}">
+                    <td>
+                      {{ row.amount | toThousandFilter }} đ
                     </td>
                   </template>
                 </app-table>
@@ -117,17 +127,14 @@ export default {
         {
           name: "amount",
           text: "Giá trị",
-          sort: true
         },
         {
           name: "desc",
           text: "Nội dung",
-          sort: true
         },
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
         },
       ],
       isAuthenticated: true,
