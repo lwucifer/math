@@ -35,7 +35,7 @@
               color="disable"
               size="md"
             >
-              <IconAttachFile24px class="mr-2" />
+              <IconAttachFile24px class="mr-2" v-if="showIcon"/>
               {{ title }}
             </app-button>
           </div>
@@ -78,6 +78,11 @@ export default {
       type: String,
       default: "Chọn file",
     },
+
+    showIcon: {
+      type: String,
+      default: true
+    }
   },
 
   data() {
