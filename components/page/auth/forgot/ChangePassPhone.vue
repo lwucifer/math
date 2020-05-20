@@ -36,6 +36,7 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorChange}}</p>
       <div>
         <app-button
+          :loading="loading"
           color="primary"
           square
           @click="acceptResetPass"
@@ -91,7 +92,8 @@ export default {
       validateProps: { password: "", otp: "", coPassword: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorChange: ""
+      messageErrorChange: "",
+      loading: false
     };
   },
   validations: {
@@ -116,6 +118,7 @@ export default {
   methods: {
     ...mapActions("auth", ["forgotPassword", "verifiOtp", "sendotp"]),
     async acceptResetPass() {
+      this.loading = true;
       try {
         const token = await this.$recaptcha.execute("resetpass");
         console.log("ReCaptcha token:", token);
@@ -131,12 +134,14 @@ export default {
             );
             const doAdd = this.forgotPassword(resetPassModelPhone).then(res => {
               if (res.success == true) {
+                this.loading = true;
                 this.$router.push("/auth/forgot/success");
               } else {
                 this.showErrorChangePass(result);
               }
             });
           } else {
+            this.loading = true;
             this.showErrorOtp(result);
           }
         });
