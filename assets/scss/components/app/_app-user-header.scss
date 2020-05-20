@@ -59,21 +59,16 @@
       align-items: center;
       height: 4rem;
       padding-left: 2rem;
+      &.nuxt-link-exact-active{
+        color: $color-primary;
+        border-left: 4px solid #37A000 !important;
+        svg path {
+          fill: $color-primary !important;
+        }
+      }
       svg {
         margin-right: 1rem;
         width: 22px;
-      }
-    }
-
-    &:hover {
-      a{
-        color: $color-primary;
-        border-left: 4px solid #37A000 !important;
-        
-      }
-
-      a svg path {
-        fill: $color-primary !important;
       }
     }
   
