@@ -5,7 +5,8 @@
   >
     <div class="e-program-item__left">
       <app-checkbox
-        :checked="lesson.status == lessonCompleted"
+        v-model="lessonStatus"
+        ref="completedCheckbox"
         :style="{
           'pointer-events':
             lesson.status == lessonCompleted ? 'none' : 'inherit'
@@ -134,11 +135,14 @@ export default {
         type: "",
         description: "",
         isShowNotify: false
-      }
+      },
+      lessonStatus: false,
     };
   },
 
   mounted() {
+    this.lessonStatus = this.lesson.status == this.lessonCompleted;
+
     const lesson_id = getParamQuery("lesson_id");
     if (lesson_id && lesson_id === this.lesson.id) {
       this.handleStuty(this.lesson);
@@ -294,6 +298,7 @@ export default {
           default:
             break;
         }
+        this.lessonStatus = false;
         this.notify = {
           type: "error",
           title: msgErr,
@@ -308,7 +313,9 @@ export default {
 
     closeConfirmCompleteStudy() {
       this.isShowCompleteStudy = false;
-      // this.getProgress();
+      this.lessonStatus = false;
+      // this.$refs.completedCheckbox.checked = false;
+      console.log("[closeConfirmCompleteStudy]", this.$refs)
     }
   },
 
