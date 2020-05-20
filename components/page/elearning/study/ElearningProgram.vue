@@ -17,6 +17,7 @@
     </div>
     <div v-else>
       <ElearningProgramItem
+        class="e-program__item-lecture"
         :lesson="get(progress, 'programs.0.lessons.0', null)"
       />
     </div>
