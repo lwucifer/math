@@ -28,8 +28,8 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.REVENUE)">
           <n-link :to="getRevenueLink">
-            <IconMonetizationOn24px class="fill-gray" />
-            <span>Thống kế doanh thu</span>
+            <IconMonetizationOn24px class="fill-gray"/>
+            <span>Thống kê doanh thu</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
@@ -61,7 +61,7 @@
           @click.prevent="handleLogout"
           v-if="checkMenuGuard(MENU.SIGNOUT)"
         >
-          <n-link to>
+          <n-link to="/auth/signin">
             <IconPowerSettingsNew24px />
             <span>Đăng xuất</span>
           </n-link>

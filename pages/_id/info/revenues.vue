@@ -37,7 +37,7 @@
                           class="px-0"
                         >
                           <slot name="icon">
-                            <icon-clock class="icon--btn icon--btn--pre" />
+                            <IconHistory24px class="icon--btn icon--btn--pre" />
                           </slot>Xem lịch sử rút tiền
                         </app-button>
                       </div>
@@ -140,31 +140,34 @@
                 </template>
 
                 <template v-slot:content>
-                  <app-table
-                    :heads="heads"
-                    :pagination="pagination"
-                    @pagechange="onPageChange"
-                    :data="list"
-                  >
-                    <!--<tr v-for="(item , index) in list" :key="index">-->
-                    <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
-                    <!--</tr>-->
-                    <template v-slot:cell(cost)="{row}">
-                      <td class="nowrap">{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
-                    </template>
-                    <template v-slot:cell(fee)="{row}">
-                      <td class="text-primary">{{ formatFee(get(row, 'fee', ''))}}%</td>
-                    </template>
-                    <template v-slot:cell(total)="{row}">
-                      <td>{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
-                    </template>
-                    <template v-slot:cell(timestamp)="{row}">
-                      <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
-                    </template>
-                    <template v-slot:cell(desc)="{row}">
-                      <td style="width:30%">{{ get(row, 'desc', '-') }}</td>
-                    </template>
-                  </app-table>
+                  <div class="wrap-table">
+                    <app-table
+                      :heads="heads"
+                      :pagination="pagination"
+                      @pagechange="onPageChange"
+                      :data="list"
+                      style="margin-left: -1.5rem; margin-right: -1.5rem;"
+                    >
+                      <!--<tr v-for="(item , index) in list" :key="index">-->
+                      <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
+                      <!--</tr>-->
+                      <template v-slot:cell(cost)="{row}">
+                        <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                      </template>
+                      <template v-slot:cell(fee)="{row}">
+                        <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+                      </template>
+                      <template v-slot:cell(total)="{row}">
+                        <td class="text-primary">{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                      </template>
+                      <template v-slot:cell(timestamp)="{row}">
+                        <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
+                      </template>
+                      <template v-slot:cell(desc)="{row}">
+                        <td class="long-text__table" :title="get(row, 'desc', '-')">{{ get(row, 'desc', '-') }}</td>
+                      </template>
+                    </app-table>
+                  </div>
                 </template>
               </sub-block-section>
             </template>
@@ -260,7 +263,7 @@ import { get } from "lodash";
 import numeral from "numeral";
 import { number } from "yup";
 import { CURRENCY } from "~/utils/config";
-import IconClock from "~/assets/svg/design-icons/clock.svg?inline";
+import IconHistory24px from '~/assets/svg/v2-icons/history_24px.svg?inline';
 import { DATE_SHORTCUT } from "~/utils/config";
 
 export default {
@@ -270,7 +273,7 @@ export default {
   components: {
     IconArrowLeft,
     SchoolAccountSide,
-    IconClock
+    IconHistory24px
   },
 
   data() {

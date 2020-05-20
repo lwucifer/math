@@ -2,7 +2,7 @@
   <div class="eh-personal-box">
     <div class="eh-personal-box__img">
       <n-link to>
-        <img :src="image" :alt="name" class="d-block w-100" />
+        <img v-lazy="image" :alt="name" class="d-block w-100" />
 
         <div v-if="livestream" class="eh-personal-box__livestream">
           <IconCameraOnline class="icon" />Trực tiếp
@@ -20,7 +20,10 @@
       </h3>
 
       <div class="eh-personal-box__teacher">
-        <n-link :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`" class="profile-link" target="_blank">
+        <n-link
+          :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`"
+          class="profile-link"
+        >
           <app-avatar :src="get(teacher, 'avatar.low', '')" :size="39" />
           <span class="eh-personal-box__teacher-name ml-3">{{ get(teacher, 'name', '') }}</span>
         </n-link>
@@ -36,8 +39,19 @@
       <div class="eh-personal-box__bottom">
         <app-button class="mr-4" nuxt :to="to">Xem chi tiết</app-button>
         <div>
-          <s>519.000đ</s>
-          <b class="text-primary heading-3 ml-3">219.000đ</b>
+          <!-- <s>519.000đ</s>
+          <b class="text-primary heading-3 ml-3">219.000đ</b>-->
+
+          <b v-if="free" class="text-primary heading-3">Miễn phí</b>
+
+          <template v-else>
+            <s class="heading-4" v-if="discount">
+              {{
+              originalPrice | numeralFormat
+              }}đ
+            </s>
+            <b class="text-primary heading-3 ml-2">{{ price | numeralFormat }}đ</b>
+          </template>
         </div>
       </div>
     </div>
@@ -52,7 +66,7 @@ export default {
   components: {
     IconCameraOnline
   },
-  
+
   props: {
     to: {
       type: String,

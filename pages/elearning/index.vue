@@ -47,7 +47,7 @@
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium mb-3">Dành cho bạn</h2>
 
-        <app-carousel :options="{ slidesPerView: 1 }">
+        <app-carousel :options="{ slidesPerView: 1, preventClicksPropagation: false }">
           <template slot="default" slot-scope="{ classes }">
             <div
               v-for="item in forYou && forYou.content || []"

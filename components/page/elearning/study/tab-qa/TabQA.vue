@@ -5,24 +5,34 @@
     <div class="d-flex align-items-center">
       <h5>151 Bình luận</h5>
       <div class="ml-auto">
-        <app-search class="mb-0 mr-4" placeholder="Tìm kiếm bình luận" size="sm" />
-        <app-select placeholder="Sắp xếp theo" size="sm" :options="sortOpts"></app-select>
+        <app-search
+          class="mb-0 mr-4"
+          placeholder="Tìm kiếm bình luận"
+          size="sm"
+        />
+        <app-select
+          placeholder="Sắp xếp theo"
+          size="sm"
+          :options="sortOpts"
+        ></app-select>
       </div>
     </div>
 
     <div class="e-study-tab-qa__comment-list">
       <TabQACommentItem>
-        <TabQACommentItem :level="2" />
-        <a href class="e-study-tab-qa__more e-study-tab-qa__more--child">Xem thêm bình luận</a>
-        <TabQACommentEditor class="mt-4" />
+        <!-- <TabQACommentItem :level="2" />
+        <a href class="e-study-tab-qa__more e-study-tab-qa__more--child"
+          >Xem thêm bình luận</a
+        >
+        <TabQACommentEditor class="mt-4" /> -->
       </TabQACommentItem>
 
-      <TabQACommentItem>
+      <!-- <TabQACommentItem>
         <TabQACommentItem :level="2" />
         <TabQACommentItem :level="2" />
         <TabQACommentItem :level="2" />
         <TabQACommentItem :level="2" />
-      </TabQACommentItem>
+      </TabQACommentItem> -->
 
       <div class="text-center">
         <a href class="e-study-tab-qa__more">Xem thêm bình luận</a>
@@ -36,13 +46,30 @@ import IconSearch from "~/assets/svg/v2-icons/search_24px.svg?inline";
 import TabQAEditor from "~/components/page/elearning/study/tab-qa/TabQAEditor.vue";
 import TabQACommentItem from "~/components/page/elearning/study/tab-qa/TabQACommentItem.vue";
 import TabQACommentEditor from "~/components/page/elearning/study/tab-qa/TabQACommentEditor.vue";
+import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconSearch,
     TabQAEditor,
     TabQACommentItem,
-    TabQACommentEditor
+    TabQACommentEditor,
+  },
+
+  mounted() {
+    const options = {
+      params: {
+        elearning_id: get(this, "$route.params.id", ""),
+      },
+    };
+    this.$store.dispatch(`elearning/study/questions/getListQuestion`, options);
+  },
+
+  computed: {
+    ...mapState("elearning/study/questions", {
+      questions: "questions",
+    }),
   },
 
   data() {
@@ -50,19 +77,19 @@ export default {
       sortOpts: [
         {
           value: 0,
-          text: "Thích nhiều nhất"
+          text: "Thích nhiều nhất",
         },
         {
           value: 1,
-          text: "Mới nhất"
+          text: "Mới nhất",
         },
         {
           value: 2,
-          text: "Cũ nhất"
-        }
-      ]
+          text: "Cũ nhất",
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 

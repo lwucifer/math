@@ -20,6 +20,7 @@
       v-else-if="status === EXERCISE_STATUS.FAILED"
       color="secondary"
       size="sm"
+      :pointer="canDoExercise"
       @click.prevent="handleDoExercise"
       >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
     >
@@ -97,6 +98,10 @@ export default {
         "e-exercise-list-item--failed": this.status === EXERCISE_STATUS.FAILED,
         "e-exercise-list-item--passed": this.status === EXERCISE_STATUS.PASSED
       };
+    },
+
+    canDoExercise() {
+      return this.works < this.reworks;
     }
   },
 
@@ -112,6 +117,8 @@ export default {
 
     handleDoExercise() {
       console.log("[handleDoExercise]");
+
+      if(!this.canDoExercise) return;
 
       // set current exercise
       this.setStudyExerciseCurrent({
