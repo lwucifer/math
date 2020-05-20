@@ -17,6 +17,21 @@
             <CourseItem2
               :item="item"
             />
+            <!--<CourseItem2-->
+              <!--:item="items"-->
+              <!--:to="`/elearning/${item.elearning_id}`"-->
+              <!--:image="get(item, 'avatar.medium', '')"-->
+              <!--:livestream="item.is_streaming"-->
+              <!--:name="item.name"-->
+              <!--:teacher="item.teacher"-->
+              <!--:averageRate="get(item, 'voting.rate', 0)"-->
+              <!--:totalReview="get(item, 'voting.votes', 0)"-->
+              <!--:price="item.price"-->
+              <!--:originalPrice="item.original_price"-->
+              <!--:free="!item.price"-->
+              <!--:discount="item.discount"-->
+              <!--:online-class="item.olclass_existed"-->
+            <!--/>-->
           </div>
         </template>
       </app-carousel>

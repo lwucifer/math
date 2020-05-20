@@ -8,7 +8,10 @@
         <div class="elearning-history__main py-0" style="background: transparent;">
           <block-section title="Doanh thu">
             <template v-slot:content>
-              <sub-block-section class="mb-0" :title-cls="{'border-0': true }">
+              <sub-block-section
+                :title-cls="{'border-0': true }"
+                class="mb-0"
+              >
                 <template v-slot:title>
                   <div class="row">
                     <div class="col-md-6 d-flex align-items-center">
@@ -30,8 +33,8 @@
                           color="transparent"
                           :disabled="!token"
                           :to="token ? '/' + token.id + '/info/withdrawals' : '/'"
-                          style="color: #656565; font-weight: normal;"
-                         
+                          style="color: #656565; font-weight: normal; box-shadow: none;"
+                          class="px-0"
                         >
                           <slot name="icon">
                             <IconHistory24px class="icon--btn icon--btn--pre" />
@@ -93,16 +96,19 @@
 
           <block-section title="Chi tiết doanh thu">
             <template v-slot:content>
-              <sub-block-section :title-cls="{'border-0': true }">
+              <sub-block-section
+                :title-cls="{ 'border-0': true }"
+                :content-cls="{ 'px-0': true }"
+              >
                 <template v-slot:title>
                   <div class="row">
                     <div class="col-md-9 mb-3">
                       <filter-form>
-                        <div class="mb-3 w-100">
+                        <div class="mb-2">
                           <span class="filter-form__title">Chọn khoảng thời gian</span>
                         </div>
 
-                        <div class="d-flex">
+                        <div class="d-flex filter-form__input-wrapper">
                           <div class="filter-form__item" style="min-width: 25rem;">
                             <app-date-picker
                               class="w-100"
