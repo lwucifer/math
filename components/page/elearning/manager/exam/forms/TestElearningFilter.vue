@@ -89,7 +89,7 @@
           },
           {
             value: ELEARNING_STATUSES.PENDING,
-            text: 'Chưa chấm điểm'
+            text: 'Chưa chấm'
           },
         ],
         initStatus: true
