@@ -31,7 +31,7 @@
 
           <span v-else class="d-inline-flex align-items-center">
             <IconEventNote class="icon body-1 mr-1 text-primary" />
-            <span class="mw-4">{{ durationTimes }}</span>
+            <span class="mw-4">01:00</span>
           </span>
         </div>
 
