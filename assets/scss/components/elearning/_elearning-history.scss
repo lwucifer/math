@@ -166,3 +166,32 @@
 	  width: 100% !important;
 	}
   }
+  .wrap-table{
+	.app-table{
+	  position: relative;
+		thead{
+			th{
+				font-weight: normal;
+				color: #999999;
+				border-top: none;
+			}
+		}
+		td{
+			border-bottom: none;
+			color: #222222;
+		}
+		.long-text__table{
+			max-width: 200px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+		}
+		.app-pagination{
+			position: absolute;
+			bottom: -76px;
+			right: 0;
+
+		}
+	}
+}
