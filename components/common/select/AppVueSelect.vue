@@ -24,7 +24,7 @@
       <slot name="list-footer"></slot>
     </template>
     <template v-slot:no-options>
-      <slot name="no-options">Không có dữ liệu</slot>
+      <slot name="no-options">No option</slot>
     </template>
   </v-select>
 </template>
