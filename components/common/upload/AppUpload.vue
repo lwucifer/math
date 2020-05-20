@@ -80,7 +80,7 @@ export default {
     },
 
     showIcon: {
-      type: String,
+      type: Boolean,
       default: true
     }
   },
