@@ -18,34 +18,33 @@
         </app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="clickSubmit">
-          Lọc kết quả
-        </filter-button>
+        <filter-button
+          @click="clickSubmit"
+          :color="filterSelect ? 'primary': 'white'"
+        ></filter-button>
       </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="rates"
+          :options="rateOpts"
           :reduce="item => item.value"
           v-model="filters.rate"
           label="text"
           placeholder="Tỷ lệ hoàn thành"
-          searchable
-          clearable
           @input="handleSelectRate"
+          :all-opt="allOpt"
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 13rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="types"
+          :options="typeOpts"
           :reduce="item => item.value"
           v-model="filters.type"
           label="text"
           placeholder="Thể loại"
-          searchable
-          clearable
           @input="handleSelectType"
+          :all-opt="allOpt"
         />
       </div>
     </div>
@@ -62,6 +61,10 @@
     },
     data() {
       return {
+        allOpt: {
+          value: null,
+          text: 'Tất cả'
+        },
         filterSelect:false,
         filters: {
           type: null,
@@ -102,6 +105,14 @@
           this.$emit("changedFilter", val)
         },
         deep: true
+      }
+    },
+    computed: {
+      typeOpts() {
+        return [this.allOpt, ...this.types]
+      },
+      rateOpts() {
+        return [this.allOpt, ...this.rates]
       }
     },
     methods: {
