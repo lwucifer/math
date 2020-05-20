@@ -38,15 +38,15 @@
             placement="top"
             popover-class="tooltip--rate"
           >
-            <div class="nowrap">
+            <div class="nowrap rate-result-wrapper">
               <span class="status-item status-item--success d-inline-block">
-                {{ get(row, 'passed_percent', 0) | numeralFormat('0.0') }}%
+                {{ get(row, 'passed_percent', 0) | numeralFormat('0') }}%
               </span>
                   <span class="status-item status-item--fail d-inline-block">
-                {{ get(row, 'failed_percent', 0) | numeralFormat('0.0') }}%
+                {{ get(row, 'failed_percent', 0) | numeralFormat('0') }}%
               </span>
                   <span class="status-item status-item--pending d-inline-block">
-                {{ get(row, 'pending_percent', 0) | numeralFormat('0.0') }}%
+                {{ 100 - numeralFormat(get(row, 'passed_percent', 0), '0') - numeralFormat(get(row, 'failed_percent', 0), '0') }}%
               </span>
             </div>
     
@@ -80,6 +80,7 @@
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
   import { ELEARNING_TYPES } from "~/utils/constants"
+  import { numeralFormat } from "~/plugins/filters";
 
   export default {
     components: {
@@ -164,6 +165,7 @@
       onPageChange(e) {
         this.$emit('changedPagination', e)
       },
+      numeralFormat,
       get
     },
   }
