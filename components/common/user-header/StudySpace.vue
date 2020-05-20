@@ -17,7 +17,7 @@
               <n-link :to="'/elearning/'+ elearning.elearning_id">
                 <div>
                   <div class="d-flex">
-                    <img :src="elearning.avatar.low" class="avatar-elearning__study" />
+                    <v-lazy :src="elearning.avatar.low" class="avatar-elearning__study" />
                     <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
                   </div>
                   <div class="proccess-bar-study-border">

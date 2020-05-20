@@ -3,7 +3,7 @@
     <div class="school-item__thumnail">
       <n-link :to="'/school/' + school.id">
         <img
-          :src="get(school, 'cover.high', '')"
+          v-lazy="get(school, 'cover.high', '')"
           :alt="get(school, 'name', '')"
         />
       </n-link>
