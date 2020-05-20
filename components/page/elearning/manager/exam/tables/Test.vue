@@ -24,13 +24,13 @@
           >
             <div class="nowrap">
               <span class="status-item status-item--success d-inline-block">
-                {{get(row, 'passed_percent', 0)}}%
+                {{parseInt(get(row, 'passed_percent', 0))}}%
               </span>
               <span class="status-item status-item--fail d-inline-block">
-                {{get(row, 'failed_percent', 0)}}%
+                {{parseInt(get(row, 'failed_percent', 0))}}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{ 100 - numeralFormat(get(row, 'passed_percent', 0), '0') - numeralFormat(get(row, 'failed_percent', 0), '0') }}%
+                {{100 - parseInt(get(row, 'passed_percent', 0)) - parseInt(get(row, 'failed_percent', 0))}}%
               </span>
             </div>
             

@@ -4,7 +4,7 @@
     <div class="e-exercise-list-item__desc mb-3">
       <span class="text-primary">{{ type | getExerciseTypeText }}</span>
       <app-divider class="e-exercise-list-item__divider" direction="vertical" />
-      <span class="text-gray">Thời gian làm bài:</span>
+      <span class="text-gray">Thời gian:</span>
       <b class="text-dark">{{ getDurationText(duration) }}</b>
     </div>
 
@@ -21,7 +21,7 @@
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
-      @click.prevent="canDoExercise && handleDoExercise"
+      @click.prevent="handleDoExercise"
       >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
     >
 
@@ -117,6 +117,8 @@ export default {
 
     handleDoExercise() {
       console.log("[handleDoExercise]");
+
+      if(!this.canDoExercise) return;
 
       // set current exercise
       this.setStudyExerciseCurrent({

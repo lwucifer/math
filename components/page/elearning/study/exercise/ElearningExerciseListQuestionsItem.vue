@@ -33,7 +33,7 @@
       v-if="question.type === EXERCISE_TYPES.CHOICE"
       class="e-exercise-list-questions__answer e-exercise-list-questions__answer--choice"
     >
-      <span>
+      <span v-if="isAnswer">
         <!-- IF USER'S ANSWER IS TRUE -->
         <span class="d-inline-flex align-items-center text-primary" v-if="question.isUserTrue">
           Câu trả lời: {{ student_answer_index | getQuestionNoText }}.

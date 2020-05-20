@@ -23,6 +23,16 @@
           >{{ statusCancel | transactionStatus2Txt }}</span>
         </td>
       </template>
+      <template v-slot:cell(desc)="{row}">
+        <td>
+          {{ row.desc | truncStrFilter(30) }}
+        </td>
+      </template>
+      <template v-slot:cell(cost)="{row}">
+        <td>
+          {{ row.cost | toThousandFilter }} đ
+        </td>
+      </template>
     </app-table>
     <app-modal-notify
       v-if="notify.isShowNotify"
@@ -75,32 +85,27 @@ export default {
         {
           name: "code",
           text: "Mã đơn hàng",
-          sort: true
         },
         {
           name: "timestamp",
-          text: "Ngày mua",
+          text: "Thời gian",
           sort: true
         },
         {
           name: "desc",
           text: "Sản phẩm",
-          sort: true
         },
         {
           name: "cost",
           text: "Tổng tiền",
-          sort: true
         },
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
         },
         {
           name: "method",
           text: "Phương thức TT",
-          sort: true
         }
       ],
       statusPending: TRANSACTION_STATUSES.PENDING,
