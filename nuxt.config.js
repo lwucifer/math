@@ -57,36 +57,37 @@ module.exports = {
     host: "0.0.0.0",
   },
 
-  /*
-   ** modules
-   */
-  plugins: [
-    { src: "@/plugins/axios.js", ssr: true },
-    { src: "@/plugins/click-outside.js", ssr: false },
-    { src: "@/plugins/global.js" },
-    { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
-    { src: "@/plugins/textarea-autosize.js", ssr: false },
-    { src: "@/plugins/vuelidate.js", ssr: true },
-    { src: "@/plugins/vue-moment.js" },
-    { src: "@/plugins/vue-select.js" },
-    { src: "@/plugins/filters.js" },
-    { src: "@/plugins/vue-fragment.js" },
-    { src: "@/plugins/vue-toast.js", ssr: false },
-    { src: "@/plugins/vue-infinite-loading.js", ssr: false },
-    { src: "~/plugins/vue-cropper", ssr: false },
-    { src: "@/plugins/sticky.js", ssr: false },
-    { src: "@/plugins/tooltip.js", ssr: false },
-    { src: "@/plugins/vue-input-number.js" },
-    { src: "@/plugins/streaming.js", ssr: false },
-    { src: "@/plugins/v-scroll-lock.js", ssr: false },
-    { src: "@/plugins/scrollTo.js", ssr: false },
-  ],
-  /**
-   * Global middleware
-   */
-  router: {
-    middleware: ["check-auth"],
-  },
+    /*
+     ** modules
+     */
+    plugins: [
+        { src: "@/plugins/axios.js", ssr: true },
+        { src: "@/plugins/click-outside.js", ssr: false },
+        { src: "@/plugins/global.js" },
+        { src: "@/plugins/vue-awesome-swiper.js", ssr: false },
+        { src: "@/plugins/textarea-autosize.js", ssr: false },
+        { src: "@/plugins/vuelidate.js", ssr: true },
+        { src: "@/plugins/vue-moment.js" },
+        { src: "@/plugins/vue-select.js" },
+        { src: "@/plugins/filters.js" },
+        { src: "@/plugins/vue-fragment.js" },
+        { src: "@/plugins/vue-toast.js", ssr: false },
+        { src: "@/plugins/vue-infinite-loading.js", ssr: false },
+        { src: '~/plugins/vue-cropper', ssr: false },
+        { src: "@/plugins/sticky.js", ssr: false },
+        { src: "@/plugins/tooltip.js", ssr: false },
+        { src: "@/plugins/vue-input-number.js" },
+        { src: '@/plugins/streaming.js', ssr: false },
+        { src: '@/plugins/v-scroll-lock.js', ssr: false },
+        { src: '@/plugins/scrollTo.js', ssr: false },
+        '~/plugins/vue-lazyload',
+    ],
+    /**
+     * Global middleware
+     */
+    router: {
+        middleware: ["check-auth"]
+    },
 
   /*
    ** modules
