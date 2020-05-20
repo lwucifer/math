@@ -21,13 +21,13 @@
         <div class="right">
           <div>
             <strong class="color-primary">{{
-              get(teacher, "elearning_total", 0)
+              numeral(get(teacher, "elearning_total", 0)).format()
             }}</strong>
             Bài giảng
           </div>
           <div>
             <strong class="color-primary">{{
-              get(teacher, "participant_total", 0)
+              numeral(get(teacher, "participant_total", 0)).format()
             }}</strong>
             Khóa học
           </div>
@@ -57,13 +57,13 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
+import numeral from "numeral";
 
 export default {
   components: {
     IconStar,
     IconStarO,
   },
-
 
   computed: {
     ...mapState("elearning/detail", {
@@ -73,6 +73,7 @@ export default {
 
   methods: {
     get,
+    numeral,
   },
 };
 </script>
