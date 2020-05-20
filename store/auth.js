@@ -229,6 +229,11 @@ const mutations = {
     [mutationTypes.AUTH.SAVE_PHONE_STATE](state, _phoneSave) {
         state.phoneSave = _phoneSave;
     },
+    [mutationTypes.AUTH.SET_TOKEN_AVATAR](state, avatar) {
+        const renewToken = {...state.token, avatar };
+        state.token = renewToken;
+        setToken(renewToken);
+    },
 };
 
 export default {
