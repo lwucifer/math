@@ -28,13 +28,14 @@
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 11.5rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="rates"
+          :options="optsRate"
           v-model="filters.rate"
           :reduce="item => item.value"
           label="text"
           placeholder="Đánh giá"
-          searchable
+          :searchable="false"
           @input="handleChangedRate"
+          :all-opt="{ value: null, text: 'Tất cả'}"
         >
         </app-vue-select>
       </div>
@@ -51,7 +52,7 @@
       <app-select-voted-elearnings
         v-if="filterSelect"
         class="filter-form__item"
-        style="min-width: 18.5rem"
+        style="min-width: 18.5rem; max-width: 20rem;"
         @input="handleChangedElearning"
         v-model="filters.elearning_id"
       />
@@ -62,14 +63,15 @@
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
   import { truncStrFilter } from "~/plugins/filters.js"
-  
+  import { addAllOptionSelect } from "~/utils/common";
+
   export default {
     components: {
       IconFilter,
     },
     data() {
       return {
-        filterSelect:false,
+        filterSelect:true,
         filters: {
           has_cmt: null,
           rate: null,
@@ -112,6 +114,9 @@
       }
     },
     computed: {
+      optsRate() {
+        return [{ value: null, text: 'Tất cả'},...this.rates]
+      }
     },
     methods: {
       submit() {

@@ -13,6 +13,9 @@ vSelect.props.components.default = () => ({
     },
 });
 
+//Set indicator icon
+vSelect.props.clearable.default = () => false;
+
 if (process.BROWSER_BUILD) {
   Vue.use(vSelect)
 }

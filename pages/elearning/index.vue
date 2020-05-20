@@ -123,11 +123,7 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Bài giảng mới nhất</h2>
-        <n-link
-          slot="title-right"
-          to
-          class="align-self-end d-flex align-items-center text-decoration-none"
-        >
+        <n-link slot="title-right" to class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
@@ -162,11 +158,7 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Khóa học mới nhất</h2>
-        <n-link
-          slot="title-right"
-          to
-          class="align-self-end d-flex align-items-center text-decoration-none"
-        >
+        <n-link slot="title-right" to class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
@@ -204,7 +196,11 @@
 
         <app-carousel :options="{ slidesPerView: 3, spaceBetween: 35 }">
           <template slot="default" slot-scope="{ classes }">
-            <div v-for="item in highlightTeachers && highlightTeachers.content || []" :key="item.teacher_id" :class="classes">
+            <div
+              v-for="item in highlightTeachers && highlightTeachers.content || []"
+              :key="item.teacher_id"
+              :class="classes"
+            >
               <ElearningHomeTeacherCard
                 :to="`/public/profile/teacher?user_id=${get(item, 'teacher_id', '')}`"
                 :image="get(item, 'avatar.medium', '')"
@@ -231,12 +227,36 @@ import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
 import { VclList } from "vue-content-loading";
 
-import IconSubjectMath from "~/assets/svg/icons/subject-math.svg?inline";
-import IconSubjectPhysical from "~/assets/svg/icons/subject-physical.svg?inline";
-import IconSubjectChemistry from "~/assets/svg/icons/subject-chemistry.svg?inline";
-import IconSubjectForeignLanguage from "~/assets/svg/icons/subject-foreign-language.svg?inline";
-import IconSubjectLiterature from "~/assets/svg/icons/subject-literature.svg?inline";
-import IconDefaultSubject from '~/assets/svg/icons/default-subject.svg?inline';
+const IconDefaultSubject = () =>
+  import("~/assets/svg/icons/default-subject.svg?inline");
+const IconSubjectMath = () =>
+  import("~/assets/svg/icons/subject-math.svg?inline");
+const IconSubjectPhysical = () =>
+  import("~/assets/svg/icons/subject-physical.svg?inline");
+const IconSubjectChemistry = () =>
+  import("~/assets/svg/icons/subject-chemistry.svg?inline");
+const IconSubjectForeignLanguage = () =>
+  import("~/assets/svg/icons/subject-foreign-language.svg?inline");
+const IconSubjectLiterature = () =>
+  import("~/assets/svg/icons/subject-literature.svg?inline");
+const IconSubjectBiology = () =>
+  import("~/assets/svg/icons/subject-biology.svg?inline");
+const IconSubjectGeography = () =>
+  import("~/assets/svg/icons/subject-geography.svg?inline");
+const IconSubjectHistory = () =>
+  import("~/assets/svg/icons/subject-history.svg?inline");
+const IconSubjectInformatics = () =>
+  import("~/assets/svg/icons/subject-informatics.svg?inline");
+const IconSubjectTechnology = () =>
+  import("~/assets/svg/icons/subject-technology.svg?inline");
+const IconSubjectFineArt = () =>
+  import("~/assets/svg/icons/subject-fine-art.svg?inline");
+const IconSubjectCivicEducation = () =>
+  import("~/assets/svg/icons/subject-civic-education.svg?inline");
+const IconSubjectMusic = () =>
+  import("~/assets/svg/icons/subject-music.svg?inline");
+const IconSubjectScience = () =>
+  import("~/assets/svg/icons/subject-science.svg?inline");
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
 import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
@@ -377,6 +397,36 @@ export default {
           break;
         case SUBJECT_CODE.LITERATURE:
           return IconSubjectLiterature;
+          break;
+        case SUBJECT_CODE.BIOLOGY:
+          return IconSubjectBiology;
+          break;
+        case SUBJECT_CODE.GEOGPRAPHY:
+          return IconSubjectGeography;
+          break;
+        case SUBJECT_CODE.HISTORY:
+          return IconSubjectHistory;
+          break;
+        case SUBJECT_CODE.INFORMATICS:
+          return IconSubjectInformatics;
+          break;
+        case SUBJECT_CODE.TECHNOLOGY:
+          return IconSubjectTechnology;
+          break;
+        case SUBJECT_CODE.FINE_ART:
+          return IconSubjectFineArt;
+          break;
+        case SUBJECT_CODE.CIVIC_EDUCATION:
+          return IconSubjectCivicEducation;
+          break;
+        case SUBJECT_CODE.MORAL:
+          return IconSubjectCivicEducation;
+          break;
+        case SUBJECT_CODE.MUSIC:
+          return IconSubjectMusic;
+          break;
+        case SUBJECT_CODE.SCIENCE:
+          return IconSubjectScience;
           break;
         default:
           return IconDefaultSubject;

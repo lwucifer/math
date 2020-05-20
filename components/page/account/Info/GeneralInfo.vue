@@ -211,7 +211,11 @@ export default {
         this.phone = get(this, "profileList.phone", "");
         this.email = get(this, "profileList.email", "");
         this.address = get(this, "profileList.address", "");
-        this.sex = get(this, "profileList.sex", "") === "MALE" ? "Nam" : "Nữ";
+        this.sex = get(this, "profileList.sex", "")
+          ? get(this, "profileList.sex", "") === "MALE"
+            ? "Nam"
+            : "Nữ"
+          : "";
         this.birthday = getDateBirthDay(get(this, "profileList.birthday", ""));
         this.accountLink.list = get(this, "linkList.data", {});
         this.profileInfo = get(this, "profileList", {});

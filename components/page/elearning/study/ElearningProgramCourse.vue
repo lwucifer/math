@@ -6,7 +6,7 @@
           Chương {{ index + 1 }}:
           <span class="text-base">{{ get(program, "chapter", "") }}</span>
         </h5>
-        <span class="caption">{{ lessionCompleted }} | 3 giờ 55 phút</span>
+        <span class="caption">{{ lessionCompleted }} | {{ get(program, "duration", 0) | formatHour }}</span>
       </div>
       <span
         v-if="get(program, 'lessons', []).length"

@@ -22,7 +22,7 @@
           </p>
           <p class="mb-3">
             Giờ bắt đầu:
-            <b>{{formatAMPM(get(data,'extra_info.start_time', ''))}}</b>
+            <b>{{getLocalTimeHH_MM_A(get(data,'extra_info.start_time', ''))}}</b>
           </p>
           <p>
             Thời lượng:
@@ -63,7 +63,8 @@
                   <a class="bold text-decoration-none"
                     :href="item.start_url"
                     target="blank"
-                  >{{formatAMPM(item.start_time, 0)}} - {{formatAMPM(item.start_time, item.duration)}}</a>
+                  >{{getLocalTimeHH_MM_A(item.start_time, 0)}} - 
+                  {{getLocalEndTime(item.start_time, item.duration, 'minutes')}}</a>
                 </p>
               </div>
             </div>
@@ -87,6 +88,10 @@
 </template>
 
 <script>
+import {
+  getLocalEndTime,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -115,6 +120,9 @@ export default {
   },
 
   methods: {
+    getLocalEndTime,
+    getLocalTimeHH_MM_A,
+
     close(invite) {
       this.$emit("close", invite);
     },

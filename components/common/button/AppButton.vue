@@ -26,7 +26,11 @@ export default {
     exact: {
       type: Boolean // Vue-router prop. Exactly match the link. Without this, '/' will match every route.
     },
-    loading: Boolean
+    loading: Boolean,
+    pointer: {
+      type: Boolean,
+      default: true,
+    }
   },
 
   computed: {
@@ -78,7 +82,10 @@ export default {
         "btn--normal": this.normal,
 
         // State
-        "btn--loading": this.loading
+        "btn--loading": this.loading,
+
+        // behavior
+        "btn--text": !this.pointer
       };
 
       return {
