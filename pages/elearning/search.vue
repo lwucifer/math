@@ -3,16 +3,14 @@
     <h1 class="elearning-search__heading heading-3">
       <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
       <span class="body-2 font-weight-normal">
-        (<b>{{ totalSummary }}</b> {{ lessonType }})
+        (
+        <b>{{ totalSummary }}</b>
+        {{ lessonType }})
       </span>
     </h1>
 
     <div class="elearning-search__toolbar">
-      <app-button
-        :color="isFilter ? 'primary' : 'default'"
-        size="sm"
-        @click="isFilter = !isFilter"
-      >
+      <app-button :color="isFilter ? 'primary' : 'default'" size="sm" @click="isFilter = !isFilter">
         <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
       </app-button>
 
@@ -59,8 +57,7 @@
         :href="`#${item.tab}`"
         :class="['elearning-search__tab', tab === item.tab && 'active']"
         @click.prevent="handleChangeTab(item.tab)"
-        >{{ item.text }}</a
-      >
+      >{{ item.text }}</a>
     </div>
 
     <div v-if="pageLoading" class="container mt-6">
@@ -81,24 +78,11 @@
         :id="item.tab"
       >
         <div class="row">
-          <div
-            class="col-md-3 elearning-search__col"
-            v-for="item in lessons"
-            :key="item.id"
-          >
+          <div class="col-md-3 elearning-search__col" v-for="item in lessons" :key="item.id">
             <CourseItem2
               class="my-0"
-              :to="`/elearning/${item.id}`"
-              :image="get(item, 'avatar.medium', '')"
-              :livestream="item && item.livestream && item.livestream.time"
-              :name="item.name"
-              :teacher="item.teacher"
-              :averageRate="get(item, 'rates.average_rate', 0)"
-              :totalReview="get(item, 'rates.total_review', 0)"
-              :price="get(item, 'price.price')"
-              :originalPrice="get(item, 'price.original_price')"
-              :free="item.free"
-              :discount="calcDiscount(item)"
+              :item="item"
+              :size="'sm'"
             />
           </div>
         </div>
@@ -353,6 +337,11 @@ export default {
       const currentPrice = price.price || 0;
       const originPrice = price.original_price || 0;
       return (currentPrice / originPrice) * 100;
+    },
+
+    isDiscount(elearning) {
+      const { price = {} } = elearning;
+      return price.price != price.original_price;
     }
   }
 };

@@ -33,7 +33,7 @@
                 'score--empty': (get(row, 'status') == SUBMISSION_RESULTS.NO_SCORE),
               }"
             >
-            {{ get(row, 'mark', 'Chưa chấm điểm') }}
+            {{ get(row, 'mark', 'Chưa chấm') }}
             </span>
             <template slot="popover">
               {{ get(row, 'status')  | submissionStatus }}
@@ -97,7 +97,7 @@
     filters: {
       submissionStatus: function(val) {
         if (val == SUBMISSION_RESULTS.NO_SCORE) {
-          return 'Chưa chấm điểm'
+          return 'Chưa chấm'
         } else if (val == SUBMISSION_RESULTS.PASS) {
           return 'Đạt'
         } else if (val == SUBMISSION_RESULTS.FAIL) {

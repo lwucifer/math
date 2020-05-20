@@ -1,12 +1,16 @@
 <template>
   <div class="the-header__user">
-    <app-avatar class="the-header__user-avt" src="https://picsum.photos/40/40" :size="40"></app-avatar>
+    <app-avatar
+      class="the-header__user-avt"
+      :src="$store.state.auth.token.avatar && $store.state.auth.token.avatar.low || 'https://picsum.photos/40/40'"
+      :size="40"
+    ></app-avatar>
     <div class="the-header__user-menu">
       <!--      <div style="height: 2rem;"></div>-->
       <ul>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.ELEARNING)">
           <n-link to="/elearning/manager">
-            <IconComputer24px  class="fill-gray"/>
+            <IconComputer24px class="fill-gray" />
             <span>Quản lý E-Learning</span>
           </n-link>
         </li>
@@ -18,13 +22,13 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.ACCOUNT_INFO)">
           <n-link :to="getAccountInfoLink">
-            <IconAccountCircle24px  class="fill-gray"/>
+            <IconAccountCircle24px class="fill-gray" />
             <span>Thông tin tài khoản</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.REVENUE)">
           <n-link :to="getRevenueLink">
-            <IconMonetizationOn24px  class="fill-gray"/>
+            <IconMonetizationOn24px class="fill-gray"/>
             <span>Thống kê doanh thu</span>
           </n-link>
         </li>
@@ -36,19 +40,19 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.NOTIFICATION)">
           <n-link :to="getNotificationLink">
-            <IconNotifications24px  class="fill-gray"/>
+            <IconNotifications24px class="fill-gray" />
             <span>Thông báo</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SETTINGS)">
           <n-link :to="getSettingLink">
-            <IconSettings24px  class="fill-gray"/>
+            <IconSettings24px class="fill-gray" />
             <span>Cài đặt chung</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SUPPORT)">
           <n-link :to="getSupportLink">
-            <IconHeadsetMic24px class="fill-gray"/>
+            <IconHeadsetMic24px class="fill-gray" />
             <span>Trợ giúp</span>
           </n-link>
         </li>
@@ -76,16 +80,16 @@ import { getToken, getDeviceId } from "~/utils/auth";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
-import IconAccountCircle24px from '~/assets/svg/v2-icons/account_circle_24px.svg?inline';
-import IconNotifications24px from '~/assets/svg/v2-icons/notifications_24px.svg?inline';
+import IconAccountCircle24px from "~/assets/svg/v2-icons/account_circle_24px.svg?inline";
+import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
 import IconSchool from "~/assets/svg/icons/school.svg?inline";
-import IconAttachMoney24px from '~/assets/svg/v2-icons/attach_money_24px.svg?inline';
-import IconMonetizationOn24px from '~/assets/svg/v2-icons/monetization_on_24px.svg?inline';
-import IconHeadsetMic24px from '~/assets/svg/v2-icons/headset_mic_24px.svg?inline';
-import IconPowerSettingsNew24px from '~/assets/svg/v2-icons/power_settings_new_24px.svg?inline';
-import IconComputer24px from '~/assets/svg/v2-icons/computer_24px.svg?inline';
-import IconSupervisorAccount24px from '~/assets/svg/v2-icons/supervisor_account_24px.svg?inline';
-import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
+import IconAttachMoney24px from "~/assets/svg/v2-icons/attach_money_24px.svg?inline";
+import IconMonetizationOn24px from "~/assets/svg/v2-icons/monetization_on_24px.svg?inline";
+import IconHeadsetMic24px from "~/assets/svg/v2-icons/headset_mic_24px.svg?inline";
+import IconPowerSettingsNew24px from "~/assets/svg/v2-icons/power_settings_new_24px.svg?inline";
+import IconComputer24px from "~/assets/svg/v2-icons/computer_24px.svg?inline";
+import IconSupervisorAccount24px from "~/assets/svg/v2-icons/supervisor_account_24px.svg?inline";
+import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
 import { mapMutations, mapActions } from "vuex";
 
 export default {

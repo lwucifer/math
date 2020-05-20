@@ -12,7 +12,6 @@
         class="app-vue-select w-100"
         :options="list"
         searchable
-        clearable
         append-to-body
         v-model="selectedClass"
         :reduce="item => item.id"
@@ -21,6 +20,7 @@
         @input="onChange"
         @open="onOpen"
         @close="onClose"
+        :all-opt="allOpt"
       >
         <template slot="list-footer" v-if="hasMoreClasses">
           <li ref="load" class="loader text-center">
@@ -77,6 +77,10 @@
     
     data() {
       return {
+        allOpt: {
+          id: null,
+          name: 'Tất cả'
+        },
         observer: null,
         params: {
           page: 1,
@@ -128,7 +132,7 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, { params }
           )
-          this.list = this.get(this.detailInfo, 'data.content', [])
+          this.list = [this.allOpt, ...this.get(this.detailInfo, 'data.content', [])]
         } catch (e) {
           console.log('Get teaching classes ', e)
         } finally {

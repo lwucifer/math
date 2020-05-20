@@ -2,7 +2,7 @@
   <div class="wrap__elearning-item">
     <div class="img__elearning-item">
       <img
-        :src="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
+        v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
       />
     </div>
     <div class="wrap-content_Elearning">
