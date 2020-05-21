@@ -38,12 +38,23 @@
       @pagechange="onPageChange"
       v-if="pagination.totalPages > 1"
     />
+    <div class="col-md-3">
+      <CourseItem2>
+        <template v-slot:mycoursefavourite>
+          <MenuDropDown/>
+        </template>
+    </CourseItem2>
+    <ShareElearningModal v-if="false"/> <!-- ModalShare -->
+    </div>
   </div>
 </template>
 
 <script>
 import ElearningList from "~/components/page/elearning/mycourses/ElearningList";
 import ElearningItem from "~/components/page/elearning/mycourses/ElearningItem";
+import CourseItem2 from "~/components/page/course/CourseItem2";
+import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
+import ShareElearningModal from "~/components/page/elearning/mycourses/ShareElearningModal";
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -54,7 +65,10 @@ export default {
   middleware: ["authenticated"],
   components: {
     ElearningList,
-    ElearningItem
+    ElearningItem,
+    CourseItem2,
+    MenuDropDown,
+    ShareElearningModal
   },
   data() {
     return {

@@ -151,6 +151,10 @@ export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
     SET_HIGHLIGHT_TEACHERS: "setElearningPublicHighlightTeachers",
 };
 
+export const ELEARNING_PUBLIC_ELEARNING = {
+    SET_PUBLIC_ELEARNING: "setElearningPublicElearing",
+};
+
 export const ELEARNING = {
     SET_ELEARNING_PUBLIC_INFO: "setElearningInfo",
     SET_ELEARNING_PROGRAM: "setElearningProgram",
@@ -187,6 +191,14 @@ export const TEACHING_OLCLASS_LESSON_SESSIONS = {
 export const TEACHING_OLCLASS_LESSONS = {
     SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
     SET_TEACHING_OLCLASS_LESSON_INFO: "setTeachingOlclassLessonInfo",
+};
+
+export const TEACHING_OLCLASS_STUDENTS = {
+    SET_TEACHING_OLCLASS_STUDENTS_LIST: "setTeachingOlclassStudentsList",
+};
+
+export const TEACHING_ELEARNING_STATISTIC = {
+    SET_TEACHING_ELEARNING_STATISTIC: "setTeachingOlclassStatistic",
 };
 
 export const CREATING_ANSWER = {
@@ -515,4 +527,8 @@ export const TEACHING_PUBLIC_LIST = {
 
 export const PUBLIC_CLASSES = {
     SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
+};
+
+export const TEACHING_STUDENTS_PRIVATE = {
+    SET_TEACHING_STUDENTS_LIST: "setTeachingStudentList",
 };

@@ -19,22 +19,33 @@
     </div>
 
     <div class="e-study-tab-qa__comment-list">
-      <TabQACommentItem>
-        <!-- <TabQACommentItem :level="2" />
+      <TabQACommentItem
+        v-for="question in get(questions, 'content', [])"
+        :key="question.id"
+        :question="question"
+        v-slot:default="slotProps"
+      >
+        <div
+          v-for="(interactive_answer, index) in get(
+            question,
+            'interactive_answers',
+            []
+          )"
+          :key="index"
+        >
+          <TabQACommentItem :level="2" :question="interactive_answer" />
+        </div>
         <a href class="e-study-tab-qa__more e-study-tab-qa__more--child"
           >Xem thêm bình luận</a
         >
-        <TabQACommentEditor class="mt-4" /> -->
+        <TabQACommentEditor
+          v-if="slotProps.showReply"
+          class="mt-4"
+          :question="question"
+        />
       </TabQACommentItem>
 
-      <!-- <TabQACommentItem>
-        <TabQACommentItem :level="2" />
-        <TabQACommentItem :level="2" />
-        <TabQACommentItem :level="2" />
-        <TabQACommentItem :level="2" />
-      </TabQACommentItem> -->
-
-      <div class="text-center">
+      <div class="text-center" v-if="get(questions, 'page.last', false)">
         <a href class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>
     </div>
@@ -89,6 +100,10 @@ export default {
         },
       ],
     };
+  },
+
+  methods: {
+    get,
   },
 };
 </script>

@@ -174,7 +174,7 @@
               <button @click="preview(row)" v-if="tab == 'APPROVED' || tab == null">
                 <IconNote height='18' width='18' class="fill-primary mr-2" />Xem chi tiết
               </button>
-              <n-link v-if="tab != 'APPROVED'" :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
+              <n-link :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" height='16' width='16'/>Chỉnh sửa
               </n-link>
 
@@ -256,6 +256,7 @@ import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/elearning";
+const STORE_NAMESPACE_STATISTIC = "elearning/teaching/statistic";
 
 export default {
   name: "ManageCourse",
@@ -427,11 +428,20 @@ export default {
     };
   },
 
+  fetch({ params, query, store }) {
+    Promise.all([
+     store.dispatch(`${STORE_NAMESPACE_STATISTIC}/${actionTypes.TEACHING_ELEARNING_STATISTIC.LIST}`)
+    ]);
+  },
+
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateElearnings: "elearnings"
-    })
+    }),
+    ...mapState(STORE_NAMESPACE_STATISTIC, {
+      stateStatistic: "teacherStatistic"
+    }),
   },
 
   watch: {
