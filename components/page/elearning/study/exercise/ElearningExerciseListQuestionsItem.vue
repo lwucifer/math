@@ -1,10 +1,10 @@
 <template>
   <li class="e-exercise-list-questions__item">
-    <h5
+    <div
       v-html="question.content"
       class="e-exercise-list-questions__question text-clickable"
       @click.prevent="navToQuestion"
-    ></h5>
+    ></div>
 
     <div
       v-if="question.type === EXERCISE_TYPES.ESSAY"
@@ -33,7 +33,7 @@
       v-if="question.type === EXERCISE_TYPES.CHOICE"
       class="e-exercise-list-questions__answer e-exercise-list-questions__answer--choice"
     >
-      <span>
+      <span v-if="isAnswer">
         <!-- IF USER'S ANSWER IS TRUE -->
         <span class="d-inline-flex align-items-center text-primary" v-if="question.isUserTrue">
           Câu trả lời: {{ student_answer_index | getQuestionNoText }}.

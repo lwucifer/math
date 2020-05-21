@@ -28,34 +28,33 @@
         </app-date-picker>
       </div>
       <div class="filter-form__item d-flex">
-        <filter-button @click="filterSelect= !filterSelect">
-          Lọc kết quả
-        </filter-button>
+        <filter-button
+          @click="clickSubmit"
+          :color="filterSelect ? 'primary': 'white'"
+        ></filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11.5rem;">
         <app-vue-select
           class="app-vue-select"
-          :options="statuses"
+          :options="statusOpts"
           :reduce="item => item.value"
           v-model="filters.status"
           label="text"
-          placeholder="Theo trạng thái"
-          searchable
-          clearable
+          placeholder="Trạng thái"
           @input="handleSelectStatus"
+          :all-opt="allOpt"
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 27rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 21rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="opts"
+          :options="paymentOpts"
           :reduce="item => item.value"
           v-model="filters.payment"
           label="text"
-          placeholder="Theo phương thức thanh toán"
-          searchable
-          clearable
+          placeholder="Phương thức thanh toán"
           @input="handleSelectPayment"
+          :all-opt="allOpt"
         />
       </div>
     </div>
@@ -68,6 +67,10 @@
   export default {
     data() {
       return {
+        allOpt: {
+          value: null,
+          text: 'Tất cả'
+        },
         filters:{
           status:'',
           payment:'',
@@ -90,7 +93,7 @@
             text: 'Đã Huỷ'
           }
         ],
-        opts:[
+        payments:[
           {
             value: 'BANK',
             text: 'BANK'
@@ -115,6 +118,14 @@
         default: () => []
       }
     },
+    computed: {
+      statusOpts() {
+        return [this.allOpt, ...this.statuses]
+      },
+      paymentOpts() {
+        return [this.allOpt, ...this.payments]
+      }
+    },
     methods: {
       changeDate(date){
         this.$emit("changeDate", date);
@@ -126,6 +137,21 @@
       handleSelectStatus(s){
         this.$emit("changeStatus", s);
       },
+      clickSubmit() {
+        if (this.filterSelect) {
+          this.resetForm()
+          this.filterSelect = false
+          if (!this.initStatus) {
+            this.$emit('submitFilter', this.filters)
+          }
+        } else {
+          this.filterSelect = true
+        }
+      },
+      resetForm() {
+        this.filters.status = null
+        this.filters.payment = null
+      }
     }
   }
 </script>

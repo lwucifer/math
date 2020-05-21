@@ -23,6 +23,9 @@
     <template v-slot:list-footer>
       <slot name="list-footer"></slot>
     </template>
+    <template v-slot:no-options>
+      <slot name="no-options">No option</slot>
+    </template>
   </v-select>
 </template>
 <script>

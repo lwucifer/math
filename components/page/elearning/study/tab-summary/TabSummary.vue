@@ -1,17 +1,17 @@
 <template>
   <div class="e-study-tab-summary">
-    <div class="mb-6">
+    <!-- <div class="mb-6">
       <h4 class="mb-5">Phù hợp với</h4>
-    </div>
+    </div> -->
 
     <div class="mb-6">
       <h4 class="mb-5">Mô tả</h4>
       <div v-html="get(info, 'description', '')" class="e-study-tab-summary__text"></div>
     </div>
 
-    <div>
+    <!-- <div>
       <h4 class="mb-5">Yêu cầu</h4>
-    </div>
+    </div> -->
   </div>
 </template>
 

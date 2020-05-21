@@ -149,7 +149,7 @@ export default {
     return {
       type: "summary",
       pageLoading: true,
-      interactive_questions: null,
+      // interactive_questions: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -217,10 +217,10 @@ export default {
         }
       );
 
-      const getInteractiveQuestion = () =>
-        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
-          options
-        );
+      // const getInteractiveQuestion = () =>
+      //   new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
+      //     options
+      //   );
       const getProgress = this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
         options
@@ -231,15 +231,13 @@ export default {
       const data = await Promise.all([
         getInfo,
         getTest,
-        getInteractiveQuestion(),
+        // getInteractiveQuestion(),
         getProgress
       ]);
 
-      console.log(data);
-
       this.pageLoading = false;
 
-      this.interactive_questions = get(data, "1.data", null);
+      // this.interactive_questions = get(data, "1.data", null);
     },
 
     async addQuestionSuccess() {
@@ -250,7 +248,7 @@ export default {
           elearning_id: get(this, "$router.history.current.params.id", "")
         }
       });
-      this.interactive_questions = get(res, "data", null);
+      // this.interactive_questions = get(res, "data", null);
     },
 
     exitStudy() {
