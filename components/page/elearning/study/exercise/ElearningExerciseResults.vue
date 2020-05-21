@@ -1,8 +1,8 @@
 <template>
   <div class="e-exercise-results">
-    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
-      {{ result.name }} - {{ result.type | getExerciseTypeText }}
-    </h1>
+    <h1
+      class="heading-3 text-dark-2 mt-3 mb-4 text-center"
+    >{{ result.name }} - {{ result.type | getExerciseTypeText }}</h1>
 
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
       <template v-if="result.result === EXERCISE_STATUS.PASSED">
@@ -17,9 +17,11 @@
         </span>
         <span>
           Số lần làm còn lại:
-          <span class="text-secondary">{{
+          <span class="text-secondary">
+            {{
             result.reworks - result.works
-          }}</span>
+            }}
+          </span>
         </span>
       </template>
 
@@ -54,17 +56,15 @@
 
     <div class="text-center">
       <app-button
-        v-if="result.result === EXERCISE_STATUS.PASSED"
+        v-if="result.result === EXERCISE_STATUS.PASSED || (result.reworks == result.works)"
         @click.prevent="handleShowComment"
-        >{{ btnTextView }}</app-button
-      >
+      >{{ btnTextView }}</app-button>
       <app-button
         v-else-if="
           result.result === EXERCISE_STATUS.FAILED &&
             result.reworks - result.works > 0
         "
-        >Làm lại bài tập</app-button
-      >
+      >Làm lại bài tập</app-button>
     </div>
 
     <app-modal
