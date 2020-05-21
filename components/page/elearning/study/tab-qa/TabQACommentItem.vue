@@ -28,9 +28,7 @@
       <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div>
 
       <div class="tab-qa-comment-item__content">
-        <p>
-          {{ get(question, "content", "") }}
-        </p>
+        <div v-html="get(question, 'content', '')"></div>
         <!-- <img
           v-if="image"
           class="tab-qa-comment-item__img d-block"
@@ -48,6 +46,7 @@
           }}
         </button>
         <button
+          v-if="level == 1"
           class="tab-qa-comment-item__reply"
           @click="showReply = !showReply"
         >
@@ -66,8 +65,6 @@ import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
 import moment from "moment";
 import numeral from "numeral";
-
-moment.tz.setDefault("Asia/Ho_Chi_Minh");
 
 export default {
   components: {
