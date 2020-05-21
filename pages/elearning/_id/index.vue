@@ -21,13 +21,13 @@
           class="mt-6"
           :content="get(lectures_of_teacher, 'content', [])"
           :swiperOptions="sliderOptions"
-          title="Bài giảng cùng giáo viên"
+          :title="`${typeText} cùng giáo viên`"
         />
 
         <ElearningSliderTab
           :content="get(lectures_related, 'content', [])"
           :swiperOptions="sliderOptions"
-          title="Bài giảng liên quan"
+          :title="`${typeText} liên quan`"
           class="mt-6"
         />
       </div>
@@ -121,10 +121,10 @@ export default {
       if (this.info) {
         switch (this.info.type) {
           case ELEARNING_TYPES.LECTURE:
-            return "bài giảng";
+            return "Bài giảng";
             break;
           case ELEARNING_TYPES.COURSE:
-            return "khoá học";
+            return "Khoá học";
             break;
           default:
             break;
