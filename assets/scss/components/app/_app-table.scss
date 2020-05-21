@@ -134,7 +134,8 @@
             }
         }
     }
-  
+    
+    //header
     &__head--sm {
       font-size: 1.3rem;
     }
@@ -179,6 +180,12 @@
         
         &__body--color-#{$name} {
             color: $color
+        }
+    }
+    //table
+    @each $name, $color in $bg-colors {
+        &__table--bg-#{$name} {
+            background-color: $color;
         }
     }
 

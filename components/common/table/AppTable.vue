@@ -1,7 +1,7 @@
 <template>
   <div class="app-table">
-    <table>
-      <thead class="app-table__head" :class="headerCls">
+    <table :class="{...tableCls, ...extTableCls}">
+      <thead class="app-table__head" :class="{...headerCls, ...headerExtCls}">
         <tr>
           <th
             v-if="multipleSelection"
@@ -68,7 +68,15 @@
     </div>
     <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
     <div v-if="needPagination" class="pagination mt-3">
-      <app-pagination v-if="hasData && (!loading)" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
+      <app-pagination
+        v-if="hasData && (!loading)"
+        :pagination="pagination"
+        @pagechange="onPageChange"
+        :opts="opts"
+        class="mt-3"
+        :position="get(paginationStyle, 'position', 'center')"
+        :ext-cls="get(paginationStyle, 'extCls', {})"
+      />
     </div>
   </div>
 </template>
@@ -77,7 +85,7 @@
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
-import { isEqual } from "lodash";
+import { isEqual, get } from "lodash";
 
 export default {
   components: {
@@ -100,6 +108,10 @@ export default {
       type: String,
       default: 'sm' // sm | md | lg
     },
+    headerExtCls: {
+      type: Object,
+      default: () => {}
+    },
     headerColor: {
       type: String,
       default: 'dark' //primary | secondary | info...
@@ -107,6 +119,18 @@ export default {
     bodyColor: {
       type: String,
       default: 'base' //primary | secondary | info...
+    },
+    bgTable: {
+      type: String,
+      default: 'transparent' //primary | secondary | info...
+    },
+    extTableCls: {
+      type: Object,
+      default: () => {}
+    },
+    paginationStyle: {  // { position: '...', extCls: '...' }
+      type: Object,
+      default: () => {}
     },
     data: {
       type: Array,
@@ -227,7 +251,8 @@ export default {
       const temp = array[i];
       array[i] = array[k];
       array[k] = temp;
-    }
+    },
+    get
   },
 
   computed: {
@@ -338,6 +363,25 @@ export default {
       }
       return {
         ...colorCls
+      }
+    },
+    tableCls() {
+      const bgCls = {
+        'app-table__table--bg-transparent': this.bgTable === 'transparent',
+        'app-table__table--bg-primary': this.bgTable === 'primary',
+        'app-table__table--bg-secondary': this.bgTable === 'secondary',
+        'app-table__table--bg-info': this.bgTable === 'info',
+        'app-table__table--bg-success': this.bgTable === 'success',
+        'app-table__table--bg-error': this.bgTable === 'error',
+        'app-table__table--bg-warning': this.bgTable === 'warning',
+        'app-table__table--bg-gray': this.bgTable === 'gray',
+        'app-table__table--bg-input-gray': this.bgTable === 'input-gray',
+        'app-table__table--bg-white': this.bgTable === 'white',
+        'app-table__table--bg-black': this.bgTable === 'black',
+        'app-table__table--bg-light-2': this.bgTable === 'light-2',
+      }
+      return {
+        ...bgCls
       }
     }
   },
