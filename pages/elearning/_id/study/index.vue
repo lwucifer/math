@@ -209,13 +209,13 @@ export default {
         `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
         options
       );
-      const getTest = this.$store.dispatch(
-        `elearning/study/study-exercise/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`,
-        {
-          elearning_id: elearning_id,
-          category: EXERCISE_CATEGORIES.TEST
-        }
-      );
+      // const getTest = this.$store.dispatch(
+      //   `elearning/study/study-exercise/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`,
+      //   {
+      //     elearning_id: elearning_id,
+      //     category: EXERCISE_CATEGORIES.TEST
+      //   }
+      // );
 
       // const getInteractiveQuestion = () =>
       //   new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
@@ -230,7 +230,7 @@ export default {
 
       const data = await Promise.all([
         getInfo,
-        getTest,
+        // getTest,
         // getInteractiveQuestion(),
         getProgress
       ]);
