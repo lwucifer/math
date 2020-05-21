@@ -140,10 +140,10 @@ export default {
       time: -1,
       timeOpts: [
         { value: -1, text: "Tất cả" },
-        { value: 0, text: "10 phút" },
-        { value: 1, text: "20 phút" },
-        { value: 2, text: "1 giờ" },
-        { value: 3, text: "3 giờ" }
+        { value: 0, text: "0 - 1 giờ" },
+        { value: 1, text: "1- 2 giờ" },
+        { value: 2, text: "2 - 4 giờ" },
+        { value: 3, text: "Trên 4 giờ" }
       ],
       level: -1,
       // levelOpts: [
@@ -182,7 +182,8 @@ export default {
         free: -1,
         page: 1,
         size: PAGE_SIZE.DEFAULT,
-        sort: SORT_ELEARNING.RELATED
+        sort: SORT_ELEARNING.RELATED,
+        keyword: -1
       },
 
       pagination: {
@@ -229,6 +230,7 @@ export default {
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
+    ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
       const alls = addAllOptionSelect(this.categories);
@@ -247,6 +249,15 @@ export default {
       const lessionType = this.payload.type;
       console.log("[lessonType]", lessionType);
       return ELEARNING_TYPES_TEXT[lessionType];
+    }
+  },
+
+  watch:{
+    keyword(_newVal){
+      console.log('keyword', _newVal)
+      this.payload.page = 1;
+      this.payload.keyword = _newVal ? _newVal : -1;
+      this.getLessons();
     }
   },
 
