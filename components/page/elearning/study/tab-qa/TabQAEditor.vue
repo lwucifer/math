@@ -1,6 +1,10 @@
 <template>
   <div class="e-study-tab-qa-editor d-flex">
-    <app-avatar :size="40" class="mr-4" />
+    <app-avatar
+      :size="40"
+      class="mr-4"
+      :src="get(user_login, 'avatar.low', '')"
+    />
 
     <div class="flex-grow e-study-tab-qa-editor__right">
       <template v-if="type === 'review'">
@@ -8,7 +12,13 @@
         <app-select-stars class="mb-4" />
       </template>
 
-      <app-input class="mb-3" textarea rows="4" placeholder="Đặt câu hỏi" />
+      <app-input
+        class="mb-3"
+        textarea
+        rows="4"
+        placeholder="Đặt câu hỏi"
+        v-model="payload.content"
+      />
 
       <!-- Preview Upload Image -->
       <div v-if="uploadImgSrc" class="e-study-tab-qa-editor__preview">
@@ -35,7 +45,9 @@
           </app-button>
         </app-upload>
 
-        <app-button class="ml-auto" size="sm">Gửi câu hỏi</app-button>
+        <app-button @click="handleAddQuestion" class="ml-auto" size="sm"
+          >Gửi câu hỏi</app-button
+        >
       </div>
     </div>
   </div>
@@ -46,6 +58,8 @@ import { getBase64 } from "~/utils/common";
 import { get } from "lodash";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+import { mapState } from "vuex";
+import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 
 export default {
   components: {
@@ -61,12 +75,16 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState("auth", { user_login: "token" }),
+  },
+
   data() {
     return {
       uploadFileList: [],
       uploadImgSrc: null,
       payload: {
-        elearning_id: "",
+        elearning_id: get(this, "$route.params.id", ""),
         content: "",
       },
     };
@@ -89,7 +107,26 @@ export default {
       }
     },
 
-    submit() {},
+    async handleAddQuestion() {
+      const res = await new InteractiveQuestionService(this.$axios)[
+        "addQuestion"
+      ](this.payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "$route.params.id", ""),
+          },
+        };
+        this.$store.dispatch(
+          `elearning/study/questions/getListQuestion`,
+          options
+        );
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+    get,
   },
 };
 </script>

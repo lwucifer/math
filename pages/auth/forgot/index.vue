@@ -130,9 +130,11 @@ export default {
         let resetModel = createResetWithEmail(this.email, token);
         const doAdd = this.resetPasswordRequest(resetModel).then(result => {
           if (result.success == true) {
+            this.loading = false;
             this.$router.push("/auth/forgot/confirmsuccess");
           } else {
             this.showErrorForgot(result);
+            this.loading = false;
           }
         });
       } catch (error) {
@@ -173,7 +175,6 @@ export default {
           });
         } else {
           this.resetPass();
-          this.loading = false;
         }
       }
     },

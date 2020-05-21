@@ -188,6 +188,7 @@ export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`
 export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
 export const PUBLIC_CLASSES = `/elearning/public/classes`;
+// export const TEACHING_STUDENTS = `/elearning/teaching/students`;
 /**
  * PAYMENT
  */
@@ -213,3 +214,8 @@ export const ACCOUNT_BANK = `/user/account/banks`;
 export const ACCOUNT_BANK_VALIDATE = `/user/account/banks/validate`;
 export const ACCOUNT_BALANCE = `/user/account/balance`;
 export const ACCOUNT_WITHDRAW = `/user/account/withdraw`;
+
+/**
+ * INFO
+ */
+export const INFO_SUPPORT = `/account/help`;
