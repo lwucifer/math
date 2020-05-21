@@ -19,6 +19,8 @@
 
         display: flex;
         margin-bottom: 1rem;
+        margin-left: -0.6rem;
+        margin-right: -0.6rem;
 
         &__item__title {
             font-weight: bold;
@@ -29,7 +31,7 @@
 
         &__item {
             display: flex;
-            margin: 0 5px;
+            margin: 0 6px;
             align-items: center;
 
             &:last-child {
@@ -39,7 +41,7 @@
                 margin-left: 0;
             }
             .vs__selected-options {
-              min-width: 133px;
+              min-width: 7rem;
             }
             &.school-filter__form__item--search {
                 flex: 1;
@@ -71,6 +73,7 @@
 
     .school-filter__form--right {
         margin-left: auto;
+        margin-right: 0.6rem;
         display: flex;
         .school-filter__form__item--search {
             min-width: 33.5rem;
