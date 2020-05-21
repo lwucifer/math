@@ -256,6 +256,7 @@ import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/elearning";
+const STORE_NAMESPACE_STATISTIC = "elearning/teaching/statistic";
 
 export default {
   name: "ManageCourse",
@@ -427,11 +428,20 @@ export default {
     };
   },
 
+  fetch({ params, query, store }) {
+    Promise.all([
+     store.dispatch(`${STORE_NAMESPACE_STATISTIC}/${actionTypes.TEACHING_ELEARNING_STATISTIC.LIST}`)
+    ]);
+  },
+
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateElearnings: "elearnings"
-    })
+    }),
+    ...mapState(STORE_NAMESPACE_STATISTIC, {
+      stateStatistic: "teacherStatistic"
+    }),
   },
 
   watch: {

@@ -94,6 +94,7 @@ export const ELEARNING_PUBLIC_FOR_YOU = `/elearning/public/for_you`;
 export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects`;
 export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
+export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
 
 /**
  * ONLINE CLASS
@@ -106,6 +107,8 @@ export const TEACHING_OLCLASS_BLOCK = `/elearning/teaching/olclass/banned`;
 export const TEACHING_OLCLASS_LESSONS = `/elearning/teaching/olclass/lessons`;
 export const TEACHING_OLCLASS_LESSON = `/elearning/teaching/olclass/lesson`;
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/lesson/attendances`;
+export const TEACHING_OLCLASS_STUDENTS = `/elearning/teaching/olclass/students`;
+export const TEACHING_ELEARNING_STATISTIC = `/elearning/teaching/elearning/statistic`;
 
 /**
  * STUDY
