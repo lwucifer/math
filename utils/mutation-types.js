@@ -516,3 +516,7 @@ export const TEACHING_PUBLIC_LIST = {
 export const PUBLIC_CLASSES = {
     SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
 };
+
+export const KEYEWORD = {
+    SEARCH_HEADER: "searchHeader",
+}
