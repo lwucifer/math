@@ -117,6 +117,9 @@ export default {
       return info && info.name;
     },
 
+    /**
+     * processPercent = lessonPercent * 0.9 + testPercent * 0.1
+     */
     processPercent() {
       if (!this.progress) return 0;
       const completeLesson = this.progress.completes || 0;
@@ -127,7 +130,16 @@ export default {
           (acc, curr) => acc + curr.total_lessons,
           0
         ) || 0;
-      return Math.floor((completeLesson / totalLessons) * 100);
+      const lessonPercent = Math.floor((completeLesson / totalLessons) * 100) * 0.9;
+
+      let testPercent = 0;
+      const { test_info } = this.progress;
+      if(test_info) {
+        testPercent = Math.floor(test_info.passed / test_info.total * 100) * 0.1;
+      }
+      
+      console.log("[processPercent]", lessonPercent, testPercent)
+      return lessonPercent + testPercent;
     }
   }
 };
