@@ -159,7 +159,7 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
 };
 
 export const ELEARNING_PUBLIC_TEACHER_ELS = {
-  LIST: "elearningPublicElearningTeacherElsList",
+    LIST: "elearningPublicElearningTeacherElsList",
 };
 
 export const ELEARNING_PUBLIC_INFO = {
@@ -517,16 +517,16 @@ export const SOCIAL_FOLLOW = {
 
 export const TEACHING_SUMMARY = {
     INFO: "teachingSummary",
-    STATISTIC_REVENUE: 'teachingSummaryStatisticRevenue'
+    STATISTIC_REVENUE: "teachingSummaryStatisticRevenue",
 };
 
 export const TEACHING_CHART_STATISTIC_REVENUE = {
-    INFO: 'teachingChartStatisticRevenue'
-}
+    INFO: "teachingChartStatisticRevenue",
+};
 
 export const TEACHING_CHART_STATISTIC_HIGHLIGHT_ELS = {
-    LIST: 'teachingChartStatisticHighlightElsList'
-}
+    LIST: "teachingChartStatisticHighlightElsList",
+};
 
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
@@ -628,6 +628,10 @@ export const TEACHING_PUBLIC_LIST = {
 
 export const PUBLIC_CLASSES = {
     LIST: "publicClassesList",
+};
+
+export const TEACHING_STUDENTS_PRIVATE = {
+    LIST: "teachingStudentsPrivatesList",
 };
 
 export const INFO_SUPPORT = {

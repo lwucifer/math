@@ -528,3 +528,7 @@ export const TEACHING_PUBLIC_LIST = {
 export const PUBLIC_CLASSES = {
     SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
 };
+
+export const TEACHING_STUDENTS_PRIVATE = {
+    SET_TEACHING_STUDENTS_LIST: "setTeachingStudentList",
+};

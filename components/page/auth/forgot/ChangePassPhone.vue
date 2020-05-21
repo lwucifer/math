@@ -134,14 +134,15 @@ export default {
             );
             const doAdd = this.forgotPassword(resetPassModelPhone).then(res => {
               if (res.success == true) {
-                this.loading = true;
+                this.loading = false;
                 this.$router.push("/auth/forgot/success");
               } else {
+                this.loading = false;
                 this.showErrorChangePass(result);
               }
             });
           } else {
-            this.loading = true;
+            this.loading = false;
             this.showErrorOtp(result);
           }
         });
