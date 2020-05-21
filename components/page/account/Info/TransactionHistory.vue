@@ -7,6 +7,7 @@
         @changeDate="changeDate"
         @changeStatus="changeStatus"
         @changePayment="changePayment"
+        @submitFilter="changeFilter"
         :selectDateDefault="DateDefault"
       />
     </template>
@@ -87,14 +88,17 @@ export default {
     changeDate(date){
       this.params.from = date[0];
       this.params.to = date[1];
+      this.params.page = 1;
       this.fetchTransaction();
     },
     changePayment(e){
       this.params.method = e;
+      this.params.page = 1;
       this.fetchTransaction();
     },
     changeStatus(s){
       this.params.status = s;
+      this.params.page = 1;
       this.fetchTransaction();
     },
     getDateSelect(){
@@ -103,6 +107,12 @@ export default {
       this.DateDefault = [firstday,today];
       this.params.from = firstday;
       this.params.to = today;
+    },
+    changeFilter(o){
+      this.params.status = o.status;
+      this.params.method = o.payment;
+      this.params.page = 1;
+      this.fetchTransaction();
     }
   },
   computed: {
