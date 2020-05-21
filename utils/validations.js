@@ -1,4 +1,12 @@
 /**
+ * validate for email
+ */
+export const validateEmail = (_email) => {
+    let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{1,}))$/;
+    return re.test(_email);
+};
+
+/**
  * validate for IP Address, Netmask, subnet mask, fixed IP, Gateway,
  */
 export const validateIpAddress = (_ip) => {
@@ -119,7 +127,7 @@ export const checkEditorEmpty = (content) => {
  */
 export const clearEmptyTag = (content) => {
     const regex = /(<p>)+(<br>){0,}?\s{0,}?(<\/\p>)/g;
-    return typeof content === "string" ?
-        content.replace(regex, "").replace(/(<br>){2,}/g, "") :
-        "";
+    return typeof content === "string"
+        ? content.replace(regex, "").replace(/(<br>){2,}/g, "")
+        : "";
 };

@@ -8,6 +8,7 @@ import BaseLesson from "~/services/elearning/teaching/OlclassLesson";
 import BaseOlclass from "~/services/elearning/teaching/OlclassBase";
 import Lessons from "~/services/elearning/teaching/OlclassLessons";
 import Sessions from "~/services/elearning/teaching/OlclassLessonSessions";
+import OlStudents from "~/services/elearning/teaching/OlclassStudents";
 
 /**
  * initial state
@@ -20,6 +21,7 @@ const state = () => ({
   Lessons: [],
   LessonInfo: [],
   LessonSessions: [],
+  Students: [],
 });
 
 /**
@@ -246,6 +248,25 @@ const actions = {
     }
   },
 
+
+  // Students
+
+  async [actionTypes.TEACHING_OLCLASS_STUDENTS.LIST]({ commit }, options) {
+    try {
+      const result = await new OlStudents(this.$axios)[actionTypes.BASE.LIST](
+        options
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASS_STUDENTS
+          .SET_TEACHING_OLCLASS_STUDENTS_LIST,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Students] list.error", error);
+    }
+  },
+
 };
 
 /**
@@ -275,6 +296,9 @@ const mutations = {
   },
   [mutationTypes.TEACHING_OLCLASS_LESSONS.SET_TEACHING_OLCLASS_LESSON_INFO](state, _info) {
     state.LessonInfo = _info;
+  },
+  [mutationTypes.TEACHING_OLCLASS_STUDENTS.SET_TEACHING_OLCLASS_STUDENTS_LIST](state, _list) {
+    state.Students = _info;
   },
 };
 
