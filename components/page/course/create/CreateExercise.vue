@@ -115,7 +115,7 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       category: "EXERCISE",
-      loading: true,
+      loading: false,
     };
   },
 
@@ -129,15 +129,14 @@ export default {
 
   methods: {
     async handleChangeGeneral() {
-      this.loading = true;
       if (get(this, "general.type", "") === "LECTURE") {
+        this.loading = true;
         const lesson_id = get(this, "lessons.0.id", "");
         await this.$store.dispatch("elearning/create/getLesson", lesson_id);
         this.loading = false;
         return;
       }
-      await this.$store.dispatch("elearning/create/getLesson", "");
-      this.loading = false;
+      this.$store.dispatch("elearning/create/getLesson", "");
     },
 
     handleShowFormAdd() {

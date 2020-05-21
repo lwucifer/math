@@ -34,6 +34,8 @@ const actions = {
       };
       const res = await Service.getExams(this.$axios, payload);
       commit("exams", res);
+    } else {
+      commit("exams", null);
     }
   },
 
@@ -47,6 +49,8 @@ const actions = {
       const res = await Service.getLessons(this.$axios, payload);
 
       commit("lessons", res);
+    } else {
+      commit("lessons", null);
     }
   },
 
@@ -59,6 +63,8 @@ const actions = {
       };
       const res = await Service.getSetting(this.$axios, payload);
       commit("setting", res);
+    } else {
+      commit("setting", null);
     }
   },
 
@@ -71,6 +77,8 @@ const actions = {
       };
       const res = await Service.getLessonsOfLecture(this.$axios, payload);
       commit("lessons_lecture", res);
+    } else {
+      commit("lessons_lecture", null);
     }
 
     if (get(state, "general.type", "") === "COURSE") {
@@ -81,6 +89,8 @@ const actions = {
       };
       const res = await Service.getChaptersOfElearning(this.$axios, payload);
       commit("chapters", res);
+    } else {
+      commit("chapters", null);
     }
   },
 
@@ -90,8 +100,12 @@ const actions = {
   },
 
   async getLesson({ commit, state }, lesson_id) {
-    const res = await Service.getLesson(this.$axios, lesson_id);
-    commit("lesson", res);
+    if (lesson_id) {
+      const res = await Service.getLesson(this.$axios, lesson_id);
+      commit("lesson", res);
+      return;
+    }
+    commit("lesson", null);
   },
 
   async getProgress({ commit, state }, options = {}) {
