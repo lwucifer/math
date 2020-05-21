@@ -197,6 +197,10 @@ export const TEACHING_OLCLASS_STUDENTS = {
     SET_TEACHING_OLCLASS_STUDENTS_LIST: "setTeachingOlclassStudentsList",
 };
 
+export const TEACHING_ELEARNING_STATISTIC = {
+    SET_TEACHING_ELEARNING_STATISTIC: "setTeachingOlclassStatistic",
+};
+
 export const CREATING_ANSWER = {
     SET_CREATING_ANSWER_LIST: "setCreatingAnswerList",
     SET_CREATING_ANSWER_ADD: "setCreatingAnswerAdd",

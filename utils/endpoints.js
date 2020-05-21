@@ -108,6 +108,7 @@ export const TEACHING_OLCLASS_LESSONS = `/elearning/teaching/olclass/lessons`;
 export const TEACHING_OLCLASS_LESSON = `/elearning/teaching/olclass/lesson`;
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/lesson/attendances`;
 export const TEACHING_OLCLASS_STUDENTS = `/elearning/teaching/olclass/students`;
+export const TEACHING_ELEARNING_STATISTIC = `/elearning/teaching/elearning/statistic`;
 
 /**
  * STUDY

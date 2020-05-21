@@ -610,6 +610,10 @@ export const TEACHING_ELEARNING_INVITES = {
     ADD: "teachingElearningInvitesAdd",
 };
 
+export const TEACHING_ELEARNING_STATISTIC = {
+    LIST: "teachingElearningStatistic",
+};
+
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
 };
