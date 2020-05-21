@@ -141,9 +141,7 @@
         if (this.filterSelect) {
           this.resetForm()
           this.filterSelect = false
-          if (!this.initStatus) {
-            this.$emit('submitFilter', this.filters)
-          }
+          this.$emit('submitFilter', this.filters)
         } else {
           this.filterSelect = true
         }

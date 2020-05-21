@@ -217,6 +217,10 @@ export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
     LIST: "elearningPublicHighlightTeachers",
 };
 
+export const ELEARNING_PUBLIC_ELEARNING = {
+    LIST: "elearningPublicElearning",
+};
+
 export const ELEARNING = {
     INFO: "elearningInfo",
     PROGRAM: "elearningProgram",
@@ -258,6 +262,9 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
 };
 export const TEACHING_OLCLASS_LESSON_SESSIONS = {
     LIST: "teachingOlclassLessonSessionsList",
+};
+export const TEACHING_OLCLASS_STUDENTS = {
+    LIST: "teachingOlclassStudentList",
 };
 
 export const CREATING_CHAPTER = {
@@ -603,6 +610,10 @@ export const TEACHING_ELEARNING_INVITES = {
     ADD: "teachingElearningInvitesAdd",
 };
 
+export const TEACHING_ELEARNING_STATISTIC = {
+    LIST: "teachingElearningStatistic",
+};
+
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
 };
@@ -621,4 +632,8 @@ export const PUBLIC_CLASSES = {
 
 export const TEACHING_STUDENTS_PRIVATE = {
     LIST: "teachingStudentsPrivatesList",
+};
+
+export const INFO_SUPPORT = {
+    ADD: "infoSupport",
 };

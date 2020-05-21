@@ -24,13 +24,15 @@
 
     <!-- Bai TEST -->
     <a
-      v-if="tests"
+      v-if="isTestExist"
       class="e-program__test"
+      :class="`text-${classExerciseStatus}`"
       href
       @click.prevent="handleDoTest"
       v-scroll-to="'body'"
     >
-      <IconFileAlt class="icon" />&nbsp;Làm bài kiểm tra
+      <IconFileAlt class="icon" />
+      &nbsp;Làm bài kiểm tra {{ testRate }}
     </a>
   </div>
 </template>
@@ -53,7 +55,7 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    ...mapGetters("elearning/study/study-exercise", ["tests"]),
+    // ...mapGetters("elearning/study/study-exercise", ["tests"]),
 
     totalLessons() {
       console.log("[progress]", this.progress);
@@ -64,7 +66,36 @@ export default {
           0
         ) || 0
       );
-    }
+    },
+
+    test_info() {
+      return this.progress.test_info || {};
+    },
+
+    isTestExist() {
+      if (!this.test_info || this.test_info.total < 1) return false;
+      return true;
+    },
+
+    testRate() {
+      if (!this.test_info) return "(0/0)";
+      const touchedExams = this.test_info.passed + this.test_info.failed + this.test_info.pending;
+      return `(${touchedExams}/${this.test_info.total})`;
+    },
+
+    // return primary|secondary|warning
+    classExerciseStatus() {
+      // debugger;
+      if (this.test_info.passed == this.test_info.total) {
+        return "primary";
+      } else if (this.test_info.failed > 0) {
+        return "secondary";
+      } else if (this.test_info.pending > 0) {
+        return "warning";
+      } else {
+        return "warning";
+      }
+    },
   },
 
   methods: {

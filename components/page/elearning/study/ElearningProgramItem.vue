@@ -184,7 +184,7 @@ export default {
       return `${totalExDid}/${this.exercises}`;
     },
 
-    // return primary|secondary
+    // return primary|secondary|warning
     classExerciseStatus() {
       // debugger;
       if (this.passedExercise == this.exercises) {
