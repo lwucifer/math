@@ -30,6 +30,7 @@ $color-text-light-2: #f9f9f9 !default;
 $color-text-dark: #222222 !default;
 $color-text-gray: #666666 !default;
 $color-text-gray-2: #CCCCCC !default;
+$color-text-gray-3: #999999 !default;
 $color-text-white: #fff !default;
 
 // Other Colors
@@ -75,6 +76,7 @@ $text-colors: (
     sub: $color-text-sub,
     gray: $color-text-gray,
     gray-2: $color-text-gray-2,
+    gray-3: $color-text-gray-3,
     white: #fff,
     black: #000,
     light: $color-text-light,
@@ -85,6 +87,7 @@ $text-colors: (
 ) !default;
 
 $bg-colors: (
+    transparent: #0000,
     primary: $color-primary,
     secondary: $color-secondary,
     info: $color-primary-4,

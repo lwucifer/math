@@ -18,7 +18,7 @@
       </slot>
     </div>
     
-    <div class="sub-block-section__main" :class="contentCls">
+    <div class="sub-block-section__main" :class="{ ...contentCls, ...ctnCls }">
       <slot name="content"></slot>
     </div>
   </div>
@@ -58,11 +58,34 @@
       hasIcon: {
         type: Boolean,
         default: false
+      },
+      bgContentColor: {
+        type: String,
+        default: 'white'
       }
     },
     computed: {
       classes: function () {
       
+      },
+      ctnCls() {
+        const bgCls = {
+          'sub-block-section__main--bg-transparent': this.bgContentColor === 'transparent',
+          'sub-block-section__main--bg-primary': this.bgContentColor === 'primary',
+          'sub-block-section__main--bg-secondary': this.bgContentColor === 'secondary',
+          'sub-block-section__main--bg-info': this.bgContentColor === 'info',
+          'sub-block-section__main--bg-success': this.bgContentColor === 'success',
+          'sub-block-section__main--bg-error': this.bgContentColor === 'error',
+          'sub-block-section__main--bg-warning': this.bgContentColor === 'warning',
+          'sub-block-section__main--bg-gray': this.bgContentColor === 'gray',
+          'sub-block-section__main--bg-input-gray': this.bgContentColor === 'input-gray',
+          'sub-block-section__main--bg-white': this.bgContentColor === 'white',
+          'sub-block-section__main--bg-black': this.bgContentColor === 'black',
+          'sub-block-section__main--bg-light-2': this.bgContentColor === 'light-2',
+        }
+        return {
+          ...bgCls
+        }
       }
     },
     methods: {
