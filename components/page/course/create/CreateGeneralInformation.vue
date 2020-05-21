@@ -215,30 +215,7 @@ export default {
   },
 
   mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    const options = {
-      params: {
-        elearning_id,
-      },
-    };
-    this.$store.dispatch(`elearning/create/getGeneral`, options);
-    // const elearning_id = getParamQuery("elearning_id");
-    // this.handleFetchElearningGeneral(elearning_id);
-  },
-
-  watch: {
-    general: {
-      handler: function() {
-        this.payload.benefit = [...get(this, "general.benefit", [])];
-        this.payload.description = get(this, "general.description", "");
-        this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject.id", "");
-        this.payload.level = get(this, "general.level", "");
-        this.payload.type = get(this, "general.type", "");
-        this.payload.elearning_id = get(this, "general.id", "");
-      },
-      deep: true,
-    },
+    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
   },
 
   computed: {
@@ -256,7 +233,6 @@ export default {
       if (!get(this, "payload.level", true)) return false;
       if (!get(this, "payload.type", true)) return false;
       if (!get(this, "payload.avatar", true) && !this.general) return false;
-      // if (!get(this, "payload.cover_image", "") && !this.general) return false;
 
       const length_name = get(this, "payload.name.length", 0);
       if (length_name > 150) {
@@ -283,6 +259,16 @@ export default {
   },
 
   methods: {
+    handleChangeGeneral() {
+      this.payload.benefit = [...get(this, "general.benefit", [])];
+      this.payload.description = get(this, "general.description", "");
+      this.payload.name = get(this, "general.name", "");
+      this.payload.subject = get(this, "general.subject.id", "");
+      this.payload.level = get(this, "general.level", "");
+      this.payload.type = get(this, "general.type", "");
+      this.payload.elearning_id = get(this, "general.id", "");
+    },
+
     handleBlurName(e) {
       this.handleChangeName(e.target.value);
     },

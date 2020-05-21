@@ -85,7 +85,6 @@
       @ok="handleOk"
       @cancel="handleCancel"
       title="Xác nhận"
-      description="Xác nhận"
     />
   </div>
 </template>
@@ -159,9 +158,9 @@ export default {
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
+  // mounted() {
+  //   this.$store.dispatch(`elearning/create/getContent`);
+  // },
 
   // updated() {
   //   console.log(this.lessons);
