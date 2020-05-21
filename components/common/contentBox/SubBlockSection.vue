@@ -18,7 +18,7 @@
       </slot>
     </div>
     
-    <div class="sub-block-section__main">
+    <div class="sub-block-section__main" :class="contentCls">
       <slot name="content"></slot>
     </div>
   </div>
@@ -41,6 +41,10 @@
         default: true
       },
       titleCls: {
+        type: Object,
+        default: () => {}
+      },
+      contentCls: {
         type: Object,
         default: () => {}
       },

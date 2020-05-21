@@ -11,6 +11,7 @@ export const AUTH = {
     SET_CURRENT_DEVICE: "setCurrentDevice",
     SAVE_PHONE_PASS: "savePhonePass",
     SAVE_PHONE_STATE: "savePhoneState",
+    SET_TOKEN_AVATAR: "setTokenAvatar",
 };
 
 export const BASE = {
@@ -96,8 +97,8 @@ export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
 };
 
 export const ELEARNING_PUBLIC_TEACHER_ELS = {
-    SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST: "setElearningPublicElearningTeacherElsList"
-}
+    SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST: "setElearningPublicElearningTeacherElsList",
+};
 
 export const ELEARNING_PUBLIC_INFO = {
     SET_ELEARNING_PUBLIC_INFO_LIST: "setElearningPublicInfoList",
@@ -473,8 +474,8 @@ export const TEACHING_STATISTIC_REVENUE = {
 };
 
 export const TEACHING_CHART_STATISTIC_REVENUE = {
-    SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue"
-}
+    SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue",
+};
 
 export const TEACHING_STATISTIC_HIGHLIGHT_ELS = {
     SET_TEACHING_STATISTIC_HIGHLIGHT_ELS_LIST: "setTeachingStatisticHighlightElsList",

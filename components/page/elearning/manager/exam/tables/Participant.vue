@@ -32,7 +32,7 @@
               >
                 Chưa làm bài
               </span>
-              <span v-if="isPending(row)">Chưa chấm điểm</span>
+              <span v-if="isPending(row)">Chưa chấm</span>
               <span v-if="isMarked(row)">
                 {{ get(row, 'mark', 0)}}/{{ get(row, 'points', 10) }}
                 ({{ get(row, 'result')  | subResult2Txt }})

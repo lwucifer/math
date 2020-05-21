@@ -1,8 +1,8 @@
 <template>
   <div class="container">
+    <div id="label-verify-phone"></div>
     <div class="row" v-if="checkRowHide">
       <div class="col-md-6 d-flex align-items-center">
-        <div id="label-verify-phone"></div>
         <div class="wrap-forgot-psw">
           <h3 class="text-primary">Quên mật khẩu?</h3>
           <div class="auth_content mt-5">
@@ -16,6 +16,7 @@
               @input="hanldeEmail"
             />
             <app-button
+              :loading="loading"
               color="primary"
               square
               @click="hanldeShowModalOTP"
@@ -92,7 +93,8 @@ export default {
       messageErrorForgot: "",
       errorForgot: false,
       validateForgot: "",
-      checkRowHide: true
+      checkRowHide: true,
+      loading: false
     };
   },
 
@@ -138,7 +140,9 @@ export default {
       }
     },
     hanldeShowModalOTP() {
+      this.loading = true;
       if (this.email == "") {
+        this.loading = false;
         this.validateForgot = VALIDATE_STATUS.ERROR;
         this.messageErrorForgot =
           "Vui lòng nhập email hoặc số điện thoại cần khôi phục";
@@ -154,8 +158,10 @@ export default {
             if (!result.code) {
               console.log("result huydv11111", result);
               this.checkRowHide = false;
+              this.loading = false;
               // this.$router.push(`/auth/forgot/changepass?phone=${this.email}`);
             } else {
+              this.loading = false;
               this.validateForgot = VALIDATE_STATUS.ERROR;
               this.errorForgot = true;
               if (result && result.code == "auth/invalid-phone-number") {
@@ -167,6 +173,7 @@ export default {
           });
         } else {
           this.resetPass();
+          this.loading = false;
         }
       }
     },

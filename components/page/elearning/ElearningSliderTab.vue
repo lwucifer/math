@@ -15,20 +15,7 @@
           :key="index"
         >
           <div class="slider-item" @click="$emit('click-item', item, index)">
-            <CourseItem2
-              size="sm"
-              :to="`/elearning/${item.elearning_id}`"
-              :image="get(item, 'avatar.medium', '')"
-              :livestream="item && item.livestream && item.livestream.time"
-              :name="item.name"
-              :teacher="item.teacher"
-              :averageRate="get(item, 'rates.average_rate', 0)"
-              :totalReview="get(item, 'rates.total_review', 0)"
-              :price="get(item, 'price.price')"
-              :originalPrice="get(item, 'price.original_price')"
-              :free="item.free"
-              :discount="calcDiscount(item)"
-            />
+            <CourseItem2 size="sm" :item="item" />
           </div>
         </div>
       </div>
@@ -101,13 +88,6 @@ export default {
 
   methods: {
     get,
-
-    calcDiscount(elearning) {
-      const { price = {} } = elearning;
-      const currentPrice = price.price || 0;
-      const originPrice = price.original_price || 0;
-      return (currentPrice / originPrice) * 100;
-    },
   },
 };
 </script>

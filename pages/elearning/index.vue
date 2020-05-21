@@ -38,21 +38,7 @@
                 <vcl-list />
               </div>
 
-              <CourseItem2
-                v-else
-                :to="`/elearning/${item.elearning_id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="item.is_streaming"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="get(item, 'voting.rate', 0)"
-                :totalReview="get(item, 'voting.votes', 0)"
-                :price="item.price"
-                :originalPrice="item.original_price"
-                :free="!item.price"
-                :discount="item.discount"
-                :online-class="item.olclass_existed"
-              />
+              <CourseItem2 v-else class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>
@@ -61,7 +47,7 @@
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium mb-3">Dành cho bạn</h2>
 
-        <app-carousel :options="{ slidesPerView: 1 }">
+        <app-carousel :options="{ slidesPerView: 1, preventClicksPropagation: false }">
           <template slot="default" slot-scope="{ classes }">
             <div
               v-for="item in forYou && forYou.content || []"
@@ -88,7 +74,7 @@
         </app-carousel>
       </ElearningHomeBox>
 
-      <ElearningHomeBox title="Môn học được yêu thích">
+      <ElearningHomeBox title="Mhọc được yêu thích">
         <div slot="title-right" class="swiper-pagination eh-subject-pagination"></div>
 
         <app-carousel
@@ -137,20 +123,7 @@
               :key="item.id"
               :class="classes"
             >
-              <CourseItem2
-                :to="`/elearning/${item.elearning_id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="item.is_streaming"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="get(item, 'voting.rate', 0)"
-                :totalReview="get(item, 'voting.votes', 0)"
-                :price="item.price"
-                :originalPrice="item.original_price"
-                :free="!item.price"
-                :discount="item.discount"
-                :online-class="item.olclass_existed"
-              />
+              <CourseItem2 class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>
@@ -172,20 +145,7 @@
               :key="item.id"
               :class="classes"
             >
-              <CourseItem2
-                :to="`/elearning/${item.elearning_id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="item.is_streaming"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="get(item, 'voting.rate', 0)"
-                :totalReview="get(item, 'voting.votes', 0)"
-                :price="item.price"
-                :originalPrice="item.original_price"
-                :free="!item.price"
-                :discount="item.discount"
-                :online-class="item.olclass_existed"
-              />
+              <CourseItem2 class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>

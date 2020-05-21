@@ -23,13 +23,13 @@
           >
             <div class="nowrap">
               <span class="status-item status-item--success d-inline-block">
-                {{get(row, 'passed_percent', 0)}}%
+                {{parseInt(get(row, 'passed_percent', 0))}}%
               </span>
               <span class="status-item status-item--fail d-inline-block">
-                {{get(row, 'failed_percent', 0)}}%
+                {{parseInt(get(row, 'failed_percent', 0))}}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{get(row, 'pending_percent', 0)}}%
+                {{100 - parseInt(get(row, 'passed_percent', 0)) - parseInt(get(row, 'failed_percent', 0))}}%
               </span>
             </div>
         
@@ -80,6 +80,7 @@
   import { get } from "lodash"
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
+  import { numeralFormat } from "~/plugins/filters";
 
   export default {
     components: {
@@ -151,6 +152,7 @@
       onPageChange(e) {
         this.$emit('changedPagination', e)
       },
+      numeralFormat,
       get
     },
   }

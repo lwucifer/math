@@ -24,6 +24,7 @@
         height: 100%;
         color: #656565;
         outline: none;
+        margin-left: 1.7rem !important;
         &:hover{
             color: $color-primary;
             svg path {fill: $color-primary;}

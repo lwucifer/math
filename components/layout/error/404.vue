@@ -1,13 +1,23 @@
 <template>
-  <div class="wrap404page">
-      <Logo404/>
-      <p>Trang không tồn tại</p>
-      <app-button square size="md" color="white">
-          <n-link to="/">
-            <IconArrowLeft/>
-            Quay lại trang chủ
-          </n-link>
-      </app-button>
+  <div class="container">
+      <div class="wrap404page">
+        <h1 class="mb-4">Trang không tồn tại</h1>
+
+        <p class="title">Liên kết bạn truy cập có thể bị hỏng hoặc trang có thể đã bị xóa.</p>
+
+        <div class="logo text-center">
+          <Logo404/>
+        </div>
+
+        <app-button
+          class="button-back" 
+          size="md" 
+          color="primary">
+            <n-link to="/">
+              <IconArrowLeft class="mr-2"/> Quay lại trang chủ
+            </n-link>
+        </app-button>
+      </div>
   </div>
 </template>
 
