@@ -85,9 +85,9 @@ export default {
     }),
   },
 
-  mounted() {
-    this.$store.dispatch("elearning/create/getExams");
-  },
+  // mounted() {
+  //   this.$store.dispatch("elearning/create/getExams");
+  // },
 
   methods: {
     handleShowFormAdd() {
