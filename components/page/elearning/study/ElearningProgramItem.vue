@@ -21,10 +21,7 @@
 
       <div class="e-program-item__bottom">
         <div class="e-program-item__time">
-          <span
-            v-if="isShowVideoLesson"
-            class="d-inline-flex align-items-center"
-          >
+          <span v-if="isShowVideoLesson" class="d-inline-flex align-items-center">
             <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
             <span>{{ durationTimes }}</span>
           </span>
@@ -51,21 +48,32 @@
 
         <div class="e-program-item__download">
           <app-dropdown
-            v-if="lesson.link"
+            v-if="lesson.lesson_docs && lesson.lesson_docs.length"
             class="e-program-item__download-tooltip"
             position="topCenter"
           >
-            <a
+            <span
               slot="activator"
-              download
-              target="_blank"
-              :href="lesson.link"
               class="d-inline-flex align-items-center text-decoration-none"
             >
               <IconFileDownloadAlt class="icon body-1 text-info" />
-            </a>
+            </span>
 
-            <span>Tải tài liệu</span>
+            <template>
+              <div>
+                <a
+                  v-for="(link, index) in lesson.lesson_docs || []"
+                  :key="index"
+                  :href="link.url"
+                  class="d-inline-flex align-items-center caption"
+                  download
+                  target="_blank"
+                >
+                  <IconFileDownloadAlt class="icon body-1 text-info mr-2" />
+                  {{ link.name }}
+                </a>
+              </div>
+            </template>
           </app-dropdown>
         </div>
       </div>

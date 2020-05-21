@@ -1,7 +1,7 @@
 <template>
   <div class="course-item-2" :class="{ 'course-item-2--size-sm': this.size === 'sm' }">
     <div class="course-item-2__img">
-      <n-link :to="`/elearning/${get(item, 'elearning_id', null)}`">
+      <n-link :to="`/elearning/${id}`">
         <img
           v-lazy="get(item, 'avatar.medium', '')"
           :alt="get(item, 'name', '')"
@@ -109,6 +109,10 @@ export default {
         original_price: get(this.item, 'original_price', 0),
         price: get(this.item, 'price', 0),
       }
+    },
+
+    id() {
+      return this.item.elearning_id || this.item.id;
     }
   },
 
