@@ -2,8 +2,8 @@
   <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
-
-      <div class="filter-form__item flex-1">
+      <div class="d-flex">
+      <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
         <div style="width: 100%">
           <app-search
             class
@@ -39,6 +39,7 @@
           @input="handleChangedCourse"
         ></app-vue-select>
       </div>
+    </div>
     </div>
     <!--End filter form-->
 
