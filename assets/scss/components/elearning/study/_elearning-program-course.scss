@@ -1,5 +1,7 @@
 .e-program-course {
-    border-bottom: 1px solid $color-disabled;
+    &:not(:last-child) {
+        border-bottom: 1px solid $color-disabled;
+    }
 }
 
 .e-program-course__title {

@@ -1,5 +1,7 @@
 <template>
-  <sub-block-section>
+  <sub-block-section
+    :title-cls="{'border-0': true }"
+  >
     <template v-slot:title>
       <filter-form 
         @changeDate="changeDate"

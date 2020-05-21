@@ -18,12 +18,12 @@
     }
 
     &__question {
-        display: flex;
+        display: block;
         color: $color-text;
         font-size: 1.5rem;
 
         &:before {
-            content: counter(my-awesome-counter) ". ";
+            content: "Câu hỏi " counter(my-awesome-counter) ". ";
             font-weight: bold;
             margin-right: 4px;
         }

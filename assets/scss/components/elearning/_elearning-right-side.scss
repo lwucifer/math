@@ -30,6 +30,14 @@
             color: $color-dark;
         }
     }
+
+    .share-favourite {
+        .favourite {
+            &:hover {
+                font-weight: 600;
+            }
+        }
+    }
 }
 
 .elearning-right-side__img {

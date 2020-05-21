@@ -39,6 +39,13 @@
     &__main {
         background-color: #fff;
         padding: 1.5rem;
+        .app-table table {
+            th {
+                div {
+                    white-space: nowrap !important;
+                }
+            }
+        }
     }
     
     &__icon-title {
