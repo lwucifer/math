@@ -140,13 +140,16 @@
                 </template>
 
                 <template v-slot:content>
-                  <div class="wrap-table">
+                  <div>
                     <app-table
                       :heads="heads"
                       :pagination="pagination"
                       @pagechange="onPageChange"
                       :data="list"
-                      style="margin-left: -1.5rem; margin-right: -1.5rem;"
+                      header-fontweight="normal"
+                      header-size="md"
+                      header-color="gray-3"
+                      body-color="dark"
                     >
                       <!--<tr v-for="(item , index) in list" :key="index">-->
                       <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->

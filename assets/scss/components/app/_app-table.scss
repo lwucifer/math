@@ -134,6 +134,53 @@
             }
         }
     }
+  
+    &__head--sm {
+      font-size: 1.3rem;
+    }
+  
+    &__head--md {
+      font-size: 1.4rem;
+    }
+  
+    &__head--lg {
+      font-size: 1.5rem;
+    }
+    
+    &__head--normal {
+        th {
+            font-weight: 400 !important;
+        }
+    }
+    
+    &__head--semi-bold {
+        th {
+            font-weight: 600;
+        }
+    }
+    &__head--bold {
+        th {
+            font-weight: 700;
+        }
+    }
+  
+    @each $name, $color in $text-colors {
+        &__head--color-#{$name} {
+            th {
+                color: $color !important;
+                
+                .btn-sort {
+                    svg path {
+                        fill: currentColor;
+                    }
+                }
+            }
+        }
+        
+        &__body--color-#{$name} {
+            color: $color
+        }
+    }
 
     .pagination {
         margin: 3rem 0 2rem;

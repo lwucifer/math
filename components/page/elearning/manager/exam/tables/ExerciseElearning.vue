@@ -5,7 +5,6 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="list"
-      :loading="loading"
     >
       <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'name', '')">
