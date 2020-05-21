@@ -3,14 +3,14 @@
       <div class="wrap404page">
         <h1 class="mb-4">Trang không tồn tại</h1>
 
-        <p class="title">Liên kết bạn truy cập có thể bị hỏng hoặc trang có thể đã bị xóa.</p>
+        <p class="wrap404page__title">Liên kết bạn truy cập có thể bị hỏng hoặc trang có thể đã bị xóa.</p>
 
-        <div class="logo text-center">
+        <div class="wrap404page__logo text-center">
           <Logo404/>
         </div>
 
         <app-button
-          class="button-back" 
+          class="wrap404page__button-back" 
           size="md" 
           color="primary">
             <n-link to="/">
