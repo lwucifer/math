@@ -1,120 +1,115 @@
 <template>
   <div class="page-timeline">
-    <SliderBanner :images="banners" class="timeline-banner" />
+    <PostEditor
+      :active="postEditorActive"
+      @submit="addPost"
+      @active-change="active => postEditorActive = active"
+    />
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8">
-          <PostEditor
-            :active="postEditorActive"
-            @submit="addPost"
-            @active-change="active => postEditorActive = active"
-          />
+    <VclFacebook v-if="postLoading" class="bg-white" />
 
-          <VclFacebook v-if="postLoading" class="bg-white" />
-
-          <transition-group
-            enter-active-class="animated faster fadeIn"
-            leave-active-class="animated faster fadeOut"
-          >
-            <Post
-              v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
-              :key="post.post_id"
-              :post="post"
-              class="mb-4"
-              :show-menu-dropdown="post.author && post.author.id === userId"
-              @delete="showModalConfirmDelete"
-              @like="likePost"
-              @edit="editPost"
-              @share="openModalShare"
-              @get-comment="getComment"
-              @post-comment="postComment"
-            >
-              <template slot="media-content" slot-scope="{ link }">
-                <PostImage
-                  v-if="post.files && post.files.length"
-                  class="my-4"
-                  :images="post.files.map(item => ({
+    <transition-group
+      enter-active-class="animated faster fadeIn"
+      leave-active-class="animated faster fadeOut"
+    >
+      <Post
+        v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
+        :key="post.post_id"
+        :post="post"
+        class="mb-4"
+        :show-menu-dropdown="post.author && post.author.id === userId"
+        @delete="showModalConfirmDelete"
+        @like="likePost"
+        @edit="editPost"
+        @share="openModalShare"
+        @get-comment="getComment"
+        @post-comment="postComment"
+      >
+        <template slot="media-content" slot-scope="{ link }">
+          <PostImage
+            v-if="post.files && post.files.length"
+            class="my-4"
+            :images="post.files.map(item => ({
                     id: item.post_id,
                     thumb: get(item, 'link.high', null),
                     object: 'image'
                   }))"
-                  @click-item="imageObj => handleClickImage(imageObj, post)"
-                />
+            @click-item="imageObj => handleClickImage(imageObj, post)"
+          />
 
-                <template v-else-if="post.link && link">
-                  <app-divider class="my-4"></app-divider>
-                  <app-content-box
-                    tag="a"
-                    target="_blank"
-                    class="mb-4"
-                    size="md"
-                    :href="link.url"
-                    :image="link.image"
-                    :title="link.title"
-                    :desc="link.description"
-                    :meta-footer="link.siteName"
-                  />
-                </template>
-              </template>
+          <template v-else-if="post.link && link">
+            <app-divider class="my-4"></app-divider>
+            <app-content-box
+              tag="a"
+              target="_blank"
+              class="mb-4"
+              size="md"
+              :href="link.url"
+              :image="link.image"
+              :title="link.title"
+              :desc="link.description"
+              :meta-footer="link.siteName"
+            />
+          </template>
+        </template>
 
-              <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
-                <PostImage
-                  v-if="post.parent_post && post.parent_post.files && post.parent_post.files.length"
-                  slot="media-content"
-                  class="mt-4"
-                  :images="post.parent_post.files.map(item => ({
+        <PostShareContent v-if="post.type === POST_TYPES.SHARE" :post="post.parent_post">
+          <PostImage
+            v-if="post.parent_post && post.parent_post.files && post.parent_post.files.length"
+            slot="media-content"
+            class="mt-4"
+            :images="post.parent_post.files.map(item => ({
                   id: item.post_id,
                   thumb: item.link.high,
                   object: 'image'
                 }))"
-                  @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
-                />
-              </PostShareContent>
+            @click-item="imageObj => handleClickImage(imageObj, post.parent_post)"
+          />
+        </PostShareContent>
 
-              <template slot="comment" slot-scope="{ commentTree }">
+        <template slot="comment" slot-scope="{ commentTree }">
+          <transition-group
+            enter-active-class="animated faster fadeIn"
+            leave-active-class="animated faster fadeOut"
+          >
+            <CommentItem
+              v-for="comment in commentTree.comments || []"
+              :key="comment.id"
+              :post="post"
+              :data="comment"
+              @edit="editComment"
+              @delete="deleteComment"
+              @like="likeComment"
+              @get-child-comment="getChildComment"
+              @post-child-comment="postChildComment"
+            >
+              <template slot="child-comment" slot-scope="{ commentTree }">
                 <transition-group
                   enter-active-class="animated faster fadeIn"
                   leave-active-class="animated faster fadeOut"
                 >
                   <CommentItem
-                    v-for="comment in commentTree.comments || []"
-                    :key="comment.id"
+                    v-for="childComment in commentTree.comments || []"
+                    :key="childComment.id"
+                    :level="2"
                     :post="post"
-                    :data="comment"
-                    @edit="editComment"
-                    @delete="deleteComment"
-                    @like="likeComment"
-                    @get-child-comment="getChildComment"
-                    @post-child-comment="postChildComment"
-                  >
-                    <template slot="child-comment" slot-scope="{ commentTree }">
-                      <transition-group
-                        enter-active-class="animated faster fadeIn"
-                        leave-active-class="animated faster fadeOut"
-                      >
-                        <CommentItem
-                          v-for="childComment in commentTree.comments || []"
-                          :key="childComment.id"
-                          :level="2"
-                          :post="post"
-                          :parentComment="comment"
-                          :data="childComment"
-                          @edit="editChildComment"
-                          @delete="deleteChildComment"
-                          @like="likeChildComment"
-                        />
-                      </transition-group>
-                    </template>
-                  </CommentItem>
+                    :parentComment="comment"
+                    :data="childComment"
+                    @edit="editChildComment"
+                    @delete="deleteChildComment"
+                    @like="likeChildComment"
+                  />
                 </transition-group>
               </template>
-            </Post>
+            </CommentItem>
           </transition-group>
+        </template>
+      </Post>
+    </transition-group>
 
-          <div class="d-none">
-            <!-- DEMO FOR POST LINK -->
-            <!-- <Post class="mb-4">
+    <div class="d-none">
+      <!-- DEMO FOR POST LINK -->
+      <!-- <Post class="mb-4">
               <template slot="media-content">
                 <app-divider class="my-4"></app-divider>
                 <app-content-box
@@ -129,11 +124,11 @@
                   meta-footer="cellphones.com.vn"
                 />
               </template>
-            </Post>-->
-            <!-- END DEMO FOR POST LINK -->
+      </Post>-->
+      <!-- END DEMO FOR POST LINK -->
 
-            <!-- DEMO FOR POST SLIDER -->
-            <!-- <Post>
+      <!-- DEMO FOR POST SLIDER -->
+      <!-- <Post>
               <template slot="media-content">
                 <PostSlider
                   :images="timelineSliderItems"
@@ -141,222 +136,145 @@
                   @click-item="handleClickImage"
                 />
               </template>
-            </Post>-->
-            <!-- END DEMO FOR POST SLIDER -->
-          </div>
+      </Post>-->
+      <!-- END DEMO FOR POST SLIDER -->
+    </div>
 
-          <client-only>
-            <infinite-loading @infinite="feedInfiniteHandler">
-              <VclFacebook slot="spinner" class="bg-white" />
-              <template slot="no-more">Không còn bài viết.</template>
-            </infinite-loading>
-          </client-only>
+    <client-only>
+      <infinite-loading @infinite="feedInfiniteHandler">
+        <VclFacebook slot="spinner" class="bg-white" />
+        <template slot="no-more">Không còn bài viết.</template>
+      </infinite-loading>
+    </client-only>
 
-          <app-modal
-            v-if="modalDetailShow"
-            centered
-            :width="1170"
-            :component-class="{ 'post-detail-modal': true }"
-            @close="handleCloseModal"
-          >
-            <PostDetail
-              slot="content"
-              :post="modalDetailPost"
-              :parent-post="modalDetailParentPost"
-              :is-parent-post="modalDetailParentPostId === modalDetailPostId"
-              @click-close="handleCloseModal"
-              @click-prev="handleClickPrev"
-              @click-next="handleClickNext"
-              @delete="showModalConfirmDelete"
+    <app-modal
+      v-if="modalDetailShow"
+      centered
+      :width="1170"
+      :component-class="{ 'post-detail-modal': true }"
+      @close="handleCloseModal"
+    >
+      <PostDetail
+        slot="content"
+        :post="modalDetailPost"
+        :parent-post="modalDetailParentPost"
+        :is-parent-post="modalDetailParentPostId === modalDetailPostId"
+        @click-close="handleCloseModal"
+        @click-prev="handleClickPrev"
+        @click-next="handleClickNext"
+        @delete="showModalConfirmDelete"
+      >
+        <PostDetailPost
+          slot="post"
+          slot-scope="{ post, isParentPost }"
+          show-edit
+          show-comment
+          :post="post"
+          :is-parent-post="isParentPost"
+          @like="(...args) => isParentPost ? likePost(...args) : likeDetailPost(...args)"
+          @get-comment="(...args) => isParentPost ? getComment(...args) : getCommentDetailPost(...args)"
+          @post-comment="(...args) => isParentPost ? postComment(...args) : postCommentDetailPost(...args)"
+        >
+          <template v-if="!isEmpty(post)" slot="comment" slot-scope="{ commentTree }">
+            <transition-group
+              enter-active-class="animated faster fadeIn"
+              leave-active-class="animated faster fadeOut"
             >
-              <PostDetailPost
-                slot="post"
-                slot-scope="{ post, isParentPost }"
-                show-edit
-                show-comment
+              <CommentItem
+                v-for="comment in commentTree.comments || []"
+                :key="comment.id"
                 :post="post"
-                :is-parent-post="isParentPost"
-                @like="(...args) => isParentPost ? likePost(...args) : likeDetailPost(...args)"
-                @get-comment="(...args) => isParentPost ? getComment(...args) : getCommentDetailPost(...args)"
-                @post-comment="(...args) => isParentPost ? postComment(...args) : postCommentDetailPost(...args)"
+                :data="comment"
+                @edit="(...args) => isParentPost ? editComment(...args) : editCommentDetailPost(...args)"
+                @delete="(...args) => isParentPost ? deleteComment(...args) : deleteCommentDetailPost(...args)"
+                @like="(...args) => isParentPost ? likeComment(...args) : likeCommentDetailPost(...args)"
+                @get-child-comment="(...args) => isParentPost ? getChildComment(...args) : getChildCommentDetailPost(...args)"
+                @post-child-comment="(...args) => isParentPost ? postChildComment(...args) : postChildCommentDetailPost(...args)"
               >
-                <template v-if="!isEmpty(post)" slot="comment" slot-scope="{ commentTree }">
+                <template slot="child-comment" slot-scope="{ commentTree }">
                   <transition-group
                     enter-active-class="animated faster fadeIn"
                     leave-active-class="animated faster fadeOut"
                   >
                     <CommentItem
-                      v-for="comment in commentTree.comments || []"
-                      :key="comment.id"
+                      v-for="childComment in commentTree.comments || []"
+                      :key="childComment.id"
+                      :level="2"
                       :post="post"
-                      :data="comment"
-                      @edit="(...args) => isParentPost ? editComment(...args) : editCommentDetailPost(...args)"
-                      @delete="(...args) => isParentPost ? deleteComment(...args) : deleteCommentDetailPost(...args)"
-                      @like="(...args) => isParentPost ? likeComment(...args) : likeCommentDetailPost(...args)"
-                      @get-child-comment="(...args) => isParentPost ? getChildComment(...args) : getChildCommentDetailPost(...args)"
-                      @post-child-comment="(...args) => isParentPost ? postChildComment(...args) : postChildCommentDetailPost(...args)"
-                    >
-                      <template slot="child-comment" slot-scope="{ commentTree }">
-                        <transition-group
-                          enter-active-class="animated faster fadeIn"
-                          leave-active-class="animated faster fadeOut"
-                        >
-                          <CommentItem
-                            v-for="childComment in commentTree.comments || []"
-                            :key="childComment.id"
-                            :level="2"
-                            :post="post"
-                            :parentComment="comment"
-                            :data="childComment"
-                            @edit="(...args) => isParentPost ? editChildComment(...args) : editChildCommentDetailPost(...args)"
-                            @delete="(...args) => isParentPost ? deleteChildComment(...args) : deleteChildCommentDetailPost(...args)"
-                            @like="(...args) => isParentPost ? likeChildComment(...args) : likeChildCommentDetailPost(...args)"
-                          />
-                        </transition-group>
-                      </template>
-                    </CommentItem>
+                      :parentComment="comment"
+                      :data="childComment"
+                      @edit="(...args) => isParentPost ? editChildComment(...args) : editChildCommentDetailPost(...args)"
+                      @delete="(...args) => isParentPost ? deleteChildComment(...args) : deleteChildCommentDetailPost(...args)"
+                      @like="(...args) => isParentPost ? likeChildComment(...args) : likeChildCommentDetailPost(...args)"
+                    />
                   </transition-group>
                 </template>
-              </PostDetailPost>
-            </PostDetail>
-          </app-modal>
+              </CommentItem>
+            </transition-group>
+          </template>
+        </PostDetailPost>
+      </PostDetail>
+    </app-modal>
 
-          <PostModalShare
-            v-if="showModalShare"
-            :post="shareData"
-            @cancel="cancelShare"
-            @share="sharePost"
-          >
-            <PostShareContent slot="share-content" :post="shareData.parent_post">
-              <PostImage
-                v-if="shareData.parent_post && shareData.parent_post.files && shareData.parent_post.files.length"
-                slot="media-content"
-                class="my-4"
-                :images="shareData.parent_post.files.map(item => ({
+    <PostModalShare
+      v-if="showModalShare"
+      :post="shareData"
+      @cancel="cancelShare"
+      @share="sharePost"
+    >
+      <PostShareContent slot="share-content" :post="shareData.parent_post">
+        <PostImage
+          v-if="shareData.parent_post && shareData.parent_post.files && shareData.parent_post.files.length"
+          slot="media-content"
+          class="my-4"
+          :images="shareData.parent_post.files.map(item => ({
                   id: item.post_id,
                   thumb: item.link.high,
                   object: 'image'
                 }))"
-              />
-            </PostShareContent>
-          </PostModalShare>
+        />
+      </PostShareContent>
+    </PostModalShare>
 
-          <app-modal v-if="showModalEditPost" :width="770">
-            <PostEditor
-              slot="content"
-              ref="editEditor"
-              class="mb-0"
-              mode="edit"
-              :initialValues="editPostData"
-              prefetch
-              :show-overlay="false"
-              @submit="handleSubmitEditPost"
-            />
-            <div slot="footer" class="text-right px-4 pb-3">
-              <app-button
-                class="mr-3"
-                color="info"
-                :disabled="modalEditPostLoading"
-                size="sm"
-                square
-                @click="closeModalEditPost"
-              >Huỷ</app-button>
+    <app-modal v-if="showModalEditPost" :width="770">
+      <PostEditor
+        slot="content"
+        ref="editEditor"
+        class="mb-0"
+        mode="edit"
+        :initialValues="editPostData"
+        prefetch
+        :show-overlay="false"
+        @submit="handleSubmitEditPost"
+      />
+      <div slot="footer" class="text-right px-4 pb-3">
+        <app-button
+          class="mr-3"
+          color="info"
+          :disabled="modalEditPostLoading"
+          size="sm"
+          square
+          @click="closeModalEditPost"
+        >Huỷ</app-button>
 
-              <app-button
-                color="primary"
-                :loading="modalEditPostLoading"
-                size="sm"
-                square
-                @click="handleClickSaveEditPost"
-              >Lưu</app-button>
-            </div>
-          </app-modal>
-
-          <app-modal-confirm
-            v-if="modalConfirmDelete"
-            okText="Xoá"
-            title="Bạn có chắc chắn muốn xoá?"
-            :confirmLoading="modalConfirmDeleteLoading"
-            @cancel="hideModalConfirmDelete"
-            @ok="deletePost(modalConfirmDeleteId)"
-          ></app-modal-confirm>
-        </div>
-
-        <div class="col-md-4">
-          <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9" class="timeline-aside-wrapper">
-            <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-              <app-content-box
-                v-for="message in messagesConverted"
-                v-bind="message"
-                class="mb-4"
-                nuxt
-                size="sm"
-                :key="message.id"
-                :to="`/messages/t/${message.id}`"
-              />
-            </AsideBox>
-
-            <AsideBox title="Khóa học Online nổi bật">
-              <div class="timeline-aside-tabs">
-                <a
-                  href
-                  :class="{ active: coursesTab === 0 }"
-                  @click.prevent="coursesTab = 0"
-                >Miễn phí</a>
-                <a
-                  href
-                  :class="{ active: coursesTab === 1 }"
-                  @click.prevent="coursesTab = 1"
-                >Trả phí</a>
-              </div>
-
-              <div class="time-aside-tabs-content">
-                <div v-show="coursesTab === 0" class="timeline-aside-tab-pane">
-                  <app-content-box
-                    v-for="item in freeCourses"
-                    :key="item.id"
-                    class="align-items-center"
-                    size="sm"
-                    :image="get(item, 'avatar.low', null)"
-                  >
-                    <n-link slot="image" :to="`/elearning/${item.id}`">
-                      <img :src="item.image" :alt="item.name" />
-                    </n-link>
-
-                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                  </app-content-box>
-                </div>
-
-                <div v-show="coursesTab === 1" class="timeline-aside-tab-pane">
-                  <app-content-box
-                    v-for="item in privateCourses"
-                    :key="item.id"
-                    class="align-items-center"
-                    size="sm"
-                    :image="get(item, 'avatar.low', null)"
-                  >
-                    <n-link slot="image" :to="`/elearning/${item.id}`">
-                      <img :src="item.image" :alt="item.name" />
-                    </n-link>
-
-                    <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
-
-                    <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
-                  </app-content-box>
-                </div>
-
-                <div class="text-center mt-4">
-                  <app-button class="timeline-aside-btn" nuxt to="/elearning">Xem Tất Cả</app-button>
-                </div>
-              </div>
-            </AsideBox>
-          </div>
-        </div>
+        <app-button
+          color="primary"
+          :loading="modalEditPostLoading"
+          size="sm"
+          square
+          @click="handleClickSaveEditPost"
+        >Lưu</app-button>
       </div>
-    </div>
+    </app-modal>
 
+    <app-modal-confirm
+      v-if="modalConfirmDelete"
+      okText="Xoá"
+      title="Bạn có chắc chắn muốn xoá?"
+      :confirmLoading="modalConfirmDeleteLoading"
+      @cancel="hideModalConfirmDelete"
+      @ok="deletePost(modalConfirmDeleteId)"
+    ></app-modal-confirm>
   </div>
 </template>
 
@@ -502,8 +420,6 @@ export default {
         }
       ],
 
-      
-
       //Fake data
       coursesList: COURSES_LIST,
       timelineSliderItems: TIMELINE_SLIDER_ITEMS
@@ -516,10 +432,10 @@ export default {
     ...mapGetters("auth", ["userId"]),
 
     // userId() {
-      // const account = $store.getters['auth/token'];
-      // return !!account ? account.id : null;
-      // const { $store: store = {} } = this;
-      // return "id" in store.state.auth.token ? store.state.auth.token.id : null;
+    // const account = $store.getters['auth/token'];
+    // return !!account ? account.id : null;
+    // const { $store: store = {} } = this;
+    // return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     // },
 
     messagesConverted() {
