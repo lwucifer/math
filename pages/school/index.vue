@@ -101,7 +101,7 @@ export default {
       return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
     },
     categoryOpts() {
-      return addAllOptionSelect(this.categories);
+      return this.categories;
     },
     selectedCategory() {
       if (this.type) return this.categories.find(c => c.type == this.type);

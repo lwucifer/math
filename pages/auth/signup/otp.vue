@@ -110,7 +110,7 @@ export default {
       await this.verifiOtp(this.otp).then(result => {
         // console.log("result huydv", result);
         if (result && result.user) {
-          this.verify_token = result.user ? result.user.ma : "";
+          this.verify_token = result.user ? result.user._lat : "";
           // console.log("result huydv11111", result);
           this.submitRegister();
         } else {
