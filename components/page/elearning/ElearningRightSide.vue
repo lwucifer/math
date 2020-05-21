@@ -239,7 +239,7 @@ export default {
       return false;
     },
     isDoneElearning() {
-      if (get(this, "info.progress", "-1") == 100) return true;
+      if (get(this, "info.progress", "-1") >= 100) return true;
       return false;
     },
     description() {

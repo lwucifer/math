@@ -13,7 +13,10 @@
       <!-- Preview Upload Image -->
       <div v-if="uploadImgSrc" class="e-study-tab-qa-editor__preview">
         <img :src="uploadImgSrc" alt />
-        <span class="e-study-tab-qa-editor__close-preview" @click.stop="removeImgUpload">
+        <span
+          class="e-study-tab-qa-editor__close-preview"
+          @click.stop="removeImgUpload"
+        >
           <IconClose class="icon" />
         </span>
       </div>
@@ -40,35 +43,39 @@
 
 <script>
 import { getBase64 } from "~/utils/common";
-
+import { get } from "lodash";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 
 export default {
   components: {
     IconCameraAlt,
-    IconClose
+    IconClose,
   },
 
   props: {
     type: {
       type: String,
       default: "comment",
-      validator: value => ["comment", "review"].includes(value)
-    }
+      validator: (value) => ["comment", "review"].includes(value),
+    },
   },
 
   data() {
     return {
       uploadFileList: [],
-      uploadImgSrc: null
+      uploadImgSrc: null,
+      payload: {
+        elearning_id: "",
+        content: "",
+      },
     };
   },
 
   methods: {
     handleUploadChange(fileList, event) {
       this.uploadFileList = Array.from(fileList);
-      getBase64(this.uploadFileList[0], src => {
+      getBase64(this.uploadFileList[0], (src) => {
         this.uploadImgSrc = src;
       });
     },
@@ -82,8 +89,8 @@ export default {
       }
     },
 
-    submit() {}
-  }
+    submit() {},
+  },
 };
 </script>
 

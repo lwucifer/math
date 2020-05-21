@@ -15,7 +15,7 @@
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.STUDENT)">
-          <n-link to="/">
+          <n-link to="/privates/students">
             <IconSupervisorAccount24px class="fill-gray" />
             <span>Quản lý học sinh</span>
           </n-link>
