@@ -5,7 +5,7 @@
             <div class="wrap-success-auth px-5">
                 <IconSuccess70px class="mb-3 fill-primary"/>
                 <h3>Gửi yêu cầu thành công</h3>
-                <p class="my-4 mx-5">Vui lòng kiểm tra email của bạn để xác thực việc thay đổi mật khẩu</p>
+                <p class="my-4 mx-5">Vui lòng kiểm tra email của bạn để xác thực việc thay đổi mật khẩu.</p>
                 <app-button class="mt-2 btn-confirm" square 
                             :to="'/auth/signin'"
                             nuxt

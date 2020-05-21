@@ -13,7 +13,7 @@
       <p class="mb-3">
         <b>Thay ảnh đại diện</b>
       </p>
-      <p class="mb-4">Định dạng hình ảnh cho phép là .jpg, .jpeg, .bmp hoặc .png</p>
+      <p class="mb-4">Click vào nút Upload dưới đây để thay đổi ảnh đại diện của bạn.</p>
       <app-upload class @change="handleUploadAvatar">
         <template>
           <div class>
