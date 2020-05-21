@@ -52,6 +52,7 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
     box-shadow: $shadow-1;
     background: #fff;
     height: 100%;
+    border: none
   }
   
   .vs__selected-options {
@@ -91,6 +92,12 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
     .vs__search {
       box-shadow: none;
     }
+  }
+}
+
+.app-vue-select--has-border {
+  .vs__dropdown-toggle {
+    border: 1px solid #E0E0E0;
   }
 }
 

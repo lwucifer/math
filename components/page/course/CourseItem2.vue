@@ -56,6 +56,7 @@
           <strong>{{ get(item, 'voting.rate', 0) }}</strong>
           ({{ get(item, 'voting.votes', 0) }})
         </span>
+        <slot name="mycoursefavourite"></slot>
       </div>
 
       <div class="course-item-2__price-wrapper">

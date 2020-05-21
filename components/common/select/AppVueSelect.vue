@@ -1,5 +1,7 @@
 <template>
   <v-select
+    class="app-vue-select"
+    :class="classes"
     v-bind="{ ...$attrs, ...$props, ...$slots }"
     v-on="$listeners" ref="vueSelectItem"
     @input="handleInput"
@@ -7,18 +9,22 @@
     @search="handleSearch"
   >
     <template v-slot:selected-option="option">
-      <span v-if="isSltedAll(option)">{{placeholder}}</span>
-      <span v-else>{{getOptionLabel(option)}}</span>
+      <slot name="selected-option" :option="option">
+        <span v-if="isSltedAll(option)">{{placeholder}}</span>
+        <span v-else>{{getOptionLabel(option)}}</span>
+      </slot>
     </template>
     <template v-slot:option="option">
-      <span v-if="isSltedOption(option)">
-        <i class="vs__icon-selected">
-          <slot name="selected-icon">
-            <IconCheck />
-          </slot>
-        </i>{{ getOptionLabel(option) }}
-      </span>
-      <span v-else>{{ getOptionLabel(option) }}</span>
+      <slot name="option" :option="option">
+        <span v-if="isSltedOption(option)">
+          <i class="vs__icon-selected">
+            <slot name="selected-icon">
+              <IconCheck />
+            </slot>
+          </i>{{ getOptionLabel(option) }}
+        </span>
+        <span v-else>{{ getOptionLabel(option) }}</span>
+      </slot>
     </template>
     <template v-slot:list-footer>
       <slot name="list-footer"></slot>
@@ -40,22 +46,23 @@
       // },
       allOpt: {
         type: Object,
-      }
+      },
+      hasBorder: Boolean
     },
     components: {
       vSelect,
       IconCheck
     },
     computed: {
-      isAll() {
-        return true
-      },
       classes() {
         const sizeCls = {
-        
+        }
+        const styleCls = {
+          'app-vue-select--has-border': this.hasBorder
         }
         return {
-        
+          ...sizeCls,
+          ...styleCls
         }
       }
     },
