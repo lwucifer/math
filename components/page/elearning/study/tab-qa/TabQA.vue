@@ -38,10 +38,14 @@
         <a href class="e-study-tab-qa__more e-study-tab-qa__more--child"
           >Xem thêm bình luận</a
         >
-        <TabQACommentEditor v-if="slotProps.showReply" class="mt-4" />
+        <TabQACommentEditor
+          v-if="slotProps.showReply"
+          class="mt-4"
+          :question="question"
+        />
       </TabQACommentItem>
 
-      <div class="text-center">
+      <div class="text-center" v-if="get(questions, 'page.last', false)">
         <a href class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>
     </div>
