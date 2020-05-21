@@ -16,7 +16,6 @@
       />
       <span v-show="error_name" class="error mb-3">{{ error_name }}</span>
 
-
       <div class="cc-box__bg-disable">
         <p class="text-center my-4">Chọn loại bài học</p>
 
@@ -67,14 +66,16 @@
         />
 
         <div class="d-flex justify-content-end mt-4">
-          <!-- <app-button
+          <app-button
+            v-if="lesson"
             class="clc-btn font-weight-semi-bold mr-4 text-secondary"
             size="md"
             color="default"
             outline
             square
             @click="handleCancel"
-            >Huỷ</app-button> -->
+            >Huỷ</app-button
+          >
 
           <app-button
             @click="handleAddContent"
@@ -94,7 +95,6 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
     />
-
 
     <app-modal-confirm
       centered
@@ -187,20 +187,20 @@ export default {
     submit() {
       return !this.error_name;
     },
-    
+
     chagingDescription() {
-      if(this.confirmLoadingVideo){
-        return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này."
+      if (this.confirmLoadingVideo) {
+        return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
       }
-      return "Bạn có chắc chắn muốn tải video này lên hệ thống?"
+      return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
 
     chagingBtnOk() {
-      if(this.confirmLoadingVideo){
-        return "Đang tải"
+      if (this.confirmLoadingVideo) {
+        return "Đang tải";
       }
-      return "Xác nhận"
-    }
+      return "Xác nhận";
+    },
   },
 
   watch: {
@@ -240,21 +240,20 @@ export default {
     },
 
     async handleAddContent() {
-      if(this.payload.type == "VIDEO"){
-        this.showModalConfirmVideo = true
+      if (this.payload.type == "VIDEO") {
+        this.showModalConfirmVideo = true;
       } else {
         this.showModalConfirm = true;
       }
-      
     },
 
     async handleOk() {
-      if(this.payload.type == "VIDEO"){
-        this.confirmLoadingVideo = true
-      }else {
+      if (this.payload.type == "VIDEO") {
+        this.confirmLoadingVideo = true;
+      } else {
         this.confirmLoading = true;
       }
-      
+
       const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
