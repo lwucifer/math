@@ -210,3 +210,8 @@ export const ACCOUNT_BANK = `/user/account/banks`;
 export const ACCOUNT_BANK_VALIDATE = `/user/account/banks/validate`;
 export const ACCOUNT_BALANCE = `/user/account/balance`;
 export const ACCOUNT_WITHDRAW = `/user/account/withdraw`;
+
+/**
+ * INFO
+ */
+export const INFO_SUPPORT = `/account/help`;

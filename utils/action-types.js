@@ -618,3 +618,7 @@ export const TEACHING_PUBLIC_LIST = {
 export const PUBLIC_CLASSES = {
     LIST: "publicClassesList",
 };
+
+export const INFO_SUPPORT = {
+    ADD: "infoSupport",
+};
