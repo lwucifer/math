@@ -3,15 +3,17 @@
         <div class="evlc-item__body bg-input-gray">
             <div class="d-flex align-items-center py-3">
             <div class="d-flex align-items-center mr-4">
-                <IconLibraryBooks 
-                    width="16px" height="16px"
-                    class="fill-primary mr-2" 
-                    v-if="lesson.format == 'DOCX'"/>
-
                 <IconPlay 
                     width="16px" height="16px"
-                    v-else 
+                    v-if="lesson.type == 'VIDEO'"
                     class="mr-2 fill-primary"/>
+
+                <IconLibraryBooks 
+                    v-else
+                    width="16px" height="16px"
+                    class="fill-primary mr-2" 
+                   />
+
                 Bài {{ lesson.index }}: {{ lesson.name }}
             </div>
             

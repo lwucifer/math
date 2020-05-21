@@ -10,6 +10,7 @@
 
       <div class="stars">
         <app-stars
+          class="mb-1"
           :stars="Math.floor(get(info, 'rates.averageRate', 0))"
           :size="14"
         />
