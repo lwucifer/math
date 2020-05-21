@@ -174,7 +174,7 @@
               <button @click="preview(row)" v-if="tab == 'APPROVED' || tab == null">
                 <IconNote height='18' width='18' class="fill-primary mr-2" />Xem chi tiết
               </button>
-              <n-link v-if="tab != 'APPROVED'" :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
+              <n-link :to="'/elearning/manager/courses/create/?elearning_id=' + row.id + ''" class="link">
                 <IconEdit class="fill-purple mr-2" height='16' width='16'/>Chỉnh sửa
               </n-link>
 

@@ -90,9 +90,9 @@ export default {
     };
   },
 
-  // mounted() {
-  //   this.$store.dispatch(`elearning/create/getProgress`);
-  // },
+  mounted() {
+    useEffect(this, this.handleChangeProgress.bind(this), ["progress"]);
+  },
 
   props: {
     formActive: String,
@@ -118,57 +118,6 @@ export default {
   },
 
   watch: {
-    // general: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    // lessons_lecture: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    // chapters: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    // setting: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    // lessons: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    // exams: {
-    //   handler: function() {
-    //     this.$store.dispatch(`elearning/create/getProgress`);
-    //   },
-    //   deep: true,
-    // },
-    progress: {
-      handler: function() {
-        let checked = get(this, "progress.general_status", false) == 1;
-        this.menu[0]["checked"] = checked;
-        checked = get(this, "progress.content_status", false) == 1;
-        this.menu[1]["checked"] = checked;
-        checked = get(this, "progress.setting_status", false) == 1;
-        this.menu[2]["checked"] = checked;
-        checked = get(this, "progress.exercise_status", false) == 1;
-        this.menu[3]["checked"] = checked;
-        checked = get(this, "progress.test_status", false) == 1;
-        this.menu[4]["checked"] = checked;
-      },
-      deep: true,
-    },
     formActive: {
       handler: function() {
         if (this.formActive === "content-lecture") {
@@ -186,6 +135,18 @@ export default {
   },
 
   methods: {
+    handleChangeProgress() {
+      let checked = get(this, "progress.general_status", false) == 1;
+      this.menu[0]["checked"] = checked;
+      checked = get(this, "progress.content_status", false) == 1;
+      this.menu[1]["checked"] = checked;
+      checked = get(this, "progress.setting_status", false) == 1;
+      this.menu[2]["checked"] = checked;
+      checked = get(this, "progress.exercise_status", false) == 1;
+      this.menu[3]["checked"] = checked;
+      checked = get(this, "progress.test_status", false) == 1;
+      this.menu[4]["checked"] = checked;
+    },
     handlePublishCourse() {
       this.showModalConfirm = true;
     },
@@ -258,4 +219,3 @@ export default {
   },
 };
 </script>
-

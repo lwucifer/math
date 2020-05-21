@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <VclFacebook v-if="loading"></VclFacebook>
+  <div v-else>
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">Bài tập</h4>
@@ -7,9 +8,9 @@
 
       <div class="px-4">
         <app-alert type="info" class="mt-4" show-close>
-          Bạn có thể tạo bài tập cho bài giảng/ khóa học của bạn tại đây. Nếu bài giảng/ khóa học của
-          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
-          gửi lên để được xét duyệt.
+          Bạn có thể tạo bài tập cho bài giảng/ khóa học của bạn tại đây. Nếu
+          bài giảng/ khóa học của bạn không yêu cầu làm bài tập, bạn có thể bỏ
+          qua phần này và tiến hành gửi lên để được xét duyệt.
         </app-alert>
 
         <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3 mt-4">
@@ -17,10 +18,8 @@
         </h5>
 
         <SelectLesson
-          :class="{'pb-3': isShowButtonCreate}"
+          :class="{ 'pb-3': isShowButtonCreate }"
           v-if="get(general, 'type', '') === 'COURSE'"
-          :lessons="lessons"
-          :default-value="lessons[0] && lessons[0].id"
         />
       </div>
 
@@ -50,18 +49,6 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <!-- <app-button
-          outline
-          class="mr-4"
-          color="error"
-          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
-        >
-        <app-button
-          class="mr-4"
-          color="primary"
-          outline
-          ><IconSave class="mr-2" /> Lưu nháp</app-button
-        > -->
         <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
@@ -82,7 +69,7 @@ import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
-
+import { VclFacebook } from "vue-content-loading";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
@@ -113,6 +100,14 @@ export default {
     IconDelete,
     Forward,
     IconSave,
+    VclFacebook,
+  },
+
+  mounted() {
+    useEffect(this, this.handleChangeGeneral.bind(this), [
+      "general",
+      "lessons",
+    ]);
   },
 
   data() {
@@ -120,6 +115,7 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       category: "EXERCISE",
+      loading: true,
     };
   },
 
@@ -131,15 +127,19 @@ export default {
     }),
   },
 
-  mounted() {
-    this.$store.dispatch("elearning/create/getLessons");
-  },
-
-  updated() {
-    console.log(this.lesson, this.lessons);
-  },
-
   methods: {
+    async handleChangeGeneral() {
+      this.loading = true;
+      if (get(this, "general.type", "") === "LECTURE") {
+        const lesson_id = get(this, "lessons.0.id", "");
+        await this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        this.loading = false;
+        return;
+      }
+      await this.$store.dispatch("elearning/create/getLesson", "");
+      this.loading = false;
+    },
+
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
