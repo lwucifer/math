@@ -16,7 +16,7 @@
                   <strong>Thuộc bài giảng/ khóa học</strong>
                 </label>
                 <app-vue-select
-                  style="width: 100%"
+                  style="width: 25rem"
                   class="app-vue-select form-item__selection"
                   v-model="filterCourse"
                   :options="courses"
@@ -59,7 +59,7 @@
                 <label>
                   <strong>Gửi lời mời học đến toàn bộ học sinh đã tham gia bài giảng/ khóa học này của bạn</strong>
                 </label>
-                <app-radio name="sendmess" value="1" class="mr-6" v-model="sendMess">Có</app-radio>
+                <app-radio name="sendmess" value="1" class="pr-6 mr-5" v-model="sendMess">Có</app-radio>
                 <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
               </div>
 
@@ -303,7 +303,6 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 
 import {
   getDateBirthDay,
-  getLocalDateTime,
   getUTCDateTime,
   getTimeHH_MM_A,
   getUTCDateTimeHH_MM_A,
@@ -391,7 +390,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
+      stateElearnings: "Elearnings"
     }),
     fullParams() {
       return this.params.elearning_id  &&
@@ -551,17 +550,16 @@ export default {
       this.confirmLoading = false;
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: {teacher_id: userId} }
         );
-        console.log(this.get(this.stateLessons, "data.content", []));
-        let lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
         lessonList.forEach(element => {
           list.push({
@@ -601,7 +599,6 @@ export default {
           ...this.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
-        console.log('wwwwwwwwwwwwwwwww',this.schedules, this.selectedItems[index])
       }
     },
     pushSelectedIndexes(item, index) {
@@ -611,8 +608,6 @@ export default {
           ...this.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])
         });
-        console.log('wwwwwwwwwwwwwwwww',this.schedules, this.selectedItems[index])
-
       }
     },
 
@@ -627,7 +622,7 @@ export default {
   },
 
   created() {
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>
