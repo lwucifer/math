@@ -1,7 +1,11 @@
 <template>
   <div class="aside-box">
-    <div class="aside-box__top">
-      <div class="tool-top mb-15">
+    <div class="tool-top">
+      <n-link to="/" class="tool-top__link">
+        <IconLeftArrow class="mr-3 fill-dark" width="5px" height="10px"/> Tin nhắn
+      </n-link>
+
+      <div class="tool-top__feature">
         <app-dropdown
           position="left"
           v-model="dropdownEdit"
@@ -9,8 +13,9 @@
           class="link--dropdown"
         >
           <button slot="activator" type="button" class="link--dropdown__button">
-            <IconDots />
+            <IconCog  class="fill-base mr-3"/>
           </button>
+
           <div class="link--dropdown__content">
             <ul>
               <li class="link--dropdown__content__item">
@@ -26,48 +31,56 @@
             </ul>
           </div>
         </app-dropdown>
+
         <button @click="create()" title="Viết tin nhắn mới">
-          <IconEdit />
+          <IconEdit class="fill-base"/>
         </button>
       </div>
-      <div class="search-nav">
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-addon">
-              <IconSearch width="15" height="15" />
-            </div>
-            <input type="text" placeholder="03826589" />
-            <div class="input-group-addon">
-              <a href="#">
-                <IconCloseOutline class="fill-999" width="15" height="15" />
-              </a>
-            </div>
+    </div>
+
+    <div class="search-nav">
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon">
+            <IconSearch width="15" height="15" />
           </div>
+
+          <input type="text" placeholder="Tìm kiếm người và nhóm" />
+
+          <!-- <div class="input-group-addon">
+            <a href="#">
+              <IconCloseOutline class="fill-999" width="15" height="15" />
+            </a>
+          </div> -->
         </div>
       </div>
     </div>
-    <div class="aside-box__content">
+
+    <div class="list-chat">
       <div class="tabs">
-        <ul class="nav-tabs list-unstyle" v-if="!isContact">
+        <!-- <ul class="nav-tabs list-unstyle" v-if="!isContact">
           <li>
             <a @click="tabClick(1)" :class="tabChat == true ? 'active' : ''">Chat</a>
           </li>
           <li>
             <a @click="tabClick(2)" :class="tabChat == false ? 'active' : ''">Group</a>
           </li>
-        </ul>
+        </ul> -->
+
         <div class="tabs-content" v-if="isContact">
           <div class="align-item" v-for="(item, index) in friends" :key="index">
             <div class="align-item__image">
               <app-avatar :src="item.avatar" size="md" class="comment-item__avatar" />
             </div>
+
             <div class="align-item__meta">
-              <h4 class="align-item__title">
+              <h5 class="align-item__title">
                 <n-link slot="title" to>{{ item.name }}</n-link>
-              </h4>
+              </h5>
             </div>
           </div>
         </div>
+
         <div v-else>
           <div class="tabs-content" v-show="tabChat == true">
             <div class="btn-create-chat" v-if="checkChatList" @click="create()">
@@ -90,9 +103,9 @@
                   />
                 </div>
                 <div class="align-item__meta">
-                  <h4 class="align-item__title">
+                  <h5 class="align-item__title">
                     <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
-                  </h4>
+                  </h5>
                   <div class="align-item__desc">
                     <p>{{ item.content }}</p>
                   </div>
@@ -129,6 +142,7 @@
               </client-only>
             </template>
           </div>
+
           <div class="tabs-content" v-show="tabChat == false">
             <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
@@ -150,9 +164,9 @@
                   />
                 </div>
                 <div class="align-item__meta">
-                  <h4 class="align-item__title">
+                  <h5 class="align-item__title">
                     <n-link slot="title" to>{{ item.room_name }}</n-link>
-                  </h4>
+                  </h5>
                   <div class="align-item__desc">
                     <p>{{ item.content }}</p>
                   </div>
@@ -192,7 +206,8 @@
         </div>
       </div>
     </div>
-    <div class="aside-box__bottom">
+    
+    <!-- <div class="aside-box__bottom">
       <ul class="group-button list-unstyle">
         <li>
           <a @click="isContact = true" :class="isContact ? 'active' : ''">
@@ -207,7 +222,7 @@
           </a>
         </li>
       </ul>
-    </div>
+    </div> -->
 
     <!-- Modal tạo nhóm chát -->
     <ModalAddGroup
@@ -239,10 +254,12 @@ import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
 import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
-import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import IconCog from '~/assets/svg/icons/cog.svg?inline';
 import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
+import IconLeftArrow from '~/assets/svg/icons/left-arrow.svg?inline';
+import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 import GroupService from "~/services/message/Group";
 import MessageType from "~/services/message/MessageType";
@@ -257,13 +274,15 @@ export default {
     IconUsers,
     IconChat,
     IconEdit,
-    IconDots,
+    IconCog,
     IconUsersAlt,
     IconUserPlus,
     ModalAddFriend,
     ModalAddGroup,
     ModalLeaveGroup,
-    IconPlus
+    IconPlus,
+    IconLeftArrow,
+    IconDots
   },
   props: {
     // contacts: {
