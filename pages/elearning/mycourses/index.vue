@@ -38,12 +38,15 @@
       @pagechange="onPageChange"
       v-if="pagination.totalPages > 1"
     />
+    <!-- Item favourite nhưng chưa
     <div class="col-md-3">
       <CourseItem2>
         <template v-slot:mycoursefavourite>
           <MenuDropDown/>
         </template>
+    
     </CourseItem2>
+    -->
     <ShareElearningModal v-if="false"/> <!-- ModalShare -->
     </div>
   </div>

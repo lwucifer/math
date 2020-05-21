@@ -31,3 +31,9 @@
     max-height: calc(100vh - 101px);
     overflow-y: auto;
 }
+
+// New UI
+.page-social__col-menu {
+    max-width: #{(239/1164) * 100 * 1%};
+    flex: 0 0 #{(239/1164) * 100 * 1%};
+}

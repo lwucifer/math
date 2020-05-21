@@ -13,53 +13,6 @@ import ElearningExerciseListItem from "~/components/page/elearning/study/exercis
 import { mapState } from 'vuex';
 
 
-const fakeExercises = [
-  {
-    id: 1,
-    name: "Bài tập số 1",
-    type: "CHOICE",
-    duration: 90,
-    reworks: 3,
-    works: 1,
-    open_time: 0,
-    result: "FAILED",
-    required: true
-  },
-  {
-    id: 2,
-    name: "Bài tập số 2",
-    type: "CHOICE",
-    duration: 90,
-    reworks: 5,
-    works: 1,
-    open_time: 0,
-    result: "PASSED",
-    required: false
-  },
-  {
-    id: 3,
-    name: "Bài tập số 3",
-    type: "CHOICE",
-    duration: 90,
-    reworks: 5,
-    works: 1,
-    open_time: 0,
-    result: "NONE",
-    required: false
-  },
-  {
-    id: 4,
-    name: "Bài tập số 4",
-    type: "ESSAY",
-    duration: 90,
-    reworks: 5,
-    works: 1,
-    open_time: 0,
-    result: "PENDING",
-    required: false
-  }
-];
-
 export default {
   components: {
     ElearningExerciseListItem

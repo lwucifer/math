@@ -55,7 +55,7 @@ export default {
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    // ...mapGetters("elearning/study/study-exercise", ["tests"]),
+    
 
     totalLessons() {
       console.log("[progress]", this.progress);

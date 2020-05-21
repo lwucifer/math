@@ -52,7 +52,7 @@
 
                 <div class="form-input">
                   <textarea
-                    :class="{'content-error' : validate.content}"
+                    :class="{'content-error' : validate.content, 'content-success' : contentSuccess}"
                     name=""
                     id=""
                     rows="10"
@@ -67,6 +67,9 @@
               <div class="form-group d-flex mb-0">
                 <div class="form-name"></div>
                 <div class="form-input">
+                  <div v-if="fileName" style="color: blue">
+                    {{ fileName }}
+                  </div>
                   <div class="upload d-flex align-items-center">
                     <app-upload
                       accept=".jpg, .png, .pdf, .word, .excel"
@@ -116,7 +119,9 @@ export default {
       email: "",
       title: "",
       content: "",
-      fileUpload: [],
+      contentSuccess: false,
+      fileUpload: '',
+      fileName: '',
       errorMessage: {
         email: "",
         title: "",
@@ -166,9 +171,8 @@ export default {
         this.errorMessage.title = "";
       }
     },
-    handleContent(content) {
-      console.log("content", content.target.value, content.target.value.length);
-      let value = content.target.value;
+    handleContent(_content) {
+      let value = _content.target.value;
       if (!this.$v.content.required) {
         this.errorMessage.content = "Trường này là bắt buộc";
         this.validate.content = true;
@@ -178,13 +182,19 @@ export default {
       } else {
         this.errorMessage.content = "";
         this.validate.content = false;
+        this.contentSuccess = true;
       }
     },
 
     handleSelectFile(files) {
       console.log("files", files[0]);
       this.fileUpload = files[0];
+      this.fileName = this.fileUpload.name;
       console.log("this.fileUpload", this.fileUpload);
+    },
+
+    selectImage(){
+      console.log('selectImage')
     },
 
     handleSend() {
@@ -211,5 +221,8 @@ export default {
 }
 .content-error{
   border: 1px solid red !important;
+}
+.content-success{
+  border: 1px solid green !important;
 }
 </style>
