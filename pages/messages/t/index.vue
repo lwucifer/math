@@ -9,7 +9,7 @@
   <div class="box">
     <div class="row">
       <TabMessage :isCreated="isCreate" />
-      <TabInfo :isGroup="isGroup" :noMessage="true" />
+      <!-- <TabInfo :isGroup="isGroup" :noMessage="true" /> -->
     </div>
   </div>
   <!-- </div>
@@ -27,7 +27,7 @@ import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconImage from "~/assets/svg/icons/image.svg?inline";
 import TabContact from "~/components/page/chat/TabContact";
 import TabMessage from "~/components/page/chat/TabMessage";
-import TabInfo from "~/components/page/chat/TabInfo";
+// import TabInfo from "~/components/page/chat/TabInfo";
 
 import * as constants from "~/utils/constants";
 import { redirectWithParams } from "../../../utils/common";
@@ -42,7 +42,7 @@ export default {
     IconImage,
     TabMessage,
     TabContact,
-    TabInfo
+    // TabInfo
   },
 
   middleware: "authenticated",

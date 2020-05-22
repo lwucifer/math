@@ -3,8 +3,16 @@
     <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
       <IconClose2 />
     </button>
-    <IconShoppingCartAlt class="fill-secondary" />
-    <span>Thêm sản phẩm vào giỏ hàng không thành công.</span>
+    <div class="d-flex align-items-center">
+      <IconCloseOutline class="mr-2 fill-secondary" />
+      <span>Thêm vào giỏ hàng thất bại</span>
+    </div>
+    <app-button
+      square
+      class="mt-4 btn-view-cart"
+      @click.prevent="$router.push('/elearning')"
+      >Tiếp tục mua sắm</app-button
+    >
   </div>
   <div class="modal_payment" v-else>
     <button class="btn-close-modal" @click.prevent="$emit('close-modal')">
@@ -25,13 +33,13 @@
 
 <script>
 import IconCheckCircle24px from '~/assets/svg/v2-icons/check_circle_24px.svg?inline';
-import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
+import IconCloseOutline from '~/assets/svg/icons/Close-outline.svg?inline';
 import IconClose2 from "~/assets/svg/icons/close2.svg?inline";
 
 export default {
   components: {
     IconCheckCircle24px,
-    IconShoppingCartAlt,
+    IconCloseOutline,
     IconClose2,
   },
   props: {

@@ -63,19 +63,23 @@
     }
     .app-dropdown__content{
         right: -16px !important;
+        overflow: unset;
     }
     .link--dropdown__ElearningItem{
         list-style: none;
         padding:18px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-        li{
+        >li{
             a{
+                font-size: 13px;
                 text-decoration: none;
                 display: flex;
                 align-items: center;
                 color: #656565;
                 svg{
                     margin-right: 10px;
+                    width: 2rem;
+                    height: 2rem;
                 }
                 &:hover{
                     color: $color-primary;
@@ -94,18 +98,21 @@
             .share-dropdowm__ElearningItem{
                 list-style: none;
                 text-decoration: none;
-                position: absolute;
-                right: -19.8rem;
-                top: 0;
+                position: absolute !important;
+                right: -13.8rem;
+                top: 0.5rem;
                 background: white;
                 padding:10px;
-                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+                box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 2px;
                 z-index: 10;
                 svg{
                     margin-right: 10px;
                 }
                 li{
                     cursor: pointer;
+                    font-size: 13px;
+                    letter-spacing: 0.01em;
                 }
                 li:nth-child(2){
                     margin: 10px 0 0;

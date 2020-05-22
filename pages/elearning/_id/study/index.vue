@@ -37,9 +37,12 @@
               "
             />
             <div class="lession-screen">
+              <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')"/>
+              <!--
               <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
                 >Download</a
               >
+              -->
             </div>
             <div class="lession-screen" v-if="studyMode === imageMode">
               <img :src="get(payload, 'link', '')" alt />
@@ -123,6 +126,7 @@ import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
 import { VclList } from "vue-content-loading";
 
+import ElearningDownload from "~/components/page/elearning/study/ElearningDownload"
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
 export default {
@@ -142,7 +146,8 @@ export default {
     // ElearningQuestion,
     Streaming,
     ElearningExercise,
-    VclList
+    VclList,
+    ElearningDownload
   },
 
   data() {

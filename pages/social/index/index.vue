@@ -438,22 +438,6 @@ export default {
     // return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     // },
 
-    messagesConverted() {
-      return this.messages && this.messages.length
-        ? this.messages.map(item => {
-            return {
-              id: item.room.id,
-              title: item.room.members
-                .filter(member => member.user_id !== this.userId)
-                .map(member => member.fullname)
-                .join(", "),
-              desc: item.message.content,
-              image: get(item, "room.room_avatar.low", null)
-            };
-          })
-        : [];
-    },
-
     modalDetailPost() {
       return this.$store.state.social.detailPost;
     },
