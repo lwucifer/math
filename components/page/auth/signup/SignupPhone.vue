@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <form @submit.prevent="hanldeShowModalOTP">
     <div class="auth_content mb-4">
       <app-input
         type="text"
         v-model="phone"
-        placeholder="Số điện thoại"
+        placeholder="Nhập số điện thoại"
         maxlength="11"
         :error="$v.phone.$invalid"
         :message="errorMessage.phone"
@@ -21,7 +21,7 @@
       <app-input
         type="password"
         v-model="password"
-        placeholder="Mật khẩu"
+        placeholder="Nhập mật khẩu"
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
@@ -68,11 +68,12 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorRegister}}</p>
     </div>
     <app-button
+      :loading="loading"
       color="primary"
       square
       fullWidth
       :disabled="disabledBtnRegister"
-      @click.prevent="hanldeShowModalOTP"
+      type="submit"
     >Đăng ký</app-button>
     <!-- <app-modal-otp
       :visible="modalOtp.showModalOTP"
@@ -88,7 +89,7 @@
       @close="closeNotify"
       @ok="$router.push(notify.redirectLink)"
     />
-  </div>
+  </form>
 </template>
 
 <script>
@@ -139,7 +140,8 @@ export default {
         redirectLink: "",
         message: "",
         showNotify: false
-      }
+      },
+      loading: false
     };
   },
   validations: {
@@ -170,6 +172,7 @@ export default {
         );
         const doAdd = this.register(registerModel).then(result => {
           if (result.success == true) {
+            this.loading = false;
             this.notify = {
               redirectLink: "/auth/signin",
               message: "Đăng kí tài khoản thành công",
@@ -177,13 +180,16 @@ export default {
             };
           } else {
             this.showErrorWhenRegister(result);
+            this.loading = false;
           }
         });
       } catch (error) {
         console.log("Login error:", error);
+        this.loading = false;
       }
     },
     async hanldeShowModalOTP() {
+      this.loading = true;
       if (this.phone != "" && this.password != "" && this.fullname != "") {
         const tokenCheckPhone = await this.$recaptcha.execute("status");
         const dataChecKPhone = {

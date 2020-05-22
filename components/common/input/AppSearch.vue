@@ -1,6 +1,18 @@
 <template>
-  <app-input class="app-search" v-bind="{ ...$attrs, ...$props }" @input="handleInput">
-    <app-button slot="append-inner" class="app-search__submit" :size="$attrs.size" @click="submit">
+  <app-input
+    class="app-search"
+    :class="{ 'app-search--bordered': bordered }"
+    v-bind="{ ...$attrs, ...$props }"
+    @input="handleInput"
+    @keyup.enter="submit"
+  >
+    <app-button
+      slot="append-inner"
+      class="app-search__submit"
+      :size="$attrs.size"
+      v-bind="buttonProps"
+      @click="submit"
+    >
       <IconSearch class="icon body-1" />
     </app-button>
   </app-input>
@@ -8,7 +20,7 @@
 
 <script>
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-
+import { mapMutations } from 'vuex'
 export default {
   inheritAttrs: false,
 
@@ -26,7 +38,12 @@ export default {
       type: [String, Number],
       required: false,
       default: ""
-    }
+    },
+    buttonProps: {
+      type: Object,
+      default: () => ({})
+    },
+    bordered: Boolean
   },
 
   data() {
@@ -46,7 +63,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations('keyword', ['searchHeader']),
     submit(event) {
+      this.searchHeader(this.localValue);
       this.$emit("submit", this.localValue);
     },
 

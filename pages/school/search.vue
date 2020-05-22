@@ -16,9 +16,20 @@
         @handleChangedDistrict="handleChangedDistrict"
         @handleChangedWard="handleChangedWard"
         @handleChangeSearch="handleChangeSearch"
+        @handleChangedOrder="handleChangeSort"
+        @resetForm="handleResetForm"
       ></school-filter>
       <!--Detail school types-->
-      <SchoolListBox :category="selectedCategory"></SchoolListBox>
+      <div v-if="pageLoading" class="container mt-6">
+        <div class="row">
+          <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+            <div class="bg-white py-6 px-3">
+              <VclList />
+            </div>
+          </div>
+        </div>
+      </div>
+      <SchoolListBox v-else :category="selectedCategory"></SchoolListBox>
     </div>
   </div>
 </template>
@@ -31,7 +42,10 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, addAllOptionSelect } from "~/utils/common";
-import { PAGE_SIZE } from '~/utils/constants';
+import { PAGE_SIZE } from "~/utils/constants";
+import { VclList } from "vue-content-loading";
+
+const SCHOOL_SUMMARY_NAMESPACE = "elearning/school/school-summary";
 
 export default {
   name: "School",
@@ -41,7 +55,8 @@ export default {
   components: {
     SchoolFilter,
     SchoolListBox,
-    SchoolSlider
+    SchoolSlider,
+    VclList
   },
 
   async asyncData({ store, query }) {
@@ -61,35 +76,33 @@ export default {
 
   data() {
     return {
-      isAuthenticated: true,
-      province_id: "",
-      district_id: "",
-      ward_id: ""
+      keyword: this.get(this.$router, "query.keyword", ""),
+      district_id: null,
+      province_id: null,
+      type: this.get(this.$router, "query.type", ""),
+      ward_id: null,
+      pageLoading: true,
+      sort_by: null
     };
   },
 
   computed: {
-    ...mapState("elearning/school/school-summary", {
+    ...mapState(SCHOOL_SUMMARY_NAMESPACE, {
       schoolSummary: "elearningSchoolSummary"
     }),
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
-
-    schools() {
-      return get(this, `schoolSummary.data.content`, []);
-    },
-
     resultSummary() {
-      const schoolNum = this.schoolSummary.total_school;
-      const studentNum = this.schoolSummary.total_student;
-      const teacherNum = this.schoolSummary.total_teacher;
+      const schoolNum = this.schoolSummary.total_school || 0;
+      const studentNum = this.schoolSummary.total_student || 0;
+      const teacherNum = this.schoolSummary.total_teacher || 0;
 
       return `(${schoolNum} trường - ${teacherNum} giáo viên - ${studentNum} học sinh)`;
     },
 
     categoryOpts() {
-      return addAllOptionSelect(this.categories);
+      return this.categories;
     },
 
     selectedCategory() {
@@ -108,17 +121,23 @@ export default {
       "province_id",
       "district_id",
       "ward_id",
-      "keyword"
+      "keyword",
+      "sort_by"
     ]);
   },
 
+  mounted() {
+    this.pageLoading = false;
+  },
+
   methods: {
-    showAll(id) {
-      console.log("[Page School] show all a type of school: ", id);
-    },
     handleChangedLevel(level) {
-      console.log("[handleChangedLevel] level", level);
+      console.log('change level: ', level)
       this.type = get(level, "type", "");
+      this.$router.push({
+        path: "/school/search",
+        query: { keyword: this.keyword, type: this.type }
+      });
     },
     handleChangedWard(ward) {
       this.ward_id = get(ward, "id", "");
@@ -130,8 +149,23 @@ export default {
       this.province_id = get(province, "id", "");
     },
     handleChangeSearch(keyword) {
-      console.log("[handleChangeSearch]", keyword);
+      // this.$router.query.keyword = keyword;
+      this.$router.push({
+        path: "/school/search",
+        query: { keyword: keyword, type: this.type }
+      });
       this.keyword = keyword;
+    },
+    handleChangeSort(order) {
+      this.sort_by = get(order, 'value')
+    },
+    handleResetForm(data) {
+      console.log('reset form: ', data)
+      this.district_id = get(data, 'district.id', null);
+      this.province_id = get(data, 'province.id', null);
+      this.ward_id = get(data, 'ward.id', null);
+      this.type = get(data, 'level.type', null);
+      this.keyword = this.get(this.$router, "query.keyword", "");
     },
     handleGetSchoolsByLocation() {
       let params = {};
@@ -140,6 +174,7 @@ export default {
       if (this.ward_id) params.ward_id = this.ward_id;
       if (this.keyword) params.keyword = this.keyword;
       if (this.type) params.type = this.type;
+      if (this.sort_by) params.sort_by = this.sort_by;
       params.size = PAGE_SIZE.SCHOOL_16;
 
       const options = { params };
@@ -147,7 +182,8 @@ export default {
         `elearning/school/school-summary/${actionTypes.ELEARNING_SCHOOL_SUMMARY.LIST}`,
         options
       );
-    }
+    },
+    get
   }
 };
 </script>

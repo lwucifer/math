@@ -16,11 +16,12 @@ const getters = {};
  * initial actions
  */
 const actions = {
-    async [actionTypes.TEACHING_ELEARNING_BANNED.ADD]({ commit }, { payload }) {
+    async [actionTypes.TEACHING_ELEARNING_BANNED.ADD]({ commit }, payload) {
         try {
             const result = await new Banned(this.$axios)[actionTypes.BASE.ADD](
                 payload
             );
+            console.log("payload banned", payload);
             return result;
         } catch (error) {
             console.log("[Banned] add.error", error);

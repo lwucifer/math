@@ -10,12 +10,12 @@
 
         &__name {
             color: $color-primary;
-            font-weight: normal;
+            font-weight: 500;
             border-bottom: 2px solid $color-primary;
             text-transform: uppercase;
             display: inline-block;
             padding: 0.5rem 1rem; 
-            margin-right: 2.5rem;
+            margin-right: 2rem;
         }
 
         &__description {

@@ -2,11 +2,10 @@
   <div class="container">
     <div class="row wrap-filter-form__ElearningManagerInteractive">
       <div class="filter-form__ElearninManagerInteractive">
-
         <div class="wrapSearchForm___ElearningManagerFilterTable">
           <app-input
             type="text"
-            v-model="filter.query"
+            v-model="listQuery.keyword"
             placeholder="Nhập để tìm kiếm..."
             :size="'sm'"
             @input="handleSearch"
@@ -30,28 +29,23 @@
           </app-button>
         </div>
 
-
         <div class="filter-course">
           <app-vue-select
             class="app-vue-select filter-form__item__selection"
-            v-model="filter.province"
-            :options="classes"
-            label="text"
+            :options="filterListLesson"
             placeholder="Bài giảng/khóa học"
             searchable
             clearable
-            @input="handleChangedInput"
+            @input="handleChangedInputLesson"
             @search:focus="handleFocusSearchInput"
             @search:blur="handleBlurSearchInput"
           ></app-vue-select>
         </div>
 
-
         <div class="filter-status">
           <app-vue-select
             class="app-vue-select filter-form__item__selection"
             :options="results"
-            label="text"
             placeholder="Trạng thái"
             searchable
             clearable
@@ -62,16 +56,26 @@
         </div>
       </div>
     </div>
-    
+
     <div class="wrapTable__ElearningManagerInteractive">
-      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">
+      <app-table
+        :heads="heads"
+        :pagination="filterPagination"
+        @pagechange="onPageChange"
+        :data="filterListQuestions"
+      >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id"><IconArrowForwardIos24pxOutlined/></n-link>
+            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.elearning_id">
+              <IconArrowForwardIos24pxOutlined />
+            </n-link>
           </td>
         </template>
+        <template v-slot:cell(content)="{row}">
+          <td v-html="row.content"></td>
+        </template>
         <template v-slot:cell(status)="{row}">
-          <td v-if="row.status=='1'">Đã trả lời</td>
+          <td v-if="row.status=='ANSWER'">Đã trả lời</td>
           <td v-else class="status-not-reply">Chưa trả lời</td>
         </template>
       </app-table>
@@ -80,16 +84,19 @@
 </template>
 
 <script>
-import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrowForwardIos24pxOutlined from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
+import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
 
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
+const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
+const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
+const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 export default {
   layout: "manage",
-    
+
   components: {
     IconHamberger,
     IconSearch,
@@ -100,22 +107,22 @@ export default {
       tab: 1,
       heads: [
         {
-          name: "question",
+          name: "content",
           text: "Câu hỏi",
           sort: false
         },
         {
-          name: "lesson",
+          name: "elearning_name",
           text: "Bài giảng khóa học",
           sort: false
         },
         {
-          name: "student",
+          name: "student_name",
           text: "Người hỏi",
           sort: false
         },
         {
-          name: "class",
+          name: "class_name",
           text: "Lớp",
           sort: false
         },
@@ -132,7 +139,7 @@ export default {
       ],
       filter: {
         type: null,
-        query: null
+        keyword: null
       },
       classes: [
         {
@@ -146,12 +153,12 @@ export default {
       ],
       results: [
         {
-          value: 1,
-          text: "Đạt"
+          value: "ANSWER",
+          label: "Đã trả lời"
         },
         {
-          value: 2,
-          text: "Chưa đạt"
+          value: "UNANSWER",
+          label: "Chưa trả lời"
         }
       ],
       isAuthenticated: true,
@@ -166,15 +173,69 @@ export default {
       list: QUESTIONS,
       listQuery: {
         page: 1,
-        size: 10
+        size: 10,
+        keyword: null,
+        status: null,
+        elearning_id: null
       }
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(STORE_NAME_INTERACTS, ["listQuestions"]),
+    // ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
+    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
+    filterListQuestions() {
+      return this.listQuestions && this.listQuestions.content
+        ? this.listQuestions.content
+        : [];
+    },
+    filterPagination() {
+      return {
+        size:
+          this.listQuestions && this.listQuestions.size
+            ? this.listQuestions.size
+            : 10,
+        totalPages:
+          this.listQuestions && this.listQuestions.totalPages
+            ? this.listQuestions.totalPages
+            : 1,
+        totalElements:
+          this.listQuestions && this.listQuestions.total_elements
+            ? this.listQuestions.total_elements
+            : 0,
+        first:
+          this.listQuestions && this.listQuestions.first
+            ? this.listQuestions.first
+            : 1,
+        last:
+          this.listQuestions && this.listQuestions.last
+            ? this.listQuestions.last
+            : 1,
+        numberOfElements:
+          this.listQuestions && this.listQuestions.number_of_elements
+            ? this.listQuestions.number_of_elements
+            : 0,
+        number:
+          this.listQuestions && this.listQuestions.number
+            ? this.listQuestions.number
+            : 0
+      };
+    },
+    filterListLesson() {
+      const data = this.teachingPublicList ? this.teachingPublicList : [];
+      const filterData = data.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        };
+      });
+      return filterData;
+    }
   },
 
   methods: {
+    ...mapActions(STORE_NAME_INTERACTS, ["teachingInteractiveListquestion"]),
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -184,9 +245,35 @@ export default {
       console.log("[Component] Elearning exam: submitted");
     },
     handleChangedInput(val) {
-      if (val !== null) {
-      } else {
-      }
+      this.listQuery.status = val ? val.value : null;
+      // if (val !== null) {
+      const query = {
+        params: {
+          ...this.listQuery,
+          status: val && val.value ? val.value : null
+        }
+      };
+      this.teachingInteractiveListquestion(query);
+      // } else {
+      //   const query = {
+      //     params: {
+      //       ...this.listQuery,
+      //       status: val && val.value ? val.value : ""
+      //     }
+      //   };
+      // this.teachingInteractiveListquestion(query);
+      // }
+      console.log("[Component] Elearning exam: changing input...", val);
+    },
+    handleChangedInputLesson(val) {
+      this.listQuery.elearning_id = val ? val.value : null;
+      const query = {
+        params: {
+          ...this.listQuery,
+          elearning_id: val ? val.value : null
+        }
+      };
+      this.teachingInteractiveListquestion(query);
       console.log("[Component] Elearning exam: changing input...", val);
     },
     handleFocusSearchInput() {
@@ -195,8 +282,13 @@ export default {
     handleBlurSearchInput() {
       console.log("[Component] Elearning exam: blur searching ");
     },
-    handleSearch() {
-      console.log("[Component] Elearning exam: searching");
+    handleSearch(val) {
+      console.log("[Component] Elearning exam: searching", val);
+      this.listQuery.keyword = val ? val : null;
+      const query = {
+        params: { ...this.listQuery }
+      };
+      this.teachingInteractiveListquestion(query);
     },
     async getList() {
       const elearningType = "1";
@@ -213,7 +305,7 @@ export default {
   },
 
   created() {
-    this.getList();
+    // this.getList();
   }
 };
 </script>

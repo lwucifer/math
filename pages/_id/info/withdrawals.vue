@@ -11,6 +11,8 @@
         >
           <template v-slot:content>
             <sub-block-section
+              :title-cls="{ 'border-0': true }"
+              :content-cls="{ 'px-0': true }"
             >
               <template v-slot:title>
                 <filter-form>
@@ -39,21 +41,24 @@
                       </app-date-picker>
                     </div>
                     <div class="filter-form__item d-flex">
-                      <filter-button @click="filterSelect= !filterSelect">
-                        Lọc kết quả
-                      </filter-button>
+                      <filter-button
+                        @click="clickSubmit"
+                        :color="filterSelect ? 'primary': 'white'"
+                      ></filter-button>
+                      <!--<filter-button @click="filterSelect= !filterSelect">-->
+                        <!--Lọc kết quả-->
+                      <!--</filter-button>-->
                     </div>
-                    <div class="filter-form__item" v-if="filterSelect">
+                    <div class="filter-form__item" v-if="filterSelect" style="min-width: 12rem;">
                       <app-vue-select
-                        :options="opts"
+                        :options="statusOpts"
                         v-model="opt"
                         size="sm"
-                        :placeholder="'Theo trạng thái'"
+                        :placeholder="'Trạng thái'"
                         label="text"
-                        searchable
-                        clearable
                         class="app-vue-select"
                         @input="handlerChangeStatus"
+                        :all-opt="allOpt"
                       />
                     </div>
                   </div>
@@ -65,13 +70,22 @@
                   :pagination="pagination"
                   @pagechange="onPageChange"
                   :data="list"
-                  style="margin-left: -1.5rem; margin-right: -1.5rem;"
                 >
+                  <template v-slot:cell(timestamp)="{row}">
+                    <td>
+                      {{ row.timestamp | moment("DD-MM-YYYY") }}
+                    </td>
+                  </template>
                   <template v-slot:cell(status)="{row}">
                     <td>
                       <span class="status-item d-inline-block" :class="statusClass(row.status)" style="min-width: 10.1rem;">
                         {{ row.status | withdrawalStatus2Txt}}
                       </span>
+                    </td>
+                  </template>
+                  <template v-slot:cell(amount)="{row}">
+                    <td>
+                      {{ row.amount | toThousandFilter }} đ
                     </td>
                   </template>
                 </app-table>
@@ -107,6 +121,11 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
+      filterSelect:false,
       heads: [
         {
           name: "timestamp",
@@ -117,17 +136,14 @@ export default {
         {
           name: "amount",
           text: "Giá trị",
-          sort: true
         },
         {
           name: "desc",
           text: "Nội dung",
-          sort: true
         },
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
         },
       ],
       isAuthenticated: true,
@@ -140,7 +156,7 @@ export default {
         status:""
       },
       opt: "",
-      opts: [
+      statuses: [
         { value: 'SUCCESS', text: 'Thành công' },
         { value: 'PENDING', text: 'Chờ xử lí' },
         { value: 'FAIL', text: 'Thất bại' }
@@ -149,14 +165,16 @@ export default {
       list:[],
       DATE_SHORTCUT: DATE_SHORTCUT,
       dateDefault:null,
-      filterSelect: false
     };
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("account", {
       withdrawalsList: "withdrawalsList",
-    })
+    }),
+    statusOpts() {
+      return [this.allOpt, ...this.statuses]
+    },
   },
   created(){
     this.getDateSelect();
@@ -192,6 +210,7 @@ export default {
     },
     handlerChangeStatus(select){
       this.params.status = get(select,"value","");
+      this.params.page =  1;
       this.fetchWithdrawals();
     },
     handlerChangeDate(date){
@@ -214,6 +233,19 @@ export default {
       } else {
         return {}
       }
+    },
+    clickSubmit() {
+      if (this.filterSelect) {
+        this.resetForm()
+        this.filterSelect = false
+        this.params.status = null
+        this.fetchWithdrawals();
+      } else {
+        this.filterSelect = true
+      }
+    },
+    resetForm() {
+      this.opt = null
     }
   }
 };

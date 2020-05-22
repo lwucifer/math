@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <create-action :isShowAction="false" />
+  <VclFacebook v-if="loading"></VclFacebook>
+  <div v-else>
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">Bài tập</h4>
       </div>
 
-      <div class="cc-panel__body">
-        <app-alert type="success" class="mb-4" show-close>
-          Bạn có thể tạo bài tập cho khóa học của bạn tại đây. Nếu khóa học của
-          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
-          gửi lên để được xét duyệt.
+      <div class="px-4">
+        <app-alert type="info" class="mt-4" show-close>
+          Bạn có thể tạo bài tập cho bài giảng/ khóa học của bạn tại đây. Nếu
+          bài giảng/ khóa học của bạn không yêu cầu làm bài tập, bạn có thể bỏ
+          qua phần này và tiến hành gửi lên để được xét duyệt.
         </app-alert>
 
-        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3">
+        <h5 v-if="get(general, 'type', '') === 'COURSE'" class="mb-3 mt-4">
           Chọn bài học liên quan
         </h5>
+
+        <SelectLesson
+          :class="{ 'pb-3': isShowButtonCreate }"
+          v-if="get(general, 'type', '') === 'COURSE'"
+        />
       </div>
 
-      <SelectLesson
-        class="mb-4"
-        v-if="get(general, 'type', '') === 'COURSE'"
-        :lessons="lessons"
-        @handleSelectLesson="handleSelectLesson"
-      />
-
-      <div v-if="lesson">
+      <div v-if="lesson" class="pb-3">
         <ButtonCreateExercise
           v-if="isShowButtonCreate"
           @handleClick="handleShowFormAdd"
@@ -34,20 +32,26 @@
 
         <FormCreateExercise
           v-if="isShowFormAdd"
-          @handleCancel="handleCancelAddCreate"
+          @cancel="handleCancelAddCreate"
           :lesson="lesson"
-          @handleRefreshExcercises="handleRefreshExcercises"
           :category="category"
         />
 
         <ExerciseList
           v-for="(exercise, index) in get(lesson, 'exercises', [])"
           :key="exercise.id"
+          :lesson="lesson"
           :index="index"
           :exercise="exercise"
-          @handleRefreshQuestion="handleRefreshQuestion"
-          @handleRefreshExcercises="handleRefreshExcercises"
         />
+      </div>
+    </div>
+
+    <div class="create-action pt-5">
+      <div class="create-action__right d-flex align-items-center">
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
+          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+        >
       </div>
     </div>
   </div>
@@ -62,7 +66,10 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
-
+import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
+import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
+import { VclFacebook } from "vue-content-loading";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
@@ -89,53 +96,47 @@ export default {
     SelectLesson,
     IconPlus2,
     IconAngleDown,
+    IconDelete,
+    IconDelete,
+    Forward,
+    IconSave,
+    VclFacebook,
+  },
+
+  mounted() {
+    useEffect(this, this.handleChangeGeneral.bind(this), [
+      "general",
+      "lessons",
+    ]);
   },
 
   data() {
     return {
       isShowButtonCreate: true,
       isShowFormAdd: false,
-      lessons: [],
-      lesson: null,
       category: "EXERCISE",
+      loading: false,
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
+      lesson: "lesson",
+      lessons: "lessons",
     }),
   },
 
-  created() {
-    this.getLessons();
-  },
-
   methods: {
-    handleRefreshQuestion() {
-      this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
-    },
-
-    async getLesson(lesson_id) {
-      if (lesson_id) {
-        const res = await this.$store.dispatch(
-          `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DETAIL}`,
-          lesson_id
-        );
-        if (get(res, "success", false)) {
-          this.lesson = get(res, "data", null);
-          return;
-        }
+    async handleChangeGeneral() {
+      if (get(this, "general.type", "") === "LECTURE") {
+        this.loading = true;
+        const lesson_id = get(this, "lessons.0.id", "");
+        await this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        this.loading = false;
+        return;
       }
-      this.lesson = null;
-    },
-
-    handleRefreshExcercises() {
-      this.getProgress();
-      this.getLesson(get(this, "lesson.id", ""));
-      this.isShowFormAdd = false;
-      this.isShowButtonCreate = true;
+      this.$store.dispatch("elearning/create/getLesson", "");
     },
 
     handleShowFormAdd() {
@@ -143,52 +144,13 @@ export default {
       this.isShowFormAdd = true;
     },
 
-    handleSelectLesson(lesson) {
-      this.getLesson(get(lesson, "id", ""));
-    },
-
     handleCancelAddCreate() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },
 
-    async getLessons() {
-      const elearning_id = get(this, "general.id", "");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.LIST}`,
-        options
-      );
-      if (get(res, "success", false)) {
-        let lessons = [];
-        get(res, "data", []).map((lesson) => {
-          lesson.value = lesson.id;
-          lesson.text = lesson.name;
-          lessons.push(lesson);
-        });
-        this.lessons = lessons;
-        if (get(this, "general.type", "") === "LECTURE") {
-          this.getLesson(get(lessons, "0.id", ""));
-        }
-      }
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
+    handleNextStep() {
+      this.$emit("nextStep", "exam");
     },
 
     get,

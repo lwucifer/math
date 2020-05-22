@@ -25,6 +25,16 @@
                 }
             }
         }
+        
+        .rate-result-wrapper {
+            .status-item {
+                width: 4rem;
+                padding: 0.1rem 0.4rem;
+                font-size: 1.3rem;
+                letter-spacing: -0.01em;
+                line-height: 2rem;
+            }
+        }
     }
 
     &__title {
@@ -40,7 +50,7 @@
 
         &__nav {
             a {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
                 text-transform: uppercase;
                 font-weight: 500;
                 line-height: 19px;
@@ -107,7 +117,7 @@
     .tooltip-inner {
         background: #fff;
         padding: 1rem 2rem;
-        border: 0.2px solid #E0E0E0;
+        border: 0.5px solid #E0E0E0;
         border-radius: 3px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
     }
@@ -119,7 +129,7 @@
         border-style: solid;
         position: absolute;
         margin: 6px;
-        border-color: $color;
+        border-color: #E0E0E0;
         z-index: 1;
     }
 
@@ -135,6 +145,16 @@
             left: calc(50% - 6px);
             margin-top: 0;
             margin-bottom: 0;
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                height: 6px;
+                width: 6px;
+                transform: rotate(45deg);
+                left: calc(50% - 3px);
+                bottom: 3px;
+            }
         }
     }
 
@@ -150,6 +170,16 @@
             left: calc(50% - 6px);
             margin-top: 0;
             margin-bottom: 0;
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                height: 6px;
+                width: 6px;
+                transform: rotate(45deg);
+                left: calc(50% - 3px);
+                top: 3px;
+            }
         }
     }
 
@@ -165,6 +195,16 @@
             top: calc(50% - 6px);
             margin-left: 0;
             margin-right: 0;
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                height: 6px;
+                width: 6px;
+                transform: rotate(45deg);
+                right: -9px;
+                top: calc(50% - 3px)
+            }
         }
     }
 
@@ -176,10 +216,20 @@
             border-top-color: transparent !important;
             border-right-color: transparent !important;
             border-bottom-color: transparent !important;
-            right: 5px;
+            right: -6px;
             top: calc(50% - 6px);
             margin-left: 0;
             margin-right: 0;
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                height: 6px;
+                width: 6px;
+                transform: rotate(45deg);
+                left: -9px;
+                top: calc(50% - 3px)
+            }
         }
     }
 }

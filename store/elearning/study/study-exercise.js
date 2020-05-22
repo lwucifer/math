@@ -2,7 +2,7 @@ import Exercise from "~/services/elearning/study/Exercise";
 import * as actionTypes from "~/utils/action-types";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import * as mutationTypes from "~/utils/mutation-types";
-import { QUESTION_NAV } from "~/utils/constants";
+import { QUESTION_NAV, EXERCISE_CATEGORIES } from "~/utils/constants";
 
 /**
  * initial state
@@ -13,6 +13,7 @@ const state = () => ({
   submissions: [],
   submissionAdd: {},
   elearningExercises: [],
+  elearningExerciseTests: [],
   currentExercise: {},
   currentElearningId: null,
   currentExerciseQuestion: null,
@@ -25,6 +26,9 @@ const state = () => ({
     attachments: []
   },
   currentQuestionId: null,
+  autoSubmission: null,
+  currentLession: null,
+
 });
 
 /**
@@ -50,6 +54,11 @@ const getters = {
         });
     console.log("[questionNoOpts]", questionNoOpts, state.questions);
     return questionNoOpts;
+  },
+  tests: state => {
+    return state.elearningExerciseTests
+      ? state.elearningExerciseTests.length > 0
+      : false;
   }
 };
 
@@ -73,6 +82,9 @@ const actions = {
             .SET_STUDY_EXERCISE_QUESTION_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
       }
 
       return result;
@@ -102,6 +114,9 @@ const actions = {
           mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
       }
 
       return result;
@@ -132,6 +147,9 @@ const actions = {
             .SET_STUDY_EXERCISE_SUBMISSION_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
       }
 
       return result;
@@ -162,6 +180,9 @@ const actions = {
             .SET_STUDY_EXERCISE_SUBMISSION_ADD,
           result.data
         );
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
+
         return result;
       }
 
@@ -186,13 +207,23 @@ const actions = {
       const result = await new Exercise(this.$axios)[
         actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE
       ](payload);
-      console.log("[LIST_ELEARNING_EXERCISE]", result);
+      console.log("[LIST_ELEARNING_EXERCISE]", result, payload);
       if (result.success == RESPONSE_SUCCESS) {
+        if (payload.category == EXERCISE_CATEGORIES.TEST) {
+          commit(
+            mutationTypes.ELEARNING_STUDY_EXERCISE
+              .SET_STUDY_ELEARNING_EXERCISE_TEST_LIST,
+            result.data
+          );
+        }
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_ELEARNING_EXERCISE_LIST,
           result.data
         );
+
+        // turnof loadingExercise
+        commit("event/setExerciseLoading", false, { root: true });
       }
 
       return result;
@@ -214,9 +245,9 @@ const mutations = {
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_QUESTION_START](
-    state,
+    state
   ) {
-    console.log("[SET_STUDY_EXERCISE_QUESTION_START]", state.questions)
+    console.log("[SET_STUDY_EXERCISE_QUESTION_START]", state.questions);
     // reset submission state
     state.submission = {
       ...state.submission,
@@ -231,7 +262,8 @@ const mutations = {
     state.currentExerciseAnswers = [];
 
     // set the first question
-    state.currentExerciseQuestion = state.questions && state.questions.length > 0 ? state.questions[0] : null; // set current question is the first
+    state.currentExerciseQuestion =
+      state.questions && state.questions.length > 0 ? state.questions[0] : null; // set current question is the first
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_RESULT_LIST](
@@ -253,6 +285,11 @@ const mutations = {
     _submissionAdd
   ) {
     state.submissionAdd = _submissionAdd;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE
+    .SET_STUDY_ELEARNING_EXERCISE_TEST_LIST](state, _list) {
+    state.elearningExerciseTests = _list;
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_ELEARNING_EXERCISE_LIST](
@@ -386,6 +423,22 @@ const mutations = {
   ) {
     state.currentQuestionId = _currQuestionId;
   },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_AUTO_SUBMISSION](
+    state,
+    _auto
+  ) {
+    state.autoSubmission = _auto;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT_LESSION](
+    state,
+    _lesson
+  ) {
+    console.log("[SET_STUDY_EXERCISE_CURRENT_LESSION]", _lesson);
+    state.currentLession = _lesson;
+  },
+
 };
 
 export default {

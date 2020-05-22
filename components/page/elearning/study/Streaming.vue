@@ -1,6 +1,7 @@
 <template>
   <section class="stream-frame">
     <div
+      v-show="!loadingExercise"
       class="video-player-box vjs-big-play-centered"
       :playsinline="playsinline"
       @play="onPlayerPlay($event)"
@@ -17,22 +18,31 @@
       @statechanged="playerStateChanged($event)"
       v-video-player:myVideoPlayer="playerOptions"
     ></div>
+    <div
+      class="text-center w-100 pt-md"
+      style="min-height: 42.6rem;"
+      v-show="loadingExercise"
+    >
+      <app-spin />
+    </div>
   </section>
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
+
 export default {
   layout: "empty",
 
   head: {
-    link: [{ rel: "stylesheet", href: "/streaming/video-js.css" }],
+    link: [{ rel: "stylesheet", href: "/streaming/video-js.css" }]
   },
 
   props: {
     url: String,
     thumbnail: {
-      type: String,
-    },
+      type: String
+    }
   },
 
   updated() {
@@ -46,14 +56,14 @@ export default {
         this.playerOptions.sources[0].src = this.url;
         this.$forceUpdate();
       },
-      deep: true,
+      deep: true
     },
     playerOptions: {
       handler: function() {
         console.log(this.playerOptions);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
 
   data() {
@@ -66,7 +76,7 @@ export default {
 
       // videojs options
       playerOptions: {
-        muted: true,
+        muted: false,
         fluid: true,
         // responsive: true,
         language: "vi",
@@ -74,11 +84,15 @@ export default {
         sources: [
           {
             // type: "application/x-mpegURL",
-            src: this.url,
-          },
+            src: this.url
+          }
         ],
         poster: this.thumbnail,
-      },
+        preload: "metadata",
+        liveui: true,
+        playbackRates: [0.5, 1, 1.5, 2],
+        height: 422
+      }
     };
   },
   mounted() {
@@ -87,7 +101,13 @@ export default {
     this.playerOptions.sources[0].src = this.url;
     this.$forceUpdate();
   },
+  computed: {
+    ...mapState("event", ["loadingExercise"])
+  },
+
   methods: {
+    ...mapMutations("event", ["setExerciseLoading"]),
+
     // listen event
     onPlayerPlay(player) {
       console.log("player play!", player);
@@ -115,6 +135,7 @@ export default {
     },
     onPlayerCanplay(player) {
       console.log("player Canplay!", player);
+      this.setExerciseLoading(false); // turnoff loading
     },
     onPlayerCanplaythrough(player) {
       console.log("player Canplaythrough!", player);
@@ -128,8 +149,8 @@ export default {
     // player is ready
     playerReadied(player) {
       console.log("example 01: the player is readied", player);
-    },
-  },
+    }
+  }
 };
 </script>
 

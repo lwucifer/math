@@ -6,10 +6,12 @@ import {
   SUBMISSION_RESULTS,
   WITHDRAWAL_STATUSES,
   TRANSACTION_STATUSES,
-  EXERCISE_STATUS
+  EXERCISE_STATUS,
+  ELEARNING_TYPES
 } from "~/utils/constants";
 import { DATETIME_FULL_TEXT } from "~/utils/config";
-const moment = require("moment");
+// const moment = require("moment");
+import { getLocalDateTime } from '~/utils/moment';
 
 /**
  * 10000 => "10.000"
@@ -124,7 +126,7 @@ export function subResult2Txt(str = "") {
   const MATCHED_DATA = {
     [SUBMISSION_RESULTS.PASSED]: "Đạt",
     [SUBMISSION_RESULTS.FAILED]: "Không đạt",
-    [SUBMISSION_RESULTS.PENDING]: "Chưa chấm điểm",
+    [SUBMISSION_RESULTS.PENDING]: "Chưa chấm",
     [SUBMISSION_RESULTS.NONE]: "Chưa làm bài"
   };
   if (MATCHED_DATA.hasOwnProperty(str)) return MATCHED_DATA[str];
@@ -165,10 +167,10 @@ export function convertBreadcrumText(str = "", elearningInfo) {
   let breadcrumTxt = str;
   switch (str) {
     case "Elearning":
-      breadcrumTxt = "Elearning";
+      breadcrumTxt = "E-learning";
       break;
     case "manager":
-      breadcrumTxt = "Quản lý Elearning";
+      breadcrumTxt = "Quản lý E-learning";
       break;
     case "":
       breadcrumTxt = "Tổng Quan";
@@ -201,10 +203,11 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = "Danh sách học sinh";
       break;
     default:
-      breadcrumTxt = elearningInfo.subject.name;
+      // const lectureType = elearningInfo.type == ELEARNING_TYPES.COURSE ? 'Khoá học' : 'Bài giảng';
+      breadcrumTxt = `${elearningInfo.subject.name}`;
       break;
   }
-  console.log("convertBreadcrumText", str, breadcrumTxt);
+  console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
   return breadcrumTxt;
 }
 
@@ -278,13 +281,25 @@ export function getExerciseResultText(result = "") {
   return resultText;
 }
 
-export function getDateTimeFullText(_utcDate="") {
+export function getDateTimeFullText(_utcDate = "") {
   if (!_utcDate) return;
-  const ts = moment.utc(_utcDate);
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
   return ts.format(DATETIME_FULL_TEXT);
 }
 
 
+/**
+ * convert seconds to text: hh giờ mm phút
+ */
+export function formatHour(val = 0) {
+  const h = Math.floor(val / 60 / 60);
+  const m = Math.floor((val - 60 * 60 * h) / 60);
+  // const s = val - 60 * 60 * h - 60 * m;
+
+  let strTime = h + " giờ " + m + " phút";
+  return strTime;
+}
 
 const filters = {
   toThousandFilter,
@@ -301,6 +316,7 @@ const filters = {
   getExerciseTypeText,
   getQuestionNoText,
   getDateTimeFullText,
+  formatHour,
 };
 
 // register global utility filters

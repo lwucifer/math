@@ -1,45 +1,60 @@
 <template>
-  <div>
-    <div
-      class="ce-question-item d-flex align-items-center"
-      v-if="!isShowEditQuestion"
-    >
-      <h3 class="body-2 mr-1">Câu {{ index + 1 }}:</h3>
-      <p class="body-2 mr-4" v-html="get(question, 'content', '')"></p>
-      <span class="text-sub mr-4">{{ type }}</span>
+  <div class="list-question">
+    <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
+      <h3 class="body-2 mr-1 question-title">Câu {{ index + 1 }}:</h3>
 
-      <div class="d-flex align-items-center ml-auto ce-question-item__actions">
-        <button class="mr-4" @click="isShowEditQuestion = !isShowEditQuestion">
+      <p
+        class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
+        v-html="get(question, 'content', '')"
+      ></p>
+
+      <span class="text-sub mr-4 question-type">{{ type }}</span>
+
+      <span
+        class="text-sub mr-4 question-point"
+        v-if="get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')"
+        >{{ get(question, "points", "") }} điểm</span
+      >
+
+      <div
+        class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
+      >
+        <button class="mr-3" @click="isShowEditQuestion = !isShowEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
-        <button class="mr-4" @click="handleDeleteQuestion">
-          <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
+        <button @click="handleDeleteQuestion">
+          <IconTrashAlt
+            class="d-block subheading fill-secondary"
+            width="20px"
+            height="20px"
+          />
         </button>
 
         <!-- <button>
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
       </button> -->
       </div>
+
       <app-modal-confirm
+        centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
       />
     </div>
+
     <div v-else>
       <EditQuestionChoice
         v-if="get(question, 'type', '') === 'CHOICE'"
-        @handleCancelAddQuestion="handleCancelAddQuestion"
-        @handleRefreshQuestion="handleRefreshQuestion"
+        @cancel="toggleAddQuestion"
         :question="question"
         :exercise="exercise"
       />
       <EditQuestionEssay
         v-else
-        @handleCancelAddQuestion="handleCancelAddQuestion"
-        @handleRefreshQuestion="handleRefreshQuestion"
+        @cancel="toggleAddQuestion"
         :question="question"
         :exercise="exercise"
       />
@@ -60,6 +75,7 @@ import CreateQuestionEssay from "~/components/page/course/create/exercise/Create
 import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
 import EditQuestionEssay from "~/components/page/course/create/exercise/EditQuestionEssay";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -98,12 +114,20 @@ export default {
     };
   },
 
+  mounted() {
+    console.log(this.question)
+  },
+
   computed: {
     type() {
       return get(this, "question.type", "") === "CHOICE"
         ? "Câu hỏi trắc nghiệm"
         : "Câu hỏi tự luận";
     },
+    ...mapState("elearning/create", {
+      general: "general",
+      lesson: "lesson",
+    }),
   },
 
   methods: {
@@ -114,9 +138,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        data: {
-          id: get(this, "question.id", ""),
-        },
+        id: get(this, "question.id", ""),
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
@@ -125,7 +147,15 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        // this.$store.dispatch(`elearning/create/getProgress`);
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -136,16 +166,15 @@ export default {
       this.confirmLoading = false;
     },
 
-    handleCancelAddQuestion() {
-      this.isShowEditQuestion = false;
-    },
-
-    handleRefreshQuestion() {
-      this.isShowEditQuestion = false;
-      this.$emit("handleRefreshQuestion");
+    toggleAddQuestion() {
+      this.isShowEditQuestion = !this.isShowEditQuestion;
     },
 
     get,
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_list-question.scss";
+</style>

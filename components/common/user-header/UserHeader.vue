@@ -1,54 +1,58 @@
 <template>
   <div class="the-header__user">
-    <app-avatar class="the-header__user-avt" src="https://picsum.photos/40/40" :size="40"></app-avatar>
+    <app-avatar
+      class="the-header__user-avt"
+      :src="$store.state.auth.token.avatar && $store.state.auth.token.avatar.low || 'https://picsum.photos/40/40'"
+      :size="40"
+    ></app-avatar>
     <div class="the-header__user-menu">
       <!--      <div style="height: 2rem;"></div>-->
       <ul>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.ELEARNING)">
           <n-link to="/elearning/manager">
-            <IconSchool />
+            <IconComputer24px class="fill-gray" />
             <span>Quản lý E-Learning</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.STUDENT)">
-          <n-link to="/">
-            <IconSchool />
+          <n-link to="/privates/students">
+            <IconSupervisorAccount24px class="fill-gray" />
             <span>Quản lý học sinh</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.ACCOUNT_INFO)">
           <n-link :to="getAccountInfoLink">
-            <IconUser />
+            <IconAccountCircle24px class="fill-gray" />
             <span>Thông tin tài khoản</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.REVENUE)">
           <n-link :to="getRevenueLink">
-            <IconDollar />
-            <span>Thống kế doanh thu</span>
+            <IconMonetizationOn24px class="fill-gray"/>
+            <span>Thống kê doanh thu</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
           <n-link :to="getTransactionLink">
-            <IconTransaction />
+            <IconAttachMoney24px />
             <span>Lịch sử giao dịch</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.NOTIFICATION)">
           <n-link :to="getNotificationLink">
-            <IconBell />
+            <IconNotifications24px class="fill-gray" />
             <span>Thông báo</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SETTINGS)">
           <n-link :to="getSettingLink">
-            <IconBell />
+            <IconSettings24px class="fill-gray" />
             <span>Cài đặt chung</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SUPPORT)">
           <n-link :to="getSupportLink">
-            <IconSupport />
+            <IconHeadsetMic24px class="fill-gray" />
             <span>Trợ giúp</span>
           </n-link>
         </li>
@@ -57,8 +61,8 @@
           @click.prevent="handleLogout"
           v-if="checkMenuGuard(MENU.SIGNOUT)"
         >
-          <n-link to>
-            <IconLogout />
+          <n-link to="/auth/signin">
+            <IconPowerSettingsNew24px />
             <span>Đăng xuất</span>
           </n-link>
         </li>
@@ -76,13 +80,16 @@ import { getToken, getDeviceId } from "~/utils/auth";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
-import IconUser from "~/assets/svg/icons/user3.svg?inline";
-import IconBell from "~/assets/svg/icons/bell.svg?inline";
+import IconAccountCircle24px from "~/assets/svg/v2-icons/account_circle_24px.svg?inline";
+import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
 import IconSchool from "~/assets/svg/icons/school.svg?inline";
-import IconDollar from "~/assets/svg/icons/dollar.svg?inline";
-import IconTransaction from "~/assets/svg/icons/transaction.svg?inline";
-import IconSupport from "~/assets/svg/icons/support.svg?inline";
-import IconLogout from "~/assets/svg/icons/logout.svg?inline";
+import IconAttachMoney24px from "~/assets/svg/v2-icons/attach_money_24px.svg?inline";
+import IconMonetizationOn24px from "~/assets/svg/v2-icons/monetization_on_24px.svg?inline";
+import IconHeadsetMic24px from "~/assets/svg/v2-icons/headset_mic_24px.svg?inline";
+import IconPowerSettingsNew24px from "~/assets/svg/v2-icons/power_settings_new_24px.svg?inline";
+import IconComputer24px from "~/assets/svg/v2-icons/computer_24px.svg?inline";
+import IconSupervisorAccount24px from "~/assets/svg/v2-icons/supervisor_account_24px.svg?inline";
+import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
 import { mapMutations, mapActions } from "vuex";
 
 export default {
@@ -99,13 +106,16 @@ export default {
   },
 
   components: {
-    IconUser,
-    IconBell,
+    IconAccountCircle24px,
+    IconNotifications24px,
     IconSchool,
-    IconDollar,
-    IconTransaction,
-    IconSupport,
-    IconLogout
+    IconAttachMoney24px,
+    IconMonetizationOn24px,
+    IconHeadsetMic24px,
+    IconPowerSettingsNew24px,
+    IconComputer24px,
+    IconSupervisorAccount24px,
+    IconSettings24px
   },
 
   computed: {

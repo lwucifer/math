@@ -10,6 +10,8 @@ export const AUTH = {
     SET_FIREBASE_TOKEN: "setFirebaseToken",
     SET_CURRENT_DEVICE: "setCurrentDevice",
     SAVE_PHONE_PASS: "savePhonePass",
+    SAVE_PHONE_STATE: "savePhoneState",
+    SET_TOKEN_AVATAR: "setTokenAvatar",
 };
 
 export const BASE = {
@@ -66,12 +68,20 @@ export const ACCOUNT_WITHDRAWALS = {
     SET_ACCOUNT_WITHDRAWALS: "setAccountWithdrawalsList",
 };
 
+export const ACCOUNT_BALANCE = {
+    SET_ACCOUNT_BALANCE: "setAccountBalance",
+};
+
 export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
 
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
+};
+
+export const ELEARNING_SEARCH = {
+    SET_ELEARNING_SEARCH_LIST: "setElearningPublicElearningList",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
@@ -84,6 +94,10 @@ export const ELEARNING_PUBLIC_CATEGORY = {
 
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_LIST: "setElearningPublicElearningTeacherList",
+};
+
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+    SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST: "setElearningPublicElearningTeacherElsList",
 };
 
 export const ELEARNING_PUBLIC_INFO = {
@@ -114,6 +128,31 @@ export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
 
 export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
     SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST: "setElearningPublicSchoolYearList",
+};
+
+export const ELEARNING_PUBLIC_WHAT_NEXTS = {
+    SET_WHAT_NEXTS: "setElearningPublicWhatNexts",
+};
+
+export const ELEARNING_PUBLIC_FOR_YOU = {
+    SET_FOR_YOU: "setElearningPublicForYou",
+};
+
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
+    SET_VOTED_SUBJECTS: "setElearningPublicVotedSubjects",
+};
+
+export const ELEARNING_PUBLIC_NEWEST = {
+    SET_NEWEST_LECTURE: "setElearningPublicNewestLecture",
+    SET_NEWEST_COURSE: "setElearningPublicNewestCourse",
+};
+
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
+    SET_HIGHLIGHT_TEACHERS: "setElearningPublicHighlightTeachers",
+};
+
+export const ELEARNING_PUBLIC_ELEARNING = {
+    SET_PUBLIC_ELEARNING: "setElearningPublicElearing",
 };
 
 export const ELEARNING = {
@@ -152,6 +191,14 @@ export const TEACHING_OLCLASS_LESSON_SESSIONS = {
 export const TEACHING_OLCLASS_LESSONS = {
     SET_TEACHING_OLCLASS_LESSONS_LIST: "setTeachingOlclassLessonList",
     SET_TEACHING_OLCLASS_LESSON_INFO: "setTeachingOlclassLessonInfo",
+};
+
+export const TEACHING_OLCLASS_STUDENTS = {
+    SET_TEACHING_OLCLASS_STUDENTS_LIST: "setTeachingOlclassStudentsList",
+};
+
+export const TEACHING_ELEARNING_STATISTIC = {
+    SET_TEACHING_ELEARNING_STATISTIC: "setTeachingOlclassStatistic",
 };
 
 export const CREATING_ANSWER = {
@@ -314,6 +361,8 @@ export const SCHOOL_TEACHERS = {
 
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
+    SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
+    SET_EXPAND: "setElearningStudyExpand",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -344,6 +393,7 @@ export const ELEARNING_STUDY_ARCHIVE = {
 export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_LIST: "setStudyExerciseQuestionList",
     SET_STUDY_ELEARNING_EXERCISE_LIST: "setStudyElearningExerciseList",
+    SET_STUDY_ELEARNING_EXERCISE_TEST_LIST: "setStudyElearningExerciseTestList",
     SET_STUDY_ELEARNING_CURRENT_ID: "setStudyElearningCurrentId",
     SET_STUDY_EXERCISE_RESULT_LIST: "setStudyExerciseResultList",
     SET_STUDY_EXERCISE_SUBMISSION_LIST: "setStudyExerciseSumissionList",
@@ -355,10 +405,13 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_CURRENT_BY_NO: "setStudyExerciseCurrentByNo",
     SET_STUDY_EXERCISE_QUESTION_START: "setStudyExerciseQuestionStart",
     SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
+    SET_STUDY_EXERCISE_AUTO_SUBMISSION: "setStudyExerciseAutoSubmission",
+    SET_STUDY_EXERCISE_CURRENT_LESSION: "setStudyExerciseCurrentLession",
 };
 
 export const ELEARNING_STUDY_PROGRESS = {
     SET_STUDY_PROGRESS_LIST: "setStudyProgressList",
+    SET_STUDY_PROGRESS_CURRENT_SESSION: "setStudyProgressCurrentSession",
 };
 
 export const ELEARNING_SCHOOL_SUMMARY = {
@@ -367,6 +420,10 @@ export const ELEARNING_SCHOOL_SUMMARY = {
 
 export const ELEARNING_SCHOOL_SEARCH = {
     SET_ELEARNING_SCHOOL_SEARCH_LIST: "setElearningSchoolSearchList",
+};
+
+export const ELEARNING_SCHOOL_STANDALONE = {
+    SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
 
 export const MESSAGE_GROUP = {
@@ -420,6 +477,14 @@ export const TEACHING_STATISTIC_REVENUE = {
     SET_TEACHING_STATISTIC_REVENUE_LIST: "setTeachingStatisticRevenuList",
 };
 
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    SET_TEACHING_CHART_STATISTIC_REVENUE: "setTeachingChartStatisticRevenue",
+};
+
+export const TEACHING_STATISTIC_HIGHLIGHT_ELS = {
+    SET_TEACHING_STATISTIC_HIGHLIGHT_ELS_LIST: "setTeachingStatisticHighlightElsList",
+};
+
 export const SOCIAL_NOTI = {
     SET_SOCIAL_NOTIFICATIONS_LIST: "setSocialNotis",
     SET_NOTI_UNREAD: "setNotiUnread",
@@ -451,3 +516,23 @@ export const TEACHING_ELEARNING_REQUESTS = {
 export const TEACHING_ELEARNING_INVITES = {
     SET_TEACHING_ELEARNING_INVITES_LIST: "setTeachingElearningInvitesList",
 };
+
+export const TEACHING_INTERACTIVE_LISTQUESTION = {
+    SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
+};
+
+export const TEACHING_PUBLIC_LIST = {
+    SET_TEACHING_PUBLIC_LIST: "setTeachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    SET_PUBLIC_CLASSES_LIST: "setPublicClassesList",
+};
+
+export const TEACHING_STUDENTS_PRIVATE = {
+    SET_TEACHING_STUDENTS_LIST: "setTeachingStudentList",
+};
+
+export const KEYWORD = {
+    SEARCH_HEADER: "searchHeader",
+}

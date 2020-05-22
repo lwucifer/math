@@ -17,28 +17,53 @@
         height: 100%;
     }
     .item{
+        font-size: 1.3rem;
         text-transform: uppercase;
         width: 100%;
         padding: 3rem 0;
         height: 100%;
         color: #656565;
         outline: none;
+        margin-left: 1.7rem !important;
+        &:hover{
+            color: $color-primary;
+            svg path {fill: $color-primary;}
+        }
     }
     .app-dropdown__content{
         left: -50%;
-        top: 110%;
+        top: 52px;
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
         }
     .link--dropdown__content{
         width: 246px;
+        
         &::after {
             content: "";
-            position: absolute;
-            bottom: 100%;  /* At the top of the tooltip */
-            right:  20%;
-            margin-left: -5px;
-            border-width: 5px;
+            position: fixed;
+            top: 64px;  /* At the top of the tooltip */
+            right:  21%;
+            margin-left: -6px;
+            border-width: 6px;
             border-style: solid;
             border-color: transparent transparent white transparent;
+            display: block;
+            z-index: 12px;
+        }
+        ul li{
+            padding: 0;
+            margin: 13px;
+            margin-bottom: 0px;
+            padding-bottom: 4px;
+        }
+        ul li + li {
+            padding-top: 13px;
+            margin-top: 0px;
+        }
+        ul li:last-child{
+            padding-top: 6px;
+            padding-bottom: 9px;
         }
         .proccess-bar-study-border{
             height: 5px;
@@ -46,7 +71,7 @@
             background: #EEEEEE;
             margin: 13px 0;
             .percent-proccess{
-                background: #37A000;
+                background: $color-primary;
                 height: 5px;
             }
         }
@@ -62,6 +87,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        margin-top: -5px;
         @supports (-webkit-line-clamp: 2) {
             overflow: hidden;
             text-overflow: ellipsis;

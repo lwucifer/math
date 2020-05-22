@@ -5,6 +5,15 @@
       <div class="cc-panel__title">
         <h1 class="cc-panel__heading heading-5 text-primary">Bài kiểm tra</h1>
       </div>
+
+      <div class="px-4">
+        <app-alert type="info" class="mt-4" show-close>
+          Bạn có thể tạo bài kiểm tra cho bài giảng/ khóa học của bạn tại đây. Nếu bài giảng/ khóa học của
+          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
+          gửi lên để được xét duyệt.
+        </app-alert>
+      </div>
+
       <ButtonCreateExercise
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
@@ -13,17 +22,15 @@
 
       <FormCreateExam
         v-if="isShowFormAdd"
-        @handleCancel="handleCancelAddCreate"
-        @handleRefreshExcercises="handleRefreshExcercises"
+        @cancel="handleHideFormAdd"
         :category="category"
       />
 
       <ExerciseList
-        v-for="(exercise, index) in exams"
+        v-for="(exercise, index) in get(exams, 'content', [])"
         :key="exercise.id"
         :exercise="exercise"
         :index="index"
-        @handleRefreshQuestion="handleRefreshQuestion"
       />
     </div>
   </div>
@@ -68,68 +75,29 @@ export default {
       isShowButtonCreate: true,
       isShowFormAdd: false,
       category: "TEST",
-      exams: [],
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
+      exams: "exams",
     }),
   },
 
-  created() {
-    this.getExams();
-  },
+  // mounted() {
+  //   this.$store.dispatch("elearning/create/getExams");
+  // },
 
   methods: {
-    handleRefreshQuestion() {
-      this.getProgress();
-      this.getExams();
-    },
-
-    async getExams() {
-      const options = {
-        params: {
-          elearning_id: getParamQuery("elearning_id"),
-          category: "TEST",
-        },
-      };
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.LIST}`,
-        options
-      );
-      this.exams = get(res, "data.content", []);
-    },
-
-    handleRefreshExcercises() {
-      this.getProgress();
-      this.getExams();
-      this.isShowFormAdd = false;
-      this.isShowButtonCreate = true;
-    },
-
     handleShowFormAdd() {
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
-    handleCancelAddCreate() {
+    handleHideFormAdd() {
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
     },
 
     get,

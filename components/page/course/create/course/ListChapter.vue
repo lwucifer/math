@@ -1,12 +1,10 @@
 <template>
   <div>
     <ChapterItem
-      v-for="(chapter, index) in get(chapters, 'data', [])"
+      v-for="(chapter, index) in chapters"
       :key="get(chapter, 'id', '')"
       :chapter="chapter"
-      @handleRefreshChapters="handleRefreshChapters"
       :index="index"
-      @handleAddLesson="handleAddLesson"
     />
   </div>
 </template>
@@ -25,58 +23,18 @@ export default {
   components: {
     IconEditAlt,
     IconTrashAlt,
-    ChapterItem
-  },
-
-  created() {
-    this.getChapters();
+    ChapterItem,
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-chapter", {
-      chapters: "chapters"
-    })
+    ...mapState("elearning/create", {
+      chapters: "chapters",
+      general: "general",
+    }),
   },
 
   methods: {
     get,
-
-    handleAddLesson(chapter) {
-      this.$emit("handleAddLesson", chapter);
-    },
-
-    getChapters() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        const options = {
-          params: {
-            elearning_id
-          }
-        };
-        this.$store.dispatch(
-          `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-          options
-        );
-      }
-    },
-
-    handleRefreshChapters(key) {
-      this.getChapters();
-      this.getProgress();
-    },
-
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id
-        }
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    }
-  }
+  },
 };
 </script>

@@ -8,7 +8,7 @@ import {
   FIREBASE_TOKEN,
   DEVICE_OS,
 } from "./config";
-import { getParamQuery } from "./common";
+import { get } from "lodash";
 
 /**
  * get access_token from local storage
@@ -159,12 +159,13 @@ export const getDeviceIdFromCookie = (req) => {
   return userCookie;
 };
 
-export const checkRequestAuthorize = (_url) => {
+export const checkRequestAuthorize = (config) => {
+  const _url = config.url;
   const urls = _url.split("?");
-  // console.log("urls", urls);
+  // // console.log("urls", urls);
 
   // if url contain token=true => return true;
-  if (_url.includes("token=true")) return true;
+  if (get(config, "params.token", "") == "true") return true;
 
   // public api url
   if (_url.includes("/public")) return false;

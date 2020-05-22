@@ -1,51 +1,56 @@
 <template>
-  <div class="cc-panel__body">
-    <div class="cc-box" >
-      <div class="cc-box__head">
+  <div class="cc-panel__body-modifer">
+    <div class="cc-box">
+      <div class="cc-box__head" :class="{'add-border-bottom': get(exercise, 'questions', []).length > 0}">
         <div class="cc-box__head-left">
           <EditExerciseName
             :exercise="get(this, 'exercise', {})"
             :index="index"
-            @handleRefreshExcercises="handleRefreshExcercises"
           />
         </div>
 
         <div class="cc-box__head-right">
-          <button @click.prevent="handleAddQuestion" class="text-primary d-flex align-items-center"
-            ><IconPlus2 class="mr-3 fill-primary"/> Thêm câu hỏi</button>
+          <button
+            @click.prevent="toggleFormAdd"
+            class="text-primary d-flex align-items-center"
+          >
+            <IconPlus2 class="mr-3 fill-primary" /> <span class="font-weight-semi-bold">Thêm câu hỏi</span>
+          </button>
+          
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
           >
-            <IconAngleDown class="icon" v-if="!isShowExercise" />
-            <IconAngleUp class="icon" v-else />
+            <IconAngleDown  width="20px" height="20px" class="icon fill-primary" v-if="!isShowExercise" />
+            <IconAngleUp  width="20px" height="20px" class="icon fill-primary" v-else />
           </button>
         </div>
       </div>
 
-      <div class="cc-box__body" style="background: #F9F9F9">
+
+      <div
+        class="cc-box__body"
+        :class="{ 'add-background': isAddQuestionForm, 'py-0' : toggleFormAdd }"
+      >
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
           :exercise="exercise"
-          @handleCancelAddQuestion="handleCancelAddQuestion"
-          @handleRefreshQuestion="handleRefreshQuestion"
+          @cancel="toggleFormAdd"
         />
         <CreateQuestionEssay
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
           :exercise="exercise"
-          @handleRefreshQuestion="handleRefreshQuestion"
-          @handleCancelAddQuestion="handleCancelAddQuestion"
+          @cancel="toggleFormAdd"
         />
-        <fragment v-if="isShowExercise">
+        <template v-if="isShowExercise">
           <ListQuestion
             v-for="(question, index) in get(exercise, 'questions', [])"
             :key="question.id"
             :index="index"
             :question="question"
             :exercise="exercise"
-            @handleRefreshQuestion="handleRefreshQuestion"
           />
-        </fragment>
+        </template>
       </div>
     </div>
   </div>
@@ -59,7 +64,7 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
-import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
+import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
@@ -67,6 +72,7 @@ import CreateQuestionChoice from "~/components/page/course/create/exercise/Creat
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -82,45 +88,40 @@ export default {
     ListQuestion,
     EditExerciseName,
     IconAngleUp,
-    IconPlus2
+    IconPlus2,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+    lesson: Object,
   },
 
   data() {
     return {
       isAddQuestionForm: false,
-      isShowExercise: true
+      isShowExercise: true,
     };
   },
 
   methods: {
-    handleRefreshQuestion() {
-      this.isAddQuestionForm = false;
-      this.$emit("handleRefreshQuestion");
-    },
-
-    handleCancelAddQuestion() {
-      this.isAddQuestionForm = false;
-    },
-
-    get,
-
-    handleAddQuestion() {
+    toggleFormAdd() {
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
-    handleRefreshExcercises() {
-      this.$emit("handleRefreshExcercises");
-    }
-  }
+    get,
+  },
 };
 </script>
+
+<style lang="scss">
+.add-background {
+  background: #f9f9f9;
+  padding: 2rem !important;
+}
+</style>

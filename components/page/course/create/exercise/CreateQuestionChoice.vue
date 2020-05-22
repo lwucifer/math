@@ -1,10 +1,27 @@
 <template>
-  <div>
+  <div class="mb-4">
     <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
       >Nội dung câu hỏi</label
     >
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
+
+    <div class="row">
+      <div class="col-md-3">
+        <label class="d-inline-block mb-3 font-weight-bold" for="answer"
+          >Chọn đáp án đúng</label
+        >
+      </div>
+
+      <div class="col-md-8">
+        <label
+          class="d-inline-block mb-3"
+          style="margin-left: 1.5rem"
+          for="answer-editor"
+          >Nội dung đáp án</label
+        >
+      </div>
+    </div>
 
     <CreateAnswerOfQuestion
       v-for="(answer, index) in get(payload, 'answers', [])"
@@ -22,21 +39,20 @@
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
-        size="sm"
-        square
-        @click="$emit('handleCancelAddQuestion')"
-        >Huỷ bỏ</app-button
+        size="md"
+        @click="$emit('cancel')"
+        >Hủy</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -51,18 +67,19 @@ import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/Cre
 import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconTrashAlt,
-    CreateAnswerOfQuestion
+    CreateAnswerOfQuestion,
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data() {
@@ -76,15 +93,21 @@ export default {
         answers: [
           {
             correct: false,
-            content: ""
+            content: "",
           },
           {
             correct: false,
-            content: ""
-          }
-        ]
-      }
+            content: "",
+          },
+        ],
+      },
     };
+  },
+  computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+      lesson: "lesson",
+    }),
   },
 
   methods: {
@@ -105,7 +128,18 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        this.$emit("cancel");
+        // this.$store.dispatch(`elearning/create/getProgress`);
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          // this.$store.dispatch(`elearning/create/getProgress`);
+          this.$store.dispatch(`elearning/create/getExams`);
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          // this.$store.dispatch(`elearning/create/getProgress`);
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -129,7 +163,7 @@ export default {
     handleAddAnswer(index) {
       const answer = {
         correct: false,
-        content: ""
+        content: "",
       };
       if (index == this.payload.answers.length && index < 6) {
         this.payload.answers.push(answer);
@@ -141,18 +175,18 @@ export default {
         this.payload.answers.splice(index, 1);
       }
     },
-    handleCheckAnswers(){
+    handleCheckAnswers() {
       var lastanswer = this.payload.answers.slice(-1)[0];
       const answer = {
         correct: false,
-        content: ""
-      }
-      const check = _.isEqual(lastanswer, answer)
-      if(this.payload.answers.length > 2 && check){
-        this.payload.answers.pop()
+        content: "",
+      };
+      const check = _.isEqual(lastanswer, answer);
+      if (this.payload.answers.length > 2 && check) {
+        this.payload.answers.pop();
       }
     },
-    get
-  }
+    get,
+  },
 };
 </script>

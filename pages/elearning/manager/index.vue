@@ -14,7 +14,19 @@
           <div class="box22">
             <div class="elearning-manager__dashboard-filter">
               <h6>Thống kê</h6>
-              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
+              <!--<app-date-picker-->
+                <!--class=""-->
+                <!--v-model="filterDate"-->
+                <!--square-->
+                <!--range-->
+                <!--size="sm"-->
+                <!--placeholder="Chọn khoảng thời gian"-->
+                <!--:shortcuts="DATE_SHORTCUT"-->
+                <!--@input="handlerChangeDate"-->
+                <!--valueFormat="DD/MM/YYYY"-->
+              <!--&gt;-->
+              <!--</app-date-picker>-->
+              <!--<app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>-->
             </div>
             <div class="elearning-manager__dashboard mt-15">
               <div class="row row-space-5">
@@ -60,11 +72,11 @@
           <div class="box22 mt-4">        
             <div class="elearning-manager__dashboard-filter">
               <h6>Doanh thu</h6>
-              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
+              <!--<app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>-->
             </div>
             <div class="elearning-manager__dashboard elearning-manager__revenue mt-15 text-center">
               <div class="revenue">
-                11.250.330 VNĐ
+                {{ totalRevenue | toThousandFilter }} VNĐ
               </div>
               <div class="chart">
                   <GChart
@@ -79,9 +91,27 @@
           <div class="box22 mt-4">        
             <div class="elearning-manager__dashboard-filter">
               <h6>Bài giảng và khóa học nổi bật</h6>
-              <app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>
+              <!--<app-date-picker label="Chọn khoảng thời gian" v-model="filterDate" size="sm"/>-->
             </div>
             <div class="elearning-manager__dashboard elearning-manager__revenue mt-15">
+              <app-table
+                :heads="tableHeads"
+                :data="highlightElearnings"
+                :need-pagination="false"
+              >
+                <template v-slot:cell(rate)="{row}">
+                  <td>
+                    <div class="nowrap">
+                      <app-stars
+                        class="d-inline-block"
+                        :stars="get(row, 'rate', 0.0)"
+                        :size="13"
+                      />
+                      <span class="text-dark font-weight-bold">{{ get(row, 'rate', 0.0) }}</span>
+                    </div>
+                  </td>
+                </template>
+              </app-table>
             </div>
           </div>
         </div>
@@ -108,11 +138,12 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
+import { DATE_SHORTCUT } from "~/utils/config";
 
 const STORE_NAMESPACE = "elearning/teaching/summary";
 
 export default {
-  layout: "manage",
+  // layout: "manage",
   name: "E-learning",
 
   components: {
@@ -128,25 +159,26 @@ export default {
     IconData,
     GChart
   },
-
+  async fetch({ params, query, store, route }) {
+    const userId = store.state.auth.token ? store.state.auth.token.id : "";
+    const room_id = route.params.id;
+    await Promise.all([
+      store.dispatch(`elearning/teaching/statistic/revenue/${actionTypes.TEACHING_CHART_STATISTIC_REVENUE.INFO}`),
+      store.dispatch(`elearning/teaching/statistic/highlight-els/${actionTypes.TEACHING_CHART_STATISTIC_HIGHLIGHT_ELS.LIST}`),
+    ]);
+  },
   data() {
     return {
-      chartData: [
-        ['Year', ''],
-        ['0', 2000],
-        ['1', 1170],
-        ['2', 1200],
-        ['3', 1530],
-        ['4', 540],
-        ['5', 650],
-        ['6', 1650],
-      ],
       chartOptions: {
         chart: {
           title: null,
           subtitle: null,
         },
         colors: ['#37A000', '#d95f02', '#7570b3'],
+        backgroundColor: {
+          fill: "#0000"
+        },
+        // width: 900,
         height: 400
       },
       filterDate: null,
@@ -186,7 +218,26 @@ export default {
         voting_rate: 0,
         participants: 0,
         revenue: 0,
-      }
+      },
+      DATE_SHORTCUT: DATE_SHORTCUT,
+      tableHeads: [
+        {
+          name: "name",
+          text: "Tiêu đề",
+        },
+        {
+          name: "views",
+          text: "Lượt xem",
+        },
+        {
+          name: "price",
+          text: "Học phí",
+        },
+        {
+          name: "rate",
+          text: "Đánh giá",
+        },
+      ],
     };
   },
 
@@ -194,7 +245,44 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateTeaching: "teachingInfo"
-    })
+    }),
+    ...mapState('elearning/teaching/statistic/revenue', {
+      revenueChart: "revenueChart"
+    }),
+    ...mapState('elearning/teaching/statistic/highlight-els', {
+      highlightElearnings: "elearnings"
+    }),
+    chartData() {
+      let tmp = [
+        ['Year', '']
+      ]
+      const dataLg = this.revenueChart.length
+      let yearTmp = null
+      for (let i = 0; i < dataLg; i++) {
+        const revenueTmp = this.revenueChart[i]
+        let chartItem
+        if (yearTmp != revenueTmp.year) {
+          yearTmp = revenueTmp.year
+          chartItem = [
+            `${revenueTmp.month}/${revenueTmp.year}`,
+            revenueTmp.revenue
+          ]
+        } else {
+          chartItem = [revenueTmp.month, revenueTmp.revenue]
+        }
+        tmp.push(chartItem)
+      }
+      return tmp
+    },
+    totalRevenue() {
+      let total = 0
+      const dataLg = this.revenueChart.length
+      for (let i = 0; i < dataLg; i++) {
+        const revenueTmp = this.revenueChart[i]
+        total+= revenueTmp.revenue
+      }
+      return total
+    }
   },
 
   methods: {
@@ -267,7 +355,12 @@ export default {
         this.loading = false
       }
     },
-
+    handlerChangeDate(date){
+      console.log('change date: ', date)
+      // this.params.from = date[0];
+      // this.params.to = date[1];
+      // this.fetchWithdrawals();
+    },
     get
   },
 

@@ -17,24 +17,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 18rem">
+      <div class="filter-form__item" style="min-width: 18rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
@@ -52,17 +52,32 @@
     <!--End filter form-->
 
     <!--Table-->
+    <div v-if="loading">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="students"
     >
+      <template v-slot:cell(student_name)="{row}">
+        <td>
+          <span class="isblock">
+            {{row.student_name}}
+            <IconLock2 class="fill-red" width="14" height="14" v-if="row.banned"/>
+          </span>
+        </td>
+      </template>
+
       <template v-slot:cell(banned)="{row}">
         <td class="nowrap">
-          <button type="button" @click="block(row.invitation_id, row.student_id, row.banned)">
-            <IconLockOpenAlt class="fill-primary" v-if="!row.banned" width="16" height="16"/>
-            <IconLock2 v-else width="16" height="16"/>
+          <button class="btn-block" type="button" @click="block(row.invitation_id, row.student_id, row.banned)" v-if="!row.banned" >
+            <IconLock2 class="fill-red" width="16" height="16"/>
+            <span>Chặn học sinh này</span>
+          </button>
+          <button class="btn-block" type="button" @click="block(row.invitation_id, row.student_id, row.banned)" v-else>
+            <IconLockOpenAlt class="fill-primary" width="16" height="16"/>
+            <span>Bỏ chặn học sinh này</span>
           </button>
         </td>
       </template>
@@ -75,7 +90,9 @@
     <!--End table-->
 
     <div class="pl-4 pr-4 mt-4">
-      <i class="color-999">*Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia tất cả các phòng học online theo yêu cầu của giáo viên</i>
+      <i class="color-999">
+        *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+      </i>
     </div>
 
     <!-- Modal invite students -->
@@ -123,6 +140,7 @@ export default {
   data() {
     return {
       openModal: false,
+      showFilter: false,
       heads: [
         {
           name: "student_name",
@@ -181,6 +199,17 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          class_id: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     closeModal(e) {
       this.openModal = false;
       if (e) this.getList();
@@ -198,6 +227,7 @@ export default {
     },
     handleChangedCourse() {
       this.params.class_id = this.filterCourse.value;
+      this.getList();
     },
     handleFocusSearchInput() {
     },
@@ -300,6 +330,39 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+.btn-block {
+  position: relative;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    span{
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  span {
+    position: absolute;
+    top: 100%;
+    right: -5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 300ms;
+    background: #fff;
+    padding: 1rem 1.5rem;
+    border: 1px solid $color-border;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
+    
+  }
+}
+.isblock {
+  position: relative;
+  svg {
+    position: absolute;
+    right: -2rem;
+    top: -2px;
+  }
+}
 .appended-col {
   p {
     max-width: 15rem;

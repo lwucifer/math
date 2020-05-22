@@ -4,36 +4,46 @@
     <div class="e-exercise-list-item__desc mb-3">
       <span class="text-primary">{{ type | getExerciseTypeText }}</span>
       <app-divider class="e-exercise-list-item__divider" direction="vertical" />
-      <span class="text-gray">Thời gian làm bài:</span>
+      <span class="text-gray">Thời gian:</span>
       <b class="text-dark">{{ getDurationText(duration) }}</b>
     </div>
 
     <app-button
       v-if="status === EXERCISE_STATUS.NONE"
-      color="orange"
+      color="yellow"
       size="sm"
       @click.prevent="handleDoExercise"
-      >Làm bài tập</app-button
+      >Làm {{ exerciseTextTransform }}</app-button
     >
 
     <app-button
-      v-else-if="status === EXERCISE_STATUS.FAILED"
+      v-else-if="status === EXERCISE_STATUS.FAILED && canDoExercise"
       color="secondary"
       size="sm"
+      :pointer="canDoExercise"
       @click.prevent="handleDoExercise"
-      >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
+      >Làm lại {{ exerciseTextTransform }} ({{ works }}/{{ reworks }})</app-button
     >
 
     <app-button
       v-else-if="status === EXERCISE_STATUS.PENDING"
-      color="orange"
+      color="yellow"
       size="sm"
+      :pointer="false"
       >Chờ chấm điểm</app-button
     >
 
     <app-button
       v-else-if="status === EXERCISE_STATUS.PASSED"
       color="primary"
+      size="sm"
+      @click.prevent="handleReviewResult"
+      >Xem kết quả</app-button
+    >
+
+    <app-button
+      v-else-if="!canDoExercise && status != EXERCISE_STATUS.PASSED"
+      color="secondary"
       size="sm"
       @click.prevent="handleReviewResult"
       >Xem kết quả</app-button
@@ -50,7 +60,7 @@ import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
 
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -62,6 +72,7 @@ export default {
     stared: Boolean,
     name: String,
     result: String,
+    open_time: String,
     questions: Number,
     duration: Number,
     reworks: Number,
@@ -87,6 +98,8 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/study/study-exercise", ["currentLession"]),
+
     classes() {
       return {
         "e-exercise-list-item--none": this.status === EXERCISE_STATUS.NONE,
@@ -95,6 +108,18 @@ export default {
         "e-exercise-list-item--failed": this.status === EXERCISE_STATUS.FAILED,
         "e-exercise-list-item--passed": this.status === EXERCISE_STATUS.PASSED
       };
+    },
+
+    canDoExercise() {
+      return this.works < this.reworks;
+    },
+
+    exerciseTextTransform() {
+      if(!this.currentLession) {
+        return "bài kiểm tra";
+      } else {
+        return " bài tập";
+      }
     }
   },
 
@@ -111,6 +136,8 @@ export default {
     handleDoExercise() {
       console.log("[handleDoExercise]");
 
+      if(!this.canDoExercise) return;
+
       // set current exercise
       this.setStudyExerciseCurrent({
         id: this.id,
@@ -121,6 +148,7 @@ export default {
         result: this.result,
         reworks: this.reworks,
         works: this.works,
+        open_time: this.open_time,
       });
 
       // show befor begin exercise

@@ -1,6 +1,7 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'invite-student-modal': true }"
+  <app-modal centered :width="600" :component-class="{ 'invite-student-modal': true }"
      :footer="false" title="Mời thêm học sinh"
+     @close="close(false)"
   >
     <div slot="content">
       <div>
@@ -36,8 +37,8 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <app-button size="sm" color="info" class="mr-3" square @click="close(false)">Hủy</app-button>
-        <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
+        <app-button color="white" class="mr-4 pl-5 pr-5" square @click="close(false)">Hủy</app-button>
+        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Mời</app-button>
       </div>
     </div>
   </app-modal>
@@ -171,26 +172,5 @@ export default {
 </script>
 
 <style lang="scss">
-.invite-student-modal .app-modal-content {
-  padding: 2rem 1.5rem;
-}
-.student-list {
-  background: #fbfbfb;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
-  .item {
-    display: block;
-    margin-bottom: 1rem;
-    .app-checkbox {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    span {
-      vertical-align: middle;
-    }
-  }
-}
-strong {
-  color: #222;
-}
+@import "~/assets/scss/components/elearning/olclass/invite-student.scss";
 </style>

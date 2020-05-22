@@ -1,17 +1,20 @@
 <template>
-  <div class="cc-box__bg-gray px-5 pt-4 pb-4" id="create-lesson-of-chapter">
-    <h3 class="heading-6 mb-2 mt-3">Tên bài học số {{ noLesson + 1 }}</h3>
+  <div class="cc-box__bg-disable mb-4" id="create-lesson-of-chapter">
+    <h3 class="heading-6 mb-2 mt-3">
+      Tên bài học
+      <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
+    </h3>
     <app-input
-      @handleBlur="handleBlurNameInput"
-      :counter="60"
+      @onBlur="handleChangeName"
+      :counter="80"
       placeholder="Tên bài học"
       v-model="payload.name"
     />
-    <span v-show="error_name" class="error">{{ error_name }}</span>
+    <app-error :error="get(error, 'name', '')"></app-error>
 
-    <span>Chọn loại bài học</span>
+    <p class="text-center mb-4">Chọn loại bài học</p>
 
-    <app-divider class="mt-3 mb-4" />
+    <!-- <app-divider class="mt-3 mb-4" /> -->
 
     <div class="clc-type-tabs">
       <a
@@ -35,7 +38,7 @@
         @click.prevent="changeTabType('document')"
       >
         <span class="clc-type-tab-item__icon">
-          <IconDefaultAsideMenu
+          <IconRadioButtonChecked
             class="icon mr-2"
             style="width: 24px; height: 24px"
           />
@@ -62,17 +65,15 @@
     <div class="d-flex justify-content-end mt-4">
       <app-button
         class="clc-btn font-weight-semi-bold text-secondary mr-4"
-        size="sm"
+        size="md"
         color="default"
         outline
-        square
         @click="handleCancel"
-        >Huỷ bỏ</app-button
+        >Hủy</app-button
       >
       <app-button
         class="clc-btn font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         :disabled="!submit"
         @click="handleAddContent"
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
@@ -80,6 +81,7 @@
     </div>
 
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -90,14 +92,14 @@
 
 <script>
 import { getBase64, getParamQuery, useEffect } from "~/utils/common";
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import IconRadioButtonChecked from "~/assets/svg/design-icons/radio_button_checked.svg?inline";
-import IconDefaultAsideMenu from "~/assets/svg/icons/default-aside-menu.svg?inline";
+
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
@@ -125,7 +127,6 @@ export default {
     LessonSelectVideo,
     LessonSelectDocument,
     IconRadioButtonChecked,
-    IconDefaultAsideMenu,
   },
 
   props: {
@@ -142,7 +143,6 @@ export default {
   data() {
     return {
       tabType: "video",
-      error_name: "",
       showModalConfirm: false,
       confirmLoading: false,
       noLesson: get(this, "chapter.lessons", "").length,
@@ -154,6 +154,9 @@ export default {
         repository_file_id: "",
         article_content: "",
         id: get(this, "lesson.id", ""),
+      },
+      error: {
+        name: "",
       },
     };
   },
@@ -177,17 +180,17 @@ export default {
       return !!get(this, "lesson.id", "");
     },
     submit() {
-      return !this.error_name;
+      return true;
     },
   },
 
   methods: {
-    handleBlurNameInput() {
+    handleChangeName() {
       if (!this.payload.name) {
-        this.error_name = "Chưa nhập tên bài học";
-        return;
+        return (this.error.name = "Chưa nhập tên bài học");
       }
-      this.error_name = "";
+
+      this.error.name = "";
     },
     changeTabType(type) {
       this.tabType = type;
@@ -223,15 +226,12 @@ export default {
       this.handleCancelModal();
 
       if (get(result, "success", false)) {
-        this.$emit("refreshLessons");
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
+        this.$emit("toggleShowAddLesson");
+        this.$store.dispatch(`elearning/create/getContent`);
+        this.$toasted.success(get(result, "message", "Thành công"));
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {
@@ -247,7 +247,7 @@ export default {
     },
 
     handleCancel() {
-      this.$emit("handleCancel");
+      this.$emit("toggleShowAddLesson");
     },
 
     get,

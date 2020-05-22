@@ -1,17 +1,21 @@
 <template>
   <div class="e-exercise">
-    <div class="e-exercise-components">
-      <ElearningExerciseList v-if="studyMode == studyModeDoExercise"/>
-      <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode"/>
-      <ElearningExerciseDoExercise v-else-if="studyMode == doingMode"/>
-      <ElearningExerciseResults v-else-if="studyMode == reviewMode"/>
+    <div class="e-exercise-components" v-if="!loadingExercise">
+      <ElearningExerciseList v-if="studyMode == studyModeDoExercise" />
+      <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode" />
+      <ElearningExerciseDoExercise v-else-if="studyMode == doingMode" />
+      <ElearningExerciseResults v-else-if="studyMode == reviewMode" />
+    </div>
+
+    <div class="text-center w-100 pt-md" v-if="loadingExercise">
+      <app-spin />
     </div>
 
     <div class="e-exercise-bottom">
-      <button class="e-exercise-bottom__button" type="button">
+      <button v-if="expand" class="e-exercise-bottom__button" type="button" @click="setExpand(false)">
         <IconCropLandscape class="icon" />
       </button>
-      <button class="e-exercise-bottom__button" type="button">
+      <button v-else class="e-exercise-bottom__button" type="button" @click="setExpand(true)">
         <IconCropFree class="icon" />
       </button>
     </div>
@@ -28,7 +32,8 @@ import ElearningExerciseDoExercise from "~/components/page/elearning/study/exerc
 import ElearningExerciseResults from "~/components/page/elearning/study/exercise/ElearningExerciseResults";
 
 import { mapState } from "vuex";
-import {STUDY_MODE} from '~/utils/constants';
+import { STUDY_MODE } from "~/utils/constants";
+import { ELEARNING_STUDY as ELEARNING_STUDY_MUTATION } from "~/utils/mutation-types";
 
 export default {
   data() {
@@ -36,8 +41,9 @@ export default {
       studyModeDoExercise: STUDY_MODE.DO_EXERCISE,
       beforeBeginMode: STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN,
       doingMode: STUDY_MODE.DO_EXERCISE_DOING,
-      reviewMode: STUDY_MODE.REVIEW_EXERCISE_RESULT,
-    }
+      reviewMode: STUDY_MODE.REVIEW_EXERCISE_RESULT
+      // loading: true,
+    };
   },
 
   components: {
@@ -52,12 +58,22 @@ export default {
   },
 
   computed: {
-    ...mapState("event", ['studyMode'])
+    ...mapState("event", ["studyMode", "loadingExercise"]),
+    ...mapState("elearning/study/study", ["expand"]),
   },
 
   watch: {
-    studyMode(_newVal){
-      console.log("[studyMode] watch", _newVal)
+    studyMode(_newVal) {
+      console.log("[studyMode] watch", _newVal);
+    }
+  },
+
+  methods: {
+    setExpand(value) {
+      this.$store.commit(
+        `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
+        value
+      );
     }
   }
 };

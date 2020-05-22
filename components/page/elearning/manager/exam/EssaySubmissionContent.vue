@@ -34,7 +34,7 @@
       contents: {
         type: Array,
         required: true,
-        validator: value => value.every(item => ["content", "index", "student"].every(key => key in item))
+        validator: value => value.every(item => ["content", "index"].every(key => key in item))
       },
       note: {
         type: String

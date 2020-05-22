@@ -33,22 +33,52 @@
       </div>
     </template>
 
-    <app-button
-      v-if="
-        get(info, 'is_study', false) || get(info, 'elearning_price.free', false)
-      "
-      fullWidth
-      class="text-uppercase body-2 font-weight-bold mb-4"
-      @click="handleStudy"
-      >Tham gia học</app-button
-    >
+    <div v-if="isBuyElearning">
+      <app-button
+        v-if="isStartElearning"
+        fullWidth
+        class="text-uppercase body-2 font-weight-bold mb-4"
+        @click="handleStudy"
+        >Tham gia học</app-button
+      >
+      <app-button
+        @click="handleStudy"
+        v-if="isStudyElearning"
+        color="primary"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+      >
+        Vào học ngay
+      </app-button>
+      <app-button
+        color="primary"
+        @click="handleStudy"
+        fullWidth
+        square
+        class="text-uppercase mt-3 mb-3"
+        v-if="isDoneElearning"
+      >
+        <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+      </app-button>
+    </div>
+
     <app-button
       v-else
       fullWidth
       class="text-uppercase body-2 font-weight-bold mb-4"
       @click.prevent="handleAddToCart"
-      >Chọn mua</app-button
+      >CHỌN MUA</app-button
     >
+
+    <!-- <app-button
+      color="primary"
+      fullWidth
+      square
+      class="text-uppercase mt-3 mb-3"
+    >
+      <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+    </app-button> -->
 
     <app-alert
       v-if="get(info, 'is_study', false)"
@@ -56,7 +86,7 @@
       type="warning"
       size="sm"
       >Bạn đã mua bài giảng này vào ngày
-      {{ get(info, "join_date", "") }}</app-alert
+      {{ get(info, "join_date", "") | moment("DD/MM/YYYY") }}</app-alert
     >
 
     <ul class="info">
@@ -74,7 +104,13 @@
       </li>
       <li>
         <IconTimer class="icon" />
-        Thời lượng: {{ [info.duration && info.duration != "0:0" ? info.duration : "1:0", "m:s"] | moment("mm:ss") }}
+        Thời lượng:
+        {{
+          [
+            info.duration && info.duration != "0:0" ? info.duration : "1:0",
+            "m:s",
+          ] | moment("mm:ss")
+        }}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -84,13 +120,33 @@
 
     <app-divider class="elearning-right-side__divider my-0" />
 
-    <div class="py-3 d-flex">
-      <a class="text-info d-flex-center">
-        <IconBxsShare class="icon subheading mr-2" />Chia sẻ
+    <div class="py-3 d-flex share-favourite">
+      <a class="text-info share">
+        <ShareNetwork
+          class="d-flex-center"
+          network="facebook"
+          :url="
+            `https://schoolly.famtechvn.com/elearning/${get(
+              info,
+              'elearning_id',
+              ''
+            )}`
+          "
+          :title="get(info, 'name', '')"
+          :description="description"
+          :quote="description"
+          hashtags="schoolly"
+        >
+          <IconBxsShare class="icon subheading mr-2" />Chia sẻ
+        </ShareNetwork>
       </a>
-      <a class="text-primary ml-auto d-flex-center">
+
+      <a
+        class="text-primary ml-auto d-flex-center favourite"
+        @click="handleAddFavouriteElearning"
+      >
         <IconFavorite
-          v-if="info && info.is_favourite"
+          v-if="get(info, 'is_favourite', false)"
           class="icon subheading mr-2"
         />
         <IconFavoriteBorder v-else class="icon subheading mr-2" />
@@ -101,6 +157,11 @@
       v-if="showModalPayment"
       :fail="AddCartFail"
       @close-modal="handleCloseModal"
+    />
+    <ElearningRequestCode
+      :showRequestCode="showRequestCode"
+      @handleCancel="handleCancelRequestCode"
+      @handleSubmit="handleSubmitCode"
     />
   </div>
 </template>
@@ -118,14 +179,16 @@ import IconInsertComment from "~/assets/svg/v2-icons/insert_comment_24px.svg?inl
 import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
-
-import { mapActions, mapGetters } from "vuex";
+import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
+import Favourite from "~/services/elearning/study/Favourite";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
 import { createHashKeyReq } from "~/models/payment/HashKeyReq";
 import { RESPONSE_SUCCESS } from "~/utils/config.js";
 import JoinService from "~/services/elearning/Join";
-
+import ElearningRequestCode from "~/components/page/elearning/ElearningRequestCode";
 import PaymentModal from "~/components/page/payment/PaymentModal";
+
 export default {
   components: {
     IconShare,
@@ -138,48 +201,142 @@ export default {
     IconRemoveRedEye,
     IconBxsShare,
     PaymentModal,
-  },
-  props: {
-    info: {
-      type: Object,
-      default: () => ({}),
-    },
-    program: {},
+    IconDone24px,
+    ElearningRequestCode,
   },
 
   data() {
     return {
       showModalPayment: false,
       AddCartFail: false,
+      showRequestCode: false,
     };
   },
 
   computed: {
     ...mapGetters("cart", ["cartCheckout"]),
-  },
+    ...mapState("elearning/detail", {
+      info: "info",
+      program: "program",
+    }),
+    isBuyElearning() {
+      if (get(this, "info.elearning_price.free", false)) return true;
+      if (get(this, "info.is_study", false)) return true;
+      return false;
+    },
+    isStartElearning() {
+      if (get(this, "info.progress", 0) == 0) return true;
+      return false;
+    },
+    isStudyElearning() {
+      if (
+        get(this, "info.progress", "-1") > 0 &&
+        get(this, "info.progress", "-1") < 100
+      ) {
+        return true;
+      }
 
-  created() {
-    console.log(this.info);
+      return false;
+    },
+    isDoneElearning() {
+      if (get(this, "info.progress", "-1") >= 100) return true;
+      return false;
+    },
+    description() {
+      let html = get(this, "info.description", "");
+      let div = document.createElement("div");
+      div.innerHTML = html;
+      let text = div.textContent || div.innerText || "";
+      return text;
+    },
   },
 
   methods: {
     get,
 
+    handleCancelRequestCode() {
+      this.showRequestCode = false;
+    },
+
+    handleSubmitCode(pass_code) {
+      const elearning_id = get(this, "info.id", "");
+      const payload = {
+        elearning_id,
+        pass_code,
+      };
+      this.handleJoinElearning(payload);
+    },
+
+    async handleAddFavouriteElearning() {
+      if (!get(this, "info.is_favourite", true)) {
+        this.addFavourite();
+        return;
+      }
+      this.removeFavourite();
+    },
+
+    async removeFavourite() {
+      const payload = {
+        elearning_ids: [get(this, "info.id", "")],
+      };
+      const res = await new Favourite(this.$axios)["deletePayload"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async addFavourite() {
+      const payload = {
+        elearning_id: get(this, "info.id", ""),
+      };
+      const res = await new Favourite(this.$axios)["add"](payload);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        const options = {
+          params: {
+            elearning_id: get(this, "info.id", ""),
+            token: "true",
+          },
+        };
+        this.$store.dispatch("elearning/detail/getInfo", options);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
 
-      if (
-        get(this, "info.is_study", false) ||
-        !get(this, "info.elearning_price.free", true)
-      ) {
+      if (get(this, "info.is_study", false)) {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
 
-      const payload = {
-        elearning_id,
-      };
+      if (get(this, "info.is_private", false)) {
+        this.showRequestCode = true;
+        return;
+      }
 
+      if (get(this, "info.elearning_price.free", false)) {
+        const payload = {
+          elearning_id,
+        };
+        this.handleJoinElearning(payload);
+        return;
+      }
+    },
+
+    async handleJoinElearning(payload) {
+      const elearning_id = get(this, "info.id", "");
       const res = await new JoinService(this.$axios)["add"](payload);
 
       if (get(res, "success", false)) {
@@ -187,6 +344,10 @@ export default {
         return;
       }
 
+      if (get(res, "code", "") === "SCLC_1127") {
+        this.$router.push(`/elearning/${elearning_id}/study`);
+        return;
+      }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 

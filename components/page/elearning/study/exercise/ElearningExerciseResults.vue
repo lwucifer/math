@@ -17,7 +17,11 @@
         </span>
         <span>
           Số lần làm còn lại:
-          <span class="text-secondary">{{ result.reworks - result.works}}</span>
+          <span class="text-secondary">
+            {{
+            result.reworks - result.works
+            }}
+          </span>
         </span>
       </template>
 
@@ -52,11 +56,14 @@
 
     <div class="text-center">
       <app-button
-        v-if="result.result === EXERCISE_STATUS.PASSED"
-        @click.prevent="handleShowListQuestion"
-      >Xem đáp án</app-button>
+        v-if="result.result === EXERCISE_STATUS.PASSED || (result.reworks == result.works)"
+        @click.prevent="handleShowComment"
+      >{{ btnTextView }}</app-button>
       <app-button
-        v-else-if="result.result === EXERCISE_STATUS.FAILED && (result.reworks - result.works > 0)"
+        v-else-if="
+          result.result === EXERCISE_STATUS.FAILED &&
+            result.reworks - result.works > 0
+        "
       >Làm lại bài tập</app-button>
     </div>
 
@@ -66,7 +73,16 @@
       :footer="false"
       @close="modalListQuestions = false"
     >
-      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer"/>
+      <ElearningExerciseListQuestions slot="content" :isAnswer="isAnswer" />
+    </app-modal>
+
+    <app-modal
+      v-if="modalComments"
+      title="Xem nhận xét"
+      :footer="false"
+      @close="modalComments = false"
+    >
+      <ElearningExerciseComments slot="content" />
     </app-modal>
   </div>
 </template>
@@ -80,12 +96,20 @@ import { mapState } from "vuex";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 const IconCheckCircleOutline = () =>
   import("~/assets/svg/v2-icons/check_circle_outline_24px.svg?inline");
-import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
+const ElearningExerciseListQuestions = () =>
+  import(
+    "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions"
+  );
+const ElearningExerciseComments = () =>
+  import(
+    "~/components/page/elearning/study/exercise/ElearningExerciseComments.vue"
+  );
 
 export default {
   components: {
     IconCheckCircleOutline,
-    ElearningExerciseListQuestions
+    ElearningExerciseListQuestions,
+    ElearningExerciseComments
   },
 
   data() {
@@ -94,6 +118,7 @@ export default {
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       modalListQuestions: false,
       isAnswer: true,
+      modalComments: false
     };
   },
 
@@ -104,6 +129,15 @@ export default {
       return `${this.result.corrects}/${
         this.result.questions
       } (${getExerciseResultText(this.result.result)})`;
+    },
+
+    btnTextView() {
+      const exerciseType = this.result.type;
+      if (exerciseType == EXERCISE_TYPES.CHOICE) {
+        return "Xem đáp án";
+      } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+        return "Xem nhận xét";
+      }
     }
   },
 
@@ -115,9 +149,10 @@ export default {
       "elearningSudyExerciseQuestionList"
     ]),
 
-    handleShowListQuestion() {
-      console.log("[handleShowListQuestion]");
+    handleShowComment() {
+      console.log("[handleShowComment]");
       const exercise_id = this.result.id;
+      const exerciseType = this.result.type;
 
       this.elearningSudyExerciseSubmissionList({
         params: {
@@ -126,7 +161,11 @@ export default {
       }).then(res => {
         this.elearningSudyExerciseQuestionList({ exercise_id }).then(result => {
           if (res.success == RESPONSE_SUCCESS) {
-            this.modalListQuestions = true;
+            if (exerciseType == EXERCISE_TYPES.CHOICE) {
+              this.modalListQuestions = true;
+            } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
+              this.modalComments = true;
+            }
           }
         });
       });

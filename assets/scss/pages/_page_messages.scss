@@ -32,52 +32,67 @@
     }
     .col-sidebar {
         .aside-box {
-            background-color: #f8f8f8;
+            background-color: map-get($bg-colors, white);
             border-right: 1px solid $color-border;
-            .aside-box__top {
+        
+            .tool-top {
                 padding: 1.5rem;
-                background-color: #fff;
-                .tool-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                height: 72px;
+                border-bottom: 1px solid $color-disabled;
+                
+                &__link {
+                    text-decoration: none;
+                    color: $color-text-dark;
+                    font-size: 1.8rem;
+                    font-weight: 600;
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    width: 100%;
+                }
+
+                &__feature {
                     button:hover svg path {
                         fill: $color-primary;
                     }
-                    svg {
-                        width: 2rem;
-                        height: 2rem;
-                        path {
-                            fill: #999;
+                }
+            }
+
+            .search-nav {
+                padding: 1.5rem;
+                
+                .form-group {
+                    background: $color-border;
+
+                    .input-group {
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #ffffff;
+                        border: 1px solid #eeeeee;
+                        box-sizing: border-box;
+                        height: 4rem;
+                        background: #fbfbfb;
+                        .input-group-addon {
+                            display: flex;
+                            padding: 12px;
+                        }
+                        input {
+                            border: none;
+                            width: 100%;
+                            background: transparent;
+                            // width: -moz-available;          /* WebKit-based browsers will ignore this. */
+                            // width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+                            // width: fill-available;
                         }
                     }
                 }
-                .input-group {
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    background: #ffffff;
-                    border: 1px solid #eeeeee;
-                    box-sizing: border-box;
-                    height: 4rem;
-                    background: #fbfbfb;
-                    .input-group-addon {
-                        display: flex;
-                        padding: 12px;
-                    }
-                    input {
-                        border: none;
-                        width: 100%;
-                        background: transparent;
-                        // width: -moz-available;          /* WebKit-based browsers will ignore this. */
-                        // width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-                        // width: fill-available;
-                    }
-                }
             }
-            .aside-box__content {
+            
+            .list-chat {
                 .nav-tabs {
                     display: flex;
                     border-bottom: 1px solid #eeeeee;
@@ -104,26 +119,32 @@
                     }
                 }
                 .tabs-content {
-                    height: 65vh;
+                    height: 75vh;
                     overflow-y: scroll;
+                    @include scrollbars(5px, #E0E0E0, #fff, 10px);
+
                     .align-item {
                         padding: 8px 15px;
                         display: flex;
                         background-color: #f8f8f8;
                         cursor: pointer;
                         align-items: center;
+
                         .link--dropdown__content {
                             display: none;
                         }
+
                         &:hover {
                             background-color: #ffffff;
                             .link--dropdown__content {
                                 display: block;
                             }
                         }
+
                         &.active {
                             background-color: #ffffff;
                         }
+
                         .align-item__image {
                             padding-right: 8px;
                             .app-avatar {
@@ -148,7 +169,7 @@
                                 justify-content: left;
                                 p {
                                     flex: 0 1 auto;
-                                    font-size: 1em;
+                                    font-size: 1.3rem;
                                     font-weight: 300;
                                     color: #666666;
                                     white-space: nowrap;
@@ -160,6 +181,7 @@
                     }
                 }
             }
+
             .aside-box__bottom {
                 .group-button {
                     display: flex;
@@ -190,31 +212,47 @@
             }
         }
     }
+
+
     .col-content {
         .box {
             background-color: #ffffff;
             padding-top: 0;
             padding-bottom: 0;
             .message-chat__content {
+                position: relative;
                 .aside-box__top {
-                    border-bottom: 1px solid #eeeeee;
+                    border-bottom: 1px solid $color-disabled;
                     display: flex;
                     justify-content: space-between;
-                    padding: 15px;
+                    padding: 1.5rem;
+                    height: 72px;
+            
                     .message-desc {
                         display: flex;
                         align-items: center;
                         .message-decs__image {
-                            margin-right: 5px;
+                            margin-right: 1.2rem;
+
                             .app-avatar {
-                                max-width: 29px;
-                                max-height: 29px;
+                                width: unset;
+                                height: unset;
+                                /deep/ img {
+                                    width: 40px;
+                                    height: 40px;
+                                }
                             }
                         }
                         .message-decs__title {
                             font-weight: bold;
-                            font-size: 1.6rem;
-                            color: #333333;
+                            font-size: 1.8rem;
+                            color: $color-text-dark;
+
+                            p {
+                                font-size: 1.2rem;
+                                font-weight: normal;
+                                color: $color-text;
+                            }
                         }
                     }
                     .message-tool {
@@ -235,6 +273,7 @@
                     padding-right: 15px;
                     height: 75vh;
                     overflow-y: scroll;
+                    @include scrollbars(5px, #E0E0E0, #fff, 10px);
                     .message-box {
                         display: flex;
                         flex-direction: column-reverse;
@@ -313,15 +352,50 @@
                             padding-left: 10px;
                             padding-right: 10px;
                         }
-                        .input-group_addon {
+                        
+                        .input-chat {
                             display: flex;
                             align-items: center;
-                            ul {
+                            justify-content: space-between;
+
+                            .app-files {
+                                width: 38px;
+                                height: 32px;
+                                border-radius: 50%;
+                                background: $color-primary;
                                 display: flex;
                                 align-items: center;
-                                li {
-                                    margin-left: 10px;
+                                justify-content: center;
+                                margin-right: 1.7rem;
+
+                                label {
+                                    height: 15px;
                                 }
+                            }
+
+                            .chat-message {
+                                border-radius: 100px;
+                                background: $color-border;
+                                
+                                /deep/ .app-input__input {
+                                    border-radius: 100px;
+                                    background: $color-border;
+                                    align-items: center;
+
+                                    & ::placeholder {
+                                        color: $color-text;
+                                    }
+                                }
+                            }
+
+                            .button-send {
+                                margin-left: 1.5rem;
+                                border-radius: 50%;
+                                width: 38px;
+                                height: 32px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
                             }
                         }
                     }
@@ -334,7 +408,14 @@
                     border-right: 1px solid #eeeeee;
                 }
             }
+
+
             .message-chat__info {
+                width: 30%;
+                z-index: 99;
+                position: absolute;
+                top: 72px;
+                right: 0;
                 .message-info__acc {
                     border-bottom: 1px solid #eeeeee;
                     padding: 15px;
@@ -565,7 +646,7 @@
         }
         .message-box__item__desc {
             .message-box__item__desc__text {
-                background-color: #32af85;
+                background-color: $color-primary;
                 color: #ffffff;
                 order: 2;
             }

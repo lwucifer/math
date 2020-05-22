@@ -3,9 +3,21 @@
     <IconStar class="star"
       :width="size"
       :height="size"
-      v-for="(i,index) in stars"
+      v-for="(i,index) in loopNumber"
       :key="index"
     />
+
+    <IconHalfStar class="star"
+      :width="size"
+      :height="size"
+      v-if="halfStar"
+    />
+    <IconStar class="star"
+      :width="size"
+      :height="size"
+      v-if="!halfStar && loopNumber > 0"
+    />
+
     <IconStarO class="star"
       :width="size"
       :height="size"
@@ -16,19 +28,27 @@
 </template>
 
 <script>
+import IconHalfStar from "~/assets/svg/icons/half-star.svg?inline";
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 
 export default {
   components: {
     IconStar,
-    IconStarO
+    IconStarO,
+    IconHalfStar
   },
 
   computed: {
+    loopNumber: function() {
+      return Math.ceil(parseFloat(this.stars)) > 1 ? Math.ceil(parseFloat(this.stars)) - 1 : 0
+    },
     unstart: function() {
-      return 5 - (this.stars)
-    }
+      return 5 - Math.ceil(parseFloat(this.stars))
+    },
+    halfStar: function() {
+      return Math.floor(parseFloat(this.stars)) < parseFloat(this.stars)
+    },
   },
 
   props: {
@@ -37,8 +57,8 @@ export default {
       default: 12
     },
     stars: {
-      type: Number,
-      default: 0
+      type: [String, Number],
+      default: '0'
     },
   },
 };

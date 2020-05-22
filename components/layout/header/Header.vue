@@ -7,14 +7,7 @@
         </n-link>
       </div>
 
-      <div class="the-header__search">
-        <form class="the-header__search__form" @submit.prevent>
-          <input type="text" placeholder="Tìm kiếm" />
-          <button type="submit">
-            <IconSearch width="15" height="15" class="fill-white" />
-          </button>
-        </form>
-      </div>
+      <app-search class="the-header__search" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>
@@ -28,14 +21,14 @@
         </li>
       </ul>
       <div v-if="isAuthenticated" class="the-header__user">
-        <study-space v-if="isStudentRole"/>
+        <study-space />
 
         <button class="item" @click="redirectMessages">
-          <IconMessager />
+          <IconCommentAltMessage />
           <span class="number">9</span>
         </button>
         <button class="item" @click.prevent="$router.push('/payment/cart')">
-          <IconShoppingCartAlt />
+          <IconShoppingCart24px class="fill-gray" />
           <span
             v-if="get(cartCheckout, 'orders.length', 0)"
             class="number"
@@ -50,7 +43,7 @@
           @visible-change="handleVisibleChange"
         >
           <button class="item" slot="activator" slot-scope="{ on }" v-on="on">
-            <IconBell />
+            <IconNotifications24px class="fill-gray" />
             <span class="number" v-if="notiUnread > 0">{{ notiUnread }}</span>
           </button>
           <div class="link--dropdown__content">
@@ -141,14 +134,8 @@
       </div>
 
       <div v-else class="d-flex">
-        <n-link
-          class="btn btn--size-md btn--color-primary btn--square mr-3"
-          :to="'/auth/signin'"
-        >Đăng nhập</n-link>
-        <n-link
-          class="btn btn--size-md btn-outline btn-outline--color-primary btn--square"
-          :to="'/auth/signup'"
-        >Đăng ký</n-link>
+        <app-button size="sm" color="white" nuxt to="/auth/signup" class="btn-signup__header">Đăng ký</app-button>
+        <app-button size="sm" nuxt to="/auth/signin" class="btn-signin__header">Đăng nhập</app-button>
       </div>
     </div>
   </div>
@@ -159,9 +146,9 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconGlobeNoti from "~/assets/svg/icons/globe-noti.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
-import IconBell from "~/assets/svg/icons/bell.svg?inline";
-import IconShoppingCartAlt from "~/assets/svg/design-icons/shopping-cart-alt.svg?inline";
-import IconMessager from "~/assets/svg/icons/messager.svg?inline";
+import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
+import IconShoppingCart24px from "~/assets/svg/v2-icons/shopping_cart_24px.svg?inline";
+import IconCommentAltMessage from "~/assets/svg/design-icons/comment-alt-message.svg?inline";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import AnnoucementItem from "~/components/page/account/Info/AnnouncementItem";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
@@ -179,9 +166,9 @@ export default {
     IconSearch,
     IconGlobeNoti,
     IconCaretDown,
-    IconBell,
-    IconShoppingCartAlt,
-    IconMessager,
+    IconNotifications24px,
+    IconShoppingCart24px,
+    IconCommentAltMessage,
     AnnoucementItem,
     IconTrashAlt,
     IconEllipseAlt,
@@ -201,10 +188,7 @@ export default {
   }),
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
-    ...mapGetters("auth", [
-      "isAuthenticated",
-      "isStudentRole",
-    ]),
+    ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
     ...mapGetters("cart", ["cartCheckout"])
   },
   mounted() {
@@ -225,10 +209,10 @@ export default {
       this.checkPayload = true;
     });
     // console.log("detectBrowser", detectBrowser());
-    this.cartList();
+    this.isAuthenticated && this.cartList();
   },
   created() {
-    this.getNotiUnread();
+    this.isAuthenticated && this.getNotiUnread();
   },
   methods: {
     get,

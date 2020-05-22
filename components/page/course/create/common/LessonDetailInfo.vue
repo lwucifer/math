@@ -1,16 +1,18 @@
 <template>
   <div class="clc-video">
-    <div class="clc-video__image">
-     <n-link to=""><img src="/images/thumnail-video.png" alt /></n-link>
-    </div>
+    <div class="clc-video__image"><img :src="thumnail" alt /></div>
 
     <div class="clc-video__right w-100">
-      <div class="d-flex justify-content-between">
-        <p>
-          <span class="clc-video__name heading-6 mb-3 font-weight-bold"
+      <div class="d-flex justify-content-between clc-video__name">
+        <p class="mb-3">
+          <span class="heading-6 mb-3 font-weight-bold"
             >Bài {{ index + 1 + ": " }}</span
           >
-          <span>{{ get(lesson, "name", "") }}</span>
+          <span>{{
+            get(lesson, "name", "").length > 60
+              ? get(lesson, "name", "").slice(0, 40) + "..."
+              : get(lesson, "name", "")
+          }}</span>
         </p>
 
         <div class="clc-video__actions">
@@ -19,7 +21,7 @@
             class="clc-video__btn-edit text-primary mr-2"
             @click="handleEditLesson($event)"
           >
-            <IconEditAlt class="icon" />
+            <IconBorderColor24px class="icon" />
           </a>
           <a
             href
@@ -31,7 +33,7 @@
         </div>
       </div>
 
-      <div class="clc-video__name text-dark mt-2">
+      <div class="clc-video__type text-dark mt-2">
         Định dạng: {{ get(lesson, "type", "") }}
       </div>
 
@@ -41,6 +43,7 @@
       </div>
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -50,17 +53,17 @@
 </template>
 
 <script>
-import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
+import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
 
-import { get, defaultTo } from "lodash";
+import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
-    IconEditAlt,
+    IconBorderColor24px,
     IconTrashAlt,
     IconClock,
   },
@@ -73,6 +76,14 @@ export default {
     index: {
       type: Number,
       default: null,
+    },
+  },
+
+  computed: {
+    thumnail() {
+      return get(this, "lesson.type", "") === "VIDEO"
+        ? "/images/thumnail-video.png"
+        : "/images/thumnail-doc.png";
     },
   },
 
@@ -109,11 +120,12 @@ export default {
       this.handleCancelModal();
 
       if (get(res, "success", false)) {
-        this.$toasted.success(defaultTo(get(res, "message", ""), "Thành công"));
-        this.$emit("refreshLessons");
+        this.$toasted.success(get(res, "message", "Thành công"));
+        this.$store.dispatch(`elearning/create/getContent`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
-      this.$toasted.error(defaultTo(get(res, "message", ""), "Có lỗi xảy ra"));
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelModal() {

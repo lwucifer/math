@@ -7,6 +7,12 @@
       :data="list"
       :loading="updating"
     >
+      <template v-slot:cell(name)="{row}">
+        <td :title="get(row, 'name', '')">
+          {{ get(row, 'name', '') | truncStrFilter(30) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(mark)="{row}">
         <td>
           <!--<v-popover-->
@@ -26,7 +32,7 @@
               >
                 Chưa làm bài
               </span>
-              <span v-if="isPending(row)">Chưa chấm điểm</span>
+              <span v-if="isPending(row)">Chưa chấm</span>
               <span v-if="isMarked(row)">
                 {{ get(row, 'mark', 0)}}/{{ get(row, 'points', 10) }}
                 ({{ get(row, 'result')  | subResult2Txt }})

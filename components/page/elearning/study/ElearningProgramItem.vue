@@ -1,97 +1,205 @@
 <template>
-  <div
-    class="content elearning-lesson-side__lesson"
-    :class="get(lesson, 'completes', 0) ? 'active' : ''"
-  >
-    <div class="lesson-title mb-2">
+  <div class="e-program-item" :class="get(lesson, 'status', 0) ? 'completed' : ''">
+    <div class="e-program-item__left">
       <app-checkbox
-        :checked="lesson.status == lessonCompleted"
-        :disabled="lesson.status == lessonCompleted"
-        @change="handleCompleteStudy($event)"
+        v-model="lessonStatus"
+        ref="completedCheckbox"
+        :style="{
+          'pointer-events':
+            lesson.status == lessonCompleted ? 'none' : 'inherit'
+        }"
+        @change="isShowCompleteStudy = true"
       />
-      <p
-        class="text-uppercase pl-1 text-clickable"
-        @click="handleStuty(lesson)"
-      >
-        {{ get(lesson, "name", "") }}
-      </p>
     </div>
-    <div class="bottom d-flex">
-      <div>
-        <IconPlay class="mr-2" />
-        <span>{{ get(lesson, "duration", "00:00") }}</span>
+
+    <div class="e-program-item__right">
+      <a
+        href
+        class="e-program-item__title"
+        @click.prevent="handleStuty(lesson)"
+      >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
+
+      <div class="e-program-item__bottom">
+        <div class="e-program-item__time">
+          <span v-if="isShowVideoLesson" class="d-inline-flex align-items-center">
+            <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
+
+          <span v-else class="d-inline-flex align-items-center">
+            <IconEventNote class="icon body-1 mr-1 text-primary" />
+            <span class="mw-4">01:00</span>
+          </span>
+        </div>
+
+        <div class="e-program-item__exercises">
+          <a
+            v-if="get(lesson, 'exercises', 0)"
+            href
+            class="d-inline-flex align-items-center text-decoration-none"
+            :class="`text-${classExerciseStatus}`"
+            v-scroll-to="'body'"
+            @click.prevent="handleGetExercises"
+          >
+            <IconFileCheckAlt class="icon body-1 mr-1" />
+            <span>Bài tập({{ completeExecerciseRate }})</span>
+          </a>
+        </div>
+
+        <div class="e-program-item__download">
+          <app-dropdown
+            v-if="lesson.lesson_docs && lesson.lesson_docs.length"
+            class="e-program-item__download-tooltip"
+            position="topCenter"
+          >
+            <span slot="activator" class="d-inline-flex align-items-center text-decoration-none">
+              <IconFileDownloadAlt class="icon body-1 text-info" />
+            </span>
+
+            <template>
+              <div v-for="(link, index) in lesson.lesson_docs || []" :key="index">
+                <a
+                  :href="link.url"
+                  class="d-inline-flex align-items-center caption"
+                  download
+                  target="_blank"
+                >
+                  <IconFileDownloadAlt class="icon body-1 text-info mr-2" />
+                  {{ link.name }}
+                </a>
+              </div>
+            </template>
+          </app-dropdown>
+        </div>
       </div>
-      <!-- <div class="color-primary ml-auto" v-if="get(lesson, 'completes', 0)">
-        <IconFileCheckAlt class="mr-2 fill-primary" height="16" width="16" />
-        <span>Xem kết quả</span>
-      </div> -->
-      <div
-        class="ml-auto text-clickable"
-        :class="`color-${classExerciseStatus}`"
-        v-if="get(lesson, 'exercises', 0)"
-        @click.prevent="handleGetExercises"
-      >
-        <IconFileEditAlt
-          class="mr-2"
-          :class="`fill-${classExerciseStatus}`"
-          height="16"
-          width="16"
-        />
-        <span>Bài tập({{ completeExecerciseRate }})</span>
-      </div>
-      <!-- <div class="color-yellow ml-auto" v-else>
-        <IconFileClock class="mr-2 fill-yellow" height="16" width="16" />
-        <span>Chờ chấm điểm</span>
-      </div> -->
     </div>
+
+    <app-modal-confirm
+      v-if="isShowCompleteStudy"
+      title="Hoàn thành bài học"
+      :footer="false"
+      description="Bạn có chắc là bạn muốn hoàn thành bài học này"
+      @close="closeConfirmCompleteStudy"
+      @cancel="closeConfirmCompleteStudy"
+      @ok="handleCompleteStudy"
+    ></app-modal-confirm>
+
+    <app-modal-notify
+      v-if="notify.isShowNotify"
+      :type="notify.type"
+      :title="notify.title"
+      @close="notify.isShowNotify = false"
+      @ok="notify.isShowNotify = false"
+    />
   </div>
 </template>
 
 <script>
-import IconPlay from "~/assets/svg/icons/play.svg?inline";
-import IconUpO from "~/assets/svg/icons/up-o.svg?inline";
-import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
-import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
-import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
-import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import StudyService from "~/services/elearning/study/Study";
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
+  LESSION_TYPE
 } from "~/utils/constants";
-import { redirectWithParams, getParamQuery } from "~/utils/common";
+import {
+  redirectWithParams,
+  getParamQuery,
+  getCountdown_MM_SS
+} from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
+
+const IconFileCheckAlt = () =>
+  import("~/assets/svg/design-icons/file-check-alt.svg?inline");
+const IconFileDownloadAlt = () =>
+  import("~/assets/svg/design-icons/file-download-alt.svg?inline");
+import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
+import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
+
+import StudyService from "~/services/elearning/study/Study";
+import { ERRORS } from "../../../../utils/error-code";
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
 export default {
+  components: {
+    IconFileCheckAlt,
+    IconSlowMotionVideo,
+    IconFileDownloadAlt,
+    IconEventNote
+  },
+
+  props: {
+    lesson: Object
+  },
+
   data() {
     return {
       lessonCompleted: LESSION_STATUS.COMPLETED,
+      isShowCompleteStudy: false,
+      notify: {
+        type: "",
+        description: "",
+        isShowNotify: false
+      },
+      lessonStatus: false
     };
-  },
-  components: {
-    IconPlay,
-    IconDownO,
-    IconUpO,
-    IconFileClock,
-    IconFileCheckAlt,
-    IconFileEditAlt,
-    IconFileCheck,
-  },
-  props: {
-    lesson: Object,
   },
 
   mounted() {
+    this.lessonStatus = this.lesson.status == this.lessonCompleted;
+
     const lesson_id = getParamQuery("lesson_id");
     if (lesson_id && lesson_id === this.lesson.id) {
       this.handleStuty(this.lesson);
+      // window.scrollTo(0, 0);
+    }
+  },
+
+  computed: {
+    ...mapState("elearning/study/study-exercise", ["isReloadExerciseList"]),
+
+    passedExercise() {
+      return get(this.lesson, "passed", 0);
+    },
+    pendingExercise() {
+      return get(this.lesson, "pending", 0);
+    },
+    failedExercise() {
+      return get(this.lesson, "failed", 0);
+    },
+    exercises() {
+      return get(this.lesson, "exercises", 0);
+    },
+    completeExecerciseRate() {
+      const totalExDid =
+        this.passedExercise + this.pendingExercise + this.failedExercise;
+      return `${totalExDid}/${this.exercises}`;
+    },
+
+    // return primary|secondary|warning
+    classExerciseStatus() {
+      // debugger;
+      if (this.passedExercise == this.exercises) {
+        return "primary";
+      } else if (this.failedExercise > 0) {
+        return "secondary";
+      } else if (this.pendingExercise > 0) {
+        return "warning";
+      } else {
+        return "warning";
+      }
+    },
+
+    isShowVideoLesson() {
+      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    },
+
+    durationTimes() {
+      const duration = get(this.lesson, "duration", 0);
+      return getCountdown_MM_SS(duration);
     }
   },
 
@@ -100,8 +208,8 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
         params: {
-          elearning_id,
-        },
+          elearning_id
+        }
       };
       this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
@@ -111,22 +219,27 @@ export default {
     async handleCompleteStudy() {
       const payload = {
         completed: true,
-        lesson_id: get(this, "lesson.id", ""),
+        lesson_id: get(this, "lesson.id", "")
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
-      if (get(res, "success", false)) {
-        this.$toasted.success("Thành công");
-        this.getProgress();
-        return;
-      }
-      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+      console.log("[handleCompleteStudy]", res);
+      this.handleResultCompleteStudy(res);
+
+      // this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
     get,
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList",
+      "elearningSudyElearningExerciseList"
     ]),
 
-    ...mapMutations("event", ["setStudyMode", "setPayload"]),
+    ...mapMutations("event", [
+      "setStudyMode",
+      "setPayload",
+      "setExerciseLoading"
+    ]),
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseCurrentLession"
+    ]),
 
     async handleStuty(lesson) {
       redirectWithParams({ lesson_id: get(lesson, "id", "") });
@@ -134,18 +247,21 @@ export default {
       if (get(lesson, "type", "") === "DOCS") {
         this.setStudyMode(STUDY_MODE.DOCS);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
       if (get(lesson, "type", "") === "ARTICLE") {
         this.setStudyMode(STUDY_MODE.ARTICLE);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
       if (get(lesson, "type", "") === "IMAGE") {
         this.setStudyMode(STUDY_MODE.IMAGE);
         this.setPayload(lesson);
+        this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
@@ -174,30 +290,55 @@ export default {
       const elearningReq = { elearning_id, lesson_id, category };
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
+      this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
       this.elearningSudyElearningExerciseList(elearningReq); // get list exercises of lession
     },
-  },
 
-  computed: {
-    completes() {
-      return get(this.lesson, "completes", 0);
-    },
-    exercises() {
-      return get(this.lesson, "exercises", 0);
-    },
-    completeExecerciseRate() {
-      return `${this.completes}/${this.exercises}`;
-    },
+    handleResultCompleteStudy(res) {
+      // if false
+      if (!get(res, "success", false)) {
+        let msgErr = "Có lỗi xảy ra";
+        switch (res.code) {
+          case ERRORS.EXERCISE.MUST_COMPLETE_ALL_REQUIRED_EXERCISES:
+            msgErr =
+              "Bạn phải hoàn thành tất cả các bài tập bắt buộc của bài học trước.";
+            break;
 
-    // return primary|red
-    classExerciseStatus() {
-      // debugger;
-      if (this.completes == this.exercises) {
-        return "primary";
-      } else if (this.completes < this.exercises) {
-        return "red";
+          default:
+            break;
+        }
+        this.lessonStatus = false;
+        this.notify = {
+          type: "error",
+          title: msgErr,
+          isShowNotify: true
+        };
       }
+
+      // always do these things
+      this.isShowCompleteStudy = false;
+      this.getProgress();
     },
+
+    closeConfirmCompleteStudy() {
+      this.isShowCompleteStudy = false;
+      this.lessonStatus = false;
+      // this.$refs.completedCheckbox.checked = false;
+      console.log("[closeConfirmCompleteStudy]", this.$refs);
+    }
   },
+
+  watch: {
+    isReloadExerciseList(_newVal) {
+      console.log("[isReloadExerciseList]", _newVal);
+      if (_newVal) {
+        this.handleGetExercises();
+      }
+    }
+  }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/study/_elearning-program-item.scss";
+</style>

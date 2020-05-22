@@ -1,46 +1,63 @@
 <template>
-  <app-modal centered :width="600" :component-class="{ 'invite-student-modal': true }"
-     :footer="false" title="Mời thêm học sinh"
-  >
-    <div slot="content">
-      <div>
-        <p>Gửi lời mời tham gia <b>Phòng học online số 1</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
-        <div class="mt-4 d-flex-center">
-          <strong class="pr-4">Chọn lớp</strong>
-          <app-vue-select
-            class="app-vue-select filter-form__item__selection"
-            style="width: 19rem"
-            v-model="classSelected"
-            :options="classList"
-            label="text"
-            placeholder="Chọn lớp"
-            searchable
-            clearable
-            @input="handleChangedClass"
-          ></app-vue-select>
+  <div>
+    <app-modal
+      centered
+      :width="600"
+      :component-class="{ 'invite-student-modal': true }"
+      :footer="false"
+      title="Mời thêm học sinh"
+    >
+      <div slot="content">
+        <div>
+          <p>
+            Gửi lời mời tham gia
+            <b>Phòng học online số 1</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi
+          </p>
+          <div class="mt-4 d-flex-center">
+            <strong class="pr-4">Chọn lớp</strong>
+            <app-vue-select
+              class="app-vue-select filter-form__item__selection"
+              style="width: 19rem"
+              v-model="classSelected"
+              :options="classList"
+              label="text"
+              placeholder="Chọn lớp"
+              searchable
+              clearable
+              @input="handleChangedClass"
+            ></app-vue-select>
+          </div>
         </div>
-      </div>
 
-      <div class="student-list">
-        <div class="item">
-          <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
-          <strong>Chọn tất cả danh sách</strong>
+        <div class="student-list">
+          <div class="item">
+            <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
+            <strong>Chọn tất cả danh sách</strong>
+          </div>
+          <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
+            <app-checkbox
+              class="ml-auto"
+              @change="handelCheckbox(item.id)"
+              :checked="arrMember.includes(item.id)"
+            />
+            <span>{{item.name}}</span>
+          </div>
         </div>
-        <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
-          <app-checkbox
-            class="ml-auto"
-            @change="handelCheckbox(item.id)"
-            :checked="arrMember.includes(item.id)"
-          />
-          <span>{{item.name}}</span>
+        <div class="text-center mt-4">
+          <app-button size="sm" color="info" class="mr-3" square @click="close(false)">Hủy</app-button>
+          <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
         </div>
       </div>
-      <div class="text-center mt-4">
-        <app-button size="sm" color="info" class="mr-3" square @click="close(false)">Hủy</app-button>
-        <app-button size="sm" square @click="hanldeInvate">Mời</app-button>
-      </div>
-    </div>
-  </app-modal>
+    </app-modal>
+    <app-modal-notify
+      v-if="notify.showNotify"
+      :title="notify.title"
+      :type="notify.type"
+      :okText="notify.okText"
+      @close="closeNotify"
+      @ok="closeNotify"
+    />
+  </div>
 </template>
 
 <script>
@@ -48,10 +65,12 @@ import { mapState, mapActions } from "vuex";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
+import result from "../../../../../store/elearning/teaching/result";
 
 const STORE_TEACHING_OLCLASS = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
+const STORE_TEACHING_INVITES = "elearning/teaching/invites";
 
 export default {
   components: {},
@@ -67,6 +86,12 @@ export default {
         invitation_ids: ["string"],
         online_class_id: "string",
         student_ids: ["string"]
+      },
+      notify: {
+        type: "",
+        title: "",
+        showNotify: false,
+        okText: ""
       }
     };
   },
@@ -78,26 +103,50 @@ export default {
 
     arrayToStringIds(data) {
       return data.reduce((result, item) => {
-        const com = result ? '","' : '';
-        return result = result + com + item;
-      }, '')
+        const com = result ? '","' : "";
+        return (result = result + com + item);
+      }, "");
     },
 
     async hanldeInvate() {
       if (this.arrMember.length > 0) {
-        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        const elearningId =
+          this.$route.query && this.$route.query.elearning_id
+            ? this.$route.query.elearning_id
+            : "";
         let params = {
-          online_class_id: online_class_id,
+          elearning_id: elearningId,
           student_ids: [...this.arrMember]
         };
         try {
-          await this.$store.dispatch(
-            `${STORE_TEACHING_OLCLASS}/${actionTypes.TEACHING_OLCLASS_INVITES.ADD}`,
-            params
-          );
+          await this.$store
+            .dispatch(
+              `${STORE_TEACHING_INVITES}/${actionTypes.TEACHING_ELEARNING_INVITES.ADD}`,
+              params
+            )
+            .then(result => {
+              if (result.success) {
+                this.notify = {
+                  title: "Gửi lời mời thành công!",
+                  showNotify: true,
+                  okText: "Đóng",
+                  type: "success"
+                };
+                setTimeout(() => {
+                  this.close(false);
+                }, 2500);
+              } else {
+                this.notify = {
+                  title: "Gửi lời mời thất bại!",
+                  showNotify: true,
+                  okText: "Đóng",
+                  type: "error"
+                };
+              }
+            });
         } catch (e) {
         } finally {
-          this.close(true)
+          this.close(true);
         }
       }
     },
@@ -112,7 +161,11 @@ export default {
           `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
           params
         );
-        this.studentList = this.get(this.stateSchoolStudents, "data.content", []);
+        this.studentList = this.get(
+          this.stateSchoolStudents,
+          "data.content",
+          []
+        );
       } catch (e) {
       } finally {
       }
@@ -151,6 +204,9 @@ export default {
       } finally {
       }
     },
+    closeNotify() {
+      this.notify.showNotify = false;
+    },
 
     get
   },
@@ -174,6 +230,9 @@ export default {
 .invite-student-modal .app-modal-content {
   padding: 2rem 1.5rem;
 }
+</style>
+
+<style lang="scss" scope>
 .student-list {
   background: #fbfbfb;
   padding: 1.2rem 1.5rem;

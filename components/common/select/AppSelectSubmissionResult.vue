@@ -10,6 +10,7 @@
       :searchable="searchable"
       :clearable="clearable"
       @input="handleChangedResult"
+      :all-opt="allOpt"
     >
     </app-vue-select>
   </div>
@@ -35,16 +36,20 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: true
+      default: false
     },
     searchable: {
       type: Boolean,
-      default: true
+      default: false
     },
     options: {
       type: Array,
       default: () => {
         return [
+          {
+            val: null,
+            label: 'Tất cả'
+          },
           {
             label: 'Đạt',
             val: true
@@ -60,6 +65,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        val: null,
+        label: 'Tất cả'
+      },
       selectedItem: null,
     }
   },

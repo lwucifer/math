@@ -1,9 +1,11 @@
 <template>
-  <div class="box11">
-    <p class="mb-3">
-      <strong>{{ get(progress, "total_lessons", 0) }} Bài giảng</strong>
+  <div class="e-program bg-white shadow-1">
+    <div class="box bg-light-2">
+      <strong>{{ totalLessons }} Bài học</strong>
       ({{ get(progress, "duration", "") }})
-    </p>
+    </div>
+
+    <app-divider class="my-0" color="disabled" />
 
     <div v-if="progress.type === 'COURSE'">
       <ElearningProgramCourse
@@ -14,58 +16,98 @@
       />
     </div>
     <div v-else>
-      <ElearningProgramItem :lesson="get(progress, 'programs.0.lessons.0', null)" />
+      <ElearningProgramItem
+        class="e-program__item-lecture"
+        :lesson="get(progress, 'programs.0.lessons.0', null)"
+      />
     </div>
 
     <!-- Bai TEST -->
-    <div class="elearning-lesson-side__course">
-      <div class="color-yellow" style="display: flex;">
-        <IconFileAlt class="mr-2 fill-yellow" height="16" width="16" />
-        <span class="text-clickable" @click.prevent="handleDoTest">Làm bài kiểm tra</span>
-      </div>
-    </div>
+    <a
+      v-if="isTestExist"
+      class="e-program__test"
+      :class="`text-${classExerciseStatus}`"
+      href
+      @click.prevent="handleDoTest"
+      v-scroll-to="'body'"
+    >
+      <IconFileAlt class="icon" />
+      &nbsp;Làm bài kiểm tra {{ testRate }}
+    </a>
   </div>
 </template>
 
 <script>
-import IconPlay from "~/assets/svg/icons/play.svg?inline";
-import IconUpO from "~/assets/svg/icons/up-o.svg?inline";
-import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
-import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
-import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
-import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import { get } from "lodash";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
+
+import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
 import ElearningProgramCourse from "~/components/page/elearning/study/ElearningProgramCourse";
 
-import { mapState, mapMutations, mapActions } from "vuex";
-import { STUDY_MODE, EXERCISE_CATEGORIES} from "~/utils/constants";
-
 export default {
   components: {
-    IconPlay,
-    IconDownO,
-    IconUpO,
-    IconFileCheckAlt,
-    IconFileEditAlt,
-    IconFileCheck,
     IconFileAlt,
     ElearningProgramItem,
     ElearningProgramCourse
   },
 
   computed: {
-    ...mapState("elearning/study/study-progress", ["progress"])
+    ...mapState("elearning/study/study-progress", ["progress"]),
+    
+
+    totalLessons() {
+      console.log("[progress]", this.progress);
+      if (!this.progress) return `0`;
+      return (
+        this.progress.programs.reduce(
+          (acc, curr) => acc + curr.total_lessons,
+          0
+        ) || 0
+      );
+    },
+
+    test_info() {
+      return this.progress.test_info || {};
+    },
+
+    isTestExist() {
+      if (!this.test_info || this.test_info.total < 1) return false;
+      return true;
+    },
+
+    testRate() {
+      if (!this.test_info) return "(0/0)";
+      const touchedExams = this.test_info.passed + this.test_info.failed + this.test_info.pending;
+      return `(${touchedExams}/${this.test_info.total})`;
+    },
+
+    // return primary|secondary|warning
+    classExerciseStatus() {
+      // debugger;
+      if (this.test_info.passed == this.test_info.total) {
+        return "primary";
+      } else if (this.test_info.failed > 0) {
+        return "secondary";
+      } else if (this.test_info.pending > 0) {
+        return "warning";
+      } else {
+        return "warning";
+      }
+    },
   },
 
   methods: {
     get,
 
     ...mapMutations("event", ["setStudyMode"]),
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseCurrentLession"
+    ]),
 
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList",
+      "elearningSudyElearningExerciseList"
     ]),
 
     handleDoTest() {
@@ -73,14 +115,19 @@ export default {
 
       // emit studyMode=DO_EXERCISE
       this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+      this.setStudyExerciseCurrentLession(null);
 
       // get list TEST
       const testReq = {
         elearning_id: this.progress.id,
-        category: EXERCISE_CATEGORIES.TEST,
-      }
+        category: EXERCISE_CATEGORIES.TEST
+      };
       this.elearningSudyElearningExerciseList(testReq);
     }
   }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/study/_elearning-program.scss";
+</style>

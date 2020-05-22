@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-8 message-chat__content">
+  <div class="col-md-12 message-chat__content">
     <div class="aside-box">
       <div class="aside-box__top" v-if="isCreated">
         <div class="aside-box__top__create d-flex-center w-100">
@@ -38,27 +38,29 @@
       <div class="aside-box__top" v-if="!isCreated">
         <div class="message-desc">
           <div class="message-decs__image">
-            <app-avatar :src="avatarSrc" size="sm" class="comment-item__avatar" />
+            <app-avatar :src="avatarSrc" class="comment-item__avatar" />
           </div>
           <div class="message-decs__title">
             <span>{{nameGroup}}</span>
+            <p>Đang hoạt động</p>
           </div>
         </div>
         <div class="message-tool">
           <ul class="list-unstyle">
             <li>
               <a href="#">
-                <IconPhone width="15" height="15" />
+                <IconPhone width="18px" height="18px" class="fill-primary"/>
               </a>
             </li>
             <li>
               <a href="#">
-                <IconVideo width="15" height="15" />
+                <IconVideo width="18px" height="18px" class="fill-primary" />
               </a>
             </li>
             <li>
-              <a @click="visibleAddByPhone = true">
-                <IconAddUser width="15" height="15" />
+              <!-- @click="visibleAddByPhone = true" -->
+              <a href="#" @click="showInfo = !showInfo"> 
+                <IconExclamationCircle width="18px" height="18px" class="fill-primary"/>
               </a>
             </li>
           </ul>
@@ -453,39 +455,40 @@
           </div>
 
           <div class="input-chat">
-            <input
-              class="input-control"
+            <div class="app-files">
+              <label for="files">
+                <IconImage width="15" height="15" class="fill-white"/>
+              </label>
+
+              <input
+                type="file"
+                id="files"
+                name="files"
+                multiple
+                @change="handleUploadChange2"
+              />
+            </div>
+
+            <app-input
+              class="mb-0 w-100 bg-light chat-message"
               v-model="textChat"
               v-on:keyup.enter="handleEmitMessage"
-              placeholder="Nhấp để chat"
-            />
-            <div class="input-group_addon">
-              <ul class="list-unstyle">
-                <li>
-                  <a href="#">
-                    <IconSmile width="15" height="15" />
-                  </a>
-                </li>
-                <li>
-                  <div class="app-files">
-                    <label for="files">
-                      <IconImage width="15" height="15" />
-                    </label>
-                    <input
-                      type="file"
-                      id="files"
-                      name="files"
-                      multiple
-                      @change="handleUploadChange2"
-                    />
-                  </div>
-                </li>
-              </ul>
-            </div>
+              placeholder="Nhập tin nhắn..."
+            >
+              <template #append-inner> <IconSmile width="16" height="16" class="fill-primary mr-3"/></template>
+            </app-input>
+
+            <button class="bg-primary button-send">
+              <IconSend24px width="15" height="15" class="fill-white"/>
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <transition enter-active-class="animate__fadeInRight" leave-active-class="animate__fadeInRight">
+      <TabInfo v-if="showInfo"/> 
+    </transition>
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
@@ -563,18 +566,21 @@ import FriendService from "~/services/social/friend";
 
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddFriendByGroup from "~/components/page/chat/ModalAddFriendByGroup";
+import TabInfo from "~/components/page/chat/TabInfo";
 
-import IconPhone from "~/assets/svg/icons/phone-green.svg?inline";
-import IconVideo from "~/assets/svg/icons/video-green.svg?inline";
-import IconAddUser from "~/assets/svg/icons/add-user-green.svg?inline";
+import IconPhone from "~/assets/svg/v2-icons/phone_24px.svg?inline";
+import IconVideo from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
+// import IconAddUser from "~/assets/svg/icons/add-user-green.svg?inline";
 import IconSmile from "~/assets/svg/icons/smile.svg?inline";
-import IconImage from "~/assets/svg/icons/image.svg?inline";
+import IconImage from "~/assets/svg/design-icons/image-v.svg?inline";
 import IconUpload from "~/assets/svg/icons/upload.svg?inline";
 import IconReply from "~/assets/svg/icons/reply.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
+import IconExclamationCircle from '~/assets/svg/design-icons/exclamation-circle.svg?inline';
+import IconSend24px from '~/assets/svg/v2-icons/send_24px.svg?inline';
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
@@ -583,7 +589,7 @@ export default {
   components: {
     IconPhone,
     IconVideo,
-    IconAddUser,
+    // IconAddUser,
     IconSmile,
     IconImage,
     IconReply,
@@ -593,7 +599,10 @@ export default {
     IconCamera,
     IconFileAlt,
     ModalAddFriend,
-    ModalAddFriendByGroup
+    ModalAddFriendByGroup,
+    IconExclamationCircle,
+    IconSend24px,
+    TabInfo
   },
 
   props: {
@@ -693,9 +702,10 @@ export default {
       name: "",
       roomIdPush: "",
       fileList: [],
-      dataCheck: false
+      dataCheck: false,
       // avatarUser: {},
-      // fullname: ""
+      // fullname: "",
+      showInfo: false
     };
   },
 

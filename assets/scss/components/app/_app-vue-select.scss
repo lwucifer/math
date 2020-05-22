@@ -1,5 +1,5 @@
 $vs-colors: (
-    //lightest: rgba(60, 60, 60, 0.26),
+  //lightest: rgba(60, 60, 60, 0.26),
     lightest: #eeeeee,
     light: rgba(60, 60, 60, 0.5),
     dark: #333,
@@ -47,69 +47,126 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
 
 @import "~vue-select/src/scss/vue-select.scss";
 
-.app-vue-select {
-    .vs__dropdown-toggle {
-        box-shadow: $shadow-1;
-        background: #fff;
-    }
-
-    .vs__selected-options {
-        padding: 0 1px 0 3px;
-    }
-
-    .vs__actions {
-        padding: 4px 15px 0 3px;
-    }
-
-    //min-width: 10rem;
+.app-vue-select, .v-select {
+  .vs__dropdown-toggle {
+    box-shadow: $shadow-1;
+    background: #fff;
+    height: 100%;
+    border: none
+  }
+  
+  .vs__selected-options {
+    padding: 0 1px 0 3px;
     
-    .vs__actions {
-        svg path {
-            fill: $color-primary;
-            fill-opacity: 1;
-        }
+    .vs__search {
+      color: $color-dark;
+      &:hover {
+        box-shadow: none;
+      }
     }
+  }
+  
+  .vs__actions {
+    padding: 4px 15px 0 3px;
+    
+    svg.vs__open-indicator {
+      path {
+        fill: $color-primary;
+      }
+    }
+  }
+  
+  //min-width: 10rem;
+  
+  //.vs__actions {
+  //    button {
+  //        display: none;
+  //        visibility: hidden;
+  //    }
+  //    svg path {
+  //        fill: $color-primary;
+  //        fill-opacity: 1;
+  //    }
+  //}
+  &:hover {
+    .vs__search {
+      box-shadow: none;
+    }
+  }
+}
+
+.app-vue-select--has-border {
+  .vs__dropdown-toggle {
+    border: 1px solid #E0E0E0;
+  }
 }
 
 .vs__selected + .vs__search {
-    position: absolute;
+  //position: absolute;
 }
+
 .app-vue-select .vs__dropdown-toggle {
-    height: 3.2rem;
+  height: 3.2rem;
 }
+
 .app-vue-select .vs__selected-options {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 //Custom scrollbar
 .vs--open .vs__dropdown-toggle {
-    border-bottom-color: $vs-border-color;
+  border-bottom-color: $vs-border-color;
 }
 
 .vs__dropdown-menu {
-    li.vs__dropdown-option {
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
+  li.vs__dropdown-option {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: .5rem 1.5rem .5rem 2.5rem;
+    line-height: 1.6rem;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.01em;
     
-    &::-webkit-scrollbar {
-        height: 5px;
-        width: 2px;
+    &.vs__dropdown-option--selected {
+      padding-left: 1rem;
+      .vs__icon-selected {
+        margin-right: 0.8rem;
+        width: 0.7rem;
+        display: inline-block;
+      }
     }
-    
-    &::-webkit-scrollbar-track { // bg color of scrollbar
-        -webkit-box-shadow: inset 0 0 6px $color-scrollbar-track;
-    }
-    
-    &::-webkit-scrollbar-thumb { // track point
-        background-color: $color-scrollbar-thumb;
-        border-radius: 2px;
-        //outline: 1px solid #708090;
-    }
-    &::-webkit-scrollbar-track-piece {
-        background-color: $vs-dropdown-bg;
-    }
-    &::-webkit-scrollbar-thumb:horizontal{
-    }
+  }
+  
+  // scroll for firefox
+  scrollbar-color: $color-scrollbar-track $vs-dropdown-bg;
+  scrollbar-width: thin;
+  
+  // scroll for chrome
+  &::-webkit-scrollbar {
+    height: 5px;
+    width: 2px;
+  }
+  
+  &::-webkit-scrollbar-track { // bg color of scrollbar
+    -webkit-box-shadow: inset 0 0 6px $color-scrollbar-track;
+  }
+  
+  &::-webkit-scrollbar-thumb { // track point
+    background-color: $color-scrollbar-thumb;
+    border-radius: 2px;
+    //outline: 1px solid #708090;
+  }
+  
+  &::-webkit-scrollbar-track-piece {
+    background-color: $vs-dropdown-bg;
+  }
+  
+  &::-webkit-scrollbar-thumb:horizontal {
+  }
+}
+
+.vs__dropdown-option--selected {
+  color: $color-primary;
 }

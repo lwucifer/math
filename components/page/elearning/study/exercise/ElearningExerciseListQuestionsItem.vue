@@ -1,10 +1,10 @@
 <template>
   <li class="e-exercise-list-questions__item">
-    <h5
-      class="e-exercise-list-questions__question text-clickable"
+    <div
       v-html="question.content"
+      class="e-exercise-list-questions__question text-clickable"
       @click.prevent="navToQuestion"
-    ></h5>
+    ></div>
 
     <div
       v-if="question.type === EXERCISE_TYPES.ESSAY"
@@ -33,23 +33,9 @@
       v-if="question.type === EXERCISE_TYPES.CHOICE"
       class="e-exercise-list-questions__answer e-exercise-list-questions__answer--choice"
     >
-      <a
-        href
-        class="e-exercise-list-questions__toggle-answer"
-        :class="{ expand: expand }"
-        @click.prevent="toggleExpand"
-        v-if="isAnswer"
-      >
-        <template v-if="expand">Thu gọn</template>
-        <template v-else>Xem đáp án</template>
-        <IconAngleDown class="icon" />
-      </a>
-      <span v-if="expand">
+      <span v-if="isAnswer">
         <!-- IF USER'S ANSWER IS TRUE -->
-        <span
-          class="d-inline-flex align-items-center text-primary"
-          v-if="question.isUserTrue"
-        >
+        <span class="d-inline-flex align-items-center text-primary" v-if="question.isUserTrue">
           Câu trả lời: {{ student_answer_index | getQuestionNoText }}.
           {{ student_answer_content }}
           <IconCheck class="icon fill-opacity-1 heading-3 ml-2" />

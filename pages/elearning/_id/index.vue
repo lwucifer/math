@@ -1,43 +1,39 @@
 <template>
-  <div class="container elearning-view" v-if="loading">Loading...</div>
+  <VclFacebook v-if="pageLoading"></VclFacebook>
   <div class="container elearning-view" v-else>
     <breadcrumb />
 
     <div class="row">
       <div class="col-md-8">
-        <ElearningViewInfo :info="info" />
+        <ElearningViewInfo />
 
         <!-- <ElearningMainMenu /> -->
 
-        <ElearningIntroduce :info="info" />
+        <ElearningIntroduce />
 
-        <ElearningContent :program="program" :info="info" />
+        <ElearningContent />
 
-        <CourseTeacherInfo :teacher_id="get(info, 'teacher.id', '')" />
+        <CourseTeacherInfo />
 
-        <ElearningReview :info="info" />
+        <ElearningReview />
 
         <ElearningSliderTab
           class="mt-6"
-          :content="teacherEls"
+          :content="get(lectures_of_teacher, 'content', [])"
           :swiperOptions="sliderOptions"
-          title="Bài giảng cùng giáo viên"
+          :title="`${typeText} cùng giáo viên`"
         />
 
         <ElearningSliderTab
-          :content="relatedCourses"
+          :content="get(lectures_related, 'content', [])"
           :swiperOptions="sliderOptions"
-          title="Bài giảng liên quan"
+          :title="`${typeText} liên quan`"
           class="mt-6"
         />
       </div>
 
       <div class="col-md-4">
-        <ElearningRightSide
-          v-sticky
-          sticky-offset="{ top: 90, bottom: 9 }"
-          v-bind="{ info, program }"
-        />
+        <ElearningRightSide v-sticky sticky-offset="{ top: 90, bottom: 9 }" />
       </div>
     </div>
   </div>
@@ -65,7 +61,7 @@ import ElearningViewInfo from "~/components/page/elearning/ElearningViewInfo";
 import ElearningMainMenu from "~/components/page/elearning/ElearningMainMenu";
 import ElearningIntroduce from "~/components/page/elearning/ElearningIntroduce";
 import ElearningContent from "~/components/page/elearning/ElearningContent";
-// import Breadcrumb from "~/components/layout/breadcrumb/BreadCrumb";
+import { VclFacebook } from "vue-content-loading";
 
 import IconEye from "~/assets/svg/icons/eye.svg?inline";
 import IconPlayO from "~/assets/svg/icons/play-o.svg?inline";
@@ -81,7 +77,6 @@ const IconPlayCircle = () =>
 
 export default {
   name: "E-learningDetail",
-  // layout: "manage",
 
   components: {
     CourseTeacherInfo,
@@ -100,22 +95,12 @@ export default {
     ElearningMainMenu,
     ElearningIntroduce,
     ElearningContent,
-    // Breadcrumb,
-  },
-
-  created() {
-    this.getData();
+    VclFacebook,
   },
 
   data() {
     return {
-      info: null,
-      loading: true,
-      levels: [],
-      subjects: [],
-      program: [],
-      relatedCourses: [],
-      teacherEls: [],
+      pageLoading: true,
       sliderOptions: {
         spaceBetween: 20,
         slidesPerView: 3,
@@ -126,16 +111,20 @@ export default {
   },
 
   computed: {
-    ...mapState("auth", ["loggedUser"]),
+    ...mapState("elearning/detail", {
+      info: "info",
+      lectures_of_teacher: "lectures_of_teacher",
+      lectures_related: "lectures_related",
+    }),
 
     typeText() {
       if (this.info) {
         switch (this.info.type) {
           case ELEARNING_TYPES.LECTURE:
-            return "bài giảng";
+            return "Bài giảng";
             break;
           case ELEARNING_TYPES.COURSE:
-            return "khoá học";
+            return "Khoá học";
             break;
           default:
             break;
@@ -144,82 +133,35 @@ export default {
     },
   },
 
-  mounted() {
-    // check whether device_id is set or not?
+  async mounted() {
     const isDeviceIdExist = !!getDeviceID();
     !isDeviceIdExist && this.initFingerPrint();
 
-    // window.addEventListener("scroll", this.bindScrollStatus);
-    // if (this.$route.hash && process.browser) {
-    //   const hashEl = document.querySelector(this.$route.hash);
-    //   hashEl && this.scrollTo(this.$route.hash);
-    // }
+    this.pageLoading = true;
+    const options = {
+      params: {
+        elearning_id: get(this, "$route.params.id", ""),
+        token: "true",
+      },
+    };
+    await this.$store.dispatch("elearning/detail/getInfo", options);
+    this.pageLoading = false;
   },
 
-  // beforeDestroy() {
-  //   window.removeEventListener("scroll", this.bindScrollStatus);
-  // },
-
   watch: {
-    "info.teacher.id": {
-      handler: async function() {
-        const teacher_id = get(this, "info.teacher.id", "");
-        const options = {
-          params: {
-            teacher_id,
-          },
-        };
-        const res = await new TeacherEls(this.$axios)[actionTypes.BASE.LIST](
-          options
-        );
-        if (get(res, "success", false) === true) {
-          this.teacherEls = get(res, "data.content", []);
-          return;
-        }
-        this.teacherEls = [];
+    info: {
+      handler: function() {
+        this.$store.dispatch("elearning/detail/getLectureOfTeacher");
+        this.$store.dispatch("elearning/detail/getLecturesRelated");
+        this.$store.dispatch("elearning/detail/getTeacher");
+        this.$store.dispatch("elearning/detail/getProgram");
       },
+      deep: true,
     },
   },
 
   methods: {
     get,
-
-    async getData() {
-      const elearning_id = get(this, "$route.params.id", "");
-
-      const params = {
-        elearning_id,
-        token: "true",
-      };
-
-      // const getInfo = () =>
-      //   new InfoService(this.$axios)[actionTypes.BASE.LIST]({
-      //     params,
-      //   });
-      const getInfo = () => this.$store.dispatch(`elearning/public/public-info/${actionTypes.ELEARNING_PUBLIC_INFO.LIST}`, params);
-      const getProgram = () =>
-        new ProgramService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
-        });
-      const getRelatedCourses = () =>
-        new RelatedService(this.$axios)[actionTypes.BASE.LIST]({
-          params,
-        });
-
-      this.loading = true;
-
-      const data = await Promise.all([
-        getInfo(),
-        getProgram(),
-        getRelatedCourses(),
-      ]);
-
-      this.loading = false;
-
-      this.info = get(data, "0.data", {});
-      this.program = get(data, "1.data", []);
-      this.relatedCourses = get(data, "2.data.content", []);
-    },
 
     initFingerPrint() {
       if (window.requestIdleCallback) {
@@ -228,27 +170,6 @@ export default {
         setTimeout(getDeviceID, 500);
       }
     },
-
-    // bindScrollStatus(event) {
-    //   const navLink = document.querySelector(".elearning-view__main-nav");
-    //   const link = document.querySelectorAll('.scroll-link[href^="#"]');
-    //   const target = document.getElementsByClassName("scroll-target");
-    //   const scrollDistance = window.scrollY + navLink.clientHeight;
-
-    //   for (const el of target) {
-    //     const react = el.getBoundingClientRect();
-
-    //     if (window.scrollY + react.top <= scrollDistance + 1) {
-    //       Array.from(link).forEach((linkEl) => {
-    //         const activeLink = document.querySelector(
-    //           `.scroll-link[href="#${el.id}"]`
-    //         );
-    //         linkEl.classList.remove("active");
-    //         activeLink.classList.add("active");
-    //       });
-    //     }
-    //   }
-    // },
   },
 };
 </script>

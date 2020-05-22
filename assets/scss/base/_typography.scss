@@ -81,7 +81,22 @@ h6, .h6 {
     font-weight: 700 !important;
 }
 
+.font-italic {
+    font-style: italic !important;
+}
+
 //Wrap text
 .nowrap {
     white-space: nowrap;
+}
+
+// Utils text
+.link-readmore {
+    text-decoration: none;
+    display: inline-flex;
+    align-self: flex-end;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }

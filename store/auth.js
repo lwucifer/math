@@ -127,7 +127,7 @@ const actions = {
                     // User signed in successfully.
                     const user = result.user;
                     console.log("user", user);
-                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user.ma);
+                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user._lat);
                     return result;
                     // ...
                 })
@@ -225,6 +225,14 @@ const mutations = {
     },
     [mutationTypes.AUTH.SAVE_PHONE_PASS](state, _phonePass) {
         state.phonePass = _phonePass;
+    },
+    [mutationTypes.AUTH.SAVE_PHONE_STATE](state, _phoneSave) {
+        state.phoneSave = _phoneSave;
+    },
+    [mutationTypes.AUTH.SET_TOKEN_AVATAR](state, avatar) {
+        const renewToken = {...state.token, avatar };
+        state.token = renewToken;
+        setToken(renewToken);
     },
 };
 

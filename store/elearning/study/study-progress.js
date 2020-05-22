@@ -8,13 +8,13 @@ import * as mutationTypes from "~/utils/mutation-types";
  */
 const state = () => ({
   progress: null,
+  currentSession: null,
 });
 
 /**
  * initial getters
  */
 const getters = {
-  //
 };
 
 const actions = {
@@ -45,6 +45,14 @@ const mutations = {
     _list
   ) {
     state.progress = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_PROGRESS.SET_STUDY_PROGRESS_CURRENT_SESSION](
+    state,
+    _currSession
+  ) {
+    console.log("[SET_STUDY_PROGRESS_CURRENT_SESSION]", _currSession);
+    state.currentSession = _currSession;
   },
 };
 

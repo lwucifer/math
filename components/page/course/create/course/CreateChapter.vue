@@ -1,41 +1,43 @@
 <template>
-  <fragment>
-    <div class="cc-box__bg-gray px-4 pt-3 pb-4">
+  <div>
+    <div class="cc-box__bg-gray pt-3 pb-4">
       <h3 class="heading-6 mb-2 mt-3">
-        Chương {{ get(chapters, "data.length", 0) + 1 }}
+        Chương {{ get(chapters, "length", 0) + 1 }}
+        <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
       </h3>
       <app-input
-        :counter="60"
+        :counter="80"
         placeholder="Tên chương"
         v-model="payload.name"
       />
+      <app-error :error="error.name"></app-error>
 
       <div class="d-flex justify-content-end mt-4">
         <app-button
           class="clc-btn font-weight-semi-bold mr-4 text-secondary"
-          size="sm"
-          square
+          size="md"
           color="default"
           outline
-          @click="handleCancelAddChapter"
-          >Huỷ bỏ</app-button
+          @click="$emit('cancel')"
+          >Huỷ</app-button
         >
         <app-button
           class="clc-btn font-weight-semi-bold"
-          size="sm"
-          square
+          size="md"
           @click="handleAddChapter"
+          :disabled="!submit"
           >Thêm chương</app-button
         >
       </div>
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
     />
-  </fragment>
+  </div>
 </template>
 
 <script>
@@ -51,15 +53,42 @@ export default {
         elearning_id: "",
         name: "",
       },
+      error: {
+        name: "",
+      },
       showModalConfirm: false,
       confirmLoading: false,
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-chapter", {
+    ...mapState("elearning/create", {
       chapters: "chapters",
     }),
+    submit() {
+      return !!this.payload.name;
+    },
+  },
+
+  watch: {
+    "payload.name": {
+      handler: function() {
+        if (!this.payload.name) {
+          return (this.error.name = "Bạn cần nhập tên chương");
+        }
+
+        if (this.payload.name.length > 80) {
+          return (this.error.name = "Tên chương chỉ được tối đa 80 ký tự");
+        }
+
+        return (this.error.name = "");
+      },
+      deep: true,
+    },
+  },
+
+  mounted() {
+    console.log(this.chapters);
   },
 
   methods: {
@@ -86,11 +115,9 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", "Thành công"));
         this.payload.name = "";
-        this.$emit("handleCreateChapterSuccess");
-        this.$store.dispatch(
-          `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.LIST}`,
-          options
-        );
+        this.$emit("cancel");
+        this.$store.dispatch(`elearning/create/getContent`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -99,10 +126,6 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
-    },
-
-    handleCancelAddChapter() {
-      this.$emit("handleCancelAddChapter");
     },
 
     get,

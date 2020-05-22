@@ -17,8 +17,8 @@
           class="cgi-demo-benefit d-flex justify-content-between align-items-center"
         >
           <div class="cgi-demo-text d-flex align-items-center">
-            <IconCheckCircle class="mr-2" />
-            <p v-html="item" />
+            <IconCheckCircle class="mr-2"/>
+            <p class="text-benefit" v-html="item" />
           </div>
 
           <div class="cgi-demo-btn">
@@ -40,20 +40,21 @@
         v-if="showBtn"
         @click="showInputBenefit"
       >
-        <IconAdd class="mr-2" /> Thêm lợi ích
+        <IconAdd class="mr-2" />
+        <span class="font-weight-semi-bold">Thêm lợi ích</span>
       </button>
 
       <app-editor-menu-bubble
         v-if="showBenefit"
-        class="bg-input-gray mb-3 flex-grow"
-        placeholder="Nhập lợi ích từ khoá học"
+        class="bg-white mb-4 flex-grow"
+        :placeholder="`Nhập lợi ích từ` + ' ' + name"
         v-model="benefitEditorValue"
       />
+      <app-error class="mb-4" :error="error"></app-error>
 
       <div class="text-right" v-if="showBenefit">
         <app-button
           outline
-          square
           color="error"
           class="mr-3"
           @click="cancelInputBenefit"
@@ -61,9 +62,9 @@
         >
 
         <app-button
-          square
           @click="addBenefit(benefitEditorValue)"
           class="font-weight-normal body-2"
+          :disabled="!submit"
           >Thêm lợi ích</app-button
         >
       </div>
@@ -77,7 +78,7 @@ const IconCheckCircle = () =>
   import("~/assets/svg/v2-icons/check_green.svg?inline");
 const IconTrashAlt = () =>
   import("~/assets/svg/v2-icons/delete_sweep.svg?inline");
-
+import { get } from "lodash";
 const IconAdd = () => import("~/assets/svg/v2-icons/add_green.svg?inline");
 
 export default {
@@ -98,10 +99,33 @@ export default {
     },
   },
 
+  computed: {
+    error() {
+      if (this.benefitEditorValue === "") {
+        return "";
+      }
+      if (get(this, "benefitEditorValue.length", 0) < 20) {
+        return "Nhập tối thiểu 20 ký tự";
+      }
+      if (get(this, "benefitEditorValue.length", 0) > 255) {
+        return "Nhập tối đa 255 ký tự";
+      }
+      return "";
+    },
+    submit() {
+      if (
+        get(this, "benefitEditorValue.length", 0) >= 20 &&
+        get(this, "benefitEditorValue.length", 0) <= 255
+      ) {
+        return true;
+      }
+      return false;
+    },
+  },
+
   data() {
     return {
       benefitEditorValue: "",
-      error: "",
       showBenefit: false,
       showBtn: true,
     };
@@ -138,6 +162,7 @@ export default {
     },
 
     cancelInputBenefit() {
+      this.benefitEditorValue = "";
       this.$emit("cancelInputBenefit");
       this.showBenefit = false;
       this.showBtn = true;

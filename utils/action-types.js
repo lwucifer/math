@@ -143,6 +143,7 @@ export const ACCOUNT_EARNING = {
 
 export const ACCOUNT_WITHDRAWALS = {
     LIST: "accountWithdrawalsList",
+    ADD: "accountWithdrawalsAdd",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
@@ -155,6 +156,10 @@ export const ELEARNING_PUBLIC_CATEGORY = {
 
 export const ELEARNING_PUBLIC_ELEARNING_TEACHER = {
     LIST: "elearningPublicElearningTeacherList",
+};
+
+export const ELEARNING_PUBLIC_TEACHER_ELS = {
+    LIST: "elearningPublicElearningTeacherElsList",
 };
 
 export const ELEARNING_PUBLIC_INFO = {
@@ -189,6 +194,31 @@ export const ELEARNING_PUBLIC_VOTED_ELEARNING = {
 
 export const ELEARNING_PUBLIC_SCHOOL_YEAR = {
     LIST: "elearningPublicSchoolYearList",
+};
+
+export const ELEARNING_PUBLIC_WHAT_NEXTS = {
+    LIST: "elearningPublicWhatNextsList",
+};
+
+export const ELEARNING_PUBLIC_FOR_YOU = {
+    LIST: "elearningPublicForYouList",
+};
+
+export const ELEARNING_PUBLIC_VOTED_SUBJECTS = {
+    LIST: "elearningPublicVotedSubjectsList",
+};
+
+export const ELEARNING_PUBLIC_NEWEST = {
+    LIST_LECTURE: "elearningPublicNewestLecture",
+    LIST_COURSE: "elearningPublicNewestCourse",
+};
+
+export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
+    LIST: "elearningPublicHighlightTeachers",
+};
+
+export const ELEARNING_PUBLIC_ELEARNING = {
+    LIST: "elearningPublicElearning",
 };
 
 export const ELEARNING = {
@@ -232,6 +262,9 @@ export const TEACHING_OLCLASS_LESSON_ATTENDANCES = {
 };
 export const TEACHING_OLCLASS_LESSON_SESSIONS = {
     LIST: "teachingOlclassLessonSessionsList",
+};
+export const TEACHING_OLCLASS_STUDENTS = {
+    LIST: "teachingOlclassStudentList",
 };
 
 export const CREATING_CHAPTER = {
@@ -391,6 +424,7 @@ export const SCHOOL_TEACHERS = {
 
 export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
+    LIST_TIMETABLE: "elearningStudyListTimetable",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -442,6 +476,10 @@ export const ELEARNING_SCHOOL_SEARCH = {
     LIST: "elearningSchoolSearchList",
 };
 
+export const ELEARNING_SCHOOL_STANDALONE = {
+    LIST: "elearningSchoolStandaloneList",
+};
+
 export const MESSAGE_GROUP = {
     ADD_MEMBER: "addMember",
     EDIT_AVATAR_GROUP: "editAvatarGroup",
@@ -479,7 +517,17 @@ export const SOCIAL_FOLLOW = {
 
 export const TEACHING_SUMMARY = {
     INFO: "teachingSummary",
+    STATISTIC_REVENUE: "teachingSummaryStatisticRevenue",
 };
+
+export const TEACHING_CHART_STATISTIC_REVENUE = {
+    INFO: "teachingChartStatisticRevenue",
+};
+
+export const TEACHING_CHART_STATISTIC_HIGHLIGHT_ELS = {
+    LIST: "teachingChartStatisticHighlightElsList",
+};
+
 export const TEACHING_ELEARNINGS = {
     LIST: "teachingElearningsList",
     DELETE: "teachingElearningsDelete",
@@ -525,6 +573,14 @@ export const ACCOUNT_BANKS = {
     VALIDATE: "accountBankValidate",
 };
 
+export const ACCOUNT_BALANCE = {
+    LIST: "accountBalance",
+};
+
+export const ACCOUNT_WITHDRAW = {
+    ADD: "accountWithdrawAdd",
+};
+
 export const PUBLIC_BANK = {
     LIST: "publicBankList",
 };
@@ -551,4 +607,33 @@ export const TEACHING_ELEARNING_ACCEPT = {
 
 export const TEACHING_ELEARNING_INVITES = {
     LIST: "teachingElearningInvitesList",
+    ADD: "teachingElearningInvitesAdd",
+};
+
+export const TEACHING_ELEARNING_STATISTIC = {
+    LIST: "teachingElearningStatistic",
+};
+
+export const ACCOUNT_BIOGRAPHY = {
+    ADD: "accountBiographyAdd",
+};
+
+export const TEACHING_INTERACTIVE_LISTQUESTION = {
+    LIST: "teachingInteractiveListquestion",
+};
+
+export const TEACHING_PUBLIC_LIST = {
+    LIST: "teachingPublicList",
+};
+
+export const PUBLIC_CLASSES = {
+    LIST: "publicClassesList",
+};
+
+export const TEACHING_STUDENTS_PRIVATE = {
+    LIST: "teachingStudentsPrivatesList",
+};
+
+export const INFO_SUPPORT = {
+    ADD: "infoSupport",
 };

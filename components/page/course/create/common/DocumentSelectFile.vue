@@ -1,13 +1,22 @@
 <template>
   <div class="cc-tab-panel">
-    <app-upload @change="handleSelectFile" class="clc-upload-video">
-      <div slot="hint" class="mt-2 caption">
+    <app-upload
+      accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx"
+      @change="handleSelectFile"
+      class="clc-upload-video"
+    >
+      <!-- <div slot="hint" class="mt-2 caption">
         <b class="text-gray">Lưu ý:</b>
-        <span class="text-sub">dasda{{
+        <span class="text-sub">{{
           `Upload tài liệu bổ trợ cho bài giảng của bạn, dung lượng không quá 1GB cho 1 file`
         }}</span>
-      </div>
+      </div> -->
     </app-upload>
+
+    <p class="text-base caption mt-2">
+      <span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài
+      liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file
+    </p>
   </div>
 </template>
 
@@ -19,13 +28,13 @@ const IconTrashAlt = () =>
 export default {
   components: {
     IconClose,
-    IconTrashAlt
+    IconTrashAlt,
   },
 
   methods: {
     handleSelectFile(files) {
-      this.$emit('handleSelectFile', files[0])
-    }
-  }
+      this.$emit("handleSelectFile", files[0]);
+    },
+  },
 };
 </script>

@@ -18,12 +18,6 @@
             <IconClose fill="#E6A01E" />
           </button>
         </div> -->
-        <!-- <app-alert type="warning" class="mb-4" show-close>
-          <template slot="icon">
-            <IconWarning class=""/>
-          </template>
-          <p class="text-warning">Vui lòng hoàn thành <n-link to="" class="text-warning font-weight-bold">hồ sơ cá nhân</n-link> trước khi cài đặt học phí cho bài giảng, khóa học của bạn.</p>
-        </app-alert> -->
 
         <h5 class="mb-2">Chế độ hiển thị</h5>
 
@@ -87,8 +81,10 @@
         <h5 class="mb-2">Giá bán</h5>
 
         <app-input
-          v-model="payload.fee"
-          type="number"
+          :value="numeral(payload.fee).format()"
+          @onFocus="(event) => event.target.select()"
+          type="text"
+          @input="handleChangeFee"
           class="text-primary font-weight-semi-bold w-170"
         >
           <template #unit>đ</template>
@@ -106,8 +102,10 @@
 
         <div class="d-flex align-item-center">
           <app-input
-            v-model="payload.price"
-            type="number"
+            :value="numeral(payload.price).format()"
+            @onFocus="(event) => event.target.select()"
+            type="text"
+            @input="handleChangePrice"
             class="text-primary font-weight-semi-bold w-170 mb-0"
           >
             <template #unit>đ</template>
@@ -131,7 +129,7 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
+        <!-- <app-button
           outline
           class="mr-4"
           @click="handleReset"
@@ -147,18 +145,19 @@
           outline
           :disabled="!is_submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
+        > -->
         <app-button
-          @click="handleCLickSave('next')"
+          @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
-          :disabled="!is_submit"
+          :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
     </div>
 
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleSaveSetting"
@@ -171,7 +170,7 @@
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import { getParamQuery, useEffect } from "~/utils/common";
-import { get, toNumber, defaultTo } from "lodash";
+import { get, toNumber } from "lodash";
 import numeral from "numeral";
 import { createPayloadCourseSetting } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
@@ -199,12 +198,9 @@ export default {
 
   data() {
     return {
-      percent_price: "",
       showModalConfirm: false,
       confirmLoading: false,
-      type_save: "",
       free: "",
-      is_submit: false,
       payload: {
         comment_allow: "",
         price: 0,
@@ -215,29 +211,46 @@ export default {
     };
   },
   mounted() {
-    this.fetchSetting();
-    useEffect(this, this.handleCheckSubmit.bind(this), ["payload", "free"]);
-  },
-
-  watch: {
-    setting: {
-      handler: function() {
-        this.handleChangeSetting();
-      },
-      deep: true,
-    },
+    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-setting", {
+    ...mapState("elearning/create", {
+      general: "general",
       setting: "setting",
     }),
-    ...mapState("elearning/creating/creating-general", {
-      general: "general",
-    }),
+    submit() {
+      if (this.payload.comment_allow === "") return false;
+      if (this.payload.privacy === "") return false;
+      if (this.free === "") return false;
+      if (this.free == 1) {
+        if (!this.payload.fee) {
+          return false;
+        }
+        // if (!this.payload.price) {
+        //   return false;
+        // }
+      }
+      return true;
+    },
+    percent_price() {
+      let percent_price = "";
+      const _fee = numeral(get(this, "payload.fee", 0)).value();
+      const _price = numeral(get(this, "payload.price", 0)).value();
+      if (_fee && _price) {
+        percent_price = numeral((_price - _fee) / _fee).format("0%");
+      }
+      return percent_price;
+    },
   },
 
   methods: {
+    handleChangePrice(e) {
+      this.payload.price = numeral(e).format();
+    },
+    handleChangeFee(e) {
+      this.payload.fee = numeral(e).format();
+    },
     handleChangeSetting() {
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.comment_allow = get(this, "setting.comment_allow", "");
@@ -252,44 +265,14 @@ export default {
       this.payload.privacy = get(this, "setting.privacy", "");
       const fee = toNumber(get(this, "setting.fee", ""));
       const price = toNumber(get(this, "setting.price", ""));
-      if (fee) {
-        this.percent_price = numeral((price - fee) / fee).format("0%");
-      }
+      // if (fee) {
+      //   this.percent_price = numeral((price - fee) / fee).format("0%");
+      // }
       if (fee > 0) {
         this.free = 1;
       }
       if (toNumber(get(this, "setting.fee", "-1")) === 0) {
         this.free = 2;
-      }
-    },
-    handleCheckSubmit() {
-      this.handleSetPercent();
-      if (this.payload.comment_allow === "") return (this.is_submit = false);
-      if (this.payload.privacy === "") return (this.is_submit = false);
-      if (this.free === "") return (this.is_submit = false);
-      if (this.free == 1) {
-        if (!this.payload.fee) {
-          return (this.is_submit = false);
-        }
-        if (!this.payload.price) {
-          return (this.is_submit = false);
-        }
-      }
-      this.is_submit = true;
-    },
-
-    fetchSetting() {
-      const elearning_id = getParamQuery("elearning_id");
-      if (elearning_id) {
-        const options = {
-          params: {
-            elearning_id,
-          },
-        };
-        this.$store.dispatch(
-          `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.LIST}`,
-          options
-        );
       }
     },
 
@@ -305,22 +288,23 @@ export default {
       }
     },
 
-    handleSetPercent() {
-      const _fee = numeral(get(this, "payload.fee", 0)).value();
-      const _price = numeral(get(this, "payload.price", 0)).value();
-      if (_fee && _price) {
-        this.percent_price = numeral((_price - _fee) / _fee).format("0%");
-      }
-    },
+    // handleSetPercent() {
+    //   const _fee = numeral(get(this, "payload.fee", 0)).value();
+    //   const _price = numeral(get(this, "payload.price", 0)).value();
+    //   if (_fee && _price) {
+    //     this.percent_price = numeral((_price - _fee) / _fee).format("0%");
+    //   }
+    // },
 
     async handleCLickSave(type_save) {
-      this.type_save = type_save;
       this.showModalConfirm = true;
     },
 
     async handleSaveSetting() {
       this.confirmLoading = true;
       this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.fee = numeral(this.payload.fee).value();
+      this.payload.price = numeral(this.payload.price).value();
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
@@ -330,19 +314,13 @@ export default {
       this.handleCancelSetting();
 
       if (get(result, "success", false)) {
-        this.getProgress();
-        this.fetchSetting();
-        this.$toasted.success(
-          defaultTo(get(result, "message", ""), "Thành công")
-        );
-        if (this.type_save === "next") {
-          this.$emit("nextStep", "exercise");
-        }
+        this.$store.dispatch(`elearning/create/getSetting`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
+        this.$toasted.success(get(result, "message", "Thành công"));
+        this.$emit("nextStep", "exercise");
         return;
       }
-      this.$toasted.error(
-        defaultTo(get(result, "message", ""), "Có lỗi xảy ra")
-      );
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
 
     handleCancelSetting() {
@@ -350,33 +328,10 @@ export default {
       this.confirmLoading = false;
     },
 
-    getProgress() {
-      const elearning_id = getParamQuery("elearning_id");
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
-    },
-
     handleReset() {
-      if (this.setting) {
-        this.handleChangeSetting();
-        return;
-      }
-
-      this.payload = {
-        comment_allow: "",
-        price: 0,
-        elearning_id: get(this, "general.id", ""),
-        fee: 0,
-        privacy: "",
-      };
+      // this.percent_price = "";
       this.free = "";
+      this.handleChangeSetting();
     },
 
     numeral,

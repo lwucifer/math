@@ -47,10 +47,17 @@
     }
 
     &__teacher {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1.2rem;
-
+        .profile-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            text-decoration: none;
+            color: $color-text;
+            &:hover {
+                color: $color-secondary;
+            }
+        }
+        
         .app-avatar {
             margin-right: 0.6rem;
         }
@@ -60,7 +67,7 @@
         text-align: right;
     }
 
-    &__label-livestream {
+    &__online-class {
         position: absolute;
         bottom: 0;
         left: 0;
@@ -88,6 +95,11 @@
             width: 2rem;
             height: 1.5rem;
             margin-right: 4px;
+
+            circle {
+                animation: scaleDot 1s infinite;
+                transform-origin: center;
+            }
         }
     }
 
@@ -128,5 +140,15 @@
         #{$this}__rating {
             margin-bottom: 1rem;
         }
+    }
+}
+
+@keyframes scaleDot {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

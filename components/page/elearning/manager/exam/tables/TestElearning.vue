@@ -7,6 +7,12 @@
       :data="list"
       :loading="loading"
     >
+      <template v-slot:cell(name)="{row}">
+        <td :title="get(row, 'name', '')">
+          {{ get(row, 'name', '') | truncStrFilter(30) }}
+        </td>
+      </template>
+      
       <template v-slot:cell(action)="{row}">
         <td>
           <n-link
@@ -19,7 +25,7 @@
       </template>
       
       <template v-slot:cell(type)="{row}">
-        <td>
+        <td class="nowrap">
           {{ get(row, 'type', '') | exerciseTypeFilter }}
         </td>
       </template>
@@ -32,15 +38,15 @@
             placement="top"
             popover-class="tooltip--rate"
           >
-            <div>
+            <div class="nowrap rate-result-wrapper">
               <span class="status-item status-item--success d-inline-block">
-                {{get(row, 'passed_percent', 0)}}%
+                {{parseInt(get(row, 'passed_percent', 0))}}%
               </span>
               <span class="status-item status-item--fail d-inline-block">
-                {{get(row, 'failed_percent', 0)}}%
+                {{parseInt(get(row, 'failed_percent', 0))}}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{get(row, 'pending_percent', 0)}}%
+                {{100 - parseInt(get(row, 'passed_percent', 0)) - parseInt(get(row, 'failed_percent', 0))}}%
               </span>
             </div>
             
@@ -74,7 +80,8 @@
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
   import { ELEARNING_TYPES } from "~/utils/constants"
-  
+  import { numeralFormat } from "~/plugins/filters";
+
   export default {
     components: {
       IconArrow,
@@ -130,7 +137,7 @@
             text: "Thể loại",
           },
           {
-            name: "exercises",
+            name: "tests",
             text: "Số bài tập",
             sort: true
           },
@@ -158,6 +165,7 @@
       onPageChange(e) {
         this.$emit('changedPagination', e)
       },
+      numeralFormat,
       get
     },
   }

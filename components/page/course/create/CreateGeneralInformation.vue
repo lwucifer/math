@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="initApp">
     <div class="cc-panel bg-white">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">
@@ -43,15 +43,13 @@
         </div>
 
         <div class="cgi-form-group mb-4">
-          <h2 class="cgi-form-title heading-6 mb-3">
-            Tên {{ name }}
-            <span class="caption text-sub font-weight-normal"
-              >(Tối đa 60 ký tự)</span
-            >
+          <h2 class="cgi-form-title heading-5 mb-3">
+            Tiêu đề {{ name }}
+            <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
           <app-input
-            placeholder="Nhập tiêu đề của khóa học"
-            :counter="60"
+            :placeholder="`Nhập tiêu đề của` + ' ' + name"
+            :counter="150"
             v-model="payload.name"
             @input="handleChangeName($event)"
             @handleBlur="handleBlurName($event)"
@@ -66,13 +64,13 @@
           @addBenefit="addBenefit"
           @cancelInputBenefit="cancelInputBenefit"
         />
-        <app-error :error="get(error, 'benefit', '')"></app-error>
+        <app-error class="mb-4" :error="get(error, 'benefit', '')"></app-error>
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
             Mô tả tổng quát
-            <span class="text-sub caption font-weight-normal"
-              >(Tối thiểu tổng 300 ký tự)</span
+            <span class="text-base font-weight-normal"
+              >(Tối thiểu 100 ký tự)</span
             >
           </h2>
           <app-editor
@@ -83,51 +81,63 @@
             @onBlur="handleBlurDescription"
           />
           <app-error :error="get(error, 'description', '')"></app-error>
-          <!-- <span class="text-sub caption">Tối thiểu 300 ký tự</span> -->
         </div>
 
-        <CourseSelectAvatar
-          :defaultAvatar="get(general, 'avatar.medium', '')"
-          @handleSelectAvatar="handleSelectAvatar"
+        <CourseSelectImage
+          :default_image="
+            get(general, 'avatar.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectAvatar"
+          :minWidth="340"
+          :minHeight="204"
+          :title="'Hình đại diện cho ' + name"
+          id="avatar"
         />
 
-        <CourseSelectCover
-          :defaultImg="get(general, 'cover_url.medium', '')"
-          @handleSelect="handleSelectCover"
+        <CourseSelectImage
+          :isCompel="false"
+          :default_image="
+            get(general, 'cover_url.medium', '/images/default-course-image.png')
+          "
+          @onSelectFile="handleSelectCover"
+          :minWidth="730"
+          :minHeight="410"
+          :title="'Hình minh hoạ cho ' + name"
+          id="cover"
+          :name="name"
         />
       </div>
       <app-modal-confirm
+        centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
         :title="title_confirm"
+        description="Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu"
       />
     </div>
 
     <div class="create-action mt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
+        <!-- <app-button
           outline
           class="mr-4"
           @click="handleReset"
-          square
           color="error"
           ><IconDelete class="mr-2" /> Thiết lập lại</app-button
         >
         <app-button
           class="mr-4"
           color="primary"
-          square
           outline
           @click="handleCLickSave('draft')"
           :disabled="!submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
-        >
+        > -->
         <app-button
-          @click="handleCLickSave('next')"
+          @click="handleCLickSave"
           class="create-action__btn mr-4"
-          square
           :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
@@ -158,8 +168,7 @@ const IconTrashAlt = () =>
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import CourseSelectLevel from "~/components/page/course/create/info/CourseSelectLevel";
 import CourseSelectSubject from "~/components/page/course/create/info/CourseSelectSubject";
-import CourseSelectAvatar from "~/components/page/course/create/info/CourseSelectAvatar";
-import CourseSelectCover from "~/components/page/course/create/info/CourseSelectCover";
+import CourseSelectImage from "~/components/page/course/create/info/CourseSelectImage";
 import CourseBenefit from "~/components/page/course/create/info/CourseBenefit";
 import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
@@ -172,11 +181,10 @@ export default {
     CreateAction,
     CourseSelectLevel,
     CourseSelectSubject,
-    CourseSelectAvatar,
+    CourseSelectImage,
     IconCheckCircle,
     IconTrashAlt,
     CourseBenefit,
-    CourseSelectCover,
     IconArrowLeft,
     IconDelete,
     IconSave,
@@ -185,6 +193,7 @@ export default {
 
   data() {
     return {
+      initApp: true,
       error: {
         description: "",
         name: "",
@@ -202,54 +211,36 @@ export default {
       },
       showModalConfirm: false,
       confirmLoading: false,
-      type_save: "",
     };
   },
 
   mounted() {
-    const elearning_id = getParamQuery("elearning_id");
-    this.handleFetchElearningGeneral(elearning_id);
-  },
-
-  watch: {
-    general: {
-      handler: function() {
-        this.payload.benefit = [...get(this, "general.benefit", [])];
-        this.payload.description = get(this, "general.description", "");
-        this.payload.name = get(this, "general.name", "");
-        this.payload.subject = get(this, "general.subject.id", "");
-        this.payload.level = get(this, "general.level", "");
-        this.payload.type = get(this, "general.type", "");
-        this.payload.elearning_id = get(this, "general.id", "");
-      },
-      deep: true,
-    },
+    useEffect(this, this.handleChangeGeneral.bind(this), ["general"]);
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
     submit() {
-      if (!get(this, "payload.name", "")) return false;
-      if (!get(this, "payload.benefit.length", 0)) return false;
-      if (!get(this, "payload.description", "")) return false;
-      if (!get(this, "payload.subject", "")) return false;
-      if (!get(this, "payload.level", "")) return false;
-      if (!get(this, "payload.type", "")) return false;
-      if (!get(this, "payload.avatar", "") && !this.general) return false;
-      if (!get(this, "payload.cover_image", "") && !this.general) return false;
+      if (!get(this, "payload.name", true)) return false;
+      if (!get(this, "payload.benefit.length", true)) return false;
+      if (!get(this, "payload.description", true)) return false;
+      if (!get(this, "payload.subject", true)) return false;
+      if (!get(this, "payload.level", true)) return false;
+      if (!get(this, "payload.type", true)) return false;
+      if (!get(this, "payload.avatar", true) && !this.general) return false;
 
-      const length_name = get(this, "payload.name", 0);
-      if (length_name > 60) {
+      const length_name = get(this, "payload.name.length", 0);
+      if (length_name > 150) {
         return false;
       }
 
       const lengh_description = get(this, "payload.description.length", 0);
-      if (lengh_description > 0 && lengh_description < 300) {
+      if (lengh_description > 0 && lengh_description < 100) {
         return false;
       }
       if (lengh_description > 2000) {
@@ -259,8 +250,7 @@ export default {
       return true;
     },
     title_confirm() {
-      let title =
-        "Xác nhận? Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu";
+      let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
         title = "Xác nhận?";
       }
@@ -269,6 +259,16 @@ export default {
   },
 
   methods: {
+    handleChangeGeneral() {
+      this.payload.benefit = [...get(this, "general.benefit", [])];
+      this.payload.description = get(this, "general.description", "");
+      this.payload.name = get(this, "general.name", "");
+      this.payload.subject = get(this, "general.subject.id", "");
+      this.payload.level = get(this, "general.level", "");
+      this.payload.type = get(this, "general.type", "");
+      this.payload.elearning_id = get(this, "general.id", "");
+    },
+
     handleBlurName(e) {
       this.handleChangeName(e.target.value);
     },
@@ -278,11 +278,11 @@ export default {
     handleChangeDescription(value) {
       value = value.replace("<p></p>", "");
       if (!value) {
-        this.error.description = "Bạn cần nhập mô tả khóa học";
+        this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
         return;
       }
-      if (value.length < 300) {
-        this.error.description = "Mô tả không được ít hơn 300 ký tự";
+      if (value.length < 100) {
+        this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";
         return;
       }
       if (value.length > 2000) {
@@ -294,29 +294,19 @@ export default {
 
     handleChangeName(value) {
       if (!value) {
-        this.error.name = "Bạn cần nhập tên khoá học";
+        this.error.name = "Bạn cần nhập tên" + " " + this.name;
         return;
       }
-      if (value.length > 60) {
-        this.error.name = "Tên khoá học vượt quá số ký tự cho phép";
+      if (value.length > 150) {
+        this.error.name = "Tên " + this.name + " vượt quá số ký tự cho phép";
         return;
       }
       this.error.name = "";
     },
 
-    handleReset() {
-      this.payload.benefit = [...get(this, "general.benefit", [])];
-      this.payload.description = get(this, "general.description", "");
-      this.payload.name = get(this, "general.name", "");
-      this.payload.subject = get(this, "general.subject", "");
-      this.payload.level = get(this, "general.level", "");
-      this.payload.type = get(this, "general.type", "");
-      this.error = {};
-    },
-
     checkShowErrorBenefit() {
       if (!this.payload.benefit.length) {
-        this.error.benefit = "Bạn cần thêm lợi ích cho khoá học";
+        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
         return;
       }
       this.error.benefit = "";
@@ -344,14 +334,11 @@ export default {
           elearning_id,
         },
       };
-      this.$store.dispatch(
-        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-        options
-      );
+      this.$store.dispatch(`elearning/create/getGeneral`, options);
     },
 
     handleChangeLevel(level) {
-      this.payload.level = get(level, "id", "");
+      this.payload.level = level;
     },
 
     handleSelectType(e) {
@@ -367,11 +354,10 @@ export default {
     },
 
     handleChangeSubject(subject) {
-      this.payload.subject = get(subject, "id", "");
+      this.payload.subject = subject;
     },
 
-    handleCLickSave(type_save) {
-      this.type_save = type_save;
+    handleCLickSave() {
       this.showModalConfirm = true;
     },
 
@@ -388,34 +374,27 @@ export default {
 
       if (get(result, "success", false)) {
         const elearning_id = get(result, "data.elearning_id", "");
-        this.handleFetchElearningGeneral(elearning_id);
+        const options = {
+          params: {
+            elearning_id,
+          },
+        };
+        await this.$store.dispatch(`elearning/create/getGeneral`, options);
+        // await this.$store.dispatch(`elearning/create/getProgress`);
         redirectWithParams({ elearning_id });
-        this.getProgress(elearning_id);
+
         this.$toasted.success(get(result, "message", ""));
-        if (this.type_save === "next") {
-          if (this.payload.type === "LECTURE") {
-            this.$emit("nextStep", "content-lecture");
-          }
-          if (this.payload.type === "COURSE") {
-            this.$emit("nextStep", "content-course");
-          }
+
+        if (this.payload.type === "LECTURE") {
+          this.$emit("nextStep", "content-lecture");
+        }
+        if (this.payload.type === "COURSE") {
+          this.$emit("nextStep", "content-course");
         }
 
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    },
-
-    getProgress(elearning_id) {
-      const options = {
-        params: {
-          elearning_id,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/creating/creating-progress/${actionTypes.ELEARNING_CREATING_PROGRESS}`,
-        options
-      );
     },
 
     handleCancel() {

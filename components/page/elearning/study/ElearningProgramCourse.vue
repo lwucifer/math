@@ -1,75 +1,77 @@
 <template>
-  <div class="elearning-lesson-side__course">
-    <div class="elearning-lesson-side__course-title">
-      <div>
-        <strong class="color-primary mb-2">
-          Chương {{ index + 1 }}: {{ get(program, "chapter", "") }}</strong
-        >
-        <!-- <p class="color-999 font-size-12" v-if="!ids.includes(item.id)">
-              {{ item.done }} - {{ item.times }}
-            </p> -->
+  <div class="e-program-course">
+    <a href @click.prevent class="e-program-course__title" @click="toggleExpand">
+      <div class="e-program-course__heading-wrapper">
+        <h5 class="e-program-course__heading">
+          Chương {{ index + 1 }}:
+          <span class="text-base">{{ get(program, "chapter", "") }}</span>
+        </h5>
+        <span class="caption">{{ lessionCompleted }} | {{ get(program, "duration", 0) | formatHour }}</span>
       </div>
-      <label class="toggle">
-        <input type="checkbox" v-model="ids" :value="get(program, 'id', '')" />
-        <IconUpO class="up" v-if="ids.includes(get(program, 'id', ''))" />
-        <IconDownO class="down" v-else />
-      </label>
-    </div>
+      <span
+        v-if="get(program, 'lessons', []).length"
+        class="e-program-course__icon-toggle"
+        :class="{ active: expand }"
+      >
+        <IconAngleDown class="icon" />
+      </span>
+    </a>
 
-    <div
-      v-if="ids.includes(get(program, 'id', ''))"
-      class="elearning-lesson-side__lessons mt-3"
-    >
+    <transition-group enter-active-class="animated faster fadeIn">
       <ElearningProgramItem
-        v-for="(lesson, j) in get(program, 'lessons', [])"
-        :key="j"
+        v-for="lesson in get(program, 'lessons', [])"
+        v-show="expand"
+        :key="lesson.id"
         :lesson="lesson"
       />
-    </div>
+    </transition-group>
   </div>
 </template>
 
 <script>
-import IconPlay from "~/assets/svg/icons/play.svg?inline";
-import IconUpO from "~/assets/svg/icons/up-o.svg?inline";
-import IconDownO from "~/assets/svg/icons/down-o.svg?inline";
-import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
-import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline";
-import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
-import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
+
+import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
+import { LESSION_STATUS } from '../../../../utils/constants';
 
 export default {
   components: {
-    IconPlay,
-    IconDownO,
-    IconUpO,
-    IconFileClock,
-    IconFileCheckAlt,
-    IconFileEditAlt,
-    IconFileCheck,
-    ElearningProgramItem,
+    IconAngleDown,
+    ElearningProgramItem
   },
+
   props: {
     program: {},
-    index: {},
+    index: {}
   },
+
   data() {
     return {
-      ids: [],
       check: {},
+      expand: false
     };
   },
 
-  created() {
-    console.log(this.program);
+  computed: {
+    lessionCompleted() {
+      const lessons = get(this.program, "lessons", []);
+      const total_lessons = get(this.program, "total_lessons", 0);
+      const completed = lessons.filter( l => l.status == LESSION_STATUS.COMPLETED) || [];
+      return `${completed.length}/${total_lessons}`;
+    }
   },
 
-  updated() {
-    console.log(this.program);
-  },
+  methods: {
+    get,
 
-  methods: { get },
+    toggleExpand() {
+      this.expand = !this.expand;
+    }
+  }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/study/_elearning-program-course.scss";
+</style>

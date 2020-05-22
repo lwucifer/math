@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <label class="d-inline-block mb-3" for="question-editor"
+  <div class="cc-box__bg-disable">
+    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
       >Nội dung câu hỏi</label
     >
 
@@ -8,34 +8,35 @@
 
     <CreateAnswerOfQuestion
       v-for="(answer, index) in get(payload, 'answers', [])"
-      :key="index"
+      :key="answer.id"
       :answer="answer"
       :index="index"
+      :id="get(payload,'id','')"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
       @handleAddAnswer="handleAddAnswer"
       @handleDeleteAnswer="handleDeleteAnswer"
     />
 
-    <div class="d-flex justify-content-end mt-5">
+    <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
-        size="sm"
-        square
-        @click="$emit('handleCancelAddQuestion')"
-        >Huỷ bỏ</app-button
+        color="default"
+        class="font-weight-semi-bold mr-4 text-secondary"
+        outline
+        size="md"
+        @click="$emit('cancel')"
+        >Huỷ</app-button
       >
       <app-button
         color="primary"
         class="font-weight-semi-bold"
-        size="sm"
-        square
+        size="md"
         @click="handleSubmitQuestion"
         >Lưu câu hỏi</app-button
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -50,15 +51,26 @@ import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/Cre
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconTrashAlt,
     CreateAnswerOfQuestion,
   },
+  computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+      lesson: "lesson",
+    }),
+  },
 
   props: {
     question: {
+      type: Object,
+      default: null,
+    },
+    exercise: {
       type: Object,
       default: null,
     },
@@ -94,7 +106,16 @@ export default {
 
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        this.$emit("handleRefreshQuestion");
+        this.$emit("cancel");
+        // this.$store.dispatch(`elearning/create/getProgress`);
+
+        if (get(this, "exercise.category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -114,31 +135,32 @@ export default {
     handleChangeContentAnswer(index, value) {
       this.payload.answers[index].content = value;
     },
-    handleAddAnswer(index){
+    handleAddAnswer(index) {
       const answer = {
         correct: false,
         content: "",
-      }
-      if(index == this.payload.answers.length && index<6){
-        this.payload.answers.push(answer)
-      }
-    },
-    handleDeleteAnswer(index){
-      if(this.payload.answers.length> 2){
-        this.payload.answers.splice(index,1)
-      }else{
-        this.$toasted.error("Tối thiểu là 2 đáp án")
+      };
+      if (index == get(this, "payload.answers.length", 0) && index < 6) {
+        let answers = this.payload.answers.concat([answer]);
+        this.payload.answers = answers;
       }
     },
-    handleCheckAnswers(){
+    handleDeleteAnswer(index) {
+      if (this.payload.answers.length > 2) {
+        this.payload.answers.splice(index, 1);
+      } else {
+        this.$toasted.error("Tối thiểu là 2 đáp án");
+      }
+    },
+    handleCheckAnswers() {
       var lastanswer = this.payload.answers.slice(-1)[0];
       const answer = {
         correct: false,
-        content: ""
-      }
-      const check = _.isEqual(lastanswer, answer)
-      if(this.payload.answers.length > 2 && check){
-        this.payload.answers.pop()
+        content: "",
+      };
+      const check = _.isEqual(lastanswer, answer);
+      if (this.payload.answers.length > 2 && check) {
+        this.payload.answers.pop();
       }
     },
     get,

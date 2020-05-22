@@ -4,6 +4,7 @@
     align-items: center;
     padding: 1.5rem;
     line-height: (22/14);
+    border-radius: 2px;
 
     &__icon-wrapper {
         margin-right: 1.5rem;
@@ -34,10 +35,21 @@
 // MODIFIERS
 @each $name, $color in $colors {
     .app-alert--#{$name} {
+        border: 1px solid $color;
         background-color: rgba($color, .1);
+        
+        .app-alert__content {
+            color: $color;
+        }
 
         .app-alert__icon {
             fill: $color;
+        }
+
+        .app-alert__close {
+            svg {
+                fill: $color;
+            }
         }
     }
 }

@@ -1,73 +1,81 @@
 <template>
-  <app-modal centered :width="350" v-if="visible">
-      <div slot="content" class="py-4 px-3 text-center">
-          <div v-if="success">
-              <div class="mt-2 mb-2 iconTick__LinkModal">
-                <IconTick />
-              </div>
-              <p class="mb-3">Gửi yêu cầu thành công</p>
-              <app-button square @click="$emit('click-close')">Đóng</app-button>
-          </div>
-          <div v-else>
-              <h5 class="text-primary">Liên kết trường học</h5>
-              <p class="my-3 text-gray">Vui lòng nhập mã liên kết</p>
-              <app-input v-model="payload.code" placeholder="Nhập mã"/>
-              <p class="text-secondary my-2 font-weight-light">Nếu bạn chưa có mã liên kết, vui lòng liên hệ với nhà trường</p>
-              <div>
-                  <app-button square color="secondary" @click="$emit('click-close')">Hủy</app-button>
-                  <app-button square class="ml-3" @click.prevent="submitLink">Xác nhận</app-button>
-              </div>
-          </div>
+  <app-modal
+    centered
+    :component-class="{ 'account-link-school-modal': true }"
+    v-if="visible"
+    :header="false"
+    :footer="false"
+  >
+    <div slot="content" class="py-4 px-3 text-center">
+      <div>
+        <h3 class="account-link-school-modal__title">Nhập mã liên kết</h3>
+        <app-input
+          v-model="code"
+          placeholder="Nhập mã liên kết trường học"
+          :validate="isValidCode"
+          :message="messageCode"
+        />
+        <div class="account-link-school-modal__actions">
+          <app-button
+            class="font-weight-semi-bold mr-3"
+            color="default"
+            outline
+            @click="$emit('cancel')"
+          >
+            <span>Hủy</span>
+          </app-button>
+          <app-button
+            class="font-weight-semi-bold"
+            color="primary"
+            @click.prevent="$emit('ok', code)"
+          >
+            <span>Xác nhận</span>
+          </app-button>
+        </div>
       </div>
+      <button class="account-link-school-modal__close" @click="$emit('close')">
+        <IconClose class="icon d-block fill-opacity-1" />
+      </button>
+    </div>
   </app-modal>
 </template>
 
 <script>
-import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
-import IconTick from "~/assets/svg/design-icons/check-circle.svg?inline";
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+import { APP_INPUT_VALIDATE_STATUS as VALIDATE_STATUS } from "~/utils/constants";
+
 export default {
-    components:{
-        IconTick
-    },
-    data(){
-        return({
-            payload:{
-                code:"",
-                g_recaptcha_response:""
-            },
-            success:false
-        })
-    },
-    props:{
-        visible: Boolean,
-    },
-    methods:{
-        async submitLink(){
-            this.payload.g_recaptcha_response = await this.$recaptcha.execute();
-            const payload = this.payload
-            const res = await this.$store.dispatch(
-                `account/${actionTypes.ACCOUNT_LINK.ADD}`,
-                payload
-            );
-            if(get(res, "success", false)){
-                this.$toasted.success("success")
-                this.$emit('click-close')
-                this.$emit('handleRefresh')
-                this.success = true
-                return;
-            }
-            this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
-            this.$emit('handleRefresh')
-        }
+  components: {
+    IconClose
+  },
+  data() {
+    return {
+      code: "",
+      success: false,
+      messageCode: ""
+    };
+  },
+  props: {
+    visible: Boolean
+  },
+  computed: {
+    isValidCode() {
+      if (this.code && this.code.length == 9) {
+        this.messageCode = "";
+        return VALIDATE_STATUS.SUCCESS;
+      } else if (this.code) {
+        this.messageCode = "Mã liên kết không hợp lệ";
+        return VALIDATE_STATUS.ERROR;
+      } else {
+        this.messageCode = "";
+      }
     }
-}
+  },
+
+  methods: {}
+};
 </script>
 
 <style lang="scss">
-.iconTick__LinkModal svg {
-    width: 34px;
-    height: 34px;
-    path{fill: #32AF85;}
-}
+@import "~/assets/scss/components/account/_account-link-school-modal.scss";
 </style>

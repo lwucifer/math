@@ -4,25 +4,28 @@
       v-if="isEditCourseName"
       v-model="courseNameModel"
       ref="inputCourseName"
-      class="cc-box__input-title bg-input-gray mb-0"
+      maxlength="150"
+      class="cc-box__input-title bg-white mb-0"
       type="text"
     />
     <h2 v-else class="cc-box__title heading-5">
-      Tiêu đề: {{ courseNameModel }}
-      <button  class="cc-box__btn cc-box__btn-edit" @click="editCourseName">
+      <!-- Tiêu đề: {{ courseNameModel }}  -->
+      {{courseNameModel.length > 60 ? ('Tiêu đề: ' + courseNameModel.slice(0, 40) + '...') :  ('Tiêu đề: ' + courseNameModel) }}
+    </h2>
+
+    <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName" v-if="!isEditCourseName">
         <IconEdit class="ml-2"/>
       </button>
-    </h2>
 
     <template v-if="isEditCourseName">
       <button
-        class="cc-box__btn mr-3 text-success"
+        class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
         @click="handleSaveCourseName"
       >
-        Lưu
+        <IconSave24px class="mr-2 fill-primary"/> Lưu
       </button>
-      <button class="cc-box__btn text-gray-2" @click="cancelEditCourseName">
-        Huỷ
+      <button class="cc-box__btn text-secondary d-flex align-items-center w-50" @click="cancelEditCourseName">
+        <IconClose class="mr-2 fill-secondary"/> Huỷ
       </button>
     </template>
   </div>
@@ -32,6 +35,8 @@
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
 const IconEdit = () => import ("~/assets/svg/v2-icons/edit.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
+import IconClose from '~/assets/svg/icons/close.svg?inline';
+import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
 
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
@@ -43,7 +48,9 @@ export default {
   components: {
     IconCheck,
     IconEdit,
-    IconTimes
+    IconTimes,
+    IconClose,
+    IconSave24px
   },
 
   props: {

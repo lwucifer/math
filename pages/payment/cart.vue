@@ -1,30 +1,50 @@
 <template>
   <div class="container">
     <div class="row" v-if="get(cartCheckout, 'orders.length', 0)">
-      <div class="col-md-8 bg-white py-3 px-4">
-        <h6 class="text-primary">Giỏ hàng</h6>
-        <div
-          class="mt-3"
-          v-for="(item, index) in carts"
-          :key="index"
+      <div class="col-md-8">
+        <sub-block-section
+          :title-cls="{'border-0': true }"
         >
-          <CartItem :item="item" />
-        </div>
+          <template v-slot:title>
+            <div class="d-flex align-items-center">
+              <h4>Giỏ hàng</h4>
+              <span class="text-gray">  ({{get(cartCheckout, 'orders.length', 0)}} sản phẩm)</span>
+            </div>
+          </template>
+          <template v-slot:content>
+            <div>
+              <CartItem 
+                class="mt-3"
+                v-for="(item, index) in carts"
+                :key="index"
+                :item="item" 
+              />
+            </div>
+          </template>
+        </sub-block-section>
       </div>
       <div class="col-md-4">
         <CartSideRight />
       </div>
     </div>
-    <div class="bg-white py-3 px-4" v-else>
-      <div class="d-flex align-items-center mb-4">
-        <h4>Giỏ hàng</h4>
-        <span class="text-gray">(0 sản phẩm)</span>
-      </div>
-      <div class="text-center my-4">
-        <img src="~assets/images/payment/undraw_empty_xct9 (1) 1.png" />
-        <p class="my-4">Không có sản phẩm nào trong giỏ hàng của bạn.</p>
-        <app-button square>Tiếp tục mua hàng</app-button>
-      </div>
+    <div v-else>
+      <sub-block-section
+        :title-cls="{'border-0': true }"
+      >
+        <template v-slot:title>
+          <div class="d-flex align-items-center">
+            <h4>Giỏ hàng</h4>
+            <span class="text-gray">  (0 sản phẩm)</span>
+          </div>
+        </template>
+         <template v-slot:content>
+           <div class="text-center" style="margin:61px 0 43px">
+             <ImageCartNull/>
+             <p class="my-4">Không có sản phẩm nào trong giỏ hàng</p>
+             <app-button square to="/elearning" nuxt>Tiếp tục mua sắm</app-button>
+           </div>
+         </template>
+      </sub-block-section>
     </div>
   </div>
 </template>
@@ -34,6 +54,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import CartSideRight from "~/components/page/payment/CartSideRight";
 import CartItem from "~/components/page/payment/CartItem";
 import { get } from "lodash";
+import ImageCartNull from "~/assets/svg/images/shopping-cart-null.svg?inline"
 
 export default {
   name: "ShoppingCart",
@@ -41,8 +62,8 @@ export default {
   components: {
     CartSideRight,
     CartItem,
+    ImageCartNull
   },
-
   methods: {
     ...mapActions("cart", ["cartList"]),
     get

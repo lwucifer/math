@@ -3,6 +3,18 @@
     margin-bottom: 22px;
     background: #FFFFFF;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    &:hover{
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    }
+    .profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: $color-text;
+        &:hover {
+            color: $color-secondary;
+        }
+    }
     .wrap-content_Elearning{
         padding: 15px;
     }
@@ -51,23 +63,61 @@
     }
     .app-dropdown__content{
         right: -16px !important;
+        overflow: unset;
     }
     .link--dropdown__ElearningItem{
         list-style: none;
         padding:18px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-        li{
+        >li{
             a{
+                font-size: 13px;
                 text-decoration: none;
                 display: flex;
                 align-items: center;
+                color: #656565;
                 svg{
                     margin-right: 10px;
+                    width: 2rem;
+                    height: 2rem;
+                }
+                &:hover{
+                    color: $color-primary;
+                }
+            }
+            .text-primary{
+                &:hover{
+                    color: #656565 !important;
                 }
             }
         }
         li:nth-child(2){
             margin: 14px 0px;
+        }
+        .item-share__ElearningItem{
+            .share-dropdowm__ElearningItem{
+                list-style: none;
+                text-decoration: none;
+                position: absolute !important;
+                right: -13.8rem;
+                top: 0.5rem;
+                background: white;
+                padding:10px;
+                box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+                border-radius: 2px;
+                z-index: 10;
+                svg{
+                    margin-right: 10px;
+                }
+                li{
+                    cursor: pointer;
+                    font-size: 13px;
+                    letter-spacing: 0.01em;
+                }
+                li:nth-child(2){
+                    margin: 10px 0 0;
+                }
+              }
         }
     }
 }
@@ -78,6 +128,8 @@
         line-height: 28px;
         letter-spacing: -0.01em;
         color: #222222;
+        margin-bottom: 25px;
+        display: block;
     }
     .elearning-manager-content__title__nav{
         a{
@@ -93,5 +145,17 @@
     }
     .btn--color-white {
         border: none;
+    }
+    .search__mycourses{
+        width: 267px;
+        margin-left: auto;
+        .app-search{
+            width: 100%;
+        }
+        .app-search__submit{
+            background: transparent;
+            box-shadow: none;
+            svg path { fill:  #656565;}
+        }
     }
 }

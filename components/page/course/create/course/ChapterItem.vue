@@ -1,18 +1,23 @@
 <template>
-  <div>
-    <div class="ce-item d-flex align-items-center justify-content-between">
-      <EditChapterName
-        :defaultName="get(this, 'chapter', {})"
-        @handleRefreshChapters="$emit('handleRefreshChapters')"
-      />
-      <div class="ce-item__right d-flex">
-        <a href @click.prevent="handleAddLesson">Thêm bài học</a>
+  <div class="chapter-item">
+    <div
+      class="d-flex align-items-center justify-content-between mb-3 ce-item--modifer"
+    >
+      <EditChapterName :chapter="chapter" :index="index" />
+
+      <div class="ce-item__right d-flex align-items-center">
+        <a @click.prevent="toggleShowAddLesson">Thêm bài học</a>
         <button
           class="cc-box__btn cc-box__btn-collapse"
           @click="isShowLesson = !isShowLesson"
         >
-          <IconAngleDown class="fill-primary" v-if="!isShowLesson" />
-          <IconAngleUp class="fill-primary" v-else />
+          <IconAngleDown
+            class="fill-primary"
+            width="20px"
+            height="20px"
+            v-if="!isShowLesson"
+          />
+          <IconAngleUp class="fill-primary" width="20px" height="20px" v-else />
         </button>
       </div>
     </div>
@@ -20,21 +25,20 @@
     <CreateLessonOfChapter
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
-      @handleCancel="handleCancel"
-      @refreshLessons="$emit('handleRefreshChapters')"
+      @toggleShowAddLesson="toggleShowAddLesson"
     />
 
     <div v-if="isShowLesson">
       <LessonDetail
-        v-for="(lesson, index) in get(chapter, 'lessons', [])"
+        class="list-lesson"
+        v-for="(lesson, index) in lessons"
         :key="lesson.id"
         :index="index"
         :lesson="lesson"
-        @refreshLessons="$emit('handleRefreshChapters')"
       />
     </div>
 
-    <app-divider class="my-0" />
+    <!-- <app-divider class="my-0" /> -->
   </div>
 </template>
 
@@ -43,7 +47,7 @@ import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import { getParamQuery } from "~/utils/common";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import { get, toNumber } from "lodash";
+import { get, toNumber, cloneDeep, orderBy } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
 import EditChapterName from "~/components/page/course/create/course/EditChapterName";
@@ -60,47 +64,36 @@ export default {
     IconAngleDown,
     IconAngleUp,
     LessonDetail,
-    EditChapterName
+    EditChapterName,
   },
 
   data() {
     return {
       isShowCreateLessonOfChapter: false,
-      indexCreateLesson: 0,
-      isShowLesson: true
+      isShowLesson: true,
     };
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
-      general: "general"
-    })
-  },
-
-  created() {
-    this.indexCreateLesson = this.setIndex(get(this, "chapter.lessons", []));
-  },
-
-  watch: {
-    chapter: {
-      handler: function() {
-        this.indexCreateLesson = this.setIndex(
-          get(this, "chapter.lessons", [])
-        );
-      },
-      deep: true
-    }
+    ...mapState("elearning/create", {
+      general: "general",
+    }),
+    lessons() {
+      let lessons = cloneDeep(get(this, "chapter.lessons", []));
+      lessons = orderBy(lessons, "index", "asc");
+      return lessons;
+    },
   },
 
   props: {
     index: {
       type: Number,
-      default: 0
+      default: 0,
     },
     chapter: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   methods: {
@@ -108,7 +101,7 @@ export default {
 
     setIndex(lessons) {
       let index = 0;
-      lessons.map(lesson => {
+      lessons.map((lesson) => {
         if (toNumber(get(lesson, "index", 0)) > index) {
           index = toNumber(get(lesson, "index", 0));
         }
@@ -116,13 +109,13 @@ export default {
       return index + 1;
     },
 
-    handleCancel() {
-      this.isShowCreateLessonOfChapter = false;
-    },
-
-    handleAddLesson() {
+    toggleShowAddLesson() {
       this.isShowCreateLessonOfChapter = !this.isShowCreateLessonOfChapter;
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_chapter-item.scss";
+</style>

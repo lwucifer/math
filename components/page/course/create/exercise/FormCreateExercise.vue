@@ -1,9 +1,12 @@
 <template>
-  <div  class="cc-panel__body">
+  <div class="cc-panel__body">
     <div class="mb-4">
-      <h5 for="title" class="mb-3 d-inline-block"
-        >Tiêu đề {{ title }} <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span></h5
-      >
+      <h5 for="title" class="mb-3 d-inline-block">
+        Tiêu đề {{ title }}
+        <span class="caption text-base font-weight-normal"
+          >(Tối đa 60 ký tự)</span
+        >
+      </h5>
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
@@ -71,13 +74,15 @@
       </div> -->
     </div>
 
-
     <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-12 col-md-4">
-        <label for="time" class="heading-5 font-weight-bold">Thời gian làm bài</label>
+        <label for="time" class="heading-5 font-weight-bold"
+          >Thời gian làm bài</label
+        >
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           class="mb-0 ce-input-with-unit mt-3"
           id="time"
           size="sm"
@@ -92,7 +97,8 @@
         <label for="point" class="heading-5 font-weight-bold">Điểm đạt</label>
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           min="0"
           max="10"
           class="mb-0 ce-input-with-unit mt-3"
@@ -106,39 +112,45 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <label for="count" class="heading-5 font-weight-bold">Số lần làm bài</label>
+        <label for="count" class="heading-5 font-weight-bold"
+          >Số lần làm bài tối đa</label
+        >
 
         <app-input
-          type="number"
-          class="mb-0 mt-3"
+          type="text"
+          class="mb-0 ce-input-with-unit mt-3"
+          @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
-          style="width: 49px"
+          style="width: 102px"
           v-model="payload.reworks"
-        ></app-input>
+        >
+          <div slot="unit">Lần</div>
+        </app-input>
       </div>
     </div>
 
     <div class="d-flex justify-content-end">
       <app-button
-        size="sm"
+        size="md"
         color="default"
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
-        square
-        @click="$emit('handleCancel')"
-        >Huỷ bỏ</app-button
+        @click="$emit('cancel')"
+        >Huỷ</app-button
       >
       <app-button
-        size="sm"
+        size="md"
         color="primary"
         class="font-weight-semi-bold"
-        square
         @click="handleAddExcercise"
         >Tạo {{ title }}</app-button
       >
     </div>
     <app-modal-confirm
+      title="Bạn muốn tạo bài tập?"
+      description="Bạn sẽ không thể thay đổi loại bài tập sau khi tạo."
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -191,7 +203,7 @@ export default {
         title: "",
         type: "",
         pass_score: 0,
-        reworks: 0,
+        reworks: 1,
         duration: 0,
         category: this.category,
       },
@@ -219,7 +231,16 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.$emit("handleRefreshExcercises");
+        // this.$store.dispatch(`elearning/create/getProgress`);
+
+        if (get(this, "category", "") === "TEST") {
+          this.$store.dispatch("elearning/create/getExams");
+        } else {
+          const lesson_id = get(this, "lesson.id", "");
+          this.$store.dispatch("elearning/create/getLesson", lesson_id);
+        }
+
+        this.$emit("cancel");
         return;
       }
 

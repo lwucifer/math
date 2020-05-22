@@ -1,5 +1,7 @@
 .filter-form {
   padding: 0 -0.6rem;
+  flex-direction: column;
+  -ms-flex-direction: column;
   
   &__title {
     font-weight: 600;

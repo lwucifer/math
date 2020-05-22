@@ -2,7 +2,7 @@
   <label class="app-checkbox">
     <input type="checkbox" class="app-checkbox__input" hidden v-bind="$attrs" checked @change="handleChange" disabled/>
     <div class="app-checkbox__checkmark">
-      <IconCheck class='icon' />
+      <IconCheck class='icon'/>
     </div>
     <div class="app-checkbox__text">
       <slot>{{ label }}</slot>

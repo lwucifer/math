@@ -1,6 +1,6 @@
 <template>
   <div class="auth__main">
-    <h3 class="text-primary">Quên mật khẩu?</h3>
+    <h3 class="text-primary">Thay đổi mật khẩu</h3>
     <div class="auth_content mt-5 px-2 d-flex flex-column">
       <app-input
         maxlength="6"
@@ -36,11 +36,12 @@
       <p class="color-red text-center full-width" v-if="errorRespon">{{messageErrorChange}}</p>
       <div>
         <app-button
+          :loading="loading"
           color="primary"
           square
           @click="acceptResetPass"
           class="mb-3 mt-4"
-          style="width:293px"
+          style="width:293px;height:41px"
           :disabled="disabledBtnForgot"
         >Xác nhận</app-button>
       </div>
@@ -91,7 +92,8 @@ export default {
       validateProps: { password: "", otp: "", coPassword: "" },
       validate: { password: true },
       errorRespon: false,
-      messageErrorChange: ""
+      messageErrorChange: "",
+      loading: false
     };
   },
   validations: {
@@ -106,7 +108,7 @@ export default {
   },
 
   computed: {
-    ...mapState("auth", ["firebaseToken"]),
+    ...mapState("auth", ["firebaseToken", "phoneSave"]),
     disabledBtnForgot() {
       const btnDisabled = this.$v.$invalid || this.validate.password;
       return btnDisabled;
@@ -116,27 +118,31 @@ export default {
   methods: {
     ...mapActions("auth", ["forgotPassword", "verifiOtp", "sendotp"]),
     async acceptResetPass() {
+      this.loading = true;
       try {
         const token = await this.$recaptcha.execute("resetpass");
         console.log("ReCaptcha token:", token);
         await this.verifiOtp(this.otp).then(result => {
           console.log("result huydv", result);
           if (result && result.user) {
-            this.verify_token = result.user.ma;
+            this.verify_token = result.user._lat;
             const resetPassModelPhone = createResetPassWithPhone(
-              `+${formatPhoneNumber(this.phone)}`,
+              `+${formatPhoneNumber(this.phoneSave)}`,
               this.verify_token,
               this.password,
               token
             );
             const doAdd = this.forgotPassword(resetPassModelPhone).then(res => {
               if (res.success == true) {
+                this.loading = false;
                 this.$router.push("/auth/forgot/success");
               } else {
+                this.loading = false;
                 this.showErrorChangePass(result);
               }
             });
           } else {
+            this.loading = false;
             this.showErrorOtp(result);
           }
         });
@@ -155,7 +161,7 @@ export default {
       }
     },
     handleOtp() {
-      this.errorRespon = false;
+      this.clearError();
       this.otp = this.otp.replace(/\D/g, "");
       this.validateProps.otp = "";
       if (!this.$v.otp.required) {
@@ -170,7 +176,7 @@ export default {
       }
     },
     handlePassword(_password) {
-      this.errorRespon = false;
+      this.clearError();
       this.validate.password = true;
       this.validateProps.password = "";
       if (!this.$v.password.required) {
@@ -187,7 +193,7 @@ export default {
       }
     },
     handleCoPassword() {
-      this.errorRespon = false;
+      this.clearError();
       if (!this.$v.coPassword.required) {
         this.validateProps.coPassword = 2;
         this.errorMessage.coPassword = "Trường này là bắt buộc";
@@ -202,7 +208,7 @@ export default {
     sendOTP() {
       const that = this;
       const data = {
-        phone: `+${formatPhoneNumber(this.phone)}`,
+        phone: `+${formatPhoneNumber(this.phoneSave)}`,
         appVerifier: window.recaptchaVerifier
       };
       this.sendotp(data);
@@ -237,6 +243,10 @@ export default {
           break;
       }
       this.messageErrorChange = message;
+    },
+    clearError() {
+      this.errorRespon = false;
+      this.messageErrorChange = "";
     }
   },
 

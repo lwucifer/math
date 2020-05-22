@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!--<breadcrumb />-->
+    <breadcrumb />
     <div class="row">
       <div class="col-md-3">
         <ElearningManagerSide active="3"/>
@@ -45,7 +45,7 @@
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
   
   export default {
-    layout: "exercise",
+    // layout: "exercise",
     components: {
       ElearningManagerSide,
       HeaderBreadcrumb,

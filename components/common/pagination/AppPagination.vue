@@ -34,13 +34,28 @@
       </div>
     </div>
 
-    <ul class="app-pagination" v-else-if="total < 8">
+    <ul class="app-pagination" v-else-if="total < 8 && total > 1">
+      <li>
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
+        <i><IconAngleLeft/></i>
+        </a>
+      </li>
       <li v-for="(i, index) in parseInt(total, 10)" :key="index">
         <a class="link" :class="i == current ? 'active' : ''" @click="goTo(i)">{{ i }}</a>
       </li>
+      <li>
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="next ? '' : 'disabled'">
+          <i><IconAngleRight /></i>
+        </a>
+      </li>
     </ul>
 
-    <ul class="app-pagination" v-else-if="total > 1">
+    <ul class="app-pagination" v-else-if="total > 1" :class="{ ...styleCls, ...extCls}">
+      <li>
+        <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
+        <i><IconAngleLeft/></i>
+        </a>
+      </li>
       <li v-if="prev && prev != 1">
         <a class="link" @click="goTo(1)">1</a>
       </li>
@@ -70,13 +85,18 @@
       <li v-if="total - current > 1">
         <a class="link" @click="goTo(total)">{{ total }}</a>
       </li>
+      <li>
+        <a class="link link-arrow" @click="goTo(next, current == total)" :class="next ? '' : 'disabled'">
+          <IconAngleRight />
+        </a>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
-import IconAngleLeft from "~/assets/svg/design-icons/angle-left.svg?inline";
-import IconAngleRight from "~/assets/svg/design-icons/angle-right.svg?inline";
+import IconAngleRight from '~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline';
+import IconAngleLeft from '~/assets/svg/v2-icons/arrow_back_ios_24px.svg?inline';
 import IconPrevious from "~/assets/svg/design-icons/previous.svg?inline";
 import IconStepForward from "~/assets/svg/design-icons/step-forward.svg?inline";
 import { toNumber, get } from "lodash";
@@ -96,6 +116,14 @@ export default {
   },
 
   props: {
+    position: {
+      type: String,
+      default: 'center' // left | center | right
+    },
+    extCls: {
+      type: Object,
+      default: () => {}
+    },
     type: {
       type: Number,
       required: false,
@@ -161,6 +189,16 @@ export default {
         this.pagination.number * this.pagination.size +
         this.pagination.numberOfElements
       );
+    },
+    styleCls() {
+      const positionCls = {
+        'app-pagination--pos-left': this.position === 'left',
+        'app-pagination--pos-center': this.position === 'center',
+        'app-pagination--pos-right': this.position === 'right',
+      }
+      return {
+        ...positionCls
+      }
     }
   }
 };

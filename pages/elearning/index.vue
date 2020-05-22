@@ -2,37 +2,43 @@
   <div class="elearning-homepage">
     <ElearingHomeBanner />
 
-    <div class="container mt-6">
+    <div v-if="pageLoading" class="container mt-6">
+      <div class="row">
+        <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+          <div class="bg-white py-6 px-3">
+            <VclList />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="container mt-6">
       <ElearningHomeBox title="Học gì tiếp theo">
         <ul slot="title-right" class="elearning-home-box__tab">
-          <li>
-            <a href class="active">Bài giảng nổi bật</a>
-          </li>
-          <li>
-            <a href>khóa học nổi bật</a>
+          <li v-for="tab in whatNextsTabs" :key="tab.value">
+            <a
+              href="javscript:;"
+              :class="{ 'active': whatNextsTab === tab.value }"
+              @click.prevent="changeWhatNextsTab(tab.value)"
+            >{{ tab.text }}</a>
           </li>
         </ul>
 
-        <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
+        <app-carousel
+          :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+          ref="whatNextsCarousel"
+        >
           <template slot="default" slot-scope="{ classes }">
             <div
-              v-for="item in get(elearnings, 'highlight.lectures', [])"
-              :key="item.id"
+              v-for="item in whatNexts && whatNexts.content || []"
+              :key="item.elearning_id"
               :class="classes"
             >
-              <CourseItem2
-                :to="`/elearning/${item.id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="true"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="4"
-                :totalReview="476"
-                :price="319000"
-                :originalPrice="519000"
-                :free="false"
-                :discount="30"
-              />
+              <div v-if="whatNextsLoading" class="bg-white py-6 px-4">
+                <vcl-list />
+              </div>
+
+              <CourseItem2 v-else class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>
@@ -41,42 +47,42 @@
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium mb-3">Dành cho bạn</h2>
 
-        <app-carousel :options="{ slidesPerView: 1 }">
+        <app-carousel :options="{ slidesPerView: 1, preventClicksPropagation: false }">
           <template slot="default" slot-scope="{ classes }">
             <div
-              v-for="item in get(elearnings, 'highlight.lectures', [])"
-              :key="item.id"
+              v-for="item in forYou && forYou.content || []"
+              :key="item.elearning_id"
               :class="classes"
             >
               <ElearningHomePersonalBox
+                :to="`/elearning/${item.elearning_id}`"
                 :image="get(item, 'avatar.medium', '')"
-                :title="item.name"
+                :livestream="item.is_streaming"
+                :name="item.name"
                 :teacher="item.teacher"
-                :average-rate="get(item, 'rates.average_rate', 0)"
-                :total-review="get(item, 'rates.total_review', 0)"
+                :averageRate="get(item, 'voting.rate', 0)"
+                :totalReview="get(item, 'voting.votes', 0)"
+                :price="item.price"
+                :originalPrice="item.original_price"
+                :free="!item.price"
+                :discount="item.discount"
+                :online-class="item.olclass_existed"
                 :description="`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non dolor tincidunt turpis eget sit egestas eget dui.`"
-                :price="get(item, 'price.price', 0)"
-                :originalPrice="get(item, 'price.original_price', 0)"
-                :free="!!item.free"
               />
             </div>
           </template>
         </app-carousel>
       </ElearningHomeBox>
 
-      <ElearningHomeBox title="Môn học được yêu thích">
-        <div
-          slot="title-right"
-          class="swiper-pagination eh-subject-pagination"
-        ></div>
-        <!-- <ol slot="title-right" v-if="subjects.length" class="eh-subject-pagination">
-          <li v-for="(item, index) in subjects" :key="index" @click="handleClickSubjectPaginationItem(index)"></li>
-        </ol>-->
+      <ElearningHomeBox title="Mhọc được yêu thích">
+        <div slot="title-right" class="swiper-pagination eh-subject-pagination"></div>
+
         <app-carousel
           class="eh-subject-carousel"
           :options="{
             slidesPerView: 5,
             spaceBetween: 22,
+            preventClicksPropagation: false,
             pagination: {
               el: '.eh-subject-pagination',
               type: 'bullets',
@@ -85,9 +91,16 @@
           }"
         >
           <template slot-scope="{ classes }">
-            <div v-for="item in subjects" :key="item.title" :class="classes">
-              <ElearningHomeSubjectItem :title="item.title">
-                <component slot="icon" :is="item.icon" />
+            <div
+              v-for="item in votedSubjects && votedSubjects.content || []"
+              :key="item.id"
+              :class="classes"
+            >
+              <ElearningHomeSubjectItem
+                :title="item.name"
+                :to="`/elearning/search?subject=${item.code}&subject_name=${item.name}`"
+              >
+                <component slot="icon" :is="checkSubjectIcon(item.code)" />
               </ElearningHomeSubjectItem>
             </div>
           </template>
@@ -96,35 +109,21 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Bài giảng mới nhất</h2>
-        <n-link
-          slot="title-right"
-          to
-          class="align-self-end d-flex align-items-center text-decoration-none"
-        >
+        <n-link slot="title-right" to class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
 
-        <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
+        <app-carousel
+          :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+        >
           <template slot="default" slot-scope="{ classes }">
             <div
-              v-for="item in get(elearnings, 'highlight.lectures', [])"
+              v-for="item in newestLecture && newestLecture.content || []"
               :key="item.id"
               :class="classes"
             >
-              <CourseItem2
-                :to="`/elearning/${item.id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="item && item.livestream && item.livestream.time"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="get(item, 'rates.average_rate', 0)"
-                :totalReview="get(item, 'rates.total_review', 0)"
-                :price="get(item, 'price.price')"
-                :originalPrice="get(item, 'price.original_price')"
-                :free="item.free"
-                :discount="calcDiscount(item)"
-              />
+              <CourseItem2 class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>
@@ -132,35 +131,21 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Khóa học mới nhất</h2>
-        <n-link
-          slot="title-right"
-          to
-          class="align-self-end d-flex align-items-center text-decoration-none"
-        >
+        <n-link slot="title-right" to class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
 
-        <app-carousel :options="{ slidesPerView: 4, spaceBetween: 24 }">
+        <app-carousel
+          :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+        >
           <template slot="default" slot-scope="{ classes }">
             <div
-              v-for="item in get(elearnings, 'highlight.lectures', [])"
+              v-for="item in newestCourse && newestCourse.content || []"
               :key="item.id"
               :class="classes"
             >
-              <CourseItem2
-                :to="`/elearning/${item.id}`"
-                :image="get(item, 'avatar.medium', '')"
-                :livestream="item && item.livestream && item.livestream.time"
-                :name="item.name"
-                :teacher="item.teacher"
-                :averageRate="get(item, 'rates.average_rate', 0)"
-                :totalReview="get(item, 'rates.total_review', 0)"
-                :price="get(item, 'price.price')"
-                :originalPrice="get(item, 'price.original_price')"
-                :free="item.free"
-                :discount="calcDiscount(item)"
-              />
+              <CourseItem2 class="my-0" :item="item" :size="'sm'" />
             </div>
           </template>
         </app-carousel>
@@ -171,16 +156,21 @@
 
         <app-carousel :options="{ slidesPerView: 3, spaceBetween: 35 }">
           <template slot="default" slot-scope="{ classes }">
-            <div v-for="i in 4" :key="i" :class="classes">
+            <div
+              v-for="item in highlightTeachers && highlightTeachers.content || []"
+              :key="item.teacher_id"
+              :class="classes"
+            >
               <ElearningHomeTeacherCard
-                to
-                name="Trần Văn Nam"
+                :to="`/public/profile/teacher?user_id=${get(item, 'teacher_id', '')}`"
+                :image="get(item, 'avatar.medium', '')"
+                :name="item.name"
                 school-name="Trường trung học cơ sở Nguyễn Trãi"
-                :num-of-lecture="18"
-                :num-of-course="18"
-                :averageRate="4"
-                :totalReview="476"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non "
+                :num-of-lecture="item.lectures"
+                :num-of-course="item.courses"
+                :averageRate="item.voting_rate ? Math.floor(item.voting_rate) : 0"
+                :totalReview="item.votings"
+                :description="item.biography || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non'"
               />
             </div>
           </template>
@@ -194,12 +184,39 @@
 import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
+import { VclList } from "vue-content-loading";
 
-import IconSubjectMath from "~/assets/svg/icons/subject-math.svg?inline";
-import IconSubjectPhysical from "~/assets/svg/icons/subject-physical.svg?inline";
-import IconSubjectChemistry from "~/assets/svg/icons/subject-chemistry.svg?inline";
-import IconSubjectForeignLanguage from "~/assets/svg/icons/subject-foreign-language.svg?inline";
-import IconSubjectLiterature from "~/assets/svg/icons/subject-literature.svg?inline";
+const IconDefaultSubject = () =>
+  import("~/assets/svg/icons/default-subject.svg?inline");
+const IconSubjectMath = () =>
+  import("~/assets/svg/icons/subject-math.svg?inline");
+const IconSubjectPhysical = () =>
+  import("~/assets/svg/icons/subject-physical.svg?inline");
+const IconSubjectChemistry = () =>
+  import("~/assets/svg/icons/subject-chemistry.svg?inline");
+const IconSubjectForeignLanguage = () =>
+  import("~/assets/svg/icons/subject-foreign-language.svg?inline");
+const IconSubjectLiterature = () =>
+  import("~/assets/svg/icons/subject-literature.svg?inline");
+const IconSubjectBiology = () =>
+  import("~/assets/svg/icons/subject-biology.svg?inline");
+const IconSubjectGeography = () =>
+  import("~/assets/svg/icons/subject-geography.svg?inline");
+const IconSubjectHistory = () =>
+  import("~/assets/svg/icons/subject-history.svg?inline");
+const IconSubjectInformatics = () =>
+  import("~/assets/svg/icons/subject-informatics.svg?inline");
+const IconSubjectTechnology = () =>
+  import("~/assets/svg/icons/subject-technology.svg?inline");
+const IconSubjectFineArt = () =>
+  import("~/assets/svg/icons/subject-fine-art.svg?inline");
+const IconSubjectCivicEducation = () =>
+  import("~/assets/svg/icons/subject-civic-education.svg?inline");
+const IconSubjectMusic = () =>
+  import("~/assets/svg/icons/subject-music.svg?inline");
+const IconSubjectScience = () =>
+  import("~/assets/svg/icons/subject-science.svg?inline");
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
 import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
@@ -214,6 +231,7 @@ import ElearningHomeTeacherCard from "~/components/page/elearning/home/Elearning
 export default {
   components: {
     // CourseSliderTab,
+    VclList,
     ElearingHomeBanner,
     ElearningHomeBox,
     CourseItem2,
@@ -223,61 +241,94 @@ export default {
     IconArrowForwardIos
   },
 
-  // async fetch({ params, query, store }) {
-  //   store.dispatch(
-  //     `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
-  //   );
-  // },
+  async fetch({ params, query, store }) {
+    const getWhatNexts = () =>
+      store.dispatch(
+        `elearning/public/public-what-nexts/${actionTypes.ELEARNING_PUBLIC_WHAT_NEXTS.LIST}`,
+        {
+          params: {
+            type: ELEARNING_TYPES.LECTURE
+          }
+        }
+      );
+    const getForYou = () =>
+      store.dispatch(
+        `elearning/public/public-for-you/${actionTypes.ELEARNING_PUBLIC_FOR_YOU.LIST}`
+      );
+    const getVotedSubjects = () =>
+      store.dispatch(
+        `elearning/public/public-voted-subjects/${actionTypes.ELEARNING_PUBLIC_VOTED_SUBJECTS.LIST}`
+      );
+    const getNewestLecture = () =>
+      store.dispatch(
+        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
+        {
+          params: {
+            type: ELEARNING_TYPES.LECTURE
+          }
+        }
+      );
+    const getNewestCourse = () =>
+      store.dispatch(
+        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_COURSE}`,
+        {
+          params: {
+            type: ELEARNING_TYPES.COURSE
+          }
+        }
+      );
+    const getHightlightTeachers = () =>
+      store.dispatch(
+        `elearning/public/public-highlight-teachers/${actionTypes.ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS.LIST}`
+      );
 
-  mounted() {
-    this.$store.dispatch(
-      `elearning/public/public-summary/${actionTypes.ELEARNING_PUBLIC_SUMMARY.LIST}`
-    );
+    return await Promise.all([
+      getWhatNexts(),
+      getForYou(),
+      getVotedSubjects(),
+      getNewestLecture(),
+      getNewestCourse(),
+      getHightlightTeachers()
+    ]);
   },
-
-  // updated() {
-  //   console.log(this.elearnings)
-  // },
 
   data() {
     return {
-      subjects: [
+      ELEARNING_TYPES: Object.freeze(ELEARNING_TYPES),
+      pageLoading: true,
+      whatNextsLoading: false,
+      whatNextsTab: ELEARNING_TYPES.LECTURE,
+      whatNextsTabs: [
         {
-          icon: IconSubjectMath,
-          title: "Toán"
+          value: ELEARNING_TYPES.LECTURE,
+          text: "Bài giảng nổi bật"
         },
         {
-          icon: IconSubjectPhysical,
-          title: "Vật lí"
-        },
-        {
-          icon: IconSubjectChemistry,
-          title: "Hóa học"
-        },
-        {
-          icon: IconSubjectForeignLanguage,
-          title: "Ngoại ngữ"
-        },
-        {
-          icon: IconSubjectLiterature,
-          title: "Ngữ văn"
-        },
-        {
-          icon: IconSubjectForeignLanguage,
-          title: "Môn học khác"
+          value: ELEARNING_TYPES.COURSE,
+          text: "Khóa học nổi bật"
         }
       ]
     };
   },
 
-  // updated() {
-  //   console.log(this.elearnings);
-  // },
-
   computed: {
     ...mapState("elearning/public/public-summary", {
       elearnings: "elearnings"
-    })
+    }),
+    ...mapState("elearning/public/public-what-nexts", ["whatNexts"]),
+    ...mapState("elearning/public/public-for-you", ["forYou"]),
+    ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
+    ...mapState("elearning/public/public-newest", [
+      "newestLecture",
+      "newestCourse"
+    ]),
+    ...mapState("elearning/public/public-highlight-teachers", [
+      "highlightTeachers"
+    ])
+  },
+
+  mounted() {
+    this.pageLoading = false;
   },
 
   methods: {
@@ -288,6 +339,82 @@ export default {
       const currentPrice = price.price || 0;
       const originPrice = price.original_price || 0;
       return (currentPrice / originPrice) * 100;
+    },
+
+    checkSubjectIcon(code) {
+      switch (code) {
+        case SUBJECT_CODE.MATHS:
+          return IconSubjectMath;
+          break;
+        case SUBJECT_CODE.PHYSICS:
+          return IconSubjectPhysical;
+          break;
+        case SUBJECT_CODE.CHEMISTRY:
+          return IconSubjectChemistry;
+          break;
+        case SUBJECT_CODE.FOREIGN_LANGUAGE:
+          return IconSubjectForeignLanguage;
+          break;
+        case SUBJECT_CODE.LITERATURE:
+          return IconSubjectLiterature;
+          break;
+        case SUBJECT_CODE.BIOLOGY:
+          return IconSubjectBiology;
+          break;
+        case SUBJECT_CODE.GEOGPRAPHY:
+          return IconSubjectGeography;
+          break;
+        case SUBJECT_CODE.HISTORY:
+          return IconSubjectHistory;
+          break;
+        case SUBJECT_CODE.INFORMATICS:
+          return IconSubjectInformatics;
+          break;
+        case SUBJECT_CODE.TECHNOLOGY:
+          return IconSubjectTechnology;
+          break;
+        case SUBJECT_CODE.FINE_ART:
+          return IconSubjectFineArt;
+          break;
+        case SUBJECT_CODE.CIVIC_EDUCATION:
+          return IconSubjectCivicEducation;
+          break;
+        case SUBJECT_CODE.MORAL:
+          return IconSubjectCivicEducation;
+          break;
+        case SUBJECT_CODE.MUSIC:
+          return IconSubjectMusic;
+          break;
+        case SUBJECT_CODE.SCIENCE:
+          return IconSubjectScience;
+          break;
+        default:
+          return IconDefaultSubject;
+          break;
+      }
+    },
+
+    async changeWhatNextsTab(tab) {
+      const { whatNextsCarousel = {} } = this.$refs;
+
+      this.whatNextsTab = tab;
+      this.whatNextsLoading = true;
+
+      await this.$store.dispatch(
+        `elearning/public/public-what-nexts/${actionTypes.ELEARNING_PUBLIC_WHAT_NEXTS.LIST}`,
+        {
+          params: {
+            type: tab
+          }
+        }
+      );
+
+      if (whatNextsCarousel.mySwiper) {
+        whatNextsCarousel.mySwiper.update();
+        whatNextsCarousel.mySwiper.slideTo(0);
+      }
+
+      this.whatNextsLoading = false;
     }
   }
 };

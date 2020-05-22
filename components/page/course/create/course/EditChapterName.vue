@@ -1,38 +1,43 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
-    <div class="mr-3">
-      <strong>Chương</strong> {{ this.defaultName.index }}:
+    <div class="mr-3 d-flex align-items-center">
+      <strong>Chương {{ index + 1 }}:</strong> 
       <input
         v-if="isEditChaperName"
         v-model="chaperNameModel"
         ref="inputChaperName"
         class="cc-box__input-title bg-input-gray mb-0"
         type="text"
+        maxlength="60"
       />
 
-      <h3 v-else class="d-inline-block body-2 mr-3">
-        <span class="font-weight-normal">{{ this.defaultName.name }}</span>
+      <h3 v-else class="d-inline-block body-2 mx-3 cc-box__title">
+        <span class="font-weight-normal">{{ get(chapter, "name", "") }}</span>
       </h3>
     </div>
 
     <template v-if="isEditChaperName">
       <button
-        class="cc-box__btn mr-3 text-success"
+        class="cc-box__btn mr-3 text-success d-flex align-items-center w-50"
         @click="handleEditChaperName"
       >
-        Lưu
+        <IconSave24px class="mr-2 fill-primary" /> Lưu
       </button>
       <button
-        class="cc-box__btn mr-3 text-gray-2"
+        class="cc-box__btn mr-3 text-secondary d-flex align-items-center w-50"
         @click="cancelEditChapterName"
       >
-        Huỷ
+        <IconClose24px class="mr-2 fill-secondary" />Huỷ
       </button>
     </template>
 
     <template v-else>
       <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
-        <IconEditAlt class="icon d-block subheading fill-primary" />
+        <IconBorderColor24px
+          width="16px"
+          height="16px"
+          class="d-block subheading fill-primary"
+        />
       </a>
 
       <a
@@ -40,10 +45,15 @@
         class="ce-item__action delete mr-3"
         @click.prevent="handleDeleteChapter"
       >
-        <IconTrashAlt class="fill-secondary d-block subheading" width="16px" height="16px"/>
+        <IconTrashAlt
+          class="fill-secondary d-block subheading"
+          width="16px"
+          height="16px"
+        />
       </a>
     </template>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -55,21 +65,27 @@
 <script>
 import { string } from "yup";
 import { get, toNumber } from "lodash";
-import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
-import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
+import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
+import IconSave24px from "~/assets/svg/v2-icons/save_24px.svg?inline";
+import IconClose24px from "~/assets/svg/v2-icons/close_24px.svg?inline";
+
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
 export default {
   components: {
-    IconEditAlt,
+    IconBorderColor24px,
     IconTrashAlt,
+    IconSave24px,
+    IconClose24px,
   },
   props: {
-    defaultName: {
+    chapter: {
       type: Object,
       default: null,
     },
+    index: {},
   },
   data() {
     return {
@@ -79,12 +95,13 @@ export default {
       confirmLoading: false,
     };
   },
-  created() {
-    useEffect(this, this.handleChangeDefaultName.bind(this), ["defaultName"]);
+  mounted() {
+    useEffect(this, this.handleChangeDefaultName.bind(this), ["chapter"]);
   },
   methods: {
+    get,
     handleChangeDefaultName() {
-      this.chaperNameModel = this.defaultName.name;
+      this.chaperNameModel = this.chapter.name;
     },
     async handleDeleteChapter() {
       this.showModalConfirm = true;
@@ -96,9 +113,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        data: {
-          id: get(this, "defaultName.id", ""),
-        },
+        id: get(this, "chapter.id", ""),
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.DELETE}`,
@@ -108,7 +123,8 @@ export default {
       this.handleCancelModal();
 
       if (get(res, "success", false)) {
-        this.$emit("handleRefreshChapters");
+        this.$store.dispatch(`elearning/create/getContent`);
+        // this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(get(res, "message", "Thành công"));
         return;
       }
@@ -126,21 +142,24 @@ export default {
     },
     async handleEditChaperName() {
       const data = {
-        id: get(this, "defaultName.id", ""),
+        id: get(this, "chapter.id", ""),
         name: this.chaperNameModel,
       };
+
       const payload = createPayloadAddContentCourse(data);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-chapter/${actionTypes.ELEARNING_CREATING_CHAPTER.EDIT}`,
         payload
       );
+
       if (get(result, "success", false)) {
-        this.$emit("handleRefreshChapters");
+        this.$store.dispatch(`elearning/create/getContent`);
         this.$toasted.success(get(result, "message", "Thành công"));
         this.isEditChaperName = false;
-      } else {
-        this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
+        return;
       }
+
+      this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));
     },
   },
 };

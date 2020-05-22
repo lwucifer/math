@@ -11,29 +11,40 @@
           <h5 class="name">{{ get(teacher, "name", "") }}</h5>
           <p class="body-3">{{ get(teacher, "school_name", "") }}</p>
           <div class="stars">
-            <app-stars :stars="Math.floor(get(teacher, 'rate', 0))" :size="14" />
+            <app-stars
+              :stars="Math.floor(get(teacher, 'rate', 0))"
+              :size="14"
+            />
           </div>
         </div>
 
         <div class="right">
           <div>
-            <strong class="color-primary">{{ get(teacher, "elearning_total", 0) }}</strong>
-            Bài giảng/khoá học
+            <strong class="color-primary">{{
+              numeral(get(teacher, "elearning_total", 0)).format()
+            }}</strong>
+            Bài giảng
           </div>
           <div>
-            <strong class="color-primary">{{ get(teacher, "participant_total", 0) }}</strong>
-            Học viên
+            <strong class="color-primary">{{
+              numeral(get(teacher, "participant_total", 0)).format()
+            }}</strong>
+            Khóa học
           </div>
         </div>
       </div>
 
       <div class="mt-4 teacher-bottom">
         <h4 class="mb-3">Tiểu sử</h4>
-        <template v-if="teacher && teacher.description">{{ get(teacher, "description", "") }}</template>
-        <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
+        <template v-if="teacher && teacher.description">{{
+          get(teacher, "description", "")
+        }}</template>
+        <div v-else class="text-center caption text-gray-2">
+          Chưa có nội dung.
+        </div>
         <!-- <div class="text-center mt-3">
           <n-link class="text-decoration-none" to="">Xem thêm</n-link>
-        </div>-->
+        </div> -->
       </div>
     </div>
   </section>
@@ -46,44 +57,24 @@ import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
+import numeral from "numeral";
 
 export default {
   components: {
     IconStar,
-    IconStarO
-  },
-
-  props: {
-    teacher_id: {
-      type: String,
-      default: ""
-    }
-  },
-
-  created() {
-    useEffect(this, this.getTeacher.bind(this), ["teacher_id"]);
+    IconStarO,
   },
 
   computed: {
-    ...mapState("elearning/public/public-elearning-teacher", {
-      teacher: "teacher"
-    })
+    ...mapState("elearning/detail", {
+      teacher: "teacher",
+    }),
   },
 
   methods: {
     get,
-    getTeacher() {
-      const options = {
-        params: {
-          teacher_id: get(this, "teacher_id", "")
-        }
-      };
-      this.$store.dispatch(
-        `elearning/public/public-elearning-teacher/${actionTypes.ELEARNING_PUBLIC_ELEARNING_TEACHER.LIST}`,
-        options
-      );
-    }
-  }
+    numeral,
+  },
 };
 </script>
 

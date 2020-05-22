@@ -1,25 +1,24 @@
 <template>
   <div class="wrap-success_payment">
-      <IconSuccess/>
-      <h5 class="my-4">Thanh toán thành công</h5>
-      <app-button square class="mb-4">Góc học tập</app-button>
-      <p class="my-4">Tải ứng dụng Schoolly để học tập đơn giản</p>
+      <IconCheckCircle1/>
+      <h3 class="my-4">Thanh toán thành công</h3>
+      <app-button square class="mb-4" nuxt to="/elearning/mycourses">Góc học tập</app-button>
+      <div style="margin-bottom:36px">
+          <n-link class="text-decoration-none" to="/elearning">Tiếp tục mua sắm</n-link>
+      </div>
       <div>
-        <span class="mr-4">
-            <img src="~assets/images/footer/playstore.png" width="171" alt="">
-        </span>
-        <span>
-            <img src="~assets/images/footer/appstore.png" width="176" alt="">
-        </span>
+          <PaymentSuccessFooter/>
       </div>
   </div>
 </template>
 
 <script>
-import IconSuccess from "~/assets/svg/icons/success.svg?inline";
+import IconCheckCircle1 from '~/assets/svg/icons/check-circle-1.svg?inline';
+import PaymentSuccessFooter from '~/components/page/payment/PaymenSuccessFooter';
 export default {
     components:{
-        IconSuccess
+        IconCheckCircle1,
+        PaymentSuccessFooter
     }
 }
 </script>

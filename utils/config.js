@@ -15,6 +15,8 @@ export const DATE_BIRTHDAY = "DD/MM/YYYY";
 export const DATE_YYYY_MM_DD = "YYYY/MM/DD";
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
+export const DATETIME_HH_MM = "HH:mm";
+export const DATETIME_HH_MM_A = "h:mm A";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
 export const DATETIME_FULL_WEEK_DAY = "dddd, DD/MM/YYYY, h:mm A";
@@ -81,6 +83,6 @@ export const MAX_UPLOADED_REPOSITORY_FILE_SIZE = 4096; // MB
 export const CURRENCY = 'đ';
 
 export const TIMEOUT = {
-  NOTIFY: 5000,
+  NOTIFY: 3000,
 }
 

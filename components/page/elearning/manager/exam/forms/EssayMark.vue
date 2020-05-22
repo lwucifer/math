@@ -147,6 +147,7 @@
       },
       updatePoint(point) {
         this.formData.mark = point
+        this.formData.to_passed = false
       },
       resetForm() {
         this.formData.mark = ''

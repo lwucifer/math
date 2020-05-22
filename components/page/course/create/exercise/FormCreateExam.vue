@@ -2,12 +2,15 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block"
-        >Tiêu đề {{ title }} <span class="caption text-sub font-weight-normal">(Tối đa 60 ký tự)</span></label
+        >Tiêu đề {{ title }}
+        <span class="caption text-base font-weight-normal"
+          >(Tối đa 60 ký tự)</span
+        ></label
       >
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
-    <div class="mb-4" v-show="category === 'TEST'">
+    <!-- <div class="mb-4" v-show="category === 'TEST'">
       <h5 for="require" class="mb-3">{{ title_required }}</h5>
 
       <app-radio-group>
@@ -27,7 +30,7 @@
           >Không</app-radio
         >
       </app-radio-group>
-    </div>
+    </div> -->
 
     <div class="mb-4">
       <h5 for="require" class="mb-3">Loại {{ title }}</h5>
@@ -45,7 +48,7 @@
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.required = 'ESSAY'"
+          @click="payload.type = 'ESSAY'"
           >Tự luận</app-radio
         >
       </app-radio-group>
@@ -53,10 +56,13 @@
 
     <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-12 col-md-4">
-        <label for="time" class="heading-5 font-weight-bold">Thời gian làm bài</label>
+        <label for="time" class="heading-5 font-weight-bold"
+          >Thời gian làm bài</label
+        >
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           class="mb-0 ce-input-with-unit mt-3"
           id="time"
           size="sm"
@@ -71,7 +77,8 @@
         <label for="point" class="heading-5 font-weight-bold">Điểm đạt</label>
 
         <app-input
-          type="number"
+          type="text"
+          @onFocus="(event) => event.target.select()"
           min="0"
           max="10"
           class="mb-0 ce-input-with-unit mt-3"
@@ -85,41 +92,85 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <label for="count" class="heading-5 font-weight-bold">Số lần làm bài</label>
+        <label for="count" class="heading-5 font-weight-bold"
+          >Số lần làm bài tối đa</label
+        >
 
         <app-input
-          type="number"
-          class="mb-0 mt-3"
+          type="text"
+          class="mb-0 mt-3 ce-input-with-unit"
+          @onFocus="(event) => event.target.select()"
           id="count"
           size="sm"
-          style="width: 49px"
+          style="width: 102px"
           v-model="payload.reworks"
-        ></app-input>
+        >
+          <div slot="unit">Lần</div>
+        </app-input>
       </div>
     </div>
-   
 
-    
+    <div class="mb-4">
+      <h5 class="font-weight-bold mb-3">Cài đặt thời gian mở đề</h5>
+      <app-radio-group class="mb-4">
+        <app-radio
+          :checked="is_open === 1"
+          @click="is_open = 1"
+          name="group3"
+          value="1"
+          class="mr-4"
+          >Có</app-radio
+        >
+        <app-radio
+          :checked="is_open === 0"
+          @click="is_open = 0"
+          name="group3"
+          value="0"
+          >Không</app-radio
+        >
+      </app-radio-group>
+
+      <div v-if="is_open == 1" class="d-flex align-items-center">
+        <div class="mr-4">
+          <h6 class="mb-2">Chọn ngày</h6>
+          <app-date-picker
+            @input="handleSelectDate"
+            value-format="YYYY-MM-DD"
+          />
+        </div>
+
+        <div class="mr-4">
+          <h6 class="mb-2">Chọn giờ</h6>
+          <app-date-picker
+            @input="handleSelectTime"
+            type="time"
+            value-format="HH:mm:ss"
+          />
+        </div>
+
+        <IconEvent24px class="fill-primary mt-4" />
+      </div>
+    </div>
 
     <div class="d-flex justify-content-end">
       <app-button
-        size="sm"
-        color="disabled"
-        class="font-weight-semi-bold mr-4"
-        square
-        @click="$emit('handleCancel')"
-        >Huỷ bỏ</app-button
+        size="md"
+        color="default"
+        outline
+        class="font-weight-semi-bold mr-4 text-secondary"
+        @click="$emit('cancel')"
+        >Huỷ</app-button
       >
       <app-button
-        size="sm"
+        size="md"
         color="primary"
         class="font-weight-semi-bold"
-        square
         @click="handleAddExcercise"
         >Tạo {{ title }}</app-button
       >
     </div>
     <app-modal-confirm
+      centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
@@ -130,6 +181,8 @@
 
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
+import IconEvent24px from "~/assets/svg/v2-icons/event_24px.svg?inline";
+import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
 import { get } from "lodash";
@@ -139,6 +192,7 @@ import { createPayloadExercise } from "~/models/course/AddCourse";
 export default {
   components: {
     IconAngleDown,
+    IconEvent24px,
   },
 
   props: {
@@ -157,23 +211,31 @@ export default {
         ? "Bài kiểm tra bắt buộc?"
         : "Bài tập bắt buộc?";
     },
+    ...mapState("elearning/create", {
+      general: "general",
+      lesson: "lesson",
+    }),
   },
 
   data() {
     return {
       payload: {
         index: 1,
-        elearning_id: getParamQuery("elearning_id"),
+        elearning_id: "",
         required: get(this, "category", "") === "TEST" ? 1 : "",
         title: "",
         type: "",
         pass_score: 0,
-        reworks: 0,
+        reworks: 1,
         duration: 0,
         category: this.category,
+        open_time: "",
       },
       showModalConfirm: false,
       confirmLoading: false,
+      is_open: 0,
+      date: "",
+      time: "",
     };
   },
 
@@ -182,10 +244,24 @@ export default {
       this.showModalConfirm = true;
     },
 
+    handleSelectDate(date) {
+      this.date = date;
+    },
+
+    handleSelectTime(time) {
+      this.time = time;
+    },
+
     async handleOk() {
       this.confirmLoading = true;
 
-      this.payload.elearning_id = getParamQuery("elearning_id");
+      this.payload.elearning_id = get(this, "general.id", "");
+      if (this.is_open == 1) {
+        this.payload.open_time = `${this.date} ${this.time}`;
+        this.payload.open_time = moment(this.payload.open_time)
+          .utc()
+          .format("YYYY-MM-DD hh:mm:ss");
+      }
 
       const payload = createPayloadExercise(this.payload);
       const res = await this.$store.dispatch(
@@ -196,7 +272,8 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "message", ""));
-        this.$emit("handleRefreshExcercises");
+        this.$store.dispatch("elearning/create/getExams");
+        this.$emit("cancel");
         return;
       }
 

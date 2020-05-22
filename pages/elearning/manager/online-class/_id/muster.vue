@@ -16,7 +16,8 @@
               <!--Info group-->
               <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
               <div class="class-info mb-4 border">
-                <strong>
+                <strong class="d-flex-center">
+                  <IconClock class="mr-3"/>
                   {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
                 </strong>
                 <div class="class-info-content mt-3">
@@ -49,24 +50,24 @@
                       :placeholder="'Nhập để tìm kiếm...'"
                       v-model="params.query"
                       :size="'sm'"
+                      @submit="submit"
                     ></app-search>
                   </div>
                 </div>
 
                 <div class="filter-form__item">
                   <app-button
-                    color="primary"
+                    :color="showFilter ? 'primary' : 'white'"
                     square
-                    class="filter-form__item__btn filter-form__item__btn--submit"
                     :size="'sm'"
-                    @click="submit"
+                    @click="toggleFilter"
                   >
-                    <IconHamberger class="fill-white mr-2" />
-                    <span class="color-white">Lọc kết quả</span>
+                    <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                    <span>Lọc kết quả</span>
                   </app-button>
                 </div>
 
-                <div class="filter-form__item" style="min-width: 12rem">
+                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
                   <app-vue-select
                     class="app-vue-select filter-form__item__selection"
                     v-model="filterCourse"
@@ -76,32 +77,30 @@
                     searchable
                     clearable
                     @input="handleChangedCourse"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item" style="min-width: 12rem">
+                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
                   <app-vue-select
                     class="app-vue-select filter-form__item__selection"
-                    v-model="filterCourse"
-                    :options="courses"
+                    v-model="filterStatus"
+                    :options="statuses"
                     label="text"
                     placeholder="Điểm danh"
                     searchable
                     clearable
-                    @input="handleChangedCourse"
-                    @search:focus="handleFocusSearchInput"
-                    @search:blur="handleBlurSearchInput"
+                    @input="handleChangedStatus"
                   ></app-vue-select>
                 </div>
               </div>
               <!--End filter form-->
 
-              <div class="d-flex mb-15">
-                <button class="color-primary bold">Cập nhật kết quả điểm danh</button>
-                <i class="ml-auto">*Kết quả điểm danh được cập nhật lần cuối vào lúc 10:00 AM, 18/10/2020</i>
+              <div class="d-flex-center mb-15">
+                <button class="color-primary bold d-flex-center" @click="getList">
+                  <IconRefresh class="fill-primary mr-2"/>
+                  Cập nhật kết quả điểm danh
+                </button>
+                <i class="ml-auto">*Kết quả điểm danh được cập nhật lần cuối vào lúc {{formatAMPM(currentTime, true)}}</i>
               </div>
-
               <!--Table-->
               <app-table
                 :heads="heads"
@@ -112,10 +111,10 @@
                 <template v-slot:cell(attendance_status)="{row, index}">
                   <td>
                     <div class="div-table">
-                      <app-checkbox :checked="row.attendance_status == 'M'" @change="updateStatus(row.online_attendance_id, 'M', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'K'" @change="updateStatus(row.online_attendance_id, 'K', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'P'" @change="updateStatus(row.online_attendance_id, 'P', index)"/>
-                      <app-checkbox :checked="row.attendance_status == 'C'" @change="updateStatus(row.online_attendance_id, 'C', index)"/>
+                      <app-checkbox label="M" :checked="row.attendance_status == 'M'" @change="updateStatus(row.online_attendance_id, 'M', index)"/>
+                      <app-checkbox label="K" :checked="row.attendance_status == 'K'" @change="updateStatus(row.online_attendance_id, 'K', index)"/>
+                      <app-checkbox label="P" :checked="row.attendance_status == 'P'" @change="updateStatus(row.online_attendance_id, 'P', index)"/>
+                      <app-checkbox label="C" :checked="row.attendance_status == 'C'" @change="updateStatus(row.online_attendance_id, 'C', index)"/>
                     </div>
                   </td>
                 </template>
@@ -131,7 +130,7 @@
             <div class="bottom-content">
               <div class="top">
                 <i >
-                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>{{lessonInfo.name}}</b> theo yêu cầu của giáo viên
                 </i>
               </div>
               <div class="bottom">
@@ -159,6 +158,9 @@ import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconRefresh from '~/assets/svg/v2-icons/refresh_24px.svg?inline';
+import IconClock from '~/assets/svg/icons/clock.svg?inline';
+
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import { mapState } from "vuex";
@@ -173,6 +175,8 @@ export default {
   layout: "manage",
     
   components: {
+    IconClock,
+    IconRefresh,
     IconHamberger,
     IconFilter,
     IconSearch,
@@ -187,7 +191,9 @@ export default {
 
   data() {
     return {
+      currentTime: new Date,
       lessonInfo: {},
+      showFilter: false,
       openModal: false,
       heads: [
         {
@@ -202,7 +208,7 @@ export default {
         },
         {
           name: "attendance_status",
-          text: "<p class='text-center'>Điểm danh</p><div class='bottom'><span>M</span><span>K</span><span>P</span><span>C</span></div>",
+          text: "Điểm danh",
           sort: true
         },
         {
@@ -219,6 +225,25 @@ export default {
       },
       courses: [],
       filterCourse: null,
+      filterStatus: null,
+      statuses: [
+        {
+          value: 'M',
+          text: 'M',
+        },
+        {
+          value: 'K',
+          text: 'K',
+        },
+        {
+          value: 'P',
+          text: 'P',
+        },
+        {
+          value: 'C',
+          text: 'C',
+        },
+      ],
       pagination: {
         total: 0,
         number: 0,
@@ -232,6 +257,7 @@ export default {
         page: 1,
         size: 10,
         class_id: null,
+        attendance_status: null,
         query: null
       },
       loading: false,
@@ -248,6 +274,18 @@ export default {
   },
 
   methods: {
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          class_id: null,
+          attendance_status: null,
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -261,6 +299,11 @@ export default {
     },
     handleChangedCourse(val) {
       this.params.class_id = this.filterCourse.value;
+      this.getList();
+    },
+    handleChangedStatus(val) {
+      this.params.attendance_status = this.filterStatus.value;
+      this.getList();
     },
     handleFocusSearchInput() {
     },
@@ -310,6 +353,7 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
           { params, id: lesson_id, after: 'attendances'}
         );
+        this.currentTime = new Date;
         this.lessons = this.get(this.stateAttendances, 'data.attendance_list.content', [])
         this.pagination.size = this.get(this.stateAttendances, 'data.attendance_list.size', 10)
         this.pagination.first = this.get(this.stateAttendances, 'data.attendance_list.first', 1)

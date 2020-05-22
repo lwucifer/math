@@ -9,7 +9,9 @@
       </template>
     </div>
 
-    <span v-else-if="!get(info, 'benefits', [])" class="caption text-sub">Chưa có nội dung</span>
+    <span v-else-if="!get(info, 'benefits', [])" class="caption text-sub"
+      >Chưa có nội dung</span
+    >
 
     <div v-else class="row">
       <div
@@ -23,25 +25,35 @@
     </div>
 
     <h4 class="my-4">Mô tả tổng quát</h4>
-    <div v-if="get(info, 'description', '')" v-html="get(info, 'description', '')"></div>
+    <div v-if="description" v-html="description"></div>
     <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
-    <!-- <div class="text-center mt-3">
-      <a class="btn-load-more">Xem thêm</a>
-    </div> -->
+
+    <div class="text-center mt-3" v-if="load_more">
+      <a @click="handleLoadMore" class="btn-load-more">Xem thêm</a>
+    </div>
+
+    <div class="text-center mt-3" v-else>
+      <a @click="handleCompact" class="btn-load-more">Rút gọn</a>
+    </div>
   </section>
 </template>
 
 <script>
 import { get } from "lodash";
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
+import { mapState } from "vuex";
 
 export default {
   components: {
-    IconCheck
+    IconCheck,
   },
-  props: {
-    info: {}
+
+  data() {
+    return {
+      lengthDescription: 300,
+    };
   },
+
   computed: {
     title() {
       switch (get(this, "info.type", "")) {
@@ -54,8 +66,33 @@ export default {
         default:
           break;
       }
-    }
+    },
+    ...mapState("elearning/detail", {
+      info: "info",
+    }),
+    description() {
+      if (this.load_more) {
+        return get(this, "info.description", "").substring(
+          0,
+          this.lengthDescription
+        );
+      }
+      return get(this, "info.description", "");
+    },
+    load_more() {
+      return get(this, "info.description.length", 0) > this.lengthDescription;
+    },
   },
-  methods: { get }
+
+  methods: {
+    get,
+    handleLoadMore() {
+      this.lengthDescription = get(this, "info.description.length", 0);
+    },
+
+    handleCompact() {
+      this.lengthDescription = 300;
+    },
+  },
 };
 </script>

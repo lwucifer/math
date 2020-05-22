@@ -4,13 +4,13 @@
       class="app-vue-select w-100"
       :options="list"
       :searchable="searchable"
-      clearable
       :reduce="item => item.id"
       :placeholder="placeholder"
       :get-option-label="genLabel"
       @input="onChange"
       @open="onOpen"
       @close="onClose"
+      :all-opt="allOpt"
     >
     </app-vue-select>
   </div>
@@ -32,7 +32,7 @@
     props: {
       searchable: {
         type: Boolean,
-        default: true
+        default: false
       },
       placeholder: {
         type: String,
@@ -51,6 +51,10 @@
     data() {
       return {
         list: [],
+        allOpt: {
+          id: null,
+          name: 'Tất cả'
+        }
       }
     },
     
@@ -75,7 +79,7 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`, {}
           )
-          this.list = this.detailInfo
+          this.list = [this.allOpt, ...this.detailInfo]
         } catch (e) {
           console.log('Get public school year ', e)
         } finally {
@@ -87,7 +91,10 @@
         loading(true)
       },
       genLabel(option) {
-        return `${get(option, 'from_year', 0)}-${get(option, 'to_year', 0)}`
+        if (option.id != null) {
+          return `${get(option, 'from_year', 0)}-${get(option, 'to_year', 0)}`
+        }
+        return get(option, 'name', '')
       },
       get
     },

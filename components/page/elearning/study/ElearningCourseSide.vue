@@ -13,7 +13,7 @@ import IconFileEditAlt from "~/assets/svg/design-icons/file-edit-alt.svg?inline"
 import IconFileCheckAlt from "~/assets/svg/design-icons/file-check-alt.svg?inline";
 import IconFileClock from "~/assets/svg/icons/file-clock.svg?inline";
 import { get } from "lodash";
-import OnlineClass from "~/components/page/elearning/study/OnlineClass";
+import OnlineClass from "~/components/page/elearning/study/olclass/OnlineClass";
 import ElearningProgram from "~/components/page/elearning/study/ElearningProgram";
 
 export default {

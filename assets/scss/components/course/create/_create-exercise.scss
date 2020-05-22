@@ -1,11 +1,26 @@
 .ce-input-with-unit {
     .app-input__unit {
         font-weight: 600;
-        color: $color-disabled;
+        color: $color-text;
         background-color: $color-border;
         height: 100%;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
+    }
+}
+
+.ce-item--modifer {
+    padding: 1rem 0;
+    &__action {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    &:hover {
+        .ce-item__action {
+            visibility: visible;
+            opacity: 1;
+        }
     }
 }
 

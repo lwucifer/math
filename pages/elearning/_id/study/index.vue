@@ -1,44 +1,77 @@
 <template>
   <div>
-    <HeaderCourse />
-    <div class="container" v-if="loading">Loading...</div>
-    <div class="container" v-else>
+    <HeaderCourse @exit="exitStudy" />
+
+    <div class="container" v-if="pageLoading">
       <div class="row">
         <div class="col-md-8">
+          <VclList />
+        </div>
+        <div class="col-md-4">
+          <VclList />
+        </div>
+      </div>
+    </div>
+
+    <div class="container" v-else>
+      <div class="row">
+        <div :class="expand ? 'col-md-12' : 'col-md-8'">
           <div class="box22">
-            <img
-              v-if="studyMode === defaultMode"
-              :src="
-                    get(info, 'cover_url.high', '') ||
-                      '/images/adefltu - course - image.png'
-                  "
-              width="750"
-              height="422"
-              alt
-            />
+            <div class="lession-screen">
+              <img
+                v-if="studyMode === defaultMode"
+                :src="
+                  get(info, 'cover_url.high', '') ||
+                    '/images/adefltu - course - image.png'
+                "
+                width="750"
+                alt
+              />
+            </div>
             <Streaming
               v-if="studyMode == videoMode"
               :url="get(payload, 'stream_urls.hls_url', '')"
+              :thumbnail="
+                get(info, 'cover_url.high', '') ||
+                  '/images/adefltu - course - image.png'
+              "
             />
-            <a v-if="studyMode == docMode" :href="get(payload, 'link', '')">Download</a>
-            <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
-            <iframe
-              v-if="studyMode == articleMode"
-              style="width: 712px"
-              :src="get(payload, 'link', '')"
-            ></iframe>
+            <div class="lession-screen">
+              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
+                >Download</a
+              >
+            </div>
+            <div class="lession-screen" v-if="studyMode === imageMode">
+              <img :src="get(payload, 'link', '')" alt />
+            </div>
+
+            <div class="lession-screen" v-if="studyMode == articleMode">
+              <iframe
+                style="width: 712px"
+                :src="get(payload, 'link', '')"
+              ></iframe>
+            </div>
 
             <!-- DO EXERCISE -->
-            <ElearningExercise v-if="studyMode !== videoMode && studyMode !== defaultMode" />
+            <ElearningExercise v-if="isExerciseMode" />
 
             <div class="elearning-study-tabs">
-              <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-              <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+              <a
+                :class="{ active: type === 'summary' }"
+                @click="type = 'summary'"
+                >Tổng quan</a
+              >
+              <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                >Hỏi đáp</a
+              >
               <a
                 :class="{ active: type === 'notification' }"
                 @click="type = 'notification'"
-              >Thông báo</a>
-              <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                >Thông báo</a
+              >
+              <a :class="{ active: type === 'review' }" @click="type = 'review'"
+                >Đánh giá</a
+              >
             </div>
 
             <TabSummary :info="info" v-if="type === 'summary'" />
@@ -49,11 +82,11 @@
               v-if="type === 'qa'"
               :interactive_questions="interactive_questions"
               @addQuestionSuccess="addQuestionSuccess"
-            /> -->
+            />-->
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div :class="expand ? 'col-md-12' : 'col-md-4'">
           <ElearningCourseSide />
         </div>
       </div>
@@ -65,7 +98,7 @@
 import { get } from "lodash";
 import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { STUDY_MODE } from "~/utils/constants";
+import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { useEffect } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
@@ -88,6 +121,7 @@ import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import { VclList } from "vue-content-loading";
 
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
@@ -107,14 +141,15 @@ export default {
     TabReview,
     // ElearningQuestion,
     Streaming,
-    ElearningExercise
+    ElearningExercise,
+    VclList
   },
 
   data() {
     return {
       type: "summary",
-      loading: true,
-      interactive_questions: null,
+      pageLoading: true,
+      // interactive_questions: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -127,7 +162,22 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
-    ...mapState("elearning/study/study-info", ["info"])
+    ...mapState("elearning/study/study-info", ["info"]),
+    ...mapState("elearning/study/study", ["expand"]),
+
+    isExerciseMode() {
+      const isExerciseScreen =
+        this.studyMode &&
+        [
+          STUDY_MODE.DO_EXERCISE,
+          STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN,
+          STUDY_MODE.DO_EXERCISE_DOING,
+          STUDY_MODE.REVIEW_EXERCISE_RESULT
+        ].includes(this.studyMode);
+
+      console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
+      return isExerciseScreen;
+    }
   },
 
   mounted() {
@@ -159,28 +209,35 @@ export default {
         `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
         options
       );
-      const getInteractiveQuestion = () =>
-        new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
-          options
-        );
+      // const getTest = this.$store.dispatch(
+      //   `elearning/study/study-exercise/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`,
+      //   {
+      //     elearning_id: elearning_id,
+      //     category: EXERCISE_CATEGORIES.TEST
+      //   }
+      // );
+
+      // const getInteractiveQuestion = () =>
+      //   new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
+      //     options
+      //   );
       const getProgress = this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
         options
       );
 
-      this.loading = true;
+      this.pageLoading = true;
 
       const data = await Promise.all([
         getInfo,
-        getInteractiveQuestion(),
+        // getTest,
+        // getInteractiveQuestion(),
         getProgress
       ]);
 
-      console.log(data);
+      this.pageLoading = false;
 
-      this.loading = false;
-
-      this.interactive_questions = get(data, "1.data", null);
+      // this.interactive_questions = get(data, "1.data", null);
     },
 
     async addQuestionSuccess() {
@@ -191,7 +248,11 @@ export default {
           elearning_id: get(this, "$router.history.current.params.id", "")
         }
       });
-      this.interactive_questions = get(res, "data", null);
+      // this.interactive_questions = get(res, "data", null);
+    },
+
+    exitStudy() {
+      this.$router.push("/elearning/mycourses");
     },
 
     get,
@@ -202,4 +263,19 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/pages/elearning/_study.scss";
+</style>
+
+<style lang="scss" scoped>
+.lession-screen {
+  display: flex;
+  justify-content: center;
+}
+
+.lession-screen {
+  img,
+  iframe,
+  a {
+    height: 42.6rem;
+  }
+}
 </style>

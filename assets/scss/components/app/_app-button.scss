@@ -161,6 +161,9 @@
 .btn--color-orange {
     background-color: $color-orange;
 }
+.btn--color-yellow {
+    background-color: $color-yellow;
+}
 
 // Font weight
 .btn--normal {
@@ -174,6 +177,11 @@
 
 .btn--rouned {
     border-radius: 20px;
+}
+
+// behavior
+.btn--text {
+    cursor: text;
 }
 
 

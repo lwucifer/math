@@ -32,24 +32,24 @@
             :placeholder="'Nhập để tìm kiếm...'"
             v-model="params.query"
             :size="'sm'"
+            @submit="submit"
           ></app-search>
         </div>
       </div>
 
       <div class="filter-form__item">
         <app-button
-          color="primary"
+          :color="showFilter ? 'primary' : 'white'"
           square
-          class="filter-form__item__btn filter-form__item__btn--submit"
           :size="'sm'"
-          @click="submit"
+          @click="toggleFilter"
         >
-          <IconHamberger class="fill-white mr-2" />
-          <span class="color-white">Lọc kết quả</span>
+          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+          <span>Lọc kết quả</span>
         </app-button>
       </div>
 
-      <div class="filter-form__item" style="min-width: 22rem">
+      <div class="filter-form__item" style="min-width: 22rem" v-if="showFilter">
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterIndex"
@@ -65,16 +65,33 @@
     <!--End filter form-->
 
     <!--Table-->
+    <div v-if="loading">Loading...</div>
     <app-table
+      v-else
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="lessons"
     >
+      <template v-slot:cell(start_time)="{row}">
+        <td>
+          <div>
+            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+          </div>
+          <div>
+            {{getDateBirthDay(row.start_time)}}
+          </div>
+        </td>
+      </template>
+      <template v-slot:cell(num_students)="{row}">
+        <td class="color-blue">
+          {{row.participants}}/{{row.num_students}}
+        </td>
+      </template>
       <template v-slot:cell(action)="{row}">
         <td class="nowrap">
-          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'" class="color-blue none-decoration">
-          50/100
+          <n-link :to="'/elearning/manager/online-class/' + row.lesson_id + '/muster'" class="none-decoration">
+          <IconArrowRight/>
           </n-link>
         </td>
       </template>
@@ -98,7 +115,12 @@ import ModalInviteStudent from "~/components/page/elearning/manager/olclass/Moda
 import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
 import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconArrowRight from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
 
+import {
+  getDateBirthDay,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -119,6 +141,7 @@ export default {
     IconLock2,
     IconLockOpenAlt,
     IconHamberger,
+    IconArrowRight,
     ModalInviteStudent
   },
 
@@ -126,6 +149,7 @@ export default {
     return {
       tab: 1,
       openModal: false,
+      showFilter: false,
       summary: {},
       heads: [
         {
@@ -149,8 +173,12 @@ export default {
           sort: true
         },
         {
-          name: "action",
+          name: "num_students",
           text: "Số học sinh có mặt"
+        },
+        {
+          name: "action",
+          text: ""
         }
       ],
       indexs: [
@@ -206,6 +234,20 @@ export default {
   },
 
   methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
+    toggleFilter() {
+      if (this.showFilter) {
+        this.filterCourse = null;
+        this.params = {...this.params,
+          lesson_index: null
+        }
+        this.getList();
+      }
+      this.showFilter = !this.showFilter;
+    },
+
     onPageChange(e) {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
@@ -218,6 +260,7 @@ export default {
     },
     handleChangedIndex() {
       this.params.lesson_index = this.filterIndex.value;
+      this.getList();
     },
 
     async getList() {
@@ -230,7 +273,7 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
           { params}
         );
-        this.lessons = this.get(this.stateLessons, 'data.content', [])
+        this.lessons = this.get(this.stateLessons, 'data.content', []);
         this.pagination.size = this.get(this.stateLessons, 'data.size', 10)
         this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
         this.pagination.last = this.get(this.stateLessons, 'data.last', 1)

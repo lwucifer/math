@@ -5,13 +5,10 @@
         <SchoolAccountSide active="1" />
       </div>
       <div class="col-md-9">
-        <block-section
-          title="Đổi mật khẩu"
-          has-icon
-        >
+        <block-section title="Đổi mật khẩu" has-icon>
           <template v-slot:content>
-            <change-pwd-form />
-            <update-pwd-noti />
+            <change-pwd-form v-if="!checkModal" @success="success" />
+            <update-pwd-noti v-else />
           </template>
         </block-section>
       </div>
@@ -20,16 +17,16 @@
 </template>
 
 <script>
-import SchoolAccountSide from "~/components/page/school/SchoolAccountSide"
-import ChangePwdForm from "~/components/page/account/forms/ChangePwd"
-import UpdatePwdNoti from "~/components/page/account/noti/UpdatePwd"
+import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
+import ChangePwdForm from "~/components/page/account/forms/ChangePwd";
+import UpdatePwdNoti from "~/components/page/account/noti/UpdatePwd";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 
 export default {
   name: "E-learning",
-  layout: 'account-info',
+  layout: "account-info",
 
   components: {
     IconFilter,
@@ -70,7 +67,7 @@ export default {
           name: "pay",
           text: "Phương thức thanh toán",
           sort: true
-        },
+        }
       ],
       isAuthenticated: true,
       pagination: {
@@ -203,8 +200,9 @@ export default {
           type: "Bán",
           pay: "Chuyển khoản",
           time: "06:50:30 10-11-2019"
-        },
-      ]
+        }
+      ],
+      checkModal: false
     };
   },
   computed: {
@@ -213,9 +211,12 @@ export default {
 
   methods: {
     onPageChange(e) {
-      const that = this
-      that.pagination = { ...that.pagination, ...e }
+      const that = this;
+      that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
+    },
+    success(data) {
+      this.checkModal = data;
     }
   }
 };

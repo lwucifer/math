@@ -1,9 +1,8 @@
 <template>
-  <div class="cc-box__body py-4">
+  <div class="mb-4">
     <LessonDetailInfo
       v-if="isShowDetailLesson"
       @handleEditLesson="handleEditLesson"
-      @refreshLessons="refreshLessons"
       :lesson="lesson"
       :index="index"
     />
@@ -11,13 +10,11 @@
     <div v-else>
       <CreateLessonOfChapter
         :lesson="lesson"
-        @handleCancel="handleCancel"
-        @refreshLessons="refreshLessons"
+        @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
       />
       <CreateLessonOfElearning
-        @refreshLessons="refreshLessons"
-        @handleCancel="handleCancel"
+        @toggleShowAddLesson="toggleShowLesson"
         :lesson="lesson"
         v-if="get(general, 'type', '') === 'LECTURE'"
       />
@@ -25,20 +22,18 @@
 
     <!-- <app-divider class="my-4" /> -->
 
-    <p class="mt-4 mb-3 heading-4">Tài liệu tham khảo</p>
+    <p class="mt-4 mb-3 heading-6" v-if="lesson.lesson_docs && lesson.lesson_docs.length > 0 || lesson.lesson_videos && lesson.lesson_videos.length > 0">Tài liệu tham khảo</p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"
       :key="doc.id"
       :doc="doc"
-      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <DocumentAdd
       :lesson="lesson"
       v-if="isShowFormAddDocument"
       @handleCloseAdd="handleCloseAdd"
-      @handleRefreshDocs="handleRefreshDocs"
     />
 
     <!-- <app-button
@@ -102,11 +97,11 @@ export default {
   },
 
   mounted() {
-    console.log(this.lesson);
+    // console.log(this.lesson);
   },
 
   computed: {
-    ...mapState("elearning/creating/creating-general", {
+    ...mapState("elearning/create", {
       general: "general",
     }),
   },
@@ -123,17 +118,8 @@ export default {
   },
 
   methods: {
-    handleRefreshDocs() {
-      this.$emit("refreshLessons");
-    },
-
-    refreshLessons() {
-      this.$emit("refreshLessons");
-      this.isShowDetailLesson = true;
-    },
-
-    handleCancel() {
-      this.isShowDetailLesson = true;
+    toggleShowLesson() {
+      this.isShowDetailLesson = !this.isShowDetailLesson;
     },
 
     handleCloseAdd() {
@@ -150,7 +136,12 @@ export default {
       this.isShowDetailLesson = false;
     },
 
+    handleCancel() {
+      //
+    },
+
     get,
   },
 };
 </script>
+

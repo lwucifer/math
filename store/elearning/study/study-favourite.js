@@ -1,5 +1,5 @@
-import * as actionTypes from "../../../utils/action-types";
-import * as mutationTypes from "../../../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as mutationTypes from "~/utils/mutation-types";
 import Favourite from "~/services/elearning/study/Favourite";
 
 /**
@@ -52,7 +52,7 @@ const actions = {
             console.log("payload", payload);
             const result = await new Favourite(this.$axios)[
                 actionTypes.BASE.DELETE_PAYLOAD
-            ]({ data: payload });
+            ](payload);
             return result;
         } catch (error) {
             console.log(error);
