@@ -2,7 +2,7 @@
   <div class="box">
     <div class="row">
       <TabMessage :isCreated="isCreate" :isGroup="isGroup" />
-      <TabInfo :isGroup="isGroup" />
+      <!-- <TabInfo :isGroup="isGroup" /> -->
     </div>
   </div>
 </template>
