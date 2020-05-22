@@ -21,8 +21,7 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
 import IconImage from "~/assets/svg/icons/image.svg?inline";
 import TabContact from "~/components/page/chat/TabContact";
-import TabMessage from "~/components/page/chat/TabMessage";
-import TabInfo from "~/components/page/chat/TabInfo";
+
 
 import * as constants from "~/utils/constants";
 
@@ -34,9 +33,7 @@ export default {
     Logo,
     IconCaretDown,
     IconImage,
-    TabMessage,
     TabContact,
-    TabInfo
   },
 
   async fetch({ params, query, store, route, redirect }) {

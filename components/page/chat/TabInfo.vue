@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4 message-chat__info">
+  <div class="message-chat__info">
     <div class="message-info">
       <div class="message-info__acc">
         <div class="message-info__acc__image" v-if="!noMessage">
@@ -160,11 +160,11 @@ export default {
     //   default: () => [],
     //   required: true
     // },
-    isGroup: {
-      type: Boolean,
-      default: false,
-      required: true
-    },
+    // isGroup: {
+    //   type: Boolean,
+    //   default: false,
+    //   required: true
+    // },
     noMessage: {
       type: Boolean,
       default: false
