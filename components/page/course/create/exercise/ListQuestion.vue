@@ -3,10 +3,10 @@
     <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
       <h3 class="body-2 mr-1 question-title">Câu {{ index + 1 }}:</h3>
 
-      <p
+      <div
         class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
-        v-html="get(question, 'content', '')"
-      ></p>
+        v-html="get(question, 'content', '').slice(0, 100) + '...'"
+      ></div>
 
       <span class="text-sub mr-4 question-type">{{ type }}</span>
 

@@ -3,58 +3,59 @@
 
     <!--Filter form-->
     <div class="filter-form">
-      <div class="filter-form__item top" @click="openModal = true">
-        <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
-          <IconPlusCircle class="mr-2 fill-white"/>
-          <span class="color-white">Mời thêm học sinh</span>
-        </app-button>
-      </div>
-
-      <div class="filter-form__item flex-1">
-        <div style="width: 100%">
-          <app-search
-            class
-            :placeholder="'Nhập để tìm kiếm...'"
-            v-model="params.query"
-            :size="'sm'"
-            @submit="submit"
-          ></app-search>
+      <div class="d-flex">
+        <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+          <div style="width: 100%">
+            <app-search
+              :placeholder="'Nhập để tìm kiếm...'"
+              v-model="params.query"
+              :size="'sm'"
+              @submit="submit"
+            ></app-search>
+          </div>
         </div>
-      </div>
 
-      <div class="filter-form__item">
-        <app-button
-          :color="showFilter ? 'primary' : 'white'"
-          square
-          :size="'sm'"
-          @click="toggleFilter"
-        >
-          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
+        <div class="filter-form__item">
+          <app-button
+            :color="showFilter ? 'primary' : 'white'"
+            square
+            :size="'sm'"
+            @click="toggleFilter"
+          >
+            <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+            <span>Lọc kết quả</span>
+          </app-button>
+        </div>
 
-      <div class="filter-form__item" style="min-width: 18rem" v-if="showFilter">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filterCourse"
-          :options="courses"
-          label="text"
-          placeholder="Lớp học"
-          searchable
-          clearable
-          @input="handleChangedCourse"
-          @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"
-        ></app-vue-select>
+        <div class="filter-form__item" style="min-width: 18rem" v-if="showFilter">
+          <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            v-model="filterCourse"
+            :options="courses"
+            label="text"
+            placeholder="Lớp học"
+            searchable
+            clearable
+            @input="handleChangedCourse"
+            @search:focus="handleFocusSearchInput"
+            @search:blur="handleBlurSearchInput"
+          ></app-vue-select>
+        </div>
+
+        <div class="filter-form__item top" @click="openModal = true">
+          <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
+            <IconPlusCircle class="mr-2 fill-white"/>
+            <span class="color-white">Mời thêm học sinh</span>
+          </app-button>
+        </div>
       </div>
     </div>
     <!--End filter form-->
 
     <!--Table-->
-    <div v-if="loading">Loading...</div>
     <app-table
-      v-else
+      class="tr-static"
+      :loading="loading"
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -68,14 +69,55 @@
           </span>
         </td>
       </template>
+     
+      <template v-slot:cell(attendance)="{row}">
+        <td>
+          <div class="attendance-points">
+            <div class="points">
+              <span class="bg-green">
+                {{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%
+              </span>
+              <span class="bg-red">
+                {{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%
+              </span>
+              <span class="bg-yellow">
+                {{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%
+              </span>
+              <span class="bg-blue">
+                {{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%
+              </span>
+            </div>
+            <div class="desc">
+              <div class="content">
+              <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
+              <div class="row mt-3">
+                <div class="col-6 mb-3">
+                  Có mặt: <span class="color-primary">{{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%</span>
+                </div>
+                <div class="col-6 mb-3">
+                  Có phép: <span class="color-yellow">{{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
+                </div>
+                <div class="col-6 mb-3">
+                  Không phép: <span class="color-red">{{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
+                </div>
+                <div class="col-6 mb-3">
+                  Vào muộn: <span class="color-blue">{{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%</span>
+                </div>
+              </div>
+              </div>
+              <div class="arroư"></div>
+            </div>
+          </div>
+        </td>
+      </template>
 
       <template v-slot:cell(banned)="{row}">
         <td class="nowrap">
-          <button class="btn-block" type="button" @click="block(row.invitation_id, row.student_id, row.banned)" v-if="!row.banned" >
+          <button class="btn-block" type="button" @click="block(row.user_id, row.banned)" v-if="!row.banned" >
             <IconLock2 class="fill-red" width="16" height="16"/>
             <span>Chặn học sinh này</span>
           </button>
-          <button class="btn-block" type="button" @click="block(row.invitation_id, row.student_id, row.banned)" v-else>
+          <button class="btn-block" type="button" @click="block(row.user_id, row.banned)" v-else>
             <IconLockOpenAlt class="fill-primary" width="16" height="16"/>
             <span>Bỏ chặn học sinh này</span>
           </button>
@@ -121,9 +163,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
-export default {
-  layout: "manage",
-    
+export default {    
   components: {
     IconFilter,
     IconSearch,
@@ -136,6 +176,8 @@ export default {
     IconHamberger,
     ModalInviteStudent
   },
+
+  middleware: ["teacher-role"],
 
   data() {
     return {
@@ -158,7 +200,7 @@ export default {
           sort: true
         },
         {
-          name: "attendance_point",
+          name: "attendance",
           text: "Điểm chuyên cần",
           sort: true
         },
@@ -191,7 +233,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      stateInvites: "Invites"
+      stateInvites: "Students"
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
@@ -200,7 +242,7 @@ export default {
 
   methods: {
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           class_id: null
@@ -241,12 +283,11 @@ export default {
       });
     },
 
-    async block(invitationId, studentId, isBlock) {
+    async block(studentId, isBlock) {
       const online_class_id = this.$route.params.id ? this.$route.params.id : "";
       const params = {
-        invitation_ids: [invitationId],
         online_class_id: online_class_id,
-        student_id: studentId
+        user_id: parseInt(studentId)
       };
       let doDo;
       if (isBlock) {
@@ -277,10 +318,11 @@ export default {
         }
         let params = { ...this.params };
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_INVITES.LIST}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_STUDENTS.LIST}`,
           { params }
         );
         this.students = this.get(this.stateInvites, 'data.content', [])
+        console.log('xxxxxxx', this.stateInvites)
         this.pagination.size = this.get(this.stateInvites, 'data.size', 10)
         this.pagination.first = this.get(this.stateInvites, 'data.first', 1)
         this.pagination.last = this.get(this.stateInvites, 'data.last', 1)
@@ -330,60 +372,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-.btn-block {
-  position: relative;
-  &:focus {
-    outline: none;
-  }
-  &:hover {
-    span{
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-  span {
-    position: absolute;
-    top: 100%;
-    right: -5rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 300ms;
-    background: #fff;
-    padding: 1rem 1.5rem;
-    border: 1px solid $color-border;
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
-    
-  }
-}
-.isblock {
-  position: relative;
-  svg {
-    position: absolute;
-    right: -2rem;
-    top: -2px;
-  }
-}
-.appended-col {
-  p {
-    max-width: 15rem;
-  }
-  .text-description {
-    color: #999;
-    font-size: 1.2rem;
-    line-height: 1.6rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-.filter-form {
-  position: relative;
-  margin-top: 1rem;
-  .filter-form__item.top {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% +  2.3rem);
-    margin: 0 !important;
-  }
-}
+@import "~/assets/scss/components/elearning/olclass/invited.scss";
 </style>

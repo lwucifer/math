@@ -58,6 +58,17 @@
                     }
                 }
             }
+            i {
+                display: flex;
+                align-items: center;
+            }
+            svg {
+                height: 10px;
+                width: 10px;
+                path {
+                    fill: $color-primary !important;
+                }
+            }
         }
         &:not(.active):not(.disable) {
             cursor: pointer;
