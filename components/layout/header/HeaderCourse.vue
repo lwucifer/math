@@ -49,7 +49,7 @@
               <div>
                 <IconDone class="icon heading-3 text-primary mr-3" />
                 Đã hoàn thành
-                {{ learningProgress }} bài giảng
+                {{ learningProgress }} bài học
               </div>
             </div>
           </div>
