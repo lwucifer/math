@@ -42,7 +42,7 @@
           </div>
           <div class="message-decs__title">
             <span>{{nameGroup}}</span>
-            <p>Đang hoạt động</p>
+            <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
         <div class="message-tool">
