@@ -98,8 +98,9 @@
             <template v-slot:content>
               <sub-block-section
                 :title-cls="{ 'border-0': true }"
-                :content-cls="{ 'px-0': true}"
+                :content-cls="{ 'px-0': true, 'pt-0': true }"
                 bg-content-color="transparent"
+                :outline="false"
               >
                 <template v-slot:title>
                   <div class="row">
