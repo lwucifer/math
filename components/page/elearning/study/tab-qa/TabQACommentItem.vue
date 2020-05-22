@@ -11,11 +11,11 @@
           <h6 class="tab-qa-comment-item__name">
             {{ get(question, "creator.name", "") }}
           </h6>
-          <app-stars
+          <!-- <app-stars
             v-if="showStars"
             class="tab-qa-comment-item__rate ml-2"
             :stars="stars"
-          />
+          /> -->
         </div>
 
         <span class="tab-qa-comment-item__time">
@@ -25,7 +25,7 @@
         </span>
       </div>
 
-      <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div>
+      <!-- <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div> -->
 
       <div class="tab-qa-comment-item__content">
         <div v-html="get(question, 'content', '')"></div>
