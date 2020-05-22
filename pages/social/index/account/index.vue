@@ -1,11 +1,16 @@
 <template>
-  <div>{{ $route.name }}</div>
+  <div>
+    <account-cover />
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+  import AccountCover from '~/components/page/social/account/AccountCover.vue'
+  export default {
+    components: {
+      AccountCover
+    }
+  }
 </script>
 
 <style>
