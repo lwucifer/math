@@ -2,6 +2,7 @@ require("dotenv").config();
 const webpack = require("webpack");
 
 module.exports = {
+  dev: true,
   head: {
     title: "Schoolly",
     meta: [
