@@ -30,7 +30,7 @@
               </n-link>
             </div>
             <div class="d-flex-center">
-              <div class="filter-form__item flex-1 mb-15" style="max-width: 36rem">
+              <div class="filter-form__item mb-15" style="max-width: 36rem; min-width: 30rem">
                 <div style="width: 100%">
                   <app-search
                     class
@@ -654,7 +654,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";

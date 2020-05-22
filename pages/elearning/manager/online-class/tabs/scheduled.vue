@@ -219,7 +219,7 @@ export default {
       stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
+      stateElearnings: "Elearnings"
     })
   },
 
@@ -261,18 +261,18 @@ export default {
       });
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: {teacher_id: userId} }
         );
-        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
-        this.lessonList.forEach(element => {
+        lessonList.forEach(element => {
           list.push({
             value: element.id,
             text: element.name
@@ -329,7 +329,7 @@ export default {
 
   created() {
     this.getList();
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>

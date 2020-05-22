@@ -45,6 +45,7 @@
                 <app-vue-select
                   style="width: 17rem"
                   class="app-vue-select form-item__selection"
+                  :disabled="true"
                   v-model="filterPrivacy"
                   :options="privacies"
                   label="text"
@@ -439,14 +440,49 @@ export default {
     getDateBirthDay,
     getEndTime,
 
+    changDate(e, index, isTo) {
+      if (isTo) {
+        if(this.schedules[index].from_date > e ) {
+          this.schedules[index].to_date = '';
+        } else {
+          this.schedules[index].to_date = e;
+        }
+      } else {     
+        if(this.schedules[index].to_date < e ) {
+          this.schedules[index].from_date = '';
+        } else {
+          this.schedules[index].from_date = e;
+        }
+      }
+      console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
+
+    },
+
     checkIncules(list, val){
       return list.includes(val)
     },
 
     convertDay(index) {
       const items = this.selectedItems[index];
-      return items.reduce((result, item, index) => {
+      const sorter = {
+        "mon": 1,
+        "tue": 2,
+        "wed": 3,
+        "thu": 4,
+        "fri": 5,
+        "sat": 6,
+        "sun": 7
+      };
+      let tmp = {};
+      items.forEach(function(value) {
+        let index = sorter[value.toLowerCase()];
+        tmp[index] = value;
+      });
+
+      let i = 0;
+      return Object.values(tmp).reduce((result, item) => {
         let text = '';
+        if (item) i++;
         switch (item) {
           case 'MON': text = '2'; break;
           case 'TUE': text = '3'; break;
@@ -456,7 +492,7 @@ export default {
           case 'SAT': text = '7'; break;
           case 'SUN': text = 'CN'; break;
         }
-        const com = index > 0 ? ", " : "";
+        const com = i > 1 ? ", " : "";
         return (result = result + com + text);
       }, "Hàng tuần vào thứ ");
     },
@@ -575,6 +611,9 @@ export default {
 
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+      // this.params.enable = this.courses[0].privacy;
+      this.params.enable = true;
+      this.filterPrivacy = {value:true, text: 'Công khai'};
     },
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;

@@ -247,7 +247,7 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           lesson_index: null

@@ -75,16 +75,16 @@
           <div class="attendance-points">
             <div class="points">
               <span class="bg-green">
-                {{row.num_attendance}}%
+                {{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%
               </span>
               <span class="bg-red">
-                {{row.num_absent_with_out_permission}}%
+                {{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%
               </span>
               <span class="bg-yellow">
-                {{row.num_absent_with_permission}}%
+                {{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%
               </span>
               <span class="bg-blue">
-                {{row.num_late}}%
+                {{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%
               </span>
             </div>
             <div class="desc">
@@ -92,16 +92,16 @@
               <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
               <div class="row mt-3">
                 <div class="col-6 mb-3">
-                  Có mặt: <span class="color-primary">{{row.num_attendance}}%</span>
+                  Có mặt: <span class="color-primary">{{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%</span>
                 </div>
                 <div class="col-6 mb-3">
-                  Có phép: <span class="color-yellow">{{row.num_absent_with_permission}}%</span>
+                  Có phép: <span class="color-yellow">{{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
                 </div>
                 <div class="col-6 mb-3">
-                  Không phép: <span class="color-red">{{row.num_absent_with_out_permission}}%</span>
+                  Không phép: <span class="color-red">{{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
                 </div>
                 <div class="col-6 mb-3">
-                  Vào muộn: <span class="color-blue">{{row.num_late}}%</span>
+                  Vào muộn: <span class="color-blue">{{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%</span>
                 </div>
               </div>
               </div>
@@ -242,7 +242,7 @@ export default {
 
   methods: {
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           class_id: null
