@@ -91,6 +91,9 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.payload.content = "";
+    },
     handleUploadChange(fileList, event) {
       this.uploadFileList = Array.from(fileList);
       getBase64(this.uploadFileList[0], (src) => {
@@ -113,6 +116,7 @@ export default {
       ](this.payload);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
+        this.reset();
         const options = {
           params: {
             elearning_id: get(this, "$route.params.id", ""),
