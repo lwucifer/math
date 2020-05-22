@@ -23,8 +23,8 @@
         label="text"
         placeholder="Đánh giá"
         searchable
-        clearable
         @input="handleChangedRate"
+        has-border
       >
       </app-vue-select>
     </div>
@@ -37,8 +37,8 @@
         label="text"
         placeholder="Lớp"
         searchable
-        clearable
         @input="handleChangedClass"
+        has-border
       >
       </app-vue-select>
     </div>
@@ -52,8 +52,8 @@
         label="text"
         placeholder="Bài giảng/khóa học"
         searchable
-        clearable
         @input="handleChangedClass"
+        has-border
       >
       </app-vue-select>
     </div>

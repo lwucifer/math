@@ -36,6 +36,7 @@
           :searchable="false"
           @input="handleChangedRate"
           :all-opt="{ value: null, text: 'Tất cả'}"
+          has-border
         >
         </app-vue-select>
       </div>
