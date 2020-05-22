@@ -46,9 +46,9 @@
         </template>
     
     </CourseItem2>
-    -->
+     </div>-->
     <ShareElearningModal v-if="false"/> <!-- ModalShare -->
-    </div>
+   
   </div>
 </template>
 
