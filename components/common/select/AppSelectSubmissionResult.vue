@@ -11,6 +11,7 @@
       :clearable="clearable"
       @input="handleChangedResult"
       :all-opt="allOpt"
+      has-border
     >
     </app-vue-select>
   </div>
