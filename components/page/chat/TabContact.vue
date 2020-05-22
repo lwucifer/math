@@ -2,7 +2,7 @@
   <div class="aside-box">
     <div class="tool-top">
       <n-link to="/" class="tool-top__link">
-        <IconLeftArrow class="mr-3 fill-dark" width="5px" height="10px"/> Tin nhắn
+        <IconLeftArrow class="mr-3 fill-dark" width="5px" height="10px" />Tin nhắn
       </n-link>
 
       <div class="tool-top__feature">
@@ -13,7 +13,7 @@
           class="link--dropdown"
         >
           <button slot="activator" type="button" class="link--dropdown__button">
-            <IconCog  class="fill-base mr-3"/>
+            <IconCog class="fill-base mr-3" />
           </button>
 
           <div class="link--dropdown__content">
@@ -33,7 +33,7 @@
         </app-dropdown>
 
         <button @click="create()" title="Viết tin nhắn mới">
-          <IconEdit class="fill-base"/>
+          <IconEdit class="fill-base" />
         </button>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-addon">
-            <IconSearch width="15" height="15" />
+            <IconSearch width="15" height="15" class="fill-base"/>
           </div>
 
           <input type="text" placeholder="Tìm kiếm người và nhóm" />
@@ -51,7 +51,7 @@
             <a href="#">
               <IconCloseOutline class="fill-999" width="15" height="15" />
             </a>
-          </div> -->
+          </div>-->
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
           <li>
             <a @click="tabClick(2)" :class="tabChat == false ? 'active' : ''">Group</a>
           </li>
-        </ul> -->
+        </ul>-->
 
         <div class="tabs-content" v-if="isContact">
           <div class="align-item" v-for="(item, index) in friends" :key="index">
@@ -110,7 +110,7 @@
                     <p>{{ item.content }}</p>
                   </div>
                 </div>
-                <app-dropdown
+                <!-- <app-dropdown
                   position="right"
                   v-model="dropdownActions"
                   :content-width="'12rem'"
@@ -133,7 +133,7 @@
                       </li>
                     </ul>
                   </div>
-                </app-dropdown>
+                </app-dropdown>-->
               </div>
               <client-only>
                 <infinite-loading @infinite="chatsInfiniteHandler">
@@ -206,7 +206,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- <div class="aside-box__bottom">
       <ul class="group-button list-unstyle">
         <li>
@@ -222,7 +222,7 @@
           </a>
         </li>
       </ul>
-    </div> -->
+    </div>-->
 
     <!-- Modal tạo nhóm chát -->
     <ModalAddGroup
@@ -254,11 +254,11 @@ import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
 import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
-import IconCog from '~/assets/svg/icons/cog.svg?inline';
+import IconCog from "~/assets/svg/icons/cog.svg?inline";
 import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
-import IconLeftArrow from '~/assets/svg/icons/left-arrow.svg?inline';
+import IconLeftArrow from "~/assets/svg/icons/left-arrow.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 
 import GroupService from "~/services/message/Group";

@@ -11,7 +11,7 @@
 
       <ul class="the-header__menu">
         <li>
-          <n-link to="/">Dòng thời gian</n-link>
+          <n-link to="/social">Dòng thời gian</n-link>
         </li>
         <li>
           <n-link to="/elearning">E-learning</n-link>

@@ -1,9 +1,10 @@
 <template>
-  <div class="col-md-4 message-chat__info">
+  <div class="message-chat__info">
     <div class="message-info">
       <div class="message-info__acc">
         <div class="message-info__acc__image" v-if="!noMessage">
           <app-avatar v-if="typeRoom==2" :src="avatarSrc" size="md" class="comment-item__avatar" />
+          
           <app-avatar
             v-else
             :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
@@ -40,6 +41,7 @@
         </div>
         <div v-else-if="typeRoom==1">{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</div>
       </div>
+
       <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
         <div class="message-info__box__content attachment">
@@ -50,6 +52,7 @@
           </ul>
         </div>
       </div>
+
       <div class="message-info__box">
         <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
         <div class="message-info__box__content images-attachment" v-if="listImage.length > 0">
@@ -63,6 +66,8 @@
         </div>
         <div class="message-info__box__content" v-else></div>
       </div>
+
+
       <div class="message-info__box" v-if="!tabChat && typeRoom == 2">
         <h5 class="message-info__box__title">Thành viên</h5>
         <div
@@ -160,11 +165,11 @@ export default {
     //   default: () => [],
     //   required: true
     // },
-    isGroup: {
-      type: Boolean,
-      default: false,
-      required: true
-    },
+    // isGroup: {
+    //   type: Boolean,
+    //   default: false,
+    //   required: true
+    // },
     noMessage: {
       type: Boolean,
       default: false
