@@ -134,6 +134,11 @@ export const convertLocalTimeForTimetable = (_time) => {
     return `${hh + gmt}:${mm}`;
 }
 
+export const addDurationToUTCDate = (_utcDate, _duration, _type) => {
+    const ts = moment.utc(_utcDate);
+    return ts.add(_duration, _type).format(DATETIME_RECEIVE);
+}
+
 
 Vue.filter("getDateBirthDay", function(_utcDate) {
     return getDateBirthDay(_utcDate);
