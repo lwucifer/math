@@ -5,7 +5,14 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       :data="listWithLocalTime"
-      style="margin-left: -1.5rem; margin-right: -1.5rem;"
+      header-fontweight="normal"
+      header-size="md"
+      header-color="gray-3"
+      body-color="dark"
+      bg-table="white"
+      :header-ext-cls="{ 'table-header-border-0': true }"
+      :ext-table-cls="{ 'pt-3': true }"
+      :pagination-style="{ position: 'right' }"
     >
       <template v-slot:cell(status)="{row}">
         <td v-if="row.status != statusPending">

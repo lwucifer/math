@@ -155,7 +155,7 @@
                       bg-table="white"
                       :header-ext-cls="{ 'table-header-border-0': true }"
                       :ext-table-cls="{ 'pt-3': true }"
-                      :pagination-style="{ position: 'right', extCls: {test: true} }"
+                      :pagination-style="{ position: 'right' }"
                     >
                       <template v-slot:cell(cost)="{row}">
                         <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
