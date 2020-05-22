@@ -181,3 +181,8 @@
         font-size: 1.3rem;
     }
 }
+
+// Bordered
+.app-select--bordered {
+    border: 1px solid $color-disabled;
+}
