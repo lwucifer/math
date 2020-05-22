@@ -1,0 +1,21 @@
+.tab-menu {
+  background-color: inherit;
+  &__item {
+    display: inline-flex;
+    font-weight: normal;
+    padding: 0.7rem 2rem;
+    border-bottom: 4px solid transparent;
+    transition: border-bottom-color .3s;
+    color: $color-text-dark;
+    min-height: 4rem;
+    &:hover {
+      font-weight: 600;
+      color: $color-primary;
+    }
+  }
+  
+  &__item.active {
+    border-bottom-color: $color-primary;
+    font-weight: 600;
+  }
+}
