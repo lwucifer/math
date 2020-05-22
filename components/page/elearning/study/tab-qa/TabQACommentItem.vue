@@ -29,12 +29,12 @@
 
       <div class="tab-qa-comment-item__content">
         <div v-html="get(question, 'content', '')"></div>
-        <!-- <img
-          v-if="image"
+        <img
+          v-if="get(question, 'image_url', '')"
           class="tab-qa-comment-item__img d-block"
-          src="~assets/images/tmp/study-comment-demo.jpg"
+          :src="get(question, 'image_url', '')"
           alt=""
-        /> -->
+        />
       </div>
       <div class="tab-qa-comment-item__actions">
         <button
@@ -88,16 +88,6 @@ export default {
       default: 1,
       validator: (value) => [1, 2].includes(value),
     },
-    name: String,
-    avatar: String,
-    content: String,
-    time: String,
-    stars: Number,
-    showStars: Boolean,
-    title: String,
-    showTitle: Boolean,
-    image: String,
-    liked: Boolean,
     question: {},
   },
 
