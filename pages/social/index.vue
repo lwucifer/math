@@ -2,7 +2,14 @@
   <div class="page-social container">
     <div class="row">
       <div class="col page-social__col-menu">
-        <SocialMenu />
+        <div
+          v-sticky
+          sticky-offset="{ top: 101 }"
+          :sticy-z-index="9"
+          class="timeline-aside-wrapper"
+        >
+          <SocialMenu />
+        </div>
       </div>
 
       <div class="col page-social__col-content">
@@ -150,6 +157,24 @@ export default {
         }
       ]
     };
+  },
+
+  computed: {
+    messagesConverted() {
+      return this.messages && this.messages.length
+        ? this.messages.map(item => {
+            return {
+              id: item.room.id,
+              title: item.room.members
+                .filter(member => member.user_id !== this.userId)
+                .map(member => member.fullname)
+                .join(", "),
+              desc: item.message.content,
+              image: get(item, "room.room_avatar.low", null)
+            };
+          })
+        : [];
+    }
   },
 
   methods: {
