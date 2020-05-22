@@ -23,6 +23,11 @@
     label {
         margin-right: 0.3rem;
     }
+    
+    .mx-input {
+        border-radius: 2px;
+    }
+    
     &.size-sm .mx-input {
         height: 3.2rem;
     }
@@ -39,9 +44,35 @@
         }
     }
 }
+
+.app-date-picker--range {
+    .mx-datepicker-range {
+        width: 21rem;
+        .mx-input {
+            &::placeholder {
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
+                opacity: 1; /* Firefox */
+            }
+    
+            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
+            }
+    
+            &::-ms-input-placeholder { /* Microsoft Edge */
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
+            }
+        }
+    }
+}
 $primary-color: #37A000;
 @import '~vue2-datepicker/scss/index.scss';
-    .datepicker-range-v2.mx-datepicker-main{
+    .app-date-picker__popup--range.mx-datepicker-main{
         background: none !important;
         box-shadow:none !important;
         border: none !important;
