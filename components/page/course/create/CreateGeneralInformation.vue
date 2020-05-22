@@ -43,7 +43,7 @@
         </div>
 
         <div class="cgi-form-group mb-4">
-          <h2 class="cgi-form-title heading-5 mb-3">
+          <h2 class="cgi-form-title heading-6 mb-3">
             Tiêu đề {{ name }}
             <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
