@@ -532,3 +532,7 @@ export const PUBLIC_CLASSES = {
 export const TEACHING_STUDENTS_PRIVATE = {
     SET_TEACHING_STUDENTS_LIST: "setTeachingStudentList",
 };
+
+export const KEYWORD = {
+    SEARCH_HEADER: "searchHeader",
+}

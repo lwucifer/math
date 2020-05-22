@@ -52,7 +52,7 @@ export async function getLessonsOfLecture($axios, options) {
     if (result.success) return result.data;
     return null;
   } catch (error) {
-    return [];
+    return null;
   }
 }
 

@@ -9,7 +9,6 @@
       size="md"
       style="width: 100%; height: 40px"
       @change="handleSelectLesson"
-      :defaultValue="defaultValue"
     >
       <template slot="placeholder-icon">
         <IconAngleDown class="icon" />
@@ -28,31 +27,24 @@ export default {
     IconAngleDown,
   },
 
-  props: {
-    lessons: {
-      type: Array,
-      default: [],
-    },
-    defaultValue: {
-      type: [Number, String],
-      default: null
-    }
-  },
-
   computed: {
     lessonsOpt() {
-      return this.lessons.map(item => ({
-          ...item,
-          value: item.id,
-          text: item.name
-      }))
-    }
+      return this.lessons.map((item) => ({
+        ...item,
+        value: item.id,
+        text: item.name,
+      }));
+    },
+    ...mapState("elearning/create", {
+      lessons: "lessons",
+    }),
   },
 
   methods: {
-    handleSelectLesson(lesson) {
-      this.$store.dispatch("elearning/create/getLesson", lesson);
+    handleSelectLesson(lesson_id) {
+      this.$store.dispatch("elearning/create/getLesson", lesson_id);
     },
+    get,
   },
 };
 </script>

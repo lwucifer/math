@@ -211,17 +211,7 @@ export default {
     };
   },
   mounted() {
-    this.handleChangeSetting();
-    this.$store.dispatch(`elearning/create/getSetting`);
-  },
-
-  watch: {
-    setting: {
-      handler: function() {
-        this.handleChangeSetting();
-      },
-      deep: true,
-    },
+    useEffect(this, this.handleChangeSetting.bind(this), ["setting"]);
   },
 
   computed: {
