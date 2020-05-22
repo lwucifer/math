@@ -64,6 +64,19 @@
     }
 }
 
+.app-pagination--pos-left {
+    text-align: left;
+}
+
+.app-pagination--pos-center {
+    text-align: center;
+}
+
+.app-pagination--pos-right {
+    text-align: right;
+}
+
+
 .app-pagination-2 {
     display: flex;
     align-items: center;
