@@ -42,7 +42,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-addon">
-            <IconSearch width="15" height="15" />
+            <IconSearch width="15" height="15" class="fill-base"/>
           </div>
 
           <input type="text" placeholder="Tìm kiếm người và nhóm" />
