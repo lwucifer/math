@@ -17,6 +17,7 @@
         @handleChangedWard="handleChangedWard"
         @handleChangeSearch="handleChangeSearch"
         @handleChangedOrder="handleChangeSort"
+        @resetForm="handleResetForm"
       ></school-filter>
       <!--Detail school types-->
       <div v-if="pageLoading" class="container mt-6">
@@ -101,7 +102,7 @@ export default {
     },
 
     categoryOpts() {
-      return addAllOptionSelect(this.categories);
+      return this.categories;
     },
 
     selectedCategory() {
@@ -131,6 +132,7 @@ export default {
 
   methods: {
     handleChangedLevel(level) {
+      console.log('change level: ', level)
       this.type = get(level, "type", "");
       this.$router.push({
         path: "/school/search",
@@ -156,6 +158,14 @@ export default {
     },
     handleChangeSort(order) {
       this.sort_by = get(order, 'value')
+    },
+    handleResetForm(data) {
+      console.log('reset form: ', data)
+      this.district_id = get(data, 'district.id', null);
+      this.province_id = get(data, 'province.id', null);
+      this.ward_id = get(data, 'ward.id', null);
+      this.type = get(data, 'level.type', null);
+      this.keyword = this.get(this.$router, "query.keyword", "");
     },
     handleGetSchoolsByLocation() {
       let params = {};

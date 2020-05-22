@@ -1,48 +1,42 @@
 <template>
   <fragment>
-    <div class="school-filter__form__item">
+    <div class="school-filter__form__item" style="min-width: 12rem">
       <app-vue-select
-        style="width: 12rem"
-        class="app-vue-select"
+        class="app-vue-select w-100"
         v-model="province"
         :options="provinceOpts"
         label="name"
         placeholder="Tỉnh thành"
         :reduce="value => value"
         searchable
-        :clearable="false"
         @input="handleChangeProvince"
         :all-opt="allOpt"
       ></app-vue-select>
     </div>
 
-    <div class="school-filter__form__item">
+    <div class="school-filter__form__item" style="min-width: 13.1rem">
       <app-vue-select
-        style="width: 12rem"
-        class="app-vue-select"
+        class="app-vue-select w-100"
         v-model="district"
         :options="districtOpts"
         label="name"
         :reduce="value => value"
         placeholder="Quận huyện"
         searchable
-        :clearable="false"
         @input="handleChangedDistrict"
         :all-opt="allOpt"
       ></app-vue-select>
     </div>
 
-    <div class="school-filter__form__item">
+    <div class="school-filter__form__item" style="min-width: 12rem">
       <app-vue-select
-        style="width: 12rem"
-        class="app-vue-select"
+        class="app-vue-select w-100"
         v-model="ward"
         :options="wardOpts"
         label="name"
         :reduce="value => value"
-        placeholder="Xã phường"
+        placeholder="Phường xã"
         searchable
-        :clearable="false"
         @input="handleChangedWard"
         :all-opt="allOpt"
       ></app-vue-select>

@@ -210,6 +210,7 @@ export default {
     },
     handlerChangeStatus(select){
       this.params.status = get(select,"value","");
+      this.params.page =  1;
       this.fetchWithdrawals();
     },
     handlerChangeDate(date){
@@ -237,12 +238,14 @@ export default {
       if (this.filterSelect) {
         this.resetForm()
         this.filterSelect = false
+        this.params.status = null
+        this.fetchWithdrawals();
       } else {
         this.filterSelect = true
       }
     },
     resetForm() {
-      this.opts = null
+      this.opt = null
     }
   }
 };

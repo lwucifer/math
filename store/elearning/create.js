@@ -34,13 +34,8 @@ const actions = {
       };
       const res = await Service.getExams(this.$axios, payload);
       commit("exams", res);
-      const _payload = {
-        params: {
-          elearning_id: get(state, "general.id", ""),
-        },
-      };
-      const _res = await Service.getProgress(this.$axios, _payload);
-      commit("progress", _res);
+    } else {
+      commit("exams", null);
     }
   },
 
@@ -53,32 +48,9 @@ const actions = {
       };
       const res = await Service.getLessons(this.$axios, payload);
 
-      let lessons = [];
-      res.map((lesson) => {
-        lesson.value = lesson.id;
-        lesson.text = lesson.name;
-        lessons.push(lesson);
-      });
-
-      if (
-        get(lessons, "length", 0) === 1 &&
-        get(state, "general.type", "") === "LECTURE"
-      ) {
-        const res_lesson = await Service.getLesson(
-          this.$axios,
-          get(lessons, "0.id", "")
-        );
-        commit("lesson", res_lesson);
-      }
-
-      commit("lessons", lessons);
-      const _payload = {
-        params: {
-          elearning_id: get(state, "general.id", ""),
-        },
-      };
-      const _res = await Service.getProgress(this.$axios, _payload);
-      commit("progress", _res);
+      commit("lessons", res);
+    } else {
+      commit("lessons", null);
     }
   },
 
@@ -91,13 +63,8 @@ const actions = {
       };
       const res = await Service.getSetting(this.$axios, payload);
       commit("setting", res);
-      const _payload = {
-        params: {
-          elearning_id: get(state, "general.id", ""),
-        },
-      };
-      const _res = await Service.getProgress(this.$axios, _payload);
-      commit("progress", _res);
+    } else {
+      commit("setting", null);
     }
   },
 
@@ -110,13 +77,8 @@ const actions = {
       };
       const res = await Service.getLessonsOfLecture(this.$axios, payload);
       commit("lessons_lecture", res);
-      const _payload = {
-        params: {
-          elearning_id: get(state, "general.id", ""),
-        },
-      };
-      const _res = await Service.getProgress(this.$axios, _payload);
-      commit("progress", _res);
+    } else {
+      commit("lessons_lecture", null);
     }
 
     if (get(state, "general.type", "") === "COURSE") {
@@ -127,38 +89,23 @@ const actions = {
       };
       const res = await Service.getChaptersOfElearning(this.$axios, payload);
       commit("chapters", res);
-      const _payload = {
-        params: {
-          elearning_id: get(state, "general.id", ""),
-        },
-      };
-      const _res = await Service.getProgress(this.$axios, _payload);
-      commit("progress", _res);
+    } else {
+      commit("chapters", null);
     }
   },
 
   async getGeneral({ commit, state }, options) {
     const res = await Service.getGeneral(this.$axios, options);
     commit("general", res);
-    const _payload = {
-      params: {
-        elearning_id: get(state, "general.id", ""),
-      },
-    };
-    const _res = await Service.getProgress(this.$axios, _payload);
-    commit("progress", _res);
   },
 
   async getLesson({ commit, state }, lesson_id) {
-    const res = await Service.getLesson(this.$axios, lesson_id);
-    commit("lesson", res);
-    const _payload = {
-      params: {
-        elearning_id: get(state, "general.id", ""),
-      },
-    };
-    const _res = await Service.getProgress(this.$axios, _payload);
-    commit("progress", _res);
+    if (lesson_id) {
+      const res = await Service.getLesson(this.$axios, lesson_id);
+      commit("lesson", res);
+      return;
+    }
+    commit("lesson", null);
   },
 
   async getProgress({ commit, state }, options = {}) {

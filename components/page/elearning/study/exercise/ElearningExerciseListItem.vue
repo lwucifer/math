@@ -13,16 +13,16 @@
       color="yellow"
       size="sm"
       @click.prevent="handleDoExercise"
-      >Làm bài tập</app-button
+      >Làm {{ exerciseTextTransform }}</app-button
     >
 
     <app-button
-      v-else-if="status === EXERCISE_STATUS.FAILED"
+      v-else-if="status === EXERCISE_STATUS.FAILED && canDoExercise"
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
       @click.prevent="handleDoExercise"
-      >Làm lại bài tập ({{ works }}/{{ reworks }})</app-button
+      >Làm lại {{ exerciseTextTransform }} ({{ works }}/{{ reworks }})</app-button
     >
 
     <app-button
@@ -41,6 +41,14 @@
       >Xem kết quả</app-button
     >
 
+    <app-button
+      v-else-if="!canDoExercise && status != EXERCISE_STATUS.PASSED"
+      color="secondary"
+      size="sm"
+      @click.prevent="handleReviewResult"
+      >Xem kết quả</app-button
+    >
+
     <span v-if="required" class="e-exercise-list-item__star">
       <IconStar class="icon" />
     </span>
@@ -52,7 +60,7 @@ import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
 
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -90,6 +98,8 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/study/study-exercise", ["currentLession"]),
+
     classes() {
       return {
         "e-exercise-list-item--none": this.status === EXERCISE_STATUS.NONE,
@@ -102,6 +112,14 @@ export default {
 
     canDoExercise() {
       return this.works < this.reworks;
+    },
+
+    exerciseTextTransform() {
+      if(!this.currentLession) {
+        return "bài kiểm tra";
+      } else {
+        return " bài tập";
+      }
     }
   },
 

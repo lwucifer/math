@@ -9,40 +9,48 @@
         </div>
       </div>
 
-      <div class="ee-comment-item__comment">{{ result.note }}</div>
+      <div class="ee-comment-item__comment">
+        <p v-html="result.note"></p>
+      </div>
 
-      <div class="ee-comment-item__question-item" v-for="(s, index) in mergeSubmissionQuestion" :key="index">
+      <div
+        class="ee-comment-item__question-item"
+        v-for="(s, index) in mergeSubmissionQuestion"
+        :key="index"
+      >
         <div class="ee-comment-item__title">Câu hỏi {{ s.index }}</div>
-        <app-input
+        <div class="ee-comment-item__content" v-html="s.content"></div>
+        <!-- <app-input
           textarea
           :autosize="false"
           readonly
-          :value="s.content"
-        />
+          v-html="s.content"
+        />-->
 
         <div class="ee-comment-item__title">Câu trả lời</div>
-        <app-input
+        <div class="ee-comment-item__content" v-html="s.student_answer"></div>
+        <!-- <app-input
           textarea
           :autosize="false"
           readonly
-          :value="s.student_answer"
-        />
+          v-html="s.student_answer"
+        />-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import { mapState } from "vuex";
 import { getExerciseResultText } from "~/plugins/filters";
 
-
-
 export default {
-
   computed: {
-    ...mapState("elearning/study/study-exercise", ["submissions", "questions", "result"]),
+    ...mapState("elearning/study/study-exercise", [
+      "submissions",
+      "questions",
+      "result"
+    ]),
 
     mergeSubmissionQuestion() {
       const tmp = this.questions.map((q, index) => {
@@ -65,7 +73,7 @@ export default {
           result,
           isUserTrue
         };
-      })
+      });
       console.log("[mergeSubmissionQuestion]", tmp);
       return tmp;
     },
@@ -75,9 +83,7 @@ export default {
         this.result.questions
       } (${getExerciseResultText(this.result.result)})`;
     }
-  },
-
-
+  }
 };
 </script>
 

@@ -1213,5 +1213,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/pages/_timeline.scss";
+@import "~/assets/scss/pages/social/_timeline.scss";
 </style>

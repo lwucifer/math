@@ -29,7 +29,7 @@
       <h3 class="course-item-2__name">
         <n-link
           class="title"
-          :to="`/elearning/${get(item, 'elearning_id', null)}`"
+          :to="`/elearning/${id}`"
           :title="item.name"
         >{{ item.name }}</n-link>
       </h3>
@@ -56,6 +56,7 @@
           <strong>{{ get(item, 'voting.rate', 0) }}</strong>
           ({{ get(item, 'voting.votes', 0) }})
         </span>
+        <slot name="mycoursefavourite"></slot>
       </div>
 
       <div class="course-item-2__price-wrapper">

@@ -127,7 +127,7 @@ const actions = {
                     // User signed in successfully.
                     const user = result.user;
                     console.log("user", user);
-                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user.ma);
+                    commit(mutationTypes.AUTH.SET_FIREBASE_TOKEN, user._lat);
                     return result;
                     // ...
                 })

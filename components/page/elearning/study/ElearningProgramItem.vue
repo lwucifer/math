@@ -52,18 +52,13 @@
             class="e-program-item__download-tooltip"
             position="topCenter"
           >
-            <span
-              slot="activator"
-              class="d-inline-flex align-items-center text-decoration-none"
-            >
+            <span slot="activator" class="d-inline-flex align-items-center text-decoration-none">
               <IconFileDownloadAlt class="icon body-1 text-info" />
             </span>
 
             <template>
-              <div>
+              <div v-for="(link, index) in lesson.lesson_docs || []" :key="index">
                 <a
-                  v-for="(link, index) in lesson.lesson_docs || []"
-                  :key="index"
                   :href="link.url"
                   class="d-inline-flex align-items-center caption"
                   download
@@ -149,7 +144,7 @@ export default {
         description: "",
         isShowNotify: false
       },
-      lessonStatus: false,
+      lessonStatus: false
     };
   },
 
@@ -184,7 +179,7 @@ export default {
       return `${totalExDid}/${this.exercises}`;
     },
 
-    // return primary|secondary
+    // return primary|secondary|warning
     classExerciseStatus() {
       // debugger;
       if (this.passedExercise == this.exercises) {
@@ -329,7 +324,7 @@ export default {
       this.isShowCompleteStudy = false;
       this.lessonStatus = false;
       // this.$refs.completedCheckbox.checked = false;
-      console.log("[closeConfirmCompleteStudy]", this.$refs)
+      console.log("[closeConfirmCompleteStudy]", this.$refs);
     }
   },
 

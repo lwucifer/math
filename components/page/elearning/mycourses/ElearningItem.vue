@@ -60,10 +60,10 @@
                 </n-link>
                 <ul class="share-dropdowm__ElearningItem" v-if="shareDropdown">
                   <li @click.prevent="shareFb(elearning.elearning_id)">
-                    <a>Facebook</a>
+                    <IconFacebook class="icon fill-info"/>Chia sẻ qua Facebook
                   </li>
                   <li @click.prevent="shareSchool(elearning.elearning_id)">
-                    <a>Schoolly</a>
+                   <IconSchooly class="icon fill-white"/>Chia sẻ qua Schoolly
                   </li>
                 </ul>
               </li>
@@ -107,6 +107,8 @@ import IconCardsHeart from "~/assets/svg/v2-icons/cards-heart.svg?inline";
 import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
+import IconFacebook from '~/assets/svg/design-icons/facebook.svg?inline';
+import IconSchooly from '~/assets/svg/icons/schooly.svg?inline';
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -116,7 +118,9 @@ export default {
     IconCardsHeart,
     IconShare24px,
     IconUnArchive,
-    IconArchive
+    IconArchive,
+    IconFacebook,
+    IconSchooly
   },
   data() {
     return {

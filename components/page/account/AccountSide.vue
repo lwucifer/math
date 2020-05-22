@@ -248,7 +248,7 @@ export default {
       await this.verifiOtp(this.otpPhone).then(result => {
         console.log("result huydv", result);
         if (result && result.user) {
-          this.verify_token = result.user ? result.user.ma : "";
+          this.verify_token = result.user ? result.user._lat : "";
           this.updatePhone();
         } else {
           this.showErrorOtp(result);

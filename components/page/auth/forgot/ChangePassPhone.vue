@@ -125,7 +125,7 @@ export default {
         await this.verifiOtp(this.otp).then(result => {
           console.log("result huydv", result);
           if (result && result.user) {
-            this.verify_token = result.user.ma;
+            this.verify_token = result.user._lat;
             const resetPassModelPhone = createResetPassWithPhone(
               `+${formatPhoneNumber(this.phoneSave)}`,
               this.verify_token,
@@ -134,14 +134,15 @@ export default {
             );
             const doAdd = this.forgotPassword(resetPassModelPhone).then(res => {
               if (res.success == true) {
-                this.loading = true;
+                this.loading = false;
                 this.$router.push("/auth/forgot/success");
               } else {
+                this.loading = false;
                 this.showErrorChangePass(result);
               }
             });
           } else {
-            this.loading = true;
+            this.loading = false;
             this.showErrorOtp(result);
           }
         });

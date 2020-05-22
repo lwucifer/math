@@ -34,7 +34,7 @@
             </div>
           </div>
 
-          <div class="cc-box__body" :class="{'py-0': toggleAddChapter}">
+          <div class="cc-box__body" :class="{ 'py-0': toggleAddChapter }">
             <CreateChapter
               v-if="isShowFormAddChapter"
               @cancel="toggleAddChapter"
@@ -68,6 +68,14 @@
         </div>
       </div>
     </div>
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirm"
+      :confirmLoading="false"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      title="Xác nhận"
+    />
   </div>
 </template>
 
@@ -129,12 +137,13 @@ export default {
     return {
       isShowFormAddChapter: false,
       isShowEditCourse: false,
+      showModalConfirm: false,
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`elearning/create/getContent`);
-  },
+  // mounted() {
+  //   this.$store.dispatch(`elearning/create/getContent`);
+  // },
 
   computed: {
     ...mapState("elearning/create", {
@@ -153,6 +162,15 @@ export default {
     get,
 
     handleNextStep() {
+      this.showModalConfirm = true;
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+    },
+
+    handleOk() {
+      this.showModalConfirm = false;
       this.$emit("nextStep", "settings");
     },
 
