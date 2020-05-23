@@ -25,9 +25,13 @@
         }
     }
 
-    .app-alert {
+    .alert-elearning {
         /deep/ .app-alert__content {
             color: $color-dark;
+        }
+
+        .app-alert__content {
+            color: $color-dark !important;
         }
     }
 
