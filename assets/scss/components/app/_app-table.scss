@@ -216,3 +216,16 @@
 .none-decoration {
     text-decoration: none;
 }
+
+
+.tr-static.app-table table tr{
+    position: static;
+    transform: none;
+    td{
+        position: relative;
+        z-index: 1;
+        &:hover{
+            z-index: 2;
+        }
+    }
+}

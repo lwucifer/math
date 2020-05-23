@@ -5,6 +5,7 @@
         <IconLibraryBooks class="icon body-1 mr-2 text-primary" />
         Bài 1: {{ get(lesson, "name", "") }}
       </div>
+      <div class="ml-auto">{{ get(lesson, "duration", "01:00") }}</div>
       <!-- <div class="evlc-item__head-right ml-auto">
         <button class="evlc-item__btn evlc-item__btn-collapse active">
           <IconAngleDown class="icon" />

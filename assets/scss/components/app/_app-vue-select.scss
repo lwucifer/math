@@ -52,7 +52,12 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
     box-shadow: $shadow-1;
     background: #fff;
     height: 100%;
-    border: none
+    border: none;
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      box-shadow: $shadow-hover;
+    }
   }
   
   .vs__selected-options {
@@ -95,9 +100,25 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
   }
 }
 
-.app-vue-select--has-border {
+.v-select.vs--open {
+  .vs__dropdown-toggle {
+    box-shadow: $shadow-hover;
+  }
+  
+  .vs__dropdown-menu {
+    box-shadow: $shadow-hover;
+    top: calc(100% + 1px);
+  }
+}
+
+.v-select.app-vue-select--has-border {
   .vs__dropdown-toggle {
     border: 1px solid #E0E0E0;
+  }
+  
+  .vs__dropdown-menu {
+    border: 1px solid #E0E0E0;
+    top: calc(100% - 1px)
   }
 }
 
@@ -119,6 +140,7 @@ $vs-dropdown-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !default;
 }
 
 .vs__dropdown-menu {
+  border: 0;
   li.vs__dropdown-option {
     width: 100%;
     text-overflow: ellipsis;

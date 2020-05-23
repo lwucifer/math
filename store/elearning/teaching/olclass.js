@@ -298,7 +298,7 @@ const mutations = {
     state.LessonInfo = _info;
   },
   [mutationTypes.TEACHING_OLCLASS_STUDENTS.SET_TEACHING_OLCLASS_STUDENTS_LIST](state, _list) {
-    state.Students = _info;
+    state.Students = _list;
   },
 };
 

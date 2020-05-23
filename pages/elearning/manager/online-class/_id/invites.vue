@@ -43,9 +43,7 @@
   const InvitedTab = () => import("./tabs/invited")
   const MusterTab = () => import("./tabs/muster")
 
-  export default {
-    layout: "manage",
-    
+  export default {    
     components: {
       ElearningManagerSide,
       InvitedTab,
@@ -53,6 +51,7 @@
       IconPlusCircle,
       ModalInviteStudent
     },
+    middleware: ["teacher-role"],
 
     data() {
       return {

@@ -6,7 +6,7 @@ import RepositoryFile from "~/services/elearning/teaching/RepositoryFile";
  * initial state
  */
 const state = () => ({
-  files: []
+  files: [],
 });
 
 /**
@@ -31,12 +31,17 @@ const actions = {
           .SET_TEACHING_REPOSITORY_FILE_LIST,
         result
       );
+      return result.data;
     } catch (error) {
       console.log("[Creating docs] list.error", error);
+      return null;
     }
   },
 
-  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD]({ commit }, { payload, config }) {
+  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.ADD](
+    { commit },
+    { payload, config }
+  ) {
     try {
       const result = await new RepositoryFile(this.$axios)[
         actionTypes.BASE.ADD
@@ -44,15 +49,18 @@ const actions = {
       return result;
     } catch (error) {
       console.log("[Creating repository] add.error", error);
-      throw error
+      throw error;
     }
   },
 
-  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE]({ commit }, payload) {
+  async [actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE](
+    { commit },
+    payload
+  ) {
     try {
       const result = await new RepositoryFile(this.$axios)[
         actionTypes.BASE.DELETE
-        ](payload);
+      ](payload);
       return result;
     } catch (error) {
       console.log("[Deleting repository] delete.error", error);
@@ -67,7 +75,7 @@ const mutations = {
   [mutationTypes.ELEARNING_TEACHING_REPOSITORY_FILE
     .SET_TEACHING_REPOSITORY_FILE_LIST](state, files) {
     state.files = files;
-  }
+  },
 };
 
 export default {
@@ -75,5 +83,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

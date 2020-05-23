@@ -1,0 +1,103 @@
+
+.social-account__cover {
+  background-color: #fff;
+  position: relative;
+  .actions {
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 9;
+    .btn {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+}
+//.change-cover {
+//  position: absolute;
+//  right: 1.5rem;
+//  top: 1.5rem;
+//}
+.sac__ava-wrapper {
+  position: absolute;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  z-index: 9;
+  transform: translateY(-50%);
+}
+.sac__username {
+  margin-left: 1.7rem;
+  transform: translateY(75%);
+}
+.sac__avatar {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  line-height: 0;
+  display: inline-block;
+  border: .4rem solid #fff;
+  &:hover {
+    .change-avatar {
+      bottom: 0;
+    }
+  }
+}
+.sac__menu {
+  margin-top: 10rem;
+}
+
+.change-avatar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5rem;
+  background: rgba(51, 51, 51, 0.7);
+  padding: .8rem;
+  transition: all 300ms;
+  text-align: center;
+  z-index: 9;
+}
+
+.friend-actions {
+  .app-dropdown__content {
+    box-shadow: none;
+    border: 1px solid $color-border;
+    margin-top: .8rem;
+  }
+}
+.friend-actions-list {
+  list-style-type: none;
+  width: 15rem;
+  text-align: center;
+  min-width: 100%;
+  &:after {
+    content: "";
+    display: block;
+    height: 0;
+    width: 0;
+    border: 8px solid transparent;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border-color: transparent transparent #fff transparent;
+  }
+  li {
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-border;
+    }
+  }
+  a {
+    cursor: pointer;
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.4rem;
+    line-height: 22/16;
+    padding: 1rem 1.2rem;
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}

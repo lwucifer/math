@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <ul class="app-pagination" v-else-if="total < 8 && total > 1">
+    <ul class="app-pagination" v-else-if="total < 8 && total > 1" :class="{ ...styleCls, ...extCls}">
       <li>
         <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
         <i><IconAngleLeft/></i>

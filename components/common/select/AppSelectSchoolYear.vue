@@ -11,6 +11,7 @@
       @open="onOpen"
       @close="onClose"
       :all-opt="allOpt"
+      has-border
     >
     </app-vue-select>
   </div>
