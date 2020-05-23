@@ -1,11 +1,15 @@
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
+import { get } from "lodash";
 
 /**
  * initial state
  */
 const state = () => ({
-  questions: null,
+  questions: {
+    content: [],
+    page: {},
+  },
 });
 
 /**
@@ -37,7 +41,14 @@ const actions = {
  */
 const mutations = {
   questions(state, questions) {
-    state.questions = questions;
+    state.questions.page = get(questions, "page", null);
+    if (get(questions, "page.number", 0) > 0) {
+      state.questions.content = state.questions.content.concat(
+        get(questions, "content", [])
+      );
+    } else {
+      state.questions.content = get(questions, "content", []);
+    }
   },
 };
 

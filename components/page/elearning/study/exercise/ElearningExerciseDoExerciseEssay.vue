@@ -305,16 +305,6 @@ export default {
     handleShowListQuestion() {
       console.log("[handleShowListQuestion]", this.submission);
       this.modalListQuestions = true;
-
-      // this.elearningSudyExerciseSubmissionList({
-      //   params: {
-      //     exercise_id: this.submission.exercise_id
-      //   }
-      // }).then(res => {
-      //   if (res.success == RESPONSE_SUCCESS) {
-      //     this.modalListQuestions = true;
-      //   }
-      // });
     },
 
     handleChangedQuestionNumber(_questionIdByNav) {
@@ -384,10 +374,11 @@ export default {
     },
 
     autoSubmission(_newVal) {
-      console.log("[autoSubmission]", _newVal);
-      // if(this.currentExercise.id == _newVal.id) {
-      //   this.handleQuestionSubmission();
-      // }
+      console.log("[autoSubmission]", _newVal, this.currentExercise);
+      if (this.currentExercise.id == _newVal.id) {
+        console.log("[handleQuestionSubmission] start");
+        this.handleQuestionSubmission();
+      }
     }
   }
 };

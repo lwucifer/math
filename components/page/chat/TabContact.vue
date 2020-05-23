@@ -2,7 +2,7 @@
   <div class="aside-box">
     <div class="tool-top">
       <n-link to="/" class="tool-top__link">
-        <IconLeftArrow class="mr-3 fill-dark" width="5px" height="10px"/> Tin nhắn
+        <IconLeftArrow class="mr-3 fill-dark" width="5px" height="10px" />Tin nhắn
       </n-link>
 
       <div class="tool-top__feature">
@@ -13,7 +13,7 @@
           class="link--dropdown"
         >
           <button slot="activator" type="button" class="link--dropdown__button">
-            <IconCog  class="fill-base mr-3"/>
+            <IconCog class="fill-base mr-3" />
           </button>
 
           <div class="link--dropdown__content">
@@ -33,7 +33,7 @@
         </app-dropdown>
 
         <button @click="create()" title="Viết tin nhắn mới">
-          <IconEdit class="fill-base"/>
+          <IconEdit class="fill-base" />
         </button>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-addon">
-            <IconSearch width="15" height="15" />
+            <IconSearch width="15" height="15" class="fill-base"/>
           </div>
 
           <input type="text" placeholder="Tìm kiếm người và nhóm" />
@@ -51,7 +51,7 @@
             <a href="#">
               <IconCloseOutline class="fill-999" width="15" height="15" />
             </a>
-          </div> -->
+          </div>-->
         </div>
       </div>
     </div>
@@ -65,19 +65,23 @@
           <li>
             <a @click="tabClick(2)" :class="tabChat == false ? 'active' : ''">Group</a>
           </li>
-        </ul> -->
+        </ul>-->
 
         <div class="tabs-content" v-if="isContact">
           <div class="align-item" v-for="(item, index) in friends" :key="index">
-            <div class="align-item__image">
-              <app-avatar :src="item.avatar" size="md" class="comment-item__avatar" />
+            <div class="left">
+              <div class="align-item__image">
+                <app-avatar :src="item.avatar" size="md" class="comment-item__avatar" />
+              </div>
+
+              <div class="align-item__meta">
+                <h5 class="align-item__title">
+                  <n-link slot="title" to>{{ item.name }}</n-link>
+                </h5>
+              </div>
             </div>
 
-            <div class="align-item__meta">
-              <h5 class="align-item__title">
-                <n-link slot="title" to>{{ item.name }}</n-link>
-              </h5>
-            </div>
+            <div class="right"></div>
           </div>
         </div>
 
@@ -88,29 +92,38 @@
                 <IconPlus />
               </div>Tạo chat mới
             </div>
+
             <template v-else>
               <div
-                class="align-item"
+                class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
                 @click="pushUrl(item.room_id)"
               >
-                <div class="align-item__image">
-                  <app-avatar
-                    :src=" item.room_avatar_member ? item.room_avatar_member : ''"
-                    size="md"
-                    class="comment-item__avatar"
-                  />
-                </div>
-                <div class="align-item__meta">
-                  <h5 class="align-item__title">
-                    <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
-                  </h5>
-                  <div class="align-item__desc">
-                    <p>{{ item.content }}</p>
+                <div class="left d-flex">
+                  <div class="align-item__image">
+                    <app-avatar
+                      :src=" item.room_avatar_member ? item.room_avatar_member : ''"
+                      size="md"
+                      class="comment-item__avatar"
+                    />
                   </div>
+                  
+                  <div class="align-item__meta">
+                    <h5 class="align-item__title">
+                      <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
+                    </h5>
+                    <div class="align-item__desc">
+                      <p>{{ item.content }}</p>
+                    </div>
+                  </div>  
                 </div>
-                <app-dropdown
+
+                <div class="right text-right">
+                  <p><DotActive/></p>
+                  <p>25 giây</p>
+                </div>
+                <!-- <app-dropdown
                   position="right"
                   v-model="dropdownActions"
                   :content-width="'12rem'"
@@ -133,7 +146,7 @@
                       </li>
                     </ul>
                   </div>
-                </app-dropdown>
+                </app-dropdown>-->
               </div>
               <client-only>
                 <infinite-loading @infinite="chatsInfiniteHandler">
@@ -206,7 +219,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- <div class="aside-box__bottom">
       <ul class="group-button list-unstyle">
         <li>
@@ -222,7 +235,7 @@
           </a>
         </li>
       </ul>
-    </div> -->
+    </div>-->
 
     <!-- Modal tạo nhóm chát -->
     <ModalAddGroup
@@ -254,12 +267,13 @@ import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconUsers from "~/assets/svg/icons/users.svg?inline";
 import IconChat from "~/assets/svg/icons/chat-green.svg?inline";
 import IconEdit from "~/assets/svg/design-icons/edit.svg?inline";
-import IconCog from '~/assets/svg/icons/cog.svg?inline';
+import IconCog from "~/assets/svg/icons/cog.svg?inline";
 import IconUsersAlt from "~/assets/svg/design-icons/users-alt.svg?inline";
 import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
-import IconLeftArrow from '~/assets/svg/icons/left-arrow.svg?inline';
+import IconLeftArrow from "~/assets/svg/icons/left-arrow.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import DotActive from "~/assets/svg/v2-icons/elipse.svg?inline";
 
 import GroupService from "~/services/message/Group";
 import MessageType from "~/services/message/MessageType";
@@ -282,7 +296,8 @@ export default {
     ModalLeaveGroup,
     IconPlus,
     IconLeftArrow,
-    IconDots
+    IconDots,
+    DotActive
   },
   props: {
     // contacts: {

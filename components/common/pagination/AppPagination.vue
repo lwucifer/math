@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <ul class="app-pagination" v-else-if="total < 8 && total > 1">
+    <ul class="app-pagination" v-else-if="total < 8 && total > 1" :class="{ ...styleCls, ...extCls}">
       <li>
         <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
         <i><IconAngleLeft/></i>
@@ -50,7 +50,7 @@
       </li>
     </ul>
 
-    <ul class="app-pagination" v-else-if="total > 1">
+    <ul class="app-pagination" v-else-if="total > 1" :class="{ ...styleCls, ...extCls}">
       <li>
         <a class="link link-arrow" @click="goTo(prev, current == 1)" :class="prev ? '' : 'disabled'">
         <i><IconAngleLeft/></i>
@@ -116,6 +116,14 @@ export default {
   },
 
   props: {
+    position: {
+      type: String,
+      default: 'center' // left | center | right
+    },
+    extCls: {
+      type: Object,
+      default: () => {}
+    },
     type: {
       type: Number,
       required: false,
@@ -181,6 +189,16 @@ export default {
         this.pagination.number * this.pagination.size +
         this.pagination.numberOfElements
       );
+    },
+    styleCls() {
+      const positionCls = {
+        'app-pagination--pos-left': this.position === 'left',
+        'app-pagination--pos-center': this.position === 'center',
+        'app-pagination--pos-right': this.position === 'right',
+      }
+      return {
+        ...positionCls
+      }
     }
   }
 };

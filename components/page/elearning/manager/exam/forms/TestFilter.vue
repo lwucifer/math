@@ -33,6 +33,7 @@
           placeholder="Tỷ lệ hoàn thành"
           @input="handleSelectRate"
           :all-opt="allOpt"
+          has-border
         />
       </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 13rem;">
@@ -45,6 +46,7 @@
           placeholder="Thể loại"
           @input="handleSelectType"
           :all-opt="allOpt"
+          has-border
         />
       </div>
     </div>
