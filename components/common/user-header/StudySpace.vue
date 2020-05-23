@@ -4,33 +4,34 @@
       position="left"
       v-model="dropdownCourse"
       class="link--dropdown link--dropdown-course"
-      open-on-click
     >
-      <button to slot="activator" class="item" slot-scope="{ on }" v-on="on">
+      <n-link slot="activator" class="item" to="/elearning/mycourses">
         Góc học tập
         <IconArrowDropDown24px />
-      </button>
+      </n-link>
       <div class="link--dropdown__content wrap-arrow__content">
         <ul>
-          <li v-for="(elearning,index) in filterElearningStudy" :key="index" v-if="index < 3">
-            <template>
-              <n-link :to="'/elearning/'+ elearning.elearning_id">
-                <div>
-                  <div class="d-flex">
-                    <img v-lazy="elearning.avatar.low" class="avatar-elearning__study" />
-                    <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
-                  </div>
-                  <div class="proccess-bar-study-border">
-                    <div class="percent-proccess" v-bind:style="{width: elearning.progress +'%'}"></div>
-                  </div>
+          <template v-for="(elearning,index) in filterElearningStudy">
+            <li :key="index" v-if="index < 3">
+              <template>
+                <n-link :to="'/elearning/'+ elearning.elearning_id">
                   <div>
-                    <span>Đã hoàn thành:</span>
-                    <strong class="color-primary">{{elearning.progress}}%</strong>
+                    <div class="d-flex">
+                      <img v-lazy="elearning.avatar.low" class="avatar-elearning__study" />
+                      <span class="ml-2 name-elearning__study">{{elearning.name}}</span>
+                    </div>
+                    <div class="proccess-bar-study-border">
+                      <div class="percent-proccess" v-bind:style="{width: elearning.progress +'%'}"></div>
+                    </div>
+                    <div>
+                      <span>Đã hoàn thành:</span>
+                      <strong class="color-primary">{{elearning.progress}}%</strong>
+                    </div>
                   </div>
-                </div>
-              </n-link>
-            </template>
-          </li>
+                </n-link>
+              </template>
+            </li>
+          </template>
           <li class="text-center" @click.prevent="pushMycourses">
             <!-- <n-link to="/elearning/mycourses">Xem thêm</n-link> -->
             <n-link to>Xem thêm</n-link>
