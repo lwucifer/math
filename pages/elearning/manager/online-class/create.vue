@@ -22,9 +22,8 @@
                   :options="courses"
                   label="text"
                   placeholder="Chọn bài giảng/khóa học"
-                  searchable
-                  clearable
                   @input="handleChangedCourse"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -50,9 +49,8 @@
                   :options="privacies"
                   label="text"
                   placeholder="Công khai"
-                  searchable
-                  clearable
                   @input="handleChangedPrivacy"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -247,7 +245,7 @@
 
           <div class="mt-4 mb-4 text-right">
             <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSave" :disabled="!fullParams">Lưu nháp</app-button>
+            <app-button color="info" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">Lưu nháp</app-button>
             <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
           </div>
         </div>
@@ -268,10 +266,10 @@
     
     <app-modal-confirm
       v-if="showModalConfirmDraf"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
+      :confirmLoading="confirmDrafLoading"
+      @ok="handleDrafOk"
       :width="550"
-      @cancel="handleCancelModal"
+      @cancel="handleDrafCancelModal"
       :footer="false"
       :header="false"
       title="Bạn muốn lưu bản nháp tạo phòng học này?"
@@ -339,6 +337,7 @@ function initialState() {
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
+    confirmDrafLoading: false,
     showBonus: false,
     schedules: [initialSchedule],
     filterCourse: null,
@@ -568,6 +567,30 @@ export default {
       }
     },
 
+    async handleDrafOk() {
+      try {
+        this.confirmLoading = true;
+        const doCreate = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
+          JSON.stringify(this.params)
+        );
+        if (doCreate.success) {
+          this.fnCancel();
+          this.message = "Lưu bản nháp phòng học thành công!";
+          this.showNotify = true;
+        } else if (doCreate.message) {
+          this.message = doCreate.message;
+          this.showNotify = true;
+        }
+      } catch (e) {
+        this.message = e;
+        this.showNotify = true;
+      } finally {
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
+      }
+    },
+
     fnCancel() {
       let temp = [...this.courses];
       Object.assign(this.$data, initialState());
@@ -577,13 +600,18 @@ export default {
     fnSave() {
       this.showModalConfirm = true;
     },
-    fnSave2() {
-      this.showModalConfirm = true;
+    fnSaveDraf() {
+      this.showModalConfirmDraf = true;
     },
 
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+    },
+    
+    handleDrafCancelModal() {
+      this.showModalConfirmDraf = false;
+      this.confirmDrafLoading = false;
     },
 
     async getElearnings() {

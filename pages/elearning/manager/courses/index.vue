@@ -38,6 +38,7 @@
                     v-model="params.keyword"
                     :size="'sm'"
                     @submit="getList"
+                    @keyup.enter.native="getList"
                   ></app-search>
                 </div>
               </div>
@@ -55,12 +56,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectType"
-                    :options="types"
                     label="text"
                     placeholder="Thể loại"
-                    searchable
-                    clearable
-                    @input="handleChangedType"
+                     @input="handleChangedType"
+                    :options="typeOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -68,12 +69,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectPrivacy"
-                    :options="privacies"
                     label="text"
                     placeholder="Hiển thị"
-                    searchable
-                    clearable
                     @input="handleChangedPrivacy"
+                    :options="privacyOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -81,12 +82,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectFree"
-                    :options="free"
                     label="text"
                     placeholder="Học phí"
-                    searchable
-                    clearable
                     @input="handleChangedFree"
+                    :options="freeOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
               </div>
@@ -286,6 +287,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       showTable: true,
       titleModelConfirm: '',
       textModelConfirm: '',
@@ -399,19 +404,16 @@ export default {
       time2: null,
       selectType: null,
       types: [
-        { value: null, text: "Tất cả" },
         { value: "COURSE", text: "Khóa học" },
         { value: "LECTURE", text: "Bài giảng" }
       ],
       selectPrivacy: null,
       privacies: [
-        { value: null, text: "Tất cả" },
         { value: "PUBLIC", text: "Công khai" },
         { value: "PRIVATE", text: "Riêng tư" }
       ],
       selectFree: null,
       free: [
-        { value: null, text: "Tất cả" },
         { value: true, text: "Miễn phí" },
         { value: false, text: "Có phí" }
       ],
@@ -442,6 +444,15 @@ export default {
     ...mapState(STORE_NAMESPACE_STATISTIC, {
       stateStatistic: "teacherStatistic"
     }),
+    typeOpts() {
+      return [this.allOpt, ...this.types]
+    },
+    freeOpts() {
+      return [this.allOpt, ...this.free]
+    },
+    privacyOpts() {
+      return [this.allOpt, ...this.privacies]
+    },
   },
 
   watch: {

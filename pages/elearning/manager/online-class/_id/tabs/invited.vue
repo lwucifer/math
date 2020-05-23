@@ -11,6 +11,7 @@
               v-model="params.query"
               :size="'sm'"
               @submit="submit"
+              @keyup.enter.native="submit"
             ></app-search>
           </div>
         </div>
@@ -31,14 +32,12 @@
           <app-vue-select
             class="app-vue-select filter-form__item__selection"
             v-model="filterCourse"
-            :options="courses"
+            :options="courseOpts"
             label="text"
             placeholder="Lớp học"
-            searchable
-            clearable
             @input="handleChangedCourse"
-            @search:focus="handleFocusSearchInput"
-            @search:blur="handleBlurSearchInput"
+            :all-opt="allOpt"
+            has-border
           ></app-vue-select>
         </div>
 
@@ -181,6 +180,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       openModal: false,
       showFilter: false,
       heads: [
@@ -238,6 +241,9 @@ export default {
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
     }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses]
+    }
   },
 
   methods: {

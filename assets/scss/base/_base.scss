@@ -552,3 +552,7 @@ input:-webkit-autofill:active {
 .bg-green {
   background: rgba($color: $color-primary, $alpha: 0.9);
 }
+
+.vs--disabled.app-vue-select .vs__dropdown-toggle {
+  background-color: #f8f8f8;
+}

@@ -34,6 +34,7 @@
               v-model="params.query"
               :size="'sm'"
               @submit="submit"
+              @keyup.enter.native="submit"
             ></app-search>
           </div>
         </div>
@@ -54,12 +55,12 @@
           <app-vue-select
             class="app-vue-select filter-form__item__selection"
             v-model="filterIndex"
-            :options="indexs"
+            :options="indexOpts"
             label="text"
             placeholder="Thứ tự buổi học"
-            searchable
-            clearable
             @input="handleChangedIndex"
+            :all-opt="allOpt"
+            has-border
           ></app-vue-select>
         </div>
       </div>
@@ -148,6 +149,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       tab: 1,
       openModal: false,
       showFilter: false,
@@ -239,7 +244,10 @@ export default {
     ...mapState(STORE_NAMESPACE, {
       stateLessons: "Lessons",
       stateAttendantSummary: "AttendantSummary",
-    })
+    }),
+    indexOpts() {
+      return [this.allOpt, ...this.indexs]
+    }
   },
 
   methods: {
@@ -247,8 +255,8 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter && this.filterCourse != null) {
-        this.filterCourse = null;
+      if (this.showFilter && this.filterIndex != null) {
+        this.filterIndex = null;
         this.params = {...this.params,
           lesson_index: null
         }

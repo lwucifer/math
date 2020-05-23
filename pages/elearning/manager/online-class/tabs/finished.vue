@@ -24,6 +24,7 @@
             v-model="params.query"
             :size="'sm'"
             @submit="submit"
+            @keyup.enter.native="submit"
           ></app-search>
         </div>
       </div>
@@ -44,12 +45,12 @@
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
-          :options="courses"
+          :options="courseOpts"
           label="text"
           placeholder="Bài giảng/khóa học"
-          searchable
-          clearable
           @input="handleChangedCourse"
+          :all-opt="allOpt"
+          has-border
         ></app-vue-select>
       </div>
     </div>
@@ -144,6 +145,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       loading: false,
       showFilter: false,
       tab: 1,
@@ -199,7 +204,10 @@ export default {
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
       stateElearnings: "Elearnings"
-    })
+    }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses]
+    }
   },
 
   methods: {
@@ -207,7 +215,7 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           elearning_id: null
