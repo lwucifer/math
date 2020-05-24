@@ -840,22 +840,22 @@ button:focus {
     }
 }
 
-button {
-    position: relative;
-    z-index: 0;
-    svg {
-        position: relative;
-        z-index: -1;
-    }
-}
+// button {
+//     position: relative;
+//     z-index: 0;
+//     svg {
+//         position: relative;
+//         z-index: -1;
+//     }
+// }
 
 .message-modal .app-modal-content {
     padding: 2rem;
 }
 
-ul {
-    list-style: none;
-}
+// ul {
+//     list-style: none;
+// }
 
 .btn-create-chat {
     display: flex;
