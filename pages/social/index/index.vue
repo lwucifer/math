@@ -1,5 +1,7 @@
 <template>
-  <div class="page-timeline">
+  <main class="page-timeline">
+    <h1 class="bg-white heading-4 pa-4">Trang chủ</h1>
+    <app-divider class="my-0" />
     <PostEditor
       :active="postEditorActive"
       @submit="addPost"
@@ -275,7 +277,7 @@
       @cancel="hideModalConfirmDelete"
       @ok="deletePost(modalConfirmDeleteId)"
     ></app-modal-confirm>
-  </div>
+  </main>
 </template>
 
 <script>
