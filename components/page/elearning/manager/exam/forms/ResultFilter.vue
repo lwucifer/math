@@ -15,6 +15,7 @@
             @keyup.enter.native="handleSubmitSearch"
             @submit="submit"
             color="primary"
+            has-border
           >
           </app-search>
         </div>

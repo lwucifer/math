@@ -3,7 +3,10 @@
     <TabQAEditor class="mb-15" />
 
     <div class="d-flex align-items-center">
-      <h5>151 Bình luận</h5>
+      <h5>
+        {{ numeral(get(questions, "page.total_elements", 0)).format() }} Bình
+        luận
+      </h5>
       <div class="ml-auto">
         <app-search
           class="mb-0 mr-4"
@@ -14,6 +17,8 @@
           placeholder="Sắp xếp theo"
           size="sm"
           :options="sortOpts"
+          :value="params.sort_by"
+          @change="handleChangeSort"
         ></app-select>
       </div>
     </div>
@@ -25,28 +30,20 @@
         :question="question"
         v-slot:default="slotProps"
       >
-        <div
-          v-for="(interactive_answer, index) in get(
-            question,
-            'interactive_answers',
-            []
-          )"
-          :key="index"
-        >
-          <TabQACommentItem :level="2" :question="interactive_answer" />
-        </div>
-        <a href class="e-study-tab-qa__more e-study-tab-qa__more--child"
-          >Xem thêm bình luận</a
-        >
         <TabQACommentEditor
           v-if="slotProps.showReply"
           class="mt-4"
           :question="question"
         />
+        <Answers :question="question" />
       </TabQACommentItem>
 
-      <div class="text-center" v-if="get(questions, 'page.last', false)">
-        <a href class="e-study-tab-qa__more">Xem thêm bình luận</a>
+      <div
+        @click="handleLoadMoreQuestion"
+        class="text-center"
+        v-if="!get(questions, 'page.last', true)"
+      >
+        <a class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>
     </div>
   </div>
@@ -56,9 +53,12 @@
 import IconSearch from "~/assets/svg/v2-icons/search_24px.svg?inline";
 import TabQAEditor from "~/components/page/elearning/study/tab-qa/TabQAEditor.vue";
 import TabQACommentItem from "~/components/page/elearning/study/tab-qa/TabQACommentItem.vue";
+import Answers from "~/components/page/elearning/study/tab-qa/Answers.vue";
 import TabQACommentEditor from "~/components/page/elearning/study/tab-qa/TabQACommentEditor.vue";
 import { get } from "lodash";
 import { mapState } from "vuex";
+import numeral from "numeral";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -66,19 +66,15 @@ export default {
     TabQAEditor,
     TabQACommentItem,
     TabQACommentEditor,
+    Answers,
   },
 
   mounted() {
-    const options = {
-      params: {
-        elearning_id: get(this, "$route.params.id", ""),
-      },
-    };
-    this.$store.dispatch(`elearning/study/questions/getListQuestion`, options);
+    useEffect(this, this.handleGetQuestions.bind(this), ["params"]);
   },
 
   computed: {
-    ...mapState("elearning/study/questions", {
+    ...mapState("elearning/study/detail", {
       questions: "questions",
     }),
   },
@@ -87,23 +83,41 @@ export default {
     return {
       sortOpts: [
         {
-          value: 0,
+          value: "FAVOURITE",
           text: "Thích nhiều nhất",
         },
         {
-          value: 1,
+          value: "NEWEST",
           text: "Mới nhất",
         },
         {
-          value: 2,
+          value: "OLDEST",
           text: "Cũ nhất",
         },
       ],
+      params: {
+        elearning_id: get(this, "$route.params.id", ""),
+        page: 1,
+        sort_by: "NEWEST", //NEWEST | OLDEST | FAVOURITE
+      },
     };
   },
 
   methods: {
+    handleChangeSort(value) {
+      this.params.sort_by = value;
+      this.params.page = 1;
+    },
+    handleGetQuestions() {
+      this.$store.dispatch(`elearning/study/detail/getListQuestion`, {
+        params: this.params,
+      });
+    },
+    handleLoadMoreQuestion() {
+      this.params.page = get(this, "questions.page.number", 0) + 2;
+    },
     get,
+    numeral,
   },
 };
 </script>

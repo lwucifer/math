@@ -4,7 +4,7 @@
       <app-input
         placeholder="Nhập để tìm kiếm..."
         style="width: 260px"
-        @input="handleChangeSearch"
+        v-model="params.name"
       >
         <template #append-inner
           ><IconSearch2 style="margin: auto 2rem" width="20px" height="20px"
@@ -24,7 +24,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="file in get(files, 'data.content', [])"
+            v-for="file in get(files, 'content', [])"
             :key="get(file, 'id', '')"
             :style="active(file)"
           >
@@ -49,6 +49,11 @@
           </tr>
         </tbody>
       </table>
+      <app-pagination
+        class="mt-4"
+        :pagination="get(files, 'page', null)"
+        @pagechange="onChangePage"
+      />
       <app-modal-confirm
         centered
         v-if="showModalConfirm"
@@ -64,10 +69,9 @@
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconSearch2 from "~/assets/svg/icons/search2.svg?inline";
-
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 import { useEffect } from "~/utils/common";
 
 export default {
@@ -89,21 +93,38 @@ export default {
       id_file: "",
       showModalConfirm: false,
       confirmLoading: false,
-      keyword: "",
+      files: null,
+      loading: false,
+      params: {
+        type: this.type,
+        page: 1,
+        size: 10,
+        name: "",
+      },
     };
   },
 
-  created() {
-    useEffect(this, this.handleGetFile.bind(this), ["keyword"]);
+  mounted() {
+    useEffect(this, this.handleGetFile.bind(this), ["params"]);
   },
 
-  computed: {
-    ...mapState("elearning/teaching/repository-files", {
-      files: "files",
-    }),
+  watch: {
+    "params.name": {
+      handler: function() {
+        this.params.page = 1;
+      },
+    },
+    type: {
+      handler: function() {
+        this.params.type = this.type;
+      },
+    },
   },
 
   methods: {
+    onChangePage(page) {
+      this.params.page = toNumber(get(page, "number", 0)) + 1;
+    },
     handleSelectUrl(file, e) {
       this.file_select = file;
       this.$emit("handleSelectUrl", file);
@@ -144,21 +165,17 @@ export default {
         ? "background: #ddd"
         : "";
     },
-    handleChangeSearch(keyword) {
-      this.keyword = keyword;
-    },
-    handleGetFile() {
-      let params = {
-        type: this.type,
-        page: 1,
-        size: 10,
+    async handleGetFile() {
+      // this.loading = true;
+      let options = {
+        params: this.params,
       };
-      if (this.keyword) params.name = this.keyword;
-      const options = { params };
-      this.$store.dispatch(
+      const res = await this.$store.dispatch(
         `elearning/teaching/repository-files/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`,
         options
       );
+      this.files = res;
+      // this.loading = false;
     },
     get,
   },

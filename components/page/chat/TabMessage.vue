@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-8 message-chat__content">
+  <div class="col-md-12 message-chat__content">
     <div class="aside-box">
       <div class="aside-box__top" v-if="isCreated">
         <div class="aside-box__top__create d-flex-center w-100">
@@ -42,7 +42,7 @@
           </div>
           <div class="message-decs__title">
             <span>{{nameGroup}}</span>
-            <p>Đang hoạt động</p>
+            <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
         <div class="message-tool">
@@ -59,7 +59,7 @@
             </li>
             <li>
               <!-- @click="visibleAddByPhone = true" -->
-              <a href="#"> 
+              <a href="#" @click="showInfo = !showInfo"> 
                 <IconExclamationCircle width="18px" height="18px" class="fill-primary"/>
               </a>
             </li>
@@ -79,7 +79,7 @@
         </client-only>
       </div>
 
-      <div class="aside-box__content" v-if="!checkList">
+      <div class="aside-box__content" v-if="!checkList" :class="{'padding-show-info': showInfo}">
         <client-only>
           <infinite-loading
             direction="top"
@@ -470,19 +470,25 @@
             </div>
 
             <app-input
-              class="mb-0 w-100 bg-light"
+              class="mb-0 w-100 bg-light chat-message"
               v-model="textChat"
               v-on:keyup.enter="handleEmitMessage"
-              placeholder="Nhấp tin nhắn..."
-            />
+              placeholder="Nhập tin nhắn..."
+            >
+              <template #append-inner> <IconSmile width="16" height="16" class="fill-primary mr-3"/></template>
+            </app-input>
 
-            <a href="#">
-              <IconSmile width="15" height="15" />
-            </a>
+            <button class="bg-primary button-send">
+              <IconSend24px width="15" height="15" class="fill-white"/>
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <transition enter-active-class="animated faster fadeInRight" leave-active-class="animated faster fadeOutRight">
+      <TabInfo v-if="showInfo"/> 
+    </transition>
 
     <!-- Modal thêm bạn qua số điện thoại -->
     <ModalAddFriend @close="visibleAddByPhone = false" v-if="visibleAddByPhone" />
@@ -560,6 +566,7 @@ import FriendService from "~/services/social/friend";
 
 import ModalAddFriend from "~/components/page/chat/ModalAddFriend";
 import ModalAddFriendByGroup from "~/components/page/chat/ModalAddFriendByGroup";
+import TabInfo from "~/components/page/chat/TabInfo";
 
 import IconPhone from "~/assets/svg/v2-icons/phone_24px.svg?inline";
 import IconVideo from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
@@ -573,6 +580,7 @@ import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import IconExclamationCircle from '~/assets/svg/design-icons/exclamation-circle.svg?inline';
+import IconSend24px from '~/assets/svg/v2-icons/send_24px.svg?inline';
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
@@ -592,7 +600,9 @@ export default {
     IconFileAlt,
     ModalAddFriend,
     ModalAddFriendByGroup,
-    IconExclamationCircle
+    IconExclamationCircle,
+    IconSend24px,
+    TabInfo
   },
 
   props: {
@@ -692,9 +702,10 @@ export default {
       name: "",
       roomIdPush: "",
       fileList: [],
-      dataCheck: false
+      dataCheck: false,
       // avatarUser: {},
-      // fullname: ""
+      // fullname: "",
+      showInfo: false
     };
   },
 
@@ -745,8 +756,8 @@ export default {
       const dataTotal =
         this.memberList &&
         this.memberList.page &&
-        this.memberList.page.totalElements
-          ? this.memberList.page.totalElements
+        this.memberList.page.total_elements
+          ? this.memberList.page.total_elements
           : "";
       if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
         const [dataFilterMember] = dataMember.filter(

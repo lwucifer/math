@@ -42,7 +42,6 @@
       multiple-selection
       @pagechange="onPageChange"
       @selectionChange="selectRow"
-      :loading="updating"
     >
       <template v-slot:cell(name)="{row}">
         <td>
@@ -124,7 +123,7 @@
             total: 0,
             size: 10,
             page: 1,
-            totalElements: 0,
+            total_elements: 0,
             first: 1,
             last: 1,
             number: 0

@@ -1,15 +1,16 @@
 <template>
-  <div class="editor post-editor" :class="classes" @click="showOverlay && setActive(true)">
+  <div class="post-editor" :class="classes" @click="showOverlay && setActive(true)">
     <div v-if="showOverlay" class="post-editor__overlay" @click.stop="localActive = false"></div>
     <div class="post-editor__components" @click.self="editor.focus()">
-      <div class="post-editor__top">
-        <app-avatar
-          class="post-editor__avatar"
-          :src="avatarUser && avatarUser.low ? avatarUser.low : null"
-        />
+      <app-avatar
+        class="post-editor__avatar"
+        :src="avatarUser && avatarUser.low ? avatarUser.low : null"
+        :size="55"
+      />
 
+      <div class="post-editor__right">
         <client-only>
-          <div class="post-editor__editor">
+          <div class="post-editor__editor editor">
             <editor-content :editor="editor" />
 
             <div class="suggestion-list" v-show="hasResults" ref="suggestions">
@@ -38,201 +39,177 @@
             </div>
           </div>
         </client-only>
-      </div>
 
-      <PostEditorUpload
-        v-show="fileList.length"
-        :mode="mode"
-        :fileList="fileList"
-        :previewList="previewList"
-        @remove-item="removeUploadItem"
-        @change="handleUploadChange"
-      />
-
-      <div class="post-editor__tagger-summary">
-        <!-- LABEL -->
-        <template v-if="label !== null">
-          cảm thấy
-          <b>{{ getLabelText() }}</b>
-        </template>
-        <!-- END LABEL -->
-
-        <!-- TAG -->
-        <template v-if="listTag.length">
-          cùng với
-          <n-link
-            class="font-weight-bold"
-            :to="`/account/${listTag[0].id}`"
-          >{{ selectedTags[0].text }}</n-link>
-
-          <template v-if="listTag.length > 1">
-            và
-            <n-link
-              v-if="listTag.length === 2"
-              class="font-weight-bold"
-              :to="`/account/${listTag[1].id}`"
-            >{{ selectedTags[1].text }}</n-link>
-
-            <app-dropdown v-else>
-              <b slot="activator">{{ listTag.slice(1).length }} người khác.</b>
-              <div
-                v-for="item in selectedTags.slice(1)"
-                :key="item.value"
-                class="px-3 py-2"
-                style="white-space: nowrap;"
-              >
-                <a :href="`/account/${item.id}`" target="_blank">{{ item.text }}</a>
-              </div>
-            </app-dropdown>
-          </template>
-        </template>
-        <!-- END TAG -->
-
-        <!-- CHECK IN -->
-        <template v-if="checkin !== null">
-          tại
-          <b>
-            <n-link to>{{ selectedCheckin }}</n-link>
-          </b>
-        </template>
-        <!-- END CHECK IN -->
-      </div>
-
-      <div v-if="linkDataFetching" class="text-center text-sub caption py-5">
-        <template v-if="linkDataFetchError">Không thể tải bản xem trước.</template>
-        <template v-else>Đang tìm nạp bản xem trước</template>
-      </div>
-      <div v-else-if="!linkDataFetching && linkDataFetched" class="post-editor__preview-link">
-        <a href class="post-editor__preview-link__remove" @click.prevent="removePreviewLink">
-          <IconTimes class="icon" />
-        </a>
-
-        <app-content-box
-          tag="a"
-          target="_blank"
-          class="mb-4"
-          size="md"
-          :href="link.url"
-          :image="link.image"
-          :title="link.title"
-          :desc="link.description"
-          :meta-footer="link.siteName"
+        <PostEditorUpload
+          v-show="fileList.length"
+          :mode="mode"
+          :fileList="fileList"
+          :previewList="previewList"
+          @remove-item="removeUploadItem"
+          @change="handleUploadChange"
         />
-      </div>
 
-      <app-divider class="mt-3 mb-0" />
-
-      <div v-show="showTags">
-        <app-select
-          mode="tags"
-          class="post-editor__select"
-          placeholder="Cùng với ai?"
-          style="width: 100%"
-          :emptyMessage="null"
-          :options="tagOptions"
-          v-model="listTag"
-          @visible-change="handleFriendsVisibleChange"
-          @search="searchFriends"
-        >
-          <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-            <app-avatar
-              :src="option.avatar && option.avatar.low ? option.avatar.low : null"
-              size="sm"
-              class="mr-3"
-            ></app-avatar>
-            {{ option.text }}
-          </div>
-
-          <client-only slot="options-append">
-            <infinite-loading :identifier="friendsInfiniteId" @infinite="friendsInfiniteHandler">
-              <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
-            </infinite-loading>
-          </client-only>
-        </app-select>
-        <app-divider class="ma-0" />
-      </div>
-
-      <div v-show="showCheckin">
-        <app-select
-          :options="checkinOptions"
-          v-model="checkin"
-          class="post-editor__select"
-          placeholder="Tại"
-          show-clear
-          searchable
-          style="width: 100%"
-        >
-          <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
-            <app-avatar src="https://picsum.photos/80/80" size="sm" class="mr-3"></app-avatar>
-            {{ option.text }}
-          </div>
-        </app-select>
-        <app-divider class="mt-0 mb-3" />
-      </div>
-
-      <div class="post-editor__toolbar">
-        <button class="post-editor__toolbar-item image" @click="handleClickUploadImage">
-          <IconAddImage />
-          <span>Hình ảnh</span>
-        </button>
-        <button class="post-editor__toolbar-item tag" @click="showTags = !showTags">
-          <IconUserGroup />
-          <span>Tag bạn bè</span>
-        </button>
-        <button class="post-editor__toolbar-item check-in" @click="showCheckin = !showCheckin">
-          <IconPinLocation />
-          <span>Check in</span>
-        </button>
-        <app-dropdown class="post-editor__label-dropdown" open-on-click v-model="labelDropdrown">
-          <button
-            slot="activator"
-            slot-scope="{ on }"
-            class="post-editor__toolbar-item emoji"
-            v-on="on"
-          >
-            <IconEmoji />
-            <span>Nhãn cảm xúc</span>
-          </button>
-
-          <ul class="post-editor__status-list">
-            <li
-              v-for="item in labelList"
-              :key="item.id"
-              :class="{ 'active': label === item.id }"
-              @click="handleClickLabel(item.id)"
-            >
-              <i class="mr-4">{{ item.icon }}</i>
-              <span>{{ item.des }}</span>
-            </li>
-          </ul>
-        </app-dropdown>
-      </div>
-
-      <app-divider class="my-3" />
-
-      <div class="post-editor__privacy mt-3">
-        <span class="mr-3">Chế độ đăng tin</span>
-        <app-select
-          class="post-editor__select-private"
-          :options="configPrivacyLevels.map(item => ({
-            ...item,
-            text: item.name
-          }))"
-          v-model="privacy"
-        >
-          <template slot="prepend" slot-scope="{ selected }">
-            <img class="d-block" :src="selected.image" />
+        <div class="post-editor__tagger-summary">
+          <!-- LABEL -->
+          <template v-if="label !== null">
+            cảm thấy
+            <b>{{ getLabelText() }}</b>
           </template>
-        </app-select>
-      </div>
+          <!-- END LABEL -->
 
-      <app-button
-        class="post-editor__submit mt-4"
-        :disabled="!submitable"
-        full-width
-        square
-        @click.stop="submit"
-      >Đăng tin</app-button>
+          <!-- TAG -->
+          <template v-if="listTag.length">
+            cùng với
+            <n-link
+              class="font-weight-bold"
+              :to="`/account/${listTag[0].id}`"
+            >{{ selectedTags[0].text }}</n-link>
+
+            <template v-if="listTag.length > 1">
+              và
+              <n-link
+                v-if="listTag.length === 2"
+                class="font-weight-bold"
+                :to="`/account/${listTag[1].id}`"
+              >{{ selectedTags[1].text }}</n-link>
+
+              <app-dropdown v-else>
+                <b slot="activator">{{ listTag.slice(1).length }} người khác.</b>
+                <div
+                  v-for="item in selectedTags.slice(1)"
+                  :key="item.value"
+                  class="px-3 py-2"
+                  style="white-space: nowrap;"
+                >
+                  <a :href="`/account/${item.id}`" target="_blank">{{ item.text }}</a>
+                </div>
+              </app-dropdown>
+            </template>
+          </template>
+          <!-- END TAG -->
+
+          <!-- CHECK IN -->
+          <template v-if="checkin !== null">
+            tại
+            <b>
+              <n-link to>{{ selectedCheckin }}</n-link>
+            </b>
+          </template>
+          <!-- END CHECK IN -->
+        </div>
+
+        <div v-if="linkDataFetching" class="text-center text-sub caption py-5">
+          <template v-if="linkDataFetchError">Không thể tải bản xem trước.</template>
+          <template v-else>Đang tìm nạp bản xem trước</template>
+        </div>
+        <div v-else-if="!linkDataFetching && linkDataFetched" class="post-editor__preview-link">
+          <a href class="post-editor__preview-link__remove" @click.prevent="removePreviewLink">
+            <IconTimes class="icon" />
+          </a>
+
+          <app-content-box
+            tag="a"
+            target="_blank"
+            class="mb-4"
+            size="md"
+            :href="link.url"
+            :image="link.image"
+            :title="link.title"
+            :desc="link.description"
+            :meta-footer="link.siteName"
+          />
+        </div>
+
+        <div v-show="showTags">
+          <app-select
+            mode="tags"
+            class="post-editor__select"
+            placeholder="Cùng với ai?"
+            style="width: 100%"
+            :emptyMessage="null"
+            :options="tagOptions"
+            v-model="listTag"
+            @visible-change="handleFriendsVisibleChange"
+            @search="searchFriends"
+          >
+            <div slot="option" slot-scope="{ option }" class="d-flex align-items-center">
+              <app-avatar
+                :src="option.avatar && option.avatar.low ? option.avatar.low : null"
+                size="sm"
+                class="mr-3"
+              ></app-avatar>
+              {{ option.text }}
+            </div>
+
+            <client-only slot="options-append">
+              <infinite-loading :identifier="friendsInfiniteId" @infinite="friendsInfiniteHandler">
+                <div slot="no-more" class="text-sub py-3">Không còn dữ liệu</div>
+              </infinite-loading>
+            </client-only>
+          </app-select>
+          <app-divider class="ma-0" />
+        </div>
+
+        <div class="post-editor__toolbar">
+          <button class="post-editor__toolbar-button image" @click="handleClickUploadImage">
+            <IconAddPhotoAlternate class="icon" />
+            <span>Ảnh / Video</span>
+          </button>
+          <button class="post-editor__toolbar-button tag" @click="showTags = !showTags">
+            <IconGroup class="icon" />
+            <span>Gắn thẻ bạn bè</span>
+          </button>
+          <app-dropdown class="post-editor__label-dropdown" open-on-click v-model="labelDropdrown">
+            <button
+              slot="activator"
+              slot-scope="{ on }"
+              class="post-editor__toolbar-button emoji"
+              v-on="on"
+            >
+              <IconSentimentSatisfied class="icon" />
+              <span>Cảm xúc / Hoạt động</span>
+            </button>
+
+            <ul class="post-editor__status-list">
+              <li
+                v-for="item in labelList"
+                :key="item.id"
+                :class="{ 'active': label === item.id }"
+                @click="handleClickLabel(item.id)"
+              >
+                <i class="mr-4">{{ item.icon }}</i>
+                <span>{{ item.des }}</span>
+              </li>
+            </ul>
+          </app-dropdown>
+        </div>
+
+        <div class="post-editor__privacy">
+          <span class="post-editor__privacy-label">Chế độ đăng tin</span>
+          <app-select
+            v-model="privacy"
+            bordered
+            class="post-editor__select-private"
+            :options="configPrivacyLevels.map(item => ({
+              ...item,
+              text: item.name
+            }))"
+            size="sm"
+          >
+            <template slot="prepend" slot-scope="{ selected }">
+              <img class="d-block" :src="selected.image" />
+            </template>
+          </app-select>
+        </div>
+
+        <app-button
+          class="post-editor__submit"
+          :disabled="!submitable"
+          full-width
+          square
+          @click.stop="submit"
+        >Đăng tin</app-button>
+      </div>
     </div>
   </div>
 </template>
@@ -254,19 +231,18 @@ import FriendService from "~/services/social/friend";
 import ScraperService from "~/services/social/scraper";
 
 import PostEditorUpload from "~/components/page/timeline/postEditor/PostEditorUpload";
-import IconAddImage from "~/assets/svg/icons/add-image.svg?inline";
-import IconUserGroup from "~/assets/svg/icons/user-group.svg?inline";
-import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
-import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 import IconTimes from "~/assets/svg/design-icons/times.svg?inline";
+
+import IconAddPhotoAlternate from "~/assets/svg/v2-icons/add_photo_alternate_24px.svg?inline";
+import IconGroup from "~/assets/svg/v2-icons/group_24px.svg?inline";
+import IconSentimentSatisfied from "~/assets/svg/v2-icons/sentiment_satisfied_24px.svg?inline";
 
 export default {
   components: {
     PostEditorUpload,
-    IconAddImage,
-    IconUserGroup,
-    IconPinLocation,
-    IconEmoji,
+    IconAddPhotoAlternate,
+    IconGroup,
+    IconSentimentSatisfied,
     IconTimes,
     EditorContent
   },
@@ -309,7 +285,6 @@ export default {
     return {
       editor: null,
       showTags: false,
-      showCheckin: false,
       previewList: this.initialValues.post_image.map(item =>
         item.link && item.link.low ? item.link.low : null
       ),
@@ -321,13 +296,6 @@ export default {
       },
       friendsList: [],
       tmpTagOptions: [],
-      checkinOptions: [
-        { value: 0, text: "Hà Nội" },
-        { value: 1, text: "Saudi Arabia" },
-        { value: 2, text: "Svalbard and Jan Mayen" },
-        { value: 3, text: "Mongolia" },
-        { value: 4, text: "Republic of Kosovo" }
-      ],
 
       // Form submit data
       content: this.initialValues.content,
@@ -381,13 +349,6 @@ export default {
         );
         return resultItem;
       });
-    },
-
-    selectedCheckin() {
-      const [result = {}] = this.checkinOptions.filter(
-        item => item.value === this.checkin
-      );
-      return result.text;
     },
 
     tagOptions() {

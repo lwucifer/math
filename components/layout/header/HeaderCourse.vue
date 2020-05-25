@@ -49,7 +49,7 @@
               <div>
                 <IconDone class="icon heading-3 text-primary mr-3" />
                 Đã hoàn thành
-                {{ learningProgress }} bài giảng
+                {{ learningProgress }} bài học
               </div>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default {
     ...mapState("elearning/study/study-progress", ["progress"]),
 
     learningProgress() {
-      console.log("[progress]", this.progress);
+      // console.log("[progress]", this.progress);
       if (!this.progress) return `0/0`;
       const completeLesson = this.progress.completes || 0;
       const totalLessons =

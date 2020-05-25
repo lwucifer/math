@@ -2,7 +2,14 @@
   <div class="page-social container">
     <div class="row">
       <div class="col page-social__col-menu">
-        <SocialMenu />
+        <div
+          v-sticky
+          sticky-offset="{ top: 101 }"
+          :sticy-z-index="9"
+          class="timeline-aside-wrapper"
+        >
+          <SocialMenu />
+        </div>
       </div>
 
       <div class="col page-social__col-content">
@@ -16,19 +23,7 @@
           :sticy-z-index="9"
           class="timeline-aside-wrapper"
         >
-          <AsideBox :title="`Tin nhắn`" link="/messages" linkText="Xem toàn bộ >>">
-            <app-content-box
-              v-for="message in messagesConverted"
-              v-bind="message"
-              class="mb-4"
-              nuxt
-              size="sm"
-              :key="message.id"
-              :to="`/messages/t/${message.id}`"
-            />
-          </AsideBox>
-
-          <AsideBox title="Khóa học Online nổi bật">
+          <AsideBox title="Bài giảng khóa học nổi bật">
             <div class="timeline-aside-tabs">
               <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
               <a href :class="{ active: coursesTab === 1 }" @click.prevent="coursesTab = 1">Trả phí</a>
@@ -39,7 +34,7 @@
                 <app-content-box
                   v-for="item in freeCourses"
                   :key="item.id"
-                  class="align-items-center"
+                  class="align-items-center mb-4"
                   size="sm"
                   :image="get(item, 'avatar.low', null)"
                 >
@@ -57,7 +52,7 @@
                 <app-content-box
                   v-for="item in privateCourses"
                   :key="item.id"
-                  class="align-items-center"
+                  class="align-items-center mb-4"
                   size="sm"
                   :image="get(item, 'avatar.low', null)"
                 >
@@ -100,8 +95,6 @@ export default {
 
   async asyncData({ $axios, error }) {
     try {
-      const getMessages = () =>
-        new LimitMessagesSerice($axios)[actionTypes.BASE.LIST]();
       const getFreeCourse = () =>
         new SearchService($axios)[actionTypes.BASE.ADD]({
           free: true,
@@ -114,19 +107,14 @@ export default {
         });
 
       const [
-        // { data: feeds = {} },
-        { data: messages = [] },
         { data: freeCourses = [] },
         { data: privateCourses = [] }
       ] = await Promise.all([
-        getMessages(),
         getFreeCourse(),
         getPrivateCourse()
       ]);
 
       return {
-        // feeds: feeds || [],
-        messages: messages || [],
         freeCourses: freeCourses.content || [],
         privateCourses: privateCourses.content || []
       };

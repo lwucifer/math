@@ -21,6 +21,7 @@
         @open="onOpen"
         @close="onClose"
         :all-opt="allOpt"
+        has-border
       >
         <template slot="list-footer" v-if="hasMoreClasses">
           <li ref="load" class="loader text-center">

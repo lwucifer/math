@@ -207,7 +207,7 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = `${elearningInfo.subject.name}`;
       break;
   }
-  console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
+  // console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
   return breadcrumTxt;
 }
 

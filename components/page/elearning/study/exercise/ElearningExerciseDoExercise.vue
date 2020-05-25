@@ -71,9 +71,10 @@ export default {
     setCountdown() {
       let seconds = (this.currentExercise.duration || 0) * 60; // in seconds
       interval = setInterval(() => {
-        console.log("[setCountdown]", seconds)
+        this.countdown = getCountdown_HH_MM_SS(seconds);
+        console.log("[setCountdown]", seconds, this.countdown);
+
         if(seconds > 0) {
-          this.countdown = getCountdown_HH_MM_SS(seconds);
           seconds -= 1;
         } else {
           // clear interval

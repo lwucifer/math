@@ -13,6 +13,7 @@
       @input="onChange"
       @open="onOpen"
       @close="onClose"
+      has-border
     >
       <template slot="list-footer" v-if="hasMoreVotedElearning">
         <li ref="load" class="loader text-center">

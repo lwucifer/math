@@ -2,9 +2,14 @@
     padding: 1.5rem 0;
     border-bottom: 1px solid $color-disabled;
     cursor: pointer;
+    position: relative;
 
     &:hover {
         .question-actions button {
+            display: block;
+        }
+
+        .tool-tip {
             display: block;
         }
     }
@@ -18,25 +23,19 @@
     }
 
     .question-title {
-        width: 6%;
+        width: 7%;
     }
 
     .question-content {
         width: 58%;
-
-        // @include set-line((
-        //     'lineClamp': 3,
-        //     'lineHeight':  1.2,
-        //     'fixedHeight': true
-        // ))
     }
-
+    
     .question-type {
         width: 24%;
     }
 
     .question-point {
-        width: 10%;
+        width: 9%;
     }
 
     .question-actions {

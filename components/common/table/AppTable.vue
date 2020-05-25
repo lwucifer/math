@@ -1,7 +1,7 @@
 <template>
   <div class="app-table">
-    <table>
-      <thead>
+    <table :class="{...tableCls, ...extTableCls}">
+      <thead class="app-table__head" :class="{...headerCls, ...headerExtCls}">
         <tr>
           <th
             v-if="multipleSelection"
@@ -23,11 +23,11 @@
         </tr>
       </thead>
       <!-- Use slot body -->
-      <tbody v-if="hasDefaultSlot && hasData">
+      <tbody v-if="hasDefaultSlot && hasData" :class="bodyCls">
         <slot />
       </tbody>
       <!-- Use data list -->
-      <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)">
+      <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)" :class="bodyCls">
         <tr v-for="(cat, i) in sortedCats" :key="i" :class="selectedItems.includes(cat) ? 'selected' : ''">
         
           <td v-if="multipleSelection || selectAll" class="pr-0" 
@@ -68,7 +68,15 @@
     </div>
     <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
     <div v-if="needPagination" class="pagination mt-3">
-      <app-pagination v-if="hasData && (!loading)" :pagination="pagination" @pagechange="onPageChange" :opts="opts" class="mt-3" />
+      <app-pagination
+        v-if="hasData && (!loading)"
+        :pagination="pagination"
+        @pagechange="onPageChange"
+        :opts="opts"
+        class="mt-3"
+        :position="get(paginationStyle, 'position', 'center')"
+        :ext-cls="get(paginationStyle, 'extCls', {})"
+      />
     </div>
   </div>
 </template>
@@ -77,7 +85,7 @@
 import IconStar from "~/assets/svg/icons/star.svg?inline";
 import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
-import { isEqual } from "lodash";
+import { isEqual, get } from "lodash";
 
 export default {
   components: {
@@ -92,6 +100,38 @@ export default {
       required: false,
       default: () => []
     },
+    headerFontweight: {
+      type: String,
+      default: 'semi-bold' // normal | semi-bold | bold
+    },
+    headerSize: {
+      type: String,
+      default: 'sm' // sm | md | lg
+    },
+    headerExtCls: {
+      type: Object,
+      default: () => {}
+    },
+    headerColor: {
+      type: String,
+      default: 'dark' //primary | secondary | info...
+    },
+    bodyColor: {
+      type: String,
+      default: 'base' //primary | secondary | info...
+    },
+    bgTable: {
+      type: String,
+      default: 'transparent' //primary | secondary | info...
+    },
+    extTableCls: {
+      type: Object,
+      default: () => {}
+    },
+    paginationStyle: {  // { position: '...', extCls: '...' }
+      type: Object,
+      default: () => {}
+    },
     data: {
       type: Array,
       required: false,
@@ -103,9 +143,9 @@ export default {
       required: false,
       default: () => {
         return {
-          totalPages: 0,
+          total_pages: 0,
           size: 10,
-          totalElements: 0,
+          total_elements: 0,
           first: 1,
           last: 1,
           number: 0
@@ -211,7 +251,8 @@ export default {
       const temp = array[i];
       array[i] = array[k];
       array[k] = temp;
-    }
+    },
+    get
   },
 
   computed: {
@@ -264,6 +305,84 @@ export default {
     },
     hasData() {
       return this.data.length > 0
+    },
+    headerCls() {
+      const fontWeightCls = {
+        'app-table__head--normal': this.headerFontweight === 'normal',
+        'app-table__head--semi-bold': this.headerFontweight === 'semi-bold',
+        'app-table__head--bold': this.headerFontweight === 'bold',
+      }
+      
+      const fontSizeCls = {
+        'app-table__head--sm': this.headerSize === 'sm',
+        'app-table__head--md': this.headerSize === 'md',
+        'app-table__head--lg': this.headerSize === 'lg',
+      }
+      
+      const colorCls = {
+        'app-table__head--color-primary': this.headerColor === 'primary',
+        'app-table__head--color-secondary': this.headerColor === 'secondary',
+        'app-table__head--color-info': this.headerColor === 'info',
+        'app-table__head--color-error': this.headerColor === 'error',
+        'app-table__head--color-warning': this.headerColor === 'warning',
+        'app-table__head--color-base': this.headerColor === 'base',
+        'app-table__head--color-sub': this.headerColor === 'sub',
+        'app-table__head--color-gray': this.headerColor === 'gray',
+        'app-table__head--color-gray-2': this.headerColor === 'gray-2',
+        'app-table__head--color-gray-3': this.headerColor === 'gray-3',
+        'app-table__head--color-black': this.headerColor === 'black',
+        'app-table__head--color-light': this.headerColor === 'light',
+        'app-table__head--color-light-2': this.headerColor === 'light-2',
+        'app-table__head--color-dark': this.headerColor === 'dark',
+        'app-table__head--color-active': this.headerColor === 'active',
+      }
+      
+      return {
+        ...fontWeightCls,
+        ...fontSizeCls,
+        ...colorCls
+      }
+    },
+    bodyCls() {
+      const colorCls = {
+        'app-table__body--color-primary': this.bodyColor === 'primary',
+        'app-table__body--color-secondary': this.bodyColor === 'secondary',
+        'app-table__body--color-info': this.bodyColor === 'info',
+        'app-table__body--color-error': this.bodyColor === 'error',
+        'app-table__body--color-warning': this.bodyColor === 'warning',
+        'app-table__body--color-base': this.bodyColor === 'base',
+        'app-table__body--color-sub': this.bodyColor === 'sub',
+        'app-table__body--color-gray': this.bodyColor === 'gray',
+        'app-table__body--color-gray-2': this.bodyColor === 'gray-2',
+        'app-table__body--color-gray-3': this.bodyColor === 'gray-3',
+        'app-table__body--color-black': this.bodyColor === 'black',
+        'app-table__body--color-light': this.bodyColor === 'light',
+        'app-table__body--color-light-2': this.bodyColor === 'light-2',
+        'app-table__body--color-dark': this.bodyColor === 'dark',
+        'app-table__body--color-active': this.bodyColor === 'active',
+      }
+      return {
+        ...colorCls
+      }
+    },
+    tableCls() {
+      const bgCls = {
+        'app-table__table--bg-transparent': this.bgTable === 'transparent',
+        'app-table__table--bg-primary': this.bgTable === 'primary',
+        'app-table__table--bg-secondary': this.bgTable === 'secondary',
+        'app-table__table--bg-info': this.bgTable === 'info',
+        'app-table__table--bg-success': this.bgTable === 'success',
+        'app-table__table--bg-error': this.bgTable === 'error',
+        'app-table__table--bg-warning': this.bgTable === 'warning',
+        'app-table__table--bg-gray': this.bgTable === 'gray',
+        'app-table__table--bg-input-gray': this.bgTable === 'input-gray',
+        'app-table__table--bg-white': this.bgTable === 'white',
+        'app-table__table--bg-black': this.bgTable === 'black',
+        'app-table__table--bg-light-2': this.bgTable === 'light-2',
+      }
+      return {
+        ...bgCls
+      }
     }
   },
 

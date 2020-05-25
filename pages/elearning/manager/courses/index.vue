@@ -30,7 +30,7 @@
               </n-link>
             </div>
             <div class="d-flex-center">
-              <div class="filter-form__item flex-1 mb-15" style="max-width: 36rem">
+              <div class="filter-form__item mb-15" style="max-width: 36rem; min-width: 30rem">
                 <div style="width: 100%">
                   <app-search
                     class
@@ -38,6 +38,7 @@
                     v-model="params.keyword"
                     :size="'sm'"
                     @submit="getList"
+                    @keyup.enter.native="getList"
                   ></app-search>
                 </div>
               </div>
@@ -55,12 +56,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectType"
-                    :options="types"
                     label="text"
                     placeholder="Thể loại"
-                    searchable
-                    clearable
-                    @input="handleChangedType"
+                     @input="handleChangedType"
+                    :options="typeOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -68,12 +69,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectPrivacy"
-                    :options="privacies"
                     label="text"
                     placeholder="Hiển thị"
-                    searchable
-                    clearable
                     @input="handleChangedPrivacy"
+                    :options="privacyOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -81,12 +82,12 @@
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectFree"
-                    :options="free"
                     label="text"
                     placeholder="Học phí"
-                    searchable
-                    clearable
                     @input="handleChangedFree"
+                    :options="freeOpts"
+                    :all-opt="allOpt"
+                    has-border
                   ></app-vue-select>
                 </div>
               </div>
@@ -260,6 +261,8 @@ const STORE_NAMESPACE_STATISTIC = "elearning/teaching/statistic";
 
 export default {
   name: "ManageCourse",
+
+  layout: "manage",
   
   components: {
     IconTrashAlt,
@@ -282,10 +285,12 @@ export default {
     IconRestore
   },
 
-  middleware: ["teacher-role"],
-
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       showTable: true,
       titleModelConfirm: '',
       textModelConfirm: '',
@@ -387,10 +392,10 @@ export default {
       ],
       currentHeads: [],
       pagination: {
-        totalPages: 0,
+        total_pages: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -399,19 +404,16 @@ export default {
       time2: null,
       selectType: null,
       types: [
-        { value: null, text: "Tất cả" },
         { value: "COURSE", text: "Khóa học" },
         { value: "LECTURE", text: "Bài giảng" }
       ],
       selectPrivacy: null,
       privacies: [
-        { value: null, text: "Tất cả" },
         { value: "PUBLIC", text: "Công khai" },
         { value: "PRIVATE", text: "Riêng tư" }
       ],
       selectFree: null,
       free: [
-        { value: null, text: "Tất cả" },
         { value: true, text: "Miễn phí" },
         { value: false, text: "Có phí" }
       ],
@@ -442,6 +444,15 @@ export default {
     ...mapState(STORE_NAMESPACE_STATISTIC, {
       stateStatistic: "teacherStatistic"
     }),
+    typeOpts() {
+      return [this.allOpt, ...this.types]
+    },
+    freeOpts() {
+      return [this.allOpt, ...this.free]
+    },
+    privacyOpts() {
+      return [this.allOpt, ...this.privacies]
+    },
   },
 
   watch: {
@@ -561,17 +572,17 @@ export default {
           "data.page.number",
           0
         );
-        this.pagination.totalPages = this.get(
+        this.pagination.total_pages = this.get(
           this.stateElearnings,
           "data.page.total_pages",
           0
         );
-        this.pagination.totalElements = this.get(
+        this.pagination.total_elements = this.get(
           this.stateElearnings,
           "data.page.total_elements",
           0
         );
-        this.pagination.numberOfElements = this.get(
+        this.pagination.number_of_elements = this.get(
           this.stateElearnings,
           "data.page.number_of_elements",
           0
@@ -654,7 +665,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 @import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";

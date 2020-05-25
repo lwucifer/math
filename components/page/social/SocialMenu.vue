@@ -25,14 +25,14 @@
       </span>
       Thông báo
     </n-link>
-    <n-link class="social-menu__item" to="/social/messages" exact>
+    <n-link class="social-menu__item" to="/messages/t" exact>
       <span class="social-menu__icon social-menu__icon--outline">
         <IconSocialMenuChat />
         <span class="social-menu__count">2</span>
       </span>
       Tin nhắn
     </n-link>
-    <n-link class="social-menu__item" to="/social/account" exact>
+    <n-link class="social-menu__item" to="/social/account">
       <span class="social-menu__icon social-menu__icon--outline">
         <IconSocialMenuUser />
       </span>

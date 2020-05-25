@@ -22,7 +22,7 @@
             placement="top"
             popover-class="tooltip--rate"
           >
-            <div class="nowrap">
+            <div class="nowrap rate-result-wrapper">
               <span class="status-item status-item--success d-inline-block">
                 {{parseInt(get(row, 'passed_percent', 0))}}%
               </span>
@@ -107,7 +107,7 @@
             total: 0,
             size: 10,
             page: 1,
-            totalElements: 0,
+            total_elements: 0,
             first: 1,
             last: 1,
             number: 0

@@ -2,8 +2,8 @@
   <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
-
-      <div class="filter-form__item flex-1">
+      <div class="d-flex">
+      <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
         <div style="width: 100%">
           <app-search
             class
@@ -11,6 +11,7 @@
             v-model="params.query"
             :size="'sm'"
             @submit="submit"
+            @keyup.enter.native="submit"
           ></app-search>
         </div>
       </div>
@@ -31,14 +32,15 @@
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
-          :options="courses"
+          :options="courseOpts"
           label="text"
           placeholder="Bài giảng/khóa học"
-          searchable
-          clearable
           @input="handleChangedCourse"
+          :all-opt="allOpt"
+          has-border
         ></app-vue-select>
       </div>
+    </div>
     </div>
     <!--End filter form-->
 
@@ -140,6 +142,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       rowClassId: null,
       showFilter: false,
       modalShow: false,
@@ -174,7 +180,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -198,8 +204,11 @@ export default {
       stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
-    })
+      stateElearnings: "Elearnings"
+    }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses]
+    }
   },
 
   methods: {
@@ -207,7 +216,7 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           elearning_id: null
@@ -240,18 +249,18 @@ export default {
       });
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: {teacher_id: userId} }
         );
-        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
-        this.lessonList.forEach(element => {
+        lessonList.forEach(element => {
           list.push({
             value: element.id,
             text: element.name
@@ -289,17 +298,17 @@ export default {
         self.pagination.first = self.get(self.stateClass, "data.first", 1);
         self.pagination.last = self.get(self.stateClass, "data.last", 1);
         self.pagination.number = self.get(self.stateClass, "data.number", 0);
-        self.pagination.totalPages = self.get(
+        self.pagination.total_pages = self.get(
           self.stateClass,
           "data.total_pages",
           0
         );
-        self.pagination.totalElements = self.get(
+        self.pagination.total_elements = self.get(
           self.stateClass,
           "data.total_elements",
           0
         );
-        self.pagination.numberOfElements = self.get(
+        self.pagination.number_of_elements = self.get(
           self.stateClass,
           "data.number_of_elements",
           0
@@ -335,7 +344,7 @@ export default {
 
   created() {
     this.getList();
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>

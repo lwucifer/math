@@ -43,53 +43,55 @@
 
               <!--Filter form-->
               <div class="filter-form">
-                <div class="filter-form__item flex-1">
-                  <div style="width: 100%">
-                    <app-search
-                      class
-                      :placeholder="'Nhập để tìm kiếm...'"
-                      v-model="params.query"
-                      :size="'sm'"
-                      @submit="submit"
-                    ></app-search>
+                <div class="d-flex">
+                  <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+                    <div style="width: 100%">
+                      <app-search
+                        class
+                        :placeholder="'Nhập để tìm kiếm...'"
+                        v-model="params.query"
+                        :size="'sm'"
+                        @submit="submit"
+                      ></app-search>
+                    </div>
                   </div>
-                </div>
 
-                <div class="filter-form__item">
-                  <app-button
-                    :color="showFilter ? 'primary' : 'white'"
-                    square
-                    :size="'sm'"
-                    @click="toggleFilter"
-                  >
-                    <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
-                    <span>Lọc kết quả</span>
-                  </app-button>
-                </div>
+                  <div class="filter-form__item">
+                    <app-button
+                      :color="showFilter ? 'primary' : 'white'"
+                      square
+                      :size="'sm'"
+                      @click="toggleFilter"
+                    >
+                      <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                      <span>Lọc kết quả</span>
+                    </app-button>
+                  </div>
 
-                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filterCourse"
-                    :options="courses"
-                    label="text"
-                    placeholder="Lớp học"
-                    searchable
-                    clearable
-                    @input="handleChangedCourse"
-                  ></app-vue-select>
-                </div>
-                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filterStatus"
-                    :options="statuses"
-                    label="text"
-                    placeholder="Điểm danh"
-                    searchable
-                    clearable
-                    @input="handleChangedStatus"
-                  ></app-vue-select>
+                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                    <app-vue-select
+                      class="app-vue-select filter-form__item__selection"
+                      v-model="filterCourse"
+                      :options="courses"
+                      label="text"
+                      placeholder="Lớp học"
+                      searchable
+                      clearable
+                      @input="handleChangedCourse"
+                    ></app-vue-select>
+                  </div>
+                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                    <app-vue-select
+                      class="app-vue-select filter-form__item__selection"
+                      v-model="filterStatus"
+                      :options="statuses"
+                      label="text"
+                      placeholder="Điểm danh"
+                      searchable
+                      clearable
+                      @input="handleChangedStatus"
+                    ></app-vue-select>
+                  </div>
                 </div>
               </div>
               <!--End filter form-->
@@ -171,9 +173,9 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
-export default {
+export default {    
   layout: "manage",
-    
+  
   components: {
     IconClock,
     IconRefresh,
@@ -248,7 +250,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -359,9 +361,9 @@ export default {
         this.pagination.first = this.get(this.stateAttendances, 'data.attendance_list.first', 1)
         this.pagination.last = this.get(this.stateAttendances, 'data.attendance_list.last', 1)
         this.pagination.number = this.get(this.stateAttendances, 'data.attendance_list.number', 0)
-        this.pagination.totalPages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
+        this.pagination.total_pages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
+        this.pagination.total_elements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
+        this.pagination.number_of_elements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
         this.summary.total_student_absent_allowed = this.get(this.stateAttendances, 'data.total_student_absent_allowed', 0)
         this.summary.total_student_absent_not_allowed = this.get(this.stateAttendances, 'data.total_student_absent_not_allowed', 0)
         this.summary.total_student_late = this.get(this.stateAttendances, 'data.total_student_late', 0)

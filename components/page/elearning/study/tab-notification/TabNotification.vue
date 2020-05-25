@@ -1,35 +1,75 @@
 <template>
   <div class="e-study-tab-notification">
-    <TabQACommentItem showTitle title="Tiêu đề thông báo" />
-    <TabQACommentItem showTitle title="Tiêu đề thông báo" />
-    <TabQACommentItem showTitle title="Tiêu đề thông báo" />
-    <TabQACommentItem showTitle title="Tiêu đề thông báo" />
-    <TabQACommentItem showTitle title="Tiêu đề thông báo" />
+    <TabNotificationItem
+      v-for="(notification, index) in get(notifications, 'content', [])"
+      :key="index"
+      :notification="notification"
+    />
 
     <app-pagination
       class="mt-4"
-      :pagination="{
-        first: true,
-        last: false,
-        number: 0,
-        numberOfElements: 10,
-        size: 10,
-        totalElements: 65,
-        totalPages: 7,
-      }"
+      :pagination="get(notifications, 'page', null)"
+      @pagechange="handleChangePage"
     />
   </div>
 </template>
 
 <script>
-import TabQACommentItem from "~/components/page/elearning/study/tab-qa/TabQACommentItem.vue";
+import TabNotificationItem from "~/components/page/elearning/study/tab-notification/TabNotificationItem.vue";
+import { useEffect } from "~/utils/common";
+import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
-    TabQACommentItem
-  }
+    TabNotificationItem,
+  },
+
+  data() {
+    return {
+      params: {
+        elearning_id: get(this, "$route.params.id", ""),
+        page: 1,
+        size: 10,
+      },
+    };
+  },
+
+  watch: {
+    "$route.params.id": {
+      handler: function() {
+        this.params.elearning_id = get(this, "$route.params.id", "");
+      },
+    },
+  },
+
+  computed: {
+    ...mapState("elearning/study/detail", {
+      notifications: "notifications",
+    }),
+  },
+
+  mounted() {
+    useEffect(this, this.getNotifications.bind(this), ["params"]);
+  },
+
+  methods: {
+    handleChangePage(page) {
+      this.params.page = page;
+    },
+
+    getNotifications() {
+      const options = {
+        params: this.params,
+      };
+      this.$store.dispatch(
+        `elearning/study/detail/getListNotification`,
+        options
+      );
+    },
+    get,
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

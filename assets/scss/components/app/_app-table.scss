@@ -134,6 +134,60 @@
             }
         }
     }
+    
+    //header
+    &__head--sm {
+      font-size: 1.3rem;
+    }
+  
+    &__head--md {
+      font-size: 1.4rem;
+    }
+  
+    &__head--lg {
+      font-size: 1.5rem;
+    }
+    
+    &__head--normal {
+        th {
+            font-weight: 400 !important;
+        }
+    }
+    
+    &__head--semi-bold {
+        th {
+            font-weight: 600;
+        }
+    }
+    &__head--bold {
+        th {
+            font-weight: 700;
+        }
+    }
+  
+    @each $name, $color in $text-colors {
+        &__head--color-#{$name} {
+            th {
+                color: $color !important;
+                
+                .btn-sort {
+                    svg path {
+                        fill: currentColor;
+                    }
+                }
+            }
+        }
+        
+        &__body--color-#{$name} {
+            color: $color
+        }
+    }
+    //table
+    @each $name, $color in $bg-colors {
+        &__table--bg-#{$name} {
+            background-color: $color;
+        }
+    }
 
     .pagination {
         margin: 3rem 0 2rem;
@@ -161,4 +215,17 @@
 
 .none-decoration {
     text-decoration: none;
+}
+
+
+.tr-static.app-table table tr{
+    position: static;
+    transform: none;
+    td{
+        position: relative;
+        z-index: 1;
+        &:hover{
+            z-index: 2;
+        }
+    }
 }
