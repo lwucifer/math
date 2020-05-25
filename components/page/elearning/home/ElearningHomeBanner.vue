@@ -9,7 +9,7 @@
 
           <p
             class="elearning-home-banner__subtitle"
-          >Scholly expertly connects professionals and agencies to businesses seeking specialized talent.</p>
+          >Scholly expertly connects professionals and agencies <span>to businesses seeking specialized talent.</span></p>
         </div>
 
         <div class="col-md-5 align-self-end">

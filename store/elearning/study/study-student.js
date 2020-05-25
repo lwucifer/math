@@ -28,7 +28,7 @@ const actions = {
     try {
       const result = await new StudyStudent(this.$axios)[actionTypes.BASE.LIST](payload);
       commit(mutationTypes.ELEARNING_STUDY_STUDENT.SET_ELEARNING_STUDY_STUDENT, result.data);
-      console.log("[Elearning] list", result.data);
+      // console.log("[Elearning] list", result.data);
     } catch (error) {
       console.log("[Elearning study student] list.error", error);
     }

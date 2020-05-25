@@ -1,15 +1,15 @@
 <template>
   <section class="elearning-home-box">
-    <div v-if="$slots['title-right']" class="elearning-home-box__title">
+    <div v-if="$slots['title-right']" class="elearning-home-box__title mb-3">
       <slot name="title">
-        <h2 class="heading-1 font-weight-semi-bold">{{ title }}</h2>
+        <h2 class="heading-3 font-weight-semi-bold">{{ title }}</h2>
       </slot>
 
       <slot name="title-right"></slot>
     </div>
 
     <slot v-else name="title">
-      <h2 class="heading-1 font-weight-semi-bold mb-6">{{ title }}</h2>
+      <h2 class="heading-3 font-weight-semi-bold mb-3">{{ title }}</h2>
     </slot>
 
     <slot />
