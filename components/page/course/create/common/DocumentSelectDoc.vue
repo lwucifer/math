@@ -51,7 +51,7 @@
       </table>
       <app-pagination
         class="mt-4"
-        :pagination="get(files, 'page', null)"
+        :pagination="get(files, 'page', {})"
         @pagechange="onChangePage"
       />
       <app-modal-confirm

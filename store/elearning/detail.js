@@ -1,5 +1,6 @@
 import * as Service from "~/services/elearning/Detail";
 import { get } from "lodash";
+import VoteService from "~/services/elearning/public/Vote.js";
 
 /**
  * initial state
@@ -10,6 +11,7 @@ const state = () => ({
   lectures_related: null,
   teacher: null,
   program: null,
+  reviews: null,
 });
 
 /**
@@ -21,6 +23,19 @@ const getters = {};
  * initial actions
  */
 const actions = {
+  async getReviews({ commit }, options) {
+    try {
+      const res = await new VoteService(this.$axios)["list"](options);
+      if (get(res, "success", false)) {
+        commit("reviews", res.data);
+        return;
+      }
+      commit("reviews", null);
+    } catch (error) {
+      commit("reviews", null);
+    }
+  },
+
   async getTeacher({ commit, state }, options = {}) {
     if (get(state, "info.teacher.id", "")) {
       const payload = {
@@ -85,6 +100,10 @@ const actions = {
  * initial mutations
  */
 const mutations = {
+  reviews(state, data) {
+    state.reviews = data;
+  },
+
   teacher(state, data) {
     state.teacher = data;
   },

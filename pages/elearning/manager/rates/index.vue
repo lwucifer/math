@@ -53,8 +53,7 @@
   const STORE_NAMESPACE = 'elearning/teaching/vote'
 
   export default {
-    // layout: "manage",
-    middleware: ["teacher-role"],
+    layout: "manage",
     components: {
       ElearningManagerSide,
       FilterForm,

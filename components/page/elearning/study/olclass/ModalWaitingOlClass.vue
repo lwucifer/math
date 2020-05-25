@@ -10,7 +10,7 @@
     >
       <div slot="content" class="text-center">
         <div class="text-left">
-          <h6 class="color-primary mb-3">Phòng học online số 1</h6>
+          <h6 class="color-primary mb-3">Phòng học online</h6>
           <div class="box12 border mb-4">
             <p class="mb-3">
               Tên phòng:
@@ -22,7 +22,7 @@
             </p>
             <p class="mb-3">
               Giờ bắt đầu:
-              <b>{{ get(data, "extra_info.start_time", "--:--") }}</b>
+              <b>{{ get(data, "extra_info.start_time", "--:--") | fullDateTimeSlash }}</b>
             </p>
             <p>
               Thời lượng:

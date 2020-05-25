@@ -6,7 +6,8 @@
       :outline="tabActive !== 'all'"
       size="sm"
       @click="changeTab('all')"
-    >Tất cả</app-button>
+      >Tất cả</app-button
+    >
 
     <app-button
       class="mr-4"
@@ -14,7 +15,8 @@
       :outline="tabActive !== 5"
       size="sm"
       @click="changeTab(5)"
-    >{{ `5 sao (${get(info, "voting.vote1_rate.votes", 0)})` }}</app-button>
+      >{{ `5 sao (${get(info, "voting.vote5_rate.votes", 0)})` }}</app-button
+    >
 
     <app-button
       class="mr-4"
@@ -22,7 +24,8 @@
       :outline="tabActive !== 4"
       size="sm"
       @click="changeTab(4)"
-    >{{ `4 sao (${get(info, "voting.vote2_rate.votes", 0)})` }}</app-button>
+      >{{ `4 sao (${get(info, "voting.vote4_rate.votes", 0)})` }}</app-button
+    >
 
     <app-button
       class="mr-4"
@@ -30,7 +33,8 @@
       :outline="tabActive !== 3"
       size="sm"
       @click="changeTab(3)"
-    >{{ `3 sao (${get(info, "voting.vote3_rate.votes", 0)})` }}</app-button>
+      >{{ `3 sao (${get(info, "voting.vote3_rate.votes", 0)})` }}</app-button
+    >
 
     <app-button
       class="mr-4"
@@ -38,7 +42,8 @@
       :outline="tabActive !== 2"
       size="sm"
       @click="changeTab(2)"
-    >{{ `2 sao (${get(info, "voting.vote4_rate.votes", 0)})` }}</app-button>
+      >{{ `2 sao (${get(info, "voting.vote2_rate.votes", 0)})` }}</app-button
+    >
 
     <app-button
       class="mr-4"
@@ -46,7 +51,8 @@
       :outline="tabActive !== 1"
       size="sm"
       @click="changeTab(1)"
-    >{{ `1 sao (${get(info, "voting.vote5_rate.votes", 0)})` }}</app-button>
+      >{{ `1 sao (${get(info, "voting.vote1_rate.votes", 0)})` }}</app-button
+    >
   </div>
 </template>
 
@@ -60,7 +66,7 @@ export default {
     changeTab(key) {
       this.$emit("changeTab", key);
     },
-    get
-  }
+    get,
+  },
 };
 </script>

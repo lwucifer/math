@@ -140,10 +140,10 @@ export default {
       time: -1,
       timeOpts: [
         { value: -1, text: "Tất cả" },
-        { value: 0, text: "0 - 1 giờ" },
-        { value: 1, text: "1- 2 giờ" },
-        { value: 2, text: "2 - 4 giờ" },
-        { value: 3, text: "Trên 4 giờ" }
+        { value: '0-1h', text: "0 - 1 giờ" },
+        { value: '1h-2h', text: "1- 2 giờ" },
+        { value: '2h-4h', text: "2 - 4 giờ" },
+        { value: '4h+', text: "Trên 4 giờ" }
       ],
       level: -1,
       // levelOpts: [

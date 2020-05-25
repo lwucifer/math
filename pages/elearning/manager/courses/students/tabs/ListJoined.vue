@@ -15,6 +15,8 @@ import StudentManagerTable from "~/components/page/elearning/manager/student/Stu
 import { mapState, mapActions } from "vuex";
 const STORE_NAMESPACE = "elearning/teaching/elearning-participant";
 export default {
+  layout: "manage",
+  
   components: {
     StudentManagerFilterForm,
     StudentManagerTable

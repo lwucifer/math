@@ -34,35 +34,25 @@
           <app-spin />
         </div>
         <div
-          v-else-if="!localReview.content || !localReview.content.length"
+          v-else-if="
+            !get(reviews, 'content', true) ||
+              !get(reviews, 'content.length', true)
+          "
           class="text-gray-2 caption text-center"
         >
           Chưa có nhận xét nào phù hợp với tiêu chí bạn đã chọn
         </div>
 
         <ElearningReviewComment
-          :data="item"
-          v-for="item in get(localReview, 'content', [])"
-          :key="item.id"
+          :review="review"
+          v-for="review in get(reviews, 'content', [])"
+          :key="review.id"
         />
         <app-pagination
-          :pagination="get(localReview, 'page', {})"
+          :pagination="get(reviews, 'page', {})"
           @pagechange="onPageChange"
           class="mt-4 mb-3"
         />
-        <!-- <app-pagination
-          :pagination="{
-          total: 99,
-          size: 10,
-          page: 1,
-          total_elements: 99,
-          first: 1,
-          last: 1,
-          number: 2
-        }"
-          @pagechange="onPageChange"
-          class="mt-4"
-        /> -->
       </div>
     </div>
   </section>
@@ -77,6 +67,7 @@ import ElearningReviewComment from "~/components/page/elearning/ElearningReviewC
 import ElearningReviewButton from "~/components/page/elearning/ElearningReviewButton";
 import { ELEARNING_TYPES } from "~/utils/constants";
 import { mapState } from "vuex";
+import { useEffect } from "~/utils/common";
 
 export default {
   components: {
@@ -102,81 +93,45 @@ export default {
     },
     ...mapState("elearning/detail", {
       info: "info",
+      reviews: "reviews",
     }),
   },
 
   data() {
     return {
       tabActive: "all",
-      localReview: [],
       fetchingReview: false,
-      pagination: {
-        total_pages: 15,
-        number: 6,
-        size: 10,
+      params: {
+        elearning_id: get(this, "$route.params.id"),
+        rate: "",
+        page: 1,
       },
     };
   },
 
   mounted() {
-    this.changeTab("all");
+    useEffect(this, this.getReviews.bind(this), ["params"]);
   },
 
   methods: {
+    getReviews() {
+      const options = {
+        params: this.params,
+      };
+      this.$store.dispatch(`elearning/detail/getReviews`, options);
+    },
+
     get,
 
     async changeTab(key) {
       this.tabActive = key;
-
-      this.fetchingReview = true;
-      const getReview = await this.getReview(key !== "all" ? key : null, 1);
-      this.fetchingReview = false;
-
-      if (getReview.success) {
-        getReview.data.content = this.formatReviewData(getReview.data.content);
-        this.localReview = getReview.data;
-        return;
-      }
-      this.$toasted.error(getReview.message);
+      let rate = key !== "all" ? key : null;
+      this.params.rate = rate;
+      this.params.page = 1;
     },
 
-    async onPageChange({ number }) {
-      if (number === this.localReview.page.number) return;
-      this.fetchingReview = true;
-
-      const rate = this.tabActive !== "all" ? this.tabActive : null;
-      const page = number + 1;
-      const getReview = await this.getReview(rate, page);
-
-      if (getReview.success) {
-        getReview.data.content = this.formatReviewData(getReview.data.content);
-        this.localReview = getReview.data;
-        this.tabActive = key;
-      } else {
-        this.$toasted.error(getReview.message);
-      }
-
-      this.fetchingReview = false;
-    },
-
-    getReview(rate, page) {
-      return new VoteService(this.$axios)[ACTION_TYPE_BASE.LIST]({
-        params: {
-          elearning_id: this.info.id,
-          rate: rate,
-          page: page,
-        },
-      });
-    },
-
-    formatReviewData(content) {
-      return content.map((item) => ({
-        avatar: get(item, "creator.avatar.low", ""),
-        comment: item.content,
-        created: item.timestamp,
-        fullname: get(item, "creator.name", ""),
-        rate: item.vote,
-      }));
+    onPageChange(page) {
+      this.params.page = page;
     },
   },
 };

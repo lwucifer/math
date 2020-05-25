@@ -1,26 +1,38 @@
 .elearning-home-banner {
-    background-color: #1D4254;
-    color: #fff;
+    background: url("~assets/images/elearning/elearning-home-banner.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 596px;
+    display: flex;
+    align-items: center;
 
     &__title {
         font-size: 3.5rem;
+        font-weight: 600;
+        color: $color-primary;
         margin-bottom: 2rem;
-        color: inherit;
 
-        > div {
-            color: $color-primary-1;
+        span {
+            display: block;
+            color: $color-text-white;
         }
     }
 
-    &__subtitle {
-        font-size: 1.5rem;
+    &__text {
+        font-size: 15px;
         font-weight: 500;
+        color: $color-text-white;
+        margin-bottom: 2.6rem;
+
+        span {
+            @media (min-width: 768px) {
+                display: block;
+            }
+        }
     }
 
-    &__img {
-        display: block;
-        max-width: 100%;
-        margin-bottom: -2px;
-        margin-top: 3.5rem;
+    &__btn {
+        padding: 0.8rem 3.3rem;
+        font-size: 1.5rem;
     }
 }
