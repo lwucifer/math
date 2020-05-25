@@ -75,7 +75,7 @@
         </app-carousel>
       </ElearningHomeBox>
 
-      <ElearningHomeBox title="Mhọc được yêu thích">
+      <ElearningHomeBox title="Môn học được yêu thích">
         <div slot="title-right" class="swiper-pagination eh-subject-pagination"></div>
 
         <app-carousel
