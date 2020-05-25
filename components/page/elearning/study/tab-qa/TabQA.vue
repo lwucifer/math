@@ -74,7 +74,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/questions", {
+    ...mapState("elearning/study/detail", {
       questions: "questions",
     }),
   },
@@ -109,7 +109,7 @@ export default {
       this.params.page = 1;
     },
     handleGetQuestions() {
-      this.$store.dispatch(`elearning/study/questions/getListQuestion`, {
+      this.$store.dispatch(`elearning/study/detail/getListQuestion`, {
         params: this.params,
       });
     },

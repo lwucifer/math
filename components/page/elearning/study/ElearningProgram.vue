@@ -7,7 +7,8 @@
 
     <app-divider class="my-0" color="disabled" />
 
-    <div v-if="progress.type === 'COURSE'">
+    <div v-if="totalLessons < 1" class="box caption">Không có bài học nào</div>
+    <div v-else-if="progress.type === 'COURSE'">
       <ElearningProgramCourse
         v-for="(program, index) in get(progress, 'programs', [])"
         :program="program"
@@ -58,7 +59,7 @@ export default {
     
 
     totalLessons() {
-      console.log("[progress]", this.progress);
+      // console.log("[progress]", this.progress);
       if (!this.progress) return `0`;
       return (
         this.progress.programs.reduce(

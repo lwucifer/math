@@ -1,16 +1,16 @@
 <template>
-  <div class="tab-menu">
-    <a
+  <ul class="tab-menu">
+    <li
       class="tab-menu__item"
       v-for="(item, index) in list"
       :key="index"
+      :title="item.text"
       :class="active == item.key ? 'active' : ''"
       @click="selectItem(item.key)"
     >
-      {{ item.text }}
-    </a>
-      <!--<a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Bài kiểm tra</a>-->
-  </div>
+      <a :title="item.text">{{ item.text }}</a>
+    </li>
+  </ul>
 </template>
 
 <script>

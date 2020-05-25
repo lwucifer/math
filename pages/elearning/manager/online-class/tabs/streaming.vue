@@ -180,7 +180,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -298,17 +298,17 @@ export default {
         self.pagination.first = self.get(self.stateClass, "data.first", 1);
         self.pagination.last = self.get(self.stateClass, "data.last", 1);
         self.pagination.number = self.get(self.stateClass, "data.number", 0);
-        self.pagination.totalPages = self.get(
+        self.pagination.total_pages = self.get(
           self.stateClass,
           "data.total_pages",
           0
         );
-        self.pagination.totalElements = self.get(
+        self.pagination.total_elements = self.get(
           self.stateClass,
           "data.total_elements",
           0
         );
-        self.pagination.numberOfElements = self.get(
+        self.pagination.number_of_elements = self.get(
           self.stateClass,
           "data.number_of_elements",
           0

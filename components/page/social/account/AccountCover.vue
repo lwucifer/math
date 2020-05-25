@@ -24,15 +24,6 @@
       <h4 class="sac__username">{{ personalList.fullname || 'Nguyễn Trâm Anh' }}</h4>
     </div>
     
-    <tab-menu
-      :list="menus"
-      active="timeline"
-      class="sac__menu"
-      @selectedItem="changeTab"
-    >
-    
-    </tab-menu>
-    
     <!-- Not friend -->
     <!--<div class="actions" v-if="status == 'none'">-->
       <!--<app-button square class="mr-3" @click="handleInviteFriendNone">-->
@@ -150,24 +141,7 @@
     
     data() {
       return {
-        menus: [
-          {
-            key: 'timeline',
-            text: 'Dòng thời gian'
-          },
-          {
-            key: 'intro',
-            text: 'Giới thiệu'
-          },
-          {
-            key: 'friends',
-            text: 'Bạn bè'
-          },
-          {
-            key: 'gallery',
-            text: 'Ảnh'
-          },
-        ],
+        
         dropdownShow: false,
         account: {
           id: "1",
