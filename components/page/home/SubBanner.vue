@@ -52,5 +52,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_sub-banner.scss";
+@import "~/assets/scss/components/home/_sub-banner.scss";
 </style>

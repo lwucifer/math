@@ -94,5 +94,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_learn-everywhere.scss";
+@import "~/assets/scss/components/home/_learn-everywhere.scss";
 </style>

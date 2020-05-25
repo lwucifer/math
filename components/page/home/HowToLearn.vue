@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/home/_how-to-learn.scss";
+@import "~/assets/scss/components/home/_how-to-learn.scss";
 </style>

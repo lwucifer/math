@@ -38,5 +38,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/home/_learn-coursera.scss";
+@import "~/assets/scss/components/home/_learn-coursera.scss";
 </style>

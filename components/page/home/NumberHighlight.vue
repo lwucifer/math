@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_number-highlight.scss";
+@import "~/assets/scss/components/home/_number-highlight.scss";
 </style>
