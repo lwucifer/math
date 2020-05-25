@@ -180,7 +180,7 @@ export default {
           STUDY_MODE.REVIEW_EXERCISE_RESULT
         ].includes(this.studyMode);
 
-      console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
+      // console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
       return isExerciseScreen;
     }
   },

@@ -143,9 +143,9 @@ export default {
       required: false,
       default: () => {
         return {
-          totalPages: 0,
+          total_pages: 0,
           size: 10,
-          totalElements: 0,
+          total_elements: 0,
           first: 1,
           last: 1,
           number: 0

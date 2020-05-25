@@ -88,13 +88,13 @@ export default {
         }
       ],
       pagination: {
-        totalElements: 44,
+        total_elements: 44,
         last: false,
-        totalPages: 5,
+        total_pages: 5,
         size: 10,
         number: 0,
         first: true,
-        numberOfElements: 10
+        number_of_elements: 10
       }
     };
   },

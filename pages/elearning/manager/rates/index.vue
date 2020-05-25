@@ -53,8 +53,7 @@
   const STORE_NAMESPACE = 'elearning/teaching/vote'
 
   export default {
-    // layout: "manage",
-    middleware: ["teacher-role"],
+    layout: "manage",
     components: {
       ElearningManagerSide,
       FilterForm,
@@ -63,13 +62,13 @@
     data() {
       return {
         pagination: {
-          totalElements: 0,
+          total_elements: 0,
           last: false,
-          totalPages: 1,
+          total_pages: 1,
           size: 10,
           number: 0,
           first: true,
-          numberOfElements: 0
+          number_of_elements: 0
         },
         params: {
           page: 1,
@@ -138,9 +137,9 @@
           this.pagination.first = this.get(this.detailInfo, 'data.first', 1)
           this.pagination.last = this.get(this.detailInfo, 'data.last', 1)
           this.pagination.number = this.get(this.detailInfo, 'data.number', 0)
-          this.pagination.totalPages = this.get(this.detailInfo, 'data.total_pages', 0)
-          this.pagination.totalElements = this.get(this.detailInfo, 'data.total_elements', 0)
-          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.number_of_elements', 0)
+          this.pagination.total_pages = this.get(this.detailInfo, 'data.total_pages', 0)
+          this.pagination.total_elements = this.get(this.detailInfo, 'data.total_elements', 0)
+          this.pagination.number_of_elements = this.get(this.detailInfo, 'data.number_of_elements', 0)
         } catch (e) {
           console.log('Get votes ', e)
         } finally {

@@ -6,10 +6,12 @@
 import ElearningList from './elearning'
 
 export default {
+  layout: "manage",
+
   components: {
     ElearningList,
   },
-  middleware: ["teacher-role"],
+  
   data() {
     return {
     }

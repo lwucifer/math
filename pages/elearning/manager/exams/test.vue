@@ -49,6 +49,8 @@
   const STORE_NAMESPACE = "elearning/teaching/exercise"
   
   export default {
+    layout: "manage",
+    
     components: {
       HeadTabs,
       ElearningManagerSide,
@@ -61,13 +63,13 @@
     data() {
       return {
         pagination: {
-          totalElements: 0,
+          total_elements: 0,
           last: false,
-          totalPages: 1,
+          total_pages: 1,
           size: 10,
           number: 0,
           first: true,
-          numberOfElements: 0
+          number_of_elements: 0
         },
         params: {
           page: 1,
@@ -123,9 +125,9 @@
           this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
           this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
           this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+          this.pagination.total_pages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+          this.pagination.total_elements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+          this.pagination.number_of_elements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
           // this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
         } catch (e) {
           console.log('Get list exercise ', e)
