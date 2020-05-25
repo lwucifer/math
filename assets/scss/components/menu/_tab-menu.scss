@@ -1,16 +1,36 @@
 .tab-menu {
   background-color: inherit;
+  list-style-type: none;
   &__item {
+    font-size: 0;
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     font-weight: normal;
     padding: 0.7rem 2rem;
     border-bottom: 4px solid transparent;
     transition: border-bottom-color .3s;
-    color: $color-text-dark;
     min-height: 4rem;
+    letter-spacing: -0.01em;
     &:hover {
+      cursor: pointer;
+      a {
+        font-weight: 600;
+        color: $color-primary;
+      }
+    }
+    a {
+      font-size: 1.4rem;
+      color: $color-text-dark;
+    }
+    a::before {
+      display: block;
+      content: attr(title);
       font-weight: 600;
-      color: $color-primary;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
     }
   }
   

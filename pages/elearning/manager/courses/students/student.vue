@@ -80,9 +80,9 @@ export default {
         }
       ],
       pagination: {
-        totalElements: 0,
-        totalPages: 1,
-        numberOfElements: 0,
+        total_elements: 0,
+        total_pages: 1,
+        number_of_elements: 0,
         last: false,
         size: 10,
         number: 0,

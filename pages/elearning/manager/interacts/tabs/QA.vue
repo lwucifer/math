@@ -166,7 +166,7 @@ export default {
         total: 15,
         page: 6,
         pager: 20,
-        totalElements: 55,
+        total_elements: 55,
         first: 1,
         last: 10
       },
@@ -196,11 +196,11 @@ export default {
           this.listQuestions && this.listQuestions.size
             ? this.listQuestions.size
             : 10,
-        totalPages:
-          this.listQuestions && this.listQuestions.totalPages
-            ? this.listQuestions.totalPages
+        total_pages:
+          this.listQuestions && this.listQuestions.total_pages
+            ? this.listQuestions.total_pages
             : 1,
-        totalElements:
+        total_elements:
           this.listQuestions && this.listQuestions.total_elements
             ? this.listQuestions.total_elements
             : 0,
@@ -212,7 +212,7 @@ export default {
           this.listQuestions && this.listQuestions.last
             ? this.listQuestions.last
             : 1,
-        numberOfElements:
+        number_of_elements:
           this.listQuestions && this.listQuestions.number_of_elements
             ? this.listQuestions.number_of_elements
             : 0,

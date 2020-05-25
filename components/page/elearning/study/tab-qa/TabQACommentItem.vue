@@ -156,7 +156,7 @@ export default {
         },
       };
       this.$store.dispatch(
-        `elearning/study/questions/getListQuestion`,
+        `elearning/study/detail/getListQuestion`,
         options
       );
     },

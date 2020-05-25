@@ -67,9 +67,9 @@ export default {
     },
     pagination() {
       const pagination = {
-        totalPages: get(this.elearningSchoolSummary, "schools.total_pages", 0),
+        total_pages: get(this.elearningSchoolSummary, "schools.total_pages", 0),
         size: get(this.elearningSchoolSummary, "schools.size", 10),
-        totalElements: get(this.elearningSchoolSummary, "schools.total_elements", 0),
+        total_elements: get(this.elearningSchoolSummary, "schools.total_elements", 0),
         first: get(this.elearningSchoolSummary, "schools.first", false),
         last: get(this.elearningSchoolSummary, "schools.last", false),
         number: get(this.elearningSchoolSummary, "schools.number", 0)
