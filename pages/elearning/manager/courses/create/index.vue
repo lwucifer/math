@@ -44,7 +44,7 @@ import { mapState } from "vuex";
 import { VclFacebook } from "vue-content-loading";
 
 export default {
-  //layout: "exercise",
+  layout: "manage",
 
   components: {
     CreateAside,

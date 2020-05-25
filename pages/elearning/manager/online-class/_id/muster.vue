@@ -174,6 +174,8 @@ const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
 export default {    
+  layout: "manage",
+  
   components: {
     IconClock,
     IconRefresh,
@@ -188,8 +190,6 @@ export default {
     IconLockOpenAlt,
     ElearningManagerSide
   },
-
-  middleware: ["teacher-role"],
 
   data() {
     return {

@@ -47,6 +47,8 @@
   const Tab4 = () => import("./tabs/finished")
 
   export default {    
+    layout: "manage",
+    
     components: {
       ElearningManagerSide,
       IconPlusCircle,
@@ -55,8 +57,6 @@
       Tab3,
       Tab4
     },
-
-    middleware: ["teacher-role"],
 
     data() {
       return {

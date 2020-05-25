@@ -261,6 +261,8 @@ const STORE_NAMESPACE_STATISTIC = "elearning/teaching/statistic";
 
 export default {
   name: "ManageCourse",
+
+  layout: "manage",
   
   components: {
     IconTrashAlt,
@@ -282,8 +284,6 @@ export default {
     IconPeople,
     IconRestore
   },
-
-  middleware: ["teacher-role"],
 
   data() {
     return {

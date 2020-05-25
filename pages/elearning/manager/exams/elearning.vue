@@ -50,6 +50,8 @@ const ExamTab = () => import("./tabs/exam-elearning");
 const STORE_NAMESPACE = 'elearning/teaching/exercise-elearning'
 
 export default {
+  layout: "manage",
+  
   components: {
     // Breadcrumb,
     HeadTabs,
