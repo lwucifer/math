@@ -756,8 +756,8 @@ export default {
       const dataTotal =
         this.memberList &&
         this.memberList.page &&
-        this.memberList.page.totalElements
-          ? this.memberList.page.totalElements
+        this.memberList.page.total_elements
+          ? this.memberList.page.total_elements
           : "";
       if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
         const [dataFilterMember] = dataMember.filter(

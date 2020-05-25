@@ -12,8 +12,7 @@
       </app-input>
     </div>
 
-    <div class="clc-table-wrapper" v-if="loading">Loading...</div>
-    <div class="clc-table-wrapper" v-else>
+    <div class="clc-table-wrapper">
       <table class="clc-table">
         <thead>
           <tr>
@@ -52,15 +51,7 @@
       </table>
       <app-pagination
         class="mt-4"
-        :pagination="{
-          first: get(files, 'page.first', false),
-          last: get(files, 'page.last', false),
-          number: get(files, 'page.number', 0),
-          numberOfElements: get(files, 'page.number_of_elements', 0),
-          size: get(files, 'page.size', 0),
-          totalElements: get(files, 'page.total_elements', 0),
-          totalPages: get(files, 'page.total_pages', 0),
-        }"
+        :pagination="get(files, 'page', {})"
         @pagechange="onChangePage"
       />
       <app-modal-confirm
@@ -175,7 +166,7 @@ export default {
         : "";
     },
     async handleGetFile() {
-      this.loading = true;
+      // this.loading = true;
       let options = {
         params: this.params,
       };
@@ -184,7 +175,7 @@ export default {
         options
       );
       this.files = res;
-      this.loading = false;
+      // this.loading = false;
     },
     get,
   },

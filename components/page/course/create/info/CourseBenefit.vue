@@ -104,18 +104,18 @@ export default {
       if (this.benefitEditorValue === "") {
         return "";
       }
-      if (get(this, "benefitEditorValue.length", 0) < 20) {
+      if (get(this, "benefitEditorValue.length", 0) < 27) {
         return "Nhập tối thiểu 20 ký tự";
       }
-      if (get(this, "benefitEditorValue.length", 0) > 255) {
+      if (get(this, "benefitEditorValue.length", 0) > 282) {
         return "Nhập tối đa 255 ký tự";
       }
       return "";
     },
     submit() {
       if (
-        get(this, "benefitEditorValue.length", 0) >= 20 &&
-        get(this, "benefitEditorValue.length", 0) <= 255
+        get(this, "benefitEditorValue.length", 0) >= 27 &&
+        get(this, "benefitEditorValue.length", 0) <= 282
       ) {
         return true;
       }

@@ -1,6 +1,8 @@
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
+import InteractiveNotification from "~/services/elearning/study/InteractiveNotification";
 import { get } from "lodash";
+import VoteStudyService from "~/services/elearning/study/Vote.js";
 
 /**
  * initial state
@@ -10,6 +12,8 @@ const state = () => ({
     content: [],
     page: {},
   },
+  notifications: null,
+  reviews: null,
 });
 
 /**
@@ -20,6 +24,34 @@ const getters = {
 };
 
 const actions = {
+  async getReviews({ commit }, options) {
+    try {
+      const res = await new VoteStudyService(this.$axios)["list"](options);
+      if (get(res, "success", false)) {
+        commit("reviews", res.data);
+        return;
+      }
+      commit("reviews", null);
+    } catch (error) {
+      commit("reviews", null);
+    }
+  },
+
+  async getListNotification({ commit }, options) {
+    try {
+      const res = await new InteractiveNotification(this.$axios)["list"](
+        options
+      );
+      if (get(res, "success", false)) {
+        commit("notifications", res.data);
+        return;
+      }
+      commit("notifications", null);
+    } catch (error) {
+      commit("notifications", null);
+    }
+  },
+
   async getListQuestion({ commit }, options) {
     try {
       const result = await new InteractiveQuestionService(this.$axios)["list"](
@@ -49,6 +81,14 @@ const mutations = {
     } else {
       state.questions.content = get(questions, "content", []);
     }
+  },
+
+  notifications(state, notifications) {
+    state.notifications = notifications;
+  },
+
+  reviews(state, reviews) {
+    state.reviews = reviews;
   },
 };
 

@@ -1,6 +1,7 @@
 <template>
   <div class="elearning-homepage">
     <ElearingHomeBanner />
+    <SubBanner/>
 
     <div v-if="pageLoading" class="container mt-6">
       <div class="row">
@@ -44,7 +45,7 @@
         </app-carousel>
       </ElearningHomeBox>
 
-      <ElearningHomeBox>
+      <!-- <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium mb-3">Dành cho bạn</h2>
 
         <app-carousel :options="{ slidesPerView: 1, preventClicksPropagation: false }">
@@ -74,7 +75,7 @@
         </app-carousel>
       </ElearningHomeBox>
 
-      <ElearningHomeBox title="Mhọc được yêu thích">
+      <ElearningHomeBox title="Môn học được yêu thích">
         <div slot="title-right" class="swiper-pagination eh-subject-pagination"></div>
 
         <app-carousel
@@ -175,8 +176,13 @@
             </div>
           </template>
         </app-carousel>
-      </ElearningHomeBox>
+      </ElearningHomeBox> -->
     </div>
+
+    <HowToLearn/>
+    <LearnCoursera/>
+    <LearnEverywhere/>
+    <NumberHighlight/>
   </div>
 </template>
 
@@ -220,7 +226,12 @@ const IconSubjectScience = () =>
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
 import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
+import SubBanner from "~/components/page/elearning/home/SubBanner"
 import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
+import HowToLearn from "~/components/page/elearning/home/HowToLearn";
+import LearnCoursera from "~/components/page/elearning/home/LearnCoursera";
+import LearnEverywhere from "~/components/page/elearning/home/LearnEverywhere";
+import NumberHighlight from "~/components/page/elearning/home/NumberHighlight";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 import ElearningHomePersonalBox from "~/components/page/elearning/home/ElearningHomePersonalBox.vue";
 import ElearningHomeSubjectItem from "~/components/page/elearning/home/ElearningHomeSubjectItem.vue";
@@ -233,7 +244,12 @@ export default {
     // CourseSliderTab,
     VclList,
     ElearingHomeBanner,
+    SubBanner,
     ElearningHomeBox,
+    HowToLearn,
+    LearnCoursera,
+    LearnEverywhere,
+    NumberHighlight,
     CourseItem2,
     ElearningHomePersonalBox,
     ElearningHomeSubjectItem,

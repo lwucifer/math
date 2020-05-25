@@ -143,7 +143,7 @@ import { DATE_SHORTCUT } from "~/utils/config";
 const STORE_NAMESPACE = "elearning/teaching/summary";
 
 export default {
-  // layout: "manage",
+  layout: "manage",
   name: "E-learning",
 
   components: {

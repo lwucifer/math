@@ -226,7 +226,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -295,9 +295,9 @@ export default {
         this.pagination.first = this.get(this.stateLessons, 'data.first', 1)
         this.pagination.last = this.get(this.stateLessons, 'data.last', 1)
         this.pagination.number = this.get(this.stateLessons, 'data.number', 0)
-        this.pagination.totalPages = this.get(this.stateLessons, 'data.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateLessons, 'data.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateLessons, 'data.number_of_elements', 0)
+        this.pagination.total_pages = this.get(this.stateLessons, 'data.total_pages', 0)
+        this.pagination.total_elements = this.get(this.stateLessons, 'data.total_elements', 0)
+        this.pagination.number_of_elements = this.get(this.stateLessons, 'data.number_of_elements', 0)
       } catch (e) {
 
       } finally {
