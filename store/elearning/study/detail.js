@@ -1,5 +1,6 @@
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
+import InteractiveNotification from "~/services/elearning/study/InteractiveNotification";
 import { get } from "lodash";
 
 /**
@@ -10,6 +11,7 @@ const state = () => ({
     content: [],
     page: {},
   },
+  notifications: null,
 });
 
 /**
@@ -20,6 +22,21 @@ const getters = {
 };
 
 const actions = {
+  async getListNotification({ commit }, options) {
+    try {
+      const res = await new InteractiveNotification(this.$axios)["list"](
+        options
+      );
+      if (get(res, "success", false)) {
+        commit("notifications", res.data);
+        return;
+      }
+      commit("notifications", null);
+    } catch (error) {
+      commit("notifications", null);
+    }
+  },
+
   async getListQuestion({ commit }, options) {
     try {
       const result = await new InteractiveQuestionService(this.$axios)["list"](
@@ -49,6 +66,10 @@ const mutations = {
     } else {
       state.questions.content = get(questions, "content", []);
     }
+  },
+
+  notifications(state, notifications) {
+    state.notifications = notifications;
   },
 };
 
