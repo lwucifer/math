@@ -106,7 +106,7 @@
                               v-model="schedules[index].duration"
                               square
                               size="sm"
-                              :minute-step="30"
+                              :minute-step="15"
                               :hourOptions="hours"
                               valueFormat="HH:mm"
                               valueType="format"
@@ -569,10 +569,10 @@ export default {
 
     async handleDrafOk() {
       try {
-        this.confirmLoading = true;
+        this.confirmDrafLoading = true;
         const doCreate = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
-          JSON.stringify(this.params)
+          JSON.stringify({...this.params, enable: false})
         );
         if (doCreate.success) {
           this.fnCancel();
@@ -586,8 +586,8 @@ export default {
         this.message = e;
         this.showNotify = true;
       } finally {
-        this.confirmLoading = false;
-        this.showModalConfirm = false;
+        this.confirmDrafLoading = false;
+        this.showModalConfirmDraf = false;
       }
     },
 
