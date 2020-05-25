@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       params: {
-        keyword: ""
+        keyword: null
       },
       tab: 1,
       list: [],
