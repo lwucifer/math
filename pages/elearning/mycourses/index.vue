@@ -30,6 +30,8 @@
         @handleDeleteFavourite="handleDeleteFavourite"
         @handleDeleteArchive="handleDeleteArchive"
         @handleArchive="handleArchive"
+        @shareFb="shareFb"
+        @shareSchool="shareSchool"
       ></ElearningItem>
     </ElearningList>
     <app-pagination
@@ -46,9 +48,9 @@
         </template>
     
     </CourseItem2>
-     </div>-->
-    <ShareElearningModal v-if="false"/> <!-- ModalShare -->
-   
+    </div>-->
+    <ShareElearningModal v-if="checkModalShare" @cancel="cancel" :dataModal="dataModal" />
+    <!-- ModalShare -->
   </div>
 </template>
 
@@ -95,7 +97,9 @@ export default {
         // number: 2,
         // first: true,
         // numberOfElements: 10
-      }
+      },
+      checkModalShare: false,
+      dataModal: {}
     };
   },
   created() {
@@ -428,6 +432,31 @@ export default {
           this.pagination = get(this, "elearningStudyArchive.page", {});
         }
       }
+    },
+    shareFb(id) {
+      const url =
+        "https://facebook.com/sharer.php?display=popup&u=" +
+        window.origin +
+        `elearning/${id}`;
+      window.open(url, "sharer", "_blank");
+    },
+    async shareSchool(item) {
+      this.checkModalShare = true;
+      this.dataModal = item;
+      // const link = window.origin + `/elearning/${id}`;
+      // const doAdd = await this.$store.dispatch(
+      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
+      //   { link: link }
+      // );
+      // if (doAdd.success) {
+      //   this.menuDropdown = false;
+      //   this.$toasted.show("Đã chia sẻ thành công.");
+      // } else {
+      //   this.$toasted.error(doAdd.message);
+      // }
+    },
+    cancel() {
+      this.checkModalShare = false;
     }
   }
 };
