@@ -128,7 +128,7 @@ import IconFilter from "~/assets/svg/icons/filter.svg?inline"
                     total: 15,
                     page: 6,
                     pager: 20,
-                    totalElements: 55,
+                    total_elements: 55,
                     first: 1,
                     last: 10
                 },

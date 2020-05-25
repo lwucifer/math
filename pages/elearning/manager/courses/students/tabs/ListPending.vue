@@ -15,6 +15,8 @@ import StudentManagerTable from "~/components/page/elearning/manager/student/Stu
 import { mapState, mapActions } from "vuex";
 const STORE_TEACHING_REQUEST = "elearning/teaching/request";
 export default {
+  layout: "manage",
+  
   components: {
     StudentManagerFilterForm,
     StudentManagerTable
@@ -50,13 +52,13 @@ export default {
         }
       ],
       pagination: {
-        totalElements: 0,
+        total_elements: 0,
         last: false,
-        totalPages: 1,
+        total_pages: 1,
         size: 10,
         number: 0,
         first: true,
-        numberOfElements: 0
+        number_of_elements: 0
       }
     };
   },
@@ -73,11 +75,11 @@ export default {
           this.elearningRequest && this.elearningRequest.size
             ? this.elearningRequest.size
             : 10,
-        totalPages:
-          this.elearningRequest && this.elearningRequest.totalPages
-            ? this.elearningRequest.totalPages
+        total_pages:
+          this.elearningRequest && this.elearningRequest.total_pages
+            ? this.elearningRequest.total_pages
             : 1,
-        totalElements:
+        total_elements:
           this.elearningRequest && this.elearningRequest.total_elements
             ? this.elearningRequest.total_elements
             : 0,
@@ -89,7 +91,7 @@ export default {
           this.elearningRequest && this.elearningRequest.last
             ? this.elearningRequest.last
             : 1,
-        numberOfElements:
+        number_of_elements:
           this.elearningRequest && this.elearningRequest.number_of_elements
             ? this.elearningRequest.number_of_elements
             : 0,

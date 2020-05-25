@@ -261,6 +261,8 @@ const STORE_NAMESPACE_STATISTIC = "elearning/teaching/statistic";
 
 export default {
   name: "ManageCourse",
+
+  layout: "manage",
   
   components: {
     IconTrashAlt,
@@ -282,8 +284,6 @@ export default {
     IconPeople,
     IconRestore
   },
-
-  middleware: ["teacher-role"],
 
   data() {
     return {
@@ -392,10 +392,10 @@ export default {
       ],
       currentHeads: [],
       pagination: {
-        totalPages: 0,
+        total_pages: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -572,17 +572,17 @@ export default {
           "data.page.number",
           0
         );
-        this.pagination.totalPages = this.get(
+        this.pagination.total_pages = this.get(
           this.stateElearnings,
           "data.page.total_pages",
           0
         );
-        this.pagination.totalElements = this.get(
+        this.pagination.total_elements = this.get(
           this.stateElearnings,
           "data.page.total_elements",
           0
         );
-        this.pagination.numberOfElements = this.get(
+        this.pagination.number_of_elements = this.get(
           this.stateElearnings,
           "data.page.number_of_elements",
           0

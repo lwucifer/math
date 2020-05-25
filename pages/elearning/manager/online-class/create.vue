@@ -371,6 +371,8 @@ function initialState() {
 export default {
   name: "onlineclass",
 
+  layout: "manage",
+
   components: {
     IconClock,
     IconAngleUp,

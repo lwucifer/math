@@ -3,7 +3,7 @@
     <div class="course-item-2__img">
       <n-link :to="`/elearning/${id}`">
         <img
-          v-lazy="get(item, 'avatar.medium', '')"
+          v-lazy="get(item, 'avatar', '')"
           :alt="get(item, 'name', '')"
           class="d-block w-100"
         />

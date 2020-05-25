@@ -30,6 +30,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/home/_elearning-home-banner.scss";
 </style>
