@@ -1,12 +1,12 @@
 <template>
-  <div class="e-program-item" :class="get(lesson, 'status', 0) ? 'completed' : ''">
+  <div class="e-program-item" :class="isLessonCompleted ? 'completed' : ''">
     <div class="e-program-item__left">
       <app-checkbox
         v-model="lessonStatus"
         ref="completedCheckbox"
         :style="{
           'pointer-events':
-            lesson.status == lessonCompleted ? 'none' : 'inherit'
+            isLessonCompleted ? 'none' : 'inherit'
         }"
         @change="isShowCompleteStudy = true"
       />
@@ -17,7 +17,7 @@
         href
         class="e-program-item__title"
         @click.prevent="handleStuty(lesson)"
-      >{{ `${lesson.index}.` }} {{ get(lesson, "name", "") }}</a>
+      >{{ `${get(lesson, "index", "0")}.` }} {{ get(lesson, "name", "") }}</a>
 
       <div class="e-program-item__bottom">
         <div class="e-program-item__time">
@@ -48,7 +48,7 @@
 
         <div class="e-program-item__download">
           <app-dropdown
-            v-if="lesson.lesson_docs && lesson.lesson_docs.length"
+            v-if="lesson_docs.length"
             class="e-program-item__download-tooltip"
             position="topCenter"
           >
@@ -57,7 +57,7 @@
             </span>
 
             <template>
-              <div v-for="(link, index) in lesson.lesson_docs || []" :key="index">
+              <div v-for="(link, index) in lesson_docs || []" :key="index">
                 <a
                   :href="link.url"
                   class="d-inline-flex align-items-center caption"
@@ -132,7 +132,10 @@ export default {
   },
 
   props: {
-    lesson: Object
+    lesson: {
+      type: Object,
+      default: () => {}
+    }
   },
 
   data() {
@@ -148,8 +151,12 @@ export default {
     };
   },
 
+  created() {
+    console.log("[this.lesson]", this.lesson);
+  },
+
   mounted() {
-    this.lessonStatus = this.lesson.status == this.lessonCompleted;
+    this.lessonStatus = get(this, "lesson.status", 0) == this.lessonCompleted;
 
     const lesson_id = getParamQuery("lesson_id");
     if (lesson_id && lesson_id === this.lesson.id) {
@@ -200,6 +207,15 @@ export default {
     durationTimes() {
       const duration = get(this.lesson, "duration", 0);
       return getCountdown_MM_SS(duration);
+    },
+
+    isLessonCompleted() {
+      const status = get(this.lesson, 'status', 0);
+      return status == this.lessonCompleted;
+    },
+
+    lesson_docs() {
+      return get(this.lesson, 'lesson_docs', []);
     }
   },
 
