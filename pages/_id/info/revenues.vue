@@ -98,8 +98,9 @@
             <template v-slot:content>
               <sub-block-section
                 :title-cls="{ 'border-0': true }"
-                :content-cls="{ 'px-0': true}"
+                :content-cls="{ 'px-0': true, 'pt-0': true }"
                 bg-content-color="transparent"
+                :outline="false"
               >
                 <template v-slot:title>
                   <div class="row">
@@ -154,7 +155,7 @@
                       bg-table="white"
                       :header-ext-cls="{ 'table-header-border-0': true }"
                       :ext-table-cls="{ 'pt-3': true }"
-                      :pagination-style="{ position: 'right', extCls: {test: true} }"
+                      :pagination-style="{ position: 'right' }"
                     >
                       <template v-slot:cell(cost)="{row}">
                         <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>

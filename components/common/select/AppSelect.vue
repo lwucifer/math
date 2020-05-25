@@ -177,7 +177,8 @@ export default {
     size: {
       type: String,
       default: "md" // 'sm' | 'md'
-    }
+    },
+    bordered: Boolean
   },
 
   data() {
@@ -197,7 +198,8 @@ export default {
         active: this.active,
         "app-select--tags": this.mode === "tags",
         "app-select--searchable": this.searchable,
-        "app-select--size-sm": this.size === "sm"
+        "app-select--size-sm": this.size === "sm",
+        "app-select--bordered": this.bordered
       };
     },
 

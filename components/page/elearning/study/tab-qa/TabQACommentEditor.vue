@@ -68,6 +68,7 @@ export default {
         content: "",
         question_id: get(this, "question.id", ""),
       },
+      image: "",
     };
   },
 
@@ -114,7 +115,15 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.editor.setContent("");
+      this.payload.content = "";
+      this.image = "";
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+    },
     handleUploadChange(fileList, event) {
+      this.image = fileList[0];
       this.uploadFileList = Array.from(fileList);
       getBase64(this.uploadFileList[0], (src) => {
         this.uploadImgSrc = src;
@@ -122,6 +131,7 @@ export default {
     },
 
     removeImgUpload() {
+      this.image = "";
       this.uploadFileList = [];
       this.uploadImgSrc = null;
 
@@ -142,10 +152,12 @@ export default {
     async submit() {
       this.payload.content = this.editor.getHTML().replace("<p></p>", "");
       const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
-        this.payload
+        this.payload,
+        this.image
       );
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
+        this.reset();
         const options = {
           params: {
             elearning_id: get(this, "$route.params.id", ""),

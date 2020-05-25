@@ -1,71 +1,120 @@
 <template>
-  <app-modal
-    centered
-    :width="750"
-    :component-class="{ 'join-class-modal': true }"
-    :footer="false"
-    title="Phòng đợi"
-    @close="close()"
-  >
-    <div slot="content" class="text-center">
-      <div class="text-left">
-        <h6 class="color-primary mb-3">Phòng học online số 1</h6>
-        <div class="box12 border mb-4">
-          <p class="mb-3">
-            Tên phòng:
-            <b>{{ get(targetClass, "extra_info.online_class_name", "--") }}</b>
-          </p>
-          <p class="mb-3">
-            Giáo viên:
-            <b>{{ get(targetClass, "extra_info.teacher_name", "--") }}</b>
-          </p>
-          <p class="mb-3">
-            Giờ bắt đầu:
-            <b>{{ get(targetClass, "extra_info.start_time", "--:--") }}</b>
-          </p>
-          <p>
-            Thời lượng:
-            <b>{{ get(targetClass, "extra_info.duration", 0) | formatHour }}</b>
-          </p>
-        </div>
+  <div>
+    <app-modal
+      centered
+      :width="750"
+      :component-class="{ 'join-class-modal': true }"
+      :footer="false"
+      title="Phòng đợi"
+      @close="close()"
+    >
+      <div slot="content" class="text-center">
+        <div class="text-left">
+          <h6 class="color-primary mb-3">Phòng học online số 1</h6>
+          <div class="box12 border mb-4">
+            <p class="mb-3">
+              Tên phòng:
+              <b>{{ get(data, "extra_info.online_class_name", "--") }}</b>
+            </p>
+            <p class="mb-3">
+              Giáo viên:
+              <b>{{ get(data, "extra_info.teacher_name", "--") }}</b>
+            </p>
+            <p class="mb-3">
+              Giờ bắt đầu:
+              <b>{{ get(data, "extra_info.start_time", "--:--") }}</b>
+            </p>
+            <p>
+              Thời lượng:
+              <b>{{ get(data, "extra_info.duration", 0) | formatHour }}</b>
+            </p>
+          </div>
 
-        <!-- <p class="mb-3">
+          <!-- <p class="mb-3">
           Hãy nhấn nút
           <b>"Vào phòng học"</b> dưới đây để vào phòng.
           <b
             class="color-red"
           >Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
         </p>-->
-        <p class="mb-3" v-if="dataLength > 1">
-          <i>
-            Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết học
-            thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động
-            chuyển sang tiết học tiếp theo. Bạn không nên đóng cửa sổ này cho
-            đến khi buổi học kết thúc.
-          </i>
-        </p>
-        <!-- <p class="mb-4" v-if="dataLength > 1"> -->
-        <!-- <p class="mb-4">
+          <p class="mb-3" v-if="dataLength > 1">
+            <i>
+              Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết
+              học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động
+              chuyển sang tiết học tiếp theo. Bạn không nên đóng cửa sổ này cho
+              đến khi buổi học kết thúc.
+            </i>
+          </p>
+          <!-- <p class="mb-4" v-if="dataLength > 1"> -->
+          <!-- <p class="mb-4">
           <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
         </p>-->
 
-        <div class="mt-4 text-center">
+          <!-- <div class="mt-4 text-center">
           <div class="mb-10">
             Phòng học bắt đầu sau
             <span class="color-primary">{{ countdown }}</span>
           </div>
+          
           <a
             href
             class="btn color-primary btn--square"
             @click.prevent="exitRoom"
             >Thoát phòng đợi</a
           >
-        </div>
+        </div> -->
 
-        <!-- <hr /> -->
+          <div class="mb-4 mt-4 d-flex-center justify-content-center">
+            <a
+              :href="activeSessionLink"
+              target="_blank"
+              class="btn btn--color-primary btn--square mr-4 btn--size-lg"
+              :v-if="data.is_started"
+              >Vào phòng học</a
+            >
+            <app-button color="white" size="lg" @click="showModalConfirm = true"
+              >Thoát phòng đợi</app-button
+            >
+          </div>
+
+          <!-- <hr /> -->
+
+          <div style="max-height: 300px; overflow-y: auto; text-align: center;">
+            <div class="text-center d-inline-block">
+              <div
+                v-for="(item, index) in data.sessions"
+                :key="index"
+                class="mb-4"
+              >
+                <p>
+                  <span style="color: #222">Tiết học {{ index + 1 }}: </span>
+                  <a
+                    class="bold text-decoration-none"
+                    :href="item.join_url"
+                    target="_blank"
+                    >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
+                    {{
+                      getLocalEndTime(item.start_time, item.duration, "minutes")
+                    }}</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </app-modal>
+    </app-modal>
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      @ok="close()"
+      :width="550"
+      @cancel="showModalConfirm = false"
+      :footer="false"
+      :header="false"
+      title="Bạn có chắc chắn muốn thoát?"
+      description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
+    />
+  </div>
 </template>
 
 <script>
@@ -73,12 +122,15 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
+import { LESSION_ONLINE_STATUS } from "~/utils/constants";
+
+import { getLocalEndTime, getLocalTimeHH_MM_A, getLocalDateTime } from "~/utils/moment";
 
 let interval = null;
 
 export default {
   props: {
-    targetClass: Object
+    data: Object
   },
 
   data() {
@@ -86,36 +138,58 @@ export default {
       duration: 30, // in minutes
       countdown: "--:--",
       seconds: null,
-      currentZoom: null
+      currentZoom: null,
+      showModalConfirm: false,
+      activeSessionLink: "#"
     };
   },
 
   methods: {
     get,
+
+    getLocalEndTime,
+    getLocalTimeHH_MM_A,
+    getLocalDateTime,
+
     ...mapMutations("elearning/study/study-progress", [
       "setStudyProgressCurrentSession"
     ]),
 
+    setActiveLinkSession() {
+      console.log("[setActiveLinkSession]");
+      // lessiong is living => open zoom
+      if (this.data.is_started == true) {
+        const sessions = this.data.sessions || [];
+
+        // calculate current session base on: start_time + duration vs new Date();
+        let activeSession = null;
+        const now = new Date();
+        for(let i=0; i< sessions.length; i++) {
+          const endTime = getLocalDateTime(sessions[i].end_time);
+          if (now <= new Date(endTime)) {
+            activeSession = sessions[i];
+            this.activeSessionLink = activeSession.join_url;
+            return;
+          }
+        }
+      }
+    },
+
     exitRoom() {
-      console.log("[exitRoom]", this.targetClass);
+      console.log("[exitRoom]", this.data);
     },
 
     close() {
       console.log("[close]", interval);
       clearInterval(interval);
       this.$emit("close");
+      this.showModalConfirm = false;
     },
 
     setCountdown() {
-      let seconds = this.targetClass.time_count_down || 0; // in seconds
-      const duration = get(this.targetClass, "extra_info.duration", 0);
-      const session_starting_position = get(
-        this.targetClass,
-        "session_starting_position",
-        0
-      );
-      // const session_starting_position = 1;
-      const isStudentRole = this.isStudentRole;
+      let seconds = this.data.time_count_down || 0; // in seconds
+      const duration = get(this.data, "extra_info.duration", 0);
+      if (!duration) return;
 
       interval = setInterval(() => {
         console.log("[setCountdown]", seconds);
@@ -123,28 +197,11 @@ export default {
         this.seconds = seconds;
 
         if (seconds <= 0) {
-          // auto join to room
-          const sessions = this.targetClass.sessions || [];
-          const zoom = sessions[session_starting_position];
-
-          if (!zoom) return;
-          this.currentZoom = zoom;
-
           clearInterval(interval);
-
-          // student open start_url or join_url
-          // if (isStudentRole) {
-          //   window.open(zoom.join_url);
-          // }
-          var windowReference = window.open("");
-          const zoomLink = isDesktop
-            ? `${zoom.join_url_win_or_mac_zoom_us}`
-            : `${zoom.join_url_ios_or_android_zoom_us}`;
-          // const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
-
-          windowReference.location = zoomLink;
         }
+
         seconds -= 1;
+        this.setActiveLinkSession();
       }, 1000);
     }
   },
@@ -153,13 +210,16 @@ export default {
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
 
     dataLength() {
-      return this.targetClass.sessions.length || 0;
+      return this.data.sessions.length || 0;
     }
   },
 
   mounted() {
-    console.log("[targetClass]", this.targetClass);
+    console.log("[data]", this.data);
     this.setCountdown();
+
+    // set active session link
+    this.setActiveLinkSession();
   },
 
   watch: {

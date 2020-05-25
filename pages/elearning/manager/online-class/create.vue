@@ -22,9 +22,8 @@
                   :options="courses"
                   label="text"
                   placeholder="Chọn bài giảng/khóa học"
-                  searchable
-                  clearable
                   @input="handleChangedCourse"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -45,13 +44,13 @@
                 <app-vue-select
                   style="width: 17rem"
                   class="app-vue-select form-item__selection"
+                  :disabled="true"
                   v-model="filterPrivacy"
                   :options="privacies"
                   label="text"
                   placeholder="Công khai"
-                  searchable
-                  clearable
                   @input="handleChangedPrivacy"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -246,7 +245,7 @@
 
           <div class="mt-4 mb-4 text-right">
             <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSave" :disabled="!fullParams">Lưu nháp</app-button>
+            <app-button color="info" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">Lưu nháp</app-button>
             <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
           </div>
         </div>
@@ -267,10 +266,10 @@
     
     <app-modal-confirm
       v-if="showModalConfirmDraf"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
+      :confirmLoading="confirmDrafLoading"
+      @ok="handleDrafOk"
       :width="550"
-      @cancel="handleCancelModal"
+      @cancel="handleDrafCancelModal"
       :footer="false"
       :header="false"
       title="Bạn muốn lưu bản nháp tạo phòng học này?"
@@ -338,6 +337,7 @@ function initialState() {
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
+    confirmDrafLoading: false,
     showBonus: false,
     schedules: [initialSchedule],
     filterCourse: null,
@@ -439,14 +439,49 @@ export default {
     getDateBirthDay,
     getEndTime,
 
+    changDate(e, index, isTo) {
+      if (isTo) {
+        if(this.schedules[index].from_date > e ) {
+          this.schedules[index].to_date = '';
+        } else {
+          this.schedules[index].to_date = e;
+        }
+      } else {     
+        if(this.schedules[index].to_date < e ) {
+          this.schedules[index].from_date = '';
+        } else {
+          this.schedules[index].from_date = e;
+        }
+      }
+      console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
+
+    },
+
     checkIncules(list, val){
       return list.includes(val)
     },
 
     convertDay(index) {
       const items = this.selectedItems[index];
-      return items.reduce((result, item, index) => {
+      const sorter = {
+        "mon": 1,
+        "tue": 2,
+        "wed": 3,
+        "thu": 4,
+        "fri": 5,
+        "sat": 6,
+        "sun": 7
+      };
+      let tmp = {};
+      items.forEach(function(value) {
+        let index = sorter[value.toLowerCase()];
+        tmp[index] = value;
+      });
+
+      let i = 0;
+      return Object.values(tmp).reduce((result, item) => {
         let text = '';
+        if (item) i++;
         switch (item) {
           case 'MON': text = '2'; break;
           case 'TUE': text = '3'; break;
@@ -456,7 +491,7 @@ export default {
           case 'SAT': text = '7'; break;
           case 'SUN': text = 'CN'; break;
         }
-        const com = index > 0 ? ", " : "";
+        const com = i > 1 ? ", " : "";
         return (result = result + com + text);
       }, "Hàng tuần vào thứ ");
     },
@@ -532,6 +567,30 @@ export default {
       }
     },
 
+    async handleDrafOk() {
+      try {
+        this.confirmLoading = true;
+        const doCreate = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
+          JSON.stringify(this.params)
+        );
+        if (doCreate.success) {
+          this.fnCancel();
+          this.message = "Lưu bản nháp phòng học thành công!";
+          this.showNotify = true;
+        } else if (doCreate.message) {
+          this.message = doCreate.message;
+          this.showNotify = true;
+        }
+      } catch (e) {
+        this.message = e;
+        this.showNotify = true;
+      } finally {
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
+      }
+    },
+
     fnCancel() {
       let temp = [...this.courses];
       Object.assign(this.$data, initialState());
@@ -541,13 +600,18 @@ export default {
     fnSave() {
       this.showModalConfirm = true;
     },
-    fnSave2() {
-      this.showModalConfirm = true;
+    fnSaveDraf() {
+      this.showModalConfirmDraf = true;
     },
 
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+    },
+    
+    handleDrafCancelModal() {
+      this.showModalConfirmDraf = false;
+      this.confirmDrafLoading = false;
     },
 
     async getElearnings() {
@@ -575,6 +639,9 @@ export default {
 
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+      // this.params.enable = this.courses[0].privacy;
+      this.params.enable = true;
+      this.filterPrivacy = {value:true, text: 'Công khai'};
     },
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;

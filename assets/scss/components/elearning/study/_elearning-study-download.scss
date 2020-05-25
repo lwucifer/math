@@ -1,0 +1,24 @@
+.wrap-elearning-download{
+    min-height: 42.6rem;
+    width: 100%;
+    background: #F9F9F9;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0 9rem;
+    .img-download{
+        margin: 4rem 0 3rem;
+    }
+    p{
+        margin-bottom: 2rem;
+    }
+    .btn-download{
+        width: 14rem;
+        svg{
+            margin-right: 0.63rem;
+            height: 16px;
+            width: 16px;
+        }
+    }
+}

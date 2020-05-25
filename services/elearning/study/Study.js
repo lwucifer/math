@@ -6,12 +6,23 @@ export default class Study extends BaseService {
     super($axios, APIs.STUDY_MY_ELEARNING);
   }
 
-  async addAnswerOfQuestion(params) {
-    const { data } = await this.$axios.request({
+  async addAnswerOfQuestion(params, image = "") {
+    let formData = new FormData();
+    formData.append("image", image);
+
+    let options = {
       url: APIs.STUDY_QUESTION_ADD_ANSWER,
       method: "POST",
       params,
-    });
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    if (image) options.data = formData;
+
+    const { data } = await this.$axios.request(options);
+
     return data;
   }
 

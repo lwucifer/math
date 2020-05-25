@@ -42,7 +42,7 @@
           </div>
           <div class="message-decs__title">
             <span>{{nameGroup}}</span>
-            <p>Đang hoạt động</p>
+            <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
         <div class="message-tool">
@@ -79,7 +79,7 @@
         </client-only>
       </div>
 
-      <div class="aside-box__content" v-if="!checkList">
+      <div class="aside-box__content" v-if="!checkList" :class="{'padding-show-info': showInfo}">
         <client-only>
           <infinite-loading
             direction="top"
@@ -486,7 +486,7 @@
       </div>
     </div>
 
-    <transition enter-active-class="animate__fadeInRight" leave-active-class="animate__fadeInRight">
+    <transition enter-active-class="animated faster fadeInRight" leave-active-class="animated faster fadeOutRight">
       <TabInfo v-if="showInfo"/> 
     </transition>
 

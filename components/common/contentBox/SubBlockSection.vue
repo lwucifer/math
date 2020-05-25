@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-block-section" :class="blockCls">
+  <div class="sub-block-section" :class="{ ...blockCls, ...classes }">
     <div
       v-if="hasTitle"
       class="sub-block-section__title"
@@ -32,6 +32,10 @@
       IconLeftArrow
     },
     props: {
+      outline: {
+        type: Boolean,
+        default: true
+      },
       blockCls: {
         type: Object,
         default: () => {}
@@ -66,7 +70,9 @@
     },
     computed: {
       classes: function () {
-      
+        const styleCls = {
+          'sub-block-section--outline': this.outline
+        }
       },
       ctnCls() {
         const bgCls = {

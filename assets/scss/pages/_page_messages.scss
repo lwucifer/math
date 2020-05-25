@@ -33,7 +33,7 @@
     .col-sidebar {
         .aside-box {
             background-color: map-get($bg-colors, white);
-            border-right: 1px solid $color-border;
+            border-right: 1px solid $color-disabled;
         
             .tool-top {
                 padding: 1.5rem;
@@ -75,10 +75,16 @@
                         border: 1px solid #eeeeee;
                         box-sizing: border-box;
                         height: 4rem;
-                        background: #fbfbfb;
+                        background: $color-border;
+                        border-radius: 2px;
+
+                        ::placeholder {
+                            color: $color-text;
+                        }
+
                         .input-group-addon {
                             display: flex;
-                            padding: 12px;
+                            padding: 12px; 
                         }
                         input {
                             border: none;
@@ -118,24 +124,33 @@
                         }
                     }
                 }
+
+                .active {
+                    background-color: $color-border !important;
+                }
+
                 .tabs-content {
                     height: 75vh;
                     overflow-y: scroll;
                     @include scrollbars(5px, #E0E0E0, #fff, 10px);
+                    padding-right: 10px;
+                    padding-left: 15px;
 
                     .align-item {
                         padding: 8px 15px;
                         display: flex;
-                        background-color: #f8f8f8;
+                        background-color: $color-border;
                         cursor: pointer;
                         align-items: center;
-
+                        background-color: #fff;
+                        border-radius: 2px;
+                        
                         .link--dropdown__content {
                             display: none;
                         }
 
                         &:hover {
-                            background-color: #ffffff;
+                            background-color: $color-border;
                             .link--dropdown__content {
                                 display: block;
                             }
@@ -268,6 +283,12 @@
                         }
                     }
                 }
+
+                .padding-show-info {
+                    padding-right: 34% !important;
+                    transition: ease-in 0.3s;
+                }
+
                 .aside-box__content {
                     padding-left: 15px;
                     padding-right: 15px;
@@ -347,7 +368,7 @@
                             width: 100%;
                             line-height: 40px;
                             height: 40px;
-                            background-color: #f8f9fd;
+                            background-color: $color-border;
                             border: none;
                             padding-left: 10px;
                             padding-right: 10px;
@@ -405,19 +426,26 @@
                 .message-chat__content {
                     padding-right: 0;
                     padding-left: 0;
-                    border-right: 1px solid #eeeeee;
+                    // border-right: 1px solid #eeeeee;
                 }
             }
 
 
             .message-chat__info {
-                width: 30%;
-                z-index: 99;
+                width: 33%;
+                height: 75vh;
+                z-index: 9999;
                 position: absolute;
                 top: 72px;
                 right: 0;
+                background: $color-text-white;
+                border-left: 1px solid $color-disabled;
+
+                .list-info-box {
+                    border-top: 1px solid $color-border;
+                }
+
                 .message-info__acc {
-                    border-bottom: 1px solid #eeeeee;
                     padding: 15px;
                     text-align: center;
                     .message-info__acc__image {
@@ -426,16 +454,20 @@
                         border-radius: 50%;
                         overflow: hidden;
                         line-height: 0;
+                        margin-bottom: 2.4rem;
+
                         .app-avatar {
-                            max-width: 65px;
-                            max-height: 65px;
+                            width: 90px;
+                            height: 90px;
                             float: none;
                         }
+
                         &:hover {
                             .change-avatar {
                                 bottom: 0;
                             }
                         }
+
                         .change-avatar {
                             position: absolute;
                             left: 0;
@@ -808,22 +840,22 @@ button:focus {
     }
 }
 
-button {
-    position: relative;
-    z-index: 0;
-    svg {
-        position: relative;
-        z-index: -1;
-    }
-}
+// button {
+//     position: relative;
+//     z-index: 0;
+//     svg {
+//         position: relative;
+//         z-index: -1;
+//     }
+// }
 
 .message-modal .app-modal-content {
     padding: 2rem;
 }
 
-ul {
-    list-style: none;
-}
+// ul {
+//     list-style: none;
+// }
 
 .btn-create-chat {
     display: flex;
