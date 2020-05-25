@@ -8,7 +8,7 @@
 
     <app-pagination
       class="mt-4"
-      :pagination="get(notifications, 'page', null)"
+      :pagination="get(notifications, 'page', {})"
       @pagechange="handleChangePage"
     />
   </div>
