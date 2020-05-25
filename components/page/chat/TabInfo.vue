@@ -3,14 +3,15 @@
     <div class="message-info">
       <div class="message-info__acc">
         <div class="message-info__acc__image" v-if="!noMessage">
-          <app-avatar v-if="typeRoom==2" :src="avatarSrc" size="md" class="comment-item__avatar" />
-          
+          <app-avatar v-if="typeRoom==2" :src="avatarSrc" class="comment-item__avatar" />
+
           <app-avatar
             v-else
             :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
             size="md"
             class="comment-item__avatar"
           />
+
           <app-upload
             class="cgi-upload-avt change-avatar"
             @change="handleUploadChange"
@@ -23,8 +24,11 @@
             </template>
           </app-upload>
         </div>
+
+
         <div class="message-info__acc__title" v-if="!noMessage && typeRoom == 2">
           <input v-if="changeName" type="text" v-model="name" />
+
           <span v-else>
             <a href="#" v-if="name">{{name}}</a>
             <span v-else>Đặt tên cho cuộc trò chuyện này</span>
@@ -39,10 +43,68 @@
             <IconTick width="20" height="20" />
           </button>
         </div>
-        <div v-else-if="typeRoom==1">{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</div>
+
+        <div v-else-if="typeRoom==1">
+          <h4>{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</h4>
+          <p class="mb-4">Đang hoạt động</p>
+        </div>
       </div>
 
-      <div class="message-info__box">
+      <ListInfoBox class="list-info-box">
+        <template #header>TÙY CHỌN</template>
+
+        <template #body>
+          <div class="d-flex align-content-center justify-content-between mb-3">
+            <div class="d-flex align-content-center">
+              <IconNotificationsNone24px class="mr-2"/> <span class="my-auto color-basse">Thông báo</span>
+            </div>
+
+            <app-toggle-switch/>
+          </div>
+
+          <div class="d-flex align-content-center justify-content-between mb-3">
+            <div class="d-flex align-content-center">
+              <IconRemoveCircleOutline24px class="mr-2"/> <span class="my-auto color-basse">Chặn tin nhắn</span>
+            </div>
+
+            <app-toggle-switch/>
+          </div>
+
+          <div class="d-flex align-content-center justify-content-between">
+            <div class="d-flex align-content-center">
+              <IconRecycle class="mr-2 fill-secondary"/> <span class="my-auto text-secondary">Xóa cuộc trò chuyện</span>
+            </div>
+
+            <div/>
+          </div>
+        </template>
+      </ListInfoBox>
+
+      <ListInfoBox>
+        <template #header>TỆP ĐƯỢC CHIA SẺ</template>
+
+        <template #body>
+          <p class="mb-3 d-flex align-content-center"><IconFileBlank class="fill-info mr-2"/> <span class="my-auto text-info">Lorem, ipsum.</span></p>
+          <p class="mb-3 d-flex align-content-center"><IconFileBlank class="fill-info mr-2"/> <span class="my-auto text-info">Lorem, ipsum.</span></p>
+          <p class="d-flex align-content-center"><IconFileBlank class="fill-info mr-2"/> <span class="my-auto text-info">Lorem, ipsum.</span></p>
+        </template>
+      </ListInfoBox>
+
+      <ListInfoBox>
+        <template #header>ẢNH ĐƯỢC CHIA SẺ</template>
+
+        <template #body>
+          <div class="row">
+            <div class="col-4 px-1">
+              <img src="/images/tmp/user-photo.png" alt="">
+            </div>
+            <div class="col-4 px-1"><img src="/images/tmp/user-photo.png" alt=""></div>
+            <div class="col-4 px-1"><img src="/images/tmp/user-photo.png" alt=""></div>
+          </div>
+        </template>
+      </ListInfoBox>
+
+      <!-- <div class="message-info__box">
         <h5 class="message-info__box__title">File chia sẻ</h5>
         <div class="message-info__box__content attachment">
           <ul class="list-unstyle" v-for="(item, index) in listFile" :key="index">
@@ -116,7 +178,7 @@
             </client-only>
           </ul>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Modal add member -->
@@ -136,6 +198,12 @@ import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
+import IconNotificationsNone24px from '~/assets/svg/v2-icons/notifications_none_24px.svg?inline';
+import IconRemoveCircleOutline24px from '~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline';
+import IconRecycle from '~/assets/svg/v2-icons/recycle.svg?inline';
+import IconFileBlank from '~/assets/svg/design-icons/file-blank.svg?inline';
+
+import ListInfoBox from "~/components/page/chat/ListInfoBox"
 import { getBase64 } from "~/utils/common";
 
 export default {
@@ -146,7 +214,12 @@ export default {
     IconPhoto,
     IconEditAlt,
     IconCloseOutline,
-    IconTick
+    IconTick,
+    ListInfoBox,
+    IconNotificationsNone24px,
+    IconRemoveCircleOutline24px,
+    IconRecycle,
+    IconFileBlank
   },
 
   props: {

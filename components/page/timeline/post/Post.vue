@@ -5,18 +5,18 @@
         <app-avatar
           class="post__avatar"
           :src="post.author && post.author.avatar ? post.author.avatar.medium : null"
-          size="lg"
+          :size="55"
         ></app-avatar>
       </n-link>
 
       <div class="post__title">
-        <div class="post__title-row mb-1">
+        <div class="post__title-row mb-2">
           <h5 class="post__name">
             <n-link
               :to="`/account/${post.author.id}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
-            <span v-if="post.label" class="text-sub font-weight-normal">
+            <span v-if="post.label" class="font-weight-normal">
               cảm thấy {{ post.label.icon }}
               <b class="text-base">{{ post.label.des }}</b>
             </span>
@@ -67,8 +67,15 @@
 
     <div class="post__interactive">
       <div class="post__count">
-        <span>{{ post.total_like }} lượt thích</span>
-        <span>{{ post.total_comment }} bình luận</span>
+        <div class="post__count-like">
+          <IconFavorite class="icon heading-3 mr-3 color-primary fill-opacity-1" />
+          {{ post.total_like }} lượt thích
+        </div>
+
+        <div>
+          <span class="post__count-comment">{{ post.total_comment }} bình luận</span>
+          <span>{{ post.total_share }} lượt chia sẻ</span>
+        </div>
       </div>
 
       <app-divider class="mt-3 mb-0" />
@@ -155,6 +162,7 @@ import IconHeart from "~/assets/svg/icons/heart.svg?inline";
 import IconBubble from "~/assets/svg/icons/bubble.svg?inline";
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import IconFavorite from '~/assets/svg/v2-icons/favorite_24px.svg?inline';
 
 export default {
   components: {
@@ -166,7 +174,8 @@ export default {
     IconHeart,
     IconBubble,
     IconShare,
-    IconDots
+    IconDots,
+    IconFavorite
   },
 
   props: {

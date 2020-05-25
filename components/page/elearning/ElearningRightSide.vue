@@ -82,10 +82,10 @@
 
     <app-alert
       v-if="get(info, 'is_study', false)"
-      class="mb-3"
+      class="mb-3 alert-elearning"
       type="warning"
       size="sm"
-      >Bạn đã mua bài giảng này vào ngày
+      >Bạn đã mua {{ title }} này vào ngày
       {{ get(info, "join_date", "") | moment("DD/MM/YYYY") }}</app-alert
     >
 
@@ -248,6 +248,19 @@ export default {
       div.innerHTML = html;
       let text = div.textContent || div.innerText || "";
       return text;
+    },
+
+    title() {
+      switch (get(this, "info.type", "")) {
+        case "LECTURE":
+          return "bài giảng";
+          break;
+        case "COURSE":
+          return "khoá học";
+          break;
+        default:
+          break;
+      }
     },
   },
 

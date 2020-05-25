@@ -4,7 +4,10 @@
       <app-input
         type="text"
         v-model="email"
+        name="email"
+        autocomplete="email"
         placeholder="Nhập email"
+        autofocus
         :error="$v.email.$invalid"
         :message="errorMessage.email"
         :validate="validateProps.email"
@@ -25,7 +28,8 @@
         :error="$v.password.$invalid || validate.password"
         :message="errorMessage.password"
         :validate="validateProps.password"
-        autocomplete="new-password"
+        name="current-password"
+        autocomplete="current-password"
         @input="handlePassword"
       >
         <template v-slot:prepend-inner>

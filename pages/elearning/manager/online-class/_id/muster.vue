@@ -43,53 +43,55 @@
 
               <!--Filter form-->
               <div class="filter-form">
-                <div class="filter-form__item flex-1">
-                  <div style="width: 100%">
-                    <app-search
-                      class
-                      :placeholder="'Nhập để tìm kiếm...'"
-                      v-model="params.query"
-                      :size="'sm'"
-                      @submit="submit"
-                    ></app-search>
+                <div class="d-flex">
+                  <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+                    <div style="width: 100%">
+                      <app-search
+                        class
+                        :placeholder="'Nhập để tìm kiếm...'"
+                        v-model="params.query"
+                        :size="'sm'"
+                        @submit="submit"
+                      ></app-search>
+                    </div>
                   </div>
-                </div>
 
-                <div class="filter-form__item">
-                  <app-button
-                    :color="showFilter ? 'primary' : 'white'"
-                    square
-                    :size="'sm'"
-                    @click="toggleFilter"
-                  >
-                    <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
-                    <span>Lọc kết quả</span>
-                  </app-button>
-                </div>
+                  <div class="filter-form__item">
+                    <app-button
+                      :color="showFilter ? 'primary' : 'white'"
+                      square
+                      :size="'sm'"
+                      @click="toggleFilter"
+                    >
+                      <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                      <span>Lọc kết quả</span>
+                    </app-button>
+                  </div>
 
-                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filterCourse"
-                    :options="courses"
-                    label="text"
-                    placeholder="Lớp học"
-                    searchable
-                    clearable
-                    @input="handleChangedCourse"
-                  ></app-vue-select>
-                </div>
-                <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                  <app-vue-select
-                    class="app-vue-select filter-form__item__selection"
-                    v-model="filterStatus"
-                    :options="statuses"
-                    label="text"
-                    placeholder="Điểm danh"
-                    searchable
-                    clearable
-                    @input="handleChangedStatus"
-                  ></app-vue-select>
+                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                    <app-vue-select
+                      class="app-vue-select filter-form__item__selection"
+                      v-model="filterCourse"
+                      :options="courses"
+                      label="text"
+                      placeholder="Lớp học"
+                      searchable
+                      clearable
+                      @input="handleChangedCourse"
+                    ></app-vue-select>
+                  </div>
+                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                    <app-vue-select
+                      class="app-vue-select filter-form__item__selection"
+                      v-model="filterStatus"
+                      :options="statuses"
+                      label="text"
+                      placeholder="Điểm danh"
+                      searchable
+                      clearable
+                      @input="handleChangedStatus"
+                    ></app-vue-select>
+                  </div>
                 </div>
               </div>
               <!--End filter form-->
@@ -171,9 +173,7 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
-export default {
-  layout: "manage",
-    
+export default {    
   components: {
     IconClock,
     IconRefresh,
@@ -188,6 +188,8 @@ export default {
     IconLockOpenAlt,
     ElearningManagerSide
   },
+
+  middleware: ["teacher-role"],
 
   data() {
     return {

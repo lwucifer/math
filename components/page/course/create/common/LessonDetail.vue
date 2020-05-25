@@ -47,11 +47,11 @@
     </app-button> -->
 
     <button
-      class="text-primary mt-3"
+      class="text-primary mt-3 d-flex align-content-center"
       v-if="isShowButtonAddDocument"
       @click="handleAddDocument"
     >
-      <IconPlus class="mr-3"></IconPlus>Thêm tài liệu
+      <IconPlus class="mr-3"></IconPlus><span>Thêm tài liệu</span>
     </button>
   </div>
 </template>

@@ -2,6 +2,7 @@
   <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
+        <div class="d-flex">
       <div class="filter-form__item">
         <app-date-picker
           v-model="params.query_date"
@@ -15,7 +16,7 @@
         </app-date-picker>
       </div>
 
-      <div class="filter-form__item flex-1">
+        <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
         <div style="width: 100%">
           <app-search
             class
@@ -23,6 +24,7 @@
             v-model="params.query"
             :size="'sm'"
             @submit="submit"
+            @keyup.enter.native="submit"
           ></app-search>
         </div>
       </div>
@@ -43,14 +45,15 @@
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
-          :options="courses"
+          :options="courseOpts"
           label="text"
           placeholder="Bài giảng/khóa học"
-          searchable
-          clearable
           @input="handleChangedCourse"
+          :all-opt="allOpt"
+          has-border
         ></app-vue-select>
       </div>
+    </div>
     </div>
     <!--End filter form-->
 
@@ -142,6 +145,10 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       loading: false,
       showFilter: false,
       tab: 1,
@@ -196,8 +203,11 @@ export default {
       stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
-    })
+      stateElearnings: "Elearnings"
+    }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses]
+    }
   },
 
   methods: {
@@ -205,7 +215,7 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           elearning_id: null
@@ -238,18 +248,18 @@ export default {
       });
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: {teacher_id: userId} }
         );
-        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
-        this.lessonList.forEach(element => {
+        lessonList.forEach(element => {
           list.push({
             value: element.id,
             text: element.name
@@ -316,7 +326,7 @@ export default {
 
   created() {
     this.getList();
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>

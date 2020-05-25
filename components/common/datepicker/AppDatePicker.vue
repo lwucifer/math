@@ -97,6 +97,7 @@ export default {
 
   methods: {
     change: function() {
+      //if(!this.value) this.text = null;
       this.$emit("input", this.text);
     }
   },
@@ -135,7 +136,7 @@ export default {
   },
 
   created() {
-    this.text = this.value;
+    this.text = this.value ? this.value : null;
   }
 };
 </script>

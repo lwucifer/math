@@ -27,11 +27,18 @@
 .post-editor__privacy {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.post-editor__privacy-label {
+    color: $color-dark;
+    margin-right: 1rem;
 }
 
 .post-editor__submit {
     display: none;
+    margin-top: 2rem;
 }
 
 .post-editor__overlay {
@@ -48,86 +55,60 @@
 
 .post-editor__components {
     position: relative;
+    display: flex;
+    align-items: flex-start;
     background-color: #fff;
-    padding: 2rem;
+    padding: 2.3rem 2rem 2rem 2rem;
 }
 
-.post-editor__top {
-    display: flex;
-    margin-bottom: 1.4rem;
+.post-editor__right {
+    flex: 1 0 calc(100% - 8.2rem);
+    width: calc(100% - 8.2rem);
 }
 
 .post-editor__avatar {
-    margin-right: 1.6rem;
+    margin-right: 1.5rem;
 }
 
 .post-editor__editor {
-    flex: 1 0 calc(100% - 8.2rem);
-    width: calc(100% - 8.2rem);
+    background-color: $color-text-light;
+    border-radius: $border-radius-common;
+    margin-top: 0.7rem; // to align center with avatar
+    margin-bottom: 1.5rem;
 
     .ProseMirror {
-        padding: 2.1rem 0;
+        padding: 1.2rem 1.6rem;
     }
 
     .ProseMirror-focused {
         outline: none;
     }
+
+    *.is-empty:nth-child(1)::before {
+        font-size: 1.3rem;
+        color: $color-text-gray-3;
+    }
 }
 
 .post-editor__toolbar {
-    margin-top: 1.2rem;
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: space-between;
 }
 
-.post-editor__toolbar-item {
+.post-editor__toolbar-button {
     display: inline-block;
+    font-size: 1.3rem;
 
-    svg {
+    .icon {
+        font-size: 2.4rem;
+        color: $color-primary;
         vertical-align: middle;
         display: inline-block;
     }
 
     span {
         vertical-align: middle;
-    }
-
-    &:not(:last-child) {
-        margin-right: 3.5rem;
-    }
-
-    &.image {
-        fill: $color-blue;
-
-        svg {
-            width: 2rem;
-            height: 2rem;
-        }
-    }
-
-    &.tag {
-        fill: $color-yellow;
-
-        svg {
-            width: 2.2rem;
-            height: 1.7rem;
-        }
-    }
-
-    &.check-in {
-        fill: $color-pink;
-
-        svg {
-            width: 1.6rem;
-            height: 2rem;
-        }
-    }
-
-    &.emoji {
-        fill: $color-purple;
-
-        svg {
-            width: 2rem;
-            height: 2rem;
-        }
     }
 }
 
@@ -139,6 +120,10 @@
 
         &:focus {
             outline: none;
+        }
+
+        &:hover {
+            box-shadow: none;
         }
     }
 
@@ -186,19 +171,6 @@
 }
 
 .post-editor__select-private {
-    .app-select__selected {
-        line-height: (17/14);
-        padding: 3px 5px;
-        background-color: $color-border;
-        border-color: transparent;
-        color: $color-text-gray;
-        height: 2.4rem;
-    }
-
-    .app-select__arrow svg {
-        fill: $color-text-gray;
-    }
-
     .app-select__prepend {
         fill: $color-text-gray;
 

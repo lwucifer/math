@@ -25,49 +25,51 @@
 
     <!--Filter form-->
     <div class="filter-form">
-      <div class="filter-form__item flex-1">
-        <div style="width: 100%">
-          <app-search
-            class
-            :placeholder="'Nhập để tìm kiếm...'"
-            v-model="params.query"
-            :size="'sm'"
-            @submit="submit"
-          ></app-search>
+      <div class="d-flex">
+        <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+          <div style="width: 100%">
+            <app-search
+              class
+              :placeholder="'Nhập để tìm kiếm...'"
+              v-model="params.query"
+              :size="'sm'"
+              @submit="submit"
+              @keyup.enter.native="submit"
+            ></app-search>
+          </div>
         </div>
-      </div>
 
-      <div class="filter-form__item">
-        <app-button
-          :color="showFilter ? 'primary' : 'white'"
-          square
-          :size="'sm'"
-          @click="toggleFilter"
-        >
-          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
+        <div class="filter-form__item">
+          <app-button
+            :color="showFilter ? 'primary' : 'white'"
+            square
+            :size="'sm'"
+            @click="toggleFilter"
+          >
+            <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+            <span>Lọc kết quả</span>
+          </app-button>
+        </div>
 
-      <div class="filter-form__item" style="min-width: 22rem" v-if="showFilter">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filterIndex"
-          :options="indexs"
-          label="text"
-          placeholder="Thứ tự buổi học"
-          searchable
-          clearable
-          @input="handleChangedIndex"
-        ></app-vue-select>
+        <div class="filter-form__item" style="min-width: 22rem" v-if="showFilter">
+          <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            v-model="filterIndex"
+            :options="indexOpts"
+            label="text"
+            placeholder="Thứ tự buổi học"
+            @input="handleChangedIndex"
+            :all-opt="allOpt"
+            has-border
+          ></app-vue-select>
+        </div>
       </div>
     </div>
     <!--End filter form-->
 
     <!--Table-->
-    <div v-if="loading">Loading...</div>
     <app-table
-      v-else
+      :loading="loading"
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
@@ -128,9 +130,7 @@ import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 
-export default {
-  layout: "manage",
-    
+export default {    
   components: {
     IconFilter,
     IconSearch,
@@ -145,8 +145,14 @@ export default {
     ModalInviteStudent
   },
 
+  middleware: ["teacher-role"],
+
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
       tab: 1,
       openModal: false,
       showFilter: false,
@@ -206,6 +212,14 @@ export default {
           value: '5',
           text: '5'
         },
+        {
+          value: '6',
+          text: '6'
+        },
+        {
+          value: '7',
+          text: '7'
+        },
       ],
       filterIndex: null,
       pagination: {
@@ -230,7 +244,10 @@ export default {
     ...mapState(STORE_NAMESPACE, {
       stateLessons: "Lessons",
       stateAttendantSummary: "AttendantSummary",
-    })
+    }),
+    indexOpts() {
+      return [this.allOpt, ...this.indexs]
+    }
   },
 
   methods: {
@@ -238,8 +255,8 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
-        this.filterCourse = null;
+      if (this.showFilter && this.filterIndex != null) {
+        this.filterIndex = null;
         this.params = {...this.params,
           lesson_index: null
         }
