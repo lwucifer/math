@@ -119,7 +119,15 @@ export default {
   },
 
   mounted() {
-    this.changeTab("all");
+    const options = {
+      params: {
+        elearning_id: "cdc06d8a-cc0d-43a2-8cdf-e5b704ea803a",
+        rate: "",
+        page: 1,
+      },
+    };
+    this.$store.dispatch(`elearning/detail/getReviews`, options);
+    // this.changeTab("all");
   },
 
   methods: {

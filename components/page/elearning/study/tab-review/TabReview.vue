@@ -1,45 +1,67 @@
 <template>
   <div class="e-study-tab-review">
-    <TabQAEditor class="mb-15" type="review" @submit="sendReview" />
+    <TabReviewEditor class="mb-15" />
 
-    <TabQACommentItem showStars :stars="4" />
-    <TabQACommentItem showStars :stars="4" />
-    <TabQACommentItem showStars :stars="4" />
-    <TabQACommentItem showStars :stars="4" />
-    <TabQACommentItem showStars :stars="4" />
-
+    <TabReviewItem
+      v-for="(review, index) in get(reviews, 'content', [])"
+      :key="index"
+      :review="review"
+    />
     <app-pagination
       class="mt-4"
-      :pagination="{
-        first: true,
-        last: false,
-        number: 0,
-        number_of_elements: 10,
-        size: 10,
-        total_elements: 65,
-        total_pages: 7,
-      }"
+      :pagination="get(reviews, 'page', {})"
+      @pagechange="handleChangePage"
     />
   </div>
 </template>
 
 <script>
-import TabQACommentItem from "~/components/page/elearning/study/tab-qa/TabQACommentItem.vue";
-import TabQAEditor from "~/components/page/elearning/study/tab-qa/TabQAEditor.vue";
+import TabReviewItem from "~/components/page/elearning/study/tab-review/TabReviewItem.vue";
+import TabReviewEditor from "~/components/page/elearning/study/tab-review/TabReviewEditor.vue";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
+import { mapState } from "vuex";
 
 export default {
   components: {
-    TabQACommentItem,
-    TabQAEditor
+    TabReviewItem,
+    TabReviewEditor,
+  },
+
+  computed: {
+    ...mapState("elearning/study/detail", {
+      reviews: "reviews",
+    }),
+  },
+
+  data() {
+    return {
+      params: {
+        elearning_id: get(this, "$route.params.id", ""),
+        page: 1,
+        size: 10,
+      },
+    };
+  },
+
+  mounted() {
+    useEffect(this, this.getVotes.bind(this), ["params"]);
   },
 
   methods: {
-    sendReview() {
-      console.log('sendReview')
-    }
-  }
+    handleChangePage(page) {
+      this.params.page = page;
+    },
+
+    getVotes() {
+      const options = {
+        params: this.params,
+      };
+      this.$store.dispatch(`elearning/study/detail/getReviews`, options);
+    },
+    get,
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
