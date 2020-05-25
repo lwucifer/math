@@ -1,0 +1,53 @@
+.social-photo {
+  background-color: #fff;
+  padding: 2.5rem;
+  box-shadow: $shadow-1;
+  
+  .btn--add-video {
+    box-shadow: none;
+  }
+}
+
+.sp__list {
+  .sp__img-wrapper {
+    margin-bottom: 1rem;
+    max-height: 25ch;
+  }
+  .sp__img-item {
+    border-radius: 2px;
+    &:hover {
+      cursor: pointer;
+    }
+    img {
+      width: 100%;
+    }
+  }
+}
+
+// Styling
+.square {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  background-color: #eee;
+}
+
+.grid {
+  display: block;
+  padding: 0;
+  margin: 0 -6px 12px;
+  text-align: left;
+  font-size: 0; }
+
+.grid-cell {
+  display: inline-block;
+  margin: 0;
+  padding: 0 6px;
+  text-align: left;
+  vertical-align: top;
+  width: 100%;
+}
+
+.grid-25 { width: 25%; }
+.grid-33 { width: 33.333333%; }
+.grid-50 { width: 50%; }
