@@ -127,6 +127,7 @@ export default {
       this.tabActive = key;
       let rate = key !== "all" ? key : null;
       this.params.rate = rate;
+      this.params.page = 1;
     },
 
     onPageChange(page) {
