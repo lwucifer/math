@@ -35,9 +35,14 @@
             v-for="(item, index) in imgs"
             :key="index"
           >
-            <span class="square sp__img-item">
-              <img :src="item" alt="">
-            </span>
+            <div
+              class="square square-100 sp__img-item"
+              :style="{
+                backgroundImage: `url('${item}')`,
+                backgroundRepeat: `no-repeat`,
+                backgroundPosition: `center`
+              }"
+            ></div>
           </div>
         </div>
       </div>
@@ -95,6 +100,8 @@
           'https://picsum.photos/133/133',
           'https://picsum.photos/133/133',
           'https://picsum.photos/133/133',
+          'https://picsum.photos/153/133',
+          'https://picsum.photos/169/250',
         ]
       }
     },
