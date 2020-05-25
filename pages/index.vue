@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-homepage">
-    <ElearingHomeBanner />
+    <HomeBanner />
     <SubBanner/>
 
     <div v-if="pageLoading" class="container mt-6">
@@ -93,7 +93,7 @@ const IconSubjectScience = () =>
   import("~/assets/svg/icons/subject-science.svg?inline");
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
-import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
+import HomeBanner from "~/components/page/home/HomeBanner.vue";
 import SubBanner from "~/components/page/elearning/home/SubBanner"
 import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
 import HowToLearn from "~/components/page/elearning/home/HowToLearn";
@@ -111,7 +111,7 @@ export default {
   components: {
     // CourseSliderTab,
     VclList,
-    ElearingHomeBanner,
+    HomeBanner,
     SubBanner,
     ElearningHomeBox,
     HowToLearn,
