@@ -51,7 +51,7 @@
   const REPOSITORY_STORE_NAMESPACE = 'elearning/teaching/repository'
 
   export default {
-    // layout: "manage",
+    layout: "manage",
     
     components: {
       ElearningManagerSide,
