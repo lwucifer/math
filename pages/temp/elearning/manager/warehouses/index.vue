@@ -58,13 +58,13 @@
     data() {
       return {
         pagination: {
-          totalElements: 0,
+          total_elements: 0,
           last: false,
-          totalPages: 1,
+          total_pages: 1,
           size: 10,
           number: 0,
           first: true,
-          numberOfElements: 0
+          number_of_elements: 0
         },
         params: {
           page: 1,

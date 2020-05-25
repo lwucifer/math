@@ -250,7 +250,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -361,9 +361,9 @@ export default {
         this.pagination.first = this.get(this.stateAttendances, 'data.attendance_list.first', 1)
         this.pagination.last = this.get(this.stateAttendances, 'data.attendance_list.last', 1)
         this.pagination.number = this.get(this.stateAttendances, 'data.attendance_list.number', 0)
-        this.pagination.totalPages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
-        this.pagination.totalElements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
-        this.pagination.numberOfElements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
+        this.pagination.total_pages = this.get(this.stateAttendances, 'data.attendance_list.total_pages', 0)
+        this.pagination.total_elements = this.get(this.stateAttendances, 'data.attendance_list.total_elements', 0)
+        this.pagination.number_of_elements = this.get(this.stateAttendances, 'data.attendance_list.number_of_elements', 0)
         this.summary.total_student_absent_allowed = this.get(this.stateAttendances, 'data.total_student_absent_allowed', 0)
         this.summary.total_student_absent_not_allowed = this.get(this.stateAttendances, 'data.total_student_absent_not_allowed', 0)
         this.summary.total_student_late = this.get(this.stateAttendances, 'data.total_student_late', 0)
