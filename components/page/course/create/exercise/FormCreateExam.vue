@@ -144,7 +144,7 @@
           <app-date-picker
             @input="handleSelectTime"
             type="time"
-            value-format="HH:mm:ss"
+            value-format="HH:mm a"
           />
         </div>
 
@@ -258,7 +258,7 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
       if (this.is_open == 1) {
         this.payload.open_time = `${this.date} ${this.time}`;
-        this.payload.open_time = moment(this.payload.open_time)
+        this.payload.open_time = moment(this.payload.open_time, "YYYY-MM-DD HH:mm a")
           .utc()
           .format("YYYY-MM-DD hh:mm:ss");
       }
