@@ -74,7 +74,7 @@ export default {
     return {
       active: 0,
       pagination: {
-        totalPages: 15,
+        total_pages: 15,
         number: 6,
         size: 10,
       }

@@ -12,10 +12,10 @@
         first: true,
         last: false,
         number: 0,
-        numberOfElements: 10,
+        number_of_elements: 10,
         size: 10,
-        totalElements: 65,
-        totalPages: 7,
+        total_elements: 65,
+        total_pages: 7,
       }"
     />
   </div>

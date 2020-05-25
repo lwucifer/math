@@ -225,8 +225,8 @@ export default {
   computed: {
     numOfViewMoreParentComment() {
       const { page = {} } = this.commentTree;
-      return page.totalPages - page.number === 1
-        ? page.totalElements - page.size * page.number
+      return page.total_pages - page.number === 1
+        ? page.total_elements - page.size * page.number
         : page.size;
     },
 

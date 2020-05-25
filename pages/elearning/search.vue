@@ -190,10 +190,10 @@ export default {
         first: true,
         last: false,
         number: 0,
-        numberOfElements: 0,
+        number_of_elements: 0,
         size: 10,
-        totalElements: 0,
-        totalPages: 0
+        total_elements: 0,
+        total_pages: 0
       },
 
       opts: [
@@ -243,7 +243,7 @@ export default {
     },
 
     totalSummary() {
-      return get(this, "pagination.totalElements", 0);
+      return get(this, "pagination.total_elements", 0);
     },
     lessonType() {
       const lessionType = this.payload.type;
@@ -287,9 +287,9 @@ export default {
       );
       this.lessons = get(res, "data.content", []);
       this.pagination = {
-        totalPages: get(res, "data.page.total_pages", 0),
+        total_pages: get(res, "data.page.total_pages", 0),
         size: get(res, "data.page.size", 10),
-        totalElements: get(res, "data.page.total_elements", 0),
+        total_elements: get(res, "data.page.total_elements", 0),
         first: get(res, "data.page.first", false),
         last: get(res, "data.page.last", false),
         number: get(res, "data.page.number", 0)

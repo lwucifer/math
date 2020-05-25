@@ -64,13 +64,13 @@ export default {
         }
       ],
       pagination: {
-        totalElements: 0,
+        total_elements: 0,
         last: false,
-        totalPages: 1,
+        total_pages: 1,
         size: 10,
         number: 0,
         first: true,
-        numberOfElements: 0
+        number_of_elements: 0
       }
     };
   },
@@ -85,11 +85,11 @@ export default {
           this.elearningParti && this.elearningParti.size
             ? this.elearningParti.size
             : 10,
-        totalPages:
-          this.elearningParti && this.elearningParti.totalPages
-            ? this.elearningParti.totalPages
+        total_pages:
+          this.elearningParti && this.elearningParti.total_pages
+            ? this.elearningParti.total_pages
             : 1,
-        totalElements:
+        total_elements:
           this.elearningParti && this.elearningParti.total_elements
             ? this.elearningParti.total_elements
             : 0,
@@ -101,7 +101,7 @@ export default {
           this.elearningParti && this.elearningParti.last
             ? this.elearningParti.last
             : 1,
-        numberOfElements:
+        number_of_elements:
           this.elearningParti && this.elearningParti.number_of_elements
             ? this.elearningParti.number_of_elements
             : 0,

@@ -55,7 +55,7 @@
           total: 99,
           size: 10,
           page: 1,
-          totalElements: 99,
+          total_elements: 99,
           first: 1,
           last: 1,
           number: 2
@@ -111,7 +111,7 @@ export default {
       localReview: [],
       fetchingReview: false,
       pagination: {
-        totalPages: 15,
+        total_pages: 15,
         number: 6,
         size: 10,
       },
