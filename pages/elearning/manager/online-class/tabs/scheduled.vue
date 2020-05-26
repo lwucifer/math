@@ -60,10 +60,16 @@
     <!--Options group-->
     <div class="filter-form">
       <div class="filter-form__item">
-        <app-button class="filter-form__item__btn m-0" color="pink" square :size="'sm'"
+        <app-button class="filter-form__item__btn m-0 mr-4" color="pink" square :size="'sm'"
         :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3">Hủy lớp</span>
+          <span class="ml-3">Hủy phòng học</span>
+        </app-button>
+        
+        <app-button class="filter-form__item__btn m-0 color-666" color="disabled" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirmSchedules = true">
+          <IconCalendarDelete/>
+          <span class="ml-3">Hủy lịch học</span>
         </app-button>
       </div>
     </div>
@@ -117,10 +123,19 @@
         @ok="deleteRows"
         :width="550"
         @cancel="showModalConfirm = false"
+        title="Bạn có chắc chắn muốn hủy phòng học?"
+        description="Bạn sẽ không thể khôi phục phòng học bị xóa."
+      />
+    
+    <app-modal-confirm
+        v-if="showModalConfirmSchedules"
+        @ok="deleteSchedules"
+        :width="550"
+        @cancel="showModalConfirmSchedules = false"
         :footer="false"
         :header="false"
-        title="Bạn có chắc chắn muốn hủy lớp học?"
-        description="Bạn sẽ không thể khôi phục lớp học bị xóa."
+        title="Bạn có chắc chắn muốn hủy lịch học?"
+        description="Bạn sẽ không thể khôi phục lịch học bị xóa."
       />
   </div>
 </template>
@@ -134,6 +149,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
 import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
+import IconCalendarDelete from '~/assets/svg/v2-icons/calendar-delete.svg?inline';
 
 import {
   getDateBirthDay,
@@ -158,7 +174,8 @@ export default {
     IconCalendar,
     IconTrash,
     IconPeople,
-    IconHamberger
+    IconHamberger,
+    IconCalendarDelete
   },
 
   data() {
@@ -169,6 +186,7 @@ export default {
       },
       showFilter: false,
       showModalConfirm: false,
+      showModalConfirmSchedules: false,
       rowClassId: null,
       tab: 1,
       heads: [
@@ -327,6 +345,22 @@ export default {
       if (doDelete.success) {
         this.showModalConfirm = false;
         this.getList();
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+    
+    async deleteSchedules() {
+      let ids = { online_lesson_ids: [...this.ids] };
+      
+      const doDelete = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_SCHEDULES.DELETE}`,
+        JSON.stringify(ids)
+      );
+
+      if (doDelete.success) {
+        this.showModalConfirmSchedules = false;
+        //this.getList();
       } else {
         this.$toasted.error(doDelete.message);
       }

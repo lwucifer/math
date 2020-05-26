@@ -36,6 +36,9 @@
             .app-checkbox__icon--unchecked {
                 display: none;
             }
+            + .app-checkbox__text {
+                color: $color-primary;
+            }
         }
     }
 

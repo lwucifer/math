@@ -2,13 +2,7 @@
   <div>
     <section class="bg-white mb-3">
       <account-cover />
-      <tab-menu
-        :list="menus"
-        active="gallery"
-        class="sa__menu"
-        @selectedItem="changeTab"
-      >
-      </tab-menu>
+      <account-menu active="gallery" />
     </section>
     <section class="social-photo">
       <div class="d-flex align-items-center justify-content-between mb-4">
@@ -22,12 +16,10 @@
           </app-button>
         </div>
       </div>
-      <tab-menu
-        :list="menuPhoto"
+      <account-photo-menu
+        class="mb-4"
         active="photo"
-        class="sp__menu mb-4"
-        @selectedItem="changeTab"
-      ></tab-menu>
+      />
       <div class="sp__list">
         <div class="grid">
           <div
@@ -52,46 +44,18 @@
 
 <script>
   import AccountCover from '~/components/page/social/account/AccountCover.vue'
+  import AccountMenu from '~/components/page/social/account/AccountMenu.vue'
+  import AccountPhotoMenu from '~/components/page/social/account/AccountPhotoMenu.vue'
   import IconAdd from '~/assets/svg/v2-icons/add_24px.svg?inline'
   export default {
     components: {
       AccountCover,
+      AccountMenu,
+      AccountPhotoMenu,
       IconAdd
     },
     data() {
       return {
-        menus: [
-          {
-            key: 'timeline',
-            text: 'Dòng thời gian'
-          },
-          {
-            key: 'intro',
-            text: 'Giới thiệu'
-          },
-          {
-            key: 'friends',
-            text: 'Bạn bè'
-          },
-          {
-            key: 'gallery',
-            text: 'Ảnh'
-          },
-        ],
-        menuPhoto: [
-          {
-            key: 'photo',
-            text: 'Ảnh của bạn'
-          },
-          {
-            key: 'tagged_photo',
-            text: 'Ảnh được gắn thẻ'
-          },
-          {
-            key: 'video',
-            text: 'Video'
-          }
-        ],
         imgs: [
           'https://picsum.photos/133/133',
           'https://picsum.photos/133/133',

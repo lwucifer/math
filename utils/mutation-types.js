@@ -76,6 +76,11 @@ export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
 
+export const ACCOUNT_SETTING = {
+    SET_ACCOUNT_SETTING_LIST: "setAccountSettingList",
+    UPDATE_ACCOUNT_SETTING: "updateAccountSetting",
+};
+
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
@@ -467,6 +472,9 @@ export const TEACHING_INTERACTIVE = {
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
     SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
+};
+export const TEACHING_SCHEDULES = {
+    SET_TEACHING_SCHEDULES_DELETE: "setTeachingSchedulesDelete",
 };
 
 export const CART = {

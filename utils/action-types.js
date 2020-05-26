@@ -146,6 +146,11 @@ export const ACCOUNT_WITHDRAWALS = {
     ADD: "accountWithdrawalsAdd",
 };
 
+export const ACCOUNT_SETTING = {
+    LIST: "accountSettingList",
+    UPDATE: "accountSettingUpdate",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     LIST: "elearningPublicSummaryList",
 };
@@ -613,6 +618,11 @@ export const TEACHING_ELEARNING_INVITES = {
 export const TEACHING_ELEARNING_STATISTIC = {
     LIST: "teachingElearningStatistic",
 };
+
+export const TEACHING_SCHEDULES = {
+    DELETE: "teachingSchedulesDelete",
+};
+
 
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
