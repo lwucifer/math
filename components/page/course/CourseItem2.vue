@@ -30,7 +30,7 @@
           v-if="price.discount && price.price"
           class="course-item-2__discount"
         >
-          {{ price.discount }}%
+          -{{ price.discount }}%
         </div>
       </n-link>
 
