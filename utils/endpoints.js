@@ -15,6 +15,7 @@ export const ACCOUNT_PERSONAL = `/social/api/user/profile`;
 export const ACCOUNT_PROFILE = `/user/account/profile`;
 export const ACCOUNT_LINK = `/user/account/link`;
 export const ACCOUNT_PHONE = `/account/phone`;
+export const ACCOUNT_SETTING = `/user/account/setting`;
 export const ACCOUNT_TRANSACTIONS = `/user/account/transactions`;
 export const ACCOUNT_REVENUE = `/user/account/revenue`;
 export const ACCOUNT_EARNING = `/user/account/earning`;

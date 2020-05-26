@@ -7,6 +7,7 @@
       <div class="col-md-9">
         <block-section
           title="Lịch sử rút tiền"
+          title-tag="h4"
           has-icon
         >
           <template v-slot:content>

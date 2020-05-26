@@ -39,7 +39,8 @@
 <script>
   import SchoolAccountSide from "~/components/page/school/SchoolAccountSide"
   import HeadTabs from "~/components/page/elearning/HeadTab"
-  
+  import * as actionTypes from "~/utils/action-types"
+
   const NotifyTab = () => import("./tabs/notify");
   const PaymentTab = () => import("./tabs/payment");
   export default {
@@ -53,7 +54,7 @@
     },
     data() {
       return {
-        tab: 'payment',
+        tab: 'notify',
         isAuthenticated: true,
         tabs: [
           {
