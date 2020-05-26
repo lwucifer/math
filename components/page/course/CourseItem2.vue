@@ -17,7 +17,7 @@
           class="course-item-2__online-class"
         >Lớp học đang diễn ra</div>
 
-        <div v-if="price.discount" class="course-item-2__discount">{{ price.discount }}%</div>
+        <div v-if="price.discount" class="course-item-2__discount">-{{ price.discount }}%</div>
       </n-link>
 
       <!-- <div class="video" v-if="get(item, 'video', '')">
