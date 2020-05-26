@@ -1,8 +1,11 @@
 <template>
   <div>
-    <section class="bg-white">
+    <section class="bg-white mb-3">
       <account-cover/>
       <account-menu active="timeline"/>
+    </section>
+    <section>
+      Dòng thời gian
     </section>
   </div>
 </template>
