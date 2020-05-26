@@ -46,7 +46,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.defaultValue)
     this.$store.dispatch(
       `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
     );
@@ -62,11 +61,11 @@ export default {
     }),
 
     levelOpt() {
-      return this.levels.map(item => ({
-          ...item,
-          value: item.id,
-          text: item.name
-      }))
+      return this.levels.map((item) => ({
+        ...item,
+        value: item.id,
+        text: item.name,
+      }));
     },
   },
 

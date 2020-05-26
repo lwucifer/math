@@ -51,12 +51,11 @@ export default {
   components: {
     IconFileAlt,
     ElearningProgramItem,
-    ElearningProgramCourse
+    ElearningProgramCourse,
   },
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    
 
     totalLessons() {
       // console.log("[progress]", this.progress);
@@ -70,7 +69,7 @@ export default {
     },
 
     test_info() {
-      return this.progress.test_info || {};
+      return get(this, "progress.test_info", {});
     },
 
     isTestExist() {
@@ -80,7 +79,8 @@ export default {
 
     testRate() {
       if (!this.test_info) return "(0/0)";
-      const touchedExams = this.test_info.passed + this.test_info.failed + this.test_info.pending;
+      const touchedExams =
+        this.test_info.passed + this.test_info.failed + this.test_info.pending;
       return `(${touchedExams}/${this.test_info.total})`;
     },
 
@@ -104,11 +104,11 @@ export default {
 
     ...mapMutations("event", ["setStudyMode"]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession"
+      "setStudyExerciseCurrentLession",
     ]),
 
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList"
+      "elearningSudyElearningExerciseList",
     ]),
 
     handleDoTest() {
@@ -121,11 +121,11 @@ export default {
       // get list TEST
       const testReq = {
         elearning_id: this.progress.id,
-        category: EXERCISE_CATEGORIES.TEST
+        category: EXERCISE_CATEGORIES.TEST,
       };
       this.elearningSudyElearningExerciseList(testReq);
-    }
-  }
+    },
+  },
 };
 </script>
 
