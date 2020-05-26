@@ -59,10 +59,11 @@
 
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item" @click="showModalConfirm = true">
-        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+      <div class="filter-form__item">
+        <app-button class="filter-form__item__btn m-0" color="pink" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3 color-white">Hủy lớp</span>
+          <span class="ml-3">Hủy lớp</span>
         </app-button>
       </div>
     </div>
@@ -113,7 +114,6 @@
 
     <app-modal-confirm
         v-if="showModalConfirm"
-        :confirmLoading="confirmLoading"
         @ok="deleteRows"
         :width="550"
         @cancel="showModalConfirm = false"
