@@ -24,7 +24,10 @@
   import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline"
   import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline"
   import FormNotify from "~/components/page/account/info/FormfNotify"
-  
+  import * as actionTypes from "~/utils/action-types"
+  import { mapState } from "vuex"
+  import { get } from "lodash"
+
   export default {
     layout: 'account-info',
     
@@ -73,6 +76,47 @@
           }
         ]
       })
+    },
+    methods: {
+      async getList() {
+        const getSettings = () =>
+          this.$store.dispatch(
+            `setting/${actionTypes.ACCOUNT_SETTING.LIST}`, {}
+          );
+        return await Promise.all([
+          getSettings(),
+        ])
+      },
+      get
+    },
+    computed: {
+      ...mapState("setting", ["settings"]),
+      elearningNotifies() {
+        let data = [
+          {
+            title: "Thông báo từ giáo viên",
+            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+            email: get(this.settings, 'teacher_notify', false) === 'Email' || get(this.settings, 'teacher_notify', false) === 'All',
+            push: get(this.settings, 'teacher_notify', false) === 'Push' || get(this.settings, 'teacher_notify', false) === 'All',
+          },
+          {
+            title: "Nhắc nhở làm bài tập",
+            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+          },
+          {
+            title: "Thông báo khi có điểm",
+            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+          },
+          {
+            title: "Thông báo lịch học tại phòng học online",
+            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
+          }
+        ]
+        return data
+      }
+    },
+    created() {
+      this.getList()
     }
   }
 </script>

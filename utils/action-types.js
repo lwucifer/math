@@ -146,6 +146,11 @@ export const ACCOUNT_WITHDRAWALS = {
     ADD: "accountWithdrawalsAdd",
 };
 
+export const ACCOUNT_SETTING = {
+    LIST: "accountSettingList",
+    UPDATE: "accountSettingUpdate",
+};
+
 export const ELEARNING_PUBLIC_SUMMARY = {
     LIST: "elearningPublicSummaryList",
 };

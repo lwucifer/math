@@ -76,6 +76,11 @@ export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
 
+export const ACCOUNT_SETTING = {
+    SET_ACCOUNT_SETTING_LIST: "setAccountSettingList",
+    UPDATE_ACCOUNT_SETTING: "updateAccountSetting",
+};
+
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
