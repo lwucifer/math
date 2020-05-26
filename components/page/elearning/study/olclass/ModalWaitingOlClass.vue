@@ -22,7 +22,9 @@
             </p>
             <p class="mb-3">
               Giờ bắt đầu:
-              <b>{{ get(data, "extra_info.start_time", "--:--") | fullDateTimeSlash }}</b>
+              <b>{{
+                get(data, "extra_info.start_time", "--:--") | fullDateTimeSlash
+              }}</b>
             </p>
             <p>
               Thời lượng:
@@ -30,39 +32,21 @@
             </p>
           </div>
 
-          <!-- <p class="mb-3">
-          Hãy nhấn nút
-          <b>"Vào phòng học"</b> dưới đây để vào phòng.
-          <b
-            class="color-red"
-          >Bạn không nên đóng cửa cho đến khi buổi học kết thúc.</b>
-        </p>-->
           <p class="mb-3" v-if="dataLength > 1">
             <i>
-              Chú ý : buổi học này sẽ được chia thành 2 tiết học. Sau khi tiết
+              Chú ý : buổi học này sẽ được chia thành {{ dataLength }} tiết học. Sau khi tiết
               học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động
               chuyển sang tiết học tiếp theo. Bạn không nên đóng cửa sổ này cho
               đến khi buổi học kết thúc.
             </i>
           </p>
-          <!-- <p class="mb-4" v-if="dataLength > 1"> -->
-          <!-- <p class="mb-4">
-          <i>*Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh, và thông báo về tiết học thứ 2 khi tiết học thứ 1 gần kết thúc</i>
-        </p>-->
 
-          <!-- <div class="mt-4 text-center">
-          <div class="mb-10">
-            Phòng học bắt đầu sau
-            <span class="color-primary">{{ countdown }}</span>
+          <div class="mt-4 text-center">
+            <div class="mb-10">
+              Phòng học bắt đầu sau
+              <b class="h5 color-blue"> {{ countdown }}</b>
+            </div>
           </div>
-          
-          <a
-            href
-            class="btn color-primary btn--square"
-            @click.prevent="exitRoom"
-            >Thoát phòng đợi</a
-          >
-        </div> -->
 
           <div class="mb-4 mt-4 d-flex-center justify-content-center">
             <a
@@ -90,6 +74,7 @@
                   <span style="color: #222">Tiết học {{ index + 1 }}: </span>
                   <a
                     class="bold text-decoration-none"
+                    :class="{'text-secondary': activeSessionLink == item.join_url}"
                     :href="item.join_url"
                     target="_blank"
                     >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
@@ -108,7 +93,7 @@
       v-if="showModalConfirm"
       @ok="close()"
       :width="550"
-      @cancel="showModalConfirm = false"
+      @cancel="close()"
       :footer="false"
       :header="false"
       title="Bạn có chắc chắn muốn thoát?"
@@ -124,7 +109,11 @@ import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
 import { LESSION_ONLINE_STATUS } from "~/utils/constants";
 
-import { getLocalEndTime, getLocalTimeHH_MM_A, getLocalDateTime } from "~/utils/moment";
+import {
+  getLocalEndTime,
+  getLocalTimeHH_MM_A,
+  getLocalDateTime
+} from "~/utils/moment";
 
 let interval = null;
 
@@ -135,12 +124,12 @@ export default {
 
   data() {
     return {
-      duration: 30, // in minutes
       countdown: "--:--",
       seconds: null,
       currentZoom: null,
       showModalConfirm: false,
-      activeSessionLink: "#"
+      activeSessionLink: "#",
+      activeSession: false,
     };
   },
 
@@ -158,21 +147,21 @@ export default {
     setActiveLinkSession() {
       console.log("[setActiveLinkSession]");
       // lessiong is living => open zoom
-      if (this.data.is_started == true) {
-        const sessions = this.data.sessions || [];
+      // if (this.data.is_started == true) {
+      const sessions = this.data.sessions || [];
 
-        // calculate current session base on: start_time + duration vs new Date();
-        let activeSession = null;
-        const now = new Date();
-        for(let i=0; i< sessions.length; i++) {
-          const endTime = getLocalDateTime(sessions[i].end_time);
-          if (now <= new Date(endTime)) {
-            activeSession = sessions[i];
-            this.activeSessionLink = activeSession.join_url;
-            return;
-          }
+      // calculate current session base on: start_time + duration vs new Date();
+      let activeSession = null;
+      const now = new Date();
+      for (let i = 0; i < sessions.length; i++) {
+        const endTime = getLocalDateTime(sessions[i].end_time);
+        if (now <= new Date(endTime)) {
+          activeSession = sessions[i];
+          this.activeSessionLink = activeSession.join_url;
+          return;
         }
       }
+      // }
     },
 
     exitRoom() {
@@ -198,6 +187,12 @@ export default {
 
         if (seconds <= 0) {
           clearInterval(interval);
+          this.countdown = "ĐÃ BẮT ĐẦU";
+
+          // set active session link
+          interval = setInterval(() => {
+            this.setActiveLinkSession();
+          }, 1000);
         }
 
         seconds -= 1;
@@ -217,9 +212,6 @@ export default {
   mounted() {
     console.log("[data]", this.data);
     this.setCountdown();
-
-    // set active session link
-    this.setActiveLinkSession();
   },
 
   watch: {
