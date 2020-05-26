@@ -619,6 +619,11 @@ export const TEACHING_ELEARNING_STATISTIC = {
     LIST: "teachingElearningStatistic",
 };
 
+export const TEACHING_SCHEDULES = {
+    DELETE: "teachingSchedulesDelete",
+};
+
+
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
 };

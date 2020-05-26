@@ -76,10 +76,10 @@
                     <div class>
                       <div class="d-flex-center">
                         <h6 class="mb-3">Giờ học</h6>
-                        <!-- <div class="ml-auto" v-if="indexEdit === index">
+                        <div class="ml-auto" v-if="indexEdit === index">
                           <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
-                          <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
-                         </div> -->
+                          <button v-on:click="removeSchedule(index, true)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                         </div>
                       </div>
                       <div class="d-flex-center">
                         <div class="d-flex-center mb-4 mr-6">
@@ -237,16 +237,23 @@
             </div>
 
             <div class="mt-4 mb-4" v-if="indexEdit === null && indexShow === null">
-              <button class="d-flex-center color-primary bold" @click="addTime">
+              <button class="d-flex-center color-primary" @click="addTime">
                 <IconPlus class="fill-primary mr-2" />Thêm lịch học
               </button>
             </div>
           </div>
 
           <div class="mt-4 mb-4 text-right">
-            <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">Lưu nháp</app-button>
-            <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
+            <app-button color="white" class="mr-3 color-red" @click="fnCancel">
+              <IconTrash class="fill-red mr-3"/>
+              Thiết lập lại
+            </app-button>
+            <app-button color="white" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">
+              <IconSave class="fill-primary mr-3"/>Lưu nháp
+            </app-button>
+            <app-button @click="fnSave" :disabled="!fullParams" class="">
+              <IconRight class="fill-white mr-3"/>Tạo phòng học
+            </app-button>
           </div>
         </div>
       </div>
@@ -258,8 +265,6 @@
       @ok="handleOk"
       :width="550"
       @cancel="handleCancelModal"
-      :footer="false"
-      :header="false"
       title="Bạn muốn tạo phòng học này?"
       description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
@@ -270,8 +275,6 @@
       @ok="handleDrafOk"
       :width="550"
       @cancel="handleDrafCancelModal"
-      :footer="false"
-      :header="false"
       title="Bạn muốn lưu bản nháp tạo phòng học này?"
       description="Các thông tin phòng học sẽ được lưu thánh một bản nháp."
     />
@@ -297,7 +300,10 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+import IconTrash from '~/assets/svg/v2-icons/trash-alt.svg?inline';
 import IconClock from '~/assets/svg/icons/clock.svg?inline';
+import IconSave from '~/assets/svg/v2-icons/save.svg?inline';
+import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import {
@@ -371,9 +377,8 @@ function initialState() {
 export default {
   name: "onlineclass",
 
-  layout: "manage",
-
   components: {
+    IconTrash,
     IconClock,
     IconAngleUp,
     IconPlus,
@@ -381,6 +386,8 @@ export default {
     IconCalendar,
     IconTrashAlt,
     IconCreate,
+    IconRight,
+    IconSave,
     ElearningManagerSide
   },
 
@@ -498,7 +505,7 @@ export default {
       }, "Hàng tuần vào thứ ");
     },
 
-    removeSchedule(index){
+    removeSchedule(index, editting){
       this.schedules = _.reject([...this.schedules], (i, inx) => inx === index);
       this.selectedItems = _.reject([...this.selectedItems], (i, inx) => inx === index);
       if (this.schedules.length === 0 ) {
@@ -507,9 +514,14 @@ export default {
       } else {
         if(this.indexShow != null && this.indexShow > index) this.indexShow = this.indexShow - 1;
         if(this.indexEdit != null && this.indexEdit > index) this.indexEdit = this.indexEdit - 1;
+        if(editting) this.indexEdit = null;
       }
     },
     editSchedule: function (index){
+      if (this.indexShow != null) {
+        this.schedules.pop();
+        this.selectedItems.pop();
+      }
       this.indexEdit = index;
       this.indexShow = null;
     },
@@ -623,7 +635,7 @@ export default {
           : "";
         await this.$store.dispatch(
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
+          { params: {teacher_id: userId, status: 'APPROVED', hidden: false} }
         );
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
