@@ -46,10 +46,11 @@
 
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item" @click="deleteRows">
-        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+      <div class="filter-form__item">
+        <app-button class="filter-form__item__btn m-0" color="pink" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3 color-white">Hủy lớp</span>
+          <span class="ml-3">Hủy lớp</span>
         </app-button>
       </div>
     </div>
@@ -91,6 +92,17 @@
       </template>
     </app-table>
     <!--End table-->
+
+    <app-modal-confirm
+        v-if="showModalConfirm"
+        @ok="deleteRows"
+        :width="550"
+        @cancel="showModalConfirm = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn hủy lớp học?"
+        description="Bạn sẽ không thể khôi phục lớp học bị xóa."
+      />
   </div>
 </template>
 
@@ -136,6 +148,7 @@ export default {
         value: null,
         text: 'Tất cả'
       },
+       showModalConfirm: false,
       showFilter: false,
       tab: 1,
       heads: [
