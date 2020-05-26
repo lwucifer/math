@@ -7,7 +7,7 @@
     >
       <slot name="title" class="sub-block-section__title">
         <h4 class="sub-block-section__title--main">
-          <span @click="clickBack">
+          <span @click="clickBack" class="d-flex align-items-center">
             <icon-left-arrow
             v-if="hasIcon"
             class="sub-block-section__icon-title"
