@@ -47,7 +47,7 @@ export const SOCIAL_POST_TAG_PHOTO = `/social/aip/post/tagPhoto`;
 export const SOCIAL_FOLLOW = `/social/api/follow`;
 export const SOCIAL_SCRAPER = `/social/api/openGraphScraper`;
 export const REGISTER_DEVICE = `/social/api/device`;
-export const NOTIFICATION_UNREAD = `/social/api/notification/unRead`;
+export const NOTIFICATION_UNREAD = `chat/social/api/notification/unRead`;
 
 /**
  * ELEARNING
@@ -152,20 +152,22 @@ export const SCHOOL_TEACHER = `/elearning/school/admin/teachers`;
 /**
  * MESSAGE
  */
-export const GROUP_ADD_MEMBER = `/social/api/room/addMember`;
-export const GROUP_AVATAR = `/social/api/room/avatar`;
-export const GROUP_NAME = `/social/api/room/name`;
-export const GROUP = `/social/api/room`;
-export const GROUP_MEMBER = `/social/api/room/getMember`;
-export const GROUP_LEAVE = `/social/api/room/leaveGroup`;
-export const GROUP_REMOVE_MEMBER = `/social/api/room/removeMember`;
-export const GROUP_NOTIFICATION = `/social/api/room/settingNotification`;
-export const MESSAGE = `/social/api/message`;
-export const GROUP_DETAIL = `/social/api/room/getDetail`;
-export const MESSAGE_SEND_IMG = `/social/api/message/uploadImg`;
-export const LIMIT_MESSAGES = `/social/api/message/getLimit`;
-export const MESSAGE_TYPE = `/social/api/message/getViaRoomType`;
-export const MESSAGE_SEND_FILE = `/social/api/message/uploadFile`;
+export const GROUP_ADD_MEMBER = `chat/social/api/room/addMember`;
+export const GROUP_AVATAR = `chat/social/api/room/avatar`;
+export const GROUP_NAME = `chat/social/api/room/name`;
+export const GROUP = `chat/social/api/room`;
+export const GROUP_MEMBER = `chat/social/api/room/getMember`;
+export const GROUP_LEAVE = `chat/social/api/room/leaveGroup`;
+export const GROUP_REMOVE_MEMBER = `chat/social/api/room/removeMember`;
+export const GROUP_NOTIFICATION = `chat/social/api/room/settingNotification`;
+export const MESSAGE = `chat/social/api/message`;
+export const GROUP_DETAIL = `chat/social/api/room/getDetail`;
+export const MESSAGE_SEND_IMG = `chat/social/api/message/uploadImg`;
+export const LIMIT_MESSAGES = `chat/social/api/message/getLimit`;
+export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
+export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
+
+export const ROOM = `chat/room`;
 
 /**
  * TEACHING
