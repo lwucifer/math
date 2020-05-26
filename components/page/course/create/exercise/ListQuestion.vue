@@ -115,10 +115,6 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.question)
-  },
-
   computed: {
     type() {
       return get(this, "question.type", "") === "CHOICE"
