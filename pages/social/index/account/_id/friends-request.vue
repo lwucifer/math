@@ -1,13 +1,28 @@
 <template>
-  <div>{{ $route.name }}</div>
+  <div>
+    <AccountFriendsMenu>
+      <template v-slot:content>
+        <div class="row py-4">
+          <div class="col-md-6">
+            <AccountFriendItem :friend="false"/>
+          </div>
+        </div>
+      </template>
+    </AccountFriendsMenu>
+  </div>
 </template>
 
 <script>
+import AccountFriendsMenu from '~/components/page/social/account/AccountFriendsMenu';
+import AccountFriendItem from '~/components/page/social/account/AccountFriendItem';
 export default {
-
+  components:{
+    AccountFriendsMenu,
+    AccountFriendItem
+  }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+@import "~/assets/scss/components/social/_social-account-friends.scss";
 </style>
