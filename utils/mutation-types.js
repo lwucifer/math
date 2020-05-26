@@ -540,4 +540,8 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const KEYWORD = {
     SEARCH_HEADER: "searchHeader",
-}
+};
+
+export const CHAT = {
+    SET_ROOM_LIST: "setRoomList",
+};

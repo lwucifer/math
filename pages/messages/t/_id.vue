@@ -33,34 +33,34 @@ export default {
     TabInfo
   },
 
-  async fetch({ params, query, store, route }) {
-    const userId = store.state.auth.token ? store.state.auth.token.id : "";
-    const room_id = route.params.id;
-    await Promise.all([
-      store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
-        params: {
-          user_id: userId
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
-        params: {
-          room_id: room_id
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
-        params: {
-          room_id: room_id
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
-        params: {
-          room_id: room_id
-        }
-      })
-      // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
-    ]);
-  },
+  // async fetch({ params, query, store, route }) {
+  // const userId = store.state.auth.token ? store.state.auth.token.id : "";
+  // const room_id = route.params.id;
+  // await Promise.all([
+  //   store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
+  //     params: {
+  //       user_id: userId
+  //     }
+  //   }),
+  //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
+  //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
+  //     params: {
+  //       room_id: room_id
+  //     }
+  //   }),
+  //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
+  //     params: {
+  //       room_id: room_id
+  //     }
+  //   }),
+  //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
+  //     params: {
+  //       room_id: room_id
+  //     }
+  //   })
+  // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+  // ]);
+  // },
   props: {
     isCreate: {
       type: Boolean,

@@ -42,7 +42,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-addon">
-            <IconSearch width="15" height="15" class="fill-base"/>
+            <IconSearch width="15" height="15" class="fill-base" />
           </div>
 
           <input type="text" placeholder="Tìm kiếm người và nhóm" />
@@ -67,7 +67,7 @@
           </li>
         </ul>-->
 
-        <div class="tabs-content" v-if="isContact">
+        <!-- <div class="tabs-content" v-if="isContact">
           <div class="align-item" v-for="(item, index) in friends" :key="index">
             <div class="left">
               <div class="align-item__image">
@@ -83,10 +83,10 @@
 
             <div class="right"></div>
           </div>
-        </div>
+        </div>-->
 
-        <div v-else>
-          <div class="tabs-content" v-show="tabChat == true">
+        <div>
+          <div class="tabs-content">
             <div class="btn-create-chat" v-if="checkChatList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -108,19 +108,24 @@
                       class="comment-item__avatar"
                     />
                   </div>
-                  
+
                   <div class="align-item__meta">
                     <h5 class="align-item__title">
-                      <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
+                      <n-link
+                        slot="title"
+                        to
+                      >{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
                     </h5>
                     <div class="align-item__desc">
                       <p>{{ item.content }}</p>
                     </div>
-                  </div>  
+                  </div>
                 </div>
 
                 <div class="right text-right">
-                  <p><DotActive/></p>
+                  <p>
+                    <DotActive />
+                  </p>
                   <p>25 giây</p>
                 </div>
                 <!-- <app-dropdown
@@ -350,6 +355,7 @@ export default {
       "groups",
       "chats"
     ]),
+    ...mapState("chat", ["roomList"]),
     ...mapGetters("auth", ["userId"]),
     mapGroupList() {
       const dataMapGroup =
@@ -391,9 +397,9 @@ export default {
     },
     mapChatList() {
       const dataMap =
-        this.chats &&
-        this.chats.listMessage &&
-        this.chats.listMessage.map(item => {
+        this.roomList &&
+        this.roomList.listMessage &&
+        this.roomList.listMessage.map(item => {
           return {
             ...item.message,
             ...item.room,
@@ -514,15 +520,18 @@ export default {
 
     async chatsInfiniteHandler($state) {
       const getData = await this.$store.dispatch(
-        `message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`,
+        `chat/${actionTypes.CHAT.ROOM_LIST}`,
         {
           params: {
-            page: get(this, "chats.page.number", 0) + 1,
-            room_type: 1
+            page: get(this, "roomList.page.number", 0) + 1
           }
         }
       );
       console.log("getData", getData);
+      // check no room
+      if (this.roomList.listMessage == 0) {
+        this.checkChatList = true;
+      }
 
       if (getData.success && !isEmpty(getData.data)) {
         $state.loaded();

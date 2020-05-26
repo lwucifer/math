@@ -84,6 +84,7 @@ export default {
 
   methods: {
     changeTabDocument(type) {
+      this.$emit("handleReset");
       this.tabDocument = type;
     },
 

@@ -50,7 +50,7 @@
         </tbody>
       </table>
       <app-pagination
-        class="mt-4"
+        class="mt-4 mx-0"
         :pagination="get(files, 'page', {})"
         @pagechange="onChangePage"
       />
