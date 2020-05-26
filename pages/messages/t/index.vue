@@ -41,25 +41,25 @@ export default {
     IconCaretDown,
     IconImage,
     TabMessage,
-    TabContact,
+    TabContact
     // TabInfo
   },
 
   middleware: "authenticated",
-  async fetch({ params, query, store, redirect }) {
-    const data = await store.dispatch(
-      `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
-    );
-    const dataRooms = data.rooms ? data.rooms : [];
-    const id = dataRooms.filter(item => item.type == 1)[0]
-      ? dataRooms.filter(item => item.type == 1)[0].id
-      : "";
-    if (id) {
-      redirect(`/messages/t/${id}`);
-    } else {
-      return false;
-    }
-  },
+  // async fetch({ params, query, store, redirect }) {
+  // const data = await store.dispatch(
+  //   `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
+  // );
+  // const dataRooms = data.rooms ? data.rooms : [];
+  // const id = dataRooms.filter(item => item.type == 1)[0]
+  //   ? dataRooms.filter(item => item.type == 1)[0].id
+  //   : "";
+  // if (id) {
+  //   redirect(`/messages/t/${id}`);
+  // } else {
+  //   return false;
+  // }
+  // },
   props: {
     isCreate: {
       type: Boolean,
