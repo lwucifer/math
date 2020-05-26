@@ -642,3 +642,7 @@ export const TEACHING_STUDENTS_PRIVATE = {
 export const INFO_SUPPORT = {
     ADD: "infoSupport",
 };
+
+export const CHAT = {
+    ROOM_LIST: "getRoomList",
+};

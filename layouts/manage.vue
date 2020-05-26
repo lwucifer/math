@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap layout-manage">
-    <TheHeaderManager />
+    <Header />
 
     <nuxt class="page-content" />
 
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import TheHeaderManager from "~/components/layout/header/HeaderManager";
+import Header from "~/components/layout/header/Header"
 import Footer from "~/components/layout/footer/Footer";
 
 export default {
   middleware: ["teacher-role"],
   
   components: {
-    TheHeaderManager,
+    Header,
     Footer
   }
 };
@@ -26,7 +26,6 @@ export default {
 
 <style lang="scss">
 .layout-manage {
-  padding-top: 80px;
   display: flex;
   flex-direction: column;
 
