@@ -14,7 +14,6 @@
         <app-date-picker
           class="w-100"
           v-model="dateDefault"
-          square
           range
           size="sm"
           placeholder="DD/MM/YYYY - DD/MM/YYYY"

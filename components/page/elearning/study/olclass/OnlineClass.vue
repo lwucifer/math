@@ -154,7 +154,7 @@ export default {
               const end_time = convertLocalTimeForTimetable(a.end_time);
 
               const checkWhichTimeInDay = this.checkWhichTimeInDay(end_time);
-              const value = `${start_time}-${end_time}`;
+              const value = `${start_time} - ${end_time}`;
               if (checkWhichTimeInDay == DAY_SECTION.MORNING) {
                 timeMorning[s] = value;
               } else if (checkWhichTimeInDay == DAY_SECTION.AFTERNOON) {

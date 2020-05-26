@@ -88,9 +88,10 @@
         flex-grow: 1;
         font-size: inherit;
         color: inherit;
+
         &:disabled {
             background-color: #F4F4F4;
-            border: 1px solid $color-disabled;
+            // border: 1px solid $color-disabled;
             color: inherit;
         }
     }
@@ -105,6 +106,7 @@
         min-height: 2rem + (1.4rem * $line-height-base);
         height: auto;
         color: inherit;
+
         &:disabled {
             background-color: #F4F4F4;
             border-color: $color-border;

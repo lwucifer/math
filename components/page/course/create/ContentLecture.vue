@@ -158,14 +158,6 @@ export default {
     };
   },
 
-  // mounted() {
-  //   this.$store.dispatch(`elearning/create/getContent`);
-  // },
-
-  // updated() {
-  //   console.log(this.lessons);
-  // },
-
   watch: {
     lessons: {
       handler: function() {

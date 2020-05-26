@@ -9,7 +9,7 @@
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.query"
+          v-model="filters.name"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"

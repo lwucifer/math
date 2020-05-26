@@ -8,7 +8,7 @@
                     <div class="col-12 col-md-3">
                         <div class="how-item">
                             <div class="how-item__img">
-                                <img src="/images/elearning/write.png" alt="">
+                                <img src="/images/home/write.png" alt="">
                             </div>
 
                             <div class="how-item__text">
@@ -21,7 +21,7 @@
                     <div class="col-12 col-md-3">
                         <div class="how-item">
                             <div class="how-item__img">
-                                <img src="/images/elearning/online-learning.png" alt="">
+                                <img src="/images/home/online-learning.png" alt="">
                             </div>
 
                             <div class="how-item__text">
@@ -34,7 +34,7 @@
                     <div class="col-12 col-md-3">
                         <div class="how-item">
                             <div class="how-item__img">
-                                <img src="/images/elearning/payment.png" alt="">
+                                <img src="/images/home/payment.png" alt="">
                             </div>
 
                             <div class="how-item__text">
@@ -47,7 +47,7 @@
                     <div class="col-12 col-md-3">
                         <div class="how-item">
                             <div class="how-item__img">
-                                <img src="/images/elearning/rating.png" alt="">
+                                <img src="/images/home/rating.png" alt="">
                             </div>
 
                             <div class="how-item__text">
@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/components/elearning/home/_how-to-learn.scss";
+@import "~/assets/scss/components/home/_how-to-learn.scss";
 </style>

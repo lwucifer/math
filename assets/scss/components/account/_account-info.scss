@@ -1,52 +1,70 @@
 .wrapInfoAccount {
     label {
-      color: #999999;
+        color: #999999;
     }
+
     h5 {
-      margin-bottom: 25px;
+        margin-bottom: 25px;
     }
+
     .app-input {
-      display: flex;
-      .app-input__label {
-        white-space: nowrap;
-        width: 15rem;
-      }
+        display: flex;
+
+        .app-input__label {
+            white-space: nowrap;
+            width: 15rem;
+        }
     }
     .form-group {
-      label {
-        width: 14rem;
-        white-space: nowrap;
-      }
+        label {
+            width: 14rem;
+            white-space: nowrap;
+        }
     }
+
     .picker-group__profileInfo {
-      display: flex;
-      .sex_Profile .app-input__input {
-        width: 62px;
-        margin-right: 80px;
-      }
-      .birthday_Profile{
-        .app-input__label{
-          width: 10rem;
+        display: flex;
+
+        .sex_Profile .app-input__input {
+            width: 62px;
+            margin-right: 80px;
         }
-        .app-input__input{
-          width: 110px;
+
+        .birthday_Profile {
+            .app-input__label {
+                width: 10rem;
+            }
+
+            .app-input__input {
+                width: 110px;
+            }
         }
-      }
     }
-  }
-  .btnChangePassword {
+}
+
+.btnChangePassword {
     margin-left: 15rem;
     margin-bottom: 30px;
-  }
-  .account-edit-modal .app-modal-content .app-input {
+}
+
+.account-edit-modal .app-modal-content .app-input {
     display: flex;
     flex-wrap: wrap;
+
     .app-input__error {
-      margin-left: 16.1rem;
+        margin-left: 16.1rem;
     }
-  }
-  .btnAccountLink_account-info{
+}
+
+.btnAccountLink_account-info {
     box-shadow: $shadow-1;
     background: #2579E7;
     color: #FBFBFB !important;
-  }
+}
+
+.school-account__main {
+    .app-input__input input:disabled {
+        background-color: $color-border;
+        color: $color-text;
+    }
+}

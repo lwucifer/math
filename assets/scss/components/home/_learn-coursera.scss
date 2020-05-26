@@ -3,7 +3,7 @@
     padding: 7rem 0;
 
     &__img {
-        background: url("/images/elearning/learn-coursera-img.png") no-repeat;
+        background: url("/images/home/learn-coursera-img.png") no-repeat;
         background-position: center;
         background-size: cover;
         height: 266px;
@@ -15,11 +15,12 @@
     }
 
     &__text {
+        margin-top: 2rem;
         margin-left: 4rem;
         .text-title {
             font-size: 3rem;
             color: $color-text-white;
-            margin-bottom: 0.7rem;
+            margin-bottom: 1rem;
         }
 
         .content {

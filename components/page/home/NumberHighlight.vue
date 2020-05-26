@@ -8,7 +8,7 @@
                     <div class="col-12 col-md-3">
                         <div class="box">
                             <div class="box__img">
-                                <img src="/images/elearning/home.png" alt="">
+                                <img src="/images/home/home.png" alt="">
                             </div>
 
                             <div class="box__text">
@@ -21,7 +21,7 @@
                     <div class="col-12 col-md-3">
                         <div class="box">
                             <div class="box__img">
-                                <img src="/images/elearning/book-open-2.png" alt="">
+                                <img src="/images/home/book-open-2.png" alt="">
                             </div>
 
                             <div class="box__text">
@@ -34,7 +34,7 @@
                     <div class="col-12 col-md-3">
                         <div class="box">
                             <div class="box__img">
-                                <img src="/images/elearning/users.png" alt="">
+                                <img src="/images/home/users.png" alt="">
                             </div>
 
                             <div class="box__text">
@@ -47,7 +47,7 @@
                     <div class="col-12 col-md-3">
                         <div class="box">
                             <div class="box__img">
-                                <img src="/images/elearning/users.png" alt="">
+                                <img src="/images/home/users.png" alt="">
                             </div>
 
                             <div class="box__text">
@@ -69,5 +69,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_number-highlight.scss";
+@import "~/assets/scss/components/home/_number-highlight.scss";
 </style>

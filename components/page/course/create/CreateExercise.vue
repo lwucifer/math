@@ -54,6 +54,14 @@
         >
       </div>
     </div>
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirm"
+      :confirmLoading="false"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      title="Xác nhận"
+    />
   </div>
 </template>
 
@@ -116,6 +124,7 @@ export default {
       isShowFormAdd: false,
       category: "EXERCISE",
       loading: false,
+      showModalConfirm: false,
     };
   },
 
@@ -128,6 +137,15 @@ export default {
   },
 
   methods: {
+    handleCancel() {
+      this.showModalConfirm = false;
+    },
+
+    handleOk() {
+      this.showModalConfirm = false;
+      this.$emit("nextStep", "exam");
+    },
+
     async handleChangeGeneral() {
       if (get(this, "general.type", "") === "LECTURE") {
         this.loading = true;
@@ -150,7 +168,7 @@ export default {
     },
 
     handleNextStep() {
-      this.$emit("nextStep", "exam");
+      this.showModalConfirm = true;
     },
 
     get,

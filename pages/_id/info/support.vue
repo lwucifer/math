@@ -59,6 +59,7 @@
                     placeholder="Nhập mô tả chi tiết"
                     v-model="content"
                     @input="handleContent"
+                    @blur="handleContent"
                   ></textarea>
                   <app-error :error="errorMessage.content"></app-error>
                 </div>
@@ -74,7 +75,7 @@
                     <app-upload
                       accept=".jpg, .png, .pdf, .word, .excel"
                       :showIcon="false"
-                      title="+ Attach file"
+                      title="+ Chọn file"
                       :inputText="false"
                       @change="handleSelectFile"
                     />
@@ -88,6 +89,7 @@
                   <app-button
                     size="md"
                     color="primary"
+                    :disabled="disabledBtn"
                     @click.prevent="handleSend"
                     >Gửi câu hỏi</app-button
                   >
@@ -138,6 +140,16 @@ export default {
     content: { required },
   },
 
+  computed: {
+    disabledBtn() {
+      const btnDisabled =
+        this.$v.$invalid ||
+        this.validate.title ||
+        this.validate.content;
+      return btnDisabled;
+    }
+  },
+
   methods: {
     ...mapActions(STORE_INFO, ["infoSupport"]),
     handleEmail(_email) {
@@ -176,9 +188,11 @@ export default {
       if (!this.$v.content.required) {
         this.errorMessage.content = "Trường này là bắt buộc";
         this.validate.content = true;
+        this.contentSuccess = false
       } else if (value.length > 1000) {
         this.errorMessage.content = "Chủ đề không được lớn hơn 1000 ký tự";
         this.validate.content = true;
+        this.contentSuccess = false;
       } else {
         this.errorMessage.content = "";
         this.validate.content = false;
@@ -197,6 +211,18 @@ export default {
       console.log('selectImage')
     },
 
+    clearForm(){
+      const that = this;
+      this.email = '';
+      this.title = '';
+      this.content = '';
+      this.fileUpload = '';
+      this.fileName = '';
+      this.validate.email = false;
+      this.validate.title = false;
+      this.validate.content = false;
+    },
+
     handleSend() {
       const body = new FormData();
       body.append("attachment", this.fileUpload);
@@ -206,7 +232,10 @@ export default {
       console.log("send body", body);
       this.infoSupport(body).then(result => {
         if (result.success == true) {
-          console.log('success')
+          this.$toasted.show("Gửi câu hỏi thành công");
+          this.clearForm();
+        } else {
+          this.$toasted.error(result.message);
         }
       });
     },
