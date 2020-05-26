@@ -13,7 +13,7 @@
         Bài {{ index + 1 }}: {{ exerciseNameModel }}
       </h2>
     </div>
-    
+
     <template v-if="isEditExerciseName">
       <button
         class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
@@ -94,12 +94,7 @@ export default {
       lesson: "lesson",
     }),
   },
-  mounted() {
-    console.log(this.exercise);
-  },
-  updated() {
-    console.log(this.exercise);
-  },
+
   data() {
     return {
       isEditExerciseName: false,
