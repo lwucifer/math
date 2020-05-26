@@ -188,7 +188,8 @@ export default {
       if (
         !get(this, "payload.article_content", true) &&
         !get(this, "payload.lesson", true) &&
-        !get(this, "payload.repository_file_id", true)
+        !get(this, "payload.repository_file_id", true) &&
+        !get(this, "payload.id", true)
       ) {
         submit = false;
       }
