@@ -75,7 +75,7 @@
                     <app-upload
                       accept=".jpg, .png, .pdf, .word, .excel"
                       :showIcon="false"
-                      title="+ Attach file"
+                      title="+ Chọn file"
                       :inputText="false"
                       @change="handleSelectFile"
                     />
