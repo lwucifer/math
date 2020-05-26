@@ -63,7 +63,7 @@
         <app-button class="filter-form__item__btn m-0" color="pink" square :size="'sm'"
         :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3">Hủy lớp</span>
+          <span class="ml-3">Hủy phòng học</span>
         </app-button>
       </div>
     </div>
@@ -113,8 +113,8 @@
         @cancel="showModalConfirm = false"
         :footer="false"
         :header="false"
-        title="Bạn có chắc chắn muốn hủy lớp học?"
-        description="Bạn sẽ không thể khôi phục lớp học bị xóa."
+        title="Bạn có chắc chắn muốn hủy phòng học?"
+        description="Bạn sẽ không thể khôi phục phòng học bị xóa."
       />
   </div>
 </template>

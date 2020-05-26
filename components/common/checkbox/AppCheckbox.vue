@@ -14,9 +14,9 @@
         class="app-checkbox__icon app-checkbox__icon--unchecked icon fill-opacity-1"
       />
     </span>
-    <span v-if="label || $slots.default" class="app-checkbox__text">
+    <div v-if="label || $slots.default" class="app-checkbox__text">
       <slot>{{ label }}</slot>
-    </span>
+    </div>
   </label>
 </template>
 
