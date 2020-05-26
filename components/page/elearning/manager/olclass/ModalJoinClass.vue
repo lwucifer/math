@@ -10,61 +10,93 @@
     <div slot="content" v-if="loading">Loading...</div>
     <div slot="content" class="text-center" v-else>
       <div class="text-left">
-        <h6 class="color-primary mb-3">{{get(data,'extra_info.online_class_name', '')}}</h6>
+        <h6 class="color-primary mb-3">
+          {{ get(data, "extra_info.online_class_name", "") }}
+        </h6>
         <div class="box12 border mb-4">
           <p class="mb-3">
             Tên phòng:
-            <b>{{get(data,'extra_info.online_class_name', '')}}</b>
+            <b>{{ get(data, "extra_info.online_class_name", "") }}</b>
           </p>
           <p class="mb-3">
             Giáo viên:
-            <b>{{get(data,'extra_info.teacher_name', '')}}</b>
+            <b>{{ get(data, "extra_info.teacher_name", "") }}</b>
           </p>
           <p class="mb-3">
             Giờ bắt đầu:
-            <b>{{getLocalTimeHH_MM_A(get(data,'extra_info.start_time', ''))}}</b>
+            <b>{{
+              getLocalTimeHH_MM_A(get(data, "extra_info.start_time", ""))
+            }}</b>
           </p>
           <p>
             Thời lượng:
-            <b>{{secondsToHms2(get(data,'extra_info.duration', ''))}}</b>
+            <b>{{ get(data, "extra_info.duration", "") | formatHour }}</b>
           </p>
         </div>
 
         <p class="mb-3" v-if="dataLength === 1 && !data.is_started">
-          <b>Chú ý:</b> buổi học sẽ được bắt đầu sau giây lát. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
+          <b>Chú ý:</b> buổi học sẽ được bắt đầu sau giây lát.
+          <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
         <p class="mb-3" v-if="dataLength === 1 && data.is_started">
-          <b>Chú ý:</b> buổi học sẽ được bắt đầu sau giây lát. Bạn có thể ấn Vào phòng học để vào phòng trước. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
+          <b>Chú ý:</b> buổi học sẽ được bắt đầu sau giây lát. Bạn có thể ấn Vào
+          phòng học để vào phòng trước.
+          <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
-        
+
         <p class="mb-3" v-if="dataLength > 1 && !data.is_started">
-          <b>Chú ý:</b> buổi học này được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
+          <b>Chú ý:</b> buổi học này được chia thành {{ dataLength }} tiết học.
+          Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống
+          sẽ tự động chuyển sang tiết học tiếp theo.
+          <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
         <p class="mb-3" v-if="dataLength > 1 && data.is_started">
-          <b>Chú ý:</b> buổi học này được chia thành 2 tiết học. Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động chuyển sang tiết học tiếp theo. Bạn phải có trách nhiệm thông báo về việc phân chia tiết học cho học sinh. <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
+          <b>Chú ý:</b> buổi học này được chia thành {{ dataLength }} tiết học.
+          Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống
+          sẽ tự động chuyển sang tiết học tiếp theo. Bạn phải có trách nhiệm
+          thông báo về việc phân chia tiết học cho học sinh.
+          <b>Bạn không nên đóng cửa sổ này cho đến khi buổi học kết thúc.</b>
         </p>
 
         <div class="mt-4 text-center">
-          <p>Phòng học bắt đầu sau: <b class="h5 color-blue"> {{ secondsToHms(countDown)}}</b></p>
-          <div class="mb-4 mt-4 d-flex-center justify-content-center"> 
+          <p>
+            Phòng học bắt đầu sau:
+            <b class="h5 color-blue"> {{ countdown }}</b>
+          </p>
+          <div class="mb-4 mt-4 d-flex-center justify-content-center">
             <a
-              :href="get(data,'sessions[0].start_url', '')"
-              target="blank"
+              :href="activeSessionLink"
+              target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
               :v-if="data.is_started"
-            >Vào phòng học</a>
-            <app-button color="white" size="lg" @click="showModalConfirm = true">Thoát phòng đợi</app-button>
+              >Vào phòng học</a
+            >
+            <app-button color="white" size="lg" @click="showModalConfirm = true"
+              >Thoát phòng đợi</app-button
+            >
           </div>
-          <div style="max-height: 300px; overflow-y: auto" v-if="dataLength > 1">
+          <div
+            style="max-height: 300px; overflow-y: auto"
+            v-if="dataLength > 1"
+          >
             <div class="text-left d-inline-block">
-              <div v-for="(item, index) in data.sessions" :key="index" class="mb-4">
+              <div
+                v-for="(item, index) in data.sessions"
+                :key="index"
+                class="mb-4"
+              >
                 <p>
-                  <span style="color: #222">Tiết học {{index + 1}}: </span> 
-                  <a class="bold text-decoration-none"
+                  <span style="color: #222">Tiết học {{ index + 1 }}: </span>
+                  <a
+                    class="bold text-decoration-none"
+                    :class="{'text-secondary': activeSessionLink == item.start_url}"
                     :href="item.start_url"
                     target="blank"
-                  >{{getLocalTimeHH_MM_A(item.start_time, 0)}} - 
-                  {{getLocalEndTime(item.start_time, item.duration, 'minutes')}}</a>
+                    >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
+                    {{
+                      getLocalEndTime(item.start_time, item.duration, "minutes")
+                    }}</a
+                  >
                 </p>
               </div>
             </div>
@@ -72,7 +104,7 @@
         </div>
       </div>
 
-      <app-modal-confirm
+      <!-- <app-modal-confirm
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
         @ok="close()"
@@ -82,7 +114,17 @@
         :header="false"
         title="Bạn có chắc chắn muốn thoát?"
         description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
-      />
+      /> -->
+      <app-modal-confirm
+      v-if="showModalConfirm"
+      @ok="close()"
+      :width="550"
+      @cancel="showModalConfirm = false"
+      :footer="false"
+      :header="false"
+      title="Bạn có chắc chắn muốn thoát?"
+      description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
+    />
     </div>
   </app-modal>
 </template>
@@ -90,14 +132,16 @@
 <script>
 import {
   getLocalEndTime,
-  getLocalTimeHH_MM_A
+  getLocalTimeHH_MM_A,
+  getLocalDateTime,
 } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
+let interval = null;
 
 export default {
   components: {},
@@ -110,42 +154,29 @@ export default {
   data() {
     return {
       showModalConfirm: false,
+      confirmLoading: true,
       data: [],
       dataLength: 0,
       loading: false,
-      startTime: this.formatAMPM(this.info.recent_schedule.start_time),
-      duration: this.formatHour(this.info.recent_schedule.duration),
-      countDown: 0
+      countdown: "--:--",
+      seconds: null,
+      currentZoom: null,
+      showModalConfirm: false,
+      activeSessionLink: "#",
+      activeSession: false
     };
   },
 
   methods: {
     getLocalEndTime,
     getLocalTimeHH_MM_A,
+    getLocalDateTime,
 
     close(invite) {
-      this.$emit("close", invite);
-    },
-
-    formatAMPM(time, duration) {
-      let dur = duration ? parseInt(duration) * 60 * 1000 : 0;
-      let date = new Date(time);
-      date = new Date(date.getTime() + dur);
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm;
-      return strTime;
-    },
-
-    formatHour(time) {
-      let minutes = time % 60;
-      let hours = Math.floor(time / 60) == 0 ? "" : Math.floor(time / 60);
-      let strTime = hours + " giờ " + minutes + " phút";
-      return strTime;
+      console.log("[close]", interval);
+      clearInterval(interval);
+      this.$emit("close");
+      this.showModalConfirm = false;
     },
 
     async getList() {
@@ -160,49 +191,61 @@ export default {
 
         self.data = self.get(self.stateClass, "data", []);
         self.dataLength = self.get(self.stateClass, "data.sessions", []).length;
-        self.countDown = 100;
-        //self.countDown = self.get(self.stateClass, "data.time_count_down", 0);
+
+        this.setCountdown();
       } catch (e) {
+        console.log("[getList] err", e);
       } finally {
-        this.countDownTimer();
         this.loading = false;
       }
     },
 
-    countDownTimer() {
-      if(this.countDown > 0) {
-        setTimeout(() => {
-            this.countDown -= 1
-            this.countDownTimer()
-        }, 1000)
+    get,
+
+    setActiveLinkSession() {
+      console.log("[setActiveLinkSession]");
+      // lessiong is living => open zoom
+      // if (this.data.is_started == true) {
+      const sessions = this.data.sessions || [];
+
+      // calculate current session base on: start_time + duration vs new Date();
+      let activeSession = null;
+      const now = new Date();
+      for (let i = 0; i < sessions.length; i++) {
+        const endTime = getLocalDateTime(sessions[i].end_time);
+        if (now <= new Date(endTime)) {
+          activeSession = sessions[i];
+          this.activeSessionLink = activeSession.start_url;
+          return;
+        }
       }
+      // }
     },
 
-    secondsToHms(d) {
-      d = Number(d);
-      var h = Math.floor(d / 3600);
-      var m = Math.floor(d % 3600 / 60);
-      var s = Math.floor(d % 3600 % 60);
+    setCountdown() {
+      let seconds = this.data.time_count_down || 0; // in seconds
+      const duration = get(this.data, "extra_info.duration", 0);
+      if (!duration) return;
 
-      var hDisplay = h > 0 ? h + ":" : "";
-      var mDisplay = m > 0 ? m + ":" : "";
-      var sDisplay = s > 0 ? s : "";
-      return hDisplay + mDisplay + sDisplay;
-    },
-    
-    secondsToHms2(d) {
-      d = Number(d);
-      var h = Math.floor(d / 3600);
-      var m = Math.floor(d % 3600 / 60);
-      var s = Math.floor(d % 3600 % 60);
+      interval = setInterval(() => {
+        console.log("[setCountdown]", seconds);
+        this.countdown = getCountdown_HH_MM_SS(seconds);
+        this.seconds = seconds;
 
-      var hDisplay = h > 0 ? h + " giờ " : "";
-      var mDisplay = m > 0 ? m + " phút " : "";
-      var sDisplay = s > 0 ? s + " giây" : '';
-      return hDisplay + mDisplay + sDisplay;
-    },
+        if (seconds <= 0) {
+          clearInterval(interval);
+          this.countdown = "ĐÃ BẮT ĐẦU";
 
-    get
+          // set active session link
+          interval = setInterval(() => {
+            this.setActiveLinkSession();
+          }, 1000);
+        }
+
+        seconds -= 1;
+        this.setActiveLinkSession();
+      }, 1000);
+    }
   },
 
   computed: {
@@ -214,6 +257,10 @@ export default {
 
   created() {
     this.getList();
+  },
+
+  beforeDestroy() {
+    clearInterval(interval);
   }
 };
 </script>

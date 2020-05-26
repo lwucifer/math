@@ -1,5 +1,5 @@
 <template>
-  <div class="elearning-homepage">
+  <div class="homepage py-0">
     <HomeBanner />
     <SubBanner/>
 
@@ -52,6 +52,7 @@
     <LearnEverywhere/>
     <NumberHighlight/>
     <Feedback/>
+    <EveryDevices/>
   </div>
 </template>
 
@@ -102,6 +103,7 @@ import LearnCoursera from "~/components/page/home/LearnCoursera";
 import LearnEverywhere from "~/components/page/home/LearnEverywhere";
 import NumberHighlight from "~/components/page/home/NumberHighlight";
 import Feedback from "~/components/page/home/Feedback";
+import EveryDevices from "~/components/page/home/EveryDevices";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 
 export default {
@@ -116,7 +118,8 @@ export default {
     NumberHighlight,
     CourseItem2,
     IconArrowForwardIos,
-    Feedback
+    Feedback,
+    EveryDevices
   },
 
   async fetch({ params, query, store }) {

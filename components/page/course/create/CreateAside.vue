@@ -181,7 +181,6 @@ export default {
     },
 
     handleClickMenuItem({ key }) {
-      console.log(key, this.general, this.progress);
       if (key === "general") {
         this.active = key;
         this.$emit("click-item", key);
