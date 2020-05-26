@@ -238,9 +238,7 @@ export default {
       this.error_name = "";
     },
     changeTabType(type) {
-      this.payload.article_content = "";
-      this.payload.lesson = "";
-      this.payload.repository_file_id = "";
+      this.handleReset();
       if (type === "video") this.payload.type = "VIDEO";
       if (type === "document") this.payload.type = "ARTICLE";
       this.tabType = type;
