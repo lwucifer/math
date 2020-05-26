@@ -1,16 +1,21 @@
 <template>
   <div class="wrap__elearning-item">
     <div class="img__elearning-item">
-      <img
-        v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
-      />
+      <n-link
+        :to="`/elearning/${elearning && elearning.elearning_id}`"
+      >
+        <img
+          v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
+        />
+      </n-link>
     </div>
     <div class="wrap-content_Elearning">
-      <n-link
-        class="name_elearning-item"
-        :to="`/elearning/${elearning && elearning.elearning_id}`"
-        :title="elearning.name"
-      >{{elearning && elearning.name}}</n-link>
+      <h3 class="name_elearning-item">
+        <n-link
+          :to="`/elearning/${elearning && elearning.elearning_id}`"
+          :title="elearning.name"
+        >{{elearning && elearning.name}}</n-link>
+      </h3>
       <div class="d-flex align-items-center my-3">
         <n-link
           :to="`/public/profile/teacher?user_id=${elearning.teacher.id}`"
@@ -55,17 +60,25 @@
 
             <ul class="link--dropdown__ElearningItem">
               <li class="item-share__ElearningItem" @click.prevent="shareDropdown=!shareDropdown">
-                <n-link to>
-                  <IconShare24px class="icon" />Chia sẻ
-                </n-link>
-                <ul class="share-dropdowm__ElearningItem" v-if="shareDropdown">
-                  <li @click.prevent="shareFb(elearning.elearning_id)">
-                    <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
-                  </li>
-                  <li @click.prevent="shareSchool(elearning)">
-                    <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
-                  </li>
-                </ul>
+                <v-popover
+                  popoverClass="menu-share-elearning-tooltip"
+                  placement ="right"
+                  trigger="hover"
+                >
+                  <n-link class="pr-2" to>
+                    <IconShare24px class="icon" />Chia sẻ
+                  </n-link>
+                  <template slot="popover">
+                    <ul class="share-dropdowm__ElearningItem">
+                      <li @click.prevent="shareFb(elearning.elearning_id)">
+                        <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                      </li>
+                      <li @click.prevent="shareSchool(elearning)">
+                        <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                      </li>
+                    </ul>
+                  </template>
+                 </v-popover>
               </li>
               <li
                 v-if="elearning && !elearning.is_favourite"

@@ -44,6 +44,7 @@
         top: calc(100% + 6px);
         box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
         border-radius: 2px;
+        overflow: unset;
         }
     .link--dropdown__content{
         width: 246px;
