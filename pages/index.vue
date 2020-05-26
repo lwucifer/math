@@ -51,6 +51,7 @@
     <LearnCoursera/>
     <LearnEverywhere/>
     <NumberHighlight/>
+    <Feedback/>
   </div>
 </template>
 
@@ -100,6 +101,7 @@ import HowToLearn from "~/components/page/home/HowToLearn";
 import LearnCoursera from "~/components/page/home/LearnCoursera";
 import LearnEverywhere from "~/components/page/home/LearnEverywhere";
 import NumberHighlight from "~/components/page/home/NumberHighlight";
+import Feedback from "~/components/page/home/Feedback";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 
 export default {
@@ -113,7 +115,8 @@ export default {
     LearnEverywhere,
     NumberHighlight,
     CourseItem2,
-    IconArrowForwardIos
+    IconArrowForwardIos,
+    Feedback
   },
 
   async fetch({ params, query, store }) {
