@@ -2,6 +2,7 @@ import { RESPONSE_SUCCESS } from "~/utils/config";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import InteractiveNotification from "~/services/elearning/study/InteractiveNotification";
 import { get } from "lodash";
+import VoteStudyService from "~/services/elearning/study/Vote.js";
 
 /**
  * initial state
@@ -12,6 +13,7 @@ const state = () => ({
     page: {},
   },
   notifications: null,
+  reviews: null,
 });
 
 /**
@@ -22,6 +24,19 @@ const getters = {
 };
 
 const actions = {
+  async getReviews({ commit }, options) {
+    try {
+      const res = await new VoteStudyService(this.$axios)["list"](options);
+      if (get(res, "success", false)) {
+        commit("reviews", res.data);
+        return;
+      }
+      commit("reviews", null);
+    } catch (error) {
+      commit("reviews", null);
+    }
+  },
+
   async getListNotification({ commit }, options) {
     try {
       const res = await new InteractiveNotification(this.$axios)["list"](
@@ -70,6 +85,10 @@ const mutations = {
 
   notifications(state, notifications) {
     state.notifications = notifications;
+  },
+
+  reviews(state, reviews) {
+    state.reviews = reviews;
   },
 };
 

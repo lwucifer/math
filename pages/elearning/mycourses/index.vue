@@ -15,6 +15,7 @@
       <div class="search__mycourses">
         <app-search
           placeholder="Tìm kiếm"
+          size="sm"
           v-model="params.keyword"
           @input="hanldeInputSearch"
           @keyup.enter.native="handleSubmitSearch"
@@ -78,7 +79,7 @@ export default {
   data() {
     return {
       params: {
-        keyword: ""
+        keyword: null
       },
       tab: 1,
       list: [],
