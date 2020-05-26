@@ -5,7 +5,7 @@
                 <div class="col-12 col-md-4">
                     <div class="sub-banner-item">
                         <div class="sub-banner-item__img">
-                            <img src="/images/elearning/book-open.png" alt="">
+                            <img src="/images/home/book-open.png" alt="">
                         </div>
 
                         <div class="sub-banner-item__text">
@@ -18,7 +18,7 @@
                 <div class="col-12 col-md-4">
                     <div class="sub-banner-item">
                         <div class="sub-banner-item__img">
-                            <img src="/images/elearning/coffee.png" alt="">
+                            <img src="/images/home/coffee.png" alt="">
                         </div>
 
                         <div class="sub-banner-item__text">
@@ -31,7 +31,7 @@
                 <div class="col-12 col-md-4">
                     <div class="sub-banner-item">
                         <div class="sub-banner-item__img">
-                            <img src="/images/elearning/clock.png" alt="">
+                            <img src="/images/home/clock.png" alt="">
                         </div>
 
                         <div class="sub-banner-item__text">
@@ -52,5 +52,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_sub-banner.scss";
+@import "~/assets/scss/components/home/_sub-banner.scss";
 </style>

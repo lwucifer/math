@@ -26,14 +26,14 @@
 
                     <div class="col-12 col-md-7">
                         <div class="learn-everywhere-box">
-                            <img src="/images/elearning/learn-everywhere-1.png" alt="">
+                            <img src="/images/home/learn-everywhere-1.png" alt="">
                         </div>
                     </div>
 
 
                     <div class="col-12 col-md-5">
                         <div class="learn-everywhere-box">
-                            <img src="/images/elearning/learn-everywhere-2.png" alt="">
+                            <img src="/images/home/learn-everywhere-2.png" alt="">
                         </div>
                     </div>
 
@@ -78,7 +78,7 @@
 
                     <div class="col-12 col-md-7">
                         <div class="learn-everywhere-box">
-                            <img src="/images/elearning/learn-everywhere-3.png" alt="">
+                            <img src="/images/home/learn-everywhere-3.png" alt="">
                         </div>
                     </div>
                 </div>
@@ -94,5 +94,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/home/_learn-everywhere.scss";
+@import "~/assets/scss/components/home/_learn-everywhere.scss";
 </style>

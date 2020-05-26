@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-homepage">
-    <ElearingHomeBanner />
+    <HomeBanner />
     <SubBanner/>
 
     <div v-if="pageLoading" class="container mt-6">
@@ -14,7 +14,7 @@
     </div>
 
     <div v-else class="container mt-6">
-      <ElearningHomeBox title="Học gì tiếp theo">
+      <ElearningHomeBox class="elearning-home-box" title="Học gì tiếp theo">
         <ul slot="title-right" class="elearning-home-box__tab">
           <li v-for="tab in whatNextsTabs" :key="tab.value">
             <a
@@ -51,6 +51,7 @@
     <LearnCoursera/>
     <LearnEverywhere/>
     <NumberHighlight/>
+    <Feedback/>
   </div>
 </template>
 
@@ -93,25 +94,20 @@ const IconSubjectScience = () =>
   import("~/assets/svg/icons/subject-science.svg?inline");
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
-import ElearingHomeBanner from "~/components/page/elearning/home/ElearningHomeBanner.vue";
-import SubBanner from "~/components/page/elearning/home/SubBanner"
+import HomeBanner from "~/components/page/home/HomeBanner.vue";
+import SubBanner from "~/components/page/home/SubBanner";
 import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
-import HowToLearn from "~/components/page/elearning/home/HowToLearn";
-import LearnCoursera from "~/components/page/elearning/home/LearnCoursera";
-import LearnEverywhere from "~/components/page/elearning/home/LearnEverywhere";
-import NumberHighlight from "~/components/page/elearning/home/NumberHighlight";
+import HowToLearn from "~/components/page/home/HowToLearn";
+import LearnCoursera from "~/components/page/home/LearnCoursera";
+import LearnEverywhere from "~/components/page/home/LearnEverywhere";
+import NumberHighlight from "~/components/page/home/NumberHighlight";
+import Feedback from "~/components/page/home/Feedback";
 import CourseItem2 from "~/components/page/course/CourseItem2";
-import ElearningHomePersonalBox from "~/components/page/elearning/home/ElearningHomePersonalBox.vue";
-import ElearningHomeSubjectItem from "~/components/page/elearning/home/ElearningHomeSubjectItem.vue";
-import ElearningHomeTeacherCard from "~/components/page/elearning/home/ElearningHomeTeacherCard";
-
-// import CourseSliderTab from "~/components/page/course/CourseSliderTab";
 
 export default {
   components: {
-    // CourseSliderTab,
     VclList,
-    ElearingHomeBanner,
+    HomeBanner,
     SubBanner,
     ElearningHomeBox,
     HowToLearn,
@@ -119,10 +115,8 @@ export default {
     LearnEverywhere,
     NumberHighlight,
     CourseItem2,
-    ElearningHomePersonalBox,
-    ElearningHomeSubjectItem,
-    ElearningHomeTeacherCard,
-    IconArrowForwardIos
+    IconArrowForwardIos,
+    Feedback
   },
 
   async fetch({ params, query, store }) {
@@ -218,66 +212,6 @@ export default {
   methods: {
     get,
 
-    calcDiscount(elearning) {
-      const { price = {} } = elearning;
-      const currentPrice = price.price || 0;
-      const originPrice = price.original_price || 0;
-      return (currentPrice / originPrice) * 100;
-    },
-
-    checkSubjectIcon(code) {
-      switch (code) {
-        case SUBJECT_CODE.MATHS:
-          return IconSubjectMath;
-          break;
-        case SUBJECT_CODE.PHYSICS:
-          return IconSubjectPhysical;
-          break;
-        case SUBJECT_CODE.CHEMISTRY:
-          return IconSubjectChemistry;
-          break;
-        case SUBJECT_CODE.FOREIGN_LANGUAGE:
-          return IconSubjectForeignLanguage;
-          break;
-        case SUBJECT_CODE.LITERATURE:
-          return IconSubjectLiterature;
-          break;
-        case SUBJECT_CODE.BIOLOGY:
-          return IconSubjectBiology;
-          break;
-        case SUBJECT_CODE.GEOGPRAPHY:
-          return IconSubjectGeography;
-          break;
-        case SUBJECT_CODE.HISTORY:
-          return IconSubjectHistory;
-          break;
-        case SUBJECT_CODE.INFORMATICS:
-          return IconSubjectInformatics;
-          break;
-        case SUBJECT_CODE.TECHNOLOGY:
-          return IconSubjectTechnology;
-          break;
-        case SUBJECT_CODE.FINE_ART:
-          return IconSubjectFineArt;
-          break;
-        case SUBJECT_CODE.CIVIC_EDUCATION:
-          return IconSubjectCivicEducation;
-          break;
-        case SUBJECT_CODE.MORAL:
-          return IconSubjectCivicEducation;
-          break;
-        case SUBJECT_CODE.MUSIC:
-          return IconSubjectMusic;
-          break;
-        case SUBJECT_CODE.SCIENCE:
-          return IconSubjectScience;
-          break;
-        default:
-          return IconDefaultSubject;
-          break;
-      }
-    },
-
     async changeWhatNextsTab(tab) {
       const { whatNextsCarousel = {} } = this.$refs;
 
@@ -304,6 +238,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "~/assets/scss/pages/elearning/_home.scss";
+<style lang="scss" scoped>
+@import "~/assets/scss/pages/_homepage.scss";
 </style>
