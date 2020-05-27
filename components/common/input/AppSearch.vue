@@ -13,7 +13,7 @@
       v-bind="buttonProps"
       @click="submit"
     >
-      <IconSearch class="icon body-1" />
+      <IconSearch class="icon" />
     </app-button>
   </app-input>
 </template>
