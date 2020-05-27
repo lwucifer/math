@@ -36,7 +36,6 @@
     &.app-input--size-md {
         .app-search__submit {
             width: 4rem;
-            height: calc(4rem - 2px);
             font-size: 1.8rem;
         }
     }
@@ -44,6 +43,15 @@
     &.app-input--size-sm {
         .app-search__submit {
             width: 3.2rem;
+        }
+    }
+
+    &.app-search--bordered {
+        &.app-input--size-md .app-search__submit {
+            height: calc(4rem - 2px);
+        }
+
+        &.app-input--size-sm .app-search__submit {
             height: calc(3.2rem - 2px);
         }
     }
