@@ -1,5 +1,11 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'create-group-chat-modal': true }">
+  <app-modal
+    centered
+    :width="420"
+    :component-class="{ 'create-group-chat-modal': true }"
+    :header="false"
+    :footer="false"
+  >
     <div slot="content">
       <h5>Tạo nhóm chat</h5>
       <div class="d-flex-center">

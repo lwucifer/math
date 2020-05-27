@@ -46,6 +46,6 @@
   }
 </script>
 
-<style>
-
+<style lang="scss">
+@import "~/assets/scss/components/social/_social-account-about.scss";
 </style>

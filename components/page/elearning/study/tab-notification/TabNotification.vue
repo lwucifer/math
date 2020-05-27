@@ -6,6 +6,13 @@
       :notification="notification"
     />
 
+    <div
+      v-if="!get(notifications, 'content.length', true)"
+      class="text-center caption text-gray-2"
+    >
+      Chưa có nội dung.
+    </div>
+
     <app-pagination
       class="mt-4"
       :pagination="get(notifications, 'page', {})"
