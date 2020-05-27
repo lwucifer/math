@@ -1,59 +1,44 @@
 <template>
   <div class="container">
-    <div class="row wrap-filter-form__ElearningManagerInteractive">
-      <div class="filter-form__ElearninManagerInteractive">
-        <div class="wrapSearchForm___ElearningManagerFilterTable">
-          <app-input
-            type="text"
-            v-model="listQuery.keyword"
-            placeholder="Nhập để tìm kiếm..."
-            :size="'sm'"
-            @input="handleSearch"
-            class="inputSearch"
-          />
+    <div class="d-flex interacts-filter">
+      <app-search
+        class="interacts-qa-search mb-0 mr-3"
+        bordered
+        size="sm"
+        placeholder="Nhập để tìm kiếm"
+        v-model="listQuery.keyword"
+        @submit="handleSearch"
+      ></app-search>
 
-          <button class="btn-search">
-            <IconSearch width="15" height="15" />
-          </button>
-        </div>
+      <app-button class="mr-3" :color="isFilter ? 'primary' : 'default'" :outline="!isFilter" size="sm" @click="isFilter = !isFilter">
+        <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
+      </app-button>
 
-        <div class="filter mr-3">
-          <app-button
-            color="white"
-            :size="'sm'"
-            @click="submit"
-          >
-            <IconHamberger class="fill-primary mr-2"/>
-            <span>Lọc kết quả</span>
-          </app-button>
-        </div>
+      <template v-if="isFilter">
+        <app-vue-select
+          class="app-vue-select filter-course"
+          :options="filterListLesson"
+          placeholder="Bài giảng/khóa học"
+          searchable
+          clearable
+          has-border
+          @input="handleChangedInputLesson"
+          @search:focus="handleFocusSearchInput"
+          @search:blur="handleBlurSearchInput"
+        />
 
-        <div class="filter-course">
-          <app-vue-select
-            class="app-vue-select filter-form__item__selection"
-            :options="filterListLesson"
-            placeholder="Bài giảng/khóa học"
-            searchable
-            clearable
-            @input="handleChangedInputLesson"
-            @search:focus="handleFocusSearchInput"
-            @search:blur="handleBlurSearchInput"
-          ></app-vue-select>
-        </div>
-
-        <div class="filter-status">
-          <app-vue-select
-            class="app-vue-select filter-form__item__selection"
-            :options="results"
-            placeholder="Trạng thái"
-            searchable
-            clearable
-            @input="handleChangedInput"
-            @search:focus="handleFocusSearchInput"
-            @search:blur="handleBlurSearchInput"
-          ></app-vue-select>
-        </div>
-      </div>
+        <app-vue-select
+          class="app-vue-select filter-status"
+          :options="results"
+          placeholder="Trạng thái"
+          searchable
+          clearable
+          has-border
+          @input="handleChangedInput"
+          @search:focus="handleFocusSearchInput"
+          @search:blur="handleBlurSearchInput"
+        />
+      </template>
     </div>
 
     <div class="wrapTable__ElearningManagerInteractive">
@@ -176,7 +161,8 @@ export default {
         keyword: null,
         status: null,
         elearning_id: null
-      }
+      },
+      isFilter: false
     };
   },
   computed: {
