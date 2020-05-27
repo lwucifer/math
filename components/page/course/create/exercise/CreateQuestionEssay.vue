@@ -13,13 +13,13 @@
         >
         <div class="d-flex align-items-center justify-content-start mb-4">
           <app-input
-            class="mb-0 mr-4 w-150 ce-input-with-unit"
+            class="mb-0 w-150 ce-input-with-unit"
             v-model="payload.points"
           >
             <template #unit><span class="text-dark">/10</span> </template>
           </app-input>
 
-          <p class="text-primary">
+          <p class="text-primary ml-4">
             * Một bài tập hợp lệ phải có
             <strong>tổng điểm các câu hỏi là 10</strong>
           </p>
@@ -173,3 +173,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/course/create/_create-question-essay.scss";
+</style>

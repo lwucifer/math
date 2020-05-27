@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AccountFriendsMenu>
+    <AccountFriendsMenu active="request">
       <template v-slot:content>
         <div class="row py-4">
           <div class="col-md-6">
