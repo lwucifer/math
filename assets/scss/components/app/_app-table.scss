@@ -126,6 +126,9 @@
                     align-items: center;
                     padding: 1rem;
                     line-height: 1;
+                    svg {
+                        margin-bottom: 2px;
+                    }
                     + a,
                     +button {
                         margin-left: 4rem;
