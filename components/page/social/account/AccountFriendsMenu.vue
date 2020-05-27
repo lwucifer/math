@@ -2,13 +2,7 @@
   <div>
     <section class="bg-white">
       <account-cover />
-      <tab-menu
-        :list="menus"
-        active="friends"
-        class="sa__menu"
-        @selectedItem="changeTab"
-      >
-      </tab-menu>
+      <account-menu active="friends"/>
     </section>
     <div class="wrap-account-friends-social">
       <div class="d-flex align-items-center">
@@ -31,31 +25,16 @@
 <script>
   import AccountCover from '~/components/page/social/account/AccountCover.vue'
   import AccountFriendSearch from '~/components/page/social/account/AccountFriendSearch'
+  import AccountMenu from '~/components/page/social/account/AccountMenu.vue'
+
   export default {
     components: {
       AccountCover,
-      AccountFriendSearch
+      AccountFriendSearch,
+      AccountMenu
     },
     data() {
       return {
-        menus: [
-          {
-            key: 'timeline',
-            text: 'Dòng thời gian'
-          },
-          {
-            key: 'intro',
-            text: 'Giới thiệu'
-          },
-          {
-            key: 'friends',
-            text: 'Bạn bè'
-          },
-          {
-            key: 'gallery',
-            text: 'Ảnh'
-          },
-        ],
         menuFriend: [
           {
             key: 'all',
