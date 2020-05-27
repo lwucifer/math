@@ -167,7 +167,7 @@ export const LIMIT_MESSAGES = `chat/social/api/message/getLimit`;
 export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
-export const ROOM = `chat/room`;
+export const ROOM = `chat/rooms`;
 
 /**
  * TEACHING
