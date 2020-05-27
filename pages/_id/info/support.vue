@@ -212,15 +212,14 @@ export default {
     },
 
     clearForm(){
-      const that = this;
       this.email = '';
       this.title = '';
       this.content = '';
       this.fileUpload = '';
       this.fileName = '';
-      this.validate.email = false;
-      this.validate.title = false;
-      this.validate.content = false;
+      this.validateProps.email = "";
+      this.validateProps.title = "";
+      this.contentSuccess = false;
     },
 
     handleSend() {
