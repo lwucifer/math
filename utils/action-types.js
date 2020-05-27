@@ -9,6 +9,7 @@ export const BASE = {
     EDIT_PAYLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload",
     EDIT_FORMDATA: "putWithFormData",
+    GET_END: "getEnd",
 };
 
 export const AUTH = {
@@ -627,7 +628,6 @@ export const TEACHING_SCHEDULES = {
     DELETE: "teachingSchedulesDelete",
 };
 
-
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
 };
@@ -654,4 +654,5 @@ export const INFO_SUPPORT = {
 
 export const CHAT = {
     ROOM_LIST: "getRoomList",
+    MEMBER_LIST: "getMemberList",
 };

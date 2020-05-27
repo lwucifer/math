@@ -171,6 +171,7 @@ export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
 export const ROOM = `chat/rooms`;
+export const CHAT = `chat`;
 
 /**
  * TEACHING

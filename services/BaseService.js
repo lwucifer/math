@@ -2,146 +2,157 @@ import * as actionTypes from "~/utils/action-types";
 import { forEach } from "lodash";
 
 export default class BaseService {
-  constructor($axios, $api) {
-    this.$axios = $axios;
-    this.$api = $api;
-  }
+    constructor($axios, $api) {
+        this.$axios = $axios;
+        this.$api = $api;
+    }
 
-  async [actionTypes.BASE.DELETE_PAYLOAD](payload) {
-    console.log(payload);
-    const { data } = await this.$axios.request({
-      url: this.$api,
-      data: payload,
-      method: "DELETE",
-    });
-    return data;
-  }
+    async [actionTypes.BASE.DELETE_PAYLOAD](payload) {
+        console.log(payload);
+        const { data } = await this.$axios.request({
+            url: this.$api,
+            data: payload,
+            method: "DELETE",
+        });
+        return data;
+    }
 
-  async [actionTypes.BASE.LIST](payload) {
-    const { data } = await this.$axios.get(this.$api, payload);
+    async [actionTypes.BASE.LIST](payload) {
+        const { data } = await this.$axios.get(this.$api, payload);
 
-    const result = data ? data : {};
-    // console.log("[BASE.LIST] result", result);
-    return result;
-  }
+        const result = data ? data : {};
+        // console.log("[BASE.LIST] result", result);
+        return result;
+    }
 
-  async [actionTypes.BASE.EDIT](id, payload) {
-    // console.log("[BaseService] params", id, payload);
-    const { data } = await this.$axios.put(`${this.$api}/${id}`, payload);
+    async [actionTypes.BASE.EDIT](id, payload) {
+        // console.log("[BaseService] params", id, payload);
+        const { data } = await this.$axios.put(`${this.$api}/${id}`, payload);
 
-    return data;
-  }
+        return data;
+    }
 
-  async [actionTypes.BASE.ADD](payload) {
-    const { data } = await this.$axios.post(this.$api, payload);
+    async [actionTypes.BASE.ADD](payload) {
+        const { data } = await this.$axios.post(this.$api, payload);
 
-    return data;
-  }
+        return data;
+    }
 
-  async [actionTypes.BASE.DELETE](id) {
-    const { data } = await this.$axios.delete(`${this.$api}/${id}`);
-    return data;
-  }
+    async [actionTypes.BASE.DELETE](id) {
+        const { data } = await this.$axios.delete(`${this.$api}/${id}`);
+        return data;
+    }
 
-  async [actionTypes.BASE.DETAIL](id) {
-    const { data } = await this.$axios.get(`${this.$api}/${id}`);
+    async [actionTypes.BASE.DETAIL](id) {
+        const { data } = await this.$axios.get(`${this.$api}/${id}`);
 
-    const result = data ? data : {};
+        const result = data ? data : {};
 
-    // console.log("[BASE.DETAIL]", result);
+        // console.log("[BASE.DETAIL]", result);
 
-    return result;
-  }
+        return result;
+    }
 
-  async [actionTypes.BASE.EDIT_PAYLOAD](payload) {
-    // console.log("[BaseService] params", payload);
-    const { data } = await this.$axios.put(this.$api, payload);
+    async [actionTypes.BASE.EDIT_PAYLOAD](payload) {
+        // console.log("[BaseService] params", payload);
+        const { data } = await this.$axios.put(this.$api, payload);
 
-    return data;
-  }
+        return data;
+    }
 
-  async getIDWithPayload (id, payload) {
-    const { data } = await this.$axios.get(`${this.$api}/${id}`, payload);
+    async getIDWithPayload(id, payload) {
+        const { data } = await this.$axios.get(`${this.$api}/${id}`, payload);
 
-    const result = data ? data : {};
+        const result = data ? data : {};
 
-    // console.log("[BASE.DETAIL]", result);
+        // console.log("[BASE.DETAIL]", result);
 
-    return result;
-  }
+        return result;
+    }
 
-  async postWithFormData(payload) {
-    let formData = new FormData();
-    forEach(payload, function(value, key) {
-      formData.append(key, value);
-    });
-    const { data } = await this.$axios.post(this.$api, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    async postWithFormData(payload) {
+        let formData = new FormData();
+        forEach(payload, function(value, key) {
+            formData.append(key, value);
+        });
+        const { data } = await this.$axios.post(this.$api, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
 
-    return data;
-  }
+        return data;
+    }
 
-  async [actionTypes.BASE.EDIT_FORMDATA](payload) {
-    let formData = new FormData();
-    forEach(payload, function(value, key) {
-      formData.append(key, value);
-    });
-    const { data } = await this.$axios.put(this.$api, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    async [actionTypes.BASE.EDIT_FORMDATA](payload) {
+        let formData = new FormData();
+        forEach(payload, function(value, key) {
+            formData.append(key, value);
+        });
+        const { data } = await this.$axios.put(this.$api, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
 
-    return data;
-  }
+        return data;
+    }
 
-  async postWithRawJson(payload) {
-    const { data } = await this.$axios.post(this.$api, payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    async postWithRawJson(payload) {
+        const { data } = await this.$axios.post(this.$api, payload, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    return data;
-  }
+        return data;
+    }
 
-  async putWithRawJson(payload) {
-    const { data } = await this.$axios.put(this.$api, payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    async putWithRawJson(payload) {
+        const { data } = await this.$axios.put(this.$api, payload, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    return data;
-  }
+        return data;
+    }
 
-  async deleteWithRawJson(payload) {
-    const { data } = await this.$axios.delete(this.$api, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: payload,
-    });
+    async deleteWithRawJson(payload) {
+        const { data } = await this.$axios.delete(this.$api, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        });
 
-    return data;
-  }
+        return data;
+    }
 
-  async getWithMiddleID(payload, id, end) {
-    const { data } = await this.$axios.get(
-      `${this.$api}/${id}/${end}`,
-      payload
-    );
+    async getWithMiddleID(payload, id, end) {
+        const { data } = await this.$axios.get(
+            `${this.$api}/${id}/${end}`,
+            payload
+        );
 
-    const result = data ? data : {};
+        const result = data ? data : {};
 
-    return result;
-  }
+        return result;
+    }
 
-  // async [actionTypes.BASE.DELETE_PAYLOAD](payload) {
-  //     const { data } = await this.$axios.delete(this.$api, payload);
-  //     return data;
-  // }
+    // async [actionTypes.BASE.DELETE_PAYLOAD](payload) {
+    //     const { data } = await this.$axios.delete(this.$api, payload);
+    //     return data;
+    // }
+    async [actionTypes.BASE.GET_END](payload, id, end) {
+        // console.log("[BaseService] params", id, payload);
+        const { data } = await this.$axios.get(
+            `${this.$api}/${id}/${end}`,
+            payload
+        );
+
+        const result = data ? data : {};
+
+        return result;
+    }
 }

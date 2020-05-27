@@ -1,9 +1,7 @@
 <template>
   <div class="wrap__elearning-item">
     <div class="img__elearning-item">
-      <n-link
-        :to="`/elearning/${elearning && elearning.elearning_id}`"
-      >
+      <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
         <img
           v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
         />
@@ -59,10 +57,14 @@
             </button>
 
             <ul class="link--dropdown__ElearningItem">
-              <li class="item-share__ElearningItem" @click.prevent="shareDropdown=!shareDropdown">
+              <li
+                class="item-share__ElearningItem"
+                @click.prevent="shareDropdown=!shareDropdown"
+                v-if="tab !== 5"
+              >
                 <v-popover
                   popoverClass="menu-share-elearning-tooltip"
-                  placement ="right"
+                  placement="right"
                   trigger="hover"
                 >
                   <n-link class="pr-2" to>
@@ -78,17 +80,20 @@
                       </li>
                     </ul>
                   </template>
-                 </v-popover>
+                </v-popover>
               </li>
               <li
-                v-if="elearning && !elearning.is_favourite"
+                v-if="elearning && !elearning.is_favourite && tab !== 5"
                 @click.prevent="handleFavourite(elearning.elearning_id)"
               >
                 <n-link to>
                   <IconCardsHeart class="icon" />Yêu thích
                 </n-link>
               </li>
-              <li v-else @click.prevent="handleDeleteFavourite(elearning.elearning_id)">
+              <li
+                v-else-if="elearning && elearning.is_favourite && tab !== 5"
+                @click.prevent="handleDeleteFavourite(elearning.elearning_id)"
+              >
                 <n-link to class="text-primary">
                   <IconCardsHeart class="icon" />Bỏ yêu thích
                 </n-link>
@@ -101,7 +106,10 @@
                   <IconArchive class="icon" />Lưu trữ
                 </n-link>
               </li>
-              <li v-else @click.prevent="handleDeleteArchive(elearning.elearning_id)">
+              <li
+                v-else-if="elearning && !elearning.is_archive && tab === 5"
+                @click.prevent="handleDeleteArchive(elearning.elearning_id)"
+              >
                 <n-link to class="text-primary">
                   <IconUnArchive class="icon" />Bỏ lưu trữ
                 </n-link>
@@ -153,6 +161,9 @@ export default {
   props: {
     elearning: {
       default: null
+    },
+    tab: {
+      default: 1
     }
   },
   computed: {
