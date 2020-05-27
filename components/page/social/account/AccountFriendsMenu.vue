@@ -12,7 +12,7 @@
       </div>
       <tab-menu
         :list="menuFriend"
-        active="all"
+        :active="active"
         class=""
         @selectedItem="changeTabFriends"
       >
@@ -26,12 +26,18 @@
   import AccountCover from '~/components/page/social/account/AccountCover.vue'
   import AccountFriendSearch from '~/components/page/social/account/AccountFriendSearch'
   import AccountMenu from '~/components/page/social/account/AccountMenu.vue'
-
+   import { get } from 'lodash'
   export default {
     components: {
       AccountCover,
       AccountFriendSearch,
       AccountMenu
+    },
+    props: {
+      active: {
+        type: String,
+        required: true
+      }
     },
     data() {
       return {
@@ -56,11 +62,27 @@
       }
     },
     methods: {
-      changeTab(item) {
-        this.$emit('changeCnt', item)
-      },
       changeTabFriends(f){
           this.$emit('changeFriendItem',f)
+          console.log('changeFriendUten',f)
+          const id = get(this.$router,'params.id', 14)
+          const selectItem = f
+          switch (selectItem) {
+            case 'all':
+              this.$router.push(`/social/account/${id}/friends`)
+              break;
+            case 'recent':
+              this.$router.push(`/social/account/${id}/friends-recent`)
+              break;
+            case 'birthday':
+              this.$router.push(`/social/account/${id}/friends-birthday`)
+              break;
+            case 'request':
+              this.$router.push(`/social/account/${id}/friends-request`)
+              break;
+            default:
+              this.$router.push(`/social/account/${id}/friends`)
+          }
       }
     }
   }
