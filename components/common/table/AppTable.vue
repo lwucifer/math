@@ -185,14 +185,22 @@ export default {
       type: String,
       default: 'id'
     },
+    orderBy: {
+      type: String,
+      default: 'name'
+    },
+    order: {
+      type: String,
+      default: 'asc'
+    }
   },
 
   data() {
     return {
       mouseOver: true,
       listSortBy: [],
-      currentSort: "name",
-      currentSortDir: "asc",
+      currentSort: this.orderBy,
+      currentSortDir: this.order,
       selectedItems: [], // An array of selected rows
     };
   },
