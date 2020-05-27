@@ -179,6 +179,7 @@
                               size="sm"
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
+                              @input="(e) => schedulesDateChange(e, index, false)"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -194,6 +195,7 @@
                               size="sm"
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
+                              @input="(e) => schedulesDateChange(e, index, true)"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -448,22 +450,21 @@ export default {
     getDateBirthDay,
     getEndTime,
 
-    changDate(e, index, isTo) {
-      if (isTo) {
-        if(this.schedules[index].from_date > e ) {
-          this.schedules[index].to_date = '';
-        } else {
-          this.schedules[index].to_date = e;
-        }
-      } else {     
-        if(this.schedules[index].to_date < e ) {
-          this.schedules[index].from_date = '';
-        } else {
-          this.schedules[index].from_date = e;
-        }
-      }
-      console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
-
+    schedulesDateChange(e, index, isTo) {
+      // if (isTo) {
+      //   if(this.schedules[index].from_date > e ) {
+      //     this.schedules[index].to_date = '';
+      //   } else {
+      //     this.schedules[index].to_date = e;
+      //   }
+      // } else {     
+      //   if(this.schedules[index].to_date < e ) {
+      //     this.schedules[index].from_date = '';
+      //   } else {
+      //     this.schedules[index].from_date = e;
+      //   }
+      // }
+      ///console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
     },
 
     checkIncules(list, val){
@@ -635,7 +636,7 @@ export default {
           : "";
         await this.$store.dispatch(
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId, status: 'APPROVED', hidden: false} }
+          { params: {teacher_id: userId, status: 'APPROVED'} }
         );
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];

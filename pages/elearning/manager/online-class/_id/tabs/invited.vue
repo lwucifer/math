@@ -1,6 +1,5 @@
 <template>
   <div class="elearning-wrapper">
-
     <!--Filter form-->
     <div class="filter-form">
       <div class="d-flex">
@@ -43,7 +42,7 @@
 
         <div class="filter-form__item top" @click="openModal = true">
           <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
-            <IconPlusCircle class="mr-2 fill-white"/>
+            <IconPlusCircle class="mr-2 fill-white" />
             <span class="color-white">Mời thêm học sinh</span>
           </app-button>
         </div>
@@ -64,45 +63,65 @@
         <td>
           <span class="isblock">
             {{row.student_name}}
-            <IconLock2 class="fill-red" width="14" height="14" v-if="row.banned"/>
+            <IconLock2 class="fill-red" width="14" height="14" v-if="row.banned" />
           </span>
         </td>
       </template>
-     
+
       <template v-slot:cell(attendance)="{row}">
         <td>
           <div class="attendance-points">
             <div class="points">
               <span class="bg-green">
-                {{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%
+                {{row.total_lesson_finished_from_joined_time ?
+                row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
               </span>
               <span class="bg-red">
-                {{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%
+                {{row.total_lesson_finished_from_joined_time ?
+                row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
               </span>
               <span class="bg-yellow">
-                {{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%
+                {{row.total_lesson_finished_from_joined_time ?
+                row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
               </span>
               <span class="bg-blue">
-                {{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%
+                {{row.total_lesson_finished_from_joined_time ?
+                row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
               </span>
             </div>
             <div class="desc">
               <div class="content">
-              <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
-              <div class="row mt-3">
-                <div class="col-6 mb-3">
-                  Có mặt: <span class="color-primary">{{row.num_attendance/row.total_lesson_finished_from_joined_time * 100}}%</span>
+                <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
+                <div class="row mt-3">
+                  <div class="col-6 mb-3">
+                    Có mặt:
+                    <span class="color-primary">
+                      {{row.total_lesson_finished_from_joined_time ?
+                      row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                    </span>
+                  </div>
+                  <div class="col-6 mb-3">
+                    Có phép:
+                    <span class="color-yellow">
+                      {{row.total_lesson_finished_from_joined_time ?
+                      row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                    </span>
+                  </div>
+                  <div class="col-6 mb-3">
+                    Không phép:
+                    <span class="color-red">
+                      {{row.total_lesson_finished_from_joined_time ?
+                      row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                    </span>
+                  </div>
+                  <div class="col-6 mb-3">
+                    Vào muộn:
+                    <span class="color-blue">
+                      {{row.total_lesson_finished_from_joined_time ?
+                      row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                    </span>
+                  </div>
                 </div>
-                <div class="col-6 mb-3">
-                  Có phép: <span class="color-yellow">{{row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
-                </div>
-                <div class="col-6 mb-3">
-                  Không phép: <span class="color-red">{{row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100}}%</span>
-                </div>
-                <div class="col-6 mb-3">
-                  Vào muộn: <span class="color-blue">{{row.num_late/row.total_lesson_finished_from_joined_time * 100}}%</span>
-                </div>
-              </div>
               </div>
               <div class="arroư"></div>
             </div>
@@ -112,32 +131,36 @@
 
       <template v-slot:cell(banned)="{row}">
         <td class="nowrap">
-          <button class="btn-block" type="button" @click="block(row.user_id, row.banned)" v-if="!row.banned" >
-            <IconLock2 class="fill-red" width="16" height="16"/>
+          <button
+            class="btn-block"
+            type="button"
+            @click="block(row.user_id, row.banned)"
+            v-if="!row.banned"
+          >
+            <IconLock2 class="fill-red" width="16" height="16" />
             <span>Chặn học sinh này</span>
           </button>
           <button class="btn-block" type="button" @click="block(row.user_id, row.banned)" v-else>
-            <IconLockOpenAlt class="fill-primary" width="16" height="16"/>
+            <IconLockOpenAlt class="fill-primary" width="16" height="16" />
             <span>Bỏ chặn học sinh này</span>
           </button>
         </td>
       </template>
       <template v-slot:cell(attendance_point)="{row}">
-        <td>
-          {{row.attendance_point}}%
-        </td>
+        <td>{{row.attendance_point}}%</td>
       </template>
     </app-table>
     <!--End table-->
 
     <div class="pl-4 pr-4 mt-4">
       <i class="color-999">
-        *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+        *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
+        <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
       </i>
     </div>
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="closeModal" v-if="openModal"/>
+    <ModalInviteStudent @close="closeModal" v-if="openModal" />
     <!-- End -->
   </div>
 </template>
@@ -148,11 +171,11 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
-import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
-import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent"
-import IconLock2 from '~/assets/svg/icons/lock2.svg?inline';
-import IconLockOpenAlt from '~/assets/svg/design-icons/lock-open-alt.svg?inline';
-import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
+import ModalInviteStudent from "~/components/page/elearning/manager/olclass/ModalInviteStudent";
+import IconLock2 from "~/assets/svg/icons/lock2.svg?inline";
+import IconLockOpenAlt from "~/assets/svg/design-icons/lock-open-alt.svg?inline";
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 
 import { get } from "lodash";
 import { mapState } from "vuex";
@@ -162,7 +185,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 
-export default {    
+export default {
   components: {
     IconFilter,
     IconSearch,
@@ -182,7 +205,7 @@ export default {
     return {
       allOpt: {
         value: null,
-        text: 'Tất cả'
+        text: "Tất cả"
       },
       openModal: false,
       showFilter: false,
@@ -229,7 +252,7 @@ export default {
         query: null
       },
       loading: false,
-      listSchoolClasses: [],
+      listSchoolClasses: []
     };
   },
 
@@ -242,7 +265,7 @@ export default {
       stateSchoolClasses: "schoolClasses"
     }),
     courseOpts() {
-      return [this.allOpt, ...this.courses]
+      return [this.allOpt, ...this.courses];
     }
   },
 
@@ -250,9 +273,7 @@ export default {
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
-        this.params = {...this.params,
-          class_id: null
-        }
+        this.params = { ...this.params, class_id: null };
         this.getList();
       }
       this.showFilter = !this.showFilter;
@@ -270,27 +291,26 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = {...this.params};
+      this.params = { ...this.params };
       this.getList();
     },
     handleChangedCourse() {
       this.params.class_id = this.filterCourse.value;
       this.getList();
     },
-    handleFocusSearchInput() {
-    },
-    handleBlurSearchInput() {
-    },
-    handleSearch() {
-    },
+    handleFocusSearchInput() {},
+    handleBlurSearchInput() {},
+    handleSearch() {},
     selectRow(data) {
       this.ids = data.map((row, index, data) => {
-          return row.online_class_id
+        return row.online_class_id;
       });
     },
 
     async block(studentId, isBlock) {
-      const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+      const online_class_id = this.$route.params.id
+        ? this.$route.params.id
+        : "";
       const params = {
         online_class_id: online_class_id,
         user_id: parseInt(studentId)
@@ -317,29 +337,42 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        const online_class_id = this.$route.params.id
+          ? this.$route.params.id
+          : "";
         this.params.online_class_id = online_class_id;
-        if ( this.filterCourse ) {
-          this.params.class_id = this.filterCourse.value
+        if (this.filterCourse) {
+          this.params.class_id = this.filterCourse.value;
         }
         let params = { ...this.params };
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_STUDENTS.LIST}`,
           { params }
         );
-        this.students = this.get(this.stateInvites, 'data.content', [])
-        console.log('xxxxxxx', this.stateInvites)
-        this.pagination.size = this.get(this.stateInvites, 'data.size', 10)
-        this.pagination.first = this.get(this.stateInvites, 'data.first', 1)
-        this.pagination.last = this.get(this.stateInvites, 'data.last', 1)
-        this.pagination.number = this.get(this.stateInvites, 'data.number', 0)
-        this.pagination.total_pages = this.get(this.stateInvites, 'data.total_pages', 0)
-        this.pagination.total_elements = this.get(this.stateInvites, 'data.total_elements', 0)
-        this.pagination.number_of_elements = this.get(this.stateInvites, 'data.number_of_elements', 0)
+        this.students = this.get(this.stateInvites, "data.content", []);
+        console.log("xxxxxxx", this.stateInvites);
+        this.pagination.size = this.get(this.stateInvites, "data.size", 10);
+        this.pagination.first = this.get(this.stateInvites, "data.first", 1);
+        this.pagination.last = this.get(this.stateInvites, "data.last", 1);
+        this.pagination.number = this.get(this.stateInvites, "data.number", 0);
+        this.pagination.total_pages = this.get(
+          this.stateInvites,
+          "data.total_pages",
+          0
+        );
+        this.pagination.total_elements = this.get(
+          this.stateInvites,
+          "data.total_elements",
+          0
+        );
+        this.pagination.number_of_elements = this.get(
+          this.stateInvites,
+          "data.number_of_elements",
+          0
+        );
       } catch (e) {
-
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
 
