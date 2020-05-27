@@ -41,6 +41,8 @@
       multiple-selection
       @pagechange="onPageChange"
       @selectionChange="selectRow"
+      order-by="created_at"
+      order="asc"
     >
       <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'name', '')">
