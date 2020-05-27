@@ -8,11 +8,11 @@
         luận
       </h5>
       <div class="ml-auto">
-        <app-search
+        <!-- <app-search
           class="mb-0 mr-4"
           placeholder="Tìm kiếm bình luận"
           size="sm"
-        />
+        /> -->
         <app-select
           placeholder="Sắp xếp theo"
           size="sm"
@@ -41,7 +41,10 @@
       <div
         @click="handleLoadMoreQuestion"
         class="text-center"
-        v-if="!get(questions, 'page.last', true)"
+        v-if="
+          !get(questions, 'page.last', true) &&
+            get(questions, 'page.total_elements', 0)
+        "
       >
         <a class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>

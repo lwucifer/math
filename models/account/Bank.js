@@ -9,11 +9,14 @@ class AddBank{
         if (payload.bank_code) {
             this.bank_code = payload.bank_code;
         }
-        if (payload.bank_code) {
-            this.bank_code = payload.bank_code;
+        if (payload.bank_name) {
+            this.bank_name = payload.bank_name;
         }
         if (payload.id) {
             this.id = payload.id;
+        }
+        if (payload.branch) {
+            this.branch = payload.branch;
         }
         if (payload.is_testing) {
             this.is_testing = payload.is_testing;

@@ -268,7 +268,7 @@ export default {
           : "";
         await this.$store.dispatch(
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
+          { params: {teacher_id: userId, status: 'APPROVED'} }
         );
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];

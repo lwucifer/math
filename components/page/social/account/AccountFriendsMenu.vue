@@ -2,13 +2,7 @@
   <div>
     <section class="bg-white">
       <account-cover />
-      <tab-menu
-        :list="menus"
-        active="friends"
-        class="sa__menu"
-        @selectedItem="changeTab"
-      >
-      </tab-menu>
+      <account-menu active="friends"/>
     </section>
     <div class="wrap-account-friends-social">
       <div class="d-flex align-items-center">
@@ -18,7 +12,7 @@
       </div>
       <tab-menu
         :list="menuFriend"
-        active="all"
+        :active="active"
         class=""
         @selectedItem="changeTabFriends"
       >
@@ -31,31 +25,22 @@
 <script>
   import AccountCover from '~/components/page/social/account/AccountCover.vue'
   import AccountFriendSearch from '~/components/page/social/account/AccountFriendSearch'
+  import AccountMenu from '~/components/page/social/account/AccountMenu.vue'
+   import { get } from 'lodash'
   export default {
     components: {
       AccountCover,
-      AccountFriendSearch
+      AccountFriendSearch,
+      AccountMenu
+    },
+    props: {
+      active: {
+        type: String,
+        required: true
+      }
     },
     data() {
       return {
-        menus: [
-          {
-            key: 'timeline',
-            text: 'Dòng thời gian'
-          },
-          {
-            key: 'intro',
-            text: 'Giới thiệu'
-          },
-          {
-            key: 'friends',
-            text: 'Bạn bè'
-          },
-          {
-            key: 'gallery',
-            text: 'Ảnh'
-          },
-        ],
         menuFriend: [
           {
             key: 'all',
@@ -77,11 +62,27 @@
       }
     },
     methods: {
-      changeTab(item) {
-        this.$emit('changeCnt', item)
-      },
       changeTabFriends(f){
           this.$emit('changeFriendItem',f)
+          console.log('changeFriendUten',f)
+          const id = get(this.$router,'params.id', 14)
+          const selectItem = f
+          switch (selectItem) {
+            case 'all':
+              this.$router.push(`/social/account/${id}/friends`)
+              break;
+            case 'recent':
+              this.$router.push(`/social/account/${id}/friends-recent`)
+              break;
+            case 'birthday':
+              this.$router.push(`/social/account/${id}/friends-birthday`)
+              break;
+            case 'request':
+              this.$router.push(`/social/account/${id}/friends-request`)
+              break;
+            default:
+              this.$router.push(`/social/account/${id}/friends`)
+          }
       }
     }
   }

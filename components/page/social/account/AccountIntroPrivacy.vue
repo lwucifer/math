@@ -4,9 +4,9 @@
         popoverClass="tooltip-privacy"
       >
           <button >
-        <IconPublicon v-if="privacy"/>
-        <IconLock v-else/>
-      </button>
+            <IconPublicon v-if="privacy"/>
+            <IconLock v-else/>
+        </button>
       <template slot="popover">
           <div class="wrap-select-privacy">
             <label class="item" :class="activePrivate ? 'active' : ''">
@@ -64,43 +64,5 @@ export default {
 </script>
 
 <style lang="scss">
-.wrap-account-btn-privacy{
-    svg{
-        width: 20px;
-        height: 20px;
-        path{fill :#656565 !important;}
-    }
-}
- .tooltip-privacy{
-        z-index: 11;
-        .tooltip-inner{
-            .wrap-select-privacy{
-                padding: 10px 0;
-                .item{
-                    display: flex;
-                    align-content: center;
-                    cursor: pointer;
-                    &:hover{
-                        color: $color-primary;
-                        svg path {fill:$color-primary !important}
-                    }
-                    .text-item{
-                        width: 8.5rem;
-                    }
-                    &:first-child{
-                        margin-bottom: 2rem;
-                    }
-                    svg{
-                        width: 20px;
-                        height: 20px;
-                        path{fill :#656565 !important;}
-                    }
-                }
-                .active{
-                    color: $color-primary;
-                    svg path {fill:$color-primary !important}
-                }
-            }
-        }
-}
+
 </style>

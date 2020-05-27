@@ -419,6 +419,10 @@ export const ELEARNING_STUDY_PROGRESS = {
     SET_STUDY_PROGRESS_CURRENT_SESSION: "setStudyProgressCurrentSession",
 };
 
+export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
+    SET_ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS_LIST: "setElearningStudyOlclassLessonSessionsList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -430,6 +434,7 @@ export const ELEARNING_SCHOOL_SEARCH = {
 export const ELEARNING_SCHOOL_STANDALONE = {
     SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
+
 
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",

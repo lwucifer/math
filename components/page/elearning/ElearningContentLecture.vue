@@ -2,7 +2,20 @@
   <div class="evlc-item mt-3">
     <div class="evlc-item__head bg-input-gray">
       <div class="evlc-item__head-left d-inline-flex align-items-center mr-4">
-        <IconLibraryBooks class="icon body-1 mr-2 text-primary" />
+        <IconPlay
+          width="16px"
+          height="16px"
+          v-if="get(lesson, 'type', '') == 'VIDEO'"
+          class="mr-2 fill-primary"
+        />
+
+        <IconLibraryBooks
+          width="16px"
+          height="16px"
+          v-else
+          class="mr-2 fill-primary"
+        />
+
         Bài 1: {{ get(lesson, "name", "") }}
       </div>
       <div class="ml-auto">{{ get(lesson, "duration", "01:00") }}</div>
@@ -30,6 +43,7 @@
 //   import("~/assets/svg/design-icons/file-alt.svg?inline");
 // import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconLibraryBooks from "~/assets/svg/icons/library-books.svg?inline";
+import IconPlay from "~/assets/svg/icons/play.svg?inline";
 import { get } from "lodash";
 import { mapState } from "vuex";
 
@@ -38,6 +52,7 @@ export default {
     // IconFileAlt,
     // IconAngleDown,
     IconLibraryBooks,
+    IconPlay,
   },
   methods: {
     get,

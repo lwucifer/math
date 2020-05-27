@@ -1,0 +1,70 @@
+.wrap-account-btn-privacy{
+    svg{
+        width: 20px;
+        height: 20px;
+        path{fill :#656565 !important;}
+    }
+    &:hover{
+        svg path {fill: $color-primary !important;}
+    }
+    .open{
+        svg path {fill: $color-primary !important;}
+    }
+}
+ .tooltip-privacy{
+        z-index: 11;
+        .tooltip-inner{
+            .wrap-select-privacy{
+                padding: 10px 0;
+                .item{
+                    display: flex;
+                    align-content: center;
+                    cursor: pointer;
+                    &:hover{
+                        color: $color-primary;
+                        svg path {fill:$color-primary !important}
+                    }
+                    .text-item{
+                        width: 8.5rem;
+                    }
+                    &:first-child{
+                        margin-bottom: 2rem;
+                    }
+                    svg{
+                        width: 20px;
+                        height: 20px;
+                        path{fill :#656565 !important;}
+                    }
+                }
+                .active{
+                    color: $color-primary;
+                    svg path {fill:$color-primary !important}
+                }
+            }
+        }
+}
+.wrap-account-intro-social{
+    padding:2.2rem;
+    background: #FFFFFF;
+    margin-top: 1rem;
+    p:first-child{
+        font-weight: 600;
+    }
+    .row{
+        margin-bottom: 25px;
+        &:last-child{
+            margin-bottom: 0;;
+        }
+        .btn-hover{
+           svg{
+               width: 20px;
+                height: 20px;
+           }
+        }
+    }
+    .icon-building{
+        path{
+            fill: #656565;
+        }
+    }
+}

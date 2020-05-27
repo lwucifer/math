@@ -5,23 +5,23 @@
         v-model="lessonStatus"
         ref="completedCheckbox"
         :style="{
-          'pointer-events':
-            isLessonCompleted ? 'none' : 'inherit'
+          'pointer-events': isLessonCompleted ? 'none' : 'inherit',
         }"
         @change="isShowCompleteStudy = true"
       />
     </div>
 
     <div class="e-program-item__right">
-      <a
-        href
-        class="e-program-item__title"
-        @click.prevent="handleStuty(lesson)"
-      >{{ `${get(lesson, "index", "0")}.` }} {{ get(lesson, "name", "") }}</a>
+      <a href class="e-program-item__title" @click.prevent="handleStuty(lesson)"
+        >{{ `${index}.` }} {{ get(lesson, "name", "") }}</a
+      >
 
       <div class="e-program-item__bottom">
         <div class="e-program-item__time">
-          <span v-if="isShowVideoLesson" class="d-inline-flex align-items-center">
+          <span
+            v-if="isShowVideoLesson"
+            class="d-inline-flex align-items-center"
+          >
             <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
             <span>{{ durationTimes }}</span>
           </span>
@@ -52,7 +52,10 @@
             class="e-program-item__download-tooltip"
             position="topCenter"
           >
-            <span slot="activator" class="d-inline-flex align-items-center text-decoration-none">
+            <span
+              slot="activator"
+              class="d-inline-flex align-items-center text-decoration-none"
+            >
               <IconFileDownloadAlt class="icon body-1 text-info" />
             </span>
 
@@ -101,12 +104,12 @@ import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
-  LESSION_TYPE
+  LESSION_TYPE,
 } from "~/utils/constants";
 import {
   redirectWithParams,
   getParamQuery,
-  getCountdown_MM_SS
+  getCountdown_MM_SS,
 } from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
@@ -128,14 +131,15 @@ export default {
     IconFileCheckAlt,
     IconSlowMotionVideo,
     IconFileDownloadAlt,
-    IconEventNote
+    IconEventNote,
   },
 
   props: {
     lesson: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
+    index: {},
   },
 
   data() {
@@ -145,9 +149,9 @@ export default {
       notify: {
         type: "",
         description: "",
-        isShowNotify: false
+        isShowNotify: false,
       },
-      lessonStatus: false
+      lessonStatus: false,
     };
   },
 
@@ -210,13 +214,13 @@ export default {
     },
 
     isLessonCompleted() {
-      const status = get(this.lesson, 'status', 0);
+      const status = get(this.lesson, "status", 0);
       return status == this.lessonCompleted;
     },
 
     lesson_docs() {
-      return get(this.lesson, 'lesson_docs', []);
-    }
+      return get(this.lesson, "lesson_docs", []);
+    },
   },
 
   methods: {
@@ -224,8 +228,8 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
         params: {
-          elearning_id
-        }
+          elearning_id,
+        },
       };
       this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
@@ -235,7 +239,7 @@ export default {
     async handleCompleteStudy() {
       const payload = {
         completed: true,
-        lesson_id: get(this, "lesson.id", "")
+        lesson_id: get(this, "lesson.id", ""),
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
       console.log("[handleCompleteStudy]", res);
@@ -245,16 +249,16 @@ export default {
     },
     get,
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList"
+      "elearningSudyElearningExerciseList",
     ]),
 
     ...mapMutations("event", [
       "setStudyMode",
       "setPayload",
-      "setExerciseLoading"
+      "setExerciseLoading",
     ]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession"
+      "setStudyExerciseCurrentLession",
     ]),
 
     async handleStuty(lesson) {
@@ -327,7 +331,7 @@ export default {
         this.notify = {
           type: "error",
           title: msgErr,
-          isShowNotify: true
+          isShowNotify: true,
         };
       }
 
@@ -341,7 +345,7 @@ export default {
       this.lessonStatus = false;
       // this.$refs.completedCheckbox.checked = false;
       console.log("[closeConfirmCompleteStudy]", this.$refs);
-    }
+    },
   },
 
   watch: {
@@ -350,8 +354,8 @@ export default {
       if (_newVal) {
         this.handleGetExercises();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
