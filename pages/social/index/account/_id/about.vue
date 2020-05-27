@@ -2,13 +2,7 @@
   <div>
     <section class="bg-white">
       <account-cover />
-      <tab-menu
-        :list="menus"
-        active="intro"
-        class="sa__menu"
-        @selectedItem="changeTab"
-      >
-      </tab-menu>
+      <account-menu active="intro"/>
     </section>
     <AccountIntro/>
     <AccountIntroWork 
@@ -26,32 +20,17 @@
   import AccountCover from '~/components/page/social/account/AccountCover.vue';
   import AccountIntro from '~/components/page/social/account/AccountIntro.vue';
   import AccountIntroWork from '~/components/page/social/account/AccountIntroWork';
+  import AccountMenu from '~/components/page/social/account/AccountMenu.vue'
+
   export default {
     components: {
       AccountCover,
       AccountIntro,
-      AccountIntroWork
+      AccountIntroWork,
+      AccountMenu
     },
     data() {
       return {
-        menus: [
-          {
-            key: 'timeline',
-            text: 'Dòng thời gian'
-          },
-          {
-            key: 'intro',
-            text: 'Giới thiệu'
-          },
-          {
-            key: 'friends',
-            text: 'Bạn bè'
-          },
-          {
-            key: 'gallery',
-            text: 'Ảnh'
-          },
-        ],
         work:{
           class:"10A",
           school:"Trường THPT Nguyễn Trãi",
@@ -67,6 +46,6 @@
   }
 </script>
 
-<style>
-
+<style lang="scss">
+@import "~/assets/scss/components/social/_social-account-about.scss";
 </style>

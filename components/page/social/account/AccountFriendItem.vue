@@ -8,7 +8,7 @@
       <div class="d-flex flex-column">
           <h6>Nguyễn Hoàng Liên Sơn</h6>
           <span class="mb-3" v-if="!birthday">61 Bạn chung</span>
-          <div class="mb-2 text-primary" v-if="birthday && friend">
+          <div class="mb-3 text-primary" v-if="birthday && friend">
                 <IconCake24px class="icon mr-2"/>
                 <span>Hôm nay</span>
             </div>

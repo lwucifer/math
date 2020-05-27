@@ -49,9 +49,5 @@ export default {
 </script>
 
 <style lang="scss">
-.icon-building{
-    path{
-        fill: #656565;
-    }
-}
+
 </style>
