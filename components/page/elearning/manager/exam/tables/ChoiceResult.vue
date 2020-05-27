@@ -8,48 +8,8 @@
       :need-pagination="false"
     >
       <template v-slot:cell(question)="{row, index}">
-        <!--<td-->
-          <!--class="table&#45;&#45;question-test__question-index"-->
-          <!--title="Chi tiết"-->
-          <!--@click="clickQuestion({row, index})"-->
-        <!--&gt;-->
-        <td
-          class="table--question-test__question-index"
-        >
-          
-          <!--<v-popover-->
-            <!--class="tooltip&#45;&#45;question"-->
-            <!--:open="index == currentQuestionIndex"-->
-            <!--offset="10"-->
-          <!--&gt;-->
-          <v-popover
-            class="tooltip--question"
-            offset="10"
-            trigger="hover"
-          >
-            <div>
-              <div v-html="get(row, 'content', '')"></div>
-            </div>
-            
-            <template slot="popover" class="tooltip-detail">
-              <div class="text-right">
-                <span v-close-popover class="icon-close" title="Đóng">
-                <IconClose/>
-              </span>
-              </div>
-              <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
-              <!--<div v-if="loadingQuestion" class="text-center">-->
-                <!--<app-spin></app-spin>-->
-              <!--</div>-->
-              <choice-question-detail
-                style="min-width: 41rem; max-width: 75rem;"
-                :content="get(row, 'content')"
-                :options="get(row, 'answers')"
-              />
-            </template>
-          
-          </v-popover>
-        
+        <td>
+          <div v-html="get(row, 'content', '')"></div>
         </td>
       </template>
   
@@ -61,7 +21,33 @@
   
       <template v-slot:cell(correct_answer)="{row}">
         <td>
-          {{ row | trueAns }}
+          <v-popover
+            class="tooltip--question"
+            offset="10"
+            trigger="hover"
+          >
+            <div>
+              <span>{{ row | trueAns }}</span>
+            </div>
+    
+            <template slot="popover" class="tooltip-detail">
+              <div class="text-right">
+                <span v-close-popover class="icon-close" title="Đóng">
+                <IconClose/>
+              </span>
+              </div>
+              <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
+              <!--<div v-if="loadingQuestion" class="text-center">-->
+              <!--<app-spin></app-spin>-->
+              <!--</div>-->
+              <choice-question-detail
+                style="min-width: 41rem; max-width: 75rem;"
+                :content="get(row, 'content')"
+                :options="get(row, 'answers')"
+              />
+            </template>
+  
+          </v-popover>
         </td>
       </template>
     </app-table><!--End table-->

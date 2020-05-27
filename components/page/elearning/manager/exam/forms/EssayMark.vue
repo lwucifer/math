@@ -1,7 +1,7 @@
 <template>
   <div class="writting-test-score">
     <div class="writting-test-score__form">
-      <div class="item">
+      <div class="item" v-if="pending">
         <label for="" class="content-title">Nhận xét chi biết bài làm của học sinh</label>
         <app-editor id="comment" v-model="$v.formData.note.$model"/>
       </div>
@@ -14,12 +14,12 @@
         </point-choice>
       </div>
       
-      <div class="item mt-4">
+      <div class="item mt-4" title="Học sinh cần phải hết lượt làm bài để có thể cho qua" v-if="canPass && failed">
         <app-checkbox
           v-model="$v.formData.to_passed.$model"
           label="Cho qua"
           style="color: #333;"
-          :disabled="formData.mark != '' && formData.mark != null && failed == false"
+          :disabled="(formData.mark != '' && formData.mark != null && failed == false) || (!canPass)"
           :class="{ 'disabled': formData.mark != '' && formData.mark != null, 'app-input--error': get($v, 'formData.to_passed.$error', true) }"
         >
         </app-checkbox>
@@ -28,7 +28,7 @@
         </p>
       </div>
 
-      <div class="item text-center">
+      <div class="item text-center" v-if="pending || (failed && canPass)">
         <app-button
           normal
           @click="submit"
@@ -77,6 +77,10 @@
       PointChoice
     },
     props: {
+      remainWork: {
+        type: String | Number,
+        default: 0,
+      },
       pending: {
         type: Boolean
       },
@@ -115,8 +119,9 @@
           between: between(0.0, 10.0)
         },
         note: {
-          minLength: minLength(5),
-          maxLength: maxLength(500)
+          required: true,
+          minLength: minLength(8),
+          // maxLength: maxLength(500)
         },
         to_passed: {
           required: requiredIf(function (model) {
@@ -127,6 +132,11 @@
     },
     watch: {
     
+    },
+    computed: {
+      canPass() {
+        return this.remainWork <= 0
+      }
     },
     methods: {
       submit() {
