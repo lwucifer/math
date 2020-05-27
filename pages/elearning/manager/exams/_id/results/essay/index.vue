@@ -25,6 +25,7 @@
       :score-to-pass="get(this, 'detail.pass_score', 5)"
       :pending="isPending"
       :failed="isFail"
+      :remain-work="get(this, 'detail.remain_works', 0)"
       @submit="handleMark"
     />
   

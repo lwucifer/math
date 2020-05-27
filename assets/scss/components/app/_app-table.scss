@@ -11,9 +11,9 @@
             visibility: hidden;
             height: 18px;
             width: 12px;
-            text-align: right;
+            //text-align: right;
             position: absolute;
-            right: 0;
+            //right: 0;
             top: calc(50% - 9px);
             svg path {
                 fill: #222;
@@ -52,7 +52,7 @@
                 }
     
                 .btn-sort {
-                    right: calc(1rem + 3px);
+                    //right: calc(1rem + 3px);
                 }
             }
         }

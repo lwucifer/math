@@ -47,9 +47,9 @@
           
         </td>
       </template>
-      <template v-slot:cell(year)="{row}">
+      <template v-slot:cell(school_year)="{row}">
         <td>
-          {{ get(row, 'year', '--') }}
+          {{ get(row, 'school_year', '--') }}
         </td>
       </template>
       <template v-slot:cell(submission)="{row}">
@@ -120,7 +120,7 @@
             text: "Lớp",
           },
           {
-            name: "year",
+            name: "school_year",
             text: "Năm học",
           },
           {

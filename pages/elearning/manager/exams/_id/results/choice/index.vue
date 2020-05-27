@@ -18,14 +18,15 @@
       class="py-3"
       :list.sync="submissionContent"
     />
-  
+    
     <!--Form-->
     <mark-form-section
       class="mt-4"
       v-if="isFailed"
+      :remain-work="get(this, 'detail.remain_works', 0)"
       @submit="handleMark"
     />
-  
+    
     <app-modal-confirm
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
@@ -36,7 +37,7 @@
       @cancel="cancelMark"
     >
     </app-modal-confirm>
-  
+    
     <app-modal-notify
       v-if="showModalError"
       type="warning"
@@ -46,9 +47,10 @@
       @close="showModalError = false"
     >
       <template v-slot:icon>
-    
+      
       </template>
     </app-modal-notify>
+  
   </div>
 </template>
 
@@ -57,22 +59,22 @@
   import MarkFormSection from "~/components/page/elearning/manager/exam/forms/ChoiceMark"
   import ResultTableSection from "~/components/page/elearning/manager/exam/tables/ChoiceResult"
   import {mapState} from "vuex"
-  import { subResult2Txt } from "~/plugins/filters"
+  import {subResult2Txt} from "~/plugins/filters"
   import * as actionTypes from "~/utils/action-types"
-  import { get } from "lodash"
-  import { SUBMISSION_RESULTS } from "~/utils/constants"
-  import { getParamQuery } from "~/utils/common"
-  import { createPayloadAddEvaluation } from "~/models/elearning/Evaluation"
-
+  import {get} from "lodash"
+  import {SUBMISSION_RESULTS} from "~/utils/constants"
+  import {getParamQuery} from "~/utils/common"
+  import {createPayloadAddEvaluation} from "~/models/elearning/Evaluation"
+  
   const STORE_NAMESPACE = 'elearning/teaching/evaluation'
-
+  
   export default {
     layout: "manage",
     
     components: {
       MarkSection,
       MarkFormSection,
-      ResultTableSection
+      ResultTableSection,
     },
     props: {
       detail: {
@@ -93,22 +95,22 @@
     },
     computed: {
       ...mapState("auth", ["loggedUser"]),
-      isPass: function() {
+      isPass: function () {
         return get(this, 'detail.result', false) &&
           (get(this, 'detail.result', SUBMISSION_RESULTS.FAILED) == SUBMISSION_RESULTS.PASSED)
       },
-      isPending: function() {
+      isPending: function () {
         return get(this, 'detail.result', false) &&
           (get(this, 'detail.result', SUBMISSION_RESULTS.FAILED) == SUBMISSION_RESULTS.PENDING)
       },
-      isFailed: function() {
+      isFailed: function () {
         return get(this, 'detail.result') == SUBMISSION_RESULTS.FAILED
       },
-      hasMark: function() {
+      hasMark: function () {
         return get(this, 'detail.result', false) &&
           (get(this, 'detail.result', '') != SUBMISSION_RESULTS.PENDING)
       },
-      result: function() {
+      result: function () {
         if (
           get(this, 'detail.result', false) &&
           get(this, 'detail.result') == SUBMISSION_RESULTS.PENDING
@@ -125,14 +127,13 @@
       resultDesc() {
         return `Số lần làm bài còn lại: ${get(this, 'detail.remain_works', 0)}`
       },
-      submissionContent: function() {
+      submissionContent: function () {
         return get(this, 'detail.question_list', [])
       }
     },
-
     methods: {
       handleMark(content) {
-        this.payload = { ...this.payload, ...content }
+        this.payload = {...this.payload, ...content}
         this.showModalConfirm = true
       },
       async confirmMark() {
@@ -162,7 +163,7 @@
       get,
       getParamQuery
     },
-
+    
     created() {
     }
   }
