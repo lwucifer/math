@@ -98,12 +98,12 @@
                 class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.room_id)"
+                @click="pushUrl(item.id)"
               >
                 <div class="left d-flex">
                   <div class="align-item__image">
                     <app-avatar
-                      :src=" item.room_avatar_member ? item.room_avatar_member : ''"
+                      :src=" item.room_avatar_member ? item.room_avatar_member : 'https://picsum.photos/60/60'"
                       size="md"
                       class="comment-item__avatar"
                     />
@@ -111,10 +111,7 @@
 
                   <div class="align-item__meta">
                     <h5 class="align-item__title">
-                      <n-link
-                        slot="title"
-                        to
-                      >{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
+                      <n-link slot="title" to>{{ item.name ? item.name : '' }}</n-link>
                     </h5>
                     <div class="align-item__desc">
                       <p>{{ item.content }}</p>
@@ -161,7 +158,7 @@
             </template>
           </div>
 
-          <div class="tabs-content" v-show="tabChat == false">
+          <!-- <div class="tabs-content" v-show="tabChat == false">
             <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -220,7 +217,7 @@
                 </infinite-loading>
               </client-only>
             </template>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -343,7 +340,11 @@ export default {
       // dataPushGroup: [],
       dataGroupLeave: {},
       checkChatList: false,
-      checkGroupList: false
+      checkGroupList: false,
+      roomQuery: {
+        page: 1,
+        limit: 10
+      }
     };
   },
   computed: {
@@ -357,76 +358,84 @@ export default {
     ]),
     ...mapState("chat", ["roomList"]),
     ...mapGetters("auth", ["userId"]),
-    mapGroupList() {
-      const dataMapGroup =
-        this.groups &&
-        this.groups.listMessage &&
-        this.groups.listMessage.map(item => {
-          return {
-            ...item.message,
-            ...item.room,
-            ...item.sender,
-            message_id: item.message && item.message.id ? item.message.id : "",
-            room_id: item.room && item.room.id ? item.room.id : ""
-          };
-        });
-      // debugger;
-      const dataGroup = dataMapGroup.map(item => {
-        const [dataNoti] =
-          item &&
-          item.members &&
-          item.members.filter(item => item.user_id == this.userId);
-        // console.log("dataNoti", dataNoti);
-        const dataRoomName =
-          (
-            item.members[0].fullname +
-            ", " +
-            item.members[1].fullname
-          ).substring(0, 15) + "...";
-        // console.log("[dataRoomName]", dataRoomName);
-        return {
-          ...item,
-          room_name: item.room_name ? item.room_name : dataRoomName,
-          allow_notication:
-            dataNoti && dataNoti.allow_notication
-              ? dataNoti.allow_notication
-              : 0
-        };
-      });
-      return dataGroup;
-    },
+    // mapGroupList() {
+    //   const dataMapGroup =
+    //     this.groups &&
+    //     this.groups.listMessage &&
+    //     this.groups.listMessage.map(item => {
+    //       return {
+    //         ...item.message,
+    //         ...item.room,
+    //         ...item.sender,
+    //         message_id: item.message && item.message.id ? item.message.id : "",
+    //         room_id: item.room && item.room.id ? item.room.id : ""
+    //       };
+    //     });
+    //   // debugger;
+    //   const dataGroup = dataMapGroup.map(item => {
+    //     const [dataNoti] =
+    //       item &&
+    //       item.members &&
+    //       item.members.filter(item => item.user_id == this.userId);
+    //     // console.log("dataNoti", dataNoti);
+    //     const dataRoomName =
+    //       (
+    //         item.members[0].fullname +
+    //         ", " +
+    //         item.members[1].fullname
+    //       ).substring(0, 15) + "...";
+    //     // console.log("[dataRoomName]", dataRoomName);
+    //     return {
+    //       ...item,
+    //       room_name: item.room_name ? item.room_name : dataRoomName,
+    //       allow_notication:
+    //         dataNoti && dataNoti.allow_notication
+    //           ? dataNoti.allow_notication
+    //           : 0
+    //     };
+    //   });
+    //   return dataGroup;
+    // },
     mapChatList() {
-      const dataMap =
+      // const dataMap =
+      //   this.roomList &&
+      //   this.roomList.list_room &&
+      //   this.roomList.list_room.map(item => {
+      //     return {
+      //       ...item.message,
+      //       ...item.room,
+      //       ...item.sender,
+      //       message_id: item.message && item.message.id ? item.message.id : "",
+      //       room_id: item.room && item.room.id ? item.room.id : ""
+      //     };
+      //   });
+      // const data = dataMap.map(item => {
+      //   const [dataName] =
+      //     item &&
+      //     item.members &&
+      //     item.members.filter(item => item.user_id != this.userId);
+      //   const [dataNoti] = item.members.filter(
+      //     item => item.user_id == this.userId
+      //   );
+      //   return {
+      //     ...item,
+      //     name_sender: item.id == this.userId ? "Bạn" : item.fullname,
+      //     room_name_member: dataName.fullname ? dataName.fullname : "",
+      //     room_avatar_member: dataName.avatar.low ? dataName.avatar.low : "",
+      //     allow_notication:
+      //       dataNoti && dataNoti.allow_notication
+      //         ? dataNoti.allow_notication
+      //         : 0
+      //   };
+      // });
+      const data =
         this.roomList &&
-        this.roomList.listMessage &&
-        this.roomList.listMessage.map(item => {
+        this.roomList.list_room.map(item => {
           return {
-            ...item.message,
-            ...item.room,
-            ...item.sender,
-            message_id: item.message && item.message.id ? item.message.id : "",
-            room_id: item.room && item.room.id ? item.room.id : ""
+            ...item,
+            name: item && item.name ? item.name : ""
           };
         });
-      const data = dataMap.map(item => {
-        const [dataName] =
-          item &&
-          item.members &&
-          item.members.filter(item => item.user_id != this.userId);
-        const [dataNoti] = item.members.filter(
-          item => item.user_id == this.userId
-        );
-        return {
-          ...item,
-          name_sender: item.id == this.userId ? "Bạn" : item.fullname,
-          room_name_member: dataName.fullname ? dataName.fullname : "",
-          room_avatar_member: dataName.avatar.low ? dataName.avatar.low : "",
-          allow_notication:
-            dataNoti && dataNoti.allow_notication
-              ? dataNoti.allow_notication
-              : 0
-        };
-      });
       return data;
     }
   },
@@ -522,9 +531,7 @@ export default {
       const getData = await this.$store.dispatch(
         `chat/${actionTypes.CHAT.ROOM_LIST}`,
         {
-          params: {
-            page: get(this, "roomList.page.number", 0) + 1
-          }
+          params: this.roomQuery
         }
       );
       console.log("getData", getData);
@@ -532,8 +539,8 @@ export default {
       if (this.roomList.listMessage == 0) {
         this.checkChatList = true;
       }
-
-      if (getData.success && !isEmpty(getData.data)) {
+      if (getData && getData.list_room && getData.list_room.length > 0) {
+        this.roomQuery.page += 1;
         $state.loaded();
       } else {
         $state.complete();

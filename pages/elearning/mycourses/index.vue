@@ -27,6 +27,7 @@
       <ElearningItem
         slot-scope="{ item }"
         :elearning="item"
+        :tab="tab"
         @handleFavourite="handleFavourite"
         @handleDeleteFavourite="handleDeleteFavourite"
         @handleDeleteArchive="handleDeleteArchive"
