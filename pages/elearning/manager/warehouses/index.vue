@@ -34,6 +34,16 @@
         </sub-block-section>
       </div>
     </div>
+    <app-modal-notify
+      v-if="modal.notify"
+      :type="modal.type"
+      :title="modal.title"
+      :description="modal.description"
+      @ok="modal.notify = false"
+      @close="modal.notify = false"
+      centered
+    >
+    </app-modal-notify>
   </div>
 </template>
 
@@ -75,7 +85,13 @@
           size: 10,
         },
         list: [],
-        loading: false
+        loading: false,
+        modal: {
+          notify: false,
+          type: 'success',
+          title: '',
+          description: ''
+        }
       }
     },
     computed: {
@@ -153,10 +169,13 @@
       async deleteItems(data) {
         if (get(data, "success", false)) {
           await this.refreshData()
-          this.$toasted.success(get(data, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"), { position: 'top-center'})
-          return
+          this.modal.type = 'success'
+          this.modal.title = 'Xóa tài liệu thành công'
+        } else {
+          this.modal.type = 'error'
+          this.modal.title = 'Xóa tài liệu không thành công. Vui lòng thử lại'
         }
-        this.$toasted.error(get(data, "message", "Xóa tài liệu thành công"))
+        this.modal.notify = true
       },
       refreshData() {
         this.params.page = 1
