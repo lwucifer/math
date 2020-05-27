@@ -125,7 +125,6 @@ export default {
       await this.$store.dispatch(`elearning/create/getGeneral`, options);
       await Promise.all([
         this.$store.dispatch(`elearning/create/getContent`),
-        this.$store.dispatch(`elearning/create/getContent`),
         this.$store.dispatch("elearning/create/getLessons"),
         this.$store.dispatch(`elearning/create/getSetting`),
         this.$store.dispatch("elearning/create/getExams"),

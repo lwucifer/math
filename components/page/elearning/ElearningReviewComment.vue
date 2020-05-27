@@ -9,7 +9,7 @@
     <div class="elearning-review-comment__right flex-grow">
       <div class="elearning-review-comment__top d-flex-center">
         <div class="elearning-review-comment__info mr-5">
-          <strong>{{ get(review, "name", "") }}</strong>
+          <strong>{{ get(review, "creator.name", "") }}</strong>
           <app-stars :stars="get(review, 'vote', 0)" :size="15" class="ml-3" />
         </div>
 

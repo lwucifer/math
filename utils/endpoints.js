@@ -137,6 +137,7 @@ export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
+export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
 
 /**
  * SCHOOL
@@ -169,7 +170,7 @@ export const LIMIT_MESSAGES = `chat/social/api/message/getLimit`;
 export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
-export const ROOM = `chat/room`;
+export const ROOM = `chat/rooms`;
 
 /**
  * TEACHING

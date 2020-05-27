@@ -86,7 +86,6 @@ import { get } from "lodash";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { LESSION_ONLINE_STATUS, DAY_SECTION } from "~/utils/constants";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-import { TEACHING_OLCLASS_LESSON_SESSIONS } from "~/utils/action-types";
 
 import ModalWaitingOlClass from "~/components/page/elearning/study/olclass/ModalWaitingOlClass";
 import Timetable from "~/components/page/elearning/study/olclass/Timetable";
@@ -182,8 +181,8 @@ export default {
 
   methods: {
     get,
-    ...mapActions("elearning/teaching/olclass", [
-      "teachingOlclassLessonSessionsList"
+    ...mapActions("elearning/study/study-olclass", [
+      "elearningStudyOlclassLessonSessionsList"
     ]),
     ...mapActions("elearning/study/study", ["elearningStudyListTimetable"]),
 
@@ -195,10 +194,10 @@ export default {
       console.log("[handlJoinOlClass]", item);
       this.currentOlClass = item;
 
-      this.teachingOlclassLessonSessionsList({
+      this.elearningStudyOlclassLessonSessionsList({
         params: { online_class_id: item.id }
       }).then(res => {
-        console.log("[teachingOlclassLessonSessionsList] res", res);
+        console.log("[elearningStudyOlclassLessonSessionsList] res", res);
         if (res.success == RESPONSE_SUCCESS) {
           const tartgetClass = res.data;
           const sessions = tartgetClass.sessions || [];
