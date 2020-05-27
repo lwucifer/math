@@ -55,11 +55,13 @@
       @handleSelectFile="handleSelectFile"
       @handleSelectUrl="handleSelectUrl"
       v-if="tabType === 'video'"
+      @handleReset="handleReset"
     />
 
     <LessonSelectDocument
       v-if="tabType === 'document'"
       @handleSelectDocument="handleSelectDocument"
+      @handleReset="handleReset"
     />
 
     <div class="d-flex justify-content-end mt-4">
@@ -74,7 +76,7 @@
       <app-button
         class="clc-btn font-weight-semi-bold"
         size="md"
-        :disabled="!submit"
+        :disabled="!isSubmit"
         @click="handleAddContent"
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
@@ -179,12 +181,28 @@ export default {
     edit() {
       return !!get(this, "lesson.id", "");
     },
-    submit() {
-      return true;
+    isSubmit() {
+      let submit = true;
+      if (!get(this, "payload.name", true)) submit = false;
+      if (
+        !get(this, "payload.article_content", true) &&
+        !get(this, "payload.lesson", true) &&
+        !get(this, "payload.repository_file_id", true) &&
+        !get(this, "payload.id", true)
+      ) {
+        submit = false;
+      }
+      return submit;
     },
   },
 
   methods: {
+    handleReset() {
+      this.payload.article_content = "";
+      this.payload.lesson = "";
+      this.payload.repository_file_id = "";
+    },
+
     handleChangeName() {
       if (!this.payload.name) {
         return (this.error.name = "Chưa nhập tên bài học");
@@ -193,6 +211,7 @@ export default {
       this.error.name = "";
     },
     changeTabType(type) {
+      this.handleReset();
       this.tabType = type;
     },
 
