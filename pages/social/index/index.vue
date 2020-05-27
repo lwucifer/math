@@ -152,6 +152,8 @@
     <app-modal
       v-if="modalDetailShow"
       centered
+      :header="false"
+      :footer="false"
       :width="1170"
       :component-class="{ 'post-detail-modal': true }"
       @close="handleCloseModal"
@@ -238,7 +240,7 @@
       </PostShareContent>
     </PostModalShare>
 
-    <app-modal v-if="showModalEditPost" :width="770">
+    <app-modal v-if="showModalEditPost" :width="770" :header="false" :footer="false">
       <PostEditor
         slot="content"
         ref="editEditor"
