@@ -1,6 +1,6 @@
 <template>
   <div class="rate-status">
-    <p class="text-dark font-weight-semi-bold mb-2 rate-status__title">Tỉ lệ hoàn thành tính trên {{ total | toThousandFilter }} học sinh làm bài</p>
+    <p class="text-dark font-weight-semi-bold mb-2 rate-status__title">Tỉ lệ hoàn thành tính trên {{ totalExam | toThousandFilter }} bài nộp</p>
     <div class="d-md-flex justify-content-md-between rate-status__figure">
       <p>Đạt: <span class="text-success font-weight-semi-bold">{{ passed }}</span></p>
       <p>Không đạt: <span class="text-error font-weight-semi-bold">{{ failed }}</span></p>
@@ -14,7 +14,8 @@
     props: {
       total: {
         type: Number | String,
-        required: true
+        required: false,
+        default: 0
       },
       passed: {
         type: Number | String,
@@ -31,6 +32,11 @@
     },
 
     filters: {
+    },
+    computed: {
+      totalExam() {
+        return this.passed + this.failed + this.pending
+      }
     }
   }
 </script>

@@ -34,7 +34,7 @@
                 <app-content-box
                   v-for="item in freeCourses"
                   :key="item.id"
-                  class="align-items-center mb-4"
+                  class="mb-4"
                   size="sm"
                   :image="get(item, 'avatar.low', null)"
                 >
@@ -44,7 +44,7 @@
 
                   <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  <!-- <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link> -->
                 </app-content-box>
               </div>
 
@@ -52,7 +52,7 @@
                 <app-content-box
                   v-for="item in privateCourses"
                   :key="item.id"
-                  class="align-items-center mb-4"
+                  class="mb-4"
                   size="sm"
                   :image="get(item, 'avatar.low', null)"
                 >
@@ -62,7 +62,7 @@
 
                   <n-link slot="title" :to="`/elearning/${item.id}`">{{ item.name }}</n-link>
 
-                  <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link>
+                  <!-- <n-link slot="desc" to>{{ get(item, 'teacher.name', null) }}</n-link> -->
                 </app-content-box>
               </div>
 

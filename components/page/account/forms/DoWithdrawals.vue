@@ -17,6 +17,7 @@
                 class="app-vue-select mb-4"
                 size="sm"
                 @input="handleChangedBank"
+                has-border
               />
             </div>
             <!--<app-select-->

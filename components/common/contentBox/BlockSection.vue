@@ -5,8 +5,8 @@
       :class="titleCls"
     >
       <slot name="title">
-        <h3 class="block-section__title--main" @click="clickTitle">
-          <span @click="clickBack">
+        <h3 class="block-section__title--main" :class="titleType" @click="clickTitle">
+          <span @click="clickBack" class="d-flex align-items-center">
             <icon-left-arrow v-if="hasIcon" class="block-section__icon-title" title="Quay lại"/>
           </span>
           {{ title }}
@@ -28,6 +28,10 @@
       IconLeftArrow
     },
     props: {
+      titleTag: {
+        type: String,
+        default: 'h3'
+      },
       title: {
         type: String,
         required: true
@@ -47,6 +51,23 @@
         type: Object,
         default: () => {}
       },
+    },
+    computed: {
+      titleType() {
+        if (this.titleTag == 'h1') {
+          return { h1: true }
+        } else if (this.titleTag == 'h2') {
+          return { h2: true }
+        } else if (this.titleTag == 'h3') {
+          return { h3: true }
+        } else if (this.titleTag == 'h4') {
+          return { h4: true }
+        } else if (this.titleTag == 'h5') {
+          return { h5: true }
+        } else if (this.titleTag == 'h6') {
+          return { h6: true }
+        }
+      }
     },
     methods: {
       clickTitle() {

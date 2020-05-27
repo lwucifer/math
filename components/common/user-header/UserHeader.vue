@@ -1,11 +1,16 @@
 <template>
   <div class="the-header__user">
-    <app-avatar
-      class="the-header__user-avt"
-      :src="$store.state.auth.token.avatar && $store.state.auth.token.avatar.low || 'https://picsum.photos/40/40'"
-      :size="40"
-    ></app-avatar>
-    <div class="the-header__user-menu">
+    <div 
+    @click.prevent="onClickUserHeader()"
+    v-click-outside="handleClickOutside"
+    >
+      <app-avatar
+        class="the-header__user-avt"
+        :src="$store.state.auth.token.avatar && $store.state.auth.token.avatar.low || 'https://picsum.photos/40/40'"
+        :size="40"
+      ></app-avatar>
+    </div>
+    <div class="the-header__user-menu" v-if="activeUserHeader">
       <!--      <div style="height: 2rem;"></div>-->
       <ul>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.ELEARNING)">
@@ -101,7 +106,8 @@ export default {
         redirectLink: "",
         message: "",
         showNotify: true
-      }
+      },
+      activeUserHeader:false
     };
   },
 
@@ -265,6 +271,12 @@ export default {
       }
 
       return isValidMenu;
+    },
+    onClickUserHeader(){
+      this.activeUserHeader = !this.activeUserHeader;
+    },
+    handleClickOutside(){
+      this.activeUserHeader = false;
     }
   },
 
