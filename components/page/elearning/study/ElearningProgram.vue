@@ -20,6 +20,7 @@
       <ElearningProgramItem
         class="e-program__item-lecture"
         :lesson="get(progress, 'programs.0.lessons.0', null)"
+        :index="1"
       />
     </div>
 
