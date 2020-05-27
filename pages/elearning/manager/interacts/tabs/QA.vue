@@ -17,14 +17,13 @@
           </button>
         </div>
 
-        <div class="filter-results">
+        <div class="filter mr-3">
           <app-button
-            color="primary"
-            class="btnFilterSummit__ElearningManagerInteractive"
+            color="white"
             :size="'sm'"
             @click="submit"
           >
-            <IconHamberger />
+            <IconHamberger class="fill-primary mr-2"/>
             <span>Lọc kết quả</span>
           </app-button>
         </div>

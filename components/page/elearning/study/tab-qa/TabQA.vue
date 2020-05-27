@@ -43,7 +43,7 @@
         class="text-center"
         v-if="
           !get(questions, 'page.last', true) &&
-            get(question, 'page.total_elements', 0)
+            get(questions, 'page.total_elements', 0)
         "
       >
         <a class="e-study-tab-qa__more">Xem thêm bình luận</a>

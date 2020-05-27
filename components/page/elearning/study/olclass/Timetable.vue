@@ -78,7 +78,7 @@ export default {
           text: "Thứ 3"
         },
         {
-          name: "web",
+          name: "wed",
           text: "Thứ 4"
         },
         {
