@@ -37,15 +37,13 @@ export default {
 
   async fetch({ params, query, store, route, redirect }) {
     const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
-    // const dataRooms = data.rooms ? data.rooms : [];
-    // const id = dataRooms.filter(item => item.type == 1)[0]
-    //   ? dataRooms.filter(item => item.type == 1)[0].id
-    //   : "";
-    // if (id) {
-    //   return redirect(`/messages/t/${id}`);
-    // } else {
-    //   return false;
-    // }
+    const dataRooms = data.list_room ? data.list_room : [];
+    const id = dataRooms[0] ? dataRooms[0].id : "";
+    if (id) {
+      return redirect(`/messages/t/${id}`);
+    } else {
+      return false;
+    }
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     // const room_id = route.params.id;
     await Promise.all([
