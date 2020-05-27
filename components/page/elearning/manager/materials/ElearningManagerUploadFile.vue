@@ -252,9 +252,6 @@
       }
     },
     watch: {
-      uploadPercentage: function(newVal, oldVal) {
-        console.log('change upload percentage: ', newVal)
-      },
       uploadTimestamp: function(newVal, oldVal) {
         this.diffTimestamp = newVal - oldVal
       },
@@ -281,9 +278,10 @@
 
         let config = {
           onUploadProgress: progressEvent => {
-            this.uploadPercentage = Math.floor((progressEvent.loaded * 100) / progressEvent.total)
             this.loadedPayload = progressEvent.loaded
             this.uploadTimestamp = progressEvent.timeStamp
+            let totalPayload = progressEvent.total
+            this.uploadPercentage = Math.floor((this.loadedPayload * 100) / totalPayload)
           },
           cancelToken: new CancelToken( cancel => {
             this.cancelUploadToken = cancel
