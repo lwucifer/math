@@ -109,7 +109,10 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Bài giảng mới nhất</h2>
-        <n-link slot="title-right" to class="link-readmore">
+        <n-link slot="title-right" 
+          :to="`/elearning/search?type=lecture&sort=NEWEST`"
+          class="link-readmore"
+        >
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
@@ -131,7 +134,9 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Khóa học mới nhất</h2>
-        <n-link slot="title-right" to class="link-readmore">
+        <n-link slot="title-right" 
+          :to="`/elearning/search?type=course&sort=NEWEST`"
+          class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>

@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-search container">
     <h1 class="elearning-search__heading heading-3">
-      <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
+      <span class="font-weight-semi-bold">{{ subject_name || "Kết quả" }}</span>
       <span class="body-2 font-weight-normal">
         (
         <b>{{ totalSummary }}</b>
@@ -15,6 +15,13 @@
       </app-button>
 
       <template v-if="isFilter">
+        <app-select
+          v-model="type"
+          @change="handleChangeTab"
+          :options="types"
+          placeholder="Thể loại"
+          size="sm"
+        />
         <app-select
           v-model="fee"
           @change="handleChangeFee"
@@ -50,7 +57,7 @@
       </div>
     </div>
 
-    <div class="elearing-search__tabs">
+    <!-- <div class="elearing-search__tabs">
       <a
         v-for="item in tabs"
         :key="item.tab"
@@ -58,7 +65,7 @@
         :class="['elearning-search__tab', tab === item.tab && 'active']"
         @click.prevent="handleChangeTab(item.tab)"
       >{{ item.text }}</a>
-    </div>
+    </div> -->
 
     <div v-if="pageLoading" class="container mt-6">
       <div class="row">
@@ -132,10 +139,6 @@ export default {
         { value: null, text: "Tất cả" },
         { value: 1, text: "Miễn phí" },
         { value: 0, text: "Có phí" }
-        // { value: 0, text: "Từ 0 đến 100k" },
-        // { value: 1, text: "Từ 100k đến 200k" },
-        // { value: 2, text: "Từ 200k đến 500k" },
-        // { value: 3, text: "Lơn hơn 500k" }
       ],
       time: null,
       timeOpts: [
@@ -152,7 +155,7 @@ export default {
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      sort: SORT_ELEARNING.RELATED,
+      sort: this.$route.query.sort ? this.$route.query.sort : SORT_ELEARNING.RELATED,
       sortOpts: [
         { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
         { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
@@ -174,15 +177,26 @@ export default {
           text: "Khoá học"
         }
       ],
+      type: this.$route.query.type ? this.$route.query.type : ELEARNING_TYPES_VALUE.LECTURE,
+      types: [
+        {
+          value: ELEARNING_TYPES_VALUE.LECTURE,
+          text: "Bài giảng"
+        },
+        {
+          value: ELEARNING_TYPES_VALUE.COURSE,
+          text: "Khoá học"
+        }
+      ],
       payload: {
         subject: this.subject,
-        type: ELEARNING_TYPES_VALUE.LECTURE,
+        type: this.$route.query.type ? this.$route.query.type : ELEARNING_TYPES_VALUE.LECTURE,
         duration: null,
         level: null,
         free: null,
         page: 1,
         size: PAGE_SIZE.DEFAULT,
-        sort: SORT_ELEARNING.RELATED,
+        sort: this.$route.query.sort ? this.$route.query.sort : SORT_ELEARNING.RELATED,
         keyword: null
       },
 
@@ -209,6 +223,9 @@ export default {
 
   async asyncData({ store, query }) {
     const { subject, subject_name } = query; // get keyword, type from url
+    console.log('query', query);
+    console.log('subject', subject);
+    console.log('subject_name', subject_name);
 
     return {
       subject,
@@ -222,7 +239,10 @@ export default {
     );
   },
 
-  created() {
+  async created() {
+    let param = this.$route.query;
+    await console.log('param', param)
+    await console.log('payload',this.payload)
     this.getLessons();
   },
 
@@ -274,7 +294,7 @@ export default {
     async getLessons() {
       this.pageLoading = true;
       Object.keys(this.payload).map(k => {
-        if (this.payload[k] == -1) {
+        if (this.payload[k] == null) {
           delete this.payload[k];
         }
       });
