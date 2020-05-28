@@ -18,11 +18,14 @@
                     />
                   </div>
                 </div>
-                {{ get(setting, "id", "123") }}
               </template>
               <template v-slot:content>
                 <keep-alive>
-                  <component v-bind:is="currentTabComponent"></component>
+                  <div v-if="loading">Loading...</div>
+                  <div v-else>
+                    <Notify v-if="tab === 'notify'" />
+                    <PaymentTab v-if="tab === 'payment'" />
+                  </div>
                 </keep-alive>
               </template>
             </sub-block-section>
@@ -37,7 +40,7 @@
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
-import NotifyTab from "~/components/page/profile/setting/tabs/notify";
+import Notify from "~/components/page/profile/setting/tabs/Notify";
 import PaymentTab from "~/components/page/profile/setting/tabs/payment";
 import { mapState } from "vuex";
 import { get } from "lodash";
@@ -47,13 +50,14 @@ export default {
 
   components: {
     SchoolAccountSide,
-    NotifyTab,
+    Notify,
     PaymentTab,
     HeadTabs,
   },
 
   data() {
     return {
+      loading: true,
       tab: "notify",
       isAuthenticated: true,
       tabs: [
@@ -69,17 +73,16 @@ export default {
     };
   },
 
-  mounted() {
-    this.$store.dispatch(`setting/getSetting`);
+  async mounted() {
+    this.loading = true;
+    await this.$store.dispatch(`setting/getSetting`);
+    this.loading = false;
   },
 
   computed: {
-    ...mapState("setting", {
-      setting: "setting",
-    }),
     currentTabComponent: function() {
       const MATCHED_TABS = {
-        notify: "NotifyTab",
+        notify: "Notify",
         payment: "PaymentTab",
       };
       return MATCHED_TABS[this.tab];
