@@ -126,8 +126,8 @@ export default {
 
     async handleSaveSetting() {
       if (!get(this, "notify.key", true)) {
-        this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
-        return console.log(this.notify);
+        this.$toasted.error("Lỗi không tồn tại notify_key");
+        return;
       }
 
       let payload = { ...this.payload };
