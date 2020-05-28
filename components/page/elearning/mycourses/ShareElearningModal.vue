@@ -8,16 +8,14 @@
     </div>
 
     <div slot="content">
-      <editor-content class="editor pms-editor" :editor="editor" />
+      <editor-content class="editor pms-editor" :editor="editor" v-model="content" />
 
       <div class="wrap-post-elearning">
         <img
           :src="dataModal.avatar && dataModal.avatar.low ? dataModal.avatar.low : 'https://picsum.photos/530/297'"
         />
         <h3 class="mt-3">{{dataModal.name}}</h3>
-        <p
-          class="color-text mb-3"
-        >Tất cả những ai muốn khởi nghiệp Kinh doanh Online bài bản, bắt đầu từ những công việc cốt lõi nhất: xác định ...</p>
+        <p class="color-text mb-3" v-html="dataModal.description"></p>
         <a style="color: #656565;">SCHOOLY.COM</a>
       </div>
     </div>
@@ -35,7 +33,7 @@
           size="sm"
           color="primary"
           :loading="btnSubmitLoading"
-          @click="$emit('submit')"
+          @click="submit"
         >Chia sẻ</app-button>
       </div>
     </div>
@@ -55,6 +53,8 @@ import IconPinLocation from "~/assets/svg/icons/pin-location.svg?inline";
 import IconEmoji from "~/assets/svg/icons/emoji.svg?inline";
 
 import Post from "~/components/page/timeline/post/Post";
+import { clearEmptyTag } from "~/utils/validations";
+import { removeTagHtml } from "~/utils/common";
 
 export default {
   components: {
@@ -101,13 +101,14 @@ export default {
           value: SHARE_OPTS.MESSAGE,
           text: "Chia sẻ trong tin nhắn riêng"
         }
-      ]
+      ],
+      content: ""
     };
   },
 
   mounted() {
     this.editor = new Editor({
-      content: this.content,
+      content: "",
       extensions: [
         new Placeholder({
           showOnlyCurrent: true,
@@ -118,7 +119,13 @@ export default {
     });
   },
 
-  methods: {}
+  methods: {
+    submit() {
+      const html = this.editor.getHTML();
+      const content = removeTagHtml(html);
+      this.$emit("submit", content);
+    }
+  }
 };
 </script>
 

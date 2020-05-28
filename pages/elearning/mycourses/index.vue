@@ -51,7 +51,12 @@
     
     </CourseItem2>
     </div>-->
-    <ShareElearningModal v-if="checkModalShare" @cancel="cancel" :dataModal="dataModal" />
+    <ShareElearningModal
+      v-if="checkModalShare"
+      @cancel="cancel"
+      :dataModal="dataModal"
+      @submit="handleShareSchoolly"
+    />
     <!-- ModalShare -->
   </div>
 </template>
@@ -456,6 +461,20 @@ export default {
       // } else {
       //   this.$toasted.error(doAdd.message);
       // }
+    },
+    async handleShareSchoolly(_content) {
+      console.log("_content", _content);
+      const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        { link: link, content: _content }
+      );
+      if (doAdd.success) {
+        this.menuDropdown = false;
+        this.$toasted.show("Đã chia sẻ thành công.");
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
     },
     cancel() {
       this.checkModalShare = false;

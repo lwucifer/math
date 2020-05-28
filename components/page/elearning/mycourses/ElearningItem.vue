@@ -1,5 +1,6 @@
 <template>
-  <div class="wrap__elearning-item">
+  <!-- <div> -->
+  <div class="wrap__elearning-item" v-if="elearning.is_study">
     <div class="img__elearning-item">
       <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
         <img
@@ -120,6 +121,12 @@
       </div>
     </div>
   </div>
+  <!-- <CourseItem2 v-else :item="elearning">
+      <template v-slot:mycoursefavourite>
+        <MenuDropDown />
+      </template>
+  </CourseItem2>-->
+  <!-- </div> -->
 </template>
 
 <script>
@@ -133,6 +140,7 @@ import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import CourseItem2 from "~/components/page/course/CourseItem2";
 export default {
   components: {
     IconDots,
@@ -141,7 +149,8 @@ export default {
     IconUnArchive,
     IconArchive,
     IconFacebook,
-    IconSchooly
+    IconSchooly,
+    CourseItem2
   },
   data() {
     return {
