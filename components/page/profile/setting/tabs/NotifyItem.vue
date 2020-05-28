@@ -135,6 +135,7 @@ export default {
       const res = await this.$store.dispatch("setting/updateSetting", payload);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
+        this.$store.dispatch(`setting/getSetting`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
