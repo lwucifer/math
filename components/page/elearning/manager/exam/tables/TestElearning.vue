@@ -144,7 +144,6 @@
           {
             name: "rate",
             text: "Tỷ lệ hoàn thành",
-            sort: true
           },
           {
             name: "created",
