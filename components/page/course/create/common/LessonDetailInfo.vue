@@ -39,15 +39,17 @@
       >
         {{ get(lesson, "file_name", "") }}
       </div>
+
       <div class="clc-video__type text-dark mt-2" v-else>
         {{ get(lesson, "type", "") }}
       </div>
 
       <div class="clc-video__time text-gray mb-3 mt-3">
-        <IconClock width="14px" height="14px" class="mr-2" />
+        <IconClock width="15px" height="15px" class="mr-2" />
         {{ get(lesson, "duration", "") }}
       </div>
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
