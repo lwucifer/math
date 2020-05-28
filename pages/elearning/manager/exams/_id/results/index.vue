@@ -47,8 +47,8 @@
   import { getParamQuery } from "~/utils/common"
   import { exCate2Txt } from "~/plugins/filters"
 
-  const ChoiceSubmission = () => import('./choice')
-  const EssaySubmission = () => import('./essay')
+  const ChoiceSubmission = () => import('~/components/page/elearning/manager/exam/ChoiceResult')
+  const EssaySubmission = () => import('~/components/page/elearning/manager/exam/EssayResult')
   
   const STORE_NAMESPACE = "elearning/teaching/result"
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"

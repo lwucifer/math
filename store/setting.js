@@ -1,46 +1,44 @@
-import * as actionTypes from "../utils/action-types";
-import * as mutationTypes from "../utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
 import Setting from "~/services/account/Setting";
 
 const state = () => ({
-  settings: {}
-})
+  setting: null,
+});
 
 const actions = {
-  async [actionTypes.ACCOUNT_SETTING.LIST]({ commit }, payload) {
+  async getSetting({ commit }, payload) {
     try {
       const result = await new Setting(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
-      commit(
-        mutationTypes.ACCOUNT_SETTING.SET_ACCOUNT_SETTING_LIST,
-        result.data
-      );
+      if (result.success) {
+        commit("setting", result.data);
+        return;
+      }
+      commit("setting", null);
     } catch (err) {
-      console.log("ACCOUNT SETTING list.err", err);
-      return err;
+      commit("setting", null);
     }
   },
-  async [actionTypes.ACCOUNT_SETTING.UPDATE]({ commit }, payload) {
+
+  async updateSetting({ commit }, payload) {
     try {
       const result = await new Setting(this.$axios)[actionTypes.BASE.ADD](
         payload
       );
-      return result
+      return result;
     } catch (err) {
       console.log("ACCOUNT SETTING update.err", err);
       return err;
     }
   },
-}
+};
+
 const mutations = {
-  [mutationTypes.ACCOUNT_SETTING.SET_ACCOUNT_SETTING_LIST](
-    state,
-    data
-  ) {
-    state.settings = data;
+  setting(state, data) {
+    state.setting = data;
   },
-}
+};
 
 export default {
   namespaced: true,

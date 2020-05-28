@@ -3,6 +3,7 @@
     <div
       class="form--score"
       title="Học sinh cần phải hết lượt làm bài để có thể cho qua"
+      v-if="canPass"
     >
       <app-checkbox
         v-model="formData.to_passed"

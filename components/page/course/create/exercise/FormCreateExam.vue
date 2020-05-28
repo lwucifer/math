@@ -54,6 +54,36 @@
       </app-radio-group>
     </div>
 
+    <div class="caculate-point" v-if="payload.type === 'CHOICE'">
+      <h5 class="mb-4">Chọn cách tính điểm</h5>
+
+      <div class="mb-4">
+        <app-radio name="caculate-point" class="mr-6">Theo hệ số <IconQuestionCircle width="12px" height="12px" class="fill-gray"/> </app-radio>
+        <app-radio name="caculate-point">Theo trọng số <IconQuestionCircle width="12px" height="12px" class="fill-gray"/> </app-radio>
+      </div>
+
+      <div class="d-flex align-items-center mb-5">
+        <p class="mr-3">Chọn hệ số:</p>
+
+        <app-select
+          class="mr-3"
+          size="sm"
+          :value="1"
+          :options="[
+            { value: 1, text: '1' },
+            { value: 2, text: '2' },
+          ]"
+        >
+          <template slot="placeholder-icon">
+            <IconAngleDown class="icon" />
+            <!-- <span class="text-primary">%</span> -->
+          </template>
+        </app-select>
+
+        <p class="text-warning">* Lưu ý: Bạn sẽ không thể thay đổi cách tính điểm sau khi bài kiểm tra đã được tạo</p>
+      </div>
+    </div>
+
     <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-12 col-md-4">
         <label for="time" class="heading-5 font-weight-bold"
@@ -109,8 +139,67 @@
         </app-input>
       </div>
     </div>
+    
 
-    <div class="mb-4">
+    <div class="setup-time mt-5 mb-6">
+      <h5 class="mb-4">
+        Cài đặt thời gian 
+        <span class="text-base font-weight-normal">(Không bắt buộc) <IconQuestionCircle width="12px" height="12px" class="fill-gray"/></span>
+      </h5>
+
+      <div class="d-flex align-items-center mb-3">
+          <p class="w-120">Thời gian bắt đầu:</p>
+
+          <app-date-picker
+            size="sm"
+            placeholder="dd/mm/yyyy"
+            value-type="DD-MM-YYYY"
+            class="mr-3"
+          >
+            <template v-slot:icon-calendar>
+              <IconCalender class="fill-primary" />
+            </template>
+          </app-date-picker>
+
+          <app-date-picker
+            size="sm"
+            type="time"
+            placeholder="HH:mm"
+            value-format="HH:mm"
+            class="ml-0 mr-6"
+          />
+
+          <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+      </div>
+
+
+      <div class="d-flex align-items-center">
+          <p class="w-120">Thời gian kết thúc:</p>
+
+          <app-date-picker
+            size="sm"
+            placeholder="dd/mm/yyyy"
+            value-type="DD-MM-YYYY"
+            class="mr-3"
+          >
+            <template v-slot:icon-calendar>
+              <IconCalender class="fill-primary" />
+            </template>
+          </app-date-picker>
+
+          <app-date-picker
+            size="sm"
+            type="time"
+            placeholder="HH:mm"
+            value-format="HH:mm"
+            class="ml-0 mr-6"
+          />
+
+          <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+      </div>
+    </div>
+
+    <!-- <div class="mb-4">
       <h5 class="font-weight-bold mb-3">Cài đặt thời gian mở đề</h5>
       <app-radio-group class="mb-4">
         <app-radio
@@ -150,7 +239,7 @@
 
         <IconEvent24px class="fill-primary mt-4" />
       </div>
-    </div>
+    </div> -->
 
     <div class="d-flex justify-content-end">
       <app-button
@@ -182,6 +271,9 @@
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconEvent24px from "~/assets/svg/v2-icons/event_24px.svg?inline";
+import IconQuestionCircle from '~/assets/svg/design-icons/question-circle.svg?inline';
+import IconCalender from '~/assets/svg/v2-icons/calendar_today_24px.svg?inline';
+
 import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
@@ -193,6 +285,8 @@ export default {
   components: {
     IconAngleDown,
     IconEvent24px,
+    IconQuestionCircle,
+    IconCalender
   },
 
   props: {

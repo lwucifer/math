@@ -4,6 +4,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="sortTable"
       :data="list"
       :loading="loading"
     >
@@ -144,7 +145,6 @@
           {
             name: "rate",
             text: "Tỷ lệ hoàn thành",
-            sort: true
           },
           {
             name: "created",
@@ -164,6 +164,9 @@
     methods: {
       onPageChange(e) {
         this.$emit('changedPagination', e)
+      },
+      sortTable(info) {
+        this.$emit('changedSort', info)
       },
       numeralFormat,
       get

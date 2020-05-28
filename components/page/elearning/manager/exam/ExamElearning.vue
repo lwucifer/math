@@ -1,17 +1,19 @@
 <template>
-  <!--List of exericses of an elearning-->
+  <!--List elearnings that have exam-->
   <div>
     <!--Filter form-->
-    <filter-form
+    <elearning-manager-filter-form
       @submitFilter="submitFilter"
       @changedType="handleChangedType"
+      @changedRate="handleChangedRate"
       @submitSearch="handleSubmitSearch"
     />
-    <list-table
+    <elearning-manager-filter-table
       :pagination="pagination"
       :list="list"
       :loading="loading"
       @changedPagination="updatePagination"
+      @changedSort="handleChangedSort"
     />
   </div>
 </template>
@@ -21,18 +23,18 @@ import { mapState } from "vuex"
 import * as actionTypes from "~/utils/action-types"
 import { get } from "lodash"
 import { useEffect, getParamQuery } from "~/utils/common"
-import FilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseFilter"
-import ListTable from "~/components/page/elearning/manager/exam/tables/Exercise"
+import ElearningManagerFilterForm from "~/components/page/elearning/manager/exam/forms/TestElearningFilter"
+import ElearningManagerFilterTable from "~/components/page/elearning/manager/exam/tables/TestElearning"
 import { EXERCISE_CATEGORIES } from '~/utils/constants'
 
-const STORE_NAMESPACE = "elearning/teaching/exercise"
+const STORE_NAMESPACE = "elearning/teaching/exercise-elearning"
 
 export default {
   layout: "manage",
     
   components: {
-    FilterForm,
-    ListTable
+    ElearningManagerFilterForm,
+    ElearningManagerFilterTable
   },
   filters: {
   },
@@ -50,9 +52,9 @@ export default {
       params: {
         page: 1,
         size: 10,
-        category: EXERCISE_CATEGORIES.EXERCISE,
-        elearning_id: null,
-        lesson_id: null
+        category: EXERCISE_CATEGORIES.TEST,
+        sort_by: 'CREATED',
+        sort_type: 'asc'
       },
       list: [],
       loading: false
@@ -62,7 +64,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
-      detailInfo: 'exercises'
+      detailInfo: 'elearnings'
     }),
   },
 
@@ -74,8 +76,11 @@ export default {
     handleChangedType(val) {
       this.updateFilter({ type: val })
     },
+    handleChangedRate(val) {
+      this.updateFilter({ rate: val })
+    },
     handleSubmitSearch(val) {
-      this.updateFilter({ keyword: val })
+      this.updateFilter({ query: val })
     },
     submitFilter(val) {
       this.updateFilter(val)
@@ -88,11 +93,10 @@ export default {
     async getList() {
       try {
         this.loading = true
-        this.params.elearning_id = getParamQuery('elearning_id')
         let params = { ...this.params }
-
+      
         await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE.LIST}`, { params }
+          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_EXERCISE_ELEARNING.LIST}`, { params }
         )
         this.list = this.get(this.detailInfo, 'data.content', [])
         this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
@@ -104,9 +108,27 @@ export default {
         this.pagination.number_of_elements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
         // this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
       } catch (e) {
-        console.log('Get list exercise ', e)
+        console.log('Get list exercise elearning', e)
       } finally {
         this.loading = false
+      }
+    },
+    handleChangedSort(val) {
+      const sortBy = get(val, 'sortBy', 'created')
+      const sortType = get(val, 'order', 'asc')
+      switch (sortBy) {
+        case 'created':
+          this.updateFilter({
+            sort_by: 'CREATED',
+            sort_type: sortType
+          })
+          break;
+        case 'tests':
+          this.updateFilter({
+            sort_by: 'EXERCISES',
+            sort_type: sortType
+          })
+          break;
       }
     },
     refreshData() {

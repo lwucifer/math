@@ -41,8 +41,10 @@
       multiple-selection
       @pagechange="onPageChange"
       @selectionChange="selectRow"
+      @sort="sortTable"
       order-by="created_at"
       order="asc"
+      ref="warehouseListTable"
     >
       <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'name', '')">
@@ -213,6 +215,9 @@
       submitFilter(val) {
         this.$emit('submitFilter', val)
       },
+      sortTable(data) {
+        this.$emit('changedSort', data)
+      },
       async deleteItems(items) {
         const delIds = _.map(items, 'id')
         let data = {
@@ -227,6 +232,7 @@
         this.visible.delete = false
         const res = await this.deleteItems(this.selectedItems)
         if (get(res, "success", false)) {
+          this.resetSelectedItems()
           this.$emit('deletedItems', res)
           this.selectedItems = []
         }
@@ -243,6 +249,9 @@
         } else {
           this.visible.delete = true
         }
+      },
+      resetSelectedItems() {
+        this.$refs['warehouseListTable']['selectedItems'] = []
       },
       get
     },
