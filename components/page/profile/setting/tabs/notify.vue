@@ -116,7 +116,7 @@
       }
     },
     created() {
-      this.getList()
+      // this.getList()
     }
   }
 </script>

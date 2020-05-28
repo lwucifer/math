@@ -36,9 +36,10 @@
 
       <div class="mt-4 teacher-bottom">
         <h4 class="mb-3">Tiểu sử</h4>
-        <template v-if="teacher && teacher.description">{{
-          get(teacher, "description", "")
-        }}</template>
+        <div
+          v-if="get(teacher, 'biography', '')"
+          v-html="get(teacher, 'biography', '')"
+        ></div>
         <div v-else class="text-center caption text-gray-2">
           Chưa có nội dung.
         </div>
