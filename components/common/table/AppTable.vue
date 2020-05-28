@@ -28,7 +28,7 @@
       </tbody>
       <!-- Use data list -->
       <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)" :class="bodyCls">
-        <tr v-for="(cat, i) in sortedCats" :key="i" :class="selectedItems.includes(cat) ? 'selected' : ''">
+        <tr v-for="(cat, i) in cats" :key="i" :class="selectedItems.includes(cat) ? 'selected' : ''">
         
           <td v-if="multipleSelection || selectAll" class="pr-0" 
           @mouseover="mouseOver = false" 
