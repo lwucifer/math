@@ -12,8 +12,9 @@
             z-index: 101;
 
             .post-editor__overlay {
+                transition: opacity .3s, visibility .3s;
                 visibility: visible;
-                opacity: 1;
+                opacity: .8;
             }
 
             .post-editor__privacy,
@@ -47,8 +48,8 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(#000, .8);
-    transition: visibility .3s, opacity .3s;
+    background-color: #000;
+    transition: none;
     visibility: hidden;
     opacity: 0;
 }

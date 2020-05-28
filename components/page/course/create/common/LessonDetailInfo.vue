@@ -33,8 +33,14 @@
         </div>
       </div>
 
-      <div class="clc-video__type text-dark mt-2">
-        Định dạng: {{ get(lesson, "type", "") }}
+      <div
+        class="clc-video__type text-dark mt-2"
+        v-if="get(lesson, 'type', '') === 'VIDEO'"
+      >
+        {{ get(lesson, "file_name", "") }}
+      </div>
+      <div class="clc-video__type text-dark mt-2" v-else>
+        {{ get(lesson, "type", "") }}
       </div>
 
       <div class="clc-video__time text-gray mb-3 mt-3">

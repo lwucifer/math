@@ -1,63 +1,58 @@
 <template>
   <div class="container">
-    <div class="row wrap-filter-form__ElearningManagerInteractive justify-content-between">
-      <!-- <app-button square size="sm" class="btnCreate-notify__ElearningManagerInteractive mr-4">
-        <n-link
-          :to="'/elearning/manager/interactive/createnotify'"
-          class="n-link__ElearningManagerInteractive"
-        >Tạo thông báo</n-link>
-      </app-button> -->
+    <div class="d-flex interacts-filter mb-4">
+      <app-search
+        class="interacts-qa-search mb-0 mr-3"
+        bordered
+        size="sm"
+        placeholder="Nhập để tìm kiếm"
+        v-model="filter.query"
+        @submit="handleSearch"
+      ></app-search>
 
-     
-      <div class="wrapSearchForm___ElearningManagerFilterTable flex-1">
-        <app-input
-          style="width: 100%"
-          type="text"
-          v-model="filter.query"
-          placeholder="Nhập để tìm kiếm..."
-          :size="'sm'"
-          @input="handleSearch"
-          class="inputSearch"/>
+      <app-button
+        class="mr-3"
+        :color="isFilter ? 'primary' : 'default'"
+        :outline="!isFilter"
+        size="sm"
+        @click="isFilter = !isFilter"
+      >
+        <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
+      </app-button>
 
-        <button class="btn-search">
-          <IconSearch width="15" height="15" />
-        </button>
-      </div>
-
-      <div class="filter-results">
-        <app-button
-          color="primary"
-          class="btnFilterSummit__ElearningManagerInteractive"
-          :size="'sm'"
-          @click="submit"
-        >
-          <IconHamberger />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
-
-      <div class="filter-course">
+      <template v-if="isFilter">
         <app-vue-select
-          class="app-vue-select filter-form__item__selection"
+          class="app-vue-select filter-course"
           v-model="filter.province"
           :options="classes"
-          label="text"
           placeholder="Bài giảng/khóa học"
           searchable
           clearable
+          has-border
           @input="handleChangedInput"
           @search:focus="handleFocusSearchInput"
-          @search:blur="handleBlurSearchInput"></app-vue-select>
-      </div>
+          @search:blur="handleBlurSearchInput"
+        />
+      </template>
     </div>
 
-    <app-button class="button-delete"><IconTrashAlt height="15" width="15" class="fill-white mr-2"/> Xoá</app-button>
+    <app-button color="red" size="sm">
+      <IconDeleteForever class="icon body-1 mr-2" />Xoá
+    </app-button>
 
     <div class="wrapTable__ElearningManagerInteractive">
-      <app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list"  multiple-selection>
+      <app-table
+        :heads="heads"
+        :pagination="pagination"
+        @pagechange="onPageChange"
+        :data="list"
+        multiple-selection
+      >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id"><IconArrowForwardIos24pxOutlined/></n-link>
+            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id">
+              <IconArrowForwardIos24pxOutlined />
+            </n-link>
           </td>
         </template>
 
@@ -84,22 +79,22 @@
 </template>
 
 <script>
-import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrowForwardIos24pxOutlined from '~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline';
-import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
+import IconDeleteForever from "~/assets/svg/v2-icons/delete_forever_24px.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { NOTIFIES } from "~/server/fakedata/elearning/materials";
 export default {
   layout: "manage",
-    
+
   components: {
     IconHamberger,
     IconSearch,
-    IconArrowForwardIos24pxOutlined,
-    IconTrashAlt
+    IconDeleteForever,
+    IconArrowForwardIos24pxOutlined
   },
   data() {
     return {
@@ -109,7 +104,7 @@ export default {
         {
           name: "",
           text: "",
-          selectAll: true,
+          selectAll: true
         },
         {
           name: "title",
@@ -174,7 +169,8 @@ export default {
       listQuery: {
         page: 1,
         size: 10
-      }
+      },
+      isFilter: false
     };
   },
   computed: {

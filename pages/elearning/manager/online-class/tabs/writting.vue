@@ -8,6 +8,7 @@
             <app-search
               class
               :placeholder="'Nhập để tìm kiếm...'"
+              bordered
               v-model="params.query"
               :size="'sm'"
               @submit="submit"

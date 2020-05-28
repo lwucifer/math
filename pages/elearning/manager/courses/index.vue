@@ -35,6 +35,7 @@
                   <app-search
                     class
                     :placeholder="'Nhập để tìm kiếm...'"
+                    bordered
                     v-model="params.keyword"
                     :size="'sm'"
                     @submit="getList"

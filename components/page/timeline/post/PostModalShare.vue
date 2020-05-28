@@ -1,5 +1,10 @@
 <template>
-  <app-modal width="606px" @close="$listeners.cancel ? $listeners.cancel() : null">
+  <app-modal
+    width="606px"
+    :header="false"
+    :footer="false"
+    @close="$listeners.cancel ? $listeners.cancel() : null"
+  >
     <div class="pms-header" slot="header">
       <h2 class="pms-header__title">Chia sẻ</h2>
       <app-select v-model="share" class="my-3" :options="shareOpts" size="sm">

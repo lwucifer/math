@@ -33,19 +33,6 @@
     &__selection {
       width: 100%;
     }
-  
-    .app-search {
-      border: 1px solid #E0E0E0 !important;
-      border-radius: 2px;
-      box-shadow: $shadow-1;
-      &__submit {
-        display: flex;
-        width: 3rem;
-        svg {
-          width: 1.1rem;
-        }
-      }
-    }
   }
   
   //&__item--search {
