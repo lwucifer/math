@@ -13,6 +13,7 @@
       :list="list"
       :loading="loading"
       @changedPagination="updatePagination"
+      @changedSort="handleChangedSort"
     />
   </div>
 </template>
@@ -53,7 +54,9 @@ export default {
       params: {
         page: 1,
         size: 10,
-        category: EXERCISE_CATEGORIES.EXERCISE
+        category: EXERCISE_CATEGORIES.EXERCISE,
+        sort_by: 'CREATED',
+        sort_type: 'asc'
       },
       list: [],
       loading: false
@@ -110,6 +113,24 @@ export default {
         console.log('Get list exercise elearning', e)
       } finally {
         this.loading = false
+      }
+    },
+    handleChangedSort(val) {
+      const sortBy = get(val, 'sortBy', 'created')
+      const sortType = get(val, 'order', 'asc')
+      switch (sortBy) {
+        case 'created':
+          this.updateFilter({
+            sort_by: 'CREATED',
+            sort_type: sortType
+          })
+          break;
+        case 'exercises':
+          this.updateFilter({
+            sort_by: 'EXERCISES',
+            sort_type: sortType
+          })
+          break;
       }
     },
     refreshData() {

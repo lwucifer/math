@@ -25,6 +25,7 @@
                   :list="list"
                   :loading="loading"
                   @changedPagination="updatePagination"
+                  @changedSort="handleChangedSort"
                 />
               </div>
             </div>
@@ -76,6 +77,8 @@
           size: 10,
           category: EXERCISE_CATEGORIES.TEST,
           elearning_id: null,
+          sort_by: 'CREATED',
+          sort_type: 'asc'
         },
         list: [],
         loading: false
@@ -133,6 +136,24 @@
           console.log('Get list exercise ', e)
         } finally {
           this.loading = false
+        }
+      },
+      handleChangedSort(val) {
+        const sortBy = get(val, 'sortBy', 'created')
+        const sortType = get(val, 'order', 'asc')
+        switch (sortBy) {
+          case 'created':
+            this.updateFilter({
+              sort_by: 'CREATED',
+              sort_type: sortType
+            })
+            break;
+          case 'participants':
+            this.updateFilter({
+              sort_by: 'PARTICIPANTS',
+              sort_type: sortType
+            })
+            break;
         }
       },
       refreshData() {
