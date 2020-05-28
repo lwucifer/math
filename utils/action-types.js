@@ -655,4 +655,5 @@ export const INFO_SUPPORT = {
 export const CHAT = {
     ROOM_LIST: "getRoomList",
     MEMBER_LIST: "getMemberList",
+    MESSAGE_LIST: "getMessageList",
 };

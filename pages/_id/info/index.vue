@@ -54,7 +54,8 @@ export default {
   async fetch({ params, query, store, route }) {
     const userId = params.id;
     await Promise.all([
-      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+      store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId),
+      store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
     ]);
   },
   data() {
