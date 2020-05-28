@@ -127,9 +127,9 @@ export default {
 
   data() {
     return {
-      fee: -1,
+      fee: null,
       feeOpts: [
-        { value: -1, text: "Tất cả" },
+        { value: null, text: "Tất cả" },
         { value: 1, text: "Miễn phí" },
         { value: 0, text: "Có phí" }
         // { value: 0, text: "Từ 0 đến 100k" },
@@ -137,15 +137,15 @@ export default {
         // { value: 2, text: "Từ 200k đến 500k" },
         // { value: 3, text: "Lơn hơn 500k" }
       ],
-      time: -1,
+      time: null,
       timeOpts: [
-        { value: -1, text: "Tất cả" },
+        { value: null, text: "Tất cả" },
         { value: '0h-1h', text: "0 - 1 giờ" },
         { value: '1h-2h', text: "1- 2 giờ" },
         { value: '2h-4h', text: "2 - 4 giờ" },
         { value: '4h+', text: "Trên 4 giờ" }
       ],
-      level: -1,
+      level: null,
       // levelOpts: [
       //   { value: 0, text: "Trình độ 1" },
       //   { value: 1, text: "Trình độ 2" },
@@ -177,13 +177,13 @@ export default {
       payload: {
         subject: this.subject,
         type: ELEARNING_TYPES_VALUE.LECTURE,
-        duration: -1,
-        level: -1,
-        free: -1,
+        duration: null,
+        level: null,
+        free: null,
         page: 1,
         size: PAGE_SIZE.DEFAULT,
         sort: SORT_ELEARNING.RELATED,
-        keyword: -1
+        keyword: null
       },
 
       pagination: {

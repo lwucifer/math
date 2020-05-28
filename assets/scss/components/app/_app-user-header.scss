@@ -64,15 +64,17 @@
       &.nuxt-link-exact-active{
         color: $color-primary;
         border-left: 4px solid #37A000 !important;
+        background: #F9F9F9;
         svg path {
           fill: $color-primary !important;
         }
       }
       &:hover{
-        color: $color-primary;
-        border-left: 4px solid #37A000 !important;
+        border-color: #008329;
+        border-left: 4px solid #008329;
+        background: #F9F9F9;
         svg path {
-          fill: $color-primary !important;
+          fill: #008329 !important;
         }
       }
       svg {
