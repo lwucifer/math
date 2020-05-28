@@ -9,6 +9,7 @@
           <app-search
             class="w-100"
             size="sm"
+            bordered
             placeholder="Nhập để tìm kiếm"
             v-model="filters.query"
             @input="handleChangedSearch"

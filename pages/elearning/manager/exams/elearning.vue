@@ -44,8 +44,8 @@ import { get } from "lodash"
 import * as actionTypes from "~/utils/action-types"
 // import ExerciseTab from './tabs/exercise-elearning'
 
-const ExerciseTab = () => import("./tabs/exercise-elearning");
-const ExamTab = () => import("./tabs/exam-elearning");
+const ExerciseTab = () => import("~/components/page/elearning/manager/exam/ExerciseElearning");
+const ExamTab = () => import("~/components/page/elearning/manager/exam/ExamElearning");
 
 const STORE_NAMESPACE = 'elearning/teaching/exercise-elearning'
 
