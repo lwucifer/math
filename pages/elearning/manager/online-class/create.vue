@@ -22,9 +22,8 @@
                   :options="courses"
                   label="text"
                   placeholder="Chọn bài giảng/khóa học"
-                  searchable
-                  clearable
                   @input="handleChangedCourse"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -45,13 +44,13 @@
                 <app-vue-select
                   style="width: 17rem"
                   class="app-vue-select form-item__selection"
+                  :disabled="true"
                   v-model="filterPrivacy"
                   :options="privacies"
                   label="text"
                   placeholder="Công khai"
-                  searchable
-                  clearable
                   @input="handleChangedPrivacy"
+                  has-border
                 ></app-vue-select>
               </div>
 
@@ -77,10 +76,10 @@
                     <div class>
                       <div class="d-flex-center">
                         <h6 class="mb-3">Giờ học</h6>
-                        <!-- <div class="ml-auto" v-if="indexEdit === index">
+                        <div class="ml-auto" v-if="indexEdit === index">
                           <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
-                          <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
-                         </div> -->
+                          <button v-on:click="removeSchedule(index, true)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                         </div>
                       </div>
                       <div class="d-flex-center">
                         <div class="d-flex-center mb-4 mr-6">
@@ -107,7 +106,7 @@
                               v-model="schedules[index].duration"
                               square
                               size="sm"
-                              :minute-step="30"
+                              :minute-step="15"
                               :hourOptions="hours"
                               valueFormat="HH:mm"
                               valueType="format"
@@ -180,6 +179,7 @@
                               size="sm"
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
+                              @input="(e) => schedulesDateChange(e, index, false)"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -195,6 +195,7 @@
                               size="sm"
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
+                              @input="(e) => schedulesDateChange(e, index, true)"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -238,16 +239,23 @@
             </div>
 
             <div class="mt-4 mb-4" v-if="indexEdit === null && indexShow === null">
-              <button class="d-flex-center color-primary bold" @click="addTime">
+              <button class="d-flex-center color-primary" @click="addTime">
                 <IconPlus class="fill-primary mr-2" />Thêm lịch học
               </button>
             </div>
           </div>
 
           <div class="mt-4 mb-4 text-right">
-            <app-button color="info" class="mr-3" @click="fnCancel">Thiết lập lại</app-button>
-            <app-button color="info" class="mr-3" @click="fnSave" :disabled="!fullParams">Lưu nháp</app-button>
-            <app-button @click="fnSave" :disabled="!fullParams">Tạo phòng học</app-button>
+            <app-button color="white" class="mr-3 color-red" @click="fnCancel">
+              <IconTrash class="fill-red mr-3"/>
+              Thiết lập lại
+            </app-button>
+            <app-button color="white" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">
+              <IconSave class="fill-primary mr-3"/>Lưu nháp
+            </app-button>
+            <app-button @click="fnSave" :disabled="!fullParams" class="">
+              <IconRight class="fill-white mr-3"/>Tạo phòng học
+            </app-button>
           </div>
         </div>
       </div>
@@ -259,20 +267,16 @@
       @ok="handleOk"
       :width="550"
       @cancel="handleCancelModal"
-      :footer="false"
-      :header="false"
       title="Bạn muốn tạo phòng học này?"
       description="Các thông tin phòng học không thể thay đổi sau khi được tạo."
     />
     
     <app-modal-confirm
       v-if="showModalConfirmDraf"
-      :confirmLoading="confirmLoading"
-      @ok="handleOk"
+      :confirmLoading="confirmDrafLoading"
+      @ok="handleDrafOk"
       :width="550"
-      @cancel="handleCancelModal"
-      :footer="false"
-      :header="false"
+      @cancel="handleDrafCancelModal"
       title="Bạn muốn lưu bản nháp tạo phòng học này?"
       description="Các thông tin phòng học sẽ được lưu thánh một bản nháp."
     />
@@ -298,7 +302,10 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+import IconTrash from '~/assets/svg/v2-icons/trash-alt.svg?inline';
 import IconClock from '~/assets/svg/icons/clock.svg?inline';
+import IconSave from '~/assets/svg/v2-icons/save.svg?inline';
+import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import {
@@ -338,6 +345,7 @@ function initialState() {
     showModalConfirm: false,
     showNotify: false,
     confirmLoading: false,
+    confirmDrafLoading: false,
     showBonus: false,
     schedules: [initialSchedule],
     filterCourse: null,
@@ -372,6 +380,7 @@ export default {
   name: "onlineclass",
 
   components: {
+    IconTrash,
     IconClock,
     IconAngleUp,
     IconPlus,
@@ -379,6 +388,8 @@ export default {
     IconCalendar,
     IconTrashAlt,
     IconCreate,
+    IconRight,
+    IconSave,
     ElearningManagerSide
   },
 
@@ -439,14 +450,48 @@ export default {
     getDateBirthDay,
     getEndTime,
 
+    schedulesDateChange(e, index, isTo) {
+      // if (isTo) {
+      //   if(this.schedules[index].from_date > e ) {
+      //     this.schedules[index].to_date = '';
+      //   } else {
+      //     this.schedules[index].to_date = e;
+      //   }
+      // } else {     
+      //   if(this.schedules[index].to_date < e ) {
+      //     this.schedules[index].from_date = '';
+      //   } else {
+      //     this.schedules[index].from_date = e;
+      //   }
+      // }
+      ///console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
+    },
+
     checkIncules(list, val){
       return list.includes(val)
     },
 
     convertDay(index) {
       const items = this.selectedItems[index];
-      return items.reduce((result, item, index) => {
+      const sorter = {
+        "mon": 1,
+        "tue": 2,
+        "wed": 3,
+        "thu": 4,
+        "fri": 5,
+        "sat": 6,
+        "sun": 7
+      };
+      let tmp = {};
+      items.forEach(function(value) {
+        let index = sorter[value.toLowerCase()];
+        tmp[index] = value;
+      });
+
+      let i = 0;
+      return Object.values(tmp).reduce((result, item) => {
         let text = '';
+        if (item) i++;
         switch (item) {
           case 'MON': text = '2'; break;
           case 'TUE': text = '3'; break;
@@ -456,12 +501,12 @@ export default {
           case 'SAT': text = '7'; break;
           case 'SUN': text = 'CN'; break;
         }
-        const com = index > 0 ? ", " : "";
+        const com = i > 1 ? ", " : "";
         return (result = result + com + text);
       }, "Hàng tuần vào thứ ");
     },
 
-    removeSchedule(index){
+    removeSchedule(index, editting){
       this.schedules = _.reject([...this.schedules], (i, inx) => inx === index);
       this.selectedItems = _.reject([...this.selectedItems], (i, inx) => inx === index);
       if (this.schedules.length === 0 ) {
@@ -470,9 +515,14 @@ export default {
       } else {
         if(this.indexShow != null && this.indexShow > index) this.indexShow = this.indexShow - 1;
         if(this.indexEdit != null && this.indexEdit > index) this.indexEdit = this.indexEdit - 1;
+        if(editting) this.indexEdit = null;
       }
     },
     editSchedule: function (index){
+      if (this.indexShow != null) {
+        this.schedules.pop();
+        this.selectedItems.pop();
+      }
       this.indexEdit = index;
       this.indexShow = null;
     },
@@ -532,6 +582,30 @@ export default {
       }
     },
 
+    async handleDrafOk() {
+      try {
+        this.confirmDrafLoading = true;
+        const doCreate = await this.$store.dispatch(
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
+          JSON.stringify({...this.params, enable: false})
+        );
+        if (doCreate.success) {
+          this.fnCancel();
+          this.message = "Lưu bản nháp phòng học thành công!";
+          this.showNotify = true;
+        } else if (doCreate.message) {
+          this.message = doCreate.message;
+          this.showNotify = true;
+        }
+      } catch (e) {
+        this.message = e;
+        this.showNotify = true;
+      } finally {
+        this.confirmDrafLoading = false;
+        this.showModalConfirmDraf = false;
+      }
+    },
+
     fnCancel() {
       let temp = [...this.courses];
       Object.assign(this.$data, initialState());
@@ -541,13 +615,18 @@ export default {
     fnSave() {
       this.showModalConfirm = true;
     },
-    fnSave2() {
-      this.showModalConfirm = true;
+    fnSaveDraf() {
+      this.showModalConfirmDraf = true;
     },
 
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+    },
+    
+    handleDrafCancelModal() {
+      this.showModalConfirmDraf = false;
+      this.confirmDrafLoading = false;
     },
 
     async getElearnings() {
@@ -557,7 +636,7 @@ export default {
           : "";
         await this.$store.dispatch(
           `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
+          { params: {teacher_id: userId, status: 'APPROVED'} }
         );
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
@@ -575,6 +654,9 @@ export default {
 
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
+      // this.params.enable = this.courses[0].privacy;
+      this.params.enable = true;
+      this.filterPrivacy = {value:true, text: 'Công khai'};
     },
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;

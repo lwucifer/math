@@ -1,11 +1,12 @@
 <template>
-  <div>{{ $route.name }}</div>
 </template>
 
 <script>
-export default {
-
-}
+  export default {
+    middleware({ store, route, redirect }) {
+      return redirect(`/social/account/14`);
+    }
+  }
 </script>
 
 <style>

@@ -1,11 +1,11 @@
 <template>
   <div class="post__tags">
-    <span class="text-sub font-weight-normal">cùng với</span>
+    <span class="text-base font-weight-normal">cùng với</span>
 
     <n-link :to="`/account/${tags[0].id}`">{{ tags[0].fullname }}</n-link>
 
     <template v-if="tags.length > 1">
-      <span class="text-sub font-weight-normal">và</span>
+      <span class="text-base font-weight-normal">và</span>
       <n-link
         v-if="tags.length === 2"
         :to="`/account/${tags[1].id}`"

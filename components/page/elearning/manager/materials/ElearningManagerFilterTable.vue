@@ -18,14 +18,13 @@
       >
         <app-button
           size="sm"
-          square
           normal
           :disabled="!additionalActions.delete"
-          :color="additionalActions.delete ? 'secondary' : 'disabled'"
+          :color="additionalActions.delete ? 'pink' : 'disabled'"
           @click="handleDelete"
         >
           <IconTrashAlt style="fill: #fff; height: 16px;"/>
-          <span>Xóa tài liệu</span>
+          <span style="color: #FBFBFB;">Xóa tài liệu</span>
         </app-button>
 
         <template slot="popover">
@@ -42,9 +41,11 @@
       multiple-selection
       @pagechange="onPageChange"
       @selectionChange="selectRow"
+      order-by="created_at"
+      order="asc"
     >
       <template v-slot:cell(name)="{row}">
-        <td>
+        <td :title="get(row, 'name', '')">
           {{ get(row, 'name', '' ) | truncStrFilter(40) }}
         </td>
       </template>
@@ -71,7 +72,6 @@
       @cancel="cancelDel"
       @ok="confirmDel"
       title="Bạn chắc chắn muốn xóa tài liệu?"
-      width="595"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
       centered
@@ -82,7 +82,6 @@
       v-if="visible.canDelete"
       type="warning"
       title="Không thể xóa file này!"
-      width="545"
       description="Bạn không thể xóa tài liệu đang được sử dụng."
       @ok="visible.canDelete = false"
       @close="visible.canDelete = false"
@@ -123,7 +122,7 @@
             total: 0,
             size: 10,
             page: 1,
-            totalElements: 0,
+            total_elements: 0,
             first: 1,
             last: 1,
             number: 0

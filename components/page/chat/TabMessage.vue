@@ -42,7 +42,7 @@
           </div>
           <div class="message-decs__title">
             <span>{{nameGroup}}</span>
-            <p>Đang hoạt động</p>
+            <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
         <div class="message-tool">
@@ -79,7 +79,7 @@
         </client-only>
       </div>
 
-      <div class="aside-box__content" v-if="!checkList">
+      <div class="aside-box__content" v-if="!checkList" :class="{'padding-show-info': showInfo}">
         <client-only>
           <infinite-loading
             direction="top"
@@ -486,7 +486,7 @@
       </div>
     </div>
 
-    <transition enter-active-class="animate__fadeInRight" leave-active-class="animate__fadeInRight">
+    <transition enter-active-class="animated faster fadeInRight" leave-active-class="animated faster fadeOutRight">
       <TabInfo v-if="showInfo"/> 
     </transition>
 
@@ -756,8 +756,8 @@ export default {
       const dataTotal =
         this.memberList &&
         this.memberList.page &&
-        this.memberList.page.totalElements
-          ? this.memberList.page.totalElements
+        this.memberList.page.total_elements
+          ? this.memberList.page.total_elements
           : "";
       if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
         const [dataFilterMember] = dataMember.filter(

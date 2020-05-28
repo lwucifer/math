@@ -28,7 +28,6 @@
           label="text"
           placeholder="Theo lớp"
           searchable
-          clearable
           @input="handleSelectType"
         />
       </div>

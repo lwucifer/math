@@ -14,7 +14,7 @@
             />
           </th>
           <th v-for="(item, index) in heads" :key="index">
-            <div v-html="item.text"></div>
+            <div v-html="item.text" class="d-inline-block"></div>
             <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
             <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
               <IconDirection height="18" width="18" />
@@ -143,9 +143,9 @@ export default {
       required: false,
       default: () => {
         return {
-          totalPages: 0,
+          total_pages: 0,
           size: 10,
-          totalElements: 0,
+          total_elements: 0,
           first: 1,
           last: 1,
           number: 0
@@ -185,14 +185,22 @@ export default {
       type: String,
       default: 'id'
     },
+    orderBy: {
+      type: String,
+      default: 'name'
+    },
+    order: {
+      type: String,
+      default: 'asc'
+    }
   },
 
   data() {
     return {
       mouseOver: true,
       listSortBy: [],
-      currentSort: "name",
-      currentSortDir: "asc",
+      currentSort: this.orderBy,
+      currentSortDir: this.order,
       selectedItems: [], // An array of selected rows
     };
   },

@@ -2,15 +2,17 @@
   <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
-
-      <div class="filter-form__item flex-1">
+      <div class="d-flex">
+      <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
         <div style="width: 100%">
           <app-search
             class
             :placeholder="'Nhập để tìm kiếm...'"
+            bordered
             v-model="params.query"
             :size="'sm'"
             @submit="submit"
+            @keyup.enter.native="submit"
           ></app-search>
         </div>
       </div>
@@ -31,23 +33,25 @@
         <app-vue-select
           class="app-vue-select filter-form__item__selection"
           v-model="filterCourse"
-          :options="courses"
+          :options="courseOpts"
           label="text"
           placeholder="Bài giảng/khóa học"
-          searchable
-          clearable
           @input="handleChangedCourse"
+          :all-opt="allOpt"
+          has-border
         ></app-vue-select>
       </div>
+    </div>
     </div>
     <!--End filter form-->
 
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item" @click="deleteRows">
-        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+      <div class="filter-form__item">
+        <app-button class="filter-form__item__btn m-0" color="pink" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3 color-white">Hủy lớp</span>
+          <span class="ml-3">Hủy phòng học</span>
         </app-button>
       </div>
     </div>
@@ -95,6 +99,17 @@
     <!--End table-->
 
     <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false" :info="modalData"/>
+
+    <app-modal-confirm
+        v-if="showModalConfirm"
+        @ok="deleteRows"
+        :width="550"
+        @cancel="showModalConfirm = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn hủy phòng học?"
+        description="Bạn sẽ không thể khôi phục phòng học bị xóa."
+      />
   </div>
 </template>
 
@@ -140,6 +155,11 @@ export default {
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: 'Tất cả'
+      },
+       showModalConfirm: false,
       rowClassId: null,
       showFilter: false,
       modalShow: false,
@@ -169,12 +189,11 @@ export default {
       ],
       filterCourse: null,
       courses: [],
-      isAuthenticated: true,
       pagination: {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -198,8 +217,11 @@ export default {
       stateClass: "OnlineClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
-    })
+      stateElearnings: "Elearnings"
+    }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses]
+    }
   },
 
   methods: {
@@ -207,7 +229,7 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
         this.params = {...this.params,
           elearning_id: null
@@ -240,18 +262,18 @@ export default {
       });
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: {teacher_id: userId, status: 'APPROVED'} }
         );
-        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
-        this.lessonList.forEach(element => {
+        lessonList.forEach(element => {
           list.push({
             value: element.id,
             text: element.name
@@ -289,17 +311,17 @@ export default {
         self.pagination.first = self.get(self.stateClass, "data.first", 1);
         self.pagination.last = self.get(self.stateClass, "data.last", 1);
         self.pagination.number = self.get(self.stateClass, "data.number", 0);
-        self.pagination.totalPages = self.get(
+        self.pagination.total_pages = self.get(
           self.stateClass,
           "data.total_pages",
           0
         );
-        self.pagination.totalElements = self.get(
+        self.pagination.total_elements = self.get(
           self.stateClass,
           "data.total_elements",
           0
         );
-        self.pagination.numberOfElements = self.get(
+        self.pagination.number_of_elements = self.get(
           self.stateClass,
           "data.number_of_elements",
           0
@@ -322,6 +344,8 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
+      
+      this.showModalConfirm = false;
     },
 
     openModal(row) {
@@ -335,7 +359,7 @@ export default {
 
   created() {
     this.getList();
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>

@@ -2,51 +2,62 @@
   <div class="elearning-wrapper">
     <!--Filter form-->
     <div class="filter-form">
-      <div class="filter-form__item flex-1">
-        <div style="width: 100%">
-          <app-search
-            class
-            :placeholder="'Nhập để tìm kiếm...'"
-            v-model="params.query"
-            :size="'sm'"
-            @submit="submit"
-          ></app-search>
+      <div class="d-flex">
+        <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+          <div style="width: 100%">
+            <app-search
+              class
+              :placeholder="'Nhập để tìm kiếm...'"
+              bordered
+              v-model="params.query"
+              :size="'sm'"
+              @submit="submit"
+              @keyup.enter.native="submit"
+            ></app-search>
+          </div>
         </div>
-      </div>
 
-      <div class="filter-form__item">
-        <app-button
-          :color="showFilter ? 'primary' : 'white'"
-          square
-          :size="'sm'"
-          @click="toggleFilter"
-        >
-          <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
-          <span>Lọc kết quả</span>
-        </app-button>
-      </div>
+        <div class="filter-form__item">
+          <app-button
+            :color="showFilter ? 'primary' : 'white'"
+            square
+            :size="'sm'"
+            @click="toggleFilter"
+          >
+            <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+            <span>Lọc kết quả</span>
+          </app-button>
+        </div>
 
-      <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
-        <app-vue-select
-          class="app-vue-select filter-form__item__selection"
-          v-model="filterCourse"
-          :options="courses"
-          label="text"
-          placeholder="Bài giảng/khóa học"
-          searchable
-          clearable
-          @input="handleChangedCourse"
-        ></app-vue-select>
+        <div class="filter-form__item" style="min-width: 19rem" v-if="showFilter">
+          <app-vue-select
+            class="app-vue-select filter-form__item__selection"
+            v-model="filterCourse"
+            :options="courseOpts"
+            label="text"
+            placeholder="Bài giảng/khóa học"
+            @input="handleChangedCourse"
+            :all-opt="allOpt"
+            has-border
+          ></app-vue-select>
+        </div>
       </div>
     </div>
     <!--End filter form-->
 
     <!--Options group-->
     <div class="filter-form">
-      <div class="filter-form__item" @click="deleteRows">
-        <app-button class="filter-form__item__btn button-delete m-0" square :size="'sm'">
+      <div class="filter-form__item">
+        <app-button class="filter-form__item__btn m-0 mr-4" color="pink" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirm = true">
           <IconTrash class="fill-white"/>
-          <span class="ml-3 color-white">Hủy lớp</span>
+          <span class="ml-3">Hủy phòng học</span>
+        </app-button>
+        
+        <app-button class="filter-form__item__btn m-0 color-666" color="disabled" square :size="'sm'"
+        :disabled="ids.length == 0" @click="showModalConfirmSchedules = true">
+          <IconCalendarDelete/>
+          <span class="ml-3">Hủy lịch học</span>
         </app-button>
       </div>
     </div>
@@ -72,22 +83,43 @@
       </template>
       <template v-slot:cell(time)="{row}">
         <td>
-          <div>
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
-          </div>
+          <div>{{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}</div>
+          <div>{{getDateBirthDay(row.start_time)}}</div>
         </td>
       </template>
 
       <template v-slot:actions="{row}">
-        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconEdit class="fill-primary mr-2"/>Chỉnh sửa
+        <n-link
+          :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
+          class="link"
+        >
+          <IconEdit class="fill-primary mr-2" />Chỉnh sửa
         </n-link>
       </template>
     </app-table>
     <!--End table-->
+
+    <app-modal-confirm
+      v-if="showModalConfirm"
+      @ok="deleteRows"
+      :width="550"
+      @cancel="showModalConfirm = false"
+      :footer="false"
+      :header="false"
+      title="Bạn có chắc chắn muốn hủy phòng học?"
+      description="Bạn sẽ không thể khôi phục phòng học bị xóa."
+    />
+
+    <app-modal-confirm
+        v-if="showModalConfirmSchedules"
+        @ok="deleteSchedules"
+        :width="550"
+        @cancel="showModalConfirmSchedules = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn hủy lịch học?"
+        description="Bạn sẽ không thể khôi phục lịch học bị xóa."
+      />
   </div>
 </template>
 
@@ -97,14 +129,12 @@ import IconSearch from "~/assets/svg/icons/search.svg?inline";
 import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
-import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
-import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconEdit from '~/assets/svg/v2-icons/edit_24px.svg?inline';
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import IconTimesCircle from "~/assets/svg/design-icons/times-circle.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
+import IconCalendarDelete from '~/assets/svg/v2-icons/calendar-delete.svg?inline';
 
-import {
-  getDateBirthDay,
-  getLocalTimeHH_MM_A
-} from "~/utils/moment";
+import { getDateBirthDay, getLocalTimeHH_MM_A } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
@@ -124,11 +154,18 @@ export default {
     IconCalendar,
     IconTrash,
     IconTimesCircle,
-    IconHamberger
+    IconHamberger,
+    IconCalendarDelete
   },
 
   data() {
     return {
+      allOpt: {
+        value: null,
+        text: "Tất cả"
+      },
+      showModalConfirm: false,
+      showModalConfirmSchedules: false,
       showFilter: false,
       tab: 1,
       heads: [
@@ -159,7 +196,7 @@ export default {
         total: 0,
         number: 0,
         size: 10,
-        totalElements: 0,
+        total_elements: 0,
         first: 0,
         last: 0
       },
@@ -183,8 +220,11 @@ export default {
       stateClass: "OnlinelClass"
     }),
     ...mapState(STORE_PUBLIC_SEARCH, {
-      stateLessons: "Lessons"
-    })
+      stateElearnings: "Elearnings"
+    }),
+    courseOpts() {
+      return [this.allOpt, ...this.courses];
+    }
   },
 
   methods: {
@@ -192,11 +232,9 @@ export default {
     getLocalTimeHH_MM_A,
 
     toggleFilter() {
-      if (this.showFilter) {
+      if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
-        this.params = {...this.params,
-          elearning_id: null
-        }
+        this.params = { ...this.params, elearning_id: null };
         this.getList();
       }
       this.showFilter = !this.showFilter;
@@ -226,18 +264,18 @@ export default {
       });
     },
 
-    async getLessons() {
+    async getElearnings() {
       try {
         let userId = this.$store.state.auth.token
           ? this.$store.state.auth.token.id
           : "";
         await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_SEARCH.DETAIL}`,
-          { userId }
+          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+          { params: { teacher_id: userId } }
         );
-        this.lessonList = this.get(this.stateLessons, "data.content", []);
+        let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
-        this.lessonList.forEach(element => {
+        lessonList.forEach(element => {
           list.push({
             value: element.id,
             text: element.name
@@ -249,7 +287,6 @@ export default {
       }
     },
 
-    
     async getList() {
       const self = this;
       try {
@@ -265,17 +302,17 @@ export default {
         this.pagination.first = this.get(this.stateClass, "data.first", 1);
         this.pagination.last = this.get(this.stateClass, "data.last", 1);
         this.pagination.number = this.get(this.stateClass, "data.number", 0);
-        this.pagination.totalPages = this.get(
+        this.pagination.total_pages = this.get(
           this.stateClass,
           "data.total_pages",
           0
         );
-        this.pagination.totalElements = this.get(
+        this.pagination.total_elements = this.get(
           this.stateClass,
           "data.total_elements",
           0
         );
-        this.pagination.numberOfElements = this.get(
+        this.pagination.number_of_elements = this.get(
           this.stateClass,
           "data.number_of_elements",
           0
@@ -300,12 +337,28 @@ export default {
       }
     },
 
+    async deleteSchedules() {
+      let ids = { online_lesson_ids: [...this.ids] };
+
+      const doDelete = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_SCHEDULES.DELETE}`,
+        JSON.stringify(ids)
+      );
+
+      if (doDelete.success) {
+        this.showModalConfirmSchedules = false;
+        //this.getList();
+      } else {
+        this.$toasted.error(doDelete.message);
+      }
+    },
+
     get
   },
 
   created() {
     this.getList();
-    this.getLessons();
+    this.getElearnings();
   }
 };
 </script>

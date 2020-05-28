@@ -3,10 +3,10 @@
     <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
       <h3 class="body-2 mr-1 question-title">Câu {{ index + 1 }}:</h3>
 
-      <p
+      <div
         class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
-        v-html="get(question, 'content', '')"
-      ></p>
+        v-html="limit"
+      ></div>
 
       <span class="text-sub mr-4 question-type">{{ type }}</span>
 
@@ -76,6 +76,7 @@ import EditQuestionChoice from "~/components/page/course/create/exercise/EditQue
 import EditQuestionEssay from "~/components/page/course/create/exercise/EditQuestionEssay";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
+import { limitCharacter } from "~/utils/common";
 
 export default {
   components: {
@@ -114,10 +115,6 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.question)
-  },
-
   computed: {
     type() {
       return get(this, "question.type", "") === "CHOICE"
@@ -128,6 +125,12 @@ export default {
       general: "general",
       lesson: "lesson",
     }),
+
+    limit() {
+      const value = get(this, 'question.content', '')
+      
+      return limitCharacter(value, 60, 20)
+    }
   },
 
   methods: {

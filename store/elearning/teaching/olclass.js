@@ -9,6 +9,7 @@ import BaseOlclass from "~/services/elearning/teaching/OlclassBase";
 import Lessons from "~/services/elearning/teaching/OlclassLessons";
 import Sessions from "~/services/elearning/teaching/OlclassLessonSessions";
 import OlStudents from "~/services/elearning/teaching/OlclassStudents";
+import OlSchedules from "~/services/elearning/teaching/OlclassSchedules";
 
 /**
  * initial state
@@ -230,7 +231,7 @@ const actions = {
       console.log("[TEACHING Olclass] list.error", error);
     }
   },
- 
+
   // Lesson sessions
   async [actionTypes.TEACHING_OLCLASS_LESSON_SESSIONS.LIST]({ commit }, options) {
     try {
@@ -267,7 +268,18 @@ const actions = {
     }
   },
 
+  // Schedules
+  async [actionTypes.TEACHING_SCHEDULES.DELETE]({ commit }, options) {
+    try {
+      const result = await new OlSchedules(this.$axios)["deleteWithRawJson"](options);
+      return result;
+    } catch (error) {
+      console.log("[TEACHING schedules] delete.error", error);
+    }
+  },
+
 };
+
 
 /**
  * initial mutations
@@ -298,7 +310,7 @@ const mutations = {
     state.LessonInfo = _info;
   },
   [mutationTypes.TEACHING_OLCLASS_STUDENTS.SET_TEACHING_OLCLASS_STUDENTS_LIST](state, _list) {
-    state.Students = _info;
+    state.Students = _list;
   },
 };
 

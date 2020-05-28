@@ -14,13 +14,13 @@
         <app-date-picker
           class="w-100"
           v-model="dateDefault"
-          square
           range
           size="sm"
           placeholder="DD/MM/YYYY - DD/MM/YYYY"
           :shortcuts="DATE_SHORTCUT"
+          popup-class="datepicker-range-v2"
+          value-type="YYYY-MM-DD"
           @input="changeDate"
-          valueFormat="YYYY-MM-DD"
         >
           <!--<template v-slot:icon-calendar>-->
           <!--<IconCalendar />-->

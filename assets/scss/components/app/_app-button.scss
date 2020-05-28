@@ -37,7 +37,13 @@
         pointer-events: none;
         background-color: $color-text-sub;
         border-color: $color-disabled;
-        color: $color-gray;
+        color: $color-gray !important;
+        svg {
+            fill: $color-gray !important; 
+            path {
+                fill: $color-gray !important; 
+            }
+        }
     }
 }
 
@@ -143,9 +149,8 @@
 }
 
 .btn--color-red {
-    background-color: #fff;
-    color: $color-red;
-    border: 1px solid $color-red;
+    background-color: $color-red;
+    color: #fff;
 }
 
 .btn--color-transparent {

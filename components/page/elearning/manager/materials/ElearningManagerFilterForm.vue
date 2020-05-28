@@ -9,7 +9,8 @@
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.query"
+          bordered
+          v-model="filters.name"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
@@ -33,6 +34,7 @@
           placeholder="Thể loại"
           @input="handleChangedType"
           :all-opt="allOpt"
+          has-border
         >
         </app-vue-select>
       </div>
@@ -46,6 +48,7 @@
           placeholder="Trạng thái"
           @input="handleChangedStatus"
           :all-opt="allOpt"
+          has-border
         >
         </app-vue-select>
       </div>

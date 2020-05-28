@@ -76,6 +76,11 @@ export const ACCOUNT_BANKS = {
     SET_ACCOUNT_BANKS_LIST: "setAccountBanksList",
 };
 
+export const ACCOUNT_SETTING = {
+    SET_ACCOUNT_SETTING_LIST: "setAccountSettingList",
+    UPDATE_ACCOUNT_SETTING: "updateAccountSetting",
+};
+
 export const ELEARNING_PUBLIC_SEARCH = {
     SET_ELEARNING_PUBLIC_SEARCH_DETAIL: "setElearningPublicElearningDetail",
 };
@@ -414,6 +419,10 @@ export const ELEARNING_STUDY_PROGRESS = {
     SET_STUDY_PROGRESS_CURRENT_SESSION: "setStudyProgressCurrentSession",
 };
 
+export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
+    SET_ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS_LIST: "setElearningStudyOlclassLessonSessionsList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -425,6 +434,7 @@ export const ELEARNING_SCHOOL_SEARCH = {
 export const ELEARNING_SCHOOL_STANDALONE = {
     SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
+
 
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
@@ -467,6 +477,9 @@ export const TEACHING_INTERACTIVE = {
 export const TEACHING_ONLINE_CLASS = {
     SET_TEACHING_ONLINE_CLASS_LIST: "setTeachingStudentsList",
     SET_TEACHING_ONLINE_CLASS_DELETE: "setTeachingStudentsDelete",
+};
+export const TEACHING_SCHEDULES = {
+    SET_TEACHING_SCHEDULES_DELETE: "setTeachingSchedulesDelete",
 };
 
 export const CART = {
@@ -535,4 +548,8 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const KEYWORD = {
     SEARCH_HEADER: "searchHeader",
-}
+};
+
+export const CHAT = {
+    SET_ROOM_LIST: "setRoomList",
+};

@@ -13,7 +13,7 @@
             <div class="row">
               <div class="col-md-8 d-flex align-items-center">
                 <h3 class="block-section__title--main">
-                  <span @click="() => { this.$router.go('-1') }">
+                  <span @click="() => { this.$router.go('-1') }" class="d-flex align-items-center">
                     <icon-left-arrow class="block-section__icon-title" title="Quay lại"/>
                   </span>
                   Rút tiền về tài khoản
@@ -26,7 +26,7 @@
                     color="transparent"
                     :disabled="!token"
                     :to="token ? '/' + token.id + '/info/withdrawals' : '/'"
-                    style="color: #656565; font-weight: normal;"
+                    style="color: #656565; font-weight: normal; box-shadow: none;"
                     class="px-0"
                   >
                     <slot name="icon">

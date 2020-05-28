@@ -1,7 +1,8 @@
 .aside-box {
     background-color: #fff;
     padding: 1rem 2rem 2rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    
     &.course-guess__side {
         padding: 1.2rem 1rem;
     }
@@ -37,9 +38,7 @@
 
 .aside-box__title {
     display: inline-block;
-    margin-right: 3rem;
-    font-size: 2rem;
-    color: $color-primary;
+    font-size: 1.5rem;
 }
 
 .aside-box__link {

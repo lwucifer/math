@@ -86,12 +86,21 @@ export default {
       payload: {
         elearning_id: get(this, "$route.params.id", ""),
         content: "",
+        image: "",
       },
+      image: "",
     };
   },
 
   methods: {
+    reset() {
+      this.payload.content = "";
+      this.image = "";
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+    },
     handleUploadChange(fileList, event) {
+      this.image = fileList[0];
       this.uploadFileList = Array.from(fileList);
       getBase64(this.uploadFileList[0], (src) => {
         this.uploadImgSrc = src;
@@ -99,6 +108,7 @@ export default {
     },
 
     removeImgUpload() {
+      this.image = "";
       this.uploadFileList = [];
       this.uploadImgSrc = null;
 
@@ -110,16 +120,17 @@ export default {
     async handleAddQuestion() {
       const res = await new InteractiveQuestionService(this.$axios)[
         "addQuestion"
-      ](this.payload);
+      ](this.payload, this.image);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
+        this.reset();
         const options = {
           params: {
             elearning_id: get(this, "$route.params.id", ""),
           },
         };
         this.$store.dispatch(
-          `elearning/study/questions/getListQuestion`,
+          `elearning/study/detail/getListQuestion`,
           options
         );
         return;

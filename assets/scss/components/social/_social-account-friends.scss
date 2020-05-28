@@ -1,0 +1,35 @@
+.wrap-account-friends-social{
+    background: #ffffff;
+    padding: 20px;
+    margin-top:11px;
+  }
+  .wrap-friend-item-social{
+    display: flex;
+    padding:10px;
+    border: 1px solid #E0E0E0;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-size: 12px;
+    .btn-friend-item{
+        font-weight: normal;
+        color: #656565;
+        width: 62px;
+        height: 25px;
+        font-size: 12px;
+        padding:0;
+        justify-content: center;
+
+    }
+}
+.account-friend-menu-dropdown{
+    display: flex;
+    flex-direction: column;
+    .item{
+        display: flex;
+        align-items: center;
+        &:hover{
+            color: $color-primary;
+            svg path { fill:$color-primary;}
+        }
+    }
+}

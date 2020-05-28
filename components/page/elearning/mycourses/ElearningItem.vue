@@ -1,16 +1,19 @@
 <template>
   <div class="wrap__elearning-item">
     <div class="img__elearning-item">
-      <img
-        v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
-      />
+      <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
+        <img
+          v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
+        />
+      </n-link>
     </div>
     <div class="wrap-content_Elearning">
-      <n-link
-        class="name_elearning-item"
-        :to="`/elearning/${elearning && elearning.elearning_id}`"
-        :title="elearning.name"
-      >{{elearning && elearning.name}}</n-link>
+      <h3 class="name_elearning-item">
+        <n-link
+          :to="`/elearning/${elearning && elearning.elearning_id}`"
+          :title="elearning.name"
+        >{{elearning && elearning.name}}</n-link>
+      </h3>
       <div class="d-flex align-items-center my-3">
         <n-link
           :to="`/public/profile/teacher?user_id=${elearning.teacher.id}`"
@@ -54,28 +57,43 @@
             </button>
 
             <ul class="link--dropdown__ElearningItem">
-              <li class="item-share__ElearningItem" @click.prevent="shareDropdown=!shareDropdown">
-                <n-link to>
-                  <IconShare24px class="icon" />Chia sẻ
-                </n-link>
-                <ul class="share-dropdowm__ElearningItem" v-if="shareDropdown">
-                  <li @click.prevent="shareFb(elearning.elearning_id)">
-                    <IconFacebook class="icon fill-info"/>Chia sẻ qua Facebook
-                  </li>
-                  <li @click.prevent="shareSchool(elearning.elearning_id)">
-                   <IconSchooly class="icon fill-white"/>Chia sẻ qua Schoolly
-                  </li>
-                </ul>
+              <li
+                class="item-share__ElearningItem"
+                @click.prevent="shareDropdown=!shareDropdown"
+                v-if="tab !== 5"
+              >
+                <v-popover
+                  popoverClass="menu-share-elearning-tooltip"
+                  placement="right"
+                  trigger="hover"
+                >
+                  <n-link class="pr-2" to>
+                    <IconShare24px class="icon" />Chia sẻ
+                  </n-link>
+                  <template slot="popover">
+                    <ul class="share-dropdowm__ElearningItem">
+                      <li @click.prevent="shareFb(elearning.elearning_id)">
+                        <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                      </li>
+                      <li @click.prevent="shareSchool(elearning)">
+                        <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                      </li>
+                    </ul>
+                  </template>
+                </v-popover>
               </li>
               <li
-                v-if="elearning && !elearning.is_favourite"
+                v-if="elearning && !elearning.is_favourite && tab !== 5"
                 @click.prevent="handleFavourite(elearning.elearning_id)"
               >
                 <n-link to>
                   <IconCardsHeart class="icon" />Yêu thích
                 </n-link>
               </li>
-              <li v-else @click.prevent="handleDeleteFavourite(elearning.elearning_id)">
+              <li
+                v-else-if="elearning && elearning.is_favourite && tab !== 5"
+                @click.prevent="handleDeleteFavourite(elearning.elearning_id)"
+              >
                 <n-link to class="text-primary">
                   <IconCardsHeart class="icon" />Bỏ yêu thích
                 </n-link>
@@ -88,7 +106,10 @@
                   <IconArchive class="icon" />Lưu trữ
                 </n-link>
               </li>
-              <li v-else @click.prevent="handleDeleteArchive(elearning.elearning_id)">
+              <li
+                v-else-if="elearning && !elearning.is_archive && tab === 5"
+                @click.prevent="handleDeleteArchive(elearning.elearning_id)"
+              >
                 <n-link to class="text-primary">
                   <IconUnArchive class="icon" />Bỏ lưu trữ
                 </n-link>
@@ -107,8 +128,8 @@ import IconCardsHeart from "~/assets/svg/v2-icons/cards-heart.svg?inline";
 import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
-import IconFacebook from '~/assets/svg/design-icons/facebook.svg?inline';
-import IconSchooly from '~/assets/svg/icons/schooly.svg?inline';
+import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
+import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -140,6 +161,9 @@ export default {
   props: {
     elearning: {
       default: null
+    },
+    tab: {
+      default: 1
     }
   },
   computed: {
@@ -165,24 +189,26 @@ export default {
       this.$emit("handleDeleteArchive", id);
     },
     shareFb(id) {
-      const url =
-        "https://facebook.com/sharer.php?display=popup&u=" +
-        window.origin +
-        `elearning/${id}`;
-      window.open(url, "sharer", "_blank");
+      this.$emit("shareFb", id);
+      // const url =
+      //   "https://facebook.com/sharer.php?display=popup&u=" +
+      //   window.origin +
+      //   `elearning/${id}`;
+      // window.open(url, "sharer", "_blank");
     },
-    async shareSchool(id) {
-      const link = window.origin + `/elearning/${id}`;
-      const doAdd = await this.$store.dispatch(
-        `social/${actionTypes.SOCIAL.ADD_POST}`,
-        { link: link }
-      );
-      if (doAdd.success) {
-        this.menuDropdown = false;
-        this.$toasted.show("Đã chia sẻ thành công.");
-      } else {
-        this.$toasted.error(doAdd.message);
-      }
+    async shareSchool(elearning) {
+      this.$emit("shareSchool", elearning);
+      // const link = window.origin + `/elearning/${id}`;
+      // const doAdd = await this.$store.dispatch(
+      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
+      //   { link: link }
+      // );
+      // if (doAdd.success) {
+      //   this.menuDropdown = false;
+      //   this.$toasted.show("Đã chia sẻ thành công.");
+      // } else {
+      //   this.$toasted.error(doAdd.message);
+      // }
     }
   },
   created() {

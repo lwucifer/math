@@ -1,9 +1,12 @@
 <template>
   <sub-block-section
     :title-cls="{'border-0': true }"
+    :content-cls="{ 'px-0': true, 'pt-0': true }"
+    bg-content-color="transparent"
+    :outline="false"
   >
     <template v-slot:title>
-      <filter-form 
+      <filter-form
         @changeDate="changeDate"
         @changeStatus="changeStatus"
         @changePayment="changePayment"

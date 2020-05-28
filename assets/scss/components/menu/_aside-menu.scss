@@ -2,9 +2,7 @@
 .aside-menu {
   &__item {
     padding: 1rem 1.5rem;
-    background-color: #F9F9F9;
     margin-bottom: 8px;
-    border-left: 4px solid #F9F9F9;
     a {
       color: #585858;
       font-size: 1.4rem;
@@ -26,6 +24,7 @@
     }
     &.active {
       border-left: 4px solid $color-primary;
+      background-color: #F9F9F9;
       a {
         color: $color-primary;
         font-weight: 600;
@@ -39,6 +38,8 @@
     
     &:hover {
       border-color: #008329;
+      border-left: 4px solid #008329;
+      background-color: #F9F9F9;
       a {
         color: #008329;
         align-items: center;

@@ -16,6 +16,7 @@
         <app-search
           placeholder="Tìm kiếm"
           v-model="params.keyword"
+          bordered
           @input="hanldeInputSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="handleSubmitSearch"
@@ -26,17 +27,20 @@
       <ElearningItem
         slot-scope="{ item }"
         :elearning="item"
+        :tab="tab"
         @handleFavourite="handleFavourite"
         @handleDeleteFavourite="handleDeleteFavourite"
         @handleDeleteArchive="handleDeleteArchive"
         @handleArchive="handleArchive"
+        @shareFb="shareFb"
+        @shareSchool="shareSchool"
       ></ElearningItem>
     </ElearningList>
     <app-pagination
       :pagination="pagination"
       :type="1"
       @pagechange="onPageChange"
-      v-if="pagination.totalPages > 1"
+      v-if="pagination.total_pages > 1"
     />
     <!-- Item favourite nhưng chưa
     <div class="col-md-3">
@@ -46,9 +50,9 @@
         </template>
     
     </CourseItem2>
-     </div>-->
-    <ShareElearningModal v-if="false"/> <!-- ModalShare -->
-   
+    </div>-->
+    <ShareElearningModal v-if="checkModalShare" @cancel="cancel" :dataModal="dataModal" />
+    <!-- ModalShare -->
   </div>
 </template>
 
@@ -76,7 +80,7 @@ export default {
   data() {
     return {
       params: {
-        keyword: ""
+        keyword: null
       },
       tab: 1,
       list: [],
@@ -88,14 +92,16 @@ export default {
         archieves: null
       },
       pagination: {
-        // totalElements: 103,
+        // total_elements: 103,
         // last: false,
-        // totalPages: 222,
+        // total_pages: 222,
         // size: 10,
         // number: 2,
         // first: true,
-        // numberOfElements: 10
-      }
+        // number_of_elements: 10
+      },
+      checkModalShare: false,
+      dataModal: {}
     };
   },
   created() {
@@ -172,9 +178,9 @@ export default {
       this.pagination.first = _newVal.first;
       this.pagination.last = _newVal.last;
       this.pagination.number = _newVal.number;
-      this.pagination.totalPages = _newVal.total_pages;
-      this.pagination.totalElements = _newVal.total_elements;
-      this.pagination.numberOfElements = _newVal.number_of_elements;
+      this.pagination.total_pages = _newVal.total_pages;
+      this.pagination.total_elements = _newVal.total_elements;
+      this.pagination.number_of_elements = _newVal.number_of_elements;
     }
   },
   methods: {
@@ -428,6 +434,31 @@ export default {
           this.pagination = get(this, "elearningStudyArchive.page", {});
         }
       }
+    },
+    shareFb(id) {
+      const url =
+        "https://facebook.com/sharer.php?display=popup&u=" +
+        window.origin +
+        `elearning/${id}`;
+      window.open(url, "sharer", "_blank");
+    },
+    async shareSchool(item) {
+      this.checkModalShare = true;
+      this.dataModal = item;
+      // const link = window.origin + `/elearning/${id}`;
+      // const doAdd = await this.$store.dispatch(
+      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
+      //   { link: link }
+      // );
+      // if (doAdd.success) {
+      //   this.menuDropdown = false;
+      //   this.$toasted.show("Đã chia sẻ thành công.");
+      // } else {
+      //   this.$toasted.error(doAdd.message);
+      // }
+    },
+    cancel() {
+      this.checkModalShare = false;
     }
   }
 };

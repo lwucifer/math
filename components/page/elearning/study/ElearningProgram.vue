@@ -7,7 +7,8 @@
 
     <app-divider class="my-0" color="disabled" />
 
-    <div v-if="progress.type === 'COURSE'">
+    <div v-if="totalLessons < 1" class="box caption">Không có bài học nào</div>
+    <div v-else-if="progress.type === 'COURSE'">
       <ElearningProgramCourse
         v-for="(program, index) in get(progress, 'programs', [])"
         :program="program"
@@ -19,6 +20,7 @@
       <ElearningProgramItem
         class="e-program__item-lecture"
         :lesson="get(progress, 'programs.0.lessons.0', null)"
+        :index="1"
       />
     </div>
 
@@ -50,15 +52,14 @@ export default {
   components: {
     IconFileAlt,
     ElearningProgramItem,
-    ElearningProgramCourse
+    ElearningProgramCourse,
   },
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
-    
 
     totalLessons() {
-      console.log("[progress]", this.progress);
+      // console.log("[progress]", this.progress);
       if (!this.progress) return `0`;
       return (
         this.progress.programs.reduce(
@@ -69,7 +70,7 @@ export default {
     },
 
     test_info() {
-      return this.progress.test_info || {};
+      return get(this, "progress.test_info", {});
     },
 
     isTestExist() {
@@ -79,7 +80,8 @@ export default {
 
     testRate() {
       if (!this.test_info) return "(0/0)";
-      const touchedExams = this.test_info.passed + this.test_info.failed + this.test_info.pending;
+      const touchedExams =
+        this.test_info.passed + this.test_info.failed + this.test_info.pending;
       return `(${touchedExams}/${this.test_info.total})`;
     },
 
@@ -103,11 +105,11 @@ export default {
 
     ...mapMutations("event", ["setStudyMode"]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession"
+      "setStudyExerciseCurrentLession",
     ]),
 
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList"
+      "elearningSudyElearningExerciseList",
     ]),
 
     handleDoTest() {
@@ -120,11 +122,11 @@ export default {
       // get list TEST
       const testReq = {
         elearning_id: this.progress.id,
-        category: EXERCISE_CATEGORIES.TEST
+        category: EXERCISE_CATEGORIES.TEST,
       };
       this.elearningSudyElearningExerciseList(testReq);
-    }
-  }
+    },
+  },
 };
 </script>
 

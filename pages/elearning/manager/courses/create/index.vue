@@ -44,7 +44,7 @@ import { mapState } from "vuex";
 import { VclFacebook } from "vue-content-loading";
 
 export default {
-  //layout: "exercise",
+  layout: "manage",
 
   components: {
     CreateAside,
@@ -124,7 +124,6 @@ export default {
       };
       await this.$store.dispatch(`elearning/create/getGeneral`, options);
       await Promise.all([
-        this.$store.dispatch(`elearning/create/getContent`),
         this.$store.dispatch(`elearning/create/getContent`),
         this.$store.dispatch("elearning/create/getLessons"),
         this.$store.dispatch(`elearning/create/getSetting`),

@@ -57,12 +57,14 @@
         <LessonSelectVideo
           @handleSelectFile="handleSelectFile"
           @handleSelectUrl="handleSelectUrl"
+          @handleReset="handleReset"
           v-if="tabType === 'video'"
         />
 
         <LessonSelectDocument
           v-if="tabType === 'document'"
           @handleSelectDocument="handleSelectDocument"
+          @handleReset="handleReset"
         />
 
         <div class="d-flex justify-content-end mt-4">
@@ -79,7 +81,7 @@
 
           <app-button
             @click="handleAddContent"
-            :disabled="!submit"
+            :disabled="!isSubmit"
             class="clc-btn font-weight-semi-bold"
             size="md"
             square
@@ -176,16 +178,22 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.lesson);
-  },
-
   computed: {
     ...mapState("elearning/create", {
       general: "general",
     }),
-    submit() {
-      return !this.error_name;
+    isSubmit() {
+      let submit = true;
+      if (!get(this, "payload.name", true)) submit = false;
+      if (
+        !get(this, "payload.article_content", true) &&
+        !get(this, "payload.lesson", true) &&
+        !get(this, "payload.repository_file_id", true) &&
+        !get(this, "payload.id", true)
+      ) {
+        submit = false;
+      }
+      return submit;
     },
 
     chagingDescription() {
@@ -216,6 +224,12 @@ export default {
   },
 
   methods: {
+    handleReset() {
+      this.payload.article_content = "";
+      this.payload.lesson = "";
+      this.payload.repository_file_id = "";
+    },
+
     handleBlurNameInput() {
       if (!this.payload.name) {
         this.error_name = "Bạn chưa nhập tên bài học";
@@ -224,6 +238,9 @@ export default {
       this.error_name = "";
     },
     changeTabType(type) {
+      this.handleReset();
+      if (type === "video") this.payload.type = "VIDEO";
+      if (type === "document") this.payload.type = "ARTICLE";
       this.tabType = type;
     },
 
@@ -290,7 +307,7 @@ export default {
       this.payload.type = type;
       this.payload.lesson = lesson;
       this.payload.repository_file_id = file_id;
-      this.payload.article_content = article_content;
+      this.payload.article_content = article_content.replace("<p></p>", "");
     },
 
     handleCancel() {

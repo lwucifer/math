@@ -34,6 +34,16 @@
         </sub-block-section>
       </div>
     </div>
+    <app-modal-notify
+      v-if="modal.notify"
+      :type="modal.type"
+      :title="modal.title"
+      :description="modal.description"
+      @ok="modal.notify = false"
+      @close="modal.notify = false"
+      centered
+    >
+    </app-modal-notify>
   </div>
 </template>
 
@@ -51,7 +61,7 @@
   const REPOSITORY_STORE_NAMESPACE = 'elearning/teaching/repository'
 
   export default {
-    // layout: "manage",
+    layout: "manage",
     
     components: {
       ElearningManagerSide,
@@ -62,9 +72,9 @@
     data() {
       return {
         pagination: {
-          totalElements: 0,
-          totalPages: 1,
-          numberOfElements: 0,
+          total_elements: 0,
+          total_pages: 1,
+          number_of_elements: 0,
           last: false,
           size: 10,
           number: 0,
@@ -75,7 +85,13 @@
           size: 10,
         },
         list: [],
-        loading: false
+        loading: false,
+        modal: {
+          notify: false,
+          type: 'success',
+          title: '',
+          description: ''
+        }
       }
     },
     computed: {
@@ -109,9 +125,9 @@
           this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
           this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
           this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-          this.pagination.totalPages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-          this.pagination.totalElements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-          this.pagination.numberOfElements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+          this.pagination.total_pages = this.get(this.detailInfo, 'data.page.total_pages', 0)
+          this.pagination.total_elements = this.get(this.detailInfo, 'data.page.total_elements', 0)
+          this.pagination.number_of_elements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
           // this.pagination = {...this.get(this.detailInfo, 'data.page', {})}
         } catch (e) {
 
@@ -153,10 +169,13 @@
       async deleteItems(data) {
         if (get(data, "success", false)) {
           await this.refreshData()
-          this.$toasted.success(get(data, "message", "Xóa tài liệu không thành công. Vui lòng thử lại"), { position: 'top-center'})
-          return
+          this.modal.type = 'success'
+          this.modal.title = 'Xóa tài liệu thành công'
+        } else {
+          this.modal.type = 'error'
+          this.modal.title = 'Xóa tài liệu không thành công. Vui lòng thử lại'
         }
-        this.$toasted.error(get(data, "message", "Xóa tài liệu thành công"))
+        this.modal.notify = true
       },
       refreshData() {
         this.params.page = 1

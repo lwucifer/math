@@ -15,6 +15,7 @@ export const ACCOUNT_PERSONAL = `/social/api/user/profile`;
 export const ACCOUNT_PROFILE = `/user/account/profile`;
 export const ACCOUNT_LINK = `/user/account/link`;
 export const ACCOUNT_PHONE = `/account/phone`;
+export const ACCOUNT_SETTING = `/user/account/setting`;
 export const ACCOUNT_TRANSACTIONS = `/user/account/transactions`;
 export const ACCOUNT_REVENUE = `/user/account/revenue`;
 export const ACCOUNT_EARNING = `/user/account/earning`;
@@ -47,7 +48,7 @@ export const SOCIAL_POST_TAG_PHOTO = `/social/aip/post/tagPhoto`;
 export const SOCIAL_FOLLOW = `/social/api/follow`;
 export const SOCIAL_SCRAPER = `/social/api/openGraphScraper`;
 export const REGISTER_DEVICE = `/social/api/device`;
-export const NOTIFICATION_UNREAD = `/social/api/notification/unRead`;
+export const NOTIFICATION_UNREAD = `chat/social/api/notification/unRead`;
 
 /**
  * ELEARNING
@@ -109,6 +110,7 @@ export const TEACHING_OLCLASS_LESSON = `/elearning/teaching/olclass/lesson`;
 export const TEACHING_OLCLASS_LESSON_ATTENDANCES = `/elearning/teaching/olclass/lesson/attendances`;
 export const TEACHING_OLCLASS_STUDENTS = `/elearning/teaching/olclass/students`;
 export const TEACHING_ELEARNING_STATISTIC = `/elearning/teaching/elearning/statistic`;
+export const TEACHING_SCHEDULES = `/elearning/teaching/olclasses/schedules`;
 
 /**
  * STUDY
@@ -117,7 +119,7 @@ export const STUDY_ELEARNING = `/elearning/study/elearnings`;
 export const STUDY_STATISTIC_ELEARNING = `/elearning/study/elearning/statistic`;
 export const STUDY_MY_ELEARNING = `/study`;
 export const STUDY_FAVOURITE = `/elearning/study/elearning/favourites`;
-export const STUDY_VOTE = `/elearning/study/votes`;
+export const STUDY_VOTE = `/elearning/study/elearning/votes`;
 export const STUDY_ARCHIVE = `/elearning/study/elearning/archives`;
 export const STUDY_INFO = `/elearning/study/elearning/info`;
 export const STUDY_INTERACTIVE_QUESTION = `/elearning/study/interactive/questions`;
@@ -127,6 +129,7 @@ export const STUDY_QUESTION_LIKE = `/elearning/study/interactive/question/like`;
 export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
 export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
 export const STUDY_LESSON = `/streaming/video`;
+export const STUDY_INTERACTIVE_NOTIFICATION = `/elearning/study/interactive/announcements`;
 
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
@@ -134,6 +137,7 @@ export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
+export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
 
 /**
  * SCHOOL
@@ -151,20 +155,23 @@ export const SCHOOL_TEACHER = `/elearning/school/admin/teachers`;
 /**
  * MESSAGE
  */
-export const GROUP_ADD_MEMBER = `/social/api/room/addMember`;
-export const GROUP_AVATAR = `/social/api/room/avatar`;
-export const GROUP_NAME = `/social/api/room/name`;
-export const GROUP = `/social/api/room`;
-export const GROUP_MEMBER = `/social/api/room/getMember`;
-export const GROUP_LEAVE = `/social/api/room/leaveGroup`;
-export const GROUP_REMOVE_MEMBER = `/social/api/room/removeMember`;
-export const GROUP_NOTIFICATION = `/social/api/room/settingNotification`;
-export const MESSAGE = `/social/api/message`;
-export const GROUP_DETAIL = `/social/api/room/getDetail`;
-export const MESSAGE_SEND_IMG = `/social/api/message/uploadImg`;
-export const LIMIT_MESSAGES = `/social/api/message/getLimit`;
-export const MESSAGE_TYPE = `/social/api/message/getViaRoomType`;
-export const MESSAGE_SEND_FILE = `/social/api/message/uploadFile`;
+export const GROUP_ADD_MEMBER = `chat/social/api/room/addMember`;
+export const GROUP_AVATAR = `chat/social/api/room/avatar`;
+export const GROUP_NAME = `chat/social/api/room/name`;
+export const GROUP = `chat/social/api/room`;
+export const GROUP_MEMBER = `chat/social/api/room/getMember`;
+export const GROUP_LEAVE = `chat/social/api/room/leaveGroup`;
+export const GROUP_REMOVE_MEMBER = `chat/social/api/room/removeMember`;
+export const GROUP_NOTIFICATION = `chat/social/api/room/settingNotification`;
+export const MESSAGE = `chat/social/api/message`;
+export const GROUP_DETAIL = `chat/social/api/room/getDetail`;
+export const MESSAGE_SEND_IMG = `chat/social/api/message/uploadImg`;
+export const LIMIT_MESSAGES = `chat/social/api/message/getLimit`;
+export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
+export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
+
+export const ROOM = `chat/rooms`;
+export const CHAT = `chat`;
 
 /**
  * TEACHING
@@ -214,8 +221,4 @@ export const ACCOUNT_BANK = `/user/account/banks`;
 export const ACCOUNT_BANK_VALIDATE = `/user/account/banks/validate`;
 export const ACCOUNT_BALANCE = `/user/account/balance`;
 export const ACCOUNT_WITHDRAW = `/user/account/withdraw`;
-
-/**
- * INFO
- */
-export const INFO_SUPPORT = `/account/help`;
+export const INFO_SUPPORT = `user/account/help`;

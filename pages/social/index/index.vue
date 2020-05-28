@@ -1,5 +1,7 @@
 <template>
-  <div class="page-timeline">
+  <main class="page-timeline">
+    <h1 class="bg-white heading-4 pa-4">Trang chủ</h1>
+    <app-divider class="my-0" />
     <PostEditor
       :active="postEditorActive"
       @submit="addPost"
@@ -150,6 +152,8 @@
     <app-modal
       v-if="modalDetailShow"
       centered
+      :header="false"
+      :footer="false"
       :width="1170"
       :component-class="{ 'post-detail-modal': true }"
       @close="handleCloseModal"
@@ -236,7 +240,7 @@
       </PostShareContent>
     </PostModalShare>
 
-    <app-modal v-if="showModalEditPost" :width="770">
+    <app-modal v-if="showModalEditPost" :width="770" :header="false" :footer="false">
       <PostEditor
         slot="content"
         ref="editEditor"
@@ -275,7 +279,7 @@
       @cancel="hideModalConfirmDelete"
       @ok="deletePost(modalConfirmDeleteId)"
     ></app-modal-confirm>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -437,22 +441,6 @@ export default {
     // const { $store: store = {} } = this;
     // return "id" in store.state.auth.token ? store.state.auth.token.id : null;
     // },
-
-    messagesConverted() {
-      return this.messages && this.messages.length
-        ? this.messages.map(item => {
-            return {
-              id: item.room.id,
-              title: item.room.members
-                .filter(member => member.user_id !== this.userId)
-                .map(member => member.fullname)
-                .join(", "),
-              desc: item.message.content,
-              image: get(item, "room.room_avatar.low", null)
-            };
-          })
-        : [];
-    },
 
     modalDetailPost() {
       return this.$store.state.social.detailPost;

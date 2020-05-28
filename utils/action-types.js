@@ -9,6 +9,7 @@ export const BASE = {
     EDIT_PAYLOAD: "editPayload",
     DELETE_PAYLOAD: "deletePayload",
     EDIT_FORMDATA: "putWithFormData",
+    GET_END: "getEnd",
 };
 
 export const AUTH = {
@@ -144,6 +145,11 @@ export const ACCOUNT_EARNING = {
 export const ACCOUNT_WITHDRAWALS = {
     LIST: "accountWithdrawalsList",
     ADD: "accountWithdrawalsAdd",
+};
+
+export const ACCOUNT_SETTING = {
+    LIST: "accountSettingList",
+    UPDATE: "accountSettingUpdate",
 };
 
 export const ELEARNING_PUBLIC_SUMMARY = {
@@ -468,6 +474,10 @@ export const ELEARNING_STUDY_STATISTIC = {
     LIST: "elearningStudyStatistic",
 };
 
+export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
+    LIST: "elearningStudyOlclassLessonSessionsList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };
@@ -614,6 +624,10 @@ export const TEACHING_ELEARNING_STATISTIC = {
     LIST: "teachingElearningStatistic",
 };
 
+export const TEACHING_SCHEDULES = {
+    DELETE: "teachingSchedulesDelete",
+};
+
 export const ACCOUNT_BIOGRAPHY = {
     ADD: "accountBiographyAdd",
 };
@@ -636,4 +650,9 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const INFO_SUPPORT = {
     ADD: "infoSupport",
+};
+
+export const CHAT = {
+    ROOM_LIST: "getRoomList",
+    MEMBER_LIST: "getMemberList",
 };

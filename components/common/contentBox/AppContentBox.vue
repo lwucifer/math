@@ -62,35 +62,44 @@ export default {
   },
 
   render: function(h) {
-    const contentBoxTitle = h(
-      this.titleTag,
-      {
-        class: "app-content-box__title"
-      },
-      [this.$slots.title ? this.$slots.title : this.title]
-    );
+    const contentBoxTitle =
+      this.$slots.title || this.title
+        ? h(
+            this.titleTag,
+            {
+              class: "app-content-box__title"
+            },
+            [this.$slots.title ? this.$slots.title : this.title]
+          )
+        : null;
 
-    const contentBoxDesc = h(
-      "p",
-      {
-        class: "app-content-box__desc"
-      },
-      [this.$slots.desc ? this.$slots.desc : this.desc]
-    );
+    const contentBoxDesc =
+      this.$slots.desc || this.desc
+        ? h(
+            "p",
+            {
+              class: "app-content-box__desc"
+            },
+            [this.$slots.desc ? this.$slots.desc : this.desc]
+          )
+        : null;
 
-    const contentBoxMetaFooter = h(
-      "div",
-      {
-        class: "app-content-box__meta-footer"
-      },
-      [
-        [
-          this.$slots["meta-footer"]
-            ? this.$slots["meta-footer"]
-            : this.metaFooter
-        ]
-      ]
-    );
+    const contentBoxMetaFooter =
+      this.$slots["meta-footer"] || this.metaFooter
+        ? h(
+            "div",
+            {
+              class: "app-content-box__meta-footer"
+            },
+            [
+              [
+                this.$slots["meta-footer"]
+                  ? this.$slots["meta-footer"]
+                  : this.metaFooter
+              ]
+            ]
+          )
+        : null;
 
     return h(
       this.nuxt ? "n-link" : this.tag,
@@ -107,18 +116,19 @@ export default {
         on: this.$listeners
       },
       [
-        h(
-          "div",
-          {
-            class: "app-content-box__image"
-          },
-          [
-            h("img", {
-              attrs: { src: this.image ? this.image : null },
-              slot: "image"
-            })
-          ]
-        ),
+        this.image &&
+          h(
+            "div",
+            {
+              class: "app-content-box__image"
+            },
+            [
+              h("img", {
+                attrs: { src: this.image ? this.image : null },
+                slot: "image"
+              })
+            ]
+          ),
 
         h(
           "div",

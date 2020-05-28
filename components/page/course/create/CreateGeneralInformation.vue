@@ -43,7 +43,7 @@
         </div>
 
         <div class="cgi-form-group mb-4">
-          <h2 class="cgi-form-title heading-5 mb-3">
+          <h2 class="cgi-form-title heading-6 mb-3">
             Tiêu đề {{ name }}
             <span class="text-base font-weight-normal">(Tối đa 150 ký tự)</span>
           </h2>
@@ -362,39 +362,43 @@ export default {
     },
 
     async handleOk() {
-      this.confirmLoading = true;
-      let payload = createPayloadAddCourse(this.payload);
-      const result = await this.$store.dispatch(
-        `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
-        payload
-      );
+      try {
+        this.confirmLoading = true;
+        let payload = createPayloadAddCourse(this.payload);
+        const result = await this.$store.dispatch(
+          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.ADD}`,
+          payload
+        );
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
 
-      this.confirmLoading = false;
-      this.showModalConfirm = false;
+        if (get(result, "success", false)) {
+          const elearning_id = get(result, "data.elearning_id", "");
+          const options = {
+            params: {
+              elearning_id,
+            },
+          };
+          await this.$store.dispatch(`elearning/create/getGeneral`, options);
+          // await this.$store.dispatch(`elearning/create/getProgress`);
+          redirectWithParams({ elearning_id });
 
-      if (get(result, "success", false)) {
-        const elearning_id = get(result, "data.elearning_id", "");
-        const options = {
-          params: {
-            elearning_id,
-          },
-        };
-        await this.$store.dispatch(`elearning/create/getGeneral`, options);
-        // await this.$store.dispatch(`elearning/create/getProgress`);
-        redirectWithParams({ elearning_id });
+          this.$toasted.success(get(result, "message", ""));
 
-        this.$toasted.success(get(result, "message", ""));
+          if (this.payload.type === "LECTURE") {
+            this.$emit("nextStep", "content-lecture");
+          }
+          if (this.payload.type === "COURSE") {
+            this.$emit("nextStep", "content-course");
+          }
 
-        if (this.payload.type === "LECTURE") {
-          this.$emit("nextStep", "content-lecture");
+          return;
         }
-        if (this.payload.type === "COURSE") {
-          this.$emit("nextStep", "content-course");
-        }
-
+        this.$toasted.error(get(result, "message", ""));
+      } catch (error) {
+        this.$toasted.error("Có lỗi xảy ra");
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
     },
 
     handleCancel() {

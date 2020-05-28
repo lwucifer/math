@@ -2,7 +2,7 @@
   <div class="box">
     <div class="row">
       <TabMessage :isCreated="isCreate" :isGroup="isGroup" />
-      <TabInfo :isGroup="isGroup" />
+      <!-- <TabInfo :isGroup="isGroup" /> -->
     </div>
   </div>
 </template>
@@ -36,28 +36,29 @@ export default {
   async fetch({ params, query, store, route }) {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     const room_id = route.params.id;
+    const paramsOptions = {};
     await Promise.all([
-      store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
-        params: {
-          user_id: userId
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
-        params: {
-          room_id: room_id
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
-        params: {
-          room_id: room_id
-        }
-      }),
-      store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
-        params: {
-          room_id: room_id
-        }
-      })
+      // store.dispatch(`chat/${actionTypes.CHAT.MEMBER_LIST}`, {
+      //   paramsOptions,
+      //   id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+      //   end: "members"
+      // })
+      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
+      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
+      //     params: {
+      //       room_id: room_id
+      //     }
+      //   }),
+      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
+      //     params: {
+      //       room_id: room_id
+      //     }
+      //   }),
+      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
+      //     params: {
+      //       room_id: room_id
+      //     }
+      //   })
       // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },

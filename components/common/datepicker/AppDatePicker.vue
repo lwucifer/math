@@ -2,9 +2,9 @@
   <div class="app-date-picker" :class="classes">
     <label v-if="label">{{label}}</label>
     <date-picker
+      v-bind="{ ...$attrs, ...$props }"
       v-model="text"
       @change="change()"
-      valueType="format"
       :format="valueFormat"
       :type="type"
       :placeholder="placeholder"
@@ -12,10 +12,11 @@
       :range="range"
       :range-separator="rangeSeparator"
       :shortcuts="shortcuts"
-      :popup-class="popupClass"
+      :popup-class="{ ...popupClass, ...popupCls }"
       :minute-step="minuteStep"
       :value-type="valueType"
       :hour-options="hourOptions"
+      @clear="clear"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -47,7 +48,10 @@ export default {
       default: false
     },
     minuteStep: [String, Number],
-    valueType: String,
+    valueType: {
+      type: String,
+      default: 'format'
+    },
     hourOptions: Array,
     placeholder: {
       type: String,
@@ -74,7 +78,7 @@ export default {
     },
     rangeSeparator: {
       type: String,
-      default: '-'
+      default: ' - '
     },
     shortcuts: {
       type: Array,
@@ -94,12 +98,20 @@ export default {
 
   methods: {
     change: function() {
+      // this.text = 0;
       this.$emit("input", this.text);
-    }
+    },
+    clear: function() {
+      //console.log(this.text);
+    },
   },
 
   computed: {
     classes() {
+      const typeClasses = {
+        'app-date-picker--range': this.range
+      }
+      
       const sizeClasses = {
         "size-xs": this.size === "xs",
         "size-sm": this.size === "sm",
@@ -110,12 +122,32 @@ export default {
         "square": this.square,
       };
 
-      return {...sizeClasses, ...borderRadiusClasses}
+      return {
+        ...typeClasses,
+        ...sizeClasses,
+        ...borderRadiusClasses
+      }
+    },
+    popupCls() {
+      const typeCls = {
+        'app-date-picker__popup--range': this.range
+      }
+      
+      return {
+        ...typeCls
+      }
     }
+  },
+  
+  watch: {
+    // value(newValue, oldValue) {
+    //   console.log(newValue);
+    //   //if(newValue = null) this.text = null;
+    // }
   },
 
   created() {
-    this.text = this.value;
+    this.text = this.value ? this.value : null;
   }
 };
 </script>

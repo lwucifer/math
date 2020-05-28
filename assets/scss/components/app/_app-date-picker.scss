@@ -1,3 +1,11 @@
+$default-color: #1D243E;
+$primary-color: #37A000;
+
+$input-border-color: #E0E0E0;
+$input-hover-border-color: $primary-color;
+
+@import '~vue2-datepicker/scss/index.scss';
+
 .mx-input {
     height: 4rem;
     padding: 0 1rem;
@@ -23,6 +31,11 @@
     label {
         margin-right: 0.3rem;
     }
+    
+    .mx-input {
+        border-radius: 2px;
+    }
+    
     &.size-sm .mx-input {
         height: 3.2rem;
     }
@@ -39,45 +52,73 @@
         }
     }
 }
-$primary-color: #37A000;
-@import '~vue2-datepicker/scss/index.scss';
-    .datepicker-range-v2.mx-datepicker-main{
-        background: none !important;
-        box-shadow:none !important;
-        border: none !important;
-        display: flex;
-        font-family: "Montserrat", sans-serif !important;
-        .mx-datepicker-sidebar {
-            background: #fff;
-            width: 194px;
-        }
-        .mx-datepicker-sidebar + .mx-datepicker-content{
-            border-left: none !important;
-            background: #fff;
-            box-shadow: 0px 8px 32px rgba(108, 115, 141, 0.12);
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-        .mx-calendar-content{
-            .cell{
-                &.active{
-                    border-radius: 10px;
-                }
+
+.app-date-picker--range {
+    .mx-datepicker-range {
+        width: 21rem;
+        .mx-input {
+            &::placeholder {
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
+                opacity: 1; /* Firefox */
             }
-        }
-        .mx-btn-shortcut{
-            border-radius: 2px;
-            width: 100%;
-            background: #F9F9F9;
-            margin-bottom: 6px;
-            padding: 6px 11px;
-            &.active {
-                background: $primary-color;
+    
+            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
             }
-        }
-        .mx-calendar:last-child{
-            border-left: none !important;
-            margin-left: 20px;
+    
+            &::-ms-input-placeholder { /* Microsoft Edge */
+                color: $color-text-gray-2;
+                font-size: 1.2rem;
+                letter-spacing: -0.01em;
+            }
         }
     }
+}
 
+.app-date-picker__popup--range.mx-datepicker-main{
+    background: none !important;
+    box-shadow:none !important;
+    border: none !important;
+    display: flex;
+    font-family: "Montserrat", sans-serif !important;
+    .mx-datepicker-sidebar {
+        background: #fff;
+        width: 194px;
+    }
+    .mx-datepicker-sidebar + .mx-datepicker-content{
+        border-left: none !important;
+        background: #fff;
+        box-shadow: 0px 8px 32px rgba(108, 115, 141, 0.12);
+        border-radius: 4px;
+        margin-left: 10px;
+    }
+    .mx-calendar-content{
+        .cell{
+            &.active{
+                border-radius: 10px;
+            }
+        }
+    }
+    .mx-btn-shortcut{
+        border-radius: 2px;
+        width: 100%;
+        background: #F9F9F9;
+        margin-bottom: 6px;
+        padding: 6px 11px;
+        &.active {
+            background: $primary-color;
+        }
+    }
+    .mx-calendar:last-child{
+        border-left: none !important;
+        margin-left: 20px;
+    }
+}
+
+.app-date-picker .mx-icon-calendar {
+    color: $primary-color;
+}

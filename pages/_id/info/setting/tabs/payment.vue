@@ -41,6 +41,12 @@
       </div>
     </div>
     <p><i style="font-size: 1.3rem;">Để nhận tiền từ việc bán bài giảng/khóa học của bạn, vui lòng cập nhật tài khoản ngâng hàng của bạn</i></p>
+    <AccountEditPaymentModal @close="closeModal" v-if="showModal"/>
+    <app-modal-confirm 
+      title="Bạn chắc muốn xóa"
+      description="It is a long established fat that a reader will be  distracted by the readable content"
+      v-if="false"
+    />
   </div>
 </template>
 
@@ -52,6 +58,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
+import AccountEditPaymentModal from "~/components/page/account/Info/AccountEditPaymentModal"
 
 export default {
 
@@ -61,12 +68,14 @@ export default {
     IconCiclePlus,
     IconCheck,
     AccountPaymentItem,
-    AddBankForm
+    AddBankForm,
+    AccountEditPaymentModal
   },
   data() {
     return ({
       showAddPayment: false,
-      opts:[]
+      opts:[],
+      showModal:false,
     })
   },
   watch:{
@@ -93,6 +102,10 @@ export default {
     handleRefresh(){
       this.fetchAccountBank();
     },
+    closeModal(){
+      this.showModal=false
+      console.log('lol')
+    }
   },
   created(){
     this.fecthPublicBank();

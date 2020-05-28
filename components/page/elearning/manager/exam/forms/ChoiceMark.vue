@@ -1,9 +1,13 @@
 <template>
   <div class="">
-    <div class="form--score">
+    <div
+      class="form--score"
+      title="Học sinh cần phải hết lượt làm bài để có thể cho qua"
+    >
       <app-checkbox
         v-model="formData.to_passed"
         label="Cho qua"
+        :disabled="!canPass"
       >
       </app-checkbox>
       <p class="form--note">
@@ -16,8 +20,8 @@
     >
       <app-button
         normal
-        :disabled="!formData.to_passed"
-        :color="formData.to_passed ? 'primary' : 'disabled'"
+        :disabled="(!formData.to_passed) || !canPass"
+        :color="(formData.to_passed && canPass) ? 'primary' : 'disabled'"
         @click="submit"
       >
         Xác nhận
@@ -39,6 +43,12 @@
         },
       }
     },
+    props: {
+      remainWork: {
+        type: String | Number,
+        default: 0,
+      }
+    },
     watch: {
       filters: {
       }
@@ -50,6 +60,11 @@
       resetForm() {
         this.formData.to_passed = false
       },
+    },
+    computed: {
+      canPass() {
+        return this.remainWork <= 0
+      }
     }
   }
 </script>

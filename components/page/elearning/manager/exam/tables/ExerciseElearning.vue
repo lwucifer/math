@@ -39,13 +39,13 @@
           >
             <div class="nowrap rate-result-wrapper">
               <span class="status-item status-item--success d-inline-block">
-                {{parseInt(get(row, 'passed_percent', 0))}}%
+                {{ row | resultFigureRate('passed_percent') }}%
               </span>
               <span class="status-item status-item--fail d-inline-block">
-                {{parseInt(get(row, 'failed_percent', 0))}}%
+                {{ row | resultFigureRate('failed_percent') }}%
               </span>
               <span class="status-item status-item--pending d-inline-block">
-                {{100 - parseInt(get(row, 'passed_percent', 0)) - parseInt(get(row, 'failed_percent', 0))}}%
+                {{ row | resultFigureRate('pending_percent') }}%
               </span>
             </div>
     
@@ -99,7 +99,7 @@
             total: 0,
             size: 10,
             page: 1,
-            totalElements: 0,
+            total_elements: 0,
             first: 1,
             last: 1,
             number: 0
@@ -121,7 +121,7 @@
         if (MATCHED_DATA.hasOwnProperty(val))
         return MATCHED_DATA[val]
         return '-'
-      }
+      },
     },
 
     data() {
@@ -143,7 +143,6 @@
           {
             name: "rate",
             text: "Tỷ lệ hoàn thành",
-            sort: true
           },
           {
             name: "created",

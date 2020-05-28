@@ -11,7 +11,15 @@
           has-icon
         >
           <template v-slot:content>
-            <div class="elearning-manager-content p-0">
+            <div v-if="pageLoading">
+              <div class="row">
+                <div class="col-md-6"><vcl-facebook /></div>
+                <div class="col-md-6"><vcl-list /></div>
+                <div class="col-12"><vcl-table /></div>
+              </div>
+            </div>
+            
+            <div v-else class="elearning-manager-content p-0">
               <div class="elearning-manager-content__main py-2">
                 <component
                   :is="currentComponent"
@@ -31,6 +39,7 @@
 <script>
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import HeaderBreadcrumb from "~/components/page/elearning/HeadBreadcrumb"
+  import { VclFacebook, VclList, VclTable } from "vue-content-loading"
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get, isEmpty } from "lodash"
@@ -38,23 +47,28 @@
   import { getParamQuery } from "~/utils/common"
   import { exCate2Txt } from "~/plugins/filters"
 
-  const ChoiceSubmission = () => import('./choice')
-  const EssaySubmission = () => import('./essay')
+  const ChoiceSubmission = () => import('~/components/page/elearning/manager/exam/ChoiceResult')
+  const EssaySubmission = () => import('~/components/page/elearning/manager/exam/EssayResult')
   
   const STORE_NAMESPACE = "elearning/teaching/result"
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
   
   export default {
-    // layout: "exercise",
+    layout: "manage",
+    
     components: {
       ElearningManagerSide,
       HeaderBreadcrumb,
       ChoiceSubmission,
       EssaySubmission,
+      VclFacebook,
+      VclList,
+      VclTable
     },
     
     data() {
       return {
+        pageLoading: true,
         item: {},
       }
     },
@@ -92,7 +106,9 @@
         return data
       }
     },
-    
+    mounted() {
+      this.pageLoading = false;
+    },
     methods: {
       async getDetail() {
         const exerciseId = this.$route.params.id

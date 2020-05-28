@@ -3,8 +3,14 @@
     <div class="box bg-light-2">
       <h6>Phòng học online</h6>
     </div>
-    <app-divider v-if="info.ol_classes && info.ol_classes.length" class="my-0" color="disabled" />
-    <div v-if="!get(info, 'ol_classes', []).length" class="box caption">Không có phòng học online.</div>
+    <app-divider
+      v-if="info.ol_classes && info.ol_classes.length"
+      class="my-0"
+      color="disabled"
+    />
+    <div v-if="!get(info, 'ol_classes', []).length" class="box caption">
+      Không có phòng học online.
+    </div>
     <div
       v-for="(item, index) in get(info, 'ol_classes', [])"
       :key="index"
@@ -14,7 +20,8 @@
         <span
           class="body-3 text-clickable"
           @click.prevent="handlJoinOlClass(item)"
-        >{{ index + 1 }}. {{ item.name }}</span>
+          >{{ index + 1 }}. {{ item.name }}</span
+        >
         <IconCalendarAlt
           class="ml-2 icon body-2 text-info text-clickable"
           height="18"
@@ -25,13 +32,17 @@
       </div>
 
       <div class="d-flex-left mt-2 caption">
-        <div class="d-flex-center color-red ml-auto" v-if="item.status == liveStatus">
+        <div
+          class="d-flex-center color-red ml-auto"
+          v-if="item.status == liveStatus"
+        >
           <IconCameraDot
             class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)">Đang diễn ra</span>
-          <!-- <span><a href="zoommtg://zoom.us/join?confno=96433623131&pwd=UkxkS0RhVEZJb0FvUkNxZHBMSGxadz09&uname=Trung Nguyen">Đang diễn ra</a></span> -->
+          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
+            >Đang diễn ra</span
+          >
         </div>
 
         <div
@@ -42,10 +53,9 @@
             class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span
-            class="text-clickable"
-            @click.prevent="handlJoinOlClass(item)"
-          >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span>
+          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
+            >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span
+          >
         </div>
 
         <div class="color-999 d-flex-center" v-else>
@@ -55,7 +65,11 @@
       </div>
     </div>
 
-    <ModalWaitingOlClass v-if="modalShow" @close="modalShow = false" :targetClass="targetClass" />
+    <ModalWaitingOlClass
+      v-if="modalShow"
+      @close="modalShow = false"
+      :data="targetClass"
+    />
     <Timetable
       v-if="isShowTimetable"
       @close="isShowTimetable = false"
@@ -67,16 +81,18 @@
 <script>
 import IconCam24 from "~/assets/svg/v2-icons/videocam_24px.svg?inline";
 import IconCalendarAlt from "~/assets/svg/design-icons/calendar-alt.svg?inline";
-import IconCameraDot from '~/assets/svg/icons/camera-dot.svg?inline';
+import IconCameraDot from "~/assets/svg/icons/camera-dot.svg?inline";
 import { get } from "lodash";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { LESSION_ONLINE_STATUS, DAY_SECTION } from "~/utils/constants";
 import { RESPONSE_SUCCESS } from "~/utils/config";
-import { TEACHING_OLCLASS_LESSON_SESSIONS } from "~/utils/action-types";
 
 import ModalWaitingOlClass from "~/components/page/elearning/study/olclass/ModalWaitingOlClass";
 import Timetable from "~/components/page/elearning/study/olclass/Timetable";
-import { convertLocalTimeForTimetable } from '~/utils/moment';
+import {
+  convertLocalTimeForTimetable,
+  addDurationToUTCDate
+} from "~/utils/moment";
 
 export default {
   data() {
@@ -106,15 +122,15 @@ export default {
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
 
     olclassLink() {
-      const olclasses = get(this.info, 'ol_classes', []);
+      const olclasses = get(this.info, "ol_classes", []);
       const olclassLink = olclasses.map(item => {
-        let joinLink = '#';
-        
+        let joinLink = "#";
+
         return {
           ...item,
-          href: joinLink,
-        }
-      })
+          href: joinLink
+        };
+      });
     },
 
     convertedTimetables() {
@@ -137,7 +153,7 @@ export default {
               const end_time = convertLocalTimeForTimetable(a.end_time);
 
               const checkWhichTimeInDay = this.checkWhichTimeInDay(end_time);
-              const value = `${start_time}-${end_time}`;
+              const value = `${start_time} - ${end_time}`;
               if (checkWhichTimeInDay == DAY_SECTION.MORNING) {
                 timeMorning[s] = value;
               } else if (checkWhichTimeInDay == DAY_SECTION.AFTERNOON) {
@@ -165,8 +181,8 @@ export default {
 
   methods: {
     get,
-    ...mapActions("elearning/teaching/olclass", [
-      "teachingOlclassLessonSessionsList"
+    ...mapActions("elearning/study/study-olclass", [
+      "elearningStudyOlclassLessonSessionsList"
     ]),
     ...mapActions("elearning/study/study", ["elearningStudyListTimetable"]),
 
@@ -178,35 +194,21 @@ export default {
       console.log("[handlJoinOlClass]", item);
       this.currentOlClass = item;
 
-      this.teachingOlclassLessonSessionsList({
+      this.elearningStudyOlclassLessonSessionsList({
         params: { online_class_id: item.id }
       }).then(res => {
-        console.log("[teachingOlclassLessonSessionsList] res", res);
+        console.log("[elearningStudyOlclassLessonSessionsList] res", res);
         if (res.success == RESPONSE_SUCCESS) {
-          const { data } = res;
-          if (item.status == LESSION_ONLINE_STATUS.LIVE) {
-            // lessiong is living => open zoom
-            if (data.is_started == true) {
-              const sessions = data.sessions || [];
-              const zoom = sessions.find(s => s.position == data.session_starting_position);
-              if (!zoom) return;
-
-              const isDesktop = this.$device.isDesktop || true;
-              console.log("[isDesktop]", this.$device);
-              var windowReference = window.open('');
-              const zoomLink = isDesktop ? `${zoom.join_url_win_or_mac_zoom_us}` : `${zoom.join_url_ios_or_android_zoom_us}`;
-              // const zoomLink = `https://zoom.us/s/${zoom.room_id}`;
-
-              windowReference.location = zoomLink;
-            }
-          } else if (
-            item.status == LESSION_ONLINE_STATUS.FINISH &&
-            item.next_time
-          ) {
-            // lession is coming => show modal Waiting
-            this.modalShow = true;
-            this.targetClass = data;
-          }
+          const tartgetClass = res.data;
+          const sessions = tartgetClass.sessions || [];
+          const sessionImpls = sessions.map(s => {
+            return {
+              ...s,
+              end_time: addDurationToUTCDate(s.start_time, s.duration, "m")
+            };
+          });
+          this.targetClass = { ...res.data, sessions: sessionImpls };
+          this.modalShow = true;
         }
       });
     },

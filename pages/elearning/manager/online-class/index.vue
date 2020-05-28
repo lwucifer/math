@@ -56,8 +56,6 @@
       Tab4
     },
 
-    middleware: ["teacher-role"],
-
     data() {
       return {
         tab: 1,

@@ -93,6 +93,48 @@ export function truncStrFilter(
 }
 
 /**
+ * Parse the result percentage
+ *
+ */
+export function resultFigureRate(val, type) {
+  const data = [
+    { type: 'passed_percent', figure:  val['passed_percent'] || 0 },
+    { type: 'failed_percent', figure: val['failed_percent'] || 0 },
+    { type: 'pending_percent', figure: val['pending_percent'] || 0 },
+  ]
+  const sorted = data.sort((first, second) => {
+    return first.figure > second.figure
+  })
+  let parsedData = {}
+  let total = 0
+  for (let i = 0; i < 3; i++) {
+    let tmp = sorted[i]
+    const figure = tmp.figure
+    let current = 0
+    if (figure == 0 || figure == 0.0) {
+      current = 0
+      parsedData[tmp.type] = current
+    } else if(figure == 100 || figure == 100.0) {
+      current = 100
+      parsedData[tmp.type] = current
+    } else if(figure > 0 && figure <= 1) {
+      current = 1
+      parsedData[tmp.type] = current
+    } else {
+      if (i != 2) {
+        current = parseInt(figure)
+        parsedData[tmp.type] = current
+      } else {
+        parsedData[tmp.type] = 100 - total
+        break
+      }
+    }
+    total += current
+  }
+  return parsedData[type]
+}
+
+/**
  * Translate exercise category => label
  * @Param {string} str
  */
@@ -207,7 +249,7 @@ export function convertBreadcrumText(str = "", elearningInfo) {
       breadcrumTxt = `${elearningInfo.subject.name}`;
       break;
   }
-  console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
+  // console.log("convertBreadcrumText", elearningInfo, breadcrumTxt);
   return breadcrumTxt;
 }
 
@@ -317,6 +359,7 @@ const filters = {
   getQuestionNoText,
   getDateTimeFullText,
   formatHour,
+  resultFigureRate,
 };
 
 // register global utility filters

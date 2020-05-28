@@ -1,0 +1,79 @@
+import * as actionTypes from "../utils/action-types";
+import * as mutationTypes from "../utils/mutation-types";
+import { isEmpty, uniqWith, isEqual, omit } from "lodash";
+import Room from "~/services/chat/Room";
+import Member from "~/services/chat/Member";
+
+/**
+ * initial state
+ */
+const state = () => ({
+    roomList: { list_room: [] },
+    memberList: {},
+});
+
+/**
+ * initial getters
+ */
+const getters = {};
+
+/**
+ * initial actions
+ */
+const actions = {
+    async [actionTypes.CHAT.ROOM_LIST]({ commit, state }, payload) {
+        try {
+            const { data: result = {} } = await new Room(this.$axios)[
+                actionTypes.BASE.LIST
+            ](payload);
+            console.log("[Room] list", result);
+            if (result) {
+                const { list_room } = result;
+                commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+                    list_room: uniqWith(
+                        state.roomList.list_room.concat(list_room),
+                        isEqual
+                    ),
+                });
+            }
+            return result;
+        } catch (err) {
+            console.log("[Room] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.CHAT.MEMBER_LIST]({ commit, state }, options) {
+        try {
+            const { data: result = {} } = await new Member(this.$axios)[
+                actionTypes.BASE.GET_END
+            ](options, options.id, options.end);
+            console.log("[Member] list", result);
+            commit(mutationTypes.CHAT.SET_MEMBER_LIST, result);
+            return result;
+        } catch (err) {
+            console.log("[Room] list.err", err);
+            return err;
+        }
+    },
+};
+/**
+ * initial mutations
+ */
+const mutations = {
+    [mutationTypes.CHAT.SET_ROOM_LIST](state, _roomList) {
+        console.log("[SET_ROOM_LIST]", _roomList);
+        state.roomList = _roomList;
+    },
+    [mutationTypes.CHAT.SET_MEMBER_LIST](state, _memberList) {
+        console.log("[SET_ROOM_LIST]", _memberList);
+        state.memberList = _memberList;
+    },
+};
+
+export default {
+    namespaced: true,
+    state,
+    getters,
+    actions,
+    mutations,
+};

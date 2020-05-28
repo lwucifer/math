@@ -42,7 +42,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-addon">
-            <IconSearch width="15" height="15" />
+            <IconSearch width="15" height="15" class="fill-base" />
           </div>
 
           <input type="text" placeholder="Tìm kiếm người và nhóm" />
@@ -67,48 +67,63 @@
           </li>
         </ul>-->
 
-        <div class="tabs-content" v-if="isContact">
+        <!-- <div class="tabs-content" v-if="isContact">
           <div class="align-item" v-for="(item, index) in friends" :key="index">
-            <div class="align-item__image">
-              <app-avatar :src="item.avatar" size="md" class="comment-item__avatar" />
+            <div class="left">
+              <div class="align-item__image">
+                <app-avatar :src="item.avatar" size="md" class="comment-item__avatar" />
+              </div>
+
+              <div class="align-item__meta">
+                <h5 class="align-item__title">
+                  <n-link slot="title" to>{{ item.name }}</n-link>
+                </h5>
+              </div>
             </div>
 
-            <div class="align-item__meta">
-              <h5 class="align-item__title">
-                <n-link slot="title" to>{{ item.name }}</n-link>
-              </h5>
-            </div>
+            <div class="right"></div>
           </div>
-        </div>
+        </div>-->
 
-        <div v-else>
-          <div class="tabs-content" v-show="tabChat == true">
+        <div>
+          <div class="tabs-content">
             <div class="btn-create-chat" v-if="checkChatList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
               </div>Tạo chat mới
             </div>
+
             <template v-else>
               <div
-                class="align-item"
+                class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.room_id)"
+                @click="pushUrl(item.id)"
               >
-                <div class="align-item__image">
-                  <app-avatar
-                    :src=" item.room_avatar_member ? item.room_avatar_member : ''"
-                    size="md"
-                    class="comment-item__avatar"
-                  />
-                </div>
-                <div class="align-item__meta">
-                  <h5 class="align-item__title">
-                    <n-link slot="title" to>{{ item.room_name_member ? item.room_name_member : '' }}</n-link>
-                  </h5>
-                  <div class="align-item__desc">
-                    <p>{{ item.content }}</p>
+                <div class="left d-flex">
+                  <div class="align-item__image">
+                    <app-avatar
+                      :src=" item.room_avatar_member ? item.room_avatar_member : 'https://picsum.photos/60/60'"
+                      size="md"
+                      class="comment-item__avatar"
+                    />
                   </div>
+
+                  <div class="align-item__meta">
+                    <h5 class="align-item__title">
+                      <n-link slot="title" to>{{ item.name ? item.name : '' }}</n-link>
+                    </h5>
+                    <div class="align-item__desc">
+                      <p>{{ item.content }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="right text-right">
+                  <p>
+                    <DotActive />
+                  </p>
+                  <p>25 giây</p>
                 </div>
                 <!-- <app-dropdown
                   position="right"
@@ -143,7 +158,7 @@
             </template>
           </div>
 
-          <div class="tabs-content" v-show="tabChat == false">
+          <!-- <div class="tabs-content" v-show="tabChat == false">
             <div class="btn-create-chat" v-if="checkGroupList" @click="create()">
               <div class="btn-create-chat-icon">
                 <IconPlus />
@@ -202,7 +217,7 @@
                 </infinite-loading>
               </client-only>
             </template>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -260,6 +275,7 @@ import IconUserPlus from "~/assets/svg/design-icons/user-plus.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 import IconLeftArrow from "~/assets/svg/icons/left-arrow.svg?inline";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
+import DotActive from "~/assets/svg/v2-icons/elipse.svg?inline";
 
 import GroupService from "~/services/message/Group";
 import MessageType from "~/services/message/MessageType";
@@ -282,7 +298,8 @@ export default {
     ModalLeaveGroup,
     IconPlus,
     IconLeftArrow,
-    IconDots
+    IconDots,
+    DotActive
   },
   props: {
     // contacts: {
@@ -323,7 +340,11 @@ export default {
       // dataPushGroup: [],
       dataGroupLeave: {},
       checkChatList: false,
-      checkGroupList: false
+      checkGroupList: false,
+      roomQuery: {
+        page: 1,
+        limit: 10
+      }
     };
   },
   computed: {
@@ -335,77 +356,86 @@ export default {
       "groups",
       "chats"
     ]),
+    ...mapState("chat", ["roomList"]),
     ...mapGetters("auth", ["userId"]),
-    mapGroupList() {
-      const dataMapGroup =
-        this.groups &&
-        this.groups.listMessage &&
-        this.groups.listMessage.map(item => {
-          return {
-            ...item.message,
-            ...item.room,
-            ...item.sender,
-            message_id: item.message && item.message.id ? item.message.id : "",
-            room_id: item.room && item.room.id ? item.room.id : ""
-          };
-        });
-      // debugger;
-      const dataGroup = dataMapGroup.map(item => {
-        const [dataNoti] =
-          item &&
-          item.members &&
-          item.members.filter(item => item.user_id == this.userId);
-        // console.log("dataNoti", dataNoti);
-        const dataRoomName =
-          (
-            item.members[0].fullname +
-            ", " +
-            item.members[1].fullname
-          ).substring(0, 15) + "...";
-        // console.log("[dataRoomName]", dataRoomName);
-        return {
-          ...item,
-          room_name: item.room_name ? item.room_name : dataRoomName,
-          allow_notication:
-            dataNoti && dataNoti.allow_notication
-              ? dataNoti.allow_notication
-              : 0
-        };
-      });
-      return dataGroup;
-    },
+    // mapGroupList() {
+    //   const dataMapGroup =
+    //     this.groups &&
+    //     this.groups.listMessage &&
+    //     this.groups.listMessage.map(item => {
+    //       return {
+    //         ...item.message,
+    //         ...item.room,
+    //         ...item.sender,
+    //         message_id: item.message && item.message.id ? item.message.id : "",
+    //         room_id: item.room && item.room.id ? item.room.id : ""
+    //       };
+    //     });
+    //   // debugger;
+    //   const dataGroup = dataMapGroup.map(item => {
+    //     const [dataNoti] =
+    //       item &&
+    //       item.members &&
+    //       item.members.filter(item => item.user_id == this.userId);
+    //     // console.log("dataNoti", dataNoti);
+    //     const dataRoomName =
+    //       (
+    //         item.members[0].fullname +
+    //         ", " +
+    //         item.members[1].fullname
+    //       ).substring(0, 15) + "...";
+    //     // console.log("[dataRoomName]", dataRoomName);
+    //     return {
+    //       ...item,
+    //       room_name: item.room_name ? item.room_name : dataRoomName,
+    //       allow_notication:
+    //         dataNoti && dataNoti.allow_notication
+    //           ? dataNoti.allow_notication
+    //           : 0
+    //     };
+    //   });
+    //   return dataGroup;
+    // },
     mapChatList() {
-      const dataMap =
-        this.chats &&
-        this.chats.listMessage &&
-        this.chats.listMessage.map(item => {
+      // const dataMap =
+      //   this.roomList &&
+      //   this.roomList.list_room &&
+      //   this.roomList.list_room.map(item => {
+      //     return {
+      //       ...item.message,
+      //       ...item.room,
+      //       ...item.sender,
+      //       message_id: item.message && item.message.id ? item.message.id : "",
+      //       room_id: item.room && item.room.id ? item.room.id : ""
+      //     };
+      //   });
+      // const data = dataMap.map(item => {
+      //   const [dataName] =
+      //     item &&
+      //     item.members &&
+      //     item.members.filter(item => item.user_id != this.userId);
+      //   const [dataNoti] = item.members.filter(
+      //     item => item.user_id == this.userId
+      //   );
+      //   return {
+      //     ...item,
+      //     name_sender: item.id == this.userId ? "Bạn" : item.fullname,
+      //     room_name_member: dataName.fullname ? dataName.fullname : "",
+      //     room_avatar_member: dataName.avatar.low ? dataName.avatar.low : "",
+      //     allow_notication:
+      //       dataNoti && dataNoti.allow_notication
+      //         ? dataNoti.allow_notication
+      //         : 0
+      //   };
+      // });
+      const data =
+        this.roomList &&
+        this.roomList.list_room.map(item => {
           return {
-            ...item.message,
-            ...item.room,
-            ...item.sender,
-            message_id: item.message && item.message.id ? item.message.id : "",
-            room_id: item.room && item.room.id ? item.room.id : ""
+            ...item,
+            name: item && item.name ? item.name : ""
           };
         });
-      const data = dataMap.map(item => {
-        const [dataName] =
-          item &&
-          item.members &&
-          item.members.filter(item => item.user_id != this.userId);
-        const [dataNoti] = item.members.filter(
-          item => item.user_id == this.userId
-        );
-        return {
-          ...item,
-          name_sender: item.id == this.userId ? "Bạn" : item.fullname,
-          room_name_member: dataName.fullname ? dataName.fullname : "",
-          room_avatar_member: dataName.avatar.low ? dataName.avatar.low : "",
-          allow_notication:
-            dataNoti && dataNoti.allow_notication
-              ? dataNoti.allow_notication
-              : 0
-        };
-      });
       return data;
     }
   },
@@ -499,17 +529,18 @@ export default {
 
     async chatsInfiniteHandler($state) {
       const getData = await this.$store.dispatch(
-        `message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`,
+        `chat/${actionTypes.CHAT.ROOM_LIST}`,
         {
-          params: {
-            page: get(this, "chats.page.number", 0) + 1,
-            room_type: 1
-          }
+          params: this.roomQuery
         }
       );
       console.log("getData", getData);
-
-      if (getData.success && !isEmpty(getData.data)) {
+      // check no room
+      if (this.roomList.listMessage == 0) {
+        this.checkChatList = true;
+      }
+      if (getData && getData.list_room && getData.list_room.length > 0) {
+        this.roomQuery.page += 1;
         $state.loaded();
       } else {
         $state.complete();

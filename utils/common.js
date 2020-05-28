@@ -223,3 +223,12 @@ export const addAllOptionSelect = (arr) => {
   };
   return [allOpt, ...arr];
 };
+
+export const limitCharacter = (_val, _limit, _numberSlice) => {
+  const newString = _val.split(" ");
+
+  if (newString.length > _limit) {
+    return newString.slice(0, _numberSlice).join(" ") + "...";
+  }
+  return _val;
+};
