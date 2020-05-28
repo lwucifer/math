@@ -27,6 +27,8 @@
                   @changedStatus="handleChangedStatus"
                   @submitSearch="handleSubmitSearch"
                   @deletedItems="deleteItems"
+                  @changedSort="handleChangedSort"
+                  ref="warehouseTable"
                 />
               </div>
             </div>
@@ -120,6 +122,7 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`, {params}
           )
+          this.$refs['warehouseTable'].resetSelectedItems()
           this.list = this.get(this.detailInfo, 'data.content', [])
           this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
           this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
@@ -157,6 +160,15 @@
       },
       handleSubmitSearch(val) {
         this.updateFilter({ name: val })
+      },
+      handleChangedSort(val) {
+        if (val.sortBy == 'created_at') {
+          if (val.order == 'asc') {
+            this.updateFilter({ sort: 1 })
+          } else {
+            this.updateFilter({ sort: 0 })
+          }
+        }
       },
       submitFilter(val) {
         this.updateFilter(val)
