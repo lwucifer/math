@@ -3,124 +3,152 @@
     <div class="mb-6">
       <h4 class="color-primary mb-2">E-LEARNING HỌC TẬP</h4>
       <div class="setting-notify-content__account-info">
-        <FormNotify
-          v-for="notify in notifys" :key="notify.title"
-          :notify="notify"/>
+        <NotifyItem
+          v-for="notify in notifys"
+          :key="notify.title"
+          :notify="notify"
+          :payload="payload"
+        />
       </div>
     </div>
-    
+
     <div>
       <h4 class="color-primary mb-2">MẠNG XÃ HỘI</h4>
       <div class="setting-notify-content__account-info">
-        <FormNotify
-          v-for="notify in socials" :key="notify.title"
-          :notify="notify"/>
+        <NotifyItem
+          v-for="notify in socials"
+          :key="notify.title"
+          :notify="notify"
+          :payload="payload"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline"
-  import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline"
-  import FormNotify from "~/components/page/account/info/FormfNotify"
-  import * as actionTypes from "~/utils/action-types"
-  import { mapState } from "vuex"
-  import { get } from "lodash"
+import IconCaretDown from "~/assets/svg/icons/caret-down.svg?inline";
+import IconCaretUp from "~/assets/svg/icons/caret-up.svg?inline";
+import NotifyItem from "~/components/page/profile/setting/tabs/NotifyItem";
+import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
+import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
-  export default {
-    layout: 'account-info',
-    
-    components: {
-      IconCaretDown,
-      IconCaretUp,
-      FormNotify,
-    },
-    data() {
-      return ({
-        showFormNotify: false,
-        notifys: [
-          {
-            title: "Thông báo từ giáo viên",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Nhắc nhở làm bài tập",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Thông báo khi có điểm",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Thông báo lịch học tại phòng học online",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          }
-        ],
-        socials: [
-          {
-            title: "Bình luận",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Gắn thẻ",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Yêu cầu kết bạn",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Các thông báo khác",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          }
-        ]
-      })
-    },
-    methods: {
-      async getList() {
-        const getSettings = () =>
-          this.$store.dispatch(
-            `setting/${actionTypes.ACCOUNT_SETTING.LIST}`, {}
-          );
-        return await Promise.all([
-          getSettings(),
-        ])
+export default {
+  layout: "account-info",
+
+  components: {
+    IconCaretDown,
+    IconCaretUp,
+    NotifyItem,
+  },
+
+  data() {
+    return {
+      payload: {
+        comment_notify: "",
+        friend_notify: "",
+        homework_notify: "",
+        id: "",
+        other_notify: "",
+        point_notify: "",
+        schedule_notify: "",
+        tag_notify: "",
+        teacher_notify: "",
+        user_id: "",
       },
-      get
+      notifys: [
+        {
+          title: "Thông báo từ giáo viên",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "teacher_notify",
+        },
+        {
+          title: "Nhắc nhở làm bài tập",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "homework_notify",
+        },
+        {
+          title: "Thông báo khi có điểm",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "point_notify",
+        },
+        {
+          title: "Thông báo lịch học tại phòng học online",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "schedule_notify",
+        },
+      ],
+      socials: [
+        {
+          title: "Bình luận",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "comment_notify",
+        },
+        {
+          title: "Gắn thẻ",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "tag_notify",
+        },
+        {
+          title: "Yêu cầu kết bạn",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "friend_notify",
+        },
+        {
+          title: "Các thông báo khác",
+          describe:
+            "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
+          key: "other_notify",
+        },
+      ],
+    };
+  },
+
+  mounted() {
+    useEffect(this, this.handleSetpayload.bind(this), ["setting"]);
+  },
+
+  methods: {
+    handleSetpayload() {
+      this.payload.comment_notify = get(this, "setting.comment_notify", "NONE");
+      this.payload.friend_notify = get(this, "setting.friend_notify", "NONE");
+      this.payload.homework_notify = get(
+        this,
+        "setting.homework_notify",
+        "NONE"
+      );
+      this.payload.id = get(this, "setting.id", "");
+      this.payload.other_notify = get(this, "setting.other_notify", "NONE");
+      this.payload.point_notify = get(this, "setting.point_notify", "NONE");
+      this.payload.schedule_notify = get(
+        this,
+        "setting.schedule_notify",
+        "NONE"
+      );
+      this.payload.tag_notify = get(this, "setting.tag_notify", "NONE");
+      this.payload.teacher_notify = get(this, "setting.teacher_notify", "NONE");
+      this.payload.user_id = get(this, "setting.user_id", "");
     },
-    computed: {
-      ...mapState("setting", ["settings"]),
-      elearningNotifies() {
-        let data = [
-          {
-            title: "Thông báo từ giáo viên",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia",
-            email: get(this.settings, 'teacher_notify', false) === 'Email' || get(this.settings, 'teacher_notify', false) === 'All',
-            push: get(this.settings, 'teacher_notify', false) === 'Push' || get(this.settings, 'teacher_notify', false) === 'All',
-          },
-          {
-            title: "Nhắc nhở làm bài tập",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Thông báo khi có điểm",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          },
-          {
-            title: "Thông báo lịch học tại phòng học online",
-            describe: "Nhận thông báo nhắc nhở làm bài tập ở bài giảng/khóa học mà bạn tham gia"
-          }
-        ]
-        return data
-      }
-    },
-    created() {
-      // this.getList()
-    }
-  }
+
+    get,
+  },
+  computed: {
+    ...mapState("setting", {
+      setting: "setting",
+    }),
+  },
+};
 </script>
 
 <style lang="scss">
-  @import "~/assets/scss/components/account/_account-info-setting.scss";
+@import "~/assets/scss/components/account/_account-info-setting.scss";
 </style>

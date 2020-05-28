@@ -21,7 +21,7 @@ const actions = {
     }
   },
 
-  async [actionTypes.ACCOUNT_SETTING.UPDATE]({ commit }, payload) {
+  async updateSetting({ commit }, payload) {
     try {
       const result = await new Setting(this.$axios)[actionTypes.BASE.ADD](
         payload
