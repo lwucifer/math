@@ -119,23 +119,23 @@ export default {
 
   methods: {
     handleSetpayload() {
-      this.payload.comment_notify = get(this, "setting.comment_notify", "NONE");
-      this.payload.friend_notify = get(this, "setting.friend_notify", "NONE");
+      this.payload.comment_notify = get(this, "setting.comment_notify", "PUSH");
+      this.payload.friend_notify = get(this, "setting.friend_notify", "PUSH");
       this.payload.homework_notify = get(
         this,
         "setting.homework_notify",
-        "NONE"
+        "PUSH"
       );
       this.payload.id = get(this, "setting.id", "");
-      this.payload.other_notify = get(this, "setting.other_notify", "NONE");
-      this.payload.point_notify = get(this, "setting.point_notify", "NONE");
+      this.payload.other_notify = get(this, "setting.other_notify", "PUSH");
+      this.payload.point_notify = get(this, "setting.point_notify", "PUSH");
       this.payload.schedule_notify = get(
         this,
         "setting.schedule_notify",
-        "NONE"
+        "PUSH"
       );
-      this.payload.tag_notify = get(this, "setting.tag_notify", "NONE");
-      this.payload.teacher_notify = get(this, "setting.teacher_notify", "NONE");
+      this.payload.tag_notify = get(this, "setting.tag_notify", "PUSH");
+      this.payload.teacher_notify = get(this, "setting.teacher_notify", "PUSH");
       this.payload.user_id = get(this, "setting.user_id", "");
     },
 

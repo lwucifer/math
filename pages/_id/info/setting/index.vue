@@ -80,9 +80,6 @@ export default {
   },
 
   computed: {
-    ...mapState("setting", {
-      setting: "setting",
-    }),
     currentTabComponent: function() {
       const MATCHED_TABS = {
         notify: "Notify",
