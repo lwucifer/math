@@ -5,6 +5,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="sortTable"
       :data="list"
       :loading="loading"
     >
@@ -74,7 +75,7 @@
         </td>
       </template>
       
-      <template v-slot:cell(created_at)="{row}">
+      <template v-slot:cell(created)="{row}">
         <td>
           {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
         </td>
@@ -140,7 +141,7 @@
             text: "Tỷ lệ hoàn thành",
           },
           {
-            name: "created_at",
+            name: "created",
             text: "Ngày khởi tạo",
             sort: true
           },
@@ -157,6 +158,9 @@
     methods: {
       onPageChange(e) {
         this.$emit('changedPagination', e)
+      },
+      sortTable(info) {
+        this.$emit('changedSort', info)
       },
       numeralFormat,
       get
