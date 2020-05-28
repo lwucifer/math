@@ -60,6 +60,7 @@ export default {
         "btn--color-transparent": this.color === "transparent",
         "btn--color-orange": this.color === "orange",
         "btn--color-yellow": this.color === "yellow",
+        "btn--color-blue": this.color === "blue",
       };
 
       const outlineColorClasses = {

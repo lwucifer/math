@@ -125,6 +125,14 @@
     }
 }
 
+.btn--color-blue {
+    background: #1481fe;
+    color: #fff;
+    &:hover, &:focus {
+        
+    }
+}
+
 .btn--color-white {
     background-color: #fff;
     color: $color-primary;
