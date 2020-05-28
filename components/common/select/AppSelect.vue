@@ -62,7 +62,7 @@
           class="app-select__placeholder"
         >{{ $attrs.placeholder || '' }}</span>
 
-        <span class="app-select__selected-value">{{ selected.text }}</span>
+        <span v-else class="app-select__selected-value">{{ selected.text }}</span>
 
         <div class="mr-auto"></div>
 
