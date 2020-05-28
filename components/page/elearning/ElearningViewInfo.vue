@@ -11,15 +11,15 @@
       <div class="stars">
         <app-stars
           class="mb-1"
-          :stars="Math.floor(get(info, 'rates.averageRate', 0))"
+          :stars="Math.floor(get(info, 'voting.average_rate', 0))"
           :size="14"
         />
         <strong class="ml-3">{{
-          numeral(get(info, "rates.averageRate", 0)).format()
+          numeral(get(info, "voting.average_rate", 0)).format()
         }}</strong
         >&nbsp;
         <span class="font-13px"
-          >({{ numeral(get(info, "rates.totalReview", 0)).format() }} đánh
+          >({{ numeral(get(info, "voting.total_votes", 0)).format() }} đánh
           giá)</span
         >
       </div>

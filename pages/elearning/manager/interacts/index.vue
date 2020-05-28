@@ -46,8 +46,8 @@ import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-const QATab = () => import("./tabs/QA");
-const NotifyTab = () => import("./tabs/notify");
+const QATab = () => import("~/components/page/elearning/manager/interacts/QA");
+const NotifyTab = () => import("~/components/page/elearning/manager/interacts/notify");
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
