@@ -133,9 +133,9 @@ export default {
       let payload = { ...this.payload };
       payload[get(this, "notify.key", "")] = this.handleSetText();
       const res = await this.$store.dispatch("setting/updateSetting", payload);
+      this.$store.dispatch(`setting/getSetting`);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
-        this.$store.dispatch(`setting/getSetting`);
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
