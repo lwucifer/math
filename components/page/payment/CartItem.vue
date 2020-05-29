@@ -12,10 +12,10 @@
     <div class="ml-auto">
       <h5 class="text-right text-primary">{{ numeral(get(item, "price", "")).format() }} đ</h5>
       <div class="d-flex mt-3">
+        <h6 class="ml-2">-{{ numeral(get(item, "discount", "")).format('0,0.00') }}%</h6>
         <span class="price-cart_payment"
           >{{ numeral(get(item, "original_price", "")).format() }}đ</span
         >
-        <h6 class="ml-2">{{ numeral(get(item, "discount", "")).format('0,0.00') }}%</h6>
       </div>
       <p class="btn-delete_cart-item">
         <a @click.prevent="deleteCartItem">Xoá khỏi giỏ hàng</a>
