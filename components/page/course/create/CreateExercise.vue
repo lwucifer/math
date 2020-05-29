@@ -1,6 +1,6 @@
 <template>
-  <VclFacebook v-if="loading"></VclFacebook>
-  <div v-else>
+  <!-- <VclFacebook v-if="loading"></VclFacebook> -->
+  <div>
     <div class="cc-panel bg-white mb-4">
       <div class="cc-panel__title">
         <h4 class="cc-panel__heading">Bài tập</h4>

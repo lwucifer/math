@@ -42,60 +42,62 @@
           />
         </div>
 
-        <div class="setup-time mt-4 mb-6">
-          <h5 class="mb-4">Cài đặt thời gian <span class="text-base font-weight-normal">(Không bắt buộc)</span></h5>
+        <!-- <div class="setup-time mt-4 mb-6">
+          <h5 class="mb-4">
+            Cài đặt thời gian
+            <span class="text-base font-weight-normal">(Không bắt buộc)</span>
+          </h5>
 
           <div class="d-flex align-items-center mb-3">
-              <p class="w-120">Thời gian bắt đầu:</p>
+            <p class="w-120">Thời gian bắt đầu:</p>
 
-              <app-date-picker
-                size="sm"
-                placeholder="dd/mm/yyyy"
-                value-type="DD-MM-YYYY"
-                class="mr-3"
-              >
-                <template v-slot:icon-calendar>
-                  <IconCalender class="fill-primary" />
-                </template>
-              </app-date-picker>
+            <app-date-picker
+              size="sm"
+              placeholder="dd/mm/yyyy"
+              value-type="DD-MM-YYYY"
+              class="mr-3"
+            >
+              <template v-slot:icon-calendar>
+                <IconCalender class="fill-primary" />
+              </template>
+            </app-date-picker>
 
-              <app-date-picker
-                size="sm"
-                type="time"
-                placeholder="HH:mm"
-                value-format="HH:mm"
-                class="ml-0 mr-6"
-              />
+            <app-date-picker
+              size="sm"
+              type="time"
+              placeholder="HH:mm"
+              value-format="HH:mm"
+              class="ml-0 mr-6"
+            />
 
-              <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+            <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox>
           </div>
-
 
           <div class="d-flex align-items-center">
-              <p class="w-120">Thời gian kết thúc:</p>
+            <p class="w-120">Thời gian kết thúc:</p>
 
-              <app-date-picker
-                size="sm"
-                placeholder="dd/mm/yyyy"
-                value-type="DD-MM-YYYY"
-                class="mr-3"
-              >
-                <template v-slot:icon-calendar>
-                  <IconCalender class="fill-primary" />
-                </template>
-              </app-date-picker>
+            <app-date-picker
+              size="sm"
+              placeholder="dd/mm/yyyy"
+              value-type="DD-MM-YYYY"
+              class="mr-3"
+            >
+              <template v-slot:icon-calendar>
+                <IconCalender class="fill-primary" />
+              </template>
+            </app-date-picker>
 
-              <app-date-picker
-                size="sm"
-                type="time"
-                placeholder="HH:mm"
-                value-format="HH:mm"
-                class="ml-0 mr-6"
-              />
+            <app-date-picker
+              size="sm"
+              type="time"
+              placeholder="HH:mm"
+              value-format="HH:mm"
+              class="ml-0 mr-6"
+            />
 
-              <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+            <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox>
           </div>
-        </div>
+        </div> -->
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
@@ -229,8 +231,7 @@ import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
-import IconCalender from '~/assets/svg/v2-icons/calendar_today_24px.svg?inline';
-
+import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 
 export default {
   components: {
@@ -246,7 +247,7 @@ export default {
     IconDelete,
     IconSave,
     Forward,
-    IconCalender
+    IconCalender,
   },
 
   data() {

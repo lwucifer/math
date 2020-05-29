@@ -22,13 +22,13 @@
         <div class="right">
           <div>
             <strong class="color-primary">{{
-              numeral(get(teacher, "elearning_total", 0)).format()
+              numeral(get(teacher, "lesson_total", 0)).format()
             }}</strong>
             Bài giảng
           </div>
           <div>
             <strong class="color-primary">{{
-              numeral(get(teacher, "participant_total", 0)).format()
+              numeral(get(teacher, "elearning_total", 0)).format()
             }}</strong>
             Khóa học
           </div>
