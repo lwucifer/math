@@ -252,9 +252,13 @@
         </div>
 
         <div class="buy-lesson mt-3">
-          <div class="text-right">
+          <div class="text-right text-primary buy-lesson__price" v-if="isFree">
+            <strong>Miễn phí</strong>
+          </div>
+
+          <div class="text-right" v-else>
             <s class="mr-3 old-price">519.000đ</s>
-            <strong class="text-primary">319.000đ</strong>
+            <strong class="text-primary buy-lesson__price">319.000đ</strong>
           </div>
 
           <app-button
@@ -314,7 +318,8 @@ export default {
       progress: null,
       is_favourite: false,
       isPoint: true,
-      isLearning: true
+      isLearning: true,
+      isFree: true
     };
   },
   props: {

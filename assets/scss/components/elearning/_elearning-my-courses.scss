@@ -76,6 +76,10 @@
     }
 
     .buy-lesson {
+        &__price {
+            font-size: 1.6rem;
+        }
+
         .old-price {
             font-size: 1.3rem;
         }

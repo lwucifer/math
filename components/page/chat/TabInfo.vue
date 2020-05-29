@@ -83,6 +83,35 @@
       </ListInfoBox>
 
       <ListInfoBox>
+        <template #header>MỌI NGƯỜI</template>
+
+        <template #button>
+          <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px"/> 
+          <span class="text-primary">Thêm người</span>
+        </template>
+
+        <template #body>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="user-add d-flex align-items-center">
+              <img src="/images/tmp/user-photo.png" alt="" class="mr-3">
+              <p>Albert Cooper</p>
+            </div>
+
+            <div class="position text-disabled">Người tạo</div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="user-add d-flex align-items-center">
+              <img src="/images/tmp/user-photo.png" alt="" class="mr-3">
+              <p>Albert Cooper</p>
+            </div>
+
+            <div class="position text-disabled">Người tạo</div>
+          </div>
+        </template>
+      </ListInfoBox>
+
+      <ListInfoBox>
         <template #header>TỆP ĐƯỢC CHIA SẺ</template>
 
         <template #body>
@@ -222,6 +251,7 @@ import IconNotificationsNone24px from "~/assets/svg/v2-icons/notifications_none_
 import IconRemoveCircleOutline24px from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconRecycle from "~/assets/svg/v2-icons/recycle.svg?inline";
 import IconFileBlank from "~/assets/svg/design-icons/file-blank.svg?inline";
+import IconAddGreen from '~/assets/svg/v2-icons/add_green.svg?inline';
 
 import ListInfoBox from "~/components/page/chat/ListInfoBox";
 import { getBase64 } from "~/utils/common";
@@ -239,7 +269,8 @@ export default {
     IconNotificationsNone24px,
     IconRemoveCircleOutline24px,
     IconRecycle,
-    IconFileBlank
+    IconFileBlank,
+    IconAddGreen
   },
 
   props: {
