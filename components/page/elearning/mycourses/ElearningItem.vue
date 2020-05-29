@@ -37,86 +37,231 @@
         <!--class="ml-2"-->
         <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
-      <div class="proccess-bar-study-border">
-        <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
-      </div>
-      <div class="d-flex">
-        <span>
-          Đã hoàn thành
-          <strong class="text-primary">{{elearning && elearning.progress}}%</strong>
-        </span>
-        <div class="ml-auto">
-          <app-dropdown
-            class="post__menu-dropdown"
-            position="right"
-            open-on-click
-            v-model="menuDropdown"
-            :content-width="'15rem'"
-          >
-            <button slot="activator" slot-scope="{ on }" v-on="on">
-              <IconDots class="icon fill-gray" />
-            </button>
 
-            <ul class="link--dropdown__ElearningItem">
-              <li
-                class="item-share__ElearningItem"
-                @click.prevent="shareDropdown=!shareDropdown"
-                v-if="tab !== 5"
-              >
-                <v-popover
-                  popoverClass="menu-share-elearning-tooltip"
-                  placement="right"
-                  trigger="hover"
+      <div v-if="isLearning">
+        <div class="proccess-bar-study-border">
+          <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
+        </div>
+
+        <div class="d-flex py-3 finish-lesson">
+          <span>
+            Đã hoàn thành
+            <strong class="text-primary">{{elearning && elearning.progress}}%</strong>
+          </span>
+
+          <div class="ml-auto">
+            <app-dropdown
+              class="post__menu-dropdown"
+              position="right"
+              open-on-click
+              v-model="menuDropdown"
+              :content-width="'15rem'"
+            >
+              <button slot="activator" slot-scope="{ on }" v-on="on">
+                <IconDots class="icon fill-gray" />
+              </button>
+
+              <ul class="link--dropdown__ElearningItem">
+                <li
+                  class="item-share__ElearningItem"
+                  @click.prevent="shareDropdown=!shareDropdown"
+                  v-if="tab !== 5"
                 >
-                  <n-link class="pr-2" to>
-                    <IconShare24px class="icon" />Chia sẻ
+                  <v-popover
+                    popoverClass="menu-share-elearning-tooltip"
+                    placement="right"
+                    trigger="hover"
+                  >
+                    <n-link class="pr-2" to>
+                      <IconShare24px class="icon" />Chia sẻ
+                    </n-link>
+
+                    <template slot="popover">
+                      <ul class="share-dropdowm__ElearningItem">
+                        <li @click.prevent="shareFb(elearning.elearning_id)">
+                          <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                        </li>
+                        <li @click.prevent="shareSchool(elearning)">
+                          <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                        </li>
+                      </ul>
+                    </template>
+                  </v-popover>
+                </li>
+
+                <li
+                  v-if="elearning && !elearning.is_favourite && tab !== 5"
+                  @click.prevent="handleFavourite(elearning.elearning_id)"
+                >
+                  <n-link to>
+                    <IconCardsHeart class="icon" />Yêu thích
                   </n-link>
-                  <template slot="popover">
-                    <ul class="share-dropdowm__ElearningItem">
-                      <li @click.prevent="shareFb(elearning.elearning_id)">
-                        <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
-                      </li>
-                      <li @click.prevent="shareSchool(elearning)">
-                        <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
-                      </li>
-                    </ul>
-                  </template>
-                </v-popover>
-              </li>
-              <li
-                v-if="elearning && !elearning.is_favourite && tab !== 5"
-                @click.prevent="handleFavourite(elearning.elearning_id)"
-              >
-                <n-link to>
-                  <IconCardsHeart class="icon" />Yêu thích
-                </n-link>
-              </li>
-              <li
-                v-else-if="elearning && elearning.is_favourite && tab !== 5"
-                @click.prevent="handleDeleteFavourite(elearning.elearning_id)"
-              >
-                <n-link to class="text-primary">
-                  <IconCardsHeart class="icon" />Bỏ yêu thích
-                </n-link>
-              </li>
-              <li
-                v-if="elearning && !elearning.is_archive"
-                @click.prevent="handleArchive(elearning.elearning_id)"
-              >
-                <n-link to>
-                  <IconArchive class="icon" />Lưu trữ
-                </n-link>
-              </li>
-              <li
-                v-else-if="elearning && !elearning.is_archive && tab === 5"
-                @click.prevent="handleDeleteArchive(elearning.elearning_id)"
-              >
-                <n-link to class="text-primary">
-                  <IconUnArchive class="icon" />Bỏ lưu trữ
-                </n-link>
-              </li>
-            </ul>
-          </app-dropdown>
+                </li>
+
+                <li
+                  v-else-if="elearning && elearning.is_favourite && tab !== 5"
+                  @click.prevent="handleDeleteFavourite(elearning.elearning_id)"
+                >
+                  <n-link to class="text-primary">
+                    <IconCardsHeart class="icon" />Bỏ yêu thích
+                  </n-link>
+                </li>
+
+                <li
+                  v-if="elearning && !elearning.is_archive"
+                  @click.prevent="handleArchive(elearning.elearning_id)"
+                >
+                  <n-link to>
+                    <IconArchive class="icon" />Lưu trữ
+                  </n-link>
+                </li>
+
+                <li
+                  v-else-if="elearning && !elearning.is_archive && tab === 5"
+                  @click.prevent="handleDeleteArchive(elearning.elearning_id)"
+                >
+                  <n-link to class="text-primary">
+                    <IconUnArchive class="icon" />Bỏ lưu trữ
+                  </n-link>
+                </li>
+              </ul>
+            </app-dropdown>
+
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between middle-point">
+          <p>
+            Điểm trung bình: 
+            <span v-if="isPoint" class="heading-5 text-primary font-weight-semi-bold">8.5</span>
+            <span v-else>Chưa tổng kết</span>
+          </p>
+
+          <div v-if="isPoint" class="popover-point">
+            <v-popover 
+              class="popover-detail" 
+              placement="right"
+              trigger="hover">
+              <IconQuestionCircle width="16px" height="16px" class="fill-base"/>
+
+              <template #popover>
+                <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
+
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+              </template>
+            </v-popover>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div v-else>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="rate-lesson">
+            <app-stars
+              class="d-inline-flex"
+              :stars="4.5"
+            />
+            <span class="text-dark ml-2">
+              <strong>4.0</strong>
+              (476)
+            </span>
+          </div>
+
+          <div class="setting">
+            <app-dropdown
+              class="post__menu-dropdown"
+              position="right"
+              open-on-click
+              v-model="menuDropdown"
+              :content-width="'15rem'"
+            >
+              <button slot="activator" slot-scope="{ on }" v-on="on">
+                <IconDots class="icon fill-gray" />
+              </button>
+
+              <ul class="link--dropdown__ElearningItem">
+                <li
+                  class="item-share__ElearningItem"
+                  @click.prevent="shareDropdown=!shareDropdown"
+                  v-if="tab !== 5"
+                >
+                  <v-popover
+                    popoverClass="menu-share-elearning-tooltip"
+                    placement="right"
+                    trigger="hover"
+                  >
+                    <n-link class="pr-2" to>
+                      <IconShare24px class="icon" />Chia sẻ
+                    </n-link>
+
+                    <template slot="popover">
+                      <ul class="share-dropdowm__ElearningItem">
+                        <li @click.prevent="shareFb(elearning.elearning_id)">
+                          <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                        </li>
+                        <li @click.prevent="shareSchool(elearning)">
+                          <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                        </li>
+                      </ul>
+                    </template>
+                  </v-popover>
+                </li>
+
+                <li
+                  v-if="elearning && !elearning.is_favourite && tab !== 5"
+                  @click.prevent="handleFavourite(elearning.elearning_id)"
+                >
+                  <n-link to>
+                    <IconCardsHeart class="icon" />Yêu thích
+                  </n-link>
+                </li>
+
+                <li
+                  v-else-if="elearning && elearning.is_favourite && tab !== 5"
+                  @click.prevent="handleDeleteFavourite(elearning.elearning_id)"
+                >
+                  <n-link to class="text-primary">
+                    <IconCardsHeart class="icon" />Bỏ yêu thích
+                  </n-link>
+                </li>
+
+                <li
+                  v-if="elearning && !elearning.is_archive"
+                  @click.prevent="handleArchive(elearning.elearning_id)"
+                >
+                  <n-link to>
+                    <IconArchive class="icon" />Lưu trữ
+                  </n-link>
+                </li>
+
+                <li
+                  v-else-if="elearning && !elearning.is_archive && tab === 5"
+                  @click.prevent="handleDeleteArchive(elearning.elearning_id)"
+                >
+                  <n-link to class="text-primary">
+                    <IconUnArchive class="icon" />Bỏ lưu trữ
+                  </n-link>
+                </li>
+              </ul>
+            </app-dropdown>
+          </div>
+        </div>
+
+        <div class="buy-lesson mt-3">
+          <div class="text-right">
+            <s class="mr-3 old-price">519.000đ</s>
+            <strong class="text-primary">319.000đ</strong>
+          </div>
+
+          <app-button
+            class="text-white mt-3"
+            fullWidth
+            color="primary"
+            size="sm">Mua ngay</app-button>
         </div>
       </div>
     </div>
@@ -137,6 +282,8 @@ import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
 import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
+import IconQuestionCircle from '~/assets/svg/design-icons/question-circle.svg?inline';
+
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -150,7 +297,8 @@ export default {
     IconArchive,
     IconFacebook,
     IconSchooly,
-    CourseItem2
+    CourseItem2,
+    IconQuestionCircle
   },
   data() {
     return {
@@ -164,7 +312,9 @@ export default {
         name: ""
       },
       progress: null,
-      is_favourite: false
+      is_favourite: false,
+      isPoint: true,
+      isLearning: true
     };
   },
   props: {
