@@ -70,6 +70,7 @@
       @close="modalShow = false"
       :data="targetClass"
       :contentLoading="waitingClassLoading"
+      :isShowModal="modalShow"
     />
     <Timetable
       v-if="isShowTimetable"
