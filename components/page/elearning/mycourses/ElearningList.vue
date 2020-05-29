@@ -1,6 +1,6 @@
 <template>
   <div class="row my-5">
-    <div class="col-md-3" v-for="(item,index) in elearningList" :key="index">
+    <div :class="col" v-for="(item,index) in elearningList" :key="index">
       <slot :item="item" />
       <!-- <ElearningItem 
           :elearning="item"
@@ -18,6 +18,11 @@ export default {
   props: {
     elearningList: {
       default: null
+    },
+
+    col: {
+      type: String,
+      default: 'col-md-3'
     }
   }
 };
