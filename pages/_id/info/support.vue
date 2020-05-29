@@ -75,15 +75,12 @@
                     <app-upload
                       accept=".jpg, .png, .pdf, .docx, .xlsx"
                       :showIcon="false"
-                      title="+ Chọn file"
+                      title="+ Attach file"
                       :inputText="false"
                       @change="handleSelectFile"
                     />
 
-                    <span class="font-italic"
-                      >Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD,
-                      EXCEL.
-                    </span>
+                    <span class="font-italic">Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD, EXCEL.</span>
                   </div>
 
                   <app-button
