@@ -58,12 +58,25 @@
       <h5 class="mb-4">Chọn cách tính điểm</h5>
 
       <div class="mb-4">
-        <app-radio name="caculate-point" class="mr-6">Theo hệ số <IconQuestionCircle width="12px" height="12px" class="fill-gray"/> </app-radio>
-        <app-radio name="caculate-point">Theo trọng số <IconQuestionCircle width="12px" height="12px" class="fill-gray"/> </app-radio>
+        <app-radio 
+          value="he so"
+          @click="handleSelectType"
+          name="caculate-point" 
+          class="mr-6">
+          Theo hệ số <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle"/> 
+        </app-radio>
+
+        <app-radio 
+          value="trong so"
+          @click="handleSelectType"
+          name="caculate-point">
+          Theo trọng số <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle"/> 
+        </app-radio>
       </div>
 
       <div class="d-flex align-items-center mb-5">
-        <p class="mr-3">Chọn hệ số:</p>
+        <p class="mr-3" v-if="typeRadio == 'he so'">Chọn hệ số:</p>
+        <p class="mr-3" v-else>Nhập trọng số:</p>
 
         <app-select
           class="mr-3"
@@ -75,8 +88,8 @@
           ]"
         >
           <template slot="placeholder-icon">
-            <IconAngleDown class="icon" />
-            <!-- <span class="text-primary">%</span> -->
+            <IconAngleDown class="icon" v-if="typeRadio == 'he so'" />
+            <span class="text-primary" v-else>%</span>
           </template>
         </app-select>
 
@@ -330,6 +343,7 @@ export default {
       is_open: 0,
       date: "",
       time: "",
+      typeRadio: 'he so'
     };
   },
 
@@ -377,6 +391,10 @@ export default {
     handleCancel() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+    },
+
+    handleSelectType(e) {
+      this.typeRadio = e.target.value;
     },
 
     get,
