@@ -5,20 +5,65 @@
     </div>
 
     <div class="cc-panel__body">
-      <div class="mb-4">
-        <!-- <div
-          class="noti-setting d-flex justify-content-between align-items-center"
-        >
-          <div class="noti-setting__text text-warning">
-            <IconWarning class="mr-2" /> Vui lòng hoàn thành
-            <n-link to="" class="text-warning">hồ sơ cá nhân</n-link> trước khi
-            cài đặt học phí cho bài giảng, khóa học của bạn.
-          </div>
-          <button class="noti-setting__close">
-            <IconClose fill="#E6A01E" />
-          </button>
-        </div> -->
+        <div class="setup-time mb-5">
+          <h5 class="mb-4">
+            Cài đặt thời gian 
+            <span class="text-base font-weight-normal">(Không bắt buộc) <IconQuestionCircle width="12px" height="12px" class="fill-gray"/></span>
+          </h5>
 
+          <div class="d-flex align-items-center mb-3">
+              <p class="w-120">Thời gian bắt đầu:</p>
+
+              <app-date-picker
+                size="sm"
+                placeholder="dd/mm/yyyy"
+                value-type="DD-MM-YYYY"
+                class="mr-3"
+              >
+                <template v-slot:icon-calendar>
+                  <IconCalender class="fill-primary" />
+                </template>
+              </app-date-picker>
+
+              <app-date-picker
+                size="sm"
+                type="time"
+                placeholder="HH:mm"
+                value-format="HH:mm"
+                class="ml-0 mr-6"
+              />
+
+              <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+          </div>
+
+
+          <div class="d-flex align-items-center">
+              <p class="w-120">Thời gian kết thúc:</p>
+
+              <app-date-picker
+                size="sm"
+                placeholder="dd/mm/yyyy"
+                value-type="DD-MM-YYYY"
+                class="mr-3"
+              >
+                <template v-slot:icon-calendar>
+                  <IconCalender class="fill-primary" />
+                </template>
+              </app-date-picker>
+
+              <app-date-picker
+                size="sm"
+                type="time"
+                placeholder="HH:mm"
+                value-format="HH:mm"
+                class="ml-0 mr-6"
+              />
+
+              <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+          </div>
+        </div>
+
+      <div class="mb-4">
         <h5 class="mb-2">Chế độ hiển thị</h5>
 
         <app-select

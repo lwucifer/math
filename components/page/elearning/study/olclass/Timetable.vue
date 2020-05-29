@@ -7,8 +7,18 @@
     title="Thời khóa biểu"
     @close="$emit('close')"
   >
-    <div slot="content">
-      <div class="table_schedule" v-for="(timetable, index) in timetables" :key="index">
+    <div
+      slot="content"
+      :class="{ 'loading-content-center': contentLoading }"
+      style="min-height: 30rem;"
+    >
+      <div class="text-center w-100" v-if="contentLoading"><app-spin /></div>
+      <div
+        v-else
+        class="table_schedule"
+        v-for="(timetable, index) in timetables"
+        :key="index"
+      >
         <h5 class="text-primary mb-4">
           Thời gian từ ngày {{ timetable.from_date }} đến
           {{ timetable.to_date }}
@@ -98,7 +108,7 @@ export default {
           text: "Chủ nhật"
         }
       ],
-      today: 'mon',
+      today: "mon"
     };
   },
 
@@ -106,6 +116,10 @@ export default {
     timetables: {
       type: Array,
       default: () => []
+    },
+    contentLoading: {
+      type: Boolean,
+      default: false
     }
   },
 

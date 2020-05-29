@@ -26,7 +26,7 @@
         :category="category"
       />
 
-      <ExerciseList
+      <ExamList
         v-for="(exercise, index) in get(exams, 'content', [])"
         :key="exercise.id"
         :exercise="exercise"
@@ -46,7 +46,7 @@ import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
 import FormCreateExam from "~/components/page/course/create/exercise/FormCreateExam";
-import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
+import ExamList from "~/components/page/course/create/exercise/ExamList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import * as actionTypes from "~/utils/action-types";
@@ -66,7 +66,7 @@ export default {
     CreateAction,
     ButtonCreateExercise,
     FormCreateExam,
-    ExerciseList,
+    ExamList,
     SelectLesson,
   },
 
