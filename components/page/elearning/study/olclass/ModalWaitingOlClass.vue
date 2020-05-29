@@ -34,18 +34,19 @@
 
           <p class="mb-3" v-if="dataLength > 1">
             <i>
-              Chú ý : buổi học này sẽ được chia thành {{ dataLength }} tiết học. Sau khi tiết
-              học thứ nhất kết thúc, hãy đợi trong giây lát, hệ thống sẽ tự động
-              chuyển sang tiết học tiếp theo. Bạn không nên đóng cửa sổ này cho
-              đến khi buổi học kết thúc.
+              Chú ý : buổi học này sẽ được chia thành {{ dataLength }} tiết học.
+              Sau khi tiết học thứ nhất kết thúc, hãy đợi trong giây lát, hệ
+              thống sẽ tự động chuyển sang tiết học tiếp theo. Bạn không nên
+              đóng cửa sổ này cho đến khi buổi học kết thúc.
             </i>
           </p>
 
           <div class="mt-4 text-center">
-            <div class="mb-10">
+            <!-- <div class="mb-10">
               Phòng học bắt đầu sau
               <b class="h5 color-blue"> {{ countdown }}</b>
-            </div>
+            </div> -->
+            <div class="text-center w-100" v-if="contentLoading"><app-spin /></div>
           </div>
 
           <div class="mb-4 mt-4 d-flex-center justify-content-center">
@@ -53,7 +54,8 @@
               :href="activeSessionLink"
               target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
-              :v-if="data.is_started"
+              :v-if="is_started"
+              :disabled="contentLoading"
               >Vào phòng học</a
             >
             <app-button color="white" size="lg" @click="showModalConfirm = true"
@@ -65,16 +67,14 @@
 
           <div style="max-height: 300px; overflow-y: auto; text-align: center;">
             <div class="text-center d-inline-block">
-              <div
-                v-for="(item, index) in data.sessions"
-                :key="index"
-                class="mb-4"
-              >
+              <div v-for="(item, index) in sessions" :key="index" class="mb-4">
                 <p>
                   <span style="color: #222">Tiết học {{ index + 1 }}: </span>
                   <a
                     class="bold text-decoration-none"
-                    :class="{'text-secondary': activeSessionLink == item.join_url}"
+                    :class="{
+                      'text-secondary': activeSessionLink == item.join_url
+                    }"
                     :href="item.join_url"
                     target="_blank"
                     >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
@@ -119,7 +119,14 @@ let interval = null;
 
 export default {
   props: {
-    data: Object
+    data: {
+      type: Object,
+      default: () => {}
+    },
+    contentLoading: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {
@@ -129,7 +136,7 @@ export default {
       currentZoom: null,
       showModalConfirm: false,
       activeSessionLink: "#",
-      activeSession: false,
+      activeSession: false
     };
   },
 
@@ -148,7 +155,8 @@ export default {
       console.log("[setActiveLinkSession]");
       // lessiong is living => open zoom
       // if (this.data.is_started == true) {
-      const sessions = this.data.sessions || [];
+      // const sessions = this.data.sessions || [];
+      const sessions = get(this, "data.sessions", []);
 
       // calculate current session base on: start_time + duration vs new Date();
       let activeSession = null;
@@ -176,7 +184,7 @@ export default {
     },
 
     setCountdown() {
-      let seconds = this.data.time_count_down || 0; // in seconds
+      let seconds = this.sessions.time_count_down || 0; // in seconds
       const duration = get(this.data, "extra_info.duration", 0);
       if (!duration) return;
 
@@ -204,8 +212,16 @@ export default {
   computed: {
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
 
+    sessions() {
+      return get(this, "data.sessions", []);
+    },
+
     dataLength() {
-      return this.data.sessions.length || 0;
+      return this.sessions.length || 0;
+    },
+
+    is_started() {
+      return get(this.data, "is_started", false);
     }
   },
 
