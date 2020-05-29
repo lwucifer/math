@@ -21,10 +21,60 @@
     .img__elearning-item{
         width: 100%;
         height: 159px;
+        position: relative;
         img{
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        .item-2__livestream{
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            display: flex;
+            align-items: center;
+            background-color: $color-red;
+            font-size: 1.2rem;
+            color: #fff;
+            padding: .5rem 1rem .5rem .6rem;
+
+            .icon {
+                width: 2rem;
+                height: 1.5rem;
+                margin-right: 4px;
+
+                circle {
+                    animation: scaleDot 1s infinite;
+                    transform-origin: center;
+                }
+            }
+        }
+        .item-2__online-class{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(#6FDA44, .8);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            padding: 1rem 1.4rem;
+            }
+        .item-2__discount{
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 3.6rem;
+            height: 3.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $color-red;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
         }
     }
     .proccess-bar-study-border{

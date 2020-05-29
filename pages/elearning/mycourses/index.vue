@@ -101,16 +101,6 @@
               v-if="pagination.total_pages > 1"
             />
             
-            <!-- Item favourite nhưng chưa
-            <div class="col-md-3">
-              <CourseItem2>
-                <template v-slot:mycoursefavourite>
-                  <MenuDropDown/>
-                </template>
-            
-            </CourseItem2>
-            </div>-->
-
             <ShareElearningModal
               v-if="checkModalShare"
               @cancel="cancel"
@@ -129,7 +119,6 @@
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import ElearningList from "~/components/page/elearning/mycourses/ElearningList";
 import ElearningItem from "~/components/page/elearning/mycourses/ElearningItem";
-import CourseItem2 from "~/components/page/course/CourseItem2";
 import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
 import ShareElearningModal from "~/components/page/elearning/mycourses/ShareElearningModal";
 import { mapState, mapActions } from "vuex";
@@ -147,7 +136,6 @@ export default {
     MyCourseSide,
     ElearningList,
     ElearningItem,
-    CourseItem2,
     MenuDropDown,
     ShareElearningModal,
     IconHamberger

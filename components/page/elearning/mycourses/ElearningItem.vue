@@ -270,11 +270,11 @@
       </div>
     </div>
   </div>
-  <!-- <CourseItem2 v-else :item="elearning">
+  <ElearningItem2 v-else :elearning="elearning">
       <template v-slot:mycoursefavourite>
         <MenuDropDown />
       </template>
-  </CourseItem2>-->
+  </ElearningItem2>
   <!-- </div> -->
 </template>
 
@@ -291,7 +291,8 @@ import IconQuestionCircle from '~/assets/svg/design-icons/question-circle.svg?in
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import CourseItem2 from "~/components/page/course/CourseItem2";
+import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2"
+import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown"
 export default {
   components: {
     IconDots,
@@ -301,8 +302,9 @@ export default {
     IconArchive,
     IconFacebook,
     IconSchooly,
-    CourseItem2,
-    IconQuestionCircle
+    IconQuestionCircle,
+    ElearningItem2,
+    MenuDropDown
   },
   data() {
     return {
