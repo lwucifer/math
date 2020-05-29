@@ -49,7 +49,7 @@
           <ul class="list-unstyle">
             <li>
               <a href="#">
-                <IconPhone width="18px" height="18px" class="fill-primary"/>
+                <IconPhone width="18px" height="18px" class="fill-primary" />
               </a>
             </li>
             <li>
@@ -59,8 +59,8 @@
             </li>
             <li>
               <!-- @click="visibleAddByPhone = true" -->
-              <a href="#" @click="showInfo = !showInfo"> 
-                <IconExclamationCircle width="18px" height="18px" class="fill-primary"/>
+              <a href="#" @click="showInfo = !showInfo">
+                <IconExclamationCircle width="18px" height="18px" class="fill-primary" />
               </a>
             </li>
           </ul>
@@ -457,16 +457,10 @@
           <div class="input-chat">
             <div class="app-files">
               <label for="files">
-                <IconImage width="15" height="15" class="fill-white"/>
+                <IconImage width="15" height="15" class="fill-white" />
               </label>
 
-              <input
-                type="file"
-                id="files"
-                name="files"
-                multiple
-                @change="handleUploadChange2"
-              />
+              <input type="file" id="files" name="files" multiple @change="handleUploadChange2" />
             </div>
 
             <app-input
@@ -475,19 +469,24 @@
               v-on:keyup.enter="handleEmitMessage"
               placeholder="Nhập tin nhắn..."
             >
-              <template #append-inner> <IconSmile width="16" height="16" class="fill-primary mr-3"/></template>
+              <template #append-inner>
+                <IconSmile width="16" height="16" class="fill-primary mr-3" />
+              </template>
             </app-input>
 
             <button class="bg-primary button-send">
-              <IconSend24px width="15" height="15" class="fill-white"/>
+              <IconSend24px width="15" height="15" class="fill-white" />
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <transition enter-active-class="animated faster fadeInRight" leave-active-class="animated faster fadeOutRight">
-      <TabInfo v-if="showInfo"/> 
+    <transition
+      enter-active-class="animated faster fadeInRight"
+      leave-active-class="animated faster fadeOutRight"
+    >
+      <TabInfo v-if="showInfo" />
     </transition>
 
     <!-- Modal thêm bạn qua số điện thoại -->
@@ -579,8 +578,8 @@ import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import IconClose from "~/assets/svg/icons/close.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
-import IconExclamationCircle from '~/assets/svg/design-icons/exclamation-circle.svg?inline';
-import IconSend24px from '~/assets/svg/v2-icons/send_24px.svg?inline';
+import IconExclamationCircle from "~/assets/svg/design-icons/exclamation-circle.svg?inline";
+import IconSend24px from "~/assets/svg/v2-icons/send_24px.svg?inline";
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
@@ -705,20 +704,23 @@ export default {
       dataCheck: false,
       // avatarUser: {},
       // fullname: "",
-      showInfo: false
+      showInfo: false,
+      messageQuery: {
+        from_meessage_id: null
+      }
     };
   },
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }]),
     ...mapState("message", [
-      "messageList",
       "groupListDetail",
       "messageOn",
       "memberList",
       "friendList",
       "isCreated"
     ]),
+    ...mapState("chat", ["messageList"]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
@@ -840,23 +842,27 @@ export default {
       "setIsCreated"
     ]),
     async messageInfiniteHandler($state) {
-      // this.messageListQuery.room_id = this.$route.params.id;
-      const { data: getData = {} } = await new Message(this.$axios)[
-        actionTypes.BASE.LIST
-      ]({
-        params: this.messageListQuery
-      });
-      console.log("getData Message", getData);
-      if (getData && !getData.messages && this.messagesList.length == 0) {
-        this.checkList = true;
-      }
-      if (getData.messages && getData.messages.length) {
-        this.messageListQuery.page += 1;
-        this.messagesList.push(...getData.messages);
-        $state.loaded();
-      } else {
-        $state.complete();
-      }
+      const room_id = this.$route.params.id;
+      const query = this.messageQuery;
+      // const getData = await this.$store.dispatch(
+      //   `chat/${actionTypes.CHAT.MESSAGE_LIST}`,
+      //   {
+      //     query,
+      //     id: room_id,
+      //     end: "messages"
+      //   }
+      // );
+      // console.log("getData Message", getData);
+      // // if (getData && !getData.messages && this.messagesList.length == 0) {
+      // //   this.checkList = true;
+      // // }
+      // if (getData && getData.length) {
+      //   this.messageQuery.from_meessage_id = getData[getData.length - 1].id;
+      //   // this.messagesList.push(...getData.messages);
+      //   $state.loaded();
+      // } else {
+      //   $state.complete();
+      // }
     },
     reply() {
       this.isReply = true;

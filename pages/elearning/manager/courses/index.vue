@@ -97,9 +97,11 @@
               square
               size="sm"
               normal
-              class="mb-4 btn-color-blue"
+              color="blue"
+              class="mb-4"
               @click="hideRows(true)"
               v-if="tab == null"
+              :disabled="ids.length == 0"
             >
               <IconRestore height="15" width="15" class="fill-white mr-2" />Khôi phục
             </app-button>
@@ -111,6 +113,7 @@
               class="mb-4"
               @click="hideRows(false)"
               v-else-if="tab == 'APPROVED'"
+              :disabled="ids.length == 0"
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Đưa vào danh sách ẩn
             </app-button>
@@ -122,6 +125,7 @@
               class="mb-4"
               @click="deleteRows()"
               v-else
+              :disabled="ids.length == 0"
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Xóa khỏi danh sách
             </app-button>

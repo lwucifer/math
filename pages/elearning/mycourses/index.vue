@@ -1,62 +1,80 @@
 <template>
   <div class="container wrap__study-space">
-    <span class="title__study-space">Góc học tập</span>
-    <div class="d-flex">
-      <div class="elearning-manager-content__title__nav">
-        <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a>
-        <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.lectures}})</a>
-        <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.courses}})</a>
-        <a
-          @click="changeTab(4)"
-          :class="tab === 4 ? 'active' : ''"
-        >Yêu thích ({{total.favourites}})</a>
-        <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
+    <div class="row">
+      <div class="col-md-3">
+        <MyCourseSide :active="2"/>
       </div>
-      <div class="search__mycourses">
-        <app-search
-          placeholder="Tìm kiếm"
-          v-model="params.keyword"
-          bordered
-          @input="hanldeInputSearch"
-          @keyup.enter.native="handleSubmitSearch"
-          @submit="handleSubmitSearch"
+      
+      <div class="col-md-9">
+        <div class="d-flex">
+          <div class="elearning-manager-content__title__nav">
+            <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a>
+            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.lectures}})</a>
+            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.courses}})</a>
+            <a
+              @click="changeTab(4)"
+              :class="tab === 4 ? 'active' : ''"
+            >Yêu thích ({{total.favourites}})</a>
+            <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
+          </div>
+
+          <div class="search__mycourses">
+            <app-search
+              placeholder="Tìm kiếm"
+              v-model="params.keyword"
+              bordered
+              @input="hanldeInputSearch"
+              @keyup.enter.native="handleSubmitSearch"
+              @submit="handleSubmitSearch"
+            />
+          </div>
+        </div>
+          
+        <ElearningList :elearningList="list" :col="'col-md-4'">
+          <ElearningItem
+            slot-scope="{ item }"
+            :elearning="item"
+            :tab="tab"
+            @handleFavourite="handleFavourite"
+            @handleDeleteFavourite="handleDeleteFavourite"
+            @handleDeleteArchive="handleDeleteArchive"
+            @handleArchive="handleArchive"
+            @shareFb="shareFb"
+            @shareSchool="shareSchool"
+          ></ElearningItem>
+        </ElearningList>
+
+        <app-pagination
+          :pagination="pagination"
+          :type="1"
+          @pagechange="onPageChange"
+          v-if="pagination.total_pages > 1"
         />
+        
+        <!-- Item favourite nhưng chưa
+        <div class="col-md-3">
+          <CourseItem2>
+            <template v-slot:mycoursefavourite>
+              <MenuDropDown/>
+            </template>
+        
+        </CourseItem2>
+        </div>-->
+
+        <ShareElearningModal
+          v-if="checkModalShare"
+          @cancel="cancel"
+          :dataModal="dataModal"
+          @submit="handleShareSchoolly"
+        />
+          <!-- ModalShare -->
       </div>
     </div>
-    <ElearningList :elearningList="list">
-      <ElearningItem
-        slot-scope="{ item }"
-        :elearning="item"
-        :tab="tab"
-        @handleFavourite="handleFavourite"
-        @handleDeleteFavourite="handleDeleteFavourite"
-        @handleDeleteArchive="handleDeleteArchive"
-        @handleArchive="handleArchive"
-        @shareFb="shareFb"
-        @shareSchool="shareSchool"
-      ></ElearningItem>
-    </ElearningList>
-    <app-pagination
-      :pagination="pagination"
-      :type="1"
-      @pagechange="onPageChange"
-      v-if="pagination.total_pages > 1"
-    />
-    <!-- Item favourite nhưng chưa
-    <div class="col-md-3">
-      <CourseItem2>
-        <template v-slot:mycoursefavourite>
-          <MenuDropDown/>
-        </template>
-    
-    </CourseItem2>
-    </div>-->
-    <ShareElearningModal v-if="checkModalShare" @cancel="cancel" :dataModal="dataModal" />
-    <!-- ModalShare -->
   </div>
 </template>
 
 <script>
+import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import ElearningList from "~/components/page/elearning/mycourses/ElearningList";
 import ElearningItem from "~/components/page/elearning/mycourses/ElearningItem";
 import CourseItem2 from "~/components/page/course/CourseItem2";
@@ -70,7 +88,9 @@ const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 
 export default {
   middleware: ["authenticated"],
+
   components: {
+    MyCourseSide,
     ElearningList,
     ElearningItem,
     CourseItem2,
@@ -456,6 +476,20 @@ export default {
       // } else {
       //   this.$toasted.error(doAdd.message);
       // }
+    },
+    async handleShareSchoolly(_content) {
+      console.log("_content", _content);
+      const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
+      const doAdd = await this.$store.dispatch(
+        `social/${actionTypes.SOCIAL.ADD_POST}`,
+        { link: link, content: _content }
+      );
+      if (doAdd.success) {
+        this.menuDropdown = false;
+        this.$toasted.show("Đã chia sẻ thành công.");
+      } else {
+        this.$toasted.error(doAdd.message);
+      }
     },
     cancel() {
       this.checkModalShare = false;

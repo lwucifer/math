@@ -435,7 +435,6 @@ export const ELEARNING_SCHOOL_STANDALONE = {
     SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
 
-
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
     SET_GROUP_LIST: "setGroupList",
@@ -552,4 +551,7 @@ export const KEYWORD = {
 
 export const CHAT = {
     SET_ROOM_LIST: "setRoomList",
+    SET_MESSAGE_LIST: "setMessageList",
+    SET_MEMBER_LIST: "setMemberList",
+    SET_ROOM_DETAIL: "setRoomDetail",
 };

@@ -10,6 +10,7 @@ import Member from "~/services/chat/Member";
 const state = () => ({
     roomList: { list_room: [] },
     memberList: {},
+    messageList: {},
 });
 
 /**
@@ -44,7 +45,7 @@ const actions = {
     },
     async [actionTypes.CHAT.MEMBER_LIST]({ commit, state }, options) {
         try {
-            const { data: result = {} } = await new Member(this.$axios)[
+            const { data: result = {} } = await new Room(this.$axios)[
                 actionTypes.BASE.GET_END
             ](options, options.id, options.end);
             console.log("[Member] list", result);
@@ -55,18 +56,48 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.CHAT.MESSAGE_LIST]({ commit, state }, options) {
+        try {
+            const { data: result = {} } = await new Room(this.$axios)[
+                actionTypes.BASE.GET_END
+            ](options, options.id, options.end);
+            console.log("[Message] list", result);
+            commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+            return result;
+        } catch (err) {
+            console.log("[Message] list.err", err);
+            return err;
+        }
+    },
+    async [actionTypes.CHAT.ROOM_DETAIL]({ commit, state }, payload) {
+        try {
+            const { data: result = {} } = await new Room(this.$axios)[
+                actionTypes.BASE.DETAIL
+            ](payload);
+            console.log("[ROOM_DETAIL] list", result);
+            commit(mutationTypes.CHAT.SET_ROOM_DETAIL, result);
+            return result;
+        } catch (err) {
+            console.log("[ROOM_DETAIL] list.err", err);
+            return err;
+        }
+    },
 };
 /**
  * initial mutations
  */
 const mutations = {
     [mutationTypes.CHAT.SET_ROOM_LIST](state, _roomList) {
-        console.log("[SET_ROOM_LIST]", _roomList);
         state.roomList = _roomList;
     },
     [mutationTypes.CHAT.SET_MEMBER_LIST](state, _memberList) {
-        console.log("[SET_ROOM_LIST]", _memberList);
         state.memberList = _memberList;
+    },
+    [mutationTypes.CHAT.SET_MESSAGE_LIST](state, _messageList) {
+        state.messageList = _messageList;
+    },
+    [mutationTypes.CHAT.SET_ROOM_DETAIL](state, _roomDetail) {
+        state.roomDetail = _roomDetail;
     },
 };
 

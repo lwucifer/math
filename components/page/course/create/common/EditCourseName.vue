@@ -10,22 +10,33 @@
     />
     <h2 v-else class="cc-box__title heading-5">
       <!-- Tiêu đề: {{ courseNameModel }}  -->
-      {{courseNameModel.length > 60 ? ('Tiêu đề: ' + courseNameModel.slice(0, 40) + '...') :  ('Tiêu đề: ' + courseNameModel) }}
+      {{
+        courseNameModel.length > 60
+          ? "Tiêu đề: " + courseNameModel.slice(0, 40) + "..."
+          : "Tiêu đề: " + courseNameModel
+      }}
     </h2>
 
-    <button  class="cc-box__btn cc-box__btn-edit-hover" @click="editCourseName" v-if="!isEditCourseName">
-        <IconEdit class="ml-2"/>
-      </button>
+    <button
+      class="cc-box__btn cc-box__btn-edit-hover"
+      @click="editCourseName"
+      v-if="!isEditCourseName"
+    >
+      <IconEdit class="ml-2" />
+    </button>
 
     <template v-if="isEditCourseName">
       <button
         class="cc-box__btn mr-4 text-success d-flex align-items-center w-50"
         @click="handleSaveCourseName"
       >
-        <IconSave24px class="mr-2 fill-primary"/> Lưu
+        <IconSave24px class="mr-2 fill-primary" /> Lưu
       </button>
-      <button class="cc-box__btn text-secondary d-flex align-items-center w-50" @click="cancelEditCourseName">
-        <IconClose class="mr-2 fill-secondary"/> Huỷ
+      <button
+        class="cc-box__btn text-secondary d-flex align-items-center w-50"
+        @click="cancelEditCourseName"
+      >
+        <IconClose class="mr-2 fill-secondary" /> Huỷ
       </button>
     </template>
   </div>
@@ -33,10 +44,10 @@
 
 <script>
 const IconCheck = () => import("~/assets/svg/design-icons/check.svg?inline");
-const IconEdit = () => import ("~/assets/svg/v2-icons/edit.svg?inline");
+const IconEdit = () => import("~/assets/svg/v2-icons/edit.svg?inline");
 const IconTimes = () => import("~/assets/svg/design-icons/times.svg?inline");
-import IconClose from '~/assets/svg/icons/close.svg?inline';
-import IconSave24px from '~/assets/svg/v2-icons/save_24px.svg?inline';
+import IconClose from "~/assets/svg/icons/close.svg?inline";
+import IconSave24px from "~/assets/svg/v2-icons/save_24px.svg?inline";
 
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
@@ -50,20 +61,20 @@ export default {
     IconEdit,
     IconTimes,
     IconClose,
-    IconSave24px
+    IconSave24px,
   },
 
   props: {
     defaultName: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   data() {
     return {
       isEditCourseName: false,
-      courseNameModel: get(this, "defaultName", "")
+      courseNameModel: get(this, "defaultName", ""),
     };
   },
 
@@ -72,8 +83,8 @@ export default {
       handler: function() {
         this.courseNameModel = this.defaultName;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -93,7 +104,7 @@ export default {
     async handleSaveCourseName() {
       const data = {
         name: this.courseNameModel,
-        elearning_id: getParamQuery("elearning_id")
+        elearning_id: getParamQuery("elearning_id"),
       };
       const payload = createPayloadAddCourse(data);
       const result = await this.$store.dispatch(
@@ -106,17 +117,18 @@ export default {
         this.isEditCourseName = false;
         const options = {
           params: {
-            elearning_id: getParamQuery("elearning_id")
-          }
+            elearning_id: getParamQuery("elearning_id"),
+          },
         };
-        this.$store.dispatch(
-          `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
-          options
-        );
+        await this.$store.dispatch(`elearning/create/getGeneral`, options);
+        // this.$store.dispatch(
+        //   `elearning/creating/creating-general/${actionTypes.ELEARNING_CREATING_GENERAL.LIST}`,
+        //   options
+        // );
         return;
       }
       this.$toasted.error(get(result, "message", ""));
-    }
-  }
+    },
+  },
 };
 </script>
