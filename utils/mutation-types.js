@@ -553,4 +553,5 @@ export const CHAT = {
     SET_ROOM_LIST: "setRoomList",
     SET_MESSAGE_LIST: "setMessageList",
     SET_MEMBER_LIST: "setMemberList",
+    SET_ROOM_DETAIL: "setRoomDetail",
 };
