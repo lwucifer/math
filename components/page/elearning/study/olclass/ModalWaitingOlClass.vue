@@ -126,6 +126,10 @@ export default {
     contentLoading: {
       type: Boolean,
       default: true
+    },
+    isShowModal: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -155,7 +159,6 @@ export default {
       console.log("[setActiveLinkSession]");
       // lessiong is living => open zoom
       // if (this.data.is_started == true) {
-      // const sessions = this.data.sessions || [];
       const sessions = get(this, "data.sessions", []);
 
       // calculate current session base on: start_time + duration vs new Date();
@@ -225,9 +228,12 @@ export default {
     }
   },
 
-  mounted() {
-    console.log("[data]", this.data);
+  updated() {
+    console.log("[updated]", this.data);
+    clearInterval(interval);
+    
     this.setCountdown();
+
   },
 
   watch: {
