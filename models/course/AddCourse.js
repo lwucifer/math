@@ -114,6 +114,10 @@ class CourseSetting {
 
     this.elearning_id = payload.elearning_id;
     this.privacy = payload.privacy;
+    this.end_time = payload.end_time;
+    this.endtime_enable = payload.endtime_enable;
+    this.start_time = payload.start_time;
+    this.starttime_enable = payload.starttime_enable;
   }
 }
 
