@@ -1,11 +1,40 @@
 <template>
   <!-- <div> -->
-  <div class="wrap__elearning-item" v-if="elearning.is_study">
+  <div class="wrap__elearning-item">
     <div class="img__elearning-item">
       <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
         <img
           v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
         />
+        <div
+          v-if="get(elearning, 'is_streaming', true)"
+          class="item-2__livestream"
+        >
+          <IconCameraOnline class="icon" />Trực tiếp
+        </div>
+
+        <div
+          v-if="get(elearning, 'is_streaming', false)"
+          class="item-2__online-class"
+        >
+          Lớp học đang diễn ra
+        </div>
+
+        <!-- nếu giảm giá 100% thì sẽ ko hiện nữa -->
+        <!--
+        <div
+          v-if="elearning.discount && price.price"
+          class="course-item-2__discount"
+        >
+          -{{ elearning.discount }}%
+        </div>
+        -->
+        <div
+          v-if="price.discount && price.price"
+          class="item-2__discount"
+        >
+          -{{ elearning.discount }}%
+        </div>
       </n-link>
     </div>
     <div class="wrap-content_Elearning">
@@ -37,15 +66,17 @@
         <!--class="ml-2"-->
         <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
-      <div class="proccess-bar-study-border">
-        <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
-      </div>
       <div class="d-flex">
-        <span>
-          Đã hoàn thành
-          <strong class="text-primary">{{elearning && elearning.progress}}%</strong>
-        </span>
-        <div class="ml-auto">
+          <app-stars
+            class="d-inline-flex"
+            :stars="get(elearning, 'voting.rate', 0)"
+            :size="size === 'sm' ? 12 : 14"
+            />
+            <span class="text-dark ml-2">
+            <strong>{{ get(elearning, "voting.rate", 0) }}</strong>
+            ({{ get(elearning, "voting.votes", 0) }})
+            </span>
+            <div class="ml-auto">
           <app-dropdown
             class="post__menu-dropdown"
             position="right"
@@ -119,14 +150,22 @@
           </app-dropdown>
         </div>
       </div>
+      <div class="text-right mt-2">
+        <b v-if="!price.price" class="text-primary body-1 font-weight-bold"
+          >Miễn phí</b
+        >
+
+        <template v-else>
+          <s class="body-3" v-if="price.discount">
+            {{ get(price, "original_price") | numeralFormat }}đ
+          </s>
+          <b class="text-primary body-1 font-weight-bold ml-2"
+            >{{ get(price, "price") | numeralFormat }}đ</b
+          >
+        </template>
+      </div>
     </div>
   </div>
-  <ElearningItem2 v-else :elearning="elearning">
-      <template v-slot:mycoursefavourite>
-        <MenuDropDown />
-      </template>
-  </ElearningItem2>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -141,7 +180,8 @@ import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2"
-import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown"
+import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
+import IconCameraOnline from "assets/svg/icons/camera-online.svg?inline";
 export default {
   components: {
     IconDots,
@@ -152,7 +192,8 @@ export default {
     IconFacebook,
     IconSchooly,
     ElearningItem2,
-    MenuDropDown
+    MenuDropDown,
+    IconCameraOnline
   },
   data() {
     return {
@@ -175,63 +216,30 @@ export default {
     },
     tab: {
       default: 1
+    },
+    size: {
+      type: String,
+      default: "md",
+      validator: (value) => ["sm", "md"].includes(value),
     }
   },
   computed: {
     ...mapState("elearning/study/study-student", {
       elearningStudyStudent: "elearningStudyStudent"
-    })
-  },
-  methods: {
-    handleFavourite(id) {
-      this.menuDropdown = false;
-      this.$emit("handleFavourite", id);
-    },
-    handleDeleteFavourite(id) {
-      this.menuDropdown = false;
-      this.$emit("handleDeleteFavourite", id);
-    },
-    handleArchive(id) {
-      this.menuDropdown = false;
-      this.$emit("handleArchive", id);
-    },
-    handleDeleteArchive(id) {
-      this.menuDropdown = false;
-      this.$emit("handleDeleteArchive", id);
-    },
-    shareFb(id) {
-      this.$emit("shareFb", id);
-      // const url =
-      //   "https://facebook.com/sharer.php?display=popup&u=" +
-      //   window.origin +
-      //   `elearning/${id}`;
-      // window.open(url, "sharer", "_blank");
-    },
-    async shareSchool(elearning) {
-      this.$emit("shareSchool", elearning);
-      // const link = window.origin + `/elearning/${id}`;
-      // const doAdd = await this.$store.dispatch(
-      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
-      //   { link: link }
-      // );
-      // if (doAdd.success) {
-      //   this.menuDropdown = false;
-      //   this.$toasted.show("Đã chia sẻ thành công.");
-      // } else {
-      //   this.$toasted.error(doAdd.message);
-      // }
+    }),
+    price() {
+      if (this.elearning.elearning_price) return this.elearning.elearning_price;
+      return {
+        discount: get(this.elearning, "discount", 0),
+        original_price: get(this.elearning, "original_price", 0),
+        price: get(this.elearning, "price", 0),
+      };
     }
   },
-  created() {
-    // console.log("[props] elearning", this.elearning);
-    // this.elearning_id = get(this, "elearning.elearning_id", "");
-    // this.name = get(this, "elearning.name", "");
-    // this.avatar = get(this, "elearning.avatar.low", "");
-    // this.teacher.avatar = get(this, "elearning.teacher.avatar.low", "");
-    // this.teacher.name = get(this, "elearning.teacher.name", "");
-    // this.progress = get(this, "elearning.progress", "");
+  methods:{
+      get
   }
-};
+}
 </script>
 
 <style lang="scss">
