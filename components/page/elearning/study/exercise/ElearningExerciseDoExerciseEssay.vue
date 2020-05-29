@@ -296,6 +296,7 @@ export default {
 
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
+      this.$toasted.success("Tải câu trả lời lên thành công");
       this.setStudyExerciseSubmission({
         file: file ? file[0] : null,
         question_id: this.currentExerciseQuestion.id
