@@ -1,6 +1,6 @@
 <template>
   <sub-block-section
-    title="Quản lý E-learning"
+    title="Góc học tập"
   >
     <template v-slot:content>
       <div class="manager-side">
