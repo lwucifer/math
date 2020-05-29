@@ -42,7 +42,6 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="sortTable"
-      order-by="created_at"
       order="asc"
       ref="warehouseListTable"
     >

@@ -85,6 +85,7 @@
         params: {
           page: 1,
           size: 10,
+          sort: 'NEWEST'
         },
         list: [],
         loading: false,
@@ -110,6 +111,7 @@
       },
       async handleDoneAddFile(data) {
         if (get(data, "success", false)) {
+          this.params.sort = 'NEWEST'
           await this.refreshData()
           return;
         }
@@ -164,9 +166,9 @@
       handleChangedSort(val) {
         if (val.sortBy == 'created_at') {
           if (val.order == 'asc') {
-            this.updateFilter({ sort: 1 })
+            this.updateFilter({ sort: 'OLDEST' })
           } else {
-            this.updateFilter({ sort: 0 })
+            this.updateFilter({ sort: 'NEWEST' })
           }
         }
       },
