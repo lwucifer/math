@@ -2,41 +2,64 @@
   <div class="container">
     <h3>Danh sách học sinh</h3>
     <div class="wrap_list-students">
-      <app-search size="sm" placeholder="Tìm kiếm học sinh" />
+      <app-search
+        size="sm"
+        v-model="params.query"
+        @submit="handleSearch"
+        placeholder="Tìm kiếm học sinh"
+      />
       <filter-button class="mr-2" />
       <div>
-        <app-select placeholder="Năm học" size="sm" class="mr-2" />
+        <app-select
+          v-model="params.school_year"
+          :options="optionYear"
+          placeholder="Năm học"
+          size="sm"
+          class="mr-2"
+          @change="handleChangedYear"
+        />
         <app-select placeholder="Lớp học" size="sm" />
       </div>
     </div>
     <div class="wrap-table">
-      <app-table :heads="heads" :data="list">
+      <app-table :heads="heads" :data="filterStudentPrivates">
         <template v-slot:cell(name)="{row}">
           <td class="wrap-name__table">{{get(row,"name","")}}</td>
         </template>
+        <template v-slot:cell(year)="{row}">
+          <td class="wrap-name__table">{{get(row,"school_year","")}}</td>
+        </template>
         <template v-slot:cell(class)="{row}">
-          <td class="wrap-name__table">{{get(row,"class","")}}</td>
+          <td class="wrap-name__table">{{get(row,"class_name","")}}</td>
+        </template>
+        <template v-slot:cell(mark)="{row}">
+          <td class="wrap-name__table">{{get(row,"attendance","")}}%</td>
         </template>
         <template v-slot:cell(percent)="{row}">
           <td style="width:30%">
             <div class="d-flex align-items-center">
-              <span class="mr-3">{{ get(row,"percent","") }}%</span>
+              <span class="mr-3">{{ get(row,"completion_rate","") }}%</span>
               <div class="w-100">
-                <app-progress :percentage="row.percent" rounded />
+                <app-progress :percentage="row.completion_rate" rounded />
               </div>
             </div>
           </td>
         </template>
       </app-table>
     </div>
-    <app-pagination :pagination="pagination" :type="1" class="right-pagination" />
+    <app-pagination
+      :pagination="filterPagination"
+      :type="1"
+      @pagechange="onPageChange"
+      class="right-pagination"
+    />
   </div>
 </template>
 
 <script>
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 const STORE_NAME_STUDENTS = "elearning/teaching/students";
 export default {
   async fetch({ params, store }) {
@@ -95,14 +118,55 @@ export default {
         number: 0,
         first: true,
         number_of_elements: 10
-      }
+      },
+      params: {
+        page: 1,
+        limit: 10,
+        query: null,
+        school_year: null
+      },
+      optionYear: [
+        { value: "2018", text: "2018" },
+        { value: "2019", text: "2019" },
+        { value: "2020", text: "2020" }
+      ]
     };
   },
   computed: {
-    ...mapState(STORE_NAME_STUDENTS, ["studentPrivates"])
+    ...mapState(STORE_NAME_STUDENTS, ["studentPrivates"]),
+    filterStudentPrivates() {
+      return this.studentPrivates && this.studentPrivates.content
+        ? this.studentPrivates.content
+        : [];
+    },
+    filterPagination() {
+      return this.studentPrivates && this.studentPrivates.page
+        ? this.studentPrivates.page
+        : [];
+    }
   },
   methods: {
-    get
+    get,
+    ...mapActions(STORE_NAME_STUDENTS, ["teachingStudentsPrivatesList"]),
+    onPageChange(e) {
+      console.log("[onPageChange]", e);
+      this.params.page = e.number + 1;
+      // const params = {
+      //   page: e.number + 1,
+      //   limit: 10
+      // };
+      // this.payload.size = PAGE_SIZE.DEFAULT;
+
+      this.teachingStudentsPrivatesList({ params: this.params });
+    },
+    handleSearch() {
+      this.params.page = 1;
+      this.teachingStudentsPrivatesList({ params: this.params });
+    },
+    handleChangedYear() {
+      this.params.page = 1;
+      this.teachingStudentsPrivatesList({ params: this.params });
+    }
   }
 };
 </script>
