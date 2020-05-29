@@ -42,7 +42,6 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="sortTable"
-      order-by="created_at"
       order="asc"
       ref="warehouseListTable"
     >
@@ -76,6 +75,7 @@
       title="Bạn chắc chắn muốn xóa tài liệu?"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
+      :confirm-loading="confirmLoading"
       centered
     >
     </app-modal-confirm>
@@ -173,7 +173,8 @@
         visible: {
           delete: false,
           canDelete: false
-        }
+        },
+        confirmLoading: false
       }
     },
 
@@ -229,12 +230,19 @@
         return res
       },
       async confirmDel() {
-        this.visible.delete = false
-        const res = await this.deleteItems(this.selectedItems)
-        if (get(res, "success", false)) {
-          this.resetSelectedItems()
-          this.$emit('deletedItems', res)
-          this.selectedItems = []
+        try {
+          this.confirmLoading = true
+          const res = await this.deleteItems(this.selectedItems)
+          this.visible.delete = false
+          if (get(res, "success", false)) {
+            this.resetSelectedItems()
+            this.$emit('deletedItems', res)
+            this.selectedItems = []
+          }
+        } catch (e) {
+        
+        } finally {
+          this.confirmLoading = false
         }
       },
       cancelDel() {
