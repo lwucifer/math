@@ -15,6 +15,7 @@
               :stars="Math.floor(get(teacher, 'rate', 0))"
               :size="14"
             />
+            ({{ numeral(get(teacher, "rate_total", 0)).format() }})
           </div>
         </div>
 
