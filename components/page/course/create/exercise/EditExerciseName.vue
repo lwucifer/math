@@ -10,7 +10,7 @@
         maxlength="80"
       />
       <h2 class="cc-box__title heading-6" v-else>
-        Bài {{ index + 1 }}: {{ exerciseNameModel.length > 60 ? (exerciseNameModel.slice(0, 60) + "...") :  exerciseNameModel}}
+        Bài {{ index + 1 }}: {{ exerciseNameModel.length > 40 ? (exerciseNameModel.slice(0, 40) + "...") :  exerciseNameModel}}
       </h2>
     </div>
 
