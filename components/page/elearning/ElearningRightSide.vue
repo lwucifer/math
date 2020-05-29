@@ -118,7 +118,7 @@
     <div class="py-3 d-flex share-favourite">
       <a class="text-info share">
         <ShareNetwork
-          class="d-flex-center"
+          class="d-flex-center text-info"
           network="facebook"
           :url="
             `https://schoolly.famtechvn.com/elearning/${get(
