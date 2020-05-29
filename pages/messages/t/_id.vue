@@ -57,11 +57,7 @@ export default {
       //       room_id: room_id
       //     }
       //   }),
-      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
-      //     params: {
-      //       room_id: room_id
-      //     }
-      //   })
+      store.dispatch(`chat/${actionTypes.CHAT.ROOM_DETAIL}`, room_id)
       // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
   },

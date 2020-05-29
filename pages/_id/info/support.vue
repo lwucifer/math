@@ -73,7 +73,7 @@
                   </div>
                   <div class="upload d-flex align-items-center">
                     <app-upload
-                      accept=".jpg, .png, .pdf, .word, .excel"
+                      accept=".jpg, .png, .pdf, .docx, .xlsx"
                       :showIcon="false"
                       title="+ Chọn file"
                       :inputText="false"
@@ -100,6 +100,14 @@
         </div>
       </div>
     </div>
+    <app-modal-notify
+      centered
+      v-if="inputCodeSuccess"
+      type="success"
+      title="Gửi câu hỏi thành công!"
+      @ok="inputCodeSuccess = false"
+      @close="closeModalNoti"
+    />
   </div>
 </template>
 
@@ -124,6 +132,7 @@ export default {
       contentSuccess: false,
       fileUpload: '',
       fileName: '',
+      inputCodeSuccess:false,
       errorMessage: {
         email: "",
         title: "",
@@ -152,6 +161,25 @@ export default {
 
   methods: {
     ...mapActions(STORE_INFO, ["infoSupport"]),
+
+    handleSend() {
+      const body = new FormData();
+      body.append("attachment", this.fileUpload);
+      body.append("email", this.email);
+      body.append("title", this.title);
+      body.append("content", this.content);
+      console.log("send body", body);
+      this.infoSupport(body).then(result => {
+        if (result.success == true) {
+          this.inputCodeSuccess = true;
+          // this.$toasted.show("Gửi câu hỏi thành công");
+          this.clearForm();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+
     handleEmail(_email) {
       this.validate.email = true;
       this.validateProps.email = "";
@@ -222,22 +250,10 @@ export default {
       this.contentSuccess = false;
     },
 
-    handleSend() {
-      const body = new FormData();
-      body.append("attachment", this.fileUpload);
-      body.append("email", this.email);
-      body.append("title", this.title);
-      body.append("content", this.content);
-      console.log("send body", body);
-      this.infoSupport(body).then(result => {
-        if (result.success == true) {
-          this.$toasted.show("Gửi câu hỏi thành công");
-          this.clearForm();
-        } else {
-          this.$toasted.error(result.message);
-        }
-      });
+    closeModalNoti() {
+      this.inputCodeSuccess = false;
     },
+
   },
 };
 </script>

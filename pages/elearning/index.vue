@@ -66,7 +66,7 @@
                 :originalPrice="item.original_price"
                 :free="!item.price"
                 :discount="item.discount"
-                :online-class="item.olclass_existed"
+                :online-class="item.is_streaming"
                 :description="`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non dolor tincidunt turpis eget sit egestas eget dui.`"
               />
             </div>

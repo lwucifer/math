@@ -69,6 +69,19 @@ const actions = {
             return err;
         }
     },
+    async [actionTypes.CHAT.ROOM_DETAIL]({ commit, state }, payload) {
+        try {
+            const { data: result = {} } = await new Room(this.$axios)[
+                actionTypes.BASE.DETAIL
+            ](payload);
+            console.log("[ROOM_DETAIL] list", result);
+            commit(mutationTypes.CHAT.SET_ROOM_DETAIL, result);
+            return result;
+        } catch (err) {
+            console.log("[ROOM_DETAIL] list.err", err);
+            return err;
+        }
+    },
 };
 /**
  * initial mutations
@@ -82,6 +95,9 @@ const mutations = {
     },
     [mutationTypes.CHAT.SET_MESSAGE_LIST](state, _messageList) {
         state.messageList = _messageList;
+    },
+    [mutationTypes.CHAT.SET_ROOM_DETAIL](state, _roomDetail) {
+        state.roomDetail = _roomDetail;
     },
 };
 

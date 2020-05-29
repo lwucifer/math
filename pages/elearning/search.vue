@@ -43,6 +43,13 @@
           placeholder="Trình độ"
           size="sm"
         />
+        <app-select
+          v-model="subject"
+          @change="handleChangeSubject"
+          :options="subjectOpts"
+          placeholder="Môn học"
+          size="sm"
+        />
       </template>
 
       <div class="ml-auto">
@@ -65,7 +72,7 @@
         :class="['elearning-search__tab', tab === item.tab && 'active']"
         @click.prevent="handleChangeTab(item.tab)"
       >{{ item.text }}</a>
-    </div> -->
+    </div>-->
 
     <div v-if="pageLoading" class="container mt-6">
       <div class="row">
@@ -86,11 +93,7 @@
       >
         <div class="row">
           <div class="col-md-3 elearning-search__col" v-for="item in lessons" :key="item.id">
-            <CourseItem2
-              class="my-0"
-              :item="item"
-              :size="'sm'"
-            />
+            <CourseItem2 class="my-0" :item="item" :size="'sm'" />
           </div>
         </div>
 
@@ -143,10 +146,10 @@ export default {
       time: null,
       timeOpts: [
         { value: null, text: "Tất cả" },
-        { value: '0h-1h', text: "0 - 1 giờ" },
-        { value: '1h-2h', text: "1- 2 giờ" },
-        { value: '2h-4h', text: "2 - 4 giờ" },
-        { value: '4h+', text: "Trên 4 giờ" }
+        { value: "0h-1h", text: "0 - 1 giờ" },
+        { value: "1h-2h", text: "1- 2 giờ" },
+        { value: "2h-4h", text: "2 - 4 giờ" },
+        { value: "4h+", text: "Trên 4 giờ" }
       ],
       level: null,
       // levelOpts: [
@@ -155,7 +158,10 @@ export default {
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      sort: this.$route.query.sort ? this.$route.query.sort : SORT_ELEARNING.RELATED,
+      subject: this.$route.query.subject ? this.$route.query.subject : null,
+      sort: this.$route.query.sort
+        ? this.$route.query.sort
+        : SORT_ELEARNING.RELATED,
       sortOpts: [
         { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
         { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
@@ -177,7 +183,9 @@ export default {
           text: "Khoá học"
         }
       ],
-      type: this.$route.query.type ? this.$route.query.type : ELEARNING_TYPES_VALUE.LECTURE,
+      type: this.$route.query.type
+        ? this.$route.query.type
+        : ELEARNING_TYPES_VALUE.LECTURE,
       types: [
         {
           value: ELEARNING_TYPES_VALUE.LECTURE,
@@ -189,14 +197,18 @@ export default {
         }
       ],
       payload: {
-        subject: this.subject,
-        type: this.$route.query.type ? this.$route.query.type : ELEARNING_TYPES_VALUE.LECTURE,
+        subject: this.$route.query.subject ? this.$route.query.subject : null,
+        type: this.$route.query.type
+          ? this.$route.query.type
+          : ELEARNING_TYPES_VALUE.LECTURE,
         duration: null,
         level: null,
         free: null,
         page: 1,
         size: PAGE_SIZE.DEFAULT,
-        sort: this.$route.query.sort ? this.$route.query.sort : SORT_ELEARNING.RELATED,
+        sort: this.$route.query.sort
+          ? this.$route.query.sort
+          : SORT_ELEARNING.RELATED,
         keyword: null
       },
 
@@ -223,10 +235,6 @@ export default {
 
   async asyncData({ store, query }) {
     const { subject, subject_name } = query; // get keyword, type from url
-    console.log('query', query);
-    console.log('subject', subject);
-    console.log('subject_name', subject_name);
-
     return {
       subject,
       subject_name
@@ -237,12 +245,12 @@ export default {
     await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );
+    await store.dispatch(
+        `elearning/public/public-voted-subjects/${actionTypes.ELEARNING_PUBLIC_VOTED_SUBJECTS.LIST}`
+      );
   },
 
   async created() {
-    let param = this.$route.query;
-    await console.log('param', param)
-    await console.log('payload',this.payload)
     this.getLessons();
   },
 
@@ -250,14 +258,27 @@ export default {
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
+
+    ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
+      console.log('this.categories', this.categories)
       const alls = addAllOptionSelect(this.categories);
       return alls.map(c => {
         return {
           value: c.id,
           text: c.name
+        };
+      });
+    },
+    subjectOpts(){
+      const alls = addAllOptionSelect(this.votedSubjects && this.votedSubjects.content);
+      return alls.map(c => {
+        return {
+          value: c.code,
+          text: c.name,
+          // code: c.code
         };
       });
     },
@@ -272,9 +293,9 @@ export default {
     }
   },
 
-  watch:{
-    keyword(_newVal){
-      console.log('keyword', _newVal)
+  watch: {
+    keyword(_newVal) {
+      console.log("keyword", _newVal);
       this.payload.page = 1;
       this.payload.keyword = _newVal ? _newVal : -1;
       this.getLessons();
@@ -337,6 +358,12 @@ export default {
       console.log("[handleChangeLevel]", _newVal, _selectedVal);
       this.payload.page = 1;
       this.payload.level = _newVal;
+      this.getLessons();
+    },
+    handleChangeSubject(_newVal, _selectedVal){
+      console.log("[handleChangeSubject]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.subject = _newVal;
       this.getLessons();
     },
 
