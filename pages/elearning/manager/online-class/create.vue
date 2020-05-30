@@ -451,20 +451,20 @@ export default {
     getEndTime,
 
     schedulesDateChange(e, index, isTo) {
-      // if (isTo) {
-      //   if(this.schedules[index].from_date > e ) {
-      //     this.schedules[index].to_date = '';
-      //   } else {
-      //     this.schedules[index].to_date = e;
-      //   }
-      // } else {     
-      //   if(this.schedules[index].to_date < e ) {
-      //     this.schedules[index].from_date = '';
-      //   } else {
-      //     this.schedules[index].from_date = e;
-      //   }
-      // }
-      ///console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
+      if (isTo) {
+        if(this.schedules[index].from_date && this.schedules[index].from_date > e ) {
+          this.schedules[index] = {...this.schedules[index], to_date: null};
+        } else {
+          this.schedules[index] = {...this.schedules[index], to_date: e};
+        }
+      } else {     
+        if(this.schedules[index].to_date && this.schedules[index].to_date < e ) {
+          this.schedules[index] = {...this.schedules[index], from_date: null};
+        } else {
+          this.schedules[index] = {...this.schedules[index], from_date: e};
+        }
+      }
+      console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
     },
 
     checkIncules(list, val){

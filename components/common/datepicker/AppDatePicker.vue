@@ -16,7 +16,6 @@
       :minute-step="minuteStep"
       :value-type="valueType"
       :hour-options="hourOptions"
-      @clear="clear"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -88,22 +87,23 @@ export default {
       type: String,
       default: "",
     },
+    clear: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      text: null,
+      text: this.value,
     };
   },
 
   methods: {
     change: function() {
-      // this.text = 0;
+      console.log('xxxxxxxxx', this.text);
       this.$emit("input", this.text);
-    },
-    clear: function() {
-      //console.log(this.text);
-    },
+    }
   },
 
   computed: {
@@ -148,7 +148,7 @@ export default {
   },
 
   created() {
-    this.text = this.value ? this.value : null;
+    //this.text = this.value ? this.value : null;
   },
 };
 </script>
