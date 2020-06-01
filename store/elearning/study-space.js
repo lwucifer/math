@@ -36,7 +36,7 @@ const actions = {
     }
   },
 
-  async getStatistic({ commit }, options) {
+  async getStatistic({ commit }, options = {}) {
     try {
       const result = await new Statistic(this.$axios)["list"](options);
       if (get(result, "success", false)) {

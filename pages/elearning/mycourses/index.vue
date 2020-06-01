@@ -14,18 +14,26 @@
               <div class="elearning-manager-content__title__nav">
                 <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
                 <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''"
-                  >Đang theo học ({{ total.lectures }})</a
+                  >Đang theo học ({{
+                    numeral(get(statistic, "total_elearnings", 0)).format()
+                  }})</a
                 >
                 <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''"
-                  >Đã hoàn thành ({{ total.courses }})</a
+                  >Đã hoàn thành ({{
+                    numeral(get(statistic, "total_elearnings", 0)).format()
+                  }})</a
                 >
 
                 <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''"
-                  >Yêu thích ({{ total.favourites }})</a
+                  >Yêu thích ({{
+                    numeral(get(statistic, "total_favourites", 0)).format()
+                  }})</a
                 >
 
                 <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''"
-                  >Lưu trữ ({{ total.archieves }})</a
+                  >Lưu trữ ({{
+                    numeral(get(statistic, "total_archieves", 0)).format()
+                  }})</a
                 >
               </div>
             </div>
@@ -93,7 +101,10 @@
               </div>
             </div>
 
-            <ElearningList :elearningList="list" :col="'col-md-4'">
+            <ElearningList
+              :elearningList="get(list, 'content', [])"
+              :col="'col-md-4'"
+            >
               <ElearningItem
                 slot-scope="{ item }"
                 :elearning="item"
@@ -108,10 +119,9 @@
             </ElearningList>
 
             <app-pagination
-              :pagination="pagination"
+              :pagination="get(list, 'page', {})"
               :type="1"
               @pagechange="onPageChange"
-              v-if="pagination.total_pages > 1"
             />
 
             <ShareElearningModal
@@ -139,8 +149,9 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
-
+import numeral from "numeral";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+
 export default {
   middleware: ["authenticated"],
 
@@ -155,10 +166,16 @@ export default {
   data() {
     return {
       params: {
-        keyword: null,
+        type: "ALL",
+        size: 12,
+        page: 1,
+        keyword: "",
       },
-      tab: 1,
-      list: [],
+      // params: {
+      //   keyword: null,
+      // },
+      tab: 2,
+      // list: [],
       total: {
         elearnings: null,
         courses: null,
@@ -183,9 +200,10 @@ export default {
       selectFree: null,
     };
   },
-  created() {
-    this.fetchElearningList();
-    this.fetchElearningStatisticList();
+  mounted() {
+    this.getData();
+    // this.fetchElearningList();
+    // this.fetchElearningStatisticList();
     // this.fetchElearningFavourite();
     // this.fetchElearningArchive();
   },
@@ -202,6 +220,16 @@ export default {
     ...mapState("elearning/study/study-student", {
       elearningStudyFavourite: "elearningStudyFavourite",
     }),
+
+    ...mapState("elearning/study-space", {
+      studying: "studying",
+      statistic: "statistic",
+      archive: "archive",
+      favourite: "favourite",
+    }),
+    list() {
+      return this.studying;
+    },
   },
 
   watch: {
@@ -265,6 +293,14 @@ export default {
   },
 
   methods: {
+    getData() {
+      const payload = {
+        params: this.params,
+      };
+      this.$store.dispatch("elearning/study-space/getStudying", payload);
+      this.$store.dispatch("elearning/study-space/getStatistic");
+    },
+
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
       "elearningStudyFavouriteDelete",
@@ -576,6 +612,8 @@ export default {
     handleChangedType() {
       this.params.type = this.selectType.value;
     },
+    get,
+    numeral,
   },
 };
 </script>
