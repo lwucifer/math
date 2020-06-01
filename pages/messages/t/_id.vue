@@ -41,11 +41,11 @@ export default {
       // room_id: room_id
     };
     await Promise.all([
-      // store.dispatch(`chat/${actionTypes.CHAT.MEMBER_LIST}`, {
-      //   paramsOptions,
-      //   id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
-      //   end: "members"
-      // })
+      store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
+        paramsOptions,
+        id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+        end: "messages"
+      }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
       //   payloadMessage,
