@@ -202,7 +202,7 @@ export default {
         subject: this.$route.query.subject ? this.$route.query.subject : null,
         type: this.$route.query.type
           ? this.$route.query.type
-          : ELEARNING_TYPES_VALUE.LECTURE,
+          : null,
         duration: null,
         level: null,
         free: null,
@@ -210,7 +210,7 @@ export default {
         size: PAGE_SIZE.DEFAULT,
         sort: this.$route.query.sort
           ? this.$route.query.sort
-          : SORT_ELEARNING.RELATED,
+          : null,
         keyword: null
       },
 
