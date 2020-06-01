@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :active="7" />
+        <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
+        <SchoolAccountCustomerSide v-else/>
       </div>
 
       <div class="col-md-9">
@@ -110,7 +111,8 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
-import { mapActions } from "vuex";
+import SchoolAccountCustomerSide from "~/components/page/school/SchoolAccountCustomerSide";
+import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import { validateEmail } from "~/utils/validations";
 import { toNumber, get, cloneDeep, trim } from "lodash";
@@ -119,6 +121,7 @@ const STORE_INFO = "info/support";
 export default {
   components: {
     SchoolAccountSide,
+    SchoolAccountCustomerSide
   },
 
   data() {
@@ -147,6 +150,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     disabledBtn() {
       const btnDisabled =
         this.$v.$invalid ||
@@ -155,7 +159,7 @@ export default {
       return btnDisabled;
     }
   },
-
+  
   methods: {
     ...mapActions(STORE_INFO, ["infoSupport"]),
 
@@ -169,7 +173,6 @@ export default {
       this.infoSupport(body).then(result => {
         if (result.success == true) {
           this.inputCodeSuccess = true;
-          // this.$toasted.show("Gửi câu hỏi thành công");
           this.clearForm();
         } else {
           this.$toasted.error(result.message);

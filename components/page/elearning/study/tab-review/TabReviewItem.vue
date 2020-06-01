@@ -19,7 +19,7 @@
 
         <span class="tab-qa-comment-item__time">
           <IconAccessTime class="icon mr-2" />{{
-            get(review, "timestamp", "") | moment("hh:mm DD/MM/YYYY")
+            get(review, "timestamp", "") | getDateTimeHH_MM_D_M_Y
           }}
         </span>
       </div>
