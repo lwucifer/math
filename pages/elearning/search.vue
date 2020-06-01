@@ -1,11 +1,11 @@
 <template>
   <div class="elearning-search container">
     <h1 class="elearning-search__heading heading-3">
-      <span class="font-weight-semi-bold">{{ subject_name || "Kết quả" }}</span>
+      <span class="font-weight-semi-bold">Kết quả tìm kiếm</span>
       <span class="body-2 font-weight-normal">
         (
         <b>{{ totalSummary }}</b>
-        {{ lessonType }})
+        kết quả )
       </span>
     </h1>
 
@@ -119,7 +119,7 @@ import {
   ELEARNING_TYPES_TEXT,
   SORT_ELEARNING
 } from "~/utils/constants";
-import { addAllOptionSelect } from "~/utils/common";
+import { addAllOptionSelect, optionSelectSubject, redirectWithParams } from "~/utils/common";
 
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import CourseItem2 from "~/components/page/course/CourseItem2";
@@ -128,7 +128,6 @@ import { VclList } from "vue-content-loading";
 
 export default {
   name: "ELearningSearch",
-  middleware: ["authenticated", "teacher-role"],
 
   components: {
     IconHamberger,
@@ -159,7 +158,7 @@ export default {
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      subject: this.$route.query.subject ? this.$route.query.subject : null,
+      subject: null,
       sort: this.$route.query.sort
         ? this.$route.query.sort
         : SORT_ELEARNING.RELATED,
@@ -175,6 +174,7 @@ export default {
       lessons: [],
       tab: "lecture",
       tabs: [
+        { tab: null, text: "Tất cả" },
         {
           tab: ELEARNING_TYPES_VALUE.LECTURE,
           text: "Bài giảng"
@@ -186,8 +186,9 @@ export default {
       ],
       type: this.$route.query.type
         ? this.$route.query.type
-        : ELEARNING_TYPES_VALUE.LECTURE,
+        : null,
       types: [
+        { value: null, text: "Tất cả" },
         {
           value: ELEARNING_TYPES_VALUE.LECTURE,
           text: "Bài giảng"
@@ -201,7 +202,7 @@ export default {
         subject: this.$route.query.subject ? this.$route.query.subject : null,
         type: this.$route.query.type
           ? this.$route.query.type
-          : ELEARNING_TYPES_VALUE.LECTURE,
+          : null,
         duration: null,
         level: null,
         free: null,
@@ -209,7 +210,7 @@ export default {
         size: PAGE_SIZE.DEFAULT,
         sort: this.$route.query.sort
           ? this.$route.query.sort
-          : SORT_ELEARNING.RELATED,
+          : null,
         keyword: null
       },
 
@@ -235,10 +236,9 @@ export default {
   },
 
   async asyncData({ store, query }) {
-    const { subject, subject_name } = query; // get keyword, type from url
+    const { subject } = query; // get keyword, type from url
     return {
-      subject,
-      subject_name
+      subject
     };
   },
 
@@ -264,7 +264,6 @@ export default {
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      console.log('this.categories', this.categories)
       const alls = addAllOptionSelect(this.categories);
       return alls.map(c => {
         return {
@@ -274,12 +273,12 @@ export default {
       });
     },
     subjectOpts(){
+      this.subject = this.$route.query.subject ? this.$route.query.subject : null;
       const alls = addAllOptionSelect(this.votedSubjects && this.votedSubjects.content);
       return alls.map(c => {
         return {
           value: c.code,
           text: c.name,
-          // code: c.code
         };
       });
     },
@@ -363,13 +362,16 @@ export default {
     },
     handleChangeSubject(_newVal, _selectedVal){
       console.log("[handleChangeSubject]", _newVal, _selectedVal);
+      redirectWithParams({subject:_newVal ? _newVal : ''})
       this.payload.page = 1;
       this.payload.subject = _newVal;
+      console.log('this.subject', this.subject)
       this.getLessons();
     },
 
     handleChangeTab(_newVal) {
       console.log("[handleChangeTab]", _newVal);
+      redirectWithParams({type:_newVal ?_newVal : ''})
       this.payload.page = 1;
       this.tab = _newVal;
       this.payload.type = _newVal;
@@ -378,6 +380,7 @@ export default {
 
     handleChangeSort(_newVal, _selectedVal) {
       console.log("[handleChangeSort]", _newVal, _selectedVal);
+      redirectWithParams({sort:_newVal ?_newVal : ''})
       this.payload.page = 1;
       this.payload.sort = _newVal;
       this.getLessons();

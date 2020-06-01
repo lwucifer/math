@@ -45,7 +45,7 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
           <n-link :to="getTransactionLink">
-            <IconAttachMoney24px />
+            <IconAttachMoney24px class="fill-gray"/>
             <span>Lịch sử giao dịch</span>
           </n-link>
         </li>
@@ -67,7 +67,7 @@
           v-if="checkMenuGuard(MENU.SIGNOUT)"
         >
           <n-link to="/auth/signin">
-            <IconPowerSettingsNew24px />
+            <IconPowerSettingsNew24px class="fill-gray"/>
             <span>Đăng xuất</span>
           </n-link>
         </li>

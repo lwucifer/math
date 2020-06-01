@@ -30,12 +30,22 @@
       class="e-program__test"
       :class="`text-${classExerciseStatus}`"
       href
-      @click.prevent="handleDoTest"
+      @click.prevent="handleExitExercise"
       v-scroll-to="'body'"
     >
       <IconFileAlt class="icon" />
       &nbsp;Làm bài kiểm tra {{ testRate }}
     </a>
+
+    <app-modal-confirm
+      centered
+      v-if="isShowConfirmExit"
+      title="Xác nhận thoát?"
+      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
+      @ok="handleDoTest"
+      @cancel="isShowConfirmExit = false"
+    />
+    
   </div>
 </template>
 
@@ -55,8 +65,15 @@ export default {
     ElearningProgramCourse,
   },
 
+  data() {
+    return {
+      isShowConfirmExit: false,
+    }
+  },
+
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
+    ...mapState("event", ["studyMode"]),
 
     totalLessons() {
       // console.log("[progress]", this.progress);
@@ -112,8 +129,20 @@ export default {
       "elearningSudyElearningExerciseList",
     ]),
 
+    handleExitExercise() {
+      console.log("[handleExitExercise]");
+      // need to confirm if user in mode DO_EXERCISE_DOING
+      if (this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) {
+        this.isShowConfirmExit = true;
+        return;
+      } else {
+        this.handleDoTest();
+      }
+    },
+
     handleDoTest() {
       console.log("[handleDoTest]", this.progress);
+      this.isShowConfirmExit = false;
 
       // emit studyMode=DO_EXERCISE
       this.setStudyMode(STUDY_MODE.DO_EXERCISE);
