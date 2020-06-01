@@ -40,6 +40,11 @@
           {{ row.cost | toThousandFilter }} đ
         </td>
       </template>
+      <template v-slot:cell(timestamp)="{row}">
+        <td>
+          {{ row.timestamp | moment("DD-MM-YYYY") }}
+        </td>
+      </template>
     </app-table>
     <app-modal-notify
       v-if="notify.isShowNotify"
