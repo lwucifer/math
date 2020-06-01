@@ -22,7 +22,7 @@
                   :options="courses"
                   label="text"
                   placeholder="Chọn bài giảng/khóa học"
-                  @input="handleChangedCourse"
+                  @input="(e) => handleChangedCourse(e)"
                   has-border
                 ></app-vue-select>
               </div>
@@ -180,6 +180,7 @@
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
                               @input="(e) => schedulesDateChange(e, index, false)"
+                              :clear="fromClear"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -196,6 +197,7 @@
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
                               @input="(e) => schedulesDateChange(e, index, true)"
+                              :clear="toClear"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -334,6 +336,9 @@ const initialSchedule = {
 
 function initialState() {
   return {
+    schedulesUpdate: 0,
+    fromClear: false,
+    toClear: false,
     indexEdit: null,
     indexShow: 0,
     tab: 1,
@@ -411,7 +416,8 @@ export default {
     },
     checkSchedule() {
       let index = this.indexEdit != null ? this.indexEdit : this.indexShow;
-      const item = this.schedules[index];
+      let update = this.schedulesUpdate;
+      let item = this.schedules[index];
       return this.schedules[index].from_date  &&
              this.schedules[index].to_date &&
              this.schedules[index].start_time  &&
@@ -421,28 +427,21 @@ export default {
   },
 
   watch: {
-
     sendMess(newValue, oldValue) {
       this.params.is_invite_all = newValue == "1";
     },
     downloadVideo(newValue, oldValue) {
       this.params.is_allow_download = newValue == "1";
     },
-    
+    schedulesUpdate(newValue, oldValue) {
+      this.updateSchedules();
+    },
     schedules: {
       handler: function (newValue, oldValue) {
-        let schedules = [...this.schedules].reduce((result, item) => {
-          let start_time = getUTCDateTimeHH_MM_A(new Date ('2020-01-01 ' + item.start_time));
-          let duration = hoursToMinutes(item.duration);
-          result.push({...item, start_time: start_time, duration: duration});
-          return result;
-        }, []);
-
-        this.params = {...this.params, schedules: schedules};
+        this.updateSchedules();
       },
       deep: true
     }
-    
   },
 
   methods: {
@@ -450,25 +449,41 @@ export default {
     getDateBirthDay,
     getEndTime,
 
+    updateSchedules () {
+      let schedules = [...this.schedules].reduce((result, item) => {
+          let start_time = getUTCDateTimeHH_MM_A(new Date ('2020-01-01 ' + item.start_time));
+          let duration = hoursToMinutes(item.duration);
+          result.push({...item, start_time: start_time, duration: duration});
+          return result;
+        }, []);
+
+      this.params = {...this.params, schedules: schedules};
+    },
+
     schedulesDateChange(e, index, isTo) {
+      this.fromClear = false;
+      this.toClear = false;
       if (isTo) {
         if(this.schedules[index].from_date && this.schedules[index].from_date > e ) {
-          this.schedules[index] = {...this.schedules[index], to_date: null};
+          this.fromClear = true;
+          this.schedules[index] = {...this.schedules[index], from_date: null};
         } else {
           this.schedules[index] = {...this.schedules[index], to_date: e};
         }
       } else {     
         if(this.schedules[index].to_date && this.schedules[index].to_date < e ) {
-          this.schedules[index] = {...this.schedules[index], from_date: null};
+          this.toClear = true;
+          this.schedules[index] = {...this.schedules[index], to_date: null};
         } else {
           this.schedules[index] = {...this.schedules[index], from_date: e};
         }
       }
-      console.log('222222222',this.schedules[index].from_date, this.schedules[index].to_date)
+      this.schedulesUpdate++;
     },
 
     checkIncules(list, val){
-      return list.includes(val)
+      let result = list ? list.includes(val) : false;
+      return result
     },
 
     convertDay(index) {
@@ -511,6 +526,7 @@ export default {
       this.selectedItems = _.reject([...this.selectedItems], (i, inx) => inx === index);
       if (this.schedules.length === 0 ) {
         this.schedules.push(initialSchedule);
+        this.selectedItems.push([]);
         this.indexShow = 0;
       } else {
         if(this.indexShow != null && this.indexShow > index) this.indexShow = this.indexShow - 1;
@@ -643,7 +659,8 @@ export default {
         lessonList.forEach(element => {
           list.push({
             value: element.id,
-            text: element.name
+            text: element.name,
+            is_hidden: element.is_hidden
           });
         });
         this.courses = list;
@@ -652,15 +669,15 @@ export default {
       }
     },
 
-    handleChangedCourse() {
-      this.params.elearning_id = this.filterCourse.value;
-      // this.params.enable = this.courses[0].privacy;
-      this.params.enable = true;
-      this.filterPrivacy = {value:true, text: 'Công khai'};
+    handleChangedCourse(e) {
+      this.params.elearning_id = e.value;
+      this.params.enable = !e.is_hidden;
+      this.filterPrivacy = {value: !e.is_hidden, text: e.is_hidden ? 'Riêng tư' : 'Công khai'};
     },
     handleChangedPrivacy() {
       this.params.enable = this.filterPrivacy.value;
     },
+
     check(checked, item, index) {
       if (checked) {
         this.pushSelectedIndexes(item, index);
@@ -673,10 +690,7 @@ export default {
         let temp = [...this.selectedItems[index]].filter(i => {
           return i !== item
         });
-        //this.selectedItems = {...this.selectedItems, [index] : temp};
-
         this.selectedItems.splice(index, 1, temp);
-
         this.schedules.splice(index, 1, {
           ...this.schedules[index],
           days_of_week: this.arrayToString(this.selectedItems[index])

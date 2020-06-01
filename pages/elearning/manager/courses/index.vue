@@ -167,6 +167,9 @@
             <template v-slot:cell(publish_date)="{ row }">
               <td>{{getDateBirthDay(row.publish_date)}}</td>
             </template>
+            <template v-slot:cell(end_date)="{ row }">
+              <td>{{getDateBirthDay(row.end_date)}}</td>
+            </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
               <td>
@@ -189,9 +192,9 @@
                 <IconEye class="fill-blue mr-2"  height='16' width='16'/>Xem preview
               </button>
 
-              <n-link :to="'/elearning/' + row.id" class="link" v-if="tab == 'REJECTED'">
-                <IconMessage height='16' width='16' class="fill-yellow mr-2" />Xem lý do từ chối
-              </n-link>
+              <button @click="showReject(row)" v-if="tab == 'REJECTED'">
+                 <IconMessage height='16' width='16' class="fill-yellow mr-2" />Xem lý do từ chối
+              </button>
 
               <n-link
                 :to="`/elearning/manager/courses/students?elearning_id=${row.id}`"
@@ -232,6 +235,17 @@
       :title="titleModelConfirm"
       :description="textModelConfirm"
     />
+
+     <app-modal-notify
+      :width="550"
+      @ok="noteReject = ''"
+      @close="noteReject = ''"
+      v-if="noteReject"
+      :footer="false"
+      title="Lý do bị từ chối"
+      :description="noteReject"
+    >
+    </app-modal-notify>
   </div>
 </template>
 
@@ -293,6 +307,7 @@ export default {
 
   data() {
     return {
+      noteReject: '',
       allOpt: {
         value: null,
         text: 'Tất cả'
@@ -331,12 +346,12 @@ export default {
         },
         {
           name: "publish_date",
-          text: "Ngày đăng",
+          text: "Ngày bắt đầu",
           sort: true
         },
         {
-          name: "participants",
-          text: "Học sinh tham gia",
+          name: "end_date",
+          text: "Ngày kết thúc",
           sort: true
         }
       ],
@@ -392,8 +407,9 @@ export default {
           sort: true
         },
         {
-          name: "content",
-          text: "Lý do bị từ chối"
+          name: "participants",
+          text: "Học sinh tham gia",
+          sort: true
         }
       ],
       currentHeads: [],
@@ -467,19 +483,19 @@ export default {
       this.ids.length = 0;
       this.params.hide = newValue == "";
       switch (newValue) {
+        case "REJECTED":
         case "PENDING":
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
           break;
-        case null:
         case "APPROVED":
           this.currentHeads = [...this.heads];
           break;
-        case "REJECTED":
+        case null:
           this.currentHeads = [...this.heads3];
           break;
         default:
-          this.currentHeads = [...this.heads];
+          this.currentHeads = [...this.heads2];
           break;
       }
       this.showTable = true;
@@ -489,6 +505,10 @@ export default {
 
   methods: {
     getDateBirthDay,
+
+    showReject(row) {
+      this.noteReject = row.note;
+    },
 
     closeModalInvite(e) {
       this.openModal = false;

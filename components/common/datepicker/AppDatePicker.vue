@@ -101,7 +101,7 @@ export default {
 
   methods: {
     change: function() {
-      console.log('xxxxxxxxx', this.text);
+      //if (this.clear) this.text = null;
       this.$emit("input", this.text);
     }
   },
@@ -141,14 +141,8 @@ export default {
 
   watch: {
     value(newValue, oldValue) {
-      this.text = this.value;
-      console.log(newValue);
-      //if(newValue = null) this.text = null;
+      this.text = this.clear ? null : newValue;
     },
-  },
-
-  created() {
-    //this.text = this.value ? this.value : null;
   },
 };
 </script>
