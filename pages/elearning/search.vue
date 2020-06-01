@@ -128,6 +128,7 @@ import { VclList } from "vue-content-loading";
 
 export default {
   name: "ELearningSearch",
+  middleware: ["authenticated", "teacher-role"],
 
   components: {
     IconHamberger,
