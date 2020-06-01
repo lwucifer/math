@@ -41,7 +41,7 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
 import Notify from "~/components/page/profile/setting/tabs/Notify";
-import PaymentTab from "~/components/page/profile/setting/tabs/payment";
+import PaymentTab from "~/components/page/profile/setting/tabs/PaymentList";
 import { mapState } from "vuex";
 import { get } from "lodash";
 
@@ -76,6 +76,11 @@ export default {
   async mounted() {
     this.loading = true;
     await this.$store.dispatch(`setting/getSetting`);
+    const options = {
+      params: { token: "true" },
+    };
+    await this.$store.dispatch(`setting/getBanks`, options);
+    await this.$store.dispatch(`setting/getAccountBanks`);
     this.loading = false;
   },
 

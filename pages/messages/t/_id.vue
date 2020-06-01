@@ -37,21 +37,22 @@ export default {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     const room_id = route.params.id;
     const paramsOptions = {};
-    const payloadMessage = {
-      // room_id: room_id
-    };
+    // const payloadMessage = {
+    //   from_message_id: "9a958a79-a3be-11ea-ba28-997cc905388a",
+    //   fetch_type: "prior"
+    // };
     await Promise.all([
-      store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
-        paramsOptions,
-        id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
-        end: "messages"
-      }),
-      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
       //   payloadMessage,
+      //   id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+      //   end: "messages"
+      // }),
+      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
+      // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
+      //   params: payloadMessage,
       //   id: room_id,
       //   end: "messages"
-      // })
+      // }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
       //     params: {
       //       room_id: room_id
