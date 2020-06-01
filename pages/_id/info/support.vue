@@ -2,8 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <!-- <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" /> -->
-        <SchoolAccountCustomerSide/>
+        <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
+        <SchoolAccountCustomerSide v-else/>
       </div>
 
       <div class="col-md-9">
