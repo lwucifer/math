@@ -423,6 +423,10 @@ export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     SET_ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS_LIST: "setElearningStudyOlclassLessonSessionsList",
 };
 
+export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
+    SET_ELEARNING_STUDY_EXERCISE_ELEARNING_LIST: "setElearningStudyExerciseElearningList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };

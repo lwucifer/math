@@ -478,6 +478,10 @@ export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     LIST: "elearningStudyOlclassLessonSessionsList",
 };
 
+export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
+    LIST: "elearningStudyExerciseElearning",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };
