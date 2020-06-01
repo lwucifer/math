@@ -55,7 +55,7 @@
             <app-button
               square
               class="btnAccountLink_account-info"
-              v-if="!accountLink.list.linked"
+              v-if="!filterLinkList"
               v-on:click="visible.addLink=true"
             >
               <slot name="icon">
@@ -110,6 +110,7 @@
             <account-story-form
               v-if="editingStory"
               :story="story"
+              :edit="checkEdit"
               @cancel="cancel"
               @submit="submitStory"
             ></account-story-form>
@@ -157,6 +158,7 @@ import { get } from "lodash";
 import { getDateBirthDay, getDateFormat } from "~/utils/moment";
 import { getDeviceId } from "~/utils/auth";
 import { RESPONSE_SUCCESS, TIMEOUT } from "~/utils/config";
+import { removeTagHtml } from "~/utils/common";
 
 export default {
   components: {
@@ -201,7 +203,8 @@ export default {
         code: "",
         g_recaptcha_response: ""
       },
-      success: false
+      success: false,
+      checkEdit: false
     };
   },
   watch: {
@@ -233,8 +236,8 @@ export default {
 
     async fetchProfile() {
       await Promise.all([
-        this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`),
-        this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
+        this.$store.dispatch(`account/${actionTypes.ACCOUNT_PROFILE.LIST}`)
+        // this.$store.dispatch(`account/${actionTypes.ACCOUNT_LINK.LIST}`)
       ]);
     },
     closeNotify() {
@@ -296,7 +299,7 @@ export default {
     },
     submitStory(_data) {
       const data = {
-        biography: _data
+        biography: removeTagHtml(_data)
       };
       this.accountBiographyAdd(data).then(result => {
         if (result.success) {
@@ -335,6 +338,11 @@ export default {
       return this.personalList && this.personalList.avatar
         ? this.personalList.avatar.low
         : "https://picsum.photos/170/170";
+    },
+    filterLinkList() {
+      return this.linkList.data && this.linkList.data.linked == true
+        ? true
+        : false;
     }
   },
   created() {

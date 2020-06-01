@@ -343,6 +343,17 @@ export function formatHour(val = 0) {
   return strTime;
 }
 
+/**
+ * convert seconds to text:  mm phút ss giây
+ */
+export function formatMMSS(val = 0) {
+  const m = Math.floor(val/60);
+  const s = val - 60 * m;
+
+  let strTime = m + " phút " + s + " giây";
+  return strTime;
+}
+
 const filters = {
   toThousandFilter,
   uppercaseFirst,
@@ -360,6 +371,7 @@ const filters = {
   getDateTimeFullText,
   formatHour,
   resultFigureRate,
+  formatMMSS,
 };
 
 // register global utility filters

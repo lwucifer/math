@@ -1,12 +1,36 @@
-$default-color: #1D243E;
-$primary-color: #37A000;
+$default-color: #1D243E !default;
+$primary-color: $color-primary !default;
+
+//$today-color: mix(#fff, $primary-color, 10%) !default;
 
 $input-border-color: #E0E0E0;
+//$input-color: #555 !default;
 $input-hover-border-color: $primary-color;
+
+//
+//$disabled-color: #ccc !default;
+//$disabled-background-color: #f3f3f3 !default;
+//
+//$border-color: #e8e8e8 !default;
+//
+//$calendar-active-color: #fff !default;
+//$calendar-active-background-color: $primary-color !default;
+//
+//$calendar-hover-color: $default-color !default;
+//$calendar-hover-background-color: mix(#fff, $calendar-active-background-color, 95%) !default;
+//
+//$calendar-in-range-color: $default-color !default;
+//$calendar-in-range-background-color: mix(#fff, $calendar-active-background-color, 85%) !default;
+//
+//$time-active-color: $primary-color !default;
+//$time-active-background-color: transparent !default;
+//
+//$time-hover-color: $default-color !default;
+//$time-hover-background-color: mix(#fff, $calendar-active-background-color, 95%) !default;
 
 @import '~vue2-datepicker/scss/index.scss';
 
-.mx-input {
+.#{$namespace}-input {
     height: 4rem;
     padding: 0 1rem;
     font-size: 1.4rem;
@@ -18,7 +42,7 @@ $input-hover-border-color: $primary-color;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.mx-datepicker {
+.#{$namespace}-datepicker {
     //width: 15.5rem;
     width: 100%;
     max-width: 100%;
@@ -53,29 +77,61 @@ $input-hover-border-color: $primary-color;
     }
 }
 
-.app-date-picker--range {
-    .mx-datepicker-range {
-        width: 21rem;
-        .mx-input {
-            &::placeholder {
-                color: $color-text-gray-2;
-                font-size: 1.2rem;
-                letter-spacing: -0.01em;
-                opacity: 1; /* Firefox */
-            }
-    
-            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-                color: $color-text-gray-2;
-                font-size: 1.2rem;
-                letter-spacing: -0.01em;
-            }
-    
-            &::-ms-input-placeholder { /* Microsoft Edge */
-                color: $color-text-gray-2;
-                font-size: 1.2rem;
-                letter-spacing: -0.01em;
-            }
+.#{$namespace}-datepicker-range {
+    width: 21rem;
+    .mx-input {
+        &::placeholder {
+            color: $color-text-gray-2;
+            font-size: 1.2rem;
+            letter-spacing: -0.01em;
+            opacity: 1; /* Firefox */
         }
+        
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: $color-text-gray-2;
+            font-size: 1.2rem;
+            letter-spacing: -0.01em;
+        }
+        
+        &::-ms-input-placeholder { /* Microsoft Edge */
+            color: $color-text-gray-2;
+            font-size: 1.2rem;
+            letter-spacing: -0.01em;
+        }
+    }
+}
+
+.#{$namespace}-calendar-content{
+    .cell{
+        &.active{
+            border-radius: 10px;
+            font-weight: bold;
+        }
+    }
+}
+
+
+.#{$namespace}-table-date {
+    thead tr th {
+        font-weight: bold;
+        color: #6C738D;
+    }
+}
+
+.#{$namespace}-datepicker-sidebar {
+    background: #fff;
+    width: 21rem;
+    box-shadow: 0px 8px 32px rgba(108, 115, 141, 0.12);
+}
+
+.#{$namespace}-btn-shortcut {
+    border-radius: 2px;
+    width: 100%;
+    background: #F9F9F9;
+    margin-bottom: 8px;
+    padding: 6px 11px;
+    &.active {
+        background: $primary-color;
     }
 }
 
@@ -85,10 +141,6 @@ $input-hover-border-color: $primary-color;
     border: none !important;
     display: flex;
     font-family: "Montserrat", sans-serif !important;
-    .mx-datepicker-sidebar {
-        background: #fff;
-        width: 194px;
-    }
     .mx-datepicker-sidebar + .mx-datepicker-content{
         border-left: none !important;
         background: #fff;
@@ -96,29 +148,23 @@ $input-hover-border-color: $primary-color;
         border-radius: 4px;
         margin-left: 10px;
     }
-    .mx-calendar-content{
-        .cell{
-            &.active{
-                border-radius: 10px;
-            }
-        }
-    }
-    .mx-btn-shortcut{
-        border-radius: 2px;
-        width: 100%;
-        background: #F9F9F9;
-        margin-bottom: 6px;
-        padding: 6px 11px;
-        &.active {
-            background: $primary-color;
-        }
-    }
     .mx-calendar:last-child{
         border-left: none !important;
         margin-left: 20px;
     }
 }
 
-.app-date-picker .mx-icon-calendar {
-    color: $primary-color;
+.#{$namespace}-icon-calendar,
+.#{$namespace}-icon-clear {
+  color: $primary-color;
+}
+
+.#{$namespace}-datepicker-main {
+  font: 1.2rem inherit, Helvetica, Arial, 'Microsoft Yahei', sans-serif;
+}
+
+//button
+.#{$namespace}-btn {
+  color: $color-text;
+  letter-spacing: -0.01em;
 }

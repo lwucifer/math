@@ -36,7 +36,7 @@
       </div>
       <div class="row">
         <div class="col-5">Tổng thời gian làm bài</div>
-        <div class="col-7">{{ result.working_time }} giây</div>
+        <div class="col-7">{{ result.working_time | formatMMSS }}</div>
       </div>
       <div class="row">
         <div class="col-5">Số câu hỏi</div>
@@ -72,7 +72,7 @@
 
     <app-modal
       v-if="modalListQuestions"
-      title="Danh sách câu hỏi"
+      title="Xem đáp án"
       :footer="false"
       @close="modalListQuestions = false"
     >

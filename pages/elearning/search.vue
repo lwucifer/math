@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-search container">
     <h1 class="elearning-search__heading heading-3">
-      <span class="font-weight-semi-bold">{{ subject_name || "Môn học" }}</span>
+      <span class="font-weight-semi-bold">{{ subject_name || "Kết quả" }}</span>
       <span class="body-2 font-weight-normal">
         (
         <b>{{ totalSummary }}</b>
@@ -15,6 +15,13 @@
       </app-button>
 
       <template v-if="isFilter">
+        <app-select
+          v-model="type"
+          @change="handleChangeTab"
+          :options="types"
+          placeholder="Thể loại"
+          size="sm"
+        />
         <app-select
           v-model="fee"
           @change="handleChangeFee"
@@ -36,6 +43,13 @@
           placeholder="Trình độ"
           size="sm"
         />
+        <app-select
+          v-model="subject"
+          @change="handleChangeSubject"
+          :options="subjectOpts"
+          placeholder="Môn học"
+          size="sm"
+        />
       </template>
 
       <div class="ml-auto">
@@ -50,7 +64,7 @@
       </div>
     </div>
 
-    <div class="elearing-search__tabs">
+    <!-- <div class="elearing-search__tabs">
       <a
         v-for="item in tabs"
         :key="item.tab"
@@ -58,7 +72,7 @@
         :class="['elearning-search__tab', tab === item.tab && 'active']"
         @click.prevent="handleChangeTab(item.tab)"
       >{{ item.text }}</a>
-    </div>
+    </div>-->
 
     <div v-if="pageLoading" class="container mt-6">
       <div class="row">
@@ -79,11 +93,7 @@
       >
         <div class="row">
           <div class="col-md-3 elearning-search__col" v-for="item in lessons" :key="item.id">
-            <CourseItem2
-              class="my-0"
-              :item="item"
-              :size="'sm'"
-            />
+            <CourseItem2 class="my-0" :item="item" :size="'sm'" />
           </div>
         </div>
 
@@ -132,18 +142,14 @@ export default {
         { value: null, text: "Tất cả" },
         { value: 1, text: "Miễn phí" },
         { value: 0, text: "Có phí" }
-        // { value: 0, text: "Từ 0 đến 100k" },
-        // { value: 1, text: "Từ 100k đến 200k" },
-        // { value: 2, text: "Từ 200k đến 500k" },
-        // { value: 3, text: "Lơn hơn 500k" }
       ],
       time: null,
       timeOpts: [
         { value: null, text: "Tất cả" },
-        { value: '0h-1h', text: "0 - 1 giờ" },
-        { value: '1h-2h', text: "1- 2 giờ" },
-        { value: '2h-4h', text: "2 - 4 giờ" },
-        { value: '4h+', text: "Trên 4 giờ" }
+        { value: "0h-1h", text: "0 - 1 giờ" },
+        { value: "1h-2h", text: "1- 2 giờ" },
+        { value: "2h-4h", text: "2 - 4 giờ" },
+        { value: "4h+", text: "Trên 4 giờ" }
       ],
       level: null,
       // levelOpts: [
@@ -152,7 +158,10 @@ export default {
       //   { value: 2, text: "Trình độ 3" },
       //   { value: 3, text: "Trình độ 4" }
       // ],
-      sort: SORT_ELEARNING.RELATED,
+      subject: this.$route.query.subject ? this.$route.query.subject : null,
+      sort: this.$route.query.sort
+        ? this.$route.query.sort
+        : SORT_ELEARNING.RELATED,
       sortOpts: [
         { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
         { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
@@ -174,15 +183,32 @@ export default {
           text: "Khoá học"
         }
       ],
+      type: this.$route.query.type
+        ? this.$route.query.type
+        : ELEARNING_TYPES_VALUE.LECTURE,
+      types: [
+        {
+          value: ELEARNING_TYPES_VALUE.LECTURE,
+          text: "Bài giảng"
+        },
+        {
+          value: ELEARNING_TYPES_VALUE.COURSE,
+          text: "Khoá học"
+        }
+      ],
       payload: {
-        subject: this.subject,
-        type: ELEARNING_TYPES_VALUE.LECTURE,
+        subject: this.$route.query.subject ? this.$route.query.subject : null,
+        type: this.$route.query.type
+          ? this.$route.query.type
+          : ELEARNING_TYPES_VALUE.LECTURE,
         duration: null,
         level: null,
         free: null,
         page: 1,
         size: PAGE_SIZE.DEFAULT,
-        sort: SORT_ELEARNING.RELATED,
+        sort: this.$route.query.sort
+          ? this.$route.query.sort
+          : SORT_ELEARNING.RELATED,
         keyword: null
       },
 
@@ -209,7 +235,6 @@ export default {
 
   async asyncData({ store, query }) {
     const { subject, subject_name } = query; // get keyword, type from url
-
     return {
       subject,
       subject_name
@@ -220,9 +245,12 @@ export default {
     await store.dispatch(
       `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
     );
+    await store.dispatch(
+        `elearning/public/public-voted-subjects/${actionTypes.ELEARNING_PUBLIC_VOTED_SUBJECTS.LIST}`
+      );
   },
 
-  created() {
+  async created() {
     this.getLessons();
   },
 
@@ -230,14 +258,27 @@ export default {
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
+
+    ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
+      console.log('this.categories', this.categories)
       const alls = addAllOptionSelect(this.categories);
       return alls.map(c => {
         return {
           value: c.id,
           text: c.name
+        };
+      });
+    },
+    subjectOpts(){
+      const alls = addAllOptionSelect(this.votedSubjects && this.votedSubjects.content);
+      return alls.map(c => {
+        return {
+          value: c.code,
+          text: c.name,
+          // code: c.code
         };
       });
     },
@@ -252,9 +293,9 @@ export default {
     }
   },
 
-  watch:{
-    keyword(_newVal){
-      console.log('keyword', _newVal)
+  watch: {
+    keyword(_newVal) {
+      console.log("keyword", _newVal);
       this.payload.page = 1;
       this.payload.keyword = _newVal ? _newVal : -1;
       this.getLessons();
@@ -274,7 +315,7 @@ export default {
     async getLessons() {
       this.pageLoading = true;
       Object.keys(this.payload).map(k => {
-        if (this.payload[k] == -1) {
+        if (this.payload[k] == null) {
           delete this.payload[k];
         }
       });
@@ -317,6 +358,12 @@ export default {
       console.log("[handleChangeLevel]", _newVal, _selectedVal);
       this.payload.page = 1;
       this.payload.level = _newVal;
+      this.getLessons();
+    },
+    handleChangeSubject(_newVal, _selectedVal){
+      console.log("[handleChangeSubject]", _newVal, _selectedVal);
+      this.payload.page = 1;
+      this.payload.subject = _newVal;
       this.getLessons();
     },
 

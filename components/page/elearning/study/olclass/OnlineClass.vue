@@ -69,11 +69,14 @@
       v-if="modalShow"
       @close="modalShow = false"
       :data="targetClass"
+      :contentLoading="waitingClassLoading"
+      :isShowModal="modalShow"
     />
     <Timetable
       v-if="isShowTimetable"
       @close="isShowTimetable = false"
       :timetables="convertedTimetables"
+      :contentLoading="timetableContentLoading"
     />
   </div>
 </template>
@@ -103,7 +106,9 @@ export default {
       modalShow: false,
       isShowTimetable: false,
       targetClass: null,
-      currentOlClass: null
+      currentOlClass: null,
+      timetableContentLoading: true,
+      waitingClassLoading: true
     };
   },
   components: {
@@ -193,6 +198,7 @@ export default {
     handlJoinOlClass(item) {
       console.log("[handlJoinOlClass]", item);
       this.currentOlClass = item;
+      this.modalShow = true;
 
       this.elearningStudyOlclassLessonSessionsList({
         params: { online_class_id: item.id }
@@ -208,20 +214,21 @@ export default {
             };
           });
           this.targetClass = { ...res.data, sessions: sessionImpls };
-          this.modalShow = true;
         }
+        this.waitingClassLoading = false;
       });
     },
 
     getTimetable(olclass) {
       console.log("[getTimetable]", olclass);
+      this.isShowTimetable = !this.isShowTimetable;
       this.elearningStudyListTimetable({
         params: { online_class_id: olclass.id }
       }).then(res => {
         if (res.success == RESPONSE_SUCCESS) {
           console.log("[elearningStudyListTimetable]", res.data);
-          this.isShowTimetable = !this.isShowTimetable;
         }
+        this.timetableContentLoading = false;
       });
     },
 

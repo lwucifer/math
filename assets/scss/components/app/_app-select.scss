@@ -2,6 +2,7 @@
     position: relative;
     display: inline-block;
     color: $color-dark;
+    // border: 1px solid $color-disabled;
 
     &.active {
         .app-select__selected {

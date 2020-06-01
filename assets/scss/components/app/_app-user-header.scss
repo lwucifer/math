@@ -55,15 +55,19 @@
     a {
       text-decoration: none;
       font-size: 1.4rem;
-      color: #666;
+      color: inherit;
       width: 100%;
       display: flex;
       align-items: center;
       height: 4rem;
       padding-left: 2rem;
+      border-left: 4px solid transparent;
+      svg path {
+        fill-opacity: 1;
+      }
       &.nuxt-link-exact-active{
         color: $color-primary;
-        border-left: 4px solid #37A000 !important;
+        border-left: 4px solid $color-primary !important;
         background: #F9F9F9;
         svg path {
           fill: $color-primary !important;
@@ -71,8 +75,8 @@
       }
       &:hover{
         border-color: #008329;
-        border-left: 4px solid #008329;
         background: #F9F9F9;
+        color: #008329;
         svg path {
           fill: #008329 !important;
         }

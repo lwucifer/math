@@ -102,7 +102,7 @@ export default {
         this.prevRoute == "/auth/signup/success" ||
         this.prevRoute == "/auth/verify-account" ||
         this.prevRoute == "/auth/forgot/success" ||
-        this.prevRoute == "/auth/forgot"
+        this.prevRoute == "/auth/forgot" || this.prevRoute == "/auth/signup"
       ) {
         this.$router.push("/");
       } else {

@@ -105,12 +105,7 @@
       <li>
         <IconTimer class="icon" />
         Thời lượng:
-        {{
-          [
-            info.duration && info.duration != "0:0" ? info.duration : "1:0",
-            "m:s",
-          ] | moment("mm:ss")
-        }}
+        {{ get(info, "duration", "01:00") }}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -123,7 +118,7 @@
     <div class="py-3 d-flex share-favourite">
       <a class="text-info share">
         <ShareNetwork
-          class="d-flex-center"
+          class="d-flex-center text-info"
           network="facebook"
           :url="
             `https://schoolly.famtechvn.com/elearning/${get(
@@ -225,18 +220,14 @@ export default {
       return false;
     },
     isStartElearning() {
-      if (get(this, "info.progress", 0) == 0) return true;
-      return false;
+      if (get(this, "info.is_study", false)) return false;
+      if (this.isDoneElearning) return false;
+      return true;
     },
     isStudyElearning() {
-      if (
-        get(this, "info.progress", "-1") > 0 &&
-        get(this, "info.progress", "-1") < 100
-      ) {
-        return true;
-      }
-
-      return false;
+      if (this.isDoneElearning) return false;
+      if (this.isStartElearning) return false;
+      return true;
     },
     isDoneElearning() {
       if (get(this, "info.progress", "-1") >= 100) return true;

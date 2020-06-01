@@ -1,6 +1,6 @@
 <template>
   <div class="app-date-picker" :class="classes">
-    <label v-if="label">{{label}}</label>
+    <label v-if="label">{{ label }}</label>
     <date-picker
       v-bind="{ ...$attrs, ...$props }"
       v-model="text"
@@ -8,7 +8,7 @@
       :format="valueFormat"
       :type="type"
       :placeholder="placeholder"
-      :disabled	="disabled"
+      :disabled="disabled"
       :range="range"
       :range-separator="rangeSeparator"
       :shortcuts="shortcuts"
@@ -16,7 +16,6 @@
       :minute-step="minuteStep"
       :value-type="valueType"
       :hour-options="hourOptions"
-      @clear="clear"
     >
       <template v-slot:icon-calendar>
         <slot name="icon-calendar"></slot>
@@ -31,11 +30,10 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
-import "vue2-datepicker/index.css";
 
 export default {
   components: {
-    DatePicker
+    DatePicker,
   },
 
   props: {
@@ -45,73 +43,75 @@ export default {
     square: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     minuteStep: [String, Number],
     valueType: {
       type: String,
-      default: 'format'
+      default: "format",
     },
     hourOptions: Array,
     placeholder: {
       type: String,
       required: false,
-      default: ''
+      default: "",
     },
     valueFormat: {
       type: String,
-      default: 'DD/MM/YYYY'
+      default: "DD/MM/YYYY",
     },
     type: {
       type: String,
-      default: 'date',
-      validator: value => ['date', 'datetime', 'year', 'month', 'time', 'week'].includes(value)
+      default: "date",
+      validator: (value) =>
+        ["date", "datetime", "year", "month", "time", "week"].includes(value),
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     range: {
       type: Boolean,
-      default: false
+      default: false,
     },
     rangeSeparator: {
       type: String,
-      default: ' - '
+      default: " - ",
     },
     shortcuts: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
-    popupClass:{
+    popupClass: {
       type: String,
-      default:''
-    }
+      default: "",
+    },
+    clear: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      text: null
+      text: this.value,
     };
   },
 
   methods: {
     change: function() {
-      // this.text = 0;
+      console.log('xxxxxxxxx', this.text);
       this.$emit("input", this.text);
-    },
-    clear: function() {
-      //console.log(this.text);
-    },
+    }
   },
 
   computed: {
     classes() {
       const typeClasses = {
-        'app-date-picker--range': this.range
-      }
-      
+        "app-date-picker--range": this.range,
+      };
+
       const sizeClasses = {
         "size-xs": this.size === "xs",
         "size-sm": this.size === "sm",
@@ -119,36 +119,37 @@ export default {
         "size-lg": this.size === "lg",
       };
       const borderRadiusClasses = {
-        "square": this.square,
+        square: this.square,
       };
 
       return {
         ...typeClasses,
         ...sizeClasses,
-        ...borderRadiusClasses
-      }
+        ...borderRadiusClasses,
+      };
     },
     popupCls() {
       const typeCls = {
-        'app-date-picker__popup--range': this.range
-      }
-      
+        "app-date-picker__popup--range": this.range,
+      };
+
       return {
-        ...typeCls
-      }
-    }
+        ...typeCls,
+      };
+    },
   },
-  
+
   watch: {
-    // value(newValue, oldValue) {
-    //   console.log(newValue);
-    //   //if(newValue = null) this.text = null;
-    // }
+    value(newValue, oldValue) {
+      this.text = this.value;
+      console.log(newValue);
+      //if(newValue = null) this.text = null;
+    },
   },
 
   created() {
-    this.text = this.value ? this.value : null;
-  }
+    //this.text = this.value ? this.value : null;
+  },
 };
 </script>
 

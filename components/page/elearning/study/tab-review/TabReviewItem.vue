@@ -25,7 +25,7 @@
       </div>
 
       <div class="tab-qa-comment-item__content">
-        <div v-html="get(review, 'comment', '')"></div>
+        <div v-html="get(review, 'comment', '')" style="word-break: break-all;"></div>
         <img
           v-if="get(review, 'image_url', '')"
           class="tab-qa-comment-item__img d-block"

@@ -11,6 +11,10 @@
             </div>
         </div>
 
+        <div class="mt-3">
+            <slot name="button"/>
+        </div>
+
         <div class="list-info__body" v-if="showContent">
             <slot name="body"/>
         </div>
