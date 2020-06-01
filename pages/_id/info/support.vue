@@ -119,7 +119,6 @@ import { toNumber, get, cloneDeep, trim } from "lodash";
 const STORE_INFO = "info/support";
 
 export default {
-  // middleware: ["authenticated", "teacher-role", "student-role"],
   components: {
     SchoolAccountSide,
     SchoolAccountCustomerSide
@@ -174,7 +173,6 @@ export default {
       this.infoSupport(body).then(result => {
         if (result.success == true) {
           this.inputCodeSuccess = true;
-          // this.$toasted.show("Gửi câu hỏi thành công");
           this.clearForm();
         } else {
           this.$toasted.error(result.message);
