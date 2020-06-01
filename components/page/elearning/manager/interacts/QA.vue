@@ -58,7 +58,28 @@
           </td>
         </template>
         <template v-slot:cell(content)="{row}">
-          <td v-html="row.content"></td>
+          <td>
+            <v-popover
+              trigger="hover"
+            >
+              <span>{{row.content | truncStrFilter(30)}}</span>
+              <template slot="popover">
+                <span>{{row.content}}</span>
+              </template>
+            </v-popover>
+          </td>
+        </template>
+        <template v-slot:cell(elearning_name)="{row}">
+          <td>
+            <v-popover
+              trigger="hover"
+            >
+              <span>{{row.elearning_name | truncStrFilter(30)}}</span>
+              <template slot="popover">
+                <span>{{row.elearning_name}}</span>
+              </template>
+            </v-popover>
+          </td>
         </template>
         <template v-slot:cell(status)="{row}">
           <td v-if="row.status=='ANSWER'">Đã trả lời</td>
@@ -169,11 +190,10 @@ export default {
       allOpt: {
           value: null,
           label: 'Tất cả'
-        },
+      },
       filters:{
         lesson: null,
         result: null
-
       }
     };
   },

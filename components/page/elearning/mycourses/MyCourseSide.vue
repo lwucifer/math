@@ -5,12 +5,12 @@
     <template v-slot:content>
       <div class="manager-side">
         <n-link class="link-gray item" 
-            to="" :class="active == 1 ? 'active' : ''">
+            to="/elearning/mycourses/" :class="active == 1 ? 'active' : ''">
           <IconDashboard width="20" height="20" />Tổng quan
         </n-link>
         <n-link
           class="link-gray item"
-          to=""
+          to="/elearning/mycourses/courses"
           :class="active == 2 ? 'active' : ''"
         >
           <IconBooks width="20" height="20" />Bài giảng và khóa học
@@ -18,16 +18,24 @@
 
         <n-link
           class="link-gray item"
-          to=""
+          to="/elearning/mycourses/exercises"
           :class="active == 3 ? 'active' : ''"
         >
-          <IconLibraryBooks width="20" height="20" />Bài tập và bài kiểm tra
+          <IconLibraryBooks width="20" height="20" />Bài tập
+        </n-link>
+
+        <n-link
+          class="link-gray item"
+          to="/elearning/mycourses/exams"
+          :class="active == 4 ? 'active' : ''"
+        >
+          <IconBallot24px width="20" height="20" />Bài kiểm tra
         </n-link>
 
         <n-link
           class="link-gray item"
           to="/elearning/mycourses/timetable"
-          :class="active == 4 ? 'active' : ''"
+          :class="active == 5 ? 'active' : ''"
         >
           <IconToday24px />Thời khóa biểu
         </n-link>
@@ -43,6 +51,7 @@ import IconDashboard from "~/assets/svg/v2-icons/dashboard_24px.svg?inline";
 import IconDollarO from "~/assets/svg/icons/dollar-o.svg?inline";
 import IconBooks from "~/assets/svg/v2-icons/collections_bookmark_24px.svg?inline";
 import IconLibraryBooks from "~/assets/svg/v2-icons/library_books_24px.svg?inline";
+import IconBallot24px from "~/assets/svg/v2-icons/ballot_24px.svg?inline";
 import IconToday24px from '~/assets/svg/v2-icons/today_24px.svg?inline';
 
 import IconBook from "~/assets/svg/icons/book.svg?inline";
@@ -61,7 +70,8 @@ export default {
     IconBook,
     IconLibraryBooks,
     IconChatUser,
-    IconToday24px
+    IconToday24px,
+    IconBallot24px,
   },
 
   props: {

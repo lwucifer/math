@@ -423,6 +423,10 @@ export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     SET_ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS_LIST: "setElearningStudyOlclassLessonSessionsList",
 };
 
+export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
+    SET_ELEARNING_STUDY_EXERCISE_ELEARNING_LIST: "setElearningStudyExerciseElearningList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -531,6 +535,12 @@ export const TEACHING_ELEARNING_INVITES = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
+};
+
+export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST : "teachingInteractiveListAnnouncement",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD : "teachingInteractiveListAnnouncementAdd",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_DELETE : "teachingInteractiveListAnnouncementDelete",
 };
 
 export const TEACHING_PUBLIC_LIST = {

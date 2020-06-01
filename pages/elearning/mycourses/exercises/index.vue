@@ -49,10 +49,9 @@
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
   
-  const STORE_NAMESPACE = 'elearning/teaching/vote'
+  const STORE_NAMESPACE = 'elearning/study/study-exercise-elearning'
   
   export default {
-    layout: "manage",
     components: {
       MyCourseSide,
       FilterForm,
@@ -72,17 +71,14 @@
         params: {
           page: 1,
           size: 10,
-          // elearning_id: "39fe1dd5-2df2-465f-8cf7-59d4ead68189"
-          elearning_id: null
         },
         list: [],
         loading: false
       }
     },
     computed: {
-      ...mapState("auth", ["loggedUser"]),
       ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'votes'
+        detailInfo: 'exerciseElearnings'
       }),
     },
     methods: {
@@ -128,19 +124,12 @@
           let params = { ...this.params }
           
           await this.$store.dispatch(
-            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_VOTE.LIST}`, { params }
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE_ELEARNING.LIST}`, { params }
           )
-          this.list = this.get(this.detailInfo, 'data.content', [])
-          // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
-          this.pagination.size = this.get(this.detailInfo, 'data.size', 10)
-          this.pagination.first = this.get(this.detailInfo, 'data.first', 1)
-          this.pagination.last = this.get(this.detailInfo, 'data.last', 1)
-          this.pagination.number = this.get(this.detailInfo, 'data.number', 0)
-          this.pagination.total_pages = this.get(this.detailInfo, 'data.total_pages', 0)
-          this.pagination.total_elements = this.get(this.detailInfo, 'data.total_elements', 0)
-          this.pagination.number_of_elements = this.get(this.detailInfo, 'data.number_of_elements', 0)
+          this.list = this.get(this.detailInfo, 'content', [])
+          this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
         } catch (e) {
-          console.log('Get votes ', e)
+          console.log('Get elearnings of studing ', e)
         } finally {
           this.loading = false
         }

@@ -81,7 +81,7 @@
 
       <div class="aside-box__content" :class="{'padding-show-info': showInfo}">
         <!-- <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4> -->
-        <!-- <client-only>
+        <client-only>
           <infinite-loading
             direction="top"
             :identifier="infiniteId"
@@ -89,7 +89,7 @@
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
-        </client-only>-->
+        </client-only>
         <div class="message-box__time">
           <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">
@@ -672,7 +672,7 @@ export default {
       // fullname: "",
       showInfo: false,
       messageQuery: {
-        from_meessage_id: null
+        from_message_id: null
       }
     };
   },
@@ -813,17 +813,19 @@ export default {
       const getData = await this.$store.dispatch(
         `chat/${actionTypes.CHAT.MESSAGE_LIST}`,
         {
-          query,
+          params: this.messageQuery,
           id: room_id,
           end: "messages"
         }
       );
       console.log("getData Message", getData);
       // if (getData && !getData.messages && this.messagesList.length == 0) {
-      //   this.checkList = true;
+      //   this.checkList = true;getData[getData.length - 1].id;
       // }
+      // console.log("getData id", getData[getData.length - 1].id);
       if (getData && getData.length) {
-        // this.messageQuery.from_meessage_id = getData[getData.length - 1].id;
+        this.messageQuery.from_message_id = getData[getData.length - 1].id;
+        this.messageQuery.fetch_type = "prior";
         // this.messagesList.push(...getData.messages);
         $state.loaded();
       } else {
