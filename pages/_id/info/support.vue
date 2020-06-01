@@ -2,8 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
-        <SchoolAccountCustomSide v-else />
+        <!-- <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" /> -->
+        <SchoolAccountCustomerSide/>
       </div>
 
       <div class="col-md-9">
@@ -111,7 +111,7 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
-import SchoolAccountCustomSide from "~/components/page/school/SchoolAccountCustomSide";
+import SchoolAccountCustomerSide from "~/components/page/school/SchoolAccountCustomerSide";
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import { validateEmail } from "~/utils/validations";
@@ -122,7 +122,7 @@ export default {
   // middleware: ["authenticated", "teacher-role", "student-role"],
   components: {
     SchoolAccountSide,
-    SchoolAccountCustomSide
+    SchoolAccountCustomerSide
   },
 
   data() {
