@@ -12,13 +12,53 @@
           {{ get(row, 'name', '') | truncStrFilter(30) }}
         </td>
       </template>
+
+      <template v-slot:cell(exercises)="{row}">
+        <td>
+          <div class="text-center">
+            {{ get(row, 'exercises', 0) }}
+          </div>
+        </td>
+      </template>
+
+      <template v-slot:cell(not_submit)="{row}">
+        <td>
+          <div class="text-center text-warning">
+            {{ get(row, 'not_submit', 0) }}
+          </div>
+        </td>
+      </template>
+
+      <template v-slot:cell(passed)="{row}">
+        <td>
+          <div class="text-center text-primary">
+            {{ get(row, 'passed', 0) }}
+          </div>
+        </td>
+      </template>
+
+      <template v-slot:cell(failed)="{row}">
+        <td>
+          <div class="text-center text-pink-2">
+            {{ get(row, 'failed', 0) }}
+          </div>
+        </td>
+      </template>
+
+      <template v-slot:cell(pending)="{row}">
+        <td>
+          <div class="text-center text-warning">
+            {{ get(row, 'pending', 0) }}
+          </div>
+        </td>
+      </template>
       
       <template v-slot:cell(action)="{row}">
         <td>
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/exams/exercise?elearning_id=${row.id}`">
+            :to="`/elearning/mycourses/exercises/${row.id}`">
             <IconArrow height="13"/>
           </n-link>
         </td>
@@ -94,7 +134,7 @@
         heads: [
           {
             name: "name",
-            text: "Khóa học/bài giảng",
+            text: "Tiêu đề",
           },
           {
             name: "type",
@@ -103,12 +143,22 @@
           {
             name: "exercises",
             text: "Số bài tập",
-            sort: true
           },
           {
-            name: "created",
-            text: "Ngày khởi tạo",
-            sort: true
+            name: "not_submit",
+            text: "Chưa nộp",
+          },
+          {
+            name: "passed",
+            text: "Đạt",
+          },
+          {
+            name: "failed",
+            text: "Không đạt",
+          },
+          {
+            name: "pending",
+            text: "Chưa chấm",
           },
           {
             name: "action",

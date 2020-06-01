@@ -18,7 +18,7 @@
 
         <n-link
           class="link-gray item"
-          to=""
+          to="/elearning/mycourses/exercises"
           :class="active == 3 ? 'active' : ''"
         >
           <IconLibraryBooks width="20" height="20" />Bài tập và bài kiểm tra
