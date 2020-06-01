@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-3">
         <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
-        <SchoolAccountCustomSide v-else />
+        <SchoolAccountCustomerSide v-else/>
       </div>
 
       <div class="col-md-9">
@@ -111,7 +111,7 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
-import SchoolAccountCustomSide from "~/components/page/school/SchoolAccountCustomSide";
+import SchoolAccountCustomerSide from "~/components/page/school/SchoolAccountCustomerSide";
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import { validateEmail } from "~/utils/validations";
@@ -121,7 +121,7 @@ const STORE_INFO = "info/support";
 export default {
   components: {
     SchoolAccountSide,
-    SchoolAccountCustomSide
+    SchoolAccountCustomerSide
   },
 
   data() {
