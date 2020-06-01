@@ -634,6 +634,13 @@ export const ACCOUNT_BIOGRAPHY = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     LIST: "teachingInteractiveListquestion",
+    ADD: "teachingInteractiveListquestionAdd"
+};
+
+export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
+    LIST: "teachingInteractiveListAnnouncement",
+    ADD: "teachingInteractiveAnnouncementAdd",
+    DELETE: "teachingInteractiveAnnouncementDelete"
 };
 
 export const TEACHING_PUBLIC_LIST = {

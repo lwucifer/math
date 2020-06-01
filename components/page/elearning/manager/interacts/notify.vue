@@ -24,19 +24,19 @@
         <app-vue-select
           class="app-vue-select filter-course"
           v-model="filter.province"
-          :options="classes"
+          :options="lessonOpts"
           placeholder="Bài giảng/khóa học"
           searchable
-          clearable
           has-border
           @input="handleChangedInput"
           @search:focus="handleFocusSearchInput"
           @search:blur="handleBlurSearchInput"
+          :all-opt="allOpt"
         />
       </template>
     </div>
 
-    <app-button color="red" size="sm">
+    <app-button color="pink" size="sm">
       <IconDeleteForever class="icon body-1 mr-2" />Xoá
     </app-button>
 
@@ -56,21 +56,29 @@
           </td>
         </template>
 
-        <template v-slot:cell(content)="{row,index}">
-          <td
-            title="Chi tiết"
-            class="table-notify__ElearningManagerInteractive"
-            v-on:mouseover="clickQuestion({row, index})"
-            v-on:mouseleave="closeDetail()"
-          >
-            <span v-if="row.content.length>200">{{row.content.slice(0,200)}}...</span>
-            <span v-if="row.content.length<=200">{{row.content}}</span>
-            <div
-              class="content-detail__notify"
-              v-if="(currentQuestionIndex >=0) && (index == currentQuestionIndex)"
+        <template v-slot:cell(content)="{row}">
+          <td>
+            <v-popover
+              trigger="hover"
             >
-              <span>{{row.content}}</span>
-            </div>
+              <span>{{row.content | truncStrFilter(30)}}</span>
+              <template slot="popover">
+                <span>{{row.content}}</span>
+              </template>
+            </v-popover>
+          </td>
+        </template>
+
+        <template v-slot:cell(title)="{row}">
+          <td>
+            <v-popover
+              trigger="hover"
+            >
+              <span>{{row.title | truncStrFilter(30)}}</span>
+              <template slot="popover">
+                <span>{{row.title}}</span>
+              </template>
+            </v-popover>
           </td>
         </template>
       </app-table>
@@ -87,6 +95,8 @@ import IconDeleteForever from "~/assets/svg/v2-icons/delete_forever_24px.svg?inl
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { NOTIFIES } from "~/server/fakedata/elearning/materials";
+import { get } from 'lodash'
+const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 export default {
   layout: "manage",
 
@@ -170,11 +180,29 @@ export default {
         page: 1,
         size: 10
       },
-      isFilter: false
+      isFilter: false,
+      allOpt: {
+        value: null,
+        label: 'Tất cả'
+      }
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
+    filterListLesson() {
+      const data = this.teachingPublicList ? this.teachingPublicList : [];
+      const filterData = data.map(item => {
+        return {
+          value: item.id,
+          label: item.name
+        };
+      });
+      return filterData;
+    },
+    lessonOpts() {
+        return [this.allOpt, ...this.filterListLesson]
+      },
   },
 
   methods: {

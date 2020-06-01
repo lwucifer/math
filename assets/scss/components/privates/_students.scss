@@ -42,3 +42,10 @@
         text-align: right;
     }
 }
+.wrap-name-class__table{
+    color: $color-primary;
+    margin-left: 9.5rem;
+    .tooltip-arrow{
+        display: none;
+    }
+}

@@ -533,6 +533,12 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
 };
 
+export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST : "teachingInteractiveListAnnouncement",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD : "teachingInteractiveListAnnouncementAdd",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_DELETE : "teachingInteractiveListAnnouncementDelete",
+};
+
 export const TEACHING_PUBLIC_LIST = {
     SET_TEACHING_PUBLIC_LIST: "setTeachingPublicList",
 };
