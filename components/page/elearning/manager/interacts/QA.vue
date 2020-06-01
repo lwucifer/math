@@ -10,33 +10,35 @@
         @submit="handleSearch"
       ></app-search>
 
-      <app-button class="mr-3" :color="isFilter ? 'primary' : 'default'" :outline="!isFilter" size="sm" @click="isFilter = !isFilter">
+      <app-button class="mr-3" :color="isFilter ? 'primary' : 'default'" :outline="!isFilter" size="sm" @click="clickSubmit">
         <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
       </app-button>
 
       <template v-if="isFilter">
         <app-vue-select
           class="app-vue-select filter-course"
-          :options="filterListLesson"
+          :options="lessonOpts"
           placeholder="Bài giảng/khóa học"
           searchable
-          clearable
           has-border
           @input="handleChangedInputLesson"
           @search:focus="handleFocusSearchInput"
           @search:blur="handleBlurSearchInput"
+          :all-opt="allOpt"
+          v-model="filters.lesson"
         />
 
         <app-vue-select
           class="app-vue-select filter-status"
-          :options="results"
+          :options="resultsOpts"
           placeholder="Trạng thái"
           searchable
-          clearable
           has-border
           @input="handleChangedInput"
           @search:focus="handleFocusSearchInput"
           @search:blur="handleBlurSearchInput"
+          :all-opt="allOpt"
+          v-model="filters.result"
         />
       </template>
     </div>
@@ -50,7 +52,7 @@
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.elearning_id">
+            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id">
               <IconArrowForwardIos24pxOutlined />
             </n-link>
           </td>
@@ -75,6 +77,7 @@ import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-io
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
+import { get } from 'lodash'
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
@@ -162,7 +165,16 @@ export default {
         status: null,
         elearning_id: null
       },
-      isFilter: false
+      isFilter: false,
+      allOpt: {
+          value: null,
+          label: 'Tất cả'
+        },
+      filters:{
+        lesson: null,
+        result: null
+
+      }
     };
   },
   computed: {
@@ -216,6 +228,12 @@ export default {
         };
       });
       return filterData;
+    },
+    lessonOpts() {
+        return [this.allOpt, ...this.filterListLesson]
+      },
+    resultsOpts(){
+      return [this.allOpt, ...this.results]
     }
   },
 
@@ -225,6 +243,14 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
+      const query = {
+        params: {
+          ...this.listQuery,
+          page : get(e,"number",0) + 1,
+          size : get(e,"size",0)
+        }
+      }
+      this.teachingInteractiveListquestion(query);
     },
     submit() {
       console.log("[Component] Elearning exam: submitted");
@@ -286,6 +312,20 @@ export default {
         `elearning/study/study/${actionTypes.ELEARNING_STURY.LIST}`,
         { params }
       );
+    },
+    clickSubmit(){
+      if (this.isFilter) {
+          this.resetForm()
+          this.isFilter = false
+          this.handleChangedInputLesson()
+          this.handleChangedInput()
+      } else {
+          this.isFilter = true
+      }
+    },
+    resetForm(){
+      this.filters.lesson = null,
+      this.filters.result = null
     }
   },
 
