@@ -260,13 +260,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "~assets/scss/pages/id/info/_support.scss";
-.form-group .error {
-  padding-left: 0px !important;
-}
-.content-error{
-  border: 1px solid red !important;
-}
-.content-success{
-  border: 1px solid green !important;
-}
 </style>
