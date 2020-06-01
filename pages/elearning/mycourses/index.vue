@@ -2,9 +2,9 @@
   <div class="container wrap__study-space">
     <div class="row">
       <div class="col-md-3">
-        <MyCourseSide :active="2"/>
+        <MyCourseSide :active="2" />
       </div>
-      
+
       <div class="col-md-9">
         <div class="mycourses">
           <h4 class="mycourses__title">Bài giảng và khóa học của tôi</h4>
@@ -13,15 +13,20 @@
             <div class="d-flex mb-4">
               <div class="elearning-manager-content__title__nav">
                 <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
-                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Đang theo học ({{total.lectures}})</a>
-                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Đã hoàn thành ({{total.courses}})</a>
+                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''"
+                  >Đang theo học ({{ total.lectures }})</a
+                >
+                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''"
+                  >Đã hoàn thành ({{ total.courses }})</a
+                >
 
-                <a
-                  @click="changeTab(4)"
-                  :class="tab === 4 ? 'active' : ''"
-                >Yêu thích ({{total.favourites}})</a>
+                <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''"
+                  >Yêu thích ({{ total.favourites }})</a
+                >
 
-                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
+                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''"
+                  >Lưu trữ ({{ total.archieves }})</a
+                >
               </div>
             </div>
 
@@ -40,8 +45,16 @@
               </div>
 
               <div class="filter-form__item">
-                <app-button :color="showFilter ? 'primary' : 'white'" square :size="'sm'" @click="toggleFilter">
-                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                <app-button
+                  :color="showFilter ? 'primary' : 'white'"
+                  square
+                  :size="'sm'"
+                  @click="toggleFilter"
+                >
+                  <IconHamberger
+                    :class="showFilter ? 'fill-white' : 'fill-primary'"
+                    class="mr-2"
+                  />
                   <span>Lọc kết quả</span>
                 </app-button>
               </div>
@@ -79,7 +92,7 @@
                 </div>
               </div>
             </div>
-              
+
             <ElearningList :elearningList="list" :col="'col-md-4'">
               <ElearningItem
                 slot-scope="{ item }"
@@ -100,14 +113,14 @@
               @pagechange="onPageChange"
               v-if="pagination.total_pages > 1"
             />
-            
+
             <ShareElearningModal
               v-if="checkModalShare"
               @cancel="cancel"
               :dataModal="dataModal"
               @submit="handleShareSchoolly"
             />
-              <!-- ModalShare -->
+            <!-- ModalShare -->
           </div>
         </div>
       </div>
@@ -127,7 +140,6 @@ import { get } from "lodash";
 const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 
-
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 export default {
   middleware: ["authenticated"],
@@ -138,12 +150,12 @@ export default {
     ElearningItem,
     MenuDropDown,
     ShareElearningModal,
-    IconHamberger
+    IconHamberger,
   },
   data() {
     return {
       params: {
-        keyword: null
+        keyword: null,
       },
       tab: 1,
       list: [],
@@ -152,7 +164,7 @@ export default {
         courses: null,
         lectures: null,
         favourites: null,
-        archieves: null
+        archieves: null,
       },
       pagination: {
         // total_elements: 103,
@@ -179,17 +191,17 @@ export default {
   },
   computed: {
     ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent"
+      elearningStudyStudent: "elearningStudyStudent",
     }),
     ...mapState("elearning/study/study-student", {
-      elearningStudyStatistic: "elearningStudyStatistic"
+      elearningStudyStatistic: "elearningStudyStatistic",
     }),
     ...mapState("elearning/study/study-student", {
-      elearningStudyArchive: "elearningStudyArchive"
+      elearningStudyArchive: "elearningStudyArchive",
     }),
     ...mapState("elearning/study/study-student", {
-      elearningStudyFavourite: "elearningStudyFavourite"
-    })
+      elearningStudyFavourite: "elearningStudyFavourite",
+    }),
   },
 
   watch: {
@@ -220,25 +232,25 @@ export default {
           "elearningStudyStatistic.total_archieves",
           0
         );
-      }
+      },
     },
     elearningStudyStudent: {
       handler: function() {
         this.list = get(this, "elearningStudyStudent.content", []);
         this.pagination = get(this, "elearningStudyStudent.page", {});
-      }
+      },
     },
     elearningStudyFavourite: {
       handler: function() {
         this.list = get(this, "elearningStudyFavourite.content", []);
         this.pagination = get(this, "elearningStudyFavourite.page", {});
-      }
+      },
     },
     elearningStudyArchive: {
       handler: function() {
         this.list = get(this, "elearningStudyArchive.content", []);
         this.pagination = get(this, "elearningStudyArchive.page", {});
-      }
+      },
     },
     tab(_tab) {},
     pagination(_newVal) {
@@ -249,17 +261,17 @@ export default {
       this.pagination.total_pages = _newVal.total_pages;
       this.pagination.total_elements = _newVal.total_elements;
       this.pagination.number_of_elements = _newVal.number_of_elements;
-    }
+    },
   },
 
   methods: {
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
-      "elearningStudyFavouriteDelete"
+      "elearningStudyFavouriteDelete",
     ]),
     ...mapActions(STORE_NAME_ARCHIVE, [
       "elearningStudyArchiveAdd",
-      "elearningStudyArchiveDelete"
+      "elearningStudyArchiveDelete",
     ]),
     changeTab(tab) {
       this.tab = tab;
@@ -298,8 +310,8 @@ export default {
           type: this.params.type,
           size: 8,
           page: this.params.page,
-          keyword: this.params.keyword
-        }
+          keyword: this.params.keyword,
+        },
       };
       this.$store.dispatch(
         `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
@@ -318,8 +330,8 @@ export default {
         params: {
           size: 8,
           page: this.params.page,
-          keyword: this.params.keyword
-        }
+          keyword: this.params.keyword,
+        },
       };
       this.$store.dispatch(
         `elearning/study/study-student/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`,
@@ -332,8 +344,8 @@ export default {
         params: {
           size: 8,
           page: this.params.page,
-          keyword: this.params.keyword
-        }
+          keyword: this.params.keyword,
+        },
       };
       this.$store.dispatch(
         `elearning/study/study-student/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
@@ -343,9 +355,9 @@ export default {
 
     handleFavourite(id) {
       const query = {
-        elearning_id: id
+        elearning_id: id,
       };
-      this.elearningStudyFavouriteAdd(query).then(result => {
+      this.elearningStudyFavouriteAdd(query).then((result) => {
         if (result.success == true) {
           if (this.tab === 4) {
             // this.fetchElearningList();
@@ -365,15 +377,15 @@ export default {
 
     handleDeleteFavourite(id) {
       const query = {
-        elearning_ids: [id]
+        elearning_ids: [id],
       };
-      this.elearningStudyFavouriteDelete(query).then(result => {
+      this.elearningStudyFavouriteDelete(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           if (this.tab === 4) {
@@ -394,15 +406,15 @@ export default {
 
     handleArchive(id) {
       const query = {
-        elearning_id: id
+        elearning_id: id,
       };
-      this.elearningStudyArchiveAdd(query).then(result => {
+      this.elearningStudyArchiveAdd(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           if (this.tab === 5) {
@@ -421,15 +433,15 @@ export default {
 
     handleDeleteArchive(id) {
       const query = {
-        elearning_ids: [id]
+        elearning_ids: [id],
       };
-      this.elearningStudyArchiveDelete(query).then(result => {
+      this.elearningStudyArchiveDelete(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           if (this.tab === 5) {
@@ -564,7 +576,7 @@ export default {
     handleChangedType() {
       this.params.type = this.selectType.value;
     },
-  }
+  },
 };
 </script>
 
