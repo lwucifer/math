@@ -61,7 +61,7 @@ const actions = {
             const { data: result = {} } = await new Room(this.$axios)[
                 actionTypes.BASE.GET_END
             ](options, options.id, options.end);
-            console.log("[Message] list", result);
+            // console.log("[Message] list", result);
             commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
             return result;
         } catch (err) {

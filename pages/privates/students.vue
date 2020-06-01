@@ -8,19 +8,55 @@
         @submit="handleSearch"
         placeholder="Tìm kiếm học sinh"
       />
-      <filter-button class="mr-2" />
+      <filter-button
+        class="mr-2"
+        :color="isFilter ? 'primary' : 'default'"
+        :outline="!isFilter"
+        size="sm"
+        @click="isFilter = !isFilter"
+      />
       <div>
         <app-select
+          placeholder="Năm học"
+          size="sm"
           v-model="params.school_year"
+          :options="optionYear"
+          class="mr-2"
+          clearable
+          @change="handleChangedYear"
+        />
+        <app-select
+          placeholder="Lớp học"
+          size="sm"
+          v-model="params.class_id"
+          :options="optionClass"
+          clearable
+          @change="handleChangedClass"
+        />
+      </div>
+      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+        <app-vue-select
+          class="app-vue-select w-100"
           :options="optionYear"
           placeholder="Năm học"
           size="sm"
-          class="mr-2"
-          @change="handleChangedYear"
+          @input="handleChangedYear"
+          clearable
         />
-        <app-select placeholder="Lớp học" size="sm" />
-      </div>
+      </div>-->
+      <!-- <app-select-school-year @input="handleChangedYear" /> -->
+      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="optionClass"
+          placeholder="Lớp học"
+          size="sm"
+          @input="handleChangedClass"
+          clearable
+        />
+      <app-vue-select placeholder="Lớp học" size="sm" />-->
     </div>
+    <!-- </div> -->
     <div class="wrap-table">
       <app-table :heads="heads" :data="filterStudentPrivates">
         <template v-slot:cell(name)="{row}">
@@ -30,7 +66,9 @@
           <td class="wrap-name__table">{{get(row,"school_year","")}}</td>
         </template>
         <template v-slot:cell(class)="{row}">
-          <td class="wrap-name__table">{{get(row,"class_name","")}}</td>
+          <td
+            class="wrap-name__table"
+          >{{get(row,"class_name","")}} (Sĩ số: {{ get(row,"size", 0) }})</td>
         </template>
         <template v-slot:cell(mark)="{row}">
           <td class="wrap-name__table">{{get(row,"attendance","")}}%</td>
@@ -123,13 +161,21 @@ export default {
         page: 1,
         limit: 10,
         query: null,
-        school_year: null
+        school_year: null,
+        class_id: null
       },
       optionYear: [
         { value: "2018", text: "2018" },
         { value: "2019", text: "2019" },
         { value: "2020", text: "2020" }
-      ]
+      ],
+      optionClass: [
+        { value: "9A", text: "9A" },
+        { value: "8C", text: "8C" },
+        { value: "6B", text: "6B" },
+        { value: "-1", text: "Khác" }
+      ],
+      isFilter: false
     };
   },
   computed: {
@@ -151,21 +197,42 @@ export default {
     onPageChange(e) {
       console.log("[onPageChange]", e);
       this.params.page = e.number + 1;
-      // const params = {
-      //   page: e.number + 1,
-      //   limit: 10
-      // };
-      // this.payload.size = PAGE_SIZE.DEFAULT;
-
       this.teachingStudentsPrivatesList({ params: this.params });
     },
     handleSearch() {
       this.params.page = 1;
       this.teachingStudentsPrivatesList({ params: this.params });
     },
-    handleChangedYear() {
-      this.params.page = 1;
-      this.teachingStudentsPrivatesList({ params: this.params });
+    handleChangedYear(val) {
+      console.log("val", val);
+      if (val) {
+        this.params.page = 1;
+        // this.params.school_year = val;
+        this.teachingStudentsPrivatesList({
+          params: this.params
+        });
+      } else {
+        this.params.page = 1;
+        this.params.school_year = null;
+        this.teachingStudentsPrivatesList({
+          params: this.params
+        });
+      }
+    },
+    handleChangedClass(val) {
+      if (val) {
+        this.params.page = 1;
+        // this.params.class_id = val;
+        this.teachingStudentsPrivatesList({
+          params: this.params
+        });
+      } else {
+        this.params.page = 1;
+        this.params.class_id = null;
+        this.teachingStudentsPrivatesList({
+          params: this.params
+        });
+      }
     }
   }
 };
