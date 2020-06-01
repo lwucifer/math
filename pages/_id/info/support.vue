@@ -161,11 +161,6 @@ export default {
     }
   },
   
-  created() {
-    console.log('isTeacherRole', this.isTeacherRole);
-    console.log('isStudentRole', this.isStudentRole);
-  },
-
   methods: {
     ...mapActions(STORE_INFO, ["infoSupport"]),
 
