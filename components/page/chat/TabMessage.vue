@@ -68,7 +68,7 @@
       </div>
 
       <div style="opacity: 0; height: 0; overflow: hidden">
-        <client-only>
+        <!-- <client-only>
           <infinite-loading
             direction="top"
             :identifier="infiniteId"
@@ -76,11 +76,12 @@
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
-        </client-only>
+        </client-only>-->
       </div>
 
       <div class="aside-box__content" v-if="!checkList" :class="{'padding-show-info': showInfo}">
-        <client-only>
+        <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4>
+        <!-- <client-only>
           <infinite-loading
             direction="top"
             :identifier="infiniteId"
@@ -88,7 +89,7 @@
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
-        </client-only>
+        </client-only>-->
         <div class="message-box__time">
           <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">

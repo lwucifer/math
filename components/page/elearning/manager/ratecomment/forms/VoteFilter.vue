@@ -73,7 +73,7 @@
     },
     data() {
       return {
-        filterSelect:true,
+        filterSelect:false,
         filters: {
           has_cmt: null,
           rate: null,

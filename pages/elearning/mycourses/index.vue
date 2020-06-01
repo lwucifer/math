@@ -6,68 +6,110 @@
       </div>
       
       <div class="col-md-9">
-        <div class="d-flex">
-          <div class="elearning-manager-content__title__nav">
-            <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a>
-            <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Bài giảng ({{total.lectures}})</a>
-            <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Khóa học ({{total.courses}})</a>
-            <a
-              @click="changeTab(4)"
-              :class="tab === 4 ? 'active' : ''"
-            >Yêu thích ({{total.favourites}})</a>
-            <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
-          </div>
+        <div class="mycourses">
+          <h4 class="mycourses__title">Bài giảng và khóa học của tôi</h4>
 
-          <div class="search__mycourses">
-            <app-search
-              placeholder="Tìm kiếm"
-              v-model="params.keyword"
-              bordered
-              @input="hanldeInputSearch"
-              @keyup.enter.native="handleSubmitSearch"
-              @submit="handleSubmitSearch"
+          <div class="mycourses__content">
+            <div class="d-flex mb-4">
+              <div class="elearning-manager-content__title__nav">
+                <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
+                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">Đang theo học ({{total.lectures}})</a>
+                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">Đã hoàn thành ({{total.courses}})</a>
+
+                <a
+                  @click="changeTab(4)"
+                  :class="tab === 4 ? 'active' : ''"
+                >Yêu thích ({{total.favourites}})</a>
+
+                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">Lưu trữ ({{total.archieves}})</a>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center search-field">
+              <div class="search__mycourses  mr-4">
+                <app-search
+                  class="mb-0"
+                  size="sm"
+                  placeholder="Tìm kiếm"
+                  v-model="params.keyword"
+                  bordered
+                  @input="hanldeInputSearch"
+                  @keyup.enter.native="handleSubmitSearch"
+                  @submit="handleSubmitSearch"
+                />
+              </div>
+
+              <div class="filter-form__item">
+                <app-button :color="showFilter ? 'primary' : 'white'" square :size="'sm'" @click="toggleFilter">
+                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                  <span>Lọc kết quả</span>
+                </app-button>
+              </div>
+
+              <div class="d-flex-center ml-3" v-if="showFilter">
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectType"
+                    label="text"
+                    placeholder="Thể loại"
+                    has-border
+                  ></app-vue-select>
+                </div>
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectPrivacy"
+                    label="text"
+                    placeholder="Hiển thị"
+                    has-border
+                  ></app-vue-select>
+                </div>
+                <div class="filter-form__item">
+                  <app-vue-select
+                    style="width: 11rem"
+                    class="app-vue-select filter-form__item__selection"
+                    v-model="selectFree"
+                    label="text"
+                    placeholder="Học phí"
+                    has-border
+                  ></app-vue-select>
+                </div>
+              </div>
+            </div>
+              
+            <ElearningList :elearningList="list" :col="'col-md-4'">
+              <ElearningItem
+                slot-scope="{ item }"
+                :elearning="item"
+                :tab="tab"
+                @handleFavourite="handleFavourite"
+                @handleDeleteFavourite="handleDeleteFavourite"
+                @handleDeleteArchive="handleDeleteArchive"
+                @handleArchive="handleArchive"
+                @shareFb="shareFb"
+                @shareSchool="shareSchool"
+              ></ElearningItem>
+            </ElearningList>
+
+            <app-pagination
+              :pagination="pagination"
+              :type="1"
+              @pagechange="onPageChange"
+              v-if="pagination.total_pages > 1"
             />
+            
+            <ShareElearningModal
+              v-if="checkModalShare"
+              @cancel="cancel"
+              :dataModal="dataModal"
+              @submit="handleShareSchoolly"
+            />
+              <!-- ModalShare -->
           </div>
         </div>
-          
-        <ElearningList :elearningList="list" :col="'col-md-4'">
-          <ElearningItem
-            slot-scope="{ item }"
-            :elearning="item"
-            :tab="tab"
-            @handleFavourite="handleFavourite"
-            @handleDeleteFavourite="handleDeleteFavourite"
-            @handleDeleteArchive="handleDeleteArchive"
-            @handleArchive="handleArchive"
-            @shareFb="shareFb"
-            @shareSchool="shareSchool"
-          ></ElearningItem>
-        </ElearningList>
-
-        <app-pagination
-          :pagination="pagination"
-          :type="1"
-          @pagechange="onPageChange"
-          v-if="pagination.total_pages > 1"
-        />
-        
-        <!-- Item favourite nhưng chưa
-        <div class="col-md-3">
-          <CourseItem2>
-            <template v-slot:mycoursefavourite>
-              <MenuDropDown/>
-            </template>
-        
-        </CourseItem2>
-        </div>-->
-
-        <ShareElearningModal
-          v-if="checkModalShare"
-          @cancel="cancel"
-          :dataModal="dataModal"
-          @submit="handleShareSchoolly"
-        />
-          <!-- ModalShare -->
       </div>
     </div>
   </div>
@@ -77,7 +119,6 @@
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import ElearningList from "~/components/page/elearning/mycourses/ElearningList";
 import ElearningItem from "~/components/page/elearning/mycourses/ElearningItem";
-import CourseItem2 from "~/components/page/course/CourseItem2";
 import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
 import ShareElearningModal from "~/components/page/elearning/mycourses/ShareElearningModal";
 import { mapState, mapActions } from "vuex";
@@ -86,6 +127,8 @@ import { get } from "lodash";
 const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 
+
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 export default {
   middleware: ["authenticated"],
 
@@ -93,9 +136,9 @@ export default {
     MyCourseSide,
     ElearningList,
     ElearningItem,
-    CourseItem2,
     MenuDropDown,
-    ShareElearningModal
+    ShareElearningModal,
+    IconHamberger
   },
   data() {
     return {
@@ -121,7 +164,11 @@ export default {
         // number_of_elements: 10
       },
       checkModalShare: false,
-      dataModal: {}
+      dataModal: {},
+      showFilter: false,
+      selectType: null,
+      selectPrivacy: null,
+      selectFree: null,
     };
   },
   created() {
@@ -144,6 +191,7 @@ export default {
       elearningStudyFavourite: "elearningStudyFavourite"
     })
   },
+
   watch: {
     elearningStudyStatistic: {
       handler: function() {
@@ -203,6 +251,7 @@ export default {
       this.pagination.number_of_elements = _newVal.number_of_elements;
     }
   },
+
   methods: {
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
@@ -242,6 +291,7 @@ export default {
         this.pagination = get(this, "elearningStudyArchive.page", {});
       }
     },
+
     fetchElearningList() {
       const payload = {
         params: {
@@ -256,11 +306,13 @@ export default {
         payload
       );
     },
+
     fetchElearningStatisticList() {
       this.$store.dispatch(
         `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STATISTIC.LIST}`
       );
     },
+
     fetchElearningArchive() {
       const payloadArchive = {
         params: {
@@ -274,6 +326,7 @@ export default {
         payloadArchive
       );
     },
+
     fetchElearningFavourite() {
       const payloadFavour = {
         params: {
@@ -287,6 +340,7 @@ export default {
         payloadFavour
       );
     },
+
     handleFavourite(id) {
       const query = {
         elearning_id: id
@@ -308,6 +362,7 @@ export default {
         }
       });
     },
+
     handleDeleteFavourite(id) {
       const query = {
         elearning_ids: [id]
@@ -336,6 +391,7 @@ export default {
         }
       });
     },
+
     handleArchive(id) {
       const query = {
         elearning_id: id
@@ -362,6 +418,7 @@ export default {
         }
       });
     },
+
     handleDeleteArchive(id) {
       const query = {
         elearning_ids: [id]
@@ -493,7 +550,20 @@ export default {
     },
     cancel() {
       this.checkModalShare = false;
-    }
+    },
+
+    toggleFilter() {
+      if (this.showFilter) {
+        this.selectType = null;
+        this.selectPrivacy = null;
+        this.selectFree = null;
+      }
+      this.showFilter = !this.showFilter;
+    },
+
+    handleChangedType() {
+      this.params.type = this.selectType.value;
+    },
   }
 };
 </script>

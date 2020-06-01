@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :active="7" />
+        <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
+        <SchoolAccountCustomSide v-else />
       </div>
 
       <div class="col-md-9">
@@ -75,15 +76,12 @@
                     <app-upload
                       accept=".jpg, .png, .pdf, .docx, .xlsx"
                       :showIcon="false"
-                      title="+ Chọn file"
+                      title="+ Attach file"
                       :inputText="false"
                       @change="handleSelectFile"
                     />
 
-                    <span class="font-italic"
-                      >Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD,
-                      EXCEL.
-                    </span>
+                    <span class="font-italic">Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD, EXCEL.</span>
                   </div>
 
                   <app-button
@@ -113,15 +111,18 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
-import { mapActions } from "vuex";
+import SchoolAccountCustomSide from "~/components/page/school/SchoolAccountCustomSide";
+import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import { validateEmail } from "~/utils/validations";
 import { toNumber, get, cloneDeep, trim } from "lodash";
 const STORE_INFO = "info/support";
 
 export default {
+  // middleware: ["authenticated", "teacher-role", "student-role"],
   components: {
     SchoolAccountSide,
+    SchoolAccountCustomSide
   },
 
   data() {
@@ -150,6 +151,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     disabledBtn() {
       const btnDisabled =
         this.$v.$invalid ||
@@ -157,6 +159,11 @@ export default {
         this.validate.content;
       return btnDisabled;
     }
+  },
+  
+  created() {
+    console.log('isTeacherRole', this.isTeacherRole);
+    console.log('isStudentRole', this.isStudentRole);
   },
 
   methods: {
