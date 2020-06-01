@@ -4,7 +4,11 @@
     <div class="img__elearning-item">
       <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
         <img
-          v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
+          v-lazy="
+            elearning && elearning.avatar && elearning.avatar.low
+              ? elearning.avatar.low
+              : 'https://picsum.photos/20/206'
+          "
         />
       </n-link>
     </div>
@@ -13,7 +17,8 @@
         <n-link
           :to="`/elearning/${elearning && elearning.elearning_id}`"
           :title="elearning.name"
-        >{{elearning && elearning.name}}</n-link>
+          >{{ elearning && elearning.name }}</n-link
+        >
       </h3>
       <div class="d-flex align-items-center my-3">
         <n-link
@@ -22,12 +27,20 @@
           target="_blank"
         >
           <app-avatar
-            :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
+            :src="
+              elearning &&
+              elearning.teacher.avatar &&
+              elearning.teacher.avatar.low
+                ? elearning.teacher.avatar.low
+                : 'https://picsum.photos/20/206'
+            "
             :size="20"
           />
-          <span
-            class="ml-2"
-          >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+          <span class="ml-2">{{
+            elearning && elearning.teacher.name
+              ? elearning && elearning.teacher.name
+              : "Nguyễn Văn C"
+          }}</span>
         </n-link>
         <!--<app-avatar-->
         <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
@@ -40,13 +53,18 @@
 
       <div v-if="isLearning">
         <div class="proccess-bar-study-border">
-          <div class="percent-proccess" v-bind:style="{width: elearning && elearning.progress +'%'}"></div>
+          <div
+            class="percent-proccess"
+            v-bind:style="{ width: elearning && elearning.progress + '%' }"
+          ></div>
         </div>
 
         <div class="d-flex py-3 finish-lesson">
           <span>
             Đã hoàn thành
-            <strong class="text-primary">{{elearning && elearning.progress}}%</strong>
+            <strong class="text-primary"
+              >{{ elearning && elearning.progress }}%</strong
+            >
           </span>
 
           <div class="ml-auto">
@@ -64,7 +82,7 @@
               <ul class="link--dropdown__ElearningItem">
                 <li
                   class="item-share__ElearningItem"
-                  @click.prevent="shareDropdown=!shareDropdown"
+                  @click.prevent="shareDropdown = !shareDropdown"
                   v-if="tab !== 5"
                 >
                   <v-popover
@@ -79,10 +97,12 @@
                     <template slot="popover">
                       <ul class="share-dropdowm__ElearningItem">
                         <li @click.prevent="shareFb(elearning.elearning_id)">
-                          <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                          <IconFacebook class="icon fill-info" />Chia sẻ qua
+                          Facebook
                         </li>
                         <li @click.prevent="shareSchool(elearning)">
-                          <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                          <IconSchooly class="icon fill-white" />Chia sẻ qua
+                          Schoolly
                         </li>
                       </ul>
                     </template>
@@ -93,9 +113,7 @@
                   v-if="elearning && !elearning.is_favourite && tab !== 5"
                   @click.prevent="handleFavourite(elearning.elearning_id)"
                 >
-                  <n-link to>
-                    <IconCardsHeart class="icon" />Yêu thích
-                  </n-link>
+                  <n-link to> <IconCardsHeart class="icon" />Yêu thích </n-link>
                 </li>
 
                 <li
@@ -111,9 +129,7 @@
                   v-if="elearning && !elearning.is_archive"
                   @click.prevent="handleArchive(elearning.elearning_id)"
                 >
-                  <n-link to>
-                    <IconArchive class="icon" />Lưu trữ
-                  </n-link>
+                  <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
                 </li>
 
                 <li
@@ -126,23 +142,27 @@
                 </li>
               </ul>
             </app-dropdown>
-
           </div>
         </div>
 
         <div class="d-flex justify-content-between middle-point">
           <p>
-            Điểm trung bình: 
-            <span v-if="isPoint" class="heading-5 text-primary font-weight-semi-bold">8.5</span>
+            Điểm trung bình:
+            <span
+              v-if="isPoint"
+              class="heading-5 text-primary font-weight-semi-bold"
+              >8.5</span
+            >
             <span v-else>Chưa tổng kết</span>
           </p>
 
           <div v-if="isPoint" class="popover-point">
-            <v-popover 
-              class="popover-detail" 
-              placement="right"
-              trigger="hover">
-              <IconQuestionCircle width="16px" height="16px" class="fill-base"/>
+            <v-popover class="popover-detail" placement="right" trigger="hover">
+              <IconQuestionCircle
+                width="16px"
+                height="16px"
+                class="fill-base"
+              />
 
               <template #popover>
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
@@ -156,15 +176,10 @@
         </div>
       </div>
 
-
-
       <div v-else>
         <div class="d-flex justify-content-between align-items-center">
           <div class="rate-lesson">
-            <app-stars
-              class="d-inline-flex"
-              :stars="4.5"
-            />
+            <app-stars class="d-inline-flex" :stars="4.5" />
             <span class="text-dark ml-2">
               <strong>4.0</strong>
               (476)
@@ -186,7 +201,7 @@
               <ul class="link--dropdown__ElearningItem">
                 <li
                   class="item-share__ElearningItem"
-                  @click.prevent="shareDropdown=!shareDropdown"
+                  @click.prevent="shareDropdown = !shareDropdown"
                   v-if="tab !== 5"
                 >
                   <v-popover
@@ -201,10 +216,12 @@
                     <template slot="popover">
                       <ul class="share-dropdowm__ElearningItem">
                         <li @click.prevent="shareFb(elearning.elearning_id)">
-                          <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                          <IconFacebook class="icon fill-info" />Chia sẻ qua
+                          Facebook
                         </li>
                         <li @click.prevent="shareSchool(elearning)">
-                          <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                          <IconSchooly class="icon fill-white" />Chia sẻ qua
+                          Schoolly
                         </li>
                       </ul>
                     </template>
@@ -215,9 +232,7 @@
                   v-if="elearning && !elearning.is_favourite && tab !== 5"
                   @click.prevent="handleFavourite(elearning.elearning_id)"
                 >
-                  <n-link to>
-                    <IconCardsHeart class="icon" />Yêu thích
-                  </n-link>
+                  <n-link to> <IconCardsHeart class="icon" />Yêu thích </n-link>
                 </li>
 
                 <li
@@ -233,9 +248,7 @@
                   v-if="elearning && !elearning.is_archive"
                   @click.prevent="handleArchive(elearning.elearning_id)"
                 >
-                  <n-link to>
-                    <IconArchive class="icon" />Lưu trữ
-                  </n-link>
+                  <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
                 </li>
 
                 <li
@@ -265,15 +278,17 @@
             class="text-white mt-3"
             fullWidth
             color="primary"
-            size="sm">Mua ngay</app-button>
+            size="sm"
+            >Mua ngay</app-button
+          >
         </div>
       </div>
     </div>
   </div>
   <ElearningItem2 v-else :elearning="elearning">
-      <template v-slot:mycoursefavourite>
-        <MenuDropDown />
-      </template>
+    <template v-slot:mycoursefavourite>
+      <MenuDropDown />
+    </template>
   </ElearningItem2>
   <!-- </div> -->
 </template>
@@ -286,13 +301,13 @@ import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
 import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
-import IconQuestionCircle from '~/assets/svg/design-icons/question-circle.svg?inline';
+import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2"
-import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown"
+import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2";
+import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
 export default {
   components: {
     IconDots,
@@ -304,7 +319,7 @@ export default {
     IconSchooly,
     IconQuestionCircle,
     ElearningItem2,
-    MenuDropDown
+    MenuDropDown,
   },
   data() {
     return {
@@ -315,27 +330,27 @@ export default {
       avatar: "",
       teacher: {
         avatar: "",
-        name: ""
+        name: "",
       },
       progress: null,
       is_favourite: false,
       isPoint: true,
       isLearning: true,
-      isFree: true
+      isFree: true,
     };
   },
   props: {
     elearning: {
-      default: null
+      default: null,
     },
     tab: {
-      default: 1
-    }
+      default: 1,
+    },
   },
   computed: {
     ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent"
-    })
+      elearningStudyStudent: "elearningStudyStudent",
+    }),
   },
   methods: {
     handleFavourite(id) {
@@ -375,7 +390,7 @@ export default {
       // } else {
       //   this.$toasted.error(doAdd.message);
       // }
-    }
+    },
   },
   created() {
     // console.log("[props] elearning", this.elearning);
@@ -385,7 +400,7 @@ export default {
     // this.teacher.avatar = get(this, "elearning.teacher.avatar.low", "");
     // this.teacher.name = get(this, "elearning.teacher.name", "");
     // this.progress = get(this, "elearning.progress", "");
-  }
+  },
 };
 </script>
 

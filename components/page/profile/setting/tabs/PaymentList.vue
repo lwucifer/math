@@ -1,0 +1,120 @@
+<template>
+  <div class="">
+    <!--form-->
+    <div v-if="showAddPayment">
+      <add-bank-form></add-bank-form>
+      <hr class="mb-4" />
+    </div>
+
+    <!--list-->
+    <div class="row mb-4 mt-3">
+      <div class="col-md-9">
+        <h6 class="mb-3">DANH SÁCH TÀI KHOẢN NHẬN TIỀN</h6>
+        <div>
+          <span class="text-primary d-flex">
+            <IconCheck class="icon subheading" />
+            Bạn vừa thêm 1 tài khoản
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-right">
+          <app-button @click.prevent="showAddPayment = !showAddPayment">
+            <slot name="icon">
+              <IconCiclePlus class="icon icon--btn icon--btn--pre" />
+            </slot>
+            <span>Thêm tài khoản</span>
+          </app-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6" v-for="(bank, index) in accountBanks" :key="index">
+        <AccountPaymentItem
+          :bank="bank"
+          @handleRefreshAccountBank="handleRefresh"
+        />
+      </div>
+    </div>
+    <p>
+      <i style="font-size: 1.3rem;"
+        >Để nhận tiền từ việc bán bài giảng/khóa học của bạn, vui lòng cập nhật
+        tài khoản ngâng hàng của bạn</i
+      >
+    </p>
+    <AccountEditPaymentModal @close="closeModal" v-if="showModal" />
+    <app-modal-confirm
+      title="Bạn chắc muốn xóa"
+      description="It is a long established fat that a reader will be  distracted by the readable content"
+      v-if="false"
+    />
+  </div>
+</template>
+
+<script>
+import IconCiclePlus from "~/assets/svg/design-icons/plus-circle.svg?inline";
+import IconCheck from "~/assets/svg/design-icons/check.svg?inline";
+import AddBankForm from "~/components/page/account/forms/AddBank";
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
+import AccountEditPaymentModal from "~/components/page/account/Info/AccountEditPaymentModal";
+
+export default {
+  layout: "account-info",
+
+  components: {
+    IconCiclePlus,
+    IconCheck,
+    AccountPaymentItem,
+    AddBankForm,
+    AccountEditPaymentModal,
+  },
+  data() {
+    return {
+      showAddPayment: false,
+      opts: [],
+      showModal: false,
+    };
+  },
+  watch: {
+    bankList: {
+      handler: function() {
+        this.opts = get(this, "bankList", []);
+      },
+    },
+  },
+  computed: {
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState("setting", {
+      banks: "banks",
+      accountBanks: "accountBanks",
+    }),
+  },
+  methods: {
+    fecthPublicBank() {
+      this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`);
+    },
+    fetchAccountBank() {
+      this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`);
+    },
+    handleRefresh() {
+      this.fetchAccountBank();
+    },
+    closeModal() {
+      this.showModal = false;
+      console.log("lol");
+    },
+  },
+  // created() {
+  //   this.fecthPublicBank();
+  //   this.fetchAccountBank();
+  // },
+};
+</script>
+
+<style lang="scss">
+@import "~/assets/scss/components/account/_account-info-setting.scss";
+</style>

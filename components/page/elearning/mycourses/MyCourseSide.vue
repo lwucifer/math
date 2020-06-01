@@ -4,7 +4,7 @@
   >
     <template v-slot:content>
       <div class="manager-side">
-        <n-link class="link-gray item pt-2" 
+        <n-link class="link-gray item" 
             to="" :class="active == 1 ? 'active' : ''">
           <IconDashboard width="20" height="20" />Tổng quan
         </n-link>
@@ -26,7 +26,7 @@
 
         <n-link
           class="link-gray item"
-          to=""
+          to="/elearning/mycourses/timetable"
           :class="active == 4 ? 'active' : ''"
         >
           <IconToday24px />Thời khóa biểu

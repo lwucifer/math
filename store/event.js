@@ -34,7 +34,7 @@ const mutations = {
     }
   },
   setPayload(state, payload) {
-    console.log("[setStudyPayload]", payload);
+    // console.log("[setStudyPayload]", payload);
     state.payload = payload;
   },
   setExerciseLoading(state, isLoading) {

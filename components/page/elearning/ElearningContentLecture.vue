@@ -16,9 +16,9 @@
           class="mr-2 fill-primary"
         />
 
-        Bài 1: {{ get(lesson, "name", "") }}
+        <span class="font-italic">Bài 1: {{ get(lesson, "name", "") }}</span>
       </div>
-      <div class="ml-auto">{{ get(lesson, "duration", "01:00") }}</div>
+      <div class="ml-auto font-italic">{{ get(lesson, "duration", "01:00") }}</div>
       <!-- <div class="evlc-item__head-right ml-auto">
         <button class="evlc-item__btn evlc-item__btn-collapse active">
           <IconAngleDown class="icon" />
