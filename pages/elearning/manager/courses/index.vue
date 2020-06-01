@@ -160,7 +160,7 @@
             </template>
             <template v-slot:cell(price)="{ row }">
               <td>
-                <span v-if="row.free">Miễn phí</span>
+                <span v-if="row.pricefree || row.price.original_price == 0">Miễn phí</span>
                 <span v-else>Trả phí</span>
               </td>
             </template>
@@ -307,6 +307,7 @@ export default {
 
   data() {
     return {
+      loaded: false,
       noteReject: '',
       allOpt: {
         value: null,
@@ -447,7 +448,8 @@ export default {
       elearningList: [],
       params: {
         page: 1,
-        limit: 10
+        limit: 10,
+        //sort: 'DESC'
       }
     };
   },
@@ -501,6 +503,24 @@ export default {
       this.showTable = true;
       this.getList();
     },
+    selectPrivacy: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
+    selectFree: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
+    selectType: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
   },
 
   methods: {
@@ -536,15 +556,12 @@ export default {
 
     handleChangedType() {
       this.params.type = this.selectType.value;
-      this.getList();
     },
     handleChangedFree() {
       this.params.free = this.selectFree.value;
-      this.getList();
     },
     handleChangedPrivacy() {
       this.params.privacy = this.selectPrivacy.value;
-      this.getList();
     },
 
     handleEditElearning(elearning) {
@@ -617,6 +634,7 @@ export default {
       } finally {
         this.ids.length = 0;
         this.loading = false;
+        this.loaded = true;
       }
     },
 
