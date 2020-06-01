@@ -108,7 +108,7 @@
           @onFocus="(event) => event.target.select()"
           type="text"
           @input="handleChangeFee"
-          class="text-primary font-weight-semi-bold w-170"
+          class="text-primary font-weight-semi-bold w-170 input-price"
         >
           <template #unit>đ</template>
         </app-input>
@@ -129,7 +129,7 @@
             @onFocus="(event) => event.target.select()"
             type="text"
             @input="handleChangePrice"
-            class="text-primary font-weight-semi-bold w-170 mb-0"
+            class="text-primary font-weight-semi-bold w-170 mb-0 input-price"
           >
             <template #unit>đ</template>
           </app-input>
@@ -388,24 +388,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.noti-setting {
-  background: #fcf8e3;
-  border: 1px solid #cdc52d;
-  border-radius: 2px;
-  height: 40px;
-  padding: 0 1.5rem;
-  margin: 1rem 0 3rem 0;
-
-  &__text {
-    a {
-      font-weight: 600;
-      text-decoration: none;
-    }
-  }
-}
-.percent_price__ElearningCreate {
-  border-radius: 2px;
-  padding: 10px;
-}
+<style lang="scss" scoped>
+@import "~assets/scss/components/elearning/course/creat/_creat-setting.scss";
 </style>

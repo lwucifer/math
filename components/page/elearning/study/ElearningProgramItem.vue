@@ -5,14 +5,14 @@
         v-model="lessonStatus"
         ref="completedCheckbox"
         :style="{
-          'pointer-events': isLessonCompleted ? 'none' : 'inherit',
+          'pointer-events': isLessonCompleted ? 'none' : 'inherit'
         }"
         @change="isShowCompleteStudy = true"
       />
     </div>
 
     <div class="e-program-item__right">
-      <a href class="e-program-item__title" @click.prevent="handleStuty(lesson)"
+      <a href class="e-program-item__title" @click.prevent="handleExitExercise2"
         >{{ `${index}.` }} {{ get(lesson, "name", "") }}</a
       >
 
@@ -39,7 +39,7 @@
             class="d-inline-flex align-items-center text-decoration-none"
             :class="`text-${classExerciseStatus}`"
             v-scroll-to="'body'"
-            @click.prevent="handleGetExercises"
+            @click.prevent="handleExitExercise"
           >
             <IconFileCheckAlt class="icon body-1 mr-1" />
             <span>Bài tập({{ completeExecerciseRate }})</span>
@@ -94,6 +94,25 @@
       @close="notify.isShowNotify = false"
       @ok="notify.isShowNotify = false"
     />
+
+    <app-modal-confirm
+      centered
+      v-if="isShowConfirmExit"
+      title="Xác nhận thoát?"
+      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
+      @ok="handleGetExercises"
+      @cancel="isShowConfirmExit = false"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="isShowConfirmExit2"
+      title="Xác nhận thoát?"
+      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
+      @ok="handleStudy"
+      @cancel="isShowConfirmExit2 = false"
+    />
+
   </div>
 </template>
 
@@ -104,12 +123,12 @@ import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
-  LESSION_TYPE,
+  LESSION_TYPE
 } from "~/utils/constants";
 import {
   redirectWithParams,
   getParamQuery,
-  getCountdown_MM_SS,
+  getCountdown_MM_SS
 } from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
@@ -131,15 +150,15 @@ export default {
     IconFileCheckAlt,
     IconSlowMotionVideo,
     IconFileDownloadAlt,
-    IconEventNote,
+    IconEventNote
   },
 
   props: {
     lesson: {
       type: Object,
-      default: () => {},
+      default: () => {}
     },
-    index: {},
+    index: {}
   },
 
   data() {
@@ -149,9 +168,11 @@ export default {
       notify: {
         type: "",
         description: "",
-        isShowNotify: false,
+        isShowNotify: false
       },
       lessonStatus: false,
+      isShowConfirmExit: false,
+      isShowConfirmExit2: false,
     };
   },
 
@@ -164,13 +185,14 @@ export default {
 
     const lesson_id = getParamQuery("lesson_id");
     if (lesson_id && lesson_id === this.lesson.id) {
-      this.handleStuty(this.lesson);
+      this.handleStudy(this.lesson);
       // window.scrollTo(0, 0);
     }
   },
 
   computed: {
     ...mapState("elearning/study/study-exercise", ["isReloadExerciseList"]),
+    ...mapState("event", ["studyMode"]),
 
     passedExercise() {
       return get(this.lesson, "passed", 0);
@@ -220,7 +242,7 @@ export default {
 
     lesson_docs() {
       return get(this.lesson, "lesson_docs", []);
-    },
+    }
   },
 
   methods: {
@@ -228,8 +250,8 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
         params: {
-          elearning_id,
-        },
+          elearning_id
+        }
       };
       this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
@@ -239,7 +261,7 @@ export default {
     async handleCompleteStudy() {
       const payload = {
         completed: true,
-        lesson_id: get(this, "lesson.id", ""),
+        lesson_id: get(this, "lesson.id", "")
       };
       const res = await new ProgressService(this.$axios)["add"](payload);
       console.log("[handleCompleteStudy]", res);
@@ -249,45 +271,58 @@ export default {
     },
     get,
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyElearningExerciseList",
+      "elearningSudyElearningExerciseList"
     ]),
 
     ...mapMutations("event", [
       "setStudyMode",
       "setPayload",
-      "setExerciseLoading",
+      "setExerciseLoading"
     ]),
     ...mapMutations("elearning/study/study-exercise", [
-      "setStudyExerciseCurrentLession",
+      "setStudyExerciseCurrentLession"
     ]),
 
-    async handleStuty(lesson) {
-      redirectWithParams({ lesson_id: get(lesson, "id", "") });
+    handleExitExercise2() {
+      console.log("[handleExitExercise2]", this.studyMode);
+      // need to confirm if user in mode DO_EXERCISE_DOING
+      if (this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) {
+        this.isShowConfirmExit2 = true;
+        return;
+      } else {
+        this.handleStudy();
+      }
+    },
 
-      if (get(lesson, "type", "") === "DOCS") {
+    async handleStudy() {
+
+      this.isShowConfirmExit2 = false;
+      redirectWithParams({ lesson_id: get(this.lesson, "id", "") });
+
+      if (get(this.lesson, "type", "") === "DOCS") {
         this.setStudyMode(STUDY_MODE.DOCS);
-        this.setPayload(lesson);
+        this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(lesson, "type", "") === "ARTICLE") {
+      if (get(this.lesson, "type", "") === "ARTICLE") {
         this.setStudyMode(STUDY_MODE.ARTICLE);
-        this.setPayload(lesson);
+        this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(lesson, "type", "") === "IMAGE") {
+      if (get(this.lesson, "type", "") === "IMAGE") {
         this.setStudyMode(STUDY_MODE.IMAGE);
-        this.setPayload(lesson);
+        this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(lesson, "type", "") === "VIDEO") {
+      if (get(this.lesson, "type", "") === "VIDEO") {
         const elearning_id = get(this, "$router.history.current.params.id", "");
-        const lesson_id = get(lesson, "id", "");
+        const lesson_id = get(this.lesson, "id", "");
         const res = await new StudyService(this.$axios)["studyLesson"](
           elearning_id,
           lesson_id
@@ -301,9 +336,22 @@ export default {
       }
     },
 
+    handleExitExercise() {
+      console.log("[handleExitExercise]");
+      // need to confirm if user in mode DO_EXERCISE_DOING
+      if (this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) {
+        this.isShowConfirmExit = true;
+        return;
+      } else {
+        this.handleGetExercises();
+      }
+    },
+
     // get list exercise of elearning lession
     async handleGetExercises() {
       console.log("[handleGetExercises]", this.lesson);
+      this.isShowConfirmExit = false;
+
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const lesson_id = get(this, "lesson.id", "");
       const category = EXERCISE_CATEGORIES.EXERCISE;
@@ -331,7 +379,7 @@ export default {
         this.notify = {
           type: "error",
           title: msgErr,
-          isShowNotify: true,
+          isShowNotify: true
         };
       }
 
@@ -345,7 +393,7 @@ export default {
       this.lessonStatus = false;
       // this.$refs.completedCheckbox.checked = false;
       console.log("[closeConfirmCompleteStudy]", this.$refs);
-    },
+    }
   },
 
   watch: {
@@ -354,8 +402,8 @@ export default {
       if (_newVal) {
         this.handleGetExercises();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

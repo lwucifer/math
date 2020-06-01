@@ -23,7 +23,7 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async getStudying({ commit }, options) {
+  async getStudying({ commit }, options = {}) {
     try {
       const result = await new StudyStudent(this.$axios)["list"](options);
       if (get(result, "success", false)) {
@@ -49,7 +49,7 @@ const actions = {
     }
   },
 
-  async getArchive({ commit }, options) {
+  async getArchive({ commit }, options = {}) {
     try {
       const result = await new Archive(this.$axios)["list"](options);
       if (get(result, "success", false)) {
@@ -62,7 +62,7 @@ const actions = {
     }
   },
 
-  async getFavourite({ commit }, options) {
+  async getFavourite({ commit }, options = {}) {
     try {
       const result = await new Favourite(this.$axios)["list"](options);
       if (get(result, "success", false)) {
