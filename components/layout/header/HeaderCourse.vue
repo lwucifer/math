@@ -7,7 +7,11 @@
         </n-link>
       </div>
 
-      <app-divider class="the-header__divider" color="disabled" direction="vertical" />
+      <app-divider
+        class="the-header__divider"
+        color="disabled"
+        direction="vertical"
+      />
 
       <h1 class="the-header__course-title">{{ title }}</h1>
 
@@ -17,7 +21,10 @@
 
       <div class="the-header__right">
         <div class="d-flex-center">
-          <div class="percent mr-3" :class="{ 'complete': processPercent == 100 }">
+          <div
+            class="percent mr-3"
+            :class="{ complete: processPercent == 100 }"
+          >
             <svg viewBox="0 0 36 36" class="circular-chart">
               <path
                 class="circle-bg circle"
@@ -55,11 +62,20 @@
           </div>
         </div>
 
-        <app-button class="the-header-btn-exit" @click="$emit('exit')">
+        <app-button class="the-header-btn-exit" @click="handleExitExercise">
           <IconClose class="icon fill-opacity-1 mr-2" />Thoát
         </app-button>
       </div>
     </div>
+
+    <app-modal-confirm
+      centered
+      v-if="isShowConfirmExit"
+      title="Xác nhận thoát?"
+      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
+      @ok="$emit('exit')"
+      @cancel="isShowConfirmExit = false"
+    />
   </div>
 </template>
 
@@ -72,6 +88,7 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
 
 import { mapState } from "vuex";
+import { STUDY_MODE } from "../../../utils/constants";
 
 export default {
   components: {
@@ -89,16 +106,27 @@ export default {
 
   data: () => ({
     showLogin: false,
-    // percent: 69
+    isShowConfirmExit: false,
   }),
   methods: {
     redirectSignin() {
       this.$router.push("/auth/signin");
+    },
+    handleExitExercise() {
+      console.log("[handleExitExercise]", this.studyMode);
+      if (this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) {
+        this.isShowConfirmExit = true;
+        return;
+      } else {
+        this.isShowConfirmExit = false;
+        this.$emit('exit');
+      }
     }
   },
 
   computed: {
     ...mapState("elearning/study/study-progress", ["progress"]),
+    ...mapState("event", ["studyMode"]),
 
     learningProgress() {
       // console.log("[progress]", this.progress);
@@ -130,15 +158,17 @@ export default {
           (acc, curr) => acc + curr.total_lessons,
           0
         ) || 0;
-      const lessonPercent = Math.floor((completeLesson / totalLessons) * 100) * 0.9;
+      const lessonPercent =
+        Math.floor((completeLesson / totalLessons) * 100) * 0.9;
 
       let testPercent = 0;
       const { test_info } = this.progress;
-      if(test_info) {
-        testPercent = Math.floor(test_info.passed / test_info.total * 100) * 0.1;
+      if (test_info) {
+        testPercent =
+          Math.floor((test_info.passed / test_info.total) * 100) * 0.1;
       }
-      
-      console.log("[processPercent]", lessonPercent, testPercent)
+
+      console.log("[processPercent]", lessonPercent, testPercent);
       return lessonPercent + testPercent;
     }
   }

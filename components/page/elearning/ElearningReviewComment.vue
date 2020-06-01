@@ -15,13 +15,12 @@
 
         <div class="d-flex-center caption ml-auto">
           <IconClock class="icon body-1 mr-2" />
-          {{
-            [get(review, "timestamp", ""), DATETIME_RECEIVE]
-              | moment(DATETIME_DISPLAY)
-          }}
+          {{ get(review, "timestamp", "") | getDateTimeHH_MM_D_M_Y }}
         </div>
       </div>
-      <p class="elearning-review-comment__content">
+      <p
+        class="elearning-review-comment__content word-break-all"
+      >
         {{ get(review, "comment", "") }}
       </p>
     </div>
@@ -34,23 +33,23 @@ import { get } from "lodash";
 
 export default {
   components: {
-    IconClock,
+    IconClock
   },
 
   data() {
     return {
       DATETIME_DISPLAY,
-      DATETIME_RECEIVE,
+      DATETIME_RECEIVE
     };
   },
 
   props: {
-    review: {},
+    review: {}
   },
 
   methods: {
-    get,
-  },
+    get
+  }
 };
 </script>
 

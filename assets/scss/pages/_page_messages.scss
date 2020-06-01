@@ -295,10 +295,12 @@
                     height: 75vh;
                     overflow-y: scroll;
                     @include scrollbars(5px, #E0E0E0, #fff, 10px);
+
                     .message-box {
                         display: flex;
                         flex-direction: column-reverse;
                     }
+                    
                     .message-box__time {
                         max-width: 80%;
                         margin-left: auto;
@@ -434,12 +436,15 @@
             .message-chat__info {
                 width: 33%;
                 height: 75vh;
-                z-index: 99;
+                z-index: 95;
                 position: absolute;
+                overflow-y: auto;
                 top: 72px;
                 right: 0;
                 background: $color-text-white;
                 border-left: 1px solid $color-disabled;
+                @include scrollbars(5px, #E0E0E0, #fff, 10px);
+
 
                 .list-info-box {
                     border-top: 1px solid $color-border;
@@ -821,6 +826,8 @@ button:focus {
 }
 
 .aside-box__bottom {
+    z-index: 99;
+
     .input-chat {
         display: flex;
         width: 100%;

@@ -79,9 +79,9 @@
         </client-only>-->
       </div>
 
-      <div class="aside-box__content" v-if="!checkList" :class="{'padding-show-info': showInfo}">
-        <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4>
-        <!-- <client-only>
+      <div class="aside-box__content" :class="{'padding-show-info': showInfo}">
+        <!-- <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4> -->
+        <client-only>
           <infinite-loading
             direction="top"
             :identifier="infiniteId"
@@ -89,7 +89,7 @@
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
-        </client-only>-->
+        </client-only>
         <div class="message-box__time">
           <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">
@@ -103,12 +103,12 @@
           <div
             class="message-box__item"
             :class="item.user && item.user.id == userId ? 'item__0' : 'item__1'"
-            v-show="item.content || (item.img_url && item.img_url.low) || item.file_url"
-            v-for="(item, index) in messagesList ? messagesList : []"
+            v-for="(item, index) in messageList ? messageList : []"
             :key="index"
           >
+            <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
-              <div class="message-box__item__meta" v-if="index == messagesList.length -1">
+              <!-- <div class="message-box__item__meta" v-if="index == messageList.length -1">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -123,33 +123,17 @@
                         class="comment-item__avatar"
                       />
                     </button>
-                    <!-- <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Gửi tin nhắn</span>
-                          </n-link>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xem trang cá nhân</span>
-                          </n-link>
-                        </li>
-                      </ul>
-                    </div>-->
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
-                  <span>{{item.user.fullname}}</span>
+                  <span>{{item.user && item.user.fullname}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
                   <span>{{item.created_at | moment("DD/MM/YYYY") }}</span>
                 </div>
-              </div>
-              <div
-                class="message-box__item__meta"
-                v-else-if="index < messagesList.length - 1 && messagesList[index].user.id != messagesList[index+1].user.id"
-              >
+              </div>-->
+              <div class="message-box__item__meta">
+                <!-- v-else-if="index < messageList.length - 1 && messageList[index].user && messageList[index].user.id != messageList[index+1].user.id" -->
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -181,18 +165,17 @@
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
-                  <span>{{item.user.fullname}}</span>
+                  <span>{{item.user && item.user.fullname}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
                   <span>{{item.created_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
-              <template
-                v-if="item.content && item.img_url && item.img_url.low || item.content && item.file_url"
-              >
+              <template>
+                <!-- v-if="item.content && item.img_url && item.img_url.low || item.content && item.file_url" -->
                 <div class="message-box__item__desc">
                   <div class="message-box__item__desc__text">
-                    <p>{{item.content}}</p>
+                    <p>{{item.text}}</p>
                   </div>
                   <!-- <div class="message-box__item__desc__image">
                   <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
@@ -226,10 +209,7 @@
                     </app-dropdown>
                   </div>
                 </div>
-                <div class="message-box__item__desc" v-if="item.img_url.low">
-                  <!-- <div class="message-box__item__desc__text">
-                    <p>{{item.content}}</p>
-                  </div>-->
+                <!-- <div class="message-box__item__desc" v-if="item.img_url.low">
                   <div class="message-box__item__desc__image">
                     <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
                   </div>
@@ -263,9 +243,6 @@
                   </div>
                 </div>
                 <div class="message-box__item__desc" v-if="item.file_url">
-                  <!-- <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                  </div>-->
                   <div class="item-file">
                     <div class="icon">
                       <IconFileAlt class="fill-primary" />
@@ -300,18 +277,12 @@
                       </div>
                     </app-dropdown>
                   </div>
-                </div>
+                </div>-->
               </template>
-              <div class="message-box__item__desc" v-else-if="item.content">
+              <!-- <div class="message-box__item__desc" v-else-if="item.content">
                 <div class="message-box__item__desc__text">
                   <p>{{item.content}}</p>
                 </div>
-                <!-- <div class="message" v-if="item.img_url">
-                  <img
-                    v-if="item.img_url && item.img_url.low"
-                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
-                  />
-                </div>-->
                 <div class="message-box__item__desc__actions">
                   <button title="Trả lời" @click="reply()">
                     <IconReply />
@@ -340,11 +311,8 @@
                     </div>
                   </app-dropdown>
                 </div>
-              </div>
-              <div class="message-box__item__desc" v-else-if="item.img_url && item.img_url.low">
-                <!-- <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                </div>-->
+              </div>-->
+              <!-- <div class="message-box__item__desc" v-else-if="item.img_url && item.img_url.low">
                 <div class="message-box__item__desc__image">
                   <img
                     v-if="item.img_url && item.img_url.low"
@@ -379,11 +347,8 @@
                     </div>
                   </app-dropdown>
                 </div>
-              </div>
-              <div class="message-box__item__desc" v-else-if="item.file_url">
-                <!-- <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                </div>-->
+              </div>-->
+              <!-- <div class="message-box__item__desc" v-else-if="item.file_url">
                 <div class="item-file">
                   <div class="icon">
                     <IconFileAlt class="fill-primary" />
@@ -418,12 +383,12 @@
                     </div>
                   </app-dropdown>
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
         </div>
       </div>
-      <div class="aside-box__content" v-else></div>
+      <!-- <div class="aside-box__content" v-else></div> -->
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -639,7 +604,7 @@ export default {
       friendsList: [],
       listImgSrc: [],
       // dataPushMessage: [],
-      messagesList: [],
+      // messagesList: [],
       checkList: false,
       friends: [
         {
@@ -707,7 +672,7 @@ export default {
       // fullname: "",
       showInfo: false,
       messageQuery: {
-        from_meessage_id: null
+        from_message_id: null
       }
     };
   },
@@ -845,25 +810,27 @@ export default {
     async messageInfiniteHandler($state) {
       const room_id = this.$route.params.id;
       const query = this.messageQuery;
-      // const getData = await this.$store.dispatch(
-      //   `chat/${actionTypes.CHAT.MESSAGE_LIST}`,
-      //   {
-      //     query,
-      //     id: room_id,
-      //     end: "messages"
-      //   }
-      // );
-      // console.log("getData Message", getData);
-      // // if (getData && !getData.messages && this.messagesList.length == 0) {
-      // //   this.checkList = true;
-      // // }
-      // if (getData && getData.length) {
-      //   this.messageQuery.from_meessage_id = getData[getData.length - 1].id;
-      //   // this.messagesList.push(...getData.messages);
-      //   $state.loaded();
-      // } else {
-      //   $state.complete();
+      const getData = await this.$store.dispatch(
+        `chat/${actionTypes.CHAT.MESSAGE_LIST}`,
+        {
+          params: this.messageQuery,
+          id: room_id,
+          end: "messages"
+        }
+      );
+      console.log("getData Message", getData);
+      // if (getData && !getData.messages && this.messagesList.length == 0) {
+      //   this.checkList = true;getData[getData.length - 1].id;
       // }
+      // console.log("getData id", getData[getData.length - 1].id);
+      if (getData && getData.length) {
+        this.messageQuery.from_message_id = getData[getData.length - 1].id;
+        this.messageQuery.fetch_type = "prior";
+        // this.messagesList.push(...getData.messages);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
     },
     reply() {
       this.isReply = true;
@@ -1115,7 +1082,7 @@ export default {
           }
         });
       } else {
-        this.messagesList = [];
+        // this.messagesList = [];
       }
     },
     removeImgSrc() {
@@ -1142,21 +1109,21 @@ export default {
           }
         };
         console.log("data", data);
-        this.messagesList.unshift(data);
-        console.log("[this.messagesList]", this.messagesList);
+        // this.messagesList.unshift(data);
+        // console.log("[this.messagesList]", this.messagesList);
         // img_url: { low: _newVal.img_url }
       }
     },
-    messageList(_newVal) {
-      if (_newVal) {
-        this.messagesList = [];
-        this.messageListQuery.page = 1;
-        this.messageListQuery.room_id = this.roomIdPush
-          ? this.roomIdPush
-          : this.$route.params.id;
-        this.infiniteId += 1;
-      }
-    },
+    // messagesList(_newVal) {
+    //   if (_newVal) {
+    //     this.messagesList = [];
+    //     this.messageListQuery.page = 1;
+    //     this.messageListQuery.room_id = this.roomIdPush
+    //       ? this.roomIdPush
+    //       : this.$route.params.id;
+    //     this.infiniteId += 1;
+    //   }
+    // },
     isCreated(_newVal) {
       console.log("_newVal", _newVal);
       if (_newVal == false && this.tag.length > 0) {

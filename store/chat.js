@@ -10,7 +10,7 @@ import Member from "~/services/chat/Member";
 const state = () => ({
     roomList: { list_room: [] },
     memberList: {},
-    messageList: {},
+    messageList: [],
 });
 
 /**
@@ -32,8 +32,7 @@ const actions = {
                 const { list_room } = result;
                 commit(mutationTypes.CHAT.SET_ROOM_LIST, {
                     list_room: uniqWith(
-                        state.roomList.list_room.concat(list_room),
-                        isEqual
+                        state.roomList.list_room.concat(list_room)
                     ),
                 });
             }
@@ -58,11 +57,19 @@ const actions = {
     },
     async [actionTypes.CHAT.MESSAGE_LIST]({ commit, state }, options) {
         try {
+            console.log('options', options.payloadMessage)
             const { data: result = {} } = await new Room(this.$axios)[
                 actionTypes.BASE.GET_END
             ](options, options.id, options.end);
-            console.log("[Message] list", result);
-            commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+            // console.log("[Message] list", result);
+            // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+            if (result) {
+                const messageList = result;
+                commit(mutationTypes.CHAT.SET_MESSAGE_LIST, uniqWith(
+                    state.messageList.concat(messageList)
+                ),
+                );
+            }
             return result;
         } catch (err) {
             console.log("[Message] list.err", err);

@@ -256,3 +256,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~assets/scss/components/elearning/course/creat/_form-creat-excercise.scss";
+</style>

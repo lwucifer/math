@@ -7,14 +7,19 @@
           <div class="col-md-6 col-sm-12">
             <div class="text-center d-inline-block">
               <strong class="h1 color-primary">{{
-                get(info, "voting.average_rate", 0)
+                numeral(get(info, "voting.average_rate", 0)).format("0,0.[0]")
               }}</strong>
               <app-stars
-                :stars="Math.floor(get(info, 'voting.average_rate', 0))"
+                :stars="Math.ceil(get(info, 'voting.average_rate', 0))"
                 :size="16"
                 class="mt-2 mb-3"
               />
-              <p>({{ get(info, "voting.total_votes", 0) }} người đánh giá)</p>
+              <p>
+                ({{
+                  numeral(get(info, "voting.total_votes", 0)).format()
+                }}
+                người đánh giá)
+              </p>
             </div>
           </div>
           <div class="col-md-6 col-sm-12">
@@ -68,6 +73,7 @@ import ElearningReviewButton from "~/components/page/elearning/ElearningReviewBu
 import { ELEARNING_TYPES } from "~/utils/constants";
 import { mapState } from "vuex";
 import { useEffect } from "~/utils/common";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -133,6 +139,7 @@ export default {
     onPageChange(page) {
       this.params.page = page;
     },
+    numeral,
   },
 };
 </script>
