@@ -1,11 +1,44 @@
 import * as actionTypes from "~/utils/action-types";
 import Setting from "~/services/account/Setting";
+import PublicBank from "~/services/bank/public/PublicBank";
+import AccountBank from "~/services/bank/account/AccountBank";
+import { get } from "lodash";
 
 const state = () => ({
   setting: null,
+  banks: null,
+  accountBanks: null,
 });
 
 const actions = {
+  async getAccountBanks({ commit }, options = {}) {
+    try {
+      const result = await new AccountBank(this.$axios)["list"](options);
+      console.log(result)
+      if (get(result, "success", false)) {
+        commit("accountBanks", get(result, "data", null));
+        return;
+      }
+      commit("accountBanks", null);
+    } catch (err) {
+      console.log(err)
+      commit("accountBanks", null);
+    }
+  },
+
+  async getBanks({ commit }, options = {}) {
+    try {
+      const result = await new PublicBank(this.$axios)["list"](options);
+      if (get(result, "success", false)) {
+        commit("banks", get(result, "data", null));
+        return;
+      }
+      commit("banks", null);
+    } catch (err) {
+      commit("banks", null);
+    }
+  },
+
   async getSetting({ commit }, payload) {
     try {
       const result = await new Setting(this.$axios)[actionTypes.BASE.LIST](
@@ -37,6 +70,12 @@ const actions = {
 const mutations = {
   setting(state, data) {
     state.setting = data;
+  },
+  banks(state, data) {
+    state.banks = data;
+  },
+  accountBanks(state, data) {
+    state.accountBanks = data;
   },
 };
 
