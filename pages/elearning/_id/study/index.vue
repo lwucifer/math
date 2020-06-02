@@ -22,7 +22,7 @@
                 v-if="studyMode === defaultMode"
                 :src="
                   get(info, 'cover_url.high', '') ||
-                    '/images/adefltu - course - image.png'
+                    '/images/default-course-image.png'
                 "
                 width="750"
                 alt
