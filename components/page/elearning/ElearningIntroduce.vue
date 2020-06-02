@@ -5,7 +5,7 @@
     <div v-if="typeof get(info, 'benefits', '') === 'string'" class="d-flex">
       <template v-if="get(info, 'benefits', [])">
         <IconCheck class="icon text-primary body-1 mr-2" />
-        <p v-html="get(info, 'benefits', [])" />
+        <p v-html="get(info, 'benefits', [])" class="word-break-all" />
       </template>
     </div>
 
@@ -25,7 +25,7 @@
     </div>
 
     <h4 class="my-4">Mô tả tổng quát</h4>
-    <div v-if="description" v-html="description"></div>
+    <div v-if="description" v-html="description" class="word-break-all"></div>
     <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
 
     <div class="text-center mt-3" v-if="load_more">
@@ -71,13 +71,12 @@ export default {
       info: "info",
     }),
     description() {
-      if (this.load_more) {
-        return get(this, "info.description", "").substring(
-          0,
-          this.lengthDescription
-        );
-      }
-      return get(this, "info.description", "");
+      let string = get(this, "info.description", "").substring(
+        0,
+        this.lengthDescription
+      );
+      if (this.load_more) string += "...";
+      return string;
     },
     load_more() {
       return get(this, "info.description.length", 0) > this.lengthDescription;

@@ -75,7 +75,7 @@
       </div>
 
       <div class="course-item-2__price-wrapper">
-        <b v-if="!price.price" class="text-primary body-1 font-weight-bold"
+        <b v-if="price.price == 0 || price.price.price == 0" class="text-primary body-1 font-weight-bold"
           >Miễn phí</b
         >
 
@@ -121,9 +121,9 @@ export default {
     price() {
       if (this.item.elearning_price) return this.item.elearning_price;
       return {
-        discount: get(this.item, "discount", 0),
-        original_price: get(this.item, "original_price", 0),
-        price: get(this.item, "price", 0),
+        discount: get(this.item.price.price ? this.item.price : this.item, "discount", 0),
+        original_price: get(this.item.price.price ? this.item.price : this.item, "original_price", 0),
+        price: get(this.item.price.price ? this.item.price : this.item, "price", 0),
       };
     },
 

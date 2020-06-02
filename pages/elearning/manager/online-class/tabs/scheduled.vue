@@ -344,11 +344,12 @@ export default {
       );
 
       if (doDelete.success) {
-        this.showModalConfirm = false;
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);
       }
+      
+      this.showModalConfirm = false;
     },
     
     async deleteSchedules() {
