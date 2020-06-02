@@ -226,7 +226,7 @@ export const addAllOptionSelect = (arr) => {
 
 export const optionSelectSubject = (arr) => {
   const allOpt = {
-    value: null,
+    id: null,
     name: "Tất cả",
     type: "",
   };
