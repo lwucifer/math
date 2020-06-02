@@ -2,7 +2,12 @@
   <div class="container wrap__study-space page-mycourses-timetable">
     <div class="row">
       <div class="col-md-3">
-        <MyCourseSide :active="5" />
+        <MyCourseSide :active="5">
+          <template slot="calendar">
+            <div class="timetable-calendar-divider"></div>
+            <app-calendar v-model="calendar"/>
+          </template>
+        </MyCourseSide>
       </div>
 
       <div class="col-md-9">
@@ -127,7 +132,9 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      calendar: null
+    };
   },
 
   methods: {}
