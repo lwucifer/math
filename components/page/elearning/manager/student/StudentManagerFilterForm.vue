@@ -11,7 +11,7 @@
           placeholder="Nhập để tìm kiếm"
           v-model="filters.query"
           @input="handleChangedSearch"
-          @keyup.enter.native="handleSubmitSearch"
+          @keyup.enter.native="submit"
           @submit="submit"
           color="primary"
         ></app-search>
@@ -127,9 +127,7 @@ export default {
   },
   methods: {
     submit() {
-      if (!this.initStatus) {
-        this.$emit("submitFilter", this.filters);
-      }
+      this.$emit("submitFilter", this.filters);
     },
     handleSelectRate(val) {
       this.$emit("changedRate", val);
@@ -139,9 +137,6 @@ export default {
     },
     handleChangedSearch(val) {
       this.$emit("changedQuery", val);
-    },
-    handleSubmitSearch(e) {
-      this.$emit("submitSearch", e.target.value);
     },
     clickSubmit() {
       if (this.filterSelect) {
