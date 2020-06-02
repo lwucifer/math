@@ -3,6 +3,11 @@ import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIR
 const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
+export const fullUTCDateTimeSlash = _utcDate => {
+    if (!_utcDate) return;
+    const ts = moment.utc(_utcDate);
+    return ts.format(DATETIME_RECEIVE);
+}
 
 export const getLocalOffsetHours = () => {
     const offsetMinutes = moment().utcOffset(); // (-240, -120, -60, 0, 60, 120, 240, etc.)

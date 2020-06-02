@@ -11,7 +11,7 @@
       <div class="stars">
         <app-stars
           class="mb-1"
-          :stars="Math.floor(get(info, 'voting.average_rate', 0))"
+          :stars="Math.ceil(get(info, 'voting.average_rate', 0))"
           :size="14"
         />
         <strong class="ml-3">{{
