@@ -105,11 +105,11 @@
         />
       </div>
     </template>
-    <!-- <template  v-if="totalSummary == 0">
+    <template  v-if="totalSummary == 0">
       <div class="text-gray-2 caption text-center">
-        Không có giữ liệu
+       <img src="~assets/images/elearning/no-data.png" alt="" />
       </div>
-    </template> -->
+    </template>
   </div>
 </template>
 
