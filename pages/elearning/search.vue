@@ -264,7 +264,7 @@ export default {
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      const alls = addAllOptionSelect(this.categories);
+      const alls = optionSelectSubject(this.categories);
       return alls.map(c => {
         return {
           value: c.id,
