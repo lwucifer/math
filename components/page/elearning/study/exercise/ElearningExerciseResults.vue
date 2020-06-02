@@ -32,11 +32,11 @@
     <div class="e-exercise-results__pane mb-4">
       <div class="row">
         <div class="col-5">Thời gian bắt đầu làm bài</div>
-        <div class="col-7">{{ result.start_time | getDateTimeFullText }}</div>
+        <div class="col-7">{{ result.start_time | getDateTimeFullText | capitalizeFirstLetter }}</div>
       </div>
       <div class="row">
         <div class="col-5">Tổng thời gian làm bài</div>
-        <div class="col-7">{{ result.working_time }} giây</div>
+        <div class="col-7">{{ result.working_time | formatMMSS }}</div>
       </div>
       <div class="row">
         <div class="col-5">Số câu hỏi</div>
@@ -72,7 +72,7 @@
 
     <app-modal
       v-if="modalListQuestions"
-      title="Danh sách câu hỏi"
+      title="Xem đáp án"
       :footer="false"
       @close="modalListQuestions = false"
     >
@@ -129,7 +129,7 @@ export default {
     ...mapState("elearning/study/study-exercise", ["result"]),
 
     resultRate() {
-      return `${this.result.mark} (${getExerciseResultText(this.result.result)})`;
+      return `${this.result.mark || 0}/${this.result.max_score || 0} (${getExerciseResultText(this.result.result)})`;
     },
 
     btnTextView() {

@@ -46,20 +46,16 @@ export default {
   },
 
   middleware: "authenticated",
-  // async fetch({ params, query, store, redirect }) {
-  // const data = await store.dispatch(
-  //   `message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`
-  // );
-  // const dataRooms = data.rooms ? data.rooms : [];
-  // const id = dataRooms.filter(item => item.type == 1)[0]
-  //   ? dataRooms.filter(item => item.type == 1)[0].id
-  //   : "";
-  // if (id) {
-  //   redirect(`/messages/t/${id}`);
-  // } else {
-  //   return false;
-  // }
-  // },
+  async fetch({ params, query, store, redirect }) {
+    const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
+    const dataRooms = data.list_room ? data.list_room : [];
+    const id = dataRooms[0] ? dataRooms[0].id : "";
+    if (id) {
+      return redirect(`/messages/t/${id}`);
+    } else {
+      return false;
+    }
+  },
   props: {
     isCreate: {
       type: Boolean,

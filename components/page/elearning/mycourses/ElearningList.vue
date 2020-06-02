@@ -1,6 +1,6 @@
 <template>
   <div class="row my-5">
-    <div class="col-md-3" v-for="(item,index) in elearningList" :key="index">
+    <div :class="col" v-for="(item, index) in elearningList" :key="index">
       <slot :item="item" />
       <!-- <ElearningItem 
           :elearning="item"
@@ -13,15 +13,19 @@
 import ElearningItem from "~/components/page/elearning/mycourses/ElearningItem";
 export default {
   components: {
-    ElearningItem
+    ElearningItem,
   },
   props: {
     elearningList: {
-      default: null
-    }
-  }
+      default: null,
+    },
+
+    col: {
+      type: String,
+      default: "col-md-3",
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

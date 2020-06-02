@@ -10,6 +10,7 @@
         </div>
 
         <div class="cc-box__head-right">
+          <!-- <p class="mr-5">Trọng số: 30%</p> -->
           <button
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"

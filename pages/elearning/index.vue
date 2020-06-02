@@ -66,7 +66,7 @@
                 :originalPrice="item.original_price"
                 :free="!item.price"
                 :discount="item.discount"
-                :online-class="item.olclass_existed"
+                :online-class="item.is_streaming"
                 :description="`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non dolor tincidunt turpis eget sit egestas eget dui.`"
               />
             </div>
@@ -98,7 +98,7 @@
             >
               <ElearningHomeSubjectItem
                 :title="item.name"
-                :to="`/elearning/search?subject=${item.code}&subject_name=${item.name}`"
+                :to="`/elearning/search?subject=${item.code}&type=&sort=`"
               >
                 <component slot="icon" :is="checkSubjectIcon(item.code)" />
               </ElearningHomeSubjectItem>
@@ -109,7 +109,10 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Bài giảng mới nhất</h2>
-        <n-link slot="title-right" to class="link-readmore">
+        <n-link slot="title-right" 
+          :to="`/elearning/search?subject=&type=lecture&sort=NEWEST`"
+          class="link-readmore"
+        >
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>
@@ -131,7 +134,9 @@
 
       <ElearningHomeBox>
         <h2 slot="title" class="heading-3 font-weight-medium">Khóa học mới nhất</h2>
-        <n-link slot="title-right" to class="link-readmore">
+        <n-link slot="title-right" 
+          :to="`/elearning/search?subject=&type=course&sort=NEWEST`"
+          class="link-readmore">
           Xem thêm
           <IconArrowForwardIos class="icon fill-opacity-1 ml-2" />
         </n-link>

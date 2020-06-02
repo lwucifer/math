@@ -101,6 +101,40 @@ export default {
             : 0
       };
     }
+  },
+
+  methods: {
+    ...mapActions(STORE_NAMESPACE, ["teachingElearningList"]),
+    submitSearch(keyword) {
+      // this.keyword = keyword;
+      const query = {
+        params: {
+          keyword: keyword,
+          elearning_id: this.$route.query.elearning_id
+        }
+      };
+      this.teachingElearningList(query);
+    },
+    changedType(classes) {
+      console.log("classes", classes);
+      if (classes == "Khác") {
+        const query = {
+          params: {
+            khac: true,
+            elearning_id: this.$route.query.elearning_id
+          }
+        };
+        this.teachingElearningList(query);
+      } else {
+        const query = {
+          params: {
+            class_id: classes,
+            elearning_id: this.$route.query.elearning_id
+          }
+        };
+        this.teachingElearningList(query);
+      }
+    }
   }
 };
 </script>

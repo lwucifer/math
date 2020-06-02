@@ -27,6 +27,8 @@
                   @changedStatus="handleChangedStatus"
                   @submitSearch="handleSubmitSearch"
                   @deletedItems="deleteItems"
+                  @changedSort="handleChangedSort"
+                  ref="warehouseTable"
                 />
               </div>
             </div>
@@ -83,6 +85,7 @@
         params: {
           page: 1,
           size: 10,
+          sort: 'NEWEST'
         },
         list: [],
         loading: false,
@@ -108,6 +111,7 @@
       },
       async handleDoneAddFile(data) {
         if (get(data, "success", false)) {
+          this.params.sort = 'NEWEST'
           await this.refreshData()
           return;
         }
@@ -120,6 +124,7 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.LIST}`, {params}
           )
+          this.$refs['warehouseTable'].resetSelectedItems()
           this.list = this.get(this.detailInfo, 'data.content', [])
           this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
           this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
@@ -157,6 +162,15 @@
       },
       handleSubmitSearch(val) {
         this.updateFilter({ name: val })
+      },
+      handleChangedSort(val) {
+        if (val.sortBy == 'created_at') {
+          if (val.order == 'asc') {
+            this.updateFilter({ sort: 'OLDEST' })
+          } else {
+            this.updateFilter({ sort: 'NEWEST' })
+          }
+        }
       },
       submitFilter(val) {
         this.updateFilter(val)

@@ -6,6 +6,7 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
+        {{elearningInfo}}
         <sub-block-section title="Bài giảng đại số lớp 10" has-icon>
           <template v-slot:content>
             <div class="elearning-manager-content p-0">
@@ -52,6 +53,8 @@ import * as actionTypes from "~/utils/action-types";
 const ListJoinedTab = () => import("./tabs/ListJoined");
 const ListPendingTab = () => import("./tabs/ListPending");
 
+const STORE_STUDY_INFO = "elearning/study/study-info";
+
 export default {
   layout: "manage",
 
@@ -96,7 +99,26 @@ export default {
       loading: false
     };
   },
+
+  fetch({ params, query, store }) {
+    alert(99999)
+    const elearningId = query.elearning_id;
+    const listQuery = {
+      params: {
+        elearning_id: elearningId
+      }
+    };
+    Promise.all([
+     store.dispatch(`${STORE_STUDY_INFO}/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
+      listQuery
+     )
+    ]);
+  },
+
   computed: {
+    ...mapState(STORE_STUDY_INFO, {
+      elearningInfo: "info"
+    }),
     currentTabComponent: function() {
       const MATCHED_TABS = {
         joined: "ListJoinedTab",

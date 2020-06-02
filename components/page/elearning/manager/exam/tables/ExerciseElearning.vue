@@ -4,6 +4,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="sortTable"
       :data="list"
     >
       <template v-slot:cell(name)="{row}">
@@ -162,6 +163,9 @@
     methods: {
       onPageChange(e) {
         this.$emit('changedPagination', e)
+      },
+      sortTable(info) {
+        this.$emit('changedSort', info)
       },
       numeralFormat,
       get

@@ -224,6 +224,14 @@ export const addAllOptionSelect = (arr) => {
   return [allOpt, ...arr];
 };
 
+export const optionSelectSubject = (arr) => {
+  const allOpt = {
+    value: null,
+    name: "Tất cả",
+  };
+  return [allOpt, ...arr];
+};
+
 export const limitCharacter = (_val, _limit, _numberSlice) => {
   const newString = _val.split(" ");
 
@@ -231,4 +239,9 @@ export const limitCharacter = (_val, _limit, _numberSlice) => {
     return newString.slice(0, _numberSlice).join(" ") + "...";
   }
   return _val;
+};
+
+export const removeTagHtml = (_text) => {
+  const content = _text.replace(/(<([^>]+)>)/gi, "");
+  return content;
 };

@@ -23,6 +23,7 @@ const actions = {
             const result = await new StudentPrivate(this.$axios)[
                 actionTypes.BASE.LIST
             ](payload);
+            console.log("payload", payload)
             // set to mutation
             commit(
                 mutationTypes.TEACHING_STUDENTS_PRIVATE.SET_TEACHING_STUDENTS_LIST,

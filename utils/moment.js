@@ -3,6 +3,11 @@ import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIR
 const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
+export const fullUTCDateTimeSlash = _utcDate => {
+    if (!_utcDate) return;
+    const ts = moment.utc(_utcDate);
+    return ts.format(DATETIME_RECEIVE);
+}
 
 export const getLocalOffsetHours = () => {
     const offsetMinutes = moment().utcOffset(); // (-240, -120, -60, 0, 60, 120, 240, etc.)
@@ -84,7 +89,12 @@ export const getDateHH_MM_A = (_date) => {
 
 export const getTimeHH_MM_A = (_time) => {
     if (!_time) return;
-    let ts = new momenttimezone(new Date('2000-01-01 ' + _time));
+    const splits = _time.split(" ");
+    const hour = splits[0].split(':')[0];
+    const minute = splits[0].split(':')[1];
+    const hh24 = splits[1] == 'pm' ? (parseInt(hour) + 12) : hour;
+    // let ts = new momenttimezone(new Date('2000-01-01 ' + _time));
+    let ts = new momenttimezone(`2000-01-01 ${hh24}:${minute}`, `YYYY-MM-DD hh:mm A`);
     return ts.lang("en").format(DATETIME_HH_MM_A);
 };
 
@@ -105,7 +115,12 @@ export const getLocalEndTime = (_startDate, _duration, type) => {
 
 export const getEndTime = (_startTime, _duration) => {
     if (!_startTime) return;
-    let date = getLocalDateTime(new Date('2000-01-01 ' + _startTime));
+    // let date = getLocalDateTime(new Date('2000-01-01 ' + _startTime));
+    const splits = _startTime.split(" ");
+    const hour = splits[0].split(':')[0];
+    const minute = splits[0].split(':')[1];
+    const hh24 = splits[1] == 'pm' ? (parseInt(hour) + 12) : hour;
+    let date = new momenttimezone(`2000-01-01 ${hh24}:${minute}`, `YYYY-MM-DD hh:mm A`);
     if (_duration) {
         date = date.add(momenttimezone.duration(_duration).asMinutes(), 'minutes');
     }

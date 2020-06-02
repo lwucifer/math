@@ -21,17 +21,67 @@
     .img__elearning-item{
         width: 100%;
         height: 159px;
+        position: relative;
         img{
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        .item-2__livestream{
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            display: flex;
+            align-items: center;
+            background-color: $color-red;
+            font-size: 1.2rem;
+            color: #fff;
+            padding: .5rem 1rem .5rem .6rem;
+
+            .icon {
+                width: 2rem;
+                height: 1.5rem;
+                margin-right: 4px;
+
+                circle {
+                    animation: scaleDot 1s infinite;
+                    transform-origin: center;
+                }
+            }
+        }
+        .item-2__online-class{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(#6FDA44, .8);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            padding: 1rem 1.4rem;
+            }
+        .item-2__discount{
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 3.6rem;
+            height: 3.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $color-red;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
         }
     }
     .proccess-bar-study-border{
             height: 5px;
             width: 100%;
             background: #EEEEEE;
-            margin: 15px 0;
+            margin-top: 1.2rem;
             .percent-proccess{
                 background: #37A000;
                 height: 5px;
@@ -45,7 +95,7 @@
         ));
         font-size: 1.5rem;
         font-weight: 600;
-        margin-bottom: 1.1rem;
+        margin-bottom: 1.4rem;
         a{
             color: inherit;
             text-decoration: none;
@@ -54,6 +104,37 @@
             }
         }
     }
+
+    .finish-lesson {
+        border-bottom: 1px solid $color-disabled;
+    }
+
+    .middle-point {
+       margin-top: 1rem;
+
+        .popover-point {
+            cursor: pointer;
+
+            .popover-detail {
+                font-size: 1.3rem;
+            }
+        }
+    }
+
+    .rate-lesson {
+        font-size: 1.3rem;
+    }
+
+    .buy-lesson {
+        &__price {
+            font-size: 1.6rem;
+        }
+
+        .old-price {
+            font-size: 1.3rem;
+        }
+    }
+
     .app-dropdown__content{
         right: -16px !important;
         overflow: unset;
@@ -107,6 +188,7 @@
             line-height: 20px;
             letter-spacing: -0.01em;
             text-transform: uppercase;
+            height: 37px;
         }
     }
     .submit-btn{
@@ -116,21 +198,34 @@
         border: none;
     }
     .search__mycourses{
-        width: 267px;
-        margin-left: auto;
+        width: 254px;
+
         .app-search{
             width: 100%;
+            .app-input__input {
+                height: 32px;
+            }
+
             .app-search__submit{
-                background: transparent;
+                background: $color-primary;
                 box-shadow: none;
-                svg path {fill: #656565;}
+                svg path {fill: #fff;}
+                // height: 30px;
+
+                // svg {
+                //     width: 12px;
+                // }
+            }
+
+            &::placeholder {
+                font-size: 1.3rem;
             }
         }
-        .app-input--focused{
-            .app-search__submit{
-                svg path{ fill: $color-primary;}
-            }  
-        }
+        // .app-input--focused{
+        //     .app-search__submit{
+        //         svg path{ fill: $color-primary;}
+        //     }  
+        // }
     }
 }
 .menu-share-elearning-tooltip{
@@ -166,4 +261,23 @@
             margin: 10px 0 0;
         }
       }
+}
+
+.mycourses {
+    &__title {
+        padding: 1.5rem;
+        color: #333;
+        background: $color-text-light-2;
+        border-bottom: 1px solid $color-disabled;
+        height: 49px;
+    }
+
+    &__content {
+        background: $color-text-white;
+        padding: 3rem 2rem;
+
+        .search-field {
+            margin-bottom: -1rem;
+        }
+    }
 }

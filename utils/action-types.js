@@ -478,6 +478,10 @@ export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     LIST: "elearningStudyOlclassLessonSessionsList",
 };
 
+export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
+    LIST: "elearningStudyExerciseElearning",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     LIST: "elearningSchoolSummaryList",
 };
@@ -634,6 +638,13 @@ export const ACCOUNT_BIOGRAPHY = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     LIST: "teachingInteractiveListquestion",
+    ADD: "teachingInteractiveListquestionAdd"
+};
+
+export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
+    LIST: "teachingInteractiveListAnnouncement",
+    ADD: "teachingInteractiveAnnouncementAdd",
+    DELETE: "teachingInteractiveAnnouncementDelete"
 };
 
 export const TEACHING_PUBLIC_LIST = {
@@ -655,4 +666,6 @@ export const INFO_SUPPORT = {
 export const CHAT = {
     ROOM_LIST: "getRoomList",
     MEMBER_LIST: "getMemberList",
+    MESSAGE_LIST: "getMessageList",
+    ROOM_DETAIL: "getRoomDetail",
 };

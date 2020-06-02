@@ -6,7 +6,7 @@
           <div class="content-box-peer content-box-peer--solid student-profile h-100">
             <div class="d-flex align-items-center">
               <div class="mr-3">
-                <img :src="studentAva" alt="avatar">
+                <app-avatar :src="studentAva" :size="sm" alt="avatar" />
               </div>
               <div>
                 <p class="mb-3"><span class="h4">{{ studentName }}</span></p>
@@ -85,8 +85,10 @@
 
 <script>
   import { DATETIME_FULL_WEEK_DAY } from "~/utils/config";
+  import AppAvatar from "../../../../common/avatar/AppAvatar";
   
   export default {
+    components: {AppAvatar},
     props: {
       studentName: {
         type: String,

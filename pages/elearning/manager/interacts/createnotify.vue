@@ -15,18 +15,23 @@
           <div class="notify-content">
             <div class="d-flex flex-column">
               <h5>Chọn bài giảng/ khóa học liên quan</h5>
-              <app-select
+              <app-vue-select
                 label="text"
                 placeholder="Chọn"
                 searchable
-                clearable
                 class="content-select__ElearningManagerInteractive"
-              ></app-select>
+                @input="handleSelectElearning"
+                :all-opt="allOpt"
+                :options="lessonOpts"
+              ></app-vue-select>
             </div>
 
             <div class="form">
               <h5>Tiêu đề thông báo</h5>
-              <app-input placeholder="Nhập tiêu đề" />
+              <app-input 
+                placeholder="Nhập tiêu đề"
+                v-model="params.title"
+              />
             </div>
 
             <div class="form">
@@ -35,11 +40,18 @@
                 textarea
                 placeholder="Xin chào..."
                 class="textArea__ElearningManagerInteractive"
+                v-model="params.content"
               />
             </div>
 
             <div class="d-flex justify-content-center">
-              <app-button square size="sm">Hoàn thành</app-button>
+              <app-button 
+                square 
+                size="sm"
+                @click="handleSaveNotify"
+              >
+                Hoàn thành
+                </app-button>
             </div>
           </div>
         </div>
@@ -61,9 +73,10 @@ import ElearningManagerSide from "~/components/page/elearning/manager/ElearningM
 import ArrowLeft from "~/assets/svg/v2-icons/arrow_left_black.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
+import { Interacts } from "~/models/elearning/Interacts";
 export default {
   layout: "manage",
-
   components: {
     ElearningManagerSide,
     IconClose,
@@ -73,18 +86,57 @@ export default {
     return {
       tab: 1,
       isAuthenticated: true,
-      showModal: false
+      showModal: false,
+      allOpt: {
+          value: null,
+          text: 'Tất cả'
+      },
+      params:{
+        elearning_id: null,
+        title: null,
+        content: null
+      }
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"])
+    ...mapState("auth", ["loggedUser"]),
+    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
+    filterListLesson() {
+      const data = this.teachingPublicList ? this.teachingPublicList : [];
+      const filterData = data.map(item => {
+        return {
+          value: item.id,
+          text: item.name
+        };
+      });
+      return filterData;
+    },
+    lessonOpts() {
+        return [this.allOpt, ...this.filterListLesson]
+      }
   },
-
+  created(){
+    this.fetchElearning()
+  },
   methods: {
-    onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
+    async fetchElearning() {
+      let params = { ...this.params }
+      const userId = this.$store.state.auth.token ? this.$store.state.auth.token.id : "";
+      this.$store.dispatch(
+          `${STORE_TEACHING_PUBLIC_LIST}/${actionTypes.TEACHING_PUBLIC_LIST.LIST}`,
+          {
+            params: {
+              teacher_id: userId
+            }
+          }
+        )
+      console.log('lol')
+    },
+    handleSaveNotify(){
+      console.log('hello',this.params)
+    },
+    handleSelectElearning(val){
+      this.params.elearning_id = val.value;
     }
   }
 };

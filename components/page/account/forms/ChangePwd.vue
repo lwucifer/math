@@ -1,7 +1,7 @@
 <template>
   <sub-block-section :has-title="false">
     <template v-slot:content>
-      <div class="form--normal">
+      <div class="form--normal" style="margin-bottom: 15.5rem;">
         <div class="row">
           <div class="col-md-3">
             <label for class="form--normal__title">Mật khẩu cũ</label>
@@ -29,6 +29,7 @@
               :message="errorMessage.newPassword"
               :validate="validateProps.newPassword"
               @input="handleNewPassword"
+              placeholder="Nhập mật khẩu mới"
             />
           </div>
           <div class="col-md-3">
@@ -42,6 +43,7 @@
               :message="errorMessage.coNewPassword"
               :validate="validateProps.coNewPassword"
               @input="handleCoNewPassword"
+              placeholder="Xác nhận mật khẩu mới"
             />
           </div>
           <div class="col-md-3"></div>

@@ -93,13 +93,16 @@
                 </div>
               </div>
             </div>
+            
             <app-button
               square
               size="sm"
               normal
-              class="mb-4 btn-color-blue"
+              color="blue"
+              class="mb-4"
               @click="hideRows(true)"
               v-if="tab == null"
+              :disabled="ids.length == 0"
             >
               <IconRestore height="15" width="15" class="fill-white mr-2" />Khôi phục
             </app-button>
@@ -111,6 +114,7 @@
               class="mb-4"
               @click="hideRows(false)"
               v-else-if="tab == 'APPROVED'"
+              :disabled="ids.length == 0"
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Đưa vào danh sách ẩn
             </app-button>
@@ -122,6 +126,7 @@
               class="mb-4"
               @click="deleteRows()"
               v-else
+              :disabled="ids.length == 0"
             >
               <IconRemove height="15" width="15" class="fill-white mr-2" />Xóa khỏi danh sách
             </app-button>
@@ -155,12 +160,15 @@
             </template>
             <template v-slot:cell(price)="{ row }">
               <td>
-                <span v-if="row.free">Miễn phí</span>
+                <span v-if="row.pricefree || row.price.original_price == 0">Miễn phí</span>
                 <span v-else>Trả phí</span>
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
               <td>{{getDateBirthDay(row.publish_date)}}</td>
+            </template>
+            <template v-slot:cell(end_date)="{ row }">
+              <td>{{getDateBirthDay(row.end_date)}}</td>
             </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
@@ -184,9 +192,9 @@
                 <IconEye class="fill-blue mr-2"  height='16' width='16'/>Xem preview
               </button>
 
-              <n-link :to="'/elearning/' + row.id" class="link" v-if="tab == 'REJECTED'">
-                <IconMessage height='16' width='16' class="fill-yellow mr-2" />Xem lý do từ chối
-              </n-link>
+              <button @click="showReject(row)" v-if="tab == 'REJECTED'">
+                 <IconMessage height='16' width='16' class="fill-yellow mr-2" />Xem lý do từ chối
+              </button>
 
               <n-link
                 :to="`/elearning/manager/courses/students?elearning_id=${row.id}`"
@@ -227,6 +235,17 @@
       :title="titleModelConfirm"
       :description="textModelConfirm"
     />
+
+     <app-modal-notify
+      :width="550"
+      @ok="noteReject = ''"
+      @close="noteReject = ''"
+      v-if="noteReject"
+      :footer="false"
+      title="Lý do bị từ chối"
+      :description="noteReject"
+    >
+    </app-modal-notify>
   </div>
 </template>
 
@@ -288,6 +307,8 @@ export default {
 
   data() {
     return {
+      loaded: false,
+      noteReject: '',
       allOpt: {
         value: null,
         text: 'Tất cả'
@@ -326,12 +347,12 @@ export default {
         },
         {
           name: "publish_date",
-          text: "Ngày đăng",
+          text: "Ngày bắt đầu",
           sort: true
         },
         {
-          name: "participants",
-          text: "Học sinh tham gia",
+          name: "end_date",
+          text: "Ngày kết thúc",
           sort: true
         }
       ],
@@ -387,8 +408,9 @@ export default {
           sort: true
         },
         {
-          name: "content",
-          text: "Lý do bị từ chối"
+          name: "participants",
+          text: "Học sinh tham gia",
+          sort: true
         }
       ],
       currentHeads: [],
@@ -426,7 +448,8 @@ export default {
       elearningList: [],
       params: {
         page: 1,
-        limit: 10
+        limit: 10,
+        //sort: 'DESC'
       }
     };
   },
@@ -462,28 +485,50 @@ export default {
       this.ids.length = 0;
       this.params.hide = newValue == "";
       switch (newValue) {
+        case "REJECTED":
         case "PENDING":
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
           break;
-        case null:
         case "APPROVED":
           this.currentHeads = [...this.heads];
           break;
-        case "REJECTED":
+        case null:
           this.currentHeads = [...this.heads3];
           break;
         default:
-          this.currentHeads = [...this.heads];
+          this.currentHeads = [...this.heads2];
           break;
       }
       this.showTable = true;
       this.getList();
     },
+    selectPrivacy: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
+    selectFree: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
+    selectType: {
+      handler: function (newValue, oldValue) {
+        this.getList();
+      },
+      deep: true
+    },
   },
 
   methods: {
     getDateBirthDay,
+
+    showReject(row) {
+      this.noteReject = row.note;
+    },
 
     closeModalInvite(e) {
       this.openModal = false;
@@ -511,15 +556,12 @@ export default {
 
     handleChangedType() {
       this.params.type = this.selectType.value;
-      this.getList();
     },
     handleChangedFree() {
       this.params.free = this.selectFree.value;
-      this.getList();
     },
     handleChangedPrivacy() {
       this.params.privacy = this.selectPrivacy.value;
-      this.getList();
     },
 
     handleEditElearning(elearning) {
@@ -592,6 +634,7 @@ export default {
       } finally {
         this.ids.length = 0;
         this.loading = false;
+        this.loaded = true;
       }
     },
 

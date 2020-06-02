@@ -1,29 +1,37 @@
 <template>
   <div class="e-exercise-do-exercise">
-    <h1
-      class="heading-3 text-dark-2 mt-3 mb-4 text-center"
-    >{{ currentExercise.name }} - {{ type | getExerciseTypeText }}</h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+      {{ currentExercise.name }} - {{ type | getExerciseTypeText }}
+    </h1>
     <div class="text-center font-weight-semi-bold heading-5 mb-15">
-      <span>
+      <span v-if="studyMode != doingExerciseMode">
         Số câu hỏi:
-        <span class="text-secondary mr-6">{{ currentExercise.questions}}</span>
+        <span class="text-secondary mr-6">{{ currentExercise.questions }}</span>
       </span>
 
       <!-- v-if -->
-      <!-- <span>
+      <span v-else>
         Thời gian làm bài:
-        <span class="text-secondary">50 phút</span>
-      </span>-->
+        <span class="text-secondary">{{ currentExercise.duration }} phút</span>
+      </span>
       <!-- v-else -->
-      <span>
+      <span style="padding-left: 3.6rem;">
         Thời gian còn lại:
         <!-- countdown clock here -->
-        <span class="text-secondary e-exercise-do-exercise__countdown">{{ countdown }}</span>
+        <span class="text-secondary e-exercise-do-exercise__countdown">{{
+          countdown
+        }}</span>
       </span>
     </div>
     <div v-if="!!currentExerciseQuestion">
-      <ElearningExerciseDoExerciseChoice v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE" :questionId="currentExerciseQuestion.id"/>
-      <ElearningExerciseDoExerciseEssay v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY" :questionId="currentExerciseQuestion.id"/>
+      <ElearningExerciseDoExerciseChoice
+        v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE"
+        :questionId="currentExerciseQuestion.id"
+      />
+      <ElearningExerciseDoExerciseEssay
+        v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY"
+        :questionId="currentExerciseQuestion.id"
+      />
     </div>
   </div>
 </template>
@@ -31,7 +39,7 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 
-import { EXERCISE_TYPES } from "~/utils/constants";
+import { EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
 import { getCountdown_HH_MM_SS } from "~/utils/common";
 
 import ElearningExerciseDoExerciseChoice from "~/components/page/elearning/study/exercise/ElearningExerciseDoExerciseChoice";
@@ -57,7 +65,7 @@ export default {
     return {
       EXERCISE_TYPES: Object.freeze(EXERCISE_TYPES),
       countdown: "--:--:--",
-      // interval: 0,
+      doingExerciseMode: STUDY_MODE.DO_EXERCISE_DOING
     };
   },
 
@@ -66,15 +74,17 @@ export default {
   },
 
   methods: {
-    ...mapMutations("elearning/study/study-exercise", ["setStudyExerciseAutoSubmission"]),
+    ...mapMutations("elearning/study/study-exercise", [
+      "setStudyExerciseAutoSubmission"
+    ]),
 
     setCountdown() {
       let seconds = (this.currentExercise.duration || 0) * 60; // in seconds
       interval = setInterval(() => {
         this.countdown = getCountdown_HH_MM_SS(seconds);
-        console.log("[setCountdown]", seconds, this.countdown);
+        // console.log("[setCountdown]", seconds, this.countdown);
 
-        if(seconds > 0) {
+        if (seconds > 0) {
           seconds -= 1;
         } else {
           // clear interval
@@ -88,8 +98,11 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["currentExercise", "currentExerciseQuestion"]),
-
+    ...mapState("elearning/study/study-exercise", [
+      "currentExercise",
+      "currentExerciseQuestion"
+    ]),
+    ...mapState("event", ["studyMode"])
   },
 
   mounted() {
@@ -97,7 +110,7 @@ export default {
   },
 
   beforeDestroy() {
-    console.log("[beforeDestroy]", interval)
+    console.log("[beforeDestroy]", interval);
     clearInterval(interval);
   }
 };

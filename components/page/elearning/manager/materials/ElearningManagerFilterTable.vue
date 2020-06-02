@@ -41,8 +41,9 @@
       multiple-selection
       @pagechange="onPageChange"
       @selectionChange="selectRow"
-      order-by="created_at"
+      @sort="sortTable"
       order="asc"
+      ref="warehouseListTable"
     >
       <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'name', '')">
@@ -74,6 +75,7 @@
       title="Bạn chắc chắn muốn xóa tài liệu?"
       description="Tài liệu bị xóa sẽ không thể khôi phục"
       ok-text="Đồng ý"
+      :confirm-loading="confirmLoading"
       centered
     >
     </app-modal-confirm>
@@ -171,7 +173,8 @@
         visible: {
           delete: false,
           canDelete: false
-        }
+        },
+        confirmLoading: false
       }
     },
 
@@ -213,6 +216,9 @@
       submitFilter(val) {
         this.$emit('submitFilter', val)
       },
+      sortTable(data) {
+        this.$emit('changedSort', data)
+      },
       async deleteItems(items) {
         const delIds = _.map(items, 'id')
         let data = {
@@ -224,11 +230,19 @@
         return res
       },
       async confirmDel() {
-        this.visible.delete = false
-        const res = await this.deleteItems(this.selectedItems)
-        if (get(res, "success", false)) {
-          this.$emit('deletedItems', res)
-          this.selectedItems = []
+        try {
+          this.confirmLoading = true
+          const res = await this.deleteItems(this.selectedItems)
+          this.visible.delete = false
+          if (get(res, "success", false)) {
+            this.resetSelectedItems()
+            this.$emit('deletedItems', res)
+            this.selectedItems = []
+          }
+        } catch (e) {
+        
+        } finally {
+          this.confirmLoading = false
         }
       },
       cancelDel() {
@@ -243,6 +257,9 @@
         } else {
           this.visible.delete = true
         }
+      },
+      resetSelectedItems() {
+        this.$refs['warehouseListTable']['selectedItems'] = []
       },
       get
     },

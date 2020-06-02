@@ -1,15 +1,7 @@
-import Vue from "vue";
 import numeral from "numeral";
-import {
-  EXERCISE_CATEGORIES,
-  EXERCISE_TYPES,
-  SUBMISSION_RESULTS,
-  WITHDRAWAL_STATUSES,
-  TRANSACTION_STATUSES,
-  EXERCISE_STATUS,
-  ELEARNING_TYPES
-} from "~/utils/constants";
+import Vue from "vue";
 import { DATETIME_FULL_TEXT } from "~/utils/config";
+import { EXERCISE_CATEGORIES, EXERCISE_STATUS, EXERCISE_TYPES, SUBMISSION_RESULTS, TRANSACTION_STATUSES, WITHDRAWAL_STATUSES } from "~/utils/constants";
 // const moment = require("moment");
 import { getLocalDateTime } from '~/utils/moment';
 
@@ -343,6 +335,22 @@ export function formatHour(val = 0) {
   return strTime;
 }
 
+/**
+ * convert seconds to text:  mm phút ss giây
+ */
+export function formatMMSS(val = 0) {
+  const m = Math.floor(val/60);
+  const s = val - 60 * m;
+
+  let strTime = m + " phút " + s + " giây";
+  return strTime;
+}
+
+export function capitalizeFirstLetter(s="") {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
 const filters = {
   toThousandFilter,
   uppercaseFirst,
@@ -360,6 +368,8 @@ const filters = {
   getDateTimeFullText,
   formatHour,
   resultFigureRate,
+  formatMMSS,
+  capitalizeFirstLetter,
 };
 
 // register global utility filters

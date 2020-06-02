@@ -1,10 +1,11 @@
 <template>
   <sub-block-section
     title="Quản lý E-learning"
+    :content-cls="{ 'py-3': true, 'px-0': true}"
   >
     <template v-slot:content>
       <div class="manager-side">
-        <n-link class="link-gray item pt-2" :to="'/elearning/manager/'" :class="active == 1 ? 'active' : ''">
+        <n-link class="link-gray item" :to="'/elearning/manager/'" :class="active == 1 ? 'active' : ''">
           <IconDashboard width="20" height="20" />Tổng quan
         </n-link>
         <n-link

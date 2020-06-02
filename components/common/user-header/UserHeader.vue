@@ -37,16 +37,16 @@
             <span>Thống kê doanh thu</span>
           </n-link>
         </li>
-        <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
-          <n-link :to="getTransactionLink">
-            <IconAttachMoney24px />
-            <span>Lịch sử giao dịch</span>
-          </n-link>
-        </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.NOTIFICATION)">
           <n-link :to="getNotificationLink">
             <IconNotifications24px class="fill-gray" />
             <span>Thông báo</span>
+          </n-link>
+        </li>
+        <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
+          <n-link :to="getTransactionLink">
+            <IconAttachMoney24px class="fill-gray"/>
+            <span>Lịch sử giao dịch</span>
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SETTINGS)">
@@ -67,7 +67,7 @@
           v-if="checkMenuGuard(MENU.SIGNOUT)"
         >
           <n-link to="/auth/signin">
-            <IconPowerSettingsNew24px />
+            <IconPowerSettingsNew24px class="fill-gray"/>
             <span>Đăng xuất</span>
           </n-link>
         </li>

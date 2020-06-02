@@ -19,13 +19,13 @@
 
         <span class="tab-qa-comment-item__time">
           <IconAccessTime class="icon mr-2" />{{
-            get(review, "timestamp", "") | moment("hh:mm DD/MM/YYYY")
+            get(review, "timestamp", "") | getDateTimeHH_MM_D_M_Y
           }}
         </span>
       </div>
 
       <div class="tab-qa-comment-item__content">
-        <div v-html="get(review, 'comment', '')"></div>
+        <div v-html="get(review, 'comment', '')" class="word-break-all"></div>
         <img
           v-if="get(review, 'image_url', '')"
           class="tab-qa-comment-item__img d-block"

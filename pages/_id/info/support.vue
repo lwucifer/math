@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <SchoolAccountSide :active="7" />
+        <SchoolAccountSide :active="7" v-if="isTeacherRole || isStudentRole" />
+        <SchoolAccountCustomerSide v-else/>
       </div>
 
       <div class="col-md-9">
@@ -73,17 +74,14 @@
                   </div>
                   <div class="upload d-flex align-items-center">
                     <app-upload
-                      accept=".jpg, .png, .pdf, .word, .excel"
+                      accept=".jpg, .png, .pdf, .docx, .xlsx"
                       :showIcon="false"
-                      title="+ Chọn file"
+                      title="+ Attach file"
                       :inputText="false"
                       @change="handleSelectFile"
                     />
 
-                    <span class="font-italic"
-                      >Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD,
-                      EXCEL.
-                    </span>
+                    <span class="font-italic">Các định dạng file được chấp nhận: JPG, PNG, PDF, WORD, EXCEL.</span>
                   </div>
 
                   <app-button
@@ -100,12 +98,21 @@
         </div>
       </div>
     </div>
+    <app-modal-notify
+      centered
+      v-if="inputCodeSuccess"
+      type="success"
+      title="Gửi câu hỏi thành công!"
+      @ok="inputCodeSuccess = false"
+      @close="closeModalNoti"
+    />
   </div>
 </template>
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
-import { mapActions } from "vuex";
+import SchoolAccountCustomerSide from "~/components/page/school/SchoolAccountCustomerSide";
+import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import { validateEmail } from "~/utils/validations";
 import { toNumber, get, cloneDeep, trim } from "lodash";
@@ -114,6 +121,7 @@ const STORE_INFO = "info/support";
 export default {
   components: {
     SchoolAccountSide,
+    SchoolAccountCustomerSide
   },
 
   data() {
@@ -124,6 +132,7 @@ export default {
       contentSuccess: false,
       fileUpload: '',
       fileName: '',
+      inputCodeSuccess:false,
       errorMessage: {
         email: "",
         title: "",
@@ -141,6 +150,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     disabledBtn() {
       const btnDisabled =
         this.$v.$invalid ||
@@ -149,9 +159,27 @@ export default {
       return btnDisabled;
     }
   },
-
+  
   methods: {
     ...mapActions(STORE_INFO, ["infoSupport"]),
+
+    handleSend() {
+      const body = new FormData();
+      body.append("attachment", this.fileUpload);
+      body.append("email", this.email);
+      body.append("title", this.title);
+      body.append("content", this.content);
+      console.log("send body", body);
+      this.infoSupport(body).then(result => {
+        if (result.success == true) {
+          this.inputCodeSuccess = true;
+          this.clearForm();
+        } else {
+          this.$toasted.error(result.message);
+        }
+      });
+    },
+
     handleEmail(_email) {
       this.validate.email = true;
       this.validateProps.email = "";
@@ -222,35 +250,14 @@ export default {
       this.contentSuccess = false;
     },
 
-    handleSend() {
-      const body = new FormData();
-      body.append("attachment", this.fileUpload);
-      body.append("email", this.email);
-      body.append("title", this.title);
-      body.append("content", this.content);
-      console.log("send body", body);
-      this.infoSupport(body).then(result => {
-        if (result.success == true) {
-          this.$toasted.show("Gửi câu hỏi thành công");
-          this.clearForm();
-        } else {
-          this.$toasted.error(result.message);
-        }
-      });
+    closeModalNoti() {
+      this.inputCodeSuccess = false;
     },
+
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~assets/scss/pages/id/info/_support.scss";
-.form-group .error {
-  padding-left: 0px !important;
-}
-.content-error{
-  border: 1px solid red !important;
-}
-.content-success{
-  border: 1px solid green !important;
-}
 </style>

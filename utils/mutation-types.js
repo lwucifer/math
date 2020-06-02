@@ -423,6 +423,10 @@ export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     SET_ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS_LIST: "setElearningStudyOlclassLessonSessionsList",
 };
 
+export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
+    SET_ELEARNING_STUDY_EXERCISE_ELEARNING_LIST: "setElearningStudyExerciseElearningList",
+};
+
 export const ELEARNING_SCHOOL_SUMMARY = {
     SET_ELEARNING_SCHOOL_SUMMARY_LIST: "setElearningSchoolSummaryList",
 };
@@ -434,7 +438,6 @@ export const ELEARNING_SCHOOL_SEARCH = {
 export const ELEARNING_SCHOOL_STANDALONE = {
     SET_ELEARNING_SCHOOL_STANDALONE_LIST: "setElearningSchoolStandaloneList",
 };
-
 
 export const MESSAGE_GROUP = {
     SET_MEMBER_LIST: "setMemberList",
@@ -534,6 +537,12 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
 };
 
+export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST : "teachingInteractiveListAnnouncement",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD : "teachingInteractiveListAnnouncementAdd",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_DELETE : "teachingInteractiveListAnnouncementDelete",
+};
+
 export const TEACHING_PUBLIC_LIST = {
     SET_TEACHING_PUBLIC_LIST: "setTeachingPublicList",
 };
@@ -552,4 +561,7 @@ export const KEYWORD = {
 
 export const CHAT = {
     SET_ROOM_LIST: "setRoomList",
+    SET_MESSAGE_LIST: "setMessageList",
+    SET_MEMBER_LIST: "setMemberList",
+    SET_ROOM_DETAIL: "setRoomDetail",
 };

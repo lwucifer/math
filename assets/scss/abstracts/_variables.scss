@@ -4,6 +4,7 @@ $color-red: #D50000 !default;
 $color-blue: #14bff4 !default;
 $color-yellow: #E6A01E !default;
 $color-pink: #EF72C4 !default;
+$color-pink-2: #EB5757 !default;
 $color-purple: #A671FE !default;
 $color-dark: #333333 !default;
 $color-gray: #999999 !default;
@@ -83,7 +84,8 @@ $text-colors: (
     light-2: $color-text-light-2,
     dark: $color-text-dark,
     active: $color-active,
-    disabled: $color-disabled
+    disabled: $color-disabled,
+    pink-2: $color-pink-2
 ) !default;
 
 $bg-colors: (

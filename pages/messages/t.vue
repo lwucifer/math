@@ -36,50 +36,50 @@ export default {
   },
 
   async fetch({ params, query, store, route, redirect }) {
-    const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
-    const dataRooms = data.list_room ? data.list_room : [];
-    const id = dataRooms[0] ? dataRooms[0].id : "";
-    if (id) {
-      return redirect(`/messages/t/${id}`);
-    } else {
-      return false;
-    }
+    // const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
+    // const dataRooms = data.list_room ? data.list_room : [];
+    // const id = dataRooms[0] ? dataRooms[0].id : "";
+    // if (id) {
+    //   return redirect(`/messages/t/${id}`);
+    // } else {
+    //   return false;
+    // }
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     // const room_id = route.params.id;
-    await Promise.all([
-      // store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
-      //   params: {
-      //     user_id: userId
-      //   }
-      // })
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
-      //   params: {
-      //     room_type: 1
-      //   }
-      // }),
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
-      //   params: {
-      //     room_type: 2
-      //   }
-      // }),
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
-      //   params: {
-      //     room_id: room_id
-      //   }
-      // }),
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
-      //   params: {
-      //     room_id: room_id
-      //   }
-      // }),
-      // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
-      //   params: {
-      //     room_id: room_id
-      //   }
-      // })
-      // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
-    ]);
+    // await Promise.all([
+    // store.dispatch(`message/${actionTypes.SOCIAL_FRIEND.LIST}`, {
+    //   params: {
+    //     user_id: userId
+    //   }
+    // })
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
+    //   params: {
+    //     room_type: 1
+    //   }
+    // }),
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.LIST_MESSAGE_TYPE}`, {
+    //   params: {
+    //     room_type: 2
+    //   }
+    // }),
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MESSAGE_LIST}`, {
+    //   params: {
+    //     room_id: room_id
+    //   }
+    // }),
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
+    //   params: {
+    //     room_id: room_id
+    //   }
+    // }),
+    // store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST_DETAIL}`, {
+    //   params: {
+    //     room_id: room_id
+    //   }
+    // })
+    // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
+    // ]);
   },
 
   data() {

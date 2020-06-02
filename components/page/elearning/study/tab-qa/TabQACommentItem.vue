@@ -28,7 +28,7 @@
       <!-- <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div> -->
 
       <div class="tab-qa-comment-item__content">
-        <div v-html="get(question, 'content', '')"></div>
+        <div v-html="get(question, 'content', '')" class="word-break-all"></div>
         <img
           v-if="get(question, 'image_url', '')"
           class="tab-qa-comment-item__img d-block"
