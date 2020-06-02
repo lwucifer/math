@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-9">
         <sub-block-section
-          title="Danh sách bài tập bắt buộc"
+          title="Danh sách bài tập"
           has-icon
         >
           <template v-slot:content>
@@ -116,13 +116,52 @@
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`, this.params
           )
           this.list = this.get(this.detailInfo, 'data.content', [])
-          // this.pagination.size = this.get(this.detailInfo, 'data.page.size', 10)
-          // this.pagination.first = this.get(this.detailInfo, 'data.page.first', 1)
-          // this.pagination.last = this.get(this.detailInfo, 'data.page.last', 1)
-          // this.pagination.number = this.get(this.detailInfo, 'data.page.number', 0)
-          // this.pagination.total_pages = this.get(this.detailInfo, 'data.page.total_pages', 0)
-          // this.pagination.total_elements = this.get(this.detailInfo, 'data.page.total_elements', 0)
-          // this.pagination.number_of_elements = this.get(this.detailInfo, 'data.page.number_of_elements', 0)
+          this.list = [
+            {
+              name: 'test01',
+              type: 'CHOICE',
+              expire: '20/10/2020',
+              rate: '24',
+              result: 'PASSED',
+              required: true,
+              deadline: '10/10/2020',
+              score: 5,
+              point: 10
+            },
+            {
+              name: 'test',
+              type: 'CHOICE',
+              expire: '10:00:00 20/10/2020',
+              rate: '24',
+              result: 'FAILED',
+              required: true,
+              deadline: '10/10/2020',
+              score: 5,
+              point: 10
+            },
+            {
+              name: 'test',
+              type: 'ESSAY',
+              expire: '20/10/2020',
+              rate: '24',
+              result: 'NONE',
+              required: false,
+              deadline: '10/10/2020',
+              score: 5,
+              point: 10
+            },
+            {
+              name: 'test',
+              type: 'ESSAY',
+              expire: '20/10/2020',
+              rate: '24',
+              result: 'PENDING',
+              required: true,
+              deadline: '10:00:00 10/10/2020',
+              score: 5,
+              point: 10
+            }
+          ]
           this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
         } catch (e) {
           console.log('Get list exercise ', e)

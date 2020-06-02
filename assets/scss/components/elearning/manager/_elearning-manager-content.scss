@@ -237,6 +237,17 @@
 .tooltip--rate {
     max-width: 34rem;
 }
+.tooltip--submit-status.tooltip {
+    left: -87px !important;
+    &[x-placement^="bottom"] .tooltip-arrow {
+      left: 195px !important;
+    }
+    
+    &[x-placement^="top"] .tooltip-arrow {
+        left: 195px !important;
+    }
+}
+//end tooltip
 
 .content-box-peer {
     border-radius: 2px;
@@ -253,4 +264,17 @@
 
 .content-box-peer--dashed {
     border-style: dashed;
+}
+
+// Text description
+.elm--text-desc {
+    font-size: 1.3rem;
+}
+
+.elm--required-symbol {
+    color: #D50000;
+    svg path {
+        fill: #D50000;
+        fill-opacity: 1;
+    }
 }
