@@ -119,7 +119,7 @@ import ElearningExerciseListQuestions from "~/components/page/elearning/study/ex
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { QUESTION_NAV } from "~/utils/constants";
 import { createExerciseSubmissionReq } from "~/models/elearning/ExerciseSubmissionReq";
-import { fullDateTimeSlash } from "~/utils/moment";
+import { fullUTCDateTimeSlash } from "~/utils/moment";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import { get } from "lodash";
 
@@ -238,14 +238,14 @@ export default {
         answers: this.submission.answers,
         attachments: null,
         duration: durationCost, // in seconds
-        start_time: fullDateTimeSlash(this.submission.start_time)
+        start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         duration: durationCost,
-        start_time: fullDateTimeSlash(this.submission.start_time)
+        start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {

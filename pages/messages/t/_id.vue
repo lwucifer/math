@@ -42,11 +42,11 @@ export default {
     //   fetch_type: "prior"
     // };
     await Promise.all([
-      // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
-      //   payloadMessage,
-      //   id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
-      //   end: "messages"
-      // }),
+      store.dispatch(`chat/${actionTypes.CHAT.MEMBER_LIST}`, {
+        paramsOptions,
+        id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+        end: "members"
+      }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
       //   params: payloadMessage,
@@ -92,7 +92,12 @@ export default {
   },
   computed: {
     ...mapState("message", ["messageEmit"]),
-    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
+    ...mapGetters("auth", [
+      "getSocketURIParam",
+      "userId",
+      "fullName",
+      "accessToken"
+    ])
   },
 
   methods: {
@@ -100,10 +105,19 @@ export default {
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
-      let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
-      console.log("[socket] [uriParam]", uriParam);
-      this.socket = await io(`${uriParam}`);
-
+      // let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
+      // console.log("[socket] [uriParam]", uriParam);
+      // this.socket = await io(`${uriParam}`);
+      this.socket = await io(process.env.SOCKET_URI, {
+        path: "/ws",
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              authorization: "Bearer " + `${this.accessToken}`
+            }
+          }
+        }
+      });
       // connect socket
       if (!this.socket.connected) {
         this.socket.connect();

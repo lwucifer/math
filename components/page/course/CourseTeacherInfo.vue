@@ -11,11 +11,8 @@
           <h5 class="name">{{ get(teacher, "name", "") }}</h5>
           <p class="body-3">{{ get(teacher, "school_name", "") }}</p>
           <div class="stars">
-            <app-stars
-              :stars="Math.ceil(get(teacher, 'rate', 0))"
-              :size="14"
-            />
-            ({{ numeral(get(teacher, "rate", 0)).format('0,0.[0]') }})
+            <app-stars :stars="Math.ceil(get(teacher, 'rate', 0))" :size="14" />
+            ({{ numeral(get(teacher, "rate", 0)).format("0,0.[0]") }})
           </div>
         </div>
 
@@ -37,16 +34,21 @@
 
       <div class="mt-4 teacher-bottom">
         <h4 class="mb-3">Tiểu sử</h4>
-        <div
-          v-if="get(teacher, 'biography', '')"
-          v-html="get(teacher, 'biography', '')"
-        ></div>
+        <div v-if="get(teacher, 'biography', '')">
+          <div v-html="description"></div>
+          <div class="text-center mt-3">
+            <a
+              @click="handleLoadMore"
+              v-if="load_more"
+              class="text-decoration-none"
+              to=""
+              >Xem thêm</a
+            >
+          </div>
+        </div>
         <div v-else class="text-center caption text-gray-2">
           Chưa có nội dung.
         </div>
-        <!-- <div class="text-center mt-3">
-          <n-link class="text-decoration-none" to="">Xem thêm</n-link>
-        </div> -->
       </div>
     </div>
   </section>
@@ -67,13 +69,31 @@ export default {
     IconStarO,
   },
 
+  data() {
+    return {
+      length_description: 300,
+    };
+  },
+
   computed: {
     ...mapState("elearning/detail", {
       teacher: "teacher",
     }),
+    load_more() {
+      return get(this, "teacher.biography.length", 0) > this.length_description;
+    },
+    description() {
+      return get(this, "teacher.biography", "").substring(
+        0,
+        this.length_description
+      );
+    },
   },
 
   methods: {
+    handleLoadMore() {
+      this.length_description = get(this, "teacher.biography.length", 0);
+    },
     get,
     numeral,
   },
