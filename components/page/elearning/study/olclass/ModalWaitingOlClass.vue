@@ -25,6 +25,7 @@
               <a
                 class="bold text-decoration-none text-secondary"
                 :href="activeSession.join_url"
+                @click="handleStartJoin"
                 target="_blank"
                 >{{ getLocalTimeHH_MM_A(activeSession.start_time, 0) }} -
                 {{
@@ -98,6 +99,7 @@
                       'text-secondary': activeSession.join_url == item.join_url
                     }"
                     :href="item.join_url"
+                    @click="handleStartJoin"
                     target="_blank"
                     >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
                     {{
@@ -125,7 +127,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
@@ -175,6 +177,9 @@ export default {
 
     ...mapMutations("elearning/study/study-progress", [
       "setStudyProgressCurrentSession"
+    ]),
+    ...mapActions("elearning/study/study-olclass", [
+      "elearningStudyOlclassLessonSessionsAttendance"
     ]),
 
     setActiveLinkSession() {
@@ -231,6 +236,15 @@ export default {
         seconds -= 1;
         this.setActiveLinkSession();
       }, 1000);
+    },
+
+    // attendance over here
+    handleStartJoin() {
+      console.log("[handleStartJoin]", this.data);
+      const online_lesson_id = get(this.data, "online_lesson_id", null);
+      if(!online_lesson_id) return;
+
+      this.elearningStudyOlclassLessonSessionsAttendance({ online_lesson_id });
     }
   },
 

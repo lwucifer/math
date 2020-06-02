@@ -39,7 +39,27 @@ const actions = {
         error
       );
     }
+  },
+
+  async [actionTypes.ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS.ATTENDANCE](
+    { commit },
+    payload
+  ) {
+    try {
+      const { data } = await this.$axios.post(
+        APIs.STUDY_OLCLASS_LESSION_ATTENDANCE,
+        payload
+      );
+      console.log("[ATTENDANCE]", data);
+      return data;
+    } catch (error) {
+      console.log(
+        "[STUDY_OLCLASS_LESSION_ATTENDANCE] list.error",
+        error
+      );
+    }
   }
+
 };
 
 /**

@@ -105,6 +105,11 @@
         />
       </div>
     </template>
+    <!-- <template  v-if="totalSummary == 0">
+      <div class="text-gray-2 caption text-center">
+        Không có giữ liệu
+      </div>
+    </template> -->
   </div>
 </template>
 
@@ -264,7 +269,7 @@ export default {
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      const alls = addAllOptionSelect(this.categories);
+      const alls = optionSelectSubject(this.categories);
       return alls.map(c => {
         return {
           value: c.id,
