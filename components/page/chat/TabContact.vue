@@ -341,10 +341,7 @@ export default {
       dataGroupLeave: {},
       checkChatList: false,
       checkGroupList: false,
-      roomQuery: {
-        page: 1,
-        limit: 10
-      }
+      roomQuery: {}
     };
   },
   computed: {
@@ -440,12 +437,12 @@ export default {
         if (item.type == "PRIVATE") {
           return {
             ...item,
-            name: item && item.room ? item.room.member[0].first_name : ""
+            name: item && item.sender ? item.sender.first_name : ""
           };
         } else {
           return {
             ...item,
-            name: item && item.name ? item.name : ""
+            name: item && item.sender ? item.sender.first_name : ""
           };
         }
       });
@@ -553,7 +550,8 @@ export default {
         this.checkChatList = true;
       }
       if (getData && getData.list_room && getData.list_room.length > 0) {
-        this.roomQuery.page += 1;
+        this.roomQuery.lastest_message_id =
+          getData.list_room[getData.list_room.length - 1].lastest_message.id;
         $state.loaded();
       } else {
         $state.complete();
