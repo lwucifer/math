@@ -15,7 +15,7 @@
               :stars="Math.ceil(get(teacher, 'rate', 0))"
               :size="14"
             />
-            ({{ numeral(get(teacher, "rate", 0)).format('0,0.[00]') }})
+            ({{ numeral(get(teacher, "rate", 0)).format('0,0.[0]') }})
           </div>
         </div>
 

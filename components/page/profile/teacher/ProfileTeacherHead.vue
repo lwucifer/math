@@ -14,8 +14,8 @@
           </div>
           <div class="">
             <app-stars class="d-inline-block mr-3" :stars="get(info, 'rate', 1)" :size="20"/>
-            <strong>{{ get(info, 'rate', 0) }}</strong>
-            <span> ({{ get(info, 'rate_total', 0) }})</span>
+            <strong>{{ get(info, 'rate', 0) | numeralFormat('0.00') }}</strong>
+            <!--<span> ({{ get(info, 'rate_total', 0) }})</span>-->
           </div>
           <div class="d-flex align-items-center">
             <a href="#" class="text-gray mr-2">

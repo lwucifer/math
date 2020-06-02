@@ -68,7 +68,21 @@
         <template v-slot:cell(class)="{row}">
           <td
             class="wrap-name__table"
-          >{{get(row,"class_name","")}} (Sĩ số: {{ get(row,"size", 0) }})</td>
+          >
+            <v-popover
+              trigger="hover"
+              popoverClass="wrap-name-class__table"
+              placement="top"
+            >
+            <div class="d-flex align-items-center">
+              <span>{{get(row,"class_name","")}} (Sĩ số: {{ get(row,"size", 0) }})</span>
+              <IconAccountBox24px class="fill-primary ml-2"/>
+            </div>
+            <template slot="popover">
+                <span>Giáo viên chủ nhiệm</span>
+            </template>
+            </v-popover>
+          </td>
         </template>
         <template v-slot:cell(mark)="{row}">
           <td class="wrap-name__table">{{get(row,"attendance","")}}%</td>
@@ -99,6 +113,7 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 const STORE_NAME_STUDENTS = "elearning/teaching/students";
+import IconAccountBox24px from '~/assets/svg/v2-icons/account_box_24px.svg?inline';
 export default {
   async fetch({ params, store }) {
     await Promise.all([
@@ -106,6 +121,9 @@ export default {
         `${STORE_NAME_STUDENTS}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`
       )
     ]);
+  },
+  components:{
+    IconAccountBox24px
   },
   data() {
     return {

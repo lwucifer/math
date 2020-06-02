@@ -2,7 +2,7 @@
   <div class="container">
       <div class="row">
           <div class="col-md-3">
-              <StudySpaceAsideMenu/>
+              <MyCourseSide/>
           </div>
           <div class="col-md-9">
               <sub-block-section 
@@ -63,7 +63,7 @@ import IconData from "~/assets/svg/icons/data.svg?inline";
 import IconList1 from '~/assets/svg/icons/list1.svg?inline';
 import IconGrade1 from '~/assets/svg/icons/grade1.svg?inline';
 import GeneralExamExpiry from "~/components/page/elearning/mycourses/GeneralExamExpiry"
-import StudySpaceAsideMenu from "~/components/page/elearning/mycourses/StudySpaceAsideMenu"
+import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide"
 import ScheduleToday from "~/components/page/elearning/mycourses/ScheduleToday"
 import moment from 'moment';
 export default {
@@ -73,7 +73,7 @@ export default {
         IconList1,
         IconGrade1,
         GeneralExamExpiry,
-        StudySpaceAsideMenu,
+        MyCourseSide,
         ScheduleToday
     },
     methods:{

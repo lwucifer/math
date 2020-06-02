@@ -2,7 +2,7 @@
   <div class="container wrap__study-space page-mycourses-timetable">
     <div class="row">
       <div class="col-md-3">
-        <MyCourseSide :active="4" />
+        <MyCourseSide :active="5" />
       </div>
 
       <div class="col-md-9">
