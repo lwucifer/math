@@ -264,7 +264,7 @@ export default {
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      const alls = addAllOptionSelect(this.categories);
+      const alls = optionSelectSubject(this.categories);
       return alls.map(c => {
         return {
           value: c.id,
@@ -315,7 +315,7 @@ export default {
     async getLessons() {
       this.pageLoading = true;
       Object.keys(this.payload).map(k => {
-        if (this.payload[k] == null) {
+        if (this.payload[k] == null || this.payload[k] == -1) {
           delete this.payload[k];
         }
       });
