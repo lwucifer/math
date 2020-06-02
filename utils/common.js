@@ -228,6 +228,7 @@ export const optionSelectSubject = (arr) => {
   const allOpt = {
     value: null,
     name: "Tất cả",
+    type: "",
   };
   return [allOpt, ...arr];
 };
