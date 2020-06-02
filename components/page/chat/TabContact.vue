@@ -103,7 +103,7 @@
                 <div class="left d-flex">
                   <div class="align-item__image">
                     <app-avatar
-                      :src=" item.room_avatar_member ? item.room_avatar_member : 'https://picsum.photos/60/60'"
+                      :src=" item && item.room_avatar_member ? item.room_avatar_member : 'https://picsum.photos/60/60'"
                       size="md"
                       class="comment-item__avatar"
                     />
@@ -114,7 +114,7 @@
                       <n-link slot="title" to>{{ item.name ? item.name : '' }}</n-link>
                     </h5>
                     <div class="align-item__desc">
-                      <p>{{ item.content }}</p>
+                      <p>{{ item.text }}</p>
                     </div>
                   </div>
                 </div>
@@ -433,10 +433,23 @@ export default {
         this.roomList.list_room.map(item => {
           return {
             ...item,
-            name: item && item.name ? item.name : ""
+            ...item.room
           };
         });
-      return data;
+      const dataRoom = data.map(item => {
+        if (item.type == "PRIVATE") {
+          return {
+            ...item,
+            name: item && item.room ? item.room.member[0].first_name : ""
+          };
+        } else {
+          return {
+            ...item,
+            name: item && item.name ? item.name : ""
+          };
+        }
+      });
+      return dataRoom;
     }
   },
   methods: {

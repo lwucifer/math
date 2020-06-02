@@ -17,13 +17,34 @@
               <b>{{ get(data, "extra_info.online_class_name", "--") }}</b>
             </p>
             <p class="mb-3">
+              <span
+                >Đang diễn ra:
+                <b>Tiết học {{ get(activeSession, "position", "") }}</b
+                >:
+              </span>
+              <a
+                class="bold text-decoration-none text-secondary"
+                :href="activeSession.join_url"
+                @click="handleStartJoin"
+                target="_blank"
+                >{{ getLocalTimeHH_MM_A(activeSession.start_time, 0) }} -
+                {{
+                  getLocalEndTime(
+                    activeSession.start_time,
+                    activeSession.duration,
+                    "minutes"
+                  )
+                }}</a
+              >
+            </p>
+            <p class="mb-3">
               Giáo viên:
               <b>{{ get(data, "extra_info.teacher_name", "--") }}</b>
             </p>
             <p class="mb-3">
               Giờ bắt đầu:
               <b>{{
-                get(data, "extra_info.start_time", "--:--") | fullDateTimeSlash
+                get(data, "extra_info.start_time", "") | fullDateTimeSlash
               }}</b>
             </p>
             <p>
@@ -46,12 +67,14 @@
               Phòng học bắt đầu sau
               <b class="h5 color-blue"> {{ countdown }}</b>
             </div> -->
-            <div class="text-center w-100" v-if="contentLoading"><app-spin /></div>
+            <div class="text-center w-100" v-if="contentLoading">
+              <app-spin />
+            </div>
           </div>
 
           <div class="mb-4 mt-4 d-flex-center justify-content-center">
             <a
-              :href="activeSessionLink"
+              :href="activeSession.join_url"
               target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
               :v-if="is_started"
@@ -73,9 +96,10 @@
                   <a
                     class="bold text-decoration-none"
                     :class="{
-                      'text-secondary': activeSessionLink == item.join_url
+                      'text-secondary': activeSession.join_url == item.join_url
                     }"
                     :href="item.join_url"
+                    @click="handleStartJoin"
                     target="_blank"
                     >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
                     {{
@@ -103,7 +127,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, getCountdown_HH_MM_SS } from "~/utils/common";
@@ -139,7 +163,7 @@ export default {
       seconds: null,
       currentZoom: null,
       showModalConfirm: false,
-      activeSessionLink: "#",
+      activeSession: {},
       activeSession: false
     };
   },
@@ -154,6 +178,9 @@ export default {
     ...mapMutations("elearning/study/study-progress", [
       "setStudyProgressCurrentSession"
     ]),
+    ...mapActions("elearning/study/study-olclass", [
+      "elearningStudyOlclassLessonSessionsAttendance"
+    ]),
 
     setActiveLinkSession() {
       console.log("[setActiveLinkSession]");
@@ -162,13 +189,13 @@ export default {
       const sessions = get(this, "data.sessions", []);
 
       // calculate current session base on: start_time + duration vs new Date();
-      let activeSession = null;
+      // let activeSession = null;
       const now = new Date();
       for (let i = 0; i < sessions.length; i++) {
         const endTime = getLocalDateTime(sessions[i].end_time);
         if (now <= new Date(endTime)) {
-          activeSession = sessions[i];
-          this.activeSessionLink = activeSession.join_url;
+          // activeSession = sessions[i];
+          this.activeSession = sessions[i];
           return;
         }
       }
@@ -209,6 +236,15 @@ export default {
         seconds -= 1;
         this.setActiveLinkSession();
       }, 1000);
+    },
+
+    // attendance over here
+    handleStartJoin() {
+      console.log("[handleStartJoin]", this.data);
+      const online_lesson_id = get(this.data, "online_lesson_id", null);
+      if(!online_lesson_id) return;
+
+      this.elearningStudyOlclassLessonSessionsAttendance({ online_lesson_id });
     }
   },
 
@@ -231,9 +267,8 @@ export default {
   updated() {
     console.log("[updated]", this.data);
     clearInterval(interval);
-    
-    this.setCountdown();
 
+    this.setCountdown();
   },
 
   watch: {

@@ -102,13 +102,13 @@
           <!-- message box item -->
           <div
             class="message-box__item"
-            :class="item.user && item.user.id == userId ? 'item__0' : 'item__1'"
-            v-for="(item, index) in messageList ? messageList : []"
+            :class="item && item.user_id == userId ? 'item__0' : 'item__1'"
+            v-for="(item, index) in filterMessageList"
             :key="index"
           >
             <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
-              <!-- <div class="message-box__item__meta" v-if="index == messageList.length -1">
+              <div class="message-box__item__meta" v-if="index == filterMessageList.length -1">
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -126,13 +126,16 @@
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
-                  <span>{{item.user && item.user.fullname}}</span>
+                  <span>{{item.user && item.user.full_name}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
-                  <span>{{item.created_at | moment("DD/MM/YYYY") }}</span>
+                  <span>{{item.sent_at | moment("hh:mm A") }}</span>
                 </div>
-              </div>-->
-              <div class="message-box__item__meta">
+              </div>
+              <div
+                class="message-box__item__meta"
+                v-else-if="index < filterMessageList.length - 1 && filterMessageList[index] && filterMessageList[index].user_id != filterMessageList[index+1].user_id"
+              >
                 <!-- v-else-if="index < messageList.length - 1 && messageList[index].user && messageList[index].user.id != messageList[index+1].user.id" -->
                 <div class="message-box__item__meta__image">
                   <app-dropdown
@@ -165,10 +168,10 @@
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
-                  <span>{{item.user && item.user.fullname}}</span>
+                  <span>{{item.user && item.user.full_name}}</span>
                 </div>
                 <div class="message-box__item__meta__time">
-                  <span>{{item.created_at | moment("hh:mm A") }}</span>
+                  <span>{{item.sent_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
               <template>
@@ -682,11 +685,10 @@ export default {
     ...mapState("message", [
       "groupListDetail",
       "messageOn",
-      "memberList",
       "friendList",
       "isCreated"
     ]),
-    ...mapState("chat", ["messageList"]),
+    ...mapState("chat", ["messageList", "memberList", "roomDetail"]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
@@ -788,6 +790,18 @@ export default {
           ? this.groupListDetail.room.room_avatar.low
           : "https://picsum.photos/40/40";
       }
+    },
+    filterMessageList() {
+      const data = this.messageList ? this.messageList : [];
+      const dataMap = data.map(item => {
+        const [tmpUser] = this.memberList.filter(i => i.id == item.sender_id);
+        return {
+          ...item,
+          user: tmpUser,
+          user_id: tmpUser ? tmpUser.int_id.low : ""
+        };
+      });
+      return dataMap;
     }
   },
 
