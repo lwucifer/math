@@ -49,7 +49,7 @@ export default {
   async fetch({ params, query, store, redirect }) {
     const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
     const dataRooms = data.list_room ? data.list_room : [];
-    const id = dataRooms[0] ? dataRooms[0].id : "";
+    const id = dataRooms[0] ? dataRooms[0].room.id : "";
     if (id) {
       return redirect(`/messages/t/${id}`);
     } else {

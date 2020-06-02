@@ -110,10 +110,10 @@ export default {
       // this.socket = await io(`${uriParam}`);
       this.socket = await io(`${process.env.SOCKET_URI}`, {
         path: "/ws",
-        transports: ['websocket'],
-          query: {
-            token: `Bearer ${this.accessToken}`
-          }
+        transports: ["websocket"],
+        query: {
+          token: `${this.accessToken}`
+        }
       });
       // connect socket
       if (!this.socket.connected) {
@@ -133,16 +133,42 @@ export default {
 
       // join room with id
       const params = {
-        room_id: this.$route.params.id,
-        user: {
-          id: this.userId,
-          fullname: this.fullName
-        }
+        room_id: this.$route.params.id
+        // user: {
+        //   id: this.userId,
+        //   fullname: this.fullName
+        // }
       };
       console.log("[params]", params);
       this.socket.emit(constants.CHAT.JOIN_ROOM, params, res => {
         console.log("[socket] User has joined this channel", res);
       });
+      this.socket.emit(
+        constants.CHAT.MESSAGE,
+        {
+          room_id: this.$route.params.id,
+          message: {
+            text: "hello"
+            // attachments: [
+            //     {type: 'file', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/0eb9b989-8e05-44ba-b7a6-e08ce1fe1740/readme.txt'},
+            //     {type: 'image', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/1db447cb-3854-43fe-8f5d-056a6aa3f1f1/readme.txt'}
+            // ]
+          }
+        },
+        res => {
+          console.log("res emit", res);
+        }
+      );
+      // this.socket.emit(
+      //   constants.CHAT.MESSAGE,
+      //   {
+      //     room_id: this.$route.params.id,
+      //     message: { text: "Hello AE lấy log" }
+      //   },
+      //   res => {
+      //     console.log("ket qua message", res);
+      //   }
+      // );
     }
   },
 
