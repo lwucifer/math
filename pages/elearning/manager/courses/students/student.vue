@@ -6,8 +6,7 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <h2>xxxxxxxx</h2>{{elearningInfo}}
-        <sub-block-section title="Bài giảng đại số lớp 10" has-icon>
+        <sub-block-section :title="get(elearningInfo, 'name', '')" has-icon>
           <template v-slot:content>
             <div class="elearning-manager-content p-0">
               <div class="elearning-manager-content__title">
@@ -101,7 +100,6 @@ export default {
   },
 
   fetch({ params, query, store }) {
-    alert(99999)
     const elearningId = query.elearning_id;
     const listQuery = {
       params: {
@@ -116,7 +114,7 @@ export default {
   },
 
   computed: {
-    ...mapState(STORE_STUDY_INFO, {
+    ...mapState("elearning/detail", {
       elearningInfo: "info"
     }),
     currentTabComponent: function() {
@@ -129,6 +127,7 @@ export default {
   },
 
   methods: {
+    get,
     changeTab(key) {
       this.tab = key;
     },

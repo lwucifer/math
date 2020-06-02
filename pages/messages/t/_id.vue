@@ -42,11 +42,11 @@ export default {
     //   fetch_type: "prior"
     // };
     await Promise.all([
-      // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
-      //   payloadMessage,
-      //   id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
-      //   end: "messages"
-      // }),
+      store.dispatch(`chat/${actionTypes.CHAT.MEMBER_LIST}`, {
+        paramsOptions,
+        id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+        end: "members"
+      }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
       //   params: payloadMessage,
@@ -92,7 +92,12 @@ export default {
   },
   computed: {
     ...mapState("message", ["messageEmit"]),
-    ...mapGetters("auth", ["getSocketURIParam", "userId", "fullName"])
+    ...mapGetters("auth", [
+      "getSocketURIParam",
+      "userId",
+      "fullName",
+      "accessToken"
+    ])
   },
 
   methods: {
@@ -100,10 +105,16 @@ export default {
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
-      let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
-      console.log("[socket] [uriParam]", uriParam);
-      this.socket = await io(`${uriParam}`);
-
+      // let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
+      // console.log("[socket] [uriParam]", uriParam);
+      // this.socket = await io(`${uriParam}`);
+      this.socket = await io(`${process.env.SOCKET_URI}`, {
+        path: "/ws",
+        transports: ["websocket"],
+        query: {
+          token: `${this.accessToken}`
+        }
+      });
       // connect socket
       if (!this.socket.connected) {
         this.socket.connect();
@@ -122,16 +133,42 @@ export default {
 
       // join room with id
       const params = {
-        room_id: this.$route.params.id,
-        user: {
-          id: this.userId,
-          fullname: this.fullName
-        }
+        room_id: this.$route.params.id
+        // user: {
+        //   id: this.userId,
+        //   fullname: this.fullName
+        // }
       };
       console.log("[params]", params);
       this.socket.emit(constants.CHAT.JOIN_ROOM, params, res => {
         console.log("[socket] User has joined this channel", res);
       });
+      this.socket.emit(
+        constants.CHAT.MESSAGE,
+        {
+          room_id: this.$route.params.id,
+          message: {
+            text: "hello"
+            // attachments: [
+            //     {type: 'file', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/0eb9b989-8e05-44ba-b7a6-e08ce1fe1740/readme.txt'},
+            //     {type: 'image', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/1db447cb-3854-43fe-8f5d-056a6aa3f1f1/readme.txt'}
+            // ]
+          }
+        },
+        res => {
+          console.log("res emit", res);
+        }
+      );
+      // this.socket.emit(
+      //   constants.CHAT.MESSAGE,
+      //   {
+      //     room_id: this.$route.params.id,
+      //     message: { text: "Hello AE lấy log" }
+      //   },
+      //   res => {
+      //     console.log("ket qua message", res);
+      //   }
+      // );
     }
   },
 

@@ -327,6 +327,7 @@ export function getDateTimeFullText(_utcDate = "") {
  * convert seconds to text: hh giờ mm phút
  */
 export function formatHour(val = 0) {
+  if(!val) return "--";
   const h = Math.floor(val / 60 / 60);
   const m = Math.floor((val - 60 * 60 * h) / 60);
   // const s = val - 60 * 60 * h - 60 * m;
