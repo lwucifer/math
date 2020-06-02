@@ -108,15 +108,12 @@ export default {
       // let uriParam = `${process.env.SOCKET_URI}?${this.getSocketURIParam}`;
       // console.log("[socket] [uriParam]", uriParam);
       // this.socket = await io(`${uriParam}`);
-      this.socket = await io(process.env.SOCKET_URI, {
+      this.socket = await io(`${process.env.SOCKET_URI}`, {
         path: "/ws",
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              authorization: "Bearer " + `${this.accessToken}`
-            }
+        transports: ['websocket'],
+          query: {
+            token: `Bearer ${this.accessToken}`
           }
-        }
       });
       // connect socket
       if (!this.socket.connected) {

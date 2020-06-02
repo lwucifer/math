@@ -335,6 +335,8 @@ export default {
       } else {
         this.$toasted.error(doDelete.message);
       }
+
+      this.showModalConfirm = false;
     },
 
     async deleteSchedules() {
