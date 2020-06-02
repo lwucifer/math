@@ -6,7 +6,7 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <h2>xxxxxxxx</h2>{{elearningInfo}}
+        {{elearningInfo}}
         <sub-block-section title="Bài giảng đại số lớp 10" has-icon>
           <template v-slot:content>
             <div class="elearning-manager-content p-0">
