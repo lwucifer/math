@@ -40,3 +40,18 @@
         }
     }
 }
+
+.e-study-bottom {
+    margin-top: auto;
+    text-align: right;
+
+    &__button {
+        font-size: 2.4rem;
+        margin-left: 1.5rem;
+
+        .icon {
+            display: block;
+        }
+    }
+}
+

@@ -16,7 +16,7 @@
     <div class="container" v-else>
       <div class="row">
         <div :class="expand ? 'col-md-12' : 'col-md-8'">
-          <div class="box22">
+          <div class="box22 mb-15">
             <div class="lession-screen">
               <img
                 v-if="studyMode === defaultMode"
@@ -38,26 +38,39 @@
             />
             <div class="lession-screen">
               <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')"/>
-              <!--
-              <a v-if="studyMode == docMode" :href="get(payload, 'link', '')"
-                >Download</a
-              >
-              -->
             </div>
             <div class="lession-screen" v-if="studyMode === imageMode">
               <img :src="get(payload, 'link', '')" alt />
             </div>
 
             <div class="lession-screen" v-if="studyMode == articleMode">
+              <!-- SCORM TEST -->
+              <!-- <iframe
+                style="width: 712px"
+                src="https://file-elearning.moet.gov.vn/upload2015/s7Y1xcf7oYzG94jLEhRi/baigiang/lop03/tnxh/tiet61a/index.htm"
+              ></iframe> -->
+
               <iframe
                 style="width: 712px"
                 :src="get(payload, 'link', '')"
               ></iframe>
             </div>
 
+            <div class="e-study-bottom">
+              <button class="e-study-bottom__button" type="button" @click="setExpand(false)">
+                <IconCropLandscape class="icon" />
+              </button>
+              <button class="e-study-bottom__button" type="button" @click="setExpand(true)">
+                <IconCropFree class="icon" />
+              </button>
+            </div>
+
             <!-- DO EXERCISE -->
             <ElearningExercise v-if="isExerciseMode" />
 
+          </div>
+
+          <div class="box22">
             <div class="elearning-study-tabs">
               <a
                 :class="{ active: type === 'summary' }"
@@ -98,6 +111,9 @@
 </template>
 
 <script>
+import IconCropLandscape from "~/assets/svg/v2-icons/crop_landscape_24px.svg?inline";
+import IconCropFree from "~/assets/svg/v2-icons/crop_free_24px.svg?inline";
+
 import { get } from "lodash";
 import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -105,7 +121,6 @@ import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { useEffect } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
-// import ProgressService from "~/services/elearning/study/Progress";
 import ProgramService from "~/services/elearning/public/Program";
 
 import { COURSE_LESSON } from "~/server/fakedata/elearning/test";
@@ -147,7 +162,9 @@ export default {
     Streaming,
     ElearningExercise,
     VclList,
-    ElearningDownload
+    ElearningDownload,
+    IconCropLandscape,
+    IconCropFree,
   },
 
   data() {
