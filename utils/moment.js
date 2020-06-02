@@ -36,7 +36,7 @@ export const getDateFormat = _utcDate => {
 };
 
 export const fullDateTimeSlash = _utcDate => {
-    if (!_utcDate) return;
+    if (!_utcDate) return "--:--";
     // const ts = moment.utc(_utcDate);
     const ts = getLocalDateTime(_utcDate);
     return ts.format(DATETIME_RECEIVE);
