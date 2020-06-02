@@ -12,7 +12,8 @@
         <div class="writing-answer">
           <label class="font-weight-semi-bold text-dark mb-2 d-block">Câu trả lời</label>
           <div class="test-content-answer">
-            <div v-html="get(item, 'student.answer', '')"></div>
+            <div v-if="get(item, 'student.answer', false)" v-html="get(item, 'student.answer', '')"></div>
+            <div v-else class="text-center caption text-gray-2">Chưa có câu trả lời</div>
           </div>
         </div>
       </div>
@@ -20,7 +21,8 @@
     <div class="item" v-if="note">
       <label for="" class="text-dark content-title">Nhận xét chi biết bài làm của học sinh</label>
       <div class="content--note">
-        <div v-html="note"></div>
+        <div v-if="note" v-html="note"></div>
+        <div v-else class="text-center caption text-gray-2">Chưa có nhận xét</div>
       </div>
     </div>
   </div>

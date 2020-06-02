@@ -6,7 +6,7 @@
           <div class="content-box-peer content-box-peer--solid student-profile h-100">
             <div class="d-flex align-items-center">
               <div class="mr-3">
-                <app-avatar :src="studentAva" :size="sm" alt="avatar" />
+                <app-avatar :src="studentAva" size="sm" alt="avatar" />
               </div>
               <div>
                 <p class="mb-3"><span class="h4">{{ studentName }}</span></p>
