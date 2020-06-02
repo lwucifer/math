@@ -1,6 +1,7 @@
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
-import InteractiveAnnouncement from "~/services/elearning/teaching/InteractiveAnnouncement";
+import { InteractiveAddAnnouncement } from "~/services/elearning/teaching/InteractiveAnnouncement";
+import  InteractiveAnnouncement  from "~/services/elearning/teaching/InteractiveAnnouncement";
 /**
  * initial state
  */
@@ -35,26 +36,16 @@ const actions = {
             console.log("[TEACHING_INTERACTIVE_ACCOUNCEMENT] list.error", error);
         }
     },
-    async [actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.ADD]({ commit }, payload) {
+    async [actionTypes.TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT.ADD]({ commit }, payload) {
         try {
-          const result = await new InteractiveAnnouncement(this.$axios)[actionTypes.BASE.ADD](
+          const result = await new InteractiveAddAnnouncement(this.$axios)[actionTypes.BASE.ADD](
             payload
           );
           return result;
         } catch (error) {
-          console.log("[TEACHING_INTERACTIVE_ACCOUNCEMENT] delete.error", error);
+          console.log("[TEACHING_INTERACTIVE_ADD_ACCOUNCEMENT] add.error", error);
         }
-    },
-    async [actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.DELETE]({ commit }, payload) {
-        try {
-          const result = await new InteractiveAnnouncement(this.$axios)['deleteWithRawJson'](
-            payload
-          );
-          return result;
-        } catch (error) {
-          console.log("[TEACHING elearning] list.error", error);
-        }
-      }
+    }
 };
 
 /**

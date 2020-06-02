@@ -118,21 +118,9 @@
 }
 .wrap-content-create-notify__ElearningManagerInteractive{
     background: $color-text-white;
-
-    .notify-title {
-      background: #F9F9F9;
-      box-shadow: 0px 1px 0px #E0E0E0;
-      height: 47.6px;
-      color: $color-text-dark;
-      font-size: 1.8rem;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-    }
-
+  
     .notify-content {
-      padding: 0 2rem 2rem 2rem;
-
+      padding : 0 20px;
       h5{
         margin: 2rem 0;
         color: $color-text-dark;

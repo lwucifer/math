@@ -639,8 +639,10 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
 
 export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
     LIST: "teachingInteractiveListAnnouncement",
+};
+
+export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = {
     ADD: "teachingInteractiveAnnouncementAdd",
-    DELETE: "teachingInteractiveAnnouncementDelete"
 };
 
 export const TEACHING_PUBLIC_LIST = {

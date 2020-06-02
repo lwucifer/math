@@ -51,6 +51,8 @@ const NotifyTab = () => import("~/components/page/elearning/manager/interacts/no
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
+const STORE_NAMESPACE = "elearning/teaching/elearning";
+
 export default {
   layout: "manage",
 
@@ -90,7 +92,9 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
     ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
-
+    ...mapState(STORE_NAMESPACE, {
+      stateElearnings: "elearnings"
+    }),
     currentTabComponent: function() {
       // List of tabs
       const MATCHED_TABS = ["QATab", "NotifyTab"];
@@ -103,7 +107,23 @@ export default {
       const that = this;
       that.pagination = { ...that.pagination, ...e };
       console.log(that.pagination);
+    },
+    async fetchElearningCourses(){
+      const payload = { 
+        params:{
+          status : "APPROVED",
+          hide : false
+        }
+      }
+      const result = await this.$store.dispatch(
+        `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
+        payload
+      )
+      console.log(result.data,'lol')
     }
+  },
+  created(){
+    this.fetchElearningCourses()
   }
 };
 </script>

@@ -7,14 +7,16 @@
         <ElearningManagerSide active="6" />
       </div>
       <div class="col-md-9">
+        <sub-block-section
+          title="Tạo thông báo"
+          has-icon
+        >
+        <template v-slot:content>
         <div class="wrap-content-create-notify__ElearningManagerInteractive">
-          <h5 class="notify-title">
-            <ArrowLeft class="mr-3" />Tạo thông báo
-          </h5>
-
           <div class="notify-content">
             <div class="d-flex flex-column">
               <h5>Chọn bài giảng/ khóa học liên quan</h5>
+              <!--
               <app-vue-select
                 label="text"
                 placeholder="Chọn"
@@ -24,6 +26,12 @@
                 :all-opt="allOpt"
                 :options="lessonOpts"
               ></app-vue-select>
+              -->
+              <AppSelectIneractiveElearning
+                class="content-select__ElearningManagerInteractive"
+                @input="handleSelectElearning"
+                placeholder="Chọn"
+              />
             </div>
 
             <div class="form">
@@ -55,6 +63,8 @@
             </div>
           </div>
         </div>
+        </template>
+        </sub-block-section>
       </div>
     </div>
 
@@ -63,6 +73,7 @@
       type="success"
       title="Tạo thông báo thành công!"
       @close="showModal = false"
+      @ok="handleOk"
     />
   </div>
 </template>
@@ -74,13 +85,17 @@ import ArrowLeft from "~/assets/svg/v2-icons/arrow_left_black.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
-import { Interacts } from "~/models/elearning/Interacts";
+const STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENT = "elearning/teaching/interactive-announcement";
+import { createInteract } from "~/models/elearning/Interacts";
+import { get } from "lodash";
+import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
 export default {
   layout: "manage",
   components: {
     ElearningManagerSide,
     IconClose,
-    ArrowLeft
+    ArrowLeft,
+    AppSelectIneractiveElearning
   },
   data() {
     return {
@@ -132,11 +147,28 @@ export default {
         )
       console.log('lol')
     },
-    handleSaveNotify(){
+    async handleSaveNotify(){
       console.log('hello',this.params)
+      const payload = createInteract(this.params)
+      console.log('payload',payload)
+      const result = await this.$store.dispatch(
+        `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENT}/${actionTypes.TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT.ADD}`,
+        payload
+      );
+      if (get(result, "success", false)) {
+        this.$toasted.success(get(result, "message", "Thành công"));
+        this.showModal= true;
+        return
+      }
+      this.$toasted.success(get(result, "message", "Có lỗi xảy ra"));
+
     },
     handleSelectElearning(val){
-      this.params.elearning_id = val.value;
+      this.params.elearning_id = val;
+    },
+    handleOk(){
+      this.showModal = false;
+      this.$router.push('/elearning/manager/interacts')
     }
   }
 };

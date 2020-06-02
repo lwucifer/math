@@ -15,6 +15,7 @@
       </app-button>
 
       <template v-if="isFilter">
+        <!--
         <app-vue-select
           class="app-vue-select filter-course"
           :options="lessonOpts"
@@ -27,7 +28,11 @@
           :all-opt="allOpt"
           v-model="filters.lesson"
         />
-
+        -->
+        <AppSelectIneractiveElearning
+          class="app-vue-select filter-course"
+          @input="handleChangedInputLesson"
+        />
         <app-vue-select
           class="app-vue-select filter-status"
           :options="resultsOpts"
@@ -102,13 +107,15 @@ import { get } from 'lodash'
 const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
+import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
 export default {
   layout: "manage",
 
   components: {
     IconHamberger,
     IconSearch,
-    IconArrowForwardIos24pxOutlined
+    IconArrowForwardIos24pxOutlined,
+    AppSelectIneractiveElearning
   },
   data() {
     return {
@@ -297,13 +304,15 @@ export default {
       console.log("[Component] Elearning exam: changing input...", val);
     },
     handleChangedInputLesson(val) {
-      this.listQuery.elearning_id = val ? val.value : null;
+      this.listQuery.elearning_id = val ? val : null;
+      console.log(this.listQuery,'lol')
       const query = {
         params: {
           ...this.listQuery,
-          elearning_id: val ? val.value : null
+          elearning_id: val ? val : null
         }
       };
+      console.log(query,'lol')
       this.teachingInteractiveListquestion(query);
       console.log("[Component] Elearning exam: changing input...", val);
     },
