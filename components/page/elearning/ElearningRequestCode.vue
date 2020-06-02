@@ -45,7 +45,7 @@
 
         <div class="mt-4 mess text-secondary font-italic text-left">
           Nếu bạn chưa có mã riêng tư để truy cập, bạn có thể gửi yêu cầu tham
-          gia bài giảng tại đây
+          gia bài giảng <a @click="handleRequestCode">tại đây</a>
         </div>
       </template>
     </app-modal-confirm>
@@ -62,6 +62,10 @@
 </template>
 
 <script>
+import moment from "moment";
+import { get } from "lodash";
+import { mapActions, mapGetters, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -77,7 +81,37 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState("auth", {
+      token: "token",
+    }),
+  },
+
   methods: {
+    async handleRequestCode() {
+      const data = {
+        class_name: "",
+        elearning_id: get(this, "$route.params.id", ""),
+        request_date: "",
+        student_id: get(this, "token.id", ""),
+        student_name: get(this, "token.fullname", ""),
+      };
+      const res = await this.$axios({
+        url: "/elearning/request",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+
+      if (get(res, "data.success", false)) {
+        this.inputCodeSuccess = true;
+        return;
+      }
+      this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+    },
+
     closeModalNoti() {
       this.inputCodeSuccess = false;
     },
