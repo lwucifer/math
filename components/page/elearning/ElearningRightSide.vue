@@ -8,29 +8,33 @@
       />
     </div>
 
-    <template v-if="get(info, 'elearning_price.free', false)">
-      <div class="elearning-right-side__price-wrapper">
-        <b class="heading-2 text-primary ml-auto">Miễn phí</b>
-      </div>
-    </template>
+    <template v-if="!get(this, 'info.is_study', true)">
+      <template v-if="get(info, 'elearning_price.free', false)">
+        <div class="elearning-right-side__price-wrapper">
+          <b class="heading-2 text-primary ml-auto">Miễn phí</b>
+        </div>
+      </template>
 
-    <template v-else>
-      <div class="elearning-right-side__price-wrapper">
-        <template v-if="get(info, 'elearning_price.discount', 0)">
-          <s class="heading-4 text-gray">
+      <template v-else>
+        <div class="elearning-right-side__price-wrapper">
+          <template v-if="get(info, 'elearning_price.discount', 0)">
+            <s class="heading-4 text-gray">
+              {{
+                get(info, "elearning_price.original_price", 0) | numeralFormat
+              }}đ
+            </s>
+            <b class="heading-2 text-primary"
+              >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
+            >
+          </template>
+
+          <b v-else class="heading-2 text-primary ml-auto">
             {{
               get(info, "elearning_price.original_price", 0) | numeralFormat
             }}đ
-          </s>
-          <b class="heading-2 text-primary"
-            >{{ get(info, "elearning_price.price", 0) | numeralFormat }}đ</b
-          >
-        </template>
-
-        <b v-else class="heading-2 text-primary ml-auto">
-          {{ get(info, "elearning_price.original_price", 0) | numeralFormat }}đ
-        </b>
-      </div>
+          </b>
+        </div>
+      </template>
     </template>
 
     <div v-if="isBuyElearning">
