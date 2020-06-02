@@ -83,7 +83,7 @@ export default {
       return get(this, "teacher.biography.length", 0) > this.length_description;
     },
     description() {
-      return get(this, "teacher.biography", "").slice(
+      return get(this, "teacher.biography", "").substring(
         0,
         this.length_description
       );

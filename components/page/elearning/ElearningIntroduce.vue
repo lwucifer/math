@@ -71,13 +71,12 @@ export default {
       info: "info",
     }),
     description() {
-      if (this.load_more) {
-        return get(this, "info.description", "").substring(
-          0,
-          this.lengthDescription
-        );
-      }
-      return get(this, "info.description", "");
+      let string = get(this, "info.description", "").substring(
+        0,
+        this.lengthDescription
+      );
+      if (this.load_more) string += "...";
+      return string;
     },
     load_more() {
       return get(this, "info.description.length", 0) > this.lengthDescription;
