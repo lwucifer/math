@@ -106,6 +106,14 @@
         <IconInsertComment class="icon" />
         Số bài học: {{ get(info, "lessons", 0) }} bài
       </li>
+      <li v-if="get(info, 'starttime_enable', false)">
+        <IconInsertComment class="icon" />
+        Bắt đầu: {{ get(info, "start_time", "") }}
+      </li>
+      <li v-if="get(info, 'endtime_enable', false)">
+        <IconInsertComment class="icon" />
+        Kết thúc: {{ get(info, "end_time", "") }}
+      </li>
       <li>
         <IconTimer class="icon" />
         Thời lượng:
