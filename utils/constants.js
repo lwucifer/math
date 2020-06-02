@@ -127,7 +127,8 @@ export const QUESTION_NAV = {
 export const SUBMISSION_RESULTS = {
   PASSED: "PASSED",
   FAILED: "FAILED",
-  PENDING: "PENDING"
+  PENDING: "PENDING",
+  NONE: "NONE"
 };
 
 export const SCALE_MARK = 10;

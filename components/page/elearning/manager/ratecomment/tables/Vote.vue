@@ -14,12 +14,14 @@
             <!--@mouseover="showCmt(row)"-->
             <!--@mouseleave="closeCmt"-->
         <!--&gt;-->
+        <!--tooltip-inner popover-inner-->
         <td class="cmt-content">
           <v-popover
-            class=""
+            popover-class="tooltip--eln-vote"
             trigger="hover"
             offset="10"
             placement="top"
+            popover-inner-class="tooltip-inner popover-inner dont-break-out"
           >
             <div>
               {{ row.content | truncStrFilter(30, false) }}
@@ -62,7 +64,7 @@
     
       <template v-slot:cell(created_at)="{row}">
         <td>
-          {{ get(row, 'timestamp', '') | moment("hh:mm A DD/MM/YYYY") }}
+          {{ get(row, 'timestamp', '') | getDateTimeHH_MM_A_DD_MM_YY }}
         </td>
       </template>
     </app-table>

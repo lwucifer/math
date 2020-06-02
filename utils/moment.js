@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A } from "../utils/config";
+import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A, DATETIME_HH_MM_A_DD_MM_YY } from "../utils/config";
 const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
@@ -154,6 +154,12 @@ export const addDurationToUTCDate = (_utcDate, _duration, _type) => {
     return ts.add(_duration, _type).format(DATETIME_RECEIVE);
 }
 
+export const getDateTimeHH_MM_A_DD_MM_YY = _utcDate => {
+    if (!_utcDate) return;
+    // const ts = moment.utc(_utcDate);
+    const ts = getLocalDateTime(_utcDate);
+    return ts.format(DATETIME_HH_MM_A_DD_MM_YY);
+}
 
 Vue.filter("getDateBirthDay", function(_utcDate) {
     return getDateBirthDay(_utcDate);
@@ -165,4 +171,8 @@ Vue.filter("getDateTimeHH_MM_D_M_Y", function(_utcDate) {
 
 Vue.filter("fullDateTimeSlash", function(_utcDate) {
     return fullDateTimeSlash(_utcDate);
+});
+
+Vue.filter("getDateTimeHH_MM_A_DD_MM_YY", function(_utcDate) {
+    return getDateTimeHH_MM_A_DD_MM_YY(_utcDate);
 });

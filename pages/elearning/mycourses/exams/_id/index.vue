@@ -2,11 +2,11 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <MyCourseSide :active="3" />
+        <MyCourseSide :active="4" />
       </div>
       <div class="col-md-9">
         <sub-block-section
-          title="Danh sách bài tập"
+          title="Danh sách bài kiểm tra"
           has-icon
         >
           <template v-slot:content>

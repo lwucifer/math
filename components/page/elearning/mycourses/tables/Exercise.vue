@@ -8,45 +8,42 @@
       :data="list"
       :loading="loading"
     >
-      <template v-slot:cell(title)="{row}">
+      <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'title', '')">
-          {{ get(row, 'title', '') | truncStrFilter(30) }}
+          <span>
+            {{ get(row, 'name', '') | truncStrFilter(30) }}<sup class="elm--required-symbol" v-if="get(row, 'required', false)"><icon-star height="14" width="14"/></sup>
+          </span>
         </td>
       </template>
       
-      <template v-slot:cell(rate)="{row}">
+      <template v-slot:cell(status)="{row}">
         <td>
           <v-popover
-            offset="10"
             trigger="hover"
-            placement="top"
-            popover-class="tooltip--rate"
+            placement="bottom"
+            popover-class="tooltip--submit-status"
           >
-            <div class="nowrap rate-result-wrapper">
-              <span class="status-item status-item--success d-inline-block">
-                {{ row | resultFigureRate('passed_percent') }}%
-              </span>
-              <span class="status-item status-item--fail d-inline-block">
-                {{ row | resultFigureRate('failed_percent') }}%
-              </span>
-              <span class="status-item status-item--pending d-inline-block">
-                {{ row | resultFigureRate('pending_percent') }}%
-              </span>
-            </div>
-        
+            <span class="nowrap" :class="statusCls(row)">
+              <span>{{ getScoreDetail(row)}}</span>
+            </span>
             <template slot="popover" class="tooltip-detail">
               <div>
-                <rate-status
-                  :total="get(row, 'participants', 0)"
-                  :passed="get(row, 'passed', 0)"
-                  :failed="get(row, 'failed', 0)"
-                  :pending="get(row, 'pending', 0)"
+                <submit-status
+                  :timestamp="get(row, 'deadline')"
+                  :scoreDetail="getScoreDetail(row)"
+                  :result="get(row, 'result')"
                 >
-                </rate-status>
+                </submit-status>
               </div>
             </template>
       
           </v-popover>
+        </td>
+      </template>
+  
+      <template v-slot:cell(type)="{row}">
+        <td>
+          {{ get(row, 'type', '') | exType2Txt }}
         </td>
       </template>
       
@@ -64,7 +61,7 @@
 
       <template v-slot:cell(type)="{row}">
         <td>
-          {{ get(row, 'type', '') | exType2Txt }}
+          <span class="nowrap">{{ get(row, 'type', '') | exType2Txt }}</span>
         </td>
       </template>
 
@@ -74,19 +71,23 @@
         </td>
       </template>
     </app-table><!--End table-->
+    <p class="elm--text-desc text-center mt-4"><i>Các bài tập có đánh dấu * là các bài tập <b>bắt buộc</b></i></p>
   </div>
 </template>
 
 <script>
   import { get } from "lodash"
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
-  import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
-  import { numeralFormat } from "~/plugins/filters";
+  import IconStar from "~/assets/svg/v2-icons/star_rate_18px.svg?inline"
+  import SubmitStatus from "~/components/page/elearning/mycourses/SubmitStatus"
+  import { subResult2Txt } from "~/plugins/filters"
+  import { SUBMISSION_RESULTS } from "~/utils/constants"
 
   export default {
     components: {
       IconArrow,
-      RateStatus
+      IconStar,
+      SubmitStatus
     },
 
     props: {
@@ -117,7 +118,7 @@
       return {
         heads: [
           {
-            name: "title",
+            name: "name",
             text: "Tiêu đề bài tập",
           },
           {
@@ -125,7 +126,7 @@
             text: "Thể loại",
           },
           {
-            name: "expire",
+            name: "deadline",
             text: "Hạn nộp",
           },
           {
@@ -141,6 +142,7 @@
     },
 
     computed: {
+    
     },
     methods: {
       onPageChange(e) {
@@ -149,7 +151,28 @@
       sortTable(info) {
         this.$emit('changedSort', info)
       },
-      numeralFormat,
+      statusCls(item) {
+        return {
+          'text-primary': get(item, 'result') === SUBMISSION_RESULTS.PASSED,
+          'text-warning': get(item, 'result') === SUBMISSION_RESULTS.PENDING ||
+                          get(item, 'result') === SUBMISSION_RESULTS.NONE,
+          'text-pink-2': get(item, 'result') === SUBMISSION_RESULTS.FAILED,
+        }
+      },
+      hasScore(item) {
+        return get(item, 'result') === SUBMISSION_RESULTS.PASSED ||
+                get(item, 'result') === SUBMISSION_RESULTS.FAILED
+      },
+      getScoreDetail(item) {
+        let desc = ''
+        if (this.hasScore(item)) {
+          desc = `(${get(item, 'score', 0)}/${get(item, 'point', 0)}) ${subResult2Txt(get(item, 'result'))}`
+        } else {
+          desc = `${subResult2Txt(get(item, 'result'))}`
+        }
+        return desc
+      },
+      subResult2Txt,
       get
     },
   }
