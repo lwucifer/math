@@ -86,28 +86,32 @@
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
-          <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px"/> 
+          <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px" />
           <span class="text-primary">Thêm người</span>
         </template>
 
         <template #body>
-          <div class="d-flex justify-content-between align-items-center mb-3">
+          <div
+            class="d-flex justify-content-between align-items-center mb-3"
+            v-for="(item, index) in filterListMember"
+            :key="index"
+          >
             <div class="user-add d-flex align-items-center">
-              <img src="/images/tmp/user-photo.png" alt="" class="mr-3">
-              <p>Albert Cooper</p>
+              <img src="/images/tmp/user-photo.png" alt class="mr-3" />
+              <p>{{item.first_name}}</p>
             </div>
 
-            <div class="position text-disabled">Người tạo</div>
+            <div class="position text-disabled" v-if="item.creator">Người tạo</div>
           </div>
 
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="user-add d-flex align-items-center">
-              <img src="/images/tmp/user-photo.png" alt="" class="mr-3">
-              <p>Albert Cooper</p>
-            </div>
+          <!-- <div class="d-flex justify-content-between align-items-center">
+              <div class="user-add d-flex align-items-center">
+                <img src="/images/tmp/user-photo.png" alt class="mr-3" />
+                <p>Albert Cooper</p>
+              </div>
 
-            <div class="position text-disabled">Người tạo</div>
-          </div>
+              <div class="position text-disabled">Người tạo</div>
+          </div>-->
         </template>
       </ListInfoBox>
 
@@ -251,7 +255,7 @@ import IconNotificationsNone24px from "~/assets/svg/v2-icons/notifications_none_
 import IconRemoveCircleOutline24px from "~/assets/svg/v2-icons/remove_circle_outline_24px.svg?inline";
 import IconRecycle from "~/assets/svg/v2-icons/recycle.svg?inline";
 import IconFileBlank from "~/assets/svg/design-icons/file-blank.svg?inline";
-import IconAddGreen from '~/assets/svg/v2-icons/add_green.svg?inline';
+import IconAddGreen from "~/assets/svg/v2-icons/add_green.svg?inline";
 
 import ListInfoBox from "~/components/page/chat/ListInfoBox";
 import { getBase64 } from "~/utils/common";
@@ -330,7 +334,7 @@ export default {
   computed: {
     ...mapState("message", ["memberList", "groupListDetail", "tabChat"]),
     ...mapGetters("auth", ["userId"]),
-    ...mapState("chat", ["memberList"]),
+    ...mapState("chat", ["memberList", "roomDetail"]),
     listImage() {
       return this.groupListDetail && this.groupListDetail.listImage
         ? this.groupListDetail.listImage
@@ -359,6 +363,23 @@ export default {
         );
         return dataName;
       }
+    },
+    filterListMember() {
+      const data = this.memberList ? this.memberList : [];
+      const dataMap = data.map(item => {
+        if (item.id == this.roomDetail.created_by) {
+          return {
+            ...item,
+            creator: true
+          };
+        } else {
+          return {
+            ...item,
+            creator: false
+          };
+        }
+      });
+      return dataMap;
     }
   },
   methods: {
