@@ -105,6 +105,11 @@
         />
       </div>
     </template>
+    <!-- <template  v-if="totalSummary == 0">
+      <div class="text-gray-2 caption text-center">
+        Không có giữ liệu
+      </div>
+    </template> -->
   </div>
 </template>
 
