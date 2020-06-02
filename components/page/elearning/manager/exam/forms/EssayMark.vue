@@ -46,6 +46,7 @@
       :description="notiMes"
       @ok="visible.error = false"
       @close="visible.error = false"
+      centered
     >
       <template v-slot:icon>
     
