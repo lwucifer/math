@@ -114,6 +114,7 @@
 //tooltip
 .tooltip {
     $color: #fff;
+    max-width: 99%;
     .tooltip-inner {
         background: #fff;
         padding: 1rem 2rem;
@@ -246,6 +247,10 @@
     &[x-placement^="top"] .tooltip-arrow {
         left: 195px !important;
     }
+}
+
+.tooltip--eln-vote.tooltip {
+    max-width: 50rem;
 }
 //end tooltip
 
