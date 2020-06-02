@@ -18,7 +18,7 @@
     padding: .8rem 1.5rem;
     border-color: transparent;
     font-weight: 600;
-    transition: color .3s, background-color .3s, box-shadow .3s;
+    transition: color .3s, background-color .3s, border-color .3s, box-shadow .3s;
     color: $color-text-white;
     background-color: $color-text-white;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
@@ -210,6 +210,13 @@
     .btn-outline--color-#{$name} {
         border-color: $color;
         color: $color;
+
+        &:hover {
+            @if $name == 'primary' {
+                color: $color-primary-3;
+                border-color: $color-primary-3;
+            }
+        }
     }
 }
 
