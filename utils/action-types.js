@@ -476,6 +476,7 @@ export const ELEARNING_STUDY_STATISTIC = {
 
 export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     LIST: "elearningStudyOlclassLessonSessionsList",
+    ATTENDANCE: "elearningStudyOlclassLessonSessionsAttendance",
 };
 
 export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
