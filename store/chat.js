@@ -32,7 +32,8 @@ const actions = {
                 const { list_room } = result;
                 commit(mutationTypes.CHAT.SET_ROOM_LIST, {
                     list_room: uniqWith(
-                        state.roomList.list_room.concat(list_room)
+                        state.roomList.list_room.concat(list_room),
+                        isEqual
                     ),
                 });
             }
@@ -57,7 +58,6 @@ const actions = {
     },
     async [actionTypes.CHAT.MESSAGE_LIST]({ commit, state }, options) {
         try {
-            console.log('options', options.payloadMessage)
             const { data: result = {} } = await new Room(this.$axios)[
                 actionTypes.BASE.GET_END
             ](options, options.id, options.end);

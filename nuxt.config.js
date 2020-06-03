@@ -216,5 +216,8 @@ module.exports = {
         config.devtool = isClient ? "source-map" : "inline-source-map";
       }
     },
+    loaders: {
+      imgUrl: { esModule: false }
+    }
   },
 };

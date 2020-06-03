@@ -161,7 +161,7 @@ export function subResult2Txt(str = "") {
     [SUBMISSION_RESULTS.PASSED]: "Đạt",
     [SUBMISSION_RESULTS.FAILED]: "Không đạt",
     [SUBMISSION_RESULTS.PENDING]: "Chưa chấm",
-    [SUBMISSION_RESULTS.NONE]: "Chưa làm bài"
+    [SUBMISSION_RESULTS.NONE]: "Chưa làm"
   };
   if (MATCHED_DATA.hasOwnProperty(str)) return MATCHED_DATA[str];
   return "-";

@@ -46,6 +46,7 @@
       :description="notiMes"
       @ok="visible.error = false"
       @close="visible.error = false"
+      centered
     >
       <template v-slot:icon>
     
@@ -98,7 +99,7 @@
         VALIDATE_STATUS_CODE: Object.freeze(APP_INPUT_VALIDATE_STATUS),
         formData: {
           mark: '',
-          note: '',
+          note: null,
           to_passed: false
         },
         visible: {
@@ -119,8 +120,8 @@
           between: between(0.0, 10.0)
         },
         note: {
-          required: true,
-          minLength: minLength(8),
+          required,
+          minLength: minLength(15),
           // maxLength: maxLength(500)
         },
         to_passed: {

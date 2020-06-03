@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-9">
         <sub-block-section
-          title="Bài tập"
+          title="Danh sách bài giảng và khóa học có bài tập"
         >
           <template v-slot:content>
             <div class="elearning-manager-content p-0">
@@ -129,7 +129,6 @@
           this.list = this.get(this.detailInfo, 'content', [])
           this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
         } catch (e) {
-          console.log('Get elearnings of studing ', e)
         } finally {
           this.loading = false
         }

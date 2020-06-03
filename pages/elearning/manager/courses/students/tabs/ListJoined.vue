@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <student-manager-filter-form @submitSearch="submitSearch" @changedType="changedType" />
+    <student-manager-filter-form @submitFilter="submitSearch" @changedType="changedType" />
     <student-manager-table
       :heads="heads"
       :list="filterDataList.content"

@@ -35,6 +35,7 @@
       ok-text="Xác nhận"
       @ok="confirmMark"
       @cancel="cancelMark"
+      centered
     >
     </app-modal-confirm>
     
@@ -45,6 +46,7 @@
       description="Có lỗi xảy ra, vui lòng thử lại."
       @ok="showModalError = false"
       @close="showModalError = false"
+      centered
     >
       <template v-slot:icon>
       

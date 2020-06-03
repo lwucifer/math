@@ -1,5 +1,5 @@
 <template>
-  <section class="stream-frame">
+  <div class="stream-frame">
     <div
       v-show="!loadingExercise"
       class="video-player-box vjs-big-play-centered"
@@ -25,7 +25,7 @@
     >
       <app-spin />
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
