@@ -249,7 +249,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
     );
     await store.dispatch(
         `elearning/public/public-voted-subjects/${actionTypes.ELEARNING_PUBLIC_VOTED_SUBJECTS.LIST}`
@@ -261,15 +261,15 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/public/public-category", {
-      categories: "categories"
+    ...mapState("elearning/public/public-levels", {
+      levels: "levels"
     }),
 
     ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      const alls = optionSelectSubject(this.categories);
+      const alls = optionSelectSubject(this.levels);
       return alls.map(c => {
         return {
           value: c.id,
