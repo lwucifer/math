@@ -67,6 +67,7 @@ import StudySpaceAsideMenu from "~/components/page/elearning/mycourses/StudySpac
 import ScheduleToday from "~/components/page/elearning/mycourses/ScheduleToday"
 import moment from 'moment';
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
+import * as actionTypes from "../../../utils/action-types"
 
 
 export default {
@@ -80,6 +81,7 @@ export default {
         ScheduleToday,
         MyCourseSide,
     },
+
     methods:{
         getWeek(){
             const s = moment("2020-05-22");
@@ -89,12 +91,18 @@ export default {
                  const tuesday = moment("2020-05-20").day(i.toString())
                  console.log(tuesday.toString())
             }
-        }
-           
+        },
+        getData() {
+            this.$store.dispatch(`elearning/study/study-overview/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
+            // this.$store.dispatch("elearning/study-space/getStatistic");
+        },   
     },
     created(){
         this.getWeek();
-    }
+    },
+    mounted() {
+        this.getData();
+    },
 }
 </script>
 

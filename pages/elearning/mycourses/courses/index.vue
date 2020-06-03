@@ -228,6 +228,18 @@ export default {
       favourite: "favourite",
     }),
     list() {
+      if (this.tab === 2) {
+        return this.studying;
+      }
+      if (this.tab === 3) {
+        return this.studying;
+      }
+      if (this.tab === 4) {
+        return this.favourite;
+      }
+      if (this.tab === 5) {
+        return this.archive;
+      }
       return this.studying;
     },
   },
@@ -311,33 +323,49 @@ export default {
     ]),
     changeTab(tab) {
       this.tab = tab;
-      this.params.size = 8;
-      if (tab === 1) {
-        this.params.type = "ALL";
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (tab === 2) {
-        this.params.type = "LECTURE";
-        this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (tab === 3) {
-        this.params.type = "COURSE";
-        this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (tab === 4) {
-        this.fetchElearningFavourite();
-        this.list = get(this, "elearningStudyFavourite.content", []);
-        this.pagination = get(this, "elearningStudyFavourite.page", {});
-      } else if (tab === 5) {
-        this.fetchElearningArchive();
-        this.list = get(this, "elearningStudyArchive.content", []);
-        this.pagination = get(this, "elearningStudyArchive.page", {});
+      this.params.page = 1;
+      const payload = {
+        params: this.params,
+      };
+      if (this.tab === 2) {
+        this.$store.dispatch("elearning/study-space/getStudying", payload);
       }
+      if (this.tab === 3) {
+        this.$store.dispatch("elearning/study-space/getStudying", payload);
+      }
+      if (this.tab === 4) {
+        this.$store.dispatch("elearning/study-space/getFavourite", payload);
+      }
+      if (this.tab === 5) {
+        this.$store.dispatch("elearning/study-space/getArchive", payload);
+      }
+      // this.params.size = 8;
+      // if (tab === 1) {
+      //   this.params.type = "ALL";
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (tab === 2) {
+      //   this.params.type = "LECTURE";
+      //   this.params.page = 1;
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (tab === 3) {
+      //   this.params.type = "COURSE";
+      //   this.params.page = 1;
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (tab === 4) {
+      //   this.fetchElearningFavourite();
+      //   this.list = get(this, "elearningStudyFavourite.content", []);
+      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
+      // } else if (tab === 5) {
+      //   this.fetchElearningArchive();
+      //   this.list = get(this, "elearningStudyArchive.content", []);
+      //   this.pagination = get(this, "elearningStudyArchive.page", {});
+      // }
     },
 
     fetchElearningList() {

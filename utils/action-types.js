@@ -433,6 +433,10 @@ export const ELEARNING_STURY = {
     LIST_TIMETABLE: "elearningStudyListTimetable",
 };
 
+export const ELEARNING_STURY_OVERVIEW = {
+    LIST: "elearningStudyOverviewList",
+};
+
 export const ELEARNING_STUDY_STUDENT = {
     LIST: "elearningStudyStudentList",
 };
@@ -672,4 +676,5 @@ export const CHAT = {
     MEMBER_LIST: "getMemberList",
     MESSAGE_LIST: "getMessageList",
     ROOM_DETAIL: "getRoomDetail",
+    MESSAGE_LIST_FETCH: "getMessageListFetch"
 };

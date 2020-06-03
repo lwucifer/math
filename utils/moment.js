@@ -169,6 +169,19 @@ export const getDateTimeHH_MM_A_DD_MM_YY = _utcDate => {
     return ts.format(DATETIME_HH_MM_A_DD_MM_YY);
 }
 
+// return current day in week: sun mon ... fri sat
+export const getTodayDDD = () => {
+    return moment().locale('en').format("ddd").toLowerCase();
+}
+
+export const isTodayInRangeDate = (_fromDate, _toDate) => {
+    // console.log("[isTodayInRangeDate]", _fromDate, _toDate)
+    if(!_fromDate || !_toDate) return false;
+    const fDate = moment(_fromDate).format(DATE_YYYY_MM_DD);
+    const tDate = moment(_toDate).format(DATE_YYYY_MM_DD);
+    return moment().isBetween(fDate, tDate);
+}
+
 Vue.filter("getDateBirthDay", function(_utcDate) {
     return getDateBirthDay(_utcDate);
 });

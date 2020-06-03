@@ -23,15 +23,12 @@
           Thời gian từ ngày {{ timetable.from_date }} đến
           {{ timetable.to_date }}
         </h5>
-        <app-table :heads="heads" :data="timetable.schedules">
+        <app-table :heads="convertedHeads" :data="timetable.schedules">
           <template v-slot:cell(day)="{ row }">
             <td v-if="row.day == 1" class="day">Sáng</td>
             <td v-else-if="row.day == 2" class="day">Chiều</td>
             <td v-else-if="row.day == 3" class="day">Tối</td>
           </template>
-          <!-- <template v-slot:cell(mon)="{ item, value }">
-            <td v-if="item == today" class="today">{{ value }}</td>
-          </template> -->
         </app-table>
       </div>
     </div>
@@ -39,6 +36,8 @@
 </template>
 
 <script>
+import { getTodayDDD } from "~/utils/moment";
+
 export default {
   data() {
     return {
@@ -107,8 +106,7 @@ export default {
           name: "sun",
           text: "Chủ nhật"
         }
-      ],
-      today: "mon"
+      ]
     };
   },
 
@@ -123,9 +121,20 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    convertedHeads() {
+      const currentDayInWeek = getTodayDDD();
 
-  created() {
+      return this.heads.map(h => {
+        return {
+          ...h,
+          class: h.name == currentDayInWeek ? "today" : null
+        };
+      });
+    }
+  },
+
+  updated() {
     console.log("[timetables]", this.timetables);
   }
 };
@@ -135,8 +144,10 @@ export default {
 @import "~/assets/scss/components/elearning/olclass/time-table.scss";
 </style>
 
-<style scoped>
+<style lang="scss">
 .today {
-  background-color: red;
+  background-color: rgba(#d50000, 0.2) !important;
+  border: none !important;
+  color: #d50000;
 }
 </style>

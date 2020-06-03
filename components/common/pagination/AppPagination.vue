@@ -1,7 +1,7 @@
 <template>
   <ul
     class="app-pagination"
-    v-if="total < 8 && total > 1"
+    v-if="total > 5"
     :class="{ ...styleCls, ...extCls }"
   >
     <li>

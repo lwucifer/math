@@ -238,16 +238,6 @@
 .tooltip--rate {
     max-width: 34rem;
 }
-.tooltip--submit-status.tooltip {
-    left: -87px !important;
-    &[x-placement^="bottom"] .tooltip-arrow {
-      left: 195px !important;
-    }
-    
-    &[x-placement^="top"] .tooltip-arrow {
-        left: 195px !important;
-    }
-}
 
 .tooltip--eln-vote.tooltip {
     max-width: 50rem;
