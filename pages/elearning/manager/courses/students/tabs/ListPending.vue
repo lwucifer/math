@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <student-manager-filter-form />
+    <student-manager-filter-form @submitFilter="submitSearch" @changedType="changedType" />
     <student-manager-table
       :heads="heads"
       :list="filterElearningRequest"
@@ -34,12 +34,11 @@ export default {
         },
         {
           name: "request_date",
-          text: "Ngày tham gia"
+          text: "Ngày gửi yêu cầu"
         },
-
         {
           name: "confirm",
-          text: ""
+          text: "Thao tác"
         }
       ],
       list: [
@@ -104,19 +103,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(STORE_NAMESPACE, ["teachingElearningList"]),
+    ...mapActions(STORE_TEACHING_REQUEST, ["teachingElearningRequestsList"]),
     submitSearch(keyword) {
-      // this.keyword = keyword;
       const query = {
         params: {
-          keyword: keyword,
+          ...keyword,
           elearning_id: this.$route.query.elearning_id
         }
       };
-      this.teachingElearningList(query);
+      this.teachingElearningRequestsList(query);
     },
     changedType(classes) {
-      console.log("classes", classes);
       if (classes == "Khác") {
         const query = {
           params: {
@@ -124,7 +121,7 @@ export default {
             elearning_id: this.$route.query.elearning_id
           }
         };
-        this.teachingElearningList(query);
+        this.teachingElearningRequestsList(query);
       } else {
         const query = {
           params: {
@@ -132,10 +129,20 @@ export default {
             elearning_id: this.$route.query.elearning_id
           }
         };
-        this.teachingElearningList(query);
+        this.teachingElearningRequestsList(query);
       }
     }
-  }
+  },
+
+  created () {
+     const query = {
+      params: {
+        khac: true,
+        elearning_id: this.$route.query.elearning_id
+      }
+    };
+    this.teachingElearningRequestsList(query);
+  },
 };
 </script>
 

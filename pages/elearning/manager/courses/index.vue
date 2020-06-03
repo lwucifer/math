@@ -167,8 +167,11 @@
             <template v-slot:cell(publish_date)="{ row }">
               <td>{{getDateBirthDay(row.publish_date)}}</td>
             </template>
-            <template v-slot:cell(end_date)="{ row }">
-              <td>{{getDateBirthDay(row.end_date)}}</td>
+            <template v-slot:cell(end_time)="{ row }">
+              <td>{{getDateBirthDay(row.end_time)}}</td>
+            </template>
+            <template v-slot:cell(start_time)="{ row }">
+              <td>{{getDateBirthDay(row.start_time)}}</td>
             </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
@@ -346,12 +349,12 @@ export default {
           text: "Hiển thị"
         },
         {
-          name: "publish_date",
+          name: "start_time",
           text: "Ngày bắt đầu",
           sort: true
         },
         {
-          name: "end_date",
+          name: "end_time",
           text: "Ngày kết thúc",
           sort: true
         }
