@@ -2,7 +2,7 @@
   <div class="">
     <!--form-->
     <div v-if="showAddPayment">
-      <add-bank-form></add-bank-form>
+      <AddBank @cancel="showAddPayment = !showAddPayment" />
       <hr class="mb-4" />
     </div>
 
@@ -55,12 +55,12 @@
 <script>
 import IconCiclePlus from "~/assets/svg/design-icons/plus-circle.svg?inline";
 import IconCheck from "~/assets/svg/design-icons/check.svg?inline";
-import AddBankForm from "~/components/page/account/forms/AddBank";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
 import AccountEditPaymentModal from "~/components/page/account/Info/AccountEditPaymentModal";
+import AddBank from "~/components/page/profile/setting/tabs/AddBank";
 
 export default {
   layout: "account-info",
@@ -69,8 +69,8 @@ export default {
     IconCiclePlus,
     IconCheck,
     AccountPaymentItem,
-    AddBankForm,
     AccountEditPaymentModal,
+    AddBank
   },
   data() {
     return {

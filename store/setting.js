@@ -14,14 +14,13 @@ const actions = {
   async getAccountBanks({ commit }, options = {}) {
     try {
       const result = await new AccountBank(this.$axios)["list"](options);
-      console.log(result)
       if (get(result, "success", false)) {
         commit("accountBanks", get(result, "data", null));
         return;
       }
       commit("accountBanks", null);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       commit("accountBanks", null);
     }
   },
@@ -30,7 +29,13 @@ const actions = {
     try {
       const result = await new PublicBank(this.$axios)["list"](options);
       if (get(result, "success", false)) {
-        commit("banks", get(result, "data", null));
+        const banks = [];
+        get(result, "data", []).map((bank) => {
+          bank.value = bank.code;
+          bank.text = bank.name;
+          banks.push(bank);
+        });
+        commit("banks", banks);
         return;
       }
       commit("banks", null);
