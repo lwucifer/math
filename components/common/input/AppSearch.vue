@@ -20,7 +20,6 @@
 
 <script>
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import { mapMutations } from 'vuex'
 export default {
   inheritAttrs: false,
 
@@ -63,9 +62,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('keyword', ['searchHeader']),
     submit(event) {
-      this.searchHeader(this.localValue);
       this.$emit("submit", this.localValue);
     },
 

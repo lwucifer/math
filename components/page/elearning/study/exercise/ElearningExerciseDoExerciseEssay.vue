@@ -297,8 +297,9 @@ export default {
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
       this.$toasted.success("Tải câu trả lời lên thành công");
+      const fileUploaded = file ? file[0] : null;
       this.setStudyExerciseSubmission({
-        file: file ? file[0] : null,
+        file: fileUploaded,
         question_id: this.currentExerciseQuestion.id
       });
     },

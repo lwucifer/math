@@ -151,6 +151,10 @@
   width: 32.7rem;
 }
 
+.interacts-qa-search-1 {
+  flex: 0 0 48.1rem;
+}
+
 .interacts-filter {
   .filter-status {
     @media (min-width: 1200px) {
@@ -165,4 +169,8 @@
       width: 190px !important;
     }
   }
+}
+
+.tooltip--eln-interactive{
+  max-width: 33.4rem;
 }

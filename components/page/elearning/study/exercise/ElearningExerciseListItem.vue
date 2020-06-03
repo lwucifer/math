@@ -17,7 +17,7 @@
     >
 
     <app-button
-      v-else-if="!overDeadline && status === EXERCISE_STATUS.NONE"
+      v-else-if="!overDeadline && status === EXERCISE_STATUS.NONE && !works"
       color="yellow"
       size="sm"
       @click.prevent="handleDoExercise"
@@ -25,7 +25,7 @@
     >
 
     <app-button
-      v-else-if="status === EXERCISE_STATUS.FAILED && canDoExercise"
+      v-else-if="(status == EXERCISE_STATUS.FAILED || status == EXERCISE_STATUS.NONE) && canDoExercise"
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
