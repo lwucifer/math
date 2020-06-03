@@ -45,6 +45,9 @@
               >Xem thêm</a
             >
           </div>
+          <div class="text-center mt-3" v-if="hide_description">
+            <a @click="handleCompact" class="text-decoration-none">Rút gọn</a>
+          </div>
         </div>
         <div v-else class="text-center caption text-gray-2">
           Chưa có nội dung.
@@ -88,11 +91,20 @@ export default {
         this.length_description
       );
     },
+    hide_description() {
+      return (
+        this.lengthDescription == get(this, "info.description.length", 0) &&
+        get(this, "teacher.biography.length", 0) > 300
+      );
+    },
   },
 
   methods: {
     handleLoadMore() {
       this.length_description = get(this, "teacher.biography.length", 0);
+    },
+    handleCompact() {
+      this.lengthDescription = 300;
     },
     get,
     numeral,
