@@ -7,7 +7,7 @@
         </n-link>
       </div>
 
-      <app-search class="the-header__search" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
+      <app-search class="the-header__search" :value="valueInput" @submit="handleInput" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>
@@ -176,6 +176,7 @@ export default {
   },
 
   data: () => ({
+    valueInput: '',
     showLogin: false,
     dropdownAuth: false,
     dropdownCourse: false,
@@ -189,7 +190,15 @@ export default {
   computed: {
     ...mapState("notifications", ["notis", "notiUnread"]),
     ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
-    ...mapGetters("cart", ["cartCheckout"])
+    ...mapGetters("cart", ["cartCheckout"]),
+    ...mapState("keyword", ["keyword"]),
+  },
+  watch: {
+    keyword(newValue){
+      if(!newValue){
+        this.valueInput = '';
+      }
+    }
   },
   mounted() {
     this.$fireMess.onMessage(payload => {
@@ -217,6 +226,7 @@ export default {
   methods: {
     get,
     ...mapMutations("auth", ["removeToken"]),
+    ...mapMutations('keyword', ['searchHeader']),
     ...mapMutations("notifications", ["reviceNoti", "commitNotiUnread"]),
     ...mapActions("notifications", [
       "socialNotifications",
@@ -224,6 +234,10 @@ export default {
       "getNotiUnread"
     ]),
     ...mapActions("cart", ["cartList"]),
+    handleInput(_value){
+      this.valueInput = _value;
+      this.searchHeader(_value);
+    },
     redirectSignin() {
       this.$router.push("/auth/signin");
     },
