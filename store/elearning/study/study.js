@@ -9,7 +9,8 @@ import Study from "~/services/elearning/study/Study";
 const state = () => ({
   elearningStudy: [],
   timetables: [],
-  expand: false
+  expand: false,
+  fullscreen: false
 });
 
 /**
@@ -66,6 +67,10 @@ const mutations = {
   
   [mutationTypes.ELEARNING_STUDY.SET_EXPAND](state, expand) {
     state.expand = expand;
+  },
+
+  [mutationTypes.ELEARNING_STUDY.SET_FULLSCREEN](state, fullscreen) {
+    state.fullscreen = fullscreen;
   }
 };
 
