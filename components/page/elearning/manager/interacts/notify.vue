@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container pr-0">
     <div class="d-flex interacts-filter mb-4">
       <app-search
-        class="interacts-qa-search mb-0 mr-3"
+        class="interacts-qa-search-1 mb-0 mr-3"
         bordered
         size="sm"
         placeholder="Nhập để tìm kiếm"
@@ -36,7 +36,7 @@
         />
         -->
         <AppSelectIneractiveElearning
-          class="app-vue-select filter-course"
+          class="app-vue-select filter-course mr-0"
           @input="handleChangedInput"
         />
       </template>
@@ -53,6 +53,7 @@
         @pagechange="onPageChange"
         :data="list"
         multiple-selection
+        @selectionChange="selectRow"
       >
         <template v-slot:cell(action)="{row}">
           <td>
@@ -66,6 +67,8 @@
           <td>
             <v-popover
               trigger="hover"
+              popover-inner-class="tooltip-inner popover-inner dont-break-out"
+              popover-class="tooltip--eln-interactive"
             >
               <span>{{get(row,"content","") | truncStrFilter(30)}}</span>
               <template slot="popover">
@@ -79,6 +82,8 @@
           <td>
             <v-popover
               trigger="hover"
+              popover-inner-class="tooltip-inner popover-inner dont-break-out"
+              popover-class="tooltip--eln-interactive"
             >
               <span>{{get(row,"title","") | truncStrFilter(30)}}</span>
               <template slot="popover">
@@ -271,7 +276,6 @@ export default {
           size:  this.params.size
         }
       }
-      console.log('hello',payload)
       const res = this.$store.dispatch(
         `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.LIST}`,
         payload
@@ -290,6 +294,9 @@ export default {
       this.params.elearning_id = null;
       this.params.page=1;
       this.params.size=10;
+    },
+    selectRow(data){
+      console.log('select data',data)
     },
     get
     /*

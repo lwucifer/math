@@ -66,10 +66,12 @@
           <td>
             <v-popover
               trigger="hover"
+              popover-class="tooltip--eln-interactive"
+              popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <span>{{row.content | truncStrFilter(30)}}</span>
+              <div>{{ get(row,"content","") | truncStrFilter(30)}}</div>
               <template slot="popover">
-                <span>{{row.content}}</span>
+                <div>{{get(row,"content","")}}</div>
               </template>
             </v-popover>
           </td>
@@ -78,10 +80,12 @@
           <td>
             <v-popover
               trigger="hover"
+              popover-inner-class="tooltip-inner popover-inner dont-break-out"
+              popover-class="tooltip--eln-interactive"
             >
-              <span>{{row.elearning_name | truncStrFilter(30)}}</span>
+              <div>{{get(row,"elearning_name","") | truncStrFilter(30)}}</div>
               <template slot="popover">
-                <span>{{row.elearning_name}}</span>
+                <div>{{get(row,"elearning_name","")}}</div>
               </template>
             </v-popover>
           </td>
@@ -208,7 +212,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAME_INTERACTS, ["listQuestions"]),
     // ...mapState(STORE_PUBLIC_SEARCH, ["Lessons"]),
-    ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
+    //...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
     filterListQuestions() {
       return this.listQuestions && this.listQuestions.content
         ? this.listQuestions.content
@@ -246,6 +250,7 @@ export default {
             : 0
       };
     },
+    /*
     filterListLesson() {
       const data = this.teachingPublicList ? this.teachingPublicList : [];
       const filterData = data.map(item => {
@@ -256,6 +261,7 @@ export default {
       });
       return filterData;
     },
+    */
     lessonOpts() {
         return [this.allOpt, ...this.filterListLesson]
       },
@@ -305,14 +311,12 @@ export default {
     },
     handleChangedInputLesson(val) {
       this.listQuery.elearning_id = val ? val : null;
-      console.log(this.listQuery,'lol')
       const query = {
         params: {
           ...this.listQuery,
           elearning_id: val ? val : null
         }
       };
-      console.log(query,'lol')
       this.teachingInteractiveListquestion(query);
       console.log("[Component] Elearning exam: changing input...", val);
     },
@@ -355,7 +359,8 @@ export default {
     resetForm(){
       this.filters.lesson = null,
       this.filters.result = null
-    }
+    },
+    get
   },
 
   created() {
