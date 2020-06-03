@@ -15,12 +15,13 @@
         :color="isFilter ? 'primary' : 'default'"
         :outline="!isFilter"
         size="sm"
-        @click="isFilter = !isFilter"
+        @click="clickFilter"
       >
         <IconHamberger class="icon mr-1" />&nbsp;Lọc kết quả
       </app-button>
 
       <template v-if="isFilter">
+        <!--
         <app-vue-select
           class="app-vue-select filter-course"
           v-model="filter.province"
@@ -33,6 +34,11 @@
           @search:blur="handleBlurSearchInput"
           :all-opt="allOpt"
         />
+        -->
+        <AppSelectIneractiveElearning
+          class="app-vue-select filter-course"
+          @input="handleChangedInput"
+        />
       </template>
     </div>
 
@@ -43,7 +49,7 @@
     <div class="wrapTable__ElearningManagerInteractive">
       <app-table
         :heads="heads"
-        :pagination="pagination"
+        :pagination="filterPagination"
         @pagechange="onPageChange"
         :data="list"
         multiple-selection
@@ -61,7 +67,7 @@
             <v-popover
               trigger="hover"
             >
-              <span>{{row.content | truncStrFilter(30)}}</span>
+              <span>{{get(row,"content","") | truncStrFilter(30)}}</span>
               <template slot="popover">
                 <span>{{row.content}}</span>
               </template>
@@ -74,11 +80,18 @@
             <v-popover
               trigger="hover"
             >
-              <span>{{row.title | truncStrFilter(30)}}</span>
+              <span>{{get(row,"title","") | truncStrFilter(30)}}</span>
               <template slot="popover">
                 <span>{{row.title}}</span>
               </template>
             </v-popover>
+          </td>
+        </template>
+        <template v-slot:cell(timestamp)="{row}">
+          <td>
+           <span>
+             {{get(row,"timestamp","") | moment('DD/MM/YYYY')}}
+           </span>
           </td>
         </template>
       </app-table>
@@ -95,8 +108,11 @@ import IconDeleteForever from "~/assets/svg/v2-icons/delete_forever_24px.svg?inl
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { NOTIFIES } from "~/server/fakedata/elearning/materials";
-import { get } from 'lodash'
+import { get } from 'lodash';
+import { moment } from 'moment'
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
+const STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS = "elearning/teaching/interactive-announcement";
+import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
 export default {
   layout: "manage",
 
@@ -104,7 +120,8 @@ export default {
     IconHamberger,
     IconSearch,
     IconDeleteForever,
-    IconArrowForwardIos24pxOutlined
+    IconArrowForwardIos24pxOutlined,
+    AppSelectIneractiveElearning
   },
   data() {
     return {
@@ -127,12 +144,12 @@ export default {
           sort: false
         },
         {
-          name: "lesson",
+          name: "elearning_name",
           text: "Bài giảng khoa học",
           sort: false
         },
         {
-          name: "time",
+          name: "timestamp",
           text: "Thời gian",
           sort: false
         },
@@ -146,26 +163,6 @@ export default {
         type: null,
         query: null
       },
-      classes: [
-        {
-          value: 1,
-          text: "11A"
-        },
-        {
-          value: 2,
-          text: "10A"
-        }
-      ],
-      results: [
-        {
-          value: 1,
-          text: "Đạt"
-        },
-        {
-          value: 2,
-          text: "Chưa đạt"
-        }
-      ],
       isAuthenticated: true,
       pagination: {
         total: 15,
@@ -175,7 +172,7 @@ export default {
         first: 1,
         last: 10
       },
-      list: NOTIFIES,
+      list: [],
       listQuery: {
         page: 1,
         size: 10
@@ -184,12 +181,26 @@ export default {
       allOpt: {
         value: null,
         label: 'Tất cả'
+      },
+      params:{
+        elearning_id:null,
+        keyword:null,
+        page:1,
+        size:10
       }
     };
+  },
+  watch:{
+    listAnnouncement:{
+      handler: function() {
+        this.list = get(this,"listAnnouncement.content")
+      }
+    }
   },
   computed: {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_TEACHING_PUBLIC_LIST, ["teachingPublicList"]),
+    ...mapState(STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS, ["listAnnouncement"]),
     filterListLesson() {
       const data = this.teachingPublicList ? this.teachingPublicList : [];
       const filterData = data.map(item => {
@@ -203,22 +214,33 @@ export default {
     lessonOpts() {
         return [this.allOpt, ...this.filterListLesson]
       },
+    filterPagination() {
+      return {
+        size:get(this,"listAnnouncement.size",10),
+        total_pages:get(this,"listAnnouncement.total_pages",0),
+        total_elements:get(this,"listAnnouncement.total_elements",0),
+        first:get(this,"listAnnouncement.first",false),
+        last:get(this,"listAnnouncement.last",false),
+        number_of_elements:get(this,"listAnnouncement.number_of_elements",0),
+        number:get(this,"listAnnouncement.number",0)
+      };
+    },
   },
 
   methods: {
     onPageChange(e) {
-      const that = this;
-      that.pagination = { ...that.pagination, ...e };
-      console.log(that.pagination);
+      this.params.page = e.number + 1;
+      console.log(this.params)
+      this.fetchAnnouncement();
     },
     submit() {
       console.log("[Component] Elearning exam: submitted");
     },
     handleChangedInput(val) {
-      if (val !== null) {
-      } else {
-      }
       console.log("[Component] Elearning exam: changing input...", val);
+      this.params.elearning_id = val;
+      this.params.page = null;
+      this.fetchAnnouncement();
     },
     handleFocusSearchInput() {
       console.log("[Component] Elearning exam: focus searching ");
@@ -226,8 +248,11 @@ export default {
     handleBlurSearchInput() {
       console.log("[Component] Elearning exam: blur searching ");
     },
-    handleSearch() {
+    handleSearch(val) {
       console.log("[Component] Elearning exam: searching");
+      this.params.keyword = val;
+      this.params.page = null;
+      this.fetchAnnouncement();
     },
     clickQuestion({ row, index }) {
       console.log("click question");
@@ -237,6 +262,37 @@ export default {
       console.log("close");
       this.currentQuestionIndex = null;
     },
+    fetchAnnouncement(){
+      const payload = { 
+        params:{
+          elearning_id: this.params.elearning_id,
+          keyword: this.params.keyword,
+          page: this.params.page,
+          size:  this.params.size
+        }
+      }
+      console.log('hello',payload)
+      const res = this.$store.dispatch(
+        `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.LIST}`,
+        payload
+      );
+    },
+    clickFilter(){
+      if (this.isFilter) {
+          this.resetForm()
+          this.isFilter = false
+          this.fetchAnnouncement()
+      } else {
+          this.isFilter = true
+      }
+    },
+    resetForm(){
+      this.params.elearning_id = null;
+      this.params.page=1;
+      this.params.size=10;
+    },
+    get
+    /*
     async getList() {
       const elearningType = "1";
       this.listQuery.type = elearningType;
@@ -249,10 +305,12 @@ export default {
         { params }
       );
     }
+    */
   },
 
   created() {
-    this.getList();
+    //this.getList();
+    this.fetchAnnouncement();
   }
 };
 </script>
