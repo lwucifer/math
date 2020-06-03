@@ -50,6 +50,7 @@
             <td
               v-html="cat[item.name]"
               v-bind:style="cat[item.css] ? cat[item.css] : ''"
+              v-bind:class="(cat[item.name] && cat[item.class]) ? cat[item.class] : ''"
               :key="j"
             >
             </td>
