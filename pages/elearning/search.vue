@@ -302,7 +302,7 @@ export default {
     keyword(_newVal) {
       console.log("keyword", _newVal);
       this.payload.page = 1;
-      this.payload.keyword = _newVal ? _newVal : -1;
+      this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
     }
   },
