@@ -5,12 +5,17 @@
       title="Thông tin đơn hàng"
     >
       <template v-slot:content>
-        <div class="item__payment-side">
+        <div 
+          class="item__payment-side" 
+          v-for="(item, index) in carts"
+          :key="index"
+          :item="item"
+        >
           <div class="name-elearning__payment">
-            <span>Khóa học đại số lớp 11</span>
-            <span class=" text-primary ml-auto">198,000đ</span>
+            <span>{{ get(item, "elearning_name", "") }}</span>
+            <span class=" text-primary ml-auto">{{ numeral(get(item, "price", "")).format() }} đ</span>
           </div>
-          <span class="name-teacher__payment">Trần Văn Nam</span>
+          <span class="name-teacher__payment">{{ get(item, "teacher_name", "") }}</span>
         </div>
         <div style="margin-top:4rem;padding:0 1.6rem">
           <div class="d-flex">
@@ -59,6 +64,12 @@ import { get } from "lodash";
 import numeral from "numeral";
 
 export default {
+  props: {
+    carts: {
+      type: Array,
+      default: () => [],
+    },
+  },
   components: {
     IconCollectionsBookmark24px,
     IconCreditCard24px,
