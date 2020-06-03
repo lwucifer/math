@@ -455,6 +455,7 @@ export const ELEARNING_STURY_ARCHIVE = {
 };
 
 export const ELEARNING_STUDY_EXERCISE = {
+    LIST_QUESTION_START: "elearningSudyExerciseQuestionListStart",
     LIST_QUESTION: "elearningSudyExerciseQuestionList",
     LIST_ELEARNING_EXERCISE: "elearningSudyElearningExerciseList",
     LIST_RESULT: "elearningSudyExerciseResultList",
@@ -644,8 +645,10 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
 
 export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
     LIST: "teachingInteractiveListAnnouncement",
+};
+
+export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = {
     ADD: "teachingInteractiveAnnouncementAdd",
-    DELETE: "teachingInteractiveAnnouncementDelete"
 };
 
 export const TEACHING_PUBLIC_LIST = {

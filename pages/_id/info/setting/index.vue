@@ -24,7 +24,7 @@
                   <div v-if="loading">Loading...</div>
                   <div v-else>
                     <Notify v-if="tab === 'notify'" />
-                    <PaymentTab v-if="tab === 'payment'" />
+                    <PaymentList v-if="tab === 'payment'" />
                   </div>
                 </keep-alive>
               </template>
@@ -41,7 +41,7 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
 import Notify from "~/components/page/profile/setting/tabs/Notify";
-import PaymentTab from "~/components/page/profile/setting/tabs/PaymentList";
+import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
 import { mapState } from "vuex";
 import { get } from "lodash";
 
@@ -51,14 +51,14 @@ export default {
   components: {
     SchoolAccountSide,
     Notify,
-    PaymentTab,
+    PaymentList,
     HeadTabs,
   },
 
   data() {
     return {
       loading: true,
-      tab: "notify",
+      tab: "payment",
       isAuthenticated: true,
       tabs: [
         {
@@ -88,7 +88,7 @@ export default {
     currentTabComponent: function() {
       const MATCHED_TABS = {
         notify: "Notify",
-        payment: "PaymentTab",
+        payment: "PaymentList",
       };
       return MATCHED_TABS[this.tab];
     },

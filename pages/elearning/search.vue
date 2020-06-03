@@ -115,7 +115,7 @@
 
 <script>
 import { get } from "lodash";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
 import {
@@ -300,11 +300,15 @@ export default {
 
   watch: {
     keyword(_newVal) {
-      console.log("keyword", _newVal);
       this.payload.page = 1;
-      this.payload.keyword = _newVal ? _newVal : -1;
+      this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
     }
+  },
+
+  beforeDestroy() {
+    console.log('[Clear Search Header]')
+    this.searchHeader();
   },
 
   mounted() {
@@ -316,7 +320,7 @@ export default {
 
   methods: {
     get,
-
+    ...mapMutations('keyword', ['searchHeader']),
     async getLessons() {
       this.pageLoading = true;
       Object.keys(this.payload).map(k => {
