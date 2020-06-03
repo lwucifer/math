@@ -371,6 +371,10 @@ export const ELEARNING_STUDY = {
     SET_FULLSCREEN: "setElearningStudyFullScreen"
 };
 
+export const ELEARNING_STUDY_OVERVIEW = {
+    SET_ELEARNING_STUDY_OVERVIEW: "setElearningStudyOverview",
+};
+
 export const ELEARNING_STUDY_STUDENT = {
     SET_ELEARNING_STUDY_STUDENT: "setElearningStudyStudent",
 };
