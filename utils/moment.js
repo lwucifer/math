@@ -35,6 +35,14 @@ export const getDateFormat = _utcDate => {
     return ts.format(DATE_FORMAT);
 };
 
+export const isBeforeNow = _utcDate => {
+    console.log("[isBeforeNow]", _utcDate);
+    if (!_utcDate) return false;
+    const ts = getLocalDateTime(_utcDate);
+    return ts.isBefore(new Date());
+};
+
+
 export const fullDateTimeSlash = _utcDate => {
     if (!_utcDate) return "--:--";
     // const ts = moment.utc(_utcDate);

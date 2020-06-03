@@ -78,6 +78,7 @@
               target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
               :v-if="is_started"
+              @click="handleStartJoin"
               :disabled="contentLoading"
               >Vào phòng học</a
             >

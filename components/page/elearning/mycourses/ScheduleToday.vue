@@ -1,7 +1,12 @@
 <template>
   <div class="wrap-schedulte-today-study-space">
       <div class="d-flex">
-          <h4>Học gì hôm nay?</h4>
+          <div class="d-flex align-items-center text-primary">
+              <h4>Học gì hôm nay?</h4>
+              <span class="ml-4">
+                  {{ dateSchedule | moment('Do MMMM, YYYY') }}
+              </span>
+          </div>
           <app-date-picker
             label="Chọn thời gian:"
             class="schedule-today-date-picker"
@@ -73,9 +78,12 @@ export default {
     },
     data(){
         return{
-            dateSchedule:'',
+            dateSchedule:moment().format("YYYY-MM-DD"),
             dayslist:[]
         }
+    },
+    created(){
+        this.changeDate(this.dateSchedule)
     },
     methods:{
         changeDate(date){
@@ -85,6 +93,7 @@ export default {
                  this.dayslist.push(day)
             }
             console.log(this.dayslist)
+            console.log(moment().format("YYYY-MM-DD").toString())
         },
         checkDate(d1){
             let date1 = moment(d1).format("YYYY-MM-DD").toString()

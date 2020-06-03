@@ -3,17 +3,17 @@
     <!-- TAGS MODE -->
     <template v-if="mode === 'tags'">
       <div class="app-select__selected" @click="handleClickSelected">
-        <span
-          class="app-select__placeholder"
-          v-if="!localValue.length"
-        >{{ $attrs.placeholder || '' }}</span>
+        <span class="app-select__placeholder" v-if="!localValue.length">{{
+          $attrs.placeholder || ""
+        }}</span>
         <app-tag
           v-for="(item, index) in selected"
           :key="item.value"
           class="ma-1"
           show-close
           @close.stop="handleCloseTag(item, index)"
-        >{{ item.text }}</app-tag>
+          >{{ item.text }}</app-tag
+        >
 
         <div class="app-select__field">
           <input
@@ -32,16 +32,22 @@
         <div
           v-if="!optionsVisible.length && emptyMessage"
           class="app-select__option text-sub text-center"
-        >{{ emptyMessage }}</div>
+        >
+          {{ emptyMessage }}
+        </div>
 
         <div
           v-for="option in optionsVisible"
-          v-show="localValue.findIndex(id => id === option.value)"
+          v-show="localValue.findIndex((id) => id === option.value)"
           class="app-select__option"
           :key="option.value"
           @click="handleClickOption(option)"
         >
-          <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
+          <slot
+            v-if="$scopedSlots.option || $slots.option"
+            name="option"
+            :option="option"
+          />
           <template v-else>{{ option.text }}</template>
         </div>
 
@@ -52,17 +58,27 @@
 
     <!-- DEFAULT MODE -->
     <template v-else>
-      <div class="app-select__selected" tabindex="0" @click="handleClickSelected">
-        <span class="app-select__prepend" v-if="$slots.prepend || $scopedSlots.prepend">
+      <div
+        class="app-select__selected"
+        tabindex="0"
+        @click="handleClickSelected"
+      >
+        <span
+          class="app-select__prepend"
+          v-if="$slots.prepend || $scopedSlots.prepend"
+        >
           <slot name="prepend" :selected="selected" />
         </span>
 
         <span
           v-if="localValue === null || localValue === undefined"
           class="app-select__placeholder"
-        >{{ $attrs.placeholder || '' }}</span>
+          >{{ $attrs.placeholder || "" }}</span
+        >
 
-        <span v-else class="app-select__selected-value">{{ selected.text }}</span>
+        <span v-else class="app-select__selected-value">{{
+          selected.text
+        }}</span>
 
         <div class="mr-auto"></div>
 
@@ -100,18 +116,30 @@
         <div
           v-if="!options.length && emptyMessage"
           class="app-select__option text-sub"
-        >{{ emptyMessage }}</div>
+        >
+          {{ emptyMessage }}
+        </div>
 
         <div
           v-for="option in options"
-          :class="['app-select__option', option.value === localValue && 'active']"
+          :class="[
+            'app-select__option',
+            option.value === localValue && 'active',
+          ]"
           :key="option.value"
           @click="handleClickOption(option)"
         >
-          <span v-if="option.value === localValue" class="app-select__checked-icon">
+          <span
+            v-if="option.value === localValue"
+            class="app-select__checked-icon"
+          >
             <IconTick class="icon" />
           </span>
-          <slot v-if="$scopedSlots.option || $slots.option" name="option" :option="option" />
+          <slot
+            v-if="$scopedSlots.option || $slots.option"
+            name="option"
+            :option="option"
+          />
           <template v-else>{{ option.text }}</template>
         </div>
 
@@ -134,51 +162,53 @@ export default {
 
   provide() {
     return {
-      appSelect: this
+      appSelect: this,
     };
   },
 
   components: {
     IconExpandMore,
     IconClose,
-    IconTick
+    IconTick,
   },
 
   model: {
     prop: "value",
-    event: "change"
+    event: "change",
   },
 
   props: {
     options: {
       type: Array,
       default: () => [],
-      validator: value =>
-        value.every(option => ["value", "text"].every(key => key in option))
+      validator: (value) =>
+        value.every((option) =>
+          ["value", "text"].every((key) => key in option)
+        ),
     },
     value: {
       type: [String, Number, Array, Boolean],
-      default: null
+      default: null,
     },
     defaultValue: {
       type: [String, Number, Array, Boolean],
-      default: null
+      default: null,
     },
     mode: {
       type: String,
-      default: "" // '' | 'tags'
+      default: "", // '' | 'tags'
     },
     emptyMessage: {
       type: String,
-      default: "No option"
+      default: "No option",
     },
     showClear: Boolean,
     searchable: Boolean,
     size: {
       type: String,
-      default: "md" // 'sm' | 'md'
+      default: "md", // 'sm' | 'md'
     },
-    bordered: Boolean
+    bordered: Boolean,
   },
 
   data() {
@@ -188,7 +218,7 @@ export default {
       localValue: ["null", "undefined"].includes(typeof this.value)
         ? this.defaultValue
         : this.value,
-      tmpOptions: this.options
+      tmpOptions: this.options,
     };
   },
 
@@ -199,21 +229,21 @@ export default {
         "app-select--tags": this.mode === "tags",
         "app-select--searchable": this.searchable,
         "app-select--size-sm": this.size === "sm",
-        "app-select--bordered": this.bordered
+        "app-select--bordered": this.bordered,
       };
     },
 
     selected() {
       if (this.mode === "tags") {
-        return this.localValue.map(id => {
+        return this.localValue.map((id) => {
           const [optionItem = {}] = this.tmpOptions.filter(
-            option => option.value === id
+            (option) => option.value === id
           );
           return optionItem;
         });
       } else {
         const [optSelected = {}] = this.options.filter(
-          item => item.value === this.localValue
+          (item) => item.value === this.localValue
         );
         return optSelected;
       }
@@ -222,9 +252,10 @@ export default {
     optionsVisible() {
       if (this.mode !== "tags") return;
       return this.options.filter(
-        option => this.localValue.findIndex(id => id === option.value) === -1
+        (option) =>
+          this.localValue.findIndex((id) => id === option.value) === -1
       );
-    }
+    },
   },
 
   watch: {
@@ -244,7 +275,7 @@ export default {
       if (this.mode !== "tags" || !newValue.length) return;
       const tmp = this.tmpOptions.concat(newValue);
       this.tmpOptions = uniqWith(tmp, (a, b) => a.value === b.value);
-    }
+    },
   },
 
   methods: {
@@ -299,8 +330,8 @@ export default {
       } else {
         this.localValue = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

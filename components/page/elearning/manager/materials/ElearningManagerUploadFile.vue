@@ -103,7 +103,7 @@
                     <div>
                       <p class="mb-3">
                         Định dạng file văn bản được chấp nhận:
-                        <span class="text-dark font-weight-semi-bold">.doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, odt, odp, .ods</span>
+                        <span class="text-dark font-weight-semi-bold">.doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, odt, odp, .ods, .zip</span>
                       </p>
                       <p>
                         Định dạng video được chấp nhận:
@@ -125,7 +125,7 @@
             <input
               ref="upload-input"
               type="file"
-              accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv"
+              accept=".m4a, .mp3, .jpeg, .jpg, .png, .gif, .bmp, .docx, .doc, .ppt, .pptx, .pdf, .txt, .mp4, .mov, .f4v, .m4v, .mp4a, .mp4v, .3gp, .3g2, .smil, .flv, .zip"
               @change="handleClick"
             />
           </div>
@@ -380,7 +380,7 @@
         return true
       },
       isValidType(file) {
-        return /\.(m4a|mp3|jpeg|jpg|png|gif|bmp|docx|doc|ppt|pptx|pdf|txt|mp4|mov|f4v|m4v|mp4a|mp4v|3gp|3g2|smil|flv)$/.test(file.name.toLowerCase())
+        return /\.(m4a|mp3|jpeg|jpg|png|gif|bmp|docx|doc|ppt|pptx|pdf|txt|mp4|mov|f4v|m4v|mp4a|mp4v|3gp|3g2|smil|flv|zip)$/.test(file.name.toLowerCase())
       },
       isValidSize(file) {
         const isLtSize = file.size / 1024 / 1024 < MAX_UPLOADED_REPOSITORY_FILE_SIZE

@@ -90,11 +90,7 @@ export default {
   methods: {
     async handleRequestCode() {
       const data = {
-        class_name: "",
         elearning_id: get(this, "$route.params.id", ""),
-        request_date: "",
-        student_id: get(this, "token.id", ""),
-        student_name: get(this, "token.fullname", ""),
       };
       const res = await this.$axios({
         url: "/elearning/request",
