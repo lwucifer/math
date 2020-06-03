@@ -9,7 +9,15 @@
     </div>
 
     <app-button
-      v-if="status === EXERCISE_STATUS.NONE"
+      v-if="overDeadline && status === EXERCISE_STATUS.NONE"
+      color="secondary"
+      size="sm"
+      :pointer="false"
+      >Qúa hạn làm {{ exerciseTextTransform }}</app-button
+    >
+
+    <app-button
+      v-else-if="!overDeadline && status === EXERCISE_STATUS.NONE"
       color="yellow"
       size="sm"
       @click.prevent="handleDoExercise"
@@ -57,6 +65,7 @@
 
 <script>
 import { EXERCISE_STATUS, EXERCISE_TYPES, STUDY_MODE } from "~/utils/constants";
+import { isBeforeNow } from "~/utils/moment";
 
 const IconStar = () => import("~/assets/svg/v2-icons/star_24px.svg?inline");
 
@@ -72,6 +81,7 @@ export default {
     stared: Boolean,
     name: String,
     result: String,
+    deadline: String,
     open_time: String,
     questions: Number,
     duration: Number,
@@ -111,7 +121,13 @@ export default {
     },
 
     canDoExercise() {
+      if(!this.reworks) return true;
       return this.works < this.reworks;
+    },
+
+    overDeadline() {
+      if(!this.deadline) return false;
+      return isBeforeNow(this.deadline);
     },
 
     exerciseTextTransform() {
