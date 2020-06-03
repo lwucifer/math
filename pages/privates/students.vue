@@ -17,19 +17,21 @@
       />
       <div>
         <app-select
+          v-if="isFilter"
           placeholder="Năm học"
           size="sm"
-          v-model="params.school_year"
-          :options="optionYear"
+          :options="filterYears"
           class="mr-2"
           clearable
           @change="handleChangedYear"
         />
         <app-select
+          v-if="isFilter && checkClass"
           placeholder="Lớp học"
           size="sm"
+          class="mr-2"
           v-model="params.class_id"
-          :options="optionClass"
+          :options="filterClasses"
           clearable
           @change="handleChangedClass"
         />
@@ -56,7 +58,6 @@
         />
       <app-vue-select placeholder="Lớp học" size="sm" />-->
     </div>
-    <!-- </div> -->
     <div class="wrap-table">
       <app-table :heads="heads" :data="filterStudentPrivates">
         <template v-slot:cell(name)="{row}">
@@ -66,22 +67,26 @@
           <td class="wrap-name__table">{{get(row,"school_year","")}}</td>
         </template>
         <template v-slot:cell(class)="{row}">
-          <td
-            class="wrap-name__table"
-          >
-            <v-popover
-              trigger="hover"
-              popoverClass="wrap-name-class__table"
-              placement="top"
-            >
+          <td class="wrap-name__table">
             <div class="d-flex align-items-center">
-              <span>{{get(row,"class_name","")}} (Sĩ số: {{ get(row,"size", 0) }})</span>
-              <IconAccountBox24px class="fill-primary ml-2"/>
+              <span>
+                {{get(row,"class_name","")}}
+                <span
+                  v-if="!!row.size"
+                >(Sĩ số: {{ get(row,"size", 0) }})</span>
+              </span>
+              <v-popover
+                trigger="hover"
+                popoverClass="wrap-name-class__table"
+                placement="top"
+                v-if="row.homeroom_teacher"
+              >
+                <IconAccountBox24px class="fill-primary ml-2" />
+                <template slot="popover">
+                  <span>Giáo viên chủ nhiệm</span>
+                </template>
+              </v-popover>
             </div>
-            <template slot="popover">
-                <span>Giáo viên chủ nhiệm</span>
-            </template>
-            </v-popover>
           </td>
         </template>
         <template v-slot:cell(mark)="{row}">
@@ -113,16 +118,29 @@ import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { mapState, mapActions } from "vuex";
 const STORE_NAME_STUDENTS = "elearning/teaching/students";
-import IconAccountBox24px from '~/assets/svg/v2-icons/account_box_24px.svg?inline';
+const STORE_NAME_CLASS = "elearning/teaching/teaching-class";
+const STORE_NAME_YEARS = "elearning/public/public-school-year";
+import IconAccountBox24px from "~/assets/svg/v2-icons/account_box_24px.svg?inline";
 export default {
   async fetch({ params, store }) {
     await Promise.all([
       store.dispatch(
         `${STORE_NAME_STUDENTS}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`
+      ),
+      store.dispatch(
+        `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
       )
+      // store.dispatch(
+      //   `${STORE_NAMESPACE}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
+      //   {
+      //     params: {
+      //       school_year_id
+      //     }
+      //   }
+      // )
     ]);
   },
-  components:{
+  components: {
     IconAccountBox24px
   },
   data() {
@@ -193,11 +211,14 @@ export default {
         { value: "6B", text: "6B" },
         { value: "-1", text: "Khác" }
       ],
-      isFilter: false
+      isFilter: false,
+      checkClass: false
     };
   },
   computed: {
     ...mapState(STORE_NAME_STUDENTS, ["studentPrivates"]),
+    ...mapState(STORE_NAME_YEARS, ["years"]),
+    ...mapState(STORE_NAME_CLASS, ["classes"]),
     filterStudentPrivates() {
       return this.studentPrivates && this.studentPrivates.content
         ? this.studentPrivates.content
@@ -207,6 +228,36 @@ export default {
       return this.studentPrivates && this.studentPrivates.page
         ? this.studentPrivates.page
         : [];
+    },
+    filterYears() {
+      const data =
+        this.years &&
+        this.years.map(item => {
+          return {
+            value: item ? item.id : "",
+            text: item ? item.from_year + " - " + item.to_year : ""
+          };
+        });
+      data.push({ value: null, text: "Tất cả" });
+      return data;
+    },
+    filterClasses() {
+      const data =
+        this.classes && this.classes.data ? this.classes.data.content : [];
+      const dataMap = data.map(item => {
+        return {
+          value: item ? item.id : "",
+          text: item ? item.name : ""
+        };
+      });
+      dataMap.push({
+        value: "-1",
+        text: "Khác"
+      });
+      return dataMap;
+    },
+    filterCheckData() {
+      return this.years ? true : false;
     }
   },
   methods: {
@@ -221,20 +272,30 @@ export default {
       this.params.page = 1;
       this.teachingStudentsPrivatesList({ params: this.params });
     },
-    handleChangedYear(val) {
+    async handleChangedYear(val) {
+      this.params.class_id = null;
       console.log("val", val);
       if (val) {
+        this.checkClass = true;
         this.params.page = 1;
-        // this.params.school_year = val;
+        this.params.school_year = val;
         this.teachingStudentsPrivatesList({
           params: this.params
         });
+        await this.$store.dispatch(
+          `${STORE_NAME_CLASS}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`,
+          {
+            params: {
+              school_year_id: val
+            }
+          }
+        );
       } else {
-        this.params.page = 1;
         this.params.school_year = null;
         this.teachingStudentsPrivatesList({
           params: this.params
         });
+        this.checkClass = false;
       }
     },
     handleChangedClass(val) {

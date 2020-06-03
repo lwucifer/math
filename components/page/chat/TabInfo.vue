@@ -82,7 +82,7 @@
         </template>
       </ListInfoBox>
 
-      <ListInfoBox>
+      <ListInfoBox v-if="filterTypeRoom">
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
@@ -259,6 +259,7 @@ import IconAddGreen from "~/assets/svg/v2-icons/add_green.svg?inline";
 
 import ListInfoBox from "~/components/page/chat/ListInfoBox";
 import { getBase64 } from "~/utils/common";
+import * as constants from "~/utils/constants";
 
 export default {
   components: {
@@ -380,6 +381,12 @@ export default {
         }
       });
       return dataMap;
+    },
+    filterTypeRoom() {
+      return this.roomDetail &&
+        this.roomDetail.type == constants.CHAT.PRIVATE_GROUP
+        ? false
+        : true;
     }
   },
   methods: {

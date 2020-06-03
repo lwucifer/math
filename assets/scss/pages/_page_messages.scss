@@ -297,8 +297,8 @@
                     @include scrollbars(5px, #E0E0E0, #fff, 10px);
 
                     .message-box {
-                        display: flex;
-                        flex-direction: column-reverse;
+                        // display: flex;
+                        // flex-direction: column-reverse;
                     }
                     
                     .message-box__time {

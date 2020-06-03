@@ -539,11 +539,11 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
 };
 
 export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
-    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST : "teachingInteractiveListAnnouncement",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST: "teachingInteractiveListAnnouncement",
 };
 
 export const TEACHING_INTERACTIVE_ADD_ACCOUNCEMENT = {
-    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD : "teachingInteractiveAnnouncementAdd",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD: "teachingInteractiveAnnouncementAdd",
 };
 
 export const TEACHING_PUBLIC_LIST = {
@@ -567,4 +567,5 @@ export const CHAT = {
     SET_MESSAGE_LIST: "setMessageList",
     SET_MEMBER_LIST: "setMemberList",
     SET_ROOM_DETAIL: "setRoomDetail",
+    SET_ID_PUSH: "setIdPush"
 };
