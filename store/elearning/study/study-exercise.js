@@ -2,6 +2,7 @@ import Exercise from "~/services/elearning/study/Exercise";
 import * as actionTypes from "~/utils/action-types";
 import { RESPONSE_SUCCESS } from "~/utils/config";
 import * as mutationTypes from "~/utils/mutation-types";
+import * as APIs from "~/utils/endpoints";
 import { QUESTION_NAV, EXERCISE_CATEGORIES } from "~/utils/constants";
 
 /**
@@ -63,6 +64,26 @@ const getters = {
 };
 
 const actions = {
+  /**
+   * Start call before get list exercise
+   * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/startWorkingExerciseUsingPOST
+   */
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_QUESTION_START](
+    { commit },
+    payload
+  ) {
+    try {
+      const { data } = await this.$axios.post(APIs.STUDY_EXERCISE_START, payload);
+      console.log("[LIST_QUESTION_START]", data);
+      return data;
+    } catch (error) {
+      console.log(
+        "[LIST_QUESTION_START] error",
+        error
+      );
+    }
+  },
+
   /**
    * Get questions and answers for exercise
    * https://api.schoolly.famtechvn.com/swagger-ui.html?urls.primaryName=core-service#/study-controller/getQuestionsUsingGET

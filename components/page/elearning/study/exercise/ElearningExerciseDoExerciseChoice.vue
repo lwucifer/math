@@ -237,15 +237,15 @@ export default {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: null,
-        duration: durationCost, // in seconds
-        start_time: fullUTCDateTimeSlash(this.submission.start_time)
+        // duration: durationCost, // in seconds
+        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        duration: durationCost,
-        start_time: fullUTCDateTimeSlash(this.submission.start_time)
+        // duration: durationCost,
+        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {

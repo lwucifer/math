@@ -151,7 +151,7 @@ export default {
       } else if (!validatePassword(_password)) {
         this.validateProps.password = 2;
         this.errorMessage.password =
-          "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái và 1 chữ số";
+          "Mật khẩu tối thiểu 8 ký tự bao gồm cả chữ và số";
       }
     },
     showErrorWhenLogin(error) {

@@ -12,7 +12,7 @@
       <div class="link--dropdown__content wrap-arrow__content">
         <ul>
           <template v-for="(elearning,index) in filterElearningStudy">
-            <li :key="index" v-if="index < 3">
+            <li :key="index" v-if="index < 3" @click="handleClickLink">
               <template>
                 <n-link :to="'/elearning/'+ elearning.elearning_id">
                   <div>
@@ -103,6 +103,9 @@ export default {
     pushMycourses() {
       this.dropdownCourse = false;
       this.$router.push("/elearning/mycourses");
+    },
+    handleClickLink(){
+      this.dropdownCourse = false;
     },
     get
   },

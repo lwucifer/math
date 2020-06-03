@@ -20,7 +20,7 @@
         class="col-md-6 d-flex mb-15"
       >
         <IconCheck class="icon text-primary body-1 mr-2" />
-        <p v-html="item" />
+        <p v-html="item" class="word-break-all" />
       </div>
     </div>
 

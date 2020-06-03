@@ -47,7 +47,12 @@ export default {
       if (!this.currentExercise.open_time) return true;
       const openTime = fullDateTimeSlash(this.currentExercise.open_time);
 
-      console.log("[isShowBtnStart]", this.currentExercise, openTime, new Date());
+      console.log(
+        "[isShowBtnStart]",
+        this.currentExercise,
+        openTime,
+        new Date()
+      );
       return new Date().getTime() >= new Date(openTime).getTime();
     }
   },
@@ -55,7 +60,8 @@ export default {
   methods: {
     ...mapMutations("event", ["setStudyMode"]),
     ...mapActions("elearning/study/study-exercise", [
-      "elearningSudyExerciseQuestionList"
+      "elearningSudyExerciseQuestionList",
+      "elearningSudyExerciseQuestionListStart"
     ]),
     ...mapMutations("elearning/study/study-exercise", [
       "setStudyExerciseSubmission",
@@ -67,20 +73,26 @@ export default {
       // show doing exercise
       this.setStudyMode(STUDY_MODE.DO_EXERCISE_DOING);
 
-      // get list question of exercise
-      this.elearningSudyExerciseQuestionList({
+      this.elearningSudyExerciseQuestionListStart({
         exercise_id: this.currentExercise.id
-      }).then(res => {
-        if (res.success == RESPONSE_SUCCESS) {
-          // sert start question
-          this.setStudyExerciseQuestionStart();
-        }
-      });
+      }).then(start => {
+        if (start.success == RESPONSE_SUCCESS) {
+          // get list question of exercise
+          this.elearningSudyExerciseQuestionList({
+            exercise_id: this.currentExercise.id
+          }).then(res => {
+            if (res.success == RESPONSE_SUCCESS) {
+              // sert start question
+              this.setStudyExerciseQuestionStart();
+            }
+          });
 
-      // set start_time of submission
-      this.setStudyExerciseSubmission({
-        start_time: new Date(),
-        exercise_id: this.currentExercise.id
+          // set start_time of submission
+          this.setStudyExerciseSubmission({
+            start_time: new Date(),
+            exercise_id: this.currentExercise.id
+          });
+        }
       });
     }
   }
