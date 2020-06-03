@@ -98,7 +98,7 @@
                 class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.id)"
+                @click="pushUrl(item.room_id)"
               >
                 <div class="left d-flex">
                   <div class="align-item__image">
@@ -442,7 +442,7 @@ export default {
         } else {
           return {
             ...item,
-            name: item && item.sender ? item.sender.first_name : ""
+            name: item && item.name ? item.name.substring(0, 15) + "..." : ""
           };
         }
       });
@@ -457,6 +457,7 @@ export default {
       "getListMessageType"
     ]),
     ...mapMutations("message", ["setTabChat"]),
+    ...mapMutations("chat", ["setMessageList", "setIdPush"]),
 
     leaveGroupModal(_item) {
       this.visibleLeaveGroup = true;
@@ -560,8 +561,11 @@ export default {
 
     pushUrl(_id) {
       console.log("id", _id);
-      const url = `/messages/t/${_id}`;
-      this.$router.push(url);
+      if (_id != this.$route.params.id) {
+        this.setIdPush(1);
+        const url = `/messages/t/${_id}`;
+        this.$router.push(url);
+      }
     }
   },
   watch: {
