@@ -35,6 +35,7 @@
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
+              bordered
             ></app-search>
           </div>
         </div>

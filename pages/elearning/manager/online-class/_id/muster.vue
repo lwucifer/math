@@ -34,7 +34,7 @@
                     Tỷ lệ vắng mặt có phép:
                     <strong
                       class="color-primary"
-                    >{{summary.total_student_late}}</strong>
+                    >{{get(summary,'total_student_late', 0)}}</strong>
                   </div>
                   <div class="item">
                     Tỷ lệ vắng mặt không phép:
@@ -57,6 +57,8 @@
                         v-model="params.query"
                         :size="'sm'"
                         @submit="submit"
+                        @keyup.enter.native="submit"
+                        bordered
                       ></app-search>
                     </div>
                   </div>
@@ -118,6 +120,7 @@
                 :pagination="pagination"
                 @pagechange="onPageChange"
                 :data="lessons"
+                :loading="loading"
               >
                 <template v-slot:cell(attendance_status)="{row, index}">
                   <td>
@@ -247,11 +250,6 @@ export default {
           text: "Điểm danh",
           sort: true
         },
-        {
-          name: "attendance_point",
-          text: "<p class='text-center'>Điểm chuyên cần</p>",
-          sort: true
-        }
       ],
       summary: {
         total_student_absent_allowed: 0,
@@ -303,6 +301,9 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateLessonInfo: "LessonInfo"
+    }),
+    ...mapState(STORE_NAMESPACE, {
+      stateAttendances: "Attendances"
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
@@ -396,6 +397,7 @@ export default {
           { params, id: lesson_id, after: "attendances" }
         );
         this.currentTime = new Date();
+        console.log('xxxxxxxxxx', this.stateAttendances)
         this.lessons = this.get(
           this.stateAttendances,
           "data.attendance_list.content",
@@ -467,18 +469,21 @@ export default {
       list[index] = { ...list[index], attendance_status: status };
       this.lessons = list;
       try {
-        let attendances = [
-          {
-            online_attendance_id: id,
-            attendance_status: status
-          }
-        ];
+        let attendances = { 
+          attendances:
+          [{
+              attendance_id: id,
+              attendance_status: status
+          }],
+          online_lesson_id: this.$route.params.id
+        };
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.EDIT}`,
-          { attendances }
+          attendances 
         );
       } catch (e) {
       } finally {
+        this.getList();
       }
     },
 
@@ -573,11 +578,14 @@ export default {
 .div-table {
   display: table;
   width: 100%;
-  text-align: center;
-  > * {
-    display: table-cell;
+  text-align: left;
+  .app-checkbox {
+    + .app-checkbox { 
+      margin-left: 2.5rem;
+    }
+    align-items: center;
     .app-checkbox__checkmark {
-      margin: 0 auto !important;
+      margin: 0;
     }
   }
 }

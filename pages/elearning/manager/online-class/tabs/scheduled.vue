@@ -300,10 +300,12 @@ export default {
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
         lessonList.forEach(element => {
-          list.push({
-            value: element.id,
-            text: element.name
-          });
+          if (!element.is_hidden) {
+            list.push({
+              value: element.id,
+              text: element.name
+            });
+          }
         });
         this.courses = list;
       } catch (e) {

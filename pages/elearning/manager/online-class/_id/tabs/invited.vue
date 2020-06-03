@@ -11,6 +11,7 @@
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
+              bordered
             ></app-search>
           </div>
         </div>
@@ -149,6 +150,9 @@
       <template v-slot:cell(attendance_point)="{row}">
         <td>{{row.attendance_point}}%</td>
       </template>
+      <template v-slot:cell(join_date)="{row}">
+        <td>{{getDateBirthDay(row.join_date)}}</td>
+      </template>
     </app-table>
     <!--End table-->
 
@@ -181,6 +185,9 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
+import {
+  getDateBirthDay
+} from "~/utils/moment";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
@@ -270,6 +277,8 @@ export default {
   },
 
   methods: {
+    getDateBirthDay,
+
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
         this.filterCourse = null;
