@@ -32,7 +32,7 @@
 
     <div class="cc-tab-panel" v-if="tabDocument === 'upload'">
       <app-upload
-        accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, .zip"
         @change="handleSelectFile"
         class="clc-upload-video"
       >

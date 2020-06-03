@@ -210,9 +210,9 @@ export default {
       console.log("[handleQuestionSubmission]", this.currentExerciseQuestion);
 
       // this.modalConfirmSubmit = false;
-      const durationCost = parseInt(
-        (new Date().getTime() - this.submission.start_time.getTime()) / 1000
-      ); // in seconds
+      // const durationCost = parseInt(
+      //   (new Date().getTime() - this.submission.start_time.getTime()) / 1000
+      // ); // in seconds
 
       const attachments = this.submission.attachments.map(m => m.file);
 
@@ -220,16 +220,16 @@ export default {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments,
-        duration: durationCost, // in seconds
-        start_time: fullDateTimeSlash(this.submission.start_time)
+        // duration: durationCost, // in seconds
+        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments,
-        duration: durationCost,
-        start_time: fullDateTimeSlash(this.submission.start_time)
+        // duration: durationCost,
+        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
@@ -297,8 +297,9 @@ export default {
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
       this.$toasted.success("Tải câu trả lời lên thành công");
+      const fileUploaded = file ? file[0] : null;
       this.setStudyExerciseSubmission({
-        file: file ? file[0] : null,
+        file: fileUploaded,
         question_id: this.currentExerciseQuestion.id
       });
     },
