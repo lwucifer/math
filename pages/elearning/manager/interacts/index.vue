@@ -119,7 +119,6 @@ export default {
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
         payload
       )
-      console.log(result.data,'lol')
     }
   },
   created(){
