@@ -6,6 +6,7 @@
       @pagechange="onPageChange"
       @sort="sortTable"
       :data="list"
+      :loading="loading"
     >
       <template v-slot:cell(name)="{row}">
         <td :title="get(row, 'name', '')">
