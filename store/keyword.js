@@ -25,6 +25,7 @@ const actions = {
 const mutations = {
     [mutationTypes.KEYWORD.SEARCH_HEADER](state, _keyword) {
         state.keyword = _keyword;
+        console.log('Search Header', state.keyword)
     },
 };
 
