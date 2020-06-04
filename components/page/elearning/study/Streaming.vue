@@ -127,7 +127,7 @@ export default {
     ...mapMutations("event", ["setExerciseLoading"]),
 
     handleFullscreenChange(opt) {
-      console.log("[handleFullscreenChange]", opt);
+      console.log("[handleFullscreenChange] 2", opt);
     },
 
     // listen event
