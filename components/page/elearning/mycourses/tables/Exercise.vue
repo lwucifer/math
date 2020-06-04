@@ -20,7 +20,7 @@
         <td>
           <v-popover
             trigger="hover"
-            placement="bottom"
+            placement="bottom-end"
             popover-class="tooltip--submit-status"
           >
             <span class="nowrap" :class="statusCls(row)">

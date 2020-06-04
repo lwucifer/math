@@ -11,14 +11,14 @@
       <app-spin />
     </div>
 
-    <div class="e-exercise-bottom">
+    <!-- <div class="e-exercise-bottom">
       <button v-if="expand" class="e-exercise-bottom__button" type="button" @click="setExpand(false)">
         <IconCropLandscape class="icon" />
       </button>
       <button v-else class="e-exercise-bottom__button" type="button" @click="setExpand(true)">
         <IconCropFree class="icon" />
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -59,7 +59,7 @@ export default {
 
   computed: {
     ...mapState("event", ["studyMode", "loadingExercise"]),
-    ...mapState("elearning/study/study", ["expand"]),
+    // ...mapState("elearning/study/study", ["expand"]),
   },
 
   watch: {
@@ -69,12 +69,12 @@ export default {
   },
 
   methods: {
-    setExpand(value) {
-      this.$store.commit(
-        `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
-        value
-      );
-    }
+    // setExpand(value) {
+    //   this.$store.commit(
+    //     `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
+    //     value
+    //   );
+    // }
   }
 };
 </script>

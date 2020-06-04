@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="elearning-study" :class="{ 'pt-0': expand || fullscreen }">
     <HeaderCourse @exit="exitStudy" />
 
     <div class="container" v-if="pageLoading">
@@ -13,110 +13,111 @@
       </div>
     </div>
 
-    <div class="container" v-else>
-      <div class="row">
-        <div :class="expand ? 'col-md-12' : 'col-md-8'">
-          <div class="box22 mb-15">
-            <div class="lession-screen">
-              <img
-                v-if="studyMode === defaultMode"
-                :src="
-                  get(info, 'cover_url.high', '') ||
-                    '/images/default-course-image.png'
-                "
-                width="750"
-                alt
-              />
-            </div>
-            <Streaming
-              v-if="studyMode == videoMode"
-              :url="get(payload, 'stream_urls.hls_url', '')"
-              :thumbnail="
-                get(info, 'cover_url.high', '') ||
-                  '/images/adefltu - course - image.png'
-              "
-            />
-            <div class="lession-screen">
-              <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')"/>
-            </div>
-            <div class="lession-screen" v-if="studyMode === imageMode">
-              <img :src="get(payload, 'link', '')" alt />
-            </div>
+    <template v-else>
+      <portal-target
+        name="theater"
+        :class="['elearning-study-theater', fullscreen && 'elearning-study-theater--fullscreen']"
+      />
 
-            <div class="lession-screen" v-if="studyMode == articleMode">
-              <!-- SCORM TEST -->
-              <!-- <iframe
-                style="width: 712px"
-                src="https://file-elearning.moet.gov.vn/upload2015/s7Y1xcf7oYzG94jLEhRi/baigiang/lop03/tnxh/tiet61a/index.htm"
-              ></iframe> -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <portal to="theater" :disabled="!(expand || fullscreen)">
+              <div class="elearning-study-content">
+                <ElearningExercise v-if="isExerciseMode" />
 
-              <iframe
-                style="width: 712px"
-                :src="get(payload, 'link', '')"
-              ></iframe>
+                <div v-else class="elearning-lesson-screen">
+                  <img
+                    v-if="studyMode === defaultMode"
+                    :src="
+                      get(info, 'cover_url.high', '') ||
+                        '/images/default-course-image.png'
+                    "
+                    width="750"
+                    alt
+                  />
+                  <Streaming
+                    v-if="studyMode == videoMode"
+                    :url="get(payload, 'stream_urls.hls_url', '')"
+                    :thumbnail="
+                    get(info, 'cover_url.high', '') ||
+                      '/images/adefltu - course - image.png'
+                  "
+                  />
+                  <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')" />
+                  <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
+                  <iframe v-if="studyMode == articleMode" :src="get(payload, 'link', '')"></iframe>
+                </div>
+
+                <!-- <div class="lession-screen">
+                  SCORM TEST
+                  <iframe
+                    style="width: 712px"
+                    src="https://file-elearning.moet.gov.vn/upload2015/s7Y1xcf7oYzG94jLEhRi/baigiang/lop03/tnxh/tiet61a/index.htm"
+                  ></iframe>
+                </div>-->
+
+                <!-- DO EXERCISE -->
+
+                <div class="elearning-study-bottom">
+                  <button
+                    v-if="!fullscreen"
+                    class="elearning-study-bottom__button elearning-study-bottom__button--expand"
+                    type="button"
+                    @click="setExpand(!expand)"
+                  >
+                    <IconStudyNarrow v-if="expand" class="icon fill-opacity-1" />
+                    <IconStudyExpand v-else class="icon fill-opacity-1" />
+                  </button>
+                  <button
+                    class="elearning-study-bottom__button elearning-study-bottom__button--fullscreen"
+                    type="button"
+                    @click="setFullscreen(!fullscreen)"
+                  >
+                    <IconCropFreeReverse v-if="fullscreen" class="icon fill-opacity-1" />
+                    <IconCropFree v-else class="icon fill-opacity-1" />
+                  </button>
+                </div>
+              </div>
+            </portal>
+
+            <div class="box22">
+              <div class="elearning-study-tabs">
+                <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
+                <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+                <a
+                  :class="{ active: type === 'notification' }"
+                  @click="type = 'notification'"
+                >Thông báo</a>
+                <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+              </div>
+
+              <TabSummary :info="info" v-if="type === 'summary'" />
+              <TabQA v-if="type === 'qa'" />
+              <TabNotification v-if="type === 'notification'" />
+              <TabReview v-if="type === 'review'" />
+              <!-- <ElearningQuestion
+                v-if="type === 'qa'"
+                :interactive_questions="interactive_questions"
+                @addQuestionSuccess="addQuestionSuccess"
+              />-->
             </div>
-
-            <div class="e-study-bottom">
-              <button class="e-study-bottom__button" type="button" @click="setExpand(false)">
-                <IconCropLandscape class="icon" />
-              </button>
-              <button class="e-study-bottom__button" type="button" @click="setExpand(true)">
-                <IconCropFree class="icon" />
-              </button>
-            </div>
-
-            <!-- DO EXERCISE -->
-            <ElearningExercise v-if="isExerciseMode" />
-
           </div>
 
-          <div class="box22">
-            <div class="elearning-study-tabs">
-              <a
-                :class="{ active: type === 'summary' }"
-                @click="type = 'summary'"
-                >Tổng quan</a
-              >
-              <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
-                >Hỏi đáp</a
-              >
-              <a
-                :class="{ active: type === 'notification' }"
-                @click="type = 'notification'"
-                >Thông báo</a
-              >
-              <a :class="{ active: type === 'review' }" @click="type = 'review'"
-                >Đánh giá</a
-              >
-            </div>
-
-            <TabSummary :info="info" v-if="type === 'summary'" />
-            <TabQA v-if="type === 'qa'" />
-            <TabNotification v-if="type === 'notification'" />
-            <TabReview v-if="type === 'review'" />
-            <!-- <ElearningQuestion
-              v-if="type === 'qa'"
-              :interactive_questions="interactive_questions"
-              @addQuestionSuccess="addQuestionSuccess"
-            />-->
+          <div class="col-md-4">
+            <ElearningCourseSide />
           </div>
-        </div>
-
-        <div :class="expand ? 'col-md-12' : 'col-md-4'">
-          <ElearningCourseSide />
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
-import IconCropLandscape from "~/assets/svg/v2-icons/crop_landscape_24px.svg?inline";
-import IconCropFree from "~/assets/svg/v2-icons/crop_free_24px.svg?inline";
-
 import { get } from "lodash";
 import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { ELEARNING_STUDY as ELEARNING_STUDY_MUTATION } from "~/utils/mutation-types";
 import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { useEffect } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
@@ -129,6 +130,10 @@ import { AUTH, COMMENTS, LESSON } from "~/server/fakedata/elearning/test";
 import IconSearch from "~/assets/svg/design-icons/search.svg?inline";
 import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
+import IconCropFree from "~/assets/svg/v2-icons/crop_free_24px.svg?inline";
+import IconCropFreeReverse from "~/assets/svg/icons/crop-free-reverse.svg?inline";
+import IconStudyExpand from "~/assets/svg/icons/study-expand.svg?inline";
+import IconStudyNarrow from "~/assets/svg/icons/study-narrow.svg?inline";
 
 import ElearningCourseSide from "~/components/page/elearning/study/ElearningCourseSide";
 import HeaderCourse from "~/components/layout/header/HeaderCourse";
@@ -141,7 +146,7 @@ import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
 import { VclList } from "vue-content-loading";
 
-import ElearningDownload from "~/components/page/elearning/study/ElearningDownload"
+import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
 
 export default {
@@ -163,8 +168,10 @@ export default {
     ElearningExercise,
     VclList,
     ElearningDownload,
-    IconCropLandscape,
     IconCropFree,
+    IconCropFreeReverse,
+    IconStudyExpand,
+    IconStudyNarrow
   },
 
   data() {
@@ -185,7 +192,7 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState("event", ["payload", "studyMode"]),
     ...mapState("elearning/study/study-info", ["info"]),
-    ...mapState("elearning/study/study", ["expand"]),
+    ...mapState("elearning/study/study", ["expand", "fullscreen"]),
 
     isExerciseMode() {
       const isExerciseScreen =
@@ -204,11 +211,22 @@ export default {
 
   mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
+
+    document.addEventListener(
+      "fullscreenchange",
+      this.handleFullscreenChange,
+      true
+    );
   },
 
   destroyed() {
     this.setStudyMode("");
     this.setPayload(null);
+    document.removeEventListener(
+      "fullscreenchange",
+      this.handleFullscreenChange,
+      true
+    );
   },
 
   watch: {
@@ -217,6 +235,18 @@ export default {
         console.log(this.payload);
       },
       deep: true
+    },
+
+    fullscreen(newValue) {
+      if (newValue) {
+        if (document.fullscreenElement === null) {
+          const el = document.documentElement;
+          this.openFullscreen(el);
+          window.scrollTo(0, 0);
+        }
+      } else {
+        document.fullscreenElement !== null && this.closeFullscreen();
+      }
     }
   },
 
@@ -277,6 +307,60 @@ export default {
       this.$router.push("/elearning/mycourses");
     },
 
+    setExpand(value) {
+      this.$store.commit(
+        `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
+        value
+      );
+    },
+
+    setFullscreen(value) {
+      this.$store.commit(
+        `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_FULLSCREEN}`,
+        value
+      );
+    },
+
+    /* View in fullscreen */
+    openFullscreen(el) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.mozRequestFullScreen) {
+        /* Firefox */
+        el.mozRequestFullScreen();
+      } else if (el.webkitRequestFullscreen) {
+        /* Chrome, Safari and Opera */
+        el.webkitRequestFullscreen();
+      } else if (el.msRequestFullscreen) {
+        /* IE/Edge */
+        el.msRequestFullscreen();
+      }
+    },
+
+    /* Close fullscreen */
+    closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        /* IE/Edge */
+        document.msExitFullscreen();
+      }
+    },
+
+    handleFullscreenChange() {
+      if (document.fullscreenElement !== null) {
+        this.setFullscreen(true);
+      } else {
+        this.setFullscreen(false);
+      }
+    },
+
     get,
     ...mapMutations("event", ["setStudyMode", "setPayload"])
   }
@@ -285,19 +369,4 @@ export default {
 
 <style lang="scss">
 @import "~/assets/scss/pages/elearning/_study.scss";
-</style>
-
-<style lang="scss" scoped>
-.lession-screen {
-  display: flex;
-  justify-content: center;
-}
-
-.lession-screen {
-  img,
-  iframe,
-  a {
-    height: 42.6rem;
-  }
-}
 </style>

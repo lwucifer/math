@@ -298,7 +298,7 @@ export function getExerciseResultText(result = "") {
       resultText = 'Chưa đạt';
       break;
     case EXERCISE_STATUS.NONE:
-      resultText = 'NONE';
+      resultText = 'Chưa đạt';
       break;
     case EXERCISE_STATUS.PASSED:
       resultText = 'Đạt';

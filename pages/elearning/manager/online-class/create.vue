@@ -579,7 +579,7 @@ export default {
         this.confirmLoading = true;
         const doCreate = await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
-          JSON.stringify(this.params)
+          JSON.stringify({...this.params, enable: true})
         );
         if (doCreate.success) {
           this.fnCancel();
@@ -657,11 +657,13 @@ export default {
         let lessonList = this.get(this.stateElearnings, "data", []);
         let list = [];
         lessonList.forEach(element => {
-          list.push({
-            value: element.id,
-            text: element.name,
-            is_hidden: element.is_hidden
-          });
+          if (!element.is_hidden && !element.is_has_active_online_class) {
+            list.push({
+              value: element.id,
+              text: element.name,
+              is_hidden: element.privacy == 'PUBLIC' ? true : false
+            });
+          }
         });
         this.courses = list;
       } catch (e) {

@@ -368,6 +368,11 @@ export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
     SET_EXPAND: "setElearningStudyExpand",
+    SET_FULLSCREEN: "setElearningStudyFullScreen"
+};
+
+export const ELEARNING_STUDY_OVERVIEW = {
+    SET_ELEARNING_STUDY_OVERVIEW: "setElearningStudyOverview",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -538,11 +543,11 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
 };
 
 export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
-    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST : "teachingInteractiveListAnnouncement",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST: "teachingInteractiveListAnnouncement",
 };
 
 export const TEACHING_INTERACTIVE_ADD_ACCOUNCEMENT = {
-    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD : "teachingInteractiveAnnouncementAdd",
+    SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_ADD: "teachingInteractiveAnnouncementAdd",
 };
 
 export const TEACHING_PUBLIC_LIST = {
@@ -566,4 +571,5 @@ export const CHAT = {
     SET_MESSAGE_LIST: "setMessageList",
     SET_MEMBER_LIST: "setMemberList",
     SET_ROOM_DETAIL: "setRoomDetail",
+    SET_ID_PUSH: "setIdPush"
 };

@@ -38,10 +38,13 @@
       <div class="aside-box__top" v-if="!isCreated">
         <div class="message-desc">
           <div class="message-decs__image">
-            <app-avatar :src="avatarSrc" class="comment-item__avatar" />
+            <app-avatar
+              :src="avatarSrc ? avatarSrc : 'https://picsum.photos/60/60'"
+              class="comment-item__avatar"
+            />
           </div>
           <div class="message-decs__title">
-            <span>{{nameGroup}}</span>
+            <span>{{nameRoom}}</span>
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
@@ -84,8 +87,8 @@
         <client-only>
           <infinite-loading
             direction="top"
-            :identifier="infiniteId"
             @infinite="messageInfiniteHandler"
+            :identifier="infiniteId"
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
@@ -108,7 +111,10 @@
           >
             <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
-              <div class="message-box__item__meta" v-if="index == filterMessageList.length -1">
+              <div
+                class="message-box__item__meta"
+                v-if="index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
+              >
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -552,6 +558,7 @@ import IconSend24px from "~/assets/svg/v2-icons/send_24px.svg?inline";
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
+import * as constants from "~/utils/constants";
 
 export default {
   components: {
@@ -596,7 +603,6 @@ export default {
       visibleAddGroup: false,
       visibleAddByGroup: false,
       friendsInfiniteId: +new Date(),
-      infiniteId: +new Date(),
       friendsListQuery: {
         page: 1
       },
@@ -607,7 +613,7 @@ export default {
       friendsList: [],
       listImgSrc: [],
       // dataPushMessage: [],
-      // messagesList: [],
+      messagesList: [],
       checkList: false,
       friends: [
         {
@@ -675,8 +681,10 @@ export default {
       // fullname: "",
       showInfo: false,
       messageQuery: {
-        from_message_id: null
-      }
+        from_message_id: null,
+        fetch_type: null
+      },
+      infiniteId: +new Date()
     };
   },
 
@@ -688,7 +696,12 @@ export default {
       "friendList",
       "isCreated"
     ]),
-    ...mapState("chat", ["messageList", "memberList", "roomDetail"]),
+    ...mapState("chat", [
+      "messageList",
+      "memberList",
+      "roomDetail",
+      "stateIdPush"
+    ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
@@ -717,55 +730,64 @@ export default {
         }))
       );
     },
-    nameGroup() {
-      console.log("this.memberList", this.memberList);
-      const dataMember =
-        this.memberList && this.memberList.listMember
-          ? this.memberList.listMember
-          : [];
-      const dataTotal =
-        this.memberList &&
-        this.memberList.page &&
-        this.memberList.page.total_elements
-          ? this.memberList.page.total_elements
-          : "";
-      if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
-        const [dataFilterMember] = dataMember.filter(
-          item => item.id != this.userId
-        );
-        return dataFilterMember && dataFilterMember.fullname
-          ? dataFilterMember.fullname
-          : "";
-      } else if (
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type == 2
-      ) {
-        const filterMemberUserId = dataMember.filter(
-          item => item.id != this.userId
-        );
-        let dataNameGroup = "";
-        if (filterMemberUserId.length < 4) {
-          dataNameGroup = filterMemberUserId
-            .reduce((acc, cor) => {
-              acc.push(cor.fullname);
-              return acc;
-            }, [])
-            .join(", ");
-        } else {
-          dataNameGroup =
-            filterMemberUserId[0].fullname +
-            ", " +
-            filterMemberUserId[1].fullname +
-            ", " +
-            filterMemberUserId[2].fullname +
-            " và " +
-            (dataTotal - 4).toString() +
-            " người khác";
-        }
-        return this.groupListDetail.room.room_name
-          ? this.groupListDetail.room.room_name
-          : dataNameGroup;
+    nameRoom() {
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
+        return data.name;
+      } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
+        const [dataFilterMember] =
+          this.memberList &&
+          this.memberList.filter(item => item.int_id.low != this.userId);
+        return dataFilterMember ? dataFilterMember.full_name : "";
       }
+      // console.log("this.memberList", this.memberList);
+      // const dataMember =
+      //   this.memberList && this.memberList.listMember
+      //     ? this.memberList.listMember
+      //     : [];
+      // const dataTotal =
+      //   this.memberList &&
+      //   this.memberList.page &&
+      //   this.memberList.page.total_elements
+      //     ? this.memberList.page.total_elements
+      //     : "";
+      // if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
+      //   const [dataFilterMember] = dataMember.filter(
+      //     item => item.id != this.userId
+      //   );
+      //   return dataFilterMember && dataFilterMember.fullname
+      //     ? dataFilterMember.fullname
+      //     : "";
+      // } else if (
+      //   this.groupListDetail.room &&
+      //   this.groupListDetail.room.type == 2
+      // ) {
+      //   const filterMemberUserId = dataMember.filter(
+      //     item => item.id != this.userId
+      //   );
+      //   let dataNameGroup = "";
+      //   if (filterMemberUserId.length < 4) {
+      //     dataNameGroup = filterMemberUserId
+      //       .reduce((acc, cor) => {
+      //         acc.push(cor.fullname);
+      //         return acc;
+      //       }, [])
+      //       .join(", ");
+      //   } else {
+      //     dataNameGroup =
+      //       filterMemberUserId[0].fullname +
+      //       ", " +
+      //       filterMemberUserId[1].fullname +
+      //       ", " +
+      //       filterMemberUserId[2].fullname +
+      //       " và " +
+      //       (dataTotal - 4).toString() +
+      //       " người khác";
+      //   }
+      //   return this.groupListDetail.room.room_name
+      //     ? this.groupListDetail.room.room_name
+      //     : dataNameGroup;
+      // }
     },
     avatarSrc() {
       const dataMember =
@@ -792,9 +814,11 @@ export default {
       }
     },
     filterMessageList() {
-      const data = this.messageList ? this.messageList : [];
+      const data = this.messagesList ? this.messagesList : [];
       const dataMap = data.map(item => {
-        const [tmpUser] = this.memberList.filter(i => i.id == item.sender_id);
+        const [tmpUser] =
+          this.memberList &&
+          this.memberList.filter(i => i.id == item.sender_id);
         return {
           ...item,
           user: tmpUser,
@@ -821,6 +845,7 @@ export default {
       "emitCloseFalse",
       "setIsCreated"
     ]),
+    ...mapMutations("chat", ["setMessageList"]),
     async messageInfiniteHandler($state) {
       const room_id = this.$route.params.id;
       const query = this.messageQuery;
@@ -840,7 +865,7 @@ export default {
       if (getData && getData.length) {
         this.messageQuery.from_message_id = getData[getData.length - 1].id;
         this.messageQuery.fetch_type = "prior";
-        // this.messagesList.push(...getData.messages);
+        this.messagesList.push(...getData);
         $state.loaded();
       } else {
         $state.complete();
@@ -1096,7 +1121,7 @@ export default {
           }
         });
       } else {
-        // this.messagesList = [];
+        this.messagesList = [];
       }
     },
     removeImgSrc() {
@@ -1128,7 +1153,7 @@ export default {
         // img_url: { low: _newVal.img_url }
       }
     },
-    // messagesList(_newVal) {
+    // messageList(_newVal) {
     //   if (_newVal) {
     //     this.messagesList = [];
     //     this.messageListQuery.page = 1;
@@ -1138,6 +1163,15 @@ export default {
     //     this.infiniteId += 1;
     //   }
     // },
+    stateIdPush(_newVal) {
+      console.log("[stateIdPush] _newVal", _newVal);
+      if (_newVal) {
+        // this.setMessageList([]);
+        // this.infiniteId += 1;
+        // this.messageQuery.from_message_id = null;
+        // this.messageQuery.fetch_type = null;
+      }
+    },
     isCreated(_newVal) {
       console.log("_newVal", _newVal);
       if (_newVal == false && this.tag.length > 0) {

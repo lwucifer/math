@@ -1,5 +1,5 @@
 .elearning-study-tabs {
-    margin: 1rem 0 2rem;
+    margin: 0 0 2rem;
 
     a {
         position: relative;
@@ -41,9 +41,18 @@
     }
 }
 
-.e-study-bottom {
-    margin-top: auto;
-    text-align: right;
+.elearning-study-bottom {
+    height: 4.9rem;
+    margin-top: 6px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #F2F2F2;
+    border-radius: 0px 0px 2px 2px;
+    padding: 0 1.2rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    border-top: 1px solid $color-disabled;
 
     &__button {
         font-size: 2.4rem;
@@ -52,6 +61,61 @@
         .icon {
             display: block;
         }
+
+        &--expand {
+            .icon {
+                fill: none;
+
+                path {
+                    fill: $color-text;
+                }
+            }
+        }
     }
 }
 
+.elearning-lesson-screen {
+    display: flex;
+    justify-content: center;
+
+    img, iframe, a {
+        height: 42.6rem;
+    }
+
+    iframe {
+        border: 0;
+        width: 100%;
+    }
+}
+
+.elearning-study-content {
+    padding: 2rem 2rem 0;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.elearning-study-theater {
+    .elearning-study-content {
+        height: calc(100vh - 7rem - 8.3rem);
+    }
+
+    .elearning-lesson-screen {
+        height: calc(100% - 5.5rem);
+        margin-bottom: 0.6rem;
+
+        iframe {
+            height: 100%;
+        }
+    }
+
+    .elearning-study-bottom {
+        margin-top: auto;
+    }
+
+    &--fullscreen {
+        .elearning-study-content {
+            height: calc(100vh - 7rem);
+        }
+    }
+}

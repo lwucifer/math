@@ -4,7 +4,7 @@ import * as mutationTypes from "../utils/mutation-types";
  * initial state
  */
 const state = () => ({
-  keyword: ''
+  keyword: '',
 });
 
 /**
@@ -23,10 +23,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-    [mutationTypes.KEYWORD.SEARCH_HEADER](state, _keyword) {
-        state.keyword = _keyword;
-        console.log('Search Header', state.keyword)
-    },
+  [mutationTypes.KEYWORD.SEARCH_HEADER](state, _keyword) {
+    state.keyword = _keyword;
+    console.log('Search Header', state.keyword);
+  },
+
 };
 
 export default {

@@ -44,12 +44,12 @@ export default {
     await Promise.all([
       store.dispatch(`chat/${actionTypes.CHAT.MEMBER_LIST}`, {
         paramsOptions,
-        id: "f6a3b88b-b6cd-49c5-988a-6864e58e429a",
+        id: room_id,
         end: "members"
       }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
-      // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST}`, {
-      //   params: payloadMessage,
+      // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST_FETCH}`, {
+      //   params: paramsOptions,
       //   id: room_id,
       //   end: "messages"
       // }),
@@ -143,22 +143,22 @@ export default {
       this.socket.emit(constants.CHAT.JOIN_ROOM, params, res => {
         console.log("[socket] User has joined this channel", res);
       });
-      this.socket.emit(
-        constants.CHAT.MESSAGE,
-        {
-          room_id: this.$route.params.id,
-          message: {
-            text: "hello"
-            // attachments: [
-            //     {type: 'file', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/0eb9b989-8e05-44ba-b7a6-e08ce1fe1740/readme.txt'},
-            //     {type: 'image', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/1db447cb-3854-43fe-8f5d-056a6aa3f1f1/readme.txt'}
-            // ]
-          }
-        },
-        res => {
-          console.log("res emit", res);
-        }
-      );
+      // this.socket.emit(
+      //   constants.CHAT.MESSAGE,
+      //   {
+      //     room_id: this.$route.params.id,
+      //     message: {
+      //       text: "hello"
+      //       // attachments: [
+      //       //     {type: 'file', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/0eb9b989-8e05-44ba-b7a6-e08ce1fe1740/readme.txt'},
+      //       //     {type: 'image', url: '/file_message/ad837772-e5a8-4a7e-906a-dced6f68ee5e/1db447cb-3854-43fe-8f5d-056a6aa3f1f1/readme.txt'}
+      //       // ]
+      //     }
+      //   },
+      //   res => {
+      //     console.log("res emit", res);
+      //   }
+      // );
       // this.socket.emit(
       //   constants.CHAT.MESSAGE,
       //   {

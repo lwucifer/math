@@ -24,7 +24,7 @@
         </sub-block-section>
       </div>
       <div class="col-md-4">
-        <CartSideRight />
+        <CartSideRight :carts="carts" />
       </div>
     </div>
     <div v-else>
