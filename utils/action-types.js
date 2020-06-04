@@ -681,5 +681,7 @@ export const CHAT = {
     MEMBER_LIST: "getMemberList",
     MESSAGE_LIST: "getMessageList",
     ROOM_DETAIL: "getRoomDetail",
-    MESSAGE_LIST_FETCH: "getMessageListFetch"
+    MESSAGE_LIST_INFINITE: "getMessageListInfinite",
+    CHANGE_ROOM_NAME: "changeRoomName",
+    IMAGE_LIST: "getImageList"
 };

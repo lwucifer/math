@@ -576,5 +576,7 @@ export const CHAT = {
     SET_ID_PUSH: "setIdPush",
     SET_EMIT_MESSAGE: "setEmitMessage",
     SET_ON_MESSAGE: "setOnMessage",
-    SET_RES_EMIT: "setResEmit"
+    SET_RES_EMIT: "setResEmit",
+    SET_IMAGE_LIST: "setImageList",
+    SET_FILE_LIST: "setFileList"
 };
