@@ -70,7 +70,7 @@
               <template v-slot:content>
                 <app-table
                   :heads="heads"
-                  :pagination="pagination"
+                  :pagination="filterPagination"
                   @pagechange="onPageChange"
                   :data="list"
                   header-fontweight="normal"
@@ -186,6 +186,17 @@ export default {
     statusOpts() {
       return [this.allOpt, ...this.statuses]
     },
+    filterPagination() {
+      return {
+        size:get(this,"withdrawalsList.data.page.size",10),
+        total_pages:get(this,"withdrawalsList.data.page.totalPages",0),
+        total_elements:get(this,"withdrawalsList.data.page.totalElements",0),
+        first:get(this,"withdrawalsList.data.page.first",false),
+        last:get(this,"withdrawalsList.data.page.last",false),
+        number_of_elements:get(this,"withdrawalsList.data.page.numberOfElements",0),
+        number:get(this,"withdrawalsList.data.page.number",0)
+      };
+    }
   },
   created(){
     this.getDateSelect();

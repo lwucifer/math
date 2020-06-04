@@ -10,9 +10,10 @@
         <div class="info">
           <h5 class="name">{{ get(teacher, "name", "") }}</h5>
           <p class="body-3">{{ get(teacher, "school_name", "") }}</p>
+
           <div class="stars">
-            <app-stars :stars="Math.ceil(get(teacher, 'rate', 0))" :size="14" />
-            ({{ numeral(get(teacher, "rate", 0)).format("0,0.[0]") }})
+            <app-stars :stars="Math.ceil(get(teacher, 'rate', 0))" :size="14" class="mr-2"/>
+            <span class="font-weight-bold mb-3">{{ numeral(get(teacher, "rate", 0)).format("0,0.[0]") }}</span>
           </div>
         </div>
 
