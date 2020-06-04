@@ -37,6 +37,14 @@ export default {
     const userId = store.state.auth.token ? store.state.auth.token.id : "";
     const room_id = route.params.id;
     const paramsOptions = {};
+    const imageOptions = {
+      limit: 12,
+      type: "image"
+    };
+    const fileOptions = {
+      limit: 12,
+      type: "file"
+    };
     // const payloadMessage = {
     //   from_message_id: "9a958a79-a3be-11ea-ba28-997cc905388a",
     //   fetch_type: "prior"
@@ -46,6 +54,16 @@ export default {
         paramsOptions,
         id: room_id,
         end: "members"
+      }),
+      store.dispatch(`chat/${actionTypes.CHAT.IMAGE_LIST}`, {
+        params: imageOptions,
+        id: room_id,
+        end: "attachments"
+      }),
+      store.dispatch(`chat/${actionTypes.CHAT.FILE_LIST}`, {
+        params: fileOptions,
+        id: room_id,
+        end: "attachments"
       }),
       //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.GROUP_LIST}`),
       // store.dispatch(`chat/${actionTypes.CHAT.MESSAGE_LIST_FETCH}`, {
@@ -91,17 +109,17 @@ export default {
     // });
   },
   computed: {
-    ...mapState("message", ["messageEmit"]),
     ...mapGetters("auth", [
       "getSocketURIParam",
       "userId",
       "fullName",
       "accessToken"
-    ])
+    ]),
+    ...mapState("chat", ["messageEmit"])
   },
 
   methods: {
-    ...mapMutations("message", ["setOnMessage"]),
+    ...mapMutations("chat", ["setOnMessage", "setResEmit"]),
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
@@ -178,24 +196,17 @@ export default {
   watch: {
     messageEmit(_newVal) {
       if (_newVal) {
-        const uuidV4 = uuidv4();
+        // const uuidV4 = uuidv4();
         const paramsMessage = {
-          uuid: uuidV4,
-          user_id: this.userId,
           room_id: _newVal.room_id,
-          content: _newVal.content ? _newVal.content : "",
-          img_url: _newVal.img_url ? _newVal.img_url : "",
-          message_id: _newVal.message_id ? _newVal.message_id : "",
-          avatar: _newVal.avatar ? _newVal.avatar : "",
-          fullname: _newVal.fullname ? _newVal.fullname : "",
-          file_url: _newVal.file_url ? _newVal.file_url : "",
-          file_name_upload: _newVal.file_name_upload
-            ? _newVal.file_name_upload
-            : ""
+          message: { text: _newVal.text ? _newVal.text : "" }
         };
-        console.log("[socket] params emit message", paramsMessage);
+        // console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
-          console.log("[socket] User has joined this channel", res);
+          console.log("[socket] emit", res);
+          if (res) {
+            this.setResEmit(res);
+          }
         });
       }
     }

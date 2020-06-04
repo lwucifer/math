@@ -4,7 +4,7 @@
     min-height: 42.6rem;
     .video-js {
       position: relative;
-  
+
       .vjs-big-play-button {
         position: absolute;
         border-radius: 50%;
@@ -18,11 +18,15 @@
           color: #fff;
           line-height: 4rem;
         }
-    
+
         &:focus {
           outline: none;
         }
       }
     }
+    .vjs-play-progress.vjs-slider-bar {
+      background-color: $color-primary !important;
+    }
   }
+
 }

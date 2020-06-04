@@ -373,6 +373,8 @@ export const ELEARNING_STUDY = {
 
 export const ELEARNING_STUDY_OVERVIEW = {
     SET_ELEARNING_STUDY_OVERVIEW: "setElearningStudyOverview",
+    SET_ELEARNING_STUDY_TIME_TABLE: "setElearningStudyTimeTable",
+    SET_ELEARNING_STUDY_DEADLINE: "setElearningStudyDeadline",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -571,5 +573,10 @@ export const CHAT = {
     SET_MESSAGE_LIST: "setMessageList",
     SET_MEMBER_LIST: "setMemberList",
     SET_ROOM_DETAIL: "setRoomDetail",
-    SET_ID_PUSH: "setIdPush"
+    SET_ID_PUSH: "setIdPush",
+    SET_EMIT_MESSAGE: "setEmitMessage",
+    SET_ON_MESSAGE: "setOnMessage",
+    SET_RES_EMIT: "setResEmit",
+    SET_IMAGE_LIST: "setImageList",
+    SET_FILE_LIST: "setFileList"
 };

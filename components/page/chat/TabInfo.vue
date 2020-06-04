@@ -7,7 +7,7 @@
 
           <app-avatar
             v-else
-            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
+            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : 'https://picsum.photos/60/60'"
             size="md"
             class="comment-item__avatar"
           />
@@ -15,7 +15,7 @@
           <app-upload
             class="cgi-upload-avt change-avatar"
             @change="handleUploadChange"
-            v-if="typeRoom == 2"
+            v-if="!typeRoom"
           >
             <template>
               <div class="cgi-upload-avt-preview">
@@ -25,26 +25,27 @@
           </app-upload>
         </div>
 
-        <div class="message-info__acc__title" v-if="!noMessage && typeRoom == 2">
+        <div class="message-info__acc__title" v-if="!typeRoom">
           <input v-if="changeName" type="text" v-model="name" />
 
           <span v-else>
-            <a href="#" v-if="name">{{name}}</a>
+            <a href="#" v-if="name">{{ name.length > 20 ? (name.slice(0, 15) + '...') : name}}</a>
             <span v-else>Đặt tên cho cuộc trò chuyện này</span>
           </span>
+
           <button v-if="!changeName" @click="changeName = true" class="btn-change-name">
-            <IconEditAlt width="20" height="20" />
+            <IconEditAlt class="fill-primary" width="18px" height="18px" />
           </button>
-          <button v-if="changeName" @click="changeName = false " class="btn-des-name">
-            <IconCloseOutline width="20" height="20" />
-          </button>
-          <button v-if="changeName" @click="saveNameGroup" class="btn-save-name">
-            <IconTick width="20" height="20" />
-          </button>
+
+          <div v-if="changeName" class="mt-3">
+            <button @click="changeName = false " class="btn-des-name text-secondary mr-3">HỦY</button>
+
+            <button @click="saveNameGroup" class="btn-save-name text-primary">LƯU</button>
+          </div>
         </div>
 
-        <div v-else-if="typeRoom==1">
-          <h4>{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</h4>
+        <div v-else-if="typeRoom">
+          <h4>{{nameRoom}}</h4>
           <p class="mb-4">Đang hoạt động</p>
         </div>
       </div>
@@ -82,7 +83,7 @@
         </template>
       </ListInfoBox>
 
-      <ListInfoBox v-if="filterTypeRoom">
+      <ListInfoBox v-if="!typeRoom">
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
@@ -119,18 +120,22 @@
         <template #header>TỆP ĐƯỢC CHIA SẺ</template>
 
         <template #body>
-          <p class="mb-3 d-flex align-content-center">
+          <p
+            class="mb-3 d-flex align-content-center"
+            v-for="(item, index) in fileList"
+            :key="index"
+          >
             <IconFileBlank class="fill-info mr-2" />
-            <span class="my-auto text-info">Lorem, ipsum.</span>
+            <span class="my-auto text-info">{{item && item.name ? item.name : "Lorem, ipsum."}}</span>
           </p>
-          <p class="mb-3 d-flex align-content-center">
+          <!-- <p class="mb-3 d-flex align-content-center">
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">Lorem, ipsum.</span>
           </p>
           <p class="d-flex align-content-center">
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">Lorem, ipsum.</span>
-          </p>
+          </p>-->
         </template>
       </ListInfoBox>
 
@@ -138,16 +143,16 @@
         <template #header>ẢNH ĐƯỢC CHIA SẺ</template>
 
         <template #body>
-          <div class="row">
+          <div class="row" v-for="(item, index) in imageList" :key="index">
             <div class="col-4 px-1">
+              <img :src="item && item.src ? item.src : '/images/tmp/user-photo.png'" alt />
+            </div>
+            <!-- <div class="col-4 px-1">
               <img src="/images/tmp/user-photo.png" alt />
             </div>
             <div class="col-4 px-1">
               <img src="/images/tmp/user-photo.png" alt />
-            </div>
-            <div class="col-4 px-1">
-              <img src="/images/tmp/user-photo.png" alt />
-            </div>
+            </div>-->
           </div>
         </template>
         <client-only>
@@ -248,7 +253,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/icons/edit.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconNotificationsNone24px from "~/assets/svg/v2-icons/notifications_none_24px.svg?inline";
@@ -322,8 +327,8 @@ export default {
   },
   created() {
     this.name =
-      this.groupListDetail.room && this.groupListDetail.room.room_name
-        ? this.groupListDetail.room.room_name
+      this.roomDetail && this.roomDetail.room_data
+        ? this.roomDetail.room_data.name
         : "";
     this.avatarSrc =
       this.groupListDetail.room &&
@@ -335,7 +340,7 @@ export default {
   computed: {
     ...mapState("message", ["memberList", "groupListDetail", "tabChat"]),
     ...mapGetters("auth", ["userId"]),
-    ...mapState("chat", ["memberList", "roomDetail"]),
+    ...mapState("chat", ["memberList", "roomDetail", "imageList", "fileList"]),
     listImage() {
       return this.groupListDetail && this.groupListDetail.listImage
         ? this.groupListDetail.listImage
@@ -347,28 +352,32 @@ export default {
         : [];
     },
     typeRoom() {
-      return this.groupListDetail &&
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type
-        ? this.groupListDetail.room.type
-        : "";
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data.type == constants.CHAT.PRIVATE_GROUP) {
+        return true;
+      } else {
+        return false;
+      }
     },
     nameRoom() {
-      if (
-        this.groupListDetail &&
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type == 1
-      ) {
-        const [dataName] = this.memberList.listMember.filter(
-          item => item.id != this.userId
-        );
-        return dataName;
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
+        return data.name;
+      } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
+        const [dataFilterMember] =
+          this.memberList &&
+          this.memberList.filter(item => item.int_id.low != this.userId);
+        return dataFilterMember ? dataFilterMember.full_name : "";
       }
     },
     filterListMember() {
       const data = this.memberList ? this.memberList : [];
+      const dataRoom =
+        this.roomDetail && this.roomDetail.room_data
+          ? this.roomDetail.room_data
+          : {};
       const dataMap = data.map(item => {
-        if (item.id == this.roomDetail.created_by) {
+        if (item.id == dataRoom.created_by) {
           return {
             ...item,
             creator: true
@@ -381,13 +390,13 @@ export default {
         }
       });
       return dataMap;
-    },
-    filterTypeRoom() {
-      return this.roomDetail &&
-        this.roomDetail.type == constants.CHAT.PRIVATE_GROUP
-        ? false
-        : true;
     }
+    // filterTypeRoom() {
+    //   return this.roomDetail && this.roomDetail.room_data;
+    //   this.roomDetail.room_data.type == constants.CHAT.PRIVATE_GROUP
+    //     ? false
+    //     : true;
+    // }
   },
   methods: {
     ...mapActions("message", [
@@ -397,6 +406,7 @@ export default {
       "getGroupListDetail",
       "editAvatarGroup"
     ]),
+    ...mapActions("chat", ["changeRoomName", "getRoomDetail"]),
     async membersInfiniteHandler($state) {
       // this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = this.$store.dispatch(
@@ -439,16 +449,16 @@ export default {
 
     saveNameGroup() {
       const dataEdit = {
-        room_id: this.$route.params.id,
-        room_name: this.name
+        id: this.$route.params.id,
+        payload: { value: this.name },
+        end: "name"
       };
-      this.editName(dataEdit).then(result => {
-        if (result.success == true) {
+      this.changeRoomName(dataEdit).then(result => {
+        console.log("result", result);
+        if (!result.error) {
           this.$toasted.show("success");
           this.changeName = false;
-          this.getGroupListDetail({
-            params: { room_id: this.$route.params.id }
-          });
+          this.getRoomDetail(this.$route.params.id);
         } else {
           this.$toasted.error(result.message);
         }
@@ -465,8 +475,13 @@ export default {
       body.append("room_avatar", fileList[0]);
       body.append("room_id", this.$route.params.id);
       console.log("[room_avatar]", fileList[0]);
-      this.editAvatarGroup(body).then(result => {
-        if (result.success == true) {
+      const data = {
+        id: this.$route.params.id,
+        payload: body.append("avatar", fileList[0]),
+        end: "avatar"
+      };
+      this.changeRoomName(data).then(result => {
+        if (!result.error) {
           setTimeout(() => {
             this.$toasted.show("success");
             this.getGroupListDetail({

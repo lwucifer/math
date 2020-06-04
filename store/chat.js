@@ -11,7 +11,12 @@ const state = () => ({
   roomList: { list_room: [] },
   memberList: {},
   messageList: [],
-  stateIdPush: +new Date()
+  stateIdPush: +new Date(),
+  messageEmit: {},
+  messageOn: {},
+  messageRes: {},
+  imageList: [],
+  fileList: []
 });
 
 /**
@@ -80,26 +85,20 @@ const actions = {
       return err;
     }
   },
-  async [actionTypes.CHAT.MESSAGE_LIST_FETCH]({ commit, state }, options) {
+  async [actionTypes.CHAT.MESSAGE_LIST_INFINITE]({ commit, state }, options) {
     try {
       const { data: result = {} } = await new Room(this.$axios)[
         actionTypes.BASE.GET_END
       ](options, options.id, options.end);
       // console.log("[Message] list", result);
       // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
-      if (result) {
-        const messageList = result;
-        commit(mutationTypes.CHAT.SET_MESSAGE_LIST,
-          messageList
-        )
-      }
       return result;
     } catch (err) {
       console.log("[Message] list.err", err);
       return err;
     }
   },
-  async[actionTypes.CHAT.ROOM_DETAIL]({ commit, state }, payload) {
+  async [actionTypes.CHAT.ROOM_DETAIL]({ commit, state }, payload) {
     try {
       const { data: result = {} } = await new Room(this.$axios)[
         actionTypes.BASE.DETAIL
@@ -109,6 +108,59 @@ const actions = {
       return result;
     } catch (err) {
       console.log("[ROOM_DETAIL] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.CHANGE_ROOM_NAME]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.GET_END_PUT
+      ](options.payload, options.id, options.end);
+      // console.log("[Message] list", result);
+      // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+      if (!result.error) {
+        const newRoomList = state.roomList.list_room.map(item => {
+          if (item.room_id == result.id) {
+            return {
+              ...item,
+              name: result && result.name ? result.name : ''
+            }
+          }
+          return item
+        })
+        commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+          list_room: newRoomList
+        });
+      }
+      return result;
+    } catch (err) {
+      console.log("[Message] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.FILE_LIST]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.GET_END
+      ](options, options.id, options.end);
+      console.log("[FILE_LIST] list", result);
+      commit(mutationTypes.CHAT.SET_FILE_LIST, result);
+      return result;
+    } catch (err) {
+      console.log("[FILE_LIST] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.IMAGE_LIST]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.GET_END
+      ](options, options.id, options.end);
+      console.log("[IMAGE_LIST] list", result);
+      commit(mutationTypes.CHAT.SET_IMAGE_LIST, result);
+      return result;
+    } catch (err) {
+      console.log("[IMAGE_LIST] list.err", err);
       return err;
     }
   },
@@ -131,6 +183,21 @@ const mutations = {
   },
   [mutationTypes.CHAT.SET_ID_PUSH](state, _stateIdPush) {
     state.stateIdPush = state.stateIdPush + _stateIdPush;
+  },
+  [mutationTypes.CHAT.SET_EMIT_MESSAGE](state, _messageEmit) {
+    state.messageEmit = _messageEmit;
+  },
+  [mutationTypes.CHAT.SET_ON_MESSAGE](state, _messageOn) {
+    state.messageOn = _messageOn;
+  },
+  [mutationTypes.CHAT.SET_RES_EMIT](state, _messageRes) {
+    state.messageRes = _messageRes;
+  },
+  [mutationTypes.CHAT.SET_IMAGE_LIST](state, _imageList) {
+    state.imageList = _imageList;
+  },
+  [mutationTypes.CHAT.SET_FILE_LIST](state, _fileList) {
+    state.fileList = _fileList;
   },
 };
 

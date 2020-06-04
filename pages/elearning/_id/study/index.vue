@@ -212,11 +212,11 @@ export default {
   mounted() {
     this.getData(get(this, "$router.history.current.params.id", ""));
 
-    document.addEventListener(
-      "fullscreenchange",
-      this.handleFullscreenChange,
-      true
-    );
+    // document.addEventListener(
+    //   "fullscreenchange",
+    //   this.handleFullscreenChange,
+    //   true
+    // );
   },
 
   destroyed() {
@@ -238,6 +238,7 @@ export default {
     },
 
     fullscreen(newValue) {
+      console.log("[fullscreen] watch", newValue);
       if (newValue) {
         if (document.fullscreenElement === null) {
           const el = document.documentElement;
@@ -261,18 +262,6 @@ export default {
         `elearning/study/study-info/${actionTypes.ELEARNING_STUDY_INFO.LIST}`,
         options
       );
-      // const getTest = this.$store.dispatch(
-      //   `elearning/study/study-exercise/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`,
-      //   {
-      //     elearning_id: elearning_id,
-      //     category: EXERCISE_CATEGORIES.TEST
-      //   }
-      // );
-
-      // const getInteractiveQuestion = () =>
-      //   new InteractiveQuestionService(this.$axios)[actionTypes.BASE.LIST](
-      //     options
-      //   );
       const getProgress = this.$store.dispatch(
         `elearning/study/study-progress/${actionTypes.ELEARNING_STUDY_PROGRESS.LIST}`,
         options
@@ -282,14 +271,11 @@ export default {
 
       const data = await Promise.all([
         getInfo,
-        // getTest,
-        // getInteractiveQuestion(),
         getProgress
       ]);
 
       this.pageLoading = false;
 
-      // this.interactive_questions = get(data, "1.data", null);
     },
 
     async addQuestionSuccess() {
@@ -300,7 +286,6 @@ export default {
           elearning_id: get(this, "$router.history.current.params.id", "")
         }
       });
-      // this.interactive_questions = get(res, "data", null);
     },
 
     exitStudy() {
@@ -315,6 +300,7 @@ export default {
     },
 
     setFullscreen(value) {
+      console.log("[setFullscreen]", value);
       this.$store.commit(
         `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_FULLSCREEN}`,
         value
@@ -323,6 +309,7 @@ export default {
 
     /* View in fullscreen */
     openFullscreen(el) {
+      console.log("[openFullscreen]", el);
       if (el.requestFullscreen) {
         el.requestFullscreen();
       } else if (el.mozRequestFullScreen) {
@@ -354,6 +341,7 @@ export default {
     },
 
     handleFullscreenChange() {
+      console.log("[handleFullscreenChange]", document.fullscreenElement)
       if (document.fullscreenElement !== null) {
         this.setFullscreen(true);
       } else {

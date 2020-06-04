@@ -437,12 +437,17 @@ export default {
         if (item.type == "PRIVATE") {
           return {
             ...item,
-            name: item && item.sender ? item.sender.first_name : ""
+            name: item && item.friend ? item.friend[0] : ""
           };
         } else {
           return {
             ...item,
-            name: item && item.name ? item.name.substring(0, 15) + "..." : ""
+            name:
+              item && item.name
+                ? item.name.length > 12
+                  ? item.name.substring(0, 12) + "..."
+                  : item.name
+                : ""
           };
         }
       });

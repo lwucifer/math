@@ -1,42 +1,70 @@
 <template>
   <div class="container mb-6">
     <div v-if="!pageLoading">
-      <!-- <div class="top" v-if="isDepartment">
-        <app-button square class="btn_link_manager">
-          <n-link :to="'/school/manager/' + get(school, 'id', '')">
-            <span class>Quản lý trường học</span>
-          </n-link>
-        </app-button>
-      </div>-->
+      <!-- <breadcrumb /> -->
 
-      <school-summary :school="school" />
+      <SchoolSummary :school="school"/>
+      <ListScrollTo/>
+      <IntroSchool/>
 
-      <school-lesson-slider
-        v-if="get(lessons, 'content', []).length > 0"
-        :lessons="get(lessons, 'content', [])"
-        :swiperOptions="sliderOptions"
-        title="Bài giảng của trường"
-      />
+      <div class="highlight">
+        <ElearningHomeBox class="mb-0">
+          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-      <school-course-slider
-        v-if="get(courses, 'content', []).length > 0"
-        :cources="get(courses, 'content', [])"
-        :swiperOptions="sliderOptions"
-        title="Khóa học của trường"
-      />
+          <app-carousel
+            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+          >
+            <template slot="default" slot-scope="{ classes }">
+              <div
+                v-for="item in newestLecture && newestLecture.content || []"
+                :key="item.id"
+                :class="classes"
+              >
+                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+              </div>
+            </template>
+          </app-carousel>
+        </ElearningHomeBox>
+      </div>
+
+      <div class="highlight">
+        <ElearningHomeBox>
+          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
+
+          <app-carousel
+            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+          >
+            <template slot="default" slot-scope="{ classes }">
+              <div
+                v-for="item in newestCourse && newestCourse.content || []"
+                :key="item.id"
+                :class="classes"
+              >
+                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+              </div>
+            </template>
+          </app-carousel>
+        </ElearningHomeBox>
+      </div>
+
+      <DataSchool/>
     </div>
-    <VclFacebook v-else />
   </div>
 </template>
 
 <script>
 import SchoolSummary from "~/components/page/school/SchoolSummary";
-import SchoolLessonSlider from "~/components/page/school/SchoolLessonSlider";
-import SchoolCourseSlider from "~/components/page/school/SchoolCourseSlider";
+import ListScrollTo from "~/components/page/school/ListScrollTo";
+import IntroSchool from "~/components/page/school/IntroSchool";
+import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
+import CourseItem2 from "~/components/page/course/CourseItem2";
+import DataSchool from "~/components/page/school/DataSchool";
+
+import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
+
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { VclFacebook } from "vue-content-loading";
-
+import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
 import { get } from "lodash";
 
 export default {
@@ -44,9 +72,12 @@ export default {
 
   components: {
     SchoolSummary,
-    SchoolLessonSlider,
-    SchoolCourseSlider,
-    VclFacebook
+    ListScrollTo,
+    IntroSchool,
+    ElearningHomeBox,
+    CourseItem2,
+    IconArrowForwardIos,
+    DataSchool
   },
 
   async fetch({ params, query, store }) {
@@ -56,59 +87,48 @@ export default {
       `elearning/school/school-info/${actionTypes.SCHOOL_INFO.INFO}`,
       data
     );
-    const options_sources = {
-      params: {
-        school_id,
-        elearning_type: "COURSE",
-        size: 16
-      }
-    };
-    await store.dispatch(
-      `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
-      options_sources
-    );
-    const options_lecture = {
-      params: {
-        school_id,
-        elearning_type: "LECTURE",
-        size: 16
-        // status: "ACCEPTED",
-      }
-    };
-    await store.dispatch(
-      `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
-      options_lecture
-    );
+
+    const getNewestLecture = () =>
+      store.dispatch(
+        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
+        {
+          params: {
+            type: ELEARNING_TYPES.LECTURE
+          }
+        }
+      );
+
+    const getNewestCourse = () =>
+      store.dispatch(
+        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_COURSE}`,
+        {
+          params: {
+            type: ELEARNING_TYPES.COURSE
+          }
+        }
+      );
+    
+    return await Promise.all([
+      getNewestLecture(),
+      getNewestCourse()
+    ]);
   },
 
   data() {
     return {
-      isAuthenticated: true,
-      isDepartment: true,
-      sliderOptions: {
-        spaceBetween: 20,
-        slidesPerView: 5,
-        setWrapperSize: true,
-        autoHeight: true,
-        watchOverflow: false,
-        navigation: false,
-        pagination: false,
-        showName: true
-      },
       pageLoading: true
     };
   },
   computed: {
-    ...mapState("auth", ["loggedUser"]),
     ...mapState("elearning/school/school-info", { school: "schoolInfo" }),
-    ...mapState(`elearning/school/school-elearning`, {
-      courses: "course",
-      lessons: "lecture"
-    })
+
+    ...mapState("elearning/public/public-newest", [
+      "newestLecture",
+      "newestCourse"
+    ]),
   },
 
   mounted() {
-    console.log(this.school, this.courses, this.lessons);
     this.pageLoading = false;
   },
 
@@ -116,37 +136,10 @@ export default {
 
   methods: {
     get,
-    showAll(params) {
-      const options_showAll = {
-        params: {
-          school_id: this.$route.params.id,
-          elearning_type: "COURSE"
-        }
-      };
-      this.$store.dispatch(
-        `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
-        options_showAll
-      );
-    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.top {
-  text-align: right;
-  padding: 2rem 2rem 0 2rem;
-  background: #ffffff;
-  button {
-    font-size: 1.4rem;
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
-  }
-}
-.btn_link_manager {
-  a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-}
+@import "~assets/scss/pages/school/id/_school-id.scss";
 </style>
