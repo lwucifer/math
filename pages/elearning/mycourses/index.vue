@@ -17,7 +17,7 @@
                                         <span>Số bài giảng đã tham gia</span>
                                         <IconBookOpen1 class="ml-auto"/>
                                     </div>
-                                    <h1>35</h1>
+                                    <h1>{{get(overview, 'lectures', 0)}}</h1>
                                </div>
                            </div>
                            <div class="col-md-6 item">
@@ -26,7 +26,7 @@
                                         <span>Số khóa học đã tham gia</span>
                                         <IconData class="ml-auto"/>
                                     </div>
-                                    <h1>35</h1>
+                                    <h1>{{get(overview, 'courses', 0)}}</h1>
                                </div>
                            </div>
                            <div class="col-md-6 item">
@@ -35,7 +35,7 @@
                                         <span>Tỷ lệ hoàn thành các bài giảng & khóa học</span>
                                         <IconList1 class="ml-auto"/>
                                     </div>
-                                    <h1>35%</h1>
+                                    <h1>{{get(overview, 'complete_rate', 0)}}%</h1>
                                </div>
                            </div>
                            <div class="col-md-6 item">
@@ -44,7 +44,7 @@
                                         <span>Điểm trung bình</span>
                                         <IconGrade1 class="ml-auto"/>
                                     </div>
-                                    <h1>5,5</h1>
+                                    <h1>{{get(overview, 'medium_score', 0)}}</h1>
                                </div>
                            </div>
                        </div>
@@ -68,6 +68,8 @@ import ScheduleToday from "~/components/page/elearning/mycourses/ScheduleToday"
 import moment from 'moment';
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import * as actionTypes from "../../../utils/action-types"
+import { mapState } from 'vuex';
+import { get } from "lodash";
 const STORE_OVERVIEW = "elearning/study/study-overview";
 
 
@@ -83,7 +85,12 @@ export default {
         MyCourseSide,
     },
 
+    computed: {
+        ...mapState(STORE_OVERVIEW, ['overview']),
+    },
+
     methods:{
+        get,
         getWeek(){
             const s = moment("2020-05-22");
             const tuesday = moment("2020-05-20").day("2")
