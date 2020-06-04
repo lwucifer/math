@@ -442,7 +442,12 @@ export default {
         } else {
           return {
             ...item,
-            name: item && item.name ? item.name.substring(0, 15) + "..." : ""
+            name:
+              item && item.name
+                ? item.name.length > 12
+                  ? item.name.substring(0, 12) + "..."
+                  : item.name
+                : ""
           };
         }
       });

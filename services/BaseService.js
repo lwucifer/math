@@ -72,7 +72,7 @@ export default class BaseService {
 
     async postWithFormData(payload) {
         let formData = new FormData();
-        forEach(payload, function(value, key) {
+        forEach(payload, function (value, key) {
             formData.append(key, value);
         });
         const { data } = await this.$axios.post(this.$api, formData, {
@@ -86,7 +86,7 @@ export default class BaseService {
 
     async [actionTypes.BASE.EDIT_FORMDATA](payload) {
         let formData = new FormData();
-        forEach(payload, function(value, key) {
+        forEach(payload, function (value, key) {
             formData.append(key, value);
         });
         const { data } = await this.$axios.put(this.$api, formData, {
@@ -147,6 +147,18 @@ export default class BaseService {
     async [actionTypes.BASE.GET_END](payload, id, end) {
         // console.log("[BaseService] params", id, payload);
         const { data } = await this.$axios.get(
+            `${this.$api}/${id}/${end}`,
+            payload
+        );
+
+        const result = data ? data : {};
+
+        return result;
+    }
+
+    async [actionTypes.BASE.GET_END_PUT](payload, id, end) {
+        // console.log("[BaseService] params", id, payload);
+        const { data } = await this.$axios.put(
             `${this.$api}/${id}/${end}`,
             payload
         );

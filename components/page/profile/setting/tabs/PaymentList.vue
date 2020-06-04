@@ -43,7 +43,7 @@
         tài khoản ngâng hàng của bạn</i
       >
     </p>
-    <AccountEditPaymentModal @close="closeModal" v-if="showModal" />
+    <EditBank @close="closeModal" v-if="showModal" />
     <app-modal-confirm
       title="Bạn chắc muốn xóa"
       description="It is a long established fat that a reader will be  distracted by the readable content"
@@ -61,6 +61,7 @@ import { get } from "lodash";
 import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
 import AccountEditPaymentModal from "~/components/page/account/Info/AccountEditPaymentModal";
 import AddBank from "~/components/page/profile/setting/tabs/AddBank";
+import EditBank from "~/components/page/profile/setting/tabs/EditBank";
 
 export default {
   layout: "account-info",
@@ -70,7 +71,8 @@ export default {
     IconCheck,
     AccountPaymentItem,
     AccountEditPaymentModal,
-    AddBank
+    AddBank,
+    EditBank,
   },
   data() {
     return {
