@@ -132,8 +132,9 @@ export default {
 
   methods: {
     handleChangedLevel(level) {
-      console.log('change level: ', level)
-      this.type = get(level, "type", "");
+      this.type = level
+      // console.log('change level: ', level)
+      // this.type = get(level, "type", "");
       this.$router.push({
         path: "/school/search",
         query: { keyword: this.keyword, type: this.type }
