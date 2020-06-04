@@ -44,7 +44,7 @@
             />
           </div>
           <div class="message-decs__title">
-            <span>{{nameGroup}}</span>
+            <span>{{nameRoom}}</span>
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
@@ -730,16 +730,11 @@ export default {
         }))
       );
     },
-    nameGroup() {
-      if (
-        this.roomDetail &&
-        this.roomDetail.type == constants.CHAT.PUBLIC_GROUP
-      ) {
-        return this.roomDetail.name;
-      } else if (
-        this.roomDetail &&
-        this.roomDetail.type == constants.CHAT.PRIVATE_GROUP
-      ) {
+    nameRoom() {
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
+        return data.name;
+      } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
         const [dataFilterMember] =
           this.memberList &&
           this.memberList.filter(item => item.int_id.low != this.userId);
