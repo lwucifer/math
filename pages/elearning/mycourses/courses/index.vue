@@ -208,18 +208,18 @@ export default {
     // this.fetchElearningArchive();
   },
   computed: {
-    ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyStatistic: "elearningStudyStatistic",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyArchive: "elearningStudyArchive",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyFavourite: "elearningStudyFavourite",
-    }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyStudent: "elearningStudyStudent",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyStatistic: "elearningStudyStatistic",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyArchive: "elearningStudyArchive",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyFavourite: "elearningStudyFavourite",
+    // }),
 
     ...mapState("elearning/study-space", {
       studying: "studying",
@@ -245,53 +245,53 @@ export default {
   },
 
   watch: {
-    elearningStudyStatistic: {
-      handler: function() {
-        this.total.elearnings = get(
-          this,
-          "elearningStudyStatistic.total_elearnings",
-          0
-        );
-        this.total.courses = get(
-          this,
-          "elearningStudyStatistic.total_courses",
-          0
-        );
-        this.total.lectures = get(
-          this,
-          "elearningStudyStatistic.total_lectures",
-          0
-        );
-        this.total.favourites = get(
-          this,
-          "elearningStudyStatistic.total_favourites",
-          0
-        );
-        this.total.archieves = get(
-          this,
-          "elearningStudyStatistic.total_archieves",
-          0
-        );
-      },
-    },
-    elearningStudyStudent: {
-      handler: function() {
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      },
-    },
-    elearningStudyFavourite: {
-      handler: function() {
-        this.list = get(this, "elearningStudyFavourite.content", []);
-        this.pagination = get(this, "elearningStudyFavourite.page", {});
-      },
-    },
-    elearningStudyArchive: {
-      handler: function() {
-        this.list = get(this, "elearningStudyArchive.content", []);
-        this.pagination = get(this, "elearningStudyArchive.page", {});
-      },
-    },
+    // elearningStudyStatistic: {
+    //   handler: function() {
+    //     this.total.elearnings = get(
+    //       this,
+    //       "elearningStudyStatistic.total_elearnings",
+    //       0
+    //     );
+    //     this.total.courses = get(
+    //       this,
+    //       "elearningStudyStatistic.total_courses",
+    //       0
+    //     );
+    //     this.total.lectures = get(
+    //       this,
+    //       "elearningStudyStatistic.total_lectures",
+    //       0
+    //     );
+    //     this.total.favourites = get(
+    //       this,
+    //       "elearningStudyStatistic.total_favourites",
+    //       0
+    //     );
+    //     this.total.archieves = get(
+    //       this,
+    //       "elearningStudyStatistic.total_archieves",
+    //       0
+    //     );
+    //   },
+    // },
+    // elearningStudyStudent: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyStudent.content", []);
+    //     this.pagination = get(this, "elearningStudyStudent.page", {});
+    //   },
+    // },
+    // elearningStudyFavourite: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyFavourite.content", []);
+    //     this.pagination = get(this, "elearningStudyFavourite.page", {});
+    //   },
+    // },
+    // elearningStudyArchive: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyArchive.content", []);
+    //     this.pagination = get(this, "elearningStudyArchive.page", {});
+    //   },
+    // },
     tab(_tab) {},
     pagination(_newVal) {
       this.pagination.size = _newVal.size;
