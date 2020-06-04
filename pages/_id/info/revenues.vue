@@ -145,7 +145,7 @@
                   <div>
                     <app-table
                       :heads="heads"
-                      :pagination="pagination"
+                      :pagination="filterPagination"
                       @pagechange="onPageChange"
                       :data="list"
                       header-fontweight="normal"
@@ -368,7 +368,18 @@ export default {
     ...mapState("account", {
       earningList: "earningList"
     }),
-    ...mapState("auth", ["token"])
+    ...mapState("auth", ["token"]),
+    filterPagination() {
+      return {
+        size:get(this,"earningList.data.earnings.page.size",10),
+        total_pages:get(this,"earningList.data.earnings.page.totalPages",0),
+        total_elements:get(this,"earningList.data.earnings.page.totalElements",0),
+        first:get(this,"earningList.data.earnings.page.first",false),
+        last:get(this,"earningList.data.earnings.page.last",false),
+        number_of_elements:get(this,"earningList.data.earnings.page.numberOfElements",0),
+        number:get(this,"earningList.data.earnings.page.number",0)
+      };
+    },
   },
 
   methods: {

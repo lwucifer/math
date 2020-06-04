@@ -7,7 +7,7 @@
 
           <app-avatar
             v-else
-            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
+            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : 'https://picsum.photos/60/60'"
             size="md"
             class="comment-item__avatar"
           />
@@ -25,7 +25,7 @@
           </app-upload>
         </div>
 
-        <div class="message-info__acc__title" v-if="!noMessage && typeRoom == 2">
+        <div class="message-info__acc__title" v-if="!typeRoom">
           <input v-if="changeName" type="text" v-model="name" />
 
           <span v-else>
@@ -43,8 +43,8 @@
           </button>
         </div>
 
-        <div v-else-if="typeRoom==1">
-          <h4>{{nameRoom && nameRoom.fullname ? nameRoom.fullname : ''}}</h4>
+        <div v-else-if="typeRoom">
+          <h4>{{nameRoom}}</h4>
           <p class="mb-4">Đang hoạt động</p>
         </div>
       </div>
@@ -82,7 +82,7 @@
         </template>
       </ListInfoBox>
 
-      <ListInfoBox v-if="filterTypeRoom">
+      <ListInfoBox v-if="!typeRoom">
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
@@ -322,8 +322,8 @@ export default {
   },
   created() {
     this.name =
-      this.groupListDetail.room && this.groupListDetail.room.room_name
-        ? this.groupListDetail.room.room_name
+      this.roomDetail && this.roomDetail.room_data
+        ? this.roomDetail.room_data.name
         : "";
     this.avatarSrc =
       this.groupListDetail.room &&
@@ -347,28 +347,32 @@ export default {
         : [];
     },
     typeRoom() {
-      return this.groupListDetail &&
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type
-        ? this.groupListDetail.room.type
-        : "";
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data.type == constants.CHAT.PRIVATE_GROUP) {
+        return true;
+      } else {
+        return false;
+      }
     },
     nameRoom() {
-      if (
-        this.groupListDetail &&
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type == 1
-      ) {
-        const [dataName] = this.memberList.listMember.filter(
-          item => item.id != this.userId
-        );
-        return dataName;
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
+        return data.name;
+      } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
+        const [dataFilterMember] =
+          this.memberList &&
+          this.memberList.filter(item => item.int_id.low != this.userId);
+        return dataFilterMember ? dataFilterMember.full_name : "";
       }
     },
     filterListMember() {
       const data = this.memberList ? this.memberList : [];
+      const dataRoom =
+        this.roomDetail && this.roomDetail.room_data
+          ? this.roomDetail.room_data
+          : {};
       const dataMap = data.map(item => {
-        if (item.id == this.roomDetail.created_by) {
+        if (item.id == dataRoom.created_by) {
           return {
             ...item,
             creator: true
@@ -381,13 +385,13 @@ export default {
         }
       });
       return dataMap;
-    },
-    filterTypeRoom() {
-      return this.roomDetail &&
-        this.roomDetail.type == constants.CHAT.PRIVATE_GROUP
-        ? false
-        : true;
     }
+    // filterTypeRoom() {
+    //   return this.roomDetail && this.roomDetail.room_data;
+    //   this.roomDetail.room_data.type == constants.CHAT.PRIVATE_GROUP
+    //     ? false
+    //     : true;
+    // }
   },
   methods: {
     ...mapActions("message", [

@@ -68,6 +68,7 @@ import ScheduleToday from "~/components/page/elearning/mycourses/ScheduleToday"
 import moment from 'moment';
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import * as actionTypes from "../../../utils/action-types"
+const STORE_OVERVIEW = "elearning/study/study-overview";
 
 
 export default {
@@ -93,8 +94,9 @@ export default {
             }
         },
         getData() {
-            this.$store.dispatch(`elearning/study/study-overview/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
-            // this.$store.dispatch("elearning/study-space/getStatistic");
+            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
+            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`);
+            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.DEADLINE}`);
         },   
     },
     created(){
