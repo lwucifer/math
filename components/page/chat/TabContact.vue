@@ -437,7 +437,7 @@ export default {
         if (item.type == "PRIVATE") {
           return {
             ...item,
-            name: item && item.sender ? item.sender.first_name : ""
+            name: item && item.friend ? item.friend[0] : ""
           };
         } else {
           return {

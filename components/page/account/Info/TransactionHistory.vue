@@ -17,7 +17,7 @@
     
     <template v-slot:content>
       <transaction-list
-        :pagination="pagination"
+        :pagination="filterPagination"
         :list.sync="list"
         :loading="loading"
         @changedPagination="updatePagination"
@@ -123,7 +123,19 @@ export default {
     ...mapState("account", [
       "transactionsList",
       "forceGetTransactions",
-    ])
+    ]),
+    filterPagination() {
+      return {
+        size:get(this,"transactionsList.data.page.size",10),
+        total_pages:get(this,"transactionsList.data.page.totalPages",0),
+        total_elements:get(this,"transactionsList.data.page.totalElements",0),
+        first:get(this,"transactionsList.data.page.first",false),
+        last:get(this,"transactionsList.data.page.last",false),
+        number_of_elements:get(this,"transactionsList.data.page.numberOfElements",0),
+        number:get(this,"transactionsList.data.page.number",0)
+      };
+      console
+    }
   },
   created() {
     this.getDateSelect();
