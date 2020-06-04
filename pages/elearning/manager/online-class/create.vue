@@ -58,8 +58,8 @@
                 <label>
                   <strong>Gửi lời mời học đến toàn bộ học sinh đã tham gia bài giảng/ khóa học này của bạn</strong>
                 </label>
-                <app-radio name="sendmess" value="1" class="pr-6 mr-5" v-model="sendMess">Có</app-radio>
-                <app-radio name="sendmess" value="0" v-model="sendMess">Không</app-radio>
+                <app-radio name="sendmess" :value="true" class="pr-6 mr-5" v-model="sendMess">Có</app-radio>
+                <app-radio name="sendmess" :value="false" v-model="sendMess">Không</app-radio>
               </div>
 
               <div class="form-item">
@@ -344,8 +344,8 @@ function initialState() {
     tab: 1,
     hours: Array.from({ length: 9 }).map((_, i) => i),
     message: "",
-    sendMess: "0",
-    downloadVideo: "0",
+    sendMess: false,
+    downloadVideo: false,
     showModalConfirmDraf: false,
     showModalConfirm: false,
     showNotify: false,
@@ -374,6 +374,7 @@ function initialState() {
       elearning_id: "",
       name: "",
       enable: true,
+      privacy: true,
       is_invite_all: false,
       is_allow_download: false,
       schedules: [initialSchedule]
@@ -428,10 +429,10 @@ export default {
 
   watch: {
     sendMess(newValue, oldValue) {
-      this.params.is_invite_all = newValue == "1";
+      this.params.is_invite_all = newValue;
     },
     downloadVideo(newValue, oldValue) {
-      this.params.is_allow_download = newValue == "1";
+      this.params.is_allow_download = newValue;
     },
     schedulesUpdate(newValue, oldValue) {
       this.updateSchedules();
@@ -661,7 +662,7 @@ export default {
             list.push({
               value: element.id,
               text: element.name,
-              is_hidden: element.privacy == 'PUBLIC' ? true : false
+              privacy: element.privacy == 'PUBLIC' ? true : false
             });
           }
         });
@@ -673,11 +674,10 @@ export default {
 
     handleChangedCourse(e) {
       this.params.elearning_id = e.value;
-      this.params.enable = !e.is_hidden;
-      this.filterPrivacy = {value: !e.is_hidden, text: e.is_hidden ? 'Riêng tư' : 'Công khai'};
+      this.filterPrivacy = {value: e.privacy, text: e.privacy ? 'Công khai' : 'Riêng tư'};
     },
     handleChangedPrivacy() {
-      this.params.enable = this.filterPrivacy.value;
+      this.params.privacy = this.filterPrivacy.value;
     },
 
     check(checked, item, index) {
