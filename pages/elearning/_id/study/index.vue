@@ -210,13 +210,14 @@ export default {
   },
 
   mounted() {
+    console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
 
-    // document.addEventListener(
-    //   "fullscreenchange",
-    //   this.handleFullscreenChange,
-    //   true
-    // );
+    document.addEventListener(
+      "fullscreenchange",
+      this.handleFullscreenChange,
+      true
+    );
   },
 
   destroyed() {
@@ -309,7 +310,7 @@ export default {
 
     /* View in fullscreen */
     openFullscreen(el) {
-      console.log("[openFullscreen]", el);
+      // console.log("[openFullscreen]", el);
       if (el.requestFullscreen) {
         el.requestFullscreen();
       } else if (el.mozRequestFullScreen) {
@@ -341,7 +342,7 @@ export default {
     },
 
     handleFullscreenChange() {
-      console.log("[handleFullscreenChange]", document.fullscreenElement)
+      console.log("[handleFullscreenChange] 1", document.fullscreenElement)
       if (document.fullscreenElement !== null) {
         this.setFullscreen(true);
       } else {
