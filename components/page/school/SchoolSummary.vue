@@ -1,89 +1,38 @@
 <template>
   <div class="school-summary">
-    <div class="partial">
-      <div class="row">
-        <!--Thumnail-->
-        <div class="school-summary__thumnail">
-          <img :src="get(school, 'cover.medium', '')" alt />
-        </div>
-        <!--End Thumnail-->
-
-        <!--Contact-->
-        <div class="school-summary__info">
-          <h2 class="school-summary__info__title text-primary h4">
-            {{ get(school, "name", "") }}
-          </h2>
-          <div class="school-summary__info__contact">
-            <p>
-              <i><IconLocation /></i
-              ><span> {{ get(school, "address", "") }}</span>
-            </p>
-            <p>
-              <i><IconPhone /></i><span> {{ get(school, "phone", "") }}</span>
-            </p>
-            <p>
-              <i><IconEmail /></i><span> {{ get(school, "email", "") }}</span>
-            </p>
-            <p>
-              <i><IconCode /></i><span> {{ get(school, "code", "") }}</span>
-            </p>
-          </div>
-        </div>
-        <!--End Contact-->
-
-        <!--Number of teacher, students, ...-->
-        <div class="school-summary__figure">
-          <div class="school-summary__figure__item text-center">
-            <div>
-              <span class="text-primary">{{
-                numeral(get(school, "teacher_number", 0)).format()
-              }}</span>
-              <p>Giáo viên</p>
-            </div>
-          </div>
-
-          <div class="school-summary__figure__item text-center">
-            <div>
-              <span class="text-primary">{{
-                numeral(get(school, "student_number", 0)).format()
-              }}</span>
-              <p>Học sinh</p>
-            </div>
-          </div>
-
-          <div class="school-summary__figure__item text-center">
-            <div>
-              <span class="text-primary">{{
-                numeral(get(school, "lession_number", 0)).format()
-              }}</span>
-              <p>Bài giảng</p>
-            </div>
-          </div>
-
-          <div class="school-summary__figure__item text-center">
-            <div>
-              <span class="text-primary">{{
-                numeral(get(school, "elearning_number", 0)).format()
-              }}</span>
-              <p>Khóa học</p>
-            </div>
-          </div>
-        </div>
-        <!--End Number of teacher, students, ...-->
+      <div class="school-summary__cover">
+        <img :src="get(school, 'cover.medium', '')" alt="">
       </div>
-    </div>
-    <div class="line"></div>
-    <!--Intro-->
-    <div class="partial">
-      <div class="school-summary__intro">
-        <h5 class="font-weight-normal color-text-dark">Giới thiệu</h5>
-        <p>{{ description }}</p>
-        <div class="text-center mt-3" v-if="load_more">
-          <a @click="handleLoadMore" to class="color-primary">Xem thêm</a>
+
+      <div class="school-summary__avatar">
+         <img :src="get(school, 'avatar.medium', '')" alt="">
+      </div>
+
+      <div class="school-summary__info">
+        <h4 class="text-primary">{{ get(school, "name", "") }}</h4>
+
+        <div class="row">
+          <div class="col-6 info-item mb-3">
+              <IconLocation class="mr-2" width="14px" height="14px"/> {{ get(school, "address", "") }}
+          </div>
+
+          <div class="col-6 info-item mb-3">
+            <a href="mailto:schoolly@gmail.com">
+              <IconEmail class="mr-2" width="14px" height="14px"/> {{ get(school, "email", "") }}
+            </a>
+          </div>
+
+          <div class="col-6 info-item">
+            <a href="tel:+0906771634">
+              <IconPhone class="mr-2" width="14px" height="14px"/> {{ get(school, "phone", "") }}
+            </a>
+          </div>
+
+          <div class="col-6 info-item">
+            <IconCode class="mr-2" width="14px" height="14px"/> {{ get(school, "code", "") }}
+          </div>
         </div>
       </div>
-    </div>
-    <!--End intro-->
   </div>
 </template>
 
