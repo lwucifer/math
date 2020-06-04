@@ -3,28 +3,27 @@
     <div v-if="pageLoading" class="teacher-profile__overview mb-3">
       <div class="bg-white px-3"><VclFacebook :height="100"/></div>
     </div>
-    
+
     <div v-else class="teacher-profile__overview">
       <ProfileTeacherHead :info="teacher"/>
       <app-divider class="my-4"/>
       <div class="">
         <p class="mb-3"><span class="h5">Thông tin giáo viên</span></p>
         <div>
-          <p v-if="!readMoreActivated" class="teacher-story">{{get(teacher, 'biography', '').slice(0,300)}}</p>
-          <p class="text-center">
-            <a
-              v-if="!readMoreActivated"
-              class="text-decoration-none font-weight-normal"
-              href="#"
-              v-on:click="activeReadMore">
-              Xem thêm
-            </a>
-          </p>
-          <p v-if="readMoreActivated" class="teacher-story" v-html="get(teacher, 'biography', '')"></p>
+          <div v-if="description" v-html="description" class="dont-break-out teacher-story"></div>
+          <div v-else class="text-center caption text-gray-2">Chưa có nội dung.</div>
+
+          <div class="text-center mt-3" v-if="load_more">
+            <a @click="handleLoadMore" class="btn-load-more">Xem thêm</a>
+          </div>
+
+          <div class="text-center mt-3" v-if="hide_description">
+            <a @click="handleCompact" class="btn-load-more">Rút gọn</a>
+          </div>
         </div>
       </div>
     </div>
-    
+
     <!--slide-->
     <div v-if="pageLoading" class="container">
       <div class="row">
@@ -51,15 +50,14 @@
   import {mapState} from "vuex";
   import * as actionTypes from "~/utils/action-types";
   import {get} from "lodash"
-  
+
   export default {
     // layout:"backhome",
     data() {
       return {
         pageLoading: true,
         courseLoading: false,
-        infoTeacher: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus accumsan quam non tempus. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum. Quisque scelerisque porttitor sem, dictum dapibus tortor blandit vestibulum Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        readMoreActivated: false,
+        lengthDescription: 300,
       }
     },
     async fetch({params, query, store}) {
@@ -73,7 +71,7 @@
             }
           }
         );
-      
+
       const getElearnings = () =>
         store.dispatch(
           `elearning/public/public-teacher-els/${actionTypes.ELEARNING_PUBLIC_TEACHER_ELS.LIST}`,
@@ -85,7 +83,7 @@
             }
           }
         );
-      
+
       return await Promise.all([
         getProfile(),
         getElearnings()
@@ -101,10 +99,30 @@
     computed: {
       ...mapState("elearning/public/public-elearning-teacher", ["teacher"]),
       ...mapState("elearning/public/public-teacher-els", ["elearnings"]),
+      description() {
+        let string = get(this, "teacher.biography", "").substring(
+          0,
+          this.lengthDescription
+        );
+        if (this.load_more) string += "...";
+        return string;
+      },
+      load_more() {
+        return get(this, "teacher.biography.length", 0) > this.lengthDescription;
+      },
+      hide_description() {
+        return (
+          this.lengthDescription == get(this, "teacher.biography.length", 0) &&
+          get(this, "teacher.biography.length", 0) > 300
+        );
+      },
     },
     methods: {
-      activeReadMore() {
-        this.readMoreActivated = true;
+      handleLoadMore() {
+        this.lengthDescription = get(this, "teacher.biography.length", 0);
+      },
+      handleCompact() {
+        this.lengthDescription = 300;
       },
       get
     },
