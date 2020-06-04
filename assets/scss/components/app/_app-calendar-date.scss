@@ -1,0 +1,52 @@
+.app-calendar-date {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+
+    th, td {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    th {
+        font-weight: 700;
+        height: 3.2rem;
+    }
+
+    td {
+        height: (100%/6);
+        padding: .2rem;
+        color: #AEB4C5;
+        cursor: pointer;
+
+        span {
+            vertical-align: middle;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
+
+        &:hover {
+            span {
+                color: #fff;
+                background-color: rgba($color-primary, .5);
+            }
+        }
+
+        &.current-month {
+            color: #1D243E;
+        }
+
+        &.active {
+            span {
+                color: #fff;
+                background-color: $color-primary;
+                font-weight: 700;
+            }
+        }
+    }
+}
