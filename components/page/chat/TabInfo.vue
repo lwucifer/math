@@ -29,18 +29,23 @@
           <input v-if="changeName" type="text" v-model="name" />
 
           <span v-else>
-            <a href="#" v-if="name">{{name}}</a>
+            <a href="#" v-if="name">{{ name.length > 20 ? (name.slice(0, 15) + '...') : name}}</a>
             <span v-else>Đặt tên cho cuộc trò chuyện này</span>
           </span>
+
           <button v-if="!changeName" @click="changeName = true" class="btn-change-name">
-            <IconEditAlt width="20" height="20" />
+            <IconEditAlt class="fill-primary" width="18px" height="18px" />
           </button>
-          <button v-if="changeName" @click="changeName = false " class="btn-des-name">
-            <IconCloseOutline width="20" height="20" />
-          </button>
-          <button v-if="changeName" @click="saveNameGroup" class="btn-save-name">
-            <IconTick width="20" height="20" />
-          </button>
+
+          <div v-if="changeName" class="mt-3">
+            <button  @click="changeName = false " class="btn-des-name text-secondary mr-3">
+              HỦY
+            </button>
+
+            <button  @click="saveNameGroup" class="btn-save-name text-primary">
+              LƯU
+            </button>
+          </div>
         </div>
 
         <div v-else-if="typeRoom">
@@ -248,7 +253,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from '~/assets/svg/icons/edit.svg?inline';
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconNotificationsNone24px from "~/assets/svg/v2-icons/notifications_none_24px.svg?inline";

@@ -484,41 +484,36 @@
                         }
                     }
                     .message-info__acc__title {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
                         position: relative;
+
                         span a {
                             text-decoration: none;
                             color: #333333;
                             font-size: 1.8rem;
                             font-weight: bold;
                         }
+
                         &:hover {
                             .btn-change-name {
                                 display: inline-block !important;
                             }
                         }
+
+                        input {
+                            height: 25px;
+                        }
+
                         .btn-change-name {
+                            display: none;
                             height: 2.4rem;
                             margin-left: 0.5rem;
                             position: absolute;
                             right: 0;
                             top: 0;
                         }
-                        .btn-save-name {
-                            height: 2.4rem;
-                            margin-left: 0.5rem;
-                            position: absolute;
-                            right: 0;
-                            top: 0;
-                        }
-                        .btn-des-name {
-                            height: 2.4rem;
-                            margin-left: 1rem;
-                            // position: absolute;
-                            right: 0;
-                            top: 0;
+
+                        .btn-save-name, .btn-des-name {
+                            font-size: 1.3rem;
                         }
                     }
                 }
