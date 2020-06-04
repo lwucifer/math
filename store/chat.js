@@ -11,7 +11,10 @@ const state = () => ({
   roomList: { list_room: [] },
   memberList: {},
   messageList: [],
-  stateIdPush: +new Date()
+  stateIdPush: +new Date(),
+  messageEmit: {},
+  messageOn: {},
+  messageRes: {}
 });
 
 /**
@@ -131,6 +134,15 @@ const mutations = {
   },
   [mutationTypes.CHAT.SET_ID_PUSH](state, _stateIdPush) {
     state.stateIdPush = state.stateIdPush + _stateIdPush;
+  },
+  [mutationTypes.CHAT.SET_EMIT_MESSAGE](state, _messageEmit) {
+    state.messageEmit = _messageEmit;
+  },
+  [mutationTypes.CHAT.SET_ON_MESSAGE](state, _messageOn) {
+    state.messageOn = _messageOn;
+  },
+  [mutationTypes.CHAT.SET_RES_EMIT](state, _messageRes) {
+    state.messageRes = _messageRes;
   },
 };
 

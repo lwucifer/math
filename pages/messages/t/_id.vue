@@ -91,17 +91,17 @@ export default {
     // });
   },
   computed: {
-    ...mapState("message", ["messageEmit"]),
     ...mapGetters("auth", [
       "getSocketURIParam",
       "userId",
       "fullName",
       "accessToken"
-    ])
+    ]),
+    ...mapState("chat", ["messageEmit"])
   },
 
   methods: {
-    ...mapMutations("message", ["setOnMessage"]),
+    ...mapMutations("chat", ["setOnMessage"]),
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
@@ -178,24 +178,17 @@ export default {
   watch: {
     messageEmit(_newVal) {
       if (_newVal) {
-        const uuidV4 = uuidv4();
+        // const uuidV4 = uuidv4();
         const paramsMessage = {
-          uuid: uuidV4,
-          user_id: this.userId,
           room_id: _newVal.room_id,
-          content: _newVal.content ? _newVal.content : "",
-          img_url: _newVal.img_url ? _newVal.img_url : "",
-          message_id: _newVal.message_id ? _newVal.message_id : "",
-          avatar: _newVal.avatar ? _newVal.avatar : "",
-          fullname: _newVal.fullname ? _newVal.fullname : "",
-          file_url: _newVal.file_url ? _newVal.file_url : "",
-          file_name_upload: _newVal.file_name_upload
-            ? _newVal.file_name_upload
-            : ""
+          message: { text: _newVal.text ? _newVal.text : "" }
         };
-        console.log("[socket] params emit message", paramsMessage);
+        // console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
-          console.log("[socket] User has joined this channel", res);
+          console.log("[socket] emit", res);
+          if (res) {
+            this.setResEmit(res);
+          }
         });
       }
     }
