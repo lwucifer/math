@@ -373,6 +373,8 @@ export const ELEARNING_STUDY = {
 
 export const ELEARNING_STUDY_OVERVIEW = {
     SET_ELEARNING_STUDY_OVERVIEW: "setElearningStudyOverview",
+    SET_ELEARNING_STUDY_TIME_TABLE: "setElearningStudyTimeTable",
+    SET_ELEARNING_STUDY_DEADLINE: "setElearningStudyDeadline",
 };
 
 export const ELEARNING_STUDY_STUDENT = {
