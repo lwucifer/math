@@ -690,17 +690,14 @@ export default {
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }]),
-    ...mapState("message", [
-      "groupListDetail",
-      "messageOn",
-      "friendList",
-      "isCreated"
-    ]),
+    ...mapState("message", ["groupListDetail", "friendList", "isCreated"]),
     ...mapState("chat", [
       "messageList",
       "memberList",
       "roomDetail",
-      "stateIdPush"
+      "stateIdPush",
+      "messageRes",
+      "messageOn"
     ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
@@ -1140,16 +1137,8 @@ export default {
     messageOn(_newVal) {
       if (_newVal) {
         console.log("[messageOn]", _newVal);
-        const data = {
-          ..._newVal,
-          user: {
-            avatar: { low: _newVal.avatar },
-            fullname: _newVal.fullname,
-            id: _newVal.user_id
-          }
-        };
-        console.log("data", data);
-        // this.messagesList.unshift(data);
+        // console.log("data", data);
+        this.messagesList.push(_newVal);
         // console.log("[this.messagesList]", this.messagesList);
         // img_url: { low: _newVal.img_url }
       }
@@ -1181,6 +1170,12 @@ export default {
             room_id: this.$route.params.id
           }
         });
+      }
+    },
+    messageRes(_newVal) {
+      console.log("_newVal", _newVal);
+      if (_newVal) {
+        this.messagesList.push(_newVal);
       }
     }
   }

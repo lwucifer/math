@@ -101,7 +101,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations("chat", ["setOnMessage"]),
+    ...mapMutations("chat", ["setOnMessage", "setResEmit"]),
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
