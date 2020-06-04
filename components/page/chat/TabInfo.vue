@@ -15,7 +15,7 @@
           <app-upload
             class="cgi-upload-avt change-avatar"
             @change="handleUploadChange"
-            v-if="typeRoom == 2"
+            v-if="!typeRoom"
           >
             <template>
               <div class="cgi-upload-avt-preview">
@@ -38,13 +38,9 @@
           </button>
 
           <div v-if="changeName" class="mt-3">
-            <button  @click="changeName = false " class="btn-des-name text-secondary mr-3">
-              HỦY
-            </button>
+            <button @click="changeName = false " class="btn-des-name text-secondary mr-3">HỦY</button>
 
-            <button  @click="saveNameGroup" class="btn-save-name text-primary">
-              LƯU
-            </button>
+            <button @click="saveNameGroup" class="btn-save-name text-primary">LƯU</button>
           </div>
         </div>
 
@@ -124,18 +120,22 @@
         <template #header>TỆP ĐƯỢC CHIA SẺ</template>
 
         <template #body>
-          <p class="mb-3 d-flex align-content-center">
+          <p
+            class="mb-3 d-flex align-content-center"
+            v-for="(item, index) in fileList"
+            :key="index"
+          >
             <IconFileBlank class="fill-info mr-2" />
-            <span class="my-auto text-info">Lorem, ipsum.</span>
+            <span class="my-auto text-info">{{item && item.name ? item.name : "Lorem, ipsum."}}</span>
           </p>
-          <p class="mb-3 d-flex align-content-center">
+          <!-- <p class="mb-3 d-flex align-content-center">
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">Lorem, ipsum.</span>
           </p>
           <p class="d-flex align-content-center">
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">Lorem, ipsum.</span>
-          </p>
+          </p>-->
         </template>
       </ListInfoBox>
 
@@ -143,16 +143,16 @@
         <template #header>ẢNH ĐƯỢC CHIA SẺ</template>
 
         <template #body>
-          <div class="row">
+          <div class="row" v-for="(item, index) in imageList" :key="index">
             <div class="col-4 px-1">
+              <img :src="item && item.src ? item.src : '/images/tmp/user-photo.png'" alt />
+            </div>
+            <!-- <div class="col-4 px-1">
               <img src="/images/tmp/user-photo.png" alt />
             </div>
             <div class="col-4 px-1">
               <img src="/images/tmp/user-photo.png" alt />
-            </div>
-            <div class="col-4 px-1">
-              <img src="/images/tmp/user-photo.png" alt />
-            </div>
+            </div>-->
           </div>
         </template>
         <client-only>
@@ -253,7 +253,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import IconDots from "~/assets/svg/icons/dots.svg?inline";
 import GroupMember from "~/services/message/GroupMember";
 import IconPhoto from "~/assets/svg/icons/photo.svg?inline";
-import IconEditAlt from '~/assets/svg/icons/edit.svg?inline';
+import IconEditAlt from "~/assets/svg/icons/edit.svg?inline";
 import IconCloseOutline from "~/assets/svg/icons/Close-outline.svg?inline";
 import IconTick from "~/assets/svg/icons/tick.svg?inline";
 import IconNotificationsNone24px from "~/assets/svg/v2-icons/notifications_none_24px.svg?inline";
@@ -340,7 +340,7 @@ export default {
   computed: {
     ...mapState("message", ["memberList", "groupListDetail", "tabChat"]),
     ...mapGetters("auth", ["userId"]),
-    ...mapState("chat", ["memberList", "roomDetail"]),
+    ...mapState("chat", ["memberList", "roomDetail", "imageList", "fileList"]),
     listImage() {
       return this.groupListDetail && this.groupListDetail.listImage
         ? this.groupListDetail.listImage
@@ -406,6 +406,7 @@ export default {
       "getGroupListDetail",
       "editAvatarGroup"
     ]),
+    ...mapActions("chat", ["changeRoomName", "getRoomDetail"]),
     async membersInfiniteHandler($state) {
       // this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = this.$store.dispatch(
@@ -448,16 +449,16 @@ export default {
 
     saveNameGroup() {
       const dataEdit = {
-        room_id: this.$route.params.id,
-        room_name: this.name
+        id: this.$route.params.id,
+        payload: { value: this.name },
+        end: "name"
       };
-      this.editName(dataEdit).then(result => {
-        if (result.success == true) {
+      this.changeRoomName(dataEdit).then(result => {
+        console.log("result", result);
+        if (!result.error) {
           this.$toasted.show("success");
           this.changeName = false;
-          this.getGroupListDetail({
-            params: { room_id: this.$route.params.id }
-          });
+          this.getRoomDetail(this.$route.params.id);
         } else {
           this.$toasted.error(result.message);
         }
@@ -474,8 +475,13 @@ export default {
       body.append("room_avatar", fileList[0]);
       body.append("room_id", this.$route.params.id);
       console.log("[room_avatar]", fileList[0]);
-      this.editAvatarGroup(body).then(result => {
-        if (result.success == true) {
+      const data = {
+        id: this.$route.params.id,
+        payload: body.append("avatar", fileList[0]),
+        end: "avatar"
+      };
+      this.changeRoomName(data).then(result => {
+        if (!result.error) {
           setTimeout(() => {
             this.$toasted.show("success");
             this.getGroupListDetail({
