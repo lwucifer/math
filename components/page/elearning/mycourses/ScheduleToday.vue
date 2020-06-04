@@ -48,9 +48,15 @@
             </div>
         </div>
       </div>
-      <div class="row schedule-item">
+      <div class="row schedule-item" v-for="(item, index) in timeTable" :key="index">
           <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Học online</h5>
+          <h5 class="col-md-3">{{get(item, 'type', '')}}</h5>
+          <span class="col-md-5">{{get(item, 'content', '')}}</span>
+          <span class="col-md-3">Thời gian học: {{get(item, 'time', '')}}</span>
+      </div>
+      <!-- <div class="row schedule-item">
+          <IconEllipse2 class="col-md-1"/>
+          <h5 class="col-md-3">Làm bài kiểm tra</h5>
           <span class="col-md-5">Phòng học số 3</span>
           <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
       </div>
@@ -59,19 +65,16 @@
           <h5 class="col-md-3">Làm bài kiểm tra</h5>
           <span class="col-md-5">Phòng học số 3</span>
           <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
-      </div>
-      <div class="row schedule-item">
-          <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Làm bài kiểm tra</h5>
-          <span class="col-md-5">Phòng học số 3</span>
-          <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
-      </div>
+      </div> -->
   </div>
 </template>
 
 <script>
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 import moment from 'moment';
+import { mapState } from 'vuex';
+import { get } from "lodash";
+const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     components:{
         IconEllipse2
@@ -82,10 +85,14 @@ export default {
             dayslist:[]
         }
     },
+    computed: {
+        ...mapState(STORE_OVERVIEW, ['timeTable']),
+    },
     created(){
         this.changeDate(this.dateSchedule)
     },
     methods:{
+        get,
         changeDate(date){
             this.dayslist.length = 0
             for(let i=1;i<=7;i++){
