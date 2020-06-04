@@ -7,7 +7,7 @@
 
           <app-avatar
             v-else
-            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : ''"
+            :src="nameRoom && nameRoom.avatar && nameRoom.avatar.low ? nameRoom.avatar.low : 'https://picsum.photos/60/60'"
             size="md"
             class="comment-item__avatar"
           />
@@ -367,8 +367,12 @@ export default {
     },
     filterListMember() {
       const data = this.memberList ? this.memberList : [];
+      const dataRoom =
+        this.roomDetail && this.roomDetail.room_data
+          ? this.roomDetail.room_data
+          : {};
       const dataMap = data.map(item => {
-        if (item.id == this.roomDetail.created_by) {
+        if (item.id == dataRoom.created_by) {
           return {
             ...item,
             creator: true

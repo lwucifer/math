@@ -441,7 +441,7 @@
             <app-input
               class="mb-0 w-100 bg-light chat-message"
               v-model="textChat"
-              v-on:keyup.enter="handleEmitMessage"
+              @keyup.enter.native="handleEmitMessage"
               placeholder="Nhập tin nhắn..."
             >
               <template #append-inner>
@@ -840,12 +840,8 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
-    ...mapMutations("message", [
-      "setEmitMessage",
-      "emitCloseFalse",
-      "setIsCreated"
-    ]),
-    ...mapMutations("chat", ["setMessageList"]),
+    ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
+    ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
       const room_id = this.$route.params.id;
       const query = this.messageQuery;
@@ -994,102 +990,107 @@ export default {
         this.friendsListQuery.page = 1;
       }
     },
-    async handleEmitMessage() {
-      this.emitCloseFalse(false, this.isGroup);
-      await this.uploadFile();
-      if (this.tag.length == 0) {
-        if (
-          this.textChat != "" ||
-          (this.urlEmitMessage && this.urlEmitMessage != "") ||
-          (this.urlFileUpload && this.urlFileNameUpload)
-        ) {
-          const dataEmit = {
-            room_id: this.$route.params.id,
-            content: this.textChat,
-            img_url: { low: this.urlEmitMessage },
-            file_url: this.urlFileUpload,
-            file_name_upload: this.urlFileNameUpload,
-            message_id: this.messageId,
-            avatar:
-              this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
-            fullname: this.fullName ? this.fullName : ""
-          };
-          console.log("[socket] dataEmit", dataEmit);
-          this.setEmitMessage(dataEmit);
-          // if img or file call api group detail
-          if (
-            (this.urlEmitMessage && this.urlEmitMessage != "") ||
-            (this.urlFileUpload && this.urlFileNameUpload)
-          ) {
-            this.getGroupListDetail({
-              params: {
-                room_id: this.$route.params.id
-              }
-            });
-          }
-        }
-        this.textChat = "";
-      } else if (this.tag.length == 1) {
-        this.setIsCreated(false);
-        this.$router.push(`/messages/t/${this.roomIdPush}`);
-        const dataEmit = {
-          room_id: this.roomIdPush,
-          content: this.textChat,
-          img_url: { low: this.urlEmitMessage },
-          file_url: this.urlFileUpload,
-          file_name_upload: this.urlFileNameUpload,
-          message_id: this.messageId,
-          avatar:
-            this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
-          fullname: this.fullName ? this.fullName : ""
-        };
-        console.log("[socket] dataEmit", dataEmit);
-        this.setEmitMessage(dataEmit);
-        this.getListMessageType({
-          params: {
-            room_type: 1,
-            payloadCheck: "check"
-          }
-        });
-      } else if (this.tag.length > 1) {
-        const data = {
-          type: 2,
-          members: this.tag.toString(),
-          name: this.name ? this.name : ""
-        };
-        await this.createGroup(data).then(result => {
-          if (result.success == true) {
-            this.setIsCreated(false);
-            this.getListMessageType({
-              params: {
-                room_type: 2,
-                payloadCheck: "check"
-              }
-            });
-            // this.getGroupList();
-            this.$toasted.show("success");
-            this.$router.push(`/messages/t/${result.data.id}`);
-            const dataEmit = {
-              room_id: result.data.id,
-              content: this.textChat,
-              img_url: { low: this.urlEmitMessage },
-              file_url: this.urlFileUpload,
-              file_name_upload: this.urlFileNameUpload,
-              message_id: this.messageId,
-              avatar:
-                this.avatarUser && this.avatarUser.low
-                  ? this.avatarUser.low
-                  : "",
-              fullname: this.fullName ? this.fullName : ""
-            };
-            console.log("[socket] dataEmit", dataEmit);
-            this.setEmitMessage(dataEmit);
-          } else {
-            this.$toasted.error(result.message);
-          }
-        });
-      }
-      this.removeImgSrc();
+    handleEmitMessage() {
+      const dataEmit = {
+        room_id: this.$route.params.id,
+        text: this.textChat
+      };
+      this.setEmitMessage(dataEmit);
+      // this.emitCloseFalse(false, this.isGroup);
+      // await this.uploadFile();
+      // if (this.tag.length == 0) {
+      //   if (
+      //     this.textChat != "" ||
+      //     (this.urlEmitMessage && this.urlEmitMessage != "") ||
+      //     (this.urlFileUpload && this.urlFileNameUpload)
+      //   ) {
+      //     const dataEmit = {
+      //       room_id: this.$route.params.id,
+      //       content: this.textChat,
+      //       img_url: { low: this.urlEmitMessage },
+      //       file_url: this.urlFileUpload,
+      //       file_name_upload: this.urlFileNameUpload,
+      //       message_id: this.messageId,
+      //       avatar:
+      //         this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
+      //       fullname: this.fullName ? this.fullName : ""
+      //     };
+      //     console.log("[socket] dataEmit", dataEmit);
+      //     this.setEmitMessage(dataEmit);
+      //     // if img or file call api group detail
+      //     if (
+      //       (this.urlEmitMessage && this.urlEmitMessage != "") ||
+      //       (this.urlFileUpload && this.urlFileNameUpload)
+      //     ) {
+      //       this.getGroupListDetail({
+      //         params: {
+      //           room_id: this.$route.params.id
+      //         }
+      //       });
+      //     }
+      //   }
+      //   this.textChat = "";
+      // } else if (this.tag.length == 1) {
+      //   this.setIsCreated(false);
+      //   this.$router.push(`/messages/t/${this.roomIdPush}`);
+      //   const dataEmit = {
+      //     room_id: this.roomIdPush,
+      //     content: this.textChat,
+      //     img_url: { low: this.urlEmitMessage },
+      //     file_url: this.urlFileUpload,
+      //     file_name_upload: this.urlFileNameUpload,
+      //     message_id: this.messageId,
+      //     avatar:
+      //       this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
+      //     fullname: this.fullName ? this.fullName : ""
+      //   };
+      //   console.log("[socket] dataEmit", dataEmit);
+      //   this.setEmitMessage(dataEmit);
+      //   this.getListMessageType({
+      //     params: {
+      //       room_type: 1,
+      //       payloadCheck: "check"
+      //     }
+      //   });
+      // } else if (this.tag.length > 1) {
+      //   const data = {
+      //     type: 2,
+      //     members: this.tag.toString(),
+      //     name: this.name ? this.name : ""
+      //   };
+      //   await this.createGroup(data).then(result => {
+      //     if (result.success == true) {
+      //       this.setIsCreated(false);
+      //       this.getListMessageType({
+      //         params: {
+      //           room_type: 2,
+      //           payloadCheck: "check"
+      //         }
+      //       });
+      //       // this.getGroupList();
+      //       this.$toasted.show("success");
+      //       this.$router.push(`/messages/t/${result.data.id}`);
+      //       const dataEmit = {
+      //         room_id: result.data.id,
+      //         content: this.textChat,
+      //         img_url: { low: this.urlEmitMessage },
+      //         file_url: this.urlFileUpload,
+      //         file_name_upload: this.urlFileNameUpload,
+      //         message_id: this.messageId,
+      //         avatar:
+      //           this.avatarUser && this.avatarUser.low
+      //             ? this.avatarUser.low
+      //             : "",
+      //         fullname: this.fullName ? this.fullName : ""
+      //       };
+      //       console.log("[socket] dataEmit", dataEmit);
+      //       this.setEmitMessage(dataEmit);
+      //     } else {
+      //       this.$toasted.error(result.message);
+      //     }
+      //   });
+      // }
+      // this.removeImgSrc();
     },
     changeUser() {
       console.log("[option]", this.tag.length);
