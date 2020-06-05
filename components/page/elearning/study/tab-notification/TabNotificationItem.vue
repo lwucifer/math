@@ -20,7 +20,7 @@
 
         <span class="tab-qa-comment-item__time">
           <IconAccessTime class="icon mr-2" />{{
-            get(notification, "timestamp", "") | moment("hh:mm DD/MM/YYYY")
+            get(notification, "timestamp", "") | getDateTimeHH_MM_D_M_Y
           }}
         </span>
       </div>
@@ -64,8 +64,6 @@
 import IconThumbUp from "~/assets/svg/v2-icons/thumb_up_24px.svg?inline";
 import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
-import moment from "moment";
-import numeral from "numeral";
 
 export default {
   components: {
@@ -87,8 +85,6 @@ export default {
 
   methods: {
     get,
-    moment,
-    numeral,
   },
 };
 </script>

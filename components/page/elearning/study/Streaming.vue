@@ -16,6 +16,7 @@
       @canplaythrough="onPlayerCanplaythrough($event)"
       @ready="playerReadied"
       @statechanged="playerStateChanged($event)"
+      @fullscreenchange="handleFullscreenChange"
       v-video-player:myVideoPlayer="playerOptions"
     ></div>
     <div
@@ -30,6 +31,19 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import videojs from 'video.js';
+
+// var Button = videojs.getComponent('Button');
+// var MyButton = videojs.extend(Button, {
+//   constructor: function() {
+//     console.log("[constructor]")
+//     Button.apply(this, arguments);
+//   },
+//   handleClick: function() {
+//     console.log("[handleClick]")
+//   }
+// });
+// videojs.registerComponent('MyButton', MyButton);
 
 export default {
   layout: "empty",
@@ -43,10 +57,6 @@ export default {
     thumbnail: {
       type: String
     }
-  },
-
-  updated() {
-    console.log(this.url);
   },
 
   watch: {
@@ -91,15 +101,23 @@ export default {
         preload: "metadata",
         liveui: true,
         playbackRates: [0.5, 1, 1.5, 2],
-        height: 422
+        height: 422,
       }
     };
   },
   mounted() {
+    // this.myVideoPlayer.addChild('SubsCapsButton', {
+    //   text: "HaftScreenButton"
+    // });
+    // this.myVideoPlayer.getChild('controlBar').addChild('myButton', {
+    //   text: "MyButton2"
+    // });
+
     console.log("this is current player instance object", this.myVideoPlayer);
-    console.log("playerOptions", this.playerOptions);
+    // console.log("playerOptions", this.playerOptions);
     this.playerOptions.sources[0].src = this.url;
     this.$forceUpdate();
+
   },
   computed: {
     ...mapState("event", ["loadingExercise"])
@@ -107,6 +125,10 @@ export default {
 
   methods: {
     ...mapMutations("event", ["setExerciseLoading"]),
+
+    handleFullscreenChange(opt) {
+      console.log("[handleFullscreenChange] 2", opt);
+    },
 
     // listen event
     onPlayerPlay(player) {
@@ -150,6 +172,12 @@ export default {
     playerReadied(player) {
       // console.log("example 01: the player is readied", player);
     }
+  },
+
+  beforeDestroy() {
+    // if (this.myVideoPlayer) {
+    //   this.myVideoPlayer.dispose();
+    // }
   }
 };
 </script>

@@ -84,7 +84,7 @@
         <h5 class="mb-2">Học phí</h5>
 
         <app-select
-          class="cc-select"
+          class="cc-select w-120"
           @change="handleChangeFree"
           :value="free"
           :options="[

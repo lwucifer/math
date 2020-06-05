@@ -46,8 +46,6 @@
                   placeholder="Tìm kiếm"
                   v-model="params.keyword"
                   bordered
-                  @input="hanldeInputSearch"
-                  @keyup.enter.native="handleSubmitSearch"
                   @submit="handleSubmitSearch"
                 />
               </div>
@@ -151,6 +149,7 @@ const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 import numeral from "numeral";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
+import { useEffect } from "../../../../utils/common";
 
 export default {
   middleware: ["authenticated"],
@@ -201,25 +200,26 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    useEffect(this, this.getData.bind(this), ["params", "tab"]);
+    this.$store.dispatch("elearning/study-space/getStatistic");
     // this.fetchElearningList();
     // this.fetchElearningStatisticList();
     // this.fetchElearningFavourite();
     // this.fetchElearningArchive();
   },
   computed: {
-    ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyStatistic: "elearningStudyStatistic",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyArchive: "elearningStudyArchive",
-    }),
-    ...mapState("elearning/study/study-student", {
-      elearningStudyFavourite: "elearningStudyFavourite",
-    }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyStudent: "elearningStudyStudent",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyStatistic: "elearningStudyStatistic",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyArchive: "elearningStudyArchive",
+    // }),
+    // ...mapState("elearning/study/study-student", {
+    //   elearningStudyFavourite: "elearningStudyFavourite",
+    // }),
 
     ...mapState("elearning/study-space", {
       studying: "studying",
@@ -245,53 +245,53 @@ export default {
   },
 
   watch: {
-    elearningStudyStatistic: {
-      handler: function() {
-        this.total.elearnings = get(
-          this,
-          "elearningStudyStatistic.total_elearnings",
-          0
-        );
-        this.total.courses = get(
-          this,
-          "elearningStudyStatistic.total_courses",
-          0
-        );
-        this.total.lectures = get(
-          this,
-          "elearningStudyStatistic.total_lectures",
-          0
-        );
-        this.total.favourites = get(
-          this,
-          "elearningStudyStatistic.total_favourites",
-          0
-        );
-        this.total.archieves = get(
-          this,
-          "elearningStudyStatistic.total_archieves",
-          0
-        );
-      },
-    },
-    elearningStudyStudent: {
-      handler: function() {
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      },
-    },
-    elearningStudyFavourite: {
-      handler: function() {
-        this.list = get(this, "elearningStudyFavourite.content", []);
-        this.pagination = get(this, "elearningStudyFavourite.page", {});
-      },
-    },
-    elearningStudyArchive: {
-      handler: function() {
-        this.list = get(this, "elearningStudyArchive.content", []);
-        this.pagination = get(this, "elearningStudyArchive.page", {});
-      },
-    },
+    // elearningStudyStatistic: {
+    //   handler: function() {
+    //     this.total.elearnings = get(
+    //       this,
+    //       "elearningStudyStatistic.total_elearnings",
+    //       0
+    //     );
+    //     this.total.courses = get(
+    //       this,
+    //       "elearningStudyStatistic.total_courses",
+    //       0
+    //     );
+    //     this.total.lectures = get(
+    //       this,
+    //       "elearningStudyStatistic.total_lectures",
+    //       0
+    //     );
+    //     this.total.favourites = get(
+    //       this,
+    //       "elearningStudyStatistic.total_favourites",
+    //       0
+    //     );
+    //     this.total.archieves = get(
+    //       this,
+    //       "elearningStudyStatistic.total_archieves",
+    //       0
+    //     );
+    //   },
+    // },
+    // elearningStudyStudent: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyStudent.content", []);
+    //     this.pagination = get(this, "elearningStudyStudent.page", {});
+    //   },
+    // },
+    // elearningStudyFavourite: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyFavourite.content", []);
+    //     this.pagination = get(this, "elearningStudyFavourite.page", {});
+    //   },
+    // },
+    // elearningStudyArchive: {
+    //   handler: function() {
+    //     this.list = get(this, "elearningStudyArchive.content", []);
+    //     this.pagination = get(this, "elearningStudyArchive.page", {});
+    //   },
+    // },
     tab(_tab) {},
     pagination(_newVal) {
       this.pagination.size = _newVal.size;
@@ -309,8 +309,18 @@ export default {
       const payload = {
         params: this.params,
       };
-      this.$store.dispatch("elearning/study-space/getStudying", payload);
-      this.$store.dispatch("elearning/study-space/getStatistic");
+      if (this.tab === 2) {
+        this.$store.dispatch("elearning/study-space/getStudying", payload);
+      }
+      if (this.tab === 3) {
+        this.$store.dispatch("elearning/study-space/getStudying", payload);
+      }
+      if (this.tab === 4) {
+        this.$store.dispatch("elearning/study-space/getFavourite", payload);
+      }
+      if (this.tab === 5) {
+        this.$store.dispatch("elearning/study-space/getArchive", payload);
+      }
     },
 
     ...mapActions(STORE_NAME_FAVOURITE, [
@@ -324,21 +334,10 @@ export default {
     changeTab(tab) {
       this.tab = tab;
       this.params.page = 1;
+      this.params.keyword = "";
       const payload = {
         params: this.params,
       };
-      if (this.tab === 2) {
-        this.$store.dispatch("elearning/study-space/getStudying", payload);
-      }
-      if (this.tab === 3) {
-        this.$store.dispatch("elearning/study-space/getStudying", payload);
-      }
-      if (this.tab === 4) {
-        this.$store.dispatch("elearning/study-space/getFavourite", payload);
-      }
-      if (this.tab === 5) {
-        this.$store.dispatch("elearning/study-space/getArchive", payload);
-      }
       // this.params.size = 8;
       // if (tab === 1) {
       //   this.params.type = "ALL";
@@ -528,65 +527,68 @@ export default {
       this.params.page = this.pagination.number + 1;
       this.fetchElearningList();
     },
-    handleSubmitSearch() {
-      this.params.page = 1;
-      if (this.tab === 1) {
-        this.params.type = "ALL";
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (this.tab === 2) {
-        this.params.type = "LECTURE";
-        // this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (this.tab === 3) {
-        this.params.type = "COURSE";
-        // this.params.page = 1;
-        this.fetchElearningList();
-        this.list = get(this, "elearningStudyStudent.content", []);
-        this.pagination = get(this, "elearningStudyStudent.page", {});
-      } else if (this.tab === 4) {
-        this.fetchElearningFavourite();
-        this.list = get(this, "elearningStudyFavourite.content", []);
-        this.pagination = get(this, "elearningStudyFavourite.page", {});
-      } else if (this.tab === 5) {
-        this.fetchElearningArchive();
-        this.list = get(this, "elearningStudyArchive.content", []);
-        this.pagination = get(this, "elearningStudyArchive.page", {});
-      }
+    handleSubmitSearch(e) {
+      // console.log(this.params.keyword)
+      // console.log(e)
+      // console.log(this.params)
+      // this.params.page = 1;
+      // if (this.tab === 1) {
+      //   this.params.type = "ALL";
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (this.tab === 2) {
+      //   this.params.type = "LECTURE";
+      //   // this.params.page = 1;
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (this.tab === 3) {
+      //   this.params.type = "COURSE";
+      //   // this.params.page = 1;
+      //   this.fetchElearningList();
+      //   this.list = get(this, "elearningStudyStudent.content", []);
+      //   this.pagination = get(this, "elearningStudyStudent.page", {});
+      // } else if (this.tab === 4) {
+      //   this.fetchElearningFavourite();
+      //   this.list = get(this, "elearningStudyFavourite.content", []);
+      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
+      // } else if (this.tab === 5) {
+      //   this.fetchElearningArchive();
+      //   this.list = get(this, "elearningStudyArchive.content", []);
+      //   this.pagination = get(this, "elearningStudyArchive.page", {});
+      // }
     },
     hanldeInputSearch(val) {
-      if (val == "") {
-        this.params.page = 1;
-        if (this.tab === 1) {
-          this.params.type = "ALL";
-          this.fetchElearningList();
-          this.list = get(this, "elearningStudyStudent.content", []);
-          this.pagination = get(this, "elearningStudyStudent.page", {});
-        } else if (this.tab === 2) {
-          this.params.type = "LECTURE";
-          // this.params.page = 1;
-          this.fetchElearningList();
-          this.list = get(this, "elearningStudyStudent.content", []);
-          this.pagination = get(this, "elearningStudyStudent.page", {});
-        } else if (this.tab === 3) {
-          this.params.type = "COURSE";
-          // this.params.page = 1;
-          this.fetchElearningList();
-          this.list = get(this, "elearningStudyStudent.content", []);
-          this.pagination = get(this, "elearningStudyStudent.page", {});
-        } else if (this.tab === 4) {
-          this.fetchElearningFavourite();
-          this.list = get(this, "elearningStudyFavourite.content", []);
-          this.pagination = get(this, "elearningStudyFavourite.page", {});
-        } else if (this.tab === 5) {
-          this.fetchElearningArchive();
-          this.list = get(this, "elearningStudyArchive.content", []);
-          this.pagination = get(this, "elearningStudyArchive.page", {});
-        }
-      }
+      // if (val == "") {
+      //   this.params.page = 1;
+      //   if (this.tab === 1) {
+      //     this.params.type = "ALL";
+      //     this.fetchElearningList();
+      //     this.list = get(this, "elearningStudyStudent.content", []);
+      //     this.pagination = get(this, "elearningStudyStudent.page", {});
+      //   } else if (this.tab === 2) {
+      //     this.params.type = "LECTURE";
+      //     // this.params.page = 1;
+      //     this.fetchElearningList();
+      //     this.list = get(this, "elearningStudyStudent.content", []);
+      //     this.pagination = get(this, "elearningStudyStudent.page", {});
+      //   } else if (this.tab === 3) {
+      //     this.params.type = "COURSE";
+      //     // this.params.page = 1;
+      //     this.fetchElearningList();
+      //     this.list = get(this, "elearningStudyStudent.content", []);
+      //     this.pagination = get(this, "elearningStudyStudent.page", {});
+      //   } else if (this.tab === 4) {
+      //     this.fetchElearningFavourite();
+      //     this.list = get(this, "elearningStudyFavourite.content", []);
+      //     this.pagination = get(this, "elearningStudyFavourite.page", {});
+      //   } else if (this.tab === 5) {
+      //     this.fetchElearningArchive();
+      //     this.list = get(this, "elearningStudyArchive.content", []);
+      //     this.pagination = get(this, "elearningStudyArchive.page", {});
+      //   }
+      // }
     },
     shareFb(id) {
       const url =

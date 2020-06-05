@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       loading: true,
-      tab: "payment",
+      tab: "notify",
       isAuthenticated: true,
       tabs: [
         {

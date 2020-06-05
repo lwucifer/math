@@ -53,7 +53,7 @@
           :options="levelOpts"
           label="name"
           placeholder="Cấp học"
-          :reduce="value => value"
+          :reduce="value => value.type"
           searchable
           @input="handleChangedLevel"
           :all-opt="allOpt"
@@ -82,7 +82,7 @@
           ></app-vue-select>
         </div>
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -90,8 +90,8 @@
 <script>
   import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
   import {get} from 'lodash';
-  
-  
+
+
   export default {
     components: {
       IconHamberger

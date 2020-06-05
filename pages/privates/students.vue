@@ -26,7 +26,7 @@
           @change="handleChangedYear"
         />
         <app-select
-          v-if="isFilter && checkClass"
+          v-if="isFilter"
           placeholder="Lớp học"
           size="sm"
           class="mr-2"
@@ -211,8 +211,7 @@ export default {
         { value: "6B", text: "6B" },
         { value: "-1", text: "Khác" }
       ],
-      isFilter: false,
-      checkClass: false
+      isFilter: false
     };
   },
   computed: {
@@ -276,7 +275,6 @@ export default {
       this.params.class_id = null;
       console.log("val", val);
       if (val) {
-        this.checkClass = true;
         this.params.page = 1;
         this.params.school_year = val;
         this.teachingStudentsPrivatesList({
@@ -295,7 +293,6 @@ export default {
         this.teachingStudentsPrivatesList({
           params: this.params
         });
-        this.checkClass = false;
       }
     },
     handleChangedClass(val) {

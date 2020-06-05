@@ -435,6 +435,11 @@ export const ELEARNING_STURY = {
 
 export const ELEARNING_STURY_OVERVIEW = {
     LIST: "elearningStudyOverviewList",
+    TIME_TABLE: "elearningStudyOverviewTimeTable",
+    DEADLINE: "elearningStudyOverviewDeadline",
+    OVERVIEW_BASE_SERVICE: "overviewBaseService",
+    TIME_TABLE_BASE_SERVICE: "timeViewBaseService",
+    DEADLINE_BASE_SERVICE: "deadlineBaseService"
 };
 
 export const ELEARNING_STUDY_STUDENT = {
@@ -676,5 +681,7 @@ export const CHAT = {
     MEMBER_LIST: "getMemberList",
     MESSAGE_LIST: "getMessageList",
     ROOM_DETAIL: "getRoomDetail",
-    MESSAGE_LIST_FETCH: "getMessageListFetch"
+    MESSAGE_LIST_INFINITE: "getMessageListInfinite",
+    CHANGE_ROOM_NAME: "changeRoomName",
+    IMAGE_LIST: "getImageList"
 };

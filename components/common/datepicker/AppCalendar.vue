@@ -1,7 +1,7 @@
 <template>
   <div class="app-calendar">
     <div class="app-calendar__nav">
-      <div class="app-calendar__select-year">
+      <div class="app-calendar__select-year" @click="pickMode = PICK_MODES.YEAR">
         {{ MONTHS[month] }} {{ year }}
         <IconCalendarArrowDown class="icon fill-opacity-1" />
       </div>
@@ -15,26 +15,26 @@
       </div>
     </div>
 
-    <table class="app-calendar__table">
-      <thead>
-        <tr>
-          <th v-for="day in DAYS" :key="day">{{ day }}</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="(row, index) in dataDates" :key="index">
-          <td
-            v-for="data in row"
-            :key="data"
-            :class="{ active: localValue.isSame(new Date(year, month, data)) }"
-            @click="chooseDate(data)"
-          >
-            <span>{{ data }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="app-calendar__calendar">
+      <app-calendar-date
+        v-show="pickMode === PICK_MODES.DATE"
+        :dates="dataDates"
+        :value="date"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'day')"
+        @change="handleChangeDate"
+      />
+      <app-calendar-month
+        v-show="pickMode === PICK_MODES.MONTH"
+        :value="month"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        @change="handleChangeMonth"
+      />
+      <app-calendar-year
+        v-show="pickMode === PICK_MODES.YEAR"
+        :value="year"
+        @change="handleChangeYear"
+      />
+    </div>
   </div>
 </template>
 
@@ -59,6 +59,11 @@ const MONTHS = [
   "Decemeber"
 ];
 const DAYS = ["M", "T", "W", "Th", "F", "Sa", "S"];
+const PICK_MODES = {
+  DATE: "DATE",
+  MONTH: "MONTH",
+  YEAR: "YEAR"
+};
 
 export default {
   components: {
@@ -75,20 +80,20 @@ export default {
   props: {
     value: {
       type: Object,
-      default: moment()
+      default: () => moment(),
+      validator: value => value instanceof moment
     },
     format: {
-      type: String,
-      default: "DD/MM/YYYY"
-    },
-    displayFormat: {
       type: String,
       default: "DD/MM/YYYY"
     }
   },
 
   data() {
-    const initialValue = this.value || moment();
+    const initialValue =
+      this.value instanceof moment
+        ? this.value
+        : moment(new Date(), this.format);
 
     return {
       month: initialValue.month(),
@@ -96,8 +101,10 @@ export default {
       date: initialValue.date(),
       MONTHS: Object.freeze(MONTHS),
       DAYS: Object.freeze(DAYS),
-      dataDates: [],
-      localValue: initialValue
+      PICK_MODES: Object.freeze(PICK_MODES),
+      localValue: initialValue,
+      pickMode: PICK_MODES.DATE,
+      dataDates: []
     };
   },
 
@@ -128,24 +135,26 @@ export default {
       const firstDay = new Date(this.year, this.month, 1);
       const lastDay = new Date(this.year, this.month + 1, 0);
       let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-      let dayCount = 1;
+      let dayCount = -offset + 1;
+      let tmpDataDates = [];
 
-      for (let i = 0; i < 5; i++) {
-        this.dataDates[i] = [];
+      for (let i = 0; i < 6; i++) {
+        tmpDataDates[i] = [];
 
         for (let j = 0; j < 7; j++) {
-          if (offset === 0) {
-            this.dataDates[i][j] = dayCount;
-            if (dayCount >= lastDay.getDate()) {
-              break;
-            }
-            dayCount++;
-          } else {
-            this.dataDates[i][j] = null;
-            offset--;
+          if (dayCount > 42) {
+            break;
           }
+          tmpDataDates[i][j] = {
+            index: dayCount,
+            date: new Date(this.year, this.month, dayCount).getDate(),
+            current: dayCount > 0 && dayCount < lastDay.getDate()
+          };
+          dayCount++;
         }
       }
+
+      this.dataDates = tmpDataDates;
     },
 
     nextMonth() {
@@ -170,10 +179,26 @@ export default {
       this.year -= 1;
     },
 
-    chooseDate(date) {
-      this.date = date;
-      this.localValue = moment(new Date(this.year, this.month, date));
-      console.log(this.localValue.month())
+    handleChangeDate(index) {
+      const value = moment(new Date(this.year, this.month, index), this.format);
+      this.date = value.date();
+      this.month = value.month();
+      this.year = value.year();
+      this.localValue = value;
+
+      this.$nextTick(() => {
+        this.pickMode = PICK_MODES.DATE;
+      });
+    },
+
+    handleChangeMonth(month) {
+      this.month = month;
+      this.pickMode = PICK_MODES.DATE;
+    },
+
+    handleChangeYear(year) {
+      this.year = year;
+      this.pickMode = PICK_MODES.MONTH;
     }
   }
 };

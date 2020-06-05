@@ -34,6 +34,7 @@
         <AccountPaymentItem
           :bank="bank"
           @handleRefreshAccountBank="handleRefresh"
+          @handleEditBank="handleEditBank"
         />
       </div>
     </div>
@@ -43,7 +44,7 @@
         tài khoản ngâng hàng của bạn</i
       >
     </p>
-    <AccountEditPaymentModal @close="closeModal" v-if="showModal" />
+    <EditBank @close="closeModal" v-if="bank" :bank="bank" />
     <app-modal-confirm
       title="Bạn chắc muốn xóa"
       description="It is a long established fat that a reader will be  distracted by the readable content"
@@ -58,9 +59,10 @@ import IconCheck from "~/assets/svg/design-icons/check.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import AccountPaymentItem from "~/components/page/account/Info/AccountPaymentItem";
 import AccountEditPaymentModal from "~/components/page/account/Info/AccountEditPaymentModal";
 import AddBank from "~/components/page/profile/setting/tabs/AddBank";
+import EditBank from "~/components/page/profile/setting/tabs/EditBank";
+import AccountPaymentItem from "~/components/page/profile/setting/tabs/AccountPaymentItem";
 
 export default {
   layout: "account-info",
@@ -70,13 +72,14 @@ export default {
     IconCheck,
     AccountPaymentItem,
     AccountEditPaymentModal,
-    AddBank
+    AddBank,
+    EditBank,
   },
   data() {
     return {
       showAddPayment: false,
       opts: [],
-      showModal: false,
+      bank: null,
     };
   },
   watch: {
@@ -94,6 +97,9 @@ export default {
     }),
   },
   methods: {
+    handleEditBank(bank) {
+      this.bank = bank;
+    },
     fecthPublicBank() {
       this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`);
     },
@@ -104,8 +110,7 @@ export default {
       this.fetchAccountBank();
     },
     closeModal() {
-      this.showModal = false;
-      console.log("lol");
+      this.bank = null;
     },
   },
   // created() {
