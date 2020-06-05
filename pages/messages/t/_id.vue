@@ -42,7 +42,7 @@ export default {
       type: "image"
     };
     const fileOptions = {
-      limit: 12,
+      limit: 20,
       type: "file"
     };
     // const payloadMessage = {

@@ -153,22 +153,24 @@ export default {
     },
 
     async handleChangedClass() {
-      let params = {
-        class_id: this.classSelected.value,
-        size: 999
-      };
-      try {
-        await this.$store.dispatch(
-          `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
-          params
-        );
-        this.studentList = this.get(
-          this.stateSchoolStudents,
-          "data.content",
-          []
-        );
-      } catch (e) {
-      } finally {
+      if (this.classSelected) {
+        let params = {
+          class_id: this.classSelected.value,
+          size: 999
+        };
+        try {
+          await this.$store.dispatch(
+            `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
+            params
+          );
+          this.studentList = this.get(
+            this.stateSchoolStudents,
+            "data.content",
+            []
+          );
+        } catch (e) {
+        } finally {
+        }
       }
     },
 

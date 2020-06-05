@@ -18,9 +18,9 @@
         ></app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="clickSubmit">Lọc kết quả</filter-button>
+        <filter-button @click="submit">Lọc kết quả</filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="filterSelectClass"
@@ -32,7 +32,7 @@
           has-border
           @input="handleSelectType"
         />
-      </div>
+      </div>-->
       <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
         <app-vue-select
           class="app-vue-select w-100"
@@ -133,7 +133,9 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit("submitFilter", this.filters);
+      if (this.filters.keyword != "") {
+        this.$emit("submitFilter", this.filters);
+      }
     },
     handleSelectRate(val) {
       this.$emit("changedRate", val);
@@ -143,17 +145,25 @@ export default {
     },
     handleChangedSearch(val) {
       this.$emit("changedQuery", val);
+      console.log("val", val);
+      if (val == "") {
+        this.$emit("submitFilter", this.filters);
+      }
     },
     clickSubmit() {
-      if (this.filterSelect) {
-        this.resetForm();
-        this.filterSelect = false;
-        if (!this.initStatus) {
-          this.$emit("submitFilter", this.filters);
-        }
-      } else {
-        this.filterSelect = true;
+      debugger;
+      if (this.filters.keyword != "") {
+        this.$emit("changedQuery", this.filters.keyword);
       }
+      // if (this.filterSelect) {
+      //   this.resetForm();
+      //   this.filterSelect = false;
+      //   if (!this.initStatus) {
+      //     this.$emit("submitFilter", this.filters);
+      //   }
+      // } else {
+      //   this.filterSelect = true;
+      // }
     },
     resetForm() {
       this.filters.rate = null;

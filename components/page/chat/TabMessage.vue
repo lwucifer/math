@@ -36,7 +36,7 @@
       </div>
 
       <div class="aside-box__top" v-if="!isCreated">
-        <div class="message-desc">
+        <div class="message-desc" v-if="!checkId">
           <div class="message-decs__image">
             <app-avatar
               :src="avatarSrc ? avatarSrc : 'https://picsum.photos/60/60'"
@@ -48,7 +48,7 @@
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
-        <div class="message-tool">
+        <div class="message-tool" v-if="!checkId">
           <ul class="list-unstyle">
             <li>
               <a href="#">
@@ -70,7 +70,24 @@
         </div>
       </div>
 
-      <div class="aside-box__content" :class="{'padding-show-info': showInfo}">
+      <div style="opacity: 0; height: 0; overflow: hidden">
+        <!-- <client-only>
+          <infinite-loading
+            direction="top"
+            :identifier="infiniteId"
+            @infinite="messageInfiniteHandler"
+          >
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>-->
+      </div>
+
+      <div
+        class="aside-box__content"
+        id="content-message"
+        :class="{'padding-show-info': showInfo}"
+        v-if="!checkList"
+      >
         <!-- <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4> -->
         <client-only>
           <infinite-loading
@@ -101,9 +118,33 @@
           >
             <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
+              <div class="message-box__item__meta" v-if="index == 0">
+                <div class="message-box__item__meta__image">
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <app-avatar
+                        :src="item.user && item.user.avatar && item.user.avatar.low ? item.user.avatar.low : ''"
+                        size="sm"
+                        class="comment-item__avatar"
+                      />
+                    </button>
+                  </app-dropdown>
+                </div>
+                <div class="message-box__item__meta__desc">
+                  <span>{{item.user && item.user.full_name}}</span>
+                </div>
+                <div class="message-box__item__meta__time">
+                  <span>{{item.sent_at | moment("hh:mm A") }}</span>
+                </div>
+              </div>
               <div
                 class="message-box__item__meta"
-                v-if="index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
+                v-else-if="index > 0 && index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
               >
                 <div class="message-box__item__meta__image">
                   <app-dropdown
@@ -195,6 +236,10 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
+=======
+      <div class="aside-box__content" v-else></div>
+>>>>>>> origin/huydv
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -379,10 +424,10 @@ export default {
   },
 
   props: {
-    // isCreated: {
-    //   type: Boolean,
-    //   default: false
-    // },
+    checkId: {
+      type: Boolean,
+      default: false
+    },
     isGroup: {
       type: Boolean,
       default: false
@@ -650,32 +695,39 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
+    ...mapActions("chat", ["getRoomList"]),
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
       const room_id = this.$route.params.id;
       const query = this.messageQuery;
-      const getData = await this.$store.dispatch(
-        `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
-        {
-          params: this.messageQuery,
-          id: room_id,
-          end: "messages"
+      if (room_id) {
+        this.checkList = false;
+        const getData = await this.$store.dispatch(
+          `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
+          {
+            params: this.messageQuery,
+            id: room_id,
+            end: "messages"
+          }
+        );
+        console.log("getData Message", getData);
+        if (getData && getData.length == 0 && this.messagesList.length == 0) {
+          this.checkList = true;
         }
-      );
-      console.log("getData Message", getData);
-      // if (getData && !getData.messages && this.messagesList.length == 0) {
-      //   this.checkList = true;getData[getData.length - 1].id;
-      // }
-      // console.log("getData id", getData[getData.length - 1].id);
-      if (getData && getData.length) {
-        this.messageQuery.from_message_id = getData[getData.length - 1].id;
-        this.messageQuery.fetch_type = "prior";
-        // const dataClone = cloneDeep(getData);
-        // this.messagesList.push(...dataClone.reverse());
-        this.messagesList.push(...getData);
-        $state.loaded();
+        // console.log("getData id", getData[getData.length - 1].id);
+        if (getData && getData.length) {
+          this.messageQuery.from_message_id = getData[getData.length - 1].id;
+          this.messageQuery.fetch_type = "prior";
+          // const dataClone = cloneDeep(getData);
+          // this.messagesList.push(...dataClone.reverse());
+          this.messagesList.push(...getData);
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
       } else {
+        this.checkList = true;
         $state.complete();
       }
     },
@@ -808,7 +860,12 @@ export default {
         text: this.textChat
       };
       this.setEmitMessage(dataEmit);
+      this.getRoomList();
       this.textChat = "";
+      const el = document.getElementById("content-message");
+      if (el.scrollTop != el.scrollHeight) {
+        el.scrollTop = el.scrollHeight;
+      }
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
       // if (this.tag.length == 0) {
