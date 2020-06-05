@@ -20,13 +20,13 @@
         v-show="pickMode === PICK_MODES.DATE"
         :dates="dataDates"
         :value="date"
-        :is-match-date="localValue.isSame(new Date(year, month, date))"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'day')"
         @change="handleChangeDate"
       />
       <app-calendar-month
         v-show="pickMode === PICK_MODES.MONTH"
         :value="month"
-        :is-match-date="localValue.isSame(new Date(year, month, date))"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
         @change="handleChangeMonth"
       />
       <app-calendar-year
@@ -80,20 +80,20 @@ export default {
   props: {
     value: {
       type: Object,
-      default: moment()
+      default: () => moment(),
+      validator: value => value instanceof moment
     },
     format: {
-      type: String,
-      default: "DD/MM/YYYY"
-    },
-    displayFormat: {
       type: String,
       default: "DD/MM/YYYY"
     }
   },
 
   data() {
-    const initialValue = this.value || moment();
+    const initialValue =
+      this.value instanceof moment
+        ? this.value
+        : moment(new Date(), this.format);
 
     return {
       month: initialValue.month(),
@@ -134,8 +134,7 @@ export default {
     getDays() {
       const firstDay = new Date(this.year, this.month, 1);
       const lastDay = new Date(this.year, this.month + 1, 0);
-      let offset =
-        firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+      let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
       let dayCount = -offset + 1;
       let tmpDataDates = [];
 
@@ -181,28 +180,24 @@ export default {
     },
 
     handleChangeDate(index) {
-      const value = moment(new Date(this.year, this.month, index));
-      const lastDateOfMonth = new Date(this.year, this.month + 1, 0);
+      const value = moment(new Date(this.year, this.month, index), this.format);
       this.date = value.date();
-      this.localValue = value;
       this.month = value.month();
       this.year = value.year();
-      
-      // if (index < 0) {
-      // } else if (value.isAfter(lastDateOfMonth)) {
-      //   this.nextMonth()
-      // }
+      this.localValue = value;
+
+      this.$nextTick(() => {
+        this.pickMode = PICK_MODES.DATE;
+      });
     },
 
     handleChangeMonth(month) {
       this.month = month;
-      // this.localValue = moment(new Date(this.year, month, this.date));
       this.pickMode = PICK_MODES.DATE;
     },
 
     handleChangeYear(year) {
       this.year = year;
-      // this.localValue = moment(new Date(year, this.month, this.date));
       this.pickMode = PICK_MODES.MONTH;
     }
   }

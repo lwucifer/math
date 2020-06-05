@@ -7,11 +7,11 @@
       <ListScrollTo/>
       <IntroSchool/>
 
-      <div class="highlight">
+      <div class="highlight" id="lesson">
         <ElearningHomeBox class="mb-0">
           <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-          <app-carousel
+          <AppCarouseSchool
             :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
           >
             <template slot="default" slot-scope="{ classes }">
@@ -23,15 +23,15 @@
                 <CourseItem2 class="my-0" :item="item" :size="'sm'" />
               </div>
             </template>
-          </app-carousel>
+          </AppCarouseSchool>
         </ElearningHomeBox>
       </div>
 
-      <div class="highlight">
+      <div class="highlight pt-0">
         <ElearningHomeBox>
           <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
 
-          <app-carousel
+          <AppCarouseSchool
             :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
           >
             <template slot="default" slot-scope="{ classes }">
@@ -43,11 +43,15 @@
                 <CourseItem2 class="my-0" :item="item" :size="'sm'" />
               </div>
             </template>
-          </app-carousel>
+          </AppCarouseSchool>
         </ElearningHomeBox>
       </div>
 
       <DataSchool/>
+      <ListTeacher/>
+      <SchoolNoti/>
+      <SchoolNews/>
+      <SchoolLink/>
     </div>
   </div>
 </template>
@@ -57,8 +61,13 @@ import SchoolSummary from "~/components/page/school/SchoolSummary";
 import ListScrollTo from "~/components/page/school/ListScrollTo";
 import IntroSchool from "~/components/page/school/IntroSchool";
 import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
+import AppCarouseSchool from "~/components/page/school/AppCarouseSchool";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 import DataSchool from "~/components/page/school/DataSchool";
+import ListTeacher from "~/components/page/school/ListTeacher";
+import SchoolNoti from "~/components/page/school/SchoolNoti";
+import SchoolNews from "~/components/page/school/SchoolNews";
+import SchoolLink from "~/components/page/school/SchoolLink";
 
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
@@ -75,9 +84,14 @@ export default {
     ListScrollTo,
     IntroSchool,
     ElearningHomeBox,
+    AppCarouseSchool,
     CourseItem2,
     IconArrowForwardIos,
-    DataSchool
+    DataSchool,
+    ListTeacher,
+    SchoolNoti,
+    SchoolNews,
+    SchoolLink
   },
 
   async fetch({ params, query, store }) {
