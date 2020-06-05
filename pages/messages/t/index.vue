@@ -45,12 +45,11 @@ export default {
     // TabInfo
   },
 
-  middleware: "authenticated",
   async fetch({ params, query, store, redirect }) {
     const data = await store.dispatch(`chat/${actionTypes.CHAT.ROOM_LIST}`);
     const dataRooms = data.list_room ? data.list_room : [];
     console.log("dataRooms", dataRooms);
-    const id = dataRooms[0] ? dataRooms[0].room_id : "";
+    const id = dataRooms[0] ? dataRooms[0].id : "";
     if (id) {
       return redirect(`/messages/t/${id}`);
     } else {

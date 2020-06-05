@@ -35,8 +35,8 @@
         </div>
       </div>
 
-      <div class="aside-box__top" v-if="!isCreated && !checkId">
-        <div class="message-desc">
+      <div class="aside-box__top" v-if="!isCreated">
+        <div class="message-desc" v-if="!checkId">
           <div class="message-decs__image">
             <app-avatar
               :src="avatarSrc ? avatarSrc : 'https://picsum.photos/60/60'"
@@ -48,7 +48,7 @@
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
-        <div class="message-tool">
+        <div class="message-tool" v-if="!checkId">
           <ul class="list-unstyle">
             <li>
               <a href="#">
@@ -879,6 +879,7 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
+    ...mapActions("chat", ["getRoomList"]),
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
@@ -1043,6 +1044,7 @@ export default {
         text: this.textChat
       };
       this.setEmitMessage(dataEmit);
+      this.getRoomList();
       this.textChat = "";
       const el = document.getElementById("content-message");
       if (el.scrollTop != el.scrollHeight) {
