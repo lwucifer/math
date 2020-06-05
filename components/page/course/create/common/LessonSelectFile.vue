@@ -9,7 +9,7 @@
     </app-upload>
 
     <p class="text-base mt-2 caption">
-      <span class="text-gray font-weight-normal">Lưu ý:</span> Video phải có độ
+      <span class="text-gray font-weight-bold">Lưu ý:</span> Video phải có độ
       phân giải tối thiểu là 480p, dung lượng tối đa là 3GB.
     </p>
   </div>
