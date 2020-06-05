@@ -33,10 +33,7 @@
         </div>
       </div>
 
-      <div
-        class="clc-video__type text-dark mt-2"
-        v-if="get(lesson, 'type', '') === 'VIDEO'"
-      >
+      <div class="clc-video__type text-dark mt-2" v-if="showFileName">
         {{ get(lesson, "file_name", "") }}
       </div>
 
@@ -92,6 +89,12 @@ export default {
       return get(this, "lesson.type", "") === "VIDEO"
         ? "/images/thumnail-video.png"
         : "/images/thumnail-doc.png";
+    },
+    showFileName() {
+      return (
+        get(this, "lesson.type", "") === "VIDEO" ||
+        get(this, "lesson.type", "") === "DOCS"
+      );
     },
   },
 

@@ -41,8 +41,6 @@
 import IconThumbUp from "~/assets/svg/v2-icons/thumb_up_24px.svg?inline";
 import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
-import moment from "moment";
-import numeral from "numeral";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
 import StudyService from "~/services/elearning/study/Study";
 
@@ -136,8 +134,6 @@ export default {
       this.$store.dispatch(`elearning/study/detail/getListQuestion`, options);
     },
     get,
-    moment,
-    numeral,
   },
 };
 </script>

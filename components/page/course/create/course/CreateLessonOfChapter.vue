@@ -163,18 +163,8 @@ export default {
     };
   },
 
-  watch: {
-    lesson: {
-      handler: function() {
-        if (get(this, "lesson.name", "")) {
-          this.payload.name = get(this, "lesson.name", "");
-        }
-        if (get(this, "lesson.id", "")) {
-          this.payload.id = get(this, "lesson.id", "");
-        }
-      },
-      deep: true,
-    },
+  mounted() {
+    useEffect(this, this.handleChangeLesson.bind(this), ["lesson"]);
   },
 
   computed: {
@@ -197,6 +187,21 @@ export default {
   },
 
   methods: {
+    handleChangeLesson() {
+      if (this.lesson) {
+        this.payload.name = get(this, "lesson.name", "");
+        this.payload.id = get(this, "lesson.id", "");
+      }
+      if (
+        get(this, "lesson.type", "") === "ARTICLE" ||
+        get(this, "lesson.type", "") === "DOCS"
+      ) {
+        this.tabType = "document";
+      }
+      if (get(this, "lesson.type", "") === "VIDEO") {
+        this.tabType = "video";
+      }
+    },
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";

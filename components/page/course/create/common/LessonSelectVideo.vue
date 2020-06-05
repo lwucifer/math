@@ -20,6 +20,7 @@
 
     <LessonSelectFile
       @handleSelectFile="handleSelectFile"
+      :lesson="lesson"
       v-if="tabVideo === 'upload'"
     />
 
@@ -41,13 +42,17 @@ export default {
   components: {
     IconTrashAlt,
     LessonSelectFile,
-    DocumentSelectDoc
+    DocumentSelectDoc,
   },
 
   data() {
     return {
-      tabVideo: "upload"
+      tabVideo: "upload",
     };
+  },
+
+  props: {
+    lesson: {},
   },
 
   methods: {
@@ -62,7 +67,7 @@ export default {
 
     handleSelectUrl(file) {
       this.$emit("handleSelectUrl", file);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -210,6 +210,7 @@ export default {
 
     handlJoinOlClass(item) {
       console.log("[handlJoinOlClass]", item);
+      this.targetClass = { ...item };
       this.currentOlClass = item;
       this.modalShow = true;
 
