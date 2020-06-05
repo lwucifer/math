@@ -1,5 +1,5 @@
 <template>
-    <div class="intro-school">
+    <div class="intro-school" id="introduction">
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="intro-text">

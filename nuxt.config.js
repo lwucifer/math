@@ -82,6 +82,7 @@ module.exports = {
         { src: '@/plugins/v-scroll-lock.js', ssr: false },
         { src: '@/plugins/scrollTo.js', ssr: false },
         '~/plugins/vue-lazyload',
+        '~/plugins/vue-scrollto',
     ],
     /**
      * Global middleware
