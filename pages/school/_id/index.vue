@@ -27,7 +27,7 @@
         </ElearningHomeBox>
       </div>
 
-      <div class="highlight">
+      <div class="highlight pt-0">
         <ElearningHomeBox>
           <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
 
@@ -48,6 +48,8 @@
       </div>
 
       <DataSchool/>
+      <ListTeacher/>
+      <SchoolNoti/>
     </div>
   </div>
 </template>
@@ -59,6 +61,8 @@ import IntroSchool from "~/components/page/school/IntroSchool";
 import ElearningHomeBox from "~/components/page/elearning/home/ElearningHomeBox";
 import CourseItem2 from "~/components/page/course/CourseItem2";
 import DataSchool from "~/components/page/school/DataSchool";
+import ListTeacher from "~/components/page/school/ListTeacher";
+import SchoolNoti from "~/components/page/school/SchoolNoti";
 
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
@@ -77,7 +81,9 @@ export default {
     ElearningHomeBox,
     CourseItem2,
     IconArrowForwardIos,
-    DataSchool
+    DataSchool,
+    ListTeacher,
+    SchoolNoti
   },
 
   async fetch({ params, query, store }) {

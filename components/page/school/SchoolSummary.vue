@@ -1,7 +1,7 @@
 <template>
   <div class="school-summary">
       <div class="school-summary__cover">
-        <img :src="get(school, 'cover.medium', '')" alt="">
+        <img :src="get(school, 'cover.high', '')" alt="">
       </div>
 
       <div class="school-summary__avatar">
