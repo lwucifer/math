@@ -3,7 +3,7 @@
     <app-upload
       @change="handleSelectFile"
       class="clc-upload-video"
-      placeholder="Chưa có video nào được chọn"
+      :placeholder="get(lesson, 'file_name', 'Chưa có video nào được chọn')"
       accept=".mp4, .f4v, .mov, .m4a, .m4v, .mp4a, .mp4v, .3gp, .3g2, .flv, .smil"
     >
     </app-upload>
@@ -16,7 +16,13 @@
 </template>
 
 <script>
+import { get } from "lodash";
+
 export default {
+  props: {
+    lesson: {},
+  },
+
   methods: {
     handleSelectFile(files) {
       const data = {
@@ -25,6 +31,7 @@ export default {
       };
       this.$emit("handleSelectFile", data);
     },
+    get,
   },
 };
 </script>
