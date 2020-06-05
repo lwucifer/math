@@ -3,6 +3,7 @@
     class="course-item-2"
     :class="{ 'course-item-2--size-sm': this.size === 'sm' }"
   >
+    <!-- <div class="course-item-2__overlay" v-if="!get(item, 'is_hidden', true)"></div> -->
     <div class="course-item-2__img">
       <n-link :to="`/elearning/${id}`">
         <img
