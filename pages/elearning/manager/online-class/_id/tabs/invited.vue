@@ -359,7 +359,6 @@ export default {
           { params }
         );
         this.students = this.get(this.stateInvites, "data.content", []);
-        console.log("xxxxxxx", this.stateInvites);
         this.pagination.size = this.get(this.stateInvites, "data.size", 10);
         this.pagination.first = this.get(this.stateInvites, "data.first", 1);
         this.pagination.last = this.get(this.stateInvites, "data.last", 1);

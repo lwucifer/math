@@ -303,6 +303,7 @@ export default {
       try {
         self.loading = true;
         let params = { ...self.params };
+        params.sort = 'start_time,desc';
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
