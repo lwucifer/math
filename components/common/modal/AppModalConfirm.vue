@@ -3,9 +3,9 @@
     v-bind="{ width, centered, order }"
     :component-class="{ 'app-modal-confirm': true }"
     :header="false"
-    :footer="false"
-    @close="$emit('cancel')"
+    :footer="false" 
   >
+<!-- @close="$emit('cancel')" -->
     <div slot="content">
       <slot v-if="type !== 'default'" name="icon">
         <div class="app-modal-confirm__icon">
