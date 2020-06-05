@@ -22,13 +22,13 @@
               </div>
 
               <div class="timetable-nav__right">
-                <a href class="timetable-nav__icon-text">
+                <a href class="timetable-nav__icon-text" @click.prevent="selectDay">
                   <IconCalendarDay class="icon fill-opacity-1" />Hôm nay
                 </a>
-                <a href class="timetable-nav__icon-text">
+                <a href class="timetable-nav__icon-text" @click.prevent="selectWeek">
                   <IconCalendarWeek class="icon fill-opacity-1" />Tuần này
                 </a>
-                <a href class="timetable-nav__icon-text">
+                <a href class="timetable-nav__icon-text" @click.prevent="selectMonth">
                   <IconCalendarMonth class="icon fill-opacity-1" />Tháng này
                 </a>
                 <app-dropdown>
@@ -41,7 +41,7 @@
               </div>
             </nav>
 
-            <div class="timetable-table">
+            <div class="timetable-table" v-if="checkTimeAble">
               <table class="timetable-table__table">
                 <thead>
                   <tr>
@@ -56,38 +56,36 @@
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <td>
-                      <span>26</span>
-                    </td>
-                    <td>
-                      <span>27</span>
-                    </td>
-                    <td>
-                      <span>28</span>
-                    </td>
-                    <td>
-                      <span>29</span>
-                    </td>
-                    <td>
-                      <span>29</span>
-                    </td>
-                    <td class="active">
-                      <span class="active">1</span>
-                    </td>
-                    <td>
-                      <span class="disabled">2</span>
+                  <tr class="item">
+                    <td v-for="(item, index) in dayslist" :key="index">
+                      <span
+                        v-if="item == dayslist[dayslist.length -1]"
+                        class="sunday"
+                        @click="changeDateInWeek(item)"
+                        :class="checkDate(item) ? 'active' :''"
+                      >{{item | moment('DD')}}</span>
+                      <span
+                        v-else
+                        :class="checkDate(item) ? 'active' :''"
+                        @click="changeDateInWeek(item)"
+                      >{{item | moment('DD')}}</span>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div class="timetable-range-status">
+            <div class="timetable-range-status" v-if="checkTimeAbleWeek">
               <span class="mr-2">Khoảng thời gian:</span>
               từ:
-              <span class="text-primary mr-2">15 tháng 5, 2020</span> đến:
-              <span class="text-primary">25 tháng 5, 2020</span>
+              <span class="text-primary mr-2">{{firstDayWeek}}</span> đến:
+              <span class="text-primary">{{lastDayWeek}}</span>
+            </div>
+            <div class="timetable-range-status" v-if="checkTimeAbleMonth">
+              <span class="mr-2">Khoảng thời gian:</span>
+              từ:
+              <span class="text-primary mr-2">{{firstDayMonth}}</span> đến:
+              <span class="text-primary">{{lastDayMonth}}</span>
             </div>
 
             <ul class="timetable-list">
@@ -142,11 +140,74 @@ export default {
 
   data() {
     return {
-      calendar: null
+      calendar: null,
+      dayslist: [],
+      dateSchedule: moment().format("YYYY-MM-DD"),
+      checkTimeAble: true,
+      checkTimeAbleMonth: false,
+      checkTimeAbleWeek: false,
+      firstDayWeek: moment()
+        .startOf("week")
+        .format("D MMMM, YYYY"),
+      lastDayWeek: moment()
+        .endOf("week")
+        .format("D MMMM, YYYY"),
+      firstDayMonth: moment()
+        .startOf("month")
+        .format("D MMMM, YYYY"),
+      lastDayMonth: moment()
+        .endOf("month")
+        .format("D MMMM, YYYY")
     };
   },
-
-  methods: {}
+  created() {
+    this.changeDate(this.dateSchedule);
+  },
+  methods: {
+    changeDate(date) {
+      this.dayslist.length = 0;
+      for (let i = 1; i <= 7; i++) {
+        const day = moment(date)
+          .day(i.toString())
+          .toString();
+        this.dayslist.push(day);
+      }
+      console.log("this.dayslist", this.dayslist);
+      // console.log("a", moment(date));
+    },
+    checkDate(d1) {
+      let date1 = moment(d1)
+        .format("YYYY-MM-DD")
+        .toString();
+      let date2 = moment(this.dateSchedule)
+        .format("YYYY-MM-DD")
+        .toString();
+      if (date1 == date2) {
+        return true;
+      } else return false;
+    },
+    changeDateInWeek(i) {
+      this.dateSchedule = moment(i)
+        .format("YYYY-MM-DD")
+        .toString();
+      console.log(this.dateSchedule);
+    },
+    selectDay() {
+      this.checkTimeAble = true;
+      this.checkTimeAbleMonth = false;
+      this.checkTimeAbleWeek = false;
+    },
+    selectWeek() {
+      this.checkTimeAbleWeek = true;
+      this.checkTimeAbleMonth = false;
+      this.checkTimeAble = false;
+    },
+    selectMonth() {
+      this.checkTimeAbleMonth = true;
+      this.checkTimeAbleWeek = false;
+      this.checkTimeAble = false;
+    }
+  }
 };
 </script>
 
