@@ -8,7 +8,7 @@
   <div class="col-md-9 col-content">-->
   <div class="box">
     <div class="row">
-      <TabMessage :isCreated="isCreate" />
+      <TabMessage :checkId="true" />
       <!-- <TabInfo :isGroup="isGroup" :noMessage="true" /> -->
     </div>
   </div>

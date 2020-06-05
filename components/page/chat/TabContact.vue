@@ -552,7 +552,7 @@ export default {
       );
       console.log("getData", getData);
       // check no room
-      if (this.roomList.listMessage == 0) {
+      if (this.roomList && this.roomList.list_room.length == 0) {
         this.checkChatList = true;
       }
       if (getData && getData.list_room && getData.list_room.length > 0) {
