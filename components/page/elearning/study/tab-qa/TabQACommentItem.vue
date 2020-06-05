@@ -20,7 +20,7 @@
 
         <span class="tab-qa-comment-item__time">
           <IconAccessTime class="icon mr-2" />{{
-            get(question, "timestamp", "") | moment("hh:mm DD/MM/YYYY")
+            get(question, "timestamp", "") | getDateTimeHH_MM_D_M_Y
           }}
         </span>
       </div>
@@ -64,7 +64,6 @@
 import IconThumbUp from "~/assets/svg/v2-icons/thumb_up_24px.svg?inline";
 import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
-import moment from "moment";
 import numeral from "numeral";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
 import StudyService from "~/services/elearning/study/Study";
@@ -161,7 +160,6 @@ export default {
       );
     },
     get,
-    moment,
     numeral,
   },
 };
