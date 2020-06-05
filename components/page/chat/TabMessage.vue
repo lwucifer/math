@@ -70,18 +70,6 @@
         </div>
       </div>
 
-      <div style="opacity: 0; height: 0; overflow: hidden">
-        <!-- <client-only>
-          <infinite-loading
-            direction="top"
-            :identifier="infiniteId"
-            @infinite="messageInfiniteHandler"
-          >
-            <template slot="no-more">Không còn tin nhắn.</template>
-          </infinite-loading>
-        </client-only>-->
-      </div>
-
       <div class="aside-box__content" :class="{'padding-show-info': showInfo}">
         <!-- <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4> -->
         <client-only>
@@ -93,12 +81,14 @@
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
         </client-only>
+
         <div class="message-box__time">
           <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">
             <!-- <span>Thứ 5, Ngày 19/09/2019</span> -->
           </div>
         </div>
+        
         <div class="message-box">
           <!-- message date -->
           <!-- END / message date -->
@@ -139,7 +129,7 @@
                 </div>
               </div>
               <div class="message-box__item__meta" v-else-if="item.check">
-                <!-- v-else-if="index < messageList.length - 1 && messageList[index].user && messageList[index].user.id != messageList[index+1].user.id" -->
+                
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -154,20 +144,7 @@
                         class="comment-item__avatar"
                       />
                     </button>
-                    <!-- <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Gửi tin nhắn</span>
-                          </n-link>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xem trang cá nhân</span>
-                          </n-link>
-                        </li>
-                      </ul>
-                    </div>-->
+                    
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
@@ -183,9 +160,7 @@
                   <div class="message-box__item__desc__text">
                     <p>{{item.text}}</p>
                   </div>
-                  <!-- <div class="message-box__item__desc__image">
-                  <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-                  </div>-->
+      
                   <div class="message-box__item__desc__actions">
                     <button title="Trả lời" @click="reply()">
                       <IconReply />
@@ -215,186 +190,11 @@
                     </app-dropdown>
                   </div>
                 </div>
-                <!-- <div class="message-box__item__desc" v-if="item.img_url.low">
-                  <div class="message-box__item__desc__image">
-                    <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-                  </div>
-                  <div class="message-box__item__desc__actions">
-                    <button title="Trả lời" @click="reply()">
-                      <IconReply />
-                    </button>
-                    <button title="Chuyển tiếp">
-                      <IconUpload />
-                    </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
-                        <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
-                  </div>
-                </div>
-                <div class="message-box__item__desc" v-if="item.file_url">
-                  <div class="item-file">
-                    <div class="icon">
-                      <IconFileAlt class="fill-primary" />
-                    </div>
-                    <span>{{item.file_name_upload}}</span>
-                  </div>
-                  <div class="message-box__item__desc__actions">
-                    <button title="Trả lời" @click="reply()">
-                      <IconReply />
-                    </button>
-                    <button title="Chuyển tiếp">
-                      <IconUpload />
-                    </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
-                        <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
-                  </div>
-                </div>-->
               </template>
-              <!-- <div class="message-box__item__desc" v-else-if="item.content">
-                <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
-              <!-- <div class="message-box__item__desc" v-else-if="item.img_url && item.img_url.low">
-                <div class="message-box__item__desc__image">
-                  <img
-                    v-if="item.img_url && item.img_url.low"
-                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
-                  />
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
-              <!-- <div class="message-box__item__desc" v-else-if="item.file_url">
-                <div class="item-file">
-                  <div class="icon">
-                    <IconFileAlt class="fill-primary" />
-                  </div>
-                  <span>{{item.file_name_upload}}</span>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="aside-box__content" v-else></div> -->
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">

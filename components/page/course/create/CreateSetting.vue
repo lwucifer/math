@@ -62,7 +62,7 @@
       </div>
 
       <div class="mb-4">
-        <h5 class="mb-3">Cho phép bình luận tại khóa học</h5>
+        <h5 class="mb-3">Cho phép bình luận tại {{get(general, 'type', '') == 'LECTURE' ? 'bài giảng' : 'khóa học'}}</h5>
         <app-radio-group>
           <app-radio
             value="1"
@@ -278,6 +278,8 @@ export default {
   },
 
   methods: {
+    get,
+
     handleChangeStartDate(date) {
       this.payload.start_time = date;
     },
