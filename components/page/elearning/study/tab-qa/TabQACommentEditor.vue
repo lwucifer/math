@@ -45,8 +45,6 @@ import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 import { getBase64 } from "~/utils/common";
 import { get } from "lodash";
-import moment from "moment";
-import numeral from "numeral";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { mapState } from "vuex";
