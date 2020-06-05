@@ -1,7 +1,7 @@
 class Interact {
     constructor(payload) {
         this.elearning_id = payload.elearning_id;
-        this.student_id = payload.title;
+        this.title = payload.title;
         this.content = payload.content;
     }
 }

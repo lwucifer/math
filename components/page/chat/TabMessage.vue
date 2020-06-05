@@ -38,10 +38,13 @@
       <div class="aside-box__top" v-if="!isCreated">
         <div class="message-desc">
           <div class="message-decs__image">
-            <app-avatar :src="avatarSrc" class="comment-item__avatar" />
+            <app-avatar
+              :src="avatarSrc ? avatarSrc : 'https://picsum.photos/60/60'"
+              class="comment-item__avatar"
+            />
           </div>
           <div class="message-decs__title">
-            <span>{{nameGroup}}</span>
+            <span>{{nameRoom}}</span>
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
@@ -84,8 +87,8 @@
         <client-only>
           <infinite-loading
             direction="top"
-            :identifier="infiniteId"
             @infinite="messageInfiniteHandler"
+            :identifier="infiniteId"
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
@@ -108,7 +111,10 @@
           >
             <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
-              <div class="message-box__item__meta" v-if="index == filterMessageList.length -1">
+              <div
+                class="message-box__item__meta"
+                v-if="index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
+              >
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -132,10 +138,7 @@
                   <span>{{item.sent_at | moment("hh:mm A") }}</span>
                 </div>
               </div>
-              <div
-                class="message-box__item__meta"
-                v-else-if="index < filterMessageList.length - 1 && filterMessageList[index] && filterMessageList[index].user_id != filterMessageList[index+1].user_id"
-              >
+              <div class="message-box__item__meta" v-else-if="item.check">
                 <!-- v-else-if="index < messageList.length - 1 && messageList[index].user && messageList[index].user.id != messageList[index+1].user.id" -->
                 <div class="message-box__item__meta__image">
                   <app-dropdown
@@ -435,7 +438,7 @@
             <app-input
               class="mb-0 w-100 bg-light chat-message"
               v-model="textChat"
-              v-on:keyup.enter="handleEmitMessage"
+              @keyup.enter.native="handleEmitMessage"
               placeholder="Nhập tin nhắn..."
             >
               <template #append-inner>
@@ -552,6 +555,8 @@ import IconSend24px from "~/assets/svg/v2-icons/send_24px.svg?inline";
 
 import Message from "~/services/message/Message";
 import * as actionTypes from "~/utils/action-types";
+import * as constants from "~/utils/constants";
+import { cloneDeep } from "lodash";
 
 export default {
   components: {
@@ -596,7 +601,6 @@ export default {
       visibleAddGroup: false,
       visibleAddByGroup: false,
       friendsInfiniteId: +new Date(),
-      infiniteId: +new Date(),
       friendsListQuery: {
         page: 1
       },
@@ -607,7 +611,7 @@ export default {
       friendsList: [],
       listImgSrc: [],
       // dataPushMessage: [],
-      // messagesList: [],
+      messagesList: [],
       checkList: false,
       friends: [
         {
@@ -675,20 +679,24 @@ export default {
       // fullname: "",
       showInfo: false,
       messageQuery: {
-        from_message_id: null
-      }
+        from_message_id: null,
+        fetch_type: null
+      },
+      infiniteId: +new Date()
     };
   },
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }]),
-    ...mapState("message", [
-      "groupListDetail",
-      "messageOn",
-      "friendList",
-      "isCreated"
+    ...mapState("message", ["groupListDetail", "friendList", "isCreated"]),
+    ...mapState("chat", [
+      "messageList",
+      "memberList",
+      "roomDetail",
+      "stateIdPush",
+      "messageRes",
+      "messageOn"
     ]),
-    ...mapState("chat", ["messageList", "memberList", "roomDetail"]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
     selectedTags() {
@@ -717,55 +725,64 @@ export default {
         }))
       );
     },
-    nameGroup() {
-      console.log("this.memberList", this.memberList);
-      const dataMember =
-        this.memberList && this.memberList.listMember
-          ? this.memberList.listMember
-          : [];
-      const dataTotal =
-        this.memberList &&
-        this.memberList.page &&
-        this.memberList.page.total_elements
-          ? this.memberList.page.total_elements
-          : "";
-      if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
-        const [dataFilterMember] = dataMember.filter(
-          item => item.id != this.userId
-        );
-        return dataFilterMember && dataFilterMember.fullname
-          ? dataFilterMember.fullname
-          : "";
-      } else if (
-        this.groupListDetail.room &&
-        this.groupListDetail.room.type == 2
-      ) {
-        const filterMemberUserId = dataMember.filter(
-          item => item.id != this.userId
-        );
-        let dataNameGroup = "";
-        if (filterMemberUserId.length < 4) {
-          dataNameGroup = filterMemberUserId
-            .reduce((acc, cor) => {
-              acc.push(cor.fullname);
-              return acc;
-            }, [])
-            .join(", ");
-        } else {
-          dataNameGroup =
-            filterMemberUserId[0].fullname +
-            ", " +
-            filterMemberUserId[1].fullname +
-            ", " +
-            filterMemberUserId[2].fullname +
-            " và " +
-            (dataTotal - 4).toString() +
-            " người khác";
-        }
-        return this.groupListDetail.room.room_name
-          ? this.groupListDetail.room.room_name
-          : dataNameGroup;
+    nameRoom() {
+      const data = this.roomDetail ? this.roomDetail.room_data : {};
+      if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
+        return data.name;
+      } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
+        const [dataFilterMember] =
+          this.memberList &&
+          this.memberList.filter(item => item.int_id.low != this.userId);
+        return dataFilterMember ? dataFilterMember.full_name : "";
       }
+      // console.log("this.memberList", this.memberList);
+      // const dataMember =
+      //   this.memberList && this.memberList.listMember
+      //     ? this.memberList.listMember
+      //     : [];
+      // const dataTotal =
+      //   this.memberList &&
+      //   this.memberList.page &&
+      //   this.memberList.page.total_elements
+      //     ? this.memberList.page.total_elements
+      //     : "";
+      // if (this.groupListDetail.room && this.groupListDetail.room.type == 1) {
+      //   const [dataFilterMember] = dataMember.filter(
+      //     item => item.id != this.userId
+      //   );
+      //   return dataFilterMember && dataFilterMember.fullname
+      //     ? dataFilterMember.fullname
+      //     : "";
+      // } else if (
+      //   this.groupListDetail.room &&
+      //   this.groupListDetail.room.type == 2
+      // ) {
+      //   const filterMemberUserId = dataMember.filter(
+      //     item => item.id != this.userId
+      //   );
+      //   let dataNameGroup = "";
+      //   if (filterMemberUserId.length < 4) {
+      //     dataNameGroup = filterMemberUserId
+      //       .reduce((acc, cor) => {
+      //         acc.push(cor.fullname);
+      //         return acc;
+      //       }, [])
+      //       .join(", ");
+      //   } else {
+      //     dataNameGroup =
+      //       filterMemberUserId[0].fullname +
+      //       ", " +
+      //       filterMemberUserId[1].fullname +
+      //       ", " +
+      //       filterMemberUserId[2].fullname +
+      //       " và " +
+      //       (dataTotal - 4).toString() +
+      //       " người khác";
+      //   }
+      //   return this.groupListDetail.room.room_name
+      //     ? this.groupListDetail.room.room_name
+      //     : dataNameGroup;
+      // }
     },
     avatarSrc() {
       const dataMember =
@@ -792,16 +809,33 @@ export default {
       }
     },
     filterMessageList() {
-      const data = this.messageList ? this.messageList : [];
-      const dataMap = data.map(item => {
-        const [tmpUser] = this.memberList.filter(i => i.id == item.sender_id);
+      const dataMap = this.messagesList.map(item => {
+        const [tmpUser] =
+          this.memberList &&
+          this.memberList.filter(i => i.id == item.sender_id);
         return {
           ...item,
           user: tmpUser,
           user_id: tmpUser ? tmpUser.int_id.low : ""
         };
       });
-      return dataMap;
+      let filterData = [];
+      dataMap.forEach((i, index) => {
+        if (index == 0 || index == dataMap.length - 1) {
+          filterData.push({
+            ...i
+          });
+        } else {
+          const dataCheckIndex =
+            dataMap[index].user_id != dataMap[index - 1].user_id ? true : false;
+          filterData.push({
+            ...i,
+            check: dataCheckIndex
+          });
+        }
+      });
+      console.log("filterData", filterData);
+      return filterData;
     }
   },
 
@@ -816,16 +850,13 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
-    ...mapMutations("message", [
-      "setEmitMessage",
-      "emitCloseFalse",
-      "setIsCreated"
-    ]),
+    ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
+    ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
       const room_id = this.$route.params.id;
       const query = this.messageQuery;
       const getData = await this.$store.dispatch(
-        `chat/${actionTypes.CHAT.MESSAGE_LIST}`,
+        `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
         {
           params: this.messageQuery,
           id: room_id,
@@ -840,7 +871,9 @@ export default {
       if (getData && getData.length) {
         this.messageQuery.from_message_id = getData[getData.length - 1].id;
         this.messageQuery.fetch_type = "prior";
-        // this.messagesList.push(...getData.messages);
+        // const dataClone = cloneDeep(getData);
+        // this.messagesList.push(...dataClone.reverse());
+        this.messagesList.push(...getData);
         $state.loaded();
       } else {
         $state.complete();
@@ -969,102 +1002,108 @@ export default {
         this.friendsListQuery.page = 1;
       }
     },
-    async handleEmitMessage() {
-      this.emitCloseFalse(false, this.isGroup);
-      await this.uploadFile();
-      if (this.tag.length == 0) {
-        if (
-          this.textChat != "" ||
-          (this.urlEmitMessage && this.urlEmitMessage != "") ||
-          (this.urlFileUpload && this.urlFileNameUpload)
-        ) {
-          const dataEmit = {
-            room_id: this.$route.params.id,
-            content: this.textChat,
-            img_url: { low: this.urlEmitMessage },
-            file_url: this.urlFileUpload,
-            file_name_upload: this.urlFileNameUpload,
-            message_id: this.messageId,
-            avatar:
-              this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
-            fullname: this.fullName ? this.fullName : ""
-          };
-          console.log("[socket] dataEmit", dataEmit);
-          this.setEmitMessage(dataEmit);
-          // if img or file call api group detail
-          if (
-            (this.urlEmitMessage && this.urlEmitMessage != "") ||
-            (this.urlFileUpload && this.urlFileNameUpload)
-          ) {
-            this.getGroupListDetail({
-              params: {
-                room_id: this.$route.params.id
-              }
-            });
-          }
-        }
-        this.textChat = "";
-      } else if (this.tag.length == 1) {
-        this.setIsCreated(false);
-        this.$router.push(`/messages/t/${this.roomIdPush}`);
-        const dataEmit = {
-          room_id: this.roomIdPush,
-          content: this.textChat,
-          img_url: { low: this.urlEmitMessage },
-          file_url: this.urlFileUpload,
-          file_name_upload: this.urlFileNameUpload,
-          message_id: this.messageId,
-          avatar:
-            this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
-          fullname: this.fullName ? this.fullName : ""
-        };
-        console.log("[socket] dataEmit", dataEmit);
-        this.setEmitMessage(dataEmit);
-        this.getListMessageType({
-          params: {
-            room_type: 1,
-            payloadCheck: "check"
-          }
-        });
-      } else if (this.tag.length > 1) {
-        const data = {
-          type: 2,
-          members: this.tag.toString(),
-          name: this.name ? this.name : ""
-        };
-        await this.createGroup(data).then(result => {
-          if (result.success == true) {
-            this.setIsCreated(false);
-            this.getListMessageType({
-              params: {
-                room_type: 2,
-                payloadCheck: "check"
-              }
-            });
-            // this.getGroupList();
-            this.$toasted.show("success");
-            this.$router.push(`/messages/t/${result.data.id}`);
-            const dataEmit = {
-              room_id: result.data.id,
-              content: this.textChat,
-              img_url: { low: this.urlEmitMessage },
-              file_url: this.urlFileUpload,
-              file_name_upload: this.urlFileNameUpload,
-              message_id: this.messageId,
-              avatar:
-                this.avatarUser && this.avatarUser.low
-                  ? this.avatarUser.low
-                  : "",
-              fullname: this.fullName ? this.fullName : ""
-            };
-            console.log("[socket] dataEmit", dataEmit);
-            this.setEmitMessage(dataEmit);
-          } else {
-            this.$toasted.error(result.message);
-          }
-        });
-      }
-      this.removeImgSrc();
+    handleEmitMessage() {
+      const dataEmit = {
+        room_id: this.$route.params.id,
+        text: this.textChat
+      };
+      this.setEmitMessage(dataEmit);
+      this.textChat = "";
+      // this.emitCloseFalse(false, this.isGroup);
+      // await this.uploadFile();
+      // if (this.tag.length == 0) {
+      //   if (
+      //     this.textChat != "" ||
+      //     (this.urlEmitMessage && this.urlEmitMessage != "") ||
+      //     (this.urlFileUpload && this.urlFileNameUpload)
+      //   ) {
+      //     const dataEmit = {
+      //       room_id: this.$route.params.id,
+      //       content: this.textChat,
+      //       img_url: { low: this.urlEmitMessage },
+      //       file_url: this.urlFileUpload,
+      //       file_name_upload: this.urlFileNameUpload,
+      //       message_id: this.messageId,
+      //       avatar:
+      //         this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
+      //       fullname: this.fullName ? this.fullName : ""
+      //     };
+      //     console.log("[socket] dataEmit", dataEmit);
+      //     this.setEmitMessage(dataEmit);
+      //     // if img or file call api group detail
+      //     if (
+      //       (this.urlEmitMessage && this.urlEmitMessage != "") ||
+      //       (this.urlFileUpload && this.urlFileNameUpload)
+      //     ) {
+      //       this.getGroupListDetail({
+      //         params: {
+      //           room_id: this.$route.params.id
+      //         }
+      //       });
+      //     }
+      //   }
+      //   this.textChat = "";
+      // } else if (this.tag.length == 1) {
+      //   this.setIsCreated(false);
+      //   this.$router.push(`/messages/t/${this.roomIdPush}`);
+      //   const dataEmit = {
+      //     room_id: this.roomIdPush,
+      //     content: this.textChat,
+      //     img_url: { low: this.urlEmitMessage },
+      //     file_url: this.urlFileUpload,
+      //     file_name_upload: this.urlFileNameUpload,
+      //     message_id: this.messageId,
+      //     avatar:
+      //       this.avatarUser && this.avatarUser.low ? this.avatarUser.low : "",
+      //     fullname: this.fullName ? this.fullName : ""
+      //   };
+      //   console.log("[socket] dataEmit", dataEmit);
+      //   this.setEmitMessage(dataEmit);
+      //   this.getListMessageType({
+      //     params: {
+      //       room_type: 1,
+      //       payloadCheck: "check"
+      //     }
+      //   });
+      // } else if (this.tag.length > 1) {
+      //   const data = {
+      //     type: 2,
+      //     members: this.tag.toString(),
+      //     name: this.name ? this.name : ""
+      //   };
+      //   await this.createGroup(data).then(result => {
+      //     if (result.success == true) {
+      //       this.setIsCreated(false);
+      //       this.getListMessageType({
+      //         params: {
+      //           room_type: 2,
+      //           payloadCheck: "check"
+      //         }
+      //       });
+      //       // this.getGroupList();
+      //       this.$toasted.show("success");
+      //       this.$router.push(`/messages/t/${result.data.id}`);
+      //       const dataEmit = {
+      //         room_id: result.data.id,
+      //         content: this.textChat,
+      //         img_url: { low: this.urlEmitMessage },
+      //         file_url: this.urlFileUpload,
+      //         file_name_upload: this.urlFileNameUpload,
+      //         message_id: this.messageId,
+      //         avatar:
+      //           this.avatarUser && this.avatarUser.low
+      //             ? this.avatarUser.low
+      //             : "",
+      //         fullname: this.fullName ? this.fullName : ""
+      //       };
+      //       console.log("[socket] dataEmit", dataEmit);
+      //       this.setEmitMessage(dataEmit);
+      //     } else {
+      //       this.$toasted.error(result.message);
+      //     }
+      //   });
+      // }
+      // this.removeImgSrc();
     },
     changeUser() {
       console.log("[option]", this.tag.length);
@@ -1096,7 +1135,7 @@ export default {
           }
         });
       } else {
-        // this.messagesList = [];
+        this.messagesList = [];
       }
     },
     removeImgSrc() {
@@ -1114,21 +1153,14 @@ export default {
     messageOn(_newVal) {
       if (_newVal) {
         console.log("[messageOn]", _newVal);
-        const data = {
-          ..._newVal,
-          user: {
-            avatar: { low: _newVal.avatar },
-            fullname: _newVal.fullname,
-            id: _newVal.user_id
-          }
-        };
-        console.log("data", data);
-        // this.messagesList.unshift(data);
+        // console.log("data", data);
+        // this.messagesList.unshift(_newVal);
+        this.messagesList.push(_newVal);
         // console.log("[this.messagesList]", this.messagesList);
         // img_url: { low: _newVal.img_url }
       }
     },
-    // messagesList(_newVal) {
+    // messageList(_newVal) {
     //   if (_newVal) {
     //     this.messagesList = [];
     //     this.messageListQuery.page = 1;
@@ -1138,6 +1170,15 @@ export default {
     //     this.infiniteId += 1;
     //   }
     // },
+    stateIdPush(_newVal) {
+      console.log("[stateIdPush] _newVal", _newVal);
+      if (_newVal) {
+        // this.setMessageList([]);
+        // this.infiniteId += 1;
+        // this.messageQuery.from_message_id = null;
+        // this.messageQuery.fetch_type = null;
+      }
+    },
     isCreated(_newVal) {
       console.log("_newVal", _newVal);
       if (_newVal == false && this.tag.length > 0) {
@@ -1146,6 +1187,13 @@ export default {
             room_id: this.$route.params.id
           }
         });
+      }
+    },
+    messageRes(_newVal) {
+      console.log("_newVal", _newVal);
+      if (_newVal) {
+        // this.messagesList.unshift(_newVal);
+        this.messagesList.push(_newVal);
       }
     }
   }

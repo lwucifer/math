@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <student-manager-filter-form @submitSearch="submitSearch" @changedType="changedType" />
+    <student-manager-filter-form @submitFilter="submitSearch" @changedType="changedType" />
     <student-manager-table
       :heads="heads"
       :list="filterDataList.content"
@@ -41,8 +41,8 @@ export default {
           text: "Tiến độ học tập"
         },
         {
-          name: "question",
-          text: "Câu hỏi cho giáo viên"
+          name: "avg",
+          text: "Điểm trung bình"
         },
         {
           name: "action",
@@ -117,10 +117,9 @@ export default {
   methods: {
     ...mapActions(STORE_NAMESPACE, ["teachingElearningList"]),
     submitSearch(keyword) {
-      // this.keyword = keyword;
       const query = {
         params: {
-          keyword: keyword,
+          ...keyword,
           elearning_id: this.$route.query.elearning_id
         }
       };

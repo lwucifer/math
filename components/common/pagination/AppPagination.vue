@@ -1,7 +1,7 @@
 <template>
   <ul
     class="app-pagination"
-    v-if="total < 8 && total > 1"
+    v-if="total < 6 && total > 1"
     :class="{ ...styleCls, ...extCls }"
   >
     <li>
@@ -49,13 +49,17 @@
     <li v-if="prev && prev != 1">
       <a class="link" @click="goTo(1)">1</a>
     </li>
-    <li v-if="current > 3 && total > 4">
-      <a class="link" @click="goTo(4)" v-if="current == 4 || total == 5">2</a>
-      <a class="link bold disable" v-else>...</a>
+    <li v-if="current > 3">
+      <span class="link bold disable">...</span>
     </li>
-    <li v-if="total == current && total > 3">
-      <a class="link" @click="goTo(total - 2)">{{ total - 2 }}</a>
+
+    <li v-if="total == current">
+      <a class="link" @click="goTo(current - 3)">{{ current - 3 }}</a>
     </li>
+    <li v-if="total - current < 2">
+      <a class="link" @click="goTo(current - 2)">{{ current - 2 }}</a>
+    </li>
+
     <li v-if="prev">
       <a class="link" @click="goTo(prev)">{{ prev }}</a>
     </li>
@@ -65,21 +69,21 @@
     <li v-if="next">
       <a class="link" @click="goTo(next)">{{ next }}</a>
     </li>
-    <li v-if="current == 1 && total > 3">
-      <a class="link" @click="goTo(3)">3</a>
+
+    <li v-if="current < 3">
+      <a class="link" @click="goTo(current + 2)">{{ current + 2 }}</a>
     </li>
-    <li v-if="total - current > 2 && total > 4">
-      <a
-        class="link"
-        @click="goTo(4)"
-        v-if="total - current == 3 || total == 5"
-        >{{ total - 1 }}</a
-      >
-      <a class="link bold disable" v-else>...</a>
+    <li v-if="current == 1">
+      <a class="link" @click="goTo(current + 3)">{{ current + 3 }}</a>
+    </li>
+
+    <li v-if="current < total - 2">
+      <span class="link bold disable">...</span>
     </li>
     <li v-if="total - current > 1">
       <a class="link" @click="goTo(total)">{{ total }}</a>
     </li>
+
     <li>
       <a
         class="link link-arrow"

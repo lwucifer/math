@@ -433,6 +433,15 @@ export const ELEARNING_STURY = {
     LIST_TIMETABLE: "elearningStudyListTimetable",
 };
 
+export const ELEARNING_STURY_OVERVIEW = {
+    LIST: "elearningStudyOverviewList",
+    TIME_TABLE: "elearningStudyOverviewTimeTable",
+    DEADLINE: "elearningStudyOverviewDeadline",
+    OVERVIEW_BASE_SERVICE: "overviewBaseService",
+    TIME_TABLE_BASE_SERVICE: "timeViewBaseService",
+    DEADLINE_BASE_SERVICE: "deadlineBaseService"
+};
+
 export const ELEARNING_STUDY_STUDENT = {
     LIST: "elearningStudyStudentList",
 };
@@ -455,6 +464,7 @@ export const ELEARNING_STURY_ARCHIVE = {
 };
 
 export const ELEARNING_STUDY_EXERCISE = {
+    LIST_QUESTION_START: "elearningSudyExerciseQuestionListStart",
     LIST_QUESTION: "elearningSudyExerciseQuestionList",
     LIST_ELEARNING_EXERCISE: "elearningSudyElearningExerciseList",
     LIST_RESULT: "elearningSudyExerciseResultList",
@@ -476,6 +486,7 @@ export const ELEARNING_STUDY_STATISTIC = {
 
 export const ELEARNING_STUDY_OLCLASS_LESSON_SESSIONS = {
     LIST: "elearningStudyOlclassLessonSessionsList",
+    ATTENDANCE: "elearningStudyOlclassLessonSessionsAttendance",
 };
 
 export const ELEARNING_STUDY_EXERCISE_ELEARNING = {
@@ -643,8 +654,10 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
 
 export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
     LIST: "teachingInteractiveListAnnouncement",
+};
+
+export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = {
     ADD: "teachingInteractiveAnnouncementAdd",
-    DELETE: "teachingInteractiveAnnouncementDelete"
 };
 
 export const TEACHING_PUBLIC_LIST = {
@@ -668,4 +681,7 @@ export const CHAT = {
     MEMBER_LIST: "getMemberList",
     MESSAGE_LIST: "getMessageList",
     ROOM_DETAIL: "getRoomDetail",
+    MESSAGE_LIST_INFINITE: "getMessageListInfinite",
+    CHANGE_ROOM_NAME: "changeRoomName",
+    IMAGE_LIST: "getImageList"
 };

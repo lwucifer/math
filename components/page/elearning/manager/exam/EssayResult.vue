@@ -35,6 +35,7 @@
       title="Bạn muốn chấm điểm?"
       description="Bạn sẽ không thể thay đổi được kết quả sau khi đã chấm điểm"
       ok-text="Xác nhận"
+      centered
       @ok="confirmMark"
       @cancel="cancelMark"
     >
@@ -47,6 +48,7 @@
       description="Có lỗi xảy ra, vui lòng thử lại."
       @ok="showModalError = false"
       @close="showModalError = false"
+      centered
     >
       <template v-slot:icon>
     

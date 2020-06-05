@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A } from "../utils/config";
+import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A, DATETIME_HH_MM_A_DD_MM_YY } from "../utils/config";
 const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
@@ -35,8 +35,16 @@ export const getDateFormat = _utcDate => {
     return ts.format(DATE_FORMAT);
 };
 
+export const isBeforeNow = _utcDate => {
+    console.log("[isBeforeNow]", _utcDate);
+    if (!_utcDate) return false;
+    const ts = getLocalDateTime(_utcDate);
+    return ts.isBefore(new Date());
+};
+
+
 export const fullDateTimeSlash = _utcDate => {
-    if (!_utcDate) return;
+    if (!_utcDate) return "--:--";
     // const ts = moment.utc(_utcDate);
     const ts = getLocalDateTime(_utcDate);
     return ts.format(DATETIME_RECEIVE);
@@ -145,6 +153,7 @@ export const convertLocalTimeForTimetable = (_time) => {
     const hh = parseInt(splits[0]);
     const mm = splits[1];
     const gmt = getLocalOffsetHours();
+    // const localhh = (hh + gmt) >= 24 ? 0 : (hh + gmt);
     // console.log("[convertLocalTimeForTimetable] _time", hh, gmt, mm, _time);
     return `${hh + gmt}:${mm}`;
 }
@@ -154,6 +163,25 @@ export const addDurationToUTCDate = (_utcDate, _duration, _type) => {
     return ts.add(_duration, _type).format(DATETIME_RECEIVE);
 }
 
+export const getDateTimeHH_MM_A_DD_MM_YY = _utcDate => {
+    if (!_utcDate) return;
+    // const ts = moment.utc(_utcDate);
+    const ts = getLocalDateTime(_utcDate);
+    return ts.format(DATETIME_HH_MM_A_DD_MM_YY);
+}
+
+// return current day in week: sun mon ... fri sat
+export const getTodayDDD = () => {
+    return moment().locale('en').format("ddd").toLowerCase();
+}
+
+export const isTodayInRangeDate = (_fromDate, _toDate) => {
+    // console.log("[isTodayInRangeDate]", _fromDate, _toDate)
+    if(!_fromDate || !_toDate) return false;
+    const fDate = moment(_fromDate).format(DATE_YYYY_MM_DD);
+    const tDate = moment(_toDate).format(DATE_YYYY_MM_DD);
+    return moment().isBetween(fDate, tDate);
+}
 
 Vue.filter("getDateBirthDay", function(_utcDate) {
     return getDateBirthDay(_utcDate);
@@ -165,4 +193,8 @@ Vue.filter("getDateTimeHH_MM_D_M_Y", function(_utcDate) {
 
 Vue.filter("fullDateTimeSlash", function(_utcDate) {
     return fullDateTimeSlash(_utcDate);
+});
+
+Vue.filter("getDateTimeHH_MM_A_DD_MM_YY", function(_utcDate) {
+    return getDateTimeHH_MM_A_DD_MM_YY(_utcDate);
 });

@@ -130,7 +130,11 @@ export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
 export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
 export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_INTERACTIVE_NOTIFICATION = `/elearning/study/interactive/announcements`;
+export const STUDY_OVERVIEW = `/study/overview`;
+export const STUDY_OVERVIEW_TIME_TABLE = ` /study/timetable`;
+export const STUDY_OVERVIEW_DEADLINE = `/study/deadline`;
 
+export const STUDY_EXERCISE_START = `/elearning/study/exercise/start`;
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
@@ -139,6 +143,7 @@ export const STUDY_EXERCISE_ELEARNING = `/elearning/study/ex_elearnings`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
 export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
+export const STUDY_OLCLASS_LESSION_ATTENDANCE = `/elearning/study/olclass/attendance`;
 
 /**
  * SCHOOL
@@ -194,7 +199,8 @@ export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/reques
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
 export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
-export const TEACHING_INTERACTIVE_ANNOUNCEMENT = `/elearning/teaching/interactive/announcements`;
+export const TEACHING_INTERACTIVE_ANNOUNCEMENTS = `/elearning/teaching/interactive/announcements`;
+export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = `/elearning/teaching/interactive/announcement`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
 export const PUBLIC_CLASSES = `/elearning/public/classes`;
 // export const TEACHING_STUDENTS = `/elearning/teaching/students`;

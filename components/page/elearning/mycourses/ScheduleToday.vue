@@ -1,7 +1,12 @@
 <template>
   <div class="wrap-schedulte-today-study-space">
       <div class="d-flex">
-          <h4>Học gì hôm nay?</h4>
+          <div class="d-flex align-items-center text-primary">
+              <h4>Học gì hôm nay?</h4>
+              <span class="ml-4">
+                  {{ dateSchedule | moment('Do MMMM, YYYY') }}
+              </span>
+          </div>
           <app-date-picker
             label="Chọn thời gian:"
             class="schedule-today-date-picker"
@@ -43,9 +48,15 @@
             </div>
         </div>
       </div>
-      <div class="row schedule-item">
+      <div class="row schedule-item" v-for="(item, index) in timeTable" :key="index">
           <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Học online</h5>
+          <h5 class="col-md-3">{{get(item, 'type', '')}}</h5>
+          <span class="col-md-5">{{get(item, 'content', '')}}</span>
+          <span class="col-md-3">Thời gian học: {{get(item, 'time', '')}}</span>
+      </div>
+      <!-- <div class="row schedule-item">
+          <IconEllipse2 class="col-md-1"/>
+          <h5 class="col-md-3">Làm bài kiểm tra</h5>
           <span class="col-md-5">Phòng học số 3</span>
           <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
       </div>
@@ -54,30 +65,34 @@
           <h5 class="col-md-3">Làm bài kiểm tra</h5>
           <span class="col-md-5">Phòng học số 3</span>
           <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
-      </div>
-      <div class="row schedule-item">
-          <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Làm bài kiểm tra</h5>
-          <span class="col-md-5">Phòng học số 3</span>
-          <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
-      </div>
+      </div> -->
   </div>
 </template>
 
 <script>
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 import moment from 'moment';
+import { mapState } from 'vuex';
+import { get } from "lodash";
+const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     components:{
         IconEllipse2
     },
     data(){
         return{
-            dateSchedule:'',
+            dateSchedule:moment().format("YYYY-MM-DD"),
             dayslist:[]
         }
     },
+    computed: {
+        ...mapState(STORE_OVERVIEW, ['timeTable']),
+    },
+    created(){
+        this.changeDate(this.dateSchedule)
+    },
     methods:{
+        get,
         changeDate(date){
             this.dayslist.length = 0
             for(let i=1;i<=7;i++){
@@ -85,6 +100,7 @@ export default {
                  this.dayslist.push(day)
             }
             console.log(this.dayslist)
+            console.log(moment().format("YYYY-MM-DD").toString())
         },
         checkDate(d1){
             let date1 = moment(d1).format("YYYY-MM-DD").toString()

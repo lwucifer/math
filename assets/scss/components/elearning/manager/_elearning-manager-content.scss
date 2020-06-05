@@ -114,6 +114,7 @@
 //tooltip
 .tooltip {
     $color: #fff;
+    max-width: 99%;
     .tooltip-inner {
         background: #fff;
         padding: 1rem 2rem;
@@ -238,6 +239,11 @@
     max-width: 34rem;
 }
 
+.tooltip--eln-vote.tooltip {
+    max-width: 50rem;
+}
+//end tooltip
+
 .content-box-peer {
     border-radius: 2px;
     border-width: 1px;
@@ -253,4 +259,17 @@
 
 .content-box-peer--dashed {
     border-style: dashed;
+}
+
+// Text description
+.elm--text-desc {
+    font-size: 1.3rem;
+}
+
+.elm--required-symbol {
+    color: #D50000;
+    svg path {
+        fill: #D50000;
+        fill-opacity: 1;
+    }
 }

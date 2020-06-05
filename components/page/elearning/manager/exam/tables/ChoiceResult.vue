@@ -25,17 +25,13 @@
             class="tooltip--question"
             offset="10"
             trigger="hover"
+            popover-inner-class="tooltip-inner popover-inner dont-break-out"
           >
             <div>
               <span>{{ row | trueAns }}</span>
             </div>
     
             <template slot="popover" class="tooltip-detail">
-              <div class="text-right">
-                <span v-close-popover class="icon-close" title="Đóng">
-                <IconClose/>
-              </span>
-              </div>
               <!--<div class="question-detail" v-if="index == currentQuestionIndex">-->
               <!--<div v-if="loadingQuestion" class="text-center">-->
               <!--<app-spin></app-spin>-->

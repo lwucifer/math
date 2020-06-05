@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-general-exam-expiry">
       <h4 class="mb-4">Bài kiểm tra sắp hết hạn</h4>
-      <app-table :heads="heads" :data="list">
+      <app-table :heads="heads" :data="deadline">
           <template v-slot:cell(status)="{ row }">
               <td>
                   <span v-if="row.status == 1" class="text-primary">Đã nộp</span>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     data(){
         return{
@@ -30,25 +32,11 @@ export default {
                     text:'Trạng thái'
                 }
             ],
-            list:[
-                {
-                    title:"baifd hojcaocs asdjdasjodajd jdaoisdqwudaodal",
-                    date:"21/12/2022",
-                    status:1
-                },
-                {
-                    title:"baifd hojcaocs asdjdasjodajd jdaoisdqwudaodal",
-                    date:"21/12/2022",
-                    status:0
-                },
-                {
-                    title:"baifd hojcaocs asdjdasjodajd jdaoisdqwudaodal",
-                    date:"21/12/2022",
-                    status:1
-                }
-            ]
         }
-    }
+    },
+    computed: {
+        ...mapState(STORE_OVERVIEW, ['deadline']),
+    },
 }
 </script>
 

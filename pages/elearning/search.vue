@@ -105,12 +105,17 @@
         />
       </div>
     </template>
+    <template  v-if="totalSummary == 0">
+      <div class="text-gray-2 caption text-center">
+       <img src="~assets/images/elearning/no-data.png" alt="" />
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import { get } from "lodash";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import Search from "~/services/elearning/public/Search";
 import {
@@ -211,7 +216,8 @@ export default {
         sort: this.$route.query.sort
           ? this.$route.query.sort
           : null,
-        keyword: null
+        keyword: null,
+        hidden: false
       },
 
       pagination: {
@@ -244,7 +250,7 @@ export default {
 
   async fetch({ params, query, store }) {
     await store.dispatch(
-      `elearning/public/public-category/${actionTypes.ELEARNING_PUBLIC_CATEGORY.LIST}`
+      `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
     );
     await store.dispatch(
         `elearning/public/public-voted-subjects/${actionTypes.ELEARNING_PUBLIC_VOTED_SUBJECTS.LIST}`
@@ -256,15 +262,15 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/public/public-category", {
-      categories: "categories"
+    ...mapState("elearning/public/public-levels", {
+      levels: "levels"
     }),
 
     ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
     ...mapState("keyword", ["keyword"]),
 
     categoryOpts() {
-      const alls = addAllOptionSelect(this.categories);
+      const alls = optionSelectSubject(this.levels);
       return alls.map(c => {
         return {
           value: c.id,
@@ -295,11 +301,15 @@ export default {
 
   watch: {
     keyword(_newVal) {
-      console.log("keyword", _newVal);
       this.payload.page = 1;
-      this.payload.keyword = _newVal ? _newVal : -1;
+      this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
     }
+  },
+
+  beforeDestroy() {
+    console.log('[Clear Search Header]')
+    this.searchHeader();
   },
 
   mounted() {
@@ -311,11 +321,11 @@ export default {
 
   methods: {
     get,
-
+    ...mapMutations('keyword', ['searchHeader']),
     async getLessons() {
       this.pageLoading = true;
       Object.keys(this.payload).map(k => {
-        if (this.payload[k] == null) {
+        if (this.payload[k] == null || this.payload[k] == -1) {
           delete this.payload[k];
         }
       });
@@ -326,6 +336,7 @@ export default {
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
         this.payload
       );
+      console.log('res', res)
       this.lessons = get(res, "data.content", []);
       this.pagination = {
         total_pages: get(res, "data.page.total_pages", 0),

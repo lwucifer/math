@@ -2,16 +2,17 @@
   <filter-form>
     <div class="d-flex">
       <div
-        class="filter-form__item filter-form__item--search border-0"
+        class="filter-form__item filter-form__item--search"
         style="max-width: 36rem; min-width: 30rem;"
       >
         <app-search
           class="w-100"
           size="sm"
+          bordered
           placeholder="Nhập để tìm kiếm"
-          v-model="filters.query"
+          v-model="filters.keyword"
           @input="handleChangedSearch"
-          @keyup.enter.native="handleSubmitSearch"
+          @keyup.enter.native="submit"
           @submit="submit"
           color="primary"
         ></app-search>
@@ -28,6 +29,7 @@
           label="text"
           placeholder="Theo lớp"
           searchable
+          has-border
           @input="handleSelectType"
         />
       </div>
@@ -63,7 +65,7 @@ export default {
       filterSelect: false,
       filters: {
         type: null,
-        query: "",
+        keyword: "",
         rate: null
       },
       types: [
@@ -113,6 +115,10 @@ export default {
         value: "Khác",
         text: "Khác"
       });
+      data.push({
+        value: null,
+        text: "Tất cả"
+      });
       return data;
     }
   },
@@ -127,9 +133,7 @@ export default {
   },
   methods: {
     submit() {
-      if (!this.initStatus) {
-        this.$emit("submitFilter", this.filters);
-      }
+      this.$emit("submitFilter", this.filters);
     },
     handleSelectRate(val) {
       this.$emit("changedRate", val);
@@ -139,9 +143,6 @@ export default {
     },
     handleChangedSearch(val) {
       this.$emit("changedQuery", val);
-    },
-    handleSubmitSearch(e) {
-      this.$emit("submitSearch", e.target.value);
     },
     clickSubmit() {
       if (this.filterSelect) {

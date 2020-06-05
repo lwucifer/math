@@ -98,7 +98,7 @@
                 class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.id)"
+                @click="pushUrl(item.room_id)"
               >
                 <div class="left d-flex">
                   <div class="align-item__image">
@@ -341,10 +341,7 @@ export default {
       dataGroupLeave: {},
       checkChatList: false,
       checkGroupList: false,
-      roomQuery: {
-        page: 1,
-        limit: 10
-      }
+      roomQuery: {}
     };
   },
   computed: {
@@ -440,12 +437,17 @@ export default {
         if (item.type == "PRIVATE") {
           return {
             ...item,
-            name: item && item.room ? item.room.member[0].first_name : ""
+            name: item && item.friend ? item.friend[0] : ""
           };
         } else {
           return {
             ...item,
-            name: item && item.name ? item.name : ""
+            name:
+              item && item.name
+                ? item.name.length > 12
+                  ? item.name.substring(0, 12) + "..."
+                  : item.name
+                : ""
           };
         }
       });
@@ -460,6 +462,7 @@ export default {
       "getListMessageType"
     ]),
     ...mapMutations("message", ["setTabChat"]),
+    ...mapMutations("chat", ["setMessageList", "setIdPush"]),
 
     leaveGroupModal(_item) {
       this.visibleLeaveGroup = true;
@@ -553,7 +556,8 @@ export default {
         this.checkChatList = true;
       }
       if (getData && getData.list_room && getData.list_room.length > 0) {
-        this.roomQuery.page += 1;
+        this.roomQuery.lastest_message_id =
+          getData.list_room[getData.list_room.length - 1].lastest_message.id;
         $state.loaded();
       } else {
         $state.complete();
@@ -562,8 +566,11 @@ export default {
 
     pushUrl(_id) {
       console.log("id", _id);
-      const url = `/messages/t/${_id}`;
-      this.$router.push(url);
+      if (_id != this.$route.params.id) {
+        this.setIdPush(1);
+        const url = `/messages/t/${_id}`;
+        this.$router.push(url);
+      }
     }
   },
   watch: {

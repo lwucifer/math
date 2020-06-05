@@ -94,7 +94,9 @@ import ModalWaitingOlClass from "~/components/page/elearning/study/olclass/Modal
 import Timetable from "~/components/page/elearning/study/olclass/Timetable";
 import {
   convertLocalTimeForTimetable,
-  addDurationToUTCDate
+  addDurationToUTCDate,
+  getTodayDDD,
+  isTodayInRangeDate,
 } from "~/utils/moment";
 
 export default {
@@ -145,6 +147,9 @@ export default {
         const timeMorning = {};
         const timeAfternoon = {};
         const timeEvening = {};
+        const currentDayInWeek = getTodayDDD();
+        const todayInRange = isTodayInRangeDate(tt.from_date, tt.to_date);
+        console.log("[todayInRange]", todayInRange);
 
         for (const s in tt.schedules) {
           const arrTime = tt.schedules[s];
@@ -170,6 +175,14 @@ export default {
             timeMorning["day"] = DAY_SECTION.MORNING;
             timeAfternoon["day"] = DAY_SECTION.AFTERNOON;
             timeEvening["day"] = DAY_SECTION.EVENING;
+          }
+
+          // set active day in week
+          // console.log("[currentDayInWeek]", currentDayInWeek, s);
+          if(s == currentDayInWeek && todayInRange) {
+            timeMorning['today'] = "today";
+            timeAfternoon['today'] = "today";
+            timeEvening['today'] = "today";
           }
         }
         schedules.push(timeMorning);
