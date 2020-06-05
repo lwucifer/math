@@ -5,7 +5,7 @@
         <MyCourseSide :active="5">
           <template slot="calendar">
             <div class="timetable-calendar-divider"></div>
-            <app-calendar v-model="calendar"/>
+            <app-calendar v-model="calendar" format="DD-MM-YYYY" />
           </template>
         </MyCourseSide>
       </div>
@@ -83,6 +83,13 @@
               </table>
             </div>
 
+            <div class="timetable-range-status">
+              <span class="mr-2">Khoảng thời gian:</span>
+              từ:
+              <span class="text-primary mr-2">15 tháng 5, 2020</span> đến:
+              <span class="text-primary">25 tháng 5, 2020</span>
+            </div>
+
             <ul class="timetable-list">
               <li class="timetable-list-item active" v-for="i in 10" :key="i">
                 <span class="timetable-list-item__dot"></span>
@@ -114,6 +121,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import IconCalendarDay from "~/assets/svg/icons/calendar-day.svg?inline";
 import IconCalendarWeek from "~/assets/svg/icons/calendar-week.svg?inline";

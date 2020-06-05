@@ -1,5 +1,5 @@
 <template>
-    <div class="school-noti">
+    <div class="school-noti" id="notification">
         <div class="school-noti__title">Thông báo</div>
 
         <div class="school-noti__line"></div>
