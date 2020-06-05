@@ -1045,7 +1045,9 @@ export default {
       this.setEmitMessage(dataEmit);
       this.textChat = "";
       const el = document.getElementById("content-message");
-      el.scrollTop = el.scrollHeight;
+      if (el.scrollTop != el.scrollHeight) {
+        el.scrollTop = el.scrollHeight;
+      }
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
       // if (this.tag.length == 0) {
