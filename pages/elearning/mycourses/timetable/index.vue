@@ -5,7 +5,7 @@
         <MyCourseSide :active="5">
           <template slot="calendar">
             <div class="timetable-calendar-divider"></div>
-            <app-calendar v-model="calendar"/>
+            <app-calendar v-model="calendar" format="DD-MM-YYYY"/>
           </template>
         </MyCourseSide>
       </div>
@@ -114,6 +114,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide";
 import IconCalendarDay from "~/assets/svg/icons/calendar-day.svg?inline";
 import IconCalendarWeek from "~/assets/svg/icons/calendar-week.svg?inline";
