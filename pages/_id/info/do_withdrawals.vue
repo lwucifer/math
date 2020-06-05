@@ -68,6 +68,7 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadWithdraw } from "~/models/account/Bank"
 import { get } from "lodash";
+import { BANK_STATUS } from "~/utils/constants"
 
 export default {
   name: "E-learning",
@@ -82,7 +83,7 @@ export default {
   
   async fetch({ params, query, store, route }) {
     await Promise.all([
-      store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`),
+      store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`, { params: { status: BANK_STATUS['ACTIVE']}}),
       store.dispatch(`account/${actionTypes.ACCOUNT_BALANCE.LIST}`)
     ]);
   },
@@ -122,6 +123,7 @@ export default {
         this.modal.title = 'Tạo lệnh rút tiền thành công'
         this.modal.type = 'success'
         this.$refs['withdrawForm'].resetForm()
+        await this.getBalance()
         this.$nextTick(() => {
           this.modal.visible = true
         })
@@ -132,6 +134,9 @@ export default {
           this.modal.visible = true
         })
       }
+    },
+    async getBalance() {
+      await this.$store.dispatch(`account/${actionTypes.ACCOUNT_BALANCE.LIST}`)
     },
     get
   },
