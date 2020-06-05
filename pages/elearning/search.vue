@@ -216,7 +216,8 @@ export default {
         sort: this.$route.query.sort
           ? this.$route.query.sort
           : null,
-        keyword: null
+        keyword: null,
+        hidden: false
       },
 
       pagination: {
@@ -335,6 +336,7 @@ export default {
       const res = await new Search(this.$axios)[actionTypes.BASE.ADD](
         this.payload
       );
+      console.log('res', res)
       this.lessons = get(res, "data.content", []);
       this.pagination = {
         total_pages: get(res, "data.page.total_pages", 0),
