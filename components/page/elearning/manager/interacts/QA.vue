@@ -57,7 +57,7 @@
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id">
+            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id + '/study?type=qa'" >
               <IconArrowForwardIos24pxOutlined />
             </n-link>
           </td>
@@ -112,6 +112,7 @@ const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
+import { redirectWithParams } from "~/utils/common";
 export default {
   layout: "manage",
 
