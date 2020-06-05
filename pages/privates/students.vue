@@ -10,8 +10,7 @@
       />
       <filter-button
         class="mr-2"
-        :color="isFilter ? 'primary' : 'default'"
-        :outline="!isFilter"
+        :color="isFilter ? 'primary' : 'white'"
         size="sm"
         @click="isFilter = !isFilter"
       />

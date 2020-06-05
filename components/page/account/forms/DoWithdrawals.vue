@@ -10,7 +10,7 @@
             <div style="width: 19.6rem;">
               <app-vue-select
                 :options="banks"
-                v-model="bank"
+                v-model="$v.bank.$model"
                 :placeholder="'Chọn ngân hàng'"
                 label="bank_name"
                 searchable
@@ -59,15 +59,17 @@
           <div class="col-md-9">
             <app-input
               placeholder="Nhập số tiền muốn rút"
-              v-model="amount"
+              v-model="$v.amount.$model"
               type="number"
               @input="handleChangedAmount"
               class="mb-3"
+              only-number
             >
               <template v-slot:unit>
                 <app-button
                   color="transparent"
                   class="px-0 font-weight-normal"
+                  style="box-shadow: none;"
                   @click="getAllMoney"
                 >
                   Rút hết
@@ -75,7 +77,7 @@
               </template>
             </app-input>
             <div class="form--normal__note mb-3 d-flex justify-content-between">
-              <span><i>Rút tối thiểu:</i> <i>{{ '50000' | toThousandFilter('.') }}</i>{{ CURRENCY }}</span>
+              <span><i>Rút tối thiểu:</i> <i>{{ minAmount | toThousandFilter('.') }}</i>{{ CURRENCY }}</span>
               <span>Số dư: <span>{{ balance | toThousandFilter('.') }}</span>{{ CURRENCY }}</span>
             </div>
           </div>
@@ -84,7 +86,7 @@
           <div class="col-md-9">
             <app-button
               @click="save"
-              :disabled="!bank"
+              :disabled="$v.$invalid"
               size="lg"
             >
               Xác nhận rút tiền
@@ -102,10 +104,13 @@
   import {CURRENCY} from "~/utils/config";
   import {
     required,
-    minLength,
+    numeric,
+    decimal,
+    maxValue,
+    minValue,
+    between
   } from "vuelidate/lib/validators";
   import { get } from "lodash";
-  import { validatePassword } from "~/utils/validations";
   import * as actionTypes from "~/utils/action-types";
 
   export default {
@@ -114,7 +119,20 @@
         bank: null,
         amount: null,
         CURRENCY: CURRENCY,
+        minAmount: 50000
       };
+    },
+    validations() {
+      return {
+        bank: {
+          required
+        },
+        amount: {
+          required,
+          decimal,
+          between: between(this.minAmount, this.balance)
+        },
+      }
     },
     props: {
       banks: {
@@ -125,9 +143,6 @@
         type: Number | String,
         required: true
       }
-    },
-    validations: {
-    
     },
     computed: {
       branch() {
@@ -160,6 +175,7 @@
         console.log('[Do withdrawals] Change card id')
       },
       getAllMoney() {
+        this.amount = this.balance
         console.log('[Do withdrawals] Get all money')
       },
       resetForm() {
