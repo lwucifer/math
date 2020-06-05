@@ -34,6 +34,7 @@
             class="number"
           >{{ get(cartCheckout, "orders.length", 0) }}</span>
         </button>
+        <!--
         <app-dropdown
           position="right"
           v-model="dropdownNotify"
@@ -129,7 +130,8 @@
             </ul>
           </div>
         </app-dropdown>
-
+        -->
+        <notification class="item"/>
         <user-header />
       </div>
 

@@ -93,7 +93,7 @@
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
-              <TabQA v-if="type === 'qa'" />
+              <TabQA  v-if="type === 'qa'" />
               <TabNotification v-if="type === 'notification'" />
               <TabReview v-if="type === 'review'" />
               <!-- <ElearningQuestion
@@ -119,7 +119,7 @@ import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_STUDY as ELEARNING_STUDY_MUTATION } from "~/utils/mutation-types";
 import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
-import { useEffect } from "~/utils/common";
+import { useEffect, redirectWithParams, getParamQuery } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import ProgramService from "~/services/elearning/public/Program";
@@ -212,7 +212,14 @@ export default {
   mounted() {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
-
+    
+    const typeParams = getParamQuery('type')
+    this.type = typeParams ? typeParams : 'summary'
+    this.$nextTick(() => {
+          var el = document.getElementById(typeParams)
+          this.$scrollTo(el)
+          console.log('hello1323')
+        })
     document.addEventListener(
       "fullscreenchange",
       this.handleFullscreenChange,
