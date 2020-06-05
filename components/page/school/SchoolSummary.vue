@@ -1,5 +1,5 @@
 <template>
-  <div class="school-summary">
+  <div class="school-summary" id="homepage">
       <div class="school-summary__cover">
         <img :src="get(school, 'cover.high', '')" alt="">
       </div>
