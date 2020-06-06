@@ -175,6 +175,7 @@ export const TEACHING_OLCLASSES = {
     SET_TEACHING_OLCLASS_DELETE: "setTeachingOlclassDelete",
     SET_TEACHING_OLCLASS_BLOCK: "setTeachingOlclassBlock",
     SET_TEACHING_OLCLASS_UNBLOCK: "setTeachingOlclassUnBlock",
+    SET_TEACHING_OLCLASS_INFO: "setTeachingOlclassInfo",
 };
 
 export const TEACHING_OLCLASS_INVITES = {

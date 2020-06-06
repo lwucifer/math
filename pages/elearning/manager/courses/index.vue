@@ -167,11 +167,11 @@
             <template v-slot:cell(publish_date)="{ row }">
               <td>{{getDateBirthDay(row.publish_date)}}</td>
             </template>
-            <template v-slot:cell(end_time)="{ row }">
-              <td>{{getDateBirthDay(row.end_time)}}</td>
-            </template>
             <template v-slot:cell(start_time)="{ row }">
-              <td>{{getDateBirthDay(row.start_time)}}</td>
+              <td>{{row.start_time ? getDateBirthDay(row.start_time) : getDateBirthDay(row.publish_date)}}</td>
+            </template>
+            <template v-slot:cell(end_time)="{ row }">
+              <td>{{row.end_time ? getDateBirthDay(row.end_time) : 'Không thời hạn'}}</td>
             </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
@@ -342,7 +342,6 @@ export default {
         {
           name: "price",
           text: "Học phí",
-          sort: true
         },
         {
           name: "privacy",
@@ -452,7 +451,7 @@ export default {
       params: {
         page: 1,
         limit: 10,
-        //sort: 'DESC'
+        sorted: 'DESC'
       }
     };
   },

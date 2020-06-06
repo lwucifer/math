@@ -87,6 +87,7 @@
                           <app-date-picker
                               class="ml-3"
                               v-model="schedules[index].start_time"
+                              @input="changeSchedules"
                               square
                               size="sm"
                               valueFormat="hh:mm a"
@@ -104,6 +105,7 @@
                           <app-date-picker
                               class="ml-3"
                               v-model="schedules[index].duration"
+                              @input="changeSchedules"
                               square
                               size="sm"
                               :minute-step="15"
@@ -180,7 +182,7 @@
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
                               @input="(e) => schedulesDateChange(e, index, false)"
-                              :clear="fromClear"
+                              :clearDate="fromClear"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -197,7 +199,7 @@
                               placeholder="yyyy-mm-dd"
                               valueFormat="YYYY-MM-DD"
                               @input="(e) => schedulesDateChange(e, index, true)"
-                              :clear="toClear"
+                              :clearDate="toClear"
                             >
                               <template v-slot:icon-calendar>
                                 <IconCalendar />
@@ -422,7 +424,7 @@ export default {
       return this.schedules[index].from_date  &&
              this.schedules[index].to_date &&
              this.schedules[index].start_time  &&
-             this.schedules[index].duration != 0 &&
+             this.schedules[index].duration &&
              this.schedules[index].days_of_week;
     },
   },
@@ -449,6 +451,10 @@ export default {
     getTimeHH_MM_A,
     getDateBirthDay,
     getEndTime,
+    
+    changeSchedules() {
+      this.schedulesUpdate++;
+    },
 
     updateSchedules () {
       let schedules = [...this.schedules].reduce((result, item) => {
@@ -457,7 +463,6 @@ export default {
           result.push({...item, start_time: start_time, duration: duration});
           return result;
         }, []);
-
       this.params = {...this.params, schedules: schedules};
     },
 
@@ -554,6 +559,7 @@ export default {
     cancelTime(index) {
       if (this.schedules.length === index + 1 && this.indexEdit == null && index > 0 ) {
         this.schedules.pop();
+        this.selectedItems.pop();
         this.indexShow = null;
       } else if (this.schedules.length > 1){
         this.indexShow = null;
