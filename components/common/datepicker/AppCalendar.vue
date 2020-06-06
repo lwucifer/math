@@ -72,6 +72,12 @@ export default {
     IconCalendarArrowDown
   },
 
+  inject: {
+    appRangePicker: {
+      default: null
+    }
+  },
+
   model: {
     prop: "value",
     event: "change"
@@ -148,7 +154,7 @@ export default {
           tmpDataDates[i][j] = {
             index: dayCount,
             date: new Date(this.year, this.month, dayCount).getDate(),
-            current: dayCount > 0 && dayCount < lastDay.getDate()
+            current: dayCount > 0 && dayCount <= lastDay.getDate()
           };
           dayCount++;
         }
@@ -160,15 +166,31 @@ export default {
     nextMonth() {
       if (this.month < 11) {
         this.month += 1;
+      } else {
+        this.year += 1;
+        this.month = 0;
+
+        const currentPickMode = this.pickMode;
+        this.$nextTick(() => {
+          this.pickMode = currentPickMode;
+        })
       }
-      console.log("this.month", this.month);
+
     },
 
     prevMonth() {
       if (this.month > 0) {
         this.month -= 1;
+      } else {
+        this.year -= 1;
+        this.month = 11;
+
+        const currentPickMode = this.pickMode;
+        this.$nextTick(() => {
+          this.pickMode = currentPickMode;
+        })
       }
-      console.log("this.month", this.month);
+
     },
 
     nextYear() {
