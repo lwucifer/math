@@ -16,8 +16,8 @@
     <app-date-picker
       size="sm"
       type="time"
-      placeholder="HH:mm:ss"
-      value-format="HH:mm:ss"
+      placeholder="h:mm a"
+      value-format="h:mm a"
       class="ml-0 mr-6"
       @input="handleChangeTime"
       :value="time"
