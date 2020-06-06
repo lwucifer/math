@@ -77,6 +77,7 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       @selectionChange="selectRow"
+      @sort="handleSort"
       :data="classList"
       multiple-selection
     >
@@ -88,7 +89,7 @@
           >{{row.online_class_name}}</n-link>
         </td>
       </template>
-      <template v-slot:cell(time)="{row}">
+      <template v-slot:cell(start_time)="{row}">
         <td>
           <div>
             {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
@@ -178,12 +179,12 @@ export default {
           sort: true
         },
         {
-          name: "time",
+          name: "start_time",
           text: "Thời gian",
           sort: true
         },
         {
-          name: "num_invitation",
+          name: "num_student",
           text: "Số học sinh đã mời",
           sort: true
         }
@@ -207,7 +208,8 @@ export default {
         class_status: "FINISHED",
         query: null,
         query_date: null,
-        search_type: null
+        search_type: null,
+        sort: 'start_time,desc'
       },
     };
   },
@@ -227,6 +229,12 @@ export default {
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
@@ -253,9 +261,7 @@ export default {
       this.params.elearning_id = this.filterCourse.value;
       this.getList();
     },
-    handleFocusSearchInput() {},
-    handleBlurSearchInput() {},
-    handleSearch() {},
+
     selectRow(data) {
       this.ids = data.map((row, index, data) => {
         return row.online_class_id;
@@ -292,7 +298,6 @@ export default {
       try {
         self.loading = true;
         let params = { ...self.params };
-        params.sort = 'start_time,desc';
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }

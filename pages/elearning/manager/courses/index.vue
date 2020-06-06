@@ -139,6 +139,7 @@
             :pagination="pagination"
             @pagechange="onPageChange"
             @selectionChange="selectRow"
+            @sort="handleSort"
             :data="elearningList"
             multiple-selection
             v-if="showTable"
@@ -146,7 +147,7 @@
             <template v-slot:cell(privacy)="{ row }">
               <td>
                 <span v-if="row.privacy == 'PUBLIC'" class="color-primary">Công khai</span>
-                <span v-else class="color-red">Riêng tư</span>
+                <span v-if="row.privacy == 'PRIVATE'" class="color-red">Riêng tư</span>
               </td>
             </template>
             <template v-slot:cell(price)="{ row }">
@@ -161,7 +162,7 @@
             <template v-slot:cell(price)="{ row }">
               <td>
                 <span v-if="row.pricefree || row.price.original_price == 0">Miễn phí</span>
-                <span v-else>Trả phí</span>
+                <span v-if="!row.pricefree && row.price.original_price > 0">Trả phí</span>
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
@@ -527,6 +528,12 @@ export default {
 
   methods: {
     getDateBirthDay,
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     showReject(row) {
       this.noteReject = row.note;
