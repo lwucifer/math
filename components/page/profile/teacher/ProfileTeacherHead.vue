@@ -33,14 +33,14 @@
           <div>
             <div class="icon-label"><IconLaptop /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'elearning_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'lecture_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Bài giảng</span></p>
             </div>
           </div>
           <div>
             <div class="icon-label"><IconCollectionBookmark /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'lesson_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'course_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Khóa học</span></p>
             </div>
           </div>

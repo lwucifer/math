@@ -244,3 +244,9 @@ export const SORT_ELEARNING = {
   PRICE_ASC: "PRICE_ASC",
   PRICE_DESC: "PRICE_DESC",
 };
+
+export const BANK_STATUS = {
+  DISABLE: "DISABLE",
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE"
+};
