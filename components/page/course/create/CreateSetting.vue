@@ -281,6 +281,7 @@ export default {
     get,
 
     handleChangeStartDate(date) {
+      console.log(date)
       this.payload.start_time = date;
     },
 
