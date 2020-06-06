@@ -38,8 +38,8 @@ const actions = {
         const { list_room } = result;
         commit(mutationTypes.CHAT.SET_ROOM_LIST, {
           list_room: uniqWith(
-            state.roomList.list_room.concat(list_room),
-            isEqual
+            list_room.concat(state.roomList.list_room),
+            (a, b) => a.id === b.id
           ),
         });
       }
@@ -120,7 +120,7 @@ const actions = {
       // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
       if (!result.error) {
         const newRoomList = state.roomList.list_room.map(item => {
-          if (item.room_id == result.id) {
+          if (item.id == result.id) {
             return {
               ...item,
               name: result && result.name ? result.name : ''
@@ -170,6 +170,7 @@ const actions = {
  */
 const mutations = {
   [mutationTypes.CHAT.SET_ROOM_LIST](state, _roomList) {
+    console.log('_roomList', _roomList)
     state.roomList = _roomList;
   },
   [mutationTypes.CHAT.SET_MEMBER_LIST](state, _memberList) {
@@ -192,6 +193,16 @@ const mutations = {
   },
   [mutationTypes.CHAT.SET_RES_EMIT](state, _messageRes) {
     state.messageRes = _messageRes;
+    // const newRoomList = state.roomList.list_room.map(item => {
+    //   if (item.id == _messageRes.room_id) {
+    //     return {
+    //       ...item,
+    //       lastest_message: _messageRes ? _messageRes : {}
+    //     }
+    //   }
+    //   return item
+    // })
+    // state.roomList.list_room = newRoomList;
   },
   [mutationTypes.CHAT.SET_IMAGE_LIST](state, _imageList) {
     state.imageList = _imageList;

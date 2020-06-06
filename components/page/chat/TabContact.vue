@@ -98,7 +98,7 @@
                 class="align-item justify-content-between active"
                 v-for="(item, index) in mapChatList ? mapChatList : []"
                 :key="index"
-                @click="pushUrl(item.room_id)"
+                @click="pushUrl(item.id)"
               >
                 <div class="left d-flex">
                   <div class="align-item__image">
@@ -114,7 +114,7 @@
                       <n-link slot="title" to>{{ item.name ? item.name : '' }}</n-link>
                     </h5>
                     <div class="align-item__desc">
-                      <p>{{ item.text }}</p>
+                      <p>{{ item && item.lastest_message ? item.lastest_message.text : ''}}</p>
                     </div>
                   </div>
                 </div>
@@ -552,7 +552,7 @@ export default {
       );
       console.log("getData", getData);
       // check no room
-      if (this.roomList.listMessage == 0) {
+      if (this.roomList && this.roomList.list_room.length == 0) {
         this.checkChatList = true;
       }
       if (getData && getData.list_room && getData.list_room.length > 0) {
