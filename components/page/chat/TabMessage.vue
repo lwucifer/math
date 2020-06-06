@@ -236,10 +236,7 @@
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-=======
       <div class="aside-box__content" v-else></div>
->>>>>>> origin/huydv
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
