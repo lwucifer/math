@@ -516,6 +516,10 @@ export const SOCIAL_NOTI = {
     COMMIT_NOTI_UNREAD: "commitNotiUnread",
 };
 
+export const HEADER_NOTI = {
+    SET_NOTIFICATIONS_LIST: "setNotifications",
+};
+
 export const SOCIAL_FRIEND = {
     SET_SOCIAL_FRIEND_INVITE_LIST: "setFriendInviteList",
 };
@@ -583,5 +587,6 @@ export const CHAT = {
 };
 
 export const TIMETABLE = {
-    SET_STATE_TIMETABLE: "setStateTimetable"
+    SET_TIMETABLE_LIST: "setTimeTableList",
+    SET_STATE_TIMETABLE: "setStateTimeTable"
 }

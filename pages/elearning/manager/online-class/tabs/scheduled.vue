@@ -101,7 +101,7 @@
           <span class="text-secondary" v-else>Riêng tư</span>
         </td>
       </template>
-      <template v-slot:cell(time)="{row}">
+      <template v-slot:cell(start_time)="{row}">
         <td>
           <div>
             {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}

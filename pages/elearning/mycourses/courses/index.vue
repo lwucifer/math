@@ -74,6 +74,7 @@
                     placeholder="Thể loại"
                     has-border
                     :value="params.type"
+                    :reduce="(item) => item.value"
                     @input="handleChangeType"
                     :options="[
                       { text: 'Tất cả', value: 'ALL' },
@@ -89,6 +90,14 @@
                     v-model="selectPrivacy"
                     label="text"
                     placeholder="Hiển thị"
+                    :value="params.privacy"
+                    :reduce="(item) => item.value"
+                    @input="handleChangePrivacy"
+                    :options="[
+                      { text: 'Tất cả', value: '' },
+                      { text: 'Công khai', value: 'PUBLIC' },
+                      { text: 'Riêng tư', value: 'PRIVATE' },
+                    ]"
                     has-border
                   ></app-vue-select>
                 </div>
@@ -99,6 +108,14 @@
                     v-model="selectFree"
                     label="text"
                     placeholder="Học phí"
+                    :value="params.free"
+                    :reduce="(item) => item.value"
+                    @input="handleChangeFree"
+                    :options="[
+                      { text: 'Tất cả', value: '' },
+                      { text: 'Miễn phí', value: true },
+                      { text: 'Có phí', value: false },
+                    ]"
                     has-border
                   ></app-vue-select>
                 </div>
@@ -176,6 +193,8 @@ export default {
         page: 1,
         keyword: "",
         is_completed: false,
+        privacy: "",
+        free: "",
       },
       // params: {
       //   keyword: null,
@@ -265,8 +284,16 @@ export default {
   },
 
   methods: {
-    handleChangeType(e) {
-      this.params.type = e.value;
+    handleChangeType(type) {
+      this.params.type = type;
+    },
+
+    handleChangePrivacy(privacy) {
+      this.params.privacy = privacy;
+    },
+
+    handleChangeFree(free) {
+      this.params.free = free;
     },
 
     getData() {
