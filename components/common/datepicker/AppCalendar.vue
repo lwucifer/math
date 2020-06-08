@@ -19,14 +19,14 @@
       <app-calendar-date
         v-show="pickMode === PICK_MODES.DATE"
         :dates="dataDates"
-        :value="date"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'day')"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        :active-dates="[this.localValue.date()]"
         @change="handleChangeDate"
       />
       <app-calendar-month
         v-show="pickMode === PICK_MODES.MONTH"
         :value="month"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'year')"
         @change="handleChangeMonth"
       />
       <app-calendar-year

@@ -15,6 +15,12 @@
           <h1 class="mycourses__title heading-4">Thời khoá biểu</h1>
 
           <div class="mycourses__content">
+            <!-- <app-range-picker /> -->
+            <!-- <app-date-picker
+              type="datetime"
+              range
+              placeholder="Select datetime range"
+            ></app-date-picker> -->
             <nav class="timetable-nav">
               <div class="timetable-nav__left">
                 <h2 class="timetable-nav__title title">Học gì hôm nay?</h2>
@@ -140,7 +146,7 @@ export default {
 
   data() {
     return {
-      calendar: null,
+      calendar: moment("1995-08-21", "YYYY-MM-DD"),
       dayslist: [],
       dateSchedule: moment().format("YYYY-MM-DD"),
       checkTimeAble: true,
@@ -162,6 +168,8 @@ export default {
   },
   created() {
     this.changeDate(this.dateSchedule);
+
+    document.addEventListener('click')
   },
   methods: {
     changeDate(date) {
