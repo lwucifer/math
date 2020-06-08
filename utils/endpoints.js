@@ -96,6 +96,7 @@ export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects
 export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
+export const ELEARNING_STUDY_TIMETABLE = `/elearning/study/timetable`;
 
 /**
  * ONLINE CLASS

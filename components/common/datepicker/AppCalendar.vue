@@ -173,9 +173,8 @@ export default {
         const currentPickMode = this.pickMode;
         this.$nextTick(() => {
           this.pickMode = currentPickMode;
-        })
+        });
       }
-
     },
 
     prevMonth() {
@@ -188,9 +187,8 @@ export default {
         const currentPickMode = this.pickMode;
         this.$nextTick(() => {
           this.pickMode = currentPickMode;
-        })
+        });
       }
-
     },
 
     nextYear() {
@@ -211,6 +209,7 @@ export default {
       this.$nextTick(() => {
         this.pickMode = PICK_MODES.DATE;
       });
+      this.$emit("changeDateToday", value);
     },
 
     handleChangeMonth(month) {
