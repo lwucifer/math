@@ -10,7 +10,7 @@
 
         <div v-if="onlineClass" class="eh-personal-box__online-class">Lớp học đang diễn ra</div>
 
-        <div v-if="discount" class="eh-personal-box__discount">{{ discount }}%</div>
+        <div v-if="discount && price" class="eh-personal-box__discount">{{ discount }}%</div>
       </n-link>
     </div>
 
