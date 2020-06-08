@@ -131,7 +131,7 @@
           </div>
         </app-dropdown>
         -->
-        <notification class="item"/>
+        <notification/>
         <user-header />
       </div>
 

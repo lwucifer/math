@@ -6,12 +6,26 @@
 
     <div class="cc-panel__body">
       <div class="setup-time mb-5">
-        <h5 class="mb-4">
+        <h5 class="mb-4 d-flex align-items-center">
           Cài đặt thời gian
-          <span class="text-base font-weight-normal"
-            >(Không bắt buộc)
-            <IconQuestionCircle width="12px" height="12px" class="fill-gray"
-          /></span>
+          <span class="text-base font-weight-normal ml-2">(Không bắt buộc)</span>
+
+        
+          <v-popover 
+            placement="right" 
+            trigger="hover">
+              <IconQuestionCircle width="12px" height="12px" class="fill-gray icon-tooltip"/>
+
+              <template #popover>
+                <div class="bg-white py-3 px-3 text-dark border">
+                  <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
+
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                </div>
+              </template>
+          </v-popover>
         </h5>
 
         <div class="d-flex align-items-center mb-3">

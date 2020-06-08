@@ -26,6 +26,10 @@
         &:hover {
             color: $color-primary;
         }
+        
+        &.active {
+          color: $color-primary;
+        }
     }
 
     &__more {

@@ -19,14 +19,14 @@
       <app-calendar-date
         v-show="pickMode === PICK_MODES.DATE"
         :dates="dataDates"
-        :value="date"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'day')"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        :active-dates="[this.localValue.date()]"
         @change="handleChangeDate"
       />
       <app-calendar-month
         v-show="pickMode === PICK_MODES.MONTH"
         :value="month"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'year')"
         @change="handleChangeMonth"
       />
       <app-calendar-year
@@ -70,6 +70,12 @@ export default {
     IconCalendarChevronLeft,
     IconCalendarChevronRight,
     IconCalendarArrowDown
+  },
+
+  inject: {
+    appRangePicker: {
+      default: null
+    }
   },
 
   model: {
@@ -148,7 +154,7 @@ export default {
           tmpDataDates[i][j] = {
             index: dayCount,
             date: new Date(this.year, this.month, dayCount).getDate(),
-            current: dayCount > 0 && dayCount < lastDay.getDate()
+            current: dayCount > 0 && dayCount <= lastDay.getDate()
           };
           dayCount++;
         }
@@ -160,15 +166,29 @@ export default {
     nextMonth() {
       if (this.month < 11) {
         this.month += 1;
+      } else {
+        this.year += 1;
+        this.month = 0;
+
+        const currentPickMode = this.pickMode;
+        this.$nextTick(() => {
+          this.pickMode = currentPickMode;
+        });
       }
-      console.log("this.month", this.month);
     },
 
     prevMonth() {
       if (this.month > 0) {
         this.month -= 1;
+      } else {
+        this.year -= 1;
+        this.month = 11;
+
+        const currentPickMode = this.pickMode;
+        this.$nextTick(() => {
+          this.pickMode = currentPickMode;
+        });
       }
-      console.log("this.month", this.month);
     },
 
     nextYear() {
@@ -189,6 +209,7 @@ export default {
       this.$nextTick(() => {
         this.pickMode = PICK_MODES.DATE;
       });
+      this.$emit("changeDateToday", value);
     },
 
     handleChangeMonth(month) {
