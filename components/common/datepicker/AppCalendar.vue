@@ -91,7 +91,7 @@ export default {
     },
     format: {
       type: String,
-      default: "DD/MM/YYYY"
+      default: undefined
     }
   },
 
