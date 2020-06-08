@@ -373,7 +373,6 @@ export default {
         {
           name: "price",
           text: "Học phí",
-          sort: true
         },
         {
           name: "privacy",
@@ -399,7 +398,6 @@ export default {
         {
           name: "price",
           text: "Học phí",
-          sort: true
         },
         {
           name: "privacy",

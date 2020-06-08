@@ -48,6 +48,9 @@
           </app-button>
         </div>
       </div>
+      <div class="text-right mb-3">
+        <i>Danh sách học sinh đã tham gia bài giảng “{{get(stateClassInfo, 'data.name', '')}}” của bạn.</i>
+      </div>
     </div>
     <!--End filter form-->
 
@@ -156,10 +159,10 @@
     </app-table>
     <!--End table-->
 
-    <div class="pl-4 pr-4 mt-4">
-      <i class="color-999">
+    <div class="pl-4 pr-4 mt-4 text-center">
+      <i>
         *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
-        <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+        <b>{{get(stateClassInfo, 'data.name', '')}}</b> theo yêu cầu của giáo viên
       </i>
     </div>
 
@@ -270,6 +273,9 @@ export default {
     }),
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
+    }),
+    ...mapState(STORE_NAMESPACE, {
+      stateClassInfo: "OnlineClassInfo"
     }),
     courseOpts() {
       return [this.allOpt, ...this.courses];

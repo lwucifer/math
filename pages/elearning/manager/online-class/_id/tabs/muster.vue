@@ -13,7 +13,7 @@
 
     <!--Info group-->
     <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã mời: <span class="color-primary">{{summary.total_student}}</span></strong>
+      <strong>Tổng số học sinh đã tham bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
         <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
         <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
@@ -64,6 +64,10 @@
             has-border
           ></app-vue-select>
         </div>
+      </div>
+
+      <div class="text-right mb-3 mt-2">
+        <i>Thống kê tỷ lệ học sinh tham gia từng buổi học online của bạn.</i>
       </div>
     </div>
     <!--End filter form-->
