@@ -1,14 +1,15 @@
 <template>
   <div class="app-range-picker">
-    <app-calendar
+    <app-range-picker-calendar
       class="app-range-picker__calendar app-range-picker__calendar--start"
-      :value="startDate"
-      @change="handleChangeStartDate"
+      :value="localValue"
+      @change="handleChangeDate"
     />
-    <app-calendar
+    <app-range-picker-calendar
       class="app-range-picker__calendar app-range-picker__calendar--end"
-      :value="endDate"
-      @change="handleChangeEndDate"
+      :value="localValue"
+      :index="1"
+      @change="handleChangeDate"
     />
   </div>
 </template>
@@ -62,13 +63,9 @@ export default {
   },
 
   methods: {
-    handleChangeStartDate(date) {
-      this.startDate = date;
+    handleChangeDate(date = []) {
+      this.localValue = date;
     },
-
-    handleChangeEndDate(date) {
-      this.endDate = date;
-    }
   }
 };
 </script>

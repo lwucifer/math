@@ -41,6 +41,10 @@
             color: #1D243E;
         }
 
+        &.in-range {
+            background-color: #F2F2F2;
+        }
+
         &.active {
             span {
                 color: #fff;
