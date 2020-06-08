@@ -11,7 +11,11 @@
         <td
           v-for="(data, i) in row"
           :key="i"
-          :class="{ active: isMatchDate && (localValue === data.date) && data.current, 'current-month': data.current }"
+          :class="{
+            'current-month': data.current,
+            'active': isMatchDate && activeDates.includes(data.index),
+            'in-range': isMatchDate && inrangeDates.includes(data.index)
+          }"
           @click="chooseDate(data.index)"
         >
           <span v-if="data !== null">{{ data.date }}</span>
@@ -25,46 +29,31 @@
 const DAYS = ["M", "T", "W", "Th", "F", "Sa", "S"];
 
 export default {
-  model: {
-    prop: "value",
-    event: "change"
-  },
-
   props: {
     dates: {
       type: Array,
       default: () => []
     },
-    value: {
-      type: Number,
-      default: new Date().getDate()
+    activeDates: {
+      type: Array,
+      default: () => []
     },
-    isMatchDate: {
-      type: Boolean,
-      default: true
-    }
+    inrangeDates: {
+      type: Array,
+      default: () => []
+    },
+    isMatchDate: Boolean
   },
 
   data() {
     return {
-      DAYS: Object.freeze(DAYS),
-      localValue: this.value
+      DAYS: Object.freeze(DAYS)
     };
-  },
-
-  watch: {
-    value(newValue) {
-      this.localValue = newValue;
-    },
-
-    localValue(newValue) {
-      this.$emit("change", newValue);
-    }
   },
 
   methods: {
     chooseDate(index) {
-      this.localValue = index;
+      this.$emit("change", index);
     }
   }
 };

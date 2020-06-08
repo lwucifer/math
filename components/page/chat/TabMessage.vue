@@ -105,7 +105,7 @@
             <!-- <span>Thứ 5, Ngày 19/09/2019</span> -->
           </div>
         </div>
-        
+
         <div class="message-box">
           <!-- message date -->
           <!-- END / message date -->
@@ -170,7 +170,6 @@
                 </div>
               </div>
               <div class="message-box__item__meta" v-else-if="item.check">
-                
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -185,7 +184,6 @@
                         class="comment-item__avatar"
                       />
                     </button>
-                    
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
@@ -201,7 +199,7 @@
                   <div class="message-box__item__desc__text">
                     <p>{{item.text}}</p>
                   </div>
-      
+
                   <div class="message-box__item__desc__actions">
                     <button title="Trả lời" @click="reply()">
                       <IconReply />
@@ -714,11 +712,16 @@ export default {
         }
         // console.log("getData id", getData[getData.length - 1].id);
         if (getData && getData.length) {
-          this.messageQuery.from_message_id = getData[getData.length - 1].id;
+          this.messageQuery.from_message_id = getData[0].id;
           this.messageQuery.fetch_type = "prior";
-          // const dataClone = cloneDeep(getData);
+          const dataClone = cloneDeep(getData);
           // this.messagesList.push(...dataClone.reverse());
-          this.messagesList.push(...getData);
+          if (this.messagesList.length >= 30) {
+            this.messagesList = dataClone.reverse().concat(this.messagesList);
+          } else {
+            this.messagesList.push(...getData);
+          }
+
           $state.loaded();
         } else {
           $state.complete();
