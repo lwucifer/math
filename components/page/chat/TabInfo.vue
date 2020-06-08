@@ -111,8 +111,8 @@
                 <IconDots class="fill-gray"/>
 
                 <template slot="popover">
-                  <p class="mb-3"><n-link to="">Xem trang cá nhân</n-link></p>
-                  <p class="mb-3"><n-link to="">Nhắn tin</n-link></p>
+                  <p class="mb-3"><n-link to="" class="text-dark">Xem trang cá nhân</n-link></p>
+                  <p class="mb-3"><n-link to="" class="text-dark">Nhắn tin</n-link></p>
                   <p><n-link to="" class="text-secondary">Xoá khỏi nhóm</n-link></p>
                 </template>
               </v-popover>
