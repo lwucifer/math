@@ -103,7 +103,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 @import "~/assets/scss/components/account/_account-info-setting.scss";
 </style>
