@@ -59,6 +59,12 @@ export const SOCIAL_NOTIFICATIONS = {
     GET_NOTI_UNREAD: "getNotiUnread",
 };
 
+export const HEADER_NOTIFICATIONS = {
+    LIST: "getNotifications",
+    DETAIL_LIST: "getDetailNotifications",
+    CHECK_IS_READ_NOTIFICATION: "checkIsReadNotifications",
+};
+
 export const SOCIAL_CONFIG = {
     LIST: "socialConfigList",
 };
