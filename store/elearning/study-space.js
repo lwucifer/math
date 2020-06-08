@@ -8,7 +8,8 @@ import Favourite from "~/services/elearning/study/Favourite";
  * initial state
  */
 const state = () => ({
-  studying: null,
+  unfinished_lecture: null,
+  finished_lecture: null,
   statistic: null,
   archive: null,
   favourite: null,
@@ -27,12 +28,24 @@ const actions = {
     try {
       const result = await new StudyStudent(this.$axios)["list"](options);
       if (get(result, "success", false)) {
-        commit("studying", get(result, "data", null));
-        return;
+        const data = get(result, "data", null);
+
+        if (options.params.is_completed === true) {
+          commit("finished_lecture", data);
+          return;
+        }
+
+        if (options.params.is_completed === false) {
+          commit("unfinished_lecture", data);
+          return;
+        }
       }
-      commit("studying", null);
+
+      commit("finished_lecture", null);
+      commit("unfinished_lecture", null);
     } catch (error) {
-      commit("studying", null);
+      commit("finished_lecture", null);
+      commit("unfinished_lecture", null);
     }
   },
 
@@ -80,8 +93,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  studying(state, data) {
-    state.studying = data;
+  finished_lecture(state, data) {
+    state.finished_lecture = data;
+  },
+  unfinished_lecture(state, data) {
+    state.unfinished_lecture = data;
   },
   statistic(state, data) {
     state.statistic = data;

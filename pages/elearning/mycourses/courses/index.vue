@@ -20,7 +20,7 @@
                 >
                 <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''"
                   >Đã hoàn thành ({{
-                    numeral(get(statistic, "total_elearnings", 0)).format()
+                    numeral(get(statistic, "total_courses", 0)).format()
                   }})</a
                 >
 
@@ -149,7 +149,7 @@ const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 import numeral from "numeral";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
-import { useEffect } from "../../../../utils/common";
+import { useEffect } from "~/utils/common";
 
 export default {
   middleware: ["authenticated"],
@@ -169,6 +169,7 @@ export default {
         size: 12,
         page: 1,
         keyword: "",
+        is_completed: false,
       },
       // params: {
       //   keyword: null,
@@ -222,17 +223,18 @@ export default {
     // }),
 
     ...mapState("elearning/study-space", {
-      studying: "studying",
+      finished_lecture: "finished_lecture",
+      unfinished_lecture: "unfinished_lecture",
       statistic: "statistic",
       archive: "archive",
       favourite: "favourite",
     }),
     list() {
       if (this.tab === 2) {
-        return this.studying;
+        return this.unfinished_lecture;
       }
       if (this.tab === 3) {
-        return this.studying;
+        return this.finished_lecture;
       }
       if (this.tab === 4) {
         return this.favourite;
@@ -240,59 +242,11 @@ export default {
       if (this.tab === 5) {
         return this.archive;
       }
-      return this.studying;
+      return this.unfinished_lecture;
     },
   },
 
   watch: {
-    // elearningStudyStatistic: {
-    //   handler: function() {
-    //     this.total.elearnings = get(
-    //       this,
-    //       "elearningStudyStatistic.total_elearnings",
-    //       0
-    //     );
-    //     this.total.courses = get(
-    //       this,
-    //       "elearningStudyStatistic.total_courses",
-    //       0
-    //     );
-    //     this.total.lectures = get(
-    //       this,
-    //       "elearningStudyStatistic.total_lectures",
-    //       0
-    //     );
-    //     this.total.favourites = get(
-    //       this,
-    //       "elearningStudyStatistic.total_favourites",
-    //       0
-    //     );
-    //     this.total.archieves = get(
-    //       this,
-    //       "elearningStudyStatistic.total_archieves",
-    //       0
-    //     );
-    //   },
-    // },
-    // elearningStudyStudent: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyStudent.content", []);
-    //     this.pagination = get(this, "elearningStudyStudent.page", {});
-    //   },
-    // },
-    // elearningStudyFavourite: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyFavourite.content", []);
-    //     this.pagination = get(this, "elearningStudyFavourite.page", {});
-    //   },
-    // },
-    // elearningStudyArchive: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyArchive.content", []);
-    //     this.pagination = get(this, "elearningStudyArchive.page", {});
-    //   },
-    // },
-    tab(_tab) {},
     pagination(_newVal) {
       this.pagination.size = _newVal.size;
       this.pagination.first = _newVal.first;
@@ -333,38 +287,14 @@ export default {
     ]),
     changeTab(tab) {
       this.tab = tab;
+      if (tab == 2) {
+        this.params.is_completed = false;
+      }
+      if (tab == 3) {
+        this.params.is_completed = true;
+      }
       this.params.page = 1;
       this.params.keyword = "";
-      const payload = {
-        params: this.params,
-      };
-      // this.params.size = 8;
-      // if (tab === 1) {
-      //   this.params.type = "ALL";
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 2) {
-      //   this.params.type = "LECTURE";
-      //   this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 3) {
-      //   this.params.type = "COURSE";
-      //   this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 4) {
-      //   this.fetchElearningFavourite();
-      //   this.list = get(this, "elearningStudyFavourite.content", []);
-      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
-      // } else if (tab === 5) {
-      //   this.fetchElearningArchive();
-      //   this.list = get(this, "elearningStudyArchive.content", []);
-      //   this.pagination = get(this, "elearningStudyArchive.page", {});
-      // }
     },
 
     fetchElearningList() {
@@ -521,7 +451,6 @@ export default {
       });
     },
     onPageChange(e) {
-      console.log(e);
       this.pagination = { ...this.pagination, ...e };
       this.params.size = this.pagination.size;
       this.params.page = this.pagination.number + 1;
