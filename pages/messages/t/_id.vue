@@ -191,7 +191,12 @@ export default {
   },
 
   beforeDestroy() {
-    this.socket.off("join_room");
+    const params = {
+      room_id: this.$route.params.id
+    };
+    this.socket.emit(constants.CHAT.LEAVE_ROOM, params, res => {
+      console.log("[socket] User has leave this channel", res);
+    });
   },
   watch: {
     messageEmit(_newVal) {
