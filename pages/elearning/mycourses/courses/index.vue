@@ -74,12 +74,14 @@
                     placeholder="Thể loại"
                     has-border
                     :value="params.type"
+                    :reduce="item => item.value"
                     @input="handleChangeType"
                     :options="[
                       { text: 'Tất cả', value: 'ALL' },
                       { text: 'Bài giảng', value: 'LECTURE' },
                       { text: 'Khoá học', value: 'COURSE' },
                     ]"
+                    :all-opt="{ text: 'Tất cả', value: 'ALL' }"
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -266,7 +268,7 @@ export default {
 
   methods: {
     handleChangeType(e) {
-      this.params.type = e.value;
+      this.params.type = e;
     },
 
     getData() {
