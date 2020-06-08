@@ -96,6 +96,7 @@ export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects
 export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
+export const ELEARNING_STUDY_TIMETABLE = `/elearning/study/timetable`;
 
 /**
  * ONLINE CLASS
@@ -144,6 +145,8 @@ export const STUDY_EXERCISE_ELEARNING = `/elearning/study/ex_elearnings`;
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
 export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
 export const STUDY_OLCLASS_LESSION_ATTENDANCE = `/elearning/study/olclass/attendance`;
+
+export const STUDY_ELEARNING_NOTIFICATIONS = `/study/elearning/announcements`;
 
 /**
  * SCHOOL

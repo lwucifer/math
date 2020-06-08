@@ -5,7 +5,7 @@
         <MyCourseSide :active="5">
           <template slot="calendar">
             <div class="timetable-calendar-divider"></div>
-            <app-calendar v-model="calendar" />
+            <app-calendar v-model="calendar" @changeDateToday="changeDateToday" />
           </template>
         </MyCourseSide>
       </div>
@@ -21,21 +21,36 @@
               type="datetime"
               range
               placeholder="Select datetime range"
-            ></app-date-picker> -->
+            ></app-date-picker>-->
             <nav class="timetable-nav">
               <div class="timetable-nav__left">
                 <h2 class="timetable-nav__title title">Học gì hôm nay?</h2>
-                <a href class="timetable-nav__date">15 tháng 5, 2020</a>
+                <a href class="timetable-nav__date">{{todayDate}}</a>
               </div>
 
               <div class="timetable-nav__right">
-                <a href class="timetable-nav__icon-text" @click.prevent="selectDay">
+                <a
+                  href
+                  class="timetable-nav__icon-text"
+                  :class="checkTimeTable ? 'active' :''"
+                  @click.prevent="selectDay"
+                >
                   <IconCalendarDay class="icon fill-opacity-1" />Hôm nay
                 </a>
-                <a href class="timetable-nav__icon-text" @click.prevent="selectWeek">
+                <a
+                  href
+                  class="timetable-nav__icon-text"
+                  :class="checkTimeTableWeek ? 'active' :''"
+                  @click.prevent="selectWeek"
+                >
                   <IconCalendarWeek class="icon fill-opacity-1" />Tuần này
                 </a>
-                <a href class="timetable-nav__icon-text" @click.prevent="selectMonth">
+                <a
+                  href
+                  class="timetable-nav__icon-text"
+                  :class="checkTimeTableMonth ? 'active' :''"
+                  @click.prevent="selectMonth"
+                >
                   <IconCalendarMonth class="icon fill-opacity-1" />Tháng này
                 </a>
                 <app-dropdown class="timetable-nav__dropdown" position="bottomRight">
@@ -48,7 +63,7 @@
               </div>
             </nav>
 
-            <div class="timetable-table" v-if="checkTimeAble">
+            <div class="timetable-table" v-if="checkTimeTable">
               <table class="timetable-table__table">
                 <thead>
                   <tr>
@@ -82,13 +97,13 @@
               </table>
             </div>
 
-            <div class="timetable-range-status" v-if="checkTimeAbleWeek">
+            <div class="timetable-range-status" v-if="checkTimeTableWeek">
               <span class="mr-2">Khoảng thời gian:</span>
               từ:
               <span class="text-primary mr-2">{{firstDayWeek}}</span> đến:
               <span class="text-primary">{{lastDayWeek}}</span>
             </div>
-            <div class="timetable-range-status" v-if="checkTimeAbleMonth">
+            <div class="timetable-range-status" v-if="checkTimeTableMonth">
               <span class="mr-2">Khoảng thời gian:</span>
               từ:
               <span class="text-primary mr-2">{{firstDayMonth}}</span> đến:
@@ -134,6 +149,8 @@ import IconCalendarWeek from "~/assets/svg/icons/calendar-week.svg?inline";
 import IconCalendarMonth from "~/assets/svg/icons/calendar-month.svg?inline";
 import IconMoreHoriz from "~/assets/svg/v2-icons/more_horiz_24px.svg?inline";
 import { mapMutations } from "vuex";
+import { TIMETABLE } from "../../../../utils/mutation-types";
+const STORE_NAME_TIMETABLE = "elearning/mycourses/timetable";
 
 export default {
   middleware: ["authenticated"],
@@ -151,9 +168,10 @@ export default {
       calendar: moment(),
       dayslist: [],
       dateSchedule: moment(),
-      checkTimeAble: true,
-      checkTimeAbleMonth: false,
-      checkTimeAbleWeek: false,
+      todayDate: moment().format("D MMMM, YYYY"),
+      checkTimeTable: true,
+      checkTimeTableMonth: false,
+      checkTimeTableWeek: false,
       firstDayWeek: moment()
         .startOf("week")
         .format("D MMMM, YYYY"),
@@ -172,7 +190,7 @@ export default {
     this.changeDate(this.calendar);
   },
   methods: {
-    ...mapMutations("timetable", ["setStateTimetable"]),
+    ...mapMutations(STORE_NAME_TIMETABLE, ["setStateTimeTable"]),
     changeDate(date) {
       this.dayslist.length = 0;
       for (let i = 1; i <= 7; i++) {
@@ -195,23 +213,29 @@ export default {
     },
     changeDateInWeek(i) {
       this.calendar = moment(i);
-      this.setStateTimetable(this.calendar);
+      this.setStateTimeTable(this.calendar);
+      this.todayDate = moment(i).format("D MMMM, YYYY");
       // console.log(this.calendar);
     },
     selectDay() {
-      this.checkTimeAble = true;
-      this.checkTimeAbleMonth = false;
-      this.checkTimeAbleWeek = false;
+      this.checkTimeTable = true;
+      this.checkTimeTableMonth = false;
+      this.checkTimeTableWeek = false;
     },
     selectWeek() {
-      this.checkTimeAbleWeek = true;
-      this.checkTimeAbleMonth = false;
-      this.checkTimeAble = false;
+      this.checkTimeTableWeek = true;
+      this.checkTimeTableMonth = false;
+      this.checkTimeTable = false;
     },
     selectMonth() {
-      this.checkTimeAbleMonth = true;
-      this.checkTimeAbleWeek = false;
-      this.checkTimeAble = false;
+      this.checkTimeTableMonth = true;
+      this.checkTimeTableWeek = false;
+      this.checkTimeTable = false;
+    },
+    changeDateToday(value) {
+      this.checkTimeTable = false;
+      // console.log("[changeDateToday] value", value);
+      this.todayDate = value.format("D MMMM, YYYY");
     }
   }
 };

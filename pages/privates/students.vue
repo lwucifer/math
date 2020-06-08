@@ -58,7 +58,15 @@
       <app-vue-select placeholder="Lớp học" size="sm" />-->
     </div>
     <div class="wrap-table">
-      <app-table :heads="heads" :data="filterStudentPrivates">
+      <app-table 
+        :heads="heads" 
+        :data="filterStudentPrivates"
+        @pagechange="onPageChange"
+        :pagination="filterPagination"
+        :pagination-style="{ position: 'right' }"
+        bg-table="white"
+        :ext-table-cls="{ 'pt-4': true }"
+      >
         <template v-slot:cell(name)="{row}">
           <td class="wrap-name__table">{{get(row,"name","")}}</td>
         </template>
@@ -92,7 +100,7 @@
           <td class="wrap-name__table">{{get(row,"attendance","")}}%</td>
         </template>
         <template v-slot:cell(percent)="{row}">
-          <td style="width:30%">
+          <td class="wrap-name__table">
             <div class="d-flex align-items-center">
               <span class="mr-3">{{ get(row,"completion_rate","") }}%</span>
               <div class="w-100">
@@ -103,12 +111,14 @@
         </template>
       </app-table>
     </div>
+    <!--
     <app-pagination
       :pagination="filterPagination"
       :type="1"
       @pagechange="onPageChange"
       class="right-pagination"
     />
+    -->
   </div>
 </template>
 
@@ -160,11 +170,13 @@ export default {
         },
         {
           name: "mark",
-          text: "Điểm chuyên cần"
+          text: "Điểm chuyên cần",
+           sort: "true"
         },
         {
           name: "percent",
-          text: "Tỉ lệ hoàn thành các bài học và khóa học"
+          text: "Tỉ lệ hoàn thành các bài học và khóa học",
+           sort: "true"
         }
       ],
       list: [

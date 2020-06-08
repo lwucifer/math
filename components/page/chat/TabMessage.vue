@@ -567,8 +567,13 @@ export default {
     },
     nameRoom() {
       const data = this.roomDetail ? this.roomDetail.room_data : {};
+      const dataTotal = this.roomDetail ? this.roomDetail.total_member : 0;
       if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
-        return data.name;
+        if (dataTotal > 3) {
+          return data.name + ", " + (dataTotal - 3) + " người khác";
+        } else {
+          return data.name;
+        }
       } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
         const [dataFilterMember] =
           this.memberList &&
@@ -1009,6 +1014,7 @@ export default {
   watch: {
     messageOn(_newVal) {
       if (_newVal) {
+        this.getRoomList();
         console.log("[messageOn]", _newVal);
         // console.log("data", data);
         // this.messagesList.unshift(_newVal);
