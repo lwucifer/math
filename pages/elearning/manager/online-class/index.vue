@@ -71,6 +71,35 @@
     },
 
     methods: {
+
+      async getElearnings() {
+        try {
+          let userId = this.$store.state.auth.token
+            ? this.$store.state.auth.token.id
+            : "";
+          await this.$store.dispatch(
+            `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+            { params: {teacher_id: userId} }
+          );
+          let lessonList = this.get(this.stateElearnings, "data", []);
+          let list = [];
+          lessonList.forEach(element => {
+            if (!element.is_hidden) {
+              list.push({
+                value: element.id,
+                text: element.name
+              });
+            }
+          });
+          this.courses = list;
+        } catch (e) {
+        } finally {
+        }
+      },
+
+      created () {
+        this.getElearnings();
+      },
     }
   };
 </script>
