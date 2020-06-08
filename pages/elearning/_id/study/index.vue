@@ -16,7 +16,10 @@
     <template v-else>
       <portal-target
         name="theater"
-        :class="['elearning-study-theater', fullscreen && 'elearning-study-theater--fullscreen']"
+        :class="[
+          'elearning-study-theater',
+          fullscreen && 'elearning-study-theater--fullscreen'
+        ]"
       />
 
       <div class="container">
@@ -24,8 +27,10 @@
           <div class="col-md-8">
             <portal to="theater" :disabled="!(expand || fullscreen)">
               <div class="elearning-study-content">
+                <!-- EXERCISE MODE -->
                 <ElearningExercise v-if="isExerciseMode" />
 
+                <!-- DEFAULT MODE -->
                 <div v-else class="elearning-lesson-screen">
                   <img
                     v-if="studyMode === defaultMode"
@@ -36,17 +41,38 @@
                     width="750"
                     alt
                   />
+
+                  <!-- VIDEO MODE -->
                   <Streaming
                     v-if="studyMode == videoMode"
                     :url="get(payload, 'stream_urls.hls_url', '')"
                     :thumbnail="
-                    get(info, 'cover_url.high', '') ||
-                      '/images/adefltu - course - image.png'
-                  "
+                      get(info, 'cover_url.high', '') ||
+                        '/images/adefltu - course - image.png'
+                    "
                   />
-                  <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')" />
-                  <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
-                  <iframe v-if="studyMode == articleMode" :src="get(payload, 'link', '')"></iframe>
+
+                  <!-- DOC MODE -->
+                  <ElearningDownload
+                    v-if="studyMode == docMode"
+                    :link="get(payload, 'link', '')"
+                    :style="{ height: screenHeight }"
+                  />
+
+                  <!-- IMAGE MODE -->
+                  <img
+                    v-if="studyMode === imageMode"
+                    :src="get(payload, 'link', '')"
+                    :style="{ height: screenHeight }"
+                    alt
+                  />
+
+                  <!-- ARTICLE MODE -->
+                  <iframe
+                    v-if="studyMode == articleMode"
+                    :src="get(payload, 'link', '')"
+                    :style="{ height: screenHeight }"
+                  ></iframe>
                 </div>
 
                 <!-- <div class="lession-screen">
@@ -59,14 +85,20 @@
 
                 <!-- DO EXERCISE -->
 
-                <div class="elearning-study-bottom">
+                <div
+                  class="elearning-study-bottom"
+                  v-if="studyMode !== defaultMode && studyMode !== videoMode"
+                >
                   <button
                     v-if="!fullscreen"
                     class="elearning-study-bottom__button elearning-study-bottom__button--expand"
                     type="button"
                     @click="setExpand(!expand)"
                   >
-                    <IconStudyNarrow v-if="expand" class="icon fill-opacity-1" />
+                    <IconStudyNarrow
+                      v-if="expand"
+                      class="icon fill-opacity-1"
+                    />
                     <IconStudyExpand v-else class="icon fill-opacity-1" />
                   </button>
                   <button
@@ -74,7 +106,10 @@
                     type="button"
                     @click="setFullscreen(!fullscreen)"
                   >
-                    <IconCropFreeReverse v-if="fullscreen" class="icon fill-opacity-1" />
+                    <IconCropFreeReverse
+                      v-if="fullscreen"
+                      class="icon fill-opacity-1"
+                    />
                     <IconCropFree v-else class="icon fill-opacity-1" />
                   </button>
                 </div>
@@ -83,17 +118,28 @@
 
             <div class="box22">
               <div class="elearning-study-tabs">
-                <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-                <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+                <a
+                  :class="{ active: type === 'summary' }"
+                  @click="type = 'summary'"
+                  >Tổng quan</a
+                >
+                <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                  >Hỏi đáp</a
+                >
                 <a
                   :class="{ active: type === 'notification' }"
                   @click="type = 'notification'"
-                >Thông báo</a>
-                <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                  >Thông báo</a
+                >
+                <a
+                  :class="{ active: type === 'review' }"
+                  @click="type = 'review'"
+                  >Đánh giá</a
+                >
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
-              <TabQA  v-if="type === 'qa'" />
+              <TabQA v-if="type === 'qa'" />
               <TabNotification v-if="type === 'notification'" />
               <TabReview v-if="type === 'review'" />
               <!-- <ElearningQuestion
@@ -206,25 +252,36 @@ export default {
 
       // console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
       return isExerciseScreen;
+    },
+
+    // expand
+    screenHeight() {
+      let h = `42.6rem`;
+      if (this.fullscreen) {
+        h = `100vh - 13rem`;
+      } else if (this.expand) {
+        h = `calc(100vh - 7rem - 8.3rem - 4.9rem)`;
+      }
+      return `${h}`;
     }
   },
 
   mounted() {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
-    
-    const typeParams = getParamQuery('type')
-    this.type = typeParams ? typeParams : 'summary'
+
+    const typeParams = getParamQuery("type");
+    this.type = typeParams ? typeParams : "summary";
     this.$nextTick(() => {
-          var el = document.getElementById(typeParams)
-          this.$scrollTo(el)
-          console.log('hello1323')
-        })
-    document.addEventListener(
-      "fullscreenchange",
-      this.handleFullscreenChange,
-      true
-    );
+      var el = document.getElementById(typeParams);
+      this.$scrollTo(el);
+      console.log("hello1323");
+    });
+    // document.addEventListener(
+    //   "fullscreenchange",
+    //   this.handleFullscreenChange,
+    //   true
+    // );
   },
 
   destroyed() {
@@ -256,6 +313,23 @@ export default {
       } else {
         document.fullscreenElement !== null && this.closeFullscreen();
       }
+    },
+
+    studyMode(_newVal) {
+      console.log("[studyMode] watch", _newVal);
+      if (_newVal !== this.videoMode) {
+        document.addEventListener(
+          "fullscreenchange",
+          this.handleFullscreenChange,
+          true
+        );
+      } else {
+        document.removeEventListener(
+          "fullscreenchange",
+          this.handleFullscreenChange,
+          true
+        );
+      }
     }
   },
 
@@ -277,13 +351,9 @@ export default {
 
       this.pageLoading = true;
 
-      const data = await Promise.all([
-        getInfo,
-        getProgress
-      ]);
+      const data = await Promise.all([getInfo, getProgress]);
 
       this.pageLoading = false;
-
     },
 
     async addQuestionSuccess() {
@@ -301,6 +371,7 @@ export default {
     },
 
     setExpand(value) {
+      console.log("[setExpand]", value);
       this.$store.commit(
         `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
         value
@@ -349,7 +420,7 @@ export default {
     },
 
     handleFullscreenChange() {
-      console.log("[handleFullscreenChange] 1", document.fullscreenElement)
+      console.log("[handleFullscreenChange] 1", document.fullscreenElement);
       if (document.fullscreenElement !== null) {
         this.setFullscreen(true);
       } else {

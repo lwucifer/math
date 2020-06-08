@@ -106,18 +106,18 @@
         <IconInsertComment class="icon" />
         Số bài học: {{ get(info, "lessons", 0) }} bài
       </li>
-      <li v-if="get(info, 'starttime_enable', false)">
-        <IconInsertComment class="icon" />
-        Bắt đầu: {{ get(info, "start_time", "") }}
-      </li>
-      <li v-if="get(info, 'endtime_enable', false)">
-        <IconInsertComment class="icon" />
-        Kết thúc: {{ get(info, "end_time", "") }}
-      </li>
       <li>
         <IconTimer class="icon" />
         Thời lượng:
         {{ get(info, "duration", "01:00") }}
+      </li>
+      <li v-if="get(info, 'starttime_enable', false)">
+        <IconPlayCirleWhite24px class="icon" />
+        Bắt đầu: {{ get(info, "start_time", "") | getDateTimeHH_MM_D_M_Y_DASH}}
+      </li>
+      <li v-if="get(info, 'endtime_enable', false)">
+        <IconPauseCircleOutline24px class="icon" />
+        Kết thúc: {{ get(info, "end_time", "") | getDateTimeHH_MM_D_M_Y_DASH}}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -128,9 +128,9 @@
     <app-divider class="elearning-right-side__divider my-0" />
 
     <div class="py-3 d-flex share-favourite">
-      <a class="text-info share">
+      <a class="text-info share favourite">
         <ShareNetwork
-          class="d-flex-center text-info"
+          class="d-flex-center text-info "
           network="facebook"
           :url="
             `https://schoolly.famtechvn.com/elearning/${get(
@@ -187,6 +187,8 @@ import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
 import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
+import IconPlayCirleWhite24px from "~/assets/svg/v2-icons/play_circle_filled_white_24px.svg?inline";
+import IconPauseCircleOutline24px from "~/assets/svg/v2-icons/pause_circle_outline_24px.svg?inline";
 import Favourite from "~/services/elearning/study/Favourite";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
@@ -210,6 +212,8 @@ export default {
     PaymentModal,
     IconDone24px,
     ElearningRequestCode,
+    IconPlayCirleWhite24px,
+    IconPauseCircleOutline24px,
   },
 
   data() {
