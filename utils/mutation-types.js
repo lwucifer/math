@@ -583,5 +583,6 @@ export const CHAT = {
 };
 
 export const TIMETABLE = {
-    SET_STATE_TIMETABLE: "setStateTimetable"
+    SET_TIMETABLE_LIST: "setTimeTableList",
+    SET_STATE_TIMETABLE: "setStateTimeTable"
 }

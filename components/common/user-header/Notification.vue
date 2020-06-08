@@ -1,9 +1,11 @@
 <template>
-  <div class="wrap-notification-header">
+  <div class="wrap-notification-header" v-click-outside="handleClickOutside">
     <button 
         @click="showMenuNotifi= !showMenuNotifi"
+        class="item"
     >
         <IconNotifications24px class="fill-gray" />
+        <span class="number">9</span>
     </button>
     <div v-if="showMenuNotifi" class="content-dropdown">
         <div class="header-content">
@@ -46,6 +48,10 @@
         </div>
         <div v-if="tab === 'elearning'">
             <div class="tab-notification">
+                <notification-item 
+                    :isReaded="isReaded"
+                    @read="handleReadNotifi"
+                />
                 <notification-item 
                     :isReaded="isReaded"
                     @read="handleReadNotifi"

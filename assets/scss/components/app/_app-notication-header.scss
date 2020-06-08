@@ -33,41 +33,28 @@
         position: relative;
     }
     .menu-dropdown-content{
-        /*
+    
             position: absolute;
             background: #FFFFFF;
             box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
             border-radius: 2px;
-            bottom: -3rem;
-            right: 1rem;
+            bottom: -6rem;
+            right: -0.5rem;
             width: 207px;
             list-style: none;
-            border:1px solid red;
             z-index: 20;
-        */
-            li{
-                a{
-                    display: flex;
-                    align-items: center;
-                    padding:1rem 1.5rem;
-                    color: #656565;
-                    svg{
-                        margin-right: 1.5rem;
-                    }
-                }
+            &::before{
+                content: "";
+                position: absolute;
+                top: -1.2rem;  /* At the top of the tooltip */
+                right: 14%;
+                margin-left: -6px;
+                border-width: 6px;
+                border-style: solid;
+                border-color: transparent transparent white transparent;
+                display: block;
+                z-index: 12px;
             }
-    }
-}
-.tooltip-notification{
-    z-index: 130;
-    left: -8rem !important;
-    text-align: center;
-    .menu-dropdown-content{
-            background: #FFFFFF;
-            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 2px;
-            width: 207px;
-            list-style: none;
             li{
                 a{
                     display: flex;
@@ -85,6 +72,7 @@
             }
     }
 }
+
 .wrap-notification-header{
     position: relative;
     .content-dropdown{
@@ -164,7 +152,7 @@
             
         }
         .tab-notification{
-            padding-top:10px;
+            padding:10px 0;
         }
         .footer-notification{
             height: 50px;
