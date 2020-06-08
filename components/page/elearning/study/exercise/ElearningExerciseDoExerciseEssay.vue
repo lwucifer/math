@@ -37,12 +37,14 @@
         trả lời
       </app-upload>
 
-      <!-- <app-input
-        id="essay-answer"
-        placeholder="Nhập câu trả lời"
-        textarea
-        v-model="answer"
-      ></app-input> -->
+      <!-- <div class="d-inline-block" style="float: right;">
+        <div class="e-exercise-essay__attachment d-inline-block">
+          <span class="mr-2 font-weight-medium">dap-an-cau-1.docx</span>
+          <span class="mr-2 e-exercise-essay__attachment__weight">37.7 KB</span>
+        </div>
+        <IconClose class="fill-white e-exercise-essay__icon"/>
+      </div> -->
+
       <app-editor class="mb-4" id="essay-answer" v-model="answer" />
 
     </div>
@@ -114,6 +116,8 @@ import IconCloudUpload from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline"
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+
 import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -133,6 +137,7 @@ export default {
     IconCloudUpload,
     IconArrowForward,
     IconArrowBack,
+    IconClose,
     ElearningExerciseListQuestions
   },
 
