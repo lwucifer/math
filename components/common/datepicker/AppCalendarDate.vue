@@ -14,7 +14,7 @@
           :class="{
             'current-month': data.current,
             'active': isMatchDate && activeDates.includes(data.index),
-            'in-range': isMatchDate && inrangeDates.includes(data.index)
+            'in-range': checkIsInRange(data.index)
           }"
           @click="chooseDate(data.index)"
         >
@@ -38,11 +38,13 @@ export default {
       type: Array,
       default: () => []
     },
-    inrangeDates: {
-      type: Array,
-      default: () => []
+    index: {
+      type: Number,
+      default: 0,
+      validator: value => [0, 1].includes(value)
     },
-    isMatchDate: Boolean
+    isMatchDate: Boolean,
+    isBetweenDate: Boolean
   },
 
   data() {
@@ -54,6 +56,20 @@ export default {
   methods: {
     chooseDate(index) {
       this.$emit("change", index);
+    },
+
+    checkIsInRange(index) {
+      // return isBetweenDate && (activeDates[0] ? activeDates[0] < data.index : true)  && (activeDates[1] ? activeDates[1] > data.index : true)
+      if (!this.isBetweenDate) return false;
+      if (this.activeDates.length === 2) {
+        return this.activeDates[0] < index && this.activeDates[1] > index;
+      } else if (this.activeDates.length === 1) {
+        return this.index === 0
+          ? this.activeDates[0] < index
+          : this.activeDates[0] > index;
+      } else {
+        return true;
+      }
     }
   }
 };

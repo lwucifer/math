@@ -54,6 +54,11 @@
     &__right {
         margin-left: auto;
     }
+
+    &__dropdown-content {
+        white-space: nowrap;
+        padding: 1rem 1.2rem;
+    }
 }
 
 .timetable-table {
