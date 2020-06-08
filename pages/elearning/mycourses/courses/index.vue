@@ -70,10 +70,16 @@
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
-                    v-model="selectType"
                     label="text"
                     placeholder="Thể loại"
                     has-border
+                    :value="params.type"
+                    @input="handleChangeType"
+                    :options="[
+                      { text: 'Tất cả', value: 'ALL' },
+                      { text: 'Bài giảng', value: 'LECTURE' },
+                      { text: 'Khoá học', value: 'COURSE' },
+                    ]"
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -259,6 +265,10 @@ export default {
   },
 
   methods: {
+    handleChangeType(e) {
+      this.params.type = e.value;
+    },
+
     getData() {
       const payload = {
         params: this.params,
