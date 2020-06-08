@@ -12,22 +12,22 @@
           <span>15 phút trước</span>
       </div>
       <div class="group-button-item">
-          <v-popover
-            popoverClass="tooltip-notification"
-          >
-            <button style="margin-left:1.7rem">
-                <IconMoreHoriz24px />
-            </button>
-              <template slot="popover">
-                  <ul class="menu-dropdown-content">
-                    <li @click="$emit('read',true)" 
+            <div class="d-flex justify-content-center" v-click-outside="handleClickOutMenu">
+                <button  @click="menuBtn=!menuBtn">
+                    <IconMoreHoriz24px />
+                </button>
+                <ul class="menu-dropdown-content" 
+                    v-if="menuBtn"
+                   
+                >
+                    <li @click="handleClickCheck" 
                         v-if="!isReaded"
                     >
                         <a>
                             <IconCheck24px/>Đánh dấu là đã đọc
                         </a>
                     </li>
-                    <li @click="$emit('read',false)" v-else>
+                    <li @click="handleClickCheck" v-else>
                         <a>
                             <IconCheck24px/>Đánh dấu là chưa đọc
                         </a>
@@ -38,8 +38,7 @@
                         </a>
                     </li>
                 </ul>
-              </template>
-          </v-popover>
+            </div>
           
           <button v-if="isReaded">
               <IconEllipse2/>
@@ -68,11 +67,17 @@ export default {
     },
     data(){
         return{
-            marked:true
+            menuBtn:false
         }
     },
     methods:{
-        
+        handleClickCheck(){
+            this.menuBtn = !this.menuBtn;
+            this.$emit('read',!this.isReaded);
+        },
+        handleClickOutMenu(){
+            this.menuBtn = false;
+        }
     }
 }
 </script>
