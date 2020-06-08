@@ -15,10 +15,10 @@
     <div class="class-info mb-4">
       <strong>Tổng số học sinh đã tham bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
+        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{attendantRate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{absenceRate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">{{absenceWithPermissionRate}}%</strong></div>
+        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">{{absentƯithoutPermissonRate}}%</strong></div>
       </div>
     </div>
     <!--end info group-->
@@ -252,7 +252,23 @@ export default {
     }),
     indexOpts() {
       return [this.allOpt, ...this.indexs]
-    }
+    },
+    attendantRate() {
+      return this.summary.total_student > 0 ? 
+        _.round(this.summary.attendant_rate / this.summary.total_student * 100, 2) : 0;
+    },
+    absenceRate() {
+      return this.summary.total_student > 0 ? 
+        _.round(this.summary.absence_rate / this.summary.total_student * 100, 2) : 0;
+    },
+    absenceWithPermissionRate() {
+      return this.summary.total_student > 0 ? 
+        _.round(this.summary.absence_with_permission_rate / this.summary.total_student * 100, 2) : 0;
+    },
+    absentƯithoutPermissonRate() {
+      return this.summary.total_student > 0 ? 
+        _.round(this.summary.absent_without_permisson_rate / this.summary.total_student * 100, 2) : 0;
+    },
   },
 
   methods: {
