@@ -683,7 +683,9 @@ export const CHAT = {
     ROOM_DETAIL: "getRoomDetail",
     MESSAGE_LIST_INFINITE: "getMessageListInfinite",
     CHANGE_ROOM_NAME: "changeRoomName",
-    IMAGE_LIST: "getImageList"
+    IMAGE_LIST: "getImageList",
+    ROOM_REMOVE_MEMBER: "roomRemoveMember",
+    ROOM_ADD_MEMBER: "roomAddMember"
 };
 
 export const TIMETABLE = {

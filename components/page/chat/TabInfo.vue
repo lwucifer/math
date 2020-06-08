@@ -406,7 +406,11 @@ export default {
       "getGroupListDetail",
       "editAvatarGroup"
     ]),
-    ...mapActions("chat", ["changeRoomName", "getRoomDetail"]),
+    ...mapActions("chat", [
+      "changeRoomName",
+      "getRoomDetail",
+      "roomRemoveMember"
+    ]),
     async membersInfiniteHandler($state) {
       // this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = this.$store.dispatch(
@@ -432,10 +436,11 @@ export default {
     },
     removeMember(id) {
       const data = {
-        room_id: this.$route.params.id,
-        member_id: id
+        id: this.$route.params.id,
+        member_id: id,
+        end: "members"
       };
-      this.groupRemoveMember(data).then(result => {
+      this.roomRemoveMember(data).then(result => {
         const query = {
           room_id: this.$route.params.id,
           page: 1
