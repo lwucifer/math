@@ -1,6 +1,6 @@
 <template>
-  <div class="elearning-study" :class="{ 'pt-0': expand || fullscreen }">
-    <HeaderCourse @exit="exitStudy" />
+  <div class="elearning-study" :class="{ 'pt-0': expand, 'fullscreen': fullscreen }">
+    <HeaderCourse v-show="!fullscreen" @exit="exitStudy" />
 
     <div class="container" v-if="pageLoading">
       <div class="row">
