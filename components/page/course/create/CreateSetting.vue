@@ -17,13 +17,11 @@
               <IconQuestionCircle width="12px" height="12px" class="fill-gray icon-tooltip"/>
 
               <template #popover>
-                <div class="bg-white py-3 px-3 text-dark border">
-                  <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
-
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                </div>
+                <p class="mb-2">Khoảng thời gian diễn ra chương trình học do giáo viên quy định.</p>
+                <p>
+                  Cài đặt này không bắt buộc, xem chi tiết
+                  <n-link to="">tại đây</n-link>
+                </p> 
               </template>
           </v-popover>
         </h5>
