@@ -114,7 +114,7 @@ const actions = {
   async [actionTypes.CHAT.CHANGE_ROOM_NAME]({ commit, state }, options) {
     try {
       const { data: result = {} } = await new Room(this.$axios)[
-        actionTypes.BASE.GET_END_PUT
+        actionTypes.BASE.PUT_END
       ](options.payload, options.id, options.end);
       // console.log("[Message] list", result);
       // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
@@ -161,6 +161,60 @@ const actions = {
       return result;
     } catch (err) {
       console.log("[IMAGE_LIST] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.ROOM_REMOVE_MEMBER]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.PUT_END
+      ](options.payload, options.id, options.end);
+      console.log("[REMOVE_MEMBER] list", result);
+      // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+      // if (!result.error) {
+      //   const newRoomList = state.roomList.list_room.map(item => {
+      //     if (item.id == result.id) {
+      //       return {
+      //         ...item,
+      //         name: result && result.name ? result.name : ''
+      //       }
+      //     }
+      //     return item
+      //   })
+      //   commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+      //     list_room: newRoomList
+      //   });
+      // }
+      return result;
+    } catch (err) {
+      console.log("[REMOVE_MEMBER].err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.ROOM_ADD_MEMBER]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.POST_END
+      ](options.payload, options.id, options.end);
+      console.log("[ROOM_ADD_MEMBER] list", result);
+      // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+      // if (!result.error) {
+      //   const newRoomList = state.roomList.list_room.map(item => {
+      //     if (item.id == result.id) {
+      //       return {
+      //         ...item,
+      //         name: result && result.name ? result.name : ''
+      //       }
+      //     }
+      //     return item
+      //   })
+      //   commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+      //     list_room: newRoomList
+      //   });
+      // }
+      return result;
+    } catch (err) {
+      console.log("[ROOM_ADD_MEMBER].err", err);
       return err;
     }
   },
