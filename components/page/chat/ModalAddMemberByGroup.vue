@@ -78,8 +78,9 @@ export default {
     },
     hanldeAddMember() {
       const data = {
-        room_id: this.$route.params.id,
-        member_id: this.arrMember.toString()
+        id: this.$route.params.id,
+        member_id: this.arrMember.toString(),
+        end: "members"
       };
       // const params = {
       //   room_id: this.$route.params.id
