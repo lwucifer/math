@@ -158,14 +158,19 @@ export default {
           (acc, curr) => acc + curr.total_lessons,
           0
         ) || 0;
+      
+      if(!totalLessons) return 0;
       const lessonPercent =
         Math.floor((completeLesson / totalLessons) * 100) * 0.9;
 
       let testPercent = 0;
       const { test_info } = this.progress;
-      if (test_info) {
+
+      if (test_info && test_info.total) {
         testPercent =
           Math.floor((test_info.passed / test_info.total) * 100) * 0.1;
+      } else {
+        testPercent = 10; // donot have test
       }
 
       console.log("[processPercent]", lessonPercent, testPercent);

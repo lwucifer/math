@@ -40,7 +40,7 @@
             class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
+          <span class="text-clickable pt-2" @click.prevent="handlJoinOlClass(item)"
             >Đang diễn ra</span
           >
         </div>
