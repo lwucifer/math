@@ -82,7 +82,7 @@
           >{{row.online_class_name}}</n-link>
         </td>
       </template>
-      <template v-slot:cell(time)="{row}">
+      <template v-slot:cell(start_time)="{row}">
         <td>
           <div>{{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}</div>
           <div>{{getDateBirthDay(row.start_time)}}</div>

@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-9">
         <h5 class="page-title">
-          {{get(stateClassInfo, 'data.name', 'Phòng học online')}}
+          {{get(stateClassInfo, 'data.name', '')}}
         </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">

@@ -350,7 +350,7 @@ export default {
 
   created() {
     this.getList();
-    this.getElearnings();
+    //this.getElearnings();
   }
 };
 </script>

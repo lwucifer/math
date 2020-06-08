@@ -70,10 +70,17 @@
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
-                    v-model="selectType"
                     label="text"
                     placeholder="Thể loại"
                     has-border
+                    :value="params.type"
+                    :reduce="(item) => item.value"
+                    @input="handleChangeType"
+                    :options="[
+                      { text: 'Tất cả', value: 'ALL' },
+                      { text: 'Bài giảng', value: 'LECTURE' },
+                      { text: 'Khoá học', value: 'COURSE' },
+                    ]"
                   ></app-vue-select>
                 </div>
                 <div class="filter-form__item">
@@ -83,6 +90,14 @@
                     v-model="selectPrivacy"
                     label="text"
                     placeholder="Hiển thị"
+                    :value="params.privacy"
+                    :reduce="(item) => item.value"
+                    @input="handleChangePrivacy"
+                    :options="[
+                      { text: 'Tất cả', value: '' },
+                      { text: 'Công khai', value: 'PUBLIC' },
+                      { text: 'Riêng tư', value: 'PRIVATE' },
+                    ]"
                     has-border
                   ></app-vue-select>
                 </div>
@@ -93,6 +108,14 @@
                     v-model="selectFree"
                     label="text"
                     placeholder="Học phí"
+                    :value="params.free"
+                    :reduce="(item) => item.value"
+                    @input="handleChangeFree"
+                    :options="[
+                      { text: 'Tất cả', value: '' },
+                      { text: 'Miễn phí', value: true },
+                      { text: 'Có phí', value: false },
+                    ]"
                     has-border
                   ></app-vue-select>
                 </div>
@@ -170,6 +193,8 @@ export default {
         page: 1,
         keyword: "",
         is_completed: false,
+        privacy: "",
+        free: "",
       },
       // params: {
       //   keyword: null,
@@ -259,6 +284,18 @@ export default {
   },
 
   methods: {
+    handleChangeType(type) {
+      this.params.type = type;
+    },
+
+    handleChangePrivacy(privacy) {
+      this.params.privacy = privacy;
+    },
+
+    handleChangeFree(free) {
+      this.params.free = free;
+    },
+
     getData() {
       const payload = {
         params: this.params,

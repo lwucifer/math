@@ -685,3 +685,7 @@ export const CHAT = {
     CHANGE_ROOM_NAME: "changeRoomName",
     IMAGE_LIST: "getImageList"
 };
+
+export const TIMETABLE = {
+    TIMETABLE_LIST: "getTimeTableList"
+}
