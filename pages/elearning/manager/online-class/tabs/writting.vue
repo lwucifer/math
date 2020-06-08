@@ -70,6 +70,7 @@
       :pagination="pagination"
       @pagechange="onPageChange"
       @selectionChange="selectRow"
+      @sort="handleSort"
       :data="classList"
       multiple-selection
     >
@@ -180,12 +181,12 @@ export default {
           sort: true
         },
         {
-          name: "time",
+          name: "start_time",
           text: "Thời gian",
           sort: true
         },
         {
-          name: "num_invitation",
+          name: "num_student",
           text: "Số học sinh đã mời",
           sort: true
         }
@@ -209,7 +210,8 @@ export default {
         class_status: "WRITTING",
         query: null,
         query_date: null,
-        search_type: null
+        search_type: null,
+        sort: 'start_time,desc'
       },
       loading: false
     };
@@ -230,6 +232,12 @@ export default {
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
@@ -294,7 +302,6 @@ export default {
       try {
         self.loading = true;
         let params = { ...self.params };
-        params.sort = 'start_time,desc';
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
