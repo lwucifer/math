@@ -5,7 +5,7 @@
         <MyCourseSide :active="5">
           <template slot="calendar">
             <div class="timetable-calendar-divider"></div>
-            <app-calendar v-model="calendar" format="DD-MM-YYYY" />
+            <app-calendar v-model="calendar" />
           </template>
         </MyCourseSide>
       </div>
@@ -15,6 +15,12 @@
           <h1 class="mycourses__title heading-4">Thời khoá biểu</h1>
 
           <div class="mycourses__content">
+            <!-- <app-range-picker /> -->
+            <!-- <app-date-picker
+              type="datetime"
+              range
+              placeholder="Select datetime range"
+            ></app-date-picker> -->
             <nav class="timetable-nav">
               <div class="timetable-nav__left">
                 <h2 class="timetable-nav__title title">Học gì hôm nay?</h2>
@@ -126,6 +132,7 @@ import IconCalendarDay from "~/assets/svg/icons/calendar-day.svg?inline";
 import IconCalendarWeek from "~/assets/svg/icons/calendar-week.svg?inline";
 import IconCalendarMonth from "~/assets/svg/icons/calendar-month.svg?inline";
 import IconMoreHoriz from "~/assets/svg/v2-icons/more_horiz_24px.svg?inline";
+import { mapMutations } from "vuex";
 
 export default {
   middleware: ["authenticated"],
@@ -140,9 +147,9 @@ export default {
 
   data() {
     return {
-      calendar: null,
+      calendar: moment(),
       dayslist: [],
-      dateSchedule: moment().format("YYYY-MM-DD"),
+      dateSchedule: moment(),
       checkTimeAble: true,
       checkTimeAbleMonth: false,
       checkTimeAbleWeek: false,
@@ -161,25 +168,24 @@ export default {
     };
   },
   created() {
-    this.changeDate(this.dateSchedule);
+    this.changeDate(this.calendar);
   },
   methods: {
+    ...mapMutations("timetable", ["setStateTimetable"]),
     changeDate(date) {
       this.dayslist.length = 0;
       for (let i = 1; i <= 7; i++) {
-        const day = moment(date)
-          .day(i.toString())
-          .toString();
+        const day = moment(date).day(i);
         this.dayslist.push(day);
       }
-      console.log("this.dayslist", this.dayslist);
+      // console.log("this.dayslist", this.dayslist);
       // console.log("a", moment(date));
     },
     checkDate(d1) {
       let date1 = moment(d1)
         .format("YYYY-MM-DD")
         .toString();
-      let date2 = moment(this.dateSchedule)
+      let date2 = moment(this.calendar)
         .format("YYYY-MM-DD")
         .toString();
       if (date1 == date2) {
@@ -187,10 +193,9 @@ export default {
       } else return false;
     },
     changeDateInWeek(i) {
-      this.dateSchedule = moment(i)
-        .format("YYYY-MM-DD")
-        .toString();
-      console.log(this.dateSchedule);
+      this.calendar = moment(i);
+      this.setStateTimetable(this.calendar);
+      // console.log(this.calendar);
     },
     selectDay() {
       this.checkTimeAble = true;

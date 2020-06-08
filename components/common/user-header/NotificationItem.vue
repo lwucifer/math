@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-notification-item">
+  <div class="wrap-notification-item" :class="isReaded ? 'readed' :''">
       <app-avatar
         :size=50
         class="avatar-notifi"
@@ -20,9 +20,16 @@
             </button>
               <template slot="popover">
                   <ul class="menu-dropdown-content">
-                    <li>
+                    <li @click="$emit('read',true)" 
+                        v-if="!isReaded"
+                    >
                         <a>
                             <IconCheck24px/>Đánh dấu là đã đọc
+                        </a>
+                    </li>
+                    <li @click="$emit('read',false)" v-else>
+                        <a>
+                            <IconCheck24px/>Đánh dấu là chưa đọc
                         </a>
                     </li>
                     <li>
@@ -34,9 +41,8 @@
               </template>
           </v-popover>
           
-          <button @click.prevent="marked = !marked">
-              <IconEllipse2 class="fill-gray" v-if="marked"/>
-              <IconEllipse2 v-else/>
+          <button v-if="isReaded">
+              <IconEllipse2/>
           </button>
       </div>
   </div>
@@ -54,93 +60,23 @@ export default {
         IconCheck24px,
         IconDeleteSweep24px
     },
+    props:{
+        isReaded:{
+            type:Boolean,
+            default: false
+        }
+    },
     data(){
         return{
             marked:true
         }
+    },
+    methods:{
+        
     }
 }
 </script>
 
 <style lang="scss">
-.wrap-notification-item{
-    display: flex;
-    flex-direction: row;
-    padding: 12px 8px ;
-    margin: 10px;
-    &:hover{
-        background: #F2F2F2;
-    }
-    .avatar-notifi{
-        margin-right: 1.2rem;
-    }
-    .wrap-content-item{
-        flex: 7;
-        .content-item{
-            @include set-line((
-                'lineClamp': 2,
-                'lineHeight': (20/15),
-                'fixedHeight': true
-            ));
-        }
-    }
-    .group-button-item{
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-    .menu-dropdown-content{
-        /*
-            position: absolute;
-            background: #FFFFFF;
-            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 2px;
-            bottom: -3rem;
-            right: 1rem;
-            width: 207px;
-            list-style: none;
-            border:1px solid red;
-            z-index: 20;
-        */
-            li{
-                a{
-                    display: flex;
-                    align-items: center;
-                    padding:1rem 1.5rem;
-                    color: #656565;
-                    svg{
-                        margin-right: 1.5rem;
-                    }
-                }
-            }
-    }
-}
-.tooltip-notification{
-    z-index: 130;
-    left: -8rem !important;
-    text-align: center;
-    .menu-dropdown-content{
-            background: #FFFFFF;
-            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 2px;
-            width: 207px;
-            list-style: none;
-            li{
-                a{
-                    display: flex;
-                    align-items: center;
-                    padding:1rem 1.5rem;
-                    color: #656565;
-                    svg{
-                        margin-right: 1.5rem;
-                    }
-                    &:hover{
-                        color: $color-primary;
-                        svg path{ fill: $color-primary;}
-                    }
-                }
-            }
-    }
-}
+
 </style>
