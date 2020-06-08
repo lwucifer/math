@@ -581,3 +581,7 @@ export const CHAT = {
     SET_IMAGE_LIST: "setImageList",
     SET_FILE_LIST: "setFileList"
 };
+
+export const TIMETABLE = {
+    SET_STATE_TIMETABLE: "setStateTimetable"
+}
