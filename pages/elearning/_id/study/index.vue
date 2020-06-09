@@ -277,6 +277,8 @@ export default {
       this.$scrollTo(el);
       console.log("hello1323");
     });
+
+    // window.addEventListener('beforeunload', this.warningF5);
     // document.addEventListener(
     //   "fullscreenchange",
     //   this.handleFullscreenChange,
@@ -292,6 +294,8 @@ export default {
       this.handleFullscreenChange,
       true
     );
+
+    // window.removeEventListener('beforeunload', this.warningF5);
   },
 
   watch: {
@@ -334,6 +338,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
+    get,
+
     async getData(elearning_id) {
       const options = {
         params: {
@@ -428,8 +435,15 @@ export default {
       }
     },
 
-    get,
-    ...mapMutations("event", ["setStudyMode", "setPayload"])
+    // warningF5(event) {
+    //   console.log("[warningF5]", event.keyCode);
+    //   alert(event.keyCode);
+    //   alert(this.studyMode);
+    //   if(116 == event.keyCode && this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) { // enter key code
+    //     console.log("[warningF5] prevent exit");
+    //   }
+    // }
+
   }
 };
 </script>
