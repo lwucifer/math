@@ -8,21 +8,26 @@
       <div class="setup-time mb-5">
         <h5 class="mb-4 d-flex align-items-center">
           Cài đặt thời gian
-          <span class="text-base font-weight-normal ml-2">(Không bắt buộc)</span>
+          <span class="text-base font-weight-normal ml-2"
+            >(Không bắt buộc)</span
+          >
 
-        
-          <v-popover 
-            placement="right" 
-            trigger="hover">
-              <IconQuestionCircle width="12px" height="12px" class="fill-gray icon-tooltip"/>
+          <v-popover placement="right" trigger="hover">
+            <IconQuestionCircle
+              width="12px"
+              height="12px"
+              class="fill-gray icon-tooltip"
+            />
 
-              <template #popover>
-                <p class="mb-2">Khoảng thời gian diễn ra chương trình học do giáo viên quy định.</p>
-                <p>
-                  Cài đặt này không bắt buộc, xem chi tiết
-                  <n-link to="">tại đây</n-link>
-                </p> 
-              </template>
+            <template #popover>
+              <p class="mb-2">
+                Khoảng thời gian diễn ra chương trình học do giáo viên quy định.
+              </p>
+              <p>
+                Cài đặt này không bắt buộc, xem chi tiết
+                <n-link to="">tại đây</n-link>
+              </p>
+            </template>
           </v-popover>
         </h5>
 
@@ -32,6 +37,7 @@
           <SelectDate
             @onChange="handleChangeStartDate"
             :value="payload.start_time"
+            :disabled="!payload.starttime_enable"
           />
 
           <app-checkbox v-model="payload.starttime_enable"
@@ -45,6 +51,7 @@
           <SelectDate
             @onChange="handleChangeEndDate"
             :value="payload.end_time"
+            :disabled="!payload.endtime_enable"
           />
 
           <app-checkbox v-model="payload.endtime_enable"
@@ -74,7 +81,10 @@
       </div>
 
       <div class="mb-4">
-        <h5 class="mb-3">Cho phép bình luận tại {{get(general, 'type', '') == 'LECTURE' ? 'bài giảng' : 'khóa học'}}</h5>
+        <h5 class="mb-3">
+          Cho phép bình luận tại
+          {{ get(general, "type", "") == "LECTURE" ? "bài giảng" : "khóa học" }}
+        </h5>
         <app-radio-group>
           <app-radio
             value="1"
@@ -293,7 +303,7 @@ export default {
     get,
 
     handleChangeStartDate(date) {
-      console.log(date)
+      console.log(date);
       this.payload.start_time = date;
     },
 
@@ -337,6 +347,14 @@ export default {
       }
       if (toNumber(get(this, "setting.fee", "-1")) === 0) {
         this.free = 2;
+      }
+
+      if (!this.payload.endtime_enable) {
+        this.end_time = "";
+      }
+
+      if (!this.payload.starttime_enable) {
+        this.start_time = "";
       }
     },
 
