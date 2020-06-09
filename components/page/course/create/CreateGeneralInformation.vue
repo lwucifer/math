@@ -32,7 +32,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4 mb-4">
             <CourseSelectLevel
               :defaultValue="payload.level"
               @handleChangeLevel="handleChangeLevel"
@@ -40,7 +40,7 @@
             <app-error :error="get(error, 'level', '')"></app-error>
           </div>
 
-          <div class="col-md-5 ml-5">
+          <div class="col-md-5 ml-5 mb-4">
             <CourseSelectSubject
               :defaultValue="payload.subject"
               @handleChangeSubject="handleChangeSubject"
@@ -157,7 +157,7 @@
           :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
-        <app-error :error="get(error, 'avatar', '')"></app-error>
+        <app-error :error="get(error, 'avatar', '')" class="mb-2"></app-error>
 
         <CourseSelectImage
           :isCompel="false"
