@@ -271,11 +271,6 @@ export default {
 
     const typeParams = getParamQuery("type");
     this.type = typeParams ? typeParams : "summary";
-    this.$nextTick(() => {
-      var el = document.getElementById(typeParams);
-      this.$scrollTo(el);
-      console.log("hello1323");
-    });
     // document.addEventListener(
     //   "fullscreenchange",
     //   this.handleFullscreenChange,
