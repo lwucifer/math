@@ -266,9 +266,7 @@ const actions = {
     }
   },
 
-
   // Students
-
   async [actionTypes.TEACHING_OLCLASS_STUDENTS.LIST]({ commit }, options) {
     try {
       const result = await new OlStudents(this.$axios)[actionTypes.BASE.LIST](
