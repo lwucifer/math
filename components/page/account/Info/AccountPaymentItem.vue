@@ -9,11 +9,13 @@
           class=""
           style="margin-right: 3.7rem;"
           @click="handleRefreshAccountBank"
-          >
+          title="Chỉnh sưả"
+        >
           <IconEditAlt class="icon" />
         </button>
         <button class=""
            @click="handleDeleteAccountBank"
+           title="Xóa"
         >
           <IconTrashAlt class="icon fill-secondary" />
         </button>
