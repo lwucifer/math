@@ -272,6 +272,8 @@ export default {
   destroyed() {
     this.setStudyMode("");
     this.setPayload(null);
+    this.setExpand(false);
+    this.setFullscreen(false);
     document.removeEventListener(
       "fullscreenchange",
       this.handleFullscreenChange,
