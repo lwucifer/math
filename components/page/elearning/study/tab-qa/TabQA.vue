@@ -29,6 +29,7 @@
         :key="question.id"
         :question="question"
         v-slot:default="slotProps"
+        :id="question.id"
       >
         <TabQACommentEditor
           v-if="slotProps.showReply"
@@ -61,7 +62,7 @@ import TabQACommentEditor from "~/components/page/elearning/study/tab-qa/TabQACo
 import { get } from "lodash";
 import { mapState } from "vuex";
 import numeral from "numeral";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 
 export default {
   components: {
@@ -74,6 +75,20 @@ export default {
 
   mounted() {
     useEffect(this, this.handleGetQuestions.bind(this), ["params"]);
+    const typeParams = getParamQuery('type')
+    const questionIdParams = getParamQuery('question_id')
+    this.$nextTick(() => {
+       if(typeParams){
+        if(questionIdParams){
+          setTimeout(()=>{
+            this.$scrollTo('#'+questionIdParams, 1000)
+          }, 1000);
+        }
+        else{
+          this.$scrollTo('#test', 1000)
+        }
+      }
+    })
   },
 
   computed: {

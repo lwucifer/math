@@ -16,22 +16,38 @@
     <template v-else>
       <portal-target
         name="theater"
-        :class="[
-          'elearning-study-theater',
-          fullscreen && 'elearning-study-theater--fullscreen'
-        ]"
+        :class="{
+          'elearning-study-theater': true,
+          'elearning-study-theater--fullscreen': fullscreen,
+          'elearning-study-theater--active': fullscreen || expand
+        }"
       />
 
       <div class="container">
         <div class="row">
-          <div class="col-md-8">
+          <div :class="[fullscreen || expand ? 'col-12 mb-4' :'col-md-8']">
             <portal to="theater" :disabled="!(expand || fullscreen)">
               <div class="elearning-study-content">
                 <!-- EXERCISE MODE -->
-                <ElearningExercise v-if="isExerciseMode" />
+                <div
+                  v-if="isExerciseMode"
+                  class="elearning-lesson-screen elearning-lesson-screen--exercise-mode"
+                >
+                  <ElearningExercise />
+                </div>
 
-                <!-- DEFAULT MODE -->
-                <div v-else class="elearning-lesson-screen">
+                <div
+                  v-else
+                  :class="{
+                    'elearning-lesson-screen': true,
+                    'elearning-lesson-screen--default-mode': studyMode === defaultMode,
+                    'elearning-lesson-screen--video-mode': studyMode === videoMode,
+                    'elearning-lesson-screen--doc-mode': studyMode === docMode,
+                    'elearning-lesson-screen--image-mode': studyMode === imageMode,
+                    'elearning-lesson-screen--article-mode': studyMode === articleMode,
+                  }"
+                >
+                  <!-- DEFAULT MODE -->
                   <img
                     v-if="studyMode === defaultMode"
                     :src="
@@ -53,25 +69,15 @@
                   />
 
                   <!-- DOC MODE -->
-                  <ElearningDownload
-                    v-if="studyMode == docMode"
-                    :link="get(payload, 'link', '')"
-                    :style="{ height: screenHeight }"
-                  />
+                  <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')" />
 
                   <!-- IMAGE MODE -->
-                  <img
-                    v-if="studyMode === imageMode"
-                    :src="get(payload, 'link', '')"
-                    :style="{ height: screenHeight }"
-                    alt
-                  />
+                  <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
 
                   <!-- ARTICLE MODE -->
                   <iframe
                     v-if="studyMode == articleMode"
                     :src="get(payload, 'link', '')"
-                    :style="{ height: screenHeight }"
                   ></iframe>
                 </div>
 
@@ -95,10 +101,7 @@
                     type="button"
                     @click="setExpand(!expand)"
                   >
-                    <IconStudyNarrow
-                      v-if="expand"
-                      class="icon fill-opacity-1"
-                    />
+                    <IconStudyNarrow v-if="expand" class="icon fill-opacity-1" />
                     <IconStudyExpand v-else class="icon fill-opacity-1" />
                   </button>
                   <button
@@ -106,10 +109,7 @@
                     type="button"
                     @click="setFullscreen(!fullscreen)"
                   >
-                    <IconCropFreeReverse
-                      v-if="fullscreen"
-                      class="icon fill-opacity-1"
-                    />
+                    <IconCropFreeReverse v-if="fullscreen" class="icon fill-opacity-1" />
                     <IconCropFree v-else class="icon fill-opacity-1" />
                   </button>
                 </div>
@@ -118,24 +118,13 @@
 
             <div class="box22">
               <div class="elearning-study-tabs">
-                <a
-                  :class="{ active: type === 'summary' }"
-                  @click="type = 'summary'"
-                  >Tổng quan</a
-                >
-                <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
-                  >Hỏi đáp</a
-                >
+                <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
+                <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
                 <a
                   :class="{ active: type === 'notification' }"
                   @click="type = 'notification'"
-                  >Thông báo</a
-                >
-                <a
-                  :class="{ active: type === 'review' }"
-                  @click="type = 'review'"
-                  >Đánh giá</a
-                >
+                >Thông báo</a>
+                <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
@@ -150,7 +139,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div :class="[fullscreen || expand ? 'col-12' :'col-md-4']">
             <ElearningCourseSide />
           </div>
         </div>
@@ -194,7 +183,6 @@ import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
-
 export default {
   name: "Elearning",
 
@@ -252,18 +240,18 @@ export default {
 
       // console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
       return isExerciseScreen;
-    },
+    }
 
     // expand
-    screenHeight() {
-      let h = `42.6rem`;
-      if (this.fullscreen) {
-        h = `100vh - 13rem`;
-      } else if (this.expand) {
-        h = `calc(100vh - 7rem - 8.3rem - 4.9rem)`;
-      }
-      return `${h}`;
-    }
+    // screenHeight() {
+    //   let h = `42.6rem`;
+    //   if (this.fullscreen) {
+    //     h = `100vh - 13rem`;
+    //   } else if (this.expand) {
+    //     h = `calc(100vh - 7rem - 8.3rem - 4.9rem)`;
+    //   }
+    //   return `${h}`;
+    // }
   },
 
   mounted() {
@@ -272,11 +260,8 @@ export default {
 
     const typeParams = getParamQuery("type");
     this.type = typeParams ? typeParams : "summary";
-    this.$nextTick(() => {
-      var el = document.getElementById(typeParams);
-      this.$scrollTo(el);
-      console.log("hello1323");
-    });
+
+    // window.addEventListener('beforeunload', this.warningF5);
     // document.addEventListener(
     //   "fullscreenchange",
     //   this.handleFullscreenChange,
@@ -292,6 +277,8 @@ export default {
       this.handleFullscreenChange,
       true
     );
+
+    // window.removeEventListener('beforeunload', this.warningF5);
   },
 
   watch: {
@@ -334,6 +321,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
+    get,
+
     async getData(elearning_id) {
       const options = {
         params: {
@@ -428,8 +418,15 @@ export default {
       }
     },
 
-    get,
-    ...mapMutations("event", ["setStudyMode", "setPayload"])
+    // warningF5(event) {
+    //   console.log("[warningF5]", event.keyCode);
+    //   alert(event.keyCode);
+    //   alert(this.studyMode);
+    //   if(116 == event.keyCode && this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) { // enter key code
+    //     console.log("[warningF5] prevent exit");
+    //   }
+    // }
+
   }
 };
 </script>

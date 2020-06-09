@@ -109,13 +109,14 @@
                   </button>
                   <i
                     class="ml-auto"
-                  >*Kết quả điểm danh được cập nhật lần cuối vào lúc {{formatAMPM(currentTime, true)}}</i>
+                  >*Kết quả điểm danh được cập nhật lần cuối vào lúc {{getLocalTimeHH_MM_A(currentTime) + ', ' + getDateBirthDay(currentTime)}}</i>
                 </div>
                 <!--Table-->
                 <app-table
                   :heads="heads"
                   :pagination="pagination"
                   @pagechange="onPageChange"
+                  @sort="handleSort"
                   :data="lessons"
                   :loading="loading"
                 >
@@ -245,7 +246,6 @@ export default {
         {
           name: "attendance_status",
           text: "Điểm danh",
-          sort: true
         }
       ],
       summary: {
@@ -289,7 +289,8 @@ export default {
         size: 10,
         class_id: null,
         attendance_status: null,
-        query: null
+        query: null,
+       // sort: 'student_name,asc'
       },
       loading: false
     };
@@ -316,6 +317,12 @@ export default {
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (
@@ -357,19 +364,6 @@ export default {
     handleBlurSearchInput() {},
     handleSearch() {},
 
-    formatAMPM(date, year = false) {
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      let strTime = hours + ":" + minutes + " " + ampm;
-      let strDate =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-      let str = year ? strTime + " " + strDate : strTime;
-      return str;
-    },
     async getLessonInfo() {
       try {
         this.loading = true;

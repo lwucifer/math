@@ -20,6 +20,32 @@
       <a
         href
         class="clc-type-tab-item"
+        :class="{ active: tabType === 'audio' }"
+        @click.prevent="changeTabType('audio')"
+      >
+        <span class="clc-type-tab-item__icon">
+          <IconRadioButtonChecked class="icon mr-3" />
+          <IconHeadphone class="icon mr-2 heading-3"/>
+          <span class="clc-type-tab-item__text">Audio</span>
+        </span>
+      </a>
+
+      <a
+        href
+        class="clc-type-tab-item"
+        :class="{ active: tabType === 'scorm' }"
+        @click.prevent="changeTabType('scorm')"
+      >
+        <span class="clc-type-tab-item__icon">
+          <IconRadioButtonChecked class="icon mr-3" />
+          <IconScorm class="icon mr-2 heading-3"/>
+          <span class="clc-type-tab-item__text">SCORM</span>
+        </span>
+      </a>
+
+      <a
+        href
+        class="clc-type-tab-item"
         :class="{ active: tabType === 'video' }"
         @click.prevent="changeTabType('video')"
       >
@@ -50,6 +76,22 @@
     </div>
 
     <app-divider class="my-4" />
+
+    <LessonSelectAudio
+      @handleSelectFile="handleSelectFile"
+      @handleSelectUrl="handleSelectUrl"
+      @handleReset="handleReset"
+      :lesson="lesson"
+      v-if="tabType === 'audio'"
+    />
+
+    <LessonSelectScorm
+      @handleSelectFile="handleSelectFile"
+      @handleSelectUrl="handleSelectUrl"
+      @handleReset="handleReset"
+      :lesson="lesson"
+      v-if="tabType === 'scorm'"
+    />
 
     <LessonSelectVideo
       @handleSelectFile="handleSelectFile"
@@ -101,6 +143,8 @@ import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconPlus from "~/assets/svg/design-icons/plus.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import IconRadioButtonChecked from "~/assets/svg/design-icons/radio_button_checked.svg?inline";
+import IconHeadphone from "~/assets/svg/v2-icons/headphones.svg?inline";
+import IconScorm from "~/assets/svg/v2-icons/scorm.svg?inline";
 
 const IconVideo = () => import("~/assets/svg/design-icons/video.svg?inline");
 const IconFileBlank = () =>
@@ -111,6 +155,8 @@ const IconTrashAlt = () =>
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import LessonSelectVideo from "~/components/page/course/create/common/LessonSelectVideo";
 import LessonSelectDocument from "~/components/page/course/create/common/LessonSelectDocument";
+import LessonSelectScorm from "~/components/page/course/create/common/LessonSelectScorm";
+import LessonSelectAudio from "~/components/page/course/create/common/LessonSelectAudio";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
@@ -129,6 +175,10 @@ export default {
     LessonSelectVideo,
     LessonSelectDocument,
     IconRadioButtonChecked,
+    IconHeadphone,
+    IconScorm,
+    LessonSelectScorm,
+    LessonSelectAudio
   },
 
   props: {

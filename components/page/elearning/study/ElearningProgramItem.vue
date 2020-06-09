@@ -177,7 +177,7 @@ export default {
   },
 
   created() {
-    console.log("[this.lesson]", this.lesson);
+    // console.log("[this.lesson]", this.lesson);
   },
 
   mounted() {

@@ -61,6 +61,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="handleSort"
       :data="students"
     >
       <template v-slot:cell(student_name)="{row}">
@@ -95,39 +96,40 @@
             </div>
             <div class="desc">
               <div class="content">
-                <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
-                <div class="row mt-3">
-                  <div class="col-6 mb-3">
-                    Có mặt:
-                    <span class="color-primary">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Có phép:
-                    <span class="color-yellow">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Không phép:
-                    <span class="color-red">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Vào muộn:
-                    <span class="color-blue">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
+                <div class="inner">
+                  <h6>Tỷ lệ tham gia {{get(stateClassInfo, 'data.name', '')}}</h6>
+                  <div class="row mt-3">
+                    <div class="col-6 mb-3">
+                      Có mặt:
+                      <span class="color-primary">
+                        {{row.total_lesson_finished_from_joined_time ?
+                        row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3">
+                      Có phép:
+                      <span class="color-yellow">
+                        {{row.total_lesson_finished_from_joined_time ?
+                        row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3">
+                      Không phép:
+                      <span class="color-red">
+                        {{row.total_lesson_finished_from_joined_time ?
+                        row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3">
+                      Vào muộn:
+                      <span class="color-blue">
+                        {{row.total_lesson_finished_from_joined_time ?
+                        row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="arroư"></div>
             </div>
           </div>
         </td>
@@ -167,7 +169,7 @@
     </div>
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="closeModal" v-if="openModal" />
+    <ModalInviteStudent @close="closeModal" v-if="openModal" :title="get(stateClassInfo, 'data.name', '')"/>
     <!-- End -->
   </div>
 </template>
@@ -238,7 +240,6 @@ export default {
         {
           name: "attendance",
           text: "Điểm chuyên cần",
-          sort: true
         },
         {
           name: "banned",
@@ -259,7 +260,8 @@ export default {
       params: {
         page: 1,
         size: 10,
-        query: null
+        query: null,
+        sort: 'join_date,desc'
       },
       loading: false,
       listSchoolClasses: []
@@ -284,6 +286,12 @@ export default {
 
   methods: {
     getDateBirthDay,
+
+     handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {

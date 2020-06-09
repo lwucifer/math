@@ -51,6 +51,7 @@
             <p class="mb-3 font-weight-normal">Chọn file đính kèm</p>
 
             <app-upload
+              style="display: inline-block"
               accept=".jpg, .jpeg, .jpg, .bmp, .png"
               :fileList="[]"
               class="cgi-upload-avt mb-3"

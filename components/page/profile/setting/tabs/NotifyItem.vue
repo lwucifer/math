@@ -18,10 +18,10 @@
         <p class="fd__title-main">Hình thức nhận thông báo</p>
         <div class="icon-title__account-info">
           <IconDatabase />
-          <span class="">Thông báo đầy</span>
+          <span class="">Thông báo đẩy</span>
           <app-toggle-switch
             class="ml-auto"
-            :value="'Thông báo đầy'"
+            :value="'Thông báo đẩy'"
             :checked="checkNotify"
             @change="handleChangeNoti"
           />
@@ -84,8 +84,8 @@ export default {
     text() {
       let text = "Tắt";
       if (this.checkEmail) text = "Email";
-      if (this.checkNotify) text = "Thông báo đầy";
-      if (this.checkNotify && this.checkEmail) text = "Email, Thông báo đầy";
+      if (this.checkNotify) text = "Thông báo đẩy";
+      if (this.checkNotify && this.checkEmail) text = "Email, Thông báo đẩy";
       return text;
     },
   },
