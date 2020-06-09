@@ -28,18 +28,25 @@
             :checked="payload.type === 'COURSE'"
             >Khoá học</app-radio
           >
+          <app-error :error="get(error, 'type', '')"></app-error>
         </div>
 
         <div class="row">
-          <CourseSelectLevel
-            :defaultValue="payload.level"
-            @handleChangeLevel="handleChangeLevel"
-          />
+          <div class="col-md-4">
+            <CourseSelectLevel
+              :defaultValue="payload.level"
+              @handleChangeLevel="handleChangeLevel"
+            />
+            <app-error :error="get(error, 'level', '')"></app-error>
+          </div>
 
-          <CourseSelectSubject
-            :defaultValue="payload.subject"
-            @handleChangeSubject="handleChangeSubject"
-          />
+          <div class="col-md-5 ml-5">
+            <CourseSelectSubject
+              :defaultValue="payload.subject"
+              @handleChangeSubject="handleChangeSubject"
+            />
+            <app-error :error="get(error, 'subject', '')"></app-error>
+          </div>
         </div>
 
         <!-- <div class="setup-time mt-4 mb-6">
@@ -108,8 +115,8 @@
             :placeholder="`Nhập tiêu đề của` + ' ' + name"
             :counter="150"
             v-model="payload.name"
-            @input="handleChangeName($event)"
-            @handleBlur="handleBlurName($event)"
+            @input="handleCheckName"
+            @handleBlur="handleCheckName"
           />
           <app-error :error="get(error, 'name', '')"></app-error>
         </div>
@@ -134,8 +141,8 @@
             class="bg-input-gray mb-3"
             :sticky-offset="`{ top: 70, bottom: 0 }`"
             v-model="payload.description"
-            @input="handleChangeDescription($event)"
-            @onBlur="handleBlurDescription"
+            @input="handleCheckDescription"
+            @onBlur="handleCheckDescription"
           />
           <app-error :error="get(error, 'description', '')"></app-error>
         </div>
@@ -150,6 +157,7 @@
           :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
+        <app-error :error="get(error, 'avatar', '')"></app-error>
 
         <CourseSelectImage
           :isCompel="false"
@@ -192,10 +200,7 @@
           :disabled="!submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          @click="handleCLickSave"
-          class="create-action__btn mr-4"
-          :disabled="!submit"
+        <app-button @click="handleCLickSave" class="create-action__btn mr-4"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -257,6 +262,10 @@ export default {
         description: "",
         name: "",
         benefit: "",
+        subject: "",
+        level: "",
+        type: "",
+        avatar: "",
       },
       payload: {
         avatar: "",
@@ -284,30 +293,6 @@ export default {
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
-    submit() {
-      if (!get(this, "payload.name", true)) return false;
-      if (!get(this, "payload.benefit.length", true)) return false;
-      if (!get(this, "payload.description", true)) return false;
-      if (!get(this, "payload.subject", true)) return false;
-      if (!get(this, "payload.level", true)) return false;
-      if (!get(this, "payload.type", true)) return false;
-      if (!get(this, "payload.avatar", true) && !this.general) return false;
-
-      const length_name = get(this, "payload.name.length", 0);
-      if (length_name > 150) {
-        return false;
-      }
-
-      const lengh_description = get(this, "payload.description.length", 0);
-      if (lengh_description > 0 && lengh_description < 100) {
-        return false;
-      }
-      if (lengh_description > 2000) {
-        return false;
-      }
-
-      return true;
-    },
     title_confirm() {
       let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
@@ -318,6 +303,75 @@ export default {
   },
 
   methods: {
+    handleCheckPayload() {
+      let check = true;
+
+      check = this.handleCheckName();
+      check = this.handleCheckDescription();
+      check = this.handleCheckBenefit();
+      check = this.handleCheckSubject();
+      check = this.handleCheckLevel();
+      check = this.handleCheckType();
+      check = this.handleCheckAvatar();
+
+      return check;
+    },
+
+    handleCheckAvatar() {
+      let check = true;
+      if (!get(this, "payload.avatar", true) && !this.general) {
+        check = false;
+        this.error.avatar = "Bạn cần chọn hình đại diện cho " + this.name;
+      } else {
+        this.error.avatar = "";
+      }
+      return check;
+    },
+
+    handleCheckType() {
+      let check = true;
+      if (!get(this, "payload.type", true)) {
+        check = false;
+        this.error.type = "Bạn cần chọn loại hình học tập";
+      } else {
+        this.error.type = "";
+      }
+      return check;
+    },
+
+    handleCheckSubject() {
+      let check = true;
+      if (!get(this, "payload.subject", true)) {
+        check = false;
+        this.error.subject = "Bạn cần chọn môn học cho" + " " + this.name;
+      } else {
+        this.error.subject = "";
+      }
+      return check;
+    },
+
+    handleCheckLevel() {
+      let check = true;
+      if (!get(this, "payload.level", true)) {
+        check = false;
+        this.error.level = "Bạn cần chọn trình độ cho" + " " + this.name;
+      } else {
+        this.error.level = "";
+      }
+      return check;
+    },
+
+    handleCheckBenefit() {
+      let check = true;
+      if (!get(this, "payload.benefit.length", true)) {
+        check = false;
+        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
+      } else {
+        this.error.benefit = "";
+      }
+      return check;
+    },
+
     handleChangeGeneral() {
       this.payload.benefit = [...get(this, "general.benefit", [])];
       this.payload.description = get(this, "general.description", "");
@@ -328,63 +382,52 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
     },
 
-    handleBlurName(e) {
-      this.handleChangeName(e.target.value);
-    },
-    handleBlurDescription() {
-      this.handleChangeDescription(this.payload.description);
-    },
-    handleChangeDescription(value) {
-      value = value.replace("<p></p>", "");
+    handleCheckDescription() {
+      let value = get(this, "payload.description", "").replace("<p></p>", "");
+      let check = true;
       if (!value) {
+        check = false;
         this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
-        return;
-      }
-      if (value.length < 100) {
+      } else if (get(value, "length", 0) > 0 && get(value, "length", 0) < 100) {
+        check = false;
         this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";
-        return;
-      }
-      if (value.length > 2000) {
+      } else if (get(value, "length", 0) > 2000) {
+        check = false;
         this.error.description = "Mô tả vượt quá số ký tự cho phép";
-        return;
+      } else {
+        this.error.description = "";
       }
-      this.error.description = "";
+      return check;
     },
 
-    handleChangeName(value) {
-      if (!value) {
+    handleCheckName(value) {
+      let check = true;
+      if (!get(this, "payload.name", true)) {
+        check = false;
         this.error.name = "Bạn cần nhập tên" + " " + this.name;
-        return;
-      }
-      if (value.length > 150) {
+      } else if (get(this, "payload.name.length", 0) > 150) {
+        check = false;
         this.error.name = "Tên " + this.name + " vượt quá số ký tự cho phép";
-        return;
+      } else {
+        this.error.name = "";
       }
-      this.error.name = "";
-    },
-
-    checkShowErrorBenefit() {
-      if (!this.payload.benefit.length) {
-        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
-        return;
-      }
-      this.error.benefit = "";
+      return check;
     },
 
     removeBenefit(index) {
       this.payload.benefit = this.payload.benefit.filter(
         (item, i) => i !== index
       );
-      this.checkShowErrorBenefit();
+      this.handleCheckBenefit();
     },
 
     cancelInputBenefit() {
-      this.checkShowErrorBenefit();
+      this.handleCheckBenefit();
     },
 
     addBenefit(html) {
       this.payload.benefit.push(html);
-      this.checkShowErrorBenefit();
+      this.handleCheckBenefit();
     },
 
     handleFetchElearningGeneral(elearning_id) {
@@ -398,14 +441,17 @@ export default {
 
     handleChangeLevel(level) {
       this.payload.level = level;
+      this.handleCheckLevel();
     },
 
     handleSelectType(e) {
       this.payload.type = e.target.value;
+      this.handleCheckType();
     },
 
     handleSelectAvatar(avatar) {
       this.payload.avatar = avatar;
+      this.handleCheckAvatar();
     },
 
     handleSelectCover(cover) {
@@ -414,9 +460,11 @@ export default {
 
     handleChangeSubject(subject) {
       this.payload.subject = subject;
+      this.handleCheckSubject();
     },
 
     handleCLickSave() {
+      this.handleCheckPayload();
       this.showModalConfirm = true;
     },
 

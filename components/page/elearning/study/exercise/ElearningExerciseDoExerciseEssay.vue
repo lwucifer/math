@@ -43,6 +43,7 @@
       <app-upload
         class="mr-auto text-primary"
         style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, .zip"
         @change="handleUploadAnswer"
       >
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
@@ -276,7 +277,6 @@ export default {
         // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
-      return;
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {

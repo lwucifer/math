@@ -119,7 +119,6 @@ export default {
           this.pickMode = currentPickMode;
         })
       }
-
     },
 
     $_calendarMixin_prevMonth() {
@@ -134,7 +133,6 @@ export default {
           this.pickMode = currentPickMode;
         })
       }
-
     },
 
     $_calendarMixin_nextYear() {

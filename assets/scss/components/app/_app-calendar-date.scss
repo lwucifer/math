@@ -56,6 +56,7 @@
                     color: inherit;
                 }
             }
+
             &:not(.active) {
                 span {
                     background-color: #F2F2F2;
@@ -69,6 +70,12 @@
             &.active {
                 span {
                     border-radius: 50%;
+                }
+
+                &:hover {
+                    span {
+                        color: #fff;
+                    }
                 }
             }
 

@@ -15,10 +15,14 @@
     justify-content: center;
 }
 
+.clc-type-tab-item:last-child {
+    margin-right: 0;
+}
+
 .clc-type-tab-item {
     width: 16rem;
     text-align: center;
-    margin: 0 2.5rem;
+    margin-right: 2.5rem;
     text-decoration: none;
 
     $this: &;
