@@ -71,7 +71,6 @@
     },
 
     methods: {
-
       async getElearnings() {
         try {
           let userId = this.$store.state.auth.token
@@ -98,7 +97,7 @@
       },
 
       created () {
-        this.getElearnings();
+        //this.getElearnings();
       },
     }
   };

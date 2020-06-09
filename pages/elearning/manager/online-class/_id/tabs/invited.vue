@@ -61,6 +61,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="handleSort"
       :data="students"
     >
       <template v-slot:cell(student_name)="{row}">
@@ -238,7 +239,6 @@ export default {
         {
           name: "attendance",
           text: "Điểm chuyên cần",
-          sort: true
         },
         {
           name: "banned",
@@ -259,7 +259,8 @@ export default {
       params: {
         page: 1,
         size: 10,
-        query: null
+        query: null,
+        sort: 'join_date,desc'
       },
       loading: false,
       listSchoolClasses: []
@@ -284,6 +285,12 @@ export default {
 
   methods: {
     getDateBirthDay,
+
+     handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
