@@ -3,13 +3,13 @@
     <app-upload
       @change="handleSelectFile"
       class="clc-upload-video"
-      :placeholder="get(lesson, 'file_name', 'Chưa có video nào được chọn')"
-      accept=".mp4, .f4v, .mov, .m4a, .m4v, .mp4a, .mp4v, .3gp, .3g2, .flv, .smil"
+      :placeholder="get(lesson, 'file_name', 'Chưa có audio nào được chọn')"
+      accept=".m4a, .mp3"
     >
     </app-upload>
 
     <p class="text-base mt-2 caption">
-      <span class="text-gray font-weight-bold">Lưu ý:</span> Video phải có độ phân giải tối thiểu là 480p, dung lượng tối đa là 3GB.
+      <span class="text-gray font-weight-bold">Lưu ý:</span> Upload bài học đúng định dạng audio, dung lượng tối đa 100MB cho 1 file.
     </p>
   </div>
 </template>
