@@ -25,7 +25,7 @@
 
       <div class="container">
         <div class="row">
-          <div :class="[fullscreen || expand ? 'col-12 mb-4' :'col-md-8']">
+          <div class="col-md-8">
             <portal to="theater" :disabled="!(expand || fullscreen)">
               <div class="elearning-study-content">
                 <!-- EXERCISE MODE -->
@@ -139,7 +139,7 @@
             </div>
           </div>
 
-          <div :class="[fullscreen || expand ? 'col-12' :'col-md-4']">
+          <div class="col-md-4">
             <ElearningCourseSide />
           </div>
         </div>
