@@ -276,7 +276,6 @@ export default {
         // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
-      return;
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
