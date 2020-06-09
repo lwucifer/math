@@ -15,7 +15,7 @@
           <h1 class="mycourses__title heading-4">Thời khoá biểu</h1>
 
           <div class="mycourses__content">
-            <app-range-picker />
+            <!-- <app-range-picker /> -->
 
             <!-- <app-date-picker
               type="datetime"
