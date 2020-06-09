@@ -87,8 +87,10 @@
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
-          <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px" />
-          <span class="text-primary">Thêm người</span>
+          <div @click="visibleAddMember = true">
+            <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px" />
+            <span class="text-primary">Thêm người</span>
+          </div>
         </template>
 
         <template #body>
@@ -105,22 +107,23 @@
             <div class="position text-disabled" v-if="item.creator">Người tạo</div>
 
             <div v-else>
-              <v-popover 
-                
-                placement="center">
-                <IconDots class="fill-gray"/>
+              <v-popover placement="center">
+                <IconDots class="fill-gray" />
 
                 <template slot="popover">
-                  <p class="mb-3"><n-link to="" class="text-dark">Xem trang cá nhân</n-link></p>
-                  <p class="mb-3"><n-link to="" class="text-dark">Nhắn tin</n-link></p>
-                  <p><n-link to="" class="text-secondary">Xoá khỏi nhóm</n-link></p>
+                  <p class="mb-3">
+                    <n-link to class="text-dark">Xem trang cá nhân</n-link>
+                  </p>
+                  <p class="mb-3">
+                    <n-link to class="text-dark">Nhắn tin</n-link>
+                  </p>
+                  <p @click.stop="handleRemoveMember(item)">
+                    <n-link to class="text-secondary">Xoá khỏi nhóm</n-link>
+                  </p>
                 </template>
               </v-popover>
-              
             </div>
           </div>
-
-         
         </template>
       </ListInfoBox>
 
@@ -136,7 +139,6 @@
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">{{item && item.name ? item.name : "Lorem, ipsum."}}</span>
           </p>
-         
         </template>
       </ListInfoBox>
 
@@ -148,7 +150,6 @@
             <div class="col-4 px-1">
               <img :src="item && item.src ? item.src : '/images/tmp/user-photo.png'" alt />
             </div>
-            
           </div>
         </template>
         <client-only>
@@ -165,9 +166,9 @@
     <app-modal-confirm
       centered
       v-if="showModal"
-      title=""
+      title
       :description="'Bạn có chắc chắn muốn xoá ' + userName + ' ra khỏi nhóm?'"
-      @ok="$emit('exit')"
+      @ok="removeMember"
       @cancel="showModal = false"
     />
   </div>
@@ -232,8 +233,10 @@ export default {
       name: "",
       avatarSrc: "",
       checkMemberList: false,
-      showModal: true,
-      userName: 'Huy Dịch Vụ'
+      showModal: false,
+      userName: "",
+      idUser: "",
+      avatarUrl: ""
     };
   },
   created() {
@@ -320,7 +323,9 @@ export default {
     ...mapActions("chat", [
       "changeRoomName",
       "getRoomDetail",
-      "roomRemoveMember"
+      "roomRemoveMember",
+      "uploadMedia",
+      "changeRoomAvatar"
     ]),
     async membersInfiniteHandler($state) {
       // this.memberListQuery.room_id = this.$route.params.id;
@@ -344,23 +349,6 @@ export default {
       } else {
         $state.complete();
       }
-    },
-    removeMember(id) {
-      const data = {
-        id: this.$route.params.id,
-        member_id: id,
-        end: "members"
-      };
-      this.roomRemoveMember(data).then(result => {
-        const query = {
-          room_id: this.$route.params.id,
-          page: 1
-        };
-        if (result.success == true) {
-          this.infiniteId += 1;
-          this.getMemberList({ params: query });
-        }
-      });
     },
 
     saveNameGroup() {
@@ -388,24 +376,52 @@ export default {
         this.avatarSrc = src;
       });
       const body = new FormData();
-      body.append("room_avatar", fileList[0]);
-      body.append("room_id", this.$route.params.id);
-      console.log("[room_avatar]", fileList[0]);
+      body.append("media", fileList[0]);
+      body.append("target_id", this.$route.params.id);
+      body.append("target_type", "room");
+      body.append("target_sub", "avatar");
+      // console.log("[room_avatar]", fileList[0]);
+      await this.uploadMedia(body).then(result => {
+        if (result.data) {
+          debugger;
+          this.avatarUrl = result.data[0].path;
+          const data = {
+            id: this.$route.params.id,
+            payload: { avatar_url: result.data[0].path },
+            end: "avatar"
+          };
+          this.changeRoomAvatar(data).then(result => {
+            if (!result.error) {
+              setTimeout(() => {
+                this.$toasted.show("success");
+                this.getGroupListDetail({
+                  params: { room_id: this.$route.params.id }
+                });
+              }, 2500);
+            } else {
+              this.$toasted.error(result.message);
+            }
+          });
+        }
+      });
+    },
+    handleRemoveMember(item) {
+      this.showModal = true;
+      this.userName = item.first_name;
+      this.idUser = item.id;
+    },
+    removeMember() {
       const data = {
         id: this.$route.params.id,
-        payload: body.append("avatar", fileList[0]),
-        end: "avatar"
+        payload: { member_ids: [this.idUser] },
+        end: "members"
       };
-      this.changeRoomName(data).then(result => {
-        if (!result.error) {
-          setTimeout(() => {
-            this.$toasted.show("success");
-            this.getGroupListDetail({
-              params: { room_id: this.$route.params.id }
-            });
-          }, 2500);
-        } else {
-          this.$toasted.error(result.message);
+      this.roomRemoveMember(data).then(result => {
+        const query = {
+          room_id: this.$route.params.id
+        };
+        if (result.success == 1) {
+          this.showModal = false;
         }
       });
     }
