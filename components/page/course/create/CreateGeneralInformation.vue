@@ -469,10 +469,8 @@ export default {
     },
 
     handleCLickSave() {
-      let check = this.handleCheckPayload();
-      if (check) {
-        this.showModalConfirm = true;
-      }
+      this.handleCheckPayload();
+      this.showModalConfirm = true;
     },
 
     async handleOk() {
