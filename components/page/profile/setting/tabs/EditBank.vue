@@ -58,7 +58,7 @@
 <script>
 import { get } from "lodash";
 import { mapState, mapActions } from "vuex";
-import { useEffect } from "../../../../../utils/common";
+import { useEffect } from "~/utils/common";
 
 export default {
   props: {
