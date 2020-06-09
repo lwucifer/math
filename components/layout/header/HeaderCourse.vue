@@ -189,7 +189,7 @@ export default {
         testPercent = 10; // donot have test
       }
 
-      console.log("[processPercent]", lessonPercent, testPercent);
+      // console.log("[processPercent]", lessonPercent, testPercent);
       return lessonPercent + testPercent;
     }
   }

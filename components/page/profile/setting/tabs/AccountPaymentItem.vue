@@ -16,11 +16,11 @@
       <span class="value">{{ get(this, "bank.account_number", "") }}</span>
     </p>
     <div class="action-group">
-      <button class="" style="margin-right: 3.7rem;" @click="handleEditBank">
+      <button class="" title="Chỉnh sưả" style="margin-right: 3.7rem;" @click="handleEditBank">
         <IconEditAlt class="icon" />
       </button>
-      <button class="" @click="handleDeleteAccountBank">
-        <IconTrashAlt class="icon fill-secondary" />
+      <button class="" title="Xóa" @click="handleDeleteAccountBank">
+        <IconTrashAlt class="icon fill-secondary fill-opacity-1" />
       </button>
     </div>
   </div>
@@ -28,7 +28,7 @@
 
 <script>
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
-import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconTrashAlt from "~/assets/svg/v2-icons/delete_outline_24px.svg?inline";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 export default {
@@ -67,4 +67,11 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+  svg.fill-secondary {
+    path {
+      fill: $color-error;
+      fill-opacity: 1;
+    }
+  }
+</style>
