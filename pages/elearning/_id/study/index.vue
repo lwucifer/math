@@ -93,7 +93,7 @@
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
-              <TabQA  v-if="type === 'qa'" />
+              <TabQA id="test"  v-if="type === 'qa'" />
               <TabNotification v-if="type === 'notification'" />
               <TabReview v-if="type === 'review'" />
               <!-- <ElearningQuestion
@@ -148,7 +148,6 @@ import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
-
 export default {
   name: "Elearning",
 
@@ -212,19 +211,17 @@ export default {
   mounted() {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
-    
-    const typeParams = getParamQuery('type')
-    this.type = typeParams ? typeParams : 'summary'
-    this.$nextTick(() => {
-          var el = document.getElementById(typeParams)
-          this.$scrollTo(el)
-          console.log('hello1323')
-        })
     document.addEventListener(
       "fullscreenchange",
       this.handleFullscreenChange,
       true
     );
+    const typeParams = getParamQuery('type')
+    if(typeParams){
+      this.type = typeParams ? typeParams : 'summary'
+
+    }
+    
   },
 
   destroyed() {
@@ -356,7 +353,6 @@ export default {
         this.setFullscreen(false);
       }
     },
-
     get,
     ...mapMutations("event", ["setStudyMode", "setPayload"])
   }
