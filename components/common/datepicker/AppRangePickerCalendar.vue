@@ -18,6 +18,7 @@
     <div class="app-calendar__calendar">
       <app-calendar-date
         v-show="pickMode === PICK_MODES.DATE"
+        class="app-calendar-date--range"
         :index="index"
         :dates="dataDates"
         :is-match-date="checkIsMatchDate('month')"

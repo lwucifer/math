@@ -14,7 +14,9 @@
           :class="{
             'current-month': data.current,
             'active': isMatchDate && activeDates.includes(data.index),
-            'in-range': checkIsInRange(data.index)
+            'in-range': checkIsInRange(data.index),
+            'start-range': checkIsInRange(data.index) && checkIsStartRange(data.index),
+            'end-range': checkIsInRange(data.index) && checkIsEndRange(data.index)
           }"
           @click="chooseDate(data.index)"
         >
@@ -62,13 +64,33 @@ export default {
       // return isBetweenDate && (activeDates[0] ? activeDates[0] < data.index : true)  && (activeDates[1] ? activeDates[1] > data.index : true)
       if (!this.isBetweenDate) return false;
       if (this.activeDates.length === 2) {
-        return this.activeDates[0] < index && this.activeDates[1] > index;
+        return this.activeDates[0] <= index && this.activeDates[1] >= index;
       } else if (this.activeDates.length === 1) {
         return this.index === 0
-          ? this.activeDates[0] < index
-          : this.activeDates[0] > index;
+          ? this.activeDates[0] <= index
+          : this.activeDates[0] >= index;
       } else {
         return true;
+      }
+    },
+
+    checkIsStartRange(index) {
+      if (this.activeDates.length === 2) {
+        return this.activeDates[0] === index;
+      } else if (this.activeDates.length === 1) {
+        return this.index === 0 ? this.activeDates[0] === index : false;
+      } else {
+        return false;
+      }
+    },
+
+    checkIsEndRange(index) {
+      if (this.activeDates.length === 2) {
+        return this.activeDates[1] === index;
+      } else if (this.activeDates.length === 1) {
+        return this.index === 1 ? this.activeDates[0] === index : false;
+      } else {
+        return false;
       }
     }
   }
