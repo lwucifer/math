@@ -101,10 +101,12 @@ export default {
     async handleAddBank() {
       let data = { ...this.payload };
       if (!data.id) delete data.id;
+      let method = "post";
+      if (data.id) method = "put";
       try {
         const res = await this.$axios({
           url: "/user/account/banks",
-          method: "post",
+          method: method,
           data,
           headers: {
             "Content-Type": "application/json",
