@@ -3,10 +3,12 @@
     width: 100%;
     height: 100%;
     table-layout: fixed;
+    border-collapse: collapse;
 
     th, td {
         font-size: 1.2rem;
         text-align: center;
+        border: 4px solid transparent;
     }
 
     th {
@@ -16,7 +18,6 @@
 
     td {
         height: (100%/6);
-        padding: .2rem;
         color: #AEB4C5;
         cursor: pointer;
 
@@ -41,16 +42,77 @@
             color: #1D243E;
         }
 
-        &.in-range {
-            background-color: #F2F2F2;
-        }
-
         &.active {
             span {
                 color: #fff;
                 background-color: $color-primary;
                 font-weight: 700;
             }
+        }
+
+        &.in-range {
+            &:hover {
+                span {
+                    color: inherit;
+                }
+            }
+            &:not(.active) {
+                span {
+                    background-color: #F2F2F2;
+                    border-radius: 0;
+                    margin-left: -2px;
+                    margin-right: -2px;
+                    width: calc(100% + 4px);
+                }
+            }
+
+            &.active {
+                span {
+                    border-radius: 50%;
+                }
+            }
+
+            &.start-range {
+                position: relative;
+
+                span {
+                    position: relative;
+                }
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    right: -4px;
+                    bottom: 0;
+                    background-color: #F2F2F2;
+                }
+            }
+
+            &.end-range {
+                position: relative;
+
+                span {
+                    position: relative;
+                }
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    left: -4px;
+                    bottom: 0;
+                    background-color: #F2F2F2;
+                }
+            }
+        }
+    }
+
+    &--range {
+        td span {
+            border-radius: 50%;
         }
     }
 }

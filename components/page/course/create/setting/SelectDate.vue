@@ -7,6 +7,7 @@
       class="mr-3"
       @input="handleChangeDate"
       :value="date"
+      :disabled="disabled"
     >
       <template v-slot:icon-calendar>
         <IconCalender class="fill-primary" />
@@ -21,6 +22,7 @@
       class="ml-0 mr-6"
       @input="handleChangeTime"
       :value="time"
+      :disabled="disabled"
     />
   </div>
 </template>
@@ -37,6 +39,10 @@ export default {
 
   props: {
     value: {},
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -47,12 +53,24 @@ export default {
   },
 
   watch: {
-    // value: {
-    //   handler: function() {
-    //     this.date = moment(this.value).format("YYYY-MM-DD");
-    //     this.time = moment(this.value).format("HH:mm:ss");
-    //   },
-    // },
+    value: {
+      handler: function() {
+        this.date = moment(this.value).format("YYYY-MM-DD");
+
+        let time = moment(this.value).format("HH:mm");
+        let hours = Number(time.match(/^(\d+)/)[1]);
+        let minutes = Number(time.match(/:(\d+)/)[1]);
+        let AMPM = "am";
+        if (hours >= 12) {
+          AMPM = "pm";
+          hours = hours - 12;
+        }
+        if (hours < 10) hours = "0" + hours.toString();
+        if (minutes < 10) minutes = "0" + minutes.toString();
+
+        this.time = `${hours}:${minutes} ${AMPM}`;
+      },
+    },
     date: {
       handler: function() {
         let time = this.date;

@@ -211,7 +211,7 @@ export function getCountdown_MM_SS(val) {
   let str = "";
   str += m >= 10 ? `${m}:` : `0${m}:`;
   str += s >= 10 ? `${s}` : `0${s}`;
-  console.log("[getCountdown_MM_SS]", str, m, s);
+  // console.log("[getCountdown_MM_SS]", str, m, s);
   return str;
 }
 
