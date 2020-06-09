@@ -10,6 +10,8 @@ export const BASE = {
     DELETE_PAYLOAD: "deletePayload",
     EDIT_FORMDATA: "putWithFormData",
     GET_END: "getEnd",
+    PUT_END: "putEnd",
+    POST_END: "postEnd"
 };
 
 export const AUTH = {
@@ -691,7 +693,9 @@ export const CHAT = {
     CHANGE_ROOM_NAME: "changeRoomName",
     IMAGE_LIST: "getImageList",
     ROOM_REMOVE_MEMBER: "roomRemoveMember",
-    ROOM_ADD_MEMBER: "roomAddMember"
+    ROOM_ADD_MEMBER: "roomAddMember",
+    UPLOAD_MEDIA: "uploadMedia",
+    CHANGE_ROOM_AVATAR: "changeRoomAvatar"
 };
 
 export const TIMETABLE = {
