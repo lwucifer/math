@@ -150,6 +150,17 @@
       title="Upload video bài học"
       :description="chagingDescription"
     />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmScorm"
+      :confirmLoading="confirmLoadingScorm"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      title="Upload scorm bài học"
+      :description="chagingDescription"
+    />
   </div>
 </template>
 
@@ -213,8 +224,10 @@ export default {
       tabType: "video",
       showModalConfirm: false,
       showModalConfirmVideo: false,
+      showModalConfirmScorm: false,
       confirmLoading: false,
       confirmLoadingVideo: false,
+      confirmLoadingScorm: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -298,6 +311,7 @@ export default {
       this.handleReset();
       if (type === "video") this.payload.type = "VIDEO";
       if (type === "document") this.payload.type = "ARTICLE";
+      if (type === "scorm") this.payload.type = "SCORM";
       this.tabType = type;
     },
 
@@ -316,6 +330,8 @@ export default {
     async handleAddContent() {
       if (this.payload.type == "VIDEO") {
         this.showModalConfirmVideo = true;
+      }else if(this.payload.type == "SCORM"){
+        this.showModalConfirmScorm = true;
       } else {
         this.showModalConfirm = true;
       }
@@ -324,6 +340,9 @@ export default {
     async handleOk() {
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
+      }
+      else if(this.payload.type == "SCORM"){
+        this.confirmLoadingScorm = true;
       } else {
         this.confirmLoading = true;
       }
@@ -358,6 +377,8 @@ export default {
       this.confirmLoading = false;
       this.showModalConfirmVideo = false;
       this.confirmLoadingVideo = false;
+      this.showModalConfirmScorm = false;
+      this.confirmLoadingScorm = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {

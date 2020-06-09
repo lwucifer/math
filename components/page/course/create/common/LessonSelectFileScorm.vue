@@ -25,7 +25,7 @@ export default {
   methods: {
     handleSelectFile(files) {
       const data = {
-        type: "VIDEO",
+        type: "SCORM",
         lesson: files[0],
       };
       this.$emit("handleSelectFile", data);
