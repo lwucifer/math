@@ -69,7 +69,9 @@
               popover-class="tooltip--eln-interactive"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <div>{{ get(row,"content","") | truncStrFilter(30)}}</div>
+              <n-link class="text-decoration-none text-gray" :to="'/elearning/' + row.elearning_id + '/study?type=qa&question_id='+row.question_id">
+                {{ get(row,"content","") | truncStrFilter(30)}}
+              </n-link>
               <template slot="popover">
                 <div>{{get(row,"content","")}}</div>
               </template>
