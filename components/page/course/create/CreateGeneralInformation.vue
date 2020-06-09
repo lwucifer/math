@@ -32,17 +32,21 @@
         </div>
 
         <div class="row">
-          <CourseSelectLevel
-            :defaultValue="payload.level"
-            @handleChangeLevel="handleChangeLevel"
-          />
-          <app-error :error="get(error, 'level', '')"></app-error>
+          <div class="col-md-4">
+            <CourseSelectLevel
+              :defaultValue="payload.level"
+              @handleChangeLevel="handleChangeLevel"
+            />
+            <app-error :error="get(error, 'level', '')"></app-error>
+          </div>
 
-          <CourseSelectSubject
-            :defaultValue="payload.subject"
-            @handleChangeSubject="handleChangeSubject"
-          />
-          <app-error :error="get(error, 'subject', '')"></app-error>
+          <div class="col-md-5 ml-5">
+            <CourseSelectSubject
+              :defaultValue="payload.subject"
+              @handleChangeSubject="handleChangeSubject"
+            />
+            <app-error :error="get(error, 'subject', '')"></app-error>
+          </div>
         </div>
 
         <!-- <div class="setup-time mt-4 mb-6">
