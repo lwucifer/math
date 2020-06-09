@@ -9,11 +9,13 @@
           class=""
           style="margin-right: 3.7rem;"
           @click="handleRefreshAccountBank"
-          >
+          title="Chỉnh sưả"
+        >
           <IconEditAlt class="icon" />
         </button>
         <button class=""
            @click="handleDeleteAccountBank"
+           title="Xóa"
         >
           <IconTrashAlt class="icon fill-secondary" />
         </button>
@@ -23,7 +25,7 @@
 
 <script>
 import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
-import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline"
+import IconTrashAlt from "~/assets/svg/design-icons/delete_outline_24px.svg?inline"
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 export default {

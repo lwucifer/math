@@ -13,7 +13,7 @@
 
     <!--Info group-->
     <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã tham bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
+      <strong>Tổng số học sinh đã tham gia bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
         <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
         <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
@@ -78,15 +78,18 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="handleSort"
       :data="lessons"
     >
       <template v-slot:cell(start_time)="{row}">
         <td>
-          <div>
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
+          <div style="white-space: no-wrap">
+            <div>
+              {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+            </div>
+            <div>
+              {{getDateBirthDay(row.start_time)}}
+            </div>
           </div>
         </td>
       </template>
@@ -166,12 +169,10 @@ export default {
         {
           name: "online_class_name",
           text: "Phòng học",
-          sort: true
         },
         {
           name: "elearning_name",
           text: "Thuộc bài giảng/khóa học",
-          sort: true
         },
         {
           name: "lesson_index",
@@ -192,40 +193,7 @@ export default {
           text: ""
         }
       ],
-      indexs: [
-        {
-          value: '0',
-          text: '0'
-        },
-        {
-          value: '1',
-          text: '1'
-        },
-        {
-          value: '2',
-          text: '2'
-        },
-        {
-          value: '3',
-          text: '3'
-        },
-        {
-          value: '4',
-          text: '4'
-        },
-        {
-          value: '5',
-          text: '5'
-        },
-        {
-          value: '6',
-          text: '6'
-        },
-        {
-          value: '7',
-          text: '7'
-        },
-      ],
+      totalElements: 0,
       filterIndex: null,
       pagination: {
         total: 0,
@@ -240,8 +208,10 @@ export default {
         page: 1,
         size: 10,
         query: null,
+        sort: 'start_time,desc'
       },
       loading: false,
+      firstLoad: true
     };
   },
   computed: {
@@ -251,14 +221,23 @@ export default {
       stateAttendantSummary: "AttendantSummary",
     }),
     indexOpts() {
-      return [this.allOpt, ...this.indexs]
-    }
+      let indexs = Array.from({ length: this.totalElements }).map((_, i) => {
+        return {value: i + 1, text: i + 1}
+      });
+      return [this.allOpt, ...indexs]
+    },
   },
 
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
 
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
+    
     toggleFilter() {
       if (this.showFilter && this.filterIndex != null) {
         this.filterIndex = null;
@@ -303,10 +282,12 @@ export default {
         this.pagination.total_pages = this.get(this.stateLessons, 'data.total_pages', 0)
         this.pagination.total_elements = this.get(this.stateLessons, 'data.total_elements', 0)
         this.pagination.number_of_elements = this.get(this.stateLessons, 'data.number_of_elements', 0)
+        if (this.firstLoad ) this.totalElements = this.get(this.stateLessons, 'data.total_elements', 0);
       } catch (e) {
 
       } finally {
-        this.loading = false
+        this.loading = false;
+        this.firstLoad = false;
       }
     },
     

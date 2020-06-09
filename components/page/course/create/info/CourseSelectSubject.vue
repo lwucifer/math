@@ -1,23 +1,21 @@
 <template>
-  <div class="col-md-5 ml-5">
-    <div
-      class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
+  <div
+    class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
+  >
+    <h2 class="cgi-form-title heading-6 mr-4">Môn học</h2>
+    <app-select
+      class="cc-select"
+      style="width: 60%"
+      :options="subjectsOpt"
+      placeholder="Chọn môn học"
+      @change="handleChangeSubject"
+      label="name"
+      :value="subject && subject.id"
     >
-      <h2 class="cgi-form-title heading-6 mr-4">Môn học</h2>
-      <app-select
-        class="cc-select"
-        style="width: 60%"
-        :options="subjectsOpt"
-        placeholder="Chọn môn học"
-        @change="handleChangeSubject"
-        label="name"
-        :value="subject && subject.id"
-      >
-        <template slot="placeholder-icon">
-          <IconAngleDown class="icon" />
-        </template>
-      </app-select>
-    </div>
+      <template slot="placeholder-icon">
+        <IconAngleDown class="icon" />
+      </template>
+    </app-select>
   </div>
 </template>
 
@@ -59,12 +57,12 @@ export default {
     }),
 
     subjectsOpt() {
-      return this.subjects.map(item => ({
+      return this.subjects.map((item) => ({
         ...item,
         value: item.id,
-        text: item.name
+        text: item.name,
       }));
-    }
+    },
   },
 
   methods: {

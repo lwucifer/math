@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-6">
-      <h4 class="color-primary mb-2">E-LEARNING HỌC TẬP</h4>
+      <h4 class="color-primary mb-2" v-if="titleElearning">{{ titleElearning }}</h4>
       <div class="setting-notify-content__account-info">
         <NotifyItem
           v-for="notify in notifys"
@@ -13,7 +13,7 @@
     </div>
 
     <div>
-      <h4 class="color-primary mb-2">MẠNG XÃ HỘI</h4>
+      <h4 class="color-primary mb-2" v-if="titleSocial">{{ titleSocial }}</h4>
       <div class="setting-notify-content__account-info">
         <NotifyItem
           v-for="notify in socials"
@@ -42,6 +42,15 @@ export default {
     IconCaretDown,
     IconCaretUp,
     NotifyItem,
+  },
+
+  props: {
+    titleElearning: {
+      type: String
+    },
+    titleSocial: {
+      type: String
+    }
   },
 
   data() {

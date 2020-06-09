@@ -72,8 +72,8 @@
       centered
       v-if="isShowConfirmExit"
       title="Xác nhận thoát?"
-      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
-      @ok="$emit('exit')"
+      description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ không ghi nhận bài làm của bạn."
+      @ok="confirmExit"
       @cancel="isShowConfirmExit = false"
     />
   </div>
@@ -88,7 +88,8 @@ import Logo from "~/assets/svg/logo/schoolly.svg?inline";
 import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
 
 import { mapState } from "vuex";
-import { STUDY_MODE } from "../../../utils/constants";
+import { STUDY_MODE } from "~/utils/constants";
+import { ELEARNING_STUDY as ELEARNING_STUDY_MUTATION } from "~/utils/mutation-types";
 
 export default {
   components: {
@@ -106,7 +107,7 @@ export default {
 
   data: () => ({
     showLogin: false,
-    isShowConfirmExit: false,
+    isShowConfirmExit: false
   }),
   methods: {
     redirectSignin() {
@@ -119,8 +120,23 @@ export default {
         return;
       } else {
         this.isShowConfirmExit = false;
-        this.$emit('exit');
+        this.$emit("exit");
+
+        // exit from full mode if has
+        this.$store.commit(
+          `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_FULLSCREEN}`,
+          false
+        );
       }
+    },
+
+    confirmExit() {
+      this.$emit("exit");
+      // exit from full mode if has
+      this.$store.commit(
+        `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_FULLSCREEN}`,
+        false
+      );
     }
   },
 
@@ -158,17 +174,22 @@ export default {
           (acc, curr) => acc + curr.total_lessons,
           0
         ) || 0;
+
+      if (!totalLessons) return 0;
       const lessonPercent =
         Math.floor((completeLesson / totalLessons) * 100) * 0.9;
 
       let testPercent = 0;
       const { test_info } = this.progress;
-      if (test_info) {
+
+      if (test_info && test_info.total) {
         testPercent =
           Math.floor((test_info.passed / test_info.total) * 100) * 0.1;
+      } else {
+        testPercent = 10; // donot have test
       }
 
-      console.log("[processPercent]", lessonPercent, testPercent);
+      // console.log("[processPercent]", lessonPercent, testPercent);
       return lessonPercent + testPercent;
     }
   }

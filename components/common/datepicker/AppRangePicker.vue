@@ -1,19 +1,26 @@
 <template>
   <div class="app-range-picker">
-    <app-calendar
+    <app-range-picker-calendar
       class="app-range-picker__calendar app-range-picker__calendar--start"
-      :value="startDate"
-      @change="handleChangeStartDate"
+      :value="localValue"
+      :calendar-month="startMonth"
+      @change="handleChangeDate"
+      @change-month="handleChangeStartMonth"
     />
-    <app-calendar
+    <app-range-picker-calendar
       class="app-range-picker__calendar app-range-picker__calendar--end"
-      :value="endDate"
-      @change="handleChangeEndDate"
+      :index="1"
+      :calendar-month="endMonth"
+      :value="localValue"
+      @change="handleChangeDate"
+      @change-month="handleChangeEndMonth"
     />
   </div>
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   provide() {
     return {
@@ -34,10 +41,19 @@ export default {
   },
 
   data() {
+    const startValue =
+      this.value[0] && this.value[0] instanceof moment
+        ? this.value[0]
+        : moment();
+    const endValue =
+      this.value[1] && this.value[1] instanceof moment
+        ? this.value[1]
+        : moment().add(1, "M");
+
     return {
       localValue: this.value,
-      startDate: this.value[0] || null,
-      endDate: this.value[1] || null
+      startMonth: startValue.month(),
+      endMonth: endValue.month()
     };
   },
 
@@ -47,27 +63,27 @@ export default {
     },
 
     localValue(newValue) {
-      // this.startDate = newValue[0] || null;
-      // this.endDate = newValue[1] || null;
       this.$emit("change", newValue);
-    },
-
-    startDate(newValue) {
-      this.localValue[0] = newValue;
-    },
-
-    endDate(newValue) {
-      this.localValue[1] = newValue;
     }
   },
 
   methods: {
-    handleChangeStartDate(date) {
-      this.startDate = date;
+    handleChangeDate(date = []) {
+      this.localValue = date;
     },
 
-    handleChangeEndDate(date) {
-      this.endDate = date;
+    handleChangeStartMonth(month) {
+      this.startMonth = month;
+      if (this.endMonth === month) {
+        this.endMonth += 1;
+      }
+    },
+
+    handleChangeEndMonth(month) {
+      this.endMonth = month;
+      if (this.startMonth === month) {
+        this.startMonth -= 1;
+      }
     }
   }
 };

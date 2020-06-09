@@ -21,9 +21,16 @@
               </template>
               <template v-slot:content>
                 <keep-alive>
-                  <div v-if="loading">Loading...</div>
+                  <div v-if="loading">
+                    <vcl-list />
+                    <vcl-list />
+                  </div>
                   <div v-else>
-                    <Notify v-if="tab === 'notify'" />
+                    <Notify
+                      v-if="tab === 'notify'"
+                      title-elearning="E-LEARNING - HỌC TẬP"
+                      title-social="MẠNG XÃ HỘI"
+                    />
                     <PaymentList v-if="tab === 'payment'" />
                   </div>
                 </keep-alive>
@@ -38,9 +45,10 @@
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
+import { VclList } from "vue-content-loading";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
-import Notify from "~/components/page/profile/setting/tabs/Notify";
+import Notify from "~/components/page/profile/setting/tabs/notify";
 import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
 import { mapState } from "vuex";
 import { get } from "lodash";
@@ -53,6 +61,7 @@ export default {
     Notify,
     PaymentList,
     HeadTabs,
+    VclList
   },
 
   data() {

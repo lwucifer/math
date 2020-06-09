@@ -42,7 +42,7 @@
             @click.prevent="handleExitExercise"
           >
             <IconFileCheckAlt class="icon body-1 mr-1" />
-            <span>Bài tập({{ completeExecerciseRate }})</span>
+            <span>Bài tập ({{ completeExecerciseRate }})</span>
           </a>
         </div>
 
@@ -177,7 +177,7 @@ export default {
   },
 
   created() {
-    console.log("[this.lesson]", this.lesson);
+    // console.log("[this.lesson]", this.lesson);
   },
 
   mounted() {

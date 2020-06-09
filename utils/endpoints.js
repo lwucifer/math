@@ -146,6 +146,8 @@ export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
 export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
 export const STUDY_OLCLASS_LESSION_ATTENDANCE = `/elearning/study/olclass/attendance`;
 
+export const STUDY_ELEARNING_NOTIFICATIONS = `/study/elearning/announcements`;
+
 /**
  * SCHOOL
  */

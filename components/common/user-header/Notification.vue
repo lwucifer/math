@@ -49,13 +49,15 @@
         <div v-if="tab === 'elearning'">
             <div class="tab-notification">
                 <notification-item 
+                    v-for="(item, index) in notis"
+                    :key="index"
                     :isReaded="isReaded"
                     @read="handleReadNotifi"
                 />
-                <notification-item 
+                <!-- <notification-item 
                     :isReaded="isReaded"
                     @read="handleReadNotifi"
-                />
+                /> -->
             </div>
         </div>
         <div v-if="tab === 'social'">
@@ -77,6 +79,7 @@
 import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
     components:{
         IconNotifications24px,
@@ -89,6 +92,12 @@ export default {
             tab: 'elearning',
             isReaded:false
         }
+    },
+    created() {
+        
+    },
+    computed: {
+        ...mapState("elearning/study/notifications", ["notis"]),
     },
     methods:{
         handleClickOutside(){

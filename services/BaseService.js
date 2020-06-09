@@ -156,9 +156,21 @@ export default class BaseService {
         return result;
     }
 
-    async [actionTypes.BASE.GET_END_PUT](payload, id, end) {
+    async [actionTypes.BASE.PUT_END](payload, id, end) {
         // console.log("[BaseService] params", id, payload);
         const { data } = await this.$axios.put(
+            `${this.$api}/${id}/${end}`,
+            payload
+        );
+
+        const result = data ? data : {};
+
+        return result;
+    }
+
+    async [actionTypes.BASE.POST_END](payload, id, end) {
+        // console.log("[BaseService] params", id, payload);
+        const { data } = await this.$axios.post(
             `${this.$api}/${id}/${end}`,
             payload
         );

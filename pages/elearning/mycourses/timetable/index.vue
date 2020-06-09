@@ -16,6 +16,7 @@
 
           <div class="mycourses__content">
             <!-- <app-range-picker /> -->
+
             <!-- <app-date-picker
               type="datetime"
               range
@@ -52,12 +53,12 @@
                 >
                   <IconCalendarMonth class="icon fill-opacity-1" />Tháng này
                 </a>
-                <app-dropdown>
-                  <a slot="activator" href class="timetable-nav__more">
+                <app-dropdown class="timetable-nav__dropdown" position="bottomRight">
+                  <a slot="activator" href class="timetable-nav__more" @click.prevent>
                     <IconMoreHoriz class="icon fill-opacity-1" />
                   </a>
 
-                  <div>Dropdown content</div>
+                  <div class="timetable-nav__dropdown-content">Chọn thời gian khác</div>
                 </app-dropdown>
               </div>
             </nav>
