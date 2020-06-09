@@ -18,11 +18,10 @@
       >
     </div>
 
-    <LessonSelectFile
+    <LessonSelectFileAudio
       @handleSelectFile="handleSelectFile"
       :lesson="lesson"
       v-if="tabVideo === 'upload'"
-      note="Upload bài học đúng định dạng audio, dung lượng tối đa 100MB cho 1 file."
     />
 
     <DocumentSelectDoc
@@ -36,13 +35,13 @@
 <script>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import LessonSelectFile from "~/components/page/course/create/common/LessonSelectFile";
+import LessonSelectFileAudio from "~/components/page/course/create/common/LessonSelectFileAudio";
 import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 
 export default {
   components: {
     IconTrashAlt,
-    LessonSelectFile,
+    LessonSelectFileAudio,
     DocumentSelectDoc,
   },
 

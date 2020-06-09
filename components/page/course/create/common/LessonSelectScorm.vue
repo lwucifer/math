@@ -18,11 +18,10 @@
       >
     </div>
 
-    <LessonSelectFile
+    <LessonSelectFileScorm
       @handleSelectFile="handleSelectFile"
       :lesson="lesson"
       v-if="tabVideo === 'upload'"
-      note="Upload bài học theo đúng chuẩn SCORM, dung lượng tối đa là 3GB."
     />
 
     <DocumentSelectDoc
@@ -36,13 +35,13 @@
 <script>
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
-import LessonSelectFile from "~/components/page/course/create/common/LessonSelectFile";
+import LessonSelectFileScorm from "~/components/page/course/create/common/LessonSelectFileScorm";
 import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 
 export default {
   components: {
     IconTrashAlt,
-    LessonSelectFile,
+    LessonSelectFileScorm,
     DocumentSelectDoc,
   },
 
