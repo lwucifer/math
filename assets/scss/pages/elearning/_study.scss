@@ -42,16 +42,14 @@
 }
 
 .elearning-study-bottom {
+    flex-shrink: 0;
     height: 4.9rem;
-    margin-top: 2rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background: #F2F2F2;
+    background: $color-text-light-2;
     border-radius: 0px 0px 2px 2px;
     padding: 0 1.2rem;
-    margin-left: -2rem;
-    margin-right: -2rem;
     border-top: 1px solid $color-disabled;
 
     &__button {
@@ -77,19 +75,29 @@
 .elearning-lesson-screen {
     display: flex;
     justify-content: center;
-
-    // img, iframe, a {
-    //     height: 42.6rem;
-    // }
+    min-height: 42.6rem;
 
     iframe {
         border: 0;
         width: 100%;
     }
+
+    &--video-mode,
+    &--default-mode {
+        padding: 2rem 2rem 0;
+    }
+
+    &--doc-mode,
+    &--exercise-mode {
+        padding: 2rem;
+    }
+
+    &--article-mode {
+        padding: 2rem 0 2rem 2rem
+    }
 }
 
 .elearning-study-content {
-    padding: 2rem 2rem 0;
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -98,6 +106,7 @@
 .elearning-study-theater {
     .elearning-study-content {
         height: calc(100vh - 7rem - 8.3rem);
+        overflow-y: auto;
 
         .e-exercise {
             height: 100%;
@@ -106,7 +115,8 @@
     }
 
     .elearning-lesson-screen {
-        min-height: calc(100% - 5.5rem);
+        min-height: unset;
+        height: 100%;
 
         iframe {
             height: 100%;
@@ -129,19 +139,20 @@
         }
     }
 
-    .elearning-study-bottom {
-        // margin-top: auto;
-    }
-
     &--fullscreen {
         .elearning-study-content {
-            height: calc(100vh - 7rem);
+            height: calc(100vh - 8.3rem);
         }
+    }
+
+    &--active {
+        margin-bottom: 2rem;
     }
 }
 
 .elearning-study {
     &.fullscreen {
         margin-top: -70px !important;
+        padding-top: 0 !important;
     }
 }
