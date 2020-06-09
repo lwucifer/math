@@ -28,6 +28,7 @@
             :checked="payload.type === 'COURSE'"
             >Khoá học</app-radio
           >
+          <app-error :error="get(error, 'type', '')"></app-error>
         </div>
 
         <div class="row">
@@ -35,11 +36,13 @@
             :defaultValue="payload.level"
             @handleChangeLevel="handleChangeLevel"
           />
+          <app-error :error="get(error, 'level', '')"></app-error>
 
           <CourseSelectSubject
             :defaultValue="payload.subject"
             @handleChangeSubject="handleChangeSubject"
           />
+          <app-error :error="get(error, 'subject', '')"></app-error>
         </div>
 
         <!-- <div class="setup-time mt-4 mb-6">
@@ -150,6 +153,7 @@
           :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
+        <app-error :error="get(error, 'avatar', '')"></app-error>
 
         <CourseSelectImage
           :isCompel="false"
@@ -192,10 +196,7 @@
           :disabled="!submit"
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          @click="handleCLickSave"
-          class="create-action__btn mr-4"
-          :disabled="!submit"
+        <app-button @click="handleCLickSave" class="create-action__btn mr-4"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -257,6 +258,10 @@ export default {
         description: "",
         name: "",
         benefit: "",
+        subject: "",
+        level: "",
+        type: "",
+        avatar: "",
       },
       payload: {
         avatar: "",
@@ -284,30 +289,6 @@ export default {
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
-    submit() {
-      if (!get(this, "payload.name", true)) return false;
-      if (!get(this, "payload.benefit.length", true)) return false;
-      if (!get(this, "payload.description", true)) return false;
-      if (!get(this, "payload.subject", true)) return false;
-      if (!get(this, "payload.level", true)) return false;
-      if (!get(this, "payload.type", true)) return false;
-      if (!get(this, "payload.avatar", true) && !this.general) return false;
-
-      const length_name = get(this, "payload.name.length", 0);
-      if (length_name > 150) {
-        return false;
-      }
-
-      const lengh_description = get(this, "payload.description.length", 0);
-      if (lengh_description > 0 && lengh_description < 100) {
-        return false;
-      }
-      if (lengh_description > 2000) {
-        return false;
-      }
-
-      return true;
-    },
     title_confirm() {
       let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
@@ -318,6 +299,73 @@ export default {
   },
 
   methods: {
+    handleCheckPayload() {
+      let check = true;
+
+      if (!get(this, "payload.name", true)) {
+        check = false;
+        this.error.name = "Bạn cần nhập tên" + " " + this.name;
+      } else if (get(this, "payload.name.length", 0) > 150) {
+        check = false;
+        this.error.name = "Tên " + this.name + " vượt quá số ký tự cho phép";
+      } else {
+        this.error.name = "";
+      }
+
+      if (!get(this, "payload.benefit.length", true)) {
+        check = false;
+        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
+      } else {
+        this.error.benefit = "";
+      }
+
+      if (!get(this, "payload.description", true)) {
+        check = false;
+        this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
+      } else if (
+        get(this, "payload.description.length", 0) > 0 &&
+        get(this, "payload.description.length", 0) < 100
+      ) {
+        check = false;
+        this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";
+      } else if (get(this, "payload.description.length", 0) > 2000) {
+        check = false;
+        this.error.description = "Mô tả vượt quá số ký tự cho phép";
+      } else {
+        this.error.description = "";
+      }
+
+      if (!get(this, "payload.subject", true)) {
+        check = false;
+        this.error.subject = "Bạn cần chọn môn học cho" + " " + this.name;
+      } else {
+        this.error.subject = "";
+      }
+
+      if (!get(this, "payload.level", true)) {
+        check = false;
+        this.error.level = "Bạn cần chọn trình độ cho" + " " + this.name;
+      } else {
+        this.error.level = "";
+      }
+
+      if (!get(this, "payload.type", true)) {
+        check = false;
+        this.error.type = "Bạn cần chọn loại hình học tập";
+      } else {
+        this.error.type = "";
+      }
+
+      if (!get(this, "payload.avatar", true) && !this.general) {
+        check = false;
+        this.error.avatar = "Bạn cần chọn hình đại diện cho " + this.name;
+      } else {
+        this.error.avatar = "";
+      }
+
+      return check;
+    },
+
     handleChangeGeneral() {
       this.payload.benefit = [...get(this, "general.benefit", [])];
       this.payload.description = get(this, "general.description", "");
@@ -417,7 +465,10 @@ export default {
     },
 
     handleCLickSave() {
-      this.showModalConfirm = true;
+      let check = this.handleCheckPayload();
+      if (check) {
+        this.showModalConfirm = true;
+      }
     },
 
     async handleOk() {
