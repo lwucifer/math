@@ -9,8 +9,7 @@
     </app-upload>
 
     <p class="text-base mt-2 caption">
-      <span class="text-gray font-weight-bold">Lưu ý:</span> Video phải có độ
-      phân giải tối thiểu là 480p, dung lượng tối đa là 3GB.
+      <span class="text-gray font-weight-bold">Lưu ý:</span> {{ note }}
     </p>
   </div>
 </template>
@@ -21,6 +20,10 @@ import { get } from "lodash";
 export default {
   props: {
     lesson: {},
+    note: {
+      type: String,
+      default: "Video phải có độ phân giải tối thiểu là 480p, dung lượng tối đa là 3GB."
+    }
   },
 
   methods: {
