@@ -11,34 +11,35 @@
         position: absolute;
         transform: translateX(-50%);
         left: 50%;
-        bottom: calc(100% + 1.5rem);
+        top: -103px;
         opacity: 0;
         visibility: hidden;
         transition: all 300ms;
         z-index: 99;
         .content {
-            background-color: #fff;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
             border-radius: 3px;
-            padding: 1rem 1.5rem 0;
-            position: relative;
-            z-index: 9;
             border: 0.2px solid #E0E0E0;
-        }
-        .arroư{
-            position: relative;
-            z-index: 0;
-            margin-top: -6px;
+            transform: translate3d(0, 0, 0);
+            background: none;
+            width: 100%;
             &::before {
-                border: 0.2px solid #E0E0E0;
+                content: "";
+                width: 10px;
+                height: 10px;
+                transform: rotate(-45deg);
+                background: #fff;
+                position: absolute;
                 box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+                border: 0.2px solid #E0E0E0;
+                z-index: -1;
+                bottom: -5px;
+                left: calc(50% - 5px);
+            }
+            .inner {
+                border-radius: 3px;
+                padding: 1rem 1.5rem 0;
                 background-color: #fff;
-                height: 6px;
-                width: 6px;
-                transform: rotate(45deg);
-                display: block;
-                content: '';
-                margin: 0 auto;
             }
         }
     }
