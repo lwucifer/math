@@ -83,6 +83,10 @@ button {
   &[disabled] {
     pointer-events: none;
   }
+  &:focus,
+  &:active {
+    outline: none;
+  }
 }
 
 input {
