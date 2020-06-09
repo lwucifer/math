@@ -106,6 +106,7 @@
 .elearning-study-theater {
     .elearning-study-content {
         height: calc(100vh - 7rem - 8.3rem);
+        overflow-y: auto;
 
         .e-exercise {
             height: 100%;
