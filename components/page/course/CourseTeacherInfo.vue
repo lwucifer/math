@@ -18,7 +18,7 @@
               class="mr-2"
             />
             <span class="font-weight-bold mb-3">{{
-              numeral(get(teacher, "rate", 0)).format("0,0.[0]")
+              numeral(get(teacher, "rate", 0)).format("0,0.0")
             }}</span>
           </div>
         </div>
