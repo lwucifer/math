@@ -114,7 +114,7 @@
                       <n-link slot="title" to>{{ item.name ? item.name : '' }}</n-link>
                     </h5>
                     <div class="align-item__desc">
-                      <p>{{ item && item.lastest_message ? item.lastest_message.text : ''}}</p>
+                      <p>{{ item && item.lastest_message ? item.lastest_message.text.length > 20 ? item.lastest_message.text.substring(0, 18) + '...' : item.lastest_message.text : ''}}</p>
                     </div>
                   </div>
                 </div>

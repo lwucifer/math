@@ -3,13 +3,13 @@
     <app-upload
       @change="handleSelectFile"
       class="clc-upload-video"
-      :placeholder="get(lesson, 'file_name', 'Chưa có video nào được chọn')"
-      accept=".mp4, .f4v, .mov, .m4a, .m4v, .mp4a, .mp4v, .3gp, .3g2, .flv, .smil"
+      :placeholder="get(lesson, 'file_name', 'Chưa có scorm nào được chọn')"
+      accept=".zip"
     >
     </app-upload>
 
     <p class="text-base mt-2 caption">
-      <span class="text-gray font-weight-bold">Lưu ý:</span> Video phải có độ phân giải tối thiểu là 480p, dung lượng tối đa là 3GB.
+      <span class="text-gray font-weight-bold">Lưu ý:</span> Upload bài học theo đúng chuẩn SCORM, dung lượng tối đa là 3GB.
     </p>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
   methods: {
     handleSelectFile(files) {
       const data = {
-        type: "VIDEO",
+        type: "SCORM",
         lesson: files[0],
       };
       this.$emit("handleSelectFile", data);

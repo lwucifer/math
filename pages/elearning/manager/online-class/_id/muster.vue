@@ -364,19 +364,6 @@ export default {
     handleBlurSearchInput() {},
     handleSearch() {},
 
-    formatAMPM(date, year = false) {
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      let strTime = hours + ":" + minutes + " " + ampm;
-      let strDate =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-      let str = year ? strTime + " " + strDate : strTime;
-      return str;
-    },
     async getLessonInfo() {
       try {
         this.loading = true;

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
+    class="cgi-form-group d-flex justify-content-start align-items-center"
   >
     <h2 class="cgi-form-title heading-6 mr-4">Trình độ</h2>
     <app-select

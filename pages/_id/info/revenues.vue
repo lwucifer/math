@@ -17,7 +17,8 @@
                     <div class="col-md-6 d-flex align-items-center">
                       <span class="mr-3">Số dư khả dụng:</span>
                       <strong
-                        class="color-red h3 mr-4"
+                        style="color: #E9446A;"
+                        class="h3 mr-4"
                       >{{ balance | toThousandFilter('.') }} {{ CURRENCY }}</strong>
                       <app-button
                         size="sm"
@@ -38,7 +39,7 @@
                         >
                           <slot name="icon">
                             <IconHistory24px class="icon--btn icon--btn--pre" />
-                          </slot>Xem lịch sử rút tiền
+                          </slot>Lịch sử rút tiền
                         </app-button>
                       </div>
                     </div>
@@ -104,7 +105,7 @@
               >
                 <template v-slot:title>
                   <div class="row">
-                    <div class="col-md-9 mb-3">
+                    <div class="col-md-9">
                       <filter-form>
                         <div class="mb-2">
                           <span class="filter-form__title">Chọn khoảng thời gian</span>
@@ -122,7 +123,7 @@
                               placeholder="DD/MM/YYYY - DD/MM/YYYY"
                               :shortcuts="DATE_SHORTCUT"
                               @input="changeDate"
-                              valueFormat="YYYY-MM-DD"
+                              value-type="YYYY-MM-DD"
                             >
                               <!--<template v-slot:icon-calendar>-->
                               <!--<IconCalendar />-->
@@ -161,7 +162,7 @@
                         <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
                       </template>
                       <template v-slot:cell(fee)="{row}">
-                        <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+                        <td class="text-center">{{ formatFee(get(row, 'fee', ''))}}%</td>
                       </template>
                       <template v-slot:cell(total)="{row}">
                         <td class="text-primary">{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
@@ -169,8 +170,12 @@
                       <template v-slot:cell(timestamp)="{row}">
                         <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
                       </template>
-                      <template v-slot:cell(desc)="{row}">
-                        <td class="long-text__table" :title="get(row, 'desc', '-')">{{ get(row, 'desc', '-') }}</td>
+                      <template v-slot:cell(elearning)="{row}">
+                        <td>
+                          <n-link :to="`/elearning/${get(row, 'elearning.id', '')}`" style="text-decoration: none;" target="_blank">
+                            {{ `Tên sản phẩm` | truncStrFilter(30) }} 
+                          </n-link>
+                        </td>
                       </template>
                     </app-table>
                   </div>
@@ -178,81 +183,6 @@
               </sub-block-section>
             </template>
           </block-section>
-
-          <!--<div class="elearning-history__title">-->
-          <!--<h5 class="color-primary mb-3">Doanh thu</h5>-->
-          <!--<div class="d-flex-center">-->
-          <!--<p>-->
-          <!--<span>Số dư:</span>-->
-          <!--<strong class="color-red h5">{{this.balance}}</strong>-->
-          <!--</p>-->
-          <!--<app-button color="secondary" size="sm" class="ml-4" square>Rút tiền</app-button>-->
-          <!--<n-link class="ml-auto" :to="'/elearning/revenue/withdrawal'">Xem lịch sử rút tiền</n-link>-->
-          <!--</div>-->
-          <!--<hr class="mt-3" />-->
-          <!--</div>-->
-
-          <!--<div class="elearning-history__statistical">-->
-          <!--<h5 class="mt-15 mb-3">Thống kê doanh thu</h5>-->
-          <!--<div class="row">-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Hôm nay</p>-->
-          <!--<strong>{{this.today_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tuần này</p>-->
-          <!--<strong>{{this.week_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tháng này</p>-->
-          <!--<strong>{{this.month_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tháng trước</p>-->
-          <!--<strong>{{this.last_month_revenue}}</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<hr class="mt-4" />-->
-          <!--</div>-->
-
-          <!--<h3>Chi tiết doanh thu</h3>-->
-          <!--<div class="elearning-history__table">-->
-          <!--<div class="d-flex mb-3 pl-4 pr-4">-->
-          <!--<app-date-picker label="from" -->
-          <!--@input="changeDateFrom" -->
-          <!--v-model="params.from"-->
-          <!--valueFormat="YYYY-MM-DD"-->
-          <!--/>-->
-          <!--<app-date-picker label="to"-->
-          <!--@input="changeDateTo"-->
-          <!--v-model="params.to"-->
-          <!--valueFormat="YYYY-MM-DD"-->
-          <!--/>-->
-          <!--<div class="ml-auto">-->
-          <!--<p class="text-right">Tổng tiền</p>-->
-          <!--<h3>{{this.revenue}}</h3>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">-->
-          <!--<tr v-for="(item , index) in list" :key="index">-->
-          <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
-          <!--</tr>-->
-          <!--<template v-slot:cell(fee)="{row}">-->
-          <!--<td>{{ formatFee(get(row, 'fee', ''))}}%</td>-->
-          <!--</template>-->
-          <!--<template v-slot:cell(total)="{row}">-->
-          <!--<td>{{ formatFee(get(row, 'total', ''))}} đ</td>-->
-          <!--</template>-->
-          <!--</app-table>-->
-          <!--</div>-->
         </div>
       </div>
     </div>
@@ -305,13 +235,12 @@ export default {
           text: "Khách hàng"
         },
         {
-          name: "desc",
-          text: "Nội dung"
-        },
-        {
           name: "cost",
           text: "Giá trị",
-          sort: true
+        },
+        {
+          name: "elearning",
+          text: "Sản phẩm",
         },
         {
           name: "fee",

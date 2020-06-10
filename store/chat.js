@@ -3,6 +3,7 @@ import * as mutationTypes from "../utils/mutation-types";
 import { isEmpty, uniqWith, isEqual, omit } from "lodash";
 import Room from "~/services/chat/Room";
 import Member from "~/services/chat/Member";
+import Media from "~/services/chat/Media";
 
 /**
  * initial state
@@ -138,6 +139,33 @@ const actions = {
       return err;
     }
   },
+  async [actionTypes.CHAT.CHANGE_ROOM_AVATAR]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.PUT_END
+      ](options.payload, options.id, options.end);
+      // console.log("[Message] list", result);
+      // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
+      if (!result.error) {
+        // const newRoomList = state.roomList.list_room.map(item => {
+        //   if (item.id == result.id) {
+        //     return {
+        //       ...item,
+        //       name: result && result.name ? result.name : ''
+        //     }
+        //   }
+        //   return item
+        // })
+        // commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+        //   list_room: newRoomList
+        // });
+      }
+      return result;
+    } catch (err) {
+      console.log("[Message] list.err", err);
+      return err;
+    }
+  },
   async [actionTypes.CHAT.FILE_LIST]({ commit, state }, options) {
     try {
       const { data: result = {} } = await new Room(this.$axios)[
@@ -170,21 +198,12 @@ const actions = {
         actionTypes.BASE.PUT_END
       ](options.payload, options.id, options.end);
       console.log("[REMOVE_MEMBER] list", result);
-      // commit(mutationTypes.CHAT.SET_MESSAGE_LIST, result);
-      // if (!result.error) {
-      //   const newRoomList = state.roomList.list_room.map(item => {
-      //     if (item.id == result.id) {
-      //       return {
-      //         ...item,
-      //         name: result && result.name ? result.name : ''
-      //       }
-      //     }
-      //     return item
-      //   })
-      //   commit(mutationTypes.CHAT.SET_ROOM_LIST, {
-      //     list_room: newRoomList
-      //   });
-      // }
+      if (result.success) {
+        const newListMembers = state.memberList.filter(
+          (item) => item.id !== options.payload.member_ids[0]
+        );
+        commit(mutationTypes.CHAT.SET_MEMBER_LIST, newListMembers);
+      }
       return result;
     } catch (err) {
       console.log("[REMOVE_MEMBER].err", err);
@@ -215,6 +234,18 @@ const actions = {
       return result;
     } catch (err) {
       console.log("[ROOM_ADD_MEMBER].err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.UPLOAD_MEDIA]({ commit }, payload) {
+    try {
+      const result = await new Media(this.$axios)[
+        actionTypes.BASE.ADD
+      ](payload);
+      console.log("[Media] add", result);
+      return result;
+    } catch (err) {
+      console.log("[Media] add.err", err);
       return err;
     }
   },

@@ -109,7 +109,7 @@
     <!--End table-->
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="openModal = false" v-if="openModal"/>
+    <ModalInviteStudent @close="closeModal" v-if="openModal" :title="get(stateClassInfo, 'data.name', '')"/>
     <!-- End -->
   </div>
 </template>
