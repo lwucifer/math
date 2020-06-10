@@ -31,7 +31,7 @@
                   >
                     <slot name="icon">
                       <icon-clock class="icon--btn icon--btn--pre" />
-                    </slot>Xem lịch sử rút tiền
+                    </slot>Lịch sử rút tiền
                   </app-button>
                 </div>
               </div>
@@ -113,7 +113,7 @@ export default {
   methods: {
     async submitDoWithdrawal(bank, amount) {
       const params = {
-        user_bank_id: bank.user_bank_id,
+        user_bank_id: this.get(bank, 'user_bank_id', ''),
         note: this.get(bank, 'note', ''),
         amount: amount
       }

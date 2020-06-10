@@ -286,7 +286,7 @@
               </template>
             </app-input>
 
-            <button class="bg-primary button-send">
+            <button class="bg-primary button-send" @click="handleEmitMessage">
               <IconSend24px width="15" height="15" class="fill-white" />
             </button>
           </div>

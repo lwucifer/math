@@ -5,7 +5,7 @@
   >
     <div slot="content">
       <div>
-        <p>Gửi lời mời tham gia <b>Phòng học online số 1</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
+        <p>Gửi lời mời tham gia <b>{{title}}</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
         <div class="mt-4 d-flex-center">
           <strong class="pr-4">Chọn lớp</strong>
           <app-vue-select
@@ -24,7 +24,7 @@
 
       <div class="student-list">
         <div class="item">
-          <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
+          <app-checkbox class="ml-auto" @change="handelAllCheckbox" v-model="checkAll"/>
           <strong>Chọn tất cả danh sách</strong>
         </div>
         <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
@@ -56,14 +56,20 @@ const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
 
 export default {
   components: {},
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+  },
 
   data() {
     return {
       arrMember: [],
-      name: "",
       classSelected: null,
       classList: [],
       studentList: [],
+      checkAll: false,
       invateStudent: {
         invitation_ids: ["string"],
         online_class_id: "string",
@@ -104,9 +110,10 @@ export default {
     },
 
     async handleChangedClass() {
+      this.checkAll = false;
       let params = {
         class_id: this.classSelected.value,
-        size: 999
+        size: 9999
       };
       try {
         await this.$store.dispatch(
