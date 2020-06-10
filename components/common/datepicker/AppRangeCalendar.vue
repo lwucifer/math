@@ -11,7 +11,7 @@
       v-model="inputVal"
     >
     <i class="app-range-calendar__icon-select"><IconCalendar class="icon"/></i>
-    <div class="d-flex app-range-calendar__options" v-if="showDropdown">
+    <div class="d-flex app-range-calendar__options" v-if="active">
       <div
         v-if="shortcuts"
         class="app-range-calendar__shortcuts"
@@ -48,7 +48,55 @@
     },
     props: {
       shortcuts: {
-        type: Array
+        type: Array,
+        default: () => {
+          return [
+            {
+              text: 'Hôm nay',
+              onClick() {
+                const start = moment();
+                const end = moment();
+                return [start, end]
+              },
+            },
+            {
+              text: 'Hôm qua',
+              onClick() {
+                const end = moment().subtract(1, 'day');
+                const start = moment().subtract(1, 'day');
+                return [start, end]
+              },
+            },
+            {
+              text: 'Tuần này',
+              onClick() {
+                const end = moment().endOf("week");
+                const start = moment().startOf("week");
+                return [start, end];
+              },
+            },
+            {
+              text: 'Tháng này',
+              onClick() {
+                const end = moment().endOf('month');
+                const start = moment().startOf('month');
+                return [start, end];
+              },
+            },
+            {
+              text: 'Tháng trước',
+              onClick() {
+                const end = moment().subtract(1, 'months').endOf('month');
+                const start = moment().subtract(1, 'months').startOf('month');
+                return [start, end];
+              },
+            },
+            {
+              text: 'Tùy chọn',
+              showPanelDate: true
+            }
+          ]
+        }
       },
       placeholder: {
         type: String
@@ -84,7 +132,6 @@
     },
     watch: {
       localValue(newValue) {
-        console.log('change value: ', (newValue[0]).format('DD-MM-YYYY'))
         this.$emit('change', newValue)
       }
     },
@@ -109,17 +156,21 @@
     },
     methods: {
       handleClickSelected() {
-        console.log("handleClickSelected");
         this.active = true
       },
       selectShortcut({item, index}) {
         this.shortcutActive = index
+        console.log('select shortcut: ', item)
         if (get(item, 'showPanelDate', false)) {
           this.showRangeSelection = true
         } else {
+          console.log('else ')
+          this.showRangeSelection = false
+          this.active = false
+          console.log('after else: ', this.active)
           const rangeDate = item.onClick()
           this.localValue = rangeDate
-          this.showRangeSelection = false
+          console.log('after clicK ', this.active)
         }
 
       },
