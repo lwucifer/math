@@ -109,7 +109,8 @@
 import {
   EXERCISE_TYPES,
   STUDY_MODE,
-  EXERCISE_CATEGORIES
+  EXERCISE_CATEGORIES,
+  PAGE_SIZE
 } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
@@ -267,12 +268,14 @@ export default {
             exerciseReq = {
               elearning_id: this.progress.id,
               category: EXERCISE_CATEGORIES.EXERCISE,
-              lesson_id: this.currentLession.id
+              lesson_id: this.currentLession.id,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           } else {
             exerciseReq = {
               elearning_id: this.progress.id,
-              category: EXERCISE_CATEGORIES.TEST
+              category: EXERCISE_CATEGORIES.TEST,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           }
           console.log("[exerciseReq]", exerciseReq);
