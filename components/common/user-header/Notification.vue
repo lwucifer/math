@@ -69,7 +69,9 @@
             </div>
         </div>
         <div class="footer-notification">
-            <a>Xem thêm</a>
+            <n-link :to="getNotificationLink">
+                Xem thêm
+            </n-link>
         </div>
     </div>
   </div>
@@ -80,6 +82,7 @@ import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
 import { mapState, mapActions, mapGetters } from "vuex";
+import { getToken } from "~/utils/auth";
 export default {
     components:{
         IconNotifications24px,
@@ -98,6 +101,12 @@ export default {
     },
     computed: {
         ...mapState("elearning/study/notifications", ["notis"]),
+        getNotificationLink() {
+            const accountObj = getToken();
+            if (!!accountObj) {
+                return `/${accountObj.id}/info/announcement`;
+            }
+        }
     },
     methods:{
         handleClickOutside(){
