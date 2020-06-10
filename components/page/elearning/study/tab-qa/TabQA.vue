@@ -78,15 +78,10 @@ export default {
     const typeParams = getParamQuery('type')
     const questionIdParams = getParamQuery('question_id')
     this.$nextTick(() => {
-       if(typeParams){
-        if(questionIdParams){
-          setTimeout(()=>{
+       if(questionIdParams){
+        setTimeout(()=>{
             this.$scrollTo('#'+questionIdParams, 1000)
           }, 1000);
-        }
-        else{
-          this.$scrollTo('#test', 1000)
-        }
       }
     })
   },
