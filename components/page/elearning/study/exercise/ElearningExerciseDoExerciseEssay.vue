@@ -150,7 +150,8 @@ import { RESPONSE_SUCCESS } from "~/utils/config";
 import {
   QUESTION_NAV,
   STUDY_MODE,
-  EXERCISE_CATEGORIES
+  EXERCISE_CATEGORIES,
+  PAGE_SIZE
 } from "~/utils/constants";
 import { EXERCISE_TYPES } from "~/utils/constants";
 
@@ -297,13 +298,15 @@ export default {
             exerciseReq = {
               elearning_id: this.progress.id,
               category: EXERCISE_CATEGORIES.EXERCISE,
-              lesson_id: this.currentLession.id
+              lesson_id: this.currentLession.id,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           } else {
             // list test
             exerciseReq = {
               elearning_id: this.progress.id,
-              category: EXERCISE_CATEGORIES.TEST
+              category: EXERCISE_CATEGORIES.TEST,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           }
           console.log("[exerciseReq]", exerciseReq);
