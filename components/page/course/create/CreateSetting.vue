@@ -195,7 +195,6 @@
           @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
-          :disabled="!submit"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -303,7 +302,6 @@ export default {
     get,
 
     handleChangeStartDate(date) {
-      console.log(date);
       this.payload.start_time = date;
     },
 
@@ -378,7 +376,11 @@ export default {
     //   }
     // },
 
-    async handleCLickSave(type_save) {
+    handleCLickSave() {
+      if (!this.submit) {
+        this.$toasted.error("Bạn chưa thiết lập xong cài đặt");
+        return;
+      }
       this.showModalConfirm = true;
     },
 

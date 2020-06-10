@@ -57,7 +57,7 @@
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id + '/study?type=qa'" >
+            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id + '/study?question_id='+row.question_id" >
               <IconArrowForwardIos24pxOutlined />
             </n-link>
           </td>
@@ -69,7 +69,7 @@
               popover-class="tooltip--eln-interactive"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <n-link class="text-decoration-none text-gray" :to="'/elearning/' + row.elearning_id + '/study?type=qa&question_id='+row.question_id">
+              <n-link class="text-decoration-none text-gray" :to="'/elearning/' + row.elearning_id + '/study?question_id='+row.question_id">
                 {{ get(row,"content","") | truncStrFilter(30)}}
               </n-link>
               <template slot="popover">
@@ -151,7 +151,7 @@ export default {
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
+          sort: false
         },
         {
           name: "action",

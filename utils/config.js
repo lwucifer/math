@@ -1,5 +1,5 @@
 import { CART_LIST, PAYMENT_HASHKEY } from "./endpoints";
-
+const moment = require('moment');
 export const DEFAULT_HEADER_SEARCH_SELECT = "product";
 export const TOKEN_KEY = "token_key";
 export const TOKEN_USER_SCHOOLLY = "token_user_schoolly";
@@ -27,43 +27,43 @@ export const DATE_SHORTCUT = [
   {
     text: 'Hôm nay',
     onClick() {
-      const date = new Date();
-      return date;
+      const start = new Date();
+      const end = new Date();
+      return [start, end]
     },
   },
   {
     text: 'Hôm qua',
     onClick() {
-      const end = new Date();
-      const start = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24);
+      const end = moment().subtract(1, 'day').toDate();
+      const start = moment().subtract(1, 'day').toDate();
+      //start.setTime(start.getTime() - 3600 * 1000 * 24);
       return [start, end]
     },
   },
   {
     text: 'Tuần này',
     onClick() {
-      const end = new Date();
-      const start = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+      const end = moment().endOf("week").toDate();
+      const start = moment().startOf("week").toDate();
+      //start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
       return [start, end];
     },
   },
   {
     text: 'Tháng này',
     onClick() {
-      const end = new Date();
-      const start = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      const end = moment().endOf('month').toDate();
+      const start = moment().startOf('month').toDate();
       return [start, end];
     },
   },
   {
     text: 'Tháng trước',
     onClick() {
-      const end = new Date();
-      const start = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+      const end = moment().subtract(1, 'months').endOf('month').toDate();
+      const start = moment().subtract(1, 'months').startOf('month').toDate();
+      //start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
       return [start, end];
     },
   },

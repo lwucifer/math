@@ -63,7 +63,7 @@
         class="text-uppercase mt-3 mb-3"
         v-if="isDoneElearning"
       >
-        <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+        <IconDone24px /> &nbsp; {{ title.toUpperCase() }} ĐÃ HOÀN THÀNH
       </app-button>
     </div>
 
@@ -113,11 +113,11 @@
       </li>
       <li v-if="get(info, 'starttime_enable', false)">
         <IconPlayCirleWhite24px class="icon" />
-        Bắt đầu: {{ get(info, "start_time", "") | getDateTimeHH_MM_D_M_Y_DASH}}
+        Bắt đầu: {{ get(info, "start_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
       </li>
       <li v-if="get(info, 'endtime_enable', false)">
         <IconPauseCircleOutline24px class="icon" />
-        Kết thúc: {{ get(info, "end_time", "") | getDateTimeHH_MM_D_M_Y_DASH}}
+        Kết thúc: {{ get(info, "end_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,

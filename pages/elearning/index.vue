@@ -329,7 +329,7 @@ export default {
     ]),
     ...mapState("elearning/public/public-highlight-teachers", [
       "highlightTeachers"
-    ])
+    ]),
   },
 
   mounted() {
@@ -338,7 +338,6 @@ export default {
 
   methods: {
     get,
-
     calcDiscount(elearning) {
       const { price = {} } = elearning;
       const currentPrice = price.price || 0;
