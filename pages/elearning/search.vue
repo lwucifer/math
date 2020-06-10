@@ -309,7 +309,6 @@ export default {
   },
 
   beforeDestroy() {
-    console.log('[Clear Search Header]')
     this.searchHeader();
   },
 
