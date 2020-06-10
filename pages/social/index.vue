@@ -116,6 +116,7 @@ import SocialMenu from "~/components/page/social/SocialMenu";
 import AsideBox from "~/components/layout/asideBox/AsideBox";
 import MessagesFriendItem from "~/components/page/social/messages/MesagesFriendItem";
 import IconSocialBirthday from "~/assets/svg/icons/social-birthday.svg?inline";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   middleware: "authenticated",
@@ -170,9 +171,23 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapState("keyword", ["keywordSearchHeader"]),
+  },
+
+  watch: {
+    keywordSearchHeader(_newVal) {
+      console.log('keywordSearchHeader social', _newVal)
+    }
+  },
+
+  beforeDestroy() {
+    this.searchHeader();
+  },
 
   methods: {
-    get
+    get,
+    ...mapMutations('keyword', ['searchHeader']),
   }
 };
 </script>
