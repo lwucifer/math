@@ -70,10 +70,7 @@
         <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          class="create-action__btn mr-4"
-          :disabled="!isNextStep"
-          @click="handleNextStep"
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -184,7 +181,7 @@ export default {
       lessons: "lessons_lecture",
       progress: "progress",
     }),
-    isNextStep() {
+    submit() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
       return true;
@@ -204,6 +201,10 @@ export default {
     },
 
     handleNextStep() {
+      if (!this.submit) {
+        this.$toasted.error('Bạn chưa tạo xong nội dung học tập')
+        return;
+      }
       this.showModalConfirm = true;
     },
 
