@@ -6,9 +6,9 @@
         <div class="row items-center">
           <div class="col-md-6 col-sm-12">
             <div class="text-center d-inline-block">
-              <strong class="h1 color-primary">{{
+              <h1 class="h1 color-primary">{{
                 numeral(get(info, "voting.average_rate", 0)).format("0,0.0")
-              }}</strong>
+              }}</h1>
               <app-stars
                 :stars="Math.ceil(get(info, 'voting.average_rate', 0))"
                 :size="16"
