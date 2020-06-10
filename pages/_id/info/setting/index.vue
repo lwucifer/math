@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="isTeacherRole">
     <div class="row">
       <div class="col-md-3">
         <SchoolAccountSide :active="6" />
@@ -41,6 +41,7 @@
       </div>
     </div>
   </div>
+  <SettingRoleStudent v-else/>
 </template>
 
 <script>
@@ -50,8 +51,9 @@ import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
 import Notify from "~/components/page/profile/setting/tabs/notify";
 import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { get } from "lodash";
+import SettingRoleStudent from "~/components/page/profile/setting/tabs/SettingRoleStudent"
 
 export default {
   layout: "account-info",
@@ -61,7 +63,8 @@ export default {
     Notify,
     PaymentList,
     HeadTabs,
-    VclList
+    VclList,
+    SettingRoleStudent
   },
 
   data() {
@@ -101,6 +104,7 @@ export default {
       };
       return MATCHED_TABS[this.tab];
     },
+    ...mapGetters("auth", ["isTeacherRole"])
   },
 
   methods: {

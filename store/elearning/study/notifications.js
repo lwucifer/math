@@ -37,6 +37,16 @@ const state = () => ({
             title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
             timestamp: '15 phút trước',
             read: false
+        },
+        {   
+            id: 4,
+            type: 'E-LEARNING',
+            name: 'Ngọc Trinh',
+            image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
+            content: '“Du lịch Dubai với Trinh”',
+            title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
+            timestamp: '15 phút trước',
+            read: true
         }
     ],
     notiUnread: 0,

@@ -84,10 +84,10 @@
       </template>
       <template v-slot:cell(start_time)="{row}">
         <td>
-          <div style="white-space: no-wrap">
-          <div>{{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}</div>
-          <div>{{getDateBirthDay(row.start_time)}}</div>
+          <div style="white-space: nowrap">
+          {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
           </div>
+          <div>{{getDateBirthDay(row.start_time)}}</div>
         </td>
       </template>
 
