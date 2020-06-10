@@ -668,6 +668,10 @@ export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = {
     ADD: "teachingInteractiveAnnouncementAdd",
 };
 
+export const TEACHING_INTERACTIVE_DELETE_ANNOUNCEMENT = {
+    DELETE: "teachingInteractiveAnnouncementDelete",
+};
+
 export const TEACHING_PUBLIC_LIST = {
     LIST: "teachingPublicList",
 };

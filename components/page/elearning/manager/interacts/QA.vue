@@ -151,7 +151,7 @@ export default {
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
+          sort: false
         },
         {
           name: "action",

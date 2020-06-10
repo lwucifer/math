@@ -42,7 +42,7 @@
       </template>
     </div>
 
-    <app-button color="pink" size="sm">
+    <app-button color="pink" size="sm" @click.prevent="handleDeleteNotify">
       <IconDeleteForever class="icon body-1 mr-2" />Xoá
     </app-button>
 
@@ -191,8 +191,9 @@ export default {
         elearning_id:null,
         keyword:null,
         page:1,
-        size:10
-      }
+        size:10,
+      },
+      ids:[]
     };
   },
   watch:{
@@ -296,7 +297,23 @@ export default {
       this.params.size=10;
     },
     selectRow(data){
-      console.log('select data',data)
+      this.ids = _.map(data, 'id');
+    },
+    async handleDeleteNotify(){
+      console.log('deleting')
+      let data = {
+          ids: this.ids
+        }
+      const res =await this.$store.dispatch(
+        `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_DELETE_ANNOUNCEMENT.DELETE}`,
+        {data}
+      );
+      if (get(res, "success", false)) {
+        this.$toasted.success(get(res, "success", false))
+        return
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"))
+      console.log(res)
     },
     get
     /*
