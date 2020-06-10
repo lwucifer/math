@@ -21,6 +21,7 @@
         :list.sync="list"
         :loading="loading"
         @changedPagination="updatePagination"
+        @changedSort="handleSortTable"
       />
     </template>
   </sub-block-section>
@@ -83,7 +84,9 @@ export default {
           size: this.params.size,
           page: this.params.page,
           status: this.params.status,
-          method:this.params.method
+          method:this.params.method,
+          sort_by: this.params.sort_by,
+          sort_type: this.params.sort_type
         }
       }
       this.$store.dispatch(`account/${actionTypes.ACCOUNT_TRANSACTIONS.LIST}`,payload)
@@ -116,6 +119,11 @@ export default {
       this.params.method = o.payment;
       this.params.page = 1;
       this.fetchTransaction();
+    },
+    handleSortTable(val){
+      this.params.sort_by = val.sortBy;
+      this.params.sort_type = val.order;
+      this.fetchTransaction();
     }
   },
   computed: {
@@ -134,7 +142,6 @@ export default {
         number_of_elements:get(this,"transactionsList.data.page.numberOfElements",0),
         number:get(this,"transactionsList.data.page.number",0)
       };
-      console
     }
   },
   created() {

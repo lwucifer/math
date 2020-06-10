@@ -170,11 +170,18 @@
                       <template v-slot:cell(timestamp)="{row}">
                         <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
                       </template>
-                      <template v-slot:cell(elearning)="{row}">
+                      <template v-slot:cell(elearning_name)="{row}">
                         <td>
-                          <n-link :to="`/elearning/${get(row, 'elearning.id', '')}`" style="text-decoration: none;" target="_blank">
-                            {{ `Tên sản phẩm` | truncStrFilter(30) }} 
-                          </n-link>
+                          <v-popover
+                            trigger="hover"
+                            popover-inner-class="tooltip-inner popover-inner dont-break-out"
+                            popover-class="tooltip-account-info-table"
+                          >
+                            {{get(row, 'elearning_name',"") | truncStrFilter(30)}}
+                            <template slot="popover">
+                              {{get(row, 'elearning_name',"")}}
+                            </template>
+                          </v-popover>
                         </td>
                       </template>
                     </app-table>
@@ -239,7 +246,7 @@ export default {
           text: "Giá trị",
         },
         {
-          name: "elearning",
+          name: "elearning_name",
           text: "Sản phẩm",
         },
         {
