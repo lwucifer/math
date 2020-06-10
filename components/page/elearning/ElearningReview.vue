@@ -7,7 +7,7 @@
           <div class="col-md-6 col-sm-12">
             <div class="text-center d-inline-block">
               <strong class="h1 color-primary">{{
-                numeral(get(info, "voting.average_rate", 0)).format("0,0.[0]")
+                numeral(get(info, "voting.average_rate", 0)).format("0,0.0")
               }}</strong>
               <app-stars
                 :stars="Math.ceil(get(info, 'voting.average_rate', 0))"
