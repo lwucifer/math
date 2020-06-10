@@ -17,47 +17,42 @@
       </div>
 
       <div class="col-md-3">
-        <div
-          v-sticky
-          sticky-offset="{ top: 101 }"
-          :sticy-z-index="9"
-          class="page-social__aside-wrapper"
-        >
-          <AsideBox class="page-social__aside-birthday" title="Sinh nhật">
-            <div class="aside-birthday">
-              <div class="aside-birthday__img">
-                <IconSocialBirthday />
-              </div>
-              <div class="aside-birthday__text text-dark">
-                <span class="font-weight-medium">Trâm Anh</span>&nbsp;và
-                <span class="font-weight-medium">Ngọc Trinh</span> có sinh nhật vào hôm nay
-              </div>
+        <AsideBox class="page-social__aside-birthday" title="Sinh nhật">
+          <div class="aside-birthday">
+            <div class="aside-birthday__img">
+              <IconSocialBirthday />
             </div>
-          </AsideBox>
+            <div class="aside-birthday__text text-dark">
+              <span class="font-weight-medium">Trâm Anh</span>&nbsp;và
+              <span class="font-weight-medium">Ngọc Trinh</span> có sinh nhật vào hôm nay
+            </div>
+          </div>
+        </AsideBox>
 
-          <AsideBox class="page-social__aside-friends-list" title="Bạn bè đang trực tuyến">
-            <MessagesFriendItem
-              v-for="i in 10"
-              :key="i"
-              name="Hồ Ngọc Thạch"
-              avatar="https://picsum.photos/40/40"
-              avatar-size="sm"
-              online
-              show-button-add
-            />
-          </AsideBox>
+        <AsideBox class="page-social__aside-friends-list" title="Bạn bè đang trực tuyến">
+          <MessagesFriendItem
+            v-for="i in 10"
+            :key="i"
+            name="Hồ Ngọc Thạch"
+            avatar="https://picsum.photos/40/40"
+            avatar-size="sm"
+            online
+            show-button-add
+          />
+        </AsideBox>
 
-          <AsideBox class="page-social__aside-friends-list" title="Gợi ý kết bạn">
-            <MessagesFriendItem
-              v-for="i in 10"
-              :key="i"
-              name="Hồ Ngọc Thạch"
-              avatar="https://picsum.photos/40/40"
-              avatar-size="sm"
-              online
-            />
-          </AsideBox>
-
+        <AsideBox class="page-social__aside-friends-list" title="Gợi ý kết bạn">
+          <MessagesFriendItem
+            v-for="i in 10"
+            :key="i"
+            name="Hồ Ngọc Thạch"
+            avatar="https://picsum.photos/40/40"
+            avatar-size="sm"
+            online
+          />
+        </AsideBox>
+        
+        <div v-sticky sticky-offset="{ top: 101 }" :sticy-z-index="9">
           <AsideBox title="Bài giảng khóa học nổi bật">
             <div class="page-social__aside-tabs">
               <a href :class="{ active: coursesTab === 0 }" @click.prevent="coursesTab = 0">Miễn phí</a>
