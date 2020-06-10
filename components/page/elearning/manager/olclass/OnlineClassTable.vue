@@ -1,270 +1,169 @@
 <template>
   <div>
-    <elearning-manager-filter-form
-      @changedFilter="updateFilter"
-      @submitFilter="submitFilter"
-      @changedType="handleChangedType"
-      @changedQuery="handleChangedSearch"
-      @changedStatus="handleChangedStatus"
-      @submitSearch="handleSubmitSearch"
-      class="px-0"
-    />
-    <div class="mb-4" v-if="additionalActions.delete">
-      <v-popover
-        :disabled="additionalActions.delete"
-        trigger="hover"
-        placement="top"
-        offset="5"
-      >
-        <app-button
-          size="sm"
-          normal
-          :disabled="!additionalActions.delete"
-          :color="additionalActions.delete ? 'pink' : 'disabled'"
-          @click="handleDelete"
-        >
-          <IconTrashAlt style="fill: #fff; height: 16px;"/>
-          <span style="color: #FBFBFB;">Xóa tài liệu</span>
-        </app-button>
-
-        <template slot="popover">
-          <span>Bạn vui lòng chọn tài liệu cần xóa</span>
-        </template>
-      </v-popover>
-      
-    </div>
-
     <app-table
-      :heads="heads"
-      :pagination="pagination"
-      :data.sync="list"
-      multiple-selection
-      @pagechange="onPageChange"
-      @selectionChange="selectRow"
-      @sort="sortTable"
-      order="asc"
-      ref="warehouseListTable"
-    >
-      <template v-slot:cell(name)="{row}">
-        <td :title="get(row, 'name', '')">
-          {{ get(row, 'name', '' ) | truncStrFilter(40) }}
-        </td>
-      </template>
-      
-      <template v-slot:cell(status)="{row}">
-        <td>
-          <span class="nowrap">{{ get(row, 'used', false ) | statusFilter }}</span>
-        </td>
-      </template>
-      <template v-slot:cell(size)="{row}">
-        <td>
-          {{ get(row, 'size', 0 ) }} MB
-        </td>
-      </template>
-      <template v-slot:cell(created_at)="{row}">
-        <td>
-          {{ get(row, 'created_at', '-') | moment("DD/MM/YYYY") }}
-        </td>
-      </template>
-    </app-table>
+        :loading="loading"
+        :heads="heads"
+        :pagination="pagination"
+        @pagechange="onPageChange"
+        @selectionChange="selectRow"
+        @sort="handleSort"
+        :data="data"
+        multiple-selection
+      >
+        <template v-slot:cell(online_class_name)="{row}">
+          <td>
+            <n-link
+              :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
+              class="link"
+            >{{row.online_class_name}}</n-link>
+          </td>
+        </template>
+        <template v-slot:cell(start_time)="{row}">
+          <td>
+            <div style="white-space: nowrap">
+              {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
+            </div>
+            <div>
+              {{getDateBirthDay(row.start_time)}}
+            </div>
+          </td>
+        </template>
+        
+        <template v-slot:actions="{row}">
+          <a class @click="openModal(row)" v-if="actions[0]">
+            <IconSwapHorizontalCircle class="fill-primary mr-2"/>Vào phòng học
+          </a>
+          <n-link class="link" :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
+            v-if="actions[1]">
+            <IconEdit class="fill-primary mr-2" />Chỉnh sửa
+          </n-link>
+          <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link"
+            v-if="actions[2]">
+            <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
+          </n-link>
+        </template>
+      </app-table>
 
-    <app-modal-confirm
-      v-if="visible.delete"
-      @cancel="cancelDel"
-      @ok="confirmDel"
-      title="Bạn chắc chắn muốn xóa tài liệu?"
-      description="Tài liệu bị xóa sẽ không thể khôi phục"
-      ok-text="Đồng ý"
-      :confirm-loading="confirmLoading"
-      centered
-    >
-    </app-modal-confirm>
-    
-    <app-modal-notify
-      v-if="visible.canDelete"
-      type="warning"
-      title="Không thể xóa file này!"
-      description="Bạn không thể xóa tài liệu đang được sử dụng."
-      @ok="visible.canDelete = false"
-      @close="visible.canDelete = false"
-      centered
-    >
-      <template v-slot:icon>
-      
-      </template>
-    </app-modal-notify>
-  </div>
+      <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false" :info="modalData"/>
+    </div>
 </template>
 
 <script>
-  import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline"
-  import ElearningManagerFilterForm from "./ElearningManagerFilterForm";
+import IconEdit from "~/assets/svg/v2-icons/edit_24px.svg?inline";
+import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
+import IconSwapHorizontalCircle from '~/assets/svg/v2-icons/swap_horizontal_circle_24px.svg?inline';
+import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass";
 
-  import {mapState} from "vuex"
-  import { get } from "lodash"
-  import * as actionTypes from "~/utils/action-types"
+import {
+  getDateBirthDay,
+  getLocalTimeHH_MM_A
+} from "~/utils/moment";
+import { get } from "lodash";
 
-  const STORE_NAMESPACE = 'elearning/teaching/repository-files'
+const STORE_NAMESPACE = "elearning/teaching/olclass";
+const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
-  export default {
-    components: {
-      IconTrashAlt,
-      ElearningManagerFilterForm
+export default {
+  components: {
+    IconEdit,
+    IconPeople,
+    IconSwapHorizontalCircle,
+    ModalJoinClass
+  },
+
+  props: {
+    actions: {
+      type: Array,
+      default: [0,0,1]
     },
-
-    props: {
-      list: {
-        type: Array,
-        default: () => []
-      },
-      pagination: {
-        type: Object,
-        default: () => {
-          return {
-            total: 0,
-            size: 10,
-            page: 1,
-            total_elements: 0,
-            first: 1,
-            last: 1,
-            number: 0
-          }
-        }
-      },
-      loading: {
-        type: Boolean,
-        default: false
-      }
+    data: {
+      type: Array,
+      default: []
     },
-
-    filters: {
-      statusFilter: function(val) {
-        if (val) return 'Đã sử dụng'
-        return '- -'
-      }
+    pagination: {
+      type: Object,
+      default: {}
     },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+  },
 
-    data() {
-      return {
-        heads: [
-          {
-            name: "name",
-            text: "Tên file",
-          },
-          {
-            name: "type",
-            text: "Loại",
-          },
-          {
-            name: "status",
-            text: "Trạng thái",
-          },
-          {
-            name: "size",
-            text: "Dung lượng",
-          },
-          {
-            name: "created_at",
-            text: "Ngày tải lên",
-            sort: true
-          },
-        ],
-        selectedItems: [],
-        visible: {
-          delete: false,
-          canDelete: false
+  data() {
+    return {
+      modalShow: false,
+      modalData: {},
+      heads: [
+        {
+          name: "online_class_name",
+          text: "Phòng học",
+          sort: true
         },
-        confirmLoading: false
-      }
+        {
+          name: "elearning_name",
+          text: "Thuộc khóa học",
+          sort: true
+        },
+        {
+          name: "start_time",
+          text: "Thời gian",
+          sort: true
+        },
+        {
+          name: "num_student",
+          text: "Số học sinh đã mời",
+          sort: true
+        }
+      ],
+    };
+  },
+  computed: {
+  },
+
+  methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
+    handleSort(e) {
+      this.$emit("sort", e);
     },
 
-    computed: {
-      ...mapState("auth", ["loggedUser"]),
-      additionalActions: function() {
-        let data = {
-          delete: this.selectedItems.length > 0
-        }
-        return data
-      },
-      updating: function () {
-        return this.loading
-      }
+    onPageChange(e) {
+      this.$emit("pagechange", e);
     },
-    methods: {
-      onPageChange(e) {
-        this.resetData()
-        this.$emit('changedPagination', e)
-      },
-      selectRow(data) {
-        this.selectedItems = data
-      },
-      handleChangedSearch(val) {
-        this.$emit('changedQuery', val)
-      },
-      handleChangedType(val) {
-        this.$emit('changedType', val)
-      },
-      handleChangedStatus(val) {
-        this.$emit('changedStatus', val)
-      },
-      handleSubmitSearch(val) {
-        this.$emit('submitSearch', val)
-      },
-      updateFilter(val) {
-        this.$emit('changedFilter', val)
-      },
-      submitFilter(val) {
-        this.$emit('submitFilter', val)
-      },
-      sortTable(data) {
-        this.$emit('changedSort', data)
-      },
-      async deleteItems(items) {
-        const delIds = _.map(items, 'id')
-        let data = {
-          ids: delIds
-        }
-        const res = await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.ELEARNING_TEACHING_REPOSITORY_FILE.DELETE}`, { data }
-        )
-        return res
-      },
-      async confirmDel() {
-        try {
-          this.confirmLoading = true
-          const res = await this.deleteItems(this.selectedItems)
-          this.visible.delete = false
-          if (get(res, "success", false)) {
-            this.resetSelectedItems()
-            this.$emit('deletedItems', res)
-            this.selectedItems = []
-          }
-        } catch (e) {
-        
-        } finally {
-          this.confirmLoading = false
-        }
-      },
-      cancelDel() {
-        this.visible.delete = false
-      },
-      resetData() {
-        this.selectedItems = []
-      },
-      handleDelete() {
-        if (this.selectedItems.some(item => item.used == true)) {
-          this.visible.canDelete = true
-        } else {
-          this.visible.delete = true
-        }
-      },
-      resetSelectedItems() {
-        this.$refs['warehouseListTable']['selectedItems'] = []
-      },
-      get
+
+    selectRow(e) {
+      this.$emit("selectionChange", e);
     },
+
+    openModal(row) {
+      this.rowClassId = row.online_class_id;
+      this.modalData = row;
+      this.modalShow = true;
+    },
+
+    get
+  },
+
+  created() {
   }
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+// @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
+.appended-col {
+  p {
+    max-width: 15rem;
+  }
+  .text-description {
+    color: #999;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 </style>
