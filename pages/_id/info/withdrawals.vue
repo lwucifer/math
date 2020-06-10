@@ -81,6 +81,7 @@
                   :header-ext-cls="{ 'table-header-border-0': true }"
                   :ext-table-cls="{ 'pt-3': true }"
                   :pagination-style="{ position: 'right' }"
+                  @sort="handleSortTable"
                 >
                   <template v-slot:cell(timestamp)="{row}">
                     <td>
@@ -164,7 +165,8 @@ export default {
         to:"",
         page:"",
         size:"",
-        status:""
+        status:"",
+        sort:""
       },
       opt: "",
       statuses: [
@@ -225,7 +227,8 @@ export default {
           from: this.params.from,
           size: this.params.size,
           page: this.params.page,
-          status: this.params.status
+          status: this.params.status,
+          sort: this.params.sort
         }
       }
       this.$store.dispatch(`account/${actionTypes.ACCOUNT_WITHDRAWALS.LIST}`,payload)
@@ -268,6 +271,18 @@ export default {
     },
     resetForm() {
       this.opt = null
+    },
+    handleSortTable(val){
+      if(val.sortBy=='timestamp'){
+        if(val.order=='asc'){
+          this.params.sort = 'created_at,asc'
+          this.fetchWithdrawals();
+        }
+        else if(val.order=='desc'){
+          this.params.sort = 'created_at,desc'
+          this.fetchWithdrawals();
+        }
+      }
     }
   }
 };

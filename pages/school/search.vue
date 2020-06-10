@@ -38,7 +38,7 @@
 import SchoolFilter from "~/components/page/school/SchoolFilter";
 import SchoolListBox from "~/components/page/school/SchoolListBox";
 import SchoolSlider from "~/components/page/school/SchoolListSlider";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect, addAllOptionSelect } from "~/utils/common";
@@ -93,6 +93,7 @@ export default {
     ...mapState("elearning/public/public-category", {
       categories: "categories"
     }),
+     ...mapState("keyword", ["keywordSearchHeader"]),
     resultSummary() {
       const schoolNum = this.schoolSummary.total_school || 0;
       const studentNum = this.schoolSummary.total_student || 0;
@@ -115,22 +116,35 @@ export default {
     }
   },
 
-  created() {
+  beforeDestroy() {
+    this.searchHeader();
+  },
+
+  watch: {
+    keywordSearchHeader(_newVal) {
+      this.handleChangeSearch(_newVal);
+    }
+  },
+
+  async created() {
+    this.keywordSearchHeader && this.handleChangeSearch(this.keywordSearchHeader);
     useEffect(this, this.handleGetSchoolsByLocation.bind(this), [
-      "type",
-      "province_id",
-      "district_id",
-      "ward_id",
-      "keyword",
-      "sort_by"
-    ]);
+        "type",
+        "province_id",
+        "district_id",
+        "ward_id",
+        "keyword",
+        "sort_by"
+      ]);
   },
 
   mounted() {
     this.pageLoading = false;
   },
+  
 
   methods: {
+    ...mapMutations('keyword', ['searchHeader']),
     handleChangedLevel(level) {
       this.type = level
       // console.log('change level: ', level)

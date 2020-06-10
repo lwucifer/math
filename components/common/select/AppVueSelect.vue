@@ -4,7 +4,6 @@
     :class="classes"
     v-bind="{ ...$attrs, ...$props, ...$slots }"
     v-on="$listeners" ref="vueSelectItem"
-    @input="handleInput"
     @open="handleOpen"
     @search="handleSearch"
   >
@@ -16,14 +15,14 @@
     </template>
     <template v-slot:option="option">
       <slot name="option" :option="option">
-        <span v-if="isSltedOption(option)">
+        <span v-if="isSltedOption(option)" :title="getOptionLabel(option)">
           <i class="vs__icon-selected">
             <slot name="selected-icon">
               <IconCheck />
             </slot>
           </i>{{ getOptionLabel(option) }}
         </span>
-        <span v-else>{{ getOptionLabel(option) }}</span>
+        <span v-else :title="getOptionLabel(option)">{{ getOptionLabel(option) }}</span>
       </slot>
     </template>
     <template v-slot:list-footer>
@@ -77,9 +76,6 @@
           return this.optionComparator(option, this.allOpt)
         }
         return false
-      },
-      handleInput(val) {
-        this.$emit('input', val)
       },
       handleOpen() {
         this.$emit('open')
