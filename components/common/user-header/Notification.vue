@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="footer-notification">
-            <n-link :to="getNotificationLink">
+            <n-link :to="getNotificationLink" @click="showMenuNotifi= !showMenuNotifi">
                 Xem thêm
             </n-link>
         </div>
