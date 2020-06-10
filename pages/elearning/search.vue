@@ -258,6 +258,7 @@ export default {
   },
 
   async created() {
+    this.payload.keyword = await this.keywordSearchHeader ? this.keywordSearchHeader : null;
     this.getLessons();
   },
 
@@ -267,7 +268,7 @@ export default {
     }),
 
     ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
-    ...mapState("keyword", ["keyword"]),
+    ...mapState("keyword", ["keywordSearchHeader"]),
 
     categoryOpts() {
       const alls = optionSelectSubject(this.levels);
@@ -300,7 +301,7 @@ export default {
   },
 
   watch: {
-    keyword(_newVal) {
+    keywordSearchHeader(_newVal) {
       this.payload.page = 1;
       this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
