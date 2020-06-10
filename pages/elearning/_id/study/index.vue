@@ -269,8 +269,9 @@ export default {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
 
-    const typeParams = getParamQuery("type");
-    this.type = typeParams ? typeParams : "summary";
+    const typeParams = getParamQuery("question_id");
+    this.type = typeParams ? 'qa' : "summary";
+    
     // document.addEventListener(
     //   "fullscreenchange",
     //   this.handleFullscreenChange,
