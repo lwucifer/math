@@ -52,7 +52,7 @@
 <script>
 import { get } from "lodash";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
+import { STUDY_MODE, EXERCISE_CATEGORIES, PAGE_SIZE } from "~/utils/constants";
 
 import IconFileAlt from "~/assets/svg/design-icons/file-alt.svg?inline";
 import ElearningProgramItem from "~/components/page/elearning/study/ElearningProgramItem";
@@ -98,7 +98,7 @@ export default {
     testRate() {
       if (!this.test_info) return "(0/0)";
       const touchedExams =
-        this.test_info.passed + this.test_info.failed + this.test_info.pending;
+        this.test_info.passed + this.test_info.failed + this.test_info.pending + this.test_info.working;
       return `(${touchedExams}/${this.test_info.total})`;
     },
 
@@ -107,7 +107,7 @@ export default {
       // debugger;
       if (this.test_info.passed == this.test_info.total) {
         return "primary";
-      } else if (this.test_info.failed > 0) {
+      } else if (this.test_info.failed > 0 || this.test_info.working > 0) {
         return "secondary";
       } else if (this.test_info.pending > 0) {
         return "warning";
@@ -152,6 +152,7 @@ export default {
       const testReq = {
         elearning_id: this.progress.id,
         category: EXERCISE_CATEGORIES.TEST,
+        size: PAGE_SIZE.MAXIMIZE,
       };
       this.elearningSudyElearningExerciseList(testReq);
     },

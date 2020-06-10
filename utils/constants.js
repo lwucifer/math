@@ -197,7 +197,8 @@ export const TRANSACTION_STATUSES = {
 
 export const PAGE_SIZE = {
   DEFAULT: 10,
-  SCHOOL_16: 16
+  SCHOOL_16: 16,
+  MAXIMIZE: 9999,
 };
 
 export const SUBJECT_CODE = {
