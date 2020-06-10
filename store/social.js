@@ -1,6 +1,7 @@
 import { get, omit, uniqWith, isEmpty } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import * as mutationTypes from "~/utils/mutation-types";
+import { SOCIAL_DEFAULT_FETCH_SIZE } from "~/utils/constants";
 import Post from "~/services/social/post";
 import Feeds from "~/services/social/feeds";
 import Like from "~/services/social/likes";
@@ -22,10 +23,7 @@ import Label from "~/services/social/label";
 const state = () => ({
   configs: {},
   labels: [],
-  feeds: {
-    listPost: [],
-    page: {},
-  },
+  feeds: [],
   detailPost: {},
 });
 
@@ -72,49 +70,39 @@ const actions = {
     }
   },
 
-  async [actionTypes.SOCIAL.GET_FEEDS]({ state, commit }, payload) {
+  async [actionTypes.SOCIAL.GET_FEEDS]({ commit }, payload) {
     try {
-      const result = await new Feeds(this.$axios)[actionTypes.BASE.LIST](
-        payload
-      );
+      const result = await new Feeds(this.$axios)[actionTypes.BASE.LIST](payload);
+      const { data = [] } = result;
+      const newFeeds = data.map(post => ({
+        ...post,
+        $commentTree: {}
+      }));
 
-      if (result.success) {
-        const { listPost = [], page = {} } = result.data;
-        const newListPost = listPost.map((post) => ({
-          ...post,
-          $commentTree: {},
-        }));
-        commit(mutationTypes.SOCIAL.SET_FEEDS, {
-          listPost: newListPost,
-          page,
-        });
-      }
+      commit(mutationTypes.SOCIAL.SET_FEEDS, newFeeds);
       return result;
     } catch (err) {
       return err;
     }
   },
 
-  async [actionTypes.SOCIAL.GET_FEEDS_INFINITE]({ state, commit }, payload) {
+  async [actionTypes.SOCIAL.GET_FEEDS_INFINITE]({ state, commit }, { fetchSize = SOCIAL_DEFAULT_FETCH_SIZE, fromPostId = null } = {}) {
     try {
       const result = await new Feeds(this.$axios)[actionTypes.BASE.LIST](
-        payload
+        {
+          params: {
+            fetch_size: fetchSize,
+            from_post_id: fromPostId
+          }
+        }
       );
+      const { data = [] } = result;
+      const newFeeds = data.map(post => ({
+        ...post,
+        $commentTree: {}
+      }));
 
-      if (result.success) {
-        const { listPost = [], page = {} } = result.data;
-        const newListPost = listPost.map((post) => ({
-          ...post,
-          $commentTree: {},
-        }));
-        commit(mutationTypes.SOCIAL.SET_FEEDS, {
-          listPost: uniqWith(
-            state.feeds.listPost.concat(newListPost),
-            (a, b) => a.post_id === b.post_id
-          ),
-          page,
-        });
-      }
+      commit(mutationTypes.SOCIAL.SET_FEEDS, [...state.feeds, ...newFeeds]);
       return result;
     } catch (err) {
       return err;

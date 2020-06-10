@@ -200,6 +200,8 @@ export const PAGE_SIZE = {
   SCHOOL_16: 16
 };
 
+export const SOCIAL_DEFAULT_FETCH_SIZE = 30;
+
 export const SUBJECT_CODE = {
   MUSIC: "AM",
   TECHNOLOGY: "CN",
