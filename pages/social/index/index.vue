@@ -146,6 +146,7 @@
       <infinite-loading @infinite="feedInfiniteHandler">
         <VclFacebook slot="spinner" class="bg-white" />
         <template slot="no-more">Không còn bài viết.</template>
+        <template slot="no-results">Chưa có bài viết.</template>
       </infinite-loading>
     </client-only>
 
