@@ -193,16 +193,24 @@ export default {
     ...mapState("notifications", ["notis", "notiUnread"]),
     ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
     ...mapGetters("cart", ["cartCheckout"]),
-    ...mapState("keyword", ["keyword"]),
+    ...mapState("keyword", ["keywordSearchHeader"]),
   },
   watch: {
-    keyword(newValue){
+    keywordSearchHeader(newValue){
       if(!newValue){
         this.valueInput = '';
+      }else{
+        const paramCheck = this.$route.path;
+        if(paramCheck == '/school'){
+          this.$router.push(`/school/search`)
+        }else if(paramCheck != '/elearning/search' && paramCheck != '/social' && paramCheck != '/school/search'){
+          this.$router.push(`/elearning/search?subject=&type=&sort=`)
+        }
       }
     }
   },
   mounted() {
+    console.log('this.$route.path', this.$route.path)
     this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
       const data = {

@@ -32,8 +32,8 @@ export const ACCOUNT_PROFILE_BIOGRAPHY = `/user/account/profile/biography`;
 /**
  * SOCIALS
  */
-export const FEED = `/social/api/feed`;
-export const POSTS = `/social/api/post`;
+export const FEED = `/social/news-feed`;
+export const POSTS = `/social/posts`;
 export const LIKES = `/social/api/like`;
 export const SHARES = `/social/api/share`;
 export const COMMENTS = `/social/api/comment`;

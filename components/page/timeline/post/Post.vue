@@ -13,7 +13,7 @@
         <div class="post__title-row mb-2">
           <h5 class="post__name">
             <n-link
-              :to="`/account/${post.author.id}`"
+              :to="`/account/${post.author && post.author.id ? post.author.id : null}`"
             >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
 
             <span v-if="post.label" class="font-weight-normal">

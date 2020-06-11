@@ -71,43 +71,14 @@
     <!--Options group-->
 
     <!--Table-->
-    <app-table
-      :loading="loading"
-      :heads="heads"
-      :pagination="pagination"
+    <OnlineClassTable 
+      :loading="loading" 
+      :pagination="pagination" 
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="handleSort"
-      :data="classList"
-      multiple-selection
-    >
-      <template v-slot:cell(online_class_name)="{row}">
-        <td>
-          <n-link
-            :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
-            class="link"
-          >{{row.online_class_name}}</n-link>
-        </td>
-      </template>
-      <template v-slot:cell(start_time)="{row}">
-        <td>
-          <div style="white-space: no-wrap">
-          <div>
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
-          </div>
-          </div>
-        </td>
-      </template>
-      
-      <template v-slot:actions="{row}">
-        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
-        </n-link>
-      </template>
-    </app-table>
+      @actions="[0,0,1]"
+      :data="classList"/>
     <!--End table-->
 
     <app-modal-confirm
@@ -132,6 +103,7 @@ import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
 import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
+import OnlineClassTable from "~/components/page/elearning/manager/olclass/OnlineClassTable";
 
 import {
   getDateBirthDay,
@@ -156,7 +128,8 @@ export default {
     IconTrash,
     IconPeople,
     IconTimesCircle,
-    IconHamberger
+    IconHamberger,
+    OnlineClassTable
   },
 
   data() {

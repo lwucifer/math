@@ -78,20 +78,16 @@
           <div class="attendance-points">
             <div class="points">
               <span class="bg-green">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_attendance')}}%
               </span>
               <span class="bg-red">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_absent_with_out_permission')}}%
               </span>
               <span class="bg-yellow">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_absent_with_permission')}}%
               </span>
               <span class="bg-blue">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_late')}}%
               </span>
             </div>
             <div class="desc">
@@ -99,32 +95,28 @@
                 <div class="inner">
                   <h6>Tỷ lệ tham gia {{get(stateClassInfo, 'data.name', '')}}</h6>
                   <div class="row mt-3">
-                    <div class="col-6 mb-3">
+                    <div class="col-6 mb-3 nowrap">
                       Có mặt:
                       <span class="color-primary">
-                        {{row.total_lesson_finished_from_joined_time ?
-                        row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                        {{covertPercent(row, 'num_attendance')}}%
                       </span>
                     </div>
                     <div class="col-6 mb-3">
                       Có phép:
-                      <span class="color-yellow">
-                        {{row.total_lesson_finished_from_joined_time ?
-                        row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                      <span class="color-yellow nowrap">
+                        {{covertPercent(row, 'num_absent_with_permission')}}%
                       </span>
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-6 mb-3 nowrap">
                       Không phép:
                       <span class="color-red">
-                        {{row.total_lesson_finished_from_joined_time ?
-                        row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                        {{covertPercent(row, 'num_absent_with_out_permission')}}%
                       </span>
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-6 mb-3 nowrap">
                       Vào muộn:
                       <span class="color-blue">
-                        {{row.total_lesson_finished_from_joined_time ?
-                        row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                        {{covertPercent(row, 'num_late')}}%
                       </span>
                     </div>
                   </div>
@@ -281,13 +273,18 @@ export default {
     }),
     courseOpts() {
       return [this.allOpt, ...this.courses];
-    }
+    },
   },
 
   methods: {
     getDateBirthDay,
 
-     handleSort(e) {
+    covertPercent(row, feild) {
+      return row.total_lesson_finished_from_joined_time ?
+             _.round(row[feild] / row.total_lesson_finished_from_joined_time * 100, 2) : 0;
+    },
+
+    handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};
       this.getList();

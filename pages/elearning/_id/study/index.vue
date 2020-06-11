@@ -1,5 +1,8 @@
 <template>
-  <div class="elearning-study" :class="{ 'pt-0': expand, 'fullscreen': fullscreen }">
+  <div
+    class="elearning-study"
+    :class="{ 'pt-0': expand, fullscreen: fullscreen }"
+  >
     <HeaderCourse v-show="!fullscreen" @exit="exitStudy" />
 
     <div class="container" v-if="pageLoading">
@@ -40,11 +43,15 @@
                   v-else
                   :class="{
                     'elearning-lesson-screen': true,
-                    'elearning-lesson-screen--default-mode': studyMode === defaultMode,
-                    'elearning-lesson-screen--video-mode': studyMode === videoMode,
+                    'elearning-lesson-screen--default-mode':
+                      studyMode === defaultMode,
+                    'elearning-lesson-screen--video-mode':
+                      studyMode === videoMode,
                     'elearning-lesson-screen--doc-mode': studyMode === docMode,
-                    'elearning-lesson-screen--image-mode': studyMode === imageMode,
-                    'elearning-lesson-screen--article-mode': studyMode === articleMode,
+                    'elearning-lesson-screen--image-mode':
+                      studyMode === imageMode,
+                    'elearning-lesson-screen--article-mode':
+                      studyMode === articleMode
                   }"
                 >
                   <!-- DEFAULT MODE -->
@@ -69,25 +76,30 @@
                   />
 
                   <!-- DOC MODE -->
-                  <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')" />
+                  <ElearningDownload
+                    v-if="studyMode == docMode"
+                    :link="get(payload, 'link', '')"
+                  />
 
                   <!-- IMAGE MODE -->
-                  <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
+                  <img
+                    v-if="studyMode === imageMode"
+                    :src="get(payload, 'link', '')"
+                    alt
+                  />
 
                   <!-- ARTICLE MODE -->
                   <iframe
                     v-if="studyMode == articleMode"
                     :src="get(payload, 'link', '')"
                   ></iframe>
-                </div>
 
-                <!-- <div class="lession-screen">
-                  SCORM TEST
-                  <iframe
-                    style="width: 712px"
-                    src="https://file-elearning.moet.gov.vn/upload2015/s7Y1xcf7oYzG94jLEhRi/baigiang/lop03/tnxh/tiet61a/index.htm"
-                  ></iframe>
-                </div>-->
+                  <!-- SCORM TEST -->
+                  <!-- <iframe
+                    src="https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/scorm/20200610034529203_c2f56f5d1c170e0a9723d5bf2b149d67ecb42aee71513e8f3ca4013b236f82fd/Tin%20hoc%206_repair/index.htm"
+                  ></iframe> -->
+                  <ScormMode v-if="studyMode === scormMode" />
+                </div>
 
                 <!-- DO EXERCISE -->
 
@@ -101,7 +113,10 @@
                     type="button"
                     @click="setExpand(!expand)"
                   >
-                    <IconStudyNarrow v-if="expand" class="icon fill-opacity-1" />
+                    <IconStudyNarrow
+                      v-if="expand"
+                      class="icon fill-opacity-1"
+                    />
                     <IconStudyExpand v-else class="icon fill-opacity-1" />
                   </button>
                   <button
@@ -109,7 +124,10 @@
                     type="button"
                     @click="setFullscreen(!fullscreen)"
                   >
-                    <IconCropFreeReverse v-if="fullscreen" class="icon fill-opacity-1" />
+                    <IconCropFreeReverse
+                      v-if="fullscreen"
+                      class="icon fill-opacity-1"
+                    />
                     <IconCropFree v-else class="icon fill-opacity-1" />
                   </button>
                 </div>
@@ -118,13 +136,24 @@
 
             <div class="box22">
               <div class="elearning-study-tabs">
-                <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-                <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+                <a
+                  :class="{ active: type === 'summary' }"
+                  @click="type = 'summary'"
+                  >Tổng quan</a
+                >
+                <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                  >Hỏi đáp</a
+                >
                 <a
                   :class="{ active: type === 'notification' }"
                   @click="type = 'notification'"
-                >Thông báo</a>
-                <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                  >Thông báo</a
+                >
+                <a
+                  :class="{ active: type === 'review' }"
+                  @click="type = 'review'"
+                  >Đánh giá</a
+                >
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
@@ -179,6 +208,7 @@ import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import ScormMode from "~/components/page/elearning/study/ScormMode";
 import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
@@ -205,7 +235,8 @@ export default {
     IconCropFree,
     IconCropFreeReverse,
     IconStudyExpand,
-    IconStudyNarrow
+    IconStudyNarrow,
+    ScormMode
   },
 
   data() {
@@ -218,7 +249,8 @@ export default {
       defaultMode: STUDY_MODE.DEFAULT,
       docMode: STUDY_MODE.DOCS,
       articleMode: STUDY_MODE.ARTICLE,
-      imageMode: STUDY_MODE.IMAGE
+      imageMode: STUDY_MODE.IMAGE,
+      scormMode: STUDY_MODE.SCORM
     };
   },
 
@@ -258,10 +290,8 @@ export default {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
 
-    const typeParams = getParamQuery("type");
-    this.type = typeParams ? typeParams : "summary";
-
-    // window.addEventListener('beforeunload', this.warningF5);
+    const typeParams = getParamQuery("question_id");
+    this.type = typeParams ? "qa" : "summary";
     // document.addEventListener(
     //   "fullscreenchange",
     //   this.handleFullscreenChange,
@@ -418,7 +448,7 @@ export default {
       } else {
         this.setFullscreen(false);
       }
-    },
+    }
 
     // warningF5(event) {
     //   console.log("[warningF5]", event.keyCode);
@@ -428,7 +458,6 @@ export default {
     //     console.log("[warningF5] prevent exit");
     //   }
     // }
-
   }
 };
 </script>

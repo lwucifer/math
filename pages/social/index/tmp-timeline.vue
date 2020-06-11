@@ -15,8 +15,8 @@
       leave-active-class="animated faster fadeOut"
     >
       <Post
-        v-for="post in feeds"
-        :key="post.id"
+        v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
+        :key="post.post_id"
         :post="post"
         class="mb-4"
         :show-menu-dropdown="post.author && post.author.id === userId"
@@ -661,13 +661,12 @@ export default {
      * Infinite scroll handler
      */
     async feedInfiniteHandler($state) {
-      const lastPostInFeed = this.feeds[this.feeds.length - 1]
-        ? this.feeds[this.feeds.length - 1].id
-        : null;
       const getData = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL.GET_FEEDS_INFINITE}`,
         {
-          fromPostId: lastPostInFeed
+          params: {
+            page: get(this, "feeds.page.number", 0) + 1
+          }
         }
       );
 
