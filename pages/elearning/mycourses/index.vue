@@ -50,7 +50,7 @@
                        </div>
                    </template>
               </sub-block-section>
-              <ScheduleToday/>
+              <ScheduleToday @changeDateInWeek="changeDateInWeek" />
               <GeneralExamExpiry/>
           </div>
       </div>
@@ -85,6 +85,12 @@ export default {
         MyCourseSide,
     },
 
+    data() {
+        return {
+            toDate: new Date()
+        }
+    },
+
     computed: {
         ...mapState(STORE_OVERVIEW, ['overview']),
     },
@@ -94,20 +100,33 @@ export default {
         getWeek(){
             const s = moment("2020-05-22");
             const tuesday = moment("2020-05-20").day("2")
-            console.log(tuesday.format('D').toString())
+            console.log('tuesday.format', tuesday.format('D').toString())
             for(let i=1;i<7;i++){
                  const tuesday = moment("2020-05-20").day(i.toString())
                  console.log(tuesday.toString())
             }
         },
         getData() {
-            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
-            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`);
-            // this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.DEADLINE}`);
-        },   
+            this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
+            this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
+            {
+                from: moment(this.toDate).format("YYYY-MM-DD 00:00:00").toString(), 
+                to: moment(this.toDate).format("YYYY-MM-DD h:mm:ss").toString()
+            });
+            this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.DEADLINE}`);
+        },
+        changeDateInWeek(date){
+            console.log('changeDateInWeek', date)
+            this.toDate = date;
+            this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
+            {
+                from: moment(this.toDate).format("YYYY-MM-DD 00:00:00").toString(), 
+                to: moment(this.toDate).format("YYYY-MM-DD h:mm:ss").toString()
+            });
+        }
     },
     created(){
-        this.getWeek();
+        // this.getWeek();
     },
     mounted() {
         this.getData();
