@@ -450,7 +450,7 @@ export default {
       params: {
         page: 1,
         limit: 10,
-        sorted: 'DESC'
+        sort: 'publish_date_desc'
       }
     };
   },
@@ -528,7 +528,7 @@ export default {
     getDateBirthDay,
 
     handleSort(e) {
-      const sortBy = e.sortBy + ',' + e.order;
+      const sortBy = e.sortBy + '_' + e.order;
       this.params = {...this.params, sort: sortBy};
       this.getList();
     },

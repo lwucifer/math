@@ -32,8 +32,8 @@ export const ACCOUNT_PROFILE_BIOGRAPHY = `/user/account/profile/biography`;
 /**
  * SOCIALS
  */
-export const FEED = `/social/api/feed`;
-export const POSTS = `/social/api/post`;
+export const FEED = `/social/news-feed`;
+export const POSTS = `/social/posts`;
 export const LIKES = `/social/api/like`;
 export const SHARES = `/social/api/share`;
 export const COMMENTS = `/social/api/comment`;
@@ -68,6 +68,7 @@ export const ELEARNING_CREATING_ANSWERS = `/elearning/creating/answers`;
 export const ELEARNING_CREATING_CHAPTERS = `/elearning/creating/chapters`;
 export const ELEARNING_CREATING_DOCS = `/elearning/creating/docs`;
 export const ELEARNING_CREATING_EXERCISES = `/elearning/creating/exercises`;
+export const ELEARNING_CREATING_TEST = `/elearning/creating/test`;
 export const ELEARNING_CREATING_GENERAL = `/elearning/creating/general`;
 export const ELEARNING_CREATING_LESSONS = `/elearning/creating/lessons`;
 export const ELEARNING_CREATING_QUESTIONS = `/elearning/creating/questions`;
