@@ -52,7 +52,7 @@
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/announcement'">
         <span>
-          <IconMonetizationOn24px class="icon"/>
+          <IconNotifications24px class="icon"/>
         </span>
         <span>
           Thông báo

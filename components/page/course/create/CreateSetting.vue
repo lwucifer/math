@@ -82,7 +82,7 @@
 
       <div class="mb-4">
         <h5 class="mb-3">
-          Cho phép bình luận tại
+          Cho phép viết đánh giá tại
           {{ get(general, "type", "") == "LECTURE" ? "bài giảng" : "khóa học" }}
         </h5>
         <app-radio-group>
@@ -164,7 +164,7 @@
 
           <div
             class="percent_price__ElearningCreate bg-primary text-white ml-3"
-            v-if="percent_price"
+           
           >
             {{ percent_price }}
           </div>
@@ -288,7 +288,7 @@ export default {
       return true;
     },
     percent_price() {
-      let percent_price = "";
+      let percent_price = '100%';
       const _fee = numeral(get(this, "payload.fee", 0)).value();
       const _price = numeral(get(this, "payload.price", 0)).value();
       if (_fee && _price) {

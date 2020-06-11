@@ -1,7 +1,14 @@
 .app-modal-confirm {
     .app-modal-content {
         text-align: center;
-        padding: 4rem 3rem 3rem;
+        padding: 3rem 2.4rem 2rem;
+    }
+
+    &--default {
+        .app-modal-confirm__close {
+            top: .5rem;
+            right: .5rem;
+        }
     }
 }
 

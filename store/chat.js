@@ -4,6 +4,7 @@ import { isEmpty, uniqWith, isEqual, omit } from "lodash";
 import Room from "~/services/chat/Room";
 import Member from "~/services/chat/Member";
 import Media from "~/services/chat/Media";
+import Friends from "~/services/chat/Friends";
 
 /**
  * initial state
@@ -17,7 +18,9 @@ const state = () => ({
   messageOn: {},
   messageRes: {},
   imageList: [],
-  fileList: []
+  fileList: [],
+  friendList: [],
+  messageListFetch: []
 });
 
 /**
@@ -44,6 +47,27 @@ const actions = {
           ),
         });
       }
+      return result;
+    } catch (err) {
+      console.log("[Room] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.ROOM_LIST_FETCH]({ commit, state }, payload) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.LIST
+      ](payload);
+      console.log("[ROOM_LIST_FETCH] list", result);
+      // if (result) {
+      //   const { list_room } = result;
+      //   commit(mutationTypes.CHAT.SET_ROOM_LIST, {
+      //     list_room: uniqWith(
+      //       list_room.concat(state.roomList.list_room),
+      //       (a, b) => a.id === b.id
+      //     ),
+      //   });
+      // }
       return result;
     } catch (err) {
       console.log("[Room] list.err", err);
@@ -83,6 +107,19 @@ const actions = {
       return result;
     } catch (err) {
       console.log("[Message] list.err", err);
+      return err;
+    }
+  },
+  async [actionTypes.CHAT.MESSAGE_LIST_FETCH]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.GET_END
+      ](options, options.id, options.end);
+      console.log("[MESSAGE_LIST_FETCH] list", result);
+      commit(mutationTypes.CHAT.SET_MESSAGE_LIST_FETCH, result);
+      return result;
+    } catch (err) {
+      console.log("[MESSAGE_LIST_FETCH] list.err", err);
       return err;
     }
   },
@@ -249,6 +286,20 @@ const actions = {
       return err;
     }
   },
+
+  async [actionTypes.CHAT.FRIENDS_LIST]({ commit }, payload) {
+    try {
+      const result = await new Friends(this.$axios)[actionTypes.BASE.LIST](
+        payload
+      );
+      // set to mutation
+      console.log("[Friends] add", result.data);
+      commit(mutationTypes.CHAT.SET_FRIENDS_LIST, result.data);
+      return result;
+    } catch (err) {
+      return err;
+    }
+  },
 };
 /**
  * initial mutations
@@ -294,6 +345,12 @@ const mutations = {
   },
   [mutationTypes.CHAT.SET_FILE_LIST](state, _fileList) {
     state.fileList = _fileList;
+  },
+  [mutationTypes.CHAT.SET_FRIENDS_LIST](state, _friendList) {
+    state.friendList = _friendList
+  },
+  [mutationTypes.CHAT.SET_MESSAGE_LIST_FETCH](state, _messageListFetch) {
+    state.messageListFetch = _messageListFetch;
   },
 };
 
