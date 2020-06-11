@@ -235,7 +235,7 @@
         </div>
       </div>
       <div class="aside-box__content" v-else>
-        <client-only>
+        <!-- <client-only>
           <infinite-loading
             direction="top"
             @infinite="messageInfiniteHandler"
@@ -243,7 +243,7 @@
           >
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
-        </client-only>
+        </client-only>-->
       </div>
 
       <div class="aside-box__bottom">
@@ -979,6 +979,7 @@ export default {
       // this.removeImgSrc();
     },
     changeUser() {
+      this.checkList = false;
       console.log("[option]", this.tag, this.tag.length);
       if (this.tag.length == 0) {
         this.roomIdPush = "";

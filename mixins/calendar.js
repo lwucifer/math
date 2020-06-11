@@ -153,6 +153,7 @@ export default {
       this.$nextTick(() => {
         this.pickMode = this.PICK_MODES.DATE;
       });
+      this.$emit("changeDateToday", value);
     },
 
     $_calendarMixin_handleChangeMonth(month) {

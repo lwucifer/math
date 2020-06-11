@@ -110,16 +110,26 @@
               <span class="text-primary">{{lastDayMonth}}</span>
             </div>
 
-            <ul class="timetable-list">
-              <li class="timetable-list-item active" v-for="i in 10" :key="i">
+            <ul class="timetable-list" v-if="checkDataTable">
+              <li
+                class="timetable-list-item active"
+                v-for="(item,index) in filterTimeTableList"
+                :key="index"
+              >
                 <span class="timetable-list-item__dot"></span>
-                <span class="timetable-list-item__title">Làm bài kiểm tra</span>
-                <span class="timetable-list-item__subtitle">Bài kiểm tra chất lượng số 2</span>
-                <span class="timetable-list-item__time">Thời gian bắt đầu: 13:00</span>
+                <span class="timetable-list-item__title">{{item.text}}</span>
+                <span class="timetable-list-item__subtitle">{{item.content}}</span>
+                <span
+                  class="timetable-list-item__time"
+                >Thời gian bắt đầu: {{item.time | moment('kk:mm') }}</span>
               </li>
             </ul>
+            <div
+              class="text-center div-no-data"
+              v-else
+            >Không có thời khóa biểu nào trong khoảng thời gian này</div>
 
-            <app-pagination
+            <!-- <app-pagination
               class="mt-5"
               :pagination="{
                 total: 4,
@@ -132,7 +142,7 @@
                 number_of_elements: 45,
                 total_pages: 4
               }"
-            />
+            />-->
           </div>
         </div>
       </div>
@@ -148,13 +158,29 @@ import IconCalendarDay from "~/assets/svg/icons/calendar-day.svg?inline";
 import IconCalendarWeek from "~/assets/svg/icons/calendar-week.svg?inline";
 import IconCalendarMonth from "~/assets/svg/icons/calendar-month.svg?inline";
 import IconMoreHoriz from "~/assets/svg/v2-icons/more_horiz_24px.svg?inline";
-import { mapMutations } from "vuex";
-import { TIMETABLE } from "../../../../utils/mutation-types";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { TIMETABLE } from "~/utils/mutation-types";
+import * as actionTypes from "~/utils/action-types";
+import * as constants from "~/utils/constants";
+import { getDateTimeFrom, getDateTimeTo } from "~/utils/moment";
 const STORE_NAME_TIMETABLE = "elearning/mycourses/timetable";
 
 export default {
   middleware: ["authenticated"],
-
+  async fetch({ params, query, store, route }) {
+    const data = {
+      from: getDateTimeFrom(moment()),
+      to: getDateTimeTo(moment())
+    };
+    await Promise.all([
+      store.dispatch(
+        `${STORE_NAME_TIMETABLE}/${actionTypes.TIMETABLE.TIMETABLE_LIST}`,
+        {
+          params: data
+        }
+      )
+    ]);
+  },
   components: {
     MyCourseSide,
     IconCalendarDay,
@@ -183,14 +209,53 @@ export default {
         .format("D MMMM, YYYY"),
       lastDayMonth: moment()
         .endOf("month")
-        .format("D MMMM, YYYY")
+        .format("D MMMM, YYYY"),
+      queryFromTo: {
+        from: null,
+        to: null
+      }
     };
+  },
+  computed: {
+    ...mapState(STORE_NAME_TIMETABLE, ["timeTableList"]),
+    filterTimeTableList() {
+      const data =
+        this.timeTableList &&
+        this.timeTableList.map(item => {
+          if (item.type == constants.TYPE_TIME_TABLE.OLCLASS) {
+            return {
+              ...item,
+              text: "Học online"
+            };
+          } else if (item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
+            return {
+              ...item,
+              text: "Học tập"
+            };
+          } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
+            return {
+              ...item,
+              text: "Làm bài tập"
+            };
+          } else {
+            return {
+              ...item,
+              text: "Làm bài kiểm tra"
+            };
+          }
+        });
+      return data;
+    },
+    checkDataTable() {
+      return this.timeTableList && this.timeTableList.length > 0 ? true : false;
+    }
   },
   created() {
     this.changeDate(this.calendar);
   },
   methods: {
     ...mapMutations(STORE_NAME_TIMETABLE, ["setStateTimeTable"]),
+    ...mapActions(STORE_NAME_TIMETABLE, ["getTimeTableList"]),
     changeDate(date) {
       this.dayslist.length = 0;
       for (let i = 1; i <= 7; i++) {
@@ -215,26 +280,44 @@ export default {
       this.calendar = moment(i);
       this.setStateTimeTable(this.calendar);
       this.todayDate = moment(i).format("D MMMM, YYYY");
+      console.log("i", this.todayDate);
+      this.queryFromTo.from = getDateTimeFrom(i);
+      this.queryFromTo.to = getDateTimeTo(i);
+      this.getTimeTableList({ params: this.queryFromTo });
       // console.log(this.calendar);
     },
     selectDay() {
       this.checkTimeTable = true;
       this.checkTimeTableMonth = false;
       this.checkTimeTableWeek = false;
+      this.calendar = moment();
+      this.todayDate = moment().format("D MMMM, YYYY");
+      this.queryFromTo.from = getDateTimeFrom(moment());
+      this.queryFromTo.to = getDateTimeTo(moment());
+      this.getTimeTableList({ params: this.queryFromTo });
     },
     selectWeek() {
       this.checkTimeTableWeek = true;
       this.checkTimeTableMonth = false;
       this.checkTimeTable = false;
+      this.queryFromTo.from = getDateTimeFrom(moment().startOf("week"));
+      this.queryFromTo.to = getDateTimeTo(moment().endOf("week"));
+      this.getTimeTableList({ params: this.queryFromTo });
     },
     selectMonth() {
       this.checkTimeTableMonth = true;
       this.checkTimeTableWeek = false;
       this.checkTimeTable = false;
+      this.queryFromTo.from = getDateTimeFrom(moment().startOf("month"));
+      this.queryFromTo.to = getDateTimeTo(moment().endOf("month"));
+      this.getTimeTableList({ params: this.queryFromTo });
     },
     changeDateToday(value) {
       this.checkTimeTable = false;
-      // console.log("[changeDateToday] value", value);
+      console.log("[changeDateToday] value", value);
+      this.queryFromTo.from = getDateTimeFrom(value);
+      this.queryFromTo.to = getDateTimeTo(value);
+      this.getTimeTableList({ params: this.queryFromTo });
       this.todayDate = value.format("D MMMM, YYYY");
     }
   }
