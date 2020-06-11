@@ -54,7 +54,7 @@
       </app-radio-group>
     </div>
 
-    <div class="caculate-point" v-if="payload.type === 'CHOICE'">
+    <div class="caculate-point">
       <h5 class="mb-4">Chọn cách tính điểm</h5>
 
       <div class="mb-4">
