@@ -1,5 +1,11 @@
 <template>
-  <sub-block-section class="my-course-side" title="Góc học tập">
+  <sub-block-section
+    v-sticky
+    sticky-offset="{ top: 88 }"
+    :sticy-z-index="9"
+    class="my-course-side"
+    title="Góc học tập"
+  >
     <template slot="content">
       <ul class="my-course-side-menu-list">
         <li class="my-course-side-menu-item">
