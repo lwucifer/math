@@ -11,7 +11,7 @@
       :key="answer.id"
       :answer="answer"
       :index="index"
-      :id="get(payload,'id','')"
+      :id="get(payload, 'id', '')"
       @handleSelectAnswerTrue="handleSelectAnswerTrue"
       @handleChangeContent="handleChangeContentAnswer"
       @handleAddAnswer="handleAddAnswer"
@@ -47,7 +47,7 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
-import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
+import CreateAnswerOfQuestion from "~/components/page/course/create/exams/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";

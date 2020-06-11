@@ -63,7 +63,7 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
-import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
+import CreateAnswerOfQuestion from "~/components/page/course/create/exams/CreateAnswerOfQuestion";
 import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";

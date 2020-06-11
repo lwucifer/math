@@ -8,23 +8,18 @@
 
       <div class="px-4">
         <app-alert type="info" class="mt-4" show-close>
-          Bạn có thể tạo bài kiểm tra cho bài giảng/ khóa học của bạn tại đây. Nếu bài giảng/ khóa học của
-          bạn không yêu cầu làm bài tập, bạn có thể bỏ qua phần này và tiến hành
-          gửi lên để được xét duyệt.
+          Bạn có thể tạo bài kiểm tra cho bài giảng/ khóa học của bạn tại đây.
+          Nếu bài giảng/ khóa học của bạn không yêu cầu làm bài tập, bạn có thể
+          bỏ qua phần này và tiến hành gửi lên để được xét duyệt.
         </app-alert>
       </div>
 
       <ButtonCreateExam
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
-        :category="category"
       />
 
-      <FormCreateExam
-        v-if="isShowFormAdd"
-        @cancel="handleHideFormAdd"
-        :category="category"
-      />
+      <FormCreateExam v-if="isShowFormAdd" @cancel="handleHideFormAdd" />
 
       <ExamList
         v-for="(exercise, index) in get(exams, 'content', [])"
@@ -74,7 +69,6 @@ export default {
     return {
       isShowButtonCreate: true,
       isShowFormAdd: false,
-      category: "TEST",
     };
   },
 
@@ -84,10 +78,6 @@ export default {
       exams: "exams",
     }),
   },
-
-  // mounted() {
-  //   this.$store.dispatch("elearning/create/getExams");
-  // },
 
   methods: {
     handleShowFormAdd() {

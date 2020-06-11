@@ -12,7 +12,9 @@
 
       <span
         class="text-sub mr-4 question-point"
-        v-if="get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')"
+        v-if="
+          get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')
+        "
         >{{ get(question, "points", "") }} điểm</span
       >
 
@@ -71,9 +73,9 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import { get } from "lodash";
-import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
-import EditQuestionChoice from "~/components/page/course/create/exercise/EditQuestionChoice";
-import EditQuestionEssay from "~/components/page/course/create/exercise/EditQuestionEssay";
+import CreateQuestionEssay from "~/components/page/course/create/exams/CreateQuestionEssay";
+import EditQuestionChoice from "~/components/page/course/create/exams/EditQuestionChoice";
+import EditQuestionEssay from "~/components/page/course/create/exams/EditQuestionEssay";
 import * as actionTypes from "~/utils/action-types";
 import { mapState } from "vuex";
 import { limitCharacter } from "~/utils/common";
@@ -127,10 +129,10 @@ export default {
     }),
 
     limit() {
-      const value = get(this, 'question.content', '')
-      
-      return limitCharacter(value, 60, 20)
-    }
+      const value = get(this, "question.content", "");
+
+      return limitCharacter(value, 60, 20);
+    },
   },
 
   methods: {

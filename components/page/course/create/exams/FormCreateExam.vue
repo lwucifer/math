@@ -2,7 +2,7 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block"
-        >Tiêu đề {{ title }}
+        >Tiêu đề bài kiểm tra
         <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         ></label
@@ -33,7 +33,7 @@
     </div> -->
 
     <div class="mb-4">
-      <h5 for="require" class="mb-3">Loại {{ title }}</h5>
+      <h5 for="require" class="mb-3">Loại bài kiểm tra</h5>
 
       <app-radio-group>
         <app-radio
@@ -58,19 +58,31 @@
       <h5 class="mb-4">Chọn cách tính điểm</h5>
 
       <div class="mb-4">
-        <app-radio 
+        <app-radio
           value="he so"
           @click="handleSelectType"
-          name="caculate-point" 
-          class="mr-6">
-          Theo hệ số <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle"/> 
+          name="caculate-point"
+          class="mr-6"
+        >
+          Theo hệ số
+          <IconQuestionCircle
+            width="12px"
+            height="12px"
+            class="fill-gray vertical-middle"
+          />
         </app-radio>
 
-        <app-radio 
+        <app-radio
           value="trong so"
           @click="handleSelectType"
-          name="caculate-point">
-          Theo trọng số <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle"/> 
+          name="caculate-point"
+        >
+          Theo trọng số
+          <IconQuestionCircle
+            width="12px"
+            height="12px"
+            class="fill-gray vertical-middle"
+          />
         </app-radio>
       </div>
 
@@ -93,7 +105,10 @@
           </template>
         </app-select>
 
-        <p class="text-warning">* Lưu ý: Bạn sẽ không thể thay đổi cách tính điểm sau khi bài kiểm tra đã được tạo</p>
+        <p class="text-warning">
+          * Lưu ý: Bạn sẽ không thể thay đổi cách tính điểm sau khi bài kiểm tra
+          đã được tạo
+        </p>
       </div>
     </div>
 
@@ -152,63 +167,41 @@
         </app-input>
       </div>
     </div>
-    
 
     <div class="setup-time mt-5 mb-6">
       <h5 class="mb-4">
-        Cài đặt thời gian 
-        <span class="text-base font-weight-normal">(Không bắt buộc) <IconQuestionCircle width="12px" height="12px" class="fill-gray"/></span>
+        Cài đặt thời gian
+        <span class="text-base font-weight-normal"
+          >(Không bắt buộc)
+          <IconQuestionCircle width="12px" height="12px" class="fill-gray"
+        /></span>
       </h5>
 
       <div class="d-flex align-items-center mb-3">
-          <p class="w-120">Thời gian bắt đầu:</p>
+        <p class="w-120">Thời gian bắt đầu:</p>
 
-          <app-date-picker
-            size="sm"
-            placeholder="dd/mm/yyyy"
-            value-type="DD-MM-YYYY"
-            class="mr-3"
-          >
-            <template v-slot:icon-calendar>
-              <IconCalender class="fill-primary" />
-            </template>
-          </app-date-picker>
-
-          <app-date-picker
-            size="sm"
-            type="time"
-            placeholder="HH:mm"
-            value-format="HH:mm"
-            class="ml-0 mr-6"
-          />
-
-          <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+        <SelectDate
+          @onChange="handleChangeOpenTime"
+          :value="payload.open_time"
+          :disabled="!payload.opentime_enable"
+        />
+        <app-checkbox v-model="payload.opentime_enable"
+          ><span class="text-base">Áp dụng</span></app-checkbox
+        >
       </div>
 
-
       <div class="d-flex align-items-center">
-          <p class="w-120">Thời gian kết thúc:</p>
+        <p class="w-120">Thời gian kết thúc:</p>
 
-          <app-date-picker
-            size="sm"
-            placeholder="dd/mm/yyyy"
-            value-type="DD-MM-YYYY"
-            class="mr-3"
-          >
-            <template v-slot:icon-calendar>
-              <IconCalender class="fill-primary" />
-            </template>
-          </app-date-picker>
+        <SelectDate
+          @onChange="handleChangeCloseTime"
+          :value="payload.close_time"
+          :disabled="!payload.closetime_enable"
+        />
 
-          <app-date-picker
-            size="sm"
-            type="time"
-            placeholder="HH:mm"
-            value-format="HH:mm"
-            class="ml-0 mr-6"
-          />
-
-          <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox> 
+        <app-checkbox v-model="payload.closetime_enable"
+          ><span class="text-base">Áp dụng</span></app-checkbox
+        >
       </div>
     </div>
 
@@ -267,8 +260,8 @@
         size="md"
         color="primary"
         class="font-weight-semi-bold"
-        @click="handleAddExcercise"
-        >Tạo {{ title }}</app-button
+        @click="handleAddExam"
+        >Tạo bài kiểm tra</app-button
       >
     </div>
     <app-modal-confirm
@@ -284,9 +277,9 @@
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconEvent24px from "~/assets/svg/v2-icons/event_24px.svg?inline";
-import IconQuestionCircle from '~/assets/svg/design-icons/question-circle.svg?inline';
-import IconCalender from '~/assets/svg/v2-icons/calendar_today_24px.svg?inline';
-
+import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
+import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
+import SelectDate from "~/components/page/course/create/setting/SelectDate";
 import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery } from "~/utils/common";
@@ -299,25 +292,11 @@ export default {
     IconAngleDown,
     IconEvent24px,
     IconQuestionCircle,
-    IconCalender
-  },
-
-  props: {
-    category: {
-      type: String,
-      default: "",
-    },
+    IconCalender,
+    SelectDate,
   },
 
   computed: {
-    title() {
-      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
-    },
-    title_required() {
-      return get(this, "category", "") === "TEST"
-        ? "Bài kiểm tra bắt buộc?"
-        : "Bài tập bắt buộc?";
-    },
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
@@ -329,26 +308,37 @@ export default {
       payload: {
         index: 1,
         elearning_id: "",
-        required: get(this, "category", "") === "TEST" ? 1 : "",
+        required: 1,
         title: "",
         type: "",
         pass_score: 0,
         reworks: 1,
         duration: 0,
-        category: this.category,
+        category: "TEST",
         open_time: "",
+        opentime_enable: true,
+        close_time: "string",
+        closetime_enable: true,
+        coefficient: 1,
+        // id: "",
+        // weight: 0,
       },
       showModalConfirm: false,
       confirmLoading: false,
-      is_open: 0,
-      date: "",
-      time: "",
-      typeRadio: 'he so'
+      typeRadio: "he so",
     };
   },
 
   methods: {
-    async handleAddExcercise() {
+    handleChangeOpenTime(date) {
+      this.payload.open_time = date;
+    },
+
+    handleChangeCloseTime(date) {
+      this.payload.close_time = date;
+    },
+
+    async handleAddExam() {
       this.showModalConfirm = true;
     },
 
@@ -364,28 +354,25 @@ export default {
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");
-      if (this.is_open == 1) {
-        this.payload.open_time = `${this.date} ${this.time}`;
-        this.payload.open_time = moment(this.payload.open_time, "YYYY-MM-DD HH:mm a")
-          .utc()
-          .format("YYYY-MM-DD hh:mm:ss");
-      }
-
-      const payload = createPayloadExercise(this.payload);
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
-        payload
-      );
+      const res = await this.$axios({
+        url: "/elearning/creating/test",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: this.payload,
+      });
 
       this.handleCancel();
-      if (get(res, "success", false)) {
-        this.$toasted.success(get(res, "message", ""));
+
+      if (get(res, "data.success", false)) {
+        this.$toasted.success(get(res, "data.message", ""));
         this.$store.dispatch("elearning/create/getExams");
         this.$emit("cancel");
         return;
       }
 
-      this.$toasted.error(get(res, "message", ""));
+      this.$toasted.error(get(res, "data.message", ""));
     },
 
     handleCancel() {

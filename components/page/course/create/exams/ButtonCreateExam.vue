@@ -14,35 +14,20 @@
       color="primary"
       size="md"
       @click="$emit('handleClick')"
-      ><IconPlus2 class="mr-2"/>{{ text }}</app-button
+      ><IconPlus2 class="mr-2" />Tạo bài kiểm tra</app-button
     >
   </div>
 </template>
 
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
-import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
+import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 import { get } from "lodash";
 
 export default {
   components: {
     IconInfoCircle,
-    IconPlus2
+    IconPlus2,
   },
-
-  props: {
-    category: {
-      type: String,
-      default: ""
-    }
-  },
-
-  computed: {
-    text() {
-      return get(this, "category", "") === "TEST"
-        ? "Tạo bài kiểm tra"
-        : "Tạo bài tập";
-    }
-  }
 };
 </script>
