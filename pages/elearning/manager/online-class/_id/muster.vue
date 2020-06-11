@@ -6,12 +6,12 @@
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
-        <sub-block-section :title="'Điểm danh - ' + lessonInfo.name" has-icon>
+        <sub-block-section :title="'Điểm danh - ' + get(lessonInfo,'name','')" has-icon>
           <template v-slot:content>
             <div class="elearning-manager-content__main pt-3">
               <div class="elearning-wrapper">
                 <!--Info group-->
-                <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
+                <h5 class="color-primary mb-15">{{get(lessonInfo,'name','')}}</h5>
                 <div class="class-info mb-4 border">
                   <strong class="d-flex-center">
                     <IconClock class="mr-3" />
@@ -157,7 +157,7 @@
                 <div class="top">
                   <i>
                     *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
-                    <b>{{lessonInfo.name}}</b> theo yêu cầu của giáo viên
+                    <b>{{get(lessonInfo,'name','')}}</b> theo yêu cầu của giáo viên
                   </i>
                 </div>
                 <div class="bottom">

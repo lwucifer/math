@@ -162,7 +162,9 @@
             <template v-slot:cell(price)="{ row }">
               <td>
                 <span v-if="row.pricefree || row.price.original_price == 0">Miễn phí</span>
-                <span v-if="!row.pricefree && row.price.original_price > 0">Trả phí</span>
+                <span v-if="!row.pricefree && row.price.original_price > 0" class="color-blue">
+                  {{numeral(row.price.original_price).format()}}đ
+                </span>
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
@@ -242,6 +244,7 @@
 
      <app-modal-notify
       :width="550"
+      :centered="false"
       @ok="noteReject = ''"
       @close="noteReject = ''"
       v-if="noteReject"
@@ -271,6 +274,8 @@ import IconMessage from "~/assets/svg/v2-icons/message_24px.svg?inline";
 import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
 import IconEdit from "~/assets/svg/icons/edit.svg?inline";
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
+
+import numeral from "numeral";
 
 import {
   getDateBirthDay
@@ -450,7 +455,7 @@ export default {
       params: {
         page: 1,
         limit: 10,
-        sort: 'publish_date_desc'
+        sorted: 'publish_date_desc'
       }
     };
   },
@@ -525,11 +530,12 @@ export default {
   },
 
   methods: {
+    numeral,
     getDateBirthDay,
 
     handleSort(e) {
       const sortBy = e.sortBy + '_' + e.order;
-      this.params = {...this.params, sort: sortBy};
+      this.params = {...this.params, sorted: sortBy};
       this.getList();
     },
 
