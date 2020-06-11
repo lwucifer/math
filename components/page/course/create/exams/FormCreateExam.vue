@@ -118,7 +118,7 @@
       <div class="d-flex align-items-center mb-5" v-if="typeRadio == 'weight'">
         <p class="mr-3">Nhập trọng số:</p>
 
-        <app-input class="mr-3" size="sm" v-model="payload.weight">
+        <app-input class="mr-3 mb-0 w-80 pr-3" size="sm" v-model="payload.weight">
           <template slot="placeholder-icon">
             <span class="text-primary">%</span>
           </template>
