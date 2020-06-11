@@ -310,6 +310,7 @@ export default {
       );
       if (get(res, "success", false)) {
         this.$toasted.success(get(res, "success", false))
+        this.fetchAnnouncement();
         return
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"))

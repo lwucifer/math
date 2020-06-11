@@ -583,7 +583,9 @@ export const CHAT = {
     SET_ON_MESSAGE: "setOnMessage",
     SET_RES_EMIT: "setResEmit",
     SET_IMAGE_LIST: "setImageList",
-    SET_FILE_LIST: "setFileList"
+    SET_FILE_LIST: "setFileList",
+    SET_FRIENDS_LIST: "setFriendsList",
+    SET_MESSAGE_LIST_FETCH: "setMessageListFetch"
 };
 
 export const TIMETABLE = {

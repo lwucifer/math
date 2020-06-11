@@ -699,7 +699,10 @@ export const CHAT = {
     ROOM_REMOVE_MEMBER: "roomRemoveMember",
     ROOM_ADD_MEMBER: "roomAddMember",
     UPLOAD_MEDIA: "uploadMedia",
-    CHANGE_ROOM_AVATAR: "changeRoomAvatar"
+    CHANGE_ROOM_AVATAR: "changeRoomAvatar",
+    FRIENDS_LIST: "getFriendsList",
+    ROOM_LIST_FETCH: "getRoomListFetch",
+    MESSAGE_LIST_FETCH: "getMessageListFetch"
 };
 
 export const TIMETABLE = {
