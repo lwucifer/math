@@ -68,6 +68,7 @@ export const ELEARNING_CREATING_ANSWERS = `/elearning/creating/answers`;
 export const ELEARNING_CREATING_CHAPTERS = `/elearning/creating/chapters`;
 export const ELEARNING_CREATING_DOCS = `/elearning/creating/docs`;
 export const ELEARNING_CREATING_EXERCISES = `/elearning/creating/exercises`;
+export const ELEARNING_CREATING_TEST = `/elearning/creating/test`;
 export const ELEARNING_CREATING_GENERAL = `/elearning/creating/general`;
 export const ELEARNING_CREATING_LESSONS = `/elearning/creating/lessons`;
 export const ELEARNING_CREATING_QUESTIONS = `/elearning/creating/questions`;

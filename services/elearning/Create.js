@@ -5,10 +5,11 @@ import General from "~/services/elearning/creating/General";
 import Chapter from "~/services/elearning/creating/Chapter";
 import Setting from "~/services/elearning/creating/Setting";
 import Exercise from "~/services/elearning/creating/Exercise";
+import Exam from "~/services/elearning/creating/Exam";
 
 export async function getExams($axios, options) {
   try {
-    const result = await new Exercise($axios)[actionTypes.BASE.LIST](options);
+    const result = await new Exam($axios)[actionTypes.BASE.LIST](options);
     if (result.success) return result.data;
     return null;
   } catch (error) {
