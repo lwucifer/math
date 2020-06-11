@@ -112,8 +112,15 @@
                         </div>
 
                         <div class="d-flex filter-form__input-wrapper">
-                          <div class="filter-form__item" style="min-width: 25rem;">
-                            <app-date-picker
+                          <div class="filter-form__item" style="min-width: 21rem;">
+                            <app-range-calendar
+                              :placeholder="'DD/MM/YYYY - DD/MM/YYYY'"
+                              v-model="dateDefault"
+                              value-type="YYYY-MM-DD"
+                              bordered
+                              @change="changeDate"
+                            />
+                            <!-- <app-date-picker
                               class="w-100"
                               popupClass="datepicker-range-v2"
                               v-model="dateDefault"
@@ -124,11 +131,11 @@
                               :shortcuts="DATE_SHORTCUT"
                               @input="changeDate"
                               value-type="YYYY-MM-DD"
-                            >
+                            > -->
                               <!--<template v-slot:icon-calendar>-->
                               <!--<IconCalendar />-->
                               <!--</template>-->
-                            </app-date-picker>
+                            <!-- </app-date-picker> -->
                           </div>
                         </div>
                       </filter-form>
@@ -267,7 +274,7 @@ export default {
         page: ""
       },
       revenue: "",
-      dateDefault: ""
+      dateDefault: []
     };
   },
   created() {

@@ -11,7 +11,14 @@
         class="filter-form__item"
         style="min-width: 21rem;"
       >
-        <app-date-picker
+        <app-range-calendar
+          :placeholder="'DD/MM/YYYY - DD/MM/YYYY'"
+          v-model="dateDefault"
+          value-type="YYYY-MM-DD"
+          bordered
+          @change="changeDate"
+        />
+        <!-- <app-date-picker
           class="w-100"
           v-model="dateDefault"
           range
@@ -21,11 +28,11 @@
           popup-class="datepicker-range-v2"
           value-type="YYYY-MM-DD"
           @input="changeDate"
-        >
+        > -->
           <!--<template v-slot:icon-calendar>-->
           <!--<IconCalendar />-->
           <!--</template>-->
-        </app-date-picker>
+        <!-- </app-date-picker> -->
       </div>
       <div class="filter-form__item d-flex">
         <filter-button
