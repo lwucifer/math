@@ -234,13 +234,13 @@ const actions = {
           commit(
             mutationTypes.ELEARNING_STUDY_EXERCISE
               .SET_STUDY_ELEARNING_EXERCISE_TEST_LIST,
-            result.data
+              result.data.content
           );
         }
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_ELEARNING_EXERCISE_LIST,
-          result.data
+            result.data.content
         );
 
         // turnof loadingExercise

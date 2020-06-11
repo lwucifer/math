@@ -7,7 +7,7 @@
     </div>
 
     <!--list-->
-    <div class="row mb-4 mt-3">
+    <div class="row mb-4 mt-3" v-if="!showAddPayment">
       <div class="col-md-9">
         <h6 class="mb-3">DANH SÁCH TÀI KHOẢN NHẬN TIỀN</h6>
         <div>

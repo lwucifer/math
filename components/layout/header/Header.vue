@@ -200,17 +200,17 @@ export default {
       if(!newValue){
         this.valueInput = '';
       }else{
-        console.log('param', this.$route);
         const paramCheck = this.$route.path;
         if(paramCheck == '/school'){
           this.$router.push(`/school/search`)
-        }else if(paramCheck != '/elearning/search' && paramCheck != '/social'){
+        }else if(paramCheck != '/elearning/search' && paramCheck != '/social' && paramCheck != '/school/search'){
           this.$router.push(`/elearning/search?subject=&type=&sort=`)
         }
       }
     }
   },
   mounted() {
+    console.log('this.$route.path', this.$route.path)
     this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
       const data = {

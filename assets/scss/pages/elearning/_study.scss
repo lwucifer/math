@@ -74,8 +74,10 @@
 
 .elearning-lesson-screen {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    min-height: 42.6rem;
+    height: 42.6rem;
+    overflow-y: auto;
 
     iframe {
         border: 0;
@@ -114,7 +116,6 @@
     }
 
     .elearning-lesson-screen {
-        min-height: unset;
         height: 100%;
 
         iframe {

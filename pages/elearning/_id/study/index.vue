@@ -98,7 +98,7 @@
                   <!-- <iframe
                     src="https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/scorm/20200610034529203_c2f56f5d1c170e0a9723d5bf2b149d67ecb42aee71513e8f3ca4013b236f82fd/Tin%20hoc%206_repair/index.htm"
                   ></iframe> -->
-
+                  <ScormMode v-if="studyMode === scormMode" />
                 </div>
 
                 <!-- DO EXERCISE -->
@@ -208,6 +208,7 @@ import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 // import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import ScormMode from "~/components/page/elearning/study/ScormMode";
 import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
@@ -234,7 +235,8 @@ export default {
     IconCropFree,
     IconCropFreeReverse,
     IconStudyExpand,
-    IconStudyNarrow
+    IconStudyNarrow,
+    ScormMode
   },
 
   data() {
@@ -247,7 +249,8 @@ export default {
       defaultMode: STUDY_MODE.DEFAULT,
       docMode: STUDY_MODE.DOCS,
       articleMode: STUDY_MODE.ARTICLE,
-      imageMode: STUDY_MODE.IMAGE
+      imageMode: STUDY_MODE.IMAGE,
+      scormMode: STUDY_MODE.SCORM
     };
   },
 

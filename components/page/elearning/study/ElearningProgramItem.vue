@@ -100,7 +100,7 @@
       v-if="isShowConfirmExit"
       title="Xác nhận thoát?"
       description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
-      @ok="handleGetExercises"
+      @ok="handleGetOkExercises"
       @cancel="isShowConfirmExit = false"
     />
 
@@ -109,10 +109,9 @@
       v-if="isShowConfirmExit2"
       title="Xác nhận thoát?"
       description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
-      @ok="handleStudy"
+      @ok="handleOkStudy"
       @cancel="isShowConfirmExit2 = false"
     />
-
   </div>
 </template>
 
@@ -123,7 +122,8 @@ import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
-  LESSION_TYPE
+  LESSION_TYPE,
+  PAGE_SIZE
 } from "~/utils/constants";
 import {
   redirectWithParams,
@@ -172,7 +172,7 @@ export default {
       },
       lessonStatus: false,
       isShowConfirmExit: false,
-      isShowConfirmExit2: false,
+      isShowConfirmExit2: false
     };
   },
 
@@ -203,12 +203,18 @@ export default {
     failedExercise() {
       return get(this.lesson, "failed", 0);
     },
+    workingExercise() {
+      return get(this.lesson, "working", 0);
+    },
     exercises() {
       return get(this.lesson, "exercises", 0);
     },
     completeExecerciseRate() {
       const totalExDid =
-        this.passedExercise + this.pendingExercise + this.failedExercise;
+        this.passedExercise +
+        this.pendingExercise +
+        this.failedExercise +
+        this.workingExercise;
       return `${totalExDid}/${this.exercises}`;
     },
 
@@ -217,7 +223,7 @@ export default {
       // debugger;
       if (this.passedExercise == this.exercises) {
         return "primary";
-      } else if (this.failedExercise > 0) {
+      } else if (this.failedExercise > 0 || this.workingExercise > 0) {
         return "secondary";
       } else if (this.pendingExercise > 0) {
         return "warning";
@@ -295,7 +301,6 @@ export default {
     },
 
     async handleStudy() {
-
       this.isShowConfirmExit2 = false;
       redirectWithParams({ lesson_id: get(this.lesson, "id", "") });
 
@@ -336,6 +341,16 @@ export default {
       }
     },
 
+    handleOkStudy() {
+      this.getProgress();
+      this.handleStudy();
+    },
+
+    handleGetOkExercises() {
+      this.getProgress();
+      this.handleGetExercises();
+    },
+
     handleExitExercise() {
       console.log("[handleExitExercise]");
       // need to confirm if user in mode DO_EXERCISE_DOING
@@ -355,7 +370,7 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const lesson_id = get(this, "lesson.id", "");
       const category = EXERCISE_CATEGORIES.EXERCISE;
-      const elearningReq = { elearning_id, lesson_id, category };
+      const elearningReq = { elearning_id, lesson_id, category, size: PAGE_SIZE.MAXIMIZE, };
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
