@@ -5,11 +5,18 @@
   position: relative;
   &:hover {
     cursor: pointer;
+    box-shadow: $shadow-hover;
   }
 
   &.active {
     .app-range-calendar__placeholder {
       border: 1px solid $color-primary;
+    }
+  }
+  &.app-range-calendar--bordered {
+    box-shadow: $shadow-1;
+    .app-range-calendar__placeholder {
+      border: 1px solid #E0E0E0;
     }
   }
 }
@@ -18,6 +25,20 @@
   .app-range-calendar__placeholder {
     height: 3.2rem;
   }
+}
+.app-range-calendar--size-md {
+  .app-range-calendar__placeholder {
+    height: 4rem;
+  }
+}
+.app-range-calendar--size-lg {
+  .app-range-calendar__placeholder {
+    height: 4.8rem;
+  }
+}
+
+.app-range-calendar__input-wrapper {
+  position: relative;
 }
 
 .app-range-calendar__placeholder {
@@ -111,10 +132,14 @@
     height: 186px;
   }
 }
-.app-range-calendar__icon-select {
+.app-range-calendar__icon-select,
+.app-range-calendar__icon-close {
   position: absolute;
   right: 1rem;
-  top: 0.9rem;
+  top: calc(50% - 0.7rem);
+  display: inline-block;
+  height: 1.4rem;
+  width: 1.4rem;
   svg path {
     fill: $color-primary;
     fill-opacity: 1;
