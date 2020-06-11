@@ -25,7 +25,7 @@
       >
         <span class="clc-type-tab-item__icon">
           <IconRadioButtonChecked class="icon mr-3" />
-          <IconHeadphone class="icon mr-2 heading-3"/>
+          <IconHeadphone class="icon mr-2 heading-3" />
           <span class="clc-type-tab-item__text">Audio</span>
         </span>
       </a>
@@ -38,7 +38,7 @@
       >
         <span class="clc-type-tab-item__icon">
           <IconRadioButtonChecked class="icon mr-3" />
-          <IconScorm class="icon mr-2 heading-3"/>
+          <IconScorm class="icon mr-2 heading-3" />
           <span class="clc-type-tab-item__text">SCORM</span>
         </span>
       </a>
@@ -118,7 +118,6 @@
       <app-button
         class="clc-btn font-weight-semi-bold"
         size="md"
-        :disabled="!isSubmit"
         @click="handleAddContent"
         >{{ edit ? "Sửa" : "Thêm" }} bài học</app-button
       >
@@ -178,7 +177,7 @@ export default {
     IconHeadphone,
     IconScorm,
     LessonSelectScorm,
-    LessonSelectAudio
+    LessonSelectAudio,
   },
 
   props: {
@@ -220,19 +219,6 @@ export default {
   computed: {
     edit() {
       return !!get(this, "lesson.id", "");
-    },
-    isSubmit() {
-      let submit = true;
-      if (!get(this, "payload.name", true)) submit = false;
-      if (
-        !get(this, "payload.article_content", true) &&
-        !get(this, "payload.lesson", true) &&
-        !get(this, "payload.repository_file_id", true) &&
-        !get(this, "payload.id", true)
-      ) {
-        submit = false;
-      }
-      return submit;
     },
   },
 
@@ -291,7 +277,15 @@ export default {
 
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
-      const payload = createPayloadAddContentCourse(this.payload);
+      // const payload = createPayloadAddContentCourse(this.payload);
+
+      const payload = { ...this.payload };
+      if (!payload.id) delete payload.id;
+      if (!payload.lesson) delete payload.lesson;
+      if (!payload.repository_file_id) delete payload.repository_file_id;
+      if (!payload.article_content) delete payload.article_content;
+      if (this.tabType === "audio") delete payload.type;
+
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload

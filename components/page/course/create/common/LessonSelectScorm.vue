@@ -27,7 +27,7 @@
     <DocumentSelectDoc
       @handleSelectUrl="handleSelectUrl"
       v-if="tabVideo === 'choose'"
-      type="VIDEO"
+      type="SCORM"
     />
   </div>
 </template>
