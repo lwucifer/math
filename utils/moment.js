@@ -119,6 +119,12 @@ export const getLocalTimeHH_MM_A = (_utcDate) => {
     return ts.lang("en").format(DATETIME_HH_MM_A);
 };
 
+export const getLocalTimeHH_MM = (_utcDate) => {
+    if (!_utcDate) return;
+    let ts = getLocalDateTime(_utcDate);
+    return ts.lang("en").format(DATETIME_HH_MM);
+};
+
 export const getLocalEndTime = (_startDate, _duration, type) => {
     if (!_startDate) return;
     let date = getLocalDateTime(_startDate);
@@ -208,4 +214,8 @@ Vue.filter("fullDateTimeSlash", function(_utcDate) {
 
 Vue.filter("getDateTimeHH_MM_A_DD_MM_YY", function(_utcDate) {
     return getDateTimeHH_MM_A_DD_MM_YY(_utcDate);
+});
+
+Vue.filter("getLocalTimeHH_MM", function(_utcDate) {
+    return getLocalTimeHH_MM(_utcDate);
 });
