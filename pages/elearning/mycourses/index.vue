@@ -111,7 +111,7 @@ export default {
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
             {
                 from: moment(this.toDate).format("YYYY-MM-DD 00:00:00").toString(), 
-                to: moment(this.toDate).format("YYYY-MM-DD h:mm:ss").toString()
+                to: moment(this.toDate).format("YYYY-MM-DD 23:59:59").toString()
             });
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.DEADLINE}`);
         },
@@ -121,7 +121,7 @@ export default {
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
             {
                 from: moment(this.toDate).format("YYYY-MM-DD 00:00:00").toString(), 
-                to: moment(this.toDate).format("YYYY-MM-DD h:mm:ss").toString()
+                to: moment(this.toDate).format("YYYY-MM-DD 23:59:59").toString()
             });
         }
     },

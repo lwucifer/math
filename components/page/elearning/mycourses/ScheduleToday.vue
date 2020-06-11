@@ -100,6 +100,7 @@ export default {
                  const day = moment(date).day(i.toString()).toString()
                  this.dayslist.push(day)
             }
+            this.$emit('changeDateInWeek', date)
             console.log('this.dayslist', this.dayslist)
             console.log(moment().format("YYYY-MM-DD h:mm:ss").toString())
         },
