@@ -55,6 +55,12 @@
           {{ row.timestamp | moment("DD-MM-YYYY") }}
         </td>
       </template>
+      <template v-slot:cell(method)="{row}">
+        <td>
+          <span v-if="row.method=='ATM'">ATM/Internet Banking</span>
+          <span v-else-if="row.method=='CREDIT'">Thẻ tín dụng/ghi nợ</span>
+        </td>
+      </template>
     </app-table>
     <app-modal-notify
       v-if="notify.isShowNotify"
