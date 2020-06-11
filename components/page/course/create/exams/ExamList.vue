@@ -3,7 +3,7 @@
     <div class="cc-box">
       <div class="cc-box__head" :class="{'add-border-bottom': get(exercise, 'questions', []).length > 0}">
         <div class="cc-box__head-left">
-          <EditExerciseName
+          <EditExamName
             :exercise="get(this, 'exercise', {})"
             :index="index"
           />
@@ -66,12 +66,11 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
-
 import { get } from "lodash";
-import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
-import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
-import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
-import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
+import CreateQuestionEssay from "~/components/page/course/create/exams/CreateQuestionEssay";
+import CreateQuestionChoice from "~/components/page/course/create/exams/CreateQuestionChoice";
+import ListQuestion from "~/components/page/course/create/exams/ListQuestion";
+import EditExamName from "~/components/page/course/create/exams/EditExamName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
 
@@ -87,7 +86,7 @@ export default {
     CreateQuestionEssay,
     CreateQuestionChoice,
     ListQuestion,
-    EditExerciseName,
+    EditExamName,
     IconAngleUp,
     IconPlus2,
   },
