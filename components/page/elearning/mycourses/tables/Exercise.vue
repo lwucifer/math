@@ -9,10 +9,17 @@
       :loading="loading"
     >
       <template v-slot:cell(name)="{row}">
-        <td :title="get(row, 'title', '')">
+        <td :title="get(row, 'name', '')">
           <span>
             {{ get(row, 'name', '') | truncStrFilter(30) }}<sup class="elm--required-symbol" v-if="get(row, 'required', false)"><icon-star height="14" width="14"/></sup>
           </span>
+        </td>
+      </template>
+
+      <template v-slot:cell(deadline)="{row}">
+        <td>
+          <span v-if="get(row, 'deadline', false)"> {{ get(row, 'deadline') | getDateBirthday }} </span>
+          <span v-else> - </span>
         </td>
       </template>
       
@@ -29,7 +36,7 @@
             <template slot="popover" class="tooltip-detail">
               <div>
                 <submit-status
-                  :timestamp="get(row, 'deadline')"
+                  :timestamp="get(row, 'deadline', false) ? getDateTimeHhMmDdMmYyDash(get(row, 'deadline')): null"
                   :scoreDetail="getScoreDetail(row)"
                   :result="get(row, 'result')"
                 >
@@ -82,6 +89,7 @@
   import SubmitStatus from "~/components/page/elearning/mycourses/SubmitStatus"
   import { subResult2Txt } from "~/plugins/filters"
   import { SUBMISSION_RESULTS } from "~/utils/constants"
+  import { getDateTimeHhMmDdMmYyDash } from "~/plugins/filters"
 
   export default {
     components: {
@@ -173,6 +181,7 @@
         return desc
       },
       subResult2Txt,
+      getDateTimeHhMmDdMmYyDash,
       get
     },
   }
