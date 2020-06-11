@@ -52,13 +52,13 @@
         v-if="get(question, 'type', '') === 'CHOICE'"
         @cancel="toggleAddQuestion"
         :question="question"
-        :exercise="exercise"
+        :exam="exam"
       />
       <EditQuestionEssay
         v-else
         @cancel="toggleAddQuestion"
         :question="question"
-        :exercise="exercise"
+        :exam="exam"
       />
     </div>
   </div>
@@ -99,7 +99,7 @@ export default {
       type: Object,
       default: null,
     },
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
@@ -152,14 +152,7 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        this.$store.dispatch("elearning/create/getExams");
 
         return;
       }

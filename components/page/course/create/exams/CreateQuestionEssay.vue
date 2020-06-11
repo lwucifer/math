@@ -1,6 +1,6 @@
 <template>
   <div class="mb-4">
-    <div v-if="showAddPoint">
+    <div>
       <!-- <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
         >Điểm</label
       >
@@ -26,8 +26,10 @@
         </div>
       </div>
     </div>
-    
-    <label class="d-inline-block mb-3 font-weight-semi-bold" for="question-editor"
+
+    <label
+      class="d-inline-block mb-3 font-weight-semi-bold"
+      for="question-editor"
       >Nội dung câu hỏi</label
     >
     <app-editor v-model="payload.content" class="mb-4" />
@@ -36,7 +38,6 @@
       ><app-checkbox class="mr-2 fill-primary" checked/> Nội dung câu trả lời <span class="text-base ml-2 font-weight-normal">(không bắt buộc)</span></label
     >
     <app-editor v-model="payload.answers[0].content"  class="mb-4 ml-4"/> -->
-
 
     <!-- <label
       class="d-inline-block mb-3 font-weight-semi-bold mb-2"
@@ -87,19 +88,18 @@ import { mapState } from "vuex";
 
 export default {
   props: {
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
   },
 
   data() {
-    console.log(this.exercise);
     return {
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
-        exercise_id: get(this, "exercise.id", ""),
+        exercise_id: get(this, "exam.id", ""),
         type: "ESSAY",
         content: "",
         points: "",
@@ -108,13 +108,9 @@ export default {
             correct: false,
             content: "",
           },
-        ]
-      }
-    }
-  },
-
-  mounted() {
-    console.log(this.exercise);
+        ],
+      },
+    };
   },
 
   computed: {
@@ -124,12 +120,6 @@ export default {
     ...mapState("elearning/create", {
       lesson: "lesson",
     }),
-    showAddPoint() {
-      return (
-        get(this, "exercise.category", "") === "TEST" ||
-        get(this, "exercise.required", "") === true
-      );
-    },
   },
 
   methods: {
@@ -151,14 +141,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        this.$store.dispatch("elearning/create/getExams");
 
         return;
       }

@@ -43,7 +43,7 @@
       </button>
       <button
         class="cc-box__btn cc-box__btn-edit-hover"
-        @click="handleDeleteExercise"
+        @click="handleDeleteExam"
       >
         <IconTrashAlt
           class="d-block subheading fill-secondary"
@@ -82,7 +82,7 @@ export default {
     IconSave24px,
   },
   props: {
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       isEditExerciseName: false,
-      exerciseNameModel: get(this, "exercise.title", ""),
+      exerciseNameModel: get(this, "exam.title", ""),
       showModalConfirm: false,
       confirmLoading: false,
     };
@@ -111,7 +111,7 @@ export default {
   watch: {
     exercise: {
       handler: function() {
-        this.exerciseNameModel = this.exercise.title;
+        this.exerciseNameModel = this.exam.title;
       },
       deep: true,
     },
@@ -127,64 +127,61 @@ export default {
     },
     cancelEditExerciseName() {
       this.isEditExerciseName = false;
-      this.exerciseNameModel = this.exercise.title;
+      this.exerciseNameModel = get(this, "exam.title", "");
     },
     async handleSaveExerciseName() {
       const data = {
-        id: get(this, "exercise.id", ""),
+        id: get(this, "exam.id", ""),
         title: this.exerciseNameModel,
+        category: "TEST",
       };
-      const payload = createPayloadExercise(data);
-      const result = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.EDIT_PAYLOAD}`,
-        payload
-      );
-      if (get(result, "success", false)) {
-        this.$toasted.success(get(result, "message", ""));
+
+      const res = await this.$axios({
+        url: "/elearning/creating/test",
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+
+      if (get(res, "data.success", false)) {
+        this.$toasted.success(get(res, "data.message", ""));
         this.isEditExerciseName = false;
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          this.$store.dispatch("elearning/create/getLessons");
-        }
-
+        this.$store.dispatch("elearning/create/getExams");
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(get(res, "data.message", ""));
     },
     handleCancel() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },
-    handleDeleteExercise() {
+    handleDeleteExam() {
       this.showModalConfirm = true;
     },
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        id: get(this, "exercise.id", ""),
+        id: get(this, "exam.id", ""),
       };
-      const result = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
-        payload
-      );
+
+      const res = await this.$axios({
+        url: "/elearning/creating/test",
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: payload,
+      });
+
       this.handleCancel();
-      if (get(result, "success", false)) {
-        this.$toasted.success(get(result, "message", ""));
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
-
+      if (get(res, "data.success", false)) {
+        this.$toasted.success(get(res, "data.message", ""));
+        this.$store.dispatch("elearning/create/getExams");
         return;
       }
-      this.$toasted.error(get(result, "message", ""));
+      this.$toasted.error(get(res, "data.message", ""));
     },
   },
 };

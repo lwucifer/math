@@ -1,12 +1,14 @@
 <template>
   <div class="cc-panel__body-modifer">
     <div class="cc-box">
-      <div class="cc-box__head" :class="{'add-border-bottom': get(exercise, 'questions', []).length > 0}">
+      <div
+        class="cc-box__head"
+        :class="{
+          'add-border-bottom': get(exam, 'questions', []).length > 0,
+        }"
+      >
         <div class="cc-box__head-left">
-          <EditExamName
-            :exercise="get(this, 'exercise', {})"
-            :index="index"
-          />
+          <EditExamName :exam="exam" :index="index" />
         </div>
 
         <div class="cc-box__head-right">
@@ -15,41 +17,51 @@
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
           >
-            <IconPlus2 class="mr-3 fill-primary" /> <span class="font-weight-semi-bold">Thêm câu hỏi</span>
+            <IconPlus2 class="mr-3 fill-primary" />
+            <span class="font-weight-semi-bold">Thêm câu hỏi</span>
           </button>
-          
+
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
           >
-            <IconAngleDown  width="20px" height="20px" class="icon fill-primary" v-if="!isShowExercise" />
-            <IconAngleUp  width="20px" height="20px" class="icon fill-primary" v-else />
+            <IconAngleDown
+              width="20px"
+              height="20px"
+              class="icon fill-primary"
+              v-if="!isShowExercise"
+            />
+            <IconAngleUp
+              width="20px"
+              height="20px"
+              class="icon fill-primary"
+              v-else
+            />
           </button>
         </div>
       </div>
 
-
       <div
         class="cc-box__body"
-        :class="{ 'add-background': isAddQuestionForm, 'py-0' : toggleFormAdd }"
+        :class="{ 'add-background': isAddQuestionForm, 'py-0': toggleFormAdd }"
       >
         <CreateQuestionChoice
-          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
-          :exercise="exercise"
+          v-if="isAddQuestionForm && get(exam, 'type', '') === 'CHOICE'"
+          :exam="exam"
           @cancel="toggleFormAdd"
         />
         <CreateQuestionEssay
-          v-if="isAddQuestionForm && get(exercise, 'type', '') === 'ESSAY'"
-          :exercise="exercise"
+          v-if="isAddQuestionForm && get(exam, 'type', '') === 'ESSAY'"
+          :exam="exam"
           @cancel="toggleFormAdd"
         />
         <template v-if="isShowExercise">
           <ListQuestion
-            v-for="(question, index) in get(exercise, 'questions', [])"
+            v-for="(question, index) in get(exam, 'questions', [])"
             :key="question.id"
             :index="index"
             :question="question"
-            :exercise="exercise"
+            :exam="exam"
           />
         </template>
       </div>
@@ -92,7 +104,7 @@ export default {
   },
 
   props: {
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
