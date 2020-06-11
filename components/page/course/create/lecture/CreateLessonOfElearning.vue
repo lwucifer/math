@@ -30,7 +30,7 @@
           >
             <span class="clc-type-tab-item__icon">
               <IconRadioButtonChecked class="icon mr-3" />
-              <IconHeadphone class="icon mr-2 heading-3"/>
+              <IconHeadphone class="icon mr-2 heading-3" />
               <span class="clc-type-tab-item__text">Audio</span>
             </span>
           </a>
@@ -43,7 +43,7 @@
           >
             <span class="clc-type-tab-item__icon">
               <IconRadioButtonChecked class="icon mr-3" />
-              <IconScorm class="icon mr-2 heading-3"/>
+              <IconScorm class="icon mr-2 heading-3" />
               <span class="clc-type-tab-item__text">SCORM</span>
             </span>
           </a>
@@ -123,7 +123,6 @@
 
           <app-button
             @click="handleAddContent"
-            :disabled="!isSubmit"
             class="clc-btn font-weight-semi-bold"
             size="md"
             square
@@ -209,7 +208,7 @@ export default {
     IconRadioButtonChecked,
     IconDefaultAsideMenu,
     IconHeadphone,
-    IconScorm
+    IconScorm,
   },
 
   props: {
@@ -245,20 +244,6 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
-    isSubmit() {
-      let submit = true;
-      if (!get(this, "payload.name", true)) submit = false;
-      if (
-        !get(this, "payload.article_content", true) &&
-        !get(this, "payload.lesson", true) &&
-        !get(this, "payload.repository_file_id", true) &&
-        !get(this, "payload.id", true)
-      ) {
-        submit = false;
-      }
-      return submit;
-    },
-
     chagingDescription() {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
@@ -330,7 +315,7 @@ export default {
     async handleAddContent() {
       if (this.payload.type == "VIDEO") {
         this.showModalConfirmVideo = true;
-      }else if(this.payload.type == "SCORM"){
+      } else if (this.payload.type == "SCORM") {
         this.showModalConfirmScorm = true;
       } else {
         this.showModalConfirm = true;
@@ -340,14 +325,20 @@ export default {
     async handleOk() {
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
-      }
-      else if(this.payload.type == "SCORM"){
+      } else if (this.payload.type == "SCORM") {
         this.confirmLoadingScorm = true;
       } else {
         this.confirmLoading = true;
       }
 
-      const payload = createPayloadAddContentCourse(this.payload);
+      const payload = { ...this.payload };
+      if (!payload.id) delete payload.id;
+      if (!payload.lesson) delete payload.lesson;
+      if (!payload.repository_file_id) delete payload.repository_file_id;
+      if (!payload.article_content) delete payload.article_content;
+      if (this.tabType === "audio") delete payload.type;
+
+      // const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
