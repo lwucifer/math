@@ -2,6 +2,11 @@
   <div class="wrap-general-exam-expiry">
       <h4 class="mb-4">Bài kiểm tra sắp hết hạn</h4>
       <app-table :heads="heads" :data="deadline">
+          <template v-slot:cell(date)="{ row }">
+              <td>
+                  <span v-if="row.deadline">{{ row.deadline | moment("HH:mm") }} ngày {{ row.deadline | moment("DD/MM/YYYY") }}</span>
+              </td>
+          </template>
           <template v-slot:cell(status)="{ row }">
               <td>
                   <span v-if="row.status == 1" class="text-primary">Đã nộp</span>
@@ -14,6 +19,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import moment from 'moment';
 const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     data(){

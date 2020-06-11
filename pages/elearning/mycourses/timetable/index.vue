@@ -121,7 +121,7 @@
                 <span class="timetable-list-item__subtitle">{{item.content}}</span>
                 <span
                   class="timetable-list-item__time"
-                >Thời gian bắt đầu: {{item.time | moment('kk:mm') }}</span>
+                >Thời gian bắt đầu: {{item.time | moment('HH:mm') }}</span>
               </li>
             </ul>
             <div
@@ -314,6 +314,8 @@ export default {
     },
     changeDateToday(value) {
       this.checkTimeTable = false;
+      this.checkTimeTableMonth = false;
+      this.checkTimeTableWeek = false;
       console.log("[changeDateToday] value", value);
       this.queryFromTo.from = getDateTimeFrom(value);
       this.queryFromTo.to = getDateTimeTo(value);
