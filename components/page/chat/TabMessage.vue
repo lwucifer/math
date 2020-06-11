@@ -207,26 +207,26 @@
                     <button title="Chuyển tiếp">
                       <IconUpload />
                     </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
+                    <button title="Khác">
+                      <v-popover
+                        position="left"
+                        v-model="dropdownEdit"
+                        :content-width="'10rem'"
+                        class="link--dropdown"
+                      >
                         <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
+                        <template #popover>
+                          <ul class="ul-popover">
+                            <li class="link--dropdown__content__item">
+                              <a>Sửa tin nhắn</a>
+                            </li>
+                            <li class="link--dropdown__content__item">
+                              <a @click="visibleDelete = true">Xóa tin</a>
+                            </li>
+                          </ul>
+                        </template>
+                      </v-popover>
+                    </button>
                   </div>
                 </div>
               </template>
@@ -234,7 +234,17 @@
           </div>
         </div>
       </div>
-      <div class="aside-box__content" v-else></div>
+      <div class="aside-box__content" v-else>
+        <client-only>
+          <infinite-loading
+            direction="top"
+            @infinite="messageInfiniteHandler"
+            :identifier="infiniteId"
+          >
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>
+      </div>
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -528,14 +538,16 @@ export default {
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }]),
-    ...mapState("message", ["groupListDetail", "friendList", "isCreated"]),
+    ...mapState("message", ["groupListDetail", "isCreated"]),
     ...mapState("chat", [
       "messageList",
       "memberList",
       "roomDetail",
       "stateIdPush",
       "messageRes",
-      "messageOn"
+      "messageOn",
+      "friendList",
+      "messageListFetch"
     ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
@@ -556,11 +568,10 @@ export default {
     tagOptions() {
       return (
         this.friendList &&
-        this.friendList.listFriend &&
-        this.friendList.listFriend.map(item => ({
+        this.friendList.map(item => ({
           ...item,
           value: item.id,
-          text: item.fullname,
+          text: item.first_name,
           avatar: item.avatar
         }))
       );
@@ -695,11 +706,15 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
-    ...mapActions("chat", ["getRoomList"]),
+    ...mapActions("chat", [
+      "getRoomList",
+      "getRoomListFetch",
+      "getMessageListFetch"
+    ]),
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
-      const room_id = this.$route.params.id;
+      const room_id = this.roomIdPush ? this.roomIdPush : this.$route.params.id;
       const query = this.messageQuery;
       if (room_id) {
         this.checkList = false;
@@ -867,10 +882,6 @@ export default {
       this.setEmitMessage(dataEmit);
       this.getRoomList();
       this.textChat = "";
-      const el = document.getElementById("content-message");
-      if (el.scrollTop != el.scrollHeight) {
-        el.scrollTop = el.scrollHeight;
-      }
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
       // if (this.tag.length == 0) {
@@ -968,29 +979,34 @@ export default {
       // this.removeImgSrc();
     },
     changeUser() {
-      console.log("[option]", this.tag.length);
+      console.log("[option]", this.tag, this.tag.length);
       if (this.tag.length == 0) {
         this.roomIdPush = "";
-        this.getMessageList({
-          params: {
-            room_id: this.$route.params.id
-          }
-        });
+        this.messagesList = [];
+        this.infiniteId += 1;
+        this.messageQuery.from_message_id = null;
+        this.messageQuery.fetch_type = null;
+        // const data = {
+        //   id: this.$route.params.id,
+        //   end: "messages",
+        //   params: {}
+        // };
+        // this.getMessageListFetch(data);
       } else if (this.tag.length == 1) {
         const data = {
-          type: 1,
-          members: this.tag[0].toString(),
-          name: this.name ? this.name : ""
+          friend_id: this.tag[0],
+          fetch_type: constants.CHAT.FETCH_PRIVATE_ROOM_BY_FRIEND_ID
         };
-        this.createGroup(data).then(result => {
-          if (result.success == true) {
-            console.log("[result]", result.data.id);
-            this.roomIdPush = result.data.id;
-            this.getMessageList({
-              params: {
-                room_id: result.data.id
-              }
-            });
+        this.getRoomListFetch({ params: data }).then(result => {
+          if (result) {
+            console.log("[result]", result);
+            this.roomIdPush = result.room ? result.room.id : "";
+            const data = {
+              id: result.room.id,
+              end: "messages",
+              params: {}
+            };
+            this.getMessageListFetch(data);
             // this.$router.push(`/messages/t/${result.data.id}`);
           } else {
             this.$toasted.error(result.message);
@@ -1019,8 +1035,13 @@ export default {
         // console.log("data", data);
         // this.messagesList.unshift(_newVal);
         this.messagesList.push(_newVal);
-        // console.log("[this.messagesList]", this.messagesList);
-        // img_url: { low: _newVal.img_url }
+        this.$nextTick(() => {
+          const el = document.getElementById("content-message");
+          console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
+          if (el.scrollHeight - el.scrollTop <= 250) {
+            el.scrollTop = el.scrollHeight;
+          }
+        });
       }
     },
     // messageList(_newVal) {
@@ -1055,9 +1076,24 @@ export default {
     messageRes(_newVal) {
       console.log("_newVal", _newVal);
       if (_newVal) {
+        this.getRoomList();
         // this.messagesList.unshift(_newVal);
         this.messagesList.push(_newVal);
+        this.$nextTick(() => {
+          const el = document.getElementById("content-message");
+          if (el.scrollTop != el.scrollHeight) {
+            el.scrollTop = el.scrollHeight;
+          }
+        });
       }
+    },
+    messageListFetch(_newVal) {
+      this.messagesList = [];
+      this.$nextTick(() => {
+        this.infiniteId += 1;
+        this.messageQuery.from_message_id = null;
+        this.messageQuery.fetch_type = null;
+      });
     }
   }
 };

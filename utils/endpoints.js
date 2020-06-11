@@ -181,6 +181,7 @@ export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
 export const ROOM = `chat/rooms`;
 export const MEDIA = `media`;
+export const SOCIAL_FRIENDS = `social/friends`
 
 /**
  * TEACHING
