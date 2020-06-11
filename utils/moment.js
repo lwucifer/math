@@ -119,6 +119,12 @@ export const getLocalTimeHH_MM_A = (_utcDate) => {
     return ts.lang("en").format(DATETIME_HH_MM_A);
 };
 
+export const getLocalTimeHH_MM = (_utcDate) => {
+    if (!_utcDate) return;
+    let ts = getLocalDateTime(_utcDate);
+    return ts.lang("en").format(DATETIME_HH_MM);
+};
+
 export const getLocalEndTime = (_startDate, _duration, type) => {
     if (!_startDate) return;
     let date = getLocalDateTime(_startDate);
@@ -237,4 +243,7 @@ Vue.filter("getDateTime_hh_mm", function (_utcDate) {
 
 Vue.filter("getDateTimeFromTo", function (_utcDate) {
     return getDateTimeFromTo(_utcDate);
+});
+Vue.filter("getLocalTimeHH_MM", function (_utcDate) {
+    return getLocalTimeHH_MM(_utcDate);
 });

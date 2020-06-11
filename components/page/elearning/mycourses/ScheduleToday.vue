@@ -52,7 +52,7 @@
           <IconEllipse2 class="col-md-1"/>
           <h5 class="col-md-3">{{get(item, 'type', '')}}</h5>
           <span class="col-md-5">{{get(item, 'content', '')}}</span>
-          <span class="col-md-3">Thời gian học: {{get(item, 'time', '')}}</span>
+          <span class="col-md-3">Thời gian bắt đầu: {{get(item, 'time', '') | moment('HH:MM')}}</span>
       </div>
       <!-- <div class="row schedule-item">
           <IconEllipse2 class="col-md-1"/>
@@ -94,17 +94,20 @@ export default {
     methods:{
         get,
         changeDate(date){
+            console.log('changeDate', date)
             this.dayslist.length = 0
             for(let i=1;i<=7;i++){
                  const day = moment(date).day(i.toString()).toString()
                  this.dayslist.push(day)
             }
-            console.log(this.dayslist)
-            console.log(moment().format("YYYY-MM-DD").toString())
+            this.$emit('changeDateInWeek', date)
+            console.log('this.dayslist', this.dayslist)
+            console.log(moment().format("YYYY-MM-DD h:mm:ss").toString())
         },
         checkDate(d1){
-            let date1 = moment(d1).format("YYYY-MM-DD").toString()
-            let date2 = moment(this.dateSchedule).format("YYYY-MM-DD").toString()
+            // console.log('checkDate', d1)
+            let date1 = moment(d1).format("YYYY-MM-DD h:mm:ss").toString()
+            let date2 = moment(this.dateSchedule).format("YYYY-MM-DD h:mm:ss").toString()
             if(date1 == date2){
                 return true
             }
@@ -112,8 +115,10 @@ export default {
             return false
         },
         changeDateInWeek(i){
-            this.dateSchedule = moment(i).format("YYYY-MM-DD").toString()
-            console.log(this.dateSchedule)
+            console.log('changeDateInWeek1', i)
+            this.dateSchedule = moment(i).format("YYYY-MM-DD h:mm:ss").toString()
+            console.log('this.dateSchedule', this.dateSchedule)
+            this.$emit('changeDateInWeek', this.dateSchedule)
         },
         moment
     }
