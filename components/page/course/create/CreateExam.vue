@@ -14,7 +14,7 @@
         </app-alert>
       </div>
 
-      <ButtonCreateExercise
+      <ButtonCreateExam
         v-if="isShowButtonCreate"
         @handleClick="handleShowFormAdd"
         :category="category"
@@ -44,10 +44,10 @@ import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
-import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExam from "~/components/page/course/create/exercise/FormCreateExam";
-import ExamList from "~/components/page/course/create/exercise/ExamList";
-import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
+import ButtonCreateExam from "~/components/page/course/create/exams/ButtonCreateExam";
+import FormCreateExam from "~/components/page/course/create/exams/FormCreateExam";
+import ExamList from "~/components/page/course/create/exams/ExamList";
+import SelectLesson from "~/components/page/course/create/exams/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
 import * as actionTypes from "~/utils/action-types";
 import { getParamQuery, useEffect } from "~/utils/common";
@@ -64,7 +64,7 @@ export default {
     IconFileCheck,
     IconClipboardNotes,
     CreateAction,
-    ButtonCreateExercise,
+    ButtonCreateExam,
     FormCreateExam,
     ExamList,
     SelectLesson,
