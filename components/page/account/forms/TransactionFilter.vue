@@ -42,7 +42,7 @@
       </div>
       <div class="filter-form__item" v-if="filterSelect" style="min-width: 11.5rem;">
         <app-vue-select
-          class="app-vue-select"
+          class="app-vue-select w-100"
           :options="statusOpts"
           :reduce="item => item.value"
           v-model="filters.status"

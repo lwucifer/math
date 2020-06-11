@@ -5,8 +5,8 @@
       class="app-checkbox__input"
       hidden
       v-bind="$attrs"
-      :checked="checked"
-      @change="handleChange"
+      v-on="inputListeners"
+      v-model="localChecked"
     />
     <span class="app-checkbox__checkmark">
       <IconCheckBox class="app-checkbox__icon app-checkbox__icon--checked icon fill-opacity-1 fill-primary" />
@@ -41,6 +41,7 @@ export default {
 
   props: {
     checked: {
+      type: Boolean,
       default: false
     },
     label: {
@@ -49,9 +50,43 @@ export default {
     }
   },
 
+  data() {
+    return {
+      localChecked: this.checked
+    }
+  },
+
+  computed: {
+    inputListeners: function() {
+      const vm = this;
+      // `Object.assign` merges objects together to form a new object
+      return Object.assign(
+        {},
+        // We add all the listeners from the parent
+        this.$listeners,
+        // Then we can add custom listeners or override the
+        // behavior of some listeners.
+        {
+          // This ensures that the component works with v-model
+          change: (event) => this.handleChange(event),
+        }
+      );
+    },
+  },
+
+  watch: {
+    checked(newValue) {
+      this.localChecked = newValue
+    },
+
+    localChecked(newValue) {
+      this.$emit("change", newValue)
+    }
+  },
+
   methods: {
     handleChange(e) {
-      this.$emit("change", e.target.checked);
+      this.localChecked = e.target.checked;
     }
   }
 };

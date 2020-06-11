@@ -5,7 +5,7 @@
 }
 
 .app-checkbox__checkmark {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 2.4rem;
@@ -16,6 +16,7 @@
 
 .app-checkbox__text {
     margin-left: .5rem;
+    line-height: (18/14);
 }
 
 .app-checkbox__icon--checked {
@@ -36,9 +37,9 @@
             .app-checkbox__icon--unchecked {
                 display: none;
             }
-            + .app-checkbox__text {
-                color: $color-primary;
-            }
+            // + .app-checkbox__text {
+            //     color: $color-primary;
+            // }
         }
     }
 
