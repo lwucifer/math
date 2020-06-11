@@ -19,6 +19,9 @@
         <td v-if="row.status != statusPending">
           <span :class="statusClass(row.status)">{{ row.status | transactionStatus2Txt }}</span>
         </td>
+        <td v-else-if="row.status == statusPending && row.type =='sell'">
+          <span class="text-info">Chờ xử lí</span>
+        </td>
         <td v-else>
           <span
             :class="statusClass(row.status, 'repay')"
