@@ -108,11 +108,11 @@ export default {
       this.fetchTransaction();
     },
     getDateSelect(){
-      const firstday = moment().format("YYYY-MM-01");
-      const today = moment().format("YYYY-MM-DD");
+      const firstday = moment().startOf('month');
+      const today = moment();
       this.DateDefault = [firstday,today];
-      this.params.from = firstday;
-      this.params.to = today;
+      this.params.from = firstday.format("YYYY-MM-01");
+      this.params.to = today.format("YYYY-MM-DD");
     },
     changeFilter(o){
       this.params.status = o.status;
