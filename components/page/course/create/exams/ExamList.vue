@@ -12,7 +12,10 @@
         </div>
 
         <div class="cc-box__head-right">
-          <p class="mr-5">Trọng số: 30%</p>
+          <p class="mr-5" v-if="get(exam, 'coefficient', '')">
+            Hệ số: {{ get(exam, "coefficient", "") }}
+          </p>
+          <p class="mr-5" v-else>Trọng số: {{ get(exam, "weight", "") }}%</p>
           <button
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
