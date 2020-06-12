@@ -46,7 +46,6 @@
                   placeholder="Tìm kiếm"
                   v-model="params.keyword"
                   bordered
-                  @submit="handleSubmitSearch"
                 />
               </div>
 
