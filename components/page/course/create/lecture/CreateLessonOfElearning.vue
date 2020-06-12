@@ -148,7 +148,7 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
       :okText="chagingBtnOk"
-      title="Upload bài học"
+      :title="changingTitleDoc"
       :description="chagingDescriptionDoc"
     />
 
@@ -159,7 +159,7 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
       :okText="chagingBtnOk"
-      title="Upload video bài học"
+      :title="changingTitle"
       :description="chagingDescription"
     />
 
@@ -252,6 +252,7 @@ export default {
         article_content: "",
         id: get(this, "lesson.id", ""),
       },
+      modalType: ''
     };
   },
 
@@ -259,9 +260,28 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
+
+    changingTitle() {
+      if(this.modalType == 'url') {
+        return "Thêm video bài học"
+      }
+
+      return "Upload video bài học"
+    },
+
+    changingTitleDoc() {
+      if(this.modalType == 'url') {
+        return "Thêm bài học"
+      }
+
+      return "Upload bài học"
+    },
+
     chagingDescription() {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == 'url') {
+        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?"
       }
       return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
@@ -269,6 +289,8 @@ export default {
     chagingDescriptionDoc() {
       if (this.confirmLoadingDoc) {
         return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == 'url') {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?"
       }
       return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
     },
@@ -325,12 +347,14 @@ export default {
     },
 
     handleSelectFile(data) {
+      this.modalType = 'upload'
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.repository_file_id = "";
     },
 
     handleSelectUrl(file) {
+      this.modalType = 'url'
       this.payload.type = file.type;
       this.payload.lesson = "";
       this.payload.repository_file_id = file.id;
@@ -392,9 +416,10 @@ export default {
     },
 
     handleCancelModal() {
+      this.modalType = ''
       this.showModalConfirm = false;
       this.confirmLoading = false;
-       this.showModalConfirmDoc = false;
+      this.showModalConfirmDoc = false;
       this.confirmLoadingDoc = false;
       this.showModalConfirmVideo = false;
       this.confirmLoadingVideo = false;

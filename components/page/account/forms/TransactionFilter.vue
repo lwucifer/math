@@ -107,7 +107,7 @@
           },
           {
             value: 'CREDIT',
-            text: 'Thẻ tín dụng/ghi nợ'
+            text: 'Thẻ tín dung/Thẻ ghi nợ'
           }
         ],
         filterSelect:false,

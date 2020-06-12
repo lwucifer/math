@@ -13,18 +13,18 @@
         </td>
       </template>
 
-      <template v-slot:cell(exercises)="{row}">
+      <template v-slot:cell(tests)="{row}">
         <td>
           <div class="text-center">
-            {{ get(row, 'exercises', 0) }}
+            {{ get(row, 'tests', 0) }}
           </div>
         </td>
       </template>
 
-      <template v-slot:cell(not_submit)="{row}">
+      <template v-slot:cell(missing)="{row}">
         <td>
           <div class="text-center text-warning">
-            {{ get(row, 'not_submit', 0) }}
+            {{ get(row, 'missing', 0) }}
           </div>
         </td>
       </template>
@@ -141,11 +141,11 @@
             text: "Thể loại",
           },
           {
-            name: "exercises",
+            name: "tests",
             text: "Số bài tập",
           },
           {
-            name: "not_submit",
+            name: "missing",
             text: "Chưa nộp",
           },
           {

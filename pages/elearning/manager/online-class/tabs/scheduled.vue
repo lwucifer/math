@@ -77,47 +77,14 @@
     <!--Options group-->
 
     <!--Table-->
-    <app-table
-      :loading="loading"
-      :heads="heads"
-      :pagination="pagination"
+    <OnlineClassTable 
+      :loading="loading" 
+      :pagination="pagination" 
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="handleSort"
-      :data="classList"
-      primaryKey="online_class_id"
-      multiple-selection
-    >
-      <template v-slot:cell(online_class_name)="{row}">
-        <td>
-          <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          {{row.online_class_name}}
-          </n-link>
-        </td>
-      </template>
-      <template v-slot:cell(privacy)="{row}">
-        <td>
-          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
-          <span class="text-secondary" v-else>Riêng tư</span>
-        </td>
-      </template>
-      <template v-slot:cell(start_time)="{row}">
-        <td>
-          <div style="white-space: nowrap">
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
-          </div>
-        </td>
-      </template>
-
-      <template v-slot:actions="{row}">
-        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconPeople class="fill-yellow mr-2"/>Xem danh sách học sinh
-        </n-link>
-      </template>
-    </app-table>
+      :actions="[0,0,1]"
+      :data="classList"/>
     <!--End table-->
 
     <app-modal-confirm
@@ -143,20 +110,12 @@
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
-import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 import IconCalendarDelete from '~/assets/svg/v2-icons/calendar-delete.svg?inline';
+import OnlineClassTable from "~/components/page/elearning/manager/olclass/OnlineClassTable";
 
-import {
-  getDateBirthDay,
-  getLocalTimeHH_MM_A
-} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -165,19 +124,13 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
-export default {
-  layout: "manage",
-    
+export default {    
   components: {
-    IconTimesCircle,
-    IconFilter,
-    IconSearch,
-    IconArrow,
     IconCalendar,
     IconTrash,
-    IconPeople,
     IconHamberger,
-    IconCalendarDelete
+    IconCalendarDelete,
+    OnlineClassTable
   },
 
   data() {
@@ -253,9 +206,6 @@ export default {
   },
 
   methods: {
-    getDateBirthDay,
-    getLocalTimeHH_MM_A,
-
     handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};

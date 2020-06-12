@@ -23,17 +23,17 @@
       <div v-if="isAuthenticated" class="the-header__user">
         <study-space />
 
-        <button class="item" @click="redirectMessages">
+        <n-link class="item" to="/messages/t">
           <IconCommentAltMessage />
           <span class="number">9</span>
-        </button>
-        <button class="item" @click.prevent="$router.push('/payment/cart')">
+        </n-link>
+        <n-link class="item" to="/payment/cart">
           <IconShoppingCart24px class="fill-gray" />
           <span
             v-if="get(cartCheckout, 'orders.length', 0)"
             class="number"
           >{{ get(cartCheckout, "orders.length", 0) }}</span>
-        </button>
+        </n-link>
         <!--
         <app-dropdown
           position="right"
@@ -262,9 +262,6 @@ export default {
     },
     redirectSignin() {
       this.$router.push("/auth/signin");
-    },
-    redirectMessages() {
-      this.$router.push("/messages/t");
     },
     handleLogout() {
       this.removeToken();

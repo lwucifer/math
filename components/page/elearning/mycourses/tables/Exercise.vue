@@ -174,7 +174,7 @@
       getScoreDetail(item) {
         let desc = ''
         if (this.hasScore(item)) {
-          desc = `(${get(item, 'score', 0)}/${get(item, 'mark', 0)}) ${subResult2Txt(get(item, 'max_score', 10))}`
+          desc = `(${get(item, 'score', 0)}/${get(item, 'mark', 0)}) ${subResult2Txt(get(item, 'result', 10))}`
         } else {
           desc = `${subResult2Txt(get(item, 'result'))}`
         }

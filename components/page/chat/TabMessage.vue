@@ -716,34 +716,39 @@ export default {
     async messageInfiniteHandler($state) {
       const room_id = this.roomIdPush ? this.roomIdPush : this.$route.params.id;
       const query = this.messageQuery;
-      if (room_id) {
-        this.checkList = false;
-        const getData = await this.$store.dispatch(
-          `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
-          {
-            params: this.messageQuery,
-            id: room_id,
-            end: "messages"
+      if (this.tag.length < 2) {
+        if (room_id) {
+          this.checkList = false;
+          const getData = await this.$store.dispatch(
+            `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
+            {
+              params: this.messageQuery,
+              id: room_id,
+              end: "messages"
+            }
+          );
+          console.log("getData Message", getData);
+          if (getData && getData.length == 0 && this.messagesList.length == 0) {
+            this.checkList = true;
           }
-        );
-        console.log("getData Message", getData);
-        if (getData && getData.length == 0 && this.messagesList.length == 0) {
-          this.checkList = true;
-        }
-        // console.log("getData id", getData[getData.length - 1].id);
-        if (getData && getData.length) {
-          this.messageQuery.from_message_id = getData[0].id;
-          this.messageQuery.fetch_type = "prior";
-          const dataClone = cloneDeep(getData);
-          // this.messagesList.push(...dataClone.reverse());
-          if (this.messagesList.length >= 30) {
-            this.messagesList = dataClone.reverse().concat(this.messagesList);
-          } else {
-            this.messagesList.push(...getData);
-          }
+          // console.log("getData id", getData[getData.length - 1].id);
+          if (getData && getData.length) {
+            this.messageQuery.from_message_id = getData[0].id;
+            this.messageQuery.fetch_type = "prior";
+            const dataClone = cloneDeep(getData);
+            // this.messagesList.push(...dataClone.reverse());
+            if (this.messagesList.length >= 30) {
+              this.messagesList = dataClone.reverse().concat(this.messagesList);
+            } else {
+              this.messagesList.push(...getData);
+            }
 
-          $state.loaded();
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
         } else {
+          this.checkList = true;
           $state.complete();
         }
       } else {
@@ -1014,7 +1019,10 @@ export default {
           }
         });
       } else {
+        this.roomIdPush = "";
         this.messagesList = [];
+        this.messageQuery.from_message_id = null;
+        this.messageQuery.fetch_type = null;
       }
     },
     removeImgSrc() {
@@ -1039,7 +1047,7 @@ export default {
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
           console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
-          if (el.scrollHeight - el.scrollTop <= 250) {
+          if (el.scrollHeight - el.scrollTop <= 500) {
             el.scrollTop = el.scrollHeight;
           }
         });
