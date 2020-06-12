@@ -81,7 +81,7 @@
     computed: {
       ...mapState("auth", ["loggedUser"]),
       ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'elearningExercises'
+        detailInfo: 'paginatedElearningExericses'
       }),
     },
     
@@ -119,8 +119,8 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`, this.params
           )
-          this.list = this.get(this, 'detailInfo', [])
-          this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+          this.list = this.get(this, 'detailInfo.content', [])
+          this.pagination = { ...this.get(this, 'detailInfo.page', {}) }
         } catch (e) {
           console.log('Get list exercise ', e)
         } finally {
