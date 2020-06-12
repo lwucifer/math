@@ -563,6 +563,7 @@ export default {
         `elearning/${id}`;
       window.open(url, "sharer", "_blank");
     },
+
     async shareSchool(item) {
       this.checkModalShare = true;
       this.dataModal = item;
@@ -578,6 +579,7 @@ export default {
       //   this.$toasted.error(doAdd.message);
       // }
     },
+    
     async handleShareSchoolly(_content) {
       console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;

@@ -100,6 +100,7 @@
                           <IconFacebook class="icon fill-info" />Chia sẻ qua
                           Facebook
                         </li>
+                        
                         <li @click.prevent="shareSchool(elearning)">
                           <IconSchooly class="icon fill-white" />Chia sẻ qua
                           Schoolly
