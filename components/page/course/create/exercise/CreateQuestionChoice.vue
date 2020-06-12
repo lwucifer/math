@@ -57,6 +57,8 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      title="Tạo câu hỏi"
+      description="Bạn có chắc chắn muốn tạo câu hỏi này?"
     />
   </div>
 </template>
