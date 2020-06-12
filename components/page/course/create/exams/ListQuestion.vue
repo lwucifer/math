@@ -44,6 +44,8 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
+        title="Xóa câu hỏi"
+        description="Bạn có chắc chắn muốn xóa câu hỏi này?"
       />
     </div>
 

@@ -53,6 +53,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      description="Bạn có chắc chắn muốn xóa bài học này?"
     />
   </div>
 </template>
