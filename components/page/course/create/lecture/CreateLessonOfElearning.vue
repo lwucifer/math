@@ -135,8 +135,21 @@
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Thêm bài học"
+      description="Bạn có chắc chắn muốn thêm bài học này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmDoc"
+      :confirmLoading="confirmLoadingDoc"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      :title="changingTitleDoc"
+      :description="chagingDescriptionDoc"
     />
 
     <app-modal-confirm
@@ -146,7 +159,7 @@
       @ok="handleOk"
       @cancel="handleCancelModal"
       :okText="chagingBtnOk"
-      title="Upload video bài học"
+      :title="changingTitle"
       :description="chagingDescription"
     />
 
@@ -224,9 +237,11 @@ export default {
       showModalConfirm: false,
       showModalConfirmVideo: false,
       showModalConfirmScorm: false,
+      showModalConfirmDoc: false,
       confirmLoading: false,
       confirmLoadingVideo: false,
       confirmLoadingScorm: false,
+      confirmLoadingDoc: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -237,6 +252,7 @@ export default {
         article_content: "",
         id: get(this, "lesson.id", ""),
       },
+      modalType: ''
     };
   },
 
@@ -244,15 +260,43 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
+
+    changingTitle() {
+      if(this.modalType == 'url') {
+        return "Thêm video bài học"
+      }
+
+      return "Upload video bài học"
+    },
+
+    changingTitleDoc() {
+      if(this.modalType == 'url') {
+        return "Thêm bài học"
+      }
+
+      return "Upload bài học"
+    },
+
     chagingDescription() {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == 'url') {
+        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?"
       }
       return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
 
+    chagingDescriptionDoc() {
+      if (this.confirmLoadingDoc) {
+        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == 'url') {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?"
+      }
+      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+    },
+
     chagingBtnOk() {
-      if (this.confirmLoadingVideo) {
+      if (this.confirmLoadingVideo || this.confirmLoadingDoc) {
         return "Đang tải";
       }
       return "Xác nhận";
@@ -279,6 +323,7 @@ export default {
         this.tabType = "video";
       }
     },
+
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";
@@ -292,6 +337,7 @@ export default {
       }
       this.error_name = "";
     },
+
     changeTabType(type) {
       this.handleReset();
       if (type === "video") this.payload.type = "VIDEO";
@@ -301,12 +347,14 @@ export default {
     },
 
     handleSelectFile(data) {
+      this.modalType = 'upload'
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.repository_file_id = "";
     },
 
     handleSelectUrl(file) {
+      this.modalType = 'url'
       this.payload.type = file.type;
       this.payload.lesson = "";
       this.payload.repository_file_id = file.id;
@@ -317,6 +365,8 @@ export default {
         this.showModalConfirmVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.showModalConfirmScorm = true;
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.showModalConfirmDoc = true
       } else {
         this.showModalConfirm = true;
       }
@@ -327,7 +377,9 @@ export default {
         this.confirmLoadingVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.confirmLoadingScorm = true;
-      } else {
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.confirmLoadingDoc = true
+      }else {
         this.confirmLoading = true;
       }
 
@@ -364,8 +416,11 @@ export default {
     },
 
     handleCancelModal() {
+      this.modalType = ''
       this.showModalConfirm = false;
       this.confirmLoading = false;
+      this.showModalConfirmDoc = false;
+      this.confirmLoadingDoc = false;
       this.showModalConfirmVideo = false;
       this.confirmLoadingVideo = false;
       this.showModalConfirmScorm = false;
