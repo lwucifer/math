@@ -70,7 +70,7 @@ export default {
       type: Object,
       default: null,
     },
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
@@ -107,14 +107,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        this.$store.dispatch("elearning/create/getExams");
 
         return;
       }

@@ -103,7 +103,7 @@
                 <div class="left d-flex">
                   <div class="align-item__image">
                     <app-avatar
-                      :src=" item && item.room_avatar_member ? item.room_avatar_member : 'https://picsum.photos/60/60'"
+                      :src=" item && item.avatar && item.avatar.low ? item.avatar.low : 'https://picsum.photos/60/60'"
                       size="md"
                       class="comment-item__avatar"
                     />

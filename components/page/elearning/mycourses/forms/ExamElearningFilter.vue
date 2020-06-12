@@ -1,8 +1,8 @@
 <template>
-  <filter-form class="">
+  <filter-form>
     <div class="d-flex">
       <div
-        class="ml-0 filter-form__item filter-form__item--search border-0"
+        class="filter-form__item filter-form__item--search border-0 ml-0"
         style="max-width: 36rem; min-width: 30rem;"
       >
         <app-search
@@ -22,9 +22,10 @@
         <filter-button
           @click="clickSubmit"
           :color="filterSelect ? 'primary': 'white'"
-        ></filter-button>
+        >
+        </filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 12.5rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="typeOpts"
@@ -37,39 +38,13 @@
           has-border
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="rateOpts"
-          :reduce="item => item.value"
-          v-model="filters.status"
-          label="text"
-          placeholder="Trạng thái"
-          @input="handleSelectRate"
-          :all-opt="allOpt"
-          has-border
-        />
-      </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="optionOpts"
-          :reduce="item => item.value"
-          v-model="filters.required"
-          label="text"
-          placeholder="Hình thức"
-          @input="handleSelectOption"
-          :all-opt="allOpt"
-          has-border
-        />
-      </div>
     </div>
   </filter-form>
 </template>
 
 <script>
   import IconFilter from "~/assets/svg/icons/filter.svg?inline"
-  import { ELEARNING_STATUSES, EXERCISE_TYPES } from '~/utils/constants'
+  import { ELEARNING_TYPES, ELEARNING_STATUSES } from '~/utils/constants'
   
   export default {
     components: {
@@ -85,17 +60,16 @@
         filters: {
           type: null,
           query: '',
-          status: null,
-          required: null
+          rate: null,
         },
         types: [
           {
-            value: EXERCISE_TYPES.CHOICE,
-            text: 'Trắc nghiệm'
+            value: ELEARNING_TYPES.LECTURE,
+            text: 'Bài giảng'
           },
           {
-            value: EXERCISE_TYPES.ESSAY,
-            text: 'Tự luận'
+            value: ELEARNING_TYPES.COURSE,
+            text: 'Khóa học'
           },
         ],
         rates: [
@@ -108,23 +82,9 @@
             text: 'Không đạt'
           },
           {
-            value: ELEARNING_STATUSES.NONE,
-            text: 'Chưa làm'
-          },
-          {
             value: ELEARNING_STATUSES.PENDING,
             text: 'Chưa chấm'
           },
-        ],
-        options: [
-          {
-            value: true,
-            text: 'Bắt buộc'
-          },
-          {
-            value: false,
-            text: 'Không bắt buộc'
-          }
         ],
         initStatus: true
       }
@@ -144,9 +104,6 @@
       },
       rateOpts() {
         return [this.allOpt, ...this.rates]
-      },
-      optionOpts() {
-        return [this.allOpt, ...this.options]
       }
     },
     methods: {
@@ -164,9 +121,6 @@
       handleChangedSearch(val) {
         this.$emit('changedQuery', val)
       },
-      handleSelectOption(val) {
-        this.$emit('changedOption', val)
-      },
       handleSubmitSearch(e) {
         this.$emit('submitSearch', e.target.value)
       },
@@ -182,9 +136,8 @@
         }
       },
       resetForm() {
-        this.filters.status = null
+        this.filters.rate = null
         this.filters.type = null
-        this.filters.required = null
         this.filters.query = ''
       }
     }

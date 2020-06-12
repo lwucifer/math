@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="showAddPoint">
+    <div>
       <!-- <label class="d-inline-block mb-3" for="question-editor">Điểm</label>
       <app-input v-model="payload.points" /> -->
 
@@ -36,8 +36,6 @@
     >
     <app-editor v-model="payload.answers[0].content" /> -->
 
-
-    
     <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
         class="font-weight-semi-bold mr-4 text-secondary"
@@ -79,7 +77,7 @@ export default {
       type: Object,
       default: null,
     },
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
@@ -108,12 +106,6 @@ export default {
       general: "general",
       lesson: "lesson",
     }),
-    showAddPoint() {
-      return (
-        get(this, "exercise.category", "") === "TEST" ||
-        get(this, "exercise.required", "") === true
-      );
-    },
   },
 
   methods: {
@@ -139,14 +131,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        this.$store.dispatch("elearning/create/getExams");
 
         return;
       }

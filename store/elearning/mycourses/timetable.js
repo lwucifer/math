@@ -4,6 +4,7 @@ import TimeTable from "~/services/elearning/mycourses/TimeTable";
 
 const state = () => ({
   stateTimeTable: null,
+  timeTableList: []
 });
 
 const actions = {
@@ -12,6 +13,7 @@ const actions = {
       const result = await new TimeTable(this.$axios)[actionTypes.BASE.LIST](
         payload
       );
+      console.log("TimeTable list", result.data);
       commit(
         mutationTypes.TIMETABLE.SET_TIMETABLE_LIST,
         result.data
@@ -26,6 +28,9 @@ const actions = {
 const mutations = {
   [mutationTypes.TIMETABLE.SET_STATE_TIMETABLE](state, _stateTimeTable) {
     state.stateTimeTable = _stateTimeTable;
+  },
+  [mutationTypes.TIMETABLE.SET_TIMETABLE_LIST](state, _timeTableList) {
+    state.timeTableList = _timeTableList;
   },
 };
 

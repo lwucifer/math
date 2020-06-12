@@ -132,9 +132,9 @@ export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
 export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
 export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_INTERACTIVE_NOTIFICATION = `/elearning/study/interactive/announcements`;
-export const STUDY_OVERVIEW = `/study/overview`;
-export const STUDY_OVERVIEW_TIME_TABLE = ` /study/timetable`;
-export const STUDY_OVERVIEW_DEADLINE = `/study/deadline`;
+export const STUDY_OVERVIEW = `/elearning/study/overview`;
+export const STUDY_OVERVIEW_TIME_TABLE = `/elearning/study/timetable`;
+export const STUDY_OVERVIEW_DEADLINE = `/elearning/study/deadline`;
 
 export const STUDY_EXERCISE_START = `/elearning/study/exercise/start`;
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
@@ -182,6 +182,7 @@ export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
 export const ROOM = `chat/rooms`;
 export const MEDIA = `media`;
+export const SOCIAL_FRIENDS = `social/friends`
 
 /**
  * TEACHING

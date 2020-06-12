@@ -71,11 +71,7 @@ export default {
       //   id: room_id,
       //   end: "messages"
       // }),
-      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
-      //     params: {
-      //       room_id: room_id
-      //     }
-      //   }),
+      store.dispatch(`chat/${actionTypes.CHAT.FRIENDS_LIST}`),
       store.dispatch(`chat/${actionTypes.CHAT.ROOM_DETAIL}`, room_id)
       // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
@@ -208,9 +204,9 @@ export default {
         };
         // console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
-          console.log("[socket] emit", res);
+          console.log("[socket] emit", res.data);
           if (res) {
-            this.setResEmit(res);
+            this.setResEmit(res.data);
           }
         });
       }

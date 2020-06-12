@@ -1,6 +1,6 @@
 import numeral from "numeral";
 import Vue from "vue";
-import { DATETIME_FULL_TEXT } from "~/utils/config";
+import { DATETIME_FULL_TEXT, DATE_BIRTHDAY, DATETIME_HH_MM_DD_MM_YY_DASH } from "~/utils/config";
 import { EXERCISE_CATEGORIES, EXERCISE_STATUS, EXERCISE_TYPES, SUBMISSION_RESULTS, TRANSACTION_STATUSES, WITHDRAWAL_STATUSES } from "~/utils/constants";
 // const moment = require("moment");
 import { getLocalDateTime } from '~/utils/moment';
@@ -322,6 +322,19 @@ export function getDateTimeFullText(_utcDate = "") {
   return ts.format(DATETIME_FULL_TEXT);
 }
 
+export function getDateBirthday(_utcDate = "") {
+  if (!_utcDate) return;
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
+  return ts.format(DATE_BIRTHDAY);
+}
+
+export function getDateTimeHhMmDdMmYyDash(_utcDate = "") {
+  if (!_utcDate) return;
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
+  return ts.format(DATETIME_HH_MM_DD_MM_YY_DASH);
+}
 
 /**
  * convert seconds to text: hh giờ mm phút
@@ -367,6 +380,7 @@ const filters = {
   getExerciseTypeText,
   getQuestionNoText,
   getDateTimeFullText,
+  getDateBirthday,
   formatHour,
   resultFigureRate,
   formatMMSS,

@@ -30,7 +30,7 @@
           >
             <span class="clc-type-tab-item__icon">
               <IconRadioButtonChecked class="icon mr-3" />
-              <IconHeadphone class="icon mr-2 heading-3"/>
+              <IconHeadphone class="icon mr-2 heading-3" />
               <span class="clc-type-tab-item__text">Audio</span>
             </span>
           </a>
@@ -43,7 +43,7 @@
           >
             <span class="clc-type-tab-item__icon">
               <IconRadioButtonChecked class="icon mr-3" />
-              <IconScorm class="icon mr-2 heading-3"/>
+              <IconScorm class="icon mr-2 heading-3" />
               <span class="clc-type-tab-item__text">SCORM</span>
             </span>
           </a>
@@ -123,7 +123,6 @@
 
           <app-button
             @click="handleAddContent"
-            :disabled="!isSubmit"
             class="clc-btn font-weight-semi-bold"
             size="md"
             square
@@ -136,8 +135,21 @@
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Thêm bài học"
+      description="Bạn có chắc chắn muốn thêm bài học này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmDoc"
+      :confirmLoading="confirmLoadingDoc"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      title="Upload bài học"
+      :description="chagingDescriptionDoc"
     />
 
     <app-modal-confirm
@@ -209,7 +221,7 @@ export default {
     IconRadioButtonChecked,
     IconDefaultAsideMenu,
     IconHeadphone,
-    IconScorm
+    IconScorm,
   },
 
   props: {
@@ -225,9 +237,11 @@ export default {
       showModalConfirm: false,
       showModalConfirmVideo: false,
       showModalConfirmScorm: false,
+      showModalConfirmDoc: false,
       confirmLoading: false,
       confirmLoadingVideo: false,
       confirmLoadingScorm: false,
+      confirmLoadingDoc: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -245,20 +259,6 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
-    isSubmit() {
-      let submit = true;
-      if (!get(this, "payload.name", true)) submit = false;
-      if (
-        !get(this, "payload.article_content", true) &&
-        !get(this, "payload.lesson", true) &&
-        !get(this, "payload.repository_file_id", true) &&
-        !get(this, "payload.id", true)
-      ) {
-        submit = false;
-      }
-      return submit;
-    },
-
     chagingDescription() {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
@@ -266,8 +266,15 @@ export default {
       return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
 
+    chagingDescriptionDoc() {
+      if (this.confirmLoadingDoc) {
+        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      }
+      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+    },
+
     chagingBtnOk() {
-      if (this.confirmLoadingVideo) {
+      if (this.confirmLoadingVideo || this.confirmLoadingDoc) {
         return "Đang tải";
       }
       return "Xác nhận";
@@ -294,6 +301,7 @@ export default {
         this.tabType = "video";
       }
     },
+
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";
@@ -307,6 +315,7 @@ export default {
       }
       this.error_name = "";
     },
+
     changeTabType(type) {
       this.handleReset();
       if (type === "video") this.payload.type = "VIDEO";
@@ -330,8 +339,10 @@ export default {
     async handleAddContent() {
       if (this.payload.type == "VIDEO") {
         this.showModalConfirmVideo = true;
-      }else if(this.payload.type == "SCORM"){
+      } else if (this.payload.type == "SCORM") {
         this.showModalConfirmScorm = true;
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.showModalConfirmDoc = true
       } else {
         this.showModalConfirm = true;
       }
@@ -340,14 +351,22 @@ export default {
     async handleOk() {
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
-      }
-      else if(this.payload.type == "SCORM"){
+      } else if (this.payload.type == "SCORM") {
         this.confirmLoadingScorm = true;
-      } else {
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.confirmLoadingDoc = true
+      }else {
         this.confirmLoading = true;
       }
 
-      const payload = createPayloadAddContentCourse(this.payload);
+      const payload = { ...this.payload };
+      if (!payload.id) delete payload.id;
+      if (!payload.lesson) delete payload.lesson;
+      if (!payload.repository_file_id) delete payload.repository_file_id;
+      if (!payload.article_content) delete payload.article_content;
+      if (this.tabType === "audio") delete payload.type;
+
+      // const payload = createPayloadAddContentCourse(this.payload);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.ADD}`,
         payload
@@ -375,6 +394,8 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+       this.showModalConfirmDoc = false;
+      this.confirmLoadingDoc = false;
       this.showModalConfirmVideo = false;
       this.confirmLoadingVideo = false;
       this.showModalConfirmScorm = false;

@@ -616,6 +616,8 @@
             background: #f8f8f8;
             border-radius: 5px;
             padding: 1rem 1.2rem;
+            max-width: 55%;
+            word-break: break-all;
             // margin: 0.5rem 0;
         }
         .message-box__item__desc__image {
@@ -799,27 +801,23 @@ button:focus {
     }
 }
 
-.page-message {
-    .link--dropdown__content {
-        ul {
-            background-color: #fff;
-            list-style: none;
-            text-align: left;
-            li {
-                display: block;
-                white-space: nowrap;
-                padding: 0.7rem 1rem;
-                a {
-                    display: flex;
-                    align-items: center;
-                }
-                +li {
-                    border-top: 1px solid $color-border;
-                }
-            }
+ul.ul-popover {
+      background-color: #fff;
+      list-style: none;
+      text-align: left;
+      li.link--dropdown__content__item{
+        display: block;
+        white-space: nowrap;
+        padding: 0.7rem 1rem;
+        a {
+          display: flex;
+          align-items: center;
         }
+        +li {
+          border-top: 1px solid $color-border;
+        }
+      }
     }
-}
 
 .aside-box__bottom {
     z-index: 99;

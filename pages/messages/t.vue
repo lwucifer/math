@@ -125,6 +125,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~/assets/scss/pages/_page_messages.scss";
 </style>

@@ -2,16 +2,20 @@
   <div
     class="app-range-calendar"
     :class="classes"
-    @click="handleClickSelected"
     v-click-outside="hideOptions"
   >
-    <input
-      class="app-range-calendar__placeholder"
-      :placeholder="placeholder"
-      v-model="inputVal"
-    >
-    <i class="app-range-calendar__icon-select"><IconCalendar class="icon"/></i>
-    <div class="d-flex app-range-calendar__options" v-if="active">
+    <div class="app-range-calendar__input-wrapper">
+      <input
+        class="app-range-calendar__placeholder"
+        :placeholder="placeholder"
+        @click="handleClickSelected"
+        v-model="inputVal"
+      >
+      <i v-if="(!isValidLocalValue) || isEmptyValue" class="app-range-calendar__icon-select"><IconCalendar class="icon"/></i>
+      <i v-else class="app-range-calendar__icon-close" @click="resetInput"><IconClose class="icon"/></i>
+    </div>
+    
+    <div class="d-flex app-range-calendar__options" v-if="showDropdown">
       <div
         v-if="shortcuts"
         class="app-range-calendar__shortcuts"
@@ -37,6 +41,7 @@
 
 <script>
   import IconCalendar from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline"
+  import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline"
   import { get } from "lodash"
   import moment from "moment";
 
@@ -109,9 +114,13 @@
         type: String,
         default: '-'
       },
-      valueType: {
+      valueType: { // format returned value 
         type: String,
         default: 'YYYY-MM-DD'
+      },
+      format: { // format display into input
+        type: String,
+        default: 'DD/MM/YYYY'
       },
       bordered: Boolean,
       value: {
@@ -120,7 +129,8 @@
       }
     },
     components: {
-      IconCalendar
+      IconCalendar,
+      IconClose
     },
     data() {
       return {
@@ -132,26 +142,50 @@
     },
     watch: {
       localValue(newValue) {
-        this.$emit('change', newValue)
+        if (this.isValidLocalValue) {
+          let parsedData = []
+          if (newValue.length == 2) {
+            parsedData = [
+              newValue[0].format(this.valueType),
+              newValue[1].format(this.valueType)
+            ]
+          }
+          this.$emit('change', parsedData)
+          this.hideOptions()
+        }
       }
     },
     computed: {
       inputVal: function() {
-        if (!this.localValue || this.localValue.length <= 0) {
+        if (!this.isValidLocalValue) {
           return null
         } else {
-          return `${this.localValue[0]} ${this.rangeSeparator} ${this.localValue[1]}`
+          if (this.localValue[0] instanceof moment && this.localValue[1] instanceof moment) {
+            return `${this.localValue[0].format(this.format)} ${this.rangeSeparator} ${this.localValue[1].format(this.format)}`
+          } else {
+            return null
+          }
         }
+      },
+      isValidLocalValue() {
+        return (this.localValue && this.localValue[0] && this.localValue[1]) || this.isEmptyValue
       },
       classes() {
         return {
           active: this.active,
           "app-range-calendar--size-sm": this.size === "sm",
+          "app-range-calendar--size-md": this.size === "md",
+          "app-range-calendar--size-lg": this.size === "lg",
           "app-range-calendar--bordered": this.bordered,
         };
       },
       showDropdown() {
         return this.active
+      },
+      isEmptyValue() {
+        return this.localValue == null ||
+               this.isSame([], this.localValue) ||
+               this.isSame([null, null], this.localValue)
       }
     },
     methods: {
@@ -160,22 +194,25 @@
       },
       selectShortcut({item, index}) {
         this.shortcutActive = index
-        console.log('select shortcut: ', item)
         if (get(item, 'showPanelDate', false)) {
           this.showRangeSelection = true
         } else {
-          console.log('else ')
           this.showRangeSelection = false
-          this.active = false
-          console.log('after else: ', this.active)
           const rangeDate = item.onClick()
           this.localValue = rangeDate
-          console.log('after clicK ', this.active)
         }
 
       },
       hideOptions() {
         this.active = false
+      },
+      resetInput() {
+        this.localValue = []
+      },
+      isSame(arr1, arr2){ // compare 2 array
+        return (arr1.length == arr2.length) && arr1.every(function(element, index) {
+            return element === arr2[index]; 
+        });
       },
       get
     }
