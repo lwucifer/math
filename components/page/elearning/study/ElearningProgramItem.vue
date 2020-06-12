@@ -7,7 +7,7 @@
         :style="{
           'pointer-events': isLessonCompleted ? 'none' : 'inherit'
         }"
-        @change="isShowCompleteStudy = true"
+        @click="isShowCompleteStudy = true"
       />
     </div>
 
