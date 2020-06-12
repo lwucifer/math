@@ -571,6 +571,7 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const KEYWORD = {
     SEARCH_HEADER: "searchHeader",
+    CHECK_ROUTE_CLEAR_KEYWORK: "checkRouteCleaKeyword"
 };
 
 export const CHAT = {

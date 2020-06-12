@@ -1,6 +1,8 @@
 <template>
   <div class="page-wrap layout-default">
-    <TheHeader />
+    <keep-alive>
+      <TheHeader />
+    </keep-alive>
 
     <nuxt class="page-content"/>
 
