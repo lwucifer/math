@@ -23,6 +23,7 @@ export const DATETIME_FULL_WEEK_DAY = "dddd, DD/MM/YYYY, h:mm A";
 export const DATETIME_HH_MM_DD_MM_YY = "HH:mm DD/MM/YYYY";
 export const DATETIME_HH_MM_DD_MM_YY_DASH = "HH:mm - DD/MM/YYYY";
 export const DATETIME_HH_MM_A_DD_MM_YY = "hh:mm A DD/MM/YYYY";
+export const DATETIME_hh_mm = "hh:mm";
 export const DATE_SHORTCUT = [
   {
     text: 'Hôm nay',

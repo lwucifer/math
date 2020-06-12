@@ -1,7 +1,10 @@
 <template>
   <app-modal
     v-bind="{ width, centered, order }"
-    :component-class="{ 'app-modal-confirm': true }"
+    :component-class="{
+      'app-modal-confirm': true,
+      'app-modal-confirm--default': type === 'default' 
+    }"
     :header="false"
     :footer="false" 
   >

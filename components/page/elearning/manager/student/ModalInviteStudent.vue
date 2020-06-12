@@ -32,16 +32,16 @@
 
         <div class="student-list">
           <div class="item">
-            <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
-            <strong>Chọn tất cả danh sách</strong>
+            <app-checkbox class="ml-auto" @click="handleAllCheckbox" :checked="checkAll">
+              <strong>Chọn tất cả danh sách</strong>
+            </app-checkbox>
           </div>
           <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
             <app-checkbox
               class="ml-auto"
-              @change="handelCheckbox(item.id)"
+              @click="handleCheckbox(item.id)"
               :checked="arrMember.includes(item.id)"
-            />
-            <span>{{item.name}}</span>
+            >{{item.name}}</app-checkbox>
           </div>
         </div>
         <div class="text-center mt-4">
@@ -83,6 +83,7 @@ export default {
       classSelected: null,
       classList: [],
       studentList: [],
+      checkAll: false,
       invateStudent: {
         invitation_ids: ["string"],
         online_class_id: "string",
@@ -153,6 +154,7 @@ export default {
     },
 
     async handleChangedClass() {
+      this.checkAll = false;
       if (this.classSelected) {
         let params = {
           class_id: this.classSelected.value,
@@ -174,19 +176,29 @@ export default {
       }
     },
 
-    handelAllCheckbox(checked) {
-      if (checked) {
-        this.arrMember = this.studentList.map(item => item.id);
-      } else {
-        this.arrMember = [];
-      }
+    handleAllCheckbox() {
+      this.checkAll = !this.checkAll;
+      this.$nextTick(() => {
+        if (this.checkAll) {
+          this.arrMember = this.studentList.map(item => item.id);
+        } else {
+          this.arrMember = [];
+        }
+      });
     },
-    handelCheckbox(_id) {
+
+    handleCheckbox(_id) {
       if (this.arrMember.includes(_id)) {
         this.arrMember = this.arrMember.filter(item => item !== _id);
       } else {
         this.arrMember.push(_id);
       }
+
+      this.checkAll && (this.checkAll = false);
+      this.$nextTick(() => {
+        this.arrMember.length === this.studentList.length &&
+          (this.checkAll = true);
+      });
     },
 
     async getSchoolClasses() {
@@ -235,24 +247,6 @@ export default {
 }
 </style>
 
-<style lang="scss" scope>
-.student-list {
-  background: #fbfbfb;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
-  .item {
-    display: block;
-    margin-bottom: 1rem;
-    .app-checkbox {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    span {
-      vertical-align: middle;
-    }
-  }
-}
-strong {
-  color: #222;
-}
+<style lang="scss">
+@import "~/assets/scss/components/elearning/olclass/invite-student.scss";
 </style>

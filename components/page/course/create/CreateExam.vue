@@ -22,9 +22,9 @@
       <FormCreateExam v-if="isShowFormAdd" @cancel="handleHideFormAdd" />
 
       <ExamList
-        v-for="(exercise, index) in get(exams, 'content', [])"
-        :key="exercise.id"
-        :exercise="exercise"
+        v-for="(exam, index) in get(exams, 'content', [])"
+        :key="exam.id"
+        :exam="exam"
         :index="index"
       />
     </div>

@@ -59,7 +59,8 @@
 
       <div class="mb-4">
         <app-radio
-          value="he so"
+          value="coefficient"
+          :checked="typeRadio == 'coefficient'"
           @click="handleSelectType"
           name="caculate-point"
           class="mr-6"
@@ -73,7 +74,8 @@
         </app-radio>
 
         <app-radio
-          value="trong so"
+          :checked="typeRadio == 'weight'"
+          value="weight"
           @click="handleSelectType"
           name="caculate-point"
         >
@@ -86,24 +88,41 @@
         </app-radio>
       </div>
 
-      <div class="d-flex align-items-center mb-5">
-        <p class="mr-3" v-if="typeRadio == 'he so'">Chọn hệ số:</p>
-        <p class="mr-3" v-else>Nhập trọng số:</p>
+      <div
+        class="d-flex align-items-center mb-5"
+        v-if="typeRadio == 'coefficient'"
+      >
+        <p class="mr-3">Chọn hệ số:</p>
 
         <app-select
           class="mr-3"
           size="sm"
-          :value="1"
+          :value="payload.coefficient"
+          @change="handleChangeCoefficient"
           :options="[
             { value: 1, text: '1' },
             { value: 2, text: '2' },
           ]"
         >
           <template slot="placeholder-icon">
-            <IconAngleDown class="icon" v-if="typeRadio == 'he so'" />
-            <span class="text-primary" v-else>%</span>
+            <IconAngleDown class="icon" />
           </template>
         </app-select>
+
+        <p class="text-warning">
+          * Lưu ý: Bạn sẽ không thể thay đổi cách tính điểm sau khi bài kiểm tra
+          đã được tạo
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center mb-5" v-if="typeRadio == 'weight'">
+        <p class="mr-3">Nhập trọng số:</p>
+
+        <app-input class="mr-3 mb-0 w-80 pr-3" size="sm" v-model="payload.weight">
+          <template slot="placeholder-icon">
+            <span class="text-primary">%</span>
+          </template>
+        </app-input>
 
         <p class="text-warning">
           * Lưu ý: Bạn sẽ không thể thay đổi cách tính điểm sau khi bài kiểm tra
@@ -308,7 +327,7 @@ export default {
       payload: {
         index: 1,
         elearning_id: "",
-        required: 1,
+        required: true,
         title: "",
         type: "",
         pass_score: 0,
@@ -316,20 +335,24 @@ export default {
         duration: 0,
         category: "TEST",
         open_time: "",
-        opentime_enable: true,
-        close_time: "string",
-        closetime_enable: true,
+        opentime_enable: false,
+        close_time: "",
+        closetime_enable: false,
         coefficient: 1,
         // id: "",
-        // weight: 0,
+        weight: "",
       },
       showModalConfirm: false,
       confirmLoading: false,
-      typeRadio: "he so",
+      typeRadio: "coefficient",
     };
   },
 
   methods: {
+    handleChangeCoefficient(value) {
+      this.payload.coefficient = value;
+    },
+
     handleChangeOpenTime(date) {
       this.payload.open_time = date;
     },
@@ -354,25 +377,32 @@ export default {
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");
+
+      let data = { ...this.payload };
+      if (!data.open_time) delete data.open_time;
+      if (!data.close_time) delete data.close_time;
+      if (this.typeRadio === 'coefficient') delete data.weight
+      if (this.typeRadio === 'weight') delete data.coefficient
+
       const res = await this.$axios({
         url: "/elearning/creating/test",
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
-        data: this.payload,
+        data,
       });
 
       this.handleCancel();
 
       if (get(res, "data.success", false)) {
-        this.$toasted.success(get(res, "data.message", ""));
+        this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
         this.$emit("cancel");
         return;
       }
 
-      this.$toasted.error(get(res, "data.message", ""));
+      this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
     },
 
     handleCancel() {

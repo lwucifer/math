@@ -76,7 +76,7 @@ export default {
   },
 
   props: {
-    exercise: {
+    exam: {
       type: Object,
       default: null,
     },
@@ -87,7 +87,7 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       payload: {
-        exercise_id: get(this, "exercise.id", ""),
+        exercise_id: get(this, "exam.id", ""),
         type: "CHOICE",
         content: "",
         answers: [
@@ -129,16 +129,7 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          // this.$store.dispatch(`elearning/create/getProgress`);
-          this.$store.dispatch(`elearning/create/getExams`);
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          // this.$store.dispatch(`elearning/create/getProgress`);
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        this.$store.dispatch(`elearning/create/getExams`);
 
         return;
       }

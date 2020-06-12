@@ -102,16 +102,12 @@
         ],
         payments:[
           {
-            value: 'BANK',
-            text: 'BANK'
-          },
-          {
             value: 'ATM',
-            text: 'ATM'
+            text: 'ATM/Internet Banking'
           },
           {
-            value: 'EWALLET',
-            text: 'EWALLET'
+            value: 'CREDIT',
+            text: 'Thẻ tín dụng/ghi nợ'
           }
         ],
         filterSelect:false,
