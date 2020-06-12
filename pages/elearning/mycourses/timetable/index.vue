@@ -113,7 +113,7 @@
             <ul class="timetable-list" v-if="checkDataTable">
               <li
                 class="timetable-list-item active"
-                v-for="(item,index) in filterTimeTableList"
+                v-for="(item,index) in timeTableListWithPagination.data || []"
                 :key="index"
               >
                 <span class="timetable-list-item__dot"></span>
@@ -125,24 +125,15 @@
               </li>
             </ul>
             <div
-              class="text-center div-no-data"
+              class="text-gray-2 text-center mt-6"
               v-else
             >Không có thời khóa biểu nào trong khoảng thời gian này</div>
 
-            <!-- <app-pagination
+            <app-pagination
               class="mt-5"
-              :pagination="{
-                total: 4,
-                size: 10,
-                page: 1,
-                total_elements: 45,
-                first: 1,
-                last: 1,
-                number: 1,
-                number_of_elements: 45,
-                total_pages: 4
-              }"
-            />-->
+              :pagination="timeTableListWithPagination.pagination || {}"
+              @pagechange="changePage"
+            />
           </div>
         </div>
       </div>
@@ -167,6 +158,7 @@ const STORE_NAME_TIMETABLE = "elearning/mycourses/timetable";
 
 export default {
   middleware: ["authenticated"],
+
   async fetch({ params, query, store, route }) {
     const data = {
       from: getDateTimeFrom(moment()),
@@ -181,6 +173,7 @@ export default {
       )
     ]);
   },
+
   components: {
     MyCourseSide,
     IconCalendarDay,
@@ -213,11 +206,13 @@ export default {
       queryFromTo: {
         from: null,
         to: null
-      }
+      },
+      paginationPage: 1
     };
   },
   computed: {
     ...mapState(STORE_NAME_TIMETABLE, ["timeTableList"]),
+
     filterTimeTableList() {
       const data =
         this.timeTableList &&
@@ -246,13 +241,46 @@ export default {
         });
       return data;
     },
+
     checkDataTable() {
       return this.timeTableList && this.timeTableList.length > 0 ? true : false;
+    },
+
+    timeTableListWithPagination() {
+      const n = this.paginationPage; // current page
+      const x = 10; // items in page
+      const begin = (n - 1) * x;
+      const end = (n - 1) * x + x;
+      const items = this.filterTimeTableList.slice(begin, end);
+      const totalPages = Math.ceil(this.filterTimeTableList.length / x);
+      
+      return {
+        data: items,
+        pagination: {
+          first: n === 0,
+          last: n === totalPages,
+          number: n - 1,
+          number_of_elements: items.length,
+          size: x,
+          total_elements: this.filterTimeTableList.length,
+          total_pages: totalPages,
+          begin,
+          end
+        }
+      }
     }
   },
+
   created() {
     this.changeDate(this.calendar);
   },
+
+  watch: {
+    timeTableList(newValue) {
+      this.paginationPage = 1;
+    }
+  },
+
   methods: {
     ...mapMutations(STORE_NAME_TIMETABLE, ["setStateTimeTable"]),
     ...mapActions(STORE_NAME_TIMETABLE, ["getTimeTableList"]),
@@ -321,6 +349,9 @@ export default {
       this.queryFromTo.to = getDateTimeTo(value);
       this.getTimeTableList({ params: this.queryFromTo });
       this.todayDate = value.format("D MMMM, YYYY");
+    },
+    changePage({ number }) {
+      this.paginationPage = number + 1
     }
   }
 };

@@ -1,5 +1,10 @@
 <template>
-  <div class="school-side menu-side">
+  <div
+    class="school-side menu-side"
+    v-sticky
+    sticky-offset="{ top: 88 }"
+    :sticy-z-index="9"
+  >
     <!--
     <aside-menu :selected-item="active" :items="menuItems"></aside-menu>
     -->
