@@ -135,8 +135,21 @@
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Thêm bài học"
+      description="Bạn có chắc chắn muốn thêm bài học này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmDoc"
+      :confirmLoading="confirmLoadingDoc"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      title="Upload bài học"
+      :description="chagingDescriptionDoc"
     />
 
     <app-modal-confirm
@@ -224,9 +237,11 @@ export default {
       showModalConfirm: false,
       showModalConfirmVideo: false,
       showModalConfirmScorm: false,
+      showModalConfirmDoc: false,
       confirmLoading: false,
       confirmLoadingVideo: false,
       confirmLoadingScorm: false,
+      confirmLoadingDoc: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -251,8 +266,15 @@ export default {
       return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
 
+    chagingDescriptionDoc() {
+      if (this.confirmLoadingDoc) {
+        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      }
+      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+    },
+
     chagingBtnOk() {
-      if (this.confirmLoadingVideo) {
+      if (this.confirmLoadingVideo || this.confirmLoadingDoc) {
         return "Đang tải";
       }
       return "Xác nhận";
@@ -279,6 +301,7 @@ export default {
         this.tabType = "video";
       }
     },
+
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";
@@ -292,6 +315,7 @@ export default {
       }
       this.error_name = "";
     },
+
     changeTabType(type) {
       this.handleReset();
       if (type === "video") this.payload.type = "VIDEO";
@@ -317,6 +341,8 @@ export default {
         this.showModalConfirmVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.showModalConfirmScorm = true;
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.showModalConfirmDoc = true
       } else {
         this.showModalConfirm = true;
       }
@@ -327,7 +353,9 @@ export default {
         this.confirmLoadingVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.confirmLoadingScorm = true;
-      } else {
+      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
+        this.confirmLoadingDoc = true
+      }else {
         this.confirmLoading = true;
       }
 
@@ -366,6 +394,8 @@ export default {
     handleCancelModal() {
       this.showModalConfirm = false;
       this.confirmLoading = false;
+       this.showModalConfirmDoc = false;
+      this.confirmLoadingDoc = false;
       this.showModalConfirmVideo = false;
       this.confirmLoadingVideo = false;
       this.showModalConfirmScorm = false;
