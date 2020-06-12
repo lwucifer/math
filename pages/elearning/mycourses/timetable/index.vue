@@ -125,7 +125,7 @@
               </li>
             </ul>
             <div
-              class="text-center div-no-data"
+              class="text-gray-2 text-center mt-6"
               v-else
             >Không có thời khóa biểu nào trong khoảng thời gian này</div>
 
