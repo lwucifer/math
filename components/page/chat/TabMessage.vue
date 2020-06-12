@@ -880,12 +880,27 @@ export default {
       }
     },
     handleEmitMessage() {
-      const dataEmit = {
-        room_id: this.$route.params.id,
-        text: this.textChat
-      };
-      this.setEmitMessage(dataEmit);
-      this.getRoomList();
+      if (this.tag.length == 0) {
+        const dataEmit = {
+          room_id: this.$route.params.id,
+          text: this.textChat
+        };
+        this.setEmitMessage(dataEmit);
+        this.getRoomList();
+      } else if (this.tag.length == 1) {
+        const dataEmit = {
+          room_id: this.roomIdPush,
+          text: this.textChat
+        };
+        this.$emit("emitMessageTag1", dataEmit, this.roomIdPush);
+        this.setIsCreated(false);
+        // this.$router.push(`/messages/t/${this.roomIdPush}`);
+        // console.log("this.textChat", this.textChat);
+        // const dataTextChat = this.textChat;
+
+        // this.setEmitMessage(dataEmit);
+        // this.getRoomList();
+      }
       this.textChat = "";
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
@@ -1046,8 +1061,8 @@ export default {
         this.messagesList.push(_newVal);
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
-          console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
-          if (el.scrollHeight - el.scrollTop <= 500) {
+          // console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
+          if (el && el.scrollHeight - el.scrollTop <= 500) {
             el.scrollTop = el.scrollHeight;
           }
         });
@@ -1090,7 +1105,12 @@ export default {
         this.messagesList.push(_newVal);
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
-          if (el.scrollTop != el.scrollHeight) {
+          if (
+            el &&
+            el.scrollTop &&
+            el.scrollHeight &&
+            el.scrollTop != el.scrollHeight
+          ) {
             el.scrollTop = el.scrollHeight;
           }
         });
