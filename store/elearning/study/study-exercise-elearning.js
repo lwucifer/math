@@ -37,7 +37,7 @@ const actions = {
         "data": {
           "content": [
             {
-              "id": "28f5e3b3-48ab-42e0-b838-cb0c17bbaaa8",
+              "id": "7ff5487c-e0f6-43ee-b288-d82033ba3938",
               "name": "sdsdfsdf",
               "type": "COURSE",
               "exercises": 1,
@@ -48,7 +48,7 @@ const actions = {
               "created": "2020-05-29 04:00:12"
             },
             {
-              "id": "28f5e3b3-48ab-42e0-b838-cb0c17bbaaa8",
+              "id": "b99892b0-c881-4d58-8a38-ffbb31c5940b",
               "name": "sdsdfsdf",
               "type": "COURSE",
               "exercises": 1,
@@ -59,7 +59,7 @@ const actions = {
               "created": "2020-05-29 04:00:12"
             },
             {
-              "id": "28f5e3b3-48ab-42e0-b838-cb0c17bbaaa8",
+              "id": "7ff5487c-e0f6-43ee-b288-d82033ba3938",
               "name": "sdsdfsdf",
               "type": "LECTURE",
               "exercises": 1,
@@ -70,7 +70,7 @@ const actions = {
               "created": "2020-05-29 04:00:12"
             },
             {
-              "id": "28f5e3b3-48ab-42e0-b838-cb0c17bbaaa8",
+              "id": "7ff5487c-e0f6-43ee-b288-d82033ba3938",
               "name": "bài giảng bảng cửu chương",
               "type": "LECTURE",
               "exercises": 1,
