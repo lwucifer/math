@@ -29,10 +29,16 @@
       </div>
 
       <div class="item text-center" v-if="pending || (failed && canPass)">
-        <app-button
+        <!-- <app-button
           normal
           @click="submit"
           :disabled="$v.$invalid"
+        >
+          Xác nhận
+        </app-button> -->
+        <app-button
+          normal
+          @click="submit"
         >
           Xác nhận
         </app-button>
@@ -42,15 +48,12 @@
     <app-modal-notify
       v-if="visible.error"
       type="warning"
-      title="Chấm điểm thất bại!"
+      :title="visible.title"
       :description="notiMes"
       @ok="visible.error = false"
       @close="visible.error = false"
       centered
     >
-      <template v-slot:icon>
-    
-      </template>
     </app-modal-notify>
   </div>
 </template>
@@ -103,7 +106,8 @@
           to_passed: false
         },
         visible: {
-          error: false
+          error: false,
+          title: 'Chấm điểm thất bại!'
         },
         notiMes: ''
       }
@@ -121,7 +125,7 @@
         },
         note: {
           required,
-          minLength: minLength(15),
+          minLength: minLength(8),
           // maxLength: maxLength(500)
         },
         to_passed: {
@@ -142,7 +146,11 @@
     methods: {
       submit() {
         if (this.$v.$invalid) {
-          this.notiMes = 'Vui lòng nhập đủ thông tin!'
+          if (!this.$v.formData.mark.required) {
+            this.notiMes = 'Vui lòng chọn số điểm'
+          } else if (!this.$v.formData.note.required) {
+            this.notiMes = 'Vui lòng nhập nhận xét'
+          }
           this.$nextTick(() => {
             this.visible.error = true
           })
