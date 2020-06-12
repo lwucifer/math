@@ -21,6 +21,13 @@ export const getDateBirthDay = _utcDate => {
     return ts.format(DATE_BIRTHDAY);
 };
 
+export const getDateBirthDayUTC = _utcDate => {
+    if (!_utcDate) return;
+    const ts = moment.utc(_utcDate);
+    //const ts = getLocalDateTime(_utcDate);
+    return ts.format(DATE_BIRTHDAY);
+};
+
 export const getDateUpdateProfile = _utcDate => {
     if (!_utcDate) return;
     // const ts = moment.utc(_utcDate);

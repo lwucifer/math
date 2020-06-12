@@ -56,12 +56,12 @@
       </template>
       <template v-slot:cell(progress)="{row}">
         <td>
-          <span class="text-primary" v-if="row.progress > 50">{{ get(row, 'progress', '') }} %</span>
+          <span class="text-primary" v-if="row.progress > 0.5">{{ get(row, 'progress', '') * 100 }} %</span>
           <span
             class="text-secondary"
-            v-else-if="row.progress < 50"
-          >{{ get(row, 'progress', '') }} %</span>
-          <span class="text-warning" v-else-if="row.progress = 50">{{ get(row, 'progress', '') }} %</span>
+            v-else-if="row.progress < 0.5"
+          >{{ get(row, 'progress', '') * 100 }} %</span>
+          <span class="text-warning" v-else-if="row.progress = 0.5">{{ get(row, 'progress', '') * 100}} %</span>
         </td>
       </template>
     </app-table>
