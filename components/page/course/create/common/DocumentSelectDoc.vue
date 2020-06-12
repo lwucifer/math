@@ -58,6 +58,8 @@
         centered
         v-if="showModalConfirm"
         :confirmLoading="confirmLoading"
+        title="Bạn có chắc chắn muốn xóa?"
+        description="Bạn sẽ phải tạo lại nội dung nếu bạn xóa bài học này."
         @ok="handleOk"
         @cancel="handleCancelModal"
       />
