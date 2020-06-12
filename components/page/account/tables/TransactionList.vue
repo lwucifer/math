@@ -19,9 +19,6 @@
         <td v-if="row.status != statusPending">
           <span :class="statusClass(row.status)">{{ row.status | transactionStatus2Txt }}</span>
         </td>
-        <td v-else-if="row.status == statusPending && row.type =='sell'">
-          <span class="text-info">Chờ xử lí</span>
-        </td>
         <td v-else>
           <span
             :class="statusClass(row.status, 'repay')"
@@ -61,7 +58,7 @@
       <template v-slot:cell(method)="{row}">
         <td>
           <span v-if="row.method=='ATM'">ATM/Internet Banking</span>
-          <span v-else-if="row.method=='CREDIT'">Thẻ tín dụng/ghi nợ</span>
+          <span v-else-if="row.method=='CREDIT'">Thẻ tín dung/Thẻ ghi nợ</span>
         </td>
       </template>
     </app-table>
