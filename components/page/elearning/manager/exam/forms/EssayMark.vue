@@ -2,7 +2,7 @@
   <div class="writting-test-score">
     <div class="writting-test-score__form">
       <div class="item" v-if="pending">
-        <label for="" class="content-title">Nhận xét chi biết bài làm của học sinh</label>
+        <label for="" class="content-title">Nhận xét chi tiết bài làm của học sinh</label>
         <app-editor id="comment" v-model="$v.formData.note.$model"/>
       </div>
       <div class="item" v-if="pending">
