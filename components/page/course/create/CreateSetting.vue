@@ -164,7 +164,6 @@
 
           <div
             class="percent_price__ElearningCreate bg-primary text-white ml-3"
-           
           >
             {{ percent_price }}
           </div>
@@ -195,7 +194,7 @@
           @click="handleCLickSave"
           class="create-action__btn mr-4"
           square
-          ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
+          ><Forward class="mr-2" /> {{ textButton }}</app-button
         >
       </div>
     </div>
@@ -206,6 +205,8 @@
       :confirmLoading="confirmLoading"
       @ok="handleSaveSetting"
       @cancel="handleCancelSetting"
+      title="Bạn có muốn tiếp tục?"
+      description="Bạn có chắc chắn là đã hoàn thành việc cài đặt?"
     />
   </div>
 </template>
@@ -271,6 +272,7 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      progress: "progress",
       setting: "setting",
     }),
     submit() {
@@ -288,13 +290,23 @@ export default {
       return true;
     },
     percent_price() {
-      let percent_price = '100%';
+      let percent_price = "100%";
       const _fee = numeral(get(this, "payload.fee", 0)).value();
       const _price = numeral(get(this, "payload.price", 0)).value();
       if (_fee && _price) {
         percent_price = numeral((_price - _fee) / _fee).format("0%");
       }
       return percent_price;
+    },
+    textButton() {
+      if (!this.nextStep) return "Lưu & gửi lên";
+      return "Lưu & tiếp tục";
+    },
+    nextStep() {
+      if (get(this, "progress.elearning_status", "") === "APPROVED") {
+        return false;
+      }
+      return true;
     },
   },
 
@@ -384,24 +396,46 @@ export default {
       this.showModalConfirm = true;
     },
 
+    async requestElearning() {
+      const elearning_id = getParamQuery("elearning_id");
+      const data = {
+        elearning_id,
+      };
+
+      await this.$store.dispatch(
+        `elearning/creating/creating-publish/${actionTypes.ELEARNING_CREATING_PUBLISH.POST}`,
+        data
+      );
+      // cập nhật setting mới sẽ tự động cập nhật progress
+      // this.$store.dispatch("elearning/create/getProgress");
+    },
+
     async handleSaveSetting() {
       this.confirmLoading = true;
       this.payload.elearning_id = getParamQuery("elearning_id");
       this.payload.fee = numeral(this.payload.fee).value();
       this.payload.price = numeral(this.payload.price).value();
+      if (this.payload.price == 0 && !this.free) {
+        this.payload.price = this.payload.fee;
+      }
       const payload = createPayloadCourseSetting(this.payload, this.free);
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
         payload
       );
 
+      if (!this.nextStep) {
+        this.requestElearning();
+      }
+
       this.handleCancelSetting();
 
       if (get(result, "success", false)) {
         this.$store.dispatch(`elearning/create/getSetting`);
-        // this.$store.dispatch(`elearning/create/getProgress`);
         this.$toasted.success(get(result, "message", "Thành công"));
-        this.$emit("nextStep", "exercise");
+        if (this.nextStep) {
+          this.$emit("nextStep", "exercise");
+        }
         return;
       }
       this.$toasted.error(get(result, "message", "Có lỗi xảy ra"));

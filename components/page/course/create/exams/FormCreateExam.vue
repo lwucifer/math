@@ -283,12 +283,16 @@
         >Tạo bài kiểm tra</app-button
       >
     </div>
+
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      title="Tạo bài kiểm tra"
+      description="Bạn có chắc chắn muốn tạo bài kiểm tra này?"
     />
   </div>
 </template>

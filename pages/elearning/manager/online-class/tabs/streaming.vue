@@ -58,45 +58,14 @@
     <!--Options group-->
 
     <!--Table-->
-    <app-table
-      :loading="loading"
-      :heads="heads"
-      :pagination="pagination"
+    <OnlineClassTable 
+      :loading="loading" 
+      :pagination="pagination" 
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="handleSort"
-      :data="classList"
-      multiple-selection
-    >
-      <template v-slot:cell(online_class_name)="{row}">
-        <td>
-          <n-link
-            :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
-            class="link"
-          >{{row.online_class_name}}</n-link>
-        </td>
-      </template>
-
-      <template v-slot:cell(start_time)="{row}">
-        <td>
-          <div style="white-space: nowrap">
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
-          </div>
-        </td>
-      </template>
-
-      <template v-slot:actions="{row}">
-        <a class @click="openModal(row)">
-          <IconSwapHorizontalCircle class="fill-primary mr-2"/>Vào phòng học
-        </a>
-        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconPeople class="fill-blue mr-2"/>Xem danh sách học sinh
-        </n-link>
-      </template>
-    </app-table>
+      :actions="[1,0,1]"
+      :data="classList"/>
     <!--End table-->
 
     <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false" :info="modalData"/>
@@ -122,14 +91,8 @@ import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
 import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
-import IconSwapHorizontalCircle from '~/assets/svg/v2-icons/swap_horizontal_circle_24px.svg?inline';
-import ModalJoinClass from "~/components/page/elearning/manager/olclass/ModalJoinClass";
+import OnlineClassTable from "~/components/page/elearning/manager/olclass/OnlineClassTable";
 
-import {
-  getDateBirthDay,
-  getLocalTimeHH_MM_A
-} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
@@ -147,9 +110,7 @@ export default {
     IconCalendar,
     IconTrash,
     IconHamberger,
-    IconPeople,
-    IconSwapHorizontalCircle,
-    ModalJoinClass
+    OnlineClassTable
   },
 
   data() {
@@ -225,9 +186,6 @@ export default {
   },
 
   methods: {
-    getDateBirthDay,
-    getLocalTimeHH_MM_A,
-
     handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};
