@@ -44,7 +44,7 @@
         </template>
       </app-table>
 
-      <ModalJoinClass :id="rowClassId" v-if="modalShow" @close="modalShow = false" :info="modalData"/>
+      <ModalJoinClass :id="rowClassId" v-if="modalShow && actions[0]" @close="modalShow = false" :info="modalData"/>
     </div>
 </template>
 
@@ -59,9 +59,6 @@ import {
   getLocalTimeHH_MM_A
 } from "~/utils/moment";
 import { get } from "lodash";
-
-const STORE_NAMESPACE = "elearning/teaching/olclass";
-const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
   components: {
