@@ -1,61 +1,75 @@
 <template>
   <div class="container">
     <h3>Danh sách học sinh</h3>
-    <div class="wrap_list-students">
-      <app-search
-        size="sm"
-        v-model="params.query"
-        @submit="handleSearch"
-        placeholder="Tìm kiếm học sinh"
-      />
-      <filter-button
-        class="mr-2"
-        :color="isFilter ? 'primary' : 'white'"
-        size="sm"
-        @click="isFilter = !isFilter"
-      />
-      <div>
-        <app-select
-          v-if="isFilter"
-          placeholder="Năm học"
+    <div class="wrap-header-students">
+      <div class="wrap_list-students">
+        <app-search
           size="sm"
-          :options="filterYears"
-          class="mr-2"
-          clearable
-          @change="handleChangedYear"
+          v-model="params.query"
+          @submit="handleSearch"
+          placeholder="Tìm kiếm học sinh"
         />
-        <app-select
-          v-if="isFilter"
-          placeholder="Lớp học"
+        <filter-button
+          class="mr-2"
+          :color="isFilter ? 'primary' : 'white'"
           size="sm"
-          class="mr-2"
-          v-model="params.class_id"
-          :options="filterClasses"
-          clearable
-          @change="handleChangedClass"
+          @click="isFilter = !isFilter"
         />
+        <div>
+          <app-select
+            v-if="isFilter"
+            placeholder="Năm học"
+            size="sm"
+            :options="filterYears"
+            class="mr-2"
+            clearable
+            @change="handleChangedYear"
+          />
+          <app-select
+            v-if="isFilter"
+            placeholder="Lớp học"
+            size="sm"
+            class="mr-2"
+            v-model="params.class_id"
+            :options="filterClasses"
+            clearable
+            @change="handleChangedClass"
+          />
+        </div>
+        <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+          <app-vue-select
+            class="app-vue-select w-100"
+            :options="optionYear"
+            placeholder="Năm học"
+            size="sm"
+            @input="handleChangedYear"
+            clearable
+          />
+        </div>-->
+        <!-- <app-select-school-year @input="handleChangedYear" /> -->
+        <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+          <app-vue-select
+            class="app-vue-select w-100"
+            :options="optionClass"
+            placeholder="Lớp học"
+            size="sm"
+            @input="handleChangedClass"
+            clearable
+          />
+        <app-vue-select placeholder="Lớp học" size="sm" />-->
       </div>
-      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="optionYear"
-          placeholder="Năm học"
-          size="sm"
-          @input="handleChangedYear"
-          clearable
-        />
-      </div>-->
-      <!-- <app-select-school-year @input="handleChangedYear" /> -->
-      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="optionClass"
-          placeholder="Lớp học"
-          size="sm"
-          @input="handleChangedClass"
-          clearable
-        />
-      <app-vue-select placeholder="Lớp học" size="sm" />-->
+      <div class="filter-avg-mark">
+        <h6 class="mt-5 mb-2">Chọn cách tính điểm trung bình và tỷ lệ hoàn thành</h6>
+        <div class="d-flex align-items-center">
+          <app-select
+            size="sm"
+            v-model="params.avg_mark"
+            :options="filterAvgMark"
+            clearable
+          />
+          <i class="ml-3">* ĐIểm và tỷ lệ sẽ được tính dựa trên toàn bộ quá trình học tập của học sinh tính từ lúc tham gia đến niên khóa mà bạn lựa chọn.</i>
+        </div>
+      </div>
     </div>
     <div class="wrap-table">
       <app-table 
@@ -161,6 +175,10 @@ export default {
           sort: "true"
         },
         {
+          name: "join_date",
+          text: "Ngày tham gia",
+        },
+        {
           name: "year",
           text: "Năm học"
         },
@@ -209,7 +227,8 @@ export default {
         limit: 10,
         query: null,
         school_year: null,
-        class_id: null
+        class_id: null,
+        avg_mark: "year"
       },
       optionYear: [
         { value: "2018", text: "2018" },
@@ -221,6 +240,10 @@ export default {
         { value: "8C", text: "8C" },
         { value: "6B", text: "6B" },
         { value: "-1", text: "Khác" }
+      ],
+      filterAvgMark:[
+        {value:"year",text:"Theo từng năm học"},
+        {value:"process",text:"Theo quá trình học"}
       ],
       isFilter: false
     };

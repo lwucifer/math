@@ -1,6 +1,6 @@
 <template>
   <div class="tooltip--submit-status-content">
-    <p>Ngày nộp bài: <span>{{ timestamp }}</span></p>
+    <p v-if="timestamp">Ngày nộp bài: <span>{{ timestamp }}</span></p>
     <p>Điểm: <span :class="statusCls">{{ scoreDetail }}</span></p>
   </div>
 </template>
