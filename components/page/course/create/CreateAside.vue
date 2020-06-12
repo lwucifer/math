@@ -109,6 +109,9 @@ export default {
       exams: "exams",
     }),
     is_submit() {
+      if (get(this, "progress.elearning_status", "") === "APPROVED") {
+        return false;
+      }
       return (
         get(this, "progress.general_status", -1) == 1 &&
         get(this, "progress.content_status", -1) == 1 &&
