@@ -179,7 +179,7 @@
         @ok="handleOk"
         @cancel="handleCancel"
         :title="title_confirm"
-        description="Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu"
+        description="Bạn sẽ không thể thay đổi loại hình học tập sau khi xác nhận."
       />
     </div>
 
@@ -296,7 +296,7 @@ export default {
     title_confirm() {
       let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
-        title = "Xác nhận?";
+        title = "Bạn có muốn tiếp tục?";
       }
       return title;
     },

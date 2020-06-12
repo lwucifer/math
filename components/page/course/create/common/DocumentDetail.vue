@@ -16,6 +16,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      description="Bạn có chắc chắn muốn xóa tài liệu này?"
     />
   </div>
 </template>
