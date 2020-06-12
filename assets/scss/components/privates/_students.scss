@@ -1,9 +1,6 @@
 .wrap_list-students{
     display: flex;
     align-items: center;
-    padding: 16px;
-    margin-top: 1.6rem;
-    background: #F9F9F9;
     .app-search{
         width: 459px;
         margin-right: 12px;
@@ -14,6 +11,11 @@
     .app-input{
         margin-bottom: 0;
     }
+}
+.wrap-header-students{
+    background: #F9F9F9;
+    padding: 16px;
+    margin-top: 1.6rem;
 }
 .wrap-table{
         .app-table{
@@ -30,20 +32,8 @@
                 border-bottom: none;
             }
             .wrap-name__table{
-                &:nth-child(1){
-                    width: 20%;
-                }
-                &:nth-child(2){
-                    width: 10%;
-                }
-                &:nth-child(3){
-                    width: 20%;
-                }
-                &:nth-child(4){
-                    width: 20%;
-                }
                 &:nth-child(5){
-                    width: 30%;
+                    white-space: nowrap;
                     span{
                         width:3.7rem
                     }

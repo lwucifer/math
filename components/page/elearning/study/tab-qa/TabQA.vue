@@ -75,15 +75,16 @@ export default {
 
   mounted() {
     useEffect(this, this.handleGetQuestions.bind(this), ["params"]);
-    const typeParams = getParamQuery('type')
+  },
+
+  updated(){
     const questionIdParams = getParamQuery('question_id')
     this.$nextTick(() => {
-       if(questionIdParams){
-        setTimeout(()=>{
-            this.$scrollTo('#'+questionIdParams, 1000)
-          }, 1000);
-      }
-    })
+      if(questionIdParams && !this.isScroll){
+          this.$scrollTo('#'+questionIdParams, 1000)
+              this.isScroll = true
+        }
+      })
   },
 
   computed: {
@@ -113,6 +114,7 @@ export default {
         page: 1,
         sort_by: "NEWEST", //NEWEST | OLDEST | FAVOURITE
       },
+      isScroll:false
     };
   },
 
