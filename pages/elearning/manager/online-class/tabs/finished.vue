@@ -77,7 +77,7 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="handleSort"
-      @actions="[0,0,1]"
+      :actions="[0,0,1]"
       :data="classList"/>
     <!--End table-->
 
@@ -95,20 +95,11 @@
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
-import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 import OnlineClassTable from "~/components/page/elearning/manager/olclass/OnlineClassTable";
 
-import {
-  getDateBirthDay,
-  getLocalTimeHH_MM_A
-} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
@@ -118,16 +109,9 @@ const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
 export default {
-  layout: "manage",
-
   components: {
-    IconFilter,
-    IconSearch,
-    IconArrow,
     IconCalendar,
     IconTrash,
-    IconPeople,
-    IconTimesCircle,
     IconHamberger,
     OnlineClassTable
   },
@@ -202,9 +186,6 @@ export default {
   },
 
   methods: {
-    getDateBirthDay,
-    getLocalTimeHH_MM_A,
-
     handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};

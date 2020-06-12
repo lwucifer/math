@@ -178,6 +178,7 @@ export default {
         backgroundColor: {
           fill: "#0000"
         },
+        legend: {position: 'none'},
         // width: 900,
         height: 400
       },
