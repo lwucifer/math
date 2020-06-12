@@ -119,7 +119,7 @@
         <p class="mr-3">Nhập trọng số:</p>
 
         <app-input class="mr-3 mb-0 w-80 pr-3" size="sm" v-model="payload.weight">
-          <template slot="placeholder-icon">
+          <template slot="unit">
             <span class="text-primary">%</span>
           </template>
         </app-input>
