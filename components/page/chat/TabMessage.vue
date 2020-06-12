@@ -1047,7 +1047,7 @@ export default {
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
           console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
-          if (el.scrollHeight - el.scrollTop <= 250) {
+          if (el.scrollHeight - el.scrollTop <= 500) {
             el.scrollTop = el.scrollHeight;
           }
         });

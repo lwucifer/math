@@ -21,10 +21,10 @@
         </td>
       </template>
 
-      <template v-slot:cell(not_submit)="{row}">
+      <template v-slot:cell(missing)="{row}">
         <td>
           <div class="text-center text-warning">
-            {{ get(row, 'not_submit', 0) }}
+            {{ get(row, 'missing', 0) }}
           </div>
         </td>
       </template>
@@ -145,7 +145,7 @@
             text: "Số bài tập",
           },
           {
-            name: "not_submit",
+            name: "missing",
             text: "Chưa nộp",
           },
           {
