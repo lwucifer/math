@@ -389,18 +389,19 @@ export default {
       };
       this.elearningStudyFavouriteAdd(query).then((result) => {
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
+          // if (this.tab === 4) {
+          //   // this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningFavourite();
+          // } else if (this.tab === 5) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningArchive();
+          // } else {
+          //   this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          //   // this.fetchElearningFavourite();
+          // }
         }
       });
     },
@@ -418,18 +419,19 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
+          // if (this.tab === 4) {
+          //   // this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningFavourite();
+          // } else if (this.tab === 5) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningArchive();
+          // } else {
+          //   this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          //   // this.fetchElearningFavourite();
+          // }
         }
       });
     },
@@ -447,16 +449,17 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
+          // if (this.tab === 5) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningArchive();
+          // } else if (this.tab === 4) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningFavourite();
+          // } else {
+          //   this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          // }
         }
       });
     },
@@ -474,24 +477,27 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
+          // if (this.tab === 5) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningArchive();
+          // } else if (this.tab === 4) {
+          //   this.fetchElearningStatisticList();
+          //   this.fetchElearningFavourite();
+          // } else {
+          //   this.fetchElearningList();
+          //   this.fetchElearningStatisticList();
+          // }
         }
       });
     },
     onPageChange(e) {
-      this.pagination = { ...this.pagination, ...e };
-      this.params.size = this.pagination.size;
-      this.params.page = this.pagination.number + 1;
-      this.fetchElearningList();
+      // console.log(e);
+      // this.pagination = { ...this.pagination, ...e };
+      // this.params.size = this.pagination.size;
+      // this.params.size = 20;
+      this.params.page = e.number + 1;
+      // this.fetchElearningList();
     },
     handleSubmitSearch(e) {
       // console.log(this.params.keyword)
