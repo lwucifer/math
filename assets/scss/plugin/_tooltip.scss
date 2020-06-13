@@ -3,6 +3,9 @@
     z-index: 96;
 
     &.popover {
+      &:focus, &:active {
+        outline: none;
+      }
       .popover-inner {
         background: $color-text-white !important;
         color: $color-text-dark;

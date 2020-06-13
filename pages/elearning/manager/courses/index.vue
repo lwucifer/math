@@ -168,13 +168,13 @@
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
-              <td>{{getDateBirthDay(row.publish_date)}}</td>
+              <td>{{getDateBirthDayUTC(row.publish_date)}}</td>
             </template>
             <template v-slot:cell(start_time)="{ row }">
-              <td>{{row.start_time ? getDateBirthDay(row.start_time) : getDateBirthDay(row.publish_date)}}</td>
+              <td>{{row.start_time ? getDateBirthDayUTC(row.start_time) : getDateBirthDayUTC(row.publish_date)}}</td>
             </template>
             <template v-slot:cell(end_time)="{ row }">
-              <td>{{row.end_time ? getDateBirthDay(row.end_time) : 'Không thời hạn'}}</td>
+              <td>{{row.end_time ? getDateBirthDayUTC(row.end_time) : 'Không thời hạn'}}</td>
             </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
@@ -278,7 +278,8 @@ import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 import numeral from "numeral";
 
 import {
-  getDateBirthDay
+  getDateBirthDay,
+  getDateBirthDayUTC
 } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -415,8 +416,7 @@ export default {
         },
         {
           name: "participants",
-          text: "Học sinh tham gia",
-          sort: true
+          text: "Học sinh tham gia"
         }
       ],
       currentHeads: [],
@@ -532,6 +532,7 @@ export default {
   methods: {
     numeral,
     getDateBirthDay,
+    getDateBirthDayUTC,
 
     handleSort(e) {
       const sortBy = e.sortBy + '_' + e.order;

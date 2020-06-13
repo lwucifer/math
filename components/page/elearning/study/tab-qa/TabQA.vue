@@ -42,10 +42,7 @@
       <div
         @click="handleLoadMoreQuestion"
         class="text-center"
-        v-if="
-          !get(questions, 'page.last', true) &&
-            get(questions, 'page.total_elements', 0)
-        "
+        v-if="isShowParentMoreQuestion"
       >
         <a class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>
@@ -81,7 +78,7 @@ export default {
     const questionIdParams = getParamQuery('question_id')
     this.$nextTick(() => {
       if(questionIdParams && !this.isScroll){
-          this.$scrollTo('#'+questionIdParams, 1000)
+          this.$scrollTo('#'+questionIdParams, 1000,{offset:-70})
               this.isScroll = true
         }
       })
@@ -91,6 +88,12 @@ export default {
     ...mapState("elearning/study/detail", {
       questions: "questions",
     }),
+    isShowParentMoreQuestion() {
+      const currPage = get(this.questions, 'page.number', 0) + 1;
+      const totalPage = get(this.questions, 'page.total_pages', 0);
+
+      return (currPage < totalPage)  
+    }
   },
 
   data() {

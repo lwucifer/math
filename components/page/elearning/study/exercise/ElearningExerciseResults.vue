@@ -1,6 +1,9 @@
 <template>
   <div class="e-exercise-results">
-    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-if="isTest">
+      {{ result.name }} - {{ result.type | getTestTypeText }}
+    </h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-else>
       {{ result.name }} - {{ result.type | getExerciseTypeText }}
     </h1>
 
@@ -66,7 +69,8 @@
           result.result === EXERCISE_STATUS.FAILED &&
             result.reworks - result.works > 0
         "
-        >Làm lại bài tập</app-button
+        @click.prevent="handleDoExercise"
+        >Làm lại {{ exerciseTextTransform }}</app-button
       >
     </div>
 
@@ -91,9 +95,9 @@
 </template>
 
 <script>
-import { EXERCISE_TYPES, EXERCISE_STATUS } from "~/utils/constants";
+import { EXERCISE_TYPES, EXERCISE_STATUS, STUDY_MODE } from "~/utils/constants";
 import { getExerciseResultText } from "~/plugins/filters";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 import { mapState } from "vuex";
 import { RESPONSE_SUCCESS } from "~/utils/config";
@@ -126,7 +130,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["result"]),
+    ...mapState("elearning/study/study-exercise", ["result", "currentLession"]),
 
     resultRate() {
       return `${this.result.mark || 0}/${this.result.max_score || 0} (${getExerciseResultText(this.result.result)})`;
@@ -139,6 +143,18 @@ export default {
       } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
         return "Xem nhận xét";
       }
+    },
+
+    isTest() {
+      return !this.currentLession;
+    },
+
+    exerciseTextTransform() {
+      if(this.isTest) {
+        return "bài kiểm tra";
+      } else {
+        return "bài tập";
+      }
     }
   },
 
@@ -149,6 +165,8 @@ export default {
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseQuestionList"
     ]),
+
+    ...mapMutations("event", ["setStudyMode"]),
 
     handleShowComment() {
       console.log("[handleShowComment]");
@@ -170,6 +188,12 @@ export default {
           }
         });
       });
+    },
+
+    handleDoExercise() {
+      console.log("[handleDoExercise]");
+      // show befor begin exercise
+      this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
     }
   }
 };

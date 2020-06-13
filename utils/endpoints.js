@@ -129,6 +129,7 @@ export const STUDY_INTERACTIVE_QUESTION_ADD = `/elearning/study/interactive/ques
 export const STUDY_ELEARNING_PROGRESS = `/elearning/study/elearning/progress`;
 export const STUDY_QUESTION_LIKE = `/elearning/study/interactive/question/like`;
 export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
+export const STUDY_QUESTION_ANSWERS = `/elearning/study/interactive/answers`;
 export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
 export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_INTERACTIVE_NOTIFICATION = `/elearning/study/interactive/announcements`;

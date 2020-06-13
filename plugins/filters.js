@@ -254,6 +254,13 @@ export function getExerciseTypeText(type = "") {
   }
 }
 
+export function getTestTypeText(type = "") {
+  if (type === EXERCISE_TYPES.CHOICE) {
+    return "Bài kiểm tra trắc nghiệm";
+  } else if (type === EXERCISE_TYPES.ESSAY) {
+    return "Bài kiểm tra tự luận";
+  }
+}
 
 export function getQuestionNoText(_index = "") {
   let noText = '';
@@ -378,6 +385,7 @@ const filters = {
   transactionStatus2Txt,
   convertBreadcrumText,
   getExerciseTypeText,
+  getTestTypeText,
   getQuestionNoText,
   getDateTimeFullText,
   getDateBirthday,

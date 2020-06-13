@@ -31,7 +31,7 @@
           v-if="price.discount && price.price"
           class="course-item-2__discount"
         >
-          -{{ price.discount }}%
+          -{{ parseInt(price.discount) }}%
         </div>
       </n-link>
 
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { assignIn, get } from "lodash";
+import { assignIn, get, parseInt } from "lodash";
 import numeral from "numeral";
 
 // import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
@@ -136,6 +136,7 @@ export default {
   methods: {
     get,
     numeral,
+    parseInt
   },
 };
 </script>

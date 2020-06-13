@@ -7,7 +7,7 @@
         </n-link>
       </div>
 
-      <app-search class="the-header__search" :value="valueInput" @submit="handleInput" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
+      <app-search class="the-header__search" v-model="valueInput" @submit="handleInput" :button-props="{ color: 'default' }" bordered placeholder="Nhập để tìm kiếm" />
 
       <ul class="the-header__menu">
         <li>
@@ -161,6 +161,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
 import { UPDATE_NOTI, USER_ROLES } from "~/utils/constants";
 import { detectBrowser } from "~/utils/common";
+import { PARAM_CHECK } from "../../../utils/config";
 
 export default {
   components: {
@@ -193,7 +194,7 @@ export default {
     ...mapState("notifications", ["notis", "notiUnread"]),
     ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
     ...mapGetters("cart", ["cartCheckout"]),
-    ...mapState("keyword", ["keywordSearchHeader"]),
+    ...mapState("keyword", ["keywordSearchHeader", "checkRouteClearKeyword"]),
   },
   watch: {
     keywordSearchHeader(newValue){
@@ -201,16 +202,23 @@ export default {
         this.valueInput = '';
       }else{
         const paramCheck = this.$route.path;
-        if(paramCheck == '/school'){
+        if(paramCheck == PARAM_CHECK.SCHOOL){
           this.$router.push(`/school/search`)
-        }else if(paramCheck != '/elearning/search' && paramCheck != '/social' && paramCheck != '/school/search'){
+        }else if(paramCheck != PARAM_CHECK.ELEARNING_SEARCH && paramCheck != PARAM_CHECK.SOCIAL && paramCheck != PARAM_CHECK.SCHOOL_SEARCH){
           this.$router.push(`/elearning/search?subject=&type=&sort=`)
         }
       }
-    }
+    },
+    checkRouteClearKeyword(newValue){
+      if(newValue != PARAM_CHECK.ELEARNING_SEARCH && newValue != PARAM_CHECK.SOCIAL && newValue != PARAM_CHECK.SCHOOL_SEARCH){
+        this.valueInput = '';
+      }
+    },
   },
   mounted() {
-    console.log('this.$route.path', this.$route.path)
+    if(this.checkRouteClearKeyword == PARAM_CHECK.ELEARNING_SEARCH){
+      this.valueInput = this.keywordSearchHeader;
+    }
     this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
       const data = {

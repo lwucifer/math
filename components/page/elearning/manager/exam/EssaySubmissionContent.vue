@@ -17,6 +17,12 @@
           </div>
         </div>
       </div>
+      <div class="item elearning-writing-test-result">
+        <attachment-assets
+          v-if="get(item, 'student.attachment', false)"
+          :link="get(item, 'student.attachment')"
+        />
+      </div>
     </div>
     <div class="item" v-if="note">
       <label for="" class="text-dark content-title">Nhận xét chi biết bài làm của học sinh</label>
@@ -30,8 +36,12 @@
 
 <script>
   import { get } from "lodash"
+  import AttachmentAssets from "~/components/page/elearning/manager/exam/AttachmentAssets"
   
   export default {
+    components: {
+      AttachmentAssets
+    },
     props: {
       contents: {
         type: Array,
