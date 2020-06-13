@@ -3,7 +3,7 @@
     <h2 class="cgi-form-title heading-5 mb-4">{{ title }}</h2>
 
     <div class="row csa-row">
-      <div class="col csa-col csa-col--left mb-4">
+      <div class="col csa-col csa-col--left mb-2">
         <div class="cgi-upload-avt-preview">
           <img
             :src="default_image"

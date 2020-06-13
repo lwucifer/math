@@ -249,6 +249,7 @@ export default {
       if (get(this, "info.progress", "-1") >= 100) return true;
       return false;
     },
+    
     description() {
       let html = get(this, "info.description", "");
       let div = document.createElement("div");
