@@ -8,18 +8,19 @@ export default class Study extends BaseService {
 
   async addAnswerOfQuestion(params, image = "") {
     let formData = new FormData();
+    formData.append("content", params.content);
+    formData.append("question_id", params.question_id);
     formData.append("image", image);
 
     let options = {
       url: APIs.STUDY_QUESTION_ADD_ANSWER,
       method: "POST",
-      params,
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
 
-    if (image) options.data = formData;
+    options.data = formData;
 
     const { data } = await this.$axios.request(options);
 
