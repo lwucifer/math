@@ -89,3 +89,10 @@ export const TIMEOUT = {
   NOTIFY: 3000,
 }
 
+export const PARAM_CHECK = {
+  SCHOOL: "/school",
+  SCHOOL_SEARCH: "/school/search",
+  SOCIAL: "/social",
+  ELEARNING_SEARCH: "/elearning/search",
+}
+

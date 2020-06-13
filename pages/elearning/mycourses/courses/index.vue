@@ -369,7 +369,7 @@ export default {
       this.checkModalShare = true;
       this.dataModal = item;
     },
-
+    
     async handleShareSchoolly(_content) {
       console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
