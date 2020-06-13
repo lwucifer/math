@@ -121,7 +121,7 @@
                 <span class="timetable-list-item__subtitle">{{item.content}}</span>
                 <span
                   class="timetable-list-item__time"
-                >Thời gian bắt đầu: {{item.time | moment('HH:mm') }}</span>
+                >{{item.text_time}}: {{item.start_time | moment('HH:mm') }} {{item && item.end_time ? '-' : ''}} {{item.end_time | moment('HH:mm') }}</span>
               </li>
             </ul>
             <div
@@ -217,25 +217,34 @@ export default {
       const data =
         this.timeTableList &&
         this.timeTableList.map(item => {
-          if (item.type == constants.TYPE_TIME_TABLE.OLCLASS) {
+          if (
+            item.type == constants.TYPE_TIME_TABLE.OLCLASS ||
+            item.type == constants.TYPE_TIME_TABLE.ELEARNING
+          ) {
             return {
               ...item,
-              text: "Học online"
-            };
-          } else if (item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
-            return {
-              ...item,
-              text: "Học tập"
+              text: "Học online",
+              text_time: "Thời gian học"
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
-            return {
-              ...item,
-              text: "Làm bài tập"
-            };
+            if (item.category == constants.TYPE_TIME_TABLE.EXCERCISE) {
+              return {
+                ...item,
+                text: "Làm bài tập",
+                text_time: "Thời gian bắt đầu"
+              };
+            } else {
+              return {
+                ...item,
+                text: "Làm bài kiểm tra",
+                text_time: "Thời gian bắt đầu"
+              };
+            }
           } else {
             return {
               ...item,
-              text: "Làm bài kiểm tra"
+              text: "Làm bài kiểm tra",
+              text_time: "Thời gian bắt đầu"
             };
           }
         });
@@ -253,7 +262,7 @@ export default {
       const end = (n - 1) * x + x;
       const items = this.filterTimeTableList.slice(begin, end);
       const totalPages = Math.ceil(this.filterTimeTableList.length / x);
-      
+
       return {
         data: items,
         pagination: {
@@ -267,7 +276,7 @@ export default {
           begin,
           end
         }
-      }
+      };
     }
   },
 
@@ -351,7 +360,7 @@ export default {
       this.todayDate = value.format("D MMMM, YYYY");
     },
     changePage({ number }) {
-      this.paginationPage = number + 1
+      this.paginationPage = number + 1;
     }
   }
 };

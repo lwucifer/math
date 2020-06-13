@@ -532,7 +532,8 @@ export default {
         from_message_id: null,
         fetch_type: null
       },
-      infiniteId: +new Date()
+      infiniteId: +new Date(),
+      roomId: ""
     };
   },
 
@@ -714,16 +715,15 @@ export default {
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
-      const room_id = this.roomIdPush ? this.roomIdPush : this.$route.params.id;
-      const query = this.messageQuery;
+      // const room_id = this.roomIdPush ? this.roomIdPush : this.$route.params.id;
       if (this.tag.length < 2) {
-        if (room_id) {
+        if (this.roomId) {
           this.checkList = false;
           const getData = await this.$store.dispatch(
             `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
             {
               params: this.messageQuery,
-              id: room_id,
+              id: this.roomId,
               end: "messages"
             }
           );
@@ -880,12 +880,27 @@ export default {
       }
     },
     handleEmitMessage() {
-      const dataEmit = {
-        room_id: this.$route.params.id,
-        text: this.textChat
-      };
-      this.setEmitMessage(dataEmit);
-      this.getRoomList();
+      if (this.tag.length == 0) {
+        const dataEmit = {
+          room_id: this.$route.params.id,
+          text: this.textChat
+        };
+        this.setEmitMessage(dataEmit);
+        this.getRoomList();
+      } else if (this.tag.length == 1) {
+        const dataEmit = {
+          room_id: this.roomIdPush,
+          text: this.textChat
+        };
+        this.$emit("emitMessageTag1", dataEmit, this.roomIdPush);
+        this.setIsCreated(false);
+        // this.$router.push(`/messages/t/${this.roomIdPush}`);
+        // console.log("this.textChat", this.textChat);
+        // const dataTextChat = this.textChat;
+
+        // this.setEmitMessage(dataEmit);
+        // this.getRoomList();
+      }
       this.textChat = "";
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
@@ -984,9 +999,10 @@ export default {
       // this.removeImgSrc();
     },
     changeUser() {
-      this.checkList = false;
       console.log("[option]", this.tag, this.tag.length);
       if (this.tag.length == 0) {
+        this.checkList = false;
+        this.roomId = this.$route.params.id;
         this.roomIdPush = "";
         this.messagesList = [];
         this.infiniteId += 1;
@@ -1007,22 +1023,35 @@ export default {
           if (result) {
             console.log("[result]", result);
             this.roomIdPush = result.room ? result.room.id : "";
+            this.roomId = result.room ? result.room.id : "";
+
             const data = {
               id: result.room.id,
               end: "messages",
               params: {}
             };
-            this.getMessageListFetch(data);
+            this.checkList = false;
+            this.messagesList = [];
+            this.infiniteId += 1;
+            this.messageQuery.from_message_id = null;
+            this.messageQuery.fetch_type = null;
+            // this.$nextTick(() => {
+            // });
+            // this.getMessageListFetch(data);
+
             // this.$router.push(`/messages/t/${result.data.id}`);
           } else {
             this.$toasted.error(result.message);
           }
         });
       } else {
-        this.roomIdPush = "";
-        this.messagesList = [];
-        this.messageQuery.from_message_id = null;
-        this.messageQuery.fetch_type = null;
+        this.roomId = "";
+        this.checkList = true;
+        // this.roomIdPush = "";
+        // this.messagesList = [];
+        // this.infiniteId += 1;
+        // this.messageQuery.from_message_id = null;
+        // this.messageQuery.fetch_type = null;
       }
     },
     removeImgSrc() {
@@ -1034,7 +1063,7 @@ export default {
     }
   },
   created() {
-    this.messageListQuery.room_id = this.$route.params.id;
+    this.roomId = this.$route.params.id;
   },
   watch: {
     messageOn(_newVal) {
@@ -1046,8 +1075,8 @@ export default {
         this.messagesList.push(_newVal);
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
-          console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
-          if (el.scrollHeight - el.scrollTop <= 500) {
+          // console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
+          if (el && el.scrollHeight - el.scrollTop <= 500) {
             el.scrollTop = el.scrollHeight;
           }
         });
@@ -1090,7 +1119,12 @@ export default {
         this.messagesList.push(_newVal);
         this.$nextTick(() => {
           const el = document.getElementById("content-message");
-          if (el.scrollTop != el.scrollHeight) {
+          if (
+            el &&
+            el.scrollTop &&
+            el.scrollHeight &&
+            el.scrollTop != el.scrollHeight
+          ) {
             el.scrollTop = el.scrollHeight;
           }
         });
