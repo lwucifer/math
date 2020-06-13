@@ -48,7 +48,7 @@ import { get } from "lodash";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { mapState } from "vuex";
-import StudyService from "~/services/elearning/study/Study";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -149,7 +149,7 @@ export default {
 
     async submit() {
       this.payload.content = this.editor.getHTML().replace("<p></p>", "");
-      const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
+      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
         this.payload,
         this.image
       );
