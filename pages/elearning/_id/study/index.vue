@@ -51,7 +51,9 @@
                     'elearning-lesson-screen--image-mode':
                       studyMode === imageMode,
                     'elearning-lesson-screen--article-mode':
-                      studyMode === articleMode
+                      studyMode === articleMode,
+                    'elearning-lesson-screen--scorm-mode':
+                      studyMode === scormMode
                   }"
                 >
                   <!-- DEFAULT MODE -->
@@ -95,8 +97,8 @@
                   ></iframe>
 
                   <!-- SCORM TEST -->
-                  <ScormMode v-if="studyMode === articleMode" />
-                  <!-- <ScormMode v-if="studyMode === scormMode" /> -->
+                  <!-- <ScormLecture v-if="studyMode === articleMode" /> -->
+                  <ScormLecture v-if="studyMode == scormMode" />
                 </div>
 
                 <!-- DO EXERCISE -->
@@ -205,7 +207,7 @@ import TabNotification from "~/components/page/elearning/study/tab-notification/
 import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
-import ScormMode from "~/components/page/elearning/study/ScormMode";
+import ScormLecture from "~/components/page/elearning/study/ScormMode";
 import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
@@ -232,7 +234,7 @@ export default {
     IconCropFreeReverse,
     IconStudyExpand,
     IconStudyNarrow,
-    ScormMode
+    ScormLecture
   },
 
   data() {

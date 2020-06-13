@@ -143,6 +143,8 @@ import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
 import StudyService from "~/services/elearning/study/Study";
 import { ERRORS } from "../../../../utils/error-code";
 
+const parseManifest = require("xml-js");
+
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
 export default {
@@ -252,6 +254,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations("elearning/study/study", [
+      "setElearningStudyScormItems"
+    ]),
+
     getProgress() {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
@@ -342,8 +348,9 @@ export default {
 
       if (get(this.lesson, "type", "") === "SCORM") {
         this.setStudyMode(STUDY_MODE.SCORM);
-        this.setPayload(this.lesson);
-        this.setExerciseLoading(false); // turnoff loading
+        // this.setPayload(this.lesson);
+        this.fetchScormItems(this.lesson.link, this.setExerciseLoading);
+        // this.setExerciseLoading(false); // turnoff loading
         return;
       }
     },
@@ -377,7 +384,12 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const lesson_id = get(this, "lesson.id", "");
       const category = EXERCISE_CATEGORIES.EXERCISE;
-      const elearningReq = { elearning_id, lesson_id, category, size: PAGE_SIZE.MAXIMIZE, };
+      const elearningReq = {
+        elearning_id,
+        lesson_id,
+        category,
+        size: PAGE_SIZE.MAXIMIZE
+      };
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
@@ -415,6 +427,37 @@ export default {
       this.lessonStatus = false;
       // this.$refs.completedCheckbox.checked = false;
       console.log("[closeConfirmCompleteStudy]", this.$refs);
+    },
+
+    fetchScormItems(_link, cb) {
+      console.log("[fetchScormItems]", _link);
+      if(!_link) return;
+
+      const self = this;
+      const manifestUrl = `${_link}imsmanifest.xml`;
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.addEventListener("readystatechange", function() {
+        if (this.readyState === 4) {
+          // console.log(this.responseText);
+          const result = parseManifest.xml2js(this.responseText, { compact: true });
+          console.log("[result]", result);
+          const organizations = result.manifest.organizations.organization.item;
+          console.log("[organizations]", organizations);
+          const resources = result.manifest.resources.resource || [];
+          console.log("[resources]", resources);
+
+          // commit here
+          const items = resources.map(i => {
+            return `${_link}${i._attributes.href}`;
+          });
+          self.setElearningStudyScormItems(items);
+
+          cb(false);
+        }
+      });
+      xhr.open("GET", manifestUrl);
+      xhr.send();
     }
   },
 
