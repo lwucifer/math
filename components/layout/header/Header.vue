@@ -198,7 +198,6 @@ export default {
   },
   watch: {
     keywordSearchHeader(newValue){
-      console.log('keywordSearchHeader', newValue)
       if(!newValue){
         this.valueInput = '';
       }else{
@@ -211,18 +210,15 @@ export default {
       }
     },
     checkRouteClearKeyword(newValue){
-      console.log('checkRouteClearKeyword', this.keywordSearchHeader)
-      // console.log('checkRouteClearKeyword', newValue)
       if(newValue != PARAM_CHECK.ELEARNING_SEARCH && newValue != PARAM_CHECK.SOCIAL && newValue != PARAM_CHECK.SCHOOL_SEARCH){
         this.valueInput = '';
       }
-      else if(newValue == PARAM_CHECK.ELEARNING_SEARCH){
-        this.valueInput = this.keywordSearchHeader;
-      }
-    }
+    },
   },
   mounted() {
-    console.log('this.$route.path', this.$route.path)
+    if(this.checkRouteClearKeyword == PARAM_CHECK.ELEARNING_SEARCH){
+      this.valueInput = this.keywordSearchHeader;
+    }
     this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
       const data = {
