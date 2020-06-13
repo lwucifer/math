@@ -97,15 +97,15 @@ export default {
 
     methods:{
         get,
-        getWeek(){
-            const s = moment("2020-05-22");
-            const tuesday = moment("2020-05-20").day("2")
-            console.log('tuesday.format', tuesday.format('D').toString())
-            for(let i=1;i<7;i++){
-                 const tuesday = moment("2020-05-20").day(i.toString())
-                 console.log(tuesday.toString())
-            }
-        },
+        // getWeek(){
+        //     const s = moment("2020-05-22");
+        //     const tuesday = moment("2020-05-20").day("2")
+        //     console.log('tuesday.format', tuesday.format('D').toString())
+        //     for(let i=1;i<7;i++){
+        //          const tuesday = moment("2020-05-20").day(i.toString())
+        //          console.log(tuesday.toString())
+        //     }
+        // },
         getData() {
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.LIST}`);
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
@@ -116,7 +116,7 @@ export default {
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.DEADLINE}`);
         },
         changeDateInWeek(date){
-            console.log('changeDateInWeek', date)
+            console.log('changeDateInWeek index', date)
             this.toDate = date;
             this.$store.dispatch(`${STORE_OVERVIEW}/${actionTypes.ELEARNING_STURY_OVERVIEW.TIME_TABLE}`, 
             {
@@ -127,9 +127,10 @@ export default {
     },
     created(){
         // this.getWeek();
+        this.getData();
     },
     mounted() {
-        this.getData();
+        // this.getData();
     },
 }
 </script>
