@@ -95,10 +95,8 @@
                   ></iframe>
 
                   <!-- SCORM TEST -->
-                  <!-- <iframe
-                    src="https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/scorm/20200610034529203_c2f56f5d1c170e0a9723d5bf2b149d67ecb42aee71513e8f3ca4013b236f82fd/Tin%20hoc%206_repair/index.htm"
-                  ></iframe> -->
-                  <ScormMode v-if="studyMode === scormMode" />
+                  <!-- <ScormMode v-if="studyMode === articleMode" /> -->
+                  <!-- <ScormMode v-if="studyMode === scormMode" /> -->
                 </div>
 
                 <!-- DO EXERCISE -->

@@ -9,7 +9,7 @@ import { isEmpty, uniqWith, omit } from "lodash";
 const state = () => ({
     notis: [
         {   
-            id: 1,
+            notification_id: 1,
             type: 'E-LEARNING',
             name: 'Ngọc Trinh',
             image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
@@ -19,7 +19,7 @@ const state = () => ({
             read: true
         },
         {   
-            id: 2,
+            notification_id: 2,
             type: 'MXH',
             name: 'Ngọc Trinh',
             image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
@@ -29,7 +29,7 @@ const state = () => ({
             read: true
         },
         {   
-            id: 3,
+            notification_id: 3,
             type: 'E-LEARNING',
             name: 'Ngọc Trinh',
             image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
@@ -39,7 +39,7 @@ const state = () => ({
             read: false
         },
         {   
-            id: 4,
+            notification_id: 4,
             type: 'E-LEARNING',
             name: 'Ngọc Trinh',
             image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
