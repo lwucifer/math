@@ -66,6 +66,7 @@
           result.result === EXERCISE_STATUS.FAILED &&
             result.reworks - result.works > 0
         "
+        @click.prevent="handleDoExercise"
         >Làm lại bài tập</app-button
       >
     </div>
@@ -91,9 +92,9 @@
 </template>
 
 <script>
-import { EXERCISE_TYPES, EXERCISE_STATUS } from "~/utils/constants";
+import { EXERCISE_TYPES, EXERCISE_STATUS, STUDY_MODE } from "~/utils/constants";
 import { getExerciseResultText } from "~/plugins/filters";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 import { mapState } from "vuex";
 import { RESPONSE_SUCCESS } from "~/utils/config";
@@ -150,6 +151,8 @@ export default {
       "elearningSudyExerciseQuestionList"
     ]),
 
+    ...mapMutations("event", ["setStudyMode"]),
+
     handleShowComment() {
       console.log("[handleShowComment]");
       const exercise_id = this.result.id;
@@ -170,6 +173,12 @@ export default {
           }
         });
       });
+    },
+
+    handleDoExercise() {
+      console.log("[handleDoExercise]");
+      // show befor begin exercise
+      this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
     }
   }
 };

@@ -29,7 +29,7 @@
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
-      @click.prevent="handleDoExercise"
+      @click.prevent="handleReviewResult"
       >Làm lại {{ exerciseTextTransform }} ({{ works }}/{{ reworks }})</app-button
     >
 
@@ -173,6 +173,18 @@ export default {
 
     handleReviewResult() {
       console.log("[handleReviewResult]");
+      // set current exercise for redo exercise
+      this.setStudyExerciseCurrent({
+        id: this.id,
+        name: this.name,
+        type: this.type,
+        duration: this.duration,
+        questions: this.questions,
+        result: this.result,
+        reworks: this.reworks,
+        works: this.works,
+        open_time: this.open_time,
+      });
       // get review result
       this.elearningSudyExerciseResultList({ exercise_id: this.id});
       // show review result
