@@ -2,7 +2,8 @@
   <div class="e-exercise-list-item text-center bg-white" :class="classes">
     <h3 class="e-exercise-list-item__name heading-5 mb-3">{{ name }}</h3>
     <div class="e-exercise-list-item__desc mb-3">
-      <span class="text-primary">{{ type | getExerciseTypeText }}</span>
+      <span v-if="isTest" class="text-primary">{{ type | getTestTypeText }}</span>
+      <span v-else class="text-primary">{{ type | getExerciseTypeText }}</span>
       <app-divider class="e-exercise-list-item__divider" direction="vertical" />
       <span class="text-gray">Thời gian:</span>
       <b class="text-dark">{{ getDurationText(duration) }}</b>
@@ -130,11 +131,15 @@ export default {
       return isBeforeNow(this.deadline);
     },
 
+    isTest() {
+      return !this.currentLession;
+    },
+
     exerciseTextTransform() {
-      if(!this.currentLession) {
+      if(this.isTest) {
         return "bài kiểm tra";
       } else {
-        return " bài tập";
+        return "bài tập";
       }
     }
   },

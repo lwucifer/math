@@ -339,6 +339,13 @@ export default {
         }
         this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
       }
+
+      if (get(this.lesson, "type", "") === "SCORM") {
+        this.setStudyMode(STUDY_MODE.SCORM);
+        this.setPayload(this.lesson);
+        this.setExerciseLoading(false); // turnoff loading
+        return;
+      }
     },
 
     handleOkStudy() {

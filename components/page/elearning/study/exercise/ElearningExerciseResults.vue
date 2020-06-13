@@ -1,6 +1,9 @@
 <template>
   <div class="e-exercise-results">
-    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-if="isTest">
+      {{ result.name }} - {{ result.type | getTestTypeText }}
+    </h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-else>
       {{ result.name }} - {{ result.type | getExerciseTypeText }}
     </h1>
 
@@ -67,7 +70,7 @@
             result.reworks - result.works > 0
         "
         @click.prevent="handleDoExercise"
-        >Làm lại bài tập</app-button
+        >Làm lại {{ exerciseTextTransform }}</app-button
       >
     </div>
 
@@ -127,7 +130,7 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["result"]),
+    ...mapState("elearning/study/study-exercise", ["result", "currentLession"]),
 
     resultRate() {
       return `${this.result.mark || 0}/${this.result.max_score || 0} (${getExerciseResultText(this.result.result)})`;
@@ -139,6 +142,18 @@ export default {
         return "Xem đáp án";
       } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
         return "Xem nhận xét";
+      }
+    },
+
+    isTest() {
+      return !this.currentLession;
+    },
+
+    exerciseTextTransform() {
+      if(this.isTest) {
+        return "bài kiểm tra";
+      } else {
+        return "bài tập";
       }
     }
   },
