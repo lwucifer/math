@@ -66,7 +66,7 @@ import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
 import numeral from "numeral";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
-import StudyService from "~/services/elearning/study/Study";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -135,7 +135,7 @@ export default {
         answer_id: get(this, "question.id", ""),
       };
 
-      const res = await new StudyService(this.$axios)["likeAnswer"](payload);
+      const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
 
       this.submit = true;
 

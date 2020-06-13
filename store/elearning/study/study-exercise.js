@@ -14,6 +14,7 @@ const state = () => ({
   submissions: [],
   submissionAdd: {},
   elearningExercises: [],
+  paginatedElearningExericses:[],
   elearningExerciseTests: [],
   currentExercise: {},
   currentElearningId: null,
@@ -243,6 +244,12 @@ const actions = {
             result.data.content
         );
 
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST,
+            result.data
+        );
+
         // turnof loadingExercise
         commit("event/setExerciseLoading", false, { root: true });
       }
@@ -318,6 +325,13 @@ const mutations = {
     _list
   ) {
     state.elearningExercises = _list;
+  },
+
+  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST](
+    state,
+    _list
+  ) {
+    state.paginatedElearningExericses = _list;
   },
 
   [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_EXERCISE_CURRENT](

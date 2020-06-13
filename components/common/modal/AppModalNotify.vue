@@ -19,7 +19,7 @@
       </slot>
 
       <slot v-if="description || $slots.description" name="description">
-        <div class="app-modal-notify__desc">{{ description }}</div>
+        <div class="app-modal-notify__desc" :class="!centered ? 'text-left': ''">{{ description }}</div>
       </slot>
 
       <div class="app-modal-notify__actions">

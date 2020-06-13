@@ -212,7 +212,7 @@ export default {
         level: null,
         free: null,
         page: 1,
-        size: PAGE_SIZE.DEFAULT,
+        limit: PAGE_SIZE.ELEARNING_12,
         sort: this.$route.query.sort
           ? this.$route.query.sort
           : null,
@@ -400,7 +400,7 @@ export default {
     onPageChange(e) {
       console.log("[onPageChange]", e);
       this.payload.page = e.number + 1;
-      this.payload.size = PAGE_SIZE.DEFAULT;
+      this.payload.limit = PAGE_SIZE.ELEARNING_12;
 
       this.getLessons();
     },

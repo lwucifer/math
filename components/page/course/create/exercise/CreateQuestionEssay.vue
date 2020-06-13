@@ -67,12 +67,15 @@
         >Lưu câu hỏi</app-button
       >
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      title="Tạo câu hỏi"
+      description="Bạn có chắc chắn muốn tạo câu hỏi này?"
     />
   </div>
 </template>

@@ -41,7 +41,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { mapState } from "vuex";
 import { get } from "lodash";
-import StudyService from "~/services/elearning/study/Study";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -125,7 +125,7 @@ export default {
           .replace("</p>", ""),
         question_id: get(this, "question.id", ""),
       };
-      const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
+      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
         params
       );
       this.submit = true;

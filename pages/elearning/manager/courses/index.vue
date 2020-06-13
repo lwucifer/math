@@ -162,17 +162,19 @@
             <template v-slot:cell(price)="{ row }">
               <td>
                 <span v-if="row.pricefree || row.price.original_price == 0">Miễn phí</span>
-                <span v-if="!row.pricefree && row.price.original_price > 0">Trả phí</span>
+                <span v-if="!row.pricefree && row.price.original_price > 0" class="color-blue">
+                  {{numeral(row.price.original_price).format()}}đ
+                </span>
               </td>
             </template>
             <template v-slot:cell(publish_date)="{ row }">
-              <td>{{getDateBirthDay(row.publish_date)}}</td>
+              <td>{{getDateBirthDayUTC(row.publish_date)}}</td>
             </template>
             <template v-slot:cell(start_time)="{ row }">
-              <td>{{row.start_time ? getDateBirthDay(row.start_time) : getDateBirthDay(row.publish_date)}}</td>
+              <td>{{row.start_time ? getDateBirthDayUTC(row.start_time) : getDateBirthDayUTC(row.publish_date)}}</td>
             </template>
             <template v-slot:cell(end_time)="{ row }">
-              <td>{{row.end_time ? getDateBirthDay(row.end_time) : 'Không thời hạn'}}</td>
+              <td>{{row.end_time ? getDateBirthDayUTC(row.end_time) : 'Không thời hạn'}}</td>
             </template>
             
             <!-- <template v-slot:cell(participants)="{ row }">
@@ -242,6 +244,7 @@
 
      <app-modal-notify
       :width="550"
+      :centered="false"
       @ok="noteReject = ''"
       @close="noteReject = ''"
       v-if="noteReject"
@@ -272,8 +275,11 @@ import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
 import IconEdit from "~/assets/svg/icons/edit.svg?inline";
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 
+import numeral from "numeral";
+
 import {
-  getDateBirthDay
+  getDateBirthDay,
+  getDateBirthDayUTC
 } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -410,8 +416,7 @@ export default {
         },
         {
           name: "participants",
-          text: "Học sinh tham gia",
-          sort: true
+          text: "Học sinh tham gia"
         }
       ],
       currentHeads: [],
@@ -450,7 +455,7 @@ export default {
       params: {
         page: 1,
         limit: 10,
-        sort: 'publish_date_desc'
+        sorted: 'publish_date_desc'
       }
     };
   },
@@ -525,11 +530,13 @@ export default {
   },
 
   methods: {
+    numeral,
     getDateBirthDay,
+    getDateBirthDayUTC,
 
     handleSort(e) {
       const sortBy = e.sortBy + '_' + e.order;
-      this.params = {...this.params, sort: sortBy};
+      this.params = {...this.params, sorted: sortBy};
       this.getList();
     },
 

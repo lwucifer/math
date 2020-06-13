@@ -37,7 +37,7 @@
               :defaultValue="payload.level"
               @handleChangeLevel="handleChangeLevel"
             />
-            <app-error :error="get(error, 'level', '')"></app-error>
+            <app-error class="mt-2" :error="get(error, 'level', '')"></app-error>
           </div>
 
           <div class="col-md-5 ml-5 mb-4">
@@ -45,7 +45,7 @@
               :defaultValue="payload.subject"
               @handleChangeSubject="handleChangeSubject"
             />
-            <app-error :error="get(error, 'subject', '')"></app-error>
+            <app-error class="mt-2" :error="get(error, 'subject', '')"></app-error>
           </div>
         </div>
 
@@ -117,6 +117,7 @@
             v-model="payload.name"
             @input="handleCheckName"
             @handleBlur="handleCheckName"
+            class="mb-2"
           />
           <app-error :error="get(error, 'name', '')"></app-error>
         </div>
@@ -157,7 +158,7 @@
           :title="'Hình đại diện cho ' + name"
           id="avatar"
         />
-        <app-error :error="get(error, 'avatar', '')" class="mb-2"></app-error>
+        <app-error :error="get(error, 'avatar', '')" class="mb-4"></app-error>
 
         <CourseSelectImage
           :isCompel="false"
@@ -179,7 +180,7 @@
         @ok="handleOk"
         @cancel="handleCancel"
         :title="title_confirm"
-        description="Bạn sẽ không thể thay đổi loại hình học tập sau khi lưu"
+        description="Bạn sẽ không thể thay đổi loại hình học tập sau khi xác nhận."
       />
     </div>
 
@@ -296,7 +297,7 @@ export default {
     title_confirm() {
       let title = "Xác nhận?";
       if (get(this, "general.id", "")) {
-        title = "Xác nhận?";
+        title = "Bạn có muốn tiếp tục?";
       }
       return title;
     },
@@ -343,7 +344,7 @@ export default {
       let check = true;
       if (!get(this, "payload.subject", true)) {
         check = false;
-        this.error.subject = "Bạn cần chọn môn học cho" + " " + this.name;
+        this.error.subject = "Bạn cần chọn môn học";
       } else {
         this.error.subject = "";
       }
@@ -354,7 +355,7 @@ export default {
       let check = true;
       if (!get(this, "payload.level", true)) {
         check = false;
-        this.error.level = "Bạn cần chọn trình độ cho" + " " + this.name;
+        this.error.level = "Bạn cần chọn trình độ";
       } else {
         this.error.level = "";
       }
@@ -365,7 +366,7 @@ export default {
       let check = true;
       if (!get(this, "payload.benefit.length", true)) {
         check = false;
-        this.error.benefit = "Bạn cần thêm lợi ích cho" + " " + this.name;
+        this.error.benefit = "Bạn cần thêm lợi ích";
       } else {
         this.error.benefit = "";
       }
@@ -387,7 +388,7 @@ export default {
       let check = true;
       if (!value) {
         check = false;
-        this.error.description = "Bạn cần nhập mô tả" + " " + this.name;
+        this.error.description = "Bạn cần nhập mô tả";
       } else if (get(value, "length", 0) > 0 && get(value, "length", 0) < 100) {
         check = false;
         this.error.description = "Mô tả tổng quát không được ít hơn 100 ký tự.";

@@ -46,7 +46,6 @@
                   placeholder="Tìm kiếm"
                   v-model="params.keyword"
                   bordered
-                  @submit="handleSubmitSearch"
                 />
               </div>
 
@@ -196,27 +195,7 @@ export default {
         privacy: "",
         free: "",
       },
-      // params: {
-      //   keyword: null,
-      // },
       tab: 2,
-      // list: [],
-      total: {
-        elearnings: null,
-        courses: null,
-        lectures: null,
-        favourites: null,
-        archieves: null,
-      },
-      pagination: {
-        // total_elements: 103,
-        // last: false,
-        // total_pages: 222,
-        // size: 10,
-        // number: 2,
-        // first: true,
-        // number_of_elements: 10
-      },
       checkModalShare: false,
       dataModal: {},
       showFilter: false,
@@ -225,28 +204,13 @@ export default {
       selectFree: null,
     };
   },
+
   mounted() {
     useEffect(this, this.getData.bind(this), ["params", "tab"]);
     this.$store.dispatch("elearning/study-space/getStatistic");
-    // this.fetchElearningList();
-    // this.fetchElearningStatisticList();
-    // this.fetchElearningFavourite();
-    // this.fetchElearningArchive();
   },
-  computed: {
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyStudent: "elearningStudyStudent",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyStatistic: "elearningStudyStatistic",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyArchive: "elearningStudyArchive",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyFavourite: "elearningStudyFavourite",
-    // }),
 
+  computed: {
     ...mapState("elearning/study-space", {
       finished_lecture: "finished_lecture",
       unfinished_lecture: "unfinished_lecture",
@@ -268,18 +232,6 @@ export default {
         return this.archive;
       }
       return this.unfinished_lecture;
-    },
-  },
-
-  watch: {
-    pagination(_newVal) {
-      this.pagination.size = _newVal.size;
-      this.pagination.first = _newVal.first;
-      this.pagination.last = _newVal.last;
-      this.pagination.number = _newVal.number;
-      this.pagination.total_pages = _newVal.total_pages;
-      this.pagination.total_elements = _newVal.total_elements;
-      this.pagination.number_of_elements = _newVal.number_of_elements;
     },
   },
 
@@ -318,10 +270,12 @@ export default {
       "elearningStudyFavouriteAdd",
       "elearningStudyFavouriteDelete",
     ]),
+
     ...mapActions(STORE_NAME_ARCHIVE, [
       "elearningStudyArchiveAdd",
       "elearningStudyArchiveDelete",
     ]),
+
     changeTab(tab) {
       this.tab = tab;
       if (tab == 2) {
@@ -334,73 +288,13 @@ export default {
       this.params.keyword = "";
     },
 
-    fetchElearningList() {
-      const payload = {
-        params: {
-          type: this.params.type,
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
-        payload
-      );
-    },
-
-    fetchElearningStatisticList() {
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STATISTIC.LIST}`
-      );
-    },
-
-    fetchElearningArchive() {
-      const payloadArchive = {
-        params: {
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`,
-        payloadArchive
-      );
-    },
-
-    fetchElearningFavourite() {
-      const payloadFavour = {
-        params: {
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
-        payloadFavour
-      );
-    },
-
     handleFavourite(id) {
       const query = {
         elearning_id: id,
       };
       this.elearningStudyFavouriteAdd(query).then((result) => {
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
         }
       });
     },
@@ -418,18 +312,7 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
         }
       });
     },
@@ -447,16 +330,7 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
         }
       });
     },
@@ -474,88 +348,15 @@ export default {
           },
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
         }
       });
     },
+
     onPageChange(e) {
-      this.pagination = { ...this.pagination, ...e };
-      this.params.size = this.pagination.size;
-      this.params.page = this.pagination.number + 1;
-      this.fetchElearningList();
+      this.params.page = get(e, "number", 0) + 1;
     },
-    handleSubmitSearch(e) {
-      // console.log(this.params.keyword)
-      // console.log(e)
-      // console.log(this.params)
-      // this.params.page = 1;
-      // if (this.tab === 1) {
-      //   this.params.type = "ALL";
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 2) {
-      //   this.params.type = "LECTURE";
-      //   // this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 3) {
-      //   this.params.type = "COURSE";
-      //   // this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 4) {
-      //   this.fetchElearningFavourite();
-      //   this.list = get(this, "elearningStudyFavourite.content", []);
-      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
-      // } else if (this.tab === 5) {
-      //   this.fetchElearningArchive();
-      //   this.list = get(this, "elearningStudyArchive.content", []);
-      //   this.pagination = get(this, "elearningStudyArchive.page", {});
-      // }
-    },
-    hanldeInputSearch(val) {
-      // if (val == "") {
-      //   this.params.page = 1;
-      //   if (this.tab === 1) {
-      //     this.params.type = "ALL";
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 2) {
-      //     this.params.type = "LECTURE";
-      //     // this.params.page = 1;
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 3) {
-      //     this.params.type = "COURSE";
-      //     // this.params.page = 1;
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 4) {
-      //     this.fetchElearningFavourite();
-      //     this.list = get(this, "elearningStudyFavourite.content", []);
-      //     this.pagination = get(this, "elearningStudyFavourite.page", {});
-      //   } else if (this.tab === 5) {
-      //     this.fetchElearningArchive();
-      //     this.list = get(this, "elearningStudyArchive.content", []);
-      //     this.pagination = get(this, "elearningStudyArchive.page", {});
-      //   }
-      // }
-    },
+
     shareFb(id) {
       const url =
         "https://facebook.com/sharer.php?display=popup&u=" +
@@ -563,21 +364,12 @@ export default {
         `elearning/${id}`;
       window.open(url, "sharer", "_blank");
     },
+
     async shareSchool(item) {
       this.checkModalShare = true;
       this.dataModal = item;
-      // const link = window.origin + `/elearning/${id}`;
-      // const doAdd = await this.$store.dispatch(
-      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
-      //   { link: link }
-      // );
-      // if (doAdd.success) {
-      //   this.menuDropdown = false;
-      //   this.$toasted.show("Đã chia sẻ thành công.");
-      // } else {
-      //   this.$toasted.error(doAdd.message);
-      // }
     },
+    
     async handleShareSchoolly(_content) {
       console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
@@ -592,6 +384,7 @@ export default {
         this.$toasted.error(doAdd.message);
       }
     },
+
     cancel() {
       this.checkModalShare = false;
     },

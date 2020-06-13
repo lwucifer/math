@@ -420,6 +420,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
     SET_STUDY_EXERCISE_AUTO_SUBMISSION: "setStudyExerciseAutoSubmission",
     SET_STUDY_EXERCISE_CURRENT_LESSION: "setStudyExerciseCurrentLession",
+    SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST: "setStudyPaginatedElearningExerciseList"
 };
 
 export const ELEARNING_STUDY_PROGRESS = {
@@ -571,6 +572,7 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const KEYWORD = {
     SEARCH_HEADER: "searchHeader",
+    CHECK_ROUTE_CLEAR_KEYWORK: "checkRouteCleaKeyword"
 };
 
 export const CHAT = {

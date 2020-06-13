@@ -5,6 +5,7 @@ import * as mutationTypes from "../utils/mutation-types";
  */
 const state = () => ({
   keywordSearchHeader: '',
+  checkRouteClearKeyword: ''
 });
 
 /**
@@ -25,7 +26,10 @@ const actions = {
 const mutations = {
   [mutationTypes.KEYWORD.SEARCH_HEADER](state, _keyword) {
     state.keywordSearchHeader = _keyword;
-    console.log('Search Header', state.keywordSearchHeader);
+  },
+
+  [mutationTypes.KEYWORD.CHECK_ROUTE_CLEAR_KEYWORK](state, _route) {
+    state.checkRouteClearKeyword = _route;
   },
 
 };
