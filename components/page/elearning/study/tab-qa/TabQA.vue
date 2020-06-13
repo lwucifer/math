@@ -78,7 +78,7 @@ export default {
     const questionIdParams = getParamQuery('question_id')
     this.$nextTick(() => {
       if(questionIdParams && !this.isScroll){
-          this.$scrollTo('#'+questionIdParams, 1000)
+          this.$scrollTo('#'+questionIdParams, 1000,{offset:-70})
               this.isScroll = true
         }
       })

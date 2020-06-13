@@ -54,6 +54,7 @@
         :pagination="filterPagination"
         @pagechange="onPageChange"
         :data="filterListQuestions"
+         :loading="loading"
       >
         <template v-slot:cell(action)="{row}">
           <td>
@@ -123,6 +124,12 @@ export default {
     IconSearch,
     IconArrowForwardIos24pxOutlined,
     AppSelectIneractiveElearning
+  },
+  props:{
+    loading:{
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

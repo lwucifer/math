@@ -262,7 +262,7 @@ export default {
         },
         {
           name: "total",
-          text: "Tổng"
+          text: "Thực nhận"
         }
       ],
       pagination: {},
