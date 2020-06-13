@@ -104,7 +104,7 @@
               >
                 <IconAccountBox24px class="fill-primary ml-2" />
                 <template slot="popover">
-                  <span>Giáo viên chủ nhiệm</span>
+                  <span class="text-primary">Giáo viên chủ nhiệm</span>
                 </template>
               </v-popover>
             </div>

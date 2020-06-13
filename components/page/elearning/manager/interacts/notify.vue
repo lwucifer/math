@@ -54,6 +54,7 @@
         :data="list"
         multiple-selection
         @selectionChange="selectRow"
+        :loading="loading"
       >
         <template v-slot:cell(action)="{row}">
           <td>
@@ -193,7 +194,8 @@ export default {
         page:1,
         size:10,
       },
-      ids:[]
+      ids:[],
+      loading:false
     };
   },
   watch:{
@@ -269,6 +271,7 @@ export default {
       this.currentQuestionIndex = null;
     },
     fetchAnnouncement(){
+      this.loading = true;
       const payload = { 
         params:{
           elearning_id: this.params.elearning_id,
@@ -281,6 +284,7 @@ export default {
         `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.LIST}`,
         payload
       );
+      this.loading = false
     },
     clickFilter(){
       if (this.isFilter) {
