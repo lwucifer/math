@@ -442,16 +442,21 @@ export default {
           // console.log(this.responseText);
           const result = parseManifest.xml2js(this.responseText, { compact: true });
           // console.log("[result]", result);
-          const organizations = result.manifest.organizations.organization.item;
-          // console.log("[organizations]", organizations);
-          const resources = result.manifest.resources.resource || [];
-          // console.log("[resources]", resources);
+          const item = result.manifest.organizations.organization.item;
+          // console.log("[item]", item);
+          const resource = result.manifest.resources.resource;
+          console.log("[resource]", resource);
 
           // commit here
-          const items = resources.map(i => {
-            return `${_link}${i._attributes.href}`;
-          });
-          self.setElearningStudyScormItems(items);
+          let lectures = [];
+          if(Array.isArray(resource)) {
+            lectures = resource.map(i => {
+              return `${_link}${i._attributes.href}`;
+            });
+          } else {
+            lectures = [`${_link}${resource._attributes.href}`];
+          }
+          self.setElearningStudyScormItems(lectures);
 
           cb(false);
         }
