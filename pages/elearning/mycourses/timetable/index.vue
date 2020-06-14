@@ -296,6 +296,7 @@ export default {
     changeDate(date) {
       this.dayslist.length = 0;
       let dayItem = [];
+      console.log("date", date);
       for (let i = 1; i <= 7; i++) {
         if (moment(date).day() == 0) {
           const day = moment(date).day(i - 7);
