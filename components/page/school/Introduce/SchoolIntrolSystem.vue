@@ -1,7 +1,7 @@
 <template>
   <div>
       <div class="row">
-        <div class="col-md-6 mb-3 px-2" v-for="(item,index) in listSystem" :key="index">
+        <div class="col-md-6 mb-3 mx-0" v-for="(item,index) in listSystem" :key="index">
             <app-button
                 class="btn-system-school"
                 color="white"
@@ -19,7 +19,7 @@
          <div class="title-system-school">
              {{nameSystem}}
          </div>
-        <div class="content-system-school">
+        <div class="content-system-school container">
             <div class="row mb-4" v-for="(el,index) in 4" :key="index">
                 <div class="col-md-2">
                     <img v-lazy="'https://picsum.photos/96/128'"/>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="d-flex mb-3">
                         <span class="title-left">Chức vụ</span>
-                        <span class="title-left">Hiệu trưởng</span>
+                        <span >Hiệu trưởng</span>
                     </div>
                     <div class="d-flex mb-3">
                         <span class="title-left">Điện thoại</span>

@@ -18,9 +18,9 @@
         ></app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="submit">Lọc kết quả</filter-button>
+        <filter-button @click="submitShowFilter" :color="showFilter ? 'primary' : 'default'" :outline="!showFilter">Lọc kết quả</filter-button>
       </div>
-      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+     <div class="filter-form__item" v-if="showFilter" style="min-width: 11rem;" >
         <app-vue-select
           class="app-vue-select w-100"
           :options="filterSelectClass"
@@ -32,10 +32,10 @@
           has-border
           @input="handleSelectType"
         />
-      </div>-->
-      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
+      </div>
+      <div class="filter-form__item w-100" v-if="showFilter">
         <app-vue-select
-          class="app-vue-select w-100"
+          class="w-100"
           :options="rates"
           :reduce="item => item.value"
           v-model="filters.rate"
@@ -43,9 +43,10 @@
           placeholder="Theo tiến độ hoàn thành"
           searchable
           clearable
+          has-border
           @input="handleSelectRate"
         />
-      </div>-->
+      </div>
     </div>
   </filter-form>
 </template>
@@ -94,6 +95,12 @@ export default {
       ],
       initStatus: true
     };
+  },
+  props:{
+    showFilter:{
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState(STORE_SCHOOL_CLASSES, ["schoolClasses"]),
@@ -169,6 +176,9 @@ export default {
       this.filters.rate = null;
       this.filters.type = null;
       this.filters.query = "";
+    },
+    submitShowFilter(){
+      this.$emit('submitShowFilter',!this.showFilter)
     }
   }
 };

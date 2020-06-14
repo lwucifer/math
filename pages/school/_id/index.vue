@@ -4,54 +4,60 @@
       <!-- <breadcrumb /> -->
 
       <SchoolSummary :school="school"/>
-      <ListScrollTo/>
-      <IntroSchool/>
+      <ListScrollTo 
+        @changeTab="changeTab"
+        :tab="tab"
+      />
+      <div v-if="tab=='index'">
+        <IntroSchool/>
 
-      <div class="highlight" id="lesson">
-        <ElearningHomeBox class="mb-0">
-          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
+        <div class="highlight" id="lesson">
+          <ElearningHomeBox class="mb-0">
+            <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-          <AppCarouseSchool
-            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-          >
-            <template slot="default" slot-scope="{ classes }">
-              <div
-                v-for="item in newestLecture && newestLecture.content || []"
-                :key="item.id"
-                :class="classes"
-              >
-                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-              </div>
-            </template>
-          </AppCarouseSchool>
-        </ElearningHomeBox>
+            <AppCarouseSchool
+              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+            >
+              <template slot="default" slot-scope="{ classes }">
+                <div
+                  v-for="item in newestLecture && newestLecture.content || []"
+                  :key="item.id"
+                  :class="classes"
+                >
+                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                </div>
+              </template>
+            </AppCarouseSchool>
+          </ElearningHomeBox>
+        </div>
+
+        <div class="highlight pt-0">
+          <ElearningHomeBox>
+            <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
+
+            <AppCarouseSchool
+              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+            >
+              <template slot="default" slot-scope="{ classes }">
+                <div
+                  v-for="item in newestCourse && newestCourse.content || []"
+                  :key="item.id"
+                  :class="classes"
+                >
+                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                </div>
+              </template>
+            </AppCarouseSchool>
+          </ElearningHomeBox>
+        </div>
+
+        <DataSchool/>
+        <ListTeacher/>
+        <SchoolNoti/>
+        <SchoolNews/>
+        <SchoolLink/>
       </div>
-
-      <div class="highlight pt-0">
-        <ElearningHomeBox>
-          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
-
-          <AppCarouseSchool
-            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-          >
-            <template slot="default" slot-scope="{ classes }">
-              <div
-                v-for="item in newestCourse && newestCourse.content || []"
-                :key="item.id"
-                :class="classes"
-              >
-                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-              </div>
-            </template>
-          </AppCarouseSchool>
-        </ElearningHomeBox>
-      </div>
-
-      <DataSchool/>
-      <ListTeacher/>
-      <SchoolNoti/>
-      <SchoolNews/>
-      <SchoolLink/>
+      <SchoolIntroduceContent v-else-if="tab=='intro'"/>
     </div>
   </div>
 </template>
@@ -68,6 +74,7 @@ import ListTeacher from "~/components/page/school/ListTeacher";
 import SchoolNoti from "~/components/page/school/SchoolNoti";
 import SchoolNews from "~/components/page/school/SchoolNews";
 import SchoolLink from "~/components/page/school/SchoolLink";
+import SchoolIntroduceContent from "~/components/page/school/Introduce/SchoolIntroduceContent";
 
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
@@ -91,7 +98,8 @@ export default {
     ListTeacher,
     SchoolNoti,
     SchoolNews,
-    SchoolLink
+    SchoolLink,
+    SchoolIntroduceContent
   },
 
   async fetch({ params, query, store }) {
@@ -130,7 +138,8 @@ export default {
 
   data() {
     return {
-      pageLoading: true
+      pageLoading: true,
+      tab:'index'
     };
   },
   computed: {
@@ -150,6 +159,9 @@ export default {
 
   methods: {
     get,
+    changeTab(tab){
+      this.tab = tab
+    }
   }
 };
 </script>
