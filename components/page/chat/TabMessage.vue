@@ -1026,7 +1026,7 @@ export default {
             this.roomId = result.room ? result.room.id : "";
 
             const data = {
-              id: result.room.id,
+              id: result.room ? result.room.id : "",
               end: "messages",
               params: {}
             };
