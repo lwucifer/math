@@ -34,8 +34,10 @@
           <IconClose class="icon" />
         </span>
       </div>
+      
       <!-- End Upload Image -->
     </div>
+    <app-button @click.prevent="submit" class="ml-10" size="sm">Gửi</app-button>
   </div>
 </template>
 
