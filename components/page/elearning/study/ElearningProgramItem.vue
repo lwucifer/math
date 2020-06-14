@@ -430,7 +430,7 @@ export default {
     },
 
     fetchScormItems(_link, cb) {
-      console.log("[fetchScormItems]", _link);
+      // console.log("[fetchScormItems]", _link);
       if(!_link) return;
 
       const self = this;
@@ -441,11 +441,11 @@ export default {
         if (this.readyState === 4) {
           // console.log(this.responseText);
           const result = parseManifest.xml2js(this.responseText, { compact: true });
-          console.log("[result]", result);
+          // console.log("[result]", result);
           const organizations = result.manifest.organizations.organization.item;
-          console.log("[organizations]", organizations);
+          // console.log("[organizations]", organizations);
           const resources = result.manifest.resources.resource || [];
-          console.log("[resources]", resources);
+          // console.log("[resources]", resources);
 
           // commit here
           const items = resources.map(i => {

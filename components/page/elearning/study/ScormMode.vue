@@ -1,9 +1,6 @@
 <template>
   <div class="es-scorm-mode">
-    <iframe
-      class="es-scorm-mode__iframe"
-      :src="activeLink"
-    ></iframe>
+    <iframe class="es-scorm-mode__iframe" :src="activeLink"></iframe>
 
     <nav class="es-scorm-mode__menu" :class="{ show: showMenu }">
       <h3 class="es-scorm-mode__heading" @click="showMenu = !showMenu">
@@ -14,7 +11,13 @@
       </h3>
 
       <ul class="es-scorm-mode__menu-list">
-        <li v-for="(item, index) in scormItems" :key="index"><a @click="setLink(item)">Tên bài học 1</a></li>
+        <li v-for="(item, index) in scormItems" :key="index">
+          <a
+            @click="setLink(item, index)"
+            :class="{ active: index == activeIndex }"
+            >Bài học {{ index + 1 }}</a
+          >
+        </li>
         <!-- <li><a href="" class="active">Tên bài học 2</a></li>
         <li><a href="">Tên bài học 3</a></li>
         <li><a href="">Tên bài học 4</a></li> -->
@@ -35,20 +38,31 @@ export default {
   data() {
     return {
       showMenu: false,
-      activeLink: "#",
+      activeLink: "",
+      activeIndex: ""
     };
   },
 
   computed: {
     ...mapState("elearning/study/study", ["scormItems"])
+
   },
 
   methods: {
-    setLink(_link) {
+    setLink(_link, _idx) {
       this.activeLink = _link;
+      this.activeIndex = _idx;
+    }
+  },
+
+  watch: {
+    scormItems(_newVal) {
+      console.log("[scormItems] watch", _newVal.length);
+      if(_newVal && _newVal.length > 0) {
+        this.activeLink = this.scormItems[0];
+      }
     }
   }
-
 };
 </script>
 
