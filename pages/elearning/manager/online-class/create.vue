@@ -7,10 +7,10 @@
         <div class="col-md-3">
           <ElearningManagerSide active="5" />
         </div>
-        <div class="col-md-9">
-          <h5 class="page-title">Tạo phòng học online</h5>
-          <div class="olclasses-create-main box">
-            <div class="mt-4">
+        <sub-block-section title="Tạo phòng học online" has-icon>
+          <template v-slot:content>
+            <div class="olclasses-create-main">
+            <div class="mt-2">
               <div class="form-item">
                 <label>
                   <strong>Thuộc bài giảng/ khóa học</strong>
@@ -261,7 +261,8 @@
               <IconRight class="fill-white mr-3"/>Tạo phòng học
             </app-button>
           </div>
-        </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
 

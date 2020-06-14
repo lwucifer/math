@@ -51,7 +51,9 @@
                     'elearning-lesson-screen--image-mode':
                       studyMode === imageMode,
                     'elearning-lesson-screen--article-mode':
-                      studyMode === articleMode
+                      studyMode === articleMode,
+                    'elearning-lesson-screen--scorm-mode':
+                      studyMode === scormMode
                   }"
                 >
                   <!-- DEFAULT MODE -->
@@ -95,10 +97,8 @@
                   ></iframe>
 
                   <!-- SCORM TEST -->
-                  <!-- <iframe
-                    src="https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/scorm/20200610034529203_c2f56f5d1c170e0a9723d5bf2b149d67ecb42aee71513e8f3ca4013b236f82fd/Tin%20hoc%206_repair/index.htm"
-                  ></iframe> -->
-                  <ScormMode v-if="studyMode === scormMode" />
+                  <!-- <ScormLecture v-if="studyMode === articleMode" /> -->
+                  <ScormLecture v-if="studyMode == scormMode" />
                 </div>
 
                 <!-- DO EXERCISE -->
@@ -205,10 +205,9 @@ import TabSummary from "~/components/page/elearning/study/tab-summary/TabSummary
 import TabQA from "~/components/page/elearning/study/tab-qa/TabQA";
 import TabNotification from "~/components/page/elearning/study/tab-notification/TabNotification";
 import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
-// import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
-import ScormMode from "~/components/page/elearning/study/ScormMode";
+import ScormLecture from "~/components/page/elearning/study/ScormMode";
 import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
@@ -227,7 +226,6 @@ export default {
     TabQA,
     TabNotification,
     TabReview,
-    // ElearningQuestion,
     Streaming,
     ElearningExercise,
     VclList,
@@ -236,14 +234,13 @@ export default {
     IconCropFreeReverse,
     IconStudyExpand,
     IconStudyNarrow,
-    ScormMode
+    ScormLecture
   },
 
   data() {
     return {
       type: "summary",
       pageLoading: true,
-      // interactive_questions: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
@@ -270,20 +267,9 @@ export default {
           STUDY_MODE.REVIEW_EXERCISE_RESULT
         ].includes(this.studyMode);
 
-      // console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
       return isExerciseScreen;
     }
 
-    // expand
-    // screenHeight() {
-    //   let h = `42.6rem`;
-    //   if (this.fullscreen) {
-    //     h = `100vh - 13rem`;
-    //   } else if (this.expand) {
-    //     h = `calc(100vh - 7rem - 8.3rem - 4.9rem)`;
-    //   }
-    //   return `${h}`;
-    // }
   },
 
   mounted() {

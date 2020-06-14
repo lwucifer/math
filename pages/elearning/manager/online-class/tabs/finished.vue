@@ -125,29 +125,6 @@ export default {
        showModalConfirm: false,
       loading: false,
       showFilter: false,
-      tab: 1,
-      heads: [
-        {
-          name: "online_class_name",
-          text: "Phòng học",
-          sort: true
-        },
-        {
-          name: "elearning_name",
-          text: "Thuộc khóa học",
-          sort: true
-        },
-        {
-          name: "start_time",
-          text: "Thời gian",
-          sort: true
-        },
-        {
-          name: "num_student",
-          text: "Số học sinh đã mời",
-          sort: true
-        }
-      ],
       courses: [],
       filterCourse: null,
       pagination: {

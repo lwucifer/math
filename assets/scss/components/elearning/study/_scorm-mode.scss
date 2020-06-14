@@ -64,6 +64,9 @@
 
 .es-scorm-mode__menu-list {
     list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
 
     li {
         a {

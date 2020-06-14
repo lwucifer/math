@@ -134,10 +134,10 @@
                 </li>
 
                 <li
-                  v-else-if="elearning && !elearning.is_archive && tab === 5"
+                  v-else-if="elearning.is_archive && tab === 5"
                   @click.prevent="handleDeleteArchive(elearning.elearning_id)"
                 >
-                  <n-link to class="text-primary">
+                  <n-link to>
                     <IconUnArchive class="icon" />Bỏ lưu trữ
                   </n-link>
                 </li>

@@ -1,9 +1,6 @@
 <template>
   <div class="es-scorm-mode">
-    <iframe
-      class="es-scorm-mode__iframe"
-      src="https://s3.cloud.cmctelecom.vn/dev-elearning-schoolly/scorm/20200610034529203_c2f56f5d1c170e0a9723d5bf2b149d67ecb42aee71513e8f3ca4013b236f82fd/Tin%20hoc%206_repair/index.htm"
-    ></iframe>
+    <iframe class="es-scorm-mode__iframe" :src="activeLink"></iframe>
 
     <nav class="es-scorm-mode__menu" :class="{ show: showMenu }">
       <h3 class="es-scorm-mode__heading" @click="showMenu = !showMenu">
@@ -14,17 +11,24 @@
       </h3>
 
       <ul class="es-scorm-mode__menu-list">
-        <li><a href="">Tên bài học 1</a></li>
-        <li><a href="" class="active">Tên bài học 2</a></li>
+        <li v-for="(item, index) in scormItems" :key="index">
+          <a
+            @click="setLink(item, index)"
+            :class="{ active: index == activeIndex }"
+            >Bài học {{ index + 1 }}</a
+          >
+        </li>
+        <!-- <li><a href="" class="active">Tên bài học 2</a></li>
         <li><a href="">Tên bài học 3</a></li>
-        <li><a href="">Tên bài học 4</a></li>
+        <li><a href="">Tên bài học 4</a></li> -->
       </ul>
     </nav>
   </div>
 </template>
 
 <script>
-import IconViewAgenda from '~/assets/svg/v2-icons/view_agenda_24px.svg?inline';
+import IconViewAgenda from "~/assets/svg/v2-icons/view_agenda_24px.svg?inline";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -33,7 +37,30 @@ export default {
 
   data() {
     return {
-      showMenu: false
+      showMenu: false,
+      activeLink: "",
+      activeIndex: ""
+    };
+  },
+
+  computed: {
+    ...mapState("elearning/study/study", ["scormItems"])
+
+  },
+
+  methods: {
+    setLink(_link, _idx) {
+      this.activeLink = _link;
+      this.activeIndex = _idx;
+    }
+  },
+
+  watch: {
+    scormItems(_newVal) {
+      console.log("[scormItems] watch", _newVal.length);
+      if(_newVal && _newVal.length > 0) {
+        this.activeLink = this.scormItems[0];
+      }
     }
   }
 };

@@ -34,7 +34,7 @@
             <app-input v-model="organization.address" disabled />
           </div>
           <div class="col-md-3">
-            <label for class="form--normal__title">Mã học sinh</label>
+            <label for class="form--normal__title">Mã liên kết</label>
           </div>
           <div class="col-md-9">
             <app-input v-model="work.code" disabled />

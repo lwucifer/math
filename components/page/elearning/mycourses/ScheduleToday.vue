@@ -11,9 +11,9 @@
             label="Chọn thời gian:"
             class="schedule-today-date-picker"
             v-model="dateSchedule"
-             @input="changeDate"
-             valueFormat="YYYY-MM-DD"
-             placeholder="YYYY-MM-DD"
+            @input="changeDate"
+            valueFormat="YYYY-MM-DD"
+            placeholder="YYYY-MM-DD"
           >
           </app-date-picker>
       </div>
@@ -48,11 +48,12 @@
             </div>
         </div>
       </div>
-      <div class="row schedule-item" v-for="(item, index) in timeTable" :key="index">
+      <div class="row schedule-item" v-for="(item, index) in filterTimeTableList" :key="index">
           <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">{{get(item, 'type', '')}}</h5>
+          <h5 class="col-md-3">{{get(item, 'text', '')}}</h5>
           <span class="col-md-5">{{get(item, 'content', '')}}</span>
-          <span class="col-md-3">Thời gian bắt đầu: {{get(item, 'time', '') | moment('HH:MM')}}</span>
+          <span v-if="item.start_time && !item.end_time" class="col-md-3">Thời gian bắt đầu: {{get(item, 'start_time', '') | moment('HH:MM')}}</span>
+          <span v-if="item.start_time && item.end_time" class="col-md-3">Thời gian học: {{get(item, 'start_time', '') | moment('HH:MM')}} - {{get(item, 'end_time', '') | moment('HH:MM')}}</span>
       </div>
       <!-- <div class="row schedule-item">
           <IconEllipse2 class="col-md-1"/>
@@ -74,6 +75,7 @@ import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 import moment from 'moment';
 import { mapState } from 'vuex';
 import { get } from "lodash";
+import * as constants from "~/utils/constants";
 const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     components:{
@@ -87,6 +89,34 @@ export default {
     },
     computed: {
         ...mapState(STORE_OVERVIEW, ['timeTable']),
+        filterTimeTableList() {
+            const data =
+                this.timeTable &&
+                this.timeTable.map(item => {
+                if (item.type == constants.TYPE_TIME_TABLE.OLCLASS) {
+                    return {
+                    ...item,
+                    text: "Học online"
+                    };
+                } else if (item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
+                    return {
+                    ...item,
+                    text: "Học online"
+                    };
+                } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
+                    return {
+                    ...item,
+                    text: "Làm bài tập"
+                    };
+                } else {
+                    return {
+                    ...item,
+                    text: "Làm bài kiểm tra"
+                    };
+                }
+                });
+            return data;
+        },
     },
     created(){
         this.changeDate(this.dateSchedule)
@@ -100,9 +130,8 @@ export default {
                  const day = moment(date).day(i.toString()).toString()
                  this.dayslist.push(day)
             }
-            this.$emit('changeDateInWeek', date)
             console.log('this.dayslist', this.dayslist)
-            console.log(moment().format("YYYY-MM-DD h:mm:ss").toString())
+            this.$emit('changeDateInWeek', date)
         },
         checkDate(d1){
             // console.log('checkDate', d1)

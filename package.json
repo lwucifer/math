@@ -65,6 +65,7 @@
         "vue-toasted": "^1.1.27",
         "vue2-datepicker": "^3.3.0",
         "vuelidate": "^0.7.5",
+        "xml-js": "^1.6.11",
         "yup": "^0.28.3"
     },
     "devDependencies": {

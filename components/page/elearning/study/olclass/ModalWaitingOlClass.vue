@@ -172,7 +172,7 @@ export default {
       currentZoom: null,
       showModalConfirm: false,
       activeSession: {},
-      activeSession: false
+      // activeSession: false
     };
   },
 
@@ -273,7 +273,6 @@ export default {
 
     isCanJoinRoom() {
       return !!this.dataLength;
-
     }
   },
 

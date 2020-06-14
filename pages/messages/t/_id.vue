@@ -1,14 +1,14 @@
 <template>
   <div class="box">
     <div class="row">
-      <TabMessage :isCreated="isCreate" :isGroup="isGroup" />
+      <TabMessage :isCreated="isCreate" :isGroup="isGroup" @emitMessageTag1="emitMessageTag1" />
       <!-- <TabInfo :isGroup="isGroup" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
@@ -115,7 +115,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations("chat", ["setOnMessage", "setResEmit"]),
+    ...mapActions("chat", ["getRoomList"]),
+    ...mapMutations("chat", ["setOnMessage", "setResEmit", "setEmitMessage"]),
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
@@ -183,6 +184,23 @@ export default {
       //     console.log("ket qua message", res);
       //   }
       // );
+    },
+    emitMessageTag1(dataEmit, id) {
+      console.log("aaa", dataEmit, id);
+      this.socket.emit(
+        constants.CHAT.JOIN_ROOM,
+        {
+          room_id: id
+        },
+        res => {
+          console.log("[socket] User has joined this channel", res);
+        }
+      );
+      this.$nextTick(() => {
+        this.setEmitMessage(dataEmit);
+        this.getRoomList();
+        this.$router.push(`/messages/t/${id}`);
+      });
     }
   },
 
