@@ -73,7 +73,7 @@
                     <th>Thứ 5</th>
                     <th>Thứ 6</th>
                     <th>Thứ 7</th>
-                    <th>Chủ nhật</th>
+                    <th class="text-pink-2">Chủ nhật</th>
                   </tr>
                 </thead>
 
@@ -82,7 +82,7 @@
                     <td v-for="(item, index) in dayslist" :key="index">
                       <span
                         v-if="item == dayslist[dayslist.length -1]"
-                        class="sunday"
+                        class="text-pink-2"
                         @click="changeDateInWeek(item)"
                         :class="checkDate(item) ? 'active' :''"
                       >{{item | moment('DD')}}</span>
