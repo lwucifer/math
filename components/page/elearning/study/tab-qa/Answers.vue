@@ -55,7 +55,6 @@ export default {
     visibleAnswers() {
       const initialAnswers = get(this, "question.interactive_answers", []);
       const updatedAnswers = get(this, "moreAnswers.content", []);
-      console.log('visibleAnswers', [...initialAnswers, ...updatedAnswers])
       return [...initialAnswers, ...updatedAnswers];
     }
   },
