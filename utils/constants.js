@@ -240,7 +240,9 @@ export const LESSION_TYPE = {
   ARTICLE: "ARTICLE",
   PDF: "PDF",
   TXT: "TXT",
-  IMAGE: "IMAGE"
+  IMAGE: "IMAGE",
+  SCORM: "SCORM",
+  AUDIO: "AUDIO",
 };
 
 export const SORT_ELEARNING = {

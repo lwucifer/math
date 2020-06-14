@@ -19,10 +19,26 @@
       <div class="e-program-item__bottom">
         <div class="e-program-item__time">
           <span
-            v-if="isShowVideoLesson"
+            v-if="lessonType == videoType"
             class="d-inline-flex align-items-center"
           >
             <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
+
+          <span
+            v-else-if="lessonType == audioType"
+            class="d-inline-flex align-items-center"
+          >
+            <IconHeadPhones class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
+
+          <span
+            v-else-if="lessonType == scormType"
+            class="d-inline-flex align-items-center"
+          >
+            <IconScorm class="icon body-1 mr-1 text-primary" />
             <span>{{ durationTimes }}</span>
           </span>
 
@@ -139,6 +155,8 @@ const IconFileDownloadAlt = () =>
   import("~/assets/svg/design-icons/file-download-alt.svg?inline");
 import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
 import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
+import IconScorm from "~/assets/svg/v2-icons/scorm.svg?inline";
+import IconHeadPhones from "~/assets/svg/v2-icons/headphones.svg?inline";
 
 import StudyService from "~/services/elearning/study/Study";
 import { ERRORS } from "../../../../utils/error-code";
@@ -152,7 +170,9 @@ export default {
     IconFileCheckAlt,
     IconSlowMotionVideo,
     IconFileDownloadAlt,
-    IconEventNote
+    IconEventNote,
+    IconScorm,
+    IconHeadPhones,
   },
 
   props: {
@@ -174,7 +194,10 @@ export default {
       },
       lessonStatus: false,
       isShowConfirmExit: false,
-      isShowConfirmExit2: false
+      isShowConfirmExit2: false,
+      videoType: LESSION_TYPE.VIDEO,
+      audioType: LESSION_TYPE.AUDIO,
+      scormType: LESSION_TYPE.SCORM,
     };
   },
 
@@ -234,8 +257,8 @@ export default {
       }
     },
 
-    isShowVideoLesson() {
-      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    lessonType() {
+      return get(this.lesson, "type", "");
     },
 
     durationTimes() {
