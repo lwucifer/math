@@ -300,6 +300,19 @@ const actions = {
       return err;
     }
   },
+
+  async [actionTypes.CHAT.CREATE_ROOM]({ commit, state }, options) {
+    try {
+      const { data: result = {} } = await new Room(this.$axios)[
+        actionTypes.BASE.POST_END
+      ](options.payload, options.id, options.end);
+      console.log("[CREATE_ROOM] list", result);
+      return result;
+    } catch (err) {
+      console.log("[CREATE_ROOM].err", err);
+      return err;
+    }
+  },
 };
 /**
  * initial mutations

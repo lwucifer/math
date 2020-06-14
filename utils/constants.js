@@ -72,7 +72,7 @@ export const CHAT = {
   READ_MESSAGE: "read_message",
   PUBLIC_GROUP: "PUBLIC_GROUP",
   PRIVATE_GROUP: "PRIVATE",
-  FETCH_PRIVATE_ROOM_BY_FRIEND_ID: "FETCH_PRIVATE_ROOM_BY_FRIEND_ID"
+  FETCH_PRIVATE_ROOM_BY_FRIEND_ID: "fetch_private_room_by_friend_id"
 };
 
 export const SHARE_OPTS = {

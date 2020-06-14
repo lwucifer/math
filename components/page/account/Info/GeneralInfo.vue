@@ -68,7 +68,7 @@
             <label for class="form--normal__title">Tiểu sử</label>
           </div>
           <div class="col-md-9" v-if="isTeacherRole">
-            <div v-if="story == ''">
+            <div v-if="story == null || story == ''">
               <app-button
                 color="transparent"
                 flat

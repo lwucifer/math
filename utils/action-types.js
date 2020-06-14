@@ -702,7 +702,8 @@ export const CHAT = {
     CHANGE_ROOM_AVATAR: "changeRoomAvatar",
     FRIENDS_LIST: "getFriendsList",
     ROOM_LIST_FETCH: "getRoomListFetch",
-    MESSAGE_LIST_FETCH: "getMessageListFetch"
+    MESSAGE_LIST_FETCH: "getMessageListFetch",
+    CREATE_ROOM: "createRoom"
 };
 
 export const TIMETABLE = {

@@ -710,7 +710,8 @@ export default {
     ...mapActions("chat", [
       "getRoomList",
       "getRoomListFetch",
-      "getMessageListFetch"
+      "getMessageListFetch",
+      "createRoom"
     ]),
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
@@ -900,6 +901,16 @@ export default {
 
         // this.setEmitMessage(dataEmit);
         // this.getRoomList();
+      } else {
+        const data = {
+          type: constants.CHAT.PUBLIC_GROUP,
+          members: this.tag.toString()
+        };
+        this.createRoom(data).then(result => {
+          if (result) {
+            this.setIsCreated(false);
+          }
+        });
       }
       this.textChat = "";
       // this.emitCloseFalse(false, this.isGroup);
