@@ -12,6 +12,7 @@
             class="schedule-today-date-picker"
             v-model="dateSchedule"
             @input="changeDate"
+            valueFormat="YYYY-MM-DD"
             placeholder="YYYY-MM-DD"
           >
           </app-date-picker>
