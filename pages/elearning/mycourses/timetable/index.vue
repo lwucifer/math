@@ -295,12 +295,16 @@ export default {
     ...mapActions(STORE_NAME_TIMETABLE, ["getTimeTableList"]),
     changeDate(date) {
       this.dayslist.length = 0;
+      let dayItem = [];
       for (let i = 1; i <= 7; i++) {
-        const day = moment(date).day(i);
-        this.dayslist.push(day);
+        if (moment(date).day() == 0) {
+          const day = moment(date).day(i - 7);
+          this.dayslist.push(day);
+        } else {
+          const day = moment(date).day(i);
+          this.dayslist.push(day);
+        }
       }
-      // console.log("this.dayslist", this.dayslist);
-      // console.log("a", moment(date));
     },
     checkDate(d1) {
       let date1 = moment(d1)
