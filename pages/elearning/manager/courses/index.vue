@@ -7,9 +7,8 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <h5 class="page-title">Bài giảng và khóa học</h5>
-        <div class="elearning-history__main">
-          <div class="pl-4 pr-4">
+        <sub-block-section title="Bài giảng và khóa học">
+          <template v-slot:content>
             <div class="elearning-manager__tab">
               <div class="nav">
                 <a @click="tab = 'APPROVED'" :class="tab == 'APPROVED' ? 'active' : ''">Đã đăng</a>
@@ -30,8 +29,8 @@
               </n-link>
             </div>
             <CoursesTable :tab="tab" />
-          </div>
-        </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>
@@ -67,9 +66,3 @@ export default {
   methods: {},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-@import "~/assets/scss/components/elearning/_elearning-history.scss";
-@import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
-</style>

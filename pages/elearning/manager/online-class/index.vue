@@ -41,7 +41,6 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types";
 
-  const STORE_NAMESPACE = "elearning/teaching/olclass";
   const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
   const Tab1 = () => import("./tabs/streaming")
@@ -62,7 +61,6 @@
     data() {
       return {
         tab: 1,
-        //elearnings: this.stateElearnings
       }
     },
     computed: {
@@ -77,6 +75,7 @@
       }),
     },
 
+    // Get elearnings
     async fetch({ params, query, store, route }) {
       const userId = store.state.auth.token ? store.state.auth.token.id : "";
       await Promise.all([

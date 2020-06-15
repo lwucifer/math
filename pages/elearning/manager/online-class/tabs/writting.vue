@@ -9,7 +9,7 @@
               class
               :placeholder="'Nhập để tìm kiếm...'"
               bordered
-              v-model="params.query"
+              v-model="query"
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
@@ -155,7 +155,10 @@ export default {
         search_type: null,
         sort: 'start_time,desc'
       },
-      loading: false
+      loading: false,
+      query: '',
+      query_date: '',
+      checkSubmit: false
     };
   },
   computed: {
@@ -179,6 +182,15 @@ export default {
       });
       return [this.allOpt, ...list]
     }
+  },
+
+  watch: {
+    query() {
+      this.checkSubmit = true;
+    },
+    query_date() {
+      this.checkSubmit = true;
+    },
   },
 
   methods: {
@@ -205,8 +217,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params, ...this.filter };
-      this.getList();
+      if (this.checkSubmit) {
+        this.getList();
+        this.checkSubmit = false;
+      }
     },
     handleChangedCourse(val) {
       this.filter.course = this.filterCourse.value;
@@ -226,6 +240,8 @@ export default {
       try {
         self.loading = true;
         let params = { ...self.params };
+        if (this.query_date) params.query_date = this.query_date;
+        if (this.query) params.query = this.query;
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }

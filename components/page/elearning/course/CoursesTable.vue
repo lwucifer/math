@@ -377,7 +377,8 @@ export default {
         },
         {
           name: "participants",
-          text: "Học sinh tham gia"
+          text: "Học sinh tham gia",
+          //sort: true
         }
       ],
       currentHeads: [],

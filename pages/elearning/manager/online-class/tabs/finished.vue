@@ -5,7 +5,7 @@
         <div class="d-flex">
       <div class="filter-form__item">
         <app-date-picker
-          v-model="params.query_date"
+          v-model="query_date"
           square
           size="sm"
           placeholder="dd/mm/yyyy"
@@ -22,7 +22,7 @@
             class
             :placeholder="'Nhập để tìm kiếm...'"
             bordered
-            v-model="params.query"
+            v-model="query"
             :size="'sm'"
             @submit="submit"
             @keyup.enter.native="submit"
@@ -104,6 +104,9 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
+import {
+  getUTCDateTime
+} from "~/utils/moment";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
@@ -122,7 +125,7 @@ export default {
         value: null,
         text: 'Tất cả'
       },
-       showModalConfirm: false,
+      showModalConfirm: false,
       loading: false,
       showFilter: false,
       courses: [],
@@ -147,6 +150,9 @@ export default {
         search_type: null,
         sort: 'start_time,desc'
       },
+      query: '',
+      query_date: '',
+      checkSubmit: false
     };
   },
   computed: {
@@ -172,7 +178,18 @@ export default {
     }
   },
 
+  watch: {
+    query() {
+      this.checkSubmit = true;
+    },
+    query_date() {
+      this.checkSubmit = true;
+    },
+  },
+
   methods: {
+    getUTCDateTime,
+    
     handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};
@@ -197,9 +214,14 @@ export default {
       that.params.page = that.pagination.number + 1;
       that.getList();
     },
+
     submit() {
-      this.getList();
+      if (this.checkSubmit) {
+        this.getList();
+        this.checkSubmit = false;
+      }
     },
+    
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
       this.getList();
@@ -215,7 +237,9 @@ export default {
       const self = this;
       try {
         self.loading = true;
-        let params = { ...self.params };
+        let params = { ...self.params};
+        if (this.query_date) params.query_date = this.query_date;
+        if (this.query) params.query = this.query;
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
