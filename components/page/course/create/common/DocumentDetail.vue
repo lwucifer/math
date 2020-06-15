@@ -27,6 +27,7 @@ const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -40,6 +41,12 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
+  },
+
   data() {
     return {
       showModalConfirm: false,
@@ -50,10 +57,12 @@ export default {
   methods: {
     async handleDeleteDoc(e) {
       e.preventDefault();
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (this.disabled_all) return;
       this.confirmLoading = true;
       const doc_id = get(this, "doc.id", "");
       const options = {
@@ -78,6 +87,7 @@ export default {
     },
 
     handleCancelModal() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },

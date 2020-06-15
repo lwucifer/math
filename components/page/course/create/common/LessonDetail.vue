@@ -22,7 +22,15 @@
 
     <!-- <app-divider class="my-4" /> -->
 
-    <p class="mt-4 mb-3 heading-6" v-if="lesson.lesson_docs && lesson.lesson_docs.length > 0 || lesson.lesson_videos && lesson.lesson_videos.length > 0">Tài liệu tham khảo</p>
+    <p
+      class="mt-4 mb-3 heading-6"
+      v-if="
+        (lesson.lesson_docs && lesson.lesson_docs.length > 0) ||
+          (lesson.lesson_videos && lesson.lesson_videos.length > 0)
+      "
+    >
+      Tài liệu tham khảo
+    </p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"
@@ -103,6 +111,7 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      disabled_all: "disabled_all",
     }),
   },
 
@@ -119,20 +128,24 @@ export default {
 
   methods: {
     toggleShowLesson() {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = !this.isShowDetailLesson;
     },
 
     handleCloseAdd() {
+      if (this.disabled_all) return;
       this.isShowFormAddDocument = false;
       this.isShowButtonAddDocument = true;
     },
 
     handleAddDocument() {
+      if (this.disabled_all) return;
       this.isShowFormAddDocument = true;
       this.isShowButtonAddDocument = false;
     },
 
     handleEditLesson() {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = false;
     },
 
@@ -144,4 +157,3 @@ export default {
   },
 };
 </script>
-
