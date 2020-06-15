@@ -13,33 +13,33 @@
             <div class="d-flex mb-4">
               <div class="elearning-manager-content__title__nav">
                 <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
-                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''"
-                  >Đang theo học ({{
-                    numeral(get(statistic, "total_elearnings", 0)).format()
-                  }})</a
-                >
-                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''"
-                  >Đã hoàn thành ({{
-                    numeral(get(statistic, "total_courses", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">
+                  Đang theo học ({{
+                  numeral(get(statistic, "total_elearnings", 0)).format()
+                  }})
+                </a>
+                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">
+                  Đã hoàn thành ({{
+                  numeral(get(statistic, "total_completed", 0)).format()
+                  }})
+                </a>
 
-                <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''"
-                  >Yêu thích ({{
-                    numeral(get(statistic, "total_favourites", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">
+                  Yêu thích ({{
+                  numeral(get(statistic, "total_favourites", 0)).format()
+                  }})
+                </a>
 
-                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''"
-                  >Lưu trữ ({{
-                    numeral(get(statistic, "total_archieves", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">
+                  Lưu trữ ({{
+                  numeral(get(statistic, "total_archieves", 0)).format()
+                  }})
+                </a>
               </div>
             </div>
 
             <div class="d-flex align-items-center search-field">
-              <div class="search__mycourses  mr-4">
+              <div class="search__mycourses mr-4">
                 <app-search
                   class="mb-0"
                   size="sm"
@@ -56,10 +56,7 @@
                   :size="'sm'"
                   @click="toggleFilter"
                 >
-                  <IconHamberger
-                    :class="showFilter ? 'fill-white' : 'fill-primary'"
-                    class="mr-2"
-                  />
+                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
                   <span>Lọc kết quả</span>
                 </app-button>
               </div>
@@ -121,10 +118,7 @@
               </div>
             </div>
 
-            <ElearningList
-              :elearningList="get(list, 'content', [])"
-              :col="'col-md-4'"
-            >
+            <ElearningList :elearningList="get(list, 'content', [])" :col="'col-md-4'">
               <ElearningItem
                 slot-scope="{ item }"
                 :elearning="item"
@@ -182,7 +176,7 @@ export default {
     ElearningItem,
     MenuDropDown,
     ShareElearningModal,
-    IconHamberger,
+    IconHamberger
   },
   data() {
     return {
@@ -190,10 +184,10 @@ export default {
         type: "ALL",
         size: 12,
         page: 1,
-        keyword: "",
+        keyword: null,
         is_completed: false,
-        privacy: "",
-        free: "",
+        privacy: null,
+        free: null
       },
       tab: 2,
       checkModalShare: false,
@@ -201,7 +195,7 @@ export default {
       showFilter: false,
       selectType: null,
       selectPrivacy: null,
-      selectFree: null,
+      selectFree: null
     };
   },
 
@@ -216,7 +210,7 @@ export default {
       unfinished_lecture: "unfinished_lecture",
       statistic: "statistic",
       archive: "archive",
-      favourite: "favourite",
+      favourite: "favourite"
     }),
     list() {
       if (this.tab === 2) {
@@ -232,7 +226,7 @@ export default {
         return this.archive;
       }
       return this.unfinished_lecture;
-    },
+    }
   },
 
   methods: {
@@ -250,7 +244,7 @@ export default {
 
     getData() {
       const payload = {
-        params: this.params,
+        params: this.params
       };
       if (this.tab === 2) {
         this.$store.dispatch("elearning/study-space/getStudying", payload);
@@ -268,12 +262,12 @@ export default {
 
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
-      "elearningStudyFavouriteDelete",
+      "elearningStudyFavouriteDelete"
     ]),
 
     ...mapActions(STORE_NAME_ARCHIVE, [
       "elearningStudyArchiveAdd",
-      "elearningStudyArchiveDelete",
+      "elearningStudyArchiveDelete"
     ]),
 
     changeTab(tab) {
@@ -285,14 +279,14 @@ export default {
         this.params.is_completed = true;
       }
       this.params.page = 1;
-      this.params.keyword = "";
+      this.params.keyword = null;
     },
 
     handleFavourite(id) {
       const query = {
-        elearning_id: id,
+        elearning_id: id
       };
-      this.elearningStudyFavouriteAdd(query).then((result) => {
+      this.elearningStudyFavouriteAdd(query).then(result => {
         if (result.success == true) {
           this.getData();
         }
@@ -301,15 +295,15 @@ export default {
 
     handleDeleteFavourite(id) {
       const query = {
-        elearning_ids: [id],
+        elearning_ids: [id]
       };
-      this.elearningStudyFavouriteDelete(query).then((result) => {
+      this.elearningStudyFavouriteDelete(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
           this.getData();
@@ -319,15 +313,15 @@ export default {
 
     handleArchive(id) {
       const query = {
-        elearning_id: id,
+        elearning_id: id
       };
-      this.elearningStudyArchiveAdd(query).then((result) => {
+      this.elearningStudyArchiveAdd(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
           this.getData();
@@ -337,15 +331,15 @@ export default {
 
     handleDeleteArchive(id) {
       const query = {
-        elearning_ids: [id],
+        elearning_ids: [id]
       };
-      this.elearningStudyArchiveDelete(query).then((result) => {
+      this.elearningStudyArchiveDelete(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
           this.getData();
@@ -369,7 +363,7 @@ export default {
       this.checkModalShare = true;
       this.dataModal = item;
     },
-    
+
     async handleShareSchoolly(_content) {
       console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
@@ -402,8 +396,8 @@ export default {
       this.params.type = this.selectType.value;
     },
     get,
-    numeral,
-  },
+    numeral
+  }
 };
 </script>
 
