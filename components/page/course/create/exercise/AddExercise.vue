@@ -2,7 +2,7 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <h5 for="title" class="mb-3 d-inline-block">
-        Tiêu đề {{ title }}
+        Tiêu đề bài tập
         <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         >
@@ -11,7 +11,7 @@
     </div>
 
     <div class="mb-4" v-show="category === 'EXERCISE'">
-      <h5 for="require" class="mb-3">{{ title_required }}</h5>
+      <h5 for="require" class="mb-3">Bài tập bắt buộc?</h5>
 
       <app-radio-group>
         <app-radio
@@ -33,7 +33,7 @@
     </div>
 
     <div class="mb-4">
-      <h5 for="require" class="mb-3">Loại {{ title }}</h5>
+      <h5 for="require" class="mb-3">Loại bài tập</h5>
 
       <app-radio-group>
         <app-radio
@@ -125,7 +125,7 @@
         class="font-weight-semi-bold"
         @click="handleAddExcercise"
         :disabled="disabled_all"
-        >Tạo {{ title }}</app-button
+        >Tạo bài tập</app-button
       >
     </div>
     <app-modal-confirm
@@ -168,14 +168,6 @@ export default {
     ...mapState("elearning/create", {
       disabled_all: "disabled_all",
     }),
-    title() {
-      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
-    },
-    title_required() {
-      return get(this, "category", "") === "TEST"
-        ? "Bài kiểm tra bắt buộc?"
-        : "Bài tập bắt buộc?";
-    },
   },
 
   data() {
@@ -183,7 +175,7 @@ export default {
       payload: {
         index: 1,
         lesson_id: "",
-        required: get(this, "category", "") === "TEST" ? 1 : "",
+        required: "",
         title: "",
         type: "",
         pass_score: 0,

@@ -1,6 +1,13 @@
 <template>
   <div class="cc-panel__body-modifer">
-    <div class="cc-box">
+    <div class="cc-box" v-if="isShowEditExercise">
+      <UpdateExercise
+        @cancel="isShowEditExercise = !isShowEditExercise"
+        :exercise="exercise"
+        :lesson="lesson"
+      />
+    </div>
+    <div class="cc-box" v-else>
       <div
         class="cc-box__head"
         :class="{
@@ -117,6 +124,7 @@ import CreateQuestionEssay from "~/components/page/course/create/exercise/Create
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
 import ListQuestion from "~/components/page/course/create/exercise/ListQuestion";
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
+import UpdateExercise from "~/components/page/course/create/exercise/UpdateExercise";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -136,6 +144,7 @@ export default {
     EditExerciseName,
     IconAngleUp,
     IconPlus2,
+    UpdateExercise,
   },
 
   props: {
