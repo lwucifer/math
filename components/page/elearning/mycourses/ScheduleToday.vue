@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div class="d-flex align-items-center text-primary">
         <h4>Học gì hôm nay?</h4>
-        <span class="ml-4">{{ dateSchedule | moment('Do MMMM, YYYY') }}</span>
+        <span class="ml-4">{{ dateSchedule | moment("Do MMMM, YYYY") }}</span>
       </div>
       <app-date-picker
         label="Chọn thời gian:"
@@ -27,32 +27,38 @@
       <div class="day-number" v-if="dateSchedule">
         <div class="item" v-for="(item, index) in dayslist" :key="index">
           <span
-            v-if="item==dayslist[dayslist.length -1]"
+            v-if="item == dayslist[dayslist.length - 1]"
             class="sunday"
             @click="changeDateInWeek(item)"
-            :class="checkDate(item) ? 'active' :''"
-          >{{item | moment('DD')}}</span>
+            :class="checkDate(item) ? 'active' : ''"
+            >{{ item | moment("DD") }}</span
+          >
 
           <span
             v-else
-            :class="checkDate(item) ? 'active' :''"
+            :class="checkDate(item) ? 'active' : ''"
             @click="changeDateInWeek(item)"
-          >{{item | moment('DD')}}</span>
+            >{{ item | moment("DD") }}</span
+          >
         </div>
       </div>
     </div>
-    <div class="row schedule-item" v-for="(item, index) in filterTimeTableList" :key="index">
+    <div
+      class="row schedule-item"
+      v-for="(item, index) in filterTimeTableList"
+      :key="index"
+    >
       <IconEllipse2 class="col-md-1" />
-      <h5 class="col-md-3">{{get(item, 'text', '')}}</h5>
-      <span class="col-md-5">{{get(item, 'content', '')}}</span>
-      <span
-        v-if="item.start_time && !item.end_time"
-        class="col-md-3"
-      >Thời gian bắt đầu: {{get(item, 'start_time', '') | moment('HH:MM')}}</span>
-      <span
-        v-if="item.start_time && item.end_time"
-        class="col-md-3"
-      >Thời gian học: {{get(item, 'start_time', '') | moment('HH:MM')}} - {{get(item, 'end_time', '') | moment('HH:MM')}}</span>
+      <h5 class="col-md-3">{{ get(item, "text", "") }}</h5>
+      <span class="col-md-5">{{ get(item, "content", "") }}</span>
+      <span v-if="item.start_time && !item.end_time" class="col-md-3"
+        >Thời gian bắt đầu:
+        {{ get(item, "start_time", "") | moment("HH:MM") }}</span
+      >
+      <span v-if="item.start_time && item.end_time" class="col-md-3"
+        >Thời gian học: {{ get(item, "start_time", "") | moment("HH:MM") }} -
+        {{ get(item, "end_time", "") | moment("HH:MM") }}</span
+      >
     </div>
     <!-- <div class="row schedule-item">
           <IconEllipse2 class="col-md-1"/>
@@ -78,12 +84,12 @@ import * as constants from "~/utils/constants";
 const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
   components: {
-    IconEllipse2
+    IconEllipse2,
   },
   data() {
     return {
       dateSchedule: moment().format("YYYY-MM-DD"),
-      dayslist: []
+      dayslist: [],
     };
   },
   computed: {
@@ -91,31 +97,31 @@ export default {
     filterTimeTableList() {
       const data =
         this.timeTable &&
-        this.timeTable.map(item => {
+        this.timeTable.map((item) => {
           if (item.type == constants.TYPE_TIME_TABLE.OLCLASS) {
             return {
               ...item,
-              text: "Học online"
+              text: "Học online",
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
             return {
               ...item,
-              text: "Học online"
+              text: "Học online",
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
             return {
               ...item,
-              text: "Làm bài tập"
+              text: "Làm bài tập",
             };
           } else {
             return {
               ...item,
-              text: "Làm bài kiểm tra"
+              text: "Làm bài kiểm tra",
             };
           }
         });
       return data;
-    }
+    },
   },
   created() {
     this.changeDate(this.dateSchedule);
@@ -144,10 +150,10 @@ export default {
     checkDate(d1) {
       // console.log('checkDate', d1)
       let date1 = moment(d1)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       let date2 = moment(this.dateSchedule)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       if (date1 == date2) {
         return true;
@@ -156,15 +162,14 @@ export default {
     changeDateInWeek(i) {
       console.log("changeDateInWeek1", i);
       this.dateSchedule = moment(i)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       console.log("this.dateSchedule", this.dateSchedule);
       this.$emit("changeDateInWeek", this.dateSchedule);
     },
-    moment
-  }
+    moment,
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
