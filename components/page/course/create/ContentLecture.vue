@@ -10,7 +10,7 @@
       <div class="cc-box">
         <div class="cc-box__head">
           <div class="cc-box__head-left flex-grow">
-            <EditCourseName :defaultName="get(this, 'general.name', '')" />
+            <EditLectureName :defaultName="get(this, 'general.name', '')" />
           </div>
 
           <div class="cc-box__head-right">
@@ -70,7 +70,10 @@
         <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button class="create-action__btn mr-4" @click="handleNextStep"
+        <app-button
+          class="create-action__btn mr-4"
+          @click="handleNextStep"
+          :disabled="disabled_all"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -115,7 +118,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
-import EditCourseName from "~/components/page/course/create/common/EditCourseName";
+import EditLectureName from "~/components/page/course/create/lecture/EditLectureName";
 
 export default {
   components: {
@@ -132,7 +135,7 @@ export default {
     CreateAction,
     CreateLessonOfElearning,
     LessonDetail,
-    EditCourseName,
+    EditLectureName,
     IconAngleUp,
     IconAdd,
     IconDelete,
@@ -181,7 +184,9 @@ export default {
       general: "general",
       lessons: "lessons_lecture",
       progress: "progress",
+      disabled_all: "disabled_all",
     }),
+
     submit() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
@@ -193,23 +198,27 @@ export default {
     get,
 
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
       this.showModalConfirm = false;
+      if (this.disabled_all) return;
       this.$emit("nextStep", "settings");
     },
 
     handleNextStep() {
+      if (this.disabled_all) return;
       if (!this.submit) {
-        this.$toasted.error('Bạn chưa tạo xong nội dung học tập')
+        this.$toasted.error("Bạn chưa tạo xong nội dung học tập");
         return;
       }
       this.showModalConfirm = true;
     },
 
     async handleSaveCourseName() {
+      if (this.disabled_all) return;
       const data = {
         name: this.courseNameModel,
         elearning_id: getParamQuery("elearning_id"),
@@ -235,10 +244,12 @@ export default {
     },
 
     handleHideEditNameCourse() {
+      if (this.disabled_all) return;
       this.isShowButtonEditNameCourse = false;
     },
 
     handleShowEditNameCourse() {
+      if (this.disabled_all) return;
       this.isShowButtonEditNameCourse = true;
     },
 
@@ -247,11 +258,13 @@ export default {
     },
 
     handleEditLesson(lesson) {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = false;
       this.lesson = lesson;
     },
 
     handleUploadChange(event) {
+      if (this.disabled_all) return;
       this.avatar = Array.from(event.target.files);
 
       getBase64(this.avatar[0], (src) => {
@@ -260,22 +273,27 @@ export default {
     },
 
     removeAvatar() {
+      if (this.disabled_all) return;
       this.avatar = [];
     },
 
     changeTabType(type) {
+      if (this.disabled_all) return;
       this.tabType = type;
     },
 
     changeTabVideo(type) {
+      if (this.disabled_all) return;
       this.tabVideo = type;
     },
 
     changeTabDocument(type) {
+      if (this.disabled_all) return;
       this.tabDocument = type;
     },
 
     changeTabAddDocument(type) {
+      if (this.disabled_all) return;
       this.tabAddDocument = type;
     },
 
@@ -284,6 +302,7 @@ export default {
     // },
 
     toggleShowAddLesson() {
+      if (this.disabled_all) return;
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id && get(this, "lessons.length", 0)) {
         this.isShowDetailLesson = true;
@@ -293,6 +312,7 @@ export default {
     },
 
     editCourseName() {
+      if (this.disabled_all) return;
       this.isEditCourseName = true;
       this.courseNameModel = get(this.general, "name", "");
 

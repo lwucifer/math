@@ -30,7 +30,7 @@
           :category="category"
         />
 
-        <FormCreateExercise
+        <AddExercise
           v-if="isShowFormAdd"
           @cancel="handleCancelAddCreate"
           :lesson="lesson"
@@ -49,7 +49,10 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button class="create-action__btn mr-4" @click="handleNextStep"
+        <app-button
+          class="create-action__btn mr-4"
+          @click="handleNextStep"
+          :disabled="disabled_all"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -79,7 +82,7 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 import { VclFacebook } from "vue-content-loading";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import AddExercise from "~/components/page/course/create/exercise/AddExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -99,7 +102,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExercise,
-    FormCreateExercise,
+    AddExercise,
     ExerciseList,
     SelectLesson,
     IconPlus2,
@@ -133,15 +136,19 @@ export default {
       general: "general",
       lesson: "lesson",
       lessons: "lessons",
+      progress: "progress",
+      disabled_all: "disabled_all",
     }),
   },
 
   methods: {
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.$emit("nextStep", "exam");
     },
@@ -158,16 +165,19 @@ export default {
     },
 
     handleShowFormAdd() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
     handleCancelAddCreate() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },
 
     handleNextStep() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 

@@ -118,6 +118,12 @@ export default {
     lesson: Object,
   },
 
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
+  },
+
   data() {
     return {
       isAddQuestionForm: false,
@@ -127,6 +133,7 @@ export default {
 
   methods: {
     toggleFormAdd() {
+      if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
     get,

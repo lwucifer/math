@@ -13,36 +13,41 @@
       class="font-weight-semi-bold"
       color="primary"
       size="md"
+      :disabled="disabled_all"
       @click="$emit('handleClick')"
-      ><IconPlus2 class="mr-2"/>{{ text }}</app-button
+      ><IconPlus2 class="mr-2" />{{ text }}</app-button
     >
   </div>
 </template>
 
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
-import IconPlus2 from '~/assets/svg/icons/plus2.svg?inline';
+import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconInfoCircle,
-    IconPlus2
+    IconPlus2,
   },
 
   props: {
     category: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
     text() {
       return get(this, "category", "") === "TEST"
         ? "Tạo bài kiểm tra"
         : "Tạo bài tập";
-    }
-  }
+    },
+  },
 };
 </script>

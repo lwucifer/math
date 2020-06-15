@@ -51,8 +51,8 @@ import IconArrowLeft from "~/assets/svg/design-icons/arrow-left.svg?inline";
 import IconDelete from "~/assets/svg/v2-icons/delete_sweep_2.svg?inline";
 import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
-
 import { get } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -60,6 +60,12 @@ export default {
     IconDelete,
     IconSave,
     Forward,
+  },
+
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
   },
 
   props: {
@@ -75,6 +81,7 @@ export default {
 
   methods: {
     handleCLickSave() {
+      if (this.disabled_all) return;
       this.$emit("handleCLickSave");
     },
 

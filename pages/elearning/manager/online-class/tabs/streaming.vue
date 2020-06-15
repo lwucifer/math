@@ -9,7 +9,7 @@
             class
             :placeholder="'Nhập để tìm kiếm...'"
             bordered
-            v-model="params.query"
+            v-model="query"
             :size="'sm'"
             @submit="submit"
             @keyup.enter.native="submit"
@@ -146,7 +146,10 @@ export default {
         search_type: null,
         sort: 'start_time,desc'
       },
-      loading: false
+      loading: false,
+      query: '',
+      query_date: '',
+      checkSubmit: false
     };
   },
   computed: {
@@ -158,8 +161,27 @@ export default {
       stateElearnings: "Elearnings"
     }),
     courseOpts() {
-      return [this.allOpt, ...this.courses]
+      let list = [];
+      let elearnings = get(this.stateElearnings, 'data', []);
+      elearnings.forEach(element => {
+        if (!element.is_hidden) {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        }
+      });
+      return [this.allOpt, ...list]
     }
+  },
+
+  watch: {
+    query() {
+      this.checkSubmit = true;
+    },
+    query_date() {
+      this.checkSubmit = true;
+    },
   },
 
   methods: {
@@ -188,7 +210,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.getList();
+      if (this.checkSubmit) {
+        this.getList();
+        this.checkSubmit = false;
+      }
     },
     handleChangedCourse() {
       this.params.elearning_id = this.filterCourse.value;
@@ -203,30 +228,7 @@ export default {
       });
     },
 
-    async getElearnings() {
-      try {
-        let userId = this.$store.state.auth.token
-          ? this.$store.state.auth.token.id
-          : "";
-        await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId, status: 'APPROVED'} }
-        );
-        let lessonList = this.get(this.stateElearnings, "data", []);
-        let list = [];
-        lessonList.forEach(element => {
-          if (!element.is_hidden) {
-            list.push({
-              value: element.id,
-              text: element.name
-            });
-          }
-        });
-        this.courses = list;
-      } catch (e) {
-      } finally {
-      }
-    },
+    
 
     formatAMPM(time) {
       let date = new Date(time.getTime() + 7*60*60*1000);
@@ -244,6 +246,8 @@ export default {
       try {
         self.loading = true;
         let params = { ...self.params };
+        if (this.query_date) params.query_date = this.query_date;
+        if (this.query) params.query = this.query;
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
@@ -302,7 +306,6 @@ export default {
 
   created() {
     this.getList();
-    this.getElearnings();
   }
 };
 </script>
