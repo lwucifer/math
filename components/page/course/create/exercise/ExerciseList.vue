@@ -8,10 +8,34 @@
         }"
       >
         <div class="cc-box__head-left">
-          <EditExerciseName
-            :exercise="get(this, 'exercise', {})"
-            :index="index"
-          />
+          <div class="ce-item__left d-flex align-items-center">
+            <div class="mr-3">
+              <h2 class="cc-box__title heading-6">
+                Bài {{ index + 1 }}:
+                {{
+                  get(exercise, "title", "").length > 40
+                    ? get(exercise, "title", "").slice(0, 40) + "..."
+                    : get(exercise, "title", "")
+                }}
+              </h2>
+            </div>
+            <button
+              class="cc-box__btn cc-box__btn-edit-hover mr-4"
+              @click="handleEditExercise"
+            >
+              <IconEditAlt class="icon d-block subheading fill-primary" />
+            </button>
+            <button
+              class="cc-box__btn cc-box__btn-edit-hover"
+              @click="handleDeleteExercise"
+            >
+              <IconTrashAlt
+                class="d-block subheading fill-secondary"
+                width="20px"
+                height="20px"
+              />
+            </button>
+          </div>
         </div>
 
         <div class="cc-box__head-right">
@@ -69,6 +93,13 @@
         </template>
       </div>
     </div>
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -88,6 +119,7 @@ import ListQuestion from "~/components/page/course/create/exercise/ListQuestion"
 import EditExerciseName from "~/components/page/course/create/exercise/EditExerciseName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
@@ -128,14 +160,53 @@ export default {
     return {
       isAddQuestionForm: false,
       isShowExercise: true,
+      isShowEditExercise: false,
+      showModalConfirm: false,
+      confirmLoading: false,
     };
   },
 
   methods: {
+    handleDeleteExercise() {
+      if (this.disabled_all) return;
+      this.showModalConfirm = true;
+    },
+
+    handleEditExercise() {
+      if (this.disabled_all) return;
+      this.isShowEditExercise = !this.isShowEditExercise;
+    },
+
     toggleFormAdd() {
       if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
+
+    async handleOk() {
+      this.confirmLoading = true;
+      const payload = {
+        id: get(this, "exercise.id", ""),
+      };
+      const result = await this.$store.dispatch(
+        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
+        payload
+      );
+      this.handleCancel();
+      if (get(result, "success", false)) {
+        this.$toasted.success(get(result, "message", ""));
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
+
+        return;
+      }
+      this.$toasted.error(get(result, "message", ""));
+    },
+
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     get,
   },
 };

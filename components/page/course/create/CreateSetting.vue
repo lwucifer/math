@@ -231,6 +231,8 @@ import IconWarning from "~/assets/svg/icons/warning.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 import SelectDate from "~/components/page/course/create/setting/SelectDate";
+import { getUTCDateTime, getUTCDateTimeHH_MM_A } from "~/utils/moment";
+import moment from "moment";
 
 export default {
   components: {
@@ -427,6 +429,15 @@ export default {
       }
 
       let payload = { ...this.payload };
+
+      let date_utc = getUTCDateTime(payload.end_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      payload.end_time = date_utc;
+      date_utc = getUTCDateTime(payload.start_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      payload.start_time = date_utc;
 
       if (this.disabled_all) {
         delete payload.privacy;
