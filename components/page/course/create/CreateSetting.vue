@@ -411,7 +411,31 @@ export default {
       if (this.payload.price == 0 && !this.free) {
         this.payload.price = this.payload.fee;
       }
-      const payload = createPayloadCourseSetting(this.payload, this.free);
+      if (this.payload.comment_allow !== "") {
+        this.payload.comment_allow =
+          this.payload.comment_allow == 1 ? true : false;
+      }
+
+      if (this.free == 1) {
+        this.payload.price = numeral(this.payload.price).value();
+        this.payload.fee = numeral(this.payload.fee).value();
+      }
+
+      if (this.free == 2) {
+        this.payload.price = 0;
+        this.payload.fee = 0;
+      }
+
+      let payload = { ...this.payload };
+
+      if (this.disabled_all) {
+        delete payload.privacy;
+        delete payload.endtime_enable;
+        delete payload.end_time;
+        delete payload.start_time;
+        delete payload.starttime_enable;
+      }
+
       const result = await this.$store.dispatch(
         `elearning/creating/creating-setting/${actionTypes.ELEARNING_CREATING_SETTING.ADD}`,
         payload
