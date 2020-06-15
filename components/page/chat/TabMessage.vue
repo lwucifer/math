@@ -673,7 +673,7 @@ export default {
         return {
           ...item,
           user: tmpUser,
-          user_id: tmpUser ? tmpUser.int_id.low : ""
+          user_id: tmpUser ? tmpUser.int_id : ""
         };
       });
       let filterData = [];
@@ -882,19 +882,23 @@ export default {
     },
     handleEmitMessage() {
       if (this.tag.length == 0) {
-        const dataEmit = {
-          room_id: this.$route.params.id,
-          text: this.textChat
-        };
-        this.setEmitMessage(dataEmit);
-        this.getRoomList();
+        if (this.textChat != "") {
+          const dataEmit = {
+            room_id: this.$route.params.id,
+            text: this.textChat
+          };
+          this.setEmitMessage(dataEmit);
+          this.getRoomList();
+        }
       } else if (this.tag.length == 1) {
-        const dataEmit = {
-          room_id: this.roomIdPush,
-          text: this.textChat
-        };
-        this.$emit("emitMessageTag1", dataEmit, this.roomIdPush);
-        this.setIsCreated(false);
+        if (this.textChat != "") {
+          const dataEmit = {
+            room_id: this.roomIdPush,
+            text: this.textChat
+          };
+          this.$emit("emitMessageTag1", dataEmit, this.roomIdPush);
+          this.setIsCreated(false);
+        }
         // this.$router.push(`/messages/t/${this.roomIdPush}`);
         // console.log("this.textChat", this.textChat);
         // const dataTextChat = this.textChat;
@@ -902,15 +906,22 @@ export default {
         // this.setEmitMessage(dataEmit);
         // this.getRoomList();
       } else {
-        const data = {
-          type: constants.CHAT.PUBLIC_GROUP,
-          members: this.tag.toString()
-        };
-        this.createRoom(data).then(result => {
-          if (result) {
-            this.setIsCreated(false);
-          }
-        });
+        if (this.textChat != "") {
+          const data = {
+            type: constants.CHAT.PUBLIC_GROUP,
+            member_ids: this.tag
+          };
+          this.createRoom(data).then(result => {
+            if (result.data) {
+              const dataEmit = {
+                room_id: result.data.id,
+                text: this.textChat
+              };
+              this.$emit("emitMessageTag2", dataEmit, this.roomIdPush);
+              this.setIsCreated(false);
+            }
+          });
+        }
       }
       this.textChat = "";
       // this.emitCloseFalse(false, this.isGroup);
@@ -1112,16 +1123,16 @@ export default {
         // this.messageQuery.fetch_type = null;
       }
     },
-    isCreated(_newVal) {
-      console.log("_newVal", _newVal);
-      if (_newVal == false && this.tag.length > 0) {
-        this.getMessageList({
-          params: {
-            room_id: this.$route.params.id
-          }
-        });
-      }
-    },
+    // isCreated(_newVal) {
+    //   console.log("_newVal", _newVal);
+    //   if (_newVal == false && this.tag.length > 0) {
+    //     this.getMessageList({
+    //       params: {
+    //         room_id: this.$route.params.id
+    //       }
+    //     });
+    //   }
+    // },
     messageRes(_newVal) {
       console.log("_newVal", _newVal);
       if (_newVal) {

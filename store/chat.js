@@ -301,11 +301,11 @@ const actions = {
     }
   },
 
-  async [actionTypes.CHAT.CREATE_ROOM]({ commit, state }, options) {
+  async [actionTypes.CHAT.CREATE_ROOM]({ commit, state }, payload) {
     try {
       const { data: result = {} } = await new Room(this.$axios)[
-        actionTypes.BASE.POST_END
-      ](options.payload, options.id, options.end);
+        actionTypes.BASE.ADD
+      ](payload);
       console.log("[CREATE_ROOM] list", result);
       return result;
     } catch (err) {
