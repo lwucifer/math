@@ -39,7 +39,9 @@
   import IconPlusCircle from '~/assets/svg/design-icons/plus-circle.svg?inline';
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import { mapState } from "vuex"
-  import * as actionTypes from "~/utils/action-types"
+  import * as actionTypes from "~/utils/action-types";
+
+  const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
   const Tab1 = () => import("./tabs/streaming")
   const Tab2 = () => import("./tabs/scheduled")
@@ -67,39 +69,22 @@
         // List of tabs
         const MATCHED_TABS = ['Tab1', 'Tab2', 'Tab3', 'Tab4']
         return (this.tab > 0) ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0]
-      }
+      },
+      ...mapState(STORE_PUBLIC_SEARCH, {
+        stateElearnings: "Elearnings"
+      }),
     },
 
-    methods: {
-      async getElearnings() {
-        try {
-          let userId = this.$store.state.auth.token
-            ? this.$store.state.auth.token.id
-            : "";
-          await this.$store.dispatch(
-            `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-            { params: {teacher_id: userId} }
-          );
-          let lessonList = this.get(this.stateElearnings, "data", []);
-          let list = [];
-          lessonList.forEach(element => {
-            if (!element.is_hidden) {
-              list.push({
-                value: element.id,
-                text: element.name
-              });
-            }
-          });
-          this.courses = list;
-        } catch (e) {
-        } finally {
-        }
-      },
+    // Get elearnings
+    async fetch({ params, query, store, route }) {
+      const userId = store.state.auth.token ? store.state.auth.token.id : "";
+      await Promise.all([
+        store.dispatch(`${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
+            { params: {teacher_id: userId, status: 'APPROVED'} }),
+      ]);
+    },
 
-      created () {
-        //this.getElearnings();
-      },
-    }
+    methods: {}
   };
 </script>
 

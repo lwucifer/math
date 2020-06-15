@@ -281,7 +281,7 @@ export default {
 
     covertPercent(row, feild) {
       return row.total_lesson_finished_from_joined_time ?
-             _.round(row[feild] / row.total_lesson_finished_from_joined_time * 100, 2) : 0;
+             _.round(row[feild] / row.total_lesson_finished_from_joined_time * 100, 0) : 0;
     },
 
     handleSort(e) {
