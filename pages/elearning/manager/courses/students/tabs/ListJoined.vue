@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <student-manager-filter-form @submitFilter="submitSearch" @changedType="changedType" />
+    <student-manager-filter-form 
+      @submitFilter="submitSearch" 
+      @changedType="changedType" 
+      @submitShowFilter="submitShowFilter"
+      :showFilter="showFilter"
+    />
     <student-manager-table
       :heads="heads"
       :list="filterDataList.content"
@@ -23,6 +28,7 @@ export default {
   },
   data() {
     return {
+      showFilter:false,
       heads: [
         {
           name: "name",
@@ -144,6 +150,9 @@ export default {
         };
         this.teachingElearningList(query);
       }
+    },
+    submitShowFilter(val){
+      this.showFilter=val
     }
   }
 };

@@ -5,7 +5,21 @@
         <IconPlay
           width="16px"
           height="16px"
-          v-if="get(lesson, 'type', '') == 'VIDEO'"
+          v-if="get(lesson, 'type', '') == videoType"
+          class="mr-2 fill-primary"
+        />
+
+        <IconHeadPhones
+          width="16px"
+          height="16px"
+          v-else-if="get(lesson, 'type', '') == audioType"
+          class="mr-2 fill-primary"
+        />
+
+        <IconScorm
+          width="16px"
+          height="16px"
+          v-else-if="get(lesson, 'type', '') == scormType"
           class="mr-2 fill-primary"
         />
 
@@ -44,8 +58,12 @@
 // import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconLibraryBooks from "~/assets/svg/icons/library-books.svg?inline";
 import IconPlay from "~/assets/svg/icons/play.svg?inline";
+import IconScorm from "~/assets/svg/v2-icons/scorm.svg?inline";
+import IconHeadPhones from "~/assets/svg/v2-icons/headphones.svg?inline";
+
 import { get } from "lodash";
 import { mapState } from "vuex";
+import { LESSION_TYPE } from '~/utils/constants';
 
 export default {
   components: {
@@ -53,6 +71,15 @@ export default {
     // IconAngleDown,
     IconLibraryBooks,
     IconPlay,
+    IconScorm,
+    IconHeadPhones,
+  },
+  data() {
+    return {
+      videoType: LESSION_TYPE.VIDEO,
+      audioType: LESSION_TYPE.AUDIO,
+      scormType: LESSION_TYPE.SCORM,
+    }
   },
   methods: {
     get,

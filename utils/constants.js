@@ -240,7 +240,9 @@ export const LESSION_TYPE = {
   ARTICLE: "ARTICLE",
   PDF: "PDF",
   TXT: "TXT",
-  IMAGE: "IMAGE"
+  IMAGE: "IMAGE",
+  SCORM: "SCORM",
+  AUDIO: "AUDIO",
 };
 
 export const SORT_ELEARNING = {
@@ -261,5 +263,5 @@ export const BANK_STATUS = {
 export const TYPE_TIME_TABLE = {
   OLCLASS: "OLCLASS",
   ELEARNING: "ELEARNING",
-  EXCERCISE: "EXCERCISE"
+  EXCERCISE: "EXERCISE"
 }

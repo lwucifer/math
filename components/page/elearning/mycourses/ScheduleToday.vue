@@ -150,10 +150,10 @@ export default {
     checkDate(d1) {
       // console.log('checkDate', d1)
       let date1 = moment(d1)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       let date2 = moment(this.dateSchedule)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       if (date1 == date2) {
         return true;
@@ -162,7 +162,7 @@ export default {
     changeDateInWeek(i) {
       console.log("changeDateInWeek1", i);
       this.dateSchedule = moment(i)
-        .format("YYYY-MM-DD h:mm:ss")
+        .format("YYYY-MM-DD")
         .toString();
       console.log("this.dateSchedule", this.dateSchedule);
       this.$emit("changeDateInWeek", this.dateSchedule);
