@@ -118,7 +118,11 @@
       <div class="d-flex align-items-center mb-5" v-if="typeRadio == 'weight'">
         <p class="mr-3">Nhập trọng số:</p>
 
-        <app-input class="mr-3 mb-0 w-80 pr-3" size="sm" v-model="payload.weight">
+        <app-input
+          class="mr-3 mb-0 w-80 pr-3"
+          size="sm"
+          v-model="payload.weight"
+        >
           <template slot="unit">
             <span class="text-primary">%</span>
           </template>
@@ -224,48 +228,6 @@
       </div>
     </div>
 
-    <!-- <div class="mb-4">
-      <h5 class="font-weight-bold mb-3">Cài đặt thời gian mở đề</h5>
-      <app-radio-group class="mb-4">
-        <app-radio
-          :checked="is_open === 1"
-          @click="is_open = 1"
-          name="group3"
-          value="1"
-          class="mr-4"
-          >Có</app-radio
-        >
-        <app-radio
-          :checked="is_open === 0"
-          @click="is_open = 0"
-          name="group3"
-          value="0"
-          >Không</app-radio
-        >
-      </app-radio-group>
-
-      <div v-if="is_open == 1" class="d-flex align-items-center">
-        <div class="mr-4">
-          <h6 class="mb-2">Chọn ngày</h6>
-          <app-date-picker
-            @input="handleSelectDate"
-            value-format="YYYY-MM-DD"
-          />
-        </div>
-
-        <div class="mr-4">
-          <h6 class="mb-2">Chọn giờ</h6>
-          <app-date-picker
-            @input="handleSelectTime"
-            type="time"
-            value-format="HH:mm a"
-          />
-        </div>
-
-        <IconEvent24px class="fill-primary mt-4" />
-      </div>
-    </div> -->
-
     <div class="d-flex justify-content-end">
       <app-button
         size="md"
@@ -283,7 +245,6 @@
         >Tạo bài kiểm tra</app-button
       >
     </div>
-
 
     <app-modal-confirm
       centered
@@ -329,7 +290,7 @@ export default {
   data() {
     return {
       payload: {
-        index: 1,
+        // index: 1,
         elearning_id: "",
         required: true,
         title: "",
@@ -385,8 +346,8 @@ export default {
       let data = { ...this.payload };
       if (!data.open_time) delete data.open_time;
       if (!data.close_time) delete data.close_time;
-      if (this.typeRadio === 'coefficient') delete data.weight
-      if (this.typeRadio === 'weight') delete data.coefficient
+      if (this.typeRadio === "coefficient") delete data.weight;
+      if (this.typeRadio === "weight") delete data.coefficient;
 
       const res = await this.$axios({
         url: "/elearning/creating/test",

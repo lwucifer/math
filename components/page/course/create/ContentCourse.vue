@@ -62,7 +62,7 @@
           <app-button
             class="create-action__btn mr-4"
             @click="handleNextStep"
-            :disabled="!isNextStep"
+            :disabled="!isNextStep || disabled_all"
             ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
           >
         </div>
@@ -142,15 +142,12 @@ export default {
     };
   },
 
-  // mounted() {
-  //   this.$store.dispatch(`elearning/create/getContent`);
-  // },
-
   computed: {
     ...mapState("elearning/create", {
       general: "general",
       progress: "progress",
       chapters: "chapters",
+      disabled_all: "disabled_all",
     }),
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
@@ -163,19 +160,23 @@ export default {
     get,
 
     handleNextStep() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.$emit("nextStep", "settings");
     },
 
     toggleAddChapter() {
+      if (this.disabled_all) return;
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
     },
   },

@@ -77,6 +77,7 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      disabled_all: "disabled_all",
     }),
     lessons() {
       let lessons = cloneDeep(get(this, "chapter.lessons", []));
@@ -110,6 +111,7 @@ export default {
     },
 
     toggleShowAddLesson() {
+      if (this.disabled_all) return;
       this.isShowCreateLessonOfChapter = !this.isShowCreateLessonOfChapter;
     },
   },

@@ -21,7 +21,7 @@
       <div
         class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
       >
-        <button class="mr-3" @click="isShowEditQuestion = !isShowEditQuestion">
+        <button class="mr-3" @click="handleEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
@@ -128,6 +128,7 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
+      disabled_all: "disabled_all",
     }),
 
     limit() {
@@ -138,7 +139,13 @@ export default {
   },
 
   methods: {
+    handleEditQuestion() {
+      if (this.disabled_all) return;
+      this.isShowEditQuestion = !this.isShowEditQuestion;
+    },
+
     handleDeleteQuestion() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 

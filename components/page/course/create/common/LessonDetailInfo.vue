@@ -63,7 +63,7 @@ import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inl
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
-
+import { mapState } from "vuex";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
@@ -86,6 +86,9 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
     thumnail() {
       return get(this, "lesson.type", "") === "VIDEO"
         ? "/images/thumnail-video.png"
@@ -109,15 +112,18 @@ export default {
   methods: {
     handleEditLesson($event) {
       $event.preventDefault();
+      if (this.disabled_all) return;
       this.$emit("handleEditLesson", this.lesson);
     },
 
     async handleDeleteLesson($event) {
       $event.preventDefault();
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (this.disabled_all) return;
       this.confirmLoading = true;
       const options = {
         data: {
@@ -141,6 +147,7 @@ export default {
     },
 
     handleCancelModal() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },

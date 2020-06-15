@@ -1,7 +1,12 @@
 <template>
   <div class="cc-panel__body-modifer">
     <div class="cc-box">
-      <div class="cc-box__head" :class="{'add-border-bottom': get(exercise, 'questions', []).length > 0}">
+      <div
+        class="cc-box__head"
+        :class="{
+          'add-border-bottom': get(exercise, 'questions', []).length > 0,
+        }"
+      >
         <div class="cc-box__head-left">
           <EditExerciseName
             :exercise="get(this, 'exercise', {})"
@@ -15,23 +20,33 @@
             @click.prevent="toggleFormAdd"
             class="text-primary d-flex align-items-center"
           >
-            <IconPlus2 class="mr-3 fill-primary" /> <span class="font-weight-semi-bold">Thêm câu hỏi</span>
+            <IconPlus2 class="mr-3 fill-primary" />
+            <span class="font-weight-semi-bold">Thêm câu hỏi</span>
           </button>
-          
+
           <button
             class="cc-box__btn cc-box__btn-collapse"
             @click="isShowExercise = !isShowExercise"
           >
-            <IconAngleDown  width="20px" height="20px" class="icon fill-primary" v-if="!isShowExercise" />
-            <IconAngleUp  width="20px" height="20px" class="icon fill-primary" v-else />
+            <IconAngleDown
+              width="20px"
+              height="20px"
+              class="icon fill-primary"
+              v-if="!isShowExercise"
+            />
+            <IconAngleUp
+              width="20px"
+              height="20px"
+              class="icon fill-primary"
+              v-else
+            />
           </button>
         </div>
       </div>
 
-
       <div
         class="cc-box__body"
-        :class="{ 'add-background': isAddQuestionForm, 'py-0' : toggleFormAdd }"
+        :class="{ 'add-background': isAddQuestionForm, 'py-0': toggleFormAdd }"
       >
         <CreateQuestionChoice
           v-if="isAddQuestionForm && get(exercise, 'type', '') === 'CHOICE'"
@@ -66,7 +81,6 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
-
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
@@ -104,6 +118,12 @@ export default {
     lesson: Object,
   },
 
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
+  },
+
   data() {
     return {
       isAddQuestionForm: false,
@@ -113,6 +133,7 @@ export default {
 
   methods: {
     toggleFormAdd() {
+      if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
     get,

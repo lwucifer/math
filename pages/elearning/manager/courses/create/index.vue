@@ -42,6 +42,7 @@ import * as actionTypes from "~/utils/action-types";
 import { getParamQuery, useEffect } from "~/utils/common";
 import { mapState } from "vuex";
 import { VclFacebook } from "vue-content-loading";
+import { get } from "lodash";
 
 export default {
   layout: "manage",
@@ -61,15 +62,18 @@ export default {
     return {
       formActive: "general",
       loading: true,
+      redirect: true,
     };
   },
 
   mounted() {
     useEffect(this, this.handleGetData.bind(this), [""]);
+
     useEffect(this, this.handleChangeContent.bind(this), [
       "lessons_lecture",
       "chapters",
     ]);
+
     useEffect(this, this.handleUpdateProgress.bind(this), [
       "general",
       "lessons_lecture",
@@ -89,6 +93,18 @@ export default {
     window.removeEventListener("beforeunload", this.preventNav);
   },
 
+  watch: {
+    disabled_all: {
+      handler: function() {
+        if (this.disabled_all && this.redirect) {
+          this.formActive = "settings";
+          this.redirect = false;
+        }
+      },
+      deep: true,
+    },
+  },
+
   computed: {
     ...mapState("elearning/create", {
       general: "general",
@@ -99,6 +115,7 @@ export default {
       lessons: "lessons",
       exams: "exams",
       lesson: "lesson",
+      disabled_all: "disabled_all",
     }),
   },
 
@@ -108,11 +125,13 @@ export default {
         this.$store.dispatch("elearning/create/getProgress");
       }
     },
+
     handleChangeContent() {
       if (!this.loading) {
         this.$store.dispatch("elearning/create/getLessons");
       }
     },
+
     async handleGetData() {
       this.loading = true;
       this.$store.dispatch("elearning/create/reset");
@@ -132,10 +151,12 @@ export default {
       await this.$store.dispatch("elearning/create/getProgress");
       this.loading = false;
     },
+
     nextStep(active) {
       this.formActive = active;
       window.scrollTo(0, 0);
     },
+
     preventNav(event) {
       event.preventDefault();
       event.returnValue = "";
