@@ -13,7 +13,7 @@
             to 
             :class="tab=='intro' ?  'active' : ''" 
         >
-            Giới thiệu
+            Giới thiệu <IconCaretDownThin class="ml-2"/>
         </n-link>
     </span> 
     <span  @click.prevent="changeTab('courses')">
@@ -37,9 +37,17 @@
             to=""
             :class="tab=='news' ?  'active' : ''" 
         >
-            Tin tức - Sự kiện
+            Tin tức - Sự kiện <IconCaretDownThin class="ml-2"/>
         </n-link>
-    </span> 
+    </span>
+    <span @click.prevent="changeTab('schedule')">
+        <n-link 
+            to=""
+            :class="tab=='schedule' ?  'active' : ''" 
+        >
+            Thời khóa biểu
+        </n-link>
+    </span>
   </div>
 </template>
 
