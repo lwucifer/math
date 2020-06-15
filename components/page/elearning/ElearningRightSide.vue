@@ -63,7 +63,7 @@
         class="text-uppercase mt-3 mb-3"
         v-if="isDoneElearning"
       >
-        <IconDone24px /> &nbsp; {{ title.toUpperCase() }} ĐÃ HOÀN THÀNH
+        <IconDone24px /> &nbsp; ĐÃ HOÀN THÀNH {{ title.toUpperCase() }}
       </app-button>
     </div>
 
