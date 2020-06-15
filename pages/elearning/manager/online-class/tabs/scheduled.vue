@@ -178,7 +178,17 @@ export default {
       stateElearnings: "Elearnings"
     }),
     courseOpts() {
-      return [this.allOpt, ...this.courses]
+      let list = [];
+      let elearnings = get(this.stateElearnings, 'data', []);
+      elearnings.forEach(element => {
+        if (!element.is_hidden) {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        }
+      });
+      return [this.allOpt, ...list]
     }
   },
 
@@ -221,31 +231,6 @@ export default {
       this.ids = data.map((row, index, data) => {
         return row.online_class_id;
       });
-    },
-
-    async getElearnings() {
-      try {
-        let userId = this.$store.state.auth.token
-          ? this.$store.state.auth.token.id
-          : "";
-        await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
-        );
-        let lessonList = this.get(this.stateElearnings, "data", []);
-        let list = [];
-        lessonList.forEach(element => {
-          if (!element.is_hidden) {
-            list.push({
-              value: element.id,
-              text: element.name
-            });
-          }
-        });
-        this.courses = list;
-      } catch (e) {
-      } finally {
-      }
     },
 
     async getList() {
@@ -310,7 +295,6 @@ export default {
 
   created() {
     this.getList();
-    this.getElearnings();
   }
 };
 </script>

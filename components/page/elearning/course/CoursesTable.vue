@@ -1,6 +1,6 @@
 <template>
   <div class="elearning-history__main">
-    <div class="pl-4 pr-4">
+    <div>
       <div class="d-flex-center">
         <div class="filter-form__item mb-15" style="max-width: 36rem; min-width: 30rem">
           <div style="width: 100%">
@@ -8,10 +8,10 @@
               class
               :placeholder="'Nhập để tìm kiếm...'"
               bordered
-              v-model="params.keyword"
+              v-model="keyword"
               :size="'sm'"
-              @submit="getList"
-              @keyup.enter.native="getList"
+              @submit="search"
+              @keyup.enter.native="search"
             ></app-search>
           </div>
         </div>
@@ -417,7 +417,14 @@ export default {
         page: 1,
         limit: 10,
         sorted: "publish_date_desc"
-      }
+      },
+      filters: {
+        type: null,
+        free: null,
+        privacy: null
+      },
+      keyword: '',
+      keywordCheck: false
     };
   },
 
@@ -461,23 +468,14 @@ export default {
       this.showTable = true;
       this.getList();
     },
-    selectPrivacy: {
+    filters: {
       handler: function(newValue, oldValue) {
         this.getList();
       },
       deep: true
     },
-    selectFree: {
-      handler: function(newValue, oldValue) {
-        this.getList();
-      },
-      deep: true
-    },
-    selectType: {
-      handler: function(newValue, oldValue) {
-        this.getList();
-      },
-      deep: true
+    keyword() {
+      this.keywordCheck = true;
     }
   },
 
@@ -485,6 +483,13 @@ export default {
     numeral,
     getDateBirthDay,
     getDateBirthDayUTC,
+
+    search () {
+      if(this.keywordCheck) {
+        this.getList();
+        this.keywordCheck = false;
+      }
+    },
 
     handleSort(e) {
       const sortBy = e.sortBy + "_" + e.order;
@@ -500,13 +505,15 @@ export default {
       this.openModal = false;
       if (e);
     },
+
     toggleFilter() {
       if (this.showFilter) {
         this.selectType = null;
         this.selectPrivacy = null;
         this.selectFree = null;
-        this.params = { ...this.params, type: null, privacy: null, free: null };
-        this.getList();
+        if (this.filters.type != null || this.filters.privacy != null || this.filters.free != null) {
+          this.filters = { type: null, privacy: null, free: null };
+        }
       }
       this.showFilter = !this.showFilter;
     },
@@ -517,13 +524,13 @@ export default {
     },
 
     handleChangedType() {
-      this.params.type = this.selectType.value;
+      this.filters.type = this.selectType.value;
     },
     handleChangedFree() {
-      this.params.free = this.selectFree.value;
+      this.filters.free = this.selectFree.value;
     },
     handleChangedPrivacy() {
-      this.params.privacy = this.selectPrivacy.value;
+      this.filters.privacy = this.selectPrivacy.value;
     },
 
     handleEditElearning(elearning) {
@@ -548,7 +555,7 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        let params = { ...this.params };
+        let params = { ...this.params, ...this.filters, keyword: this.keyword };
         params.status = this.tab;
         params.hide = this.tab == null;
 
