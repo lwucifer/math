@@ -10,7 +10,7 @@
       <div class="cc-box">
         <div class="cc-box__head">
           <div class="cc-box__head-left flex-grow">
-            <EditCourseName :defaultName="get(this, 'general.name', '')" />
+            <EditLectureName :defaultName="get(this, 'general.name', '')" />
           </div>
 
           <div class="cc-box__head-right">
@@ -118,7 +118,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
-import EditCourseName from "~/components/page/course/create/common/EditCourseName";
+import EditLectureName from "~/components/page/course/create/lecture/EditLectureName";
 
 export default {
   components: {
@@ -135,7 +135,7 @@ export default {
     CreateAction,
     CreateLessonOfElearning,
     LessonDetail,
-    EditCourseName,
+    EditLectureName,
     IconAngleUp,
     IconAdd,
     IconDelete,
