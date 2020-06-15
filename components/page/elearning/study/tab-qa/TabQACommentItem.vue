@@ -133,10 +133,11 @@
 <script>
 import IconThumbUp from "~/assets/svg/v2-icons/thumb_up_24px.svg?inline";
 import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
-import { get } from "lodash";
-import numeral from "numeral";
+import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
 import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
+import { get } from "lodash";
+import numeral from "numeral";
 import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
@@ -145,7 +146,6 @@ import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { getBase64 } from "~/utils/common";
-import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 
 export default {
   components: {
@@ -282,7 +282,6 @@ export default {
       ](this.queryUpdateQuestion, this.image);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
-        this.reset();
         this.getQuestions();
         return;
       }
@@ -304,7 +303,7 @@ export default {
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
-    async handleSaveUpdate(level, _question){
+    handleSaveUpdate(level, _question){
       // console.log('_question',_question)
       // console.log('questionId',this.questionId)
       this.queryUpdateQuestion.content = this.content;
@@ -323,19 +322,45 @@ export default {
       console.log('confirmModal', _id)
       this.modalConfirmSubmit = false;
       if (this.level == 1) {
-        this.deleteQuestion();
+        this.deleteQuestion(_id);
       }
       if (this.level == 2) {
-        this.deleteAnswer();
+        this.deleteAnswer(_id);
       }
     },
 
-    deleteQuestion(){
-
+    async deleteQuestion(_id){
+      const res = await new InteractiveQuestionService(this.$axios)["deleteQuestion"]({
+        question_id: _id
+      });
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
-    deleteAnswer(){
+    async deleteAnswer(_id){
+      const res = await new InteractiveAnswer(this.$axios)["deleteAnswerOfQuestion"]({
+        answer_id: _id
+      });
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions(_id);
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
 
+    reset() {
+      this.queryUpdateQuestion.content = "";
+      this.queryUpdateAnswer.content = "";
+      this.image = "";
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
     },
 
     handleFeedBack(){
