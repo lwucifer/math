@@ -30,7 +30,7 @@
           :category="category"
         />
 
-        <FormCreateExercise
+        <AddExercise
           v-if="isShowFormAdd"
           @cancel="handleCancelAddCreate"
           :lesson="lesson"
@@ -82,7 +82,7 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 import { VclFacebook } from "vue-content-loading";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import AddExercise from "~/components/page/course/create/exercise/AddExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -102,7 +102,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExercise,
-    FormCreateExercise,
+    AddExercise,
     ExerciseList,
     SelectLesson,
     IconPlus2,

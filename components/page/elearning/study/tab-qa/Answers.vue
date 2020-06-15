@@ -2,8 +2,8 @@
   <div>
     <div>
       <TabQACommentItem
-        :question="ans"
         v-for="(ans, index) in visibleAnswers"
+        :question="ans"
         :level="2"
         :key="index"
       />
