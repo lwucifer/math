@@ -49,7 +49,10 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button class="create-action__btn mr-4" @click="handleNextStep"
+        <app-button
+          class="create-action__btn mr-4"
+          @click="handleNextStep"
+          :disabled="disabled_all"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -133,15 +136,19 @@ export default {
       general: "general",
       lesson: "lesson",
       lessons: "lessons",
+      progress: "progress",
+      disabled_all: "disabled_all",
     }),
   },
 
   methods: {
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.$emit("nextStep", "exam");
     },
@@ -158,16 +165,19 @@ export default {
     },
 
     handleShowFormAdd() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
     handleCancelAddCreate() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },
 
     handleNextStep() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 

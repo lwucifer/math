@@ -17,7 +17,7 @@
           class="cgi-demo-benefit d-flex justify-content-between align-items-center"
         >
           <div class="cgi-demo-text d-flex align-items-center">
-            <IconCheckCircle class="mr-2"/>
+            <IconCheckCircle class="mr-2" />
             <p class="text-benefit" v-html="item" />
           </div>
 
@@ -131,19 +131,6 @@ export default {
     };
   },
 
-  // watch: {
-  //   benefit: {
-  //     handler: function() {
-  //       if (!this.benefit.length) {
-  //         this.error = "Chưa thêm lợi ích";
-  //       } else {
-  //         this.error = "";
-  //       }
-  //     },
-  //     deep: true,
-  //   },
-  // },
-
   methods: {
     removeBenefit(index) {
       this.$emit("removeBenefit", index);
@@ -155,6 +142,7 @@ export default {
     },
 
     addBenefit(html) {
+      if (this.disabled_all) return;
       if (this.benefit.length < 10 && this.benefitEditorValue) {
         this.$emit("addBenefit", html);
         this.benefitEditorValue = "";

@@ -274,6 +274,7 @@ export default {
       general: "general",
       progress: "progress",
       setting: "setting",
+      disabled_all: "disabled_all",
     }),
     submit() {
       if (this.payload.comment_allow === "") return false;
@@ -380,14 +381,6 @@ export default {
       }
     },
 
-    // handleSetPercent() {
-    //   const _fee = numeral(get(this, "payload.fee", 0)).value();
-    //   const _price = numeral(get(this, "payload.price", 0)).value();
-    //   if (_fee && _price) {
-    //     this.percent_price = numeral((_price - _fee) / _fee).format("0%");
-    //   }
-    // },
-
     handleCLickSave() {
       if (!this.submit) {
         this.$toasted.error("Bạn chưa thiết lập xong cài đặt");
@@ -433,7 +426,7 @@ export default {
       if (get(result, "success", false)) {
         this.$store.dispatch(`elearning/create/getSetting`);
         this.$toasted.success(get(result, "message", "Thành công"));
-        if (this.nextStep) {
+        if (this.nextStep && !this.disabled_all) {
           this.$emit("nextStep", "exercise");
         }
         return;

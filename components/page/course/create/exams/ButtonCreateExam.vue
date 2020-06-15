@@ -14,6 +14,7 @@
       color="primary"
       size="md"
       @click="$emit('handleClick')"
+      :disabled="disabled_all"
       ><IconPlus2 class="mr-2" />Tạo bài kiểm tra</app-button
     >
   </div>
@@ -23,11 +24,19 @@
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
 import { get } from "lodash";
+import { getParamQuery, useEffect } from "~/utils/common";
+import { mapState } from "vuex";
 
 export default {
   components: {
     IconInfoCircle,
     IconPlus2,
+  },
+
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
   },
 };
 </script>

@@ -37,7 +37,10 @@
               :defaultValue="payload.level"
               @handleChangeLevel="handleChangeLevel"
             />
-            <app-error class="mt-2" :error="get(error, 'level', '')"></app-error>
+            <app-error
+              class="mt-2"
+              :error="get(error, 'level', '')"
+            ></app-error>
           </div>
 
           <div class="col-md-5 ml-5 mb-4">
@@ -45,66 +48,12 @@
               :defaultValue="payload.subject"
               @handleChangeSubject="handleChangeSubject"
             />
-            <app-error class="mt-2" :error="get(error, 'subject', '')"></app-error>
+            <app-error
+              class="mt-2"
+              :error="get(error, 'subject', '')"
+            ></app-error>
           </div>
         </div>
-
-        <!-- <div class="setup-time mt-4 mb-6">
-          <h5 class="mb-4">
-            Cài đặt thời gian
-            <span class="text-base font-weight-normal">(Không bắt buộc)</span>
-          </h5>
-
-          <div class="d-flex align-items-center mb-3">
-            <p class="w-120">Thời gian bắt đầu:</p>
-
-            <app-date-picker
-              size="sm"
-              placeholder="dd/mm/yyyy"
-              value-type="DD-MM-YYYY"
-              class="mr-3"
-            >
-              <template v-slot:icon-calendar>
-                <IconCalender class="fill-primary" />
-              </template>
-            </app-date-picker>
-
-            <app-date-picker
-              size="sm"
-              type="time"
-              placeholder="HH:mm"
-              value-format="HH:mm"
-              class="ml-0 mr-6"
-            />
-
-            <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <p class="w-120">Thời gian kết thúc:</p>
-
-            <app-date-picker
-              size="sm"
-              placeholder="dd/mm/yyyy"
-              value-type="DD-MM-YYYY"
-              class="mr-3"
-            >
-              <template v-slot:icon-calendar>
-                <IconCalender class="fill-primary" />
-              </template>
-            </app-date-picker>
-
-            <app-date-picker
-              size="sm"
-              type="time"
-              placeholder="HH:mm"
-              value-format="HH:mm"
-              class="ml-0 mr-6"
-            />
-
-            <app-checkbox><span class="text-base">Áp dụng</span></app-checkbox>
-          </div>
-        </div> -->
 
         <div class="cgi-form-group mb-4">
           <h2 class="cgi-form-title heading-6 mb-3">
@@ -186,22 +135,10 @@
 
     <div class="create-action mt-5">
       <div class="create-action__right d-flex align-items-center">
-        <!-- <app-button
-          outline
-          class="mr-4"
-          @click="handleReset"
-          color="error"
-          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
-        >
         <app-button
-          class="mr-4"
-          color="primary"
-          outline
-          @click="handleCLickSave('draft')"
-          :disabled="!submit"
-          ><IconSave class="mr-2" /> Lưu nháp</app-button
-        > -->
-        <app-button @click="handleCLickSave" class="create-action__btn mr-4"
+          @click="handleCLickSave"
+          :disabled="disabled_all"
+          class="create-action__btn mr-4"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -290,6 +227,8 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
+      progress: "progress",
+      disabled_all: "disabled_all",
     }),
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
