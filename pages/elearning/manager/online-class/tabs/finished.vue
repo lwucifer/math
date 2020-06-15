@@ -5,7 +5,7 @@
         <div class="d-flex">
       <div class="filter-form__item">
         <app-date-picker
-          v-model="params.query_date"
+          v-model="query_date"
           square
           size="sm"
           placeholder="dd/mm/yyyy"
@@ -22,7 +22,7 @@
             class
             :placeholder="'Nhập để tìm kiếm...'"
             bordered
-            v-model="params.query"
+            v-model="query"
             :size="'sm'"
             @submit="submit"
             @keyup.enter.native="submit"
@@ -104,6 +104,9 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get, reduce } from "lodash";
 import { useEffect } from "~/utils/common";
+import {
+  getUTCDateTime
+} from "~/utils/moment";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
@@ -122,7 +125,7 @@ export default {
         value: null,
         text: 'Tất cả'
       },
-       showModalConfirm: false,
+      showModalConfirm: false,
       loading: false,
       showFilter: false,
       courses: [],
@@ -147,6 +150,9 @@ export default {
         search_type: null,
         sort: 'start_time,desc'
       },
+      query: '',
+      query_date: '',
+      checkSubmit: false
     };
   },
   computed: {
@@ -158,11 +164,32 @@ export default {
       stateElearnings: "Elearnings"
     }),
     courseOpts() {
-      return [this.allOpt, ...this.courses]
+      let list = [];
+      let elearnings = get(this.stateElearnings, 'data', []);
+      elearnings.forEach(element => {
+        if (!element.is_hidden) {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        }
+      });
+      return [this.allOpt, ...list]
     }
   },
 
+  watch: {
+    query() {
+      this.checkSubmit = true;
+    },
+    query_date() {
+      this.checkSubmit = true;
+    },
+  },
+
   methods: {
+    getUTCDateTime,
+    
     handleSort(e) {
       const sortBy = e.sortBy + ',' + e.order;
       this.params = {...this.params, sort: sortBy};
@@ -187,9 +214,14 @@ export default {
       that.params.page = that.pagination.number + 1;
       that.getList();
     },
+
     submit() {
-      this.getList();
+      if (this.checkSubmit) {
+        this.getList();
+        this.checkSubmit = false;
+      }
     },
+    
     handleChangedCourse(val) {
       this.params.elearning_id = this.filterCourse.value;
       this.getList();
@@ -201,36 +233,13 @@ export default {
       });
     },
 
-    async getElearnings() {
-      try {
-        let userId = this.$store.state.auth.token
-          ? this.$store.state.auth.token.id
-          : "";
-        await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
-        );
-        let lessonList = this.get(this.stateElearnings, "data", []);
-        let list = [];
-        lessonList.forEach(element => {
-          if (!element.is_hidden) {
-            list.push({
-              value: element.id,
-              text: element.name
-            });
-          }
-        });
-        this.courses = list;
-      } catch (e) {
-      } finally {
-      }
-    },
-
     async getList() {
       const self = this;
       try {
         self.loading = true;
-        let params = { ...self.params };
+        let params = { ...self.params};
+        if (this.query_date) params.query_date = this.query_date;
+        if (this.query) params.query = this.query;
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
@@ -283,7 +292,6 @@ export default {
 
   created() {
     this.getList();
-    this.getElearnings();
   }
 };
 </script>

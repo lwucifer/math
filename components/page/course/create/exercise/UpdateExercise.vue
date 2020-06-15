@@ -2,7 +2,7 @@
   <div class="cc-panel__body">
     <div class="mb-4">
       <h5 for="title" class="mb-3 d-inline-block">
-        Tiêu đề {{ title }}
+        Tiêu đề bài tập
         <span class="caption text-base font-weight-normal"
           >(Tối đa 60 ký tự)</span
         >
@@ -10,44 +10,47 @@
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
-    <div class="mb-4" v-show="category === 'EXERCISE'">
-      <h5 for="require" class="mb-3">{{ title_required }}</h5>
+    <div class="mb-4">
+      <h5 for="require" class="mb-3">Bài tập bắt buộc?</h5>
 
       <app-radio-group>
         <app-radio
           name="group1"
           value="1"
           class="mr-4"
-          :checked="payload.required === 1"
-          @click="payload.required = 1"
+          :checked="payload.required === true"
+          @click="payload.required = true"
           >Có</app-radio
         >
         <app-radio
           name="group1"
           value="0"
-          :checked="payload.required === 0"
-          @click="payload.required = 0"
+          :checked="payload.required === false"
+          @click="payload.required = false"
           >Không</app-radio
         >
       </app-radio-group>
     </div>
 
     <div class="mb-4">
-      <h5 for="require" class="mb-3">Loại {{ title }}</h5>
+      <h5 for="require" class="mb-3">Loại bài tập</h5>
 
       <app-radio-group>
         <app-radio
           name="group2"
           value="CHOICE"
-          class="mr-4"
+          class="mr-4 disabled-input"
           :checked="payload.type === 'CHOICE'"
+          :disabled="true"
           @click="payload.type = 'CHOICE'"
           >Trắc nghiệm</app-radio
         >
         <app-radio
           name="group2"
           value="ESSAY"
+          class="disabled-input"
           :checked="payload.type === 'ESSAY'"
+          :disabled="true"
           @click="payload.type = 'ESSAY'"
           >Tự luận</app-radio
         >
@@ -123,14 +126,13 @@
         size="md"
         color="primary"
         class="font-weight-semi-bold"
-        @click="handleAddExcercise"
+        @click="handleUpdateExercise"
         :disabled="disabled_all"
-        >Tạo {{ title }}</app-button
+        >Sửa bài tập</app-button
       >
     </div>
     <app-modal-confirm
-      title="Bạn muốn tạo bài tập?"
-      description="Bạn sẽ không thể thay đổi loại bài tập sau khi tạo."
+      title="Bạn muốn sửa bài tập?"
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
@@ -143,7 +145,7 @@
 <script>
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery } from "~/utils/common";
+import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
@@ -158,36 +160,33 @@ export default {
       type: Object,
       default: null,
     },
-    category: {
-      type: String,
-      default: "",
-    },
+    exercise: {},
   },
 
   computed: {
     ...mapState("elearning/create", {
       disabled_all: "disabled_all",
     }),
-    title() {
-      return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
-    },
-    title_required() {
-      return get(this, "category", "") === "TEST"
-        ? "Bài kiểm tra bắt buộc?"
-        : "Bài tập bắt buộc?";
-    },
+  },
+
+  mounted() {
+    useEffect(this, this.watchLessonAndExercise.bind(this), [
+      "lesson",
+      "exercise",
+    ]);
   },
 
   data() {
     return {
       payload: {
-        index: 1,
+        // index: 1,
         lesson_id: "",
-        required: get(this, "category", "") === "TEST" ? 1 : "",
+        required: "",
         title: "",
         type: "",
         pass_score: 0,
         reworks: 1,
+        id: "",
         duration: 0,
         category: this.category,
       },
@@ -197,7 +196,13 @@ export default {
   },
 
   methods: {
-    async handleAddExcercise() {
+    watchLessonAndExercise() {
+      this.payload = { ...this.exercise };
+      this.payload.lesson_id = get(this, "lesson.id", "");
+    },
+
+    async handleUpdateExercise() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
@@ -206,18 +211,23 @@ export default {
 
       this.payload.lesson_id = get(this, "lesson.id", "");
 
-      const payload = createPayloadExercise(this.payload);
-      const res = await this.$store.dispatch(
-        `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.ADD}`,
-        payload
-      );
+      let payload = { ...this.payload };
+      delete payload.category;
+
+      const res = await this.$axios({
+        url: "elearning/creating/exercises",
+        method: "PUT",
+        data: payload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       this.handleCancel();
-      if (get(res, "success", false)) {
-        this.$toasted.success(get(res, "message", ""));
-        // this.$store.dispatch(`elearning/create/getProgress`);
+      if (get(res, "data.success", false)) {
+        this.$toasted.success(get(res, "message", "Thành công"));
 
-        if (get(this, "category", "") === "TEST") {
+        if (get(this, "data.category", "") === "TEST") {
           this.$store.dispatch("elearning/create/getExams");
         } else {
           const lesson_id = get(this, "lesson.id", "");
@@ -228,7 +238,7 @@ export default {
         return;
       }
 
-      this.$toasted.error(get(res, "message", ""));
+      this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
     },
 
     handleCancel() {
