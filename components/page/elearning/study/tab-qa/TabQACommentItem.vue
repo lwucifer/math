@@ -28,7 +28,10 @@
       <!-- <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div> -->
 
       <div class="tab-qa-comment-item__content">
-        <div v-html="get(question, 'content', '')" class="word-break-all"></div>
+        <div v-if="!showInputUpdate" v-html="get(question, 'content', '')" class="word-break-all"></div>
+        <div v-else>
+          <!-- show content update -->
+        </div>
         <img
           v-if="get(question, 'image_url', '')"
           class="tab-qa-comment-item__img d-block"
@@ -53,7 +56,23 @@
         >
           Phản hồi
         </button>
+        <a class="action item-edit" @click.prevent="handleUpdate">
+          <IconEdit class="icon fill-primary" />
+          <span>Chỉnh sửa</span>
+        </a>
+        <a class="action item-delete" @click.prevent="modalConfirmSubmit = true">
+          <IconTrashAlt class="icon fill-secondary" />
+          <span>Xóa</span>
+        </a>
       </div>
+      <app-modal-confirm
+        v-if="modalConfirmSubmit"
+        title="Bạn chắc chắn muốn xoá bình luận"
+        description="Bạn chắc chắn muốn xoá bình luận?"
+        @cancel="modalConfirmSubmit = false"
+        @ok="handleQuestionSubmission(question)"
+        @close="modalConfirmSubmit = false"
+      ></app-modal-confirm>
 
       <slot v-bind="{ showReply }" />
     </div>
@@ -67,17 +86,23 @@ import { get } from "lodash";
 import numeral from "numeral";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
 import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
+import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
+import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 
 export default {
   components: {
     IconThumbUp,
     IconAccessTime,
+    IconEdit,
+    IconTrashAlt
   },
 
   data() {
     return {
       showReply: false,
       submit: true,
+      modalConfirmSubmit: false,
+      showInputUpdate: false,
     };
   },
 
@@ -158,6 +183,12 @@ export default {
         `elearning/study/detail/getListQuestion`,
         options
       );
+    },
+    handleUpdate(){
+      this.showInputUpdate = true;
+    },
+    handleQuestionSubmission(question) {
+      console.log('handleQuestionSubmission', question)
     },
     get,
     numeral,
