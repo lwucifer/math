@@ -29,11 +29,54 @@
 
       <div class="tab-qa-comment-item__content">
         <div v-if="!showInputUpdate" v-html="get(question, 'content', '')" class="word-break-all"></div>
-        <div v-else>
           <!-- show content update -->
+          <div v-else class="tab-qa-comment-editor" style="align-items: center">
+          <!-- <app-avatar :size="30" :src="get(user_login, 'avatar.low', '')" /> -->
+
+          <div class="tab-qa-comment-editor__right">
+            <div class="tab-qa-comment-editor__editor-wrapper">
+              <client-only>
+                <editor-content
+                  :editor="editor"
+                  class="editor tab-qa-comment-editor__editor"
+                  v-model="content"
+                />
+              </client-only>
+
+              <app-upload
+                :fileList="uploadFileList"
+                accept="image/*, image/heic, image/heif"
+                class="tab-qa-comment-editor__upload d-inline-block"
+                @change="handleUploadChange"
+              >
+                <button class="tab-qa-comment-editor__btn">
+                  <IconCameraAlt class="icon d-block" />
+                </button>
+              </app-upload>
+            </div>
+
+            <!-- Upload Image -->
+            <div v-if="uploadImgSrc" class="tab-qa-comment-editor__preview">
+              <img :src="uploadImgSrc" alt />
+              <span
+                class="tab-qa-comment-editor__close-preview"
+                @click.stop="removeImgUpload"
+              >
+                <IconClose class="icon" />
+              </span>
+            </div>
+            
+            <!-- End Upload Image -->
+          </div>
+          <a class="action item-save" @click.prevent="handleSaveUpdate(level, question)">
+            <span>Lưu</span>
+          </a>
+          <a class="action item-cancel" @click.prevent="showInputUpdate = false">
+            <span>Huỷ</span>
+          </a>
         </div>
         <img
-          v-if="get(question, 'image_url', '')"
+          v-if="get(question, 'image_url', '') && !showInputUpdate"
           class="tab-qa-comment-item__img d-block"
           :src="get(question, 'image_url', '')"
           alt=""
@@ -52,15 +95,23 @@
         <button
           v-if="level == 1"
           class="tab-qa-comment-item__reply"
-          @click="showReply = !showReply"
+          @click="handleFeedBack"
         >
           Phản hồi
         </button>
-        <a class="action item-edit" @click.prevent="handleUpdate">
+        <a 
+          v-if="idToken.id == question.creator.id" 
+          class="action item-edit" 
+          @click.prevent="handleUpdate"
+        >
           <IconEdit class="icon fill-primary" />
           <span>Chỉnh sửa</span>
         </a>
-        <a class="action item-delete" @click.prevent="modalConfirmSubmit = true">
+        <a 
+          v-if="idToken.id == question.creator.id" 
+          class="action item-delete" 
+          @click.prevent="modalConfirmSubmit = true"
+        >
           <IconTrashAlt class="icon fill-secondary" />
           <span>Xóa</span>
         </a>
@@ -70,7 +121,7 @@
         title="Bạn chắc chắn muốn xoá bình luận"
         description="Bạn chắc chắn muốn xoá bình luận?"
         @cancel="modalConfirmSubmit = false"
-        @ok="handleQuestionSubmission(question)"
+        @ok="confirmModal(level, question.id)"
         @close="modalConfirmSubmit = false"
       ></app-modal-confirm>
 
@@ -88,21 +139,48 @@ import QuestionLikeService from "~/services/elearning/study/QuestionLike";
 import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 import IconEdit from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
+import { Editor, EditorContent } from "tiptap";
+import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
+import { EnterHandler } from "~/utils/tiptap-plugins";
+const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+import { getBase64 } from "~/utils/common";
+import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 
 export default {
   components: {
     IconThumbUp,
     IconAccessTime,
     IconEdit,
-    IconTrashAlt
+    IconTrashAlt,
+    IconCameraAlt,
+    Editor,
+    EditorContent,
+    IconClose
   },
 
   data() {
     return {
+      idToken: "",
       showReply: false,
       submit: true,
       modalConfirmSubmit: false,
       showInputUpdate: false,
+      editor: null,
+      uploadFileList: [],
+      uploadImgSrc: get(this, "question.image_url", ""),
+      content: "",
+      image: "",
+      queryUpdateQuestion: {
+        content: "",
+        elearning_id: get(this, "$route.params.id", ""),
+        id: ""
+      },
+      queryUpdateAnswer: {
+        content: "",
+        question_id: this.questionId,
+        id: ""
+      },
     };
   },
 
@@ -113,6 +191,10 @@ export default {
       validator: (value) => [1, 2].includes(value),
     },
     question: {},
+    questionId: {
+      type: String,
+      default: ""
+    }
   },
 
   computed: {
@@ -123,15 +205,31 @@ export default {
     },
   },
 
+  mounted() {
+    // Init editor
+    this.editor = new Editor({
+      content: this.question.content || "",
+      autoFocus: true,
+      extensions: [
+        new Placeholder({
+          showOnlyCurrent: true,
+          showOnlyWhenEditable: true,
+          emptyNodeText: "Viết bình luận",
+        }),
+        new HardBreak(),
+        new History(),
+        new EnterHandler({
+          onEnter: this.submit,
+        }),
+      ],
+      onPaste: this.handleEditorPaste,
+    });
+    this.idToken = JSON.parse(localStorage.getItem("token_user_schoolly"));
+  },
+
   methods: {
-    handleLike() {
-      if (this.level == 1) {
-        this.likeQuestion();
-      }
-      if (this.level == 2) {
-        this.likeAnswer();
-      }
-    },
+    get,
+    numeral,
     async likeQuestion() {
       if (!this.submit) return;
       this.submit = false;
@@ -139,39 +237,32 @@ export default {
         question_id: get(this, "question.id", ""),
         like: !get(this, "question.liked", false),
       };
-
       const res = await new QuestionLikeService(this.$axios)["add"](payload);
-
       this.submit = true;
-
       if (get(res, "success", false)) {
-        this.updateQuestions();
+        this.getQuestions();
         return;
       }
-
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
+
     async likeAnswer() {
       if (!this.submit) return;
       this.submit = false;
-
       const payload = {
         like: !get(this, "question.liked", false),
         answer_id: get(this, "question.id", ""),
       };
-
       const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
-
       this.submit = true;
-
       if (get(res, "success", false)) {
-        this.updateQuestions();
+        this.getQuestions();
         return;
       }
-
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
-    updateQuestions() {
+
+    getQuestions() {
       const options = {
         params: {
           elearning_id: get(this, "$route.params.id", ""),
@@ -184,18 +275,114 @@ export default {
         options
       );
     },
+
+    async updateQuestions(){
+      const res = await new InteractiveQuestionService(this.$axios)[
+        "addQuestion"
+      ](this.queryUpdateQuestion, this.image);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async updateAnswer(){
+      this.queryUpdateAnswer.content = this.editor.getHTML().replace("<p></p>", "");
+      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
+        this.queryUpdateAnswer,
+        this.image
+      );
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async handleSaveUpdate(level, _question){
+      // console.log('_question',_question)
+      // console.log('questionId',this.questionId)
+      this.queryUpdateQuestion.content = this.content;
+      this.queryUpdateAnswer.content = this.content;
+      if(level == 1){
+        this.queryUpdateQuestion.id = _question.id
+        this.updateQuestions();
+      }
+      if(level == 2){
+        this.queryUpdateAnswer.id = _question.id
+        this.updateAnswer();
+      }
+    },
+
+    confirmModal(level, _id) {
+      console.log('confirmModal', _id)
+      this.modalConfirmSubmit = false;
+      if (this.level == 1) {
+        this.deleteQuestion();
+      }
+      if (this.level == 2) {
+        this.deleteAnswer();
+      }
+    },
+
+    deleteQuestion(){
+
+    },
+
+    deleteAnswer(){
+
+    },
+
+    handleFeedBack(){
+      this.showReply = !this.showReply;
+      this.showInputUpdate = false;
+    },
+
     handleUpdate(){
       this.showInputUpdate = true;
+      this.showReply = false;
+      this.$nextTick(() => {
+        this.editor.focus()
+      })
     },
-    handleQuestionSubmission(question) {
-      console.log('handleQuestionSubmission', question)
+
+    handleLike() {
+      if (this.level == 1) {
+        this.likeQuestion();
+      }
+      if (this.level == 2) {
+        this.likeAnswer();
+      }
     },
-    get,
-    numeral,
+
+    removeImgUpload() {
+      this.image = "";
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+
+      if (this.mode === "edit") {
+        this.isDeleteOldImg = true;
+      }
+    },
+    
+    handleUploadChange(fileList, event) {
+      this.image = fileList[0];
+      this.uploadFileList = Array.from(fileList);
+      getBase64(this.uploadFileList[0], (src) => {
+        this.uploadImgSrc = src;
+      });
+    },
+    
   },
 };
 </script>
 
 <style lang="scss">
 @import "~/assets/scss/components/elearning/study/_tab-qa-comment-item.scss";
+@import "~/assets/scss/components/elearning/study/_tab-qa-comment-editor.scss";
 </style>

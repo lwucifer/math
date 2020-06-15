@@ -4,6 +4,7 @@
       <TabQACommentItem
         v-for="(ans, index) in visibleAnswers"
         :question="ans"
+        :questionId="question.id"
         :level="2"
         :key="index"
       />
