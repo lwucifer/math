@@ -39,15 +39,18 @@
         <app-radio
           name="group2"
           value="CHOICE"
-          class="mr-4"
+          class="mr-4 disabled-input"
           :checked="payload.type === 'CHOICE'"
+          :disabled="true"
           @click="payload.type = 'CHOICE'"
           >Trắc nghiệm</app-radio
         >
         <app-radio
           name="group2"
           value="ESSAY"
+          class="disabled-input"
           :checked="payload.type === 'ESSAY'"
+          :disabled="true"
           @click="payload.type = 'ESSAY'"
           >Tự luận</app-radio
         >
