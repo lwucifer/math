@@ -81,7 +81,6 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import IconPlus2 from "~/assets/svg/icons/plus2.svg?inline";
-
 import { get } from "lodash";
 import CreateQuestionEssay from "~/components/page/course/create/exercise/CreateQuestionEssay";
 import CreateQuestionChoice from "~/components/page/course/create/exercise/CreateQuestionChoice";
@@ -119,6 +118,12 @@ export default {
     lesson: Object,
   },
 
+  computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
+  },
+
   data() {
     return {
       isAddQuestionForm: false,
@@ -128,6 +133,7 @@ export default {
 
   methods: {
     toggleFormAdd() {
+      if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
     get,
