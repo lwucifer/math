@@ -58,6 +58,7 @@
         <SchoolLink/>
       </div>
       <SchoolIntroduceContent v-else-if="tab=='intro'"/>
+      <SchoolCoursesContent v-else-if="tab=='courses'"/>
       <SchoolNotifyContent v-else-if="tab=='notify'"/>
       <SchoolNewsContent v-else-if="tab=='news'"/>
       <SchoolScheduleContent v-else-if="tab=='schedule'"/>
@@ -81,6 +82,7 @@ import SchoolIntroduceContent from "~/components/page/school/Introduce/SchoolInt
 import SchoolNotifyContent from "~/components/page/school/Notify/SchoolNotifyContent";
 import SchoolNewsContent from "~/components/page/school/News/SchoolNewsContent";
 import SchoolScheduleContent from "~/components/page/school/Schedule/SchoolScheduleContent";
+import SchoolCoursesContent from "~/components/page/school/Courses/SchoolCoursesContent";
 
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
@@ -108,7 +110,8 @@ export default {
     SchoolIntroduceContent,
     SchoolNotifyContent,
     SchoolNewsContent,
-    SchoolScheduleContent
+    SchoolScheduleContent,
+    SchoolCoursesContent
   },
 
   async fetch({ params, query, store }) {

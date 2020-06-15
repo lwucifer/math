@@ -94,7 +94,7 @@
           </td>
         </template>
         <template v-slot:cell(status)="{row}">
-          <td v-if="row.status=='ANSWER'">Đã trả lời</td>
+          <td v-if="row.status=='ANSWERED'" class="text-primary">Đã trả lời</td>
           <td v-else class="status-not-reply">Chưa trả lời</td>
         </template>
       </app-table>
