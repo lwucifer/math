@@ -52,26 +52,6 @@
           >Tự luận</app-radio
         >
       </app-radio-group>
-
-      <!-- <div class="col-md-10">
-        <app-select
-          class="cc-select"
-          id="require"
-          :options="[
-            { value: '', text: 'Chọn' },
-            { value: 'CHOICE', text: 'Trắc nghiệm' },
-            { value: 'ESSAY', text: 'Tự luận' },
-          ]"
-          placeholder="Bắt buộc"
-          size="sm"
-          style="width: 112px"
-          v-model="payload.type"
-        >
-          <template slot="placeholder-icon">
-            <IconAngleDown class="icon" />
-          </template>
-        </app-select>
-      </div> -->
     </div>
 
     <div class="row align-items-center mb-4" v-show="payload.required">
@@ -144,6 +124,7 @@
         color="primary"
         class="font-weight-semi-bold"
         @click="handleAddExcercise"
+        :disabled="disabled_all"
         >Tạo {{ title }}</app-button
       >
     </div>
@@ -184,6 +165,9 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/create", {
+      disabled_all: "disabled_all",
+    }),
     title() {
       return get(this, "category", "") === "TEST" ? "bài kiểm tra" : "bài tập";
     },

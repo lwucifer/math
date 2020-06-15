@@ -13,6 +13,7 @@ const state = () => ({
   setting: null, // màn hình setting
   lessons: [], // màn hình tạo bài tập của khoá học
   exams: null, // ds bài kiểm tra
+  disabled_all: false,
 });
 
 /**
@@ -116,10 +117,16 @@ const actions = {
         },
       };
       const res = await Service.getProgress(this.$axios, payload);
+      if (get(res, "elearning_status", "") === "APPROVED") {
+        commit("disabled_all", true);
+      } else {
+        commit("disabled_all", false);
+      }
       commit("progress", res);
       return;
     }
     commit("progress", null);
+    commit("disabled_all", false);
   },
 
   reset({ commit }) {
@@ -133,6 +140,10 @@ const actions = {
 const mutations = {
   lessons(state, data) {
     state.lessons = data;
+  },
+  
+  disabled_all(state, data) {
+    state.disabled_all = data;
   },
 
   exams(state, data) {

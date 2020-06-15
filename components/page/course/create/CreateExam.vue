@@ -76,16 +76,19 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       exams: "exams",
+      progress: "progress",
     }),
   },
 
   methods: {
     handleShowFormAdd() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
     handleHideFormAdd() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },

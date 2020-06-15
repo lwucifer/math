@@ -12,14 +12,16 @@
 
       <span
         class="text-sub mr-4 question-point"
-        v-if="get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')"
+        v-if="
+          get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')
+        "
         >{{ get(question, "points", "") }} điểm</span
       >
 
       <div
         class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
       >
-        <button class="mr-3" @click="isShowEditQuestion = !isShowEditQuestion">
+        <button class="mr-3" @click="handleEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
@@ -126,17 +128,23 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
+      disabled_all: "disabled_all",
     }),
 
     limit() {
-      const value = get(this, 'question.content', '')
-      
-      return limitCharacter(value, 60, 20)
-    }
+      const value = get(this, "question.content", "");
+
+      return limitCharacter(value, 60, 20);
+    },
   },
 
   methods: {
+    handleEditQuestion() {
+      if (this.disabled_all) return;
+      this.isShowEditQuestion = !this.isShowEditQuestion;
+    },
     handleDeleteQuestion() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
