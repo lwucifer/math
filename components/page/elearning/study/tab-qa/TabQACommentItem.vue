@@ -39,7 +39,7 @@
                 <editor-content
                   :editor="editor"
                   class="editor tab-qa-comment-editor__editor"
-                  v-model="payload.content"
+                  v-model="content"
                 />
               </client-only>
 
@@ -68,7 +68,7 @@
             
             <!-- End Upload Image -->
           </div>
-          <a class="action item-save" @click.prevent="handleUpdate">
+          <a class="action item-save" @click.prevent="handleSaveUpdate(level, question)">
             <span>Lưu</span>
           </a>
           <a class="action item-cancel" @click.prevent="showInputUpdate = false">
@@ -121,7 +121,7 @@
         title="Bạn chắc chắn muốn xoá bình luận"
         description="Bạn chắc chắn muốn xoá bình luận?"
         @cancel="modalConfirmSubmit = false"
-        @ok="handleQuestionSubmission(question.id)"
+        @ok="confirmModal(level, question.id)"
         @close="modalConfirmSubmit = false"
       ></app-modal-confirm>
 
@@ -144,6 +144,8 @@ import { Editor, EditorContent } from "tiptap";
 import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
+import { getBase64 } from "~/utils/common";
+import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 
 export default {
   components: {
@@ -167,9 +169,17 @@ export default {
       editor: null,
       uploadFileList: [],
       uploadImgSrc: get(this, "question.image_url", ""),
-      payload: {
+      content: "",
+      image: "",
+      queryUpdateQuestion: {
         content: "",
-        question_id: get(this, "question.id", ""),
+        elearning_id: get(this, "$route.params.id", ""),
+        id: ""
+      },
+      queryUpdateAnswer: {
+        content: "",
+        question_id: this.questionId,
+        id: ""
       },
     };
   },
@@ -181,6 +191,10 @@ export default {
       validator: (value) => [1, 2].includes(value),
     },
     question: {},
+    questionId: {
+      type: String,
+      default: ""
+    }
   },
 
   computed: {
@@ -212,29 +226,10 @@ export default {
     });
     this.idToken = JSON.parse(localStorage.getItem("token_user_schoolly"));
   },
-  created() {
-  },
 
   methods: {
-    handleFeedBack(){
-      this.showReply = !this.showReply;
-      this.showInputUpdate = false;
-    },
-    handleUpdate(){
-      this.showInputUpdate = true;
-      this.showReply = false;
-      this.$nextTick(() => {
-        this.editor.focus()
-      })
-    },
-    handleLike() {
-      if (this.level == 1) {
-        this.likeQuestion();
-      }
-      if (this.level == 2) {
-        this.likeAnswer();
-      }
-    },
+    get,
+    numeral,
     async likeQuestion() {
       if (!this.submit) return;
       this.submit = false;
@@ -242,39 +237,32 @@ export default {
         question_id: get(this, "question.id", ""),
         like: !get(this, "question.liked", false),
       };
-
       const res = await new QuestionLikeService(this.$axios)["add"](payload);
-
       this.submit = true;
-
       if (get(res, "success", false)) {
-        this.updateQuestions();
+        this.getQuestions();
         return;
       }
-
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
+
     async likeAnswer() {
       if (!this.submit) return;
       this.submit = false;
-
       const payload = {
         like: !get(this, "question.liked", false),
         answer_id: get(this, "question.id", ""),
       };
-
       const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
-
       this.submit = true;
-
       if (get(res, "success", false)) {
-        this.updateQuestions();
+        this.getQuestions();
         return;
       }
-
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
-    updateQuestions() {
+
+    getQuestions() {
       const options = {
         params: {
           elearning_id: get(this, "$route.params.id", ""),
@@ -287,20 +275,109 @@ export default {
         options
       );
     },
-    handleUploadChange(fileList, event) {
-      // this.image = fileList[0];
-      // this.uploadFileList = Array.from(fileList);
-      // getBase64(this.uploadFileList[0], (src) => {
-      //   this.uploadImgSrc = src;
-      // });
+
+    async updateQuestions(){
+      const res = await new InteractiveQuestionService(this.$axios)[
+        "addQuestion"
+      ](this.queryUpdateQuestion, this.image);
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async updateAnswer(){
+      this.queryUpdateAnswer.content = this.editor.getHTML().replace("<p></p>", "");
+      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
+        this.queryUpdateAnswer,
+        this.image
+      );
+      if (get(res, "success", false)) {
+        this.$toasted.success("Thành công");
+        this.reset();
+        this.getQuestions();
+        return;
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
+    },
+
+    async handleSaveUpdate(level, _question){
+      // console.log('_question',_question)
+      // console.log('questionId',this.questionId)
+      this.queryUpdateQuestion.content = this.content;
+      this.queryUpdateAnswer.content = this.content;
+      if(level == 1){
+        this.queryUpdateQuestion.id = _question.id
+        this.updateQuestions();
+      }
+      if(level == 2){
+        this.queryUpdateAnswer.id = _question.id
+        this.updateAnswer();
+      }
+    },
+
+    confirmModal(level, _id) {
+      console.log('confirmModal', _id)
+      this.modalConfirmSubmit = false;
+      if (this.level == 1) {
+        this.deleteQuestion();
+      }
+      if (this.level == 2) {
+        this.deleteAnswer();
+      }
+    },
+
+    deleteQuestion(){
+
+    },
+
+    deleteAnswer(){
+
+    },
+
+    handleFeedBack(){
+      this.showReply = !this.showReply;
+      this.showInputUpdate = false;
+    },
+
+    handleUpdate(){
+      this.showInputUpdate = true;
+      this.showReply = false;
+      this.$nextTick(() => {
+        this.editor.focus()
+      })
+    },
+
+    handleLike() {
+      if (this.level == 1) {
+        this.likeQuestion();
+      }
+      if (this.level == 2) {
+        this.likeAnswer();
+      }
+    },
+
+    removeImgUpload() {
+      this.image = "";
+      this.uploadFileList = [];
+      this.uploadImgSrc = null;
+
+      if (this.mode === "edit") {
+        this.isDeleteOldImg = true;
+      }
     },
     
-    handleQuestionSubmission(_id) {
-      console.log('handleQuestionSubmission', _id)
-      this.modalConfirmSubmit = false;
+    handleUploadChange(fileList, event) {
+      this.image = fileList[0];
+      this.uploadFileList = Array.from(fileList);
+      getBase64(this.uploadFileList[0], (src) => {
+        this.uploadImgSrc = src;
+      });
     },
-    get,
-    numeral,
+    
   },
 };
 </script>
