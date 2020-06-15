@@ -108,7 +108,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import CreateChapter from "~/components/page/course/create/course/CreateChapter";
 import ListChapter from "~/components/page/course/create/course/ListChapter";
-import EditCourseName from "~/components/page/course/create/common/EditCourseName";
+import EditCourseName from "~/components/page/course/create/course/EditCourseName";
 
 export default {
   components: {
