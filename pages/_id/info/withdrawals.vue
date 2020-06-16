@@ -30,18 +30,13 @@
                       class="filter-form__item"
                       style="min-width: 21rem;"
                     >
-                      <app-date-picker
-                        class="w-100"
+                      <app-range-calendar
+                        :placeholder="'DD/MM/YYYY - DD/MM/YYYY'"
                         v-model="dateDefault"
-                        square
-                        range
-                        size="sm"
-                        placeholder="DD/MM/YYYY - DD/MM/YYYY"
-                        :shortcuts="DATE_SHORTCUT"
-                        @input="handlerChangeDate"
-                        valueFormat="YYYY-MM-DD"
-                      >
-                      </app-date-picker>
+                        value-type="YYYY-MM-DD"
+                        bordered
+                        @change="handlerChangeDate"
+                        />
                     </div>
                     <div class="filter-form__item d-flex">
                       <filter-button
@@ -214,11 +209,11 @@ export default {
   },
   methods: {
     getDateSelect(){
-      const firstday = moment().format("YYYY-MM-01");
-      const today = moment().format("YYYY-MM-DD");
+      const firstday = moment().startOf('month');
+      const today = moment();
       this.dateDefault = [firstday,today];
-      this.params.from = firstday;
-      this.params.to = today;
+      this.params.from = firstday.format("YYYY-MM-01");
+      this.params.to = today.format("YYYY-MM-DD");
     },
     fetchWithdrawals(){
       const payload = {
