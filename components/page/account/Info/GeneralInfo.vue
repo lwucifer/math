@@ -299,7 +299,7 @@ export default {
     },
     submitStory(_data) {
       const data = {
-        biography: removeTagHtml(_data)
+        biography: _data
       };
       this.accountBiographyAdd(data).then(result => {
         if (result.success) {
