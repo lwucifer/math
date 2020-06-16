@@ -11,10 +11,10 @@
       {{ message }}
     </p>
     <div class="my-4">
-      <app-button color="white" square class="mr-4"
+      <app-button color="white" square class="mr-4" :to="transactionLink" nuxt
         >Lịch sử giao dịch</app-button
       >
-      <app-button square>Thanh toán lại</app-button>
+      <app-button square :to="transactionLink" nuxt>Thanh toán lại</app-button>
     </div>
     <div>
       <PaymentSuccessFooter />
@@ -26,6 +26,7 @@
 import IconAlertCircle1 from "~/assets/svg/icons/alert-circle-1.svg?inline";
 import PaymentSuccessFooter from "~/components/page/payment/PaymenSuccessFooter";
 import { get } from "lodash";
+import { getToken } from '../../utils/auth';
 
 export default {
   components: {
@@ -37,6 +38,15 @@ export default {
     return {
       message: "",
     };
+  },
+
+  computed: {
+    transactionLink() {
+      const accountObj = getToken();
+      if (!!accountObj) {
+        return `/${accountObj.id}/info/transactions`;
+      }
+    },
   },
 
   mounted() {

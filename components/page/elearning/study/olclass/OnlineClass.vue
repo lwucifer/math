@@ -40,21 +40,35 @@
             class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
-          <span class="text-clickable pt-2" @click.prevent="handlJoinOlClass(item)"
+          <span
+            class="text-clickable pt-2"
+            @click.prevent="handlJoinOlClass(item)"
             >Đang diễn ra</span
           >
         </div>
 
         <div
           class="d-flex-center text-warning ml-auto"
-          v-else-if="item.status == finishStatus && item.next_time"
+          v-else-if="item.status == finishStatus && item.streaming_time"
         >
           <IconCam24
             class="mr-2 icon heading-3 text-clickable"
             @click.prevent="handlJoinOlClass(item)"
           />
           <span class="text-clickable" @click.prevent="handlJoinOlClass(item)"
-            >Sắp diễn ra {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span
+            >Sắp diễn ra -
+            {{ item.streaming_time | getDateTimeHH_MM_D_M_Y }}</span
+          >
+        </div>
+
+        <div
+          class="d-flex-center color-999 ml-auto"
+          v-else-if="item.status == finishStatus && item.next_time"
+        >
+          <IconCam24 class="mr-2" />
+          <span
+            >Thời gian học kế tiếp -
+            {{ item.next_time | getDateTimeHH_MM_D_M_Y }}</span
           >
         </div>
 
@@ -96,7 +110,7 @@ import {
   convertLocalTimeForTimetable,
   addDurationToUTCDate,
   getTodayDDD,
-  isTodayInRangeDate,
+  isTodayInRangeDate
 } from "~/utils/moment";
 
 export default {
@@ -179,10 +193,10 @@ export default {
 
           // set active day in week
           // console.log("[currentDayInWeek]", currentDayInWeek, s);
-          if(s == currentDayInWeek && todayInRange) {
-            timeMorning['today'] = "today";
-            timeAfternoon['today'] = "today";
-            timeEvening['today'] = "today";
+          if (s == currentDayInWeek && todayInRange) {
+            timeMorning["today"] = "today";
+            timeAfternoon["today"] = "today";
+            timeEvening["today"] = "today";
           }
         }
         schedules.push(timeMorning);
