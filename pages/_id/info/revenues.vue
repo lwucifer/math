@@ -141,7 +141,7 @@
                       </filter-form>
                     </div>
                     <div class="col-md-3 text-md-right">
-                      <p class="font-weight-semi-bold mb-2">Tổng tiền</p>
+                      <p class="font-weight-semi-bold mb-2">Tổng thực nhận</p>
                       <p
                         class="font-weight-bold h3"
                       >{{ revenue | toThousandFilter('.') }} {{ CURRENCY }}</p>
