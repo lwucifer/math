@@ -40,9 +40,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/create", {
-      disabled_all: "disabled_all",
-    }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     text() {
       return get(this, "category", "") === "TEST"
         ? "Tạo bài kiểm tra"

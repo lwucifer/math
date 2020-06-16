@@ -37,12 +37,12 @@
           <SelectDate
             @onChange="handleChangeStartDate"
             :value="payload.start_time"
-            :disabled="!payload.starttime_enable"
+            :disabled="!payload.starttime_enable || disabled_all"
           />
 
           <app-checkbox
             v-model="payload.starttime_enable"
-            :disabled="get(setting, 'setting', false)"
+            :disabled="disabled_all"
             ><span class="text-base">Áp dụng</span></app-checkbox
           >
         </div>
@@ -53,12 +53,12 @@
           <SelectDate
             @onChange="handleChangeEndDate"
             :value="payload.end_time"
-            :disabled="!payload.endtime_enable"
+            :disabled="!payload.endtime_enable || disabled_all"
           />
 
           <app-checkbox
             v-model="payload.endtime_enable"
-            :disabled="get(setting, 'setting', false)"
+            :disabled="disabled_all"
             ><span class="text-base">Áp dụng</span></app-checkbox
           >
         </div>
@@ -70,6 +70,7 @@
         <app-select
           class="cc-select"
           @change="handleChangePrivacy"
+          :disabled="disabled_all"
           :value="payload.privacy"
           :options="[
             { value: '', text: 'Chọn chế độ hiển thị' },
@@ -251,8 +252,10 @@ export default {
       general: "general",
       progress: "progress",
       setting: "setting",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     submit() {
       if (this.payload.comment_allow === "") return false;
       if (this.payload.privacy === "") return false;
@@ -318,6 +321,7 @@ export default {
     },
 
     handleChangePrivacy(privacy) {
+      if (this.disabled_all) return;
       this.payload.privacy = privacy;
     },
 
@@ -390,13 +394,6 @@ export default {
 
       if (this.disabled_all) {
         delete payload.privacy;
-        delete payload.endtime_enable;
-        delete payload.end_time;
-        delete payload.start_time;
-        delete payload.starttime_enable;
-      }
-
-      if (get(this, "setting.setting", false)) {
         delete payload.endtime_enable;
         delete payload.end_time;
         delete payload.start_time;

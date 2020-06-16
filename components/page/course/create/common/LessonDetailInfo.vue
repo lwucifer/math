@@ -86,9 +86,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/create", {
-      disabled_all: "disabled_all",
-    }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     thumnail() {
       return get(this, "lesson.type", "") === "VIDEO"
         ? "/images/thumnail-video.png"

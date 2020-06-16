@@ -11,7 +11,7 @@
         > 
          <template slot="default" slot-scope="{ classes }">
              <div v-for="(item,index) in votedSubjects.content" :key="index" :class="classes">
-                <div class="subject-item">
+                <div class="subject-item" @click="$emit('showSearch',item)">
                     <component :is="checkSubjectIcon(item.code)" />
                     <p class="mt-2">{{item.name}}</p>
                 </div>
@@ -136,15 +136,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.subject-item{
-    border: 1px solid #E0E0E0;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 161px;
-    height: 145px;
-    flex-direction: column;
-}
 
 </style>
