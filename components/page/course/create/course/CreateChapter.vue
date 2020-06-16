@@ -87,10 +87,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.chapters);
-  },
-
   methods: {
     async handleAddChapter() {
       this.showModalConfirm = true;

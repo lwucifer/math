@@ -13,7 +13,7 @@
         @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
       />
-      <CreateLessonOfElearning
+      <UpdateLesson
         @toggleShowAddLesson="toggleShowLesson"
         :lesson="lesson"
         v-if="get(general, 'type', '') === 'LECTURE'"
@@ -80,7 +80,7 @@ import CreateLessonOfChapter from "~/components/page/course/create/course/Create
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import UpdateLesson from "~/components/page/course/create/lecture/AddLesson";
 
 export default {
   components: {
@@ -93,7 +93,7 @@ export default {
     DocumentDetail,
     CreateLessonOfChapter,
     LessonDetailInfo,
-    CreateLessonOfElearning,
+    UpdateLesson,
   },
 
   data() {

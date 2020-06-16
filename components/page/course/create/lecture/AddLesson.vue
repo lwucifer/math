@@ -335,6 +335,10 @@ export default {
     },
 
     handleCheckContent() {
+      if (this.lesson) {
+        this.error.content = "";
+        return true;
+      }
       let lesson = !!this.payload.lesson;
       let repository_file_id = !!this.payload.repository_file_id;
       let article_content = !!this.payload.article_content;

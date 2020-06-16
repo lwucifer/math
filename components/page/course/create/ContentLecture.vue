@@ -44,7 +44,7 @@
         </div>
 
         <div class="cc-box__body" style="border-top: 1px solid #E0E0E0">
-          <CreateLessonOfElearning
+          <AddLesson
             v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"
@@ -111,7 +111,7 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import AddLesson from "~/components/page/course/create/lecture/AddLesson";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
@@ -133,7 +133,7 @@ export default {
     IconCheck,
     IconTimes,
     CreateAction,
-    CreateLessonOfElearning,
+    AddLesson,
     LessonDetail,
     EditLectureName,
     IconAngleUp,
