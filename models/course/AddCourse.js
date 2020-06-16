@@ -11,7 +11,7 @@ class AddCourse {
       this.cover_image = payload.cover_image;
     }
 
-    if (payload.benefit) {
+    if (payload.benefit.length) {
       this.benefit = JSON.stringify(payload.benefit);
     }
 
