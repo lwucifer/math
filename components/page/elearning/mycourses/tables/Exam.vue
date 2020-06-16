@@ -22,6 +22,13 @@
         </td>
       </template>
 
+      <template v-slot:cell(open_time)="{row}">
+        <td>
+          <span v-if="get(row, 'open_time', false)">{{ get(row, 'open_time') | getDateBirthday }}</span>
+          <span v-else>-</span>
+        </td>
+      </template>
+
       <template v-slot:cell(deadline)="{row}">
         <td>
           <span v-if="get(row, 'deadline', false)">{{ get(row, 'deadline') | getDateBirthday }}</span>
@@ -135,6 +142,10 @@ export default {
         {
           name: "type",
           text: "Thể loại"
+        },
+        {
+          name: "open_time",
+          text: "Ngày mở đề"
         },
         {
           name: "deadline",
