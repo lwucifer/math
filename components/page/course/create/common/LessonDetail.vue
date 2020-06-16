@@ -8,7 +8,7 @@
     />
 
     <div v-else>
-      <CreateLessonOfChapter
+      <UpdateLessonChapter
         :lesson="lesson"
         @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
@@ -76,7 +76,7 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import DocumentAdd from "~/components/page/course/create/common/DocumentAdd";
 import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
-import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import UpdateLessonChapter from "~/components/page/course/create/course/AddLesson";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
@@ -91,7 +91,7 @@ export default {
     DocumentAdd,
     IconFileBlank,
     DocumentDetail,
-    CreateLessonOfChapter,
+    UpdateLessonChapter,
     LessonDetailInfo,
     UpdateLesson,
   },

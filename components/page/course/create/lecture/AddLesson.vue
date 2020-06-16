@@ -14,9 +14,7 @@
         placeholder="Bài học số 1"
         :counter="150"
       />
-      <span v-show="get(error, 'name', '')" class="error mb-3">{{
-        get(error, "name", "")
-      }}</span>
+      <app-error :error="get(error, 'name', '')"></app-error>
 
       <div class="cc-box__bg-disable">
         <p class="text-center my-4">Chọn loại bài học</p>
@@ -112,9 +110,7 @@
           :lesson="lesson"
         />
 
-        <span v-show="get(error, 'content', '')" class="error mb-3">{{
-          get(error, "content", "")
-        }}</span>
+        <app-error :error="get(error, 'content', '')"></app-error>
 
         <div class="d-flex justify-content-end mt-4">
           <app-button
