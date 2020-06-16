@@ -28,11 +28,14 @@
       <!-- <div class="tab-qa-comment-item__title" v-if="showTitle">{{ title }}</div> -->
 
       <div class="tab-qa-comment-item__content">
-        <div v-if="!showInputUpdate" v-html="get(question, 'content', '')" class="word-break-all"></div>
-          <!-- show content update -->
-          <div v-else class="tab-qa-comment-editor" style="align-items: center">
+        <div
+          v-if="!showInputUpdate"
+          v-html="get(question, 'content', '')"
+          class="word-break-all"
+        ></div>
+        <!-- show content update -->
+        <div v-else class="tab-qa-comment-editor" style="align-items: center">
           <!-- <app-avatar :size="30" :src="get(user_login, 'avatar.low', '')" /> -->
-
           <div class="tab-qa-comment-editor__right">
             <div class="tab-qa-comment-editor__editor-wrapper">
               <client-only>
@@ -55,25 +58,35 @@
               </app-upload>
             </div>
 
-            <!-- Upload Image -->
-            <div v-if="uploadImgSrc" class="tab-qa-comment-editor__preview">
-              <img :src="uploadImgSrc" alt />
-              <span
-                class="tab-qa-comment-editor__close-preview"
-                @click.stop="removeImgUpload"
-              >
-                <IconClose class="icon" />
-              </span>
-            </div>
-            
             <!-- End Upload Image -->
           </div>
-          <a class="action item-save" @click.prevent="handleSaveUpdate(level, question)">
+          <a
+            class="action item-save"
+            @click.prevent="handleSaveUpdate(level, question)"
+          >
             <span>Lưu</span>
           </a>
-          <a class="action item-cancel" @click.prevent="showInputUpdate = false">
+          <a
+            class="action item-cancel"
+            @click.prevent="showInputUpdate = false"
+          >
             <span>Huỷ</span>
           </a>
+        </div>
+
+        <!-- Upload Image -->
+        <div
+          v-if="uploadImgSrc && showInputUpdate"
+          class="tab-qa-comment-editor__preview"
+          style="margin-left: 0.8rem"
+        >
+          <img :src="uploadImgSrc" alt />
+          <span
+            class="tab-qa-comment-editor__close-preview"
+            @click.stop="removeImgUpload"
+          >
+            <IconClose class="icon" />
+          </span>
         </div>
         <img
           v-if="get(question, 'image_url', '') && !showInputUpdate"
@@ -99,17 +112,17 @@
         >
           Phản hồi
         </button>
-        <a 
-          v-if="idToken.id == question.creator.id" 
-          class="action item-edit" 
+        <a
+          v-if="idToken.id == question.creator.id"
+          class="action item-edit"
           @click.prevent="handleUpdate"
         >
           <IconEdit class="icon fill-primary" />
           <span>Chỉnh sửa</span>
         </a>
-        <a 
-          v-if="idToken.id == question.creator.id" 
-          class="action item-delete" 
+        <a
+          v-if="idToken.id == question.creator.id"
+          class="action item-delete"
           @click.prevent="modalConfirmSubmit = true"
         >
           <IconTrashAlt class="icon fill-secondary" />
@@ -156,7 +169,7 @@ export default {
     IconCameraAlt,
     Editor,
     EditorContent,
-    IconClose
+    IconClose,
   },
 
   data() {
@@ -174,12 +187,12 @@ export default {
       queryUpdateQuestion: {
         content: "",
         elearning_id: get(this, "$route.params.id", ""),
-        id: ""
+        id: "",
       },
       queryUpdateAnswer: {
         content: "",
         question_id: this.questionId,
-        id: ""
+        id: "",
       },
     };
   },
@@ -193,8 +206,8 @@ export default {
     question: {},
     questionId: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   computed: {
@@ -253,7 +266,9 @@ export default {
         like: !get(this, "question.liked", false),
         answer_id: get(this, "question.id", ""),
       };
-      const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
+      const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](
+        payload
+      );
       this.submit = true;
       if (get(res, "success", false)) {
         this.getQuestions();
@@ -270,13 +285,10 @@ export default {
           sort_by: "NEWEST",
         },
       };
-      this.$store.dispatch(
-        `elearning/study/detail/getListQuestion`,
-        options
-      );
+      this.$store.dispatch(`elearning/study/detail/getListQuestion`, options);
     },
 
-    async updateQuestions(){
+    async updateQuestions() {
       const res = await new InteractiveQuestionService(this.$axios)[
         "addQuestion"
       ](this.queryUpdateQuestion, this.image);
@@ -288,12 +300,13 @@ export default {
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
-    async updateAnswer(){
-      this.queryUpdateAnswer.content = this.editor.getHTML().replace("<p></p>", "");
-      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
-        this.queryUpdateAnswer,
-        this.image
-      );
+    async updateAnswer() {
+      this.queryUpdateAnswer.content = this.editor
+        .getHTML()
+        .replace("<p></p>", "");
+      const res = await new InteractiveAnswer(this.$axios)[
+        "addAnswerOfQuestion"
+      ](this.queryUpdateAnswer, this.image);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
         this.reset();
@@ -303,23 +316,23 @@ export default {
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
-    handleSaveUpdate(level, _question){
+    handleSaveUpdate(level, _question) {
       // console.log('_question',_question)
       // console.log('questionId',this.questionId)
       this.queryUpdateQuestion.content = this.content;
       this.queryUpdateAnswer.content = this.content;
-      if(level == 1){
-        this.queryUpdateQuestion.id = _question.id
+      if (level == 1) {
+        this.queryUpdateQuestion.id = _question.id;
         this.updateQuestions();
       }
-      if(level == 2){
-        this.queryUpdateAnswer.id = _question.id
+      if (level == 2) {
+        this.queryUpdateAnswer.id = _question.id;
         this.updateAnswer();
       }
     },
 
     confirmModal(level, _id) {
-      console.log('confirmModal', _id)
+      console.log("confirmModal", _id);
       this.modalConfirmSubmit = false;
       if (this.level == 1) {
         this.deleteQuestion(_id);
@@ -329,9 +342,11 @@ export default {
       }
     },
 
-    async deleteQuestion(_id){
-      const res = await new InteractiveQuestionService(this.$axios)["deleteQuestion"]({
-        question_id: _id
+    async deleteQuestion(_id) {
+      const res = await new InteractiveQuestionService(this.$axios)[
+        "deleteQuestion"
+      ]({
+        question_id: _id,
       });
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
@@ -342,9 +357,11 @@ export default {
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
-    async deleteAnswer(_id){
-      const res = await new InteractiveAnswer(this.$axios)["deleteAnswerOfQuestion"]({
-        answer_id: _id
+    async deleteAnswer(_id) {
+      const res = await new InteractiveAnswer(this.$axios)[
+        "deleteAnswerOfQuestion"
+      ]({
+        answer_id: _id,
       });
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
@@ -360,20 +377,22 @@ export default {
       this.queryUpdateAnswer.content = "";
       this.image = "";
       this.uploadFileList = [];
-      this.uploadImgSrc = null;
+      this.uploadImgSrc = null;;
+      this.modalConfirmSubmit = false;
+      this.showInputUpdate = false;
     },
 
-    handleFeedBack(){
+    handleFeedBack() {
       this.showReply = !this.showReply;
       this.showInputUpdate = false;
     },
 
-    handleUpdate(){
+    handleUpdate() {
       this.showInputUpdate = true;
       this.showReply = false;
       this.$nextTick(() => {
-        this.editor.focus()
-      })
+        this.editor.focus();
+      });
     },
 
     handleLike() {
@@ -394,7 +413,7 @@ export default {
         this.isDeleteOldImg = true;
       }
     },
-    
+
     handleUploadChange(fileList, event) {
       this.image = fileList[0];
       this.uploadFileList = Array.from(fileList);
@@ -402,7 +421,6 @@ export default {
         this.uploadImgSrc = src;
       });
     },
-    
   },
 };
 </script>
