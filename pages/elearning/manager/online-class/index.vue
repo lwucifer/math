@@ -15,8 +15,7 @@
             <div class="elearning-manager-content__title__nav">
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Đang diễn ra</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Đã lên lịch</a>
-              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Đang soạn</a>
-              <a :class="tab == 4 ? 'active' : ''" @click="tab = 4">Đã kết thúc</a>
+              <a :class="tab == 3 ? 'active' : ''" @click="tab = 3">Đã kết thúc</a>
             </div>
             <n-link :to="'/elearning/manager/online-class/create'" class="btn btn--size-sm btn--color-info btn--square btn-right">
               <IconPlusCircle class="fill-white mr-2"/>
@@ -45,8 +44,7 @@
 
   const Tab1 = () => import("./tabs/streaming")
   const Tab2 = () => import("./tabs/scheduled")
-  const Tab3 = () => import("./tabs/writting")
-  const Tab4 = () => import("./tabs/finished")
+  const Tab3 = () => import("./tabs/finished")
 
   export default {    
     components: {
@@ -54,8 +52,7 @@
       IconPlusCircle,
       Tab1,
       Tab2,
-      Tab3,
-      Tab4
+      Tab3
     },
 
     data() {
@@ -67,7 +64,7 @@
       ...mapState("auth", ["loggedUser"]),
       currentTabComponent: function() {
         // List of tabs
-        const MATCHED_TABS = ['Tab1', 'Tab2', 'Tab3', 'Tab4']
+        const MATCHED_TABS = ['Tab1', 'Tab2', 'Tab3']
         return (this.tab > 0) ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0]
       },
       ...mapState(STORE_PUBLIC_SEARCH, {

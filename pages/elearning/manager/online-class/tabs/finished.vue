@@ -279,6 +279,7 @@ export default {
       );
 
       if (doDelete.success) {
+        this.ids = [];
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);
