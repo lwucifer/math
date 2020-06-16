@@ -251,8 +251,10 @@ export default {
       general: "general",
       progress: "progress",
       setting: "setting",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     submit() {
       if (this.payload.comment_allow === "") return false;
       if (this.payload.privacy === "") return false;

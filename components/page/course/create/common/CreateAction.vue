@@ -63,9 +63,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/create", {
-      disabled_all: "disabled_all",
-    }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
   },
 
   props: {
