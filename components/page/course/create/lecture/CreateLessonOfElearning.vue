@@ -14,7 +14,9 @@
         placeholder="Bài học số 1"
         :counter="150"
       />
-      <span v-show="error_name" class="error mb-3">{{ error_name }}</span>
+      <span v-show="get(error, 'name', '')" class="error mb-3">{{
+        get(error, "name", "")
+      }}</span>
 
       <div class="cc-box__bg-disable">
         <p class="text-center my-4">Chọn loại bài học</p>
@@ -108,6 +110,10 @@
           @handleSelectDocument="handleSelectDocument"
           @handleReset="handleReset"
         />
+
+        <span v-show="get(error, 'content', '')" class="error mb-3">{{
+          get(error, "content", "")
+        }}</span>
 
         <div class="d-flex justify-content-end mt-4">
           <app-button
@@ -252,7 +258,11 @@ export default {
         article_content: "",
         id: get(this, "lesson.id", ""),
       },
-      modalType: ''
+      modalType: "",
+      error: {
+        name: "",
+        content: "",
+      },
     };
   },
 
@@ -262,26 +272,26 @@ export default {
     }),
 
     changingTitle() {
-      if(this.modalType == 'url') {
-        return "Thêm video bài học"
+      if (this.modalType == "url") {
+        return "Thêm video bài học";
       }
 
-      return "Upload video bài học"
+      return "Upload video bài học";
     },
 
     changingTitleDoc() {
-      if(this.modalType == 'url') {
-        return "Thêm bài học"
+      if (this.modalType == "url") {
+        return "Thêm bài học";
       }
 
-      return "Upload bài học"
+      return "Upload bài học";
     },
 
     chagingDescription() {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-      } else if (this.modalType == 'url') {
-        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?"
+      } else if (this.modalType == "url") {
+        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?";
       }
       return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
     },
@@ -289,8 +299,8 @@ export default {
     chagingDescriptionDoc() {
       if (this.confirmLoadingDoc) {
         return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-      } else if (this.modalType == 'url') {
-        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?"
+      } else if (this.modalType == "url") {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
       }
       return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
     },
@@ -308,6 +318,34 @@ export default {
   },
 
   methods: {
+    handleCheckPayload() {
+      let check = true;
+      check = this.handleCheckName();
+      check = this.handleCheckContent();
+      return check;
+    },
+
+    handleCheckName() {
+      if (!this.payload.name) {
+        this.error.name = "Bạn cần nhập tên bài học";
+        return false;
+      }
+      this.error.name = "";
+      return true;
+    },
+
+    handleCheckContent() {
+      let lesson = !!this.payload.lesson;
+      let repository_file_id = !!this.payload.repository_file_id;
+      let article_content = !!this.payload.article_content;
+      if (!lesson && !repository_file_id && !article_content) {
+        this.error.content = "Bạn cần nhập nội dung cho bài học";
+        return false;
+      }
+      this.error.content = "";
+      return true;
+    },
+
     handleChangeLesson() {
       if (this.lesson) {
         this.payload.name = get(this, "lesson.name", "");
@@ -331,10 +369,7 @@ export default {
     },
 
     handleBlurNameInput() {
-      if (!this.payload.name) {
-        this.error_name = "Bạn chưa nhập tên bài học";
-        return;
-      }
+      this.handleCheckName();
       this.error_name = "";
     },
 
@@ -347,17 +382,19 @@ export default {
     },
 
     handleSelectFile(data) {
-      this.modalType = 'upload'
+      this.modalType = "upload";
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.repository_file_id = "";
+      this.handleCheckContent();
     },
 
     handleSelectUrl(file) {
-      this.modalType = 'url'
+      this.modalType = "url";
       this.payload.type = file.type;
       this.payload.lesson = "";
       this.payload.repository_file_id = file.id;
+      this.handleCheckContent();
     },
 
     async handleAddContent() {
@@ -365,21 +402,33 @@ export default {
         this.showModalConfirmVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.showModalConfirmScorm = true;
-      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
-        this.showModalConfirmDoc = true
+      } else if (
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        this.showModalConfirmDoc = true;
       } else {
         this.showModalConfirm = true;
       }
     },
 
     async handleOk() {
+      if (!this.handleCheckPayload()) {
+        this.handleCancelModal();
+        return;
+      }
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
       } else if (this.payload.type == "SCORM") {
         this.confirmLoadingScorm = true;
-      } else if(this.payload.type == "PDF" || this.payload.type == "DOC" || this.payload.type == "TXT") {
-        this.confirmLoadingDoc = true
-      }else {
+      } else if (
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        this.confirmLoadingDoc = true;
+      } else {
         this.confirmLoading = true;
       }
 
@@ -416,7 +465,7 @@ export default {
     },
 
     handleCancelModal() {
-      this.modalType = ''
+      this.modalType = "";
       this.showModalConfirm = false;
       this.confirmLoading = false;
       this.showModalConfirmDoc = false;
@@ -432,6 +481,7 @@ export default {
       this.payload.lesson = lesson;
       this.payload.repository_file_id = file_id;
       this.payload.article_content = article_content.replace("<p></p>", "");
+      this.handleCheckContent();
     },
 
     handleCancel() {

@@ -406,11 +406,15 @@ export default {
     },
 
     handleCLickSave() {
-      this.handleCheckPayload();
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (!this.handleCheckPayload()) {
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
+        return;
+      }
       try {
         this.confirmLoading = true;
         let payload = createPayloadAddCourse(this.payload);
