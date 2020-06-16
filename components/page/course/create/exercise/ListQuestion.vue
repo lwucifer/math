@@ -128,8 +128,11 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
-      disabled_all: "disabled_all",
     }),
+
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
 
     limit() {
       const value = get(this, "question.content", "");

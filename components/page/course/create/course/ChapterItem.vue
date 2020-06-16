@@ -77,8 +77,10 @@ export default {
   computed: {
     ...mapState("elearning/create", {
       general: "general",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     lessons() {
       let lessons = cloneDeep(get(this, "chapter.lessons", []));
       lessons = orderBy(lessons, "index", "asc");

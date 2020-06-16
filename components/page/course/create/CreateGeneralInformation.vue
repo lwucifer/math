@@ -228,8 +228,10 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       progress: "progress",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     name() {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
