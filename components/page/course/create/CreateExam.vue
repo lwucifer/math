@@ -19,7 +19,7 @@
         @handleClick="handleShowFormAdd"
       />
 
-      <FormCreateExam v-if="isShowFormAdd" @cancel="handleHideFormAdd" />
+      <AddExam v-if="isShowFormAdd" @cancel="handleHideFormAdd" />
 
       <ExamList
         v-for="(exam, index) in get(exams, 'content', [])"
@@ -40,7 +40,7 @@ import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?i
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
 import IconClipboardNotes from "~/assets/svg/design-icons/clipboard-notes.svg?inline";
 import ButtonCreateExam from "~/components/page/course/create/exams/ButtonCreateExam";
-import FormCreateExam from "~/components/page/course/create/exams/FormCreateExam";
+import AddExam from "~/components/page/course/create/exams/AddExam";
 import ExamList from "~/components/page/course/create/exams/ExamList";
 import SelectLesson from "~/components/page/course/create/exams/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -60,7 +60,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExam,
-    FormCreateExam,
+    AddExam,
     ExamList,
     SelectLesson,
   },
