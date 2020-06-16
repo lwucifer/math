@@ -109,6 +109,7 @@
           v-if="tabType === 'document'"
           @handleSelectDocument="handleSelectDocument"
           @handleReset="handleReset"
+          :lesson="lesson"
         />
 
         <span v-show="get(error, 'content', '')" class="error mb-3">{{
