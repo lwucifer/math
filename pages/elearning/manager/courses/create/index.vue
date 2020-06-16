@@ -115,8 +115,10 @@ export default {
       lessons: "lessons",
       exams: "exams",
       lesson: "lesson",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
   },
 
   methods: {

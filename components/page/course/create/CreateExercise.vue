@@ -137,8 +137,10 @@ export default {
       lesson: "lesson",
       lessons: "lessons",
       progress: "progress",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
   },
 
   methods: {

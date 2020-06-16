@@ -119,9 +119,9 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/create", {
-      disabled_all: "disabled_all",
-    }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     changingTitle() {
       if (this.modalType == "upload") {
         return "Upload tài liệu";

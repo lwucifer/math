@@ -184,9 +184,10 @@ export default {
       general: "general",
       lessons: "lessons_lecture",
       progress: "progress",
-      disabled_all: "disabled_all",
     }),
-
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     submit() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
