@@ -1,6 +1,9 @@
 <template>
   <div class="cc-panel__body-modifer">
-    <div class="cc-box">
+    <div v-if="isShowEdit" class="cc-box">
+      <UpdateExam @cancel="isShowEdit = !isShowEdit" :exam="exam" />
+    </div>
+    <div class="cc-box" v-else>
       <div
         class="cc-box__head"
         :class="{
@@ -8,7 +11,28 @@
         }"
       >
         <div class="cc-box__head-left">
-          <EditExamName :exam="exam" :index="index" />
+          <div class="ce-item__left d-flex align-items-center">
+            <h2 class="cc-box__title heading-6">
+              Bài {{ index + 1 }}:
+              {{ examName }}
+            </h2>
+            <button
+              class="cc-box__btn cc-box__btn-edit-hover mr-4"
+              @click="handleEditExam"
+            >
+              <IconEditAlt class="icon d-block subheading fill-primary" />
+            </button>
+            <button
+              class="cc-box__btn cc-box__btn-edit-hover"
+              @click="handleDeleteExam"
+            >
+              <IconTrashAlt
+                class="d-block subheading fill-secondary"
+                width="20px"
+                height="20px"
+              />
+            </button>
+          </div>
         </div>
 
         <div class="cc-box__head-right">
@@ -69,6 +93,13 @@
         </template>
       </div>
     </div>
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirm"
+      :confirmLoading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
@@ -88,6 +119,7 @@ import ListQuestion from "~/components/page/course/create/exams/ListQuestion";
 import EditExamName from "~/components/page/course/create/exams/EditExamName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
+import UpdateExam from "~/components/page/course/create/exams/UpdateExam";
 
 export default {
   components: {
@@ -104,6 +136,7 @@ export default {
     EditExamName,
     IconAngleUp,
     IconPlus2,
+    UpdateExam,
   },
 
   props: {
@@ -122,16 +155,58 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
+    examName() {
+      return get(this, "exam.title", "").length > 40
+        ? get(this, "exam.title", "").slice(0, 40) + "..."
+        : get(this, "exam.title", "");
+    },
   },
 
   data() {
     return {
       isAddQuestionForm: false,
       isShowExercise: true,
+      isShowEdit: false,
+      showModalConfirm: false,
+      confirmLoading: false,
     };
   },
 
   methods: {
+    handleEditExam() {
+      if (this.disabled_all) return;
+      this.isShowEdit = !this.isShowEdit;
+    },
+
+    handleDeleteExam() {
+      if (this.disabled_all) return;
+      this.showModalConfirm = true;
+    },
+
+    async handleOk() {
+      this.confirmLoading = true;
+      const payload = {
+        id: get(this, "exam.id", ""),
+      };
+
+      const res = await this.$axios({
+        url: "/elearning/creating/test",
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: payload,
+      });
+
+      this.handleCancel();
+      if (get(res, "data.success", false)) {
+        this.$toasted.success(get(res, "data.message", ""));
+        this.$store.dispatch("elearning/create/getExams");
+        return;
+      }
+      this.$toasted.error(get(res, "data.message", ""));
+    },
+
     toggleFormAdd() {
       if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;

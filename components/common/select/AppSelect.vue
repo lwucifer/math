@@ -209,6 +209,10 @@ export default {
       default: "md", // 'sm' | 'md'
     },
     bordered: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
@@ -302,6 +306,7 @@ export default {
     },
 
     handleClickSelected() {
+      if (this.disabled) return;
       console.log("handleClickSelected");
       this.active = !this.active;
       this.$refs.search && this.$refs.search.focus();
