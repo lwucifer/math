@@ -124,7 +124,7 @@
           </td>
         </template>
         <template v-slot:cell(medium_score)="{row}">
-          <td class="wrap-name__table">{{get(row,"medium_score", 0)}}</td>
+          <td class="wrap-name__table text-center">{{get(row,"medium_score", 0)}}</td>
         </template>
         <template v-slot:cell(completion_rate)="{row}">
           <td class="wrap-name__table">
@@ -209,7 +209,8 @@ export default {
         {
           name: "medium_score",
           text: "Điểm trung bình",
-          sort: "true"
+          sort: "true",
+          classTextCenter: "true"
         },
         {
           name: "completion_rate",

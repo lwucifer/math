@@ -37,10 +37,12 @@
           <SelectDate
             @onChange="handleChangeStartDate"
             :value="payload.start_time"
-            :disabled="!payload.starttime_enable"
+            :disabled="!payload.starttime_enable || disabled_all"
           />
 
-          <app-checkbox v-model="payload.starttime_enable"
+          <app-checkbox
+            v-model="payload.starttime_enable"
+            :disabled="disabled_all"
             ><span class="text-base">Áp dụng</span></app-checkbox
           >
         </div>
@@ -51,10 +53,12 @@
           <SelectDate
             @onChange="handleChangeEndDate"
             :value="payload.end_time"
-            :disabled="!payload.endtime_enable"
+            :disabled="!payload.endtime_enable || disabled_all"
           />
 
-          <app-checkbox v-model="payload.endtime_enable"
+          <app-checkbox
+            v-model="payload.endtime_enable"
+            :disabled="disabled_all"
             ><span class="text-base">Áp dụng</span></app-checkbox
           >
         </div>
@@ -66,6 +70,7 @@
         <app-select
           class="cc-select"
           @change="handleChangePrivacy"
+          :disabled="disabled_all"
           :value="payload.privacy"
           :options="[
             { value: '', text: 'Chọn chế độ hiển thị' },
@@ -89,14 +94,14 @@
           <app-radio
             value="1"
             class="mr-4"
-            :checked="payload.comment_allow === 1"
-            @click="payload.comment_allow = 1"
+            :checked="payload.comment_allow === true"
+            @click="payload.comment_allow = true"
             >Có</app-radio
           >
           <app-radio
             value="0"
-            :checked="payload.comment_allow === 0"
-            @click="payload.comment_allow = 0"
+            :checked="payload.comment_allow === false"
+            @click="payload.comment_allow = false"
             >Không</app-radio
           >
         </app-radio-group>
@@ -134,12 +139,6 @@
         >
           <template #unit>đ</template>
         </app-input>
-
-        <!-- <div class="app-input mb-0 app-input--size-md">
-          <div class="app-input__input">
-            <currency-input v-model="payload.fee" />
-          </div>
-        </div> -->
       </div>
 
       <div class="mb-4" v-if="this.free == 1">
@@ -156,12 +155,6 @@
             <template #unit>đ</template>
           </app-input>
 
-          <!-- <div class="app-input mb-0 app-input--size-md">
-            <div class="app-input__input">
-              <currency-input v-model="payload.price" />
-            </div>
-          </div> -->
-
           <div
             class="percent_price__ElearningCreate bg-primary text-white ml-3"
           >
@@ -173,23 +166,6 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <!-- <app-button
-          outline
-          class="mr-4"
-          @click="handleReset"
-          square
-          color="error"
-          ><IconDelete class="mr-2" /> Thiết lập lại</app-button
-        >
-        <app-button
-          @click="handleCLickSave('draft')"
-          class="mr-4"
-          color="primary"
-          square
-          outline
-          :disabled="!is_submit"
-          ><IconSave class="mr-2" /> Lưu nháp</app-button
-        > -->
         <app-button
           @click="handleCLickSave"
           class="create-action__btn mr-4"
@@ -276,8 +252,10 @@ export default {
       general: "general",
       progress: "progress",
       setting: "setting",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     submit() {
       if (this.payload.comment_allow === "") return false;
       if (this.payload.privacy === "") return false;
@@ -286,9 +264,6 @@ export default {
         if (!this.payload.fee) {
           return false;
         }
-        // if (!this.payload.price) {
-        //   return false;
-        // }
       }
       return true;
     },
@@ -327,51 +302,26 @@ export default {
     handleChangePrice(e) {
       this.payload.price = numeral(e).format();
     },
+
     handleChangeFee(e) {
       this.payload.fee = numeral(e).format();
+      this.payload.price = numeral(e).format();
     },
+
     handleChangeSetting() {
-      this.payload.elearning_id = getParamQuery("elearning_id");
-      this.payload.comment_allow = get(this, "setting.comment_allow", "");
-      if (this.payload.comment_allow === true) {
-        this.payload.comment_allow = 1;
-      }
-      if (this.payload.comment_allow === false) {
-        this.payload.comment_allow = 0;
-      }
-      this.payload.price = get(this, "setting.price", 0);
-      this.payload.start_time = get(this, "setting.start_time", "");
-      this.payload.end_time = get(this, "setting.end_time", "");
-      this.payload.starttime_enable = get(
-        this,
-        "setting.starttime_enable",
-        false
-      );
-      this.payload.endtime_enable = get(this, "setting.endtime_enable", false);
-      this.payload.fee = get(this, "setting.fee", 0);
-      this.payload.privacy = get(this, "setting.privacy", "");
-      const fee = toNumber(get(this, "setting.fee", ""));
-      const price = toNumber(get(this, "setting.price", ""));
-      // if (fee) {
-      //   this.percent_price = numeral((price - fee) / fee).format("0%");
-      // }
-      if (fee > 0) {
-        this.free = 1;
-      }
-      if (toNumber(get(this, "setting.fee", "-1")) === 0) {
-        this.free = 2;
-      }
-
-      if (!this.payload.endtime_enable) {
-        this.end_time = "";
-      }
-
-      if (!this.payload.starttime_enable) {
-        this.start_time = "";
+      if (get(this, "setting.setting", false)) {
+        this.payload = { ...this.setting };
+        if (get(this, "setting.price", "") === 0) {
+          this.free = 2;
+        }
+        if (get(this, "setting.price", "") > 0) {
+          this.free = 1;
+        }
       }
     },
 
     handleChangePrivacy(privacy) {
+      if (this.disabled_all) return;
       this.payload.privacy = privacy;
     },
 
@@ -430,14 +380,17 @@ export default {
 
       let payload = { ...this.payload };
 
-      let date_utc = getUTCDateTime(payload.end_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      payload.end_time = date_utc;
-      date_utc = getUTCDateTime(payload.start_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      payload.start_time = date_utc;
+      if (payload.end_time) {
+        payload.end_time = getUTCDateTime(payload.end_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
+
+      if (payload.start_time) {
+        payload.start_time = getUTCDateTime(payload.start_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
 
       if (this.disabled_all) {
         delete payload.privacy;
@@ -475,7 +428,6 @@ export default {
     },
 
     handleReset() {
-      // this.percent_price = "";
       this.free = "";
       this.handleChangeSetting();
     },

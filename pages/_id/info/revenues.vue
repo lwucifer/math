@@ -141,7 +141,7 @@
                       </filter-form>
                     </div>
                     <div class="col-md-3 text-md-right">
-                      <p class="font-weight-semi-bold mb-2">Tổng tiền</p>
+                      <p class="font-weight-semi-bold mb-2">Tổng thực nhận</p>
                       <p
                         class="font-weight-bold h3"
                       >{{ revenue | toThousandFilter('.') }} {{ CURRENCY }}</p>
@@ -215,6 +215,7 @@ import { number } from "yup";
 import { CURRENCY } from "~/utils/config";
 import IconHistory24px from '~/assets/svg/v2-icons/history_24px.svg?inline';
 import { DATE_SHORTCUT } from "~/utils/config";
+import moment from "moment"
 
 export default {
   name: "E-learning",
@@ -278,6 +279,7 @@ export default {
     };
   },
   created() {
+    this.getDateSelect()
     this.fetchRevenue();
     this.fetchEarning();
   },
@@ -357,6 +359,13 @@ export default {
       this.params.from = date[0];
       this.params.to = date[1];
       this.fetchEarning();
+    },
+    getDateSelect(){
+      const firstday = moment().startOf('month');
+      const today = moment();
+      this.dateDefault = [firstday,today];
+      this.params.from = firstday.format("YYYY-MM-01");
+      this.params.to = today.format("YYYY-MM-DD");
     },
     get,
     numeral

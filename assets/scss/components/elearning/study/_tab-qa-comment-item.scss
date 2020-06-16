@@ -28,6 +28,12 @@
 
     &__content {
         margin-bottom: 1.5rem;
+        .action{
+            margin-left: 1rem;
+        }
+        .item-cancel{
+            color: #656565;
+        }
     }
 
     &__actions {

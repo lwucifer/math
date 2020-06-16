@@ -147,8 +147,10 @@ export default {
       general: "general",
       progress: "progress",
       chapters: "chapters",
-      disabled_all: "disabled_all",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;

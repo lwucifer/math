@@ -55,6 +55,7 @@ export default {
   watch: {
     value: {
       handler: function() {
+        if (!this.value) return;
         this.date = moment(this.value).format("YYYY-MM-DD");
 
         let time = moment(this.value).format("HH:mm");
