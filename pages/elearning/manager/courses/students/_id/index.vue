@@ -144,7 +144,7 @@ export default {
           this.$route.query && this.$route.query.elearning_id
             ? this.$route.query.elearning_id
             : "",
-        student_id:
+        user_id:
           this.$route.params && this.$route.params.id
             ? this.$route.params.id
             : "",
