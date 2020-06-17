@@ -59,10 +59,7 @@
             outline
             ><IconSave class="mr-2" /> Lưu nháp</app-button
           > -->
-          <app-button
-            class="create-action__btn mr-4"
-            @click="handleNextStep"
-            :disabled="!isNextStep || disabled_all"
+          <app-button class="create-action__btn mr-4" @click="handleNextStep"
             ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
           >
         </div>
@@ -162,7 +159,14 @@ export default {
     get,
 
     handleNextStep() {
-      if (this.disabled_all) return;
+      if (this.disabled_all) {
+        this.$toasted.error("Bài giảng đã đăng, không được phép sửa");
+        return;
+      }
+      if (!this.isNextStep()) {
+        this.$toasted.error("Bạn chưa hoàn thiện hết nội dung bài giảng");
+        return;
+      }
       this.showModalConfirm = true;
     },
 
