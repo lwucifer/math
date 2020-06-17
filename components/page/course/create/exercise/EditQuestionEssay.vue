@@ -37,6 +37,15 @@
         <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
         câu hỏi</a
       > -->
+      <!-- <app-upload
+        class="mr-auto text-primary"
+        style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .jpg, .jpeg, .jpg, .bmp, .png"
+        @change="handleUploadAnswer"
+      >
+        <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
+        trả lời
+      </app-upload> -->
     </div>
     <app-editor v-model="payload.content" />
 
@@ -76,7 +85,7 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
-import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+import IconCloudUpload from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline";
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
@@ -86,7 +95,7 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    IconCloudDownload24px,
+    IconCloudUpload,
   },
   
   props: {
@@ -170,6 +179,10 @@ export default {
 
     handleCancel() {
       (this.showModalConfirm = false), (this.confirmLoading = false);
+    },
+
+    handleUploadAnswer(file) {
+      console.log("[handleUploadAnswer]", file);
     },
 
     get,
