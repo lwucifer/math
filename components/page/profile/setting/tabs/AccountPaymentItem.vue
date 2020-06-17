@@ -17,10 +17,10 @@
     </p>
     <div class="action-group">
       <button class="" title="Chỉnh sưả" style="margin-right: 3.7rem;" @click="handleEditBank">
-        <IconEditAlt class="icon" />
+        <IconEditAlt :height="20" :width="20"/>
       </button>
       <button class="" title="Xóa" @click="handleDeleteAccountBank">
-        <IconTrashAlt class="icon fill-secondary fill-opacity-1" />
+        <IconTrashAlt :height="20" :width="20" class="fill-secondary fill-opacity-1" />
       </button>
     </div>
   </div>

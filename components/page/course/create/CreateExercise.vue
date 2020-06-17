@@ -49,10 +49,7 @@
 
     <div class="create-action pt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
-          class="create-action__btn mr-4"
-          @click="handleNextStep"
-          :disabled="disabled_all"
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -141,6 +138,11 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
+    },
   },
 
   methods: {
@@ -179,7 +181,10 @@ export default {
     },
 
     handleNextStep() {
-      if (this.disabled_all) return;
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 

@@ -74,16 +74,6 @@ export default {
     useEffect(this, this.handleGetQuestions.bind(this), ["params"]);
   },
 
-  updated(){
-    const questionIdParams = getParamQuery('question_id')
-    this.$nextTick(() => {
-      if(questionIdParams && !this.isScroll){
-          this.$scrollTo('#'+questionIdParams, 1000,{offset:-70})
-              this.isScroll = true
-        }
-      })
-  },
-
   computed: {
     ...mapState("elearning/study/detail", {
       questions: "questions",

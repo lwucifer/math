@@ -26,9 +26,18 @@
       </div>
     </div>
 
-    <label class="d-inline-block mb-3" for="question-editor"
+    <!-- <label class="d-inline-block mb-3" for="question-editor"
       >Nội dung câu hỏi</label
-    >
+    > -->
+    <div class="d-flex justify-content-between align-items-center">
+      <label class="mb-3 font-weight-semi-bold" for="question-editor"
+        >Nội dung câu hỏi</label
+      >
+      <!-- <a href class="d-flex text-decoration-none mr-3">
+        <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
+        câu hỏi</a
+      > -->
+    </div>
     <app-editor v-model="payload.content" />
 
     <!-- <label class="d-inline-block mb-3" for="question-editor"
@@ -67,6 +76,8 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
@@ -74,6 +85,10 @@ import { createPayloadQuestion } from "~/models/course/AddCourseNoAnswer";
 import { mapState } from "vuex";
 
 export default {
+  components: {
+    IconCloudDownload24px,
+  },
+  
   props: {
     question: {
       type: Object,

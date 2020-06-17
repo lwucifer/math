@@ -8,12 +8,12 @@
     />
 
     <div v-else>
-      <CreateLessonOfChapter
+      <UpdateLessonChapter
         :lesson="lesson"
         @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
       />
-      <CreateLessonOfElearning
+      <UpdateLesson
         @toggleShowAddLesson="toggleShowLesson"
         :lesson="lesson"
         v-if="get(general, 'type', '') === 'LECTURE'"
@@ -76,11 +76,11 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import DocumentAdd from "~/components/page/course/create/common/DocumentAdd";
 import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
-import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import UpdateLessonChapter from "~/components/page/course/create/course/AddLesson";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import UpdateLesson from "~/components/page/course/create/lecture/AddLesson";
 
 export default {
   components: {
@@ -91,9 +91,9 @@ export default {
     DocumentAdd,
     IconFileBlank,
     DocumentDetail,
-    CreateLessonOfChapter,
+    UpdateLessonChapter,
     LessonDetailInfo,
-    CreateLessonOfElearning,
+    UpdateLesson,
   },
 
   data() {

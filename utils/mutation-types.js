@@ -551,6 +551,10 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
 };
 
+export const TEACHING_INTERACTIVE_LISTANSWER = {
+    SET_TEACHING_INTERACTIVE_LISTANSWER_LIST: "setTeachingInteractiveListAnswer",
+};
+
 export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
     SET_TEACHING_INTERACTIVE_ACCOUNCEMENT_LIST: "teachingInteractiveListAnnouncement",
 };
