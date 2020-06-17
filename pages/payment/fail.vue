@@ -26,7 +26,7 @@
 import IconAlertCircle1 from "~/assets/svg/icons/alert-circle-1.svg?inline";
 import PaymentSuccessFooter from "~/components/page/payment/PaymenSuccessFooter";
 import { get } from "lodash";
-import { getToken } from '../../utils/auth';
+import { getToken } from "../../utils/auth";
 
 export default {
   components: {
@@ -52,8 +52,8 @@ export default {
   mounted() {
     try {
       const res = JSON.parse(localStorage.getItem("res_payment"));
-      if (!get(res, "data.success", true)) {
-        this.message = get(res, "data.message", "Có lỗi xảy ra");
+      if (!get(res, "success", true)) {
+        this.message = get(res, "message", "Có lỗi xảy ra");
       }
     } catch (error) {
       console.log(error);
