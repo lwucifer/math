@@ -4,9 +4,9 @@
     <div class="e-exercise-list-item__desc mb-3">
       <span v-if="isTest" class="text-primary">{{ type | getTestTypeText }}</span>
       <span v-else class="text-primary">{{ type | getExerciseTypeText }}</span>
-      <app-divider class="e-exercise-list-item__divider" direction="vertical" />
-      <span class="text-gray">Thời gian:</span>
-      <b class="text-dark">{{ getDurationText(duration) }}</b>
+      <app-divider class="e-exercise-list-item__divider" direction="vertical" v-if="duration"/>
+      <span class="text-gray" v-if="duration">Thời gian:</span>
+      <b class="text-dark" v-if="duration">{{ getDurationText(duration) }}</b>
     </div>
 
     <app-button
@@ -31,7 +31,7 @@
       size="sm"
       :pointer="canDoExercise"
       @click.prevent="handleReviewResult"
-      >Làm lại {{ exerciseTextTransform }} ({{ works }}/{{ reworks }})</app-button
+      >Làm lại {{ exerciseTextTransform }} ({{ reworksTransform }})</app-button
     >
 
     <app-button
@@ -141,6 +141,10 @@ export default {
       } else {
         return "bài tập";
       }
+    },
+
+    reworksTransform() {
+      return this.reworks ? `${this.works}/${this.reworks}` : 'Không giới hạn';
     }
   },
 

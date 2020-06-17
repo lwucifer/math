@@ -135,10 +135,7 @@
 
     <div class="create-action mt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
-          @click="handleCLickSave"
-          :disabled="disabled_all"
-          class="create-action__btn mr-4"
+        <app-button @click="handleCLickSave" class="create-action__btn mr-4"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -304,6 +301,7 @@ export default {
     },
 
     handleCheckBenefit() {
+      return true; // ko check loi ich nua
       let check = true;
       if (!get(this, "payload.benefit.length", true)) {
         check = false;
@@ -406,11 +404,19 @@ export default {
     },
 
     handleCLickSave() {
-      this.handleCheckPayload();
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (!this.handleCheckPayload()) {
+        this.confirmLoading = false;
+        this.showModalConfirm = false;
+        return;
+      }
       try {
         this.confirmLoading = true;
         let payload = createPayloadAddCourse(this.payload);

@@ -20,7 +20,7 @@
                 </n-link >
                 <n-link  
                     class="d-flex align-items-center ml-4 text-decoration-none text-gray"
-                    to
+                    :to="'/'+token.id+'/info/setting'"
                 >
                     <IconSettings24px class="mr-3"/>
                     Cài đặt thông báo
@@ -83,12 +83,14 @@ import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
 import { mapState, mapActions, mapGetters } from "vuex";
 import { getToken } from "~/utils/auth";
+const STORE_NOTIFI = 'elearning/study/notifications'
 export default {
     components:{
         IconNotifications24px,
         IconCheck24px,
         IconSettings24px
     },
+
     data(){
         return {
             showMenuNotifi:false,
@@ -96,10 +98,11 @@ export default {
             isReaded:false
         }
     },
-    created() {
-        
-    },
+
     computed: {
+        ...mapState("auth", [
+            "token",
+        ]),
         ...mapState("elearning/study/notifications", ["notis"]),
         getNotificationLink() {
             const accountObj = getToken();
@@ -108,14 +111,26 @@ export default {
             }
         }
     },
+
+    created(){
+        // this.getNotifications()
+    },
+
     methods:{
+        ...mapActions(STORE_NOTIFI, ['getNotifications']),
         handleClickOutside(){
             this.showMenuNotifi = false;
         },
         handleReadNotifi(val){
             this.isReaded = val;
         }
-    }
+    },
+    
+    // watch: {
+    //     showMenuNotifi(newVal){
+    //         newVal && this.getNotifications();
+    //     }
+    // },
 }
 </script>
 

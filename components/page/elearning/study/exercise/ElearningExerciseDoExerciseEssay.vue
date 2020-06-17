@@ -13,18 +13,10 @@
           />
         </div>
         <div class="d-flex justify-content-end align-items-center">
-          <!-- <a
-            href
-            class="text-decoration-none"
-            @click.prevent="handleShowListQuestion"
-            >Xem danh sách câu hỏi</a
-          > -->
-
-          <a href class="text-decoration-none mr-3">
+          <a href class="d-flex text-decoration-none mr-3">
             <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
             câu hỏi</a
           >
-
           <IconFormatListNumbered24px
             class="ext-decoration-none text-clickable"
             @click.prevent="handleShowListQuestion"
@@ -266,19 +258,22 @@ export default {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments
-        // duration: durationCost, // in seconds
-        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
+
+      const submissionForm = new FormData();
+      submissionForm.append("exercise_id", this.submission.exercise_id);
+      submissionForm.append("answers", JSON.stringify(this.submission.answers));
+      attachments.map(singleFile => {
+        submissionForm.append("attachments", singleFile);
+      })
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments
-        // duration: durationCost,
-        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
-      this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
+      this.elearningSudyExerciseSubmissionAdd(submissionForm).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;

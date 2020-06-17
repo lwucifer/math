@@ -20,7 +20,7 @@
                                 </n-link >
                                 <n-link  
                                     class="d-flex align-items-center ml-4 text-decoration-none text-gray"
-                                    to
+                                    :to="'/'+token.id+'/info/setting'"
                                 >
                                     <IconSettings24px class="mr-3"/>
                                     Cài đặt thông báo
@@ -52,6 +52,8 @@
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
+import { mapState, mapActions } from "vuex";
+const STORE_NOTIFI = 'elearning/study/notifications'
 export default {
     layout: 'account-info',
     
@@ -73,10 +75,16 @@ export default {
             }
         }
     },
-    computed:{
-    
+    computed: {
+        ...mapState("auth", [
+            "token",
+        ]),
+    },
+    created(){
+        this.getNotifications()
     },
     methods:{
+        ...mapActions(STORE_NOTIFI, ['getNotifications']),
         handleReadNotifi(val){
             this.isReaded = val;
         },

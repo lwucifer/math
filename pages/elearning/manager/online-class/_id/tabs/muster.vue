@@ -15,10 +15,10 @@
     <div class="class-info mb-4">
       <strong>Tổng số học sinh đã tham gia bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
+        <div class="item">Có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
+        <div class="item">Đến muộn: <strong class="color-primary">{{summary.late_rate}}%</strong></div>
+        <div class="item">Vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
+        <div class="item">Vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
       </div>
     </div>
     <!--end info group-->
