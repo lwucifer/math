@@ -14,7 +14,7 @@
       <app-button color="white" square class="mr-4" :to="transactionLink" nuxt
         >Lịch sử giao dịch</app-button
       >
-      <app-button square :to="transactionLink" nuxt>Thanh toán lại</app-button>
+      <app-button square to="/payment/cart" nuxt>Thanh toán lại</app-button>
     </div>
     <div>
       <PaymentSuccessFooter />
