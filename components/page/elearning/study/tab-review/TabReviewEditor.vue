@@ -82,6 +82,8 @@ export default {
     },
 
     async handleAddVote() {
+      if(!this.payload.comment) delete this.payload.comment;
+      
       const res = await new VoteStudyService(this.$axios)["add"](this.payload);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
