@@ -104,7 +104,10 @@
       v-if="tabType === 'document'"
       @handleSelectDocument="handleSelectDocument"
       @handleReset="handleReset"
+      :lesson="lesson"
     />
+
+    <app-error :error="get(error, 'content', '')"></app-error>
 
     <div class="d-flex justify-content-end mt-4">
       <app-button
@@ -208,6 +211,7 @@ export default {
       },
       error: {
         name: "",
+        content: "",
       },
     };
   },
@@ -223,6 +227,38 @@ export default {
   },
 
   methods: {
+    handleCheckPayload() {
+      let check = true;
+      check = this.handleCheckName();
+      check = this.handleCheckContent();
+      return check;
+    },
+
+    handleCheckName() {
+      if (!this.payload.name) {
+        this.error.name = "Bạn cần nhập tên bài học";
+        return false;
+      }
+      this.error.name = "";
+      return true;
+    },
+
+    handleCheckContent() {
+      if (this.lesson) {
+        this.error.content = "";
+        return true;
+      }
+      let lesson = !!this.payload.lesson;
+      let repository_file_id = !!this.payload.repository_file_id;
+      let article_content = !!this.payload.article_content;
+      if (!lesson && !repository_file_id && !article_content) {
+        this.error.content = "Bạn cần nhập nội dung cho bài học";
+        return false;
+      }
+      this.error.content = "";
+      return true;
+    },
+
     handleChangeLesson() {
       if (this.lesson) {
         this.payload.name = get(this, "lesson.name", "");
@@ -245,11 +281,7 @@ export default {
     },
 
     handleChangeName() {
-      if (!this.payload.name) {
-        return (this.error.name = "Chưa nhập tên bài học");
-      }
-
-      this.error.name = "";
+      this.handleCheckName();
     },
     changeTabType(type) {
       this.handleReset();
@@ -260,12 +292,14 @@ export default {
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.repository_file_id = "";
+      this.handleCheckContent();
     },
 
     handleSelectUrl(file) {
       this.payload.type = file.type;
       this.payload.lesson = "";
       this.payload.repository_file_id = file.id;
+      this.handleCheckContent();
     },
 
     handleAddContent() {
@@ -273,6 +307,10 @@ export default {
     },
 
     async handleOk() {
+      if (!this.handleCheckPayload()) {
+        this.handleCancelModal();
+        return;
+      }
       this.confirmLoading = true;
 
       this.payload.chapter_id = get(this, "chapter.id", "");
@@ -312,6 +350,7 @@ export default {
       this.payload.lesson = lesson;
       this.payload.repository_file_id = file_id;
       this.payload.article_content = article_content;
+      this.handleCheckContent();
     },
 
     handleCancel() {

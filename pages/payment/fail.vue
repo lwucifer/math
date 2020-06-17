@@ -14,7 +14,7 @@
       <app-button color="white" square class="mr-4" :to="transactionLink" nuxt
         >Lịch sử giao dịch</app-button
       >
-      <app-button square :to="transactionLink" nuxt>Thanh toán lại</app-button>
+      <app-button square to="/payment/cart" nuxt>Thanh toán lại</app-button>
     </div>
     <div>
       <PaymentSuccessFooter />
@@ -26,17 +26,17 @@
 import IconAlertCircle1 from "~/assets/svg/icons/alert-circle-1.svg?inline";
 import PaymentSuccessFooter from "~/components/page/payment/PaymenSuccessFooter";
 import { get } from "lodash";
-import { getToken } from '../../utils/auth';
+import { getToken } from "../../utils/auth";
 
 export default {
   components: {
     IconAlertCircle1,
-    PaymentSuccessFooter,
+    PaymentSuccessFooter
   },
 
   data() {
     return {
-      message: "",
+      message: ""
     };
   },
 
@@ -46,7 +46,8 @@ export default {
       if (!!accountObj) {
         return `/${accountObj.id}/info/transactions`;
       }
-    },
+      return "#";
+    }
   },
 
   mounted() {
@@ -58,7 +59,7 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
+  }
 };
 </script>
 

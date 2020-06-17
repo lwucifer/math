@@ -1,5 +1,5 @@
 import numeral from "numeral";
-import { toNumber } from "lodash";
+import { toNumber, get } from "lodash";
 
 class AddCourse {
   constructor(payload) {
@@ -11,7 +11,7 @@ class AddCourse {
       this.cover_image = payload.cover_image;
     }
 
-    if (payload.benefit.length) {
+    if (get(payload, "benefit.length", 0)) {
       this.benefit = JSON.stringify(payload.benefit);
     }
 
