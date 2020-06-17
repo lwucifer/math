@@ -660,6 +660,12 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
     ADD: "teachingInteractiveListquestionAdd"
 };
 
+export const TEACHING_INTERACTIVE_ANSWER = {
+    LIST: "teachingInteractiveListqAnswer",
+    ADD: "teachingInteractiveAnswer",
+    LIKE: "teachingInteractiveLikeAnswer"
+};
+
 export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
     LIST: "teachingInteractiveListAnnouncement",
 };

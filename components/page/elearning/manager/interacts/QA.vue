@@ -58,27 +58,23 @@
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <div @click="showDetialNotify(row.question_id)">
+            <div @click="showDetialQuestion(row)">
               <n-link class title="Chi tiết" to>
-                <IconKeyboardArrowDown24px v-if="isDetail == row.question_id"/>
-                <IconKeyboardArrowRight24px v-else/>
+                <IconKeyboardArrowRight24px/>
               </n-link>
             </div>
           </td>
         </template>
         <template v-slot:cell(content)="{row}">
-          <td v-if="isDetail == row.question_id">
-            <div>{{get(row,"content","")}}</div>
-          </td>
-          <td v-else>
+          <td>
             <v-popover
               trigger="hover"
               popover-class="tooltip--eln-interactive"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <n-link class="text-decoration-none text-gray nowrap" to>
-                {{ get(row,"content","") | truncStrFilter(30)}}
-              </n-link>
+              <span>
+                 {{ get(row,"content","") | truncStrFilter(30)}}
+              </span>
               <template slot="popover">
                 <div>{{get(row,"content","")}}</div>
               </template>
@@ -86,10 +82,7 @@
           </td>
         </template>
         <template v-slot:cell(elearning_name)="{row}">
-          <td v-if="isDetail == row.question_id">
-            <div>{{get(row,"elearning_name","")}}</div>
-          </td>
-          <td v-else>
+          <td>
             <v-popover
               trigger="hover"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
@@ -108,6 +101,11 @@
         </template>
       </app-table>
     </div>
+    <ModalQA 
+      v-if="isDetailQuestion"
+      @close="closeModal"
+      :question="question"
+    />
   </div>
 </template>
 
@@ -125,7 +123,7 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
 import { redirectWithParams } from "~/utils/common";
-
+import ModalQA from "~/components/page/elearning/manager/interacts/ModalQA"
 export default {
   layout: "manage",
 
@@ -134,7 +132,8 @@ export default {
     IconSearch,
     IconKeyboardArrowRight24px,
     IconKeyboardArrowDown24px,
-    AppSelectIneractiveElearning
+    AppSelectIneractiveElearning,
+    ModalQA
   },
   props:{
     loading:{
@@ -145,7 +144,8 @@ export default {
   data() {
     return {
       tab: 1,
-      isDetail:'',
+      isDetailQuestion:false,
+      question:null,
       heads: [
         {
           name: "content",
@@ -382,12 +382,13 @@ export default {
       this.filters.lesson = null,
       this.filters.result = null
     },
-    showDetialNotify(val){
-      if(this.isDetail == val){
-        this.isDetail = ''
-      }else{
-        this.isDetail =val;
-      }
+    showDetialQuestion(val){
+      this.isDetailQuestion = true
+      this.question = val
+    },
+    closeModal(val){
+      this.isDetailQuestion = val;
+      this.teachingInteractiveListquestion(query);
     },
     get
   },
