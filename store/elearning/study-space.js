@@ -35,7 +35,11 @@ const actions = {
           return;
         }
 
+<<<<<<< HEAD
         if (options.params.completed === null) {
+=======
+        if (options.params.completed === false) {
+>>>>>>> origin/develop
           commit("unfinished_lecture", data);
           return;
         }

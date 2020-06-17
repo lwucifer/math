@@ -20,7 +20,7 @@
                 </n-link >
                 <n-link  
                     class="d-flex align-items-center ml-4 text-decoration-none text-gray"
-                    to
+                    :to="'/'+token.id+'/info/setting'"
                 >
                     <IconSettings24px class="mr-3"/>
                     Cài đặt thông báo
@@ -100,6 +100,9 @@ export default {
     },
 
     computed: {
+        ...mapState("auth", [
+            "token",
+        ]),
         ...mapState("elearning/study/notifications", ["notis"]),
         getNotificationLink() {
             const accountObj = getToken();

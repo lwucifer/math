@@ -44,7 +44,7 @@
         </div>
 
         <div class="cc-box__body" style="border-top: 1px solid #E0E0E0">
-          <CreateLessonOfElearning
+          <AddLesson
             v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"
@@ -70,10 +70,7 @@
         <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          class="create-action__btn mr-4"
-          @click="handleNextStep"
-          :disabled="disabled_all"
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -111,7 +108,7 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import AddLesson from "~/components/page/course/create/lecture/AddLesson";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
@@ -133,7 +130,7 @@ export default {
     IconCheck,
     IconTimes,
     CreateAction,
-    CreateLessonOfElearning,
+    AddLesson,
     LessonDetail,
     EditLectureName,
     IconAngleUp,
@@ -188,10 +185,15 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
-    submit() {
+    isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
       return true;
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
     },
   },
 
@@ -210,9 +212,12 @@ export default {
     },
 
     handleNextStep() {
-      if (this.disabled_all) return;
-      if (!this.submit) {
-        this.$toasted.error("Bạn chưa tạo xong nội dung học tập");
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
+      if (!this.isNextStep()) {
+        this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
         return;
       }
       this.showModalConfirm = true;

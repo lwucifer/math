@@ -20,7 +20,7 @@
                                 </n-link >
                                 <n-link  
                                     class="d-flex align-items-center ml-4 text-decoration-none text-gray"
-                                    to
+                                    :to="'/'+token.id+'/info/setting'"
                                 >
                                     <IconSettings24px class="mr-3"/>
                                     Cài đặt thông báo
@@ -74,6 +74,11 @@ export default {
                 number: 1
             }
         }
+    },
+    computed: {
+        ...mapState("auth", [
+            "token",
+        ]),
     },
     created(){
         this.getNotifications()
