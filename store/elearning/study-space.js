@@ -30,12 +30,12 @@ const actions = {
       if (get(result, "success", false)) {
         const data = get(result, "data", null);
 
-        if (options.params.is_completed === true) {
+        if (options.params.completed === true) {
           commit("finished_lecture", data);
           return;
         }
 
-        if (options.params.is_completed === false) {
+        if (options.params.completed === null) {
           commit("unfinished_lecture", data);
           return;
         }
