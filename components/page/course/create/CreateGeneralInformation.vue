@@ -135,10 +135,7 @@
 
     <div class="create-action mt-5">
       <div class="create-action__right d-flex align-items-center">
-        <app-button
-          @click="handleCLickSave"
-          :disabled="disabled_all"
-          class="create-action__btn mr-4"
+        <app-button @click="handleCLickSave" class="create-action__btn mr-4"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -407,6 +404,10 @@ export default {
     },
 
     handleCLickSave() {
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 

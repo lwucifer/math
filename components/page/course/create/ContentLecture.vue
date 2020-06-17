@@ -70,10 +70,7 @@
         <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          class="create-action__btn mr-4"
-          @click="handleNextStep"
-          :disabled="disabled_all"
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -188,10 +185,15 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
-    submit() {
+    isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
       return true;
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
     },
   },
 
@@ -210,9 +212,12 @@ export default {
     },
 
     handleNextStep() {
-      if (this.disabled_all) return;
-      if (!this.submit) {
-        this.$toasted.error("Bạn chưa tạo xong nội dung học tập");
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
+      if (!this.isNextStep()) {
+        this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
         return;
       }
       this.showModalConfirm = true;
