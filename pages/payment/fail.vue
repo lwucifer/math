@@ -71,8 +71,8 @@ export default {
   mounted() {
     try {
       const res = JSON.parse(localStorage.getItem("res_payment"));
-      if (!get(res, "data.success", true)) {
-        this.message = get(res, "data.message", "Có lỗi xảy ra");
+      if (!get(res, "success", true)) {
+        this.message = get(res, "message", "Có lỗi xảy ra");
       }
     } catch (error) {
       console.log(error);
