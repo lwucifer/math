@@ -52,6 +52,8 @@
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconSettings24px from '~/assets/svg/v2-icons/settings_24px.svg?inline';
+import { mapState, mapActions } from "vuex";
+const STORE_NOTIFI = 'elearning/study/notifications'
 export default {
     layout: 'account-info',
     
@@ -73,10 +75,11 @@ export default {
             }
         }
     },
-    computed:{
-    
+    created(){
+        this.getNotifications()
     },
     methods:{
+        ...mapActions(STORE_NOTIFI, ['getNotifications']),
         handleReadNotifi(val){
             this.isReaded = val;
         },

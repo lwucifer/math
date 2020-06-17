@@ -67,7 +67,7 @@
                 :free="get(item, 'price.free', false)"
                 :discount="item.discount"
                 :online-class="item.is_streaming"
-                :description="`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non dolor tincidunt turpis eget sit egestas eget dui.`"
+                :description="item.description"
               />
             </div>
           </template>
@@ -175,7 +175,7 @@
                 :num-of-course="item.courses"
                 :averageRate="item.voting_rate ? Math.floor(item.voting_rate) : 0"
                 :totalReview="item.votings"
-                :description="item.biography || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non'"
+                :description="item.biography"
               />
             </div>
           </template>

@@ -64,6 +64,11 @@
 }
 
 .eh-personal-box__desc {
+    @include set-line((
+        'lineClamp': 3,
+        'lineHeight': $line-height-base,
+        'fixedHeight': true
+    ));
     margin-bottom: 3rem;
 }
 

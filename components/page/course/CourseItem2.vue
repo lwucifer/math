@@ -69,7 +69,7 @@
           :size="size === 'sm' ? 12 : 14"
         />
         <span class="text-dark">
-          <strong>{{ get(item, "voting.rate", 0) }}</strong>
+          <strong>{{ get(item, "voting.rate", 0) | numeralFormat("0.0") }}</strong>
           ({{ get(item, "voting.votes", 0) }})
         </span>
         <slot name="mycoursefavourite"></slot>

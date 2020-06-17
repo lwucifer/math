@@ -266,19 +266,22 @@ export default {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments
-        // duration: durationCost, // in seconds
-        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
+
+      const submissionForm = new FormData();
+      submissionForm.append("exercise_id", this.submission.exercise_id);
+      submissionForm.append("answers", JSON.stringify(this.submission.answers));
+      attachments.map(singleFile => {
+        submissionForm.append("attachments", singleFile);
+      })
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: attachments
-        // duration: durationCost,
-        // start_time: fullDateTimeSlash(this.submission.start_time)
       });
 
-      this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
+      this.elearningSudyExerciseSubmissionAdd(submissionForm).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;

@@ -230,23 +230,21 @@ export default {
 
     handleQuestionSubmission() {
       console.log("[handleQuestionSubmission]", this.currentExerciseQuestion);
-      const durationCost = parseInt(
-        (new Date().getTime() - this.submission.start_time.getTime()) / 1000
-      ); // in seconds
 
       const submissionReq = createExerciseSubmissionReq({
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: null,
-        // duration: durationCost, // in seconds
-        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
+
+      // const submissionForm = new FormData();
+      // submissionForm.append("exercise_id", this.submission.exercise_id);
+      // submissionForm.append("answers", JSON.stringify(this.submission.answers));
+      // submissionForm.append("attachments", null);
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        // duration: durationCost,
-        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {

@@ -20,8 +20,9 @@
         class="mb-3"
         textarea
         rows="4"
-        placeholder="Đặt câu hỏi"
+        placeholder="Viết đánh giá"
         v-model="payload.comment"
+        v-if="isAllowComment"
       />
 
       <div class="d-flex justify-content-between mt-4">
@@ -42,6 +43,7 @@ import { mapState } from "vuex";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import VoteStudyService from "~/services/elearning/study/Vote.js";
 
+
 export default {
   components: {
     IconCameraAlt,
@@ -50,6 +52,13 @@ export default {
 
   computed: {
     ...mapState("auth", { user_login: "token" }),
+    ...mapState("elearning/study/study-info", [
+      "info",
+    ]),
+
+    isAllowComment() {
+      return get(this, "info.allow_comment", false);
+    }
   },
 
   data() {
@@ -73,6 +82,8 @@ export default {
     },
 
     async handleAddVote() {
+      if(!this.payload.comment) delete this.payload.comment;
+      
       const res = await new VoteStudyService(this.$axios)["add"](this.payload);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
