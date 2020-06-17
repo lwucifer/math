@@ -103,9 +103,11 @@ export default {
 
       if (get(res, "data.success", false)) {
         this.inputCodeSuccess = true;
+        this.$emit("handleCancel");
         return;
       }
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+      this.$emit("handleCancel");
     },
 
     closeModalNoti() {
