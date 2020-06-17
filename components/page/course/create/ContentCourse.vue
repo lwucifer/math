@@ -153,6 +153,11 @@ export default {
       if (get(this, "progress.content_status", false) != 1) return false;
       return true;
     },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
+    },
   },
 
   methods: {
@@ -160,11 +165,11 @@ export default {
 
     handleNextStep() {
       if (this.disabled_all) {
-        this.$toasted.error("Bài giảng đã đăng, không được phép sửa");
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
         return;
       }
       if (!this.isNextStep()) {
-        this.$toasted.error("Bạn chưa hoàn thiện hết nội dung bài giảng");
+        this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
         return;
       }
       this.showModalConfirm = true;
