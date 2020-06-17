@@ -31,12 +31,12 @@ import { getToken } from "../../utils/auth";
 export default {
   components: {
     IconAlertCircle1,
-    PaymentSuccessFooter,
+    PaymentSuccessFooter
   },
 
   data() {
     return {
-      message: "",
+      message: ""
     };
   },
 
@@ -46,7 +46,8 @@ export default {
       if (!!accountObj) {
         return `/${accountObj.id}/info/transactions`;
       }
-    },
+      return "#";
+    }
   },
 
   mounted() {
@@ -58,7 +59,7 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
+  }
 };
 </script>
 

@@ -14,7 +14,7 @@ export default {
     console.log("[payload]", qs.stringify(payload));
     const res = await this.$store.dispatch(
       `payment/${actionTypes.PAYMENT.VALIDATE_TRANSACTION}`,
-      { params: payload }
+      { params: qs.stringify(payload) }
     );
     localStorage.setItem("res_payment", JSON.stringify(res));
     if (res.success) {
