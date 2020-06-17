@@ -5,7 +5,11 @@
 
       <div class="row">
         <div class="col-md-3">
-          <ElearningManagerSide active="5" />
+          <sub-side>
+            <template v-slot:content>
+              <ElearningManagerSide active="5" />
+            </template>
+          </sub-side>
         </div>
         <div class="col-md-9">
           <sub-block-section title="Tạo phòng học online" has-icon>
@@ -296,15 +300,12 @@
 </template>
 
 <script>
-import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
-import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 import IconTrash from '~/assets/svg/v2-icons/trash-alt.svg?inline';
 import IconClock from '~/assets/svg/icons/clock.svg?inline';
-import IconSave from '~/assets/svg/v2-icons/save.svg?inline';
 import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
@@ -386,14 +387,11 @@ export default {
   components: {
     IconTrash,
     IconClock,
-    IconAngleUp,
     IconPlus,
-    IconAngleDown,
     IconCalendar,
     IconTrashAlt,
     IconCreate,
     IconRight,
-    IconSave,
     ElearningManagerSide
   },
 
