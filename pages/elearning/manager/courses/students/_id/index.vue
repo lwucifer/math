@@ -6,17 +6,17 @@
         <ElearningManagerSide active="2" />
       </div>
       <div class="col-md-9">
-        <sub-block-section :title="progress.name" has-icon>
+        <sub-block-section :title="get(progress, 'name', '')" has-icon>
           <template v-slot:content>
             <div class="d-flex">
               <h5 class="text-primary">Thông tin học sinh</h5>
               <app-button
-                v-if="!progress.is_banned"
+                v-if="!get(progress, 'is_banned', false)"
                 square
                 color="secondary"
                 size="sm"
                 class="btn-block__manager-student"
-                @click="bannedStudent(progress.is_banned)"
+                @click="bannedStudent(get(progress, 'is_banned', false))"
               >
                 <IconBlock24px class="icon mr-2" />Cấm học sinh này
               </app-button>
@@ -134,6 +134,8 @@ export default {
   },
 
   methods: {
+    get,
+    
     ...mapActions(STORE_TEACHING_BANNED, ["teachingElearningBanned"]),
     ...mapActions(STORE_TEACHING_PROGRESS, ["teachingStudentProGressList"]),
     bannedStudent(isBanned) {

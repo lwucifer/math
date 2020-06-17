@@ -58,19 +58,25 @@
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id + '/study?question_id='+row.question_id" >
-              <IconArrowForwardIos24pxOutlined />
-            </n-link>
+            <div @click="showDetialNotify(row.question_id)">
+              <n-link class title="Chi tiết" to>
+                <IconKeyboardArrowDown24px v-if="isDetail == row.question_id"/>
+                <IconKeyboardArrowRight24px v-else/>
+              </n-link>
+            </div>
           </td>
         </template>
         <template v-slot:cell(content)="{row}">
-          <td>
+          <td v-if="isDetail == row.question_id">
+            <div>{{get(row,"content","")}}</div>
+          </td>
+          <td v-else>
             <v-popover
               trigger="hover"
               popover-class="tooltip--eln-interactive"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <n-link class="text-decoration-none text-gray" :to="'/elearning/' + row.elearning_id + '/study?question_id='+row.question_id">
+              <n-link class="text-decoration-none text-gray nowrap" to>
                 {{ get(row,"content","") | truncStrFilter(30)}}
               </n-link>
               <template slot="popover">
@@ -80,13 +86,16 @@
           </td>
         </template>
         <template v-slot:cell(elearning_name)="{row}">
-          <td>
+          <td v-if="isDetail == row.question_id">
+            <div>{{get(row,"elearning_name","")}}</div>
+          </td>
+          <td v-else>
             <v-popover
               trigger="hover"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
               popover-class="tooltip--eln-interactive"
             >
-              <div>{{get(row,"elearning_name","") | truncStrFilter(30)}}</div>
+              <div class="nowrap">{{get(row,"elearning_name","") | truncStrFilter(30)}}</div>
               <template slot="popover">
                 <div>{{get(row,"elearning_name","")}}</div>
               </template>
@@ -105,8 +114,8 @@
 <script>
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
-
+import IconKeyboardArrowRight24px from '~/assets/svg/v2-icons/keyboard_arrow_right_24px.svg?inline';
+import IconKeyboardArrowDown24px from '~/assets/svg/v2-icons/keyboard_arrow_down_24px.svg?inline';
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
@@ -116,13 +125,15 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
 import { redirectWithParams } from "~/utils/common";
+
 export default {
   layout: "manage",
 
   components: {
     IconHamberger,
     IconSearch,
-    IconArrowForwardIos24pxOutlined,
+    IconKeyboardArrowRight24px,
+    IconKeyboardArrowDown24px,
     AppSelectIneractiveElearning
   },
   props:{
@@ -134,6 +145,7 @@ export default {
   data() {
     return {
       tab: 1,
+      isDetail:'',
       heads: [
         {
           name: "content",
@@ -369,6 +381,13 @@ export default {
     resetForm(){
       this.filters.lesson = null,
       this.filters.result = null
+    },
+    showDetialNotify(val){
+      if(this.isDetail == val){
+        this.isDetail = ''
+      }else{
+        this.isDetail =val;
+      }
     },
     get
   },
