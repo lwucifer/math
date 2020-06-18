@@ -23,6 +23,13 @@
         <IconTrashAlt :height="20" :width="20" class="fill-secondary fill-opacity-1" />
       </button>
     </div>
+    <app-modal-confirm
+      title="Bạn chắc muốn xóa"
+      description="It is a long established fat that a reader will be  distracted by the readable content"
+      v-if="showModalDelete"
+      @ok="handleOk"
+      @cancel="handleClose"
+    />
   </div>
 </template>
 
@@ -36,6 +43,11 @@ export default {
     IconEditAlt,
     IconTrashAlt,
   },
+  data(){
+    return{
+       showModalDelete:false
+    }
+  },
   props: {
     bank: {
       type: Object,
@@ -44,7 +56,16 @@ export default {
   },
   methods: {
     get,
-    async handleDeleteAccountBank() {
+    handleDeleteAccountBank() {
+      this.showModalDelete = true
+    },
+    handleRefreshAccountBank() {
+      this.$emit("handleRefreshAccountBank");
+    },
+    handleEditBank() {
+      this.$emit("handleEditBank", this.bank);
+    },
+    async handleOk(){
       const payload = get(this, "bank.user_bank_id", "");
       const result = await this.$store.dispatch(
         `bank/${actionTypes.ACCOUNT_BANKS.DELETE}`,
@@ -53,16 +74,15 @@ export default {
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.$emit("handleRefreshAccountBank");
+        this.showModalDelete = false;
         return;
       }
       this.$toasted.error(get(result, "message", ""));
+      this.showModalDelete = false;
     },
-    handleRefreshAccountBank() {
-      this.$emit("handleRefreshAccountBank");
-    },
-    handleEditBank() {
-      this.$emit("handleEditBank", this.bank);
-    },
+    handleClose(){
+      this.showModalDelete = false;
+    }
   },
 };
 </script>
