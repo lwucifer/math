@@ -1,3 +1,4 @@
+.btn-close-side,
 .btn-toggle-side {
     display: none;
 }
@@ -92,6 +93,7 @@
     }
     .btn-close-side {
         position: absolute;
+        display: block;
         top: 1.5rem;
         right: 1.5rem;
         z-index: 99;
