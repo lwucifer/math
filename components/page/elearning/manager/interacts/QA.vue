@@ -388,6 +388,9 @@ export default {
     },
     closeModal(val){
       this.isDetailQuestion = val;
+      const query = {
+        params: { ...this.listQuery }
+      };
       this.teachingInteractiveListquestion(query);
     },
     get

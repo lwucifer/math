@@ -12,13 +12,13 @@
             <app-avatar class="mr-2" :size="40" v-lazy="'https://picsum.photos/40/40'"/>
             <div>
                 <p class="text-dark">{{get(question,"student_name",'')}}</p>
-                <p class="text-gray-3">15/10/2020</p>
+                <p class="text-gray-3">{{'Wednesday, June 17, 2020 1:42 AM' | moment('from')}}</p>
             </div>
         </div>
         <span>{{get(question,"content",'')}}</span>
         <hr class="mt-3"/>
-        <div class="mt-5">
-            <div class="d-flex mb-5" v-for="(item,index) in  get(this,'question.content','')" :key="index">
+        <div class="mt-5" v-if="listAnswers">
+            <div class="d-flex mb-5" v-for="(item,index) in  get(this,'listAnswers.content',[])" :key="index">
                 <app-avatar class="mr-2" :size="40" :src="get(item,'creator_avatar','')"/>
                 <div>
                     <p class="text-dark">{{item.creator_name}}</p>
@@ -26,6 +26,9 @@
                     <p v-html="get(item,'content','')"></p>
                 </div>
             </div>
+        </div>
+        <div class="my-3 text-center" v-else>
+            Không có dữ liệu
         </div>
         <app-input
             textarea

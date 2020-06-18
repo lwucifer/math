@@ -47,6 +47,7 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 25px;
+    margin-top:6rem;
     svg {   
         height: 40px;
         width: 40px;

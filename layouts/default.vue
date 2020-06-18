@@ -1,8 +1,14 @@
 <template>
-  <div class="page-wrap layout-default">
+  <div class="page-wrap layout-default" :class="show ? 'open-side' : ''">
     <TheHeader />
 
-    <nuxt class="page-content"/>
+    <div class="page-content" >
+      <!--btn toggle side on tablet-->
+      <button class="btn-toggle-side" @click="show = !show">
+        <IconHamberger class="fill-primary"/>
+      </button>
+      <nuxt/>
+    </div>
 
     <Footer />
 
@@ -13,13 +19,22 @@
 <script>
 import TheHeader from "~/components/layout/header/Header"
 import Footer from "~/components/layout/footer/Footer"
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline"
 
 export default {
   components: {
     TheHeader,
-    Footer
+    Footer,
+    IconHamberger
+  },
+
+  data() {
+    return {
+      show: false
+    }
   }
 }
+
 </script>
 
 <style lang="scss">
