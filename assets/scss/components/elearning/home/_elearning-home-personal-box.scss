@@ -67,9 +67,10 @@
     @include set-line((
         'lineClamp': 3,
         'lineHeight': $line-height-base,
-        'fixedHeight': true
     ));
+    max-height: unset;
     margin-bottom: 3rem;
+    word-break: break-word;
 }
 
 .eh-personal-box__bottom {
