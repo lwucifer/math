@@ -5,7 +5,11 @@
 
       <div class="row">
         <div class="col-md-3 sub-side">
-          <ElearningManagerSide active="5" />
+          <sub-side>
+            <template v-slot:content>
+              <ElearningManagerSide active="5" />
+            </template>
+          </sub-side>
         </div>
         <div class="col-md-9">
           <sub-block-section title="Tạo phòng học online" has-icon>
