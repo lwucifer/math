@@ -559,8 +559,10 @@ export default {
       }
     },
     saveTime(index) {
-      this.indexEdit = null;
-      this.indexShow = null;
+      if (this.checkSchedule) {
+        this.indexEdit = null;
+        this.indexShow = null;
+      }
     },
 
     changeName(e) {
@@ -626,7 +628,9 @@ export default {
     },
 
     fnSave() {
-      this.showModalConfirm = true;
+      if (this.fullParams) {
+        this.showModalConfirm = true;
+      }
     },
     fnSaveDraf() {
       this.showModalConfirmDraf = true;
