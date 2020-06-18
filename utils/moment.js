@@ -254,3 +254,6 @@ Vue.filter("getDateTimeFromTo", function (_utcDate) {
 Vue.filter("getLocalTimeHH_MM", function (_utcDate) {
     return getLocalTimeHH_MM(_utcDate);
 });
+Vue.filter("getLocalDateTime", function (_utcDate) {
+    return getLocalDateTime(_utcDate);
+});

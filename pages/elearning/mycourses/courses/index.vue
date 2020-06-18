@@ -49,7 +49,7 @@
                 />
               </div>
 
-              <div class="filter-form__item">
+              <div class="filter-form__item m-0">
                 <app-button
                   :color="showFilter ? 'primary' : 'white'"
                   square
