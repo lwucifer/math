@@ -187,7 +187,8 @@ export default {
         keyword: null,
         completed: null,
         privacy: null,
-        free: null
+        free: null,
+        is_archive: false
       },
       tab: 2,
       checkModalShare: false,
@@ -274,9 +275,19 @@ export default {
       this.tab = tab;
       if (tab == 2) {
         this.params.completed = null;
+        this.params.is_archive = false;
       }
       if (tab == 3) {
         this.params.completed = true;
+        this.params.is_archive = null;
+      }
+      if (tab == 4) {
+        this.params.completed = null;
+        this.params.is_archive = null;
+      }
+      if (tab == 5) {
+        this.params.completed = null;
+        this.params.is_archive = null;
       }
       this.params.page = 1;
       this.params.keyword = null;
