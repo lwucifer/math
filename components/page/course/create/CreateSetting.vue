@@ -304,7 +304,10 @@ export default {
         return false;
       }
       this.error.free = "";
-      if (numeral(get(this, "payload.fee", 0)).value() < 10000) {
+      if (
+        this.free == 1 &&
+        numeral(get(this, "payload.fee", 0)).value() < 10000
+      ) {
         this.error.price = "Học phí tối thiểu là 10,000đ";
         return false;
       }
@@ -383,6 +386,7 @@ export default {
 
     handleCLickSave() {
       if (!this.handleCheckPayload()) {
+        console.log(1);
         return;
       }
       this.showModalConfirm = true;
