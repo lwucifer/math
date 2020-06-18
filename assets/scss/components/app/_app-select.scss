@@ -142,12 +142,11 @@
         }
     }
 
-    .app-select__option {
-        padding-top: .5rem;
-        padding-bottom: .5rem;
-        padding-left: 1rem;
-        border-bottom: 0;
-    }
+    // .app-select__option {
+    //     padding-top: .5rem;
+    //     padding-bottom: .5rem;
+    //     border-bottom: 0;
+    // }
 
     .app-select__options {
         max-height: 55px * 5;
@@ -163,6 +162,7 @@
         width: 0.75em;
         max-width: 100%;
         border: 0;
+        background-color: inherit;
     }
 }
 
@@ -191,4 +191,18 @@
 // Bordered
 .app-select--bordered {
     border: 1px solid $color-disabled;
+
+    .app-select--disabled {
+        border-color: $color-disabled;
+    }
+}
+
+// Disabled
+.app-select--disabled {
+    pointer-events: none;
+
+    .app-select__selected {
+        background-color: #F4F4F4;
+        color: $color-disabled;
+    }
 }
