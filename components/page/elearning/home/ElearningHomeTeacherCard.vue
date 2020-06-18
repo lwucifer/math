@@ -1,7 +1,8 @@
 <template>
   <div class="eh-teacher-card">
     <div class="eh-teacher-card__img">
-      <img :src="image" :alt="name" />
+      <img v-if="!!image" :src="image" :alt="name" />
+      <DefaultAvatar v-else width="100%" height="100%" />
     </div>
 
     <h3 class="eh-teacher-card__name heading-4">{{ name }}</h3>
@@ -17,7 +18,7 @@
       </div>
       <div class="eh-teacher-card__rating">
         <div class="text-dark mb-1">
-          <b>{{ averageRate }}</b>&nbsp;({{ totalReview }})
+          <b>{{ averageRate | numeralFormat("0.0") }}</b>
         </div>
         <app-stars :size="13" :stars="averageRate" />
       </div>
@@ -25,20 +26,27 @@
 
     <app-divider class="my-3" color="disabled" />
 
-    <div
-      class="eh-teacher-card__desc"
-    >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non</div>
+    <div v-if="!!description" v-html="description" class="eh-teacher-card__desc"></div>
+    <div v-else class="eh-teacher-card__desc">
+      <div class="text-gray-2 caption text-center">Chưa có nội dung giới thiệu.</div>
+    </div>
 
     <app-button class="eh-teacher-card__btn" nuxt :to="to">Xem thêm</app-button>
   </div>
 </template>
 
 <script>
+import DefaultAvatar from "~/assets/svg/images/default-avatar.svg?inline";
+
 export default {
+  components: {
+    DefaultAvatar
+  },
+
   props: {
     to: {
       type: String,
-      default: ''
+      default: ""
     },
     image: String,
     name: String,

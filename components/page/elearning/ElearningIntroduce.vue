@@ -1,6 +1,8 @@
 <template>
   <section class="elearning-id-box scroll-target" id="introduce">
-    <h4 class="mb-4">Lợi ích từ {{ title }}</h4>
+    <h4 class="mb-4" v-if="get(info, 'benefits.length', 0)">
+      Lợi ích từ {{ title }}
+    </h4>
 
     <div v-if="typeof get(info, 'benefits', '') === 'string'" class="d-flex">
       <template v-if="get(info, 'benefits', [])">

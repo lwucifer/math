@@ -29,12 +29,18 @@
         </n-link>
         <app-stars :stars="averageRate || 0" class="ml-4 mr-3" />
         <span class="text-dark">
-          <b>{{ averageRate || 0 }}</b>
+          <b>{{ (averageRate || 0) | numeralFormat("0.0") }}</b>
           ({{ totalReview || 0 }})
         </span>
       </div>
 
-      <div class="eh-personal-box__desc" v-if="description">{{ description }}</div>
+      <div v-if="!!description" class="eh-personal-box__desc">
+        <div v-html="description"></div>
+      </div>
+      <div v-else class="eh-personal-box__desc">
+        <div class="text-gray-2 caption">Chưa có mô tả khoá học.</div>
+      </div>
+      
 
       <div class="eh-personal-box__bottom">
         <app-button class="mr-4" nuxt :to="to">Xem chi tiết</app-button>

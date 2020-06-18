@@ -102,7 +102,14 @@ export default {
       return this.tab > 0 ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0];
     }
   },
-
+  mounted(){
+    const hash = this.$route.hash
+    const type = hash ? hash.substring(1) : ''
+    if(type == 'notify'){
+      this.tab = 2;
+      console.log('hello')
+    }
+  },
   methods: {
     onPageChange(e) {
       const that = this;

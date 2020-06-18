@@ -1,7 +1,7 @@
 class BannedStudent {
     constructor(payload) {
         this.elearning_id = payload.elearning_id;
-        this.student_id = payload.student_id;
+        this.user_id = payload.user_id;
         this.banned = payload.banned;
     }
 }

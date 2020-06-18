@@ -23,7 +23,9 @@ const actions = {
       const result = await new InfoService(this.$axios)[
         actionTypes.BASE.LIST
       ](payload);
+
       if (result.success == RESPONSE_SUCCESS) {
+        // console.log("[ELEARNING_STUDY_INFO.LIST]", result.data);
         commit(
           mutationTypes.ELEARNING_INFO.SET_ELEARNING_INFO,
           result.data

@@ -148,6 +148,9 @@
       <template v-slot:cell(publish_date)="{ row }">
         <td>{{getDateBirthDayUTC(row.publish_date)}}</td>
       </template>
+      <template v-slot:cell(created_at)="{ row }">
+        <td>{{getDateBirthDayUTC(row.created_at)}}</td>
+      </template>
       <template v-slot:cell(start_time)="{ row }">
         <td>{{row.start_time ? getDateBirthDayUTC(row.start_time) : getDateBirthDayUTC(row.publish_date)}}</td>
       </template>
@@ -346,7 +349,7 @@ export default {
           text: "Hiển thị"
         },
         {
-          name: "publish_date",
+          name: "created_at",
           text: "Ngày tạo",
           sort: true
         }
@@ -417,7 +420,7 @@ export default {
       params: {
         page: 1,
         limit: 10,
-        sorted: "publish_date_desc"
+        sorted: "created_at_desc"
       },
       filters: {
         type: null,

@@ -4,265 +4,264 @@
       <breadcrumb />
 
       <div class="row">
-        <div class="col-md-3">
-          <ElearningManagerSide active="5" />
+        <div class="col-md-3 sub-side">
+          <sub-side>
+            <template v-slot:content>
+              <ElearningManagerSide active="5" />
+            </template>
+          </sub-side>
         </div>
-        <sub-block-section title="Tạo phòng học online" has-icon>
-          <template v-slot:content>
-            <div class="olclasses-create-main">
-            <div class="mt-2">
-              <div class="form-item">
-                <label>
-                  <strong>Thuộc bài giảng/ khóa học</strong>
-                </label>
-                <app-vue-select
-                  style="width: 25rem"
-                  class="app-vue-select form-item__selection"
-                  v-model="filterCourse"
-                  :options="courses"
-                  label="text"
-                  placeholder="Chọn bài giảng/khóa học"
-                  @input="(e) => handleChangedCourse(e)"
-                  has-border
-                ></app-vue-select>
-              </div>
-
-              <div class="form-item">
-                <label>
-                  <strong>Tên phòng học</strong> (Tối đa 150 ký tự)
-                </label>
-                <div class="input-limit">
-                  <input type="text" :value="params.name" @input="changeName" />
-                  <span class="limit">{{params.name.length}}</span>
+        <div class="col-md-9">
+          <sub-block-section title="Tạo phòng học online" has-icon>
+            <template v-slot:content>
+              <div class="olclasses-create-main">
+              <div class="mt-2">
+                <div class="form-item">
+                  <label>
+                    <strong>Thuộc bài giảng/ khóa học</strong>
+                  </label>
+                  <app-vue-select
+                    style="width: 25rem"
+                    class="app-vue-select form-item__selection"
+                    v-model="filterCourse"
+                    :options="courses"
+                    label="text"
+                    placeholder="Chọn bài giảng/khóa học"
+                    @input="(e) => handleChangedCourse(e)"
+                    has-border
+                  ></app-vue-select>
                 </div>
-              </div>
 
-              <div class="form-item">
-                <label>
-                  <strong>Chế độ hiển thị</strong> (Hiển thị theo thuộc tính của bài giảng /khóa học liên quan)
-                </label>
-                <app-vue-select
-                  style="width: 17rem"
-                  class="app-vue-select form-item__selection"
-                  :disabled="true"
-                  v-model="filterPrivacy"
-                  :options="privacies"
-                  label="text"
-                  placeholder="Công khai"
-                  @input="handleChangedPrivacy"
-                  has-border
-                ></app-vue-select>
-              </div>
+                <div class="form-item">
+                  <label>
+                    <strong>Tên phòng học</strong> (Tối đa 150 ký tự)
+                  </label>
+                  <div class="input-limit">
+                    <input type="text" :value="params.name" @input="changeName" />
+                    <span class="limit">{{params.name.length}}</span>
+                  </div>
+                </div>
 
-              <div class="form-item">
-                <label>
-                  <strong>Gửi lời mời học đến toàn bộ học sinh đã tham gia bài giảng/ khóa học này của bạn</strong>
-                </label>
-                <app-radio name="sendmess" :value="true" class="pr-6 mr-5" v-model="sendMess">Có</app-radio>
-                <app-radio name="sendmess" :value="false" v-model="sendMess">Không</app-radio>
-              </div>
+                <div class="form-item">
+                  <label>
+                    <strong>Chế độ hiển thị</strong> (Hiển thị theo thuộc tính của bài giảng /khóa học liên quan)
+                  </label>
+                  <app-vue-select
+                    style="width: 17rem"
+                    class="app-vue-select form-item__selection"
+                    :disabled="true"
+                    v-model="filterPrivacy"
+                    :options="privacies"
+                    label="text"
+                    placeholder="Công khai"
+                    @input="handleChangedPrivacy"
+                    has-border
+                  ></app-vue-select>
+                </div>
 
-              <div class="form-item">
-                <p>
-                  <strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)
-                </p>
+                <div class="form-item">
+                  <label>
+                    <strong>Gửi lời mời học đến toàn bộ học sinh đã tham gia bài giảng/ khóa học này của bạn</strong>
+                  </label>
+                  <app-radio name="sendmess" :value="true" class="pr-6 mr-5" v-model="sendMess">Có</app-radio>
+                  <app-radio name="sendmess" :value="false" v-model="sendMess">Không</app-radio>
+                </div>
 
-                <div
-                  class="box22 border mt-3"
-                  v-for="(item, index) in params.schedules"
-                  :key="index"
-                >
-                  <div v-if="indexEdit === index || indexShow === index">
-                    <div class>
-                      <div class="d-flex-center">
-                        <h6 class="mb-3">Giờ học</h6>
-                        <div class="ml-auto" v-if="indexEdit === index">
-                          <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
-                          <button v-on:click="removeSchedule(index, true)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
-                         </div>
-                      </div>
-                      <div class="d-flex-center">
-                        <div class="d-flex-center mb-4 mr-6">
-                          <label class="mr-3">Bắt đầu vào lúc</label>
-                          <app-date-picker
-                              class="ml-3"
-                              v-model="schedules[index].start_time"
-                              @input="changeSchedules"
-                              square
-                              size="sm"
-                              valueFormat="hh:mm a"
-                              placeholder="hh:mm a"
-                              type="time"
-                              :minuteStep="5"
-                            >
-                              <template v-slot:icon-calendar>
-                                <IconClock />
-                              </template>
-                            </app-date-picker>
+                <div class="form-item">
+                  <p>
+                    <strong>Lịch học</strong> (Việc tạo lịch học là bắt buộc)
+                  </p>
+
+                  <div
+                    class="box22 border mt-3"
+                    v-for="(item, index) in params.schedules"
+                    :key="index"
+                  >
+                    <div v-if="indexEdit === index || indexShow === index">
+                      <div class>
+                        <div class="d-flex-center">
+                          <h6 class="mb-3">Giờ học</h6>
+                          <div class="ml-auto" v-if="indexEdit === index">
+                            <button v-on:click="indexEdit = null"><IconCreate height="20" width="20" class="fill-primary"/></button>
+                            <button v-on:click="removeSchedule(index, true)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                          </div>
                         </div>
-                        <div class="d-flex-center mb-4">
-                          <label class="mr-3">Thời lượng</label>
-                          <app-date-picker
-                              class="ml-3"
-                              v-model="schedules[index].duration"
-                              @input="changeSchedules"
-                              square
-                              size="sm"
-                              :minute-step="15"
-                              :hourOptions="hours"
-                              valueFormat="HH:mm"
-                              valueType="format"
-                              type="time"
-                              placeholder="HH:mm"
-                            >
-                              <template v-slot:icon-calendar>
-                                <IconClock />
-                              </template>
-                            </app-date-picker>
+                        <div class="d-flex-center">
+                          <div class="d-flex-center mb-4 mr-6">
+                            <label class="mr-3">Bắt đầu vào lúc</label>
+                            <app-date-picker
+                                class="ml-3"
+                                v-model="schedules[index].start_time"
+                                @input="changeSchedules"
+                                square
+                                size="sm"
+                                valueFormat="hh:mm a"
+                                placeholder="hh:mm a"
+                                type="time"
+                                :minuteStep="5"
+                              >
+                                <template v-slot:icon-calendar>
+                                  <IconClock />
+                                </template>
+                              </app-date-picker>
+                          </div>
+                          <div class="d-flex-center mb-4">
+                            <label class="mr-3">Thời lượng</label>
+                            <app-date-picker
+                                class="ml-3"
+                                v-model="schedules[index].duration"
+                                @input="changeSchedules"
+                                square
+                                size="sm"
+                                :minute-step="15"
+                                :hourOptions="hours"
+                                valueFormat="HH:mm"
+                                valueType="format"
+                                type="time"
+                                placeholder="HH:mm"
+                              >
+                                <template v-slot:icon-calendar>
+                                  <IconClock />
+                                </template>
+                              </app-date-picker>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-item mb-5">
+                        <label>
+                          <strong>Ngày học trong tuần</strong>
+                        </label>
+                        <div class="d-flex-center mt-3">
+                          <app-checkbox
+                            @change="check($event, 'MON', index)"
+                            :checked="checkIncules(selectedItems[index],('MON'))"
+                            label="Thứ 2"
+                          ></app-checkbox>
+                          <app-checkbox
+                            @change="check($event, 'TUE', index)"
+                            :checked="checkIncules(selectedItems[index],('TUE'))"
+                            label="Thứ 3"
+                          />
+                          <app-checkbox
+                            @change="check($event, 'WED', index)"
+                            :checked="checkIncules(selectedItems[index],('WED'))"
+                            label="Thứ 4"
+                          />
+                          <app-checkbox
+                            @change="check($event, 'THU', index)"
+                            :checked="checkIncules(selectedItems[index],('THU'))"
+                            label="Thứ 5"
+                          />
+                          <app-checkbox
+                            @change="check($event, 'FRI', index)"
+                            :checked="checkIncules(selectedItems[index],('FRI'))"
+                            label="Thứ 6"
+                          />
+                          <app-checkbox
+                            @change="check($event, 'SAT', index)"
+                            :checked="checkIncules(selectedItems[index],('SAT'))"
+                            label="Thứ 7"
+                          />
+                          <app-checkbox
+                            @change="check($event, 'SUN', index)"
+                            :checked="checkIncules(selectedItems[index],('SUN'))"
+                            label="Chủ nhật"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-item mb-0">
+                        <label>
+                          <strong>Thời gian áp dụng</strong>
+                        </label>
+                        <div>
+                          <div class="d-flex-center mt-15">
+                            <div class="d-flex-center mr-4">
+                              <label>Từ</label>
+                              <app-date-picker
+                                class="ml-3"
+                                v-model="schedules[index].from_date"
+                                square
+                                size="sm"
+                                placeholder="yyyy-mm-dd"
+                                valueFormat="YYYY-MM-DD"
+                                @input="(e) => schedulesDateChange(e, index, false)"
+                                :clearDate="fromClear"
+                              >
+                                <template v-slot:icon-calendar>
+                                  <IconCalendar />
+                                </template>
+                              </app-date-picker>
+                            </div>
+                            <div class="d-flex-center">
+                              <label>Đến</label>
+                              <app-date-picker
+                                class="ml-3"
+                                v-model="schedules[index].to_date"
+                                square
+                                size="sm"
+                                placeholder="yyyy-mm-dd"
+                                valueFormat="YYYY-MM-DD"
+                                @input="(e) => schedulesDateChange(e, index, true)"
+                                :clearDate="toClear"
+                              >
+                                <template v-slot:icon-calendar>
+                                  <IconCalendar />
+                                </template>
+                              </app-date-picker>
+                            </div>
+                          </div>
+
+                          <div class="mt-5">
+                            <app-button
+                              color="white"
+                              class="mr-4 color-red border"
+                              @click="cancelTime(index)"
+                            >Hủy</app-button>
+                            <app-button @click="saveTime(index)" :disabled="!checkSchedule">
+                              <span v-if="index == indexEdit">Cập nhật</span>
+                              <span v-else>Thêm lịch học</span>
+                            </app-button>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div class="form-item mb-5">
-                      <label>
-                        <strong>Ngày học trong tuần</strong>
-                      </label>
-                      <div class="d-flex-center mt-3">
-                        <app-checkbox
-                          @change="check($event, 'MON', index)"
-                          :checked="checkIncules(selectedItems[index],('MON'))"
-                          label="Thứ 2"
-                        ></app-checkbox>
-                        <app-checkbox
-                          @change="check($event, 'TUE', index)"
-                          :checked="checkIncules(selectedItems[index],('TUE'))"
-                          label="Thứ 3"
-                        />
-                        <app-checkbox
-                          @change="check($event, 'WED', index)"
-                          :checked="checkIncules(selectedItems[index],('WED'))"
-                          label="Thứ 4"
-                        />
-                        <app-checkbox
-                          @change="check($event, 'THU', index)"
-                          :checked="checkIncules(selectedItems[index],('THU'))"
-                          label="Thứ 5"
-                        />
-                        <app-checkbox
-                          @change="check($event, 'FRI', index)"
-                          :checked="checkIncules(selectedItems[index],('FRI'))"
-                          label="Thứ 6"
-                        />
-                        <app-checkbox
-                          @change="check($event, 'SAT', index)"
-                          :checked="checkIncules(selectedItems[index],('SAT'))"
-                          label="Thứ 7"
-                        />
-                        <app-checkbox
-                          @change="check($event, 'SUN', index)"
-                          :checked="checkIncules(selectedItems[index],('SUN'))"
-                          label="Chủ nhật"
-                        />
+                    <div v-else class="d-flex-center">
+                      <div class="mr-4">
+                        {{getTimeHH_MM_A(schedules[index].start_time)}} - {{ getEndTime(schedules[index].start_time, schedules[index].duration) }}
                       </div>
-                    </div>
-
-                    <div class="form-item mb-0">
-                      <label>
-                        <strong>Thời gian áp dụng</strong>
-                      </label>
+                      <div class="mr-4">
+                        {{convertDay(index)}}
+                      </div>
                       <div>
-                        <div class="d-flex-center mt-15">
-                          <div class="d-flex-center mr-4">
-                            <label>Từ</label>
-                            <app-date-picker
-                              class="ml-3"
-                              v-model="schedules[index].from_date"
-                              square
-                              size="sm"
-                              placeholder="yyyy-mm-dd"
-                              valueFormat="YYYY-MM-DD"
-                              @input="(e) => schedulesDateChange(e, index, false)"
-                              :clearDate="fromClear"
-                            >
-                              <template v-slot:icon-calendar>
-                                <IconCalendar />
-                              </template>
-                            </app-date-picker>
-                          </div>
-                          <div class="d-flex-center">
-                            <label>Đến</label>
-                            <app-date-picker
-                              class="ml-3"
-                              v-model="schedules[index].to_date"
-                              square
-                              size="sm"
-                              placeholder="yyyy-mm-dd"
-                              valueFormat="YYYY-MM-DD"
-                              @input="(e) => schedulesDateChange(e, index, true)"
-                              :clearDate="toClear"
-                            >
-                              <template v-slot:icon-calendar>
-                                <IconCalendar />
-                              </template>
-                            </app-date-picker>
-                          </div>
-                        </div>
-
-                        <div class="mt-5">
-                          <app-button
-                            color="white"
-                            class="mr-4 color-red border"
-                            @click="cancelTime(index)"
-                          >Hủy</app-button>
-                          <app-button @click="saveTime(index)" :disabled="!checkSchedule">
-                            <span v-if="index == indexEdit">Cập nhật</span>
-                            <span v-else>Thêm lịch học</span>
-                          </app-button>
-                        </div>
+                        {{getDateBirthDay(item.from_date)}} - {{getDateBirthDay(item.to_date)}}
                       </div>
-                    </div>
-                  </div>
-
-                  <div v-else class="d-flex-center">
-                    <div class="mr-4">
-                      {{getTimeHH_MM_A(schedules[index].start_time)}} - {{ getEndTime(schedules[index].start_time, schedules[index].duration) }}
-                    </div>
-                    <div class="mr-4">
-                      {{convertDay(index)}}
-                    </div>
-                    <div>
-                      {{getDateBirthDay(item.from_date)}} - {{getDateBirthDay(item.to_date)}}
-                    </div>
-                    <div class="ml-auto">
-                      <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
-                      <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                      <div class="ml-auto">
+                        <button v-on:click="editSchedule(index)"><IconCreate height="20" width="20" class="fill-primary"/></button>
+                        <button v-on:click="removeSchedule(index)"><IconTrashAlt height="20" width="20" class="fill-red"/></button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div class="mt-4 mb-4" v-if="indexEdit === null && indexShow === null">
+                <button class="d-flex-center color-primary" @click="addTime">
+                  <IconPlus class="fill-primary mr-2" />Thêm lịch học
+                </button>
+              </div>
             </div>
 
-            <div class="mt-4 mb-4" v-if="indexEdit === null && indexShow === null">
-              <button class="d-flex-center color-primary" @click="addTime">
-                <IconPlus class="fill-primary mr-2" />Thêm lịch học
-              </button>
+            <div class="mt-4 mb-4 text-right">
+              <app-button @click="fnSave" :disabled="!fullParams" class="">
+                <IconRight class="fill-white mr-3"/>Tạo phòng học
+              </app-button>
             </div>
-          </div>
-
-          <div class="mt-4 mb-4 text-right">
-            <app-button color="white" class="mr-3 color-red" @click="fnCancel">
-              <IconTrash class="fill-red mr-3"/>
-              Thiết lập lại
-            </app-button>
-            <app-button color="white" class="mr-3" @click="fnSaveDraf" :disabled="!fullParams">
-              <IconSave class="fill-primary mr-3"/>Lưu nháp
-            </app-button>
-            <app-button @click="fnSave" :disabled="!fullParams" class="">
-              <IconRight class="fill-white mr-3"/>Tạo phòng học
-            </app-button>
-          </div>
-          </template>
-        </sub-block-section>
+            </template>
+          </sub-block-section>
+        </div>
       </div>
     </div>
 
@@ -301,15 +300,12 @@
 </template>
 
 <script>
-import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
-import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconPlus from "~/assets/svg/icons/plus2.svg?inline";
 import IconCreate from '~/assets/svg/v2-icons/create_24px.svg?inline';
 import IconTrashAlt from '~/assets/svg/icons/trash-alt.svg?inline';
 import IconTrash from '~/assets/svg/v2-icons/trash-alt.svg?inline';
 import IconClock from '~/assets/svg/icons/clock.svg?inline';
-import IconSave from '~/assets/svg/v2-icons/save.svg?inline';
 import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
@@ -391,14 +387,11 @@ export default {
   components: {
     IconTrash,
     IconClock,
-    IconAngleUp,
     IconPlus,
-    IconAngleDown,
     IconCalendar,
     IconTrashAlt,
     IconCreate,
     IconRight,
-    IconSave,
     ElearningManagerSide
   },
 
@@ -570,8 +563,10 @@ export default {
       }
     },
     saveTime(index) {
-      this.indexEdit = null;
-      this.indexShow = null;
+      if (this.checkSchedule) {
+        this.indexEdit = null;
+        this.indexShow = null;
+      }
     },
 
     changeName(e) {
@@ -637,7 +632,9 @@ export default {
     },
 
     fnSave() {
-      this.showModalConfirm = true;
+      if (this.fullParams) {
+        this.showModalConfirm = true;
+      }
     },
     fnSaveDraf() {
       this.showModalConfirmDraf = true;

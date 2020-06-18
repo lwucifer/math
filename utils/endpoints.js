@@ -98,6 +98,7 @@ export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
 export const ELEARNING_STUDY_TIMETABLE = `/elearning/study/timetable`;
+export const ELEARNING_NOTIFICATION = `/elearning/notifications`;
 
 /**
  * ONLINE CLASS
@@ -205,6 +206,9 @@ export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/reques
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
 export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
+export const TEACHING_INTERACTIVE_LISTANSWER = `/elearning/teaching/interactive/answers`;
+export const TEACHING_INTERACTIVE_ANSWER = `/elearning/teaching/interactive/answer`;
+export const TEACHING_INTERACTIVE_LIKEANSWER = `/elearning/teaching/interactive/answer/like`;
 export const TEACHING_INTERACTIVE_ANNOUNCEMENTS = `/elearning/teaching/interactive/announcements`;
 export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = `/elearning/teaching/interactive/announcement`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;

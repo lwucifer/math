@@ -168,7 +168,7 @@ export default {
     },
     handleOk(){
       this.showModal = false;
-      this.$router.push('/elearning/manager/interacts')
+      this.$router.push('/elearning/manager/interacts#notify')
     }
   }
 };

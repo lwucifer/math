@@ -55,9 +55,17 @@
     }
 
     &__btn {
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         height: 3.6rem;
         font-weight: 500;
+    }
+
+    &__desc {
+        @include set-line((
+            'lineClamp': 3,
+            'lineHeight': $line-height-base,
+            'fixedHeight': true,
+        ))
     }
 
     &:hover {

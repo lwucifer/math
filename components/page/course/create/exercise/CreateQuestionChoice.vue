@@ -1,8 +1,23 @@
 <template>
   <div class="mb-4">
-    <label class="d-inline-block mb-3 font-weight-bold" for="question-editor"
-      >Nội dung câu hỏi</label
-    >
+    <div class="d-flex justify-content-between align-items-center">
+      <label class="mb-3 font-weight-bold" for="question-editor"
+        >Nội dung câu hỏi</label
+      >
+      <!-- <a href class="d-flex text-decoration-none mr-3">
+        <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
+        câu hỏi</a
+      > -->
+      <!-- <app-upload
+        class="mr-auto text-primary"
+        style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .jpg, .jpeg, .jpg, .bmp, .png"
+        @change="handleUploadAnswer"
+      >
+        <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
+        trả lời
+      </app-upload> -->
+    </div>
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
 
@@ -65,6 +80,8 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get, isEqual } from "lodash";
 import * as actionTypes from "~/utils/action-types";
@@ -75,6 +92,7 @@ export default {
   components: {
     IconTrashAlt,
     CreateAnswerOfQuestion,
+    IconCloudDownload24px,
   },
 
   props: {
