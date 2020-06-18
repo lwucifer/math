@@ -42,7 +42,7 @@
                 <editor-content
                   :editor="editor"
                   class="editor tab-qa-comment-editor__editor"
-                  v-model="content"
+                  v-model="contentEdittor"
                 />
               </client-only>
 
@@ -182,17 +182,18 @@ export default {
       editor: null,
       uploadFileList: [],
       uploadImgSrc: get(this, "question.image_url", ""),
-      content: "",
-      image: "",
+      contentEdittor: "",
+      image: [],
       queryUpdateQuestion: {
         content: "",
-        elearning_id: get(this, "$route.params.id", ""),
         id: "",
+        image: []
       },
       queryUpdateAnswer: {
         content: "",
         question_id: this.questionId,
         id: "",
+        image: []
       },
     };
   },
@@ -216,6 +217,12 @@ export default {
         "tab-qa-comment-item--level-2": this.level === 2,
       };
     },
+  },
+
+  watch: {
+    contentEdittor(newVal){
+      console.log('contentEdittor', newVal)
+    }
   },
 
   mounted() {
@@ -289,9 +296,16 @@ export default {
     },
 
     async updateQuestions() {
+      let body = new FormData();
+      body.append("content", this.queryUpdateQuestion.content);
+      body.append("id", this.queryUpdateQuestion.id);
+      if(this.image){
+        body.append("image", this.image);
+      }
+      
       const res = await new InteractiveQuestionService(this.$axios)[
-        "addQuestion"
-      ](this.queryUpdateQuestion, this.image);
+        "editQuestion"
+      ](body);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
         this.getQuestions();
@@ -301,12 +315,16 @@ export default {
     },
 
     async updateAnswer() {
-      this.queryUpdateAnswer.content = this.editor
-        .getHTML()
-        .replace("<p></p>", "");
+      let body = new FormData();
+      body.append("content", this.queryUpdateAnswer.content);
+      body.append("id", this.queryUpdateAnswer.id);
+      // body.append("question_id", this.queryUpdateAnswer.question_id);
+      if(this.image) {
+        body.append("image", this.image);
+      } 
       const res = await new InteractiveAnswer(this.$axios)[
-        "addAnswerOfQuestion"
-      ](this.queryUpdateAnswer, this.image);
+        "editAnswerOfQuestion"
+      ](body);
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
         this.reset();
@@ -317,10 +335,15 @@ export default {
     },
 
     handleSaveUpdate(level, _question) {
-      // console.log('_question',_question)
-      // console.log('questionId',this.questionId)
-      this.queryUpdateQuestion.content = this.content;
-      this.queryUpdateAnswer.content = this.content;
+      console.log('_question',_question)
+      this.queryUpdateQuestion.content = this.editor
+        .getHTML()
+        .replace("<p></p>", "");
+      this.queryUpdateAnswer.content = this.editor
+        .getHTML()
+        .replace("<p></p>", "");
+      console.log('this.queryUpdateQuestion.content',this.queryUpdateQuestion.content)
+      console.log('this.queryUpdateAnswer.content',this.queryUpdateAnswer.content)
       if (level == 1) {
         this.queryUpdateQuestion.id = _question.id;
         this.updateQuestions();
@@ -350,8 +373,8 @@ export default {
       });
       if (get(res, "success", false)) {
         this.$toasted.success("Thành công");
-        this.reset();
         this.getQuestions();
+        this.reset();
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
@@ -375,7 +398,7 @@ export default {
     reset() {
       this.queryUpdateQuestion.content = "";
       this.queryUpdateAnswer.content = "";
-      this.image = "";
+      this.image = [];
       this.uploadFileList = [];
       this.uploadImgSrc = null;;
       this.modalConfirmSubmit = false;
@@ -388,6 +411,7 @@ export default {
     },
 
     handleUpdate() {
+      console.log('this.editor', this.editor)
       this.showInputUpdate = true;
       this.showReply = false;
       this.$nextTick(() => {
@@ -405,7 +429,7 @@ export default {
     },
 
     removeImgUpload() {
-      this.image = "";
+      this.image = [];
       this.uploadFileList = [];
       this.uploadImgSrc = null;
 
