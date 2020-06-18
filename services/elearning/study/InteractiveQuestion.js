@@ -22,16 +22,16 @@ export default class InteractiveQuestion extends BaseService {
     return data;
   }
 
+  async editQuestion(payload) {
+    const { data } = await this.$axios.post(APIs.STUDY_INTERACTIVE_QUESTION_ADD, payload);
+    return data;
+  }
+
   async deleteQuestion(payload) {
-    let options = {
-      url: APIs.STUDY_INTERACTIVE_QUESTION_ADD,
-      method: "POST",
-      data: payload,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const { data } = await this.$axios.request(options);
+    const { data } = await this.$axios.request({
+      url: `${APIs.STUDY_INTERACTIVE_QUESTION_ADD}/${payload.question_id}`,
+      method: "DELETE",
+    });
     return data;
   }
 }

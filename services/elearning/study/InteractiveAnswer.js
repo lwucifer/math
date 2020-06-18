@@ -36,16 +36,16 @@ export default class InteractiveAnswer extends BaseService {
     return data;
   }
 
+  async editAnswerOfQuestion(payload) {
+    const { data } = await this.$axios.post(APIs.STUDY_QUESTION_ADD_ANSWER, payload);
+    return data;
+  }
+
   async deleteAnswerOfQuestion(payload) {
-    let options = {
-      url: APIs.STUDY_QUESTION_ADD_ANSWER,
+    const { data } = await this.$axios.request({
+      url: `${APIs.STUDY_QUESTION_ADD_ANSWER}/${payload.answer_id}`,
       method: "DELETE",
-      data: payload,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const { data } = await this.$axios.request(options);
+    });
     return data;
   }
 
