@@ -1,20 +1,20 @@
 <template>
-  <div class="wrap-success_payment px-3">
-    <IconAlertCircle1 class="icon-fail_payment" />
-    <h5 class="my-4">Thanh toán không thành công</h5>
-    <!-- <p class="text-gray mb-4 description__payment-fail">
+  <div class="wrap-success_payment">
+    <IconAlertCircle1 class="icon-fail_payment mt-2" />
+    <h3 class="my-4">Thanh toán không thành công!</h3>
+    <p class="text-gray mb-4 description__payment-fail">
       Giao dịch không thành công. Thẻ của bạn cần xác thực 3D Secure. Liên hệ
       Hotline: 1900-6035 để biết thêm chi tiết. Bạn hãy thử thanh toán lại sau
       vài phút hoặc Chọn phương thức thanh toán khác
-    </p> -->
+    </p>
     <p class="text-gray mb-4 description__payment-fail">
       {{ message }}
     </p>
     <div class="my-4">
-      <app-button color="white" square class="mr-4" :to="transactionLink" nuxt
+      <app-button color="white" class="mr-4" :to="transactionLink" nuxt
         >Lịch sử giao dịch</app-button
       >
-      <app-button square @click="handleRepayOrder">Thanh toán lại</app-button>
+      <app-button style="width:142px" @click="handleRepayOrder">Thanh toán lại</app-button>
     </div>
     <div>
       <PaymentSuccessFooter />

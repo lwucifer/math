@@ -45,11 +45,6 @@
       >
     </p>
     <EditBank @close="closeModal" v-if="bank" :bank="bank" />
-    <app-modal-confirm
-      title="Bạn chắc muốn xóa"
-      description="It is a long established fat that a reader will be  distracted by the readable content"
-      v-if="false"
-    />
   </div>
 </template>
 
@@ -79,7 +74,7 @@ export default {
     return {
       showAddPayment: false,
       opts: [],
-      bank: null,
+      bank: null
     };
   },
   watch: {
