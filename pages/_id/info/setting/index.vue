@@ -92,7 +92,7 @@ export default {
       params: { token: "true" },
     };
     await this.$store.dispatch(`setting/getBanks`, options);
-    await this.$store.dispatch(`setting/getAccountBanks`);
+    await this.$store.dispatch(`setting/getAccountBanks`, { params: { status: 'ACTIVE'} });
     this.loading = false;
   },
 
