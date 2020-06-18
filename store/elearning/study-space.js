@@ -26,23 +26,29 @@ const getters = {};
 const actions = {
   async getStudying({ commit }, options = {}) {
     try {
-      const result = await new StudyStudent(this.$axios)["list"](options);
-      if (get(result, "success", false)) {
-        const data = get(result, "data", null);
-
-        if (options.params.completed === true) {
+      if (options.params.completed) {
+        const result = await new StudyStudent(this.$axios)["list"](options);
+        if (get(result, "success", false)) {
+          const data = get(result, "data", null);
           commit("finished_lecture", data);
           return;
         }
+        commit("finished_lecture", null);
+        return;
+      }
 
-        if (!options.params.completed) {
+      if (!options.params.completed) {
+        const payload = { ...options };
+        payload.is_archive = false;
+        const result = await new StudyStudent(this.$axios)["list"](payload);
+        if (get(result, "success", false)) {
+          const data = get(result, "data", null);
           commit("unfinished_lecture", data);
           return;
         }
+        commit("unfinished_lecture", null);
+        return;
       }
-
-      commit("finished_lecture", null);
-      commit("unfinished_lecture", null);
     } catch (error) {
       commit("finished_lecture", null);
       commit("unfinished_lecture", null);
