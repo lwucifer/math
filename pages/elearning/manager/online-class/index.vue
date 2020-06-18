@@ -47,6 +47,8 @@
   const Tab3 = () => import("./tabs/finished")
 
   export default {    
+    middleware: ["teacher-role"],
+
     components: {
       ElearningManagerSide,
       IconPlusCircle,

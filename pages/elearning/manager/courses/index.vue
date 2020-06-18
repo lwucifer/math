@@ -46,6 +46,8 @@ import * as actionTypes from "~/utils/action-types";
 
 export default {
   name: "ManageCourse",
+
+  middleware: ["teacher-role"],
   
   components: {
     ElearningManagerSide,
