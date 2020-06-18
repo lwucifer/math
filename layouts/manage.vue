@@ -1,8 +1,14 @@
 <template>
-  <div class="page-wrap layout-manage">
+  <div class="page-wrap layout-manage" :class="show ? 'open-side' : ''">
     <Header />
 
-    <nuxt class="page-content" />
+    <div class="page-content" >
+      <!--btn toggle side on tablet-->
+      <button class="btn-toggle-side" @click="show = !show">
+        <IconHamberger class="fill-primary"/>
+      </button>
+      <nuxt/>
+    </div>
 
     <Footer />
 
@@ -12,14 +18,22 @@
 
 <script>
 import Header from "~/components/layout/header/Header"
-import Footer from "~/components/layout/footer/Footer";
+import Footer from "~/components/layout/footer/Footer"
+import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline"
 
 export default {
   middleware: ["teacher-role"],
   
   components: {
     Header,
-    Footer
+    Footer,
+    IconHamberger
+  },
+
+  data() {
+    return {
+      show: false
+    }
   }
 };
 </script>
