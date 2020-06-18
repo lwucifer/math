@@ -105,6 +105,7 @@
       v-if="isDetailQuestion"
       @close="closeModal"
       :question="question"
+      @refreshListQuestion="refreshListQuestion"
     />
   </div>
 </template>
@@ -194,7 +195,7 @@ export default {
       ],
       results: [
         {
-          value: "ANSWER",
+          value: "ANSWERED",
           label: "Đã trả lời"
         },
         {
@@ -388,6 +389,11 @@ export default {
     },
     closeModal(val){
       this.isDetailQuestion = val;
+    },
+    refreshListQuestion(){
+      const query = {
+        params: { ...this.listQuery }
+      };
       this.teachingInteractiveListquestion(query);
     },
     get

@@ -9,23 +9,26 @@
   >
     <div slot="content" class="px-3">
         <div class="d-flex my-2">
-            <app-avatar class="mr-2" :size="40" v-lazy="'https://picsum.photos/40/40'"/>
+            <app-avatar class="mr-2" :size="40" :src="get(question,'avatar','')"/>
             <div>
                 <p class="text-dark">{{get(question,"student_name",'')}}</p>
-                <p class="text-gray-3">15/10/2020</p>
+                <p class="text-gray-3">{{get(question,'timestamp','') | getLocalDateTime | checkTime}}</p>
             </div>
         </div>
         <span>{{get(question,"content",'')}}</span>
         <hr class="mt-3"/>
-        <div class="mt-5">
-            <div class="d-flex mb-5" v-for="(item,index) in  get(this,'question.content','')" :key="index">
+        <div class="mt-5" v-if="listAnswers">
+            <div class="d-flex mb-5" v-for="(item,index) in  get(this,'listAnswers.content',[])" :key="index">
                 <app-avatar class="mr-2" :size="40" :src="get(item,'creator_avatar','')"/>
                 <div>
                     <p class="text-dark">{{item.creator_name}}</p>
-                    <p class="text-gray-3">{{get(item,'timestamp','') | moment('DD/MM/YYYY')}}</p>
+                    <p class="text-gray-3">{{ get(item,'timestamp','') | getLocalDateTime | checkTime}}</p>
                     <p v-html="get(item,'content','')"></p>
                 </div>
             </div>
+        </div>
+        <div class="my-3 text-center" v-else>
+            Không có dữ liệu
         </div>
         <app-input
             textarea
@@ -58,12 +61,25 @@ import * as actionTypes from "~/utils/action-types";
 const STORE_NAME_ANSWERS = "elearning/teaching/interactive-answer";
 import { createInteractAnswer } from "~/models/elearning/Interacts";
 import InteractiveAddAnswer from "~/services/elearning/teaching/InteractiveAnswer";
+import moment from "moment"
 export default {
     props:{
         question:{
             type: Object,
             default: ()=>{}
         }
+    },
+    filters:{
+        checkTime(d){
+            let hours = moment().diff(moment(d), 'hours');
+            if(hours<24){
+                const today = moment(d).fromNow(); 
+                return today
+            }
+            else{
+                return  moment(d).format("DD/MM/YYYY")
+            }
+        },
     },
     data(){
         return{
@@ -92,7 +108,6 @@ export default {
         },
         async submitAnswer(){
             const payload = createInteractAnswer(this.payload)
-            console.log('hello',payload)
             const res = await new InteractiveAddAnswer(this.$axios)["addAnswerOfAnswer"](
                 this.payload
             );
@@ -100,6 +115,7 @@ export default {
                 this.$toasted.success("Thành công");
                 this.payload.content = '';
                 this.fetchListAnswer();
+                this.$emit("refreshListQuestion")
                 return
             }
             this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

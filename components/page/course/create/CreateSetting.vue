@@ -83,6 +83,7 @@
             <IconAngleDown class="icon" />
           </template>
         </app-select>
+        <app-error :error="get(error, 'privacy', '')" />
       </div>
 
       <div class="mb-4">
@@ -95,16 +96,17 @@
             value="1"
             class="mr-4"
             :checked="payload.comment_allow === true"
-            @click="payload.comment_allow = true"
+            @click="handleChangeCommentAllow(true)"
             >Có</app-radio
           >
           <app-radio
             value="0"
             :checked="payload.comment_allow === false"
-            @click="payload.comment_allow = false"
+            @click="handleChangeCommentAllow(false)"
             >Không</app-radio
           >
         </app-radio-group>
+        <app-error :error="get(error, 'comment_allow', '')" />
       </div>
 
       <div class="mb-4">
@@ -125,6 +127,7 @@
             <IconAngleDown class="icon" />
           </template>
         </app-select>
+        <app-error :error="get(error, 'free', '')" />
       </div>
 
       <div class="mb-4" v-if="this.free == 1">
@@ -161,6 +164,7 @@
             {{ percent_price }}
           </div>
         </div>
+        <app-error :error="get(error, 'price', '')" />
       </div>
     </div>
 
@@ -241,6 +245,12 @@ export default {
         start_time: "",
         starttime_enable: false,
       },
+      error: {
+        privacy: "",
+        price: "",
+        comment_allow: "",
+        free: "",
+      },
     };
   },
   mounted() {
@@ -255,17 +265,6 @@ export default {
     }),
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
-    },
-    submit() {
-      if (this.payload.comment_allow === "") return false;
-      if (this.payload.privacy === "") return false;
-      if (this.free === "") return false;
-      if (this.free == 1) {
-        if (!this.payload.fee) {
-          return false;
-        }
-      }
-      return true;
     },
     percent_price() {
       let percent_price = "100%";
@@ -291,6 +290,49 @@ export default {
   methods: {
     get,
 
+    handleCheckPayload() {
+      let check = true;
+      check = this.handleCheckPrivacy();
+      check = this.handleCheckCommentAllow();
+      check = this.handleCheckPrice();
+      return check;
+    },
+
+    handleCheckPrice() {
+      if (get(this, "free", "") === "") {
+        this.error.free = "Bạn chưa chọn loại học phí";
+        return false;
+      }
+      this.error.free = "";
+      if (
+        this.free == 1 &&
+        numeral(get(this, "payload.fee", 0)).value() < 10000
+      ) {
+        this.error.price = "Học phí tối thiểu là 10,000đ";
+        return false;
+      }
+      this.error.price = "";
+      return true;
+    },
+
+    handleCheckPrivacy() {
+      if (get(this, "payload.privacy", "") === "") {
+        this.error.privacy = "Bạn chưa chọn chế độ hiển thị";
+        return false;
+      }
+      this.error.privacy = "";
+      return true;
+    },
+
+    handleCheckCommentAllow() {
+      if (get(this, "payload.comment_allow", "") === "") {
+        this.error.comment_allow = "Bạn chưa chọn cho phép đánh giá";
+        return false;
+      }
+      this.error.comment_allow = "";
+      return true;
+    },
+
     handleChangeStartDate(date) {
       this.payload.start_time = date;
     },
@@ -301,11 +343,18 @@ export default {
 
     handleChangePrice(e) {
       this.payload.price = numeral(e).format();
+      this.handleCheckPrice();
+    },
+
+    handleChangeCommentAllow(comment_allow) {
+      this.payload.comment_allow = comment_allow;
+      this.handleCheckCommentAllow();
     },
 
     handleChangeFee(e) {
       this.payload.fee = numeral(e).format();
       this.payload.price = numeral(e).format();
+      this.handleCheckPrice();
     },
 
     handleChangeSetting() {
@@ -323,6 +372,7 @@ export default {
     handleChangePrivacy(privacy) {
       if (this.disabled_all) return;
       this.payload.privacy = privacy;
+      this.handleCheckPrivacy();
     },
 
     handleChangeFree(free) {
@@ -331,11 +381,12 @@ export default {
         this.payload.fee = 0;
         this.payload.price = 0;
       }
+      this.handleCheckPrice();
     },
 
     handleCLickSave() {
-      if (!this.submit) {
-        this.$toasted.error("Bạn chưa thiết lập xong cài đặt");
+      if (!this.handleCheckPayload()) {
+        console.log(1);
         return;
       }
       this.showModalConfirm = true;

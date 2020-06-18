@@ -2,7 +2,7 @@
   <div class="page-wrap layout-manage">
     <Header />
 
-    <nuxt class="page-content" />
+    <nuxt class="page-content"/>
 
     <Footer />
 
@@ -12,7 +12,7 @@
 
 <script>
 import Header from "~/components/layout/header/Header"
-import Footer from "~/components/layout/footer/Footer";
+import Footer from "~/components/layout/footer/Footer"
 
 export default {
   middleware: ["teacher-role"],
