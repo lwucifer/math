@@ -5,7 +5,11 @@
 
       <div class="row">
         <div class="col-md-3 sub-side">
-          <ElearningManagerSide active="5" />
+          <sub-side>
+            <template v-slot:content>
+              <ElearningManagerSide active="5" />
+            </template>
+          </sub-side>
         </div>
         <div class="col-md-9">
           <sub-block-section title="Tạo phòng học online" has-icon>
@@ -559,8 +563,10 @@ export default {
       }
     },
     saveTime(index) {
-      this.indexEdit = null;
-      this.indexShow = null;
+      if (this.checkSchedule) {
+        this.indexEdit = null;
+        this.indexShow = null;
+      }
     },
 
     changeName(e) {
@@ -626,7 +632,9 @@ export default {
     },
 
     fnSave() {
-      this.showModalConfirm = true;
+      if (this.fullParams) {
+        this.showModalConfirm = true;
+      }
     },
     fnSaveDraf() {
       this.showModalConfirmDraf = true;
