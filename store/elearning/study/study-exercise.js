@@ -14,7 +14,7 @@ const state = () => ({
   submissions: [],
   submissionAdd: {},
   elearningExercises: [],
-  paginatedElearningExericses:[],
+  paginatedElearningExericses: [],
   elearningExerciseTests: [],
   currentExercise: {},
   currentElearningId: null,
@@ -29,8 +29,7 @@ const state = () => ({
   },
   currentQuestionId: null,
   autoSubmission: null,
-  currentLession: null,
-
+  currentLession: null
 });
 
 /**
@@ -74,14 +73,14 @@ const actions = {
     payload
   ) {
     try {
-      const { data } = await this.$axios.post(APIs.STUDY_EXERCISE_START, payload);
+      const { data } = await this.$axios.post(
+        APIs.STUDY_EXERCISE_START,
+        payload
+      );
       console.log("[LIST_QUESTION_START]", data);
       return data;
     } catch (error) {
-      console.log(
-        "[LIST_QUESTION_START] error",
-        error
-      );
+      console.log("[LIST_QUESTION_START] error", error);
     }
   },
 
@@ -235,19 +234,19 @@ const actions = {
           commit(
             mutationTypes.ELEARNING_STUDY_EXERCISE
               .SET_STUDY_ELEARNING_EXERCISE_TEST_LIST,
-              result.data.content
+            result.data.content
           );
         }
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_ELEARNING_EXERCISE_LIST,
-            result.data.content
+          result.data.content
         );
 
         commit(
           mutationTypes.ELEARNING_STUDY_EXERCISE
             .SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST,
-            result.data
+          result.data
         );
 
         // turnof loadingExercise
@@ -327,10 +326,8 @@ const mutations = {
     state.elearningExercises = _list;
   },
 
-  [mutationTypes.ELEARNING_STUDY_EXERCISE.SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST](
-    state,
-    _list
-  ) {
+  [mutationTypes.ELEARNING_STUDY_EXERCISE
+    .SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST](state, _list) {
     state.paginatedElearningExericses = _list;
   },
 
@@ -378,20 +375,18 @@ const mutations = {
   ) {
     console.log("[SET_STUDY_EXERCISE_SUBMISSION]", _submission);
     const updatedAnswer = _submission.answers;
-    const updatedStartTime = _submission.start_time;
     const updatedExerciseId = _submission.exercise_id;
-    // const updatedAttachments = _submission.attachments;
     const updatedQuestionId = _submission.question_id;
 
-    if (!!updatedStartTime) {
-      state.submission = { ...state.submission, start_time: updatedStartTime };
-    }
+    // update exercise_id
     if (!!updatedExerciseId) {
       state.submission = {
         ...state.submission,
         exercise_id: updatedExerciseId
       };
     }
+
+    // update answer
     if (!!updatedAnswer) {
       let currAnsers = [...state.submission.answers];
       const currAnswerIndex = currAnsers.findIndex(
@@ -400,43 +395,68 @@ const mutations = {
       if (currAnswerIndex == -1) {
         currAnsers = [...currAnsers, updatedAnswer];
       } else {
-        // const mergedUpdatedAnswered = { ...currAnsers[currAnswerIndex], updatedAnswer};
-        // currAnsers[currAnswerIndex] = mergedUpdatedAnswered;
-        currAnsers[currAnswerIndex] = updatedAnswer;
+        const newUpdatedAnswer = { ...currAnsers[currAnswerIndex], answer: updatedAnswer.answer }
+        currAnsers[currAnswerIndex] = newUpdatedAnswer;
       }
       state.submission = { ...state.submission, answers: currAnsers };
       state.currentExerciseAnswers = [...state.submission.answers];
     }
 
     // update attachment files
-    const preAttachments = [...state.submission.attachments];
+    let preAttachments = [...state.submission.attachments];
     if (!!updatedQuestionId) {
       const uploadAttachBeforeIndex = preAttachments.findIndex(
         at => at.question_id == updatedQuestionId
       );
-      if (uploadAttachBeforeIndex != -1) {
-        preAttachments[uploadAttachBeforeIndex] = _submission;
+      // if upload file
+      if (_submission.file) {
+        if (uploadAttachBeforeIndex != -1) {
+          preAttachments[uploadAttachBeforeIndex] = _submission;
+        } else {
+          preAttachments.push(_submission);
+        }
       } else {
-        preAttachments.push(_submission);
+        // if remove file
+        if (uploadAttachBeforeIndex != -1) {
+          preAttachments = preAttachments.filter(
+            p => p.question_id != updatedQuestionId
+          );
+        }
       }
-
       state.submission = { ...state.submission, attachments: preAttachments };
 
       // update attach_answer_index in state.submission.answers
-      const prevAnswers = state.submission.answers;
+      const prevAnswers = [...state.submission.answers];
       const attachQuestionIndex = prevAnswers.findIndex(
         at => at.question_id == updatedQuestionId
       );
-      if (attachQuestionIndex != -1) {
+      let updateAnswer = prevAnswers;
+      
+      if(attachQuestionIndex != -1) {
+        updateAnswer = prevAnswers.map(ans => {
+          const fileIndex = state.submission.attachments.findIndex(
+            att => att.question_id == ans.question_id
+          );
+
+          if (fileIndex == -1) {
+            delete ans.attach_answer_index;
+          } else {
+            ans.attach_answer_index = fileIndex + 1; // base 1
+          }
+  
+          return ans;
+        });
+      } else {
         const attachFileIndex = state.submission.attachments.findIndex(
-          a => a.question_id == updatedQuestionId
+          att => att.question_id == updatedQuestionId
         );
-        prevAnswers[attachQuestionIndex].attach_answer_index =
-          attachFileIndex + 1; // base 1
-        state.submission.answers = prevAnswers;
+        updateAnswer.push({
+          question_id: updatedQuestionId,
+          attach_answer_index: attachFileIndex + 1
+        });
       }
-    } else {
-      preAttachments.push(null);
+
+      state.submission.answers = updateAnswer;
     }
 
     console.log(
@@ -472,8 +492,7 @@ const mutations = {
   ) {
     console.log("[SET_STUDY_EXERCISE_CURRENT_LESSION]", _lesson);
     state.currentLession = _lesson;
-  },
-
+  }
 };
 
 export default {
