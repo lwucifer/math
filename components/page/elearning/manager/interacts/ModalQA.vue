@@ -11,17 +11,17 @@
         <div class="d-flex my-2">
             <app-avatar class="mr-2" :size="40" :src="get(question,'avatar','')"/>
             <div>
-                <p class="text-dark">{{get(question,"student_name",'')}}</p>
+                <p class="text-dark font-weight-bold" style="font-size: 16px;">{{get(question,"student_name",'')}}</p>
                 <p class="text-gray-3">{{get(question,'timestamp','') | getLocalDateTime | checkTime}}</p>
             </div>
         </div>
-        <span>{{get(question,"content",'')}}</span>
+        <span class="mt-2">{{get(question,"content",'')}}</span>
         <hr class="mt-3"/>
         <div class="mt-5" v-if="listAnswers">
             <div class="d-flex mb-5" v-for="(item,index) in  get(this,'listAnswers.content',[])" :key="index">
                 <app-avatar class="mr-2" :size="40" :src="get(item,'creator_avatar','')"/>
                 <div>
-                    <p class="text-dark">{{item.creator_name}}</p>
+                    <p class="text-dark" style="font-size: 16px;font-weight: 500;">{{item.creator_name}}</p>
                     <p class="text-gray-3">{{ get(item,'timestamp','') | getLocalDateTime | checkTime}}</p>
                     <p v-html="get(item,'content','')"></p>
                 </div>
