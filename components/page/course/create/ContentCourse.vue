@@ -151,7 +151,11 @@ export default {
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
-      return true;
+      let check = true;
+      get(this, "chapters", []).map((chapter) => {
+        if (!get(chapter, "lessons.length", 0)) check = false;
+      });
+      return check;
     },
     name() {
       return get(this, "general.type", "") === "COURSE"
@@ -168,7 +172,7 @@ export default {
         this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
         return;
       }
-      if (!this.isNextStep()) {
+      if (!this.isNextStep) {
         this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
         return;
       }
