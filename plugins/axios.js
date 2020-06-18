@@ -20,7 +20,7 @@ function addSubscriber(callback) {
   subscribers.push(callback);
 }
 
-export default function({ store, $axios, redirect }) {
+export default function ({ store, $axios, redirect }) {
   $axios.onRequest((config) => {
 
     // add Device-Id if existed

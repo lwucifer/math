@@ -185,9 +185,10 @@ export default {
         size: 12,
         page: 1,
         keyword: null,
-        completed: false,
+        completed: null,
         privacy: null,
-        free: null
+        free: null,
+        is_archive: false
       },
       tab: 2,
       checkModalShare: false,
@@ -273,10 +274,20 @@ export default {
     changeTab(tab) {
       this.tab = tab;
       if (tab == 2) {
-        this.params.completed = false;
+        this.params.completed = null;
+        this.params.is_archive = false;
       }
       if (tab == 3) {
         this.params.completed = true;
+        this.params.is_archive = null;
+      }
+      if (tab == 4) {
+        this.params.completed = null;
+        this.params.is_archive = null;
+      }
+      if (tab == 5) {
+        this.params.completed = null;
+        this.params.is_archive = null;
       }
       this.params.page = 1;
       this.params.keyword = null;
@@ -289,6 +300,7 @@ export default {
       this.elearningStudyFavouriteAdd(query).then(result => {
         if (result.success == true) {
           this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
@@ -307,6 +319,7 @@ export default {
         };
         if (result.success == true) {
           this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
@@ -325,6 +338,7 @@ export default {
         };
         if (result.success == true) {
           this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
@@ -343,6 +357,7 @@ export default {
         };
         if (result.success == true) {
           this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },

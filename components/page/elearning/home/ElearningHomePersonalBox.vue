@@ -34,7 +34,9 @@
         </span>
       </div>
 
-      <div v-if="!!description" class="eh-personal-box__desc">{{ description }}</div>
+      <div v-if="!!description" class="eh-personal-box__desc">
+        <div v-html="description"></div>
+      </div>
       <div v-else class="eh-personal-box__desc">
         <div class="text-gray-2 caption">Chưa có mô tả khoá học.</div>
       </div>

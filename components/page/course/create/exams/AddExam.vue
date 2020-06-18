@@ -57,7 +57,7 @@
     <div class="caculate-point">
       <h5 class="mb-4">Chọn cách tính điểm</h5>
 
-      <div class="mb-4">
+      <div class="d-flex mb-4">
         <app-radio
           value="coefficient"
           :checked="typeRadio == 'coefficient'"
@@ -65,12 +65,23 @@
           name="caculate-point"
           class="mr-6"
         >
-          Theo hệ số
-          <IconQuestionCircle
-            width="12px"
-            height="12px"
-            class="fill-gray vertical-middle"
-          />
+         
+          <v-popover
+              placement="right" trigger="hover">
+              Theo hệ số 
+              <IconQuestionCircle
+                width="12px"
+                height="12px"
+                class="fill-gray vertical-middle"
+              />
+
+            <template #popover>
+              <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2 </p>
+              <p class="mb-3">để làm cơ sở tính điểm trung bình cho học sinh.</p>
+
+              <a href="">Xem chi tiết</a>
+            </template>
+          </v-popover>
         </app-radio>
 
         <app-radio
@@ -79,12 +90,21 @@
           @click="handleSelectType"
           name="caculate-point"
         >
-          Theo trọng số
-          <IconQuestionCircle
-            width="12px"
-            height="12px"
-            class="fill-gray vertical-middle"
-          />
+          <v-popover placement="right" trigger="hover">
+            Theo trọng số
+            <IconQuestionCircle
+              width="12px"
+              height="12px"
+              class="fill-gray vertical-middle"
+            />
+
+            <template #popover>
+              <p>Các bài kiểm tra được cài đặt theo trọng số, tính theo %.</p>
+              <p class="mb-3">Tổng trọng số của tất cả các bài kiểm tra là 100%.</p>
+
+              <a href="">Xem chi tiết</a>
+            </template>
+          </v-popover>
         </app-radio>
       </div>
 

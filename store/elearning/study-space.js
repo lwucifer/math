@@ -35,7 +35,7 @@ const actions = {
           return;
         }
 
-        if (options.params.completed === false) {
+        if (!options.params.completed) {
           commit("unfinished_lecture", data);
           return;
         }

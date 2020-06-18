@@ -7,10 +7,10 @@
       <label class="mb-3 font-weight-bold" for="question-editor"
         >Nội dung câu hỏi</label
       >
-      <a href class="d-flex text-decoration-none mr-3">
+      <!-- <a href class="d-flex text-decoration-none mr-3">
         <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
         câu hỏi</a
-      >
+      > -->
     </div>
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />

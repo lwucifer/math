@@ -8,6 +8,15 @@
         <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
         câu hỏi</a
       > -->
+      <!-- <app-upload
+        class="mr-auto text-primary"
+        style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .jpg, .jpeg, .jpg, .bmp, .png"
+        @change="handleUploadAnswer"
+      >
+        <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
+        trả lời
+      </app-upload> -->
     </div>
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />

@@ -40,6 +40,7 @@ import { getToken } from "../../utils/auth";
 import { createRepayReq } from '../../models/payment/RepayReq';
 import { mapActions } from 'vuex';
 import { RESPONSE_SUCCESS } from '../../utils/config';
+import qs from 'qs';
 
 export default {
   components: {
