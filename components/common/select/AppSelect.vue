@@ -197,7 +197,7 @@ export default {
     return {
       active: false,
       search: "",
-      localValue: ["null", "undefined"].includes(typeof this.value)
+      localValue: this.value === null || this.value === undefined
         ? this.defaultValue || (this.mode === "" ? null : [])
         : this.value || (this.mode === "" ? null : []),
       tmpOptions: this.options
