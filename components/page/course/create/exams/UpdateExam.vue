@@ -279,6 +279,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.exam);
     useEffect(this, this.watchExam.bind(this), ["exam"]);
   },
 
@@ -311,6 +312,9 @@ export default {
   methods: {
     watchExam() {
       this.payload = { ...this.exam };
+      if (this.payload.weight !== "") {
+        this.typeRadio = "weight";
+      }
     },
 
     handleChangeCoefficient(value) {
