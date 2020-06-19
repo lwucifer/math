@@ -7,10 +7,27 @@
       <label class="mb-3 font-weight-bold" for="question-editor"
         >Nội dung câu hỏi</label
       >
-      <!-- <a href class="d-flex text-decoration-none mr-3">
-        <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
-        câu hỏi</a
-      > -->
+      <!-- UI Upload File
+      <div v-if="isUpload" class="d-flex align-items-center">
+        <div>{{fileRaw.name}}</div>
+        <div class="text-sub ml-2" style="font-size: 11px;">{{ fileRaw.size | fileSizeFilter}}</div>
+        <button class="ml-2" @click="handleCloseUpload">
+          <IconCloseSquare/>
+        </button>
+      </div>
+      <app-upload
+        @change="handleUpload"
+        class="text-primary"
+        style="display: inline-block;"
+        :multiple="false"
+        v-else
+      >
+        <div class="d-flex align-items-center">
+          <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />
+          Tải lên câu hỏi
+        </div>
+      </app-upload>
+      -->
     </div>
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
@@ -57,6 +74,7 @@
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+import IconCloseSquare from '~/assets/svg/icons/close-square.svg?inline';
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exams/CreateAnswerOfQuestion";
 import { get } from "lodash";
@@ -69,6 +87,7 @@ export default {
     IconTrashAlt,
     CreateAnswerOfQuestion,
     IconCloudDownload24px,
+    IconCloseSquare
   },
   computed: {
     ...mapState("elearning/create", {
@@ -97,6 +116,12 @@ export default {
         content: get(this, "question.content", ""),
         answers: get(this, "question.answers", []),
       },
+      fileRaw: {
+        name:'',
+        size:'',
+        file:''
+      },
+      isUpload:false
     };
   },
 
@@ -167,6 +192,15 @@ export default {
       if (this.payload.answers.length > 2 && check) {
         this.payload.answers.pop();
       }
+    },
+    handleUpload(data){
+      this.isUpload = true;
+      this.fileRaw.name = data[0].name;
+      this.fileRaw.size = data[0].size
+    },
+    handleCloseUpload(){
+      this.isUpload = false;
+      this.fileRaw = {};
     },
     get,
   },

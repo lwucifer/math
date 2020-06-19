@@ -94,6 +94,11 @@
         padding: 2rem;
     }
 
+    &--exercise-mode {
+        height: auto;
+        min-height: 42.6rem;
+    }
+
     &--article-mode {
         padding: 2rem 0 2rem 2rem
     }
@@ -140,6 +145,11 @@
                 padding-top: 0;
                 height: 100%;
             }
+        }
+
+
+        &--exercise-mode {
+            min-height: unset;
         }
     }
 

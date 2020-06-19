@@ -85,7 +85,7 @@
       <app-button
         size="sm"
         color="info"
-        @click.prevent="modalConfirmSubmit = true"
+        @click.prevent="modalConfirmSubmit = true; confirmLoading = false;"
       >
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
@@ -109,6 +109,7 @@
       v-if="modalConfirmSubmit"
       title="Xác nhận nộp bài"
       description="Bạn có chắc chắn muốn nộp bài?"
+      :confirmLoading="confirmLoading"
       @cancel="modalConfirmSubmit = false"
       @ok="handleQuestionSubmission"
       @close="modalConfirmSubmit = false"
@@ -173,6 +174,7 @@ export default {
       answer: null,
       questionNo: this.questionId,
       modalListQuestions: false,
+      confirmLoading: false,
       notify: {
         type: "",
         description: "",
@@ -268,6 +270,8 @@ export default {
         attachments: attachments
       });
 
+      this.confirmLoading = true;
+
       this.elearningSudyExerciseSubmissionAdd(submissionForm).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
@@ -309,6 +313,8 @@ export default {
             isShowNotify: true
           };
         }
+
+        this.confirmLoading = false;
       });
     },
 

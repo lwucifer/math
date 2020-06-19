@@ -7,6 +7,7 @@ import { InteractiveAddAnswer, InteractiveLikeAnswer,InteractiveAnswerList } fro
  */
 const state = () => ({
     listAnswers: [],
+    hideFrom: false
 });
 
 /**
@@ -47,6 +48,9 @@ const mutations = {
     ](state, data) {
         console.log("SET_TEACHING_INTERACTIVE_LISTANSWER_LIST", data);
         state.listAnswers = data;
+    },
+    [mutationTypes.ANSWER.HIDE_FROM](state, data) {
+        state.hideFrom = !state.hideFrom;
     },
 };
 

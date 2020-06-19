@@ -163,14 +163,8 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }
