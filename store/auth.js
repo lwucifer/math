@@ -76,7 +76,10 @@ const getters = {
     },
     phonePass(state) {
         return state.phonePass;
-    }
+    },
+    uuidUser(state) {
+        return !!state.token ? state.token.uuid : "";
+    },
 };
 
 /**
