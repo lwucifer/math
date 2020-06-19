@@ -30,7 +30,7 @@
         <span class="text-secondary e-exercise-do-exercise__countdown">Không giới hạn</span>
       </span>
     </div>
-    <div v-if="!!currentExerciseQuestion">
+    <template v-if="!!currentExerciseQuestion">
       <ElearningExerciseDoExerciseChoice
         v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE"
         :questionId="currentExerciseQuestion.id"
@@ -39,7 +39,7 @@
         v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY"
         :questionId="currentExerciseQuestion.id"
       />
-    </div>
+    </template>
   </div>
 </template>
 
