@@ -7,7 +7,13 @@
           >(Tối đa 60 ký tự)</span
         ></label
       >
-      <app-input id="title" :counter="60" v-model="payload.title" />
+      <app-input
+        id="title"
+        :counter="60"
+        v-model="payload.title"
+        @input="checkTitle()"
+      />
+      <app-error :error="get(error, 'title', '')" />
     </div>
 
     <div class="mb-4">
@@ -19,17 +25,18 @@
           value="CHOICE"
           class="mr-4"
           :checked="payload.type === 'CHOICE'"
-          @click="payload.type = 'CHOICE'"
+          @click="handleChangeType('CHOICE')"
           >Trắc nghiệm</app-radio
         >
         <app-radio
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.type = 'ESSAY'"
+          @click="handleChangeType('ESSAY')"
           >Tự luận</app-radio
         >
       </app-radio-group>
+      <app-error :error="get(error, 'type', '')" />
     </div>
 
     <div class="caculate-point">
@@ -125,6 +132,7 @@
           class="mr-3 mb-0 w-80 pr-3"
           size="sm"
           v-model="payload.weight"
+          @input="checkWeight()"
         >
           <template slot="unit">
             <span class="text-primary">%</span>
@@ -136,6 +144,7 @@
           đã được tạo
         </p>
       </div>
+      <app-error :error="get(error, 'weight', '')" />
     </div>
 
     <div class="row align-items-center mb-4" v-show="payload.required">
@@ -273,6 +282,7 @@ import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -324,17 +334,70 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       typeRadio: "coefficient",
+      error: {
+        title: "",
+        type: "",
+        weight: "",
+      },
     };
   },
 
   methods: {
+    handleChangeType(type) {
+      this.payload.type = type;
+      this.checkType();
+    },
+
+    checkPayload() {
+      let check = true;
+      check = this.checkTitle();
+      check = this.checkType();
+      check = this.checkWeight();
+      return check;
+    },
+
+    checkWeight() {
+      if (this.typeRadio !== "weight") {
+        this.error.weight = "";
+        return true;
+      }
+      if (!this.payload.weight) {
+        this.error.weight = "Bạn cần nhập trọng số";
+        return false;
+      }
+      if (numeral(this.payload.weight).value() <= 0) {
+        this.error.weight = "Trọng số phải lớn hơn 0";
+        return false;
+      }
+      this.error.weight = "";
+      return true;
+    },
+
+    checkType() {
+      if (this.payload.type === "") {
+        this.error.type = "Bạn cần nhập loại bài kiểm tra";
+        return false;
+      }
+      this.error.type = "";
+      return true;
+    },
+
+    checkTitle() {
+      if (!this.payload.title) {
+        this.error.title = "Bạn cần nhập tiêu đề";
+        return false;
+      }
+      this.error.title = "";
+      return true;
+    },
+
     watchExams() {
       if (get(this, "exams.content.0.weight", "") !== "") {
-        this.payload.weight = get(this, "exams.content.0.weight", "");
+        // this.payload.weight = get(this, "exams.content.0.weight", "");
         this.typeRadio = "weight";
       }
       if (get(this, "exams.content.0.coefficient", "") !== "") {
-        this.payload.coefficient = get(this, "exams.content.0.coefficient", "");
+        // this.payload.coefficient = get(this, "exams.content.0.coefficient", "");
         this.typeRadio = "coefficient";
       }
     },
@@ -364,6 +427,11 @@ export default {
     },
 
     async handleOk() {
+      if (!this.checkPayload()) {
+        this.handleCancel();
+        return;
+      }
+
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");
