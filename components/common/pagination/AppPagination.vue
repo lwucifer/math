@@ -2,7 +2,7 @@
   <ul
     class="app-pagination"
     v-if="total < 6 && total > 1"
-    :class="{ ...styleCls, ...extCls }"
+    :class="{ ...styleCls}"
   >
     <li>
       <a
@@ -35,7 +35,7 @@
   <ul
     class="app-pagination"
     v-else-if="total > 1"
-    :class="{ ...styleCls, ...extCls }"
+    :class="{ ...styleCls}"
   >
     <li>
       <a
@@ -121,15 +121,6 @@ export default {
     position: {
       type: String,
       default: "center", // left | center | right
-    },
-    extCls: {
-      type: Object,
-      default: () => {},
-    },
-    type: {
-      type: Number,
-      required: false,
-      default: 1,
     },
     pagination: {
       type: Object,
