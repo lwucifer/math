@@ -10,28 +10,6 @@
       <app-input id="title" :counter="60" v-model="payload.title" />
     </div>
 
-    <!-- <div class="mb-4" v-show="category === 'TEST'">
-      <h5 for="require" class="mb-3">{{ title_required }}</h5>
-
-      <app-radio-group>
-        <app-radio
-          name="group1"
-          value="1"
-          class="mr-4"
-          :checked="payload.required === 1"
-          @click="payload.required = 1"
-          >Có</app-radio
-        >
-        <app-radio
-          name="group1"
-          value="0"
-          :checked="payload.required === 0"
-          @click="payload.required = 0"
-          >Không</app-radio
-        >
-      </app-radio-group>
-    </div> -->
-
     <div class="mb-4">
       <h5 for="require" class="mb-3">Loại bài kiểm tra</h5>
 
@@ -63,21 +41,22 @@
           :checked="typeRadio == 'coefficient'"
           @click="handleSelectType"
           name="caculate-point"
-          class="mr-6"
+          :disabled="disabledType"
+          :class="{ 'mr-6': true, 'disabled-input': disabledType }"
         >
-         
-          <v-popover
-              placement="right" trigger="hover">
-              Theo hệ số 
-              <IconQuestionCircle
-                width="12px"
-                height="12px"
-                class="fill-gray vertical-middle"
-              />
+          <v-popover placement="right" trigger="hover">
+            Theo hệ số
+            <IconQuestionCircle
+              width="12px"
+              height="12px"
+              class="fill-gray vertical-middle"
+            />
 
             <template #popover>
-              <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2 </p>
-              <p class="mb-3">để làm cơ sở tính điểm trung bình cho học sinh.</p>
+              <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2</p>
+              <p class="mb-3">
+                để làm cơ sở tính điểm trung bình cho học sinh.
+              </p>
 
               <a href="">Xem chi tiết</a>
             </template>
@@ -87,8 +66,10 @@
         <app-radio
           :checked="typeRadio == 'weight'"
           value="weight"
+          :disabled="disabledType"
           @click="handleSelectType"
           name="caculate-point"
+          :class="{ 'disabled-input': disabledType }"
         >
           <v-popover placement="right" trigger="hover">
             Theo trọng số
@@ -100,7 +81,9 @@
 
             <template #popover>
               <p>Các bài kiểm tra được cài đặt theo trọng số, tính theo %.</p>
-              <p class="mb-3">Tổng trọng số của tất cả các bài kiểm tra là 100%.</p>
+              <p class="mb-3">
+                Tổng trọng số của tất cả các bài kiểm tra là 100%.
+              </p>
 
               <a href="">Xem chi tiết</a>
             </template>
@@ -286,7 +269,7 @@ import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 import SelectDate from "~/components/page/course/create/setting/SelectDate";
 import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery } from "~/utils/common";
+import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
@@ -304,7 +287,18 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
+      exams: "exams",
     }),
+    disabledType() {
+      return !!(
+        get(this, "exams.content.0.weight", "") !== "" ||
+        get(this, "exams.content.0.coefficient", "") !== ""
+      );
+    },
+  },
+
+  mounted() {
+    useEffect(this, this.watchExams.bind(this), ["exams"]);
   },
 
   data() {
@@ -334,6 +328,17 @@ export default {
   },
 
   methods: {
+    watchExams() {
+      if (get(this, "exams.content.0.weight", "") !== "") {
+        this.payload.weight = get(this, "exams.content.0.weight", "");
+        this.typeRadio = "weight";
+      }
+      if (get(this, "exams.content.0.coefficient", "") !== "") {
+        this.payload.coefficient = get(this, "exams.content.0.coefficient", "");
+        this.typeRadio = "coefficient";
+      }
+    },
+
     handleChangeCoefficient(value) {
       this.payload.coefficient = value;
     },
