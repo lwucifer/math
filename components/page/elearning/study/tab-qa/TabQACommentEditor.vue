@@ -49,7 +49,7 @@ import { getBase64 } from "~/utils/common";
 import { get } from "lodash";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
@@ -115,6 +115,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations('elearning/teaching/interactive-answer', ['hideFrom']),
     reset() {
       this.editor.setContent("");
       this.payload.content = "";
@@ -155,7 +156,8 @@ export default {
         this.payload,
         this.image
       );
-      if (get(res, "success", false)) {
+      if (res.success == true) {
+        this.hideFrom();
         this.$toasted.success("Thành công");
         this.reset();
         const options = {
@@ -163,10 +165,13 @@ export default {
             elearning_id: get(this, "$route.params.id", ""),
           },
         };
-        this.$store.dispatch(
-          `elearning/study/detail/getListQuestion`,
-          options
-        );
+        setTimeout(() => {
+          this.$store.dispatch(
+            `elearning/study/detail/getListQuestion`,
+            options
+          );
+        }, 500);
+        
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
