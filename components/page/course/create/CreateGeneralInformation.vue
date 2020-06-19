@@ -301,7 +301,6 @@ export default {
     },
 
     handleCheckBenefit() {
-      return true; // ko check loi ich nua
       let check = true;
       if (!get(this, "payload.benefit.length", true)) {
         check = false;
