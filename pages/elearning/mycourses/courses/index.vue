@@ -49,7 +49,7 @@
                 />
               </div>
 
-              <div class="filter-form__item m-0">
+              <div class="filter-form__item my-0">
                 <app-button
                   :color="showFilter ? 'primary' : 'white'"
                   square
@@ -62,7 +62,7 @@
               </div>
 
               <div class="d-flex-center ml-3" v-if="showFilter">
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
@@ -79,7 +79,7 @@
                     ]"
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
@@ -97,7 +97,7 @@
                     has-border
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
