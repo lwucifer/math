@@ -174,6 +174,7 @@ export default {
         reworks: this.reworks,
         works: this.works,
         open_time: this.open_time,
+        required: this.required
       });
 
       // show befor begin exercise
@@ -193,6 +194,7 @@ export default {
         reworks: this.reworks,
         works: this.works,
         open_time: this.open_time,
+        required: this.required
       });
       // get review result
       this.elearningSudyExerciseResultList({ exercise_id: this.id});

@@ -226,14 +226,8 @@ export default {
       this.handleCancel();
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "message", "Thành công"));
-
-        if (get(this, "data.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
-
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
         this.$emit("cancel");
         return;
       }

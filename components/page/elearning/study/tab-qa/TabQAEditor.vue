@@ -129,10 +129,13 @@ export default {
             elearning_id: get(this, "$route.params.id", ""),
           },
         };
-        this.$store.dispatch(
-          `elearning/study/detail/getListQuestion`,
-          options
-        );
+        setTimeout(() => {
+          this.$store.dispatch(
+            `elearning/study/detail/getListQuestion`,
+            options
+          );
+        }, 500);
+        
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

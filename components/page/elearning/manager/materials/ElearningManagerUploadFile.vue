@@ -278,6 +278,8 @@
 
         let config = {
           onUploadProgress: progressEvent => {
+            console.log("[onUploadProgress]", progressEvent);
+            
             this.loadedPayload = progressEvent.loaded
             this.uploadTimestamp = progressEvent.timeStamp
             let totalPayload = progressEvent.total
