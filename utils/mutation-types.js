@@ -14,6 +14,7 @@ export const AUTH = {
     SET_TOKEN_AVATAR: "setTokenAvatar",
 };
 
+
 export const BASE = {
     RESET: "resetData",
 };
@@ -261,6 +262,10 @@ export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_LIST: "setElearningTeachingExerciseList",
     SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
 };
+
+export const ANSWER = {
+    HIDE_FROM: "hideFrom"
+}
 
 export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
     SET_TEACHING_EXERCISE_PARTICIPANT_LIST: "setElearningTeachingExerciseParticipantList",
