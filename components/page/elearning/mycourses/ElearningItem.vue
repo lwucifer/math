@@ -168,9 +168,9 @@
               <template #popover>
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
 
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p class="mb-2">Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p class="mb-2">Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p class="mb-2">Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
               </template>
             </v-popover>
           </div>

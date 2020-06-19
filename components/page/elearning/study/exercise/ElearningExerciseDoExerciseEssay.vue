@@ -250,15 +250,10 @@ export default {
     ]),
 
     handleQuestionSubmission() {
-      console.log("[handleQuestionSubmission]", this.currentExerciseQuestion);
+      console.log("[handleQuestionSubmission] bf", this.submission);
 
-      const attachments = this.submission.attachments.map(m => m.file);
-
-      const submissionReq = createExerciseSubmissionReq({
-        exercise_id: this.submission.exercise_id,
-        answers: this.submission.answers,
-        attachments: attachments
-      });
+      const attachments = this.submission.attachments.filter(f => f.file).map(m => m.file);
+      
 
       const submissionForm = new FormData();
       submissionForm.append("exercise_id", this.submission.exercise_id);
