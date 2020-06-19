@@ -13,9 +13,13 @@
         Số câu hỏi:
         <span class="text-secondary mr-6">{{ currentExercise.questions }}</span>
       </span>
-      <span>
+      <span v-if="currentExercise.required">
         Thời gian làm bài:
         <span class="text-secondary">{{ currentExercise.duration }} phút</span>
+      </span>
+      <span v-else>
+        Thời gian làm bài:
+        <span class="text-secondary">Không giới hạn</span>
       </span>
     </div>
 
