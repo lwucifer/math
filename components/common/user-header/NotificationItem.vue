@@ -6,10 +6,9 @@
       />
       <div class="wrap-content-item">
           <p class="content-item" >
-              <strong>Ngọc Trinh</strong>
-              đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ: “Du lịch Dubai với Trinh” 
+              {{ dataNoti.payload.text || '' }}
           </p>
-          <span>15 phút trước</span>
+          <span>{{ dataNoti.created_at | moment('from') }}</span>
       </div>
       <div class="group-button-item">
             <div class="d-flex justify-content-center" v-click-outside="handleClickOutMenu">
@@ -33,14 +32,14 @@
                         </a>
                     </li>
                     <li>
-                        <a>
+                        <a @click="handleDelete">
                             <IconDeleteSweep24px/>Xóa thông báo này
                         </a>
                     </li>
                 </ul>
             </div>
           
-          <button v-if="isReaded">
+          <button v-if="!isReaded">
               <IconEllipse2/>
           </button>
       </div>
@@ -52,6 +51,7 @@ import IconMoreHoriz24px from '~/assets/svg/v2-icons/more_horiz_24px.svg?inline'
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconDeleteSweep24px from '~/assets/svg/v2-icons/delete_sweep_24px.svg?inline';
+import { mapState, mapActions } from "vuex";
 export default {
     components:{
         IconMoreHoriz24px,
@@ -60,8 +60,16 @@ export default {
         IconDeleteSweep24px
     },
     props:{
+        dataNoti:{
+            type: Object,
+            default: {}
+        },
+        typeTab:{
+            type: String,
+            default: 'elearning'
+        },
         isReaded:{
-            type:Boolean,
+            type: Boolean,
             default: false
         }
     },
@@ -70,10 +78,32 @@ export default {
             menuBtn:false
         }
     },
+
+    created() {
+        console.log('dataNoti', this.dataNoti)
+    },
     methods:{
+        ...mapActions('elearning/study/notifications', [
+            "getNotifications",
+            "checkIsReadNotifications", 
+            "deleteNotifications"
+        ]),
+        handleDelete(){
+            this.deleteNotifications({
+                notification_id: this.dataNoti.id,
+                service_type: this.typeTab == 'elearning' ? 'ELEARNING' : 'SOCIAL'
+            })
+        },
         handleClickCheck(){
             this.menuBtn = !this.menuBtn;
             this.$emit('read',!this.isReaded);
+            this.checkIsReadNotifications({
+                notification_id: this.dataNoti.id,
+                type: "ONLY_ONE",
+                service_type: this.typeTab == 'elearning' ? 'ELEARNING' : 'SOCIAL'
+            }).then(res => {
+                console.log('res', res)
+            })
         },
         handleClickOutMenu(){
             this.menuBtn = false;

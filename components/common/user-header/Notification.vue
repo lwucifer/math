@@ -5,7 +5,7 @@
         class="item"
     >
         <IconNotifications24px class="fill-gray" />
-        <span class="number">9</span>
+        <span class="number" v-if="sumCountNoti > 0">{{ sumCountNoti }}</span>
     </button>
     <div v-if="showMenuNotifi" class="content-dropdown">
         <div class="header-content">
@@ -29,19 +29,19 @@
         </div>
         <hr>
         <div class="notification-tabs">
-            <a :class="{ active: tab === 'elearning' }" @click="tab = 'elearning'">
+            <a :class="{ active: tab === 'elearning' }" @click="changeTab('elearning')">
                 <div class="d-flex">
                         e-leaning
-                    <div class="count-notification">
-                        12
+                    <div class="count-notification" v-if="countNotiElearning > 0">
+                        {{ countNotiElearning }}
                     </div>
                 </div>
             </a>
-            <a :class="{ active: tab === 'social' }" @click="tab = 'social'">
+            <a :class="{ active: tab === 'social' }" @click="changeTab('social')">
                 <div class="d-flex">
                         mạng xã hội
-                    <div class="count-notification">
-                        12
+                    <div class="count-notification" v-if="countNotiSocial > 0">
+                        {{ countNotiSocial }}
                     </div>
                 </div>
             </a>
@@ -51,6 +51,7 @@
                 <notification-item 
                     v-for="(item, index) in notis"
                     :key="index"
+                    :dataNoti="item"
                     :isReaded="isReaded"
                     @read="handleReadNotifi"
                 />
@@ -63,8 +64,12 @@
         <div v-if="tab === 'social'">
             <div class="tab-notification">
                  <notification-item 
+                    v-for="(item, index) in notis"
+                    :key="index"
+                    :dataNoti="item"
                     :isReaded="isReaded"
                     @read="handleReadNotifi"
+                    :typeTab="tab"
                 />
             </div>
         </div>
@@ -103,12 +108,20 @@ export default {
         ...mapState("auth", [
             "token",
         ]),
-        ...mapState("elearning/study/notifications", ["notis"]),
+        ...mapState("elearning/study/notifications", [
+            "notis",
+            "countNotiElearning",
+            "countNotiSocial"
+        ]),
         getNotificationLink() {
             const accountObj = getToken();
             if (!!accountObj) {
                 return `/${accountObj.id}/info/announcement`;
             }
+        },
+        sumCountNoti(){
+            const sumNoti = parseInt(this.countNotiElearning) + parseInt(this.countNotiSocial)
+            return sumNoti
         }
     },
 
@@ -117,7 +130,23 @@ export default {
     },
 
     methods:{
-        ...mapActions(STORE_NOTIFI, ['getNotifications']),
+        ...mapActions(STORE_NOTIFI, ['getNotifications', 'getCountNotifications']),
+
+        changeTab(_tab){
+            this.tab = _tab;
+            if(this.tab == "elearning"){
+                this.getNotifications({
+                    fetch_size: 50,
+                    service_type: "ELEARNING"
+                });
+            }else{
+                this.getNotifications({
+                    fetch_size: 50,
+                    service_type: "SOCIAL"
+                });
+            }
+            
+        },
         handleClickOutside(){
             this.showMenuNotifi = false;
         },
@@ -126,11 +155,20 @@ export default {
         }
     },
     
-    // watch: {
-    //     showMenuNotifi(newVal){
-    //         newVal && this.getNotifications();
-    //     }
-    // },
+    watch: {
+        showMenuNotifi(newVal){
+            newVal && this.getNotifications({
+                fetch_size: 50,
+                service_type: "ELEARNING"
+            });
+            newVal && this.getCountNotifications({
+                service_type: "ELEARNING"
+            });
+            newVal && this.getCountNotifications({
+                service_type: "SOCIAL"
+            });
+        }
+    },
 }
 </script>
 
