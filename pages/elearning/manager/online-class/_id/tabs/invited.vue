@@ -7,7 +7,7 @@
           <div style="width: 100%">
             <app-search
               :placeholder="'Nhập để tìm kiếm...'"
-              v-model="params.query"
+              v-model="query"
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
@@ -207,6 +207,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: "Tất cả"
@@ -256,7 +257,8 @@ export default {
         sort: 'join_date,desc'
       },
       loading: false,
-      listSchoolClasses: []
+      listSchoolClasses: [],
+      checkFilter: false
     };
   },
 
@@ -276,6 +278,12 @@ export default {
     },
   },
 
+  watch: {
+    query() {
+      this.checkFilter = true;
+    },
+  },
+  
   methods: {
     getDateBirthDay,
 
@@ -311,8 +319,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params };
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedCourse() {
       this.params.class_id = this.filterCourse.value;
@@ -361,6 +371,7 @@ export default {
           ? this.$route.params.id
           : "";
         this.params.online_class_id = online_class_id;
+        if (this.query != null) {this.params.query = this.query}
         if (this.filterCourse) {
           this.params.class_id = this.filterCourse.value;
         }
