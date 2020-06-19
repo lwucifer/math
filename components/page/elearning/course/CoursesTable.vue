@@ -460,10 +460,8 @@ export default {
           this.currentHeads = [...this.heads2];
           break;
         case "APPROVED":
-          this.currentHeads = [...this.heads];
-          break;
         case null:
-          this.currentHeads = [...this.heads3];
+          this.currentHeads = [...this.heads];
           break;
         default:
           this.currentHeads = [...this.heads2];

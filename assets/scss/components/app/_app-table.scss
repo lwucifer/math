@@ -101,18 +101,18 @@
                 }
             }
         }
-        .app-checkbox__checkmark {
-            //border: 1px solid #333;
-        }
         tr {
             position: relative;
             transform: scale(1,1);
             &:hover .actions.show {
                 opacity: 1;
                 visibility: visible;
+                display: flex;
             }
             .actions {
-                position:fixed;
+                //position:fixed;
+                display: none;
+                position: absolute;
                 left: 0;
                 right: 0;
                 top: 1px;
@@ -120,11 +120,12 @@
                 opacity: 0;
                 visibility: hidden;
                 transition: all 300ms;
-                display: flex;
+                //display: flex;
                 flex-wrap: nowrap;
                 align-items: center;
                 padding: 1rem 2rem 1rem 5rem;
                 background: rgba(255, 255, 255, 0.9);
+                min-width: 100%;
                 button, a {
                     display: inline-flex;
                     align-items: center;
