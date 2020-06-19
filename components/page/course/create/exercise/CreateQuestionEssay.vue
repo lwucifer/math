@@ -34,10 +34,7 @@
       <label class="mb-3 font-weight-semi-bold" for="question-editor"
         >Nội dung câu hỏi</label
       >
-      <!-- <a href class="d-flex text-decoration-none mr-3">
-        <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
-        câu hỏi</a
-      > -->
+      <!-- UI Upload File
       <div v-if="isUpload" class="d-flex align-items-center">
         <div>{{fileRaw.name}}</div>
         <div class="text-sub ml-2" style="font-size: 11px;">{{ fileRaw.size | fileSizeFilter}}</div>
@@ -57,6 +54,7 @@
           Tải lên câu hỏi
         </div>
       </app-upload>
+      -->
     </div>
     <app-editor v-model="payload.content" class="mb-4" />
 
