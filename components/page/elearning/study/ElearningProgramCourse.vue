@@ -47,18 +47,18 @@ import { LESSION_STATUS } from "../../../../utils/constants";
 export default {
   components: {
     IconAngleDown,
-    ElearningProgramItem,
+    ElearningProgramItem
   },
 
   props: {
     program: {},
-    index: {},
+    index: {}
   },
 
   data() {
     return {
       check: {},
-      expand: false,
+      expand: false
     };
   },
 
@@ -67,9 +67,9 @@ export default {
       const lessons = get(this.program, "lessons", []);
       const total_lessons = get(this.program, "total_lessons", 0);
       const completed =
-        lessons.filter((l) => l.status == LESSION_STATUS.COMPLETED) || [];
+        lessons.filter(l => l.status == LESSION_STATUS.COMPLETED) || [];
       return `${completed.length}/${total_lessons}`;
-    },
+    }
   },
 
   methods: {
@@ -77,8 +77,15 @@ export default {
 
     toggleExpand() {
       this.expand = !this.expand;
-    },
+    }
   },
+
+  mounted() {
+    this.$nextTick(() => {
+      const lession_id = get(this, "$route.query.lession_id", "");
+      console.log("[mounted] lession_id", lession_id, this.program.lessions);
+    });
+  }
 };
 </script>
 

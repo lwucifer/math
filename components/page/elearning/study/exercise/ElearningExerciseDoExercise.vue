@@ -1,7 +1,7 @@
 <template>
   <div class="e-exercise-do-exercise">
     <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
-      {{ currentExercise.name }} - {{ type | getExerciseTypeText }}
+      {{ currentExercise.name }} - {{ currentExercise.type | getExerciseTypeText }}
     </h1>
     <div class="text-center font-weight-semi-bold heading-5 mb-15" >
       <span v-if="studyMode != doingExerciseMode">
@@ -60,13 +60,13 @@ export default {
     ElearningExerciseDoExerciseEssay
   },
 
-  props: {
-    type: {
-      type: String,
-      default: EXERCISE_TYPES.ESSAY,
-      validator: value => Object.values(EXERCISE_TYPES).includes(value)
-    }
-  },
+  // props: {
+  //   type: {
+  //     type: String,
+  //     default: EXERCISE_TYPES.ESSAY,
+  //     validator: value => Object.values(EXERCISE_TYPES).includes(value)
+  //   }
+  // },
 
   data() {
     return {
