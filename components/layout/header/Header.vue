@@ -240,6 +240,14 @@ export default {
   },
   created() {
     this.isAuthenticated && this.getNotiUnread();
+    this.getNotifications({
+        fetch_size: 50,
+        service_type: "ELEARNING"
+    });
+    this.getNotifications({
+        fetch_size: 50,
+        service_type: "SOCIAL"
+    });
     this.getCountNotifications({
         service_type: "ELEARNING"
     });
@@ -249,7 +257,7 @@ export default {
   },
   methods: {
     get,
-    ...mapActions('elearning/study/notifications', ['getCountNotifications']),
+    ...mapActions('elearning/study/notifications', ['getNotifications', 'getCountNotifications']),
     ...mapMutations("auth", ["removeToken"]),
     ...mapMutations('keyword', ['searchHeader']),
     ...mapMutations("notifications", ["reviceNoti", "commitNotiUnread"]),

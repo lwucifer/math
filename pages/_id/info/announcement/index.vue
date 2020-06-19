@@ -29,7 +29,7 @@
               </div>
               <div class="content-notification">
                 <notification-item
-                  v-for="(item, index) in notis"
+                  v-for="(item, index) in notiElearning"
                   :key="index"
                   :dataNoti="item"
                   :isReaded="isReaded"
@@ -78,7 +78,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("elearning/study/notifications", ["notis"]),
+    ...mapState("elearning/study/notifications", ["notiElearning"]),
     ...mapState("auth", ["token"]),
   },
   created() {

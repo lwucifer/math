@@ -49,7 +49,7 @@
         <div v-if="tab === 'elearning'">
             <div class="tab-notification">
                 <notification-item 
-                    v-for="(item, index) in notis"
+                    v-for="(item, index) in notiElearning"
                     :key="index"
                     :dataNoti="item"
                     :isReaded="isReaded"
@@ -64,7 +64,7 @@
         <div v-if="tab === 'social'">
             <div class="tab-notification">
                  <notification-item 
-                    v-for="(item, index) in notis"
+                    v-for="(item, index) in notiSocial"
                     :key="index"
                     :dataNoti="item"
                     :isReaded="isReaded"
@@ -109,7 +109,8 @@ export default {
             "token",
         ]),
         ...mapState("elearning/study/notifications", [
-            "notis",
+            "notiElearning",
+            "notiSocial",
             "countNotiElearning",
             "countNotiSocial"
         ]),
@@ -134,17 +135,17 @@ export default {
 
         changeTab(_tab){
             this.tab = _tab;
-            if(this.tab == "elearning"){
-                this.getNotifications({
-                    fetch_size: 50,
-                    service_type: "ELEARNING"
-                });
-            }else{
-                this.getNotifications({
-                    fetch_size: 50,
-                    service_type: "SOCIAL"
-                });
-            }
+            // if(this.tab == "elearning"){
+            //     this.getNotifications({
+            //         fetch_size: 50,
+            //         service_type: "ELEARNING"
+            //     });
+            // }else{
+            //     this.getNotifications({
+            //         fetch_size: 50,
+            //         service_type: "SOCIAL"
+            //     });
+            // }
             
         },
         handleClickOutside(){
@@ -157,16 +158,7 @@ export default {
     
     watch: {
         showMenuNotifi(newVal){
-            newVal && this.getNotifications({
-                fetch_size: 50,
-                service_type: "ELEARNING"
-            });
-            newVal && this.getCountNotifications({
-                service_type: "ELEARNING"
-            });
-            newVal && this.getCountNotifications({
-                service_type: "SOCIAL"
-            });
+            
         }
     },
 }
