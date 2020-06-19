@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- <label class="d-inline-block mb-3 font-weight-semi-bold" for="question-editor"
       >Nội dung câu hỏi</label
     > -->
@@ -91,7 +91,7 @@
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
-import IconCloseSquare from '~/assets/svg/icons/close-square.svg?inline';
+import IconCloseSquare from "~/assets/svg/icons/close-square.svg?inline";
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
@@ -109,7 +109,7 @@ export default {
 
   components: {
     IconCloudDownload24px,
-    IconCloseSquare
+    IconCloseSquare,
   },
 
   data() {
@@ -127,15 +127,15 @@ export default {
             correct: false,
             content: "",
           },
-        ]
+        ],
       },
       fileRaw: {
-        name:'',
-        size:'',
-        file:''
+        name: "",
+        size: "",
+        file: "",
       },
-      isUpload:false
-    }
+      isUpload: false,
+    };
   },
 
   mounted() {
@@ -176,14 +176,8 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }
@@ -193,12 +187,12 @@ export default {
     handleCancel() {
       (this.showModalConfirm = false), (this.confirmLoading = false);
     },
-    handleUpload(data){
+    handleUpload(data) {
       this.isUpload = true;
       this.fileRaw.name = data[0].name;
-      this.fileRaw.size = data[0].size
+      this.fileRaw.size = data[0].size;
     },
-    handleCloseUpload(){
+    handleCloseUpload() {
       this.isUpload = false;
       this.fileRaw = {};
     },

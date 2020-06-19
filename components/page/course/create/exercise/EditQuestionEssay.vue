@@ -42,7 +42,7 @@
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
         trả lời
       </app-upload> -->
-      
+
       <!-- UI Upload File
       <div v-if="isUpload" class="d-flex align-items-center">
         <div>{{fileRaw.name}}</div>
@@ -72,8 +72,6 @@
     >
     <app-editor v-model="payload.answers[0].content" /> -->
 
-
-    
     <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
         class="font-weight-semi-bold mr-4 text-secondary"
@@ -104,7 +102,7 @@
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
-import IconCloseSquare from '~/assets/svg/icons/close-square.svg?inline';
+import IconCloseSquare from "~/assets/svg/icons/close-square.svg?inline";
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
@@ -115,9 +113,9 @@ import { mapState } from "vuex";
 export default {
   components: {
     IconCloudDownload24px,
-    IconCloseSquare
+    IconCloseSquare,
   },
-  
+
   props: {
     question: {
       type: Object,
@@ -146,11 +144,11 @@ export default {
         // ],
       },
       fileRaw: {
-        name:'',
-        size:'',
-        file:''
+        name: "",
+        size: "",
+        file: "",
       },
-      isUpload:false
+      isUpload: false,
     };
   },
   computed: {
@@ -189,14 +187,8 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }
@@ -210,12 +202,12 @@ export default {
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
     },
-    handleUpload(data){
+    handleUpload(data) {
       this.isUpload = true;
       this.fileRaw.name = data[0].name;
-      this.fileRaw.size = data[0].size
+      this.fileRaw.size = data[0].size;
     },
-    handleCloseUpload(){
+    handleCloseUpload() {
       this.isUpload = false;
       this.fileRaw = {};
     },
