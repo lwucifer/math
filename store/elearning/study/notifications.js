@@ -7,48 +7,9 @@ import { isEmpty, uniqWith, omit } from "lodash";
  * initial state
  */
 const state = () => ({
-    notis: [
-        {   
-            notification_id: 1,
-            type: 'E-LEARNING',
-            name: 'Ngọc Trinh',
-            image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
-            content: '“Du lịch Dubai với Trinh”',
-            title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
-            timestamp: '15 phút trước',
-            read: true
-        },
-        {   
-            notification_id: 2,
-            type: 'MXH',
-            name: 'Ngọc Trinh',
-            image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
-            content: '“Du lịch Dubai với Trinh”',
-            title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
-            timestamp: '15 phút trước',
-            read: true
-        },
-        {   
-            notification_id: 3,
-            type: 'E-LEARNING',
-            name: 'Ngọc Trinh',
-            image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
-            content: '“Du lịch Dubai với Trinh”',
-            title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
-            timestamp: '15 phút trước',
-            read: false
-        },
-        {   
-            notification_id: 4,
-            type: 'E-LEARNING',
-            name: 'Ngọc Trinh',
-            image: 'https://s3.cloud.cmctelecom.vn/dev-image-schoolly/avatar/14/low/5c6e7804-514d-48f0-b82f-63258b0b47fe.jpg',
-            content: '“Du lịch Dubai với Trinh”',
-            title: 'đã bày tỏ cảm xúc đến bài viết mà bạn được gắn thẻ:',
-            timestamp: '15 phút trước',
-            read: true
-        }
-    ],
+    notis: [],
+    countNotiElearning: 0,
+    countNotiSocial: 0,
     notiUnread: 0,
 });
 
@@ -64,9 +25,26 @@ const actions = {
     async [actionTypes.HEADER_NOTIFICATIONS.LIST]({ state, commit }, payload) {
         try {
             const result = await new Notifications(this.$axios)[
-                actionTypes.BASE.LIST
-              ](payload);
-            commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, result.data );
+                actionTypes.HEADER_NOTIFICATIONS.LIST
+            ](payload);
+            commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_LIST, result.data);
+        } catch (err) {
+            console.log("[Notifications] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.HEADER_NOTIFICATIONS.LIST_COUNT]({ state, commit }, payload) {
+        try {
+            const result = await new Notifications(this.$axios)[
+                actionTypes.HEADER_NOTIFICATIONS.LIST_COUNT
+            ](payload);
+            if (payload.service_type == 'ELEARNING') {
+                commit(mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_ELEARNING, result.data);
+            }
+            if (payload.service_type == 'SOCIAL') {
+                commit(mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_SOCIAL, result.data);
+            }
         } catch (err) {
             console.log("[Notifications] list.err", err);
             return err;
@@ -77,25 +55,39 @@ const actions = {
         try {
             const result = await new Notifications(this.$axios)[
                 actionTypes.BASE.DETAIL
-              ](payload);
-            commit(mutationTypes.SOCIAL_NOTI.SET_SOCIAL_NOTIFICATIONS_LIST, result.data );
+            ](payload);
+            commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_LIST, result.data);
         } catch (err) {
             console.log("[Notifications] list.err", err);
             return err;
         }
     },
 
+
+
     async [actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION]({ state, commit }, payload) {
         try {
             const result = await new Notifications(this.$axios)[
-                actionTypes.BASE.LIST
-              ](payload);
-            commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_LIST, result.data );
+                actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION
+            ](payload);
+            return result;
         } catch (err) {
-            console.log("[Notifications] list.err", err);
+            console.log("[Notifications] PUT.err", err);
             return err;
         }
     },
+
+
+    async [actionTypes.HEADER_NOTIFICATIONS.DELETE]({ commit }, options) {
+        try {
+            const result = await new Notifications(this.$axios)[
+                actionTypes.BASE.DELETE_PAYLOAD
+            ](options);
+            return result;
+        } catch (error) {
+            console.log("[Notifications] delete.error", error);
+        }
+    }
 };
 
 /**
@@ -106,7 +98,13 @@ const mutations = {
         console.log("[state.notis]", _notis);
         state.notis = _notis;
     },
-   
+    [mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_ELEARNING](state, _notis) {
+        state.countNotiElearning = _notis;
+    },
+    [mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_SOCIAL](state, _notis) {
+        state.countNotiSocial = _notis;
+    },
+
 };
 
 export default {

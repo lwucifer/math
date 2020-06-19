@@ -525,6 +525,8 @@ export const SOCIAL_NOTI = {
 
 export const HEADER_NOTI = {
     SET_NOTIFICATIONS_LIST: "setNotifications",
+    SET_COUNT_NOTI_ELEARNING: "setCountNotiElearning",
+    SET_COUNT_NOTI_SOCIAL: "setCountNotiSocial",
 };
 
 export const SOCIAL_FRIEND = {

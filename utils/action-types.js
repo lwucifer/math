@@ -63,8 +63,10 @@ export const SOCIAL_NOTIFICATIONS = {
 
 export const HEADER_NOTIFICATIONS = {
     LIST: "getNotifications",
+    LIST_COUNT: 'getCountNotifications',
     DETAIL_LIST: "getDetailNotifications",
     CHECK_IS_READ_NOTIFICATION: "checkIsReadNotifications",
+    DELETE: "deleteNotifications"
 };
 
 export const SOCIAL_CONFIG = {

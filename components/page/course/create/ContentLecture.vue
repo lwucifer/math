@@ -216,7 +216,7 @@ export default {
         this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
         return;
       }
-      if (!this.isNextStep()) {
+      if (!this.isNextStep) {
         this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
         return;
       }

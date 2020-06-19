@@ -51,6 +51,12 @@ export const REGISTER_DEVICE = `/social/api/device`;
 export const NOTIFICATION_UNREAD = `chat/social/api/notification/unRead`;
 
 /**
+ * NOTIFICATION
+ */
+export const NOTIFICATIONS_HEADER = `/notification/notification`;
+export const COUNT_NOTIFICATIONS_HEADER = `/notification/notification/countNotification`;
+
+/**
  * ELEARNING
  */
 export const ELEARNING_PUBLIC_SUMMARY = `/elearning/public/summary`;
