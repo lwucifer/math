@@ -33,10 +33,6 @@
       <label class="mb-3 font-weight-semi-bold" for="question-editor"
         >Nội dung câu hỏi</label
       >
-      <!-- <a href class="d-flex text-decoration-none mr-3">
-        <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
-        câu hỏi</a
-      > -->
       <!-- <app-upload
         class="mr-auto text-primary"
         style="display: inline-block; float: right;"
@@ -46,6 +42,28 @@
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
         trả lời
       </app-upload> -->
+      
+      <!-- UI Upload File
+      <div v-if="isUpload" class="d-flex align-items-center">
+        <div>{{fileRaw.name}}</div>
+        <div class="text-sub ml-2" style="font-size: 11px;">{{ fileRaw.size | fileSizeFilter}}</div>
+        <button class="ml-2" @click="handleCloseUpload">
+          <IconCloseSquare/>
+        </button>
+      </div>
+      <app-upload
+        @change="handleUpload"
+        class="text-primary"
+        style="display: inline-block;"
+        :multiple="false"
+        v-else
+      >
+        <div class="d-flex align-items-center">
+          <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />
+          Tải lên câu hỏi
+        </div>
+      </app-upload>
+      -->
     </div>
     <app-editor v-model="payload.content" />
 
@@ -85,7 +103,8 @@
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
-import IconCloudUpload from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline";
+import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+import IconCloseSquare from '~/assets/svg/icons/close-square.svg?inline';
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
@@ -95,7 +114,8 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    IconCloudUpload,
+    IconCloudDownload24px,
+    IconCloseSquare
   },
   
   props: {
@@ -125,6 +145,12 @@ export default {
         //   },
         // ],
       },
+      fileRaw: {
+        name:'',
+        size:'',
+        file:''
+      },
+      isUpload:false
     };
   },
   computed: {
@@ -184,7 +210,15 @@ export default {
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
     },
-
+    handleUpload(data){
+      this.isUpload = true;
+      this.fileRaw.name = data[0].name;
+      this.fileRaw.size = data[0].size
+    },
+    handleCloseUpload(){
+      this.isUpload = false;
+      this.fileRaw = {};
+    },
     get,
   },
 };
