@@ -81,10 +81,10 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      const lession_id = get(this, "$route.query.lession_id", "");
-      console.log("[mounted] lession_id", lession_id, this.program.lessions);
-    });
+    // this.$nextTick(() => {
+    //   const lession_id = get(this, "$route.query.lession_id", "");
+    //   console.log("[mounted] lession_id", lession_id, this.program.lessions);
+    // });
   }
 };
 </script>

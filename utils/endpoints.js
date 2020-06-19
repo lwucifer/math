@@ -163,6 +163,12 @@ export const SCHOOL_ELEARNING = `/elearning/school/elearnings`;
 export const SCHOOL_PROFESSIONAL = `/elearning/school/admin/professional`;
 export const SCHOOL_STUDENT = `/elearning/school/admin/students`;
 export const SCHOOL_TEACHER = `/elearning/school/admin/teachers`;
+export const SCHOOL_ANNOUCEMENTS = `/elearning/school/announcements`;
+export const SCHOOL_LINKWEBS = `/elearning/school/linkwebs`;
+export const SCHOOL_NEWS = `/elearning/school/news`;
+export const SCHOOL_ORG_INTRO = `/elearning/school/organization`;
+export const SCHOOL_PROFESSION = `/elearning/school/professions`;
+export const SCHOOL_TIMETABLE = `/elearning/school/timetable`;
 
 /**
  * MESSAGE
