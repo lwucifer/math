@@ -642,6 +642,10 @@ export const TEACHING_STUDENT_PROGRESS = {
     LIST: "teachingStudentProGressList",
 };
 
+export const TEACHING_STUDENT_EXERCISES = {
+    LIST: "teachingStudentExercisesList",
+};
+
 export const TEACHING_ELEARNING_REQUESTS = {
     LIST: "teachingElearningRequestsList",
 };
