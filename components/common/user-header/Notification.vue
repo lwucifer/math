@@ -5,7 +5,7 @@
         class="item"
     >
         <IconNotifications24px class="fill-gray" />
-        <span class="number" v-if="sumCountNoti > 0">{{ sumCountNoti }}</span>
+        <span class="number" v-if="countSumNoti > 0">{{ countSumNoti }}</span>
     </button>
     <div v-if="showMenuNotifi" class="content-dropdown">
         <div class="header-content">
@@ -52,13 +52,8 @@
                     v-for="(item, index) in notiElearning"
                     :key="index"
                     :dataNoti="item"
-                    :isReaded="isReaded"
-                    @read="handleReadNotifi"
+                    :typeTab="tab"
                 />
-                <!-- <notification-item 
-                    :isReaded="isReaded"
-                    @read="handleReadNotifi"
-                /> -->
             </div>
         </div>
         <div v-if="tab === 'social'">
@@ -67,8 +62,6 @@
                     v-for="(item, index) in notiSocial"
                     :key="index"
                     :dataNoti="item"
-                    :isReaded="isReaded"
-                    @read="handleReadNotifi"
                     :typeTab="tab"
                 />
             </div>
@@ -108,6 +101,7 @@ export default {
         ...mapState("auth", [
             "token",
         ]),
+        ...mapGetters('elearning/study/notifications', ["countSumNoti"]),
         ...mapState("elearning/study/notifications", [
             "notiElearning",
             "notiSocial",
@@ -120,14 +114,6 @@ export default {
                 return `/${accountObj.id}/info/announcement`;
             }
         },
-        sumCountNoti(){
-            const sumNoti = parseInt(this.countNotiElearning) + parseInt(this.countNotiSocial)
-            return sumNoti
-        }
-    },
-
-    created(){
-        // this.getNotifications()
     },
 
     methods:{
@@ -135,25 +121,13 @@ export default {
 
         changeTab(_tab){
             this.tab = _tab;
-            // if(this.tab == "elearning"){
-            //     this.getNotifications({
-            //         fetch_size: 50,
-            //         service_type: "ELEARNING"
-            //     });
-            // }else{
-            //     this.getNotifications({
-            //         fetch_size: 50,
-            //         service_type: "SOCIAL"
-            //     });
-            // }
-            
         },
         handleClickOutside(){
             this.showMenuNotifi = false;
         },
-        handleReadNotifi(val){
-            this.isReaded = val;
-        }
+        // handleReadNotifi(val){
+        //     this.isReaded = val;
+        // }
     },
     
     watch: {

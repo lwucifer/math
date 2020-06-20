@@ -342,6 +342,16 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
     SET_SCHOOL_INFO: "setSchoolInfo",
+    SET_SCHOOL_ANNOUNCEMENT: "setSchoolAnnouncement",
+    SET_SCHOOL_ANNOUNCEMENT_DETAIL: "setSchoolAnnouncementDetail",
+    SET_SCHOOL_LINK_WEB: "setSchoolLinkWeb",
+    SET_SCHOOL_LINK_WEB_DETAIL: "setSchoolLinkWebDetail",
+    SET_SCHOOL_NEWS: "setSchoolNews",
+    SET_SCHOOL_ORG_INTRO: "setSchoolOrgIntro",
+    SET_SCHOOL_PROFESSIONS: "setSchoolProfessions",
+    SET_SCHOOL_PROFESSIONS_DETAIL: "setSchoolProfessionsDetail",
+    SET_SCHOOL_TIMETABLE: "setSchoolTimeTable",
+    SET_SCHOOL_TIMETABLE_DETAIL: "setSchoolTimeTableDetail",
 };
 
 export const SCHOOL_ELEARNING = {

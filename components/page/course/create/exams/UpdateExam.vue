@@ -312,7 +312,7 @@ export default {
   methods: {
     watchExam() {
       this.payload = { ...this.exam };
-      if (this.payload.weight !== "") {
+      if (this.payload.weight && this.payload.weight !== "") {
         this.typeRadio = "weight";
       }
     },

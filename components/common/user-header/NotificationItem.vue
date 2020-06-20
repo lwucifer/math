@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-notification-item" :class="isReaded ? 'readed' :''">
+  <div class="wrap-notification-item" :class="dataNoti.is_read ? 'readed' :''">
       <app-avatar
         :size=50
         class="avatar-notifi"
@@ -20,7 +20,7 @@
                    
                 >
                     <li @click="handleClickCheck" 
-                        v-if="!isReaded"
+                        v-if="!dataNoti.is_read"
                     >
                         <a>
                             <IconCheck24px/>Đánh dấu là đã đọc
@@ -39,7 +39,7 @@
                 </ul>
             </div>
           
-          <button v-if="!isReaded">
+          <button v-if="!dataNoti.is_read">
               <IconEllipse2/>
           </button>
       </div>
@@ -51,7 +51,7 @@ import IconMoreHoriz24px from '~/assets/svg/v2-icons/more_horiz_24px.svg?inline'
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 import IconCheck24px from '~/assets/svg/v2-icons/check_24px.svg?inline';
 import IconDeleteSweep24px from '~/assets/svg/v2-icons/delete_sweep_24px.svg?inline';
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
     components:{
         IconMoreHoriz24px,
@@ -68,15 +68,23 @@ export default {
             type: String,
             default: 'elearning'
         },
-        isReaded:{
-            type: Boolean,
-            default: false
-        }
+        // isReaded:{
+        //     type: Boolean,
+        //     default: false
+        // }
     },
+
     data(){
         return{
             menuBtn:false
         }
+    },
+
+    computed: {
+        ...mapState('elearning/study/notifications', [
+            "countNotiElearning",
+            "countNotiSocial"
+        ]),
     },
 
     created() {
@@ -84,10 +92,34 @@ export default {
     },
     methods:{
         ...mapActions('elearning/study/notifications', [
-            "getNotifications",
+            // "getNotifications",
+            // "getCountNotifications",
             "checkIsReadNotifications", 
             "deleteNotifications"
         ]),
+        ...mapMutations('elearning/study/notifications', [
+            "setCountNotiElearning",
+            "setCountNotiSocial"
+        ]),
+
+        updateCountElearning(_isRead){
+            if(!_isRead){
+                const countElearning = parseInt(this.countNotiElearning) + 1
+                this.setCountNotiElearning(countElearning)
+            }else{
+                const countElearning = parseInt(this.countNotiElearning) -1
+                this.setCountNotiElearning(countElearning)
+            }
+        },
+        updateCountSocial(_isRead){
+            if(!_isRead){
+                const countSocial = parseInt(this.countNotiSocial) + 1
+                this.setCountNotiSocial(countSocial)
+            }else{
+                const countSocial = parseInt(this.countNotiSocial) -1
+                this.setCountNotiSocial(countSocial)
+            }
+        },
         handleDelete(){
             this.deleteNotifications({
                 notification_id: this.dataNoti.id,
@@ -96,13 +128,20 @@ export default {
         },
         handleClickCheck(){
             this.menuBtn = !this.menuBtn;
-            this.$emit('read',!this.isReaded);
+            // this.$emit('read',!this.isReaded);
             this.checkIsReadNotifications({
                 notification_id: this.dataNoti.id,
                 type: "ONLY_ONE",
                 service_type: this.typeTab == 'elearning' ? 'ELEARNING' : 'SOCIAL'
             }).then(res => {
-                console.log('res', res)
+                if(res.data.success){
+                    console.log('res', res)
+                    if(this.typeTab == 'elearning'){
+                        this.updateCountElearning(res.data.is_read)
+                    }else{
+                        this.updateCountSocial(res.data.is_read)
+                    }
+                }
             })
         },
         handleClickOutMenu(){

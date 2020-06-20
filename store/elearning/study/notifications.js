@@ -17,7 +17,11 @@ const state = () => ({
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    countSumNoti(state) {
+        return parseInt(state.countNotiElearning) + parseInt(state.countNotiSocial)
+    },
+};
 
 /**
  * initial actions
