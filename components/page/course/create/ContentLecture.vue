@@ -81,7 +81,7 @@
       :confirmLoading="false"
       @ok="handleOk"
       @cancel="handleCancel"
-      title="Bạn có muốn tiếp tục?"
+      title="Xác nhận"
       description="Bạn có chắc chắn là đã hoàn thành xong nội dung học tập?"
     />
   </div>

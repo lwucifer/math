@@ -50,9 +50,8 @@
           name="caculate-point"
           :disabled="disabledType"
           :class="{ 'mr-6': true, 'disabled-input': disabledType }"
-        >
-          <v-popover placement="right" trigger="hover">
-            Theo hệ số
+        >Theo hệ số
+          <v-popover placement="right" trigger="hover" class="d-inline-block">
             <IconQuestionCircle
               width="12px"
               height="12px"
@@ -77,9 +76,9 @@
           @click="handleSelectType"
           name="caculate-point"
           :class="{ 'disabled-input': disabledType }"
-        >
-          <v-popover placement="right" trigger="hover">
-            Theo trọng số
+        >Theo trọng số
+          <v-popover placement="right" trigger="hover" class="d-inline-block">
+            
             <IconQuestionCircle
               width="12px"
               height="12px"
@@ -129,7 +128,7 @@
         <p class="mr-3">Nhập trọng số:</p>
 
         <app-input
-          class="mr-3 mb-0 w-80 pr-3"
+          class="mr-3 mb-0 w-90 pr-3"
           size="sm"
           @onFocus="(event) => event.target.select()"
           v-model="payload.weight"

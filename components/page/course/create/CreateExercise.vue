@@ -61,6 +61,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
       title="Xác nhận"
+      description="Bạn có chắc chắn là đã hoàn thành việc tạo bài tập?"
     />
   </div>
 </template>

@@ -20,7 +20,7 @@
           </app-input>
 
           <p class="text-primary ml-4">
-            * Một bài tập hợp lệ phải có
+            * Một bài kiểm tra tự luận hợp lệ phải có
             <strong>tổng điểm các câu hỏi là 10</strong>
           </p>
         </div>
@@ -77,12 +77,14 @@
         >Lưu câu hỏi</app-button
       >
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn muốn lưu câu hỏi này?"
     />
   </div>
 </template>
