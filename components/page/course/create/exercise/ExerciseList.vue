@@ -74,6 +74,10 @@
           </button>
         </div>
       </div>
+      <app-error
+        v-if="get(exercise, 'status', '') == 0"
+        :error="`Bạn chưa hoàn thiện nội dung bài tập`"
+      />
 
       <div
         class="cc-box__body"
