@@ -7,7 +7,8 @@ import { isEmpty, uniqWith, omit } from "lodash";
  * initial state
  */
 const state = () => ({
-    notis: [],
+    notiElearning: [],
+    notiSocial: [],
     countNotiElearning: 0,
     countNotiSocial: 0,
     notiUnread: 0,
@@ -16,7 +17,11 @@ const state = () => ({
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+    countSumNoti(state) {
+        return parseInt(state.countNotiElearning) + parseInt(state.countNotiSocial)
+    },
+};
 
 /**
  * initial actions
@@ -27,7 +32,13 @@ const actions = {
             const result = await new Notifications(this.$axios)[
                 actionTypes.HEADER_NOTIFICATIONS.LIST
             ](payload);
-            commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_LIST, result.data);
+            if (payload.service_type == 'ELEARNING') {
+                commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST, result.data);
+            }
+            if (payload.service_type == 'SOCIAL') {
+                commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_SOCIAL_LIST, result.data);
+            }
+            
         } catch (err) {
             console.log("[Notifications] list.err", err);
             return err;
@@ -94,9 +105,13 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-    [mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_LIST](state, _notis) {
+    [mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST](state, _notis) {
         console.log("[state.notis]", _notis);
-        state.notis = _notis;
+        state.notiElearning = _notis;
+    },
+    [mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_SOCIAL_LIST](state, _notis) {
+        console.log("[state.notis]", _notis);
+        state.notiSocial = _notis;
     },
     [mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_ELEARNING](state, _notis) {
         state.countNotiElearning = _notis;
