@@ -9,12 +9,13 @@
         >
       </h3>
       <app-input
+        :class="{'mb-0': get(error, 'name', '')}"
         @handleBlur="handleBlurNameInput"
         v-model="payload.name"
         placeholder="Bài học số 1"
         :counter="150"
       />
-      <app-error :error="get(error, 'name', '')"></app-error>
+      <app-error :error="get(error, 'name', '')" class="mb-4"></app-error>
 
       <div class="cc-box__bg-disable">
         <p class="text-center my-4">Chọn loại bài học</p>
@@ -138,8 +139,8 @@
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
-      title="Thêm bài học"
-      description="Bạn có chắc chắn muốn thêm bài học này?"
+      title="Xác nhận"
+      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
     />

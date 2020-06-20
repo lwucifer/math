@@ -37,6 +37,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn là muốn gửi bài giảng này lên để kiểm duyệt?"
     />
   </aside>
 </template>

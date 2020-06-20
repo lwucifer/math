@@ -185,7 +185,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleSaveSetting"
       @cancel="handleCancelSetting"
-      title="Bạn có muốn tiếp tục?"
+      title="Xác nhận"
       description="Bạn có chắc chắn là đã hoàn thành việc cài đặt?"
     />
   </div>

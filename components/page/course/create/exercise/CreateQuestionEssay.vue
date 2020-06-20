@@ -20,7 +20,7 @@
           </app-input>
 
           <p class="text-primary ml-4">
-            * Một bài tập hợp lệ phải có
+            * Một bài tập tự luận hợp lệ phải có
             <strong>tổng điểm các câu hỏi là 10</strong>
           </p>
         </div>
