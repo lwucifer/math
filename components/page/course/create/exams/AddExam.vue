@@ -471,11 +471,27 @@ export default {
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
+        const params = {
+          elearning_id: this.payload.elearning_id,
+        };
+        await this.handleCalculatePoint(params);
         this.$emit("cancel");
         return;
       }
 
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+    },
+
+    async handleCalculatePoint(params = {}) {
+      const res = await this.$axios({
+        url: "/elearning/creating/point_calculation",
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params,
+      });
+      return res;
     },
 
     handleCancel() {
