@@ -131,6 +131,7 @@
         <app-input
           class="mr-3 mb-0 w-80 pr-3"
           size="sm"
+          @onFocus="(event) => event.target.select()"
           v-model="payload.weight"
           @input="checkWeight()"
         >
@@ -307,6 +308,15 @@ export default {
     },
   },
 
+  watch: {
+    "this.payload.weight": {
+      handler: function() {
+        this.payload.weight = Math.ceil(this.payload.weight);
+      },
+      deep: true,
+    },
+  },
+
   mounted() {
     useEffect(this, this.watchExams.bind(this), ["exams"]);
   },
@@ -361,14 +371,28 @@ export default {
         this.error.weight = "";
         return true;
       }
+
       if (!this.payload.weight) {
         this.error.weight = "Bạn cần nhập trọng số";
         return false;
       }
-      if (numeral(this.payload.weight).value() <= 0) {
+
+      const checkInteger = Number.isInteger(+this.payload.weight);
+      if (!checkInteger) {
+        this.error.weight = "Trọng số phải là số nguyên";
+        return false;
+      }
+
+      if (+this.payload.weight <= 0) {
         this.error.weight = "Trọng số phải lớn hơn 0";
         return false;
       }
+
+      if (+this.payload.weight > 100) {
+        this.error.weight = "Trọng số không được lớn hơn 100";
+        return false;
+      }
+
       this.error.weight = "";
       return true;
     },
