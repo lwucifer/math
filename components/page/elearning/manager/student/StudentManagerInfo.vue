@@ -11,7 +11,7 @@
             </p>
             <p>
               Lớp :
-              <strong>{{get(progress, 'class_name', '')}}</strong>
+              <strong>{{get(progress, 'class', '')}}</strong>
             </p>
           </div>
         </div>

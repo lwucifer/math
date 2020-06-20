@@ -557,6 +557,10 @@ export const TEACHING_STUDENT_PROGRESS = {
     SET_TEACHING_STUDENT_PROGRESS_LIST: "setTeachingStudentProgressList",
 };
 
+export const TEACHING_STUDENT_EXERCISES = {
+    SET_TEACHING_STUDENT_EXERCISES_LIST: "setTeachingStudentExercisesList",
+};
+
 export const TEACHING_ELEARNING_REQUESTS = {
     SET_TEACHING_ELEARNING_REQUESTS_LIST: "setTeachingStudentRequestList",
 };
