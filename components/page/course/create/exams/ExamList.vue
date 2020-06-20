@@ -207,6 +207,11 @@ export default {
       this.$toasted.error(get(res, "data.message", ""));
     },
 
+    handleCancel() {
+      this.showModalConfirm = false;
+      this.confirmLoading = false;
+    },
+
     toggleFormAdd() {
       if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;

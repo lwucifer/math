@@ -51,7 +51,7 @@
                         <app-search
                           class
                           :placeholder="'Nhập để tìm kiếm...'"
-                          v-model="params.query"
+                          v-model="query"
                           :size="'sm'"
                           @submit="submit"
                           @keyup.enter.native="submit"
@@ -224,6 +224,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: "Tất cả"
@@ -314,6 +315,12 @@ export default {
     }
   },
 
+  watch: {
+    query() {
+      this.checkFilter = true;
+    },
+  },
+
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
@@ -349,8 +356,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params };
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedCourse(val) {
       this.params.class_id = this.filterCourse.value;
@@ -384,12 +393,12 @@ export default {
         this.loading = true;
         const lesson_id = this.$route.params.id ? this.$route.params.id : "";
         let params = { ...this.params };
+        if (this.query != null) {params.query = this.query}
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
           { params, id: lesson_id, after: "attendances" }
         );
         this.currentTime = new Date();
-        console.log("xxxxxxxxxx", this.stateAttendances);
         this.lessons = this.get(
           this.stateAttendances,
           "data.attendance_list.content",

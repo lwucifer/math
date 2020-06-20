@@ -63,8 +63,10 @@ export const SOCIAL_NOTIFICATIONS = {
 
 export const HEADER_NOTIFICATIONS = {
     LIST: "getNotifications",
+    LIST_COUNT: 'getCountNotifications',
     DETAIL_LIST: "getDetailNotifications",
     CHECK_IS_READ_NOTIFICATION: "checkIsReadNotifications",
+    DELETE: "deleteNotifications"
 };
 
 export const SOCIAL_CONFIG = {
@@ -409,6 +411,16 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
     INFO: "schoolInfo",
+    ANNOUNCEMENT: "schoolAnnouncement",
+    ANNOUNCEMENT_DETAIL: "schoolAnnouncementDetail",
+    LINK_WEB: "schoolLinkWeb",
+    LINK_WEB_DETAIL: "schoolLinkWebDetail",
+    NEWS: "schoolNews",
+    ORG_INTRO: "schoolOrgIntro",
+    PROFESSIONS: "schoolProfessions",
+    PROFESSIONS_DETAIL: "schoolProfessionsDetail",
+    TIMETABLE: "schoolTimeTable",
+    TIMETABLE_DETAIL: "schoolTimeTableDetail",
 };
 
 export const SCHOOL_ELEARNING = {

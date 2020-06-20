@@ -273,6 +273,12 @@ export default {
       if (get(this, "lesson.type", "") === "VIDEO") {
         this.tabType = "video";
       }
+      if (get(this, "lesson.type", "") === "SCORM") {
+        this.tabType = "scorm";
+      }
+      if (get(this, "lesson.type", "") === "AUDIO") {
+        this.tabType = "audio";
+      }
     },
     handleReset() {
       this.payload.article_content = "";

@@ -14,6 +14,7 @@ export const AUTH = {
     SET_TOKEN_AVATAR: "setTokenAvatar",
 };
 
+
 export const BASE = {
     RESET: "resetData",
 };
@@ -262,6 +263,10 @@ export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
 };
 
+export const ANSWER = {
+    HIDE_FROM: "hideFrom"
+}
+
 export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
     SET_TEACHING_EXERCISE_PARTICIPANT_LIST: "setElearningTeachingExerciseParticipantList",
 };
@@ -337,6 +342,16 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
     SET_SCHOOL_INFO: "setSchoolInfo",
+    SET_SCHOOL_ANNOUNCEMENT: "setSchoolAnnouncement",
+    SET_SCHOOL_ANNOUNCEMENT_DETAIL: "setSchoolAnnouncementDetail",
+    SET_SCHOOL_LINK_WEB: "setSchoolLinkWeb",
+    SET_SCHOOL_LINK_WEB_DETAIL: "setSchoolLinkWebDetail",
+    SET_SCHOOL_NEWS: "setSchoolNews",
+    SET_SCHOOL_ORG_INTRO: "setSchoolOrgIntro",
+    SET_SCHOOL_PROFESSIONS: "setSchoolProfessions",
+    SET_SCHOOL_PROFESSIONS_DETAIL: "setSchoolProfessionsDetail",
+    SET_SCHOOL_TIMETABLE: "setSchoolTimeTable",
+    SET_SCHOOL_TIMETABLE_DETAIL: "setSchoolTimeTableDetail",
 };
 
 export const SCHOOL_ELEARNING = {
@@ -520,6 +535,8 @@ export const SOCIAL_NOTI = {
 
 export const HEADER_NOTI = {
     SET_NOTIFICATIONS_LIST: "setNotifications",
+    SET_COUNT_NOTI_ELEARNING: "setCountNotiElearning",
+    SET_COUNT_NOTI_SOCIAL: "setCountNotiSocial",
 };
 
 export const SOCIAL_FRIEND = {

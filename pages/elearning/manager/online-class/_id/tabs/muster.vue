@@ -31,7 +31,7 @@
             <app-search
               class
               :placeholder="'Nhập để tìm kiếm...'"
-              v-model="params.query"
+              v-model="query"
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
@@ -155,6 +155,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: 'Tất cả'
@@ -209,7 +210,8 @@ export default {
         sort: 'start_time,desc'
       },
       loading: false,
-      firstLoad: true
+      firstLoad: true,
+      checkFilter: false
     };
   },
   computed: {
@@ -223,6 +225,12 @@ export default {
         return {value: i + 1, text: i + 1}
       });
       return [this.allOpt, ...indexs]
+    },
+  },
+
+  watch: {
+    query() {
+      this.checkFilter = true;
     },
   },
 
@@ -255,7 +263,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedIndex() {
       this.params.lesson_index = this.filterIndex.value;
@@ -267,6 +278,7 @@ export default {
         this.loading = true;
         const online_class_id = this.$route.params.id ? this.$route.params.id : "";
         this.params.online_class_id = online_class_id;
+        if (this.query != null) {this.params.query = this.query}
         let params = { ...this.params };
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,

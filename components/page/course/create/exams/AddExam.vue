@@ -7,30 +7,14 @@
           >(Tối đa 60 ký tự)</span
         ></label
       >
-      <app-input id="title" :counter="60" v-model="payload.title" />
+      <app-input
+        id="title"
+        :counter="60"
+        v-model="payload.title"
+        @input="checkTitle()"
+      />
+      <app-error :error="get(error, 'title', '')" />
     </div>
-
-    <!-- <div class="mb-4" v-show="category === 'TEST'">
-      <h5 for="require" class="mb-3">{{ title_required }}</h5>
-
-      <app-radio-group>
-        <app-radio
-          name="group1"
-          value="1"
-          class="mr-4"
-          :checked="payload.required === 1"
-          @click="payload.required = 1"
-          >Có</app-radio
-        >
-        <app-radio
-          name="group1"
-          value="0"
-          :checked="payload.required === 0"
-          @click="payload.required = 0"
-          >Không</app-radio
-        >
-      </app-radio-group>
-    </div> -->
 
     <div class="mb-4">
       <h5 for="require" class="mb-3">Loại bài kiểm tra</h5>
@@ -41,17 +25,18 @@
           value="CHOICE"
           class="mr-4"
           :checked="payload.type === 'CHOICE'"
-          @click="payload.type = 'CHOICE'"
+          @click="handleChangeType('CHOICE')"
           >Trắc nghiệm</app-radio
         >
         <app-radio
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.type = 'ESSAY'"
+          @click="handleChangeType('ESSAY')"
           >Tự luận</app-radio
         >
       </app-radio-group>
+      <app-error :error="get(error, 'type', '')" />
     </div>
 
     <div class="caculate-point">
@@ -63,21 +48,22 @@
           :checked="typeRadio == 'coefficient'"
           @click="handleSelectType"
           name="caculate-point"
-          class="mr-6"
+          :disabled="disabledType"
+          :class="{ 'mr-6': true, 'disabled-input': disabledType }"
         >
-         
-          <v-popover
-              placement="right" trigger="hover">
-              Theo hệ số 
-              <IconQuestionCircle
-                width="12px"
-                height="12px"
-                class="fill-gray vertical-middle"
-              />
+          <v-popover placement="right" trigger="hover">
+            Theo hệ số
+            <IconQuestionCircle
+              width="12px"
+              height="12px"
+              class="fill-gray vertical-middle"
+            />
 
             <template #popover>
-              <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2 </p>
-              <p class="mb-3">để làm cơ sở tính điểm trung bình cho học sinh.</p>
+              <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2</p>
+              <p class="mb-3">
+                để làm cơ sở tính điểm trung bình cho học sinh.
+              </p>
 
               <a href="">Xem chi tiết</a>
             </template>
@@ -87,8 +73,10 @@
         <app-radio
           :checked="typeRadio == 'weight'"
           value="weight"
+          :disabled="disabledType"
           @click="handleSelectType"
           name="caculate-point"
+          :class="{ 'disabled-input': disabledType }"
         >
           <v-popover placement="right" trigger="hover">
             Theo trọng số
@@ -100,7 +88,9 @@
 
             <template #popover>
               <p>Các bài kiểm tra được cài đặt theo trọng số, tính theo %.</p>
-              <p class="mb-3">Tổng trọng số của tất cả các bài kiểm tra là 100%.</p>
+              <p class="mb-3">
+                Tổng trọng số của tất cả các bài kiểm tra là 100%.
+              </p>
 
               <a href="">Xem chi tiết</a>
             </template>
@@ -142,6 +132,7 @@
           class="mr-3 mb-0 w-80 pr-3"
           size="sm"
           v-model="payload.weight"
+          @input="checkWeight()"
         >
           <template slot="unit">
             <span class="text-primary">%</span>
@@ -153,6 +144,7 @@
           đã được tạo
         </p>
       </div>
+      <app-error :error="get(error, 'weight', '')" />
     </div>
 
     <div class="row align-items-center mb-4" v-show="payload.required">
@@ -286,10 +278,11 @@ import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 import SelectDate from "~/components/page/course/create/setting/SelectDate";
 import moment from "moment";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery } from "~/utils/common";
+import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
+import numeral from "numeral";
 
 export default {
   components: {
@@ -304,7 +297,18 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
+      exams: "exams",
     }),
+    disabledType() {
+      return !!(
+        get(this, "exams.content.0.weight", "") !== "" ||
+        get(this, "exams.content.0.coefficient", "") !== ""
+      );
+    },
+  },
+
+  mounted() {
+    useEffect(this, this.watchExams.bind(this), ["exams"]);
   },
 
   data() {
@@ -330,10 +334,74 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       typeRadio: "coefficient",
+      error: {
+        title: "",
+        type: "",
+        weight: "",
+      },
     };
   },
 
   methods: {
+    handleChangeType(type) {
+      this.payload.type = type;
+      this.checkType();
+    },
+
+    checkPayload() {
+      let check = true;
+      check = this.checkTitle();
+      check = this.checkType();
+      check = this.checkWeight();
+      return check;
+    },
+
+    checkWeight() {
+      if (this.typeRadio !== "weight") {
+        this.error.weight = "";
+        return true;
+      }
+      if (!this.payload.weight) {
+        this.error.weight = "Bạn cần nhập trọng số";
+        return false;
+      }
+      if (numeral(this.payload.weight).value() <= 0) {
+        this.error.weight = "Trọng số phải lớn hơn 0";
+        return false;
+      }
+      this.error.weight = "";
+      return true;
+    },
+
+    checkType() {
+      if (this.payload.type === "") {
+        this.error.type = "Bạn cần nhập loại bài kiểm tra";
+        return false;
+      }
+      this.error.type = "";
+      return true;
+    },
+
+    checkTitle() {
+      if (!this.payload.title) {
+        this.error.title = "Bạn cần nhập tiêu đề";
+        return false;
+      }
+      this.error.title = "";
+      return true;
+    },
+
+    watchExams() {
+      if (get(this, "exams.content.0.weight", "") !== "") {
+        // this.payload.weight = get(this, "exams.content.0.weight", "");
+        this.typeRadio = "weight";
+      }
+      if (get(this, "exams.content.0.coefficient", "") !== "") {
+        // this.payload.coefficient = get(this, "exams.content.0.coefficient", "");
+        this.typeRadio = "coefficient";
+      }
+    },
+
     handleChangeCoefficient(value) {
       this.payload.coefficient = value;
     },
@@ -359,6 +427,11 @@ export default {
     },
 
     async handleOk() {
+      if (!this.checkPayload()) {
+        this.handleCancel();
+        return;
+      }
+
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");

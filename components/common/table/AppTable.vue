@@ -65,9 +65,9 @@
             </template>
 
             <!-- Hover actions -->
-            <div class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
+            <td class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
               <slot name="actions" :row="cat"></slot>
-            </div>
+            </td>
           </tr>
         </tbody>
       </table>

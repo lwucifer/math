@@ -386,7 +386,6 @@ export default {
 
     handleCLickSave() {
       if (!this.handleCheckPayload()) {
-        console.log(1);
         return;
       }
       this.showModalConfirm = true;
