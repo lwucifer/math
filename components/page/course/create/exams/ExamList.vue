@@ -68,6 +68,11 @@
         </div>
       </div>
 
+      <app-error
+        v-if="get(exam, 'status', '') == 0"
+        :error="`Bạn chưa hoàn thiện nội dung bài kiểm tra`"
+      />
+
       <div
         class="cc-box__body"
         :class="{ 'add-background': isAddQuestionForm, 'py-0': toggleFormAdd }"
@@ -148,7 +153,6 @@ export default {
       type: Number,
       default: 0,
     },
-    lesson: Object,
   },
 
   computed: {
