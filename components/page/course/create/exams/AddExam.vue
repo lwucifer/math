@@ -308,15 +308,6 @@ export default {
     },
   },
 
-  watch: {
-    "this.payload.weight": {
-      handler: function() {
-        this.payload.weight = Math.ceil(this.payload.weight);
-      },
-      deep: true,
-    },
-  },
-
   mounted() {
     useEffect(this, this.watchExams.bind(this), ["exams"]);
   },
