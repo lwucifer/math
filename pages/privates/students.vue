@@ -24,6 +24,7 @@
             :options="filterYears"
             class="mr-2"
             clearable
+            :default-value="filterYears && filterYears[0] ? filterYears[0].value : null"
             @change="handleChangedYear"
           />
           <app-select
@@ -160,8 +161,17 @@ import IconAccountBox24px from "~/assets/svg/v2-icons/account_box_24px.svg?inlin
 import { getDateFormat } from "~/utils/moment";
 export default {
   async fetch({ params, store }) {
+    const { data = [] } = await store.dispatch(
+      `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+    );
+    console.log("data", data);
+    const school_year_id = data && data[0] ? data[0].id : null;
     const queryStudent = {
-      cal_type: "SCHOOL_YEAR"
+      cal_type: "SCHOOL_YEAR",
+      school_year_id: school_year_id
+    };
+    const queryClass = {
+      school_year_id: school_year_id
     };
     await Promise.all([
       store.dispatch(
@@ -171,8 +181,14 @@ export default {
         }
       ),
       store.dispatch(
-        `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+        `${STORE_NAME_CLASS}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`,
+        {
+          params: queryClass
+        }
       )
+      // store.dispatch(
+      //   `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+      // )
       // store.dispatch(
       //   `${STORE_NAMESPACE}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
       //   {
@@ -303,7 +319,6 @@ export default {
             text: item ? item.from_year + " - " + item.to_year : ""
           };
         });
-      data.push({ value: null, text: "Tất cả" });
       return data;
     },
     filterClasses() {
