@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-general-exam-expiry">
       <h4 class="mb-4">Bài kiểm tra sắp hết hạn</h4>
-      <app-table :heads="heads" :data="deadline">
+      <app-table :heads="heads" :data="deadlineList">
           <template v-slot:cell(date)="{ row }">
               <td style="width:60%">{{row.title}}</td>
           </template>
@@ -45,6 +45,10 @@ export default {
     },
     computed: {
         ...mapState(STORE_OVERVIEW, ['deadline']),
+        deadlineList(){
+            const data = this.deadline.filter(item => item.category == "TEST");
+            return data
+        }
     },
 }
 </script>

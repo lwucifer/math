@@ -131,6 +131,7 @@
         <app-input
           class="mr-3 mb-0 w-80 pr-3"
           size="sm"
+          @onFocus="(event) => event.target.select()"
           v-model="payload.weight"
           @input="checkWeight()"
         >
@@ -361,14 +362,28 @@ export default {
         this.error.weight = "";
         return true;
       }
+
       if (!this.payload.weight) {
         this.error.weight = "Bạn cần nhập trọng số";
         return false;
       }
-      if (numeral(this.payload.weight).value() <= 0) {
+
+      const checkInteger = Number.isInteger(+this.payload.weight);
+      if (!checkInteger) {
+        this.error.weight = "Trọng số phải là số nguyên";
+        return false;
+      }
+
+      if (+this.payload.weight <= 0) {
         this.error.weight = "Trọng số phải lớn hơn 0";
         return false;
       }
+
+      if (+this.payload.weight > 100) {
+        this.error.weight = "Trọng số không được lớn hơn 100";
+        return false;
+      }
+
       this.error.weight = "";
       return true;
     },
@@ -456,11 +471,27 @@ export default {
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
+        const params = {
+          elearning_id: this.payload.elearning_id,
+        };
+        await this.handleCalculatePoint(params);
         this.$emit("cancel");
         return;
       }
 
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+    },
+
+    async handleCalculatePoint(params = {}) {
+      const res = await this.$axios({
+        url: "/elearning/creating/point_calculation",
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params,
+      });
+      return res;
     },
 
     handleCancel() {
