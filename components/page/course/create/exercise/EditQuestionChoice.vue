@@ -78,7 +78,7 @@ import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg
 import IconCloseSquare from "~/assets/svg/icons/close-square.svg?inline";
 
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
-import { get } from "lodash";
+import { get, cloneDeep } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadQuestion } from "~/models/course/AddCourse";
 import { mapState } from "vuex";
@@ -115,7 +115,7 @@ export default {
       payload: {
         id: get(this, "question.id", ""),
         content: get(this, "question.content", ""),
-        answers: get(this, "question.answers", []),
+        answers: cloneDeep(get(this, "question.answers", [])),
       },
       fileRaw: {
         name: "",
