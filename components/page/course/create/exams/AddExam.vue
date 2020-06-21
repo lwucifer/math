@@ -50,7 +50,7 @@
           name="caculate-point"
           :disabled="disabledType"
           :class="{ 'mr-6': true, 'disabled-input': disabledType }"
-        >Theo hệ số
+          >Theo hệ số
           <v-popover placement="right" trigger="hover" class="d-inline-block">
             <IconQuestionCircle
               width="12px"
@@ -76,9 +76,8 @@
           @click="handleSelectType"
           name="caculate-point"
           :class="{ 'disabled-input': disabledType }"
-        >Theo trọng số
+          >Theo trọng số
           <v-popover placement="right" trigger="hover" class="d-inline-block">
-            
             <IconQuestionCircle
               width="12px"
               height="12px"
@@ -470,10 +469,13 @@ export default {
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
-        const params = {
+        const data = {
+          apply: true,
+          calculation_method:
+            this.typeRadio === "coefficient" ? "COEFFICIENT" : "WEIGHT",
           elearning_id: this.payload.elearning_id,
         };
-        await this.handleCalculatePoint(params);
+        await this.handleCalculatePoint(data);
         this.$emit("cancel");
         return;
       }
@@ -481,14 +483,14 @@ export default {
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
     },
 
-    async handleCalculatePoint(params = {}) {
+    async handleCalculatePoint(data) {
       const res = await this.$axios({
         url: "/elearning/creating/point_calculation",
-        method: "get",
+        method: "post",
         headers: {
           "Content-Type": "application/json",
         },
-        params,
+        data,
       });
       return res;
     },
