@@ -110,10 +110,7 @@ export default {
               text: "Học online",
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
-            return {
-              ...item,
-              text: "Làm bài tập",
-            };
+            return
           } else {
             return {
               ...item,
