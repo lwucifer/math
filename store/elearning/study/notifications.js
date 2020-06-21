@@ -12,6 +12,7 @@ const state = () => ({
     countNotiElearning: 0,
     countNotiSocial: 0,
     notiUnread: 0,
+    checkfireBase: false
 });
 
 /**
@@ -38,6 +39,7 @@ const actions = {
             if (payload.service_type == 'SOCIAL') {
                 commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_SOCIAL_LIST, result.data);
             }
+            // return result.data
             
         } catch (err) {
             console.log("[Notifications] list.err", err);
@@ -118,6 +120,11 @@ const mutations = {
     },
     [mutationTypes.HEADER_NOTI.SET_COUNT_NOTI_SOCIAL](state, _notis) {
         state.countNotiSocial = _notis;
+    },
+
+    [mutationTypes.HEADER_NOTI.SET_CHECK_FIREBASE](state, _notis) {
+        console.log("[state.checkfireBase]", _notis);
+        state.checkfireBase = _notis;
     },
 
 };
