@@ -34,7 +34,7 @@
       </div>
 
       <div class="clc-video__type text-dark mt-2" v-if="showFileName">
-        {{ get(lesson, "file_name", "") }}
+        {{ get(lesson, "file_name", "").length > 60 ? (get(lesson, "file_name", "").slice(0, 60) + '...' +  get(lesson, "format", "").toLowerCase()) : get(lesson, "file_name", "")}}
       </div>
 
       <div class="clc-video__type text-dark mt-2" v-else>
