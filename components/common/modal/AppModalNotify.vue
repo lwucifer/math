@@ -1,9 +1,10 @@
 <template>
   <app-modal
-    v-bind="{ width, centered, order }"
+    v-bind="{ width, centered, order, visible }"
     :component-class="{ 'app-modal-notify': true }"
     :header="false"
     :footer="false"
+    v-on="$listeners"
   >
     <div slot="content">
       <slot v-if="type !== 'default'" name="icon">
@@ -44,10 +45,10 @@
 </template>
 
 <script>
-import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
-const IconCheckCircle = () => import("~/assets/svg/icons/check-circle-1.svg?inline");
-const IconAlertTriangle = () => import("~/assets/svg/icons/alert-triangle-1.svg?inline");
-const IconAlertCircle = () => import("~/assets/svg/icons/alert-circle-1.svg?inline");
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline'";
+import IconCheckCircle from "~/assets/svg/icons/check-circle-1.svg?inline";
+import IconAlertTriangle from "~/assets/svg/icons/alert-triangle-1.svg?inline";
+import IconAlertCircle from "~/assets/svg/icons/alert-circle-1.svg?inline";
 
 export default {
   inheritAttrs: false,
@@ -57,6 +58,11 @@ export default {
     IconCheckCircle,
     IconAlertTriangle,
     IconAlertCircle
+  },
+
+  model: {
+    prop: 'visible',
+    event: 'visibleChange'
   },
 
   props: {
@@ -72,6 +78,10 @@ export default {
     width: {
       type: [Number, String],
       default: 536 // number in px or css value
+    },
+    visible: {
+      type: Boolean,
+      default: true
     },
     // This component props
     type: {
