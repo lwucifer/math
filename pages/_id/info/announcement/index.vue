@@ -60,7 +60,7 @@
                 /> -->
               </template>
             </div>
-            <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+            <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
           </template>
         </block-section>
       </div>

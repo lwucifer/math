@@ -55,7 +55,7 @@
             :typeTab="tab"
           />
         </div>
-        <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+        <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
       </div>
       <div v-if="tab === 'social'">
         <div class="tab-notification">
@@ -66,7 +66,7 @@
             :typeTab="tab"
           />
         </div>
-        <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+        <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
       </div>
 
       <div class="footer-notification">
