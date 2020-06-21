@@ -52,6 +52,7 @@
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
+      title="Xác nhận"
       @cancel="handleCancelModal"
       description="Bạn có chắc chắn muốn xóa bài học này?"
     />

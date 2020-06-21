@@ -214,6 +214,7 @@ export const TEACHING_VOTES = `/elearning/teaching/votes`;
 export const TEACHING_ELEARNING_PARTICIPANT = `/elearning/teaching/elearning/participants`;
 export const TEACHING_ELEARNING_BANNED = `/elearning/teaching/elearning/banned`;
 export const TEACHING_STUDENT_PROGESS = `/elearning/teaching/student/progress`;
+export const TEACHING_STUDENT_EXERCISES = `/elearning/teaching/student/exercises`;
 export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/requests`;
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;

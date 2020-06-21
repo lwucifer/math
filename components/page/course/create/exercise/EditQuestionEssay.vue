@@ -89,12 +89,14 @@
         >Lưu câu hỏi</app-button
       >
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
     />
   </div>
 </template>
