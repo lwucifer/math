@@ -159,7 +159,7 @@ export default {
 
     reworksTransform() {
       return this.result.reworks
-        ? `${this.result.works}/${this.result.reworks}`
+        ? `${this.result.reworks - this.result.works}/${this.result.reworks}`
         : "Không giới hạn";
     },
 
