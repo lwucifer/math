@@ -266,10 +266,6 @@ export default {
 
   computed: {
     edit() {
-      this.showModalConfirm = true
-      this.showModalConfirmVideo = false
-      this.showModalConfirmScorm = false
-      this.showModalConfirmDoc = false
       return !!get(this, "lesson.id", "");
     },
 
@@ -282,8 +278,10 @@ export default {
     },
 
     changingTitleDoc() {
-      if (this.modalType == "url" || this.payload.article_content.length > 0) {
+      if (this.modalType == "url" || this.payload.article_content.length > 0 && this.edit == false) {
         return "Thêm bài học";
+      } else if (this.edit) {
+        return "Xác nhận"
       }
 
       return "Upload bài học";
@@ -303,8 +301,10 @@ export default {
         return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
       } else if (this.modalType == "url" || this.payload.repository_file_id) {
         return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
-      } else if (this.payload.article_content){
+      } else if (this.payload.article_content && this.edit == false){
         return "Bạn có chắc chắn muốn thêm bài học này?"
+      } else if (this.edit) {
+        return "Bạn có chắc chắn là muốn lưu thay đổi này?"
       }
       return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
     },
