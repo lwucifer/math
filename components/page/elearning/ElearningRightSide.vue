@@ -264,15 +264,15 @@ export default {
     },
 
     noteElearningNotTimeYet() {
-      const publish_date = get(this, "info.publish_date", "");
+      const start_time = get(this, "info.start_time", "");
       const type = get(this, "info.type", "");
-      const publish_date_format = getLocalDateTime(publish_date).format(
+      const start_time_format = getLocalDateTime(start_time).format(
         "YYYY-MM-DD HH:mm:ss"
       );
       if (type === "LECTURE") {
-        return `Bài giảng sẽ bắt đầu vào lúc ${publish_date_format}. Xin vui lòng quay lại sau !`;
+        return `Bài giảng sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
       }
-      return `Khoá học sẽ bắt đầu vào lúc ${publish_date_format}. Xin vui lòng quay lại sau !`;
+      return `Khoá học sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
     },
   },
 
@@ -340,22 +340,25 @@ export default {
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
-      const publish_date = get(this, "info.publish_date", "");
+      const starttime_enable = get(this, "info.starttime_enable", false);
+      const start_time = get(this, "info.start_time", "");
       const is_private = get(this, "info.is_private", false);
       const is_study = get(this, "info.is_study", false);
       const free = get(this, "info.elearning_price.free", false);
 
-      try {
-        const publish_date_timestamp = moment(
-          getLocalDateTime(publish_date)
-        ).format("x");
-        const now_timestamp = moment().format("x");
-        if (now_timestamp < publish_date_timestamp) {
-          this.$toasted.error(this.noteElearningNotTimeYet);
-          return;
+      if (starttime_enable) {
+        try {
+          const start_time_timestamp = moment(
+            getLocalDateTime(start_time)
+          ).format("x");
+          const now_timestamp = moment().format("x");
+          if (now_timestamp < start_time_timestamp) {
+            this.$toasted.error(this.noteElearningNotTimeYet);
+            return;
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
 
       if (is_study) {
@@ -390,6 +393,12 @@ export default {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
+
+      if (get(res, "code", "") === "SCLC_1245") {
+        this.$toasted.error(this.noteElearningNotTimeYet);
+        return;
+      }
+
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 
