@@ -12,6 +12,7 @@
                 <h4>Danh sách thông báo</h4>
                 <div class="ml-auto d-flex">
                   <n-link
+                    @click.prevent="handleCheckAllRead"
                     class="d-flex align-items-center text-primary text-decoration-none"
                     to
                   >
@@ -29,12 +30,12 @@
               </div>
               <div class="content-notification">
                 <notification-item
-                  v-for="(item, index) in notis"
+                  v-for="(item, index) in notiElearning"
                   :key="index"
                   :dataNoti="item"
                   :isReaded="isReaded"
                   @read="handleReadNotifi"
-									:typeTab="'elearning'"
+                  :typeTab="'elearning'"
                 />
                 <app-pagination
                   :pagination="pagination"
@@ -78,7 +79,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("elearning/study/notifications", ["notis"]),
+    ...mapState("elearning/study/notifications", ["notiElearning"]),
     ...mapState("auth", ["token"]),
   },
   created() {
@@ -88,12 +89,32 @@ export default {
     });
   },
   methods: {
-    ...mapActions(STORE_NOTIFI, ["getNotifications"]),
+    ...mapActions(STORE_NOTIFI, [
+      "getNotifications", 
+      "getCountNotifications", 
+      "handleCheckAllRead"
+    ]),
     handleReadNotifi(val) {
       this.isReaded = val;
     },
     onPageChange(e) {
       this.$emit("pagechange", e);
+    },
+    handleCheckAllRead() {
+      this.checkIsReadNotifications({
+        type: "ALL",
+        service_type: "ELEARNING",
+      }).then((res) => {
+        if (res.data.success) {
+          this.getNotifications({
+            fetch_size: 50,
+            service_type: "ELEARNING",
+          });
+          this.getCountNotifications({
+            service_type: "ELEARNING",
+          });
+        }
+      });
     },
   },
 };

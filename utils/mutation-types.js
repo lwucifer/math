@@ -534,7 +534,8 @@ export const SOCIAL_NOTI = {
 };
 
 export const HEADER_NOTI = {
-    SET_NOTIFICATIONS_LIST: "setNotifications",
+    SET_NOTIFICATIONS_ELEARNING_LIST: "setNotificationsElearning",
+    SET_NOTIFICATIONS_SOCIAL_LIST: "setNotificationsSocial",
     SET_COUNT_NOTI_ELEARNING: "setCountNotiElearning",
     SET_COUNT_NOTI_SOCIAL: "setCountNotiSocial",
 };
@@ -554,6 +555,10 @@ export const TEACHING_ELEARNING_PARTICIAPANT = {
 
 export const TEACHING_STUDENT_PROGRESS = {
     SET_TEACHING_STUDENT_PROGRESS_LIST: "setTeachingStudentProgressList",
+};
+
+export const TEACHING_STUDENT_EXERCISES = {
+    SET_TEACHING_STUDENT_EXERCISES_LIST: "setTeachingStudentExercisesList",
 };
 
 export const TEACHING_ELEARNING_REQUESTS = {

@@ -233,7 +233,7 @@ export default {
       return this.payload.type === "COURSE" ? "khoá học" : "bài giảng";
     },
     title_confirm() {
-      let title = "Xác nhận?";
+      let title = "Xác nhận";
       if (get(this, "general.id", "")) {
         title = "Bạn có muốn tiếp tục?";
       }

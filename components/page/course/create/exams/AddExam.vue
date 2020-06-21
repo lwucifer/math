@@ -50,9 +50,8 @@
           name="caculate-point"
           :disabled="disabledType"
           :class="{ 'mr-6': true, 'disabled-input': disabledType }"
-        >
-          <v-popover placement="right" trigger="hover">
-            Theo hệ số
+          >Theo hệ số
+          <v-popover placement="right" trigger="hover" class="d-inline-block">
             <IconQuestionCircle
               width="12px"
               height="12px"
@@ -77,9 +76,8 @@
           @click="handleSelectType"
           name="caculate-point"
           :class="{ 'disabled-input': disabledType }"
-        >
-          <v-popover placement="right" trigger="hover">
-            Theo trọng số
+          >Theo trọng số
+          <v-popover placement="right" trigger="hover" class="d-inline-block">
             <IconQuestionCircle
               width="12px"
               height="12px"
@@ -129,8 +127,9 @@
         <p class="mr-3">Nhập trọng số:</p>
 
         <app-input
-          class="mr-3 mb-0 w-80 pr-3"
+          class="mr-3 mb-0 w-90 pr-3"
           size="sm"
+          @onFocus="(event) => event.target.select()"
           v-model="payload.weight"
           @input="checkWeight()"
         >
@@ -361,14 +360,28 @@ export default {
         this.error.weight = "";
         return true;
       }
+
       if (!this.payload.weight) {
         this.error.weight = "Bạn cần nhập trọng số";
         return false;
       }
-      if (numeral(this.payload.weight).value() <= 0) {
+
+      const checkInteger = Number.isInteger(+this.payload.weight);
+      if (!checkInteger) {
+        this.error.weight = "Trọng số phải là số nguyên";
+        return false;
+      }
+
+      if (+this.payload.weight <= 0) {
         this.error.weight = "Trọng số phải lớn hơn 0";
         return false;
       }
+
+      if (+this.payload.weight > 100) {
+        this.error.weight = "Trọng số không được lớn hơn 100";
+        return false;
+      }
+
       this.error.weight = "";
       return true;
     },
@@ -456,11 +469,30 @@ export default {
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
+        const data = {
+          apply: true,
+          calculation_method:
+            this.typeRadio === "coefficient" ? "COEFFICIENT" : "WEIGHT",
+          elearning_id: this.payload.elearning_id,
+        };
+        await this.handleCalculatePoint(data);
         this.$emit("cancel");
         return;
       }
 
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+    },
+
+    async handleCalculatePoint(data) {
+      const res = await this.$axios({
+        url: "/elearning/creating/point_calculation",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+      return res;
     },
 
     handleCancel() {

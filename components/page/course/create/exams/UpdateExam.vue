@@ -279,7 +279,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.exam);
     useEffect(this, this.watchExam.bind(this), ["exam"]);
   },
 
@@ -369,11 +368,30 @@ export default {
       if (get(res, "data.success", false)) {
         this.$toasted.success(get(res, "data.message", "Thành công"));
         this.$store.dispatch("elearning/create/getExams");
+        const data = {
+          apply: true,
+          calculation_method:
+            this.typeRadio === "coefficient" ? "COEFFICIENT" : "WEIGHT",
+          elearning_id: this.payload.elearning_id,
+        };
+        await this.handleCalculatePoint(data);
         this.$emit("cancel");
         return;
       }
 
       this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));
+    },
+
+    async handleCalculatePoint(data) {
+      const res = await this.$axios({
+        url: "/elearning/creating/point_calculation",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+      return res;
     },
 
     handleCancel() {

@@ -395,7 +395,7 @@ const mutations = {
       if (currAnswerIndex == -1) {
         currAnsers = [...currAnsers, updatedAnswer];
       } else {
-        const newUpdatedAnswer = { ...currAnsers[currAnswerIndex], answer: updatedAnswer.answer }
+        const newUpdatedAnswer = { ...currAnsers[currAnswerIndex], answer: updatedAnswer.answer, choise_answer_id: updatedAnswer.choise_answer_id }
         currAnsers[currAnswerIndex] = newUpdatedAnswer;
       }
       state.submission = { ...state.submission, answers: currAnsers };

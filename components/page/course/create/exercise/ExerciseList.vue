@@ -27,7 +27,7 @@
               </h2>
             </div>
             <button
-              class="cc-box__btn cc-box__btn-edit-hover mr-4"
+              class="cc-box__btn cc-box__btn-edit-hover mr-3"
               @click="handleEditExercise"
             >
               <IconEditAlt class="icon d-block subheading fill-primary" />
@@ -74,6 +74,11 @@
           </button>
         </div>
       </div>
+      <app-error
+        class="ml-4 mb-2"
+        v-if="get(exercise, 'status', '') == 0"
+        :error="`Bạn chưa hoàn thiện nội dung bài tập`"
+      />
 
       <div
         class="cc-box__body"
@@ -100,12 +105,14 @@
         </template>
       </div>
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắc muốn xóa bài tập này?"
     />
   </div>
 </template>

@@ -17,7 +17,7 @@
               {{ examName }}
             </h2>
             <button
-              class="cc-box__btn cc-box__btn-edit-hover mr-4"
+              class="cc-box__btn cc-box__btn-edit-hover mr-3"
               @click="handleEditExam"
             >
               <IconEditAlt class="icon d-block subheading fill-primary" />
@@ -68,6 +68,12 @@
         </div>
       </div>
 
+      <app-error
+        class="mb-2 ml-4"
+        v-if="get(exam, 'status', '') == 0"
+        :error="`Bạn chưa hoàn thiện nội dung bài kiểm tra`"
+      />
+
       <div
         class="cc-box__body"
         :class="{ 'add-background': isAddQuestionForm, 'py-0': toggleFormAdd }"
@@ -99,6 +105,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn muốn xóa bài kiểm tra này?"
     />
   </div>
 </template>
@@ -148,7 +155,6 @@ export default {
       type: Number,
       default: 0,
     },
-    lesson: Object,
   },
 
   computed: {
