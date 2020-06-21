@@ -11,6 +11,10 @@ export const FIREBASE_TOKEN = "firebase_token";
 
 export const RESPONSE_SUCCESS = true;
 
+export const FETCH_SIZE = 50;
+export const SOCIAL = "SOCIAL";
+export const ELEARNING = "ELEARNING";
+
 export const DATE_BIRTHDAY = "DD/MM/YYYY";
 export const DATE_YYYY_MM_DD = "YYYY/MM/DD";
 export const DATE_FORMAT = "YYYY-MM-DD";
@@ -88,6 +92,7 @@ export const CURRENCY = 'đ';
 export const TIMEOUT = {
   NOTIFY: 3000,
 }
+
 
 export const PARAM_CHECK = {
   SCHOOL: "/school",

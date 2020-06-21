@@ -55,6 +55,7 @@
             :typeTab="tab"
           />
         </div>
+        <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
       </div>
       <div v-if="tab === 'social'">
         <div class="tab-notification">
@@ -65,14 +66,13 @@
             :typeTab="tab"
           />
         </div>
+        <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
       </div>
+
       <div class="footer-notification">
-        <n-link
-          :to="getNotificationLink"
-          @click="showMenuNotifi = !showMenuNotifi"
-        >
+        <a :href="getNotificationLink" @click="handleShowMore">
           Xem thêm
-        </n-link>
+        </a>
       </div>
     </div>
   </div>
@@ -82,7 +82,8 @@
 import IconNotifications24px from "~/assets/svg/v2-icons/notifications_24px.svg?inline";
 import IconCheck24px from "~/assets/svg/v2-icons/check_24px.svg?inline";
 import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { FETCH_SIZE, SOCIAL, ELEARNING } from "~/utils/config";
 import { getToken } from "~/utils/auth";
 const STORE_NOTIFI = "elearning/study/notifications";
 export default {
@@ -108,11 +109,14 @@ export default {
       "notiSocial",
       "countNotiElearning",
       "countNotiSocial",
+      "checkfireBase"
     ]),
     getNotificationLink() {
       const accountObj = getToken();
       if (!!accountObj) {
-        return `/${accountObj.id}/info/announcement`;
+        return this.tab == "elearning"
+          ? `/${accountObj.id}/info/announcement?type=${ELEARNING}`
+          : `/${accountObj.id}/info/announcement?type=${SOCIAL}`;
       }
     },
   },
@@ -123,10 +127,13 @@ export default {
       "getCountNotifications",
       "checkIsReadNotifications",
     ]),
+    ...mapMutations(STORE_NOTIFI, ["setCheckFireBase"]),
 
     changeTab(_tab) {
       this.tab = _tab;
     },
+
+    infiniteHandler($state) {},
 
     handleClickOutside() {
       this.showMenuNotifi = false;
@@ -135,7 +142,7 @@ export default {
     handleCheckAllRead() {
       this.checkIsReadNotifications({
         type: "ALL",
-        service_type: this.tab == "elearning" ? "ELEARNING" : "SOCIAL",
+        service_type: this.tab == "elearning" ? ELEARNING : SOCIAL,
       }).then((res) => {
         if (res.data.success) {
           if (this.tab == "elearning") {
@@ -149,26 +156,42 @@ export default {
 
     updateCountElearning() {
       this.getNotifications({
-        fetch_size: 50,
-        service_type: "ELEARNING",
+        fetch_size: FETCH_SIZE,
+        service_type: ELEARNING,
       });
       this.getCountNotifications({
-        service_type: "ELEARNING",
+        service_type: ELEARNING,
       });
     },
     updateCountSocial() {
       this.getNotifications({
-        fetch_size: 50,
-        service_type: "SOCIAL",
+        fetch_size: FETCH_SIZE,
+        service_type: SOCIAL,
       });
       this.getCountNotifications({
-        service_type: "SOCIAL",
+        service_type: SOCIAL,
       });
+    },
+
+    handleShowMore() {
+      this.showMenuNotifi = !this.showMenuNotifi;
     },
   },
 
   watch: {
-    showMenuNotifi(newVal) {},
+    showMenuNotifi(newVal) {
+      if(this.checkfireBase){
+        this.getNotifications({
+          fetch_size: FETCH_SIZE,
+          service_type: ELEARNING
+        });
+        this.getNotifications({
+            fetch_size: FETCH_SIZE,
+            service_type: SOCIAL
+        });
+      }
+      this.setCheckFireBase(false)
+    },
   },
 };
 </script>
