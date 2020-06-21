@@ -279,7 +279,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.exam);
     useEffect(this, this.watchExam.bind(this), ["exam"]);
   },
 
