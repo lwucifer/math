@@ -36,6 +36,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      description="Bạn có chắc chắn muốn tạo chương mới?"
     />
   </div>
 </template>
