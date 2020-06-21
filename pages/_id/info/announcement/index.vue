@@ -28,9 +28,9 @@
                   </n-link>
                 </div>
               </div>
-              <template 
+              <template
                 v-if="checkType == 'SOCIAL'"
-                class="content-notification" 
+                class="content-notification"
               >
                 <notification-item
                   v-for="(item, index) in notiSocial"
@@ -41,10 +41,7 @@
                   :typeTab="'social'"
                 />
               </template>
-              <template 
-                v-else
-                class="content-notification" 
-              >
+              <template v-else class="content-notification">
                 <notification-item
                   v-for="(item, index) in notiElearning"
                   :key="index"
@@ -60,7 +57,11 @@
                 /> -->
               </template>
             </div>
-            <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
+            <client-only>
+              <infinite-loading @infinite="infiniteHandler">
+                <template slot="no-more">Không còn tin nhắn nào.</template>
+              </infinite-loading>
+            </client-only>
           </template>
         </block-section>
       </div>
@@ -73,7 +74,9 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconCheck24px from "~/assets/svg/v2-icons/check_24px.svg?inline";
 import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
 import { mapState, mapActions } from "vuex";
-import { FETCH_SIZE, SOCIAL, ELEARNING } from "../../../../utils/config"
+import { FETCH_SIZE, SOCIAL, ELEARNING } from "../../../../utils/config";
+import * as actionTypes from "~/utils/action-types";
+import Notifications from "~/services/elearning/study/Notifications";
 const STORE_NOTIFI = "elearning/study/notifications";
 export default {
   layout: "account-info",
@@ -114,31 +117,32 @@ export default {
 
   methods: {
     ...mapActions(STORE_NOTIFI, [
-      "getNotifications", 
-      "getCountNotifications", 
-      "handleCheckAllRead"
+      "getNotifications",
+      "getCountNotifications",
+      "handleCheckAllRead",
     ]),
 
-    infiniteHandler($state) {
-      // axios.get(api, {
-      //   params: {
-      //     page: this.page,
-      //   },
-      // })
+    async infiniteHandler($state) {
+      let lastItemNoti =
+        this.typeTab == "social"
+          ? this.notiSocial[this.notiSocial.length - 1]
+          : this.notiElearning[this.notiElearning.length - 1];
+      console.log("lastItemNoti", lastItemNoti.id);
       this.getNotifications({
         fetch_size: FETCH_SIZE,
-        service_type: ELEARNING,
-      })
-      .then(res => {
-          console.log('infiniteHandler', res)
-          // if (res.data) {
-          //   this.page += 1;
-          //   this.notiElearning.push(...res.data);
-          //   $state.loaded();
-          // } else {
-          //   $state.complete();
-          // }
-        });
+        service_type: this.typeTab == "social" ? SOCIAL : ELEARNING,
+        from_notification_id: lastItemNoti && lastItemNoti.id,
+      }).then((res) => {
+        console.log("infiniteHandler", res);
+        if (res && res.length) {
+          // this.page += 1;
+          console.log("this.notiSocial", this.notiSocial);
+          console.log("this.notiElearning", this.notiElearning);
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
     },
     handleReadNotifi(val) {
       this.isReaded = val;

@@ -39,7 +39,7 @@ const actions = {
             if (payload.service_type == 'SOCIAL') {
                 commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_SOCIAL_LIST, result.data);
             }
-            // return result.data
+            return result.data
             
         } catch (err) {
             console.log("[Notifications] list.err", err);
