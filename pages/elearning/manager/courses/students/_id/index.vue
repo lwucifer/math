@@ -37,7 +37,7 @@
 
               <div class="elearning-manager__tab mb-4">
                 <div class="nav">
-                  <a @click="tab = 'EXCERCISE'" :class="tab == 'EXCERCISE' ? 'active' : ''">BÀI TẬP</a>
+                  <a @click="tab = 'EXERCISE'" :class="tab == 'EXERCISE' ? 'active' : ''">BÀI TẬP</a>
                   <a @click="tab = 'TEST'" :class="tab == 'TEST' ? 'active' : ''">BÀI KIỂM TRA</a>
                 </div>
               </div>
@@ -129,11 +129,11 @@ export default {
         first: true,
         number_of_elements: 0
       },
-      tab: 'EXCERCISE',
+      tab: 'EXERCISE',
       params: {
         page: 1,
         size: 10,
-        category: 'EXCERCISE'
+        category: 'EXERCISE'
       },
     };
   },
