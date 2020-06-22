@@ -26,7 +26,7 @@ export function uppercaseFirst(string) {
 }
 
 /**
- * 10000 => "10.000" by numeral
+ * 10000 => 10,000, 10.000
  * @param {Number} num
  * @param {String} format
  */
