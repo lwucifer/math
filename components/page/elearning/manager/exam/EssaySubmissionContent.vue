@@ -5,7 +5,7 @@
       :key="index"
     >
       <div class="item">
-        <label class="content-title">Câu hỏi {{ get(item, 'index', '*') }} ({{ get(item, 'point', 0) }} điểm)</label>
+        <label class="content-title">Câu hỏi {{ get(item, 'index', '*') }} ({{ get(item, 'points', 0) }} điểm)</label>
         <div class="test-content" v-html="get(item, 'content', '')"></div>
       </div>
       <div class="item">
