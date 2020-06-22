@@ -36,7 +36,7 @@
       <div class="row">
         <div class="col-5">Thời gian bắt đầu làm bài</div>
         <div class="col-7">
-          {{ result.start_time | getDateTimeFullText | capitalizeFirstLetter }}
+          {{ result.start_time | getDateTimeFullText | capitalizeFirstLetterOfString }}
         </div>
       </div>
       <div class="row">

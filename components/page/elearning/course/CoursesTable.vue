@@ -143,7 +143,7 @@
           <span
             v-if="!row.pricefree && row.price.original_price > 0"
             class="color-blue"
-          >{{numeral(row.price.original_price).format()}}đ</span>
+          >{{row.price.original_price | numeralFormat("0,0.00")}}đ</span>
         </td>
       </template>
       <template v-slot:cell(publish_date)="{ row }">
@@ -247,7 +247,6 @@ import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
 import IconEdit from "~/assets/svg/icons/edit.svg?inline";
 import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
 
-import numeral from "numeral";
 import { getDateBirthDay, getDateBirthDayUTC } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -472,7 +471,6 @@ export default {
   },
 
   methods: {
-    numeral,
     getDateBirthDay,
     getDateBirthDayUTC,
 

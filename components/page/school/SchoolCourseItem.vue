@@ -40,7 +40,7 @@
         </div>
         <div class="price-wrapper">
           <span v-if="get(cource, 'price', 0) > 0" class="price">
-            {{ get(cource, "price", 0) | toThousandFilter }}đ
+            {{ get(cource, "price", 0) | numeralFormat("0,0.00") }}đ
           </span>
           <span v-else class="price price--free">
             Miễn phí

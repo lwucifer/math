@@ -51,7 +51,7 @@
           </ElearningHomeBox>
         </div>
 
-        <DataSchool/>
+        <DataSchool :school="school"/>
         <ListTeacher/>
         <SchoolNoti/>
         <SchoolNews/>
@@ -90,6 +90,8 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
 import { get } from "lodash";
+import OlClass from '../../../services/elearning/teaching/Olclass';
+import { getParamQuery } from "~/utils/common"
 
 export default {
   watchQuery: ["school_id"],
@@ -113,7 +115,16 @@ export default {
     SchoolScheduleContent,
     SchoolCoursesContent
   },
-
+  watchQuery(newQuery, oldQuery){
+    if (
+      get(newQuery, 'tab', false) && 
+      ['index', 'intro','courses','notify','news','schedule'].includes(get(newQuery, 'tab', false))
+    ) {
+      this.tab = get(newQuery, 'tab', 'index')
+    } else {
+      this.tab = 'index'
+    }
+  },
   async fetch({ params, query, store }) {
     const school_id = params.id;
     const data = { school_id };
@@ -166,13 +177,22 @@ export default {
   mounted() {
     this.pageLoading = false;
   },
-
-  watch: {},
-
+  created(){
+    this.checkTab()
+  },
   methods: {
     get,
     changeTab(tab){
       this.tab = tab
+      this.$router.push({query: { tab: tab}})
+    },
+    checkTab(){
+      const typeTab = getParamQuery('tab')
+      if(typeTab && ['index', 'intro','courses','notify','news','schedule'].includes(typeTab)){
+        this.tab = typeTab
+      }else{
+        this.tab = "index"
+      }
     }
   }
 };

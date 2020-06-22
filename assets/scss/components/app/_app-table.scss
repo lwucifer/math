@@ -131,7 +131,7 @@
                 button, a {
                     display: inline-flex;
                     align-items: center;
-                    padding: 1rem;
+                    padding: 0 1rem;
                     line-height: 1;
                     svg {
                         margin-bottom: 2px;
@@ -270,6 +270,8 @@ $end2: 100;
         td, th  {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            overflow: hidden;
         }
         th {
             padding: 1.2rem 1rem;
