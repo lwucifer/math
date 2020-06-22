@@ -10,7 +10,7 @@
         :style="{'background-color': colors[index  % (colors.length)]}"
       >
         <p class="title">{{ item.title }}</p>
-        <p class="value"><b>{{ item.value | toThousandFilter(',') }}</b></p>
+        <p class="value"><b>{{ item.value | numeralFormat("0,0.00") }}</b></p>
       </div>
     </div>
   </div>
