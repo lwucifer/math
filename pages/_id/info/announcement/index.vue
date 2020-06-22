@@ -92,6 +92,7 @@ export default {
   data() {
     return {
       isReaded: false,
+      fromNotifyId: "",
       checkType: this.$route.query.type == SOCIAL ? SOCIAL : ELEARNING,
       pagination: {
         total_pages: 2,
@@ -118,26 +119,22 @@ export default {
   methods: {
     ...mapActions(STORE_NOTIFI, [
       "getNotifications",
+      "getNotificationsScroll",
       "getCountNotifications",
       "handleCheckAllRead",
     ]),
 
     async infiniteHandler($state) {
-      let lastItemNoti =
+      this.fromNotifyId =
         this.typeTab == "social"
           ? this.notiSocial[this.notiSocial.length - 1]
           : this.notiElearning[this.notiElearning.length - 1];
-      console.log("lastItemNoti", lastItemNoti.id);
-      this.getNotifications({
+      this.getNotificationsScroll({
         fetch_size: FETCH_SIZE,
         service_type: this.typeTab == "social" ? SOCIAL : ELEARNING,
-        from_notification_id: lastItemNoti && lastItemNoti.id,
+        from_notification_id: this.fromNotifyId && this.fromNotifyId.id,
       }).then((res) => {
-        console.log("infiniteHandler", res);
         if (res && res.length) {
-          // this.page += 1;
-          console.log("this.notiSocial", this.notiSocial);
-          console.log("this.notiElearning", this.notiElearning);
           $state.loaded();
         } else {
           $state.complete();
@@ -155,7 +152,7 @@ export default {
         type: "ALL",
         service_type: ELEARNING,
       }).then((res) => {
-        if (res.data.success) {
+        if (res.data) {
           this.getNotifications({
             fetch_size: FETCH_SIZE,
             service_type: ELEARNING,

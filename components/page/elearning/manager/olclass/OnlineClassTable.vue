@@ -9,6 +9,7 @@
         @sort="handleSort"
         :data="data"
         multiple-selection
+        :cols="[5,28,27,25,15]"
       >
         <template v-slot:cell(online_class_name)="{row}">
           <td>
@@ -99,17 +100,17 @@ export default {
         },
         {
           name: "elearning_name",
-          text: "Thuộc khóa học",
+          text: "Thuộc bài giảng/khoá học",
           sort: true
         },
         {
           name: "start_time",
-          text: "Thời gian",
+          text: "Thời gian học",
           sort: true
         },
         {
           name: "num_student",
-          text: "Số học sinh đã mời",
+          text: "Số học sinh",
           sort: true
         }
       ],
@@ -149,7 +150,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
 .appended-col {
   p {
     max-width: 15rem;

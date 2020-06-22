@@ -106,9 +106,18 @@
         <IconPlayCirleWhite24px class="icon" />
         Bắt đầu: {{ get(info, "start_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
       </li>
+      <li v-else>
+        <IconPauseCircleOutline24px class="icon" />
+        Bắt đầu:
+        {{ get(info, "publish_date", "") | getDateTimeHH_MM_D_M_Y_DASH }}
+      </li>
       <li v-if="get(info, 'endtime_enable', false)">
         <IconPauseCircleOutline24px class="icon" />
         Kết thúc: {{ get(info, "end_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
+      </li>
+      <li v-else>
+        <IconPauseCircleOutline24px class="icon" />
+        Kết thúc: không thời hạn
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,

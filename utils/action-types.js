@@ -63,6 +63,7 @@ export const SOCIAL_NOTIFICATIONS = {
 
 export const HEADER_NOTIFICATIONS = {
     LIST: "getNotifications",
+    LIST_SCROLL: "getNotificationsScroll",
     LIST_COUNT: 'getCountNotifications',
     DETAIL_LIST: "getDetailNotifications",
     CHECK_IS_READ_NOTIFICATION: "checkIsReadNotifications",
@@ -446,6 +447,11 @@ export const SCHOOL_TEACHERS = {
     ADD: "schoolTeachersAdd",
     EDIT: "schoolTeachersEdit",
     DELETE: "schoolTeachersDelete",
+};
+
+export const SCHOOL_NEWS = {
+    LIST: "schoolNewsList",
+    DETAIL: "schoolNewsDetail",
 };
 
 export const ELEARNING_STURY = {
