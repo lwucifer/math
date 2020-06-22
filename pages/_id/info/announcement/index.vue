@@ -119,6 +119,7 @@ export default {
   methods: {
     ...mapActions(STORE_NOTIFI, [
       "getNotifications",
+      "getNotificationsScroll",
       "getCountNotifications",
       "handleCheckAllRead",
     ]),
@@ -128,7 +129,7 @@ export default {
         this.typeTab == "social"
           ? this.notiSocial[this.notiSocial.length - 1]
           : this.notiElearning[this.notiElearning.length - 1];
-      this.getNotifications({
+      this.getNotificationsScroll({
         fetch_size: FETCH_SIZE,
         service_type: this.typeTab == "social" ? SOCIAL : ELEARNING,
         from_notification_id: this.fromNotifyId && this.fromNotifyId.id,
@@ -151,7 +152,7 @@ export default {
         type: "ALL",
         service_type: ELEARNING,
       }).then((res) => {
-        if (res.data.success) {
+        if (res.data) {
           this.getNotifications({
             fetch_size: FETCH_SIZE,
             service_type: ELEARNING,

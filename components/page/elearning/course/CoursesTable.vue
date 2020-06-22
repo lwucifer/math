@@ -120,6 +120,7 @@
       :data="elearningList"
       multiple-selection
       v-if="showTable"
+      :cols="cols"
     >
       <template v-slot:cell(privacy)="{ row }">
         <td>
@@ -282,6 +283,7 @@ export default {
 
   data() {
     return {
+      cols: [5,35,15,15,15,15],
       loaded: false,
       noteReject: "",
       allOpt: {
@@ -300,11 +302,6 @@ export default {
       previewInfo: {},
       ids: [],
       heads: [
-        {
-          name: "",
-          text: "",
-          selectAll: true
-        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -331,11 +328,6 @@ export default {
       ],
       heads2: [
         {
-          name: "",
-          text: "",
-          selectAll: true
-        },
-        {
           name: "name",
           text: "Bài giảng và khóa học",
           sort: true
@@ -355,11 +347,6 @@ export default {
         }
       ],
       heads3: [
-        {
-          name: "",
-          text: "",
-          selectAll: true
-        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -458,13 +445,16 @@ export default {
         case "PENDING":
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
         case "APPROVED":
         case null:
           this.currentHeads = [...this.heads];
+          this.cols = [5,35,15,15,15,15];
           break;
         default:
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
       }
       this.showTable = true;
@@ -686,6 +676,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-@import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
 </style>

@@ -16,7 +16,7 @@
           <IconMoreHoriz24px />
         </button>
         <ul class="menu-dropdown-content" v-if="menuBtn">
-          <li @click="handleClickCheck" v-if="!dataNoti.is_read">
+          <li @click="handleClickCheck" v-if="!checkIsRead">
             <a> <IconCheck24px />Đánh dấu là đã đọc </a>
           </li>
           <li @click="handleClickCheck" v-else>
@@ -30,7 +30,7 @@
         </ul>
       </div>
 
-      <button v-if="!dataNoti.is_read">
+      <button v-if="!checkIsRead">
         <IconEllipse2 />
       </button>
     </div>
@@ -68,6 +68,7 @@ export default {
 
   data() {
     return {
+      checkIsRead: this.dataNoti.is_read,
       menuBtn: false,
     };
   },
@@ -134,14 +135,14 @@ export default {
     },
     handleClickCheck() {
       this.menuBtn = !this.menuBtn;
-      // this.$emit('read',!this.isReaded);
       this.checkIsReadNotifications({
         notification_id: this.dataNoti.id,
         type: "ONLY_ONE",
         service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
       }).then((res) => {
-        if (res.data.success) {
+        if (res.data) {
           console.log("res", res);
+          this.checkIsRead = res.data.is_read;
           if (this.typeTab == "elearning") {
             this.updateCountElearning();
           } else {
