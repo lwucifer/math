@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div
         class="ml-0 filter-form__item filter-form__item--search border-0"
-        style="max-width: 36rem; min-width: 30rem;"
+        style="max-width: 23.4rem;"
       >
         <app-search
           class="w-100"
@@ -24,7 +24,7 @@
           :color="filterSelect ? 'primary': 'white'"
         ></filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 15rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="rateOpts"
@@ -46,6 +46,20 @@
           label="text"
           placeholder="Thể loại"
           @input="handleSelectType"
+          :all-opt="allOpt"
+          has-border
+        />
+      </div>
+
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11.4rem;">
+        <app-vue-select
+          class="app-vue-select w-100"
+          :options="optOpts"
+          :reduce="item => item.value"
+          v-model="filters.required"
+          label="text"
+          placeholder="Hình thức"
+          @input="handleSelectOptional"
           :all-opt="allOpt"
           has-border
         />
@@ -73,6 +87,7 @@
           type: null,
           keyword: '',
           rate: null,
+          required: true
         },
         types: [
           {
@@ -98,6 +113,16 @@
             text: 'Chưa chấm'
           },
         ],
+        optionals: [
+          {
+            value: true,
+            text: 'Bắt buộc'
+          },
+          {
+            value: false,
+            text: 'Không bắt buộc'
+          }
+        ],
         initStatus: true
       }
     },
@@ -116,6 +141,9 @@
       },
       rateOpts() {
         return [this.allOpt, ...this.rates]
+      },
+      optOpts() {
+        return [this.allOpt, ...this.optionals]
       }
     },
     methods: {
@@ -129,6 +157,9 @@
       },
       handleSelectType(val) {
         this.$emit('changedType', val)
+      },
+      handleSelectOptional(val) {
+        this.$emit('changedRequired', val)
       },
       handleChangedSearch(val) {
         this.$emit('changedQuery', val)
