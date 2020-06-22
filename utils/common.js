@@ -233,13 +233,23 @@ export const optionSelectSubject = (arr) => {
   return [allOpt, ...arr];
 };
 
-export const limitCharacter = (_val, _limit, _numberSlice) => {
+export const limitCharacter = (_val="", _limit, _numberSlice) => {
   const newString = _val.split(" ");
 
   if (newString.length > _limit) {
     return newString.slice(0, _numberSlice).join(" ") + "...";
   }
   return _val;
+};
+
+/**
+ * return: xxxxxx...asas.docx
+ * @param {*} _val: string need to limit
+ * @param {*} _numberSlice: string with length display
+ */
+export const limitLetter = (_val="", _numberSlice=20) => {
+  if(_val.length <= _numberSlice) return _val;
+  return `${_val.substring(0, _numberSlice/2)}...${_val.substring(_val.length - _numberSlice/2 - 3)}`
 };
 
 export const removeTagHtml = (_text) => {
