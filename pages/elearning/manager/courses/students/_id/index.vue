@@ -33,7 +33,15 @@
             </div>
             <StudentManagerInfo />
             <div class="mt-4">
-              <h5 class="text-primary mb-3">Điểm đánh giá</h5>
+              <h5 class="mb-4">Điểm đánh giá</h5>
+
+              <div class="elearning-manager__tab mb-4">
+                <div class="nav">
+                  <a @click="tab = 'EXCERCISE'" :class="tab == 'EXCERCISE' ? 'active' : ''">BÀI TẬP</a>
+                  <a @click="tab = 'TEST'" :class="tab == 'TEST' ? 'active' : ''">BÀI KIỂM TRA</a>
+                </div>
+              </div>
+
               <StudentManagerInfoTable
                 :heads="heads"
                 :list="list"
@@ -87,6 +95,13 @@ export default {
     ]);
   },
 
+  watch: {
+    tab(newValue, oldValue) {
+      this.params.category = newValue;
+      this.getList();
+    }
+  },
+
   data() {
     return {
       loading: false,
@@ -104,19 +119,7 @@ export default {
           text: ""
         }
       ],
-      list: [
-        {
-          name: "Justice League",
-          mark: 10
-        },
-        {
-          name: "Justice League",
-          mark: 4
-        },
-        {
-          name: "Justice League"
-        }
-      ],
+      list: [],
       pagination: {
         total_elements: 0,
         last: false,
@@ -126,9 +129,11 @@ export default {
         first: true,
         number_of_elements: 0
       },
+      tab: 'EXCERCISE',
       params: {
         page: 1,
         size: 10,
+        category: 'EXCERCISE'
       },
     };
   },
@@ -149,10 +154,7 @@ export default {
           this.$route.query && this.$route.query.elearning_id
             ? this.$route.query.elearning_id
             : "",
-        user_id:
-          this.$route.params && this.$route.params.id
-            ? this.$route.params.id
-            : "",
+        user_id: this.$store.state.auth.token ? this.$store.state.auth.token.id : "",
         banned: !isBanned
       });
       const dataQuery = {
