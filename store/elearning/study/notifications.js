@@ -37,6 +37,28 @@ const actions = {
             if (result.data) {
                 console.log('HEADER_NOTIFICATIONS.LIST', result.data)
                 if (payload.service_type == ELEARNING) {
+                    commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST, result.data);
+                }
+                if (payload.service_type == SOCIAL) {
+                    commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_SOCIAL_LIST, result.data);
+                }
+            }
+            return result.data
+
+        } catch (err) {
+            console.log("[Notifications] list.err", err);
+            return err;
+        }
+    },
+
+    async [actionTypes.HEADER_NOTIFICATIONS.LIST_SCROLL]({ state, commit }, payload) {
+        try {
+            const result = await new Notifications(this.$axios)[
+                actionTypes.HEADER_NOTIFICATIONS.LIST
+            ](payload);
+            if (result.data) {
+                console.log('HEADER_NOTIFICATIONS.LIST', result.data)
+                if (payload.service_type == ELEARNING) {
                     commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST,
                         uniqWith(state.notiElearning.concat(result.data), (a, b) => a.id === b.id)
                     );
@@ -54,6 +76,7 @@ const actions = {
             return err;
         }
     },
+    
 
     async [actionTypes.HEADER_NOTIFICATIONS.LIST_COUNT]({ state, commit }, payload) {
         try {
