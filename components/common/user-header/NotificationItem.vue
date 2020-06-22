@@ -16,7 +16,7 @@
           <IconMoreHoriz24px />
         </button>
         <ul class="menu-dropdown-content" v-if="menuBtn">
-          <li @click="handleClickCheck" v-if="!dataNoti.is_read">
+          <li @click="handleClickCheck" v-if="!checkIsRead">
             <a> <IconCheck24px />Đánh dấu là đã đọc </a>
           </li>
           <li @click="handleClickCheck" v-else>
@@ -30,7 +30,7 @@
         </ul>
       </div>
 
-      <button v-if="!dataNoti.is_read">
+      <button v-if="!checkIsRead">
         <IconEllipse2 />
       </button>
     </div>
@@ -43,6 +43,7 @@ import IconEllipse2 from "~/assets/svg/icons/ellipse2.svg?inline";
 import IconCheck24px from "~/assets/svg/v2-icons/check_24px.svg?inline";
 import IconDeleteSweep24px from "~/assets/svg/v2-icons/delete_sweep_24px.svg?inline";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { FETCH_SIZE, SOCIAL, ELEARNING } from "~/utils/config"
 export default {
   components: {
     IconMoreHoriz24px,
@@ -67,6 +68,7 @@ export default {
 
   data() {
     return {
+      checkIsRead: this.dataNoti.is_read,
       menuBtn: false,
     };
   },
@@ -95,11 +97,11 @@ export default {
 
     updateCountElearning() {
       this.getNotifications({
-        fetch_size: 50,
-        service_type: "ELEARNING",
+        fetch_size: FETCH_SIZE,
+        service_type: ELEARNING,
       });
       this.getCountNotifications({
-        service_type: "ELEARNING",
+        service_type: ELEARNING,
       });
       // if(this.dataNoti.is_read){
       //     const countElearning = parseInt(this.countNotiElearning) + 1
@@ -111,11 +113,11 @@ export default {
     },
     updateCountSocial() {
       this.getNotifications({
-        fetch_size: 50,
-        service_type: "SOCIAL",
+        fetch_size: FETCH_SIZE,
+        service_type: SOCIAL,
       });
       this.getCountNotifications({
-        service_type: "SOCIAL",
+        service_type: SOCIAL,
       });
       // if(this.dataNoti.is_read){
       //     const countSocial = parseInt(this.countNotiSocial) + 1
@@ -128,19 +130,19 @@ export default {
     handleDelete() {
       this.deleteNotifications({
         notification_id: this.dataNoti.id,
-        service_type: this.typeTab == "elearning" ? "ELEARNING" : "SOCIAL",
+        service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
       });
     },
     handleClickCheck() {
       this.menuBtn = !this.menuBtn;
-      // this.$emit('read',!this.isReaded);
       this.checkIsReadNotifications({
         notification_id: this.dataNoti.id,
         type: "ONLY_ONE",
-        service_type: this.typeTab == "elearning" ? "ELEARNING" : "SOCIAL",
+        service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
       }).then((res) => {
-        if (res.data.success) {
+        if (res.data) {
           console.log("res", res);
+          this.checkIsRead = res.data.is_read;
           if (this.typeTab == "elearning") {
             this.updateCountElearning();
           } else {

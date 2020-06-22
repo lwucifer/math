@@ -410,14 +410,14 @@ export default {
     },
 
     handleUpdate() {
+      this.showInputUpdate = !this.showInputUpdate;
       this.editor = new Editor({
-      content: this.question.content || "",
+        content: this.question.content || "",
       })
       this.uploadImgSrc = this.question.image_url || "",
-      this.showInputUpdate = true;
       this.showReply = false;
       this.$nextTick(() => {
-        this.editor.focus();
+        this.editor.focus('end');
       });
     },
 

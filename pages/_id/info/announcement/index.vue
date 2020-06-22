@@ -5,7 +5,7 @@
         <SchoolAccountSide :active="5" />
       </div>
       <div class="col-md-9 cc-panel">
-        <block-section title="Elearning">
+        <block-section :title="checkType == 'SOCIAL' ? '' : 'Elearning'">
           <template v-slot:content>
             <div class="wrap-notify-account-info">
               <div class="header-content">
@@ -28,7 +28,20 @@
                   </n-link>
                 </div>
               </div>
-              <div class="content-notification">
+              <template
+                v-if="checkType == 'SOCIAL'"
+                class="content-notification"
+              >
+                <notification-item
+                  v-for="(item, index) in notiSocial"
+                  :key="index"
+                  :dataNoti="item"
+                  :isReaded="isReaded"
+                  @read="handleReadNotifi"
+                  :typeTab="'social'"
+                />
+              </template>
+              <template v-else class="content-notification">
                 <notification-item
                   v-for="(item, index) in notiElearning"
                   :key="index"
@@ -37,13 +50,18 @@
                   @read="handleReadNotifi"
                   :typeTab="'elearning'"
                 />
-                <app-pagination
+                <!-- <app-pagination
                   :pagination="pagination"
                   @pagechange="onPageChange"
                   class="mt-5"
-                />
-              </div>
+                /> -->
+              </template>
             </div>
+            <client-only>
+              <infinite-loading @infinite="infiniteHandler">
+                <template slot="no-more">Không còn tin nhắn nào.</template>
+              </infinite-loading>
+            </client-only>
           </template>
         </block-section>
       </div>
@@ -56,6 +74,9 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconCheck24px from "~/assets/svg/v2-icons/check_24px.svg?inline";
 import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
 import { mapState, mapActions } from "vuex";
+import { FETCH_SIZE, SOCIAL, ELEARNING } from "../../../../utils/config";
+import * as actionTypes from "~/utils/action-types";
+import Notifications from "~/services/elearning/study/Notifications";
 const STORE_NOTIFI = "elearning/study/notifications";
 export default {
   layout: "account-info",
@@ -65,9 +86,14 @@ export default {
     IconCheck24px,
     IconSettings24px,
   },
+  // asyncData({isDev, route, store, env, params, query, req, res, redirect, error}) {
+  //   return {checkType: query.type == 'SOCIAL' ? 'SOCIAL' : 'ELEARNING'}
+  // },
   data() {
     return {
       isReaded: false,
+      fromNotifyId: "",
+      checkType: this.$route.query.type == SOCIAL ? SOCIAL : ELEARNING,
       pagination: {
         total_pages: 2,
         size: 10,
@@ -79,21 +105,42 @@ export default {
     };
   },
   computed: {
-    ...mapState("elearning/study/notifications", ["notiElearning"]),
+    ...mapState(STORE_NOTIFI, ["notiElearning", "notiSocial"]),
     ...mapState("auth", ["token"]),
   },
+
   created() {
-    this.getNotifications({
-      fetch_size: 50,
-      service_type: "ELEARNING",
-    });
+    // this.getNotifications({
+    //   fetch_size: FETCH_SIZE,
+    //   service_type: ELEARNING,
+    // });
   },
+
   methods: {
     ...mapActions(STORE_NOTIFI, [
-      "getNotifications", 
-      "getCountNotifications", 
-      "handleCheckAllRead"
+      "getNotifications",
+      "getNotificationsScroll",
+      "getCountNotifications",
+      "handleCheckAllRead",
     ]),
+
+    async infiniteHandler($state) {
+      this.fromNotifyId =
+        this.typeTab == "social"
+          ? this.notiSocial[this.notiSocial.length - 1]
+          : this.notiElearning[this.notiElearning.length - 1];
+      this.getNotificationsScroll({
+        fetch_size: FETCH_SIZE,
+        service_type: this.typeTab == "social" ? SOCIAL : ELEARNING,
+        from_notification_id: this.fromNotifyId && this.fromNotifyId.id,
+      }).then((res) => {
+        if (res && res.length) {
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
+    },
     handleReadNotifi(val) {
       this.isReaded = val;
     },
@@ -103,15 +150,15 @@ export default {
     handleCheckAllRead() {
       this.checkIsReadNotifications({
         type: "ALL",
-        service_type: "ELEARNING",
+        service_type: ELEARNING,
       }).then((res) => {
-        if (res.data.success) {
+        if (res.data) {
           this.getNotifications({
-            fetch_size: 50,
-            service_type: "ELEARNING",
+            fetch_size: FETCH_SIZE,
+            service_type: ELEARNING,
           });
           this.getCountNotifications({
-            service_type: "ELEARNING",
+            service_type: ELEARNING,
           });
         }
       });

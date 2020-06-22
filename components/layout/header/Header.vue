@@ -161,7 +161,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get, isEmpty } from "lodash";
 import { UPDATE_NOTI, USER_ROLES } from "~/utils/constants";
 import { detectBrowser } from "~/utils/common";
-import { PARAM_CHECK } from "../../../utils/config";
+import { PARAM_CHECK, FETCH_SIZE, SOCIAL, ELEARNING } from "../../../utils/config";
 
 export default {
   components: {
@@ -195,6 +195,10 @@ export default {
     ...mapGetters("auth", ["isAuthenticated", "isStudentRole"]),
     ...mapGetters("cart", ["cartCheckout"]),
     ...mapState("keyword", ["keywordSearchHeader", "checkRouteClearKeyword"]),
+    ...mapState("elearning/study/notifications", [
+      "countNotiElearning",
+      "countNotiSocial",
+    ]),
   },
   watch: {
     keywordSearchHeader(newValue){
@@ -227,6 +231,7 @@ export default {
         meta_data: payload.notification.body
       };
       this.reviceNoti(data);
+      payload.data.service_type && this.checkSumCountNoti(payload.data.service_type);
       this.socialNotifications({
         params: {
           page: 1,
@@ -241,18 +246,18 @@ export default {
   created() {
     this.isAuthenticated && this.getNotiUnread();
     this.getNotifications({
-        fetch_size: 50,
-        service_type: "ELEARNING"
+        fetch_size: FETCH_SIZE,
+        service_type: ELEARNING
     });
     this.getNotifications({
-        fetch_size: 50,
-        service_type: "SOCIAL"
+        fetch_size: FETCH_SIZE,
+        service_type: SOCIAL
     });
     this.getCountNotifications({
-        service_type: "ELEARNING"
+        service_type: ELEARNING
     });
     this.getCountNotifications({
-        service_type: "SOCIAL"
+        service_type: SOCIAL
     });
   },
   methods: {
@@ -265,6 +270,11 @@ export default {
       "socialNotifications",
       "readNotification",
       "getNotiUnread"
+    ]),
+    ...mapMutations("elearning/study/notifications", [
+      "setCountNotiElearning",
+      "setCountNotiSocial",
+      "setCheckFireBase"
     ]),
     ...mapActions("cart", ["cartList"]),
     handleInput(_value){
@@ -325,6 +335,17 @@ export default {
         $state.loaded();
       } else {
         $state.complete();
+      }
+    },
+
+    checkSumCountNoti(_type){
+      this.setCheckFireBase(true);
+      if(_type == SOCIAL){
+          const countSocial = parseInt(this.countNotiSocial) + 1
+          this.setCountNotiSocial(countSocial)
+      }else{
+          const countElearning = parseInt(this.countNotiElearning) + 1
+          this.setCountNotiElearning(countElearning)
       }
     }
   }
