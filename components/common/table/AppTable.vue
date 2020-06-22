@@ -1,10 +1,10 @@
 <template>
   <no-ssr>
     <div class="app-table">
-      <table :class="{ ...tableCls, ...extTableCls }">
+      <table :class="{ ...tableCls, ...extTableCls, ...gridCls }">
         <thead class="app-table__head" :class="{ ...headerCls, ...headerExtCls }">
           <tr>
-            <th v-if="multipleSelection">
+            <th v-if="multipleSelection" class="checkbox">
               <app-checkbox
                 @change="changeSelect"
                 v-model="allSelected"
@@ -17,11 +17,12 @@
               :key="index"
               :class="item.classTextCenter ? 'text-center': ''"
             >
-              <div v-html="item.text" class="d-inline-block"></div>
-              <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
-              <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
-                <IconDirection height="18" width="18" />
-              </span>
+              <div class="div-head">
+                <div v-html="item.text"></div>
+                <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
+                  <IconDirection height="18" width="18" />
+                </span>
+              </div>
             </th>
           </tr>
         </thead>
@@ -38,7 +39,7 @@
           >
             <td
               v-if="multipleSelection || selectAll"
-              class="pr-0"
+              class="checkbox"
               @mouseover="mouseOver = false"
               @mouseleave="mouseOver = true"
             >
@@ -91,15 +92,11 @@
 </template>
 
 <script>
-import IconStar from "~/assets/svg/icons/star.svg?inline";
-import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
 import { isEqual, get } from "lodash";
 
 export default {
   components: {
-    IconStar,
-    IconStarO,
     IconDirection
   },
 
@@ -206,7 +203,11 @@ export default {
     classTextCenter: {
       type: Boolean,
       default: false
-    }
+    }, 
+    cols: {
+      type: Array,
+      default: []
+    }, 
   },
 
   data() {
@@ -414,12 +415,22 @@ export default {
       return {
         ...bgCls
       };
+    },
+    gridCls() {
+      let gCls = {
+        'table-grid': this.cols.length > 0
+      };
+      
+      this.cols.forEach((e, index) => {
+        let i = index + 1;
+        gCls['col-' + i + '--' + e] = true;
+      })
+
+      return {
+        ...gCls
+      };
     }
   },
-
-  mounted() {
-    // this.cats = [...this.data];
-  }
 };
 </script>
 

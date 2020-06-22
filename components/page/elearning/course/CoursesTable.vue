@@ -120,6 +120,7 @@
       :data="elearningList"
       multiple-selection
       v-if="showTable"
+      :cols="[5, 35, 15, 15, 15, 15]"
     >
       <template v-slot:cell(privacy)="{ row }">
         <td>
@@ -301,11 +302,6 @@ export default {
       ids: [],
       heads: [
         {
-          name: "",
-          text: "",
-          selectAll: true
-        },
-        {
           name: "name",
           text: "Bài giảng và khóa học",
           sort: true
@@ -331,11 +327,6 @@ export default {
       ],
       heads2: [
         {
-          name: "",
-          text: "",
-          selectAll: true
-        },
-        {
           name: "name",
           text: "Bài giảng và khóa học",
           sort: true
@@ -355,11 +346,6 @@ export default {
         }
       ],
       heads3: [
-        {
-          name: "",
-          text: "",
-          selectAll: true
-        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -686,6 +672,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-@import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
 </style>
