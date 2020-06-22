@@ -48,33 +48,41 @@
       </div>
       <div v-if="tab === 'elearning'">
         <div class="tab-notification">
+
           <notification-item
             v-for="(item, index) in notiElearning"
             :key="index"
             :dataNoti="item"
             :typeTab="tab"
           />
+
+          <client-only> 
+            <infinite-loading @infinite="infiniteHandler">
+              <template slot="no-more">Không còn tin nhắn nào.</template>
+              <template slot="no-results">Không còn tin nhắn nào.</template>
+            </infinite-loading>
+          </client-only>
+          
         </div>
-        <client-only>
-          <infinite-loading @infinite="infiniteHandler">
-            <template slot="no-more">Không còn tin nhắn nào.</template>
-          </infinite-loading>
-        </client-only>
       </div>
       <div v-if="tab === 'social'">
         <div class="tab-notification">
+
           <notification-item
             v-for="(item, index) in notiSocial"
             :key="index"
             :dataNoti="item"
             :typeTab="tab"
           />
+
+          <client-only>
+            <infinite-loading @infinite="infiniteHandler">
+              <template slot="no-more">Không còn tin nhắn nào.</template>
+              <template slot="no-results">Không còn tin nhắn nào.</template>
+            </infinite-loading>
+          </client-only>
+
         </div>
-         <client-only>
-          <infinite-loading @infinite="infiniteHandler">
-            <template slot="no-more">Không còn tin nhắn nào.</template>
-          </infinite-loading>
-        </client-only>
       </div>
 
       <div class="footer-notification">
