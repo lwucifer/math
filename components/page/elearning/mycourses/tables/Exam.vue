@@ -82,9 +82,9 @@
       </template>
     </app-table>
     <!--End table-->
-    <p class="elm--text-desc text-center mt-4">
+    <p class="elm--text-desc text-center mt-4" v-if="list.length > 0">
       <i>
-        Các bài tập có đánh dấu * là các bài tập
+        Các bài tập có đánh dấu * là các bài kiểm tra
         <b>bắt buộc</b>
       </i>
     </p>
