@@ -47,7 +47,7 @@
       </template>
       <template v-slot:cell(cost)="{row}">
         <td>
-          {{ row.cost | numeralFormat("0,0.000") }} đ
+          {{ row.cost | numeralFormat("0,0.00") }} đ
         </td>
       </template>
       <template v-slot:cell(timestamp)="{row}">

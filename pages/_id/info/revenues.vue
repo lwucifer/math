@@ -19,7 +19,7 @@
                       <strong
                         style="color: #E9446A;"
                         class="h3 mr-4"
-                      >{{ balance | numeralFormat("0,0.000")}} {{ CURRENCY }}</strong>
+                      >{{ balance | numeralFormat("0,0.00")}} {{ CURRENCY }}</strong>
                       <app-button
                         size="sm"
                         nuxt
@@ -56,7 +56,7 @@
                           <span class="value">
                             <strong
                               class="text-primary"
-                            >{{ today_revenue | numeralFormat("0,0.000") }} {{ CURRENCY }}</strong>
+                            >{{ today_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -66,7 +66,7 @@
                           <span class="value">
                             <strong
                               class="color-blue"
-                            >{{ week_revenue | numeralFormat("0,0.000") }} {{ CURRENCY }}</strong>
+                            >{{ week_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -76,7 +76,7 @@
                           <span class="value">
                             <strong
                               class="color-yellow"
-                            >{{ month_revenue | numeralFormat("0,0.000") }} {{ CURRENCY }}</strong>
+                            >{{ month_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -84,7 +84,7 @@
                         <div class="item">
                           <p class="title">Tháng trước</p>
                           <span class="value">
-                            <strong>{{ last_month_revenue | numeralFormat("0,0.000") }} {{ CURRENCY }}</strong>
+                            <strong>{{ last_month_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -144,7 +144,7 @@
                       <p class="font-weight-semi-bold mb-2">Tổng thực nhận</p>
                       <p
                         class="font-weight-bold h3"
-                      >{{ revenue | numeralFormat("0,0.000") }} {{ CURRENCY }}</p>
+                      >{{ revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</p>
                     </div>
                   </div>
                 </template>
@@ -166,13 +166,13 @@
                       :pagination-style="{ position: 'right' }"
                     >
                       <template v-slot:cell(cost)="{row}">
-                        <td>{{ get(row, 'cost', '') | numeralFormat("0,0.000") }} {{ CURRENCY }}</td>
+                        <td>{{ get(row, 'cost', '') | numeralFormat("0,0.00") }} {{ CURRENCY }}</td>
                       </template>
                       <template v-slot:cell(fee)="{row}">
                         <td class="text-center">{{ formatFee(get(row, 'fee', ''))}}%</td>
                       </template>
                       <template v-slot:cell(total)="{row}">
-                        <td class="text-primary">{{ formatFee(get(row, 'total', '')) | numeralFormat("0,0.000") }} {{ CURRENCY }}</td>
+                        <td class="text-primary">{{ formatFee(get(row, 'total', '')) | numeralFormat("0,0.00") }} {{ CURRENCY }}</td>
                       </template>
                       <template v-slot:cell(timestamp)="{row}">
                         <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
