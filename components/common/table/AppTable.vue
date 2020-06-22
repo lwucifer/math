@@ -206,7 +206,8 @@ export default {
     }, 
     cols: {
       type: Array,
-      default: []
+      required: false,
+      default: () => []
     }, 
   },
 
@@ -421,10 +422,12 @@ export default {
         'table-grid': this.cols.length > 0
       };
       
-      this.cols.forEach((e, index) => {
-        let i = index + 1;
-        gCls['col-' + i + '--' + e] = true;
-      })
+      if (this.cols.length > 0) {
+        this.cols.forEach((e, index) => {
+          let i = index + 1;
+          gCls['col-' + i + '--' + e] = true;
+        })
+      }
 
       return {
         ...gCls
