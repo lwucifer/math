@@ -8,8 +8,17 @@
           :size="100"
         />
         <div class="info">
-          <h5 class="name">{{ get(teacher, "name", "") }}</h5>
-          <p class="body-3">{{ get(teacher, "school_name", "") }}</p>
+          <h5 class="name">
+            <n-link
+              :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`"
+              >{{ get(teacher, "name", "") }}</n-link
+            >
+          </h5>
+          <p class="body-3">
+            <n-link :to="`/school/${get(teacher, 'school_id', '')}`">{{
+              get(teacher, "school_name", "")
+            }}</n-link>
+          </p>
 
           <div class="stars">
             <app-stars
