@@ -120,7 +120,7 @@
       :data="elearningList"
       multiple-selection
       v-if="showTable"
-      :cols="[5, 35, 15, 15, 15, 15]"
+      :cols="cols"
     >
       <template v-slot:cell(privacy)="{ row }">
         <td>
@@ -283,6 +283,7 @@ export default {
 
   data() {
     return {
+      cols: [5,35,15,15,15,15],
       loaded: false,
       noteReject: "",
       allOpt: {
@@ -444,13 +445,16 @@ export default {
         case "PENDING":
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
         case "APPROVED":
         case null:
           this.currentHeads = [...this.heads];
+          this.cols = [5,35,15,15,15,15];
           break;
         default:
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
       }
       this.showTable = true;
