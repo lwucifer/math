@@ -66,7 +66,7 @@
           <app-dropdown
             v-if="lesson_docs.length"
             class="e-program-item__download-tooltip"
-            position="topCenter"
+            position="topRight"
           >
             <span
               slot="activator"
@@ -84,7 +84,7 @@
                   target="_blank"
                 >
                   <IconFileDownloadAlt class="icon body-1 text-info mr-2" />
-                  {{ link.name }}
+                  {{ limitLetter(link.name, 40) }}
                 </a>
               </div>
             </template>
@@ -144,7 +144,8 @@ import {
 import {
   redirectWithParams,
   getParamQuery,
-  getCountdown_MM_SS
+  getCountdown_MM_SS,
+  limitLetter,
 } from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
@@ -280,6 +281,7 @@ export default {
     ...mapMutations("elearning/study/study", [
       "setElearningStudyScormItems"
     ]),
+    limitLetter,
 
     getProgress() {
       const elearning_id = get(this, "$router.history.current.params.id", "");
