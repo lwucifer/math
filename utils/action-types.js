@@ -448,6 +448,11 @@ export const SCHOOL_TEACHERS = {
     DELETE: "schoolTeachersDelete",
 };
 
+export const SCHOOL_NEWS = {
+    LIST: "schoolNewsList",
+    DETAIL: "schoolNewsDetail",
+};
+
 export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
     LIST_TIMETABLE: "elearningStudyListTimetable",

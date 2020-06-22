@@ -354,6 +354,11 @@ export const SCHOOL_INFO = {
     SET_SCHOOL_TIMETABLE_DETAIL: "setSchoolTimeTableDetail",
 };
 
+export const SCHOOL_NEWS = {
+    SET_SCHOOL_NEWS : "setSchoolNews",
+    SET_SCHOOL_NEWS_DETAIL : "setSchoolNewsDetail"
+}
+
 export const SCHOOL_ELEARNING = {
     SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
     SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture",
