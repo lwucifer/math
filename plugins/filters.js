@@ -373,7 +373,7 @@ export function capitalizeFirstLetter(s="") {
 }
 
 export function capitalizeFirstLetterOfString(s="") {
-  console.log("[capitalizeFirstLetterOfString]", s);
+  // console.log("[capitalizeFirstLetterOfString]", s);
   const arr = s.split(" ");
   const [first, second, ...third] = arr;
   return [first, capitalizeFirstLetter(second), third.join(" ")].join(" ");
