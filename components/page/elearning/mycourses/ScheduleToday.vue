@@ -45,34 +45,23 @@
       </div>
     </div>
     <div
-      class="row schedule-item"
       v-for="(item, index) in filterTimeTableList"
       :key="index"
     >
-      <IconEllipse2 class="col-md-1" />
-      <h5 class="col-md-3">{{ get(item, "text", "") }}</h5>
-      <span class="col-md-5">{{ get(item, "content", "") }}</span>
-      <span v-if="item.start_time && !item.end_time" class="col-md-3"
-        >Thời gian bắt đầu:
-        {{ get(item, "start_time", "") | moment("HH:MM") }}</span
-      >
-      <span v-if="item.start_time && item.end_time" class="col-md-3"
-        >Thời gian học: {{ get(item, "start_time", "") | moment("HH:MM") }} -
-        {{ get(item, "end_time", "") | moment("HH:MM") }}</span
-      >
-    </div>
-    <!-- <div class="row schedule-item">
-          <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Làm bài kiểm tra</h5>
-          <span class="col-md-5">Phòng học số 3</span>
-          <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
+      <div v-if="item" class="row schedule-item">
+        <IconEllipse2 class="col-md-1" />
+        <h5 class="col-md-3">{{ get(item, "text", "") }}</h5>
+        <span class="col-md-5">{{ get(item, "content", "") }}</span>
+        <span v-if="item.start_time && !item.end_time" class="col-md-3"
+          >Thời gian bắt đầu:
+          {{ get(item, "start_time", "") | moment("HH:MM") }}</span
+        >
+        <span v-if="item.start_time && item.end_time" class="col-md-3"
+          >Thời gian học: {{ get(item, "start_time", "") | moment("HH:MM") }} -
+          {{ get(item, "end_time", "") | moment("HH:MM") }}</span
+        >
       </div>
-      <div class="row schedule-item">
-          <IconEllipse2 class="col-md-1"/>
-          <h5 class="col-md-3">Làm bài kiểm tra</h5>
-          <span class="col-md-5">Phòng học số 3</span>
-          <span class="col-md-3">Thời gian học: 15:30 - 16:30</span>
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -99,25 +88,26 @@ export default {
       const data =
         this.timeTable &&
         this.timeTable.map((item) => {
-          if (item.type == constants.TYPE_TIME_TABLE.OLCLASS) {
-            return {
-              ...item,
-              text: "Học online",
-            };
-          } else if (item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
+          if (item.type == constants.TYPE_TIME_TABLE.OLCLASS || item.type == constants.TYPE_TIME_TABLE.ELEARNING) {
             return {
               ...item,
               text: "Học online",
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
-            return {
-              ...item,
-              text: "Làm bài tập",
-            };
+            if (item.category == constants.TYPE_TIME_TABLE.EXCERCISE) {
+              return 
+            } else {
+              return {
+                ...item,
+                text: "Làm bài kiểm tra",
+                text_time: "Thời gian bắt đầu"
+              };
+            }
           } else {
             return {
               ...item,
               text: "Làm bài kiểm tra",
+              text_time: "Thời gian bắt đầu"
             };
           }
         });

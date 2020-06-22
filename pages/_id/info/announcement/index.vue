@@ -5,7 +5,7 @@
         <SchoolAccountSide :active="5" />
       </div>
       <div class="col-md-9 cc-panel">
-        <block-section title="Elearning">
+        <block-section :title="checkType == 'SOCIAL' ? '' : 'Elearning'">
           <template v-slot:content>
             <div class="wrap-notify-account-info">
               <div class="header-content">
@@ -28,7 +28,23 @@
                   </n-link>
                 </div>
               </div>
-              <div class="content-notification">
+              <template 
+                v-if="checkType == 'SOCIAL'"
+                class="content-notification" 
+              >
+                <notification-item
+                  v-for="(item, index) in notiSocial"
+                  :key="index"
+                  :dataNoti="item"
+                  :isReaded="isReaded"
+                  @read="handleReadNotifi"
+                  :typeTab="'social'"
+                />
+              </template>
+              <template 
+                v-else
+                class="content-notification" 
+              >
                 <notification-item
                   v-for="(item, index) in notiElearning"
                   :key="index"
@@ -37,13 +53,14 @@
                   @read="handleReadNotifi"
                   :typeTab="'elearning'"
                 />
-                <app-pagination
+                <!-- <app-pagination
                   :pagination="pagination"
                   @pagechange="onPageChange"
                   class="mt-5"
-                />
-              </div>
+                /> -->
+              </template>
             </div>
+            <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
           </template>
         </block-section>
       </div>
@@ -56,6 +73,7 @@ import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import IconCheck24px from "~/assets/svg/v2-icons/check_24px.svg?inline";
 import IconSettings24px from "~/assets/svg/v2-icons/settings_24px.svg?inline";
 import { mapState, mapActions } from "vuex";
+import { FETCH_SIZE, SOCIAL, ELEARNING } from "../../../../utils/config"
 const STORE_NOTIFI = "elearning/study/notifications";
 export default {
   layout: "account-info",
@@ -65,9 +83,13 @@ export default {
     IconCheck24px,
     IconSettings24px,
   },
+  // asyncData({isDev, route, store, env, params, query, req, res, redirect, error}) {
+  //   return {checkType: query.type == 'SOCIAL' ? 'SOCIAL' : 'ELEARNING'}
+  // },
   data() {
     return {
       isReaded: false,
+      checkType: this.$route.query.type == SOCIAL ? SOCIAL : ELEARNING,
       pagination: {
         total_pages: 2,
         size: 10,
@@ -79,21 +101,45 @@ export default {
     };
   },
   computed: {
-    ...mapState("elearning/study/notifications", ["notiElearning"]),
+    ...mapState(STORE_NOTIFI, ["notiElearning", "notiSocial"]),
     ...mapState("auth", ["token"]),
   },
+
   created() {
-    this.getNotifications({
-      fetch_size: 50,
-      service_type: "ELEARNING",
-    });
+    // this.getNotifications({
+    //   fetch_size: FETCH_SIZE,
+    //   service_type: ELEARNING,
+    // });
   },
+
   methods: {
     ...mapActions(STORE_NOTIFI, [
       "getNotifications", 
       "getCountNotifications", 
       "handleCheckAllRead"
     ]),
+
+    infiniteHandler($state) {
+      // axios.get(api, {
+      //   params: {
+      //     page: this.page,
+      //   },
+      // })
+      this.getNotifications({
+        fetch_size: FETCH_SIZE,
+        service_type: ELEARNING,
+      })
+      .then(res => {
+          console.log('infiniteHandler', res)
+          // if (res.data) {
+          //   this.page += 1;
+          //   this.notiElearning.push(...res.data);
+          //   $state.loaded();
+          // } else {
+          //   $state.complete();
+          // }
+        });
+    },
     handleReadNotifi(val) {
       this.isReaded = val;
     },
@@ -103,15 +149,15 @@ export default {
     handleCheckAllRead() {
       this.checkIsReadNotifications({
         type: "ALL",
-        service_type: "ELEARNING",
+        service_type: ELEARNING,
       }).then((res) => {
         if (res.data.success) {
           this.getNotifications({
-            fetch_size: 50,
-            service_type: "ELEARNING",
+            fetch_size: FETCH_SIZE,
+            service_type: ELEARNING,
           });
           this.getCountNotifications({
-            service_type: "ELEARNING",
+            service_type: ELEARNING,
           });
         }
       });

@@ -56,6 +56,7 @@
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
 import HeadTabs from "~/components/page/elearning/HeadTab";
+import { VclList } from "vue-content-loading";
 import * as actionTypes from "~/utils/action-types";
 import Notify from "~/components/page/profile/setting/tabs/notify";
 import NotifyItem from "~/components/page/profile/setting/tabs/NotifyItem";
@@ -66,6 +67,7 @@ import { get } from "lodash";
 export default {
 
   components: {
+    VclList,
     SchoolAccountSide,
     Notify,
     PaymentList,

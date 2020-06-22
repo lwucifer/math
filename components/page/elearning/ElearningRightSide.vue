@@ -75,15 +75,6 @@
       >CHỌN MUA</app-button
     >
 
-    <!-- <app-button
-      color="primary"
-      fullWidth
-      square
-      class="text-uppercase mt-3 mb-3"
-    >
-      <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
-    </app-button> -->
-
     <app-alert
       v-if="get(info, 'is_study', false)"
       class="mb-3 alert-elearning"
@@ -176,7 +167,6 @@
 <script>
 import { get } from "lodash";
 import qs from "qs";
-
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconFavoriteBorder from "~/assets/svg/v2-icons/favorite_border_24px.svg?inline";
 import IconFavorite from "~/assets/svg/v2-icons/favorite_24px.svg?inline";
@@ -197,6 +187,8 @@ import { RESPONSE_SUCCESS } from "~/utils/config.js";
 import JoinService from "~/services/elearning/Join";
 import ElearningRequestCode from "~/components/page/elearning/ElearningRequestCode";
 import PaymentModal from "~/components/page/payment/PaymentModal";
+import { getLocalDateTime } from "~/utils/moment";
+import moment from "moment";
 
 export default {
   components: {
@@ -249,7 +241,7 @@ export default {
       if (get(this, "info.progress", "-1") >= 100) return true;
       return false;
     },
-    
+
     description() {
       let html = get(this, "info.description", "");
       let div = document.createElement("div");
@@ -269,6 +261,18 @@ export default {
         default:
           break;
       }
+    },
+
+    noteElearningNotTimeYet() {
+      const start_time = get(this, "info.start_time", "");
+      const type = get(this, "info.type", "");
+      const start_time_format = getLocalDateTime(start_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      if (type === "LECTURE") {
+        return `Bài giảng sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
+      }
+      return `Khoá học sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
     },
   },
 
@@ -336,18 +340,38 @@ export default {
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
+      const starttime_enable = get(this, "info.starttime_enable", false);
+      const start_time = get(this, "info.start_time", "");
+      const is_private = get(this, "info.is_private", false);
+      const is_study = get(this, "info.is_study", false);
+      const free = get(this, "info.elearning_price.free", false);
 
-      if (get(this, "info.is_study", false)) {
+      if (starttime_enable) {
+        try {
+          const start_time_timestamp = moment(
+            getLocalDateTime(start_time)
+          ).format("x");
+          const now_timestamp = moment().format("x");
+          if (now_timestamp < start_time_timestamp) {
+            this.$toasted.error(this.noteElearningNotTimeYet);
+            return;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      if (is_study) {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
 
-      if (get(this, "info.is_private", false)) {
+      if (is_private) {
         this.showRequestCode = true;
         return;
       }
 
-      if (get(this, "info.elearning_price.free", false)) {
+      if (free) {
         const payload = {
           elearning_id,
         };
@@ -369,6 +393,12 @@ export default {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
+
+      if (get(res, "code", "") === "SCLC_1245") {
+        this.$toasted.error(this.noteElearningNotTimeYet);
+        return;
+      }
+
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 

@@ -5,12 +5,13 @@
       <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
     </h3>
     <app-input
+      :class="{'mb-0': get(error, 'name', '')}"
       @onBlur="handleChangeName"
       :counter="80"
       placeholder="Tên bài học"
       v-model="payload.name"
     />
-    <app-error :error="get(error, 'name', '')"></app-error>
+    <app-error :error="get(error, 'name', '')" class="mb-4"></app-error>
 
     <p class="text-center mb-4">Chọn loại bài học</p>
 
@@ -46,20 +47,6 @@
       <a
         href
         class="clc-type-tab-item"
-        :class="{ active: tabType === 'video' }"
-        @click.prevent="changeTabType('video')"
-      >
-        <span class="clc-type-tab-item__icon">
-          <IconRadioButtonChecked class="icon mr-2" />
-          <IconVideo class="icon mr-2" />
-          <span class="clc-type-tab-item__text">Video</span>
-        </span>
-        <!-- <span class="clc-type-tab-item__text">Video</span> -->
-      </a>
-
-      <a
-        href
-        class="clc-type-tab-item"
         :class="{ active: tabType === 'document' }"
         @click.prevent="changeTabType('document')"
       >
@@ -72,6 +59,20 @@
           <span class="clc-type-tab-item__text">Văn bản</span>
         </span>
         <!-- <span class="clc-type-tab-item__text"></span> -->
+      </a>
+
+      <a
+        href
+        class="clc-type-tab-item"
+        :class="{ active: tabType === 'video' }"
+        @click.prevent="changeTabType('video')"
+      >
+        <span class="clc-type-tab-item__icon">
+          <IconRadioButtonChecked class="icon mr-2" />
+          <IconVideo class="icon mr-2" />
+          <span class="clc-type-tab-item__text">Video</span>
+        </span>
+        <!-- <span class="clc-type-tab-item__text">Video</span> -->
       </a>
     </div>
 
@@ -103,6 +104,7 @@
     <LessonSelectDocument
       v-if="tabType === 'document'"
       @handleSelectDocument="handleSelectDocument"
+      @handleSelectUrl="handleSelectUrl"
       @handleReset="handleReset"
       :lesson="lesson"
     />
@@ -130,8 +132,43 @@
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
+      title="Xác nhận"
+      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmDoc"
+      :confirmLoading="confirmLoadingDoc"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      :title="changingTitleDoc"
+      :description="chagingDescriptionDoc"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmVideo"
+      :confirmLoading="confirmLoadingVideo"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      :title="changingTitle"
+      :description="chagingDescription"
+    />
+
+    <app-modal-confirm
+      centered
+      v-if="showModalConfirmScorm"
+      :confirmLoading="confirmLoadingScorm"
+      @ok="handleOk"
+      @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      title="Upload scorm bài học"
+      :description="chagingDescription"
     />
   </div>
 </template>
@@ -198,7 +235,13 @@ export default {
     return {
       tabType: "video",
       showModalConfirm: false,
+      showModalConfirmVideo: false,
+      showModalConfirmScorm: false,
+      showModalConfirmDoc: false,
       confirmLoading: false,
+      confirmLoadingVideo: false,
+      confirmLoadingScorm: false,
+      confirmLoadingDoc: false,
       noLesson: get(this, "chapter.lessons", "").length,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
@@ -209,6 +252,7 @@ export default {
         article_content: "",
         id: get(this, "lesson.id", ""),
       },
+      modalType: "",
       error: {
         name: "",
         content: "",
@@ -223,6 +267,53 @@ export default {
   computed: {
     edit() {
       return !!get(this, "lesson.id", "");
+    },
+
+    changingTitle() {
+      if (this.modalType == "url") {
+        return "Thêm video bài học";
+      }
+
+      return "Upload video bài học";
+    },
+
+    changingTitleDoc() {
+      if (this.modalType == "url" || this.payload.article_content.length > 0 && this.edit == false) {
+        return "Thêm bài học";
+      } else if (this.edit) {
+        return "Xác nhận"
+      }
+
+      return "Upload bài học";
+    },
+
+    chagingDescription() {
+      if (this.confirmLoadingVideo) {
+        return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == "url") {
+        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?";
+      }
+      return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
+    },
+
+    chagingDescriptionDoc() {
+      if (this.confirmLoadingDoc) {
+        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == "url" || this.payload.repository_file_id) {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+      } else if (this.payload.article_content && this.edit == false){
+        return "Bạn có chắc chắn muốn thêm bài học này?"
+      } else if (this.edit) {
+        return "Bạn có chắc chắn là muốn lưu thay đổi này?"
+      }
+      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+    },
+
+    chagingBtnOk() {
+      if (this.confirmLoadingVideo || this.confirmLoadingDoc) {
+        return "Đang tải";
+      }
+      return "Xác nhận";
     },
   },
 
@@ -295,6 +386,7 @@ export default {
     },
 
     handleSelectFile(data) {
+      this.modalType = "upload";
       this.payload.type = data.type;
       this.payload.lesson = data.lesson;
       this.payload.repository_file_id = "";
@@ -302,6 +394,7 @@ export default {
     },
 
     handleSelectUrl(file) {
+      this.modalType = "url";
       this.payload.type = file.type;
       this.payload.lesson = "";
       this.payload.repository_file_id = file.id;
@@ -309,7 +402,20 @@ export default {
     },
 
     handleAddContent() {
-      this.showModalConfirm = true;
+      if (this.payload.type == "VIDEO") {
+        this.showModalConfirmVideo = true;
+      } else if (this.payload.type == "SCORM") {
+        this.showModalConfirmScorm = true;
+      } else if (
+        this.payload.article_content.length > 0 ||
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        this.showModalConfirmDoc = true;
+      } else {
+        this.showModalConfirm = true;
+      }
     },
 
     async handleOk() {
@@ -317,7 +423,19 @@ export default {
         this.handleCancelModal();
         return;
       }
-      this.confirmLoading = true;
+      if (this.payload.type == "VIDEO") {
+        this.confirmLoadingVideo = true;
+      } else if (this.payload.type == "SCORM") {
+        this.confirmLoadingScorm = true;
+      } else if (
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        this.confirmLoadingDoc = true;
+      } else {
+        this.confirmLoading = true;
+      }
 
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
@@ -347,8 +465,15 @@ export default {
     },
 
     handleCancelModal() {
+      this.modalType = "";
       this.showModalConfirm = false;
       this.confirmLoading = false;
+      this.showModalConfirmDoc = false;
+      this.confirmLoadingDoc = false;
+      this.showModalConfirmVideo = false;
+      this.confirmLoadingVideo = false;
+      this.showModalConfirmScorm = false;
+      this.confirmLoadingScorm = false;
     },
 
     handleSelectDocument(type, article_content, file_id, lesson) {
