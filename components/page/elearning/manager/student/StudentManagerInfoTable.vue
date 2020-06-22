@@ -23,7 +23,7 @@
 
       <template v-slot:cell(mark)="{row}">
         <td style="width:25%">
-          <span v-if="!row.point" class="text-warning">Chưa chấm điểm</span>
+          <span v-if="row.point < 0" class="text-warning">Chưa chấm điểm</span>
           <span
             v-else-if="row.point > 6"
             class="text-primary"
