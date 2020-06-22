@@ -48,33 +48,41 @@
       </div>
       <div v-if="tab === 'elearning'">
         <div class="tab-notification">
+
           <notification-item
             v-for="(item, index) in notiElearning"
             :key="index"
             :dataNoti="item"
             :typeTab="tab"
           />
+
+          <client-only> 
+            <infinite-loading @infinite="infiniteHandler">
+              <template slot="no-more">Không còn tin nhắn nào.</template>
+              <template slot="no-results">Không còn tin nhắn nào.</template>
+            </infinite-loading>
+          </client-only>
+          
         </div>
-        <!-- <client-only>
-          <infinite-loading @infinite="infiniteHandler">
-            <template slot="no-more">Không còn tin nhắn nào.</template>
-          </infinite-loading>
-        </client-only> -->
       </div>
       <div v-if="tab === 'social'">
         <div class="tab-notification">
+
           <notification-item
             v-for="(item, index) in notiSocial"
             :key="index"
             :dataNoti="item"
             :typeTab="tab"
           />
+
+          <client-only>
+            <infinite-loading @infinite="infiniteHandler">
+              <template slot="no-more">Không còn tin nhắn nào.</template>
+              <template slot="no-results">Không còn tin nhắn nào.</template>
+            </infinite-loading>
+          </client-only>
+
         </div>
-         <!-- <client-only>
-          <infinite-loading @infinite="infiniteHandler">
-            <template slot="no-more">Không còn tin nhắn nào.</template>
-          </infinite-loading>
-        </client-only> -->
       </div>
 
       <div class="footer-notification">
@@ -106,6 +114,7 @@ export default {
       showMenuNotifi: false,
       tab: "elearning",
       isReaded: false,
+      fromNotifyId: "",
     };
   },
 
@@ -137,11 +146,27 @@ export default {
     ]),
     ...mapMutations(STORE_NOTIFI, ["setCheckFireBase"]),
 
+    async infiniteHandler($state) {
+      this.fromNotifyId =
+        this.tab == "social"
+          ? this.notiSocial[this.notiSocial.length - 1]
+          : this.notiElearning[this.notiElearning.length - 1];
+      this.getNotifications({
+        fetch_size: FETCH_SIZE,
+        service_type: this.tab == "social" ? SOCIAL : ELEARNING,
+        from_notification_id: this.fromNotifyId && this.fromNotifyId.id,
+      }).then((res) => {
+        if (res && res.length) {
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
+    },
+
     changeTab(_tab) {
       this.tab = _tab;
     },
-
-    infiniteHandler($state) {},
 
     handleClickOutside() {
       this.showMenuNotifi = false;
