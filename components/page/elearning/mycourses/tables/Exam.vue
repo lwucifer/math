@@ -12,12 +12,6 @@
         <td :title="get(row, 'name', '')">
           <span>
             {{ get(row, 'name', '') | truncStrFilter(30) }}
-            <sup
-              class="elm--required-symbol"
-              v-if="get(row, 'required', false)"
-            >
-              <icon-star height="14" width="14" />
-            </sup>
           </span>
         </td>
       </template>
@@ -82,12 +76,6 @@
       </template>
     </app-table>
     <!--End table-->
-    <p class="elm--text-desc text-center mt-4" v-if="list.length > 0">
-      <i>
-        Các bài tập có đánh dấu * là các bài kiểm tra
-        <b>bắt buộc</b>
-      </i>
-    </p>
   </div>
 </template>
 
