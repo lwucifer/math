@@ -429,6 +429,10 @@ export default {
     },
 
     async handleAddExam() {
+      if (!this.checkPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
       this.showModalConfirm = true;
     },
 
@@ -441,11 +445,6 @@ export default {
     },
 
     async handleOk() {
-      if (!this.checkPayload()) {
-        this.handleCancel();
-        return;
-      }
-
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");

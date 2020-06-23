@@ -294,6 +294,7 @@ export default {
 
     async handleAddExcercise() {
       if (!this.checkPayload()) {
+        this.$toasted.error("Invalid params");
         return;
       }
       this.showModalConfirm = true;
