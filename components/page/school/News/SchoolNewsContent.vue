@@ -16,13 +16,16 @@
                         </div>
                     </div>
                     <app-pagination
-                        :pagination="pagination"
+                        :pagination="filterPagination"
+                        @pagechange="pagechange"
                         class="mt-5"
                     />
                 </div>
             </div>
             <div class="col-md-4">
-                <SchoolNewsMenuSide/>
+                <SchoolNewsMenuSide
+                    @changeCategory="changeCategory"
+                />
             </div>
         </div>
     </div>
@@ -53,9 +56,17 @@ export default {
                 first: 1,
                 last: 0,
                 number: 1
+            },
+            params:{
+                organization_id : this.$route.params.id,
+                category_id:1,
+                size:10,
+                page:null
+
             }
          }
     },
+    
     watch:{
         newsList:{
             handler:function(){
@@ -64,16 +75,26 @@ export default {
         }
     },
     computed:{
-        ...mapState("elearning/school/school-news", { newsList: "schoolNews" })
+        ...mapState("elearning/school/school-news", { newsList: "schoolNews" }),
+        filterPagination(){
+            this.pagination.total_pages = get(this,'newsList.total_pages','');
+            this.pagination.size = get(this,'newsList.size','');
+            this.pagination.total_elements = get(this,'newsList.total_elements','');
+            this.pagination.first =  get(this,'newsList.first',0);
+            this.pagination.last =  get(this,'newsList.last',0);
+            this.pagination.number =  get(this,'newsList.number','');
+            return this.pagination
+        }
     },
     methods:{
         showDetailNews(newsID){
             this.isDetail= true;
-            this.$router.push({query: { tab: 'news',id: newsID}})
+            this.$router.push({query: { tab: 'news',news_id: newsID}})
         },
         async fetchNewsList(){
-            const organization_id = this.$route.params.id;
-            const data = { organization_id };
+    
+            const data = this.params;
+            console.log('params',data)
             await this.$store.dispatch(
             `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.LIST}`,
                 data
@@ -87,6 +108,17 @@ export default {
             }else{
                 this.isDetail= false;
             }
+        },
+        changeCategory(cID){
+            this.params.category_id = cID;
+            this.params.size = 10;
+            this.params.page = 1;
+            this.fetchNewsList();
+        },
+        pagechange(val){
+            this.params.page = val.number + 1;
+            console.log(this.params.page)
+            this.fetchNewsList();
         },
         get
     },

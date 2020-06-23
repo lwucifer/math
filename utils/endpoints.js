@@ -105,6 +105,7 @@ export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_
 export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
 export const ELEARNING_STUDY_TIMETABLE = `/elearning/study/timetable`;
 export const ELEARNING_NOTIFICATION = `/elearning/notifications`;
+export const PUBLIC_CATEGORY = `/elearning/public/category`;
 
 /**
  * ONLINE CLASS
