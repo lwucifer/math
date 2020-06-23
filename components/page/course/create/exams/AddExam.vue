@@ -223,6 +223,7 @@
           ><span class="text-base">Áp dụng</span></app-checkbox
         >
       </div>
+      <app-error :error="get(error, 'open_time', '')" />
 
       <div class="d-flex align-items-center">
         <p class="w-120">Thời gian kết thúc:</p>
@@ -237,6 +238,7 @@
           ><span class="text-base">Áp dụng</span></app-checkbox
         >
       </div>
+      <app-error :error="get(error, 'close_time', '')" />
     </div>
 
     <div class="d-flex justify-content-end">
@@ -282,7 +284,7 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
 import numeral from "numeral";
-import { getUTCDateTime } from "../../../../../utils/moment";
+import { getUTCDateTime, getLocalDateTime } from "~/utils/moment";
 
 export default {
   components: {
@@ -298,6 +300,7 @@ export default {
       general: "general",
       lesson: "lesson",
       exams: "exams",
+      setting: "setting",
     }),
     disabledType() {
       return !!(
@@ -338,6 +341,8 @@ export default {
         title: "",
         type: "",
         weight: "",
+        opent_time: "",
+        close_time: "",
       },
     };
   },
@@ -353,7 +358,45 @@ export default {
       check = this.checkTitle();
       check = this.checkType();
       check = this.checkWeight();
+      check = this.checkOpenTime();
+      check = this.checkClosetime();
       return check;
+    },
+
+    checkOpenTime() {
+      this.error.open_time = "";
+      if (!this.payload.opentime_enable) return true;
+      if (!get(this, "setting.starttime_enable", true)) return true;
+      if (!get(this, "setting.start_time", true)) return true;
+      if (!this.payload.open_time) return true;
+      const open_time_timestamp = moment(this.payload.open_time).format("x");
+      const start_time_timestamp = getLocalDateTime(
+        this.setting.start_time
+      ).format("x");
+      if (open_time_timestamp - start_time_timestamp < 3 * 24 * 3600 * 1000) {
+        this.error.open_time =
+          "Thời gian bắt đầu bài kiểm tra phải lớn hơn thời gian bắt đầu khoá học ít nhất 3 ngày";
+        return false;
+      }
+      return true;
+    },
+
+    checkClosetime() {
+      this.error.close_time = "";
+      if (!this.payload.closetime_enable) return true;
+      if (!get(this, "setting.endtime_enable", true)) return true;
+      if (!get(this, "setting.end_time", true)) return true;
+      if (!this.payload.close_time) return true;
+      const close_time_timestamp = moment(this.payload.close_time).format("x");
+      const end_time_timestamp = getLocalDateTime(this.setting.end_time).format(
+        "x"
+      );
+      if (end_time_timestamp - close_time_timestamp < 3 * 24 * 3600 * 1000) {
+        this.error.close_time =
+          "Thời gian kết thúc bài kiểm tra phải nhỏ hơn thời gian kết thúc khoá học ít nhất 3 ngày";
+        return false;
+      }
+      return true;
     },
 
     checkWeight() {
@@ -422,13 +465,19 @@ export default {
 
     handleChangeOpenTime(date) {
       this.payload.open_time = date;
+      this.checkOpenTime();
     },
 
     handleChangeCloseTime(date) {
       this.payload.close_time = date;
+      this.checkClosetime();
     },
 
     async handleAddExam() {
+      if (!this.checkPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
       this.showModalConfirm = true;
     },
 
@@ -441,11 +490,6 @@ export default {
     },
 
     async handleOk() {
-      if (!this.checkPayload()) {
-        this.handleCancel();
-        return;
-      }
-
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");
