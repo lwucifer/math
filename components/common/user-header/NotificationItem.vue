@@ -156,4 +156,8 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.content-item{
+  color: black;
+}
+</style>
