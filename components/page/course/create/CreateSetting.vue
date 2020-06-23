@@ -62,6 +62,7 @@
             ><span class="text-base">Áp dụng</span></app-checkbox
           >
         </div>
+        <app-error :error="get(error, 'end_time', '')" />
       </div>
 
       <div class="mb-4">
@@ -211,7 +212,11 @@ import IconWarning from "~/assets/svg/icons/warning.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 import SelectDate from "~/components/page/course/create/setting/SelectDate";
-import { getUTCDateTime, getUTCDateTimeHH_MM_A } from "~/utils/moment";
+import {
+  getUTCDateTime,
+  getUTCDateTimeHH_MM_A,
+  getLocalDateTime,
+} from "~/utils/moment";
 import moment from "moment";
 
 export default {
@@ -250,6 +255,7 @@ export default {
         price: "",
         comment_allow: "",
         free: "",
+        end_time: "",
       },
     };
   },
@@ -295,6 +301,7 @@ export default {
       check = this.handleCheckPrivacy();
       check = this.handleCheckCommentAllow();
       check = this.handleCheckPrice();
+      check = this.handleCheckEndDate();
       return check;
     },
 
@@ -333,12 +340,29 @@ export default {
       return true;
     },
 
+    handleCheckEndDate() {
+      this.error.end_time = "";
+      if (!this.payload.start_time) return true;
+      if (!this.payload.end_time) return true;
+      if (!this.payload.starttime_enable) return true;
+      if (!this.payload.endtime_enable) return true;
+      const start_time_timestamp = moment(this.payload.start_time).format("x");
+      const end_time_timestamp = moment(this.payload.end_time).format("x");
+      if (end_time_timestamp - start_time_timestamp < 24 * 7 * 3600 * 1000) {
+        this.error.end_time =
+          "Thời gian kết thúc phải hơn thời gian bắt đầu 7 ngày";
+        return false;
+      }
+      return true;
+    },
+
     handleChangeStartDate(date) {
       this.payload.start_time = date;
     },
 
     handleChangeEndDate(date) {
       this.payload.end_time = date;
+      this.handleCheckEndDate();
     },
 
     handleChangePrice(e) {
@@ -360,6 +384,16 @@ export default {
     handleChangeSetting() {
       if (get(this, "setting.setting", false)) {
         this.payload = { ...this.setting };
+        if (this.payload.starttime_enable) {
+          this.payload.start_time = getLocalDateTime(
+            this.payload.start_time
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+        if (this.payload.endtime_enable) {
+          this.payload.end_time = getLocalDateTime(
+            this.payload.end_time
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
         if (get(this, "setting.price", "") === 0) {
           this.free = 2;
         }
@@ -386,6 +420,7 @@ export default {
 
     handleCLickSave() {
       if (!this.handleCheckPayload()) {
+        this.$toasted.error("Invalid params");
         return;
       }
       this.showModalConfirm = true;

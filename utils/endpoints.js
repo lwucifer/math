@@ -11,7 +11,7 @@ export const CHECK_PHONE = `/user/public/validate`;
 export const FORGOT_PASSWORD = `/user/public/resetpwd`;
 export const RESET_PASSWORD_REQUEST = `/user/public/resetpwd/request`;
 export const CHANGE_PASSWORD = `/user/account/changepwd`;
-export const ACCOUNT_PERSONAL = `/social/api/user/profile`;
+export const ACCOUNT_PERSONAL = `/social/profile`;
 export const ACCOUNT_PROFILE = `/user/account/profile`;
 export const ACCOUNT_LINK = `/user/account/link`;
 export const ACCOUNT_PHONE = `/account/phone`;
@@ -196,8 +196,6 @@ export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
 export const ROOM = `chat/rooms`;
-export const MEDIA = `media`;
-export const SOCIAL_FRIENDS = `social/friends`
 
 /**
  * TEACHING
@@ -254,3 +252,10 @@ export const ACCOUNT_BANK_VALIDATE = `/user/account/banks/validate`;
 export const ACCOUNT_BALANCE = `/user/account/balance`;
 export const ACCOUNT_WITHDRAW = `/user/account/withdraw`;
 export const INFO_SUPPORT = `user/account/help`;
+
+/**
+ * SOCIAL
+ */
+export const MEDIA = `media`;
+export const SOCIAL_FRIENDS = `social/friends`
+export const PROFILE_AVATAR = `social/profile/avatar`;

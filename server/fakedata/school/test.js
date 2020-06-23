@@ -224,7 +224,7 @@ export const SCHOOL_SUMMARY = {
   description:
     "<p><span>Địa chỉ:</span><b> 15 Xuân Diệu, Tây Hồ, Hà Nội</b></p>" +
     "<p><span>Số điện thoại: </span></span><b> 0906771634</b></p>" +
-    "<p><span>Email:</span><b> Scholly@gmail.com</b></p>" +
+    "<p><span>Email:</span><b> Schoolly@gmail.com</b></p>" +
     "<p><span>Mã trường:</span><b> MHDUAA12</b></p>",
   level: 1,
   teachers: 500,

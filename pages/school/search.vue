@@ -29,7 +29,15 @@
           </div>
         </div>
       </div>
-      <SchoolListBox v-else :category="selectedCategory"></SchoolListBox>
+      <div v-else>
+        <template v-if="get(schoolSummary, 'total_school', 0) == 0">
+          <div class="text-gray-2 caption text-center">
+          <img src="~assets/images/elearning/no-data.png" alt="" />
+          </div>
+        </template>
+
+        <SchoolListBox v-else :category="selectedCategory"></SchoolListBox>
+      </div>
     </div>
   </div>
 </template>
