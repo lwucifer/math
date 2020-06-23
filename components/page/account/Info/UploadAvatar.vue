@@ -40,7 +40,8 @@ export default {
   data() {
     return {
       avatar: [],
-      avatarSrc: this.avSrc
+      avatarSrc: this.avSrc,
+      avatarFull: {}
     };
   },
   computed: {
@@ -67,16 +68,15 @@ export default {
       // console.log("[room_avatar]", fileList[0]);
       await this.uploadMedia(body).then(result => {
         if (result.data) {
-          this.avatarUrl = result.data[0].full_path
-            ? result.data[0].full_path.low
-            : "";
+          this.avatarUrl = result.data[0].path ? result.data[0].path : "";
+          this.avatarFull = result.data[0].full_path;
           const data = {
             avatar_url: this.avatarUrl
           };
           console.log("avatar", data);
-          this.accountPersonalEditAvatar(data).then(result => {
-            if (result.data) {
-              this.setTokenAvatar(result.data[0].avatar_url);
+          this.accountPersonalEditAvatar(data).then(res => {
+            if (res.data) {
+              this.setTokenAvatar(this.avatarFull);
             }
           });
         }
