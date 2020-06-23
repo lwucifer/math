@@ -335,7 +335,11 @@ export default {
     ...mapState("auth", ["token"]),
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     filterAvatarSrc() {
-      return this.personalList ? this.personalList.avatar_url : "";
+      return this.personalList &&
+        this.personalList.avatar &&
+        this.personalList.avatar.low
+        ? this.personalList.avatar.low
+        : "";
     },
     filterLinkList() {
       return this.linkList.data && this.linkList.data.linked == true
