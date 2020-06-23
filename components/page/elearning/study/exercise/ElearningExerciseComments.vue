@@ -18,7 +18,7 @@
         v-for="(s, index) in mergeSubmissionQuestion"
         :key="index"
       >
-        <div class="ee-comment-item__title">Câu hỏi {{ s.index }}</div>
+        <div class="ee-comment-item__title">{{ s.index }}. Câu hỏi {{ s.index }}</div>
         <div class="ee-comment-item__content" v-html="s.content"></div>
         <!-- <app-input
           textarea
@@ -57,20 +57,20 @@ export default {
         const answered = this.submissions.find(s => s.question_id == q.id);
         let correct_answer = null;
         let student_answer = null;
-        let result = null;
+        // let result = null;
         let isUserTrue = false;
         if (answered) {
-          correct_answer = q.answers.find(a => a.id == answered.correct_answer);
+          // correct_answer = q.answers.find(a => a.id == answered.correct_answer);
           student_answer = answered.student_answer;
-          result = answered.result;
+          // result = answered.result;
           isUserTrue = answered.correct_answer == answered.student_answer;
         }
         return {
           ...q,
           // content: `${index + 1}.xxx${q.content}`,
-          correct_answer,
+          // correct_answer,
           student_answer,
-          result,
+          // result,
           isUserTrue
         };
       });

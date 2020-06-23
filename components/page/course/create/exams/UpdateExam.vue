@@ -254,6 +254,7 @@ import { getParamQuery, useEffect } from "~/utils/common";
 import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
+import { getLocalDateTime, getUTCDateTime } from "~/utils/moment";
 
 export default {
   components: {
@@ -314,6 +315,16 @@ export default {
       if (this.payload.weight && this.payload.weight !== "") {
         this.typeRadio = "weight";
       }
+      if (this.payload.opentime_enable) {
+        this.payload.open_time = getLocalDateTime(
+          this.payload.open_time
+        ).format("YYYY-MM-DD HH:mm:ss");
+      }
+      if (this.payload.closetime_enable) {
+        this.payload.close_time = getLocalDateTime(
+          this.payload.close_time
+        ).format("YYYY-MM-DD HH:mm:ss");
+      }
     },
 
     handleChangeCoefficient(value) {
@@ -347,6 +358,13 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
 
       let data = { ...this.payload };
+      data.open_time = getUTCDateTime(data.open_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      data.close_time = getUTCDateTime(data.close_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+
       if (!data.open_time) delete data.open_time;
       if (!data.close_time) delete data.close_time;
       if (this.typeRadio === "coefficient") delete data.weight;

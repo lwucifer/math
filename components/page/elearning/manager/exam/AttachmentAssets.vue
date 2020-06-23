@@ -11,7 +11,7 @@
         target="_blank"
         class="btn--download-attachment"
       >
-        <span class="emt__file-name font-weight-semi-bold text-primary mr-2">{{ link | truncStrFilter(30) }}</span>
+        <span class="emt__file-name font-weight-semi-bold text-primary mr-2">{{ title | truncStrFilter(30) }}</span>
         <span v-if="size" class="emt__file-size mr-3">{{ size }}</span>
         <IconDownload class="icon fill-opacity-1"/>
       </a>
@@ -35,6 +35,10 @@
       },
       size: {
         type: String | Number
+      },
+      title: {
+	type: String,
+        default: ""
       }
     },
     data() {

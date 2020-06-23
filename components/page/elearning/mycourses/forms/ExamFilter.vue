@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div
         class="ml-0 filter-form__item filter-form__item--search border-0"
-        style="max-width: 36rem; min-width: 30rem;"
+        style="max-width: 33rem; min-width: 28rem;"
       >
         <app-search
           class="w-100"
@@ -50,7 +50,7 @@
           has-border
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 13.7rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="optionOpts"

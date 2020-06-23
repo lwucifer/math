@@ -11,7 +11,7 @@ export const FIREBASE_TOKEN = "firebase_token";
 
 export const RESPONSE_SUCCESS = true;
 
-export const FETCH_SIZE = 50;
+export const FETCH_SIZE = 9;
 export const SOCIAL = "SOCIAL";
 export const ELEARNING = "ELEARNING";
 
@@ -23,6 +23,7 @@ export const DATETIME_HH_MM = "HH:mm";
 export const DATETIME_HH_MM_A = "h:mm A";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
+export const DATETIME_FULL_DATE_TEXT = "HH:mm dddd, DD [tháng] MM [năm] YYYY";
 export const DATETIME_FULL_WEEK_DAY = "dddd, DD/MM/YYYY, h:mm A";
 export const DATETIME_HH_MM_DD_MM_YY = "HH:mm DD/MM/YYYY";
 export const DATETIME_HH_MM_DD_MM_YY_DASH = "HH:mm - DD/MM/YYYY";

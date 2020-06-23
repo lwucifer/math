@@ -120,6 +120,7 @@
       :data="elearningList"
       multiple-selection
       v-if="showTable"
+      :cols="cols"
     >
       <template v-slot:cell(privacy)="{ row }">
         <td>
@@ -142,7 +143,7 @@
           <span
             v-if="!row.pricefree && row.price.original_price > 0"
             class="color-blue"
-          >{{numeral(row.price.original_price).format()}}đ</span>
+          >{{row.price.original_price | numeralFormat("0,0.00")}}đ</span>
         </td>
       </template>
       <template v-slot:cell(publish_date)="{ row }">
@@ -246,7 +247,6 @@ import IconNote from "~/assets/svg/icons/note-alt.svg?inline";
 import IconEdit from "~/assets/svg/icons/edit.svg?inline";
 import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
 
-import numeral from "numeral";
 import { getDateBirthDay, getDateBirthDayUTC } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -282,6 +282,7 @@ export default {
 
   data() {
     return {
+      cols: [5,35,15,15,15,15],
       loaded: false,
       noteReject: "",
       allOpt: {
@@ -300,11 +301,6 @@ export default {
       previewInfo: {},
       ids: [],
       heads: [
-        {
-          name: "",
-          text: "",
-          selectAll: true
-        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -331,11 +327,6 @@ export default {
       ],
       heads2: [
         {
-          name: "",
-          text: "",
-          selectAll: true
-        },
-        {
           name: "name",
           text: "Bài giảng và khóa học",
           sort: true
@@ -355,11 +346,6 @@ export default {
         }
       ],
       heads3: [
-        {
-          name: "",
-          text: "",
-          selectAll: true
-        },
         {
           name: "name",
           text: "Bài giảng và khóa học",
@@ -458,13 +444,16 @@ export default {
         case "PENDING":
         case "WAITING_FOR_APPROVE":
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
         case "APPROVED":
         case null:
           this.currentHeads = [...this.heads];
+          this.cols = [5,35,15,15,15,15];
           break;
         default:
           this.currentHeads = [...this.heads2];
+          this.cols = [5,45,15,15,20];
           break;
       }
       this.showTable = true;
@@ -482,7 +471,6 @@ export default {
   },
 
   methods: {
-    numeral,
     getDateBirthDay,
     getDateBirthDayUTC,
 
@@ -686,6 +674,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/components/elearning/_elearning-filter-form.scss";
-@import "~/assets/scss/components/elearning/_elearning-history.scss";
 @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
 </style>

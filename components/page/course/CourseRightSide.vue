@@ -15,14 +15,14 @@
           {{
             numeral(
               get(favourites, "content.0.price.original_price", 0)
-            ).format() | toThousandFilter
+            ).format() | numeralFormat("0,0.00")
           }}đ
         </span>
         <span class="price--secondary">
           {{
             numeral(
               get(favourites, "content.0.price.original_price", 0)
-            ).format() | toThousandFilter
+            ).format() | numeralFormat("0,0.00")
           }}đ
         </span>
       </div>

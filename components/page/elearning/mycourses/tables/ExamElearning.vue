@@ -142,7 +142,7 @@
           },
           {
             name: "tests",
-            text: "Số bài tập",
+            text: "Số bài kiểm tra",
           },
           {
             name: "missing",

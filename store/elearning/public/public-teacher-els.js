@@ -33,6 +33,7 @@ const actions = {
           .SET_ELEARNING_PUBLIC_ELEARNING_TEACHER_ELS_LIST,
         result.data
       );
+      return result;
     } catch (error) {
       console.log("[Elearning public els] list.error", error);
     }

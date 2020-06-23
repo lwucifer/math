@@ -10,11 +10,13 @@
             <span class="h4">{{ get(info, 'name', '') }}</span>
           </div>
           <div>
-            <span>{{ get(info, 'school_name', '') }}</span>
+	    <n-link class="text-decoration-none text-base" to='/' target="_blank">
+            	<span>{{ get(info, 'school_name', '') }}</span>
+            </n-link>
           </div>
           <div class="">
             <app-stars class="d-inline-block mr-3" :stars="get(info, 'rate', 1)" :size="20"/>
-            <strong>{{ get(info, 'rate', 0) | numeralFormat('0.00') }}</strong>
+            <strong>{{ get(info, 'rate', 0) | numeralFormat('0.0') }}</strong>
             <!--<span> ({{ get(info, 'rate_total', 0) }})</span>-->
           </div>
           <div class="d-flex align-items-center">

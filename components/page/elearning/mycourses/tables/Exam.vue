@@ -82,9 +82,9 @@
       </template>
     </app-table>
     <!--End table-->
-    <p class="elm--text-desc text-center mt-4">
+    <p class="elm--text-desc text-center mt-4" v-if="list.length > 0">
       <i>
-        Các bài tập có đánh dấu * là các bài tập
+        Các bài tập có đánh dấu * là các bài kiểm tra
         <b>bắt buộc</b>
       </i>
     </p>
@@ -137,7 +137,7 @@ export default {
       heads: [
         {
           name: "name",
-          text: "Tiêu đề bài tập"
+          text: "Tiêu đề bài kiểm tra"
         },
         {
           name: "type",
@@ -191,9 +191,9 @@ export default {
     getScoreDetail(item) {
       let desc = "";
       if (this.hasScore(item)) {
-        desc = `(${get(item, "score", 0)}/${get(
+        desc = `(${get(item, "mark", 0)}/${get(
           item,
-          "mark",
+          "max_score",
           0
         )}) ${subResult2Txt(get(item, "result", 10))}`;
       } else {
