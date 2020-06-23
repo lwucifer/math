@@ -245,18 +245,18 @@ export default {
   },
   created() {
     this.isAuthenticated && this.getNotiUnread();
-    this.getNotifications({
+    this.isAuthenticated && this.getNotifications({
         fetch_size: FETCH_SIZE,
         service_type: ELEARNING
     });
-    this.getNotifications({
+    this.isAuthenticated && this.getNotifications({
         fetch_size: FETCH_SIZE,
         service_type: SOCIAL
     });
-    this.getCountNotifications({
+    this.isAuthenticated && this.getCountNotifications({
         service_type: ELEARNING
     });
-    this.getCountNotifications({
+    this.isAuthenticated && this.getCountNotifications({
         service_type: SOCIAL
     });
   },
