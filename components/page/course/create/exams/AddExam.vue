@@ -282,7 +282,7 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import { createPayloadExercise } from "~/models/course/AddCourse";
 import numeral from "numeral";
-import { getUTCDateTime } from '../../../../../utils/moment';
+import { getUTCDateTime } from "../../../../../utils/moment";
 
 export default {
   components: {
@@ -429,6 +429,10 @@ export default {
     },
 
     async handleAddExam() {
+      if (!this.checkPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
       this.showModalConfirm = true;
     },
 
@@ -441,18 +445,21 @@ export default {
     },
 
     async handleOk() {
-      if (!this.checkPayload()) {
-        this.handleCancel();
-        return;
-      }
-
       this.confirmLoading = true;
 
       this.payload.elearning_id = get(this, "general.id", "");
 
       let data = { ...this.payload };
-      data.open_time = getUTCDateTime(data.open_time).format('YYYY-MM-DD HH:mm:ss')
-      data.close_time = getUTCDateTime(data.close_time).format('YYYY-MM-DD HH:mm:ss')
+      if (data.opentime_enable) {
+        data.open_time = getUTCDateTime(data.open_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
+      if (data.closetime_enable) {
+        data.close_time = getUTCDateTime(data.close_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
 
       if (!data.open_time) delete data.open_time;
       if (!data.close_time) delete data.close_time;

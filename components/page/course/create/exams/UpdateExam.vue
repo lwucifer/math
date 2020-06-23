@@ -277,6 +277,11 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
+    },
   },
 
   mounted() {
@@ -340,7 +345,10 @@ export default {
     },
 
     async handleAddExam() {
-      if (this.disabled_all) return;
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 
@@ -358,12 +366,17 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
 
       let data = { ...this.payload };
-      data.open_time = getUTCDateTime(data.open_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      data.close_time = getUTCDateTime(data.close_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
+
+      if (data.opentime_enable) {
+        data.open_time = getUTCDateTime(data.open_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
+      if (data.closetime_enable) {
+        data.close_time = getUTCDateTime(data.close_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
 
       if (!data.open_time) delete data.open_time;
       if (!data.close_time) delete data.close_time;

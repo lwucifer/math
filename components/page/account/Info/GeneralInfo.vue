@@ -335,9 +335,7 @@ export default {
     ...mapState("auth", ["token"]),
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     filterAvatarSrc() {
-      return this.personalList && this.personalList.avatar
-        ? this.personalList.avatar.low
-        : "https://picsum.photos/170/170";
+      return this.personalList ? this.personalList.avatar_url : "";
     },
     filterLinkList() {
       return this.linkList.data && this.linkList.data.linked == true

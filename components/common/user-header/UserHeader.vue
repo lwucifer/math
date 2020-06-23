@@ -1,12 +1,9 @@
 <template>
   <div class="the-header__user">
-    <div 
-    @click.prevent="onClickUserHeader()"
-    v-click-outside="handleClickOutside"
-    >
+    <div @click.prevent="onClickUserHeader()" v-click-outside="handleClickOutside">
       <app-avatar
         class="the-header__user-avt"
-        :src="$store.state.auth.token.avatar && $store.state.auth.token.avatar.low || 'https://picsum.photos/40/40'"
+        :src="$store.state.auth.token ? $store.state.auth.token.avatar : ''"
         :size="40"
       ></app-avatar>
     </div>
@@ -33,7 +30,7 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.REVENUE)">
           <n-link :to="getRevenueLink">
-            <IconMonetizationOn24px class="fill-gray"/>
+            <IconMonetizationOn24px class="fill-gray" />
             <span>Thống kê doanh thu</span>
           </n-link>
         </li>
@@ -45,7 +42,7 @@
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.TRANSACTION)">
           <n-link :to="getTransactionLink">
-            <IconAttachMoney24px class="fill-gray"/>
+            <IconAttachMoney24px class="fill-gray" />
             <span>Lịch sử giao dịch</span>
           </n-link>
         </li>
@@ -67,7 +64,7 @@
           v-if="checkMenuGuard(MENU.SIGNOUT)"
         >
           <n-link to="/auth/signin">
-            <IconPowerSettingsNew24px class="fill-gray"/>
+            <IconPowerSettingsNew24px class="fill-gray" />
             <span>Đăng xuất</span>
           </n-link>
         </li>
@@ -107,7 +104,7 @@ export default {
         message: "",
         showNotify: true
       },
-      activeUserHeader:false
+      activeUserHeader: false
     };
   },
 
@@ -272,10 +269,10 @@ export default {
 
       return isValidMenu;
     },
-    onClickUserHeader(){
+    onClickUserHeader() {
       this.activeUserHeader = !this.activeUserHeader;
     },
-    handleClickOutside(){
+    handleClickOutside() {
       this.activeUserHeader = false;
     }
   },

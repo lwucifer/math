@@ -51,7 +51,7 @@ const getters = {
 const actions = {
     async [actionTypes.ACCOUNT_PERSONAL.LIST]({ commit }, payload) {
         try {
-            const result = await new Personal(this.$axios)[actionTypes.BASE.DETAIL](
+            const result = await new Personal(this.$axios)[actionTypes.BASE.LIST](
                 payload
             );
             console.log("[Personal] list", result.data);
@@ -244,7 +244,7 @@ const actions = {
     async [actionTypes.ACCOUNT_WITHDRAW.ADD]({ commit }, payload) {
         try {
             const result = await new Withdraw(this.$axios)[actionTypes.BASE.ADD](
-              payload
+                payload
             );
             console.log("[Withdraw] add", result);
             return result;
@@ -256,7 +256,7 @@ const actions = {
     async [actionTypes.ACCOUNT_BALANCE.LIST]({ commit }, payload) {
         try {
             const result = await new Balance(this.$axios)[actionTypes.BASE.LIST](
-              payload
+                payload
             );
             console.log("[Balance] list", result);
             commit(mutationTypes.ACCOUNT_BALANCE.SET_ACCOUNT_BALANCE, result);
@@ -446,8 +446,8 @@ const mutations = {
         state.withdrawalsList = _withdrawalsList;
     },
     [mutationTypes.ACCOUNT_BALANCE.SET_ACCOUNT_BALANCE](
-      state,
-      _data
+        state,
+        _data
     ) {
         console.log("SET_ACCOUNT_BALANCE", _data);
         state.balance = _data;
