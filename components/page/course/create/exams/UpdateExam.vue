@@ -7,7 +7,13 @@
           >(Tối đa 60 ký tự)</span
         ></label
       >
-      <app-input id="title" :counter="60" v-model="payload.title" />
+      <app-input
+        id="title"
+        :counter="60"
+        v-model="payload.title"
+        @input="checkTitle()"
+      />
+      <app-error :error="get(error, 'title', '')" />
     </div>
 
     <div class="mb-4">
@@ -19,7 +25,7 @@
           value="CHOICE"
           class="mr-4 disabled-input"
           :checked="payload.type === 'CHOICE'"
-          @click="payload.type = 'CHOICE'"
+          @click="handleChangeType('CHOICE')"
           :disabled="true"
           >Trắc nghiệm</app-radio
         >
@@ -28,11 +34,12 @@
           class="disabled-input"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
-          @click="payload.type = 'ESSAY'"
+          @click="handleChangeType('ESSAY')"
           :disabled="true"
           >Tự luận</app-radio
         >
       </app-radio-group>
+      <app-error :error="get(error, 'type', '')" />
     </div>
 
     <div class="caculate-point">
@@ -106,6 +113,7 @@
           class="mr-3 mb-0 w-80 pr-3"
           size="sm"
           v-model="payload.weight"
+          @input="checkWeight()"
         >
           <template slot="unit">
             <span class="text-primary">%</span>
@@ -117,6 +125,7 @@
           đã được tạo
         </p>
       </div>
+      <app-error :error="get(error, 'weight', '')" />
     </div>
 
     <div class="row align-items-center mb-4" v-show="payload.required">
@@ -196,6 +205,7 @@
           ><span class="text-base">Áp dụng</span></app-checkbox
         >
       </div>
+      <app-error :error="get(error, 'open_time', '')" />
 
       <div class="d-flex align-items-center">
         <p class="w-120">Thời gian kết thúc:</p>
@@ -210,6 +220,7 @@
           ><span class="text-base">Áp dụng</span></app-checkbox
         >
       </div>
+      <app-error :error="get(error, 'close_time', '')" />
     </div>
 
     <div class="d-flex justify-content-end">
@@ -273,6 +284,7 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
       lesson: "lesson",
+      setting: "setting",
     }),
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
@@ -311,10 +323,22 @@ export default {
       showModalConfirm: false,
       confirmLoading: false,
       typeRadio: "coefficient",
+      error: {
+        title: "",
+        type: "",
+        weight: "",
+        opent_time: "",
+        close_time: "",
+      },
     };
   },
 
   methods: {
+    handleChangeType(type) {
+      this.payload.type = type;
+      this.checkType();
+    },
+
     watchExam() {
       this.payload = { ...this.exam };
       if (this.payload.weight && this.payload.weight !== "") {
@@ -332,21 +356,122 @@ export default {
       }
     },
 
+    checkPayload() {
+      let check = true;
+      check = this.checkTitle();
+      check = this.checkType();
+      check = this.checkWeight();
+      check = this.checkOpenTime();
+      check = this.checkClosetime();
+      return check;
+    },
+
+    checkWeight() {
+      if (this.typeRadio !== "weight") {
+        this.error.weight = "";
+        return true;
+      }
+
+      if (!this.payload.weight) {
+        this.error.weight = "Bạn cần nhập trọng số";
+        return false;
+      }
+
+      const checkInteger = Number.isInteger(+this.payload.weight);
+      if (!checkInteger) {
+        this.error.weight = "Trọng số phải là số nguyên";
+        return false;
+      }
+
+      if (+this.payload.weight <= 0) {
+        this.error.weight = "Trọng số phải lớn hơn 0";
+        return false;
+      }
+
+      if (+this.payload.weight > 100) {
+        this.error.weight = "Trọng số không được lớn hơn 100";
+        return false;
+      }
+
+      this.error.weight = "";
+      return true;
+    },
+
+    checkType() {
+      if (this.payload.type === "") {
+        this.error.type = "Bạn cần nhập loại bài kiểm tra";
+        return false;
+      }
+      this.error.type = "";
+      return true;
+    },
+
+    checkTitle() {
+      if (!this.payload.title) {
+        this.error.title = "Bạn cần nhập tiêu đề";
+        return false;
+      }
+      this.error.title = "";
+      return true;
+    },
+
+    checkOpenTime() {
+      this.error.open_time = "";
+      if (!this.payload.opentime_enable) return true;
+      if (!get(this, "setting.starttime_enable", true)) return true;
+      if (!get(this, "setting.start_time", true)) return true;
+      if (!this.payload.open_time) return true;
+      const open_time_timestamp = moment(this.payload.open_time).format("x");
+      const start_time_timestamp = getLocalDateTime(
+        this.setting.start_time
+      ).format("x");
+      if (open_time_timestamp - start_time_timestamp < 3 * 24 * 3600 * 1000) {
+        this.error.open_time =
+          "Thời gian bắt đầu bài kiểm tra phải lớn hơn thời gian bắt đầu khoá học ít nhất 3 ngày";
+        return false;
+      }
+      return true;
+    },
+
+    checkClosetime() {
+      this.error.close_time = "";
+      if (!this.payload.closetime_enable) return true;
+      if (!get(this, "setting.endtime_enable", true)) return true;
+      if (!get(this, "setting.end_time", true)) return true;
+      if (!this.payload.close_time) return true;
+      const close_time_timestamp = moment(this.payload.close_time).format("x");
+      const end_time_timestamp = getLocalDateTime(this.setting.end_time).format(
+        "x"
+      );
+      if (end_time_timestamp - close_time_timestamp < 3 * 24 * 3600 * 1000) {
+        this.error.close_time =
+          "Thời gian kết thúc bài kiểm tra phải nhỏ hơn thời gian kết thúc khoá học ít nhất 3 ngày";
+        return false;
+      }
+      return true;
+    },
+
     handleChangeCoefficient(value) {
       this.payload.coefficient = value;
     },
 
     handleChangeOpenTime(date) {
       this.payload.open_time = date;
+      this.checkOpenTime();
     },
 
     handleChangeCloseTime(date) {
       this.payload.close_time = date;
+      this.checkClosetime();
     },
 
     async handleAddExam() {
       if (this.disabled_all) {
         this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
+      if (!this.checkPayload()) {
+        this.$toasted.error("Invalid params");
         return;
       }
       this.showModalConfirm = true;
