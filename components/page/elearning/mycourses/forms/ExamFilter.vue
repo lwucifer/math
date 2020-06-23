@@ -50,7 +50,7 @@
           has-border
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 13.7rem;">
+      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 13.7rem;">
         <app-vue-select
           class="app-vue-select w-100"
           :options="optionOpts"
@@ -62,7 +62,7 @@
           :all-opt="allOpt"
           has-border
         />
-      </div>
+      </div> -->
     </div>
   </filter-form>
 </template>

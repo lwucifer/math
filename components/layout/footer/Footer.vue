@@ -29,7 +29,7 @@
           <h2 class="footer__title">Hỗ trợ khách hàng</h2>
           <ul class="footer__menu">
             <li><a href="">Hotline: <span class="text-primary">1900 6035</span></a></li>
-            <li><a href="">Email: <span class="text-primary">cskh@scholly.vn</span></a></li>
+            <li><a href="">Email: <span class="text-primary">cskh@schoolly.vn</span></a></li>
             <li><a href="">Gửi yêu cầu hỗ trợ</a></li>
             <li><a href="">Hướng dẫn sử dụng</a></li>
           </ul>

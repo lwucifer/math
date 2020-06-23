@@ -34,7 +34,7 @@ export default {
   props: {
     avSrc: {
       type: String,
-      default: "https://picsum.photos/96/96"
+      default: ""
     }
   },
   data() {
@@ -67,25 +67,18 @@ export default {
       // console.log("[room_avatar]", fileList[0]);
       await this.uploadMedia(body).then(result => {
         if (result.data) {
-          this.avatarUrl = result.data[0].path;
+          this.avatarUrl = result.data[0].full_path
+            ? result.data[0].full_path.low
+            : "";
           const data = {
-            id: this.$route.params.id,
-            payload: { avatar_url: result.data[0].path },
-            end: "avatar"
+            avatar_url: this.avatarUrl
           };
           console.log("avatar", data);
-          // this.changeRoomAvatar(data).then(result => {
-          //   if (!result.error) {
-          //     setTimeout(() => {
-          //       this.$toasted.show("success");
-          //       this.getGroupListDetail({
-          //         params: { room_id: this.$route.params.id }
-          //       });
-          //     }, 2500);
-          //   } else {
-          //     this.$toasted.error(result.message);
-          //   }
-          // });
+          this.accountPersonalEditAvatar(data).then(result => {
+            if (result.data) {
+              this.setTokenAvatar(result.data[0].avatar_url);
+            }
+          });
         }
       });
     }

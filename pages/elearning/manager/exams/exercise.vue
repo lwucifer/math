@@ -18,6 +18,7 @@
                   @submitFilter="submitFilter"
                   @changedType="handleChangedType"
                   @changedRate="handleChangedRate"
+                  @changedRequired="handleChangedRequired"
                   @submitSearch="handleSubmitSearch"
                 />
                 <list-table
@@ -77,7 +78,8 @@
           category: EXERCISE_CATEGORIES.EXERCISE,
           elearning_id: null,
           sort_by: 'CREATED',
-          sort_type: 'asc'
+          sort_type: 'asc',
+          required: true
         },
         list: [],
         loading: false
@@ -104,6 +106,10 @@
       },
       handleSubmitSearch(val) {
         this.updateFilter({ query: val })
+      },
+      handleChangedRequired(val) {
+        this.updateFilter({ required: val })
+        // console.log('change required: ', val)
       },
       submitFilter(val) {
         this.updateFilter(val)
