@@ -366,12 +366,17 @@ export default {
       this.payload.elearning_id = get(this, "general.id", "");
 
       let data = { ...this.payload };
-      data.open_time = getUTCDateTime(data.open_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      data.close_time = getUTCDateTime(data.close_time).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
+
+      if (data.opentime_enable) {
+        data.open_time = getUTCDateTime(data.open_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
+      if (data.closetime_enable) {
+        data.close_time = getUTCDateTime(data.close_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      }
 
       if (!data.open_time) delete data.open_time;
       if (!data.close_time) delete data.close_time;
