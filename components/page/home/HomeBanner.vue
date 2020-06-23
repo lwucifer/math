@@ -10,7 +10,7 @@
         color="primary"
         class="home-banner__btn text-white"
         nuxt
-        to=""
+        to="/auth/signup"
         >Tạo tài khoản</app-button>
     </div>
   </div>
