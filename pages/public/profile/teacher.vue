@@ -196,7 +196,7 @@ import { getParamQuery } from '~/utils/common';
       },
       onPageChange(e) {
         this.payload.page = e.number + 1;
-        this.payload.limit = PAGE_SIZE.ELEARNING_12;
+        this.payload.size = PAGE_SIZE.ELEARNING_12;
 
         this.getElearnings();
       },
