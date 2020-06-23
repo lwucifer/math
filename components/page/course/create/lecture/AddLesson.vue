@@ -9,7 +9,7 @@
         >
       </h3>
       <app-input
-        :class="{'mb-0': get(error, 'name', '')}"
+        :class="{ 'mb-0': get(error, 'name', '') }"
         @handleBlur="handleBlurNameInput"
         v-model="payload.name"
         placeholder="Bài học số 1"
@@ -406,6 +406,11 @@ export default {
     },
 
     async handleAddContent() {
+      if (!this.handleCheckPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
+
       if (this.payload.type == "VIDEO") {
         this.showModalConfirmVideo = true;
       } else if (this.payload.type == "SCORM") {
@@ -422,10 +427,6 @@ export default {
     },
 
     async handleOk() {
-      if (!this.handleCheckPayload()) {
-        this.handleCancelModal();
-        return;
-      }
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
       } else if (this.payload.type == "SCORM") {

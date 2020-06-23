@@ -5,7 +5,7 @@
       <span class="text-base font-weight-normal">(Tối đa 80 ký tự)</span>
     </h3>
     <app-input
-      :class="{'mb-0': get(error, 'name', '')}"
+      :class="{ 'mb-0': get(error, 'name', '') }"
       @onBlur="handleChangeName"
       :counter="80"
       placeholder="Tên bài học"
@@ -278,10 +278,13 @@ export default {
     },
 
     changingTitleDoc() {
-      if (this.modalType == "url" || this.payload.article_content.length > 0 && this.edit == false) {
+      if (
+        this.modalType == "url" ||
+        (this.payload.article_content.length > 0 && this.edit == false)
+      ) {
         return "Thêm bài học";
       } else if (this.edit) {
-        return "Xác nhận"
+        return "Xác nhận";
       }
 
       return "Upload bài học";
@@ -301,10 +304,10 @@ export default {
         return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
       } else if (this.modalType == "url" || this.payload.repository_file_id) {
         return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
-      } else if (this.payload.article_content && this.edit == false){
-        return "Bạn có chắc chắn muốn thêm bài học này?"
+      } else if (this.payload.article_content && this.edit == false) {
+        return "Bạn có chắc chắn muốn thêm bài học này?";
       } else if (this.edit) {
-        return "Bạn có chắc chắn là muốn lưu thay đổi này?"
+        return "Bạn có chắc chắn là muốn lưu thay đổi này?";
       }
       return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
     },
@@ -402,6 +405,11 @@ export default {
     },
 
     handleAddContent() {
+      if (!this.handleCheckPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
+
       if (this.payload.type == "VIDEO") {
         this.showModalConfirmVideo = true;
       } else if (this.payload.type == "SCORM") {
@@ -419,10 +427,6 @@ export default {
     },
 
     async handleOk() {
-      if (!this.handleCheckPayload()) {
-        this.handleCancelModal();
-        return;
-      }
       if (this.payload.type == "VIDEO") {
         this.confirmLoadingVideo = true;
       } else if (this.payload.type == "SCORM") {

@@ -164,8 +164,17 @@ export default {
   },
 
   computed: {
+    ...mapState("elearning/create", {
+      general: "general",
+      progress: "progress",
+    }),
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
     },
   },
 
@@ -202,7 +211,10 @@ export default {
     },
 
     async handleUpdateExercise() {
-      if (this.disabled_all) return;
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 

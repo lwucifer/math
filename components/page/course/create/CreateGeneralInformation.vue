@@ -407,15 +407,14 @@ export default {
         this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
         return;
       }
+      if (!this.handleCheckPayload()) {
+        this.$toasted.error("Invalid params");
+        return;
+      }
       this.showModalConfirm = true;
     },
 
     async handleOk() {
-      if (!this.handleCheckPayload()) {
-        this.confirmLoading = false;
-        this.showModalConfirm = false;
-        return;
-      }
       try {
         this.confirmLoading = true;
         let payload = createPayloadAddCourse(this.payload);
