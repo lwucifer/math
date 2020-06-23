@@ -1,7 +1,7 @@
 <template>
   <div class="home-banner">
     <div class="container">
-      <div class="home-banner__title">In-demand talent on demand. <span>Scholly is how.</span></div>
+      <div class="home-banner__title">In-demand talent on demand. <span>Schoolly is how.</span></div>
 
       <div class="home-banner__text">Schoolly expertly connects professionals and agencies <span>to businesses seeking specialized talent.</span></div>
 

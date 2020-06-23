@@ -4,12 +4,12 @@
       <div class="row">
         <div class="col-md-7 align-self-center py-5">
           <h1 class="elearning-home-banner__title">
-            <div>In-demand talent on demand.</div>Scholly is how.
+            <div>In-demand talent on demand.</div>Schoolly is how.
           </h1>
 
           <p
             class="elearning-home-banner__subtitle"
-          >Scholly expertly connects professionals and agencies <span>to businesses seeking specialized talent.</span></p>
+          >Schoolly expertly connects professionals and agencies <span>to businesses seeking specialized talent.</span></p>
         </div>
 
         <div class="col-md-5 align-self-end">
