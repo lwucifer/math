@@ -3,7 +3,7 @@
     <div @click.prevent="onClickUserHeader()" v-click-outside="handleClickOutside">
       <app-avatar
         class="the-header__user-avt"
-        :src="$store.state.auth.token ? ($store.state.auth.token.avatar.low ? $store.state.auth.token.avatar.low : $store.state.auth.token.avatar) : ''"
+        :src="$store.state.auth.token && $store.state.auth.token.avatar && $store.state.auth.token.avatar.low ? $store.state.auth.token.avatar.low : ''"
         :size="40"
       ></app-avatar>
     </div>
