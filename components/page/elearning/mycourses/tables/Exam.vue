@@ -12,12 +12,6 @@
         <td :title="get(row, 'name', '')">
           <span>
             {{ get(row, 'name', '') | truncStrFilter(30) }}
-            <sup
-              class="elm--required-symbol"
-              v-if="get(row, 'required', false)"
-            >
-              <icon-star height="14" width="14" />
-            </sup>
           </span>
         </td>
       </template>
@@ -82,12 +76,6 @@
       </template>
     </app-table>
     <!--End table-->
-    <p class="elm--text-desc text-center mt-4">
-      <i>
-        Các bài tập có đánh dấu * là các bài tập
-        <b>bắt buộc</b>
-      </i>
-    </p>
   </div>
 </template>
 
@@ -137,7 +125,7 @@ export default {
       heads: [
         {
           name: "name",
-          text: "Tiêu đề bài tập"
+          text: "Tiêu đề bài kiểm tra"
         },
         {
           name: "type",
@@ -191,9 +179,9 @@ export default {
     getScoreDetail(item) {
       let desc = "";
       if (this.hasScore(item)) {
-        desc = `(${get(item, "score", 0)}/${get(
+        desc = `(${get(item, "mark", 0)}/${get(
           item,
-          "mark",
+          "max_score",
           0
         )}) ${subResult2Txt(get(item, "result", 10))}`;
       } else {

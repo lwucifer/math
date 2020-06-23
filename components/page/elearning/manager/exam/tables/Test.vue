@@ -125,7 +125,7 @@
         heads: [
           {
             name: "title",
-            text: "Tiêu đề bài tập",
+            text: "Tiêu đề bài kiểm tra",
           },
           {
             name: "type",

@@ -1,13 +1,19 @@
 import auth from './auth.js'
+import { getTokenFromCookie } from '~/utils/auth.js';
 
 const state = () => ({
   authUser: null,
 });
 
 const actions = {
-  async nuxtServerInit({ commit }) {
-    console.log("[nuxtServerInit] context", this.$fireMess);
-
+  async nuxtServerInit({ commit }, { req } ) {
+    // console.log("[nuxtServerInit] context", req.headers.cookie);
+    const userCookies = getTokenFromCookie(req);
+    console.log("[userCookies]", userCookies);
+    if(userCookies) {
+      commit("auth/setToken", userCookies);
+      commit("auth/setAccessToken", userCookies.access_token);
+    }
   },
 
   onAuthStateChanged({ commit }) {

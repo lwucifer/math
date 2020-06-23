@@ -2,37 +2,23 @@
     <div class="container">
         <div class="row wrap-notify-school">
             <div class="col-md-8">
-                <div v-if="!isDetail">
+                <SchoolNewsDetail v-if="isDetail"/>
+                <div v-else>
                     <div class="intro-text-school-menu-side">Tin tức mới</div>
-                    <div class="row news-item-school" v-for="(item,index) in 5" :key="index" @click="showDetailNews">
+                    <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item.news_id)">
                         <div class="col-md-4">
-                            <img :height="131" class="w-100" src="~assets/images/tmp/img-intro.png">
+                            <img :height="131" class="w-100" :src="get(item,'thumb','')">
                         </div>
                         <div class="col-md-8">
-                            <p class="title-notify">Triển khai cuộc thi “An toàn giao thông cho nụ cười ngày mai cấp THPT năm học 2019-2020</p>
-                            <p class="text-sub my-2">01/06/2020</p>
-                            <p>Nhà trường kính gửi các đồng chí cán bộ, giáo viên, nhân viên và các em học sinh công văn triển khai cuộc thi “An toàn giao thông cho nụ cười ngày mai cấp THPT năm học 2019-2020”...</p>
+                            <p class="title-notify">{{get(item,"title","")}}</p>
+                            <p class="text-sub my-2">{{get(item,"updated","") | moment("DD/MM/YYYY")}}</p>
+                            <p v-html="get(item,'short_desc','')"></p>
                         </div>
                     </div>
                     <app-pagination
                         :pagination="pagination"
                         class="mt-5"
                     />
-                </div>
-                <div v-else>
-                    <h4>Bộ GD&ĐT ra công điện về phòng chống dịch vi rút Corona</h4>
-                    <p class="text-sub my-2">02/12/2022</p>
-                    <div style="padding: 2.5rem 0 3.5rem">
-                        Content News
-                    </div>
-                    <div class="notify-other">
-                        <div class="intro-text-school-menu-side" style="font-size: 16px;">Tin tức khác</div>
-                        <div class="d-flex align-items-center mb-4" v-for="(item,index) in 5" :key="index">
-                            <IconEllipse2 class="mr-3"/>
-                            <span class="">Lịch trả bằng tốt nghiệp năm học 2018- 2019</span>
-                            <span class="ml-auto text-sub">06.09.2018</span>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -43,16 +29,23 @@
 </template>
 
 <script>
-import SchoolNewsMenuSide from "~/components/page/school/News/SchoolNewsMenuSide"
-import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
+import SchoolNewsMenuSide from "~/components/page/school/News/SchoolNewsMenuSide";
+import SchoolNewsDetail from "~/components/page/school/News/SchoolNewsDetail"
+
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import {moment} from "moment";
+import { getParamQuery } from "~/utils/common"
 export default {
     components:{
         SchoolNewsMenuSide,
-        IconEllipse2
+        SchoolNewsDetail
     },
     data(){
         return{
             isDetail:false,
+            list:get(this,'newsList.content',[]),
             pagination:{
                 total_pages: 2,
                 size: 10,
@@ -61,12 +54,45 @@ export default {
                 last: 0,
                 number: 1
             }
+         }
+    },
+    watch:{
+        newsList:{
+            handler:function(){
+                this.list = get(this,"newsList.content",[])
+            }
         }
     },
+    computed:{
+        ...mapState("elearning/school/school-news", { newsList: "schoolNews" })
+    },
     methods:{
-        showDetailNews(){
-            this.isDetail= true
-        }
+        showDetailNews(newsID){
+            this.isDetail= true;
+            this.$router.push({query: { tab: 'news',id: newsID}})
+        },
+        async fetchNewsList(){
+            const organization_id = this.$route.params.id;
+            const data = { organization_id };
+            await this.$store.dispatch(
+            `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.LIST}`,
+                data
+            );
+
+        },
+        checkDetail(){
+            const news_id = getParamQuery('id');
+            if(news_id){
+                this.isDetail= true;
+            }else{
+                this.isDetail= false;
+            }
+        },
+        get
+    },
+    async created(){
+        await this.fetchNewsList();
+        this.checkDetail()
     }
 }
 </script>

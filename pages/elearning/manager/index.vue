@@ -76,7 +76,7 @@
             </div>
             <div class="elearning-manager__dashboard elearning-manager__revenue mt-15 text-center">
               <div class="revenue">
-                {{ totalRevenue | toThousandFilter }} VNĐ
+                {{ totalRevenue | numeralFormat }} VNĐ
               </div>
               <div class="chart">
                   <GChart
@@ -139,6 +139,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { useEffect } from "~/utils/common";
 import { DATE_SHORTCUT } from "~/utils/config";
+import { numeralFormat } from "~/plugins/filters";
 
 const STORE_NAMESPACE = "elearning/teaching/summary";
 
@@ -231,11 +232,11 @@ export default {
           text: "Lượt xem",
         },
         {
-          name: "price",
+          name: "priceFormat",
           text: "Học phí",
         },
         {
-          name: "rate",
+          name: "rateFormat",
           text: "Đánh giá",
         },
       ],
@@ -250,9 +251,9 @@ export default {
     ...mapState('elearning/teaching/statistic/revenue', {
       revenueChart: "revenueChart"
     }),
-    ...mapState('elearning/teaching/statistic/highlight-els', {
-      highlightElearnings: "elearnings"
-    }),
+    ...mapState('elearning/teaching/statistic/highlight-els', [
+      "elearnings",
+    ]),
     chartData() {
       let tmp = [
         ['Year', '']
@@ -283,6 +284,15 @@ export default {
         total+= revenueTmp.revenue
       }
       return total
+    },
+    highlightElearnings() {
+      return this.elearnings.map(el => {
+        return {
+          ...el,
+          priceFormat: numeralFormat(el.price, "0,0"),
+          rateFormat: numeralFormat(el.rate, "0,0.0"),
+        }
+      })
     }
   },
 

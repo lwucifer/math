@@ -211,7 +211,11 @@ import IconWarning from "~/assets/svg/icons/warning.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import IconCalender from "~/assets/svg/v2-icons/calendar_today_24px.svg?inline";
 import SelectDate from "~/components/page/course/create/setting/SelectDate";
-import { getUTCDateTime, getUTCDateTimeHH_MM_A } from "~/utils/moment";
+import {
+  getUTCDateTime,
+  getUTCDateTimeHH_MM_A,
+  getLocalDateTime,
+} from "~/utils/moment";
 import moment from "moment";
 
 export default {
@@ -360,6 +364,16 @@ export default {
     handleChangeSetting() {
       if (get(this, "setting.setting", false)) {
         this.payload = { ...this.setting };
+        if (this.payload.starttime_enable) {
+          this.payload.start_time = getLocalDateTime(
+            this.payload.start_time
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+        if (this.payload.endtime_enable) {
+          this.payload.end_time = getLocalDateTime(
+            this.payload.end_time
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
         if (get(this, "setting.price", "") === 0) {
           this.free = 2;
         }

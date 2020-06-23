@@ -55,22 +55,7 @@ export default {
           text: ""
         }
       ],
-      list: [
-        {
-          name: "Nguyễn Văn A",
-          class: "10B",
-          date: "19/10/2021",
-          progress: "80",
-          question: 0
-        },
-        {
-          name: "Nguyễn Văn C",
-          class: "10B",
-          date: "19/10/2021",
-          progress: "30",
-          question: 0
-        }
-      ],
+      list: [],
       pagination: {
         total_elements: 0,
         last: false,
@@ -132,7 +117,6 @@ export default {
       this.teachingElearningList(query);
     },
     changedType(classes) {
-      console.log("classes", classes);
       if (classes == "Khác") {
         const query = {
           params: {
@@ -152,7 +136,7 @@ export default {
       }
     },
     submitShowFilter(val){
-      this.showFilter=val
+      this.showFilter=val;
     }
   }
 };
