@@ -40,7 +40,7 @@
         <td style="width:30%">
           <div class="student_name">
            {{ get(row, 'student_name', '') }}
-           <IconLock2 class="fill-red" width="14" height="14" v-if="row.banned" />
+           <IconLock2 class="fill-red" width="14" height="14" v-if="!row.banned" />
           </div>
         </td>
       </template>
@@ -195,7 +195,7 @@ export default {
   position: relative;
   .fill-red {
     position: absolute;
-    left: 100%;
+    left: calc(100% + 5px);
   }
 }
 </style>
