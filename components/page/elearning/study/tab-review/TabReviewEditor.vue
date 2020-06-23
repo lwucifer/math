@@ -3,7 +3,7 @@
     <app-avatar
       :size="40"
       class="mr-4"
-      :src="get(user_login, 'avatar.low', '')"
+      :src="$store.state.auth.token ? $store.state.auth.token.avatar : ''"
     />
 
     <div class="flex-grow e-study-tab-qa-editor__right">

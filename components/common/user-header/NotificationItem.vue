@@ -129,6 +129,11 @@ export default {
       this.deleteNotifications({
         notification_id: this.dataNoti.id,
         service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
+      }).then(res => {
+        if(res.success){
+          const index = this.dataNoti.indexOf(this.dataNoti.id)
+          this.dataNoti.splice(index, 1)
+        }
       });
     },
     handleClickCheck() {
