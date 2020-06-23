@@ -182,6 +182,7 @@
         this.filters.rate = null
         this.filters.type = null
         this.filters.query = ''
+        this.filters.required = null
       }
     }
   }
