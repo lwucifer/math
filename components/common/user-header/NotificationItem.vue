@@ -1,10 +1,8 @@
 <template>
   <div class="wrap-notification-item" :class="dataNoti.is_read ? 'readed' : ''">
-    <app-avatar :size="50" class="avatar-notifi" />
+    <app-avatar :size="50" :src="dataNoti.sender_avatar.high" class="avatar-notifi" />
     <div class="wrap-content-item">
-      <p class="content-item">
-        {{ dataNoti.payload.text || "" }}
-      </p>
+      <p class="content-item" v-html="dataNoti.payload.text"></p>
       <span>{{ dataNoti.created_at | moment("from") }}</span>
     </div>
     <div class="group-button-item">
