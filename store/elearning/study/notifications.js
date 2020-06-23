@@ -125,7 +125,7 @@ const actions = {
     async [actionTypes.HEADER_NOTIFICATIONS.DELETE]({ commit }, options) {
         try {
             const result = await new Notifications(this.$axios)[
-                actionTypes.BASE.DELETE_PAYLOAD
+                actionTypes.HEADER_NOTIFICATIONS.DELETE
             ](options);
             return result;
         } catch (error) {

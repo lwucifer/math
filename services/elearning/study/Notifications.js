@@ -32,4 +32,17 @@ export default class Notifications extends BaseService {
     });
     return data;
   }
+
+  async [actionTypes.HEADER_NOTIFICATIONS.DELETE](payload) {
+    console.log(payload);
+    const { data } = await this.$axios.request({
+        url: APIs.NOTIFICATIONS_HEADER,
+        data: payload,
+        method: "DELETE",
+        // headers: {
+        //   "sc-response-format": "v1",
+        // },
+    });
+    return data;
+}
 }
