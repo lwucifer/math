@@ -94,21 +94,7 @@ export default {
               text: "Học online",
             };
           } else if (item.type == constants.TYPE_TIME_TABLE.EXCERCISE) {
-            if (item.category == constants.TYPE_TIME_TABLE.EXCERCISE) {
-              return 
-            } else {
-              return {
-                ...item,
-                text: "Làm bài kiểm tra",
-                text_time: "Thời gian bắt đầu"
-              };
-            }
-          } else {
-            return {
-              ...item,
-              text: "Làm bài kiểm tra",
-              text_time: "Thời gian bắt đầu"
-            };
+            return
           }
         });
       return data;

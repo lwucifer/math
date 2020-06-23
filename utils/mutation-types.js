@@ -23,6 +23,11 @@ export const PUBLIC = {
     SET_BANK_LIST: "setBankList",
 };
 
+export const PUBLIC_CATEGORY = {
+    SET_CATEGORY_LIST: "setPublicCategoryList",
+};
+
+
 export const SOCIAL = {
     SET_FEEDS: "setSocialFeeds",
     UPDATE_FEEDS: "updateSocialFeeds",

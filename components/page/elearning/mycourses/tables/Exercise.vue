@@ -62,7 +62,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/${$route.params.id}/study?lesson_id=${row.id}`"
+            :to="`/elearning/${$route.params.id}/study?exercise_id=${row.id}`"
           >
             <IconArrow height="13" />
           </n-link>
