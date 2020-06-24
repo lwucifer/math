@@ -133,6 +133,7 @@ export default {
           },
         });
         if (get(res, "data.success", false)) {
+          this.$emit('addSuccess')
           this.$toasted.success(
             "Thêm tài khoản thành công, bạn vui lòng đăng nhập email để active tài khoản. Xin cảm ơn!"
           );

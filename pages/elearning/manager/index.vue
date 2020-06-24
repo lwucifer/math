@@ -63,7 +63,7 @@
                       <span>Điểm đánh giá giáo viên</span>
                       <IconStar2 />
                     </div>
-                    <strong>{{teacherInfo.voting_rate}}/5</strong>
+                  <strong>{{teacherInfo.voting_rate | numeralFormat('0.0') }}/5</strong>
                   </div>
                 </div>
               </div>
