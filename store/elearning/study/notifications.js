@@ -113,7 +113,7 @@ const actions = {
         try {
             const result = await new Notifications(this.$axios)[
                 actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION
-            ](payload);
+            ](payload.notification_id, payload.body);
             return result;
         } catch (err) {
             console.log("[Notifications] PUT.err", err);
@@ -126,7 +126,8 @@ const actions = {
         try {
             const result = await new Notifications(this.$axios)[
                 actionTypes.HEADER_NOTIFICATIONS.DELETE
-            ](options);
+            ](options.notification_id, options.body);
+            console.log("[HEADER_NOTIFICATIONS.DELETE]", result);
             return result;
         } catch (error) {
             console.log("[Notifications] delete.error", error);

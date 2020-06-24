@@ -10,12 +10,12 @@
     <div class="row mb-4 mt-3" v-if="!showAddPayment">
       <div class="col-md-9">
         <h6 class="mb-3">DANH SÁCH TÀI KHOẢN NHẬN TIỀN</h6>
-        <div>
+        <!-- <div>
           <span class="text-primary d-flex">
             <IconCheck class="icon subheading" />
             Bạn vừa thêm 1 tài khoản
           </span>
-        </div>
+        </div> -->
       </div>
       <div class="col-md-3">
         <div class="text-right">
@@ -74,7 +74,10 @@ export default {
     return {
       showAddPayment: false,
       opts: [],
-      bank: null
+      bank: null,
+      params: {
+        status: "ACTIVE",
+      },
     };
   },
   watch: {
@@ -99,7 +102,13 @@ export default {
       this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`);
     },
     fetchAccountBank() {
-      this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`);
+      const payload = {
+        params: this.params,
+      };
+      this.$store.dispatch(
+        `bank/${actionTypes.ACCOUNT_BANKS.LIST}`,
+        payload
+      );
     },
     handleRefresh() {
       this.fetchAccountBank();

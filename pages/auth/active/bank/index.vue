@@ -36,7 +36,7 @@ export default {
       data,
     });
     if (get(res, "data.success", false)) {
-      this.$router.push(`/${get(token, "id", "")}/info/setting?tab=payment`);
+      this.$router.push(`/${get(this, "token.id", "")}/info/setting?tab=payment`);
       return;
     }
     this.error = get(res, "data.message", "Có lỗi xảy ra");

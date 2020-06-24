@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-notification-item" :class="dataNoti.is_read ? 'readed' : ''">
-    <app-avatar :size="50" :src="dataNoti.sender_avatar.high" class="avatar-notifi" />
+    <app-avatar :size="50" :src="dataNoti.sender_avatar && dataNoti.sender_avatar.high" class="avatar-notifi" />
     <div class="wrap-content-item">
       <p class="content-item" v-html="dataNoti.payload.text"></p>
       <span>{{ dataNoti.created_at | moment("from") }}</span>
@@ -128,20 +128,27 @@ export default {
     handleDelete() {
       this.deleteNotifications({
         notification_id: this.dataNoti.id,
-        service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
-      }).then(res => {
-        if(res.success){
-          const index = this.dataNoti.indexOf(this.dataNoti.id)
-          this.dataNoti.splice(index, 1)
+        body: {
+          service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
         }
-      });
+      }).then(res => {
+        if(!res.error){
+          if (this.typeTab == "elearning") {
+            this.updateCountElearning();
+          } else {
+            this.updateCountSocial();
+          }
+        }
+      })
     },
     handleClickCheck() {
       this.menuBtn = !this.menuBtn;
       this.checkIsReadNotifications({
         notification_id: this.dataNoti.id,
-        type: "ONLY_ONE",
-        service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
+        body: {
+          type: "ONLY_ONE",
+          service_type: this.typeTab == "elearning" ? ELEARNING : SOCIAL,
+        }
       }).then((res) => {
         if (res.data) {
           console.log("res", res);
