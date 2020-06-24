@@ -63,7 +63,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/${$route.params.id}/study?lesson_id=${row.id}`"
+            :to="`/elearning/${$route.params.id}/study?elearning_id=${$route.params.id}&category_type=${EXERCISE_CATEGORIES.TEST}`"
           >
             <IconArrow height="13" />
           </n-link>
@@ -90,7 +90,7 @@ import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 import IconStar from "~/assets/svg/v2-icons/star_rate_18px.svg?inline";
 import SubmitStatus from "~/components/page/elearning/mycourses/SubmitStatus";
 import { subResult2Txt } from "~/plugins/filters";
-import { SUBMISSION_RESULTS } from "~/utils/constants";
+import { SUBMISSION_RESULTS, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { getDateTimeHhMmDdMmYyDash } from "~/plugins/filters";
 import { mapActions, mapGetters } from "vuex";
 
@@ -153,7 +153,8 @@ export default {
           text: ""
         }
       ],
-      SUBMISSION_RESULTS: SUBMISSION_RESULTS
+      SUBMISSION_RESULTS: SUBMISSION_RESULTS,
+      EXERCISE_CATEGORIES: EXERCISE_CATEGORIES,
     };
   },
 
