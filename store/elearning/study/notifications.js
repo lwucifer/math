@@ -35,7 +35,7 @@ const actions = {
                 actionTypes.HEADER_NOTIFICATIONS.LIST
             ](payload);
             if (result.data) {
-                console.log('HEADER_NOTIFICATIONS.LIST', result.data)
+                // console.log('HEADER_NOTIFICATIONS.LIST', result.data)
                 if (payload.service_type == ELEARNING) {
                     commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST, result.data);
                 }
@@ -57,7 +57,7 @@ const actions = {
                 actionTypes.HEADER_NOTIFICATIONS.LIST
             ](payload);
             if (result.data) {
-                console.log('HEADER_NOTIFICATIONS.LIST', result.data)
+                // console.log('HEADER_NOTIFICATIONS.LIST', result.data)
                 if (payload.service_type == ELEARNING) {
                     commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST,
                         uniqWith(state.notiElearning.concat(result.data), (a, b) => a.id === b.id)

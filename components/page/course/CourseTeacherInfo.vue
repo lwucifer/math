@@ -11,13 +11,18 @@
           <h5 class="name">
             <n-link
               :to="`/public/profile/teacher?user_id=${get(teacher, 'id', '')}`"
-              >{{ get(teacher, "name", "") }}</n-link
+              class="teacher-title"
             >
+              {{ get(teacher, "name", "") }}
+            </n-link>
           </h5>
           <p class="body-3">
-            <n-link :to="`/school/${get(teacher, 'school_id', '')}`">{{
-              get(teacher, "school_name", "")
-            }}</n-link>
+            <n-link
+              :to="`/school/${get(teacher, 'school_id', '')}`"
+              class="school-title"
+            >
+              {{ get(teacher, "school_name", "") }}
+            </n-link>
           </p>
 
           <div class="stars">

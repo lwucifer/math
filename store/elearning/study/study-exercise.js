@@ -257,7 +257,48 @@ const actions = {
     } catch (error) {
       console.log("[LIST_ELEARNING_EXERCISE] error", error);
     }
+  },
+
+  /**
+   * Get exercise list of exercise_list
+   */
+  async [actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE_2](
+    { commit },
+    payload
+  ) {
+    try {
+      const result = await new Exercise(this.$axios)[
+        actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE_2
+      ](payload);
+      console.log("[LIST_ELEARNING_EXERCISE_2]", result, payload);
+      if (result.success == RESPONSE_SUCCESS) {
+        if (payload.category == EXERCISE_CATEGORIES.TEST) {
+          commit(
+            mutationTypes.ELEARNING_STUDY_EXERCISE
+              .SET_STUDY_ELEARNING_EXERCISE_TEST_LIST,
+            result.data.content
+          );
+        }
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_ELEARNING_EXERCISE_LIST,
+          result.data.content
+        );
+        commit(
+          mutationTypes.ELEARNING_STUDY_EXERCISE
+            .SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST,
+          result.data
+        );
+
+      }
+
+      return result;
+    } catch (error) {
+      console.log("[LIST_ELEARNING_EXERCISE] error", error);
+    }
   }
+
+
 };
 
 /**

@@ -117,7 +117,7 @@
           let params = { ...this.params }
           
           await this.$store.dispatch(
-            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`, this.params
+            `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE_2}`, this.params
           )
           this.list = this.get(this, 'detailInfo', [])
           this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
