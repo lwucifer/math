@@ -19,7 +19,7 @@
          <div class="news-intro-school">
             <div class="intro-text-school-menu-side">Tin xem nhiều</div>
             <div v-for="(item,index) in get(this,'schoolNewsest.content',[])" :key="index">
-                <n-link  class="row mb-3 text-decoration-none" to>
+                <n-link  class="row mb-3 text-decoration-none" :to="params.organization_id+'?tab=news&news_id='+item.id">
                     <div class="col-md-5">
                         <img :height="73" class="w-100" :src="get(item,'thumb','/_nuxt/assets/images/tmp/img-intro.png')">
                     </div>
@@ -74,14 +74,11 @@ export default {
         },
         async fetchNewsestList(){
             const data = this.params;
-            console.log('params',data)
             await this.schoolNewsestList(data)
-            
-
         },
         changeCategory(item){
             this.btnActice = item.id;
-            this.$emit('changeCategory',item.id)
+            this.$emit('changeCategory',item)
         },
         get
     },
