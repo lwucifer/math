@@ -133,14 +133,12 @@ export default {
     },
     handleShowModalInvite() {
       this.showModalInvite = true;
-      console.log("lol");
     },
     closeModalInvite(close) {
       this.showModalInvite = close;
     },
     closeModalNotify() {
       this.showModalNotify = false;
-      console.log("lol");
     }
   },
   created() {
