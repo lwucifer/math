@@ -38,12 +38,12 @@
         />
       </div>
     </div>
-    <p>
+    <!-- <p>
       <i style="font-size: 1.3rem;"
         >Để nhận tiền từ việc bán bài giảng/khóa học của bạn, vui lòng cập nhật
         tài khoản ngâng hàng của bạn</i
       >
-    </p>
+    </p> -->
     <EditBank @close="closeModal" v-if="bank" :bank="bank" />
   </div>
 </template>
