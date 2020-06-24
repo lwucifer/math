@@ -216,14 +216,13 @@ export default {
 
   methods: {
     checkPayload() {
-      let check = true;
-      check = this.checkTitle();
-      check = this.checkDuration();
-      check = this.checkPassScore();
-      check = this.checkReworks();
-      check = this.checkType();
-      check = this.checkRequired();
-      return check;
+      const title = this.checkTitle();
+      const duration = this.checkDuration();
+      const pass_score = this.checkPassScore();
+      const reworks = this.checkReworks();
+      const type = this.checkType();
+      const required = this.checkRequired();
+      return title && duration && pass_score && reworks && type && required;
     },
 
     checkTitle() {
