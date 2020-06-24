@@ -357,13 +357,12 @@ export default {
     },
 
     checkPayload() {
-      let check = true;
-      check = this.checkTitle();
-      check = this.checkType();
-      check = this.checkWeight();
-      check = this.checkOpenTime();
-      check = this.checkClosetime();
-      return check;
+      const title = this.checkTitle();
+      const type = this.checkType();
+      const weight = this.checkWeight();
+      const open_time = this.checkOpenTime();
+      const close_time = this.checkClosetime();
+      return title && type && weight && open_time && close_time;
     },
 
     checkWeight() {

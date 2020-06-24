@@ -41,7 +41,7 @@
       </div>
     </div>
   </div>
-  <SettingRoleStudent v-else/>
+  <SettingRoleStudent v-else />
 </template>
 
 <script>
@@ -53,7 +53,8 @@ import Notify from "~/components/page/profile/setting/tabs/notify";
 import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
 import { mapState, mapGetters } from "vuex";
 import { get } from "lodash";
-import SettingRoleStudent from "~/components/page/profile/setting/tabs/SettingRoleStudent"
+import SettingRoleStudent from "~/components/page/profile/setting/tabs/SettingRoleStudent";
+import { getParamQuery, redirectWithParams } from "~/utils/common";
 
 export default {
   layout: "account-info",
@@ -64,7 +65,7 @@ export default {
     PaymentList,
     HeadTabs,
     VclList,
-    SettingRoleStudent
+    SettingRoleStudent,
   },
 
   data() {
@@ -86,13 +87,17 @@ export default {
   },
 
   async mounted() {
+    const tab = getParamQuery("tab");
+    this.tab = tab;
     this.loading = true;
     await this.$store.dispatch(`setting/getSetting`);
     const options = {
       params: { token: "true" },
     };
     await this.$store.dispatch(`setting/getBanks`, options);
-    await this.$store.dispatch(`setting/getAccountBanks`, { params: { status: 'ACTIVE'} });
+    await this.$store.dispatch(`setting/getAccountBanks`, {
+      params: { status: "ACTIVE" },
+    });
     this.loading = false;
   },
 
@@ -104,12 +109,13 @@ export default {
       };
       return MATCHED_TABS[this.tab];
     },
-    ...mapGetters("auth", ["isTeacherRole"])
+    ...mapGetters("auth", ["isTeacherRole"]),
   },
 
   methods: {
     changeTab(key) {
       this.tab = key;
+      redirectWithParams({ tab: key });
     },
     getCurrentContent() {
       const tab = get(this, '$route.query.tab', false)

@@ -102,7 +102,7 @@
                         </li>
 
                         <li @click.prevent="shareSchool(elearning)">
-                          <IconLogo width="13" height="13"/>Chia sẻ qua
+                          <IconLogo width="13" height="13" />Chia sẻ qua
                           Schoolly
                         </li>
                       </ul>
@@ -150,7 +150,9 @@
             <span
               v-if="isPoint"
               class="heading-5 text-primary font-weight-semi-bold"
-              >8.5</span
+              >{{
+                numeral(get(elearning, "medium_score.score", 0)).format("0,0.0")
+              }}</span
             >
             <span v-else>Chưa tổng kết</span>
           </p>
@@ -167,7 +169,7 @@
               <template #popover>
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
 
-                <p class="mb-2" v-for="(srore, index) in scores" :key="index">
+                <p class="mb-2" v-for="(score, index) in scores" :key="index">
                   {{ get(score, "name", "") }}:
                   <span class="text-primary">{{ get(score, "score", 0) }}</span>
                 </p>
@@ -301,9 +303,10 @@ import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
-import IconLogo from '~/assets/svg/icons/logo.svg?inline';
+import IconLogo from "~/assets/svg/icons/logo.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import { get } from "lodash";
+import numeral from "numeral";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2";
@@ -355,6 +358,8 @@ export default {
     }),
   },
   methods: {
+    get,
+    numeral,
     async handleShowDetailExams() {
       const params = {
         elearning_id: get(this, "elearning.elearning_id", ""),
