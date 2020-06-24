@@ -150,6 +150,7 @@ export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
+export const STUDY_ELEARNING_EXERCISE_2 = `/elearning/study/elearning/exercise_list`;
 export const STUDY_EXERCISE_ELEARNING = `/elearning/study/ex_elearnings`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
