@@ -24,12 +24,21 @@ export default class Notifications extends BaseService {
     return data;
   }
 
-  async [actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION](payload) {
-    const { data } = await this.$axios.request({
-      url: APIs.NOTIFICATIONS_HEADER,
-      method: "PUT",
-      data: payload,
-    });
+  async [actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION](id, payload) {
+    const { data } = await this.$axios.put(`${APIs.NOTIFICATIONS_HEADER}/${id}`, payload);
     return data;
   }
+
+  async [actionTypes.HEADER_NOTIFICATIONS.DELETE](id, payload) {
+    console.log(payload);
+    const { data } = await this.$axios.request({
+        url: `${APIs.NOTIFICATIONS_HEADER}/${id}`,
+        data: payload,
+        method: "DELETE",
+        // headers: {
+        //   "sc-response-format": "v1",
+        // },
+    });
+    return data;
+}
 }
