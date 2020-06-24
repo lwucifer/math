@@ -497,6 +497,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     LIST_QUESTION_START: "elearningSudyExerciseQuestionListStart",
     LIST_QUESTION: "elearningSudyExerciseQuestionList",
     LIST_ELEARNING_EXERCISE: "elearningSudyElearningExerciseList",
+    LIST_ELEARNING_EXERCISE_2: "elearningSudyElearningExerciseList2",
     LIST_RESULT: "elearningSudyExerciseResultList",
     LIST_SUBMISTION: "elearningSudyExerciseSubmissionList",
     ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",

@@ -206,40 +206,50 @@ export default {
     // console.log("[this.lesson]", this.lesson);
   },
 
-  mounted() {
+  async mounted() {
+    console.log("[mounted 1]")
     this.lessonStatus = get(this, "lesson.status", 0) == this.lessonCompleted;
 
+    const elearning_id = getParamQuery("elearning_id");
+    const category_type = getParamQuery("category_type");
     const lesson_id = getParamQuery("lesson_id");
-    if (lesson_id && lesson_id === this.lesson.id) {
+    console.log("[elearning_id]", elearning_id, category_type, lesson_id)
+    // go to lesson
+    if (lesson_id && lesson_id === this.lesson.id && !elearning_id) {
       this.handleStudy(this.lesson);
       return;
       // window.scrollTo(0, 0);
     }
 
-    // const elearning_id = getParamQuery("elearning_id");
-    // const lession_id = getParamQuery("lession_id");
-    // const category_type = getParamQuery("category_type");
-    // if(!elearning_id || !lession_id || !type) {
-    //   console.log("[exercise_id]", elearning_id, lession_id, type);
-    //   let exerciseReq = null;
-    //   if (this.currentLession) {
-    //     exerciseReq = {
-    //       elearning_id,
-    //       category: category_type,
-    //       lesson_id,
-    //       size: PAGE_SIZE.MAXIMIZE,
-    //     };
-    //   } else {
-    //     exerciseReq = {
-    //       elearning_id,
-    //       category: category_type,
-    //       size: PAGE_SIZE.MAXIMIZE,
-    //     };
-    //   }
-    //   this.setStudyMode(STUDY_MODE.DO_EXERCISE);
-    //   this.elearningSudyElearningExerciseList(exerciseReq);
-    //   return;
-    // }
+    // goto exercise of lesson
+    if(elearning_id && category_type) {
+      let exerciseReq = null;
+      this.setStudyMode(STUDY_MODE.DO_EXERCISE);
+      if (category_type == EXERCISE_CATEGORIES.EXERCISE) {
+        exerciseReq = {
+          elearning_id,
+          category: category_type,
+          lesson_id,
+          size: PAGE_SIZE.MAXIMIZE,
+        };
+
+        this.setStudyExerciseCurrentLession({
+          id: lesson_id
+        }); // set current lesson to return list exercise after submission success
+      } else if(category_type == EXERCISE_CATEGORIES.TEST) {
+        exerciseReq = {
+          elearning_id,
+          category: category_type,
+          size: PAGE_SIZE.MAXIMIZE,
+        };
+        this.setStudyExerciseCurrentLession(null);
+      }
+
+      console.log("[exerciseReq]", exerciseReq);
+      await this.elearningSudyElearningExerciseList(exerciseReq);
+
+      return;
+    }
   },
 
   computed: {

@@ -139,7 +139,7 @@ export default {
           );
           this.$emit("cancel");
           this.$store.dispatch("setting/getAccountBanks", {
-            params: { status: 'ACTIVE'} 
+            params: { status: "ACTIVE" },
           });
           return;
         }

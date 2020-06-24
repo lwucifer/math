@@ -79,7 +79,10 @@ export default {
       opts: [],
       bank: null,
       notifyMsg: null,
-      notifyType: null
+      notifyType: null,
+      params: {
+        status: "ACTIVE",
+      },
     };
   },
   watch: {
@@ -113,9 +116,13 @@ export default {
       this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`);
     },
     fetchAccountBank() {
-      this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`, {
-        params: { status: 'ACTIVE'} 
-      });
+      const payload = {
+        params: this.params,
+      };
+      this.$store.dispatch(
+        `bank/${actionTypes.ACCOUNT_BANKS.LIST}`,
+        payload
+      );
     },
     handleRefresh() {
       this.fetchAccountBank();

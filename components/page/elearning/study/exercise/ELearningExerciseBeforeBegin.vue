@@ -71,13 +71,6 @@ export default {
 
   },
 
-  // mounted() {
-  //   const exercise_id = getParamQuery("exercise_id");
-  //   console.log("[Exercise]", exercise_id);
-  //   if (exercise_id) {
-  //     // this.handleStudy(this.lesson);
-  //   }
-  // },
 
   methods: {
     ...mapMutations("event", ["setStudyMode"]),
