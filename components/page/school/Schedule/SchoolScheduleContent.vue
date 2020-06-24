@@ -4,17 +4,17 @@
             <div class="col-md-8">
                 <div v-if="!isDetail">
                     <div class="intro-text-school-menu-side">Thời khóa biểu mới mới</div>
-                    <div class="row news-item-school" v-for="(item,index) in 5" :key="index" @click="showDetailSchedule">
+                    <div class="row news-item-school" v-for="(item,index) in get(this,'timetablesList.content','')" :key="index" @click="showDetailSchedule">
                         <div class="col-md-4">
-                            <img :height="131" class="w-100" src="~assets/images/tmp/img-intro.png">
+                            <img :height="131" class="w-100" src="~assets/images/tmp/timetable.png">
                         </div>
                         <div class="col-md-8">
-                            <p class="title-notify">Thời khóa biểu THCS từ ngày 08.06.2020</p>
-                            <p class="text-sub my-2">01/06/2020</p>
+                            <p class="title-notify">{{ get(item,'title','') }}</p>
+                            <p class="text-sub my-2">{{ get(item,'updated','') | moment('DD/MM/YYYY') }}</p>
                         </div>
                     </div>
                     <app-pagination
-                        :pagination="pagination"
+                        :pagination="filterPagination"
                         class="mt-5"
                     />
                 </div>
@@ -46,6 +46,11 @@
 <script>
 import SchoolSchedileMenuSide from "~/components/page/school/Schedule/SchoolSchedileMenuSide"
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
+
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import {moment} from "moment";
 export default {
     components:{
         SchoolSchedileMenuSide,
@@ -64,10 +69,35 @@ export default {
             }
         }
     },
+    computed:{
+        ...mapState("elearning/school/school-info", { timetablesList: "timetables" }),
+        filterPagination(){
+            this.pagination.total_pages = get(this,'timetablesList.total_pages','');
+            this.pagination.size = get(this,'timetablesList.size','');
+            this.pagination.total_elements = get(this,'timetablesList.total_elements','');
+            this.pagination.first =  get(this,'timetablesList.first',0);
+            this.pagination.last =  get(this,'timetablesList.last',0);
+            this.pagination.number =  get(this,'timetablesList.number','');
+            return this.pagination
+        }
+    },
+    created(){
+        this.fetchTimeTableList();
+    },
     methods:{
         showDetailSchedule(){
             this.isDetail= true
-        }
+        },
+        async fetchTimeTableList(){
+            const organization_id = this.$route.params.id;
+            const data = { organization_id };
+            await this.$store.dispatch(
+            `elearning/school/school-info/${actionTypes.SCHOOL_INFO.TIMETABLE}`,
+                data
+            );
+
+        },
+        get
     }
 }
 </script>

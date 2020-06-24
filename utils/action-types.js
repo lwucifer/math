@@ -230,6 +230,10 @@ export const ELEARNING_PUBLIC_NEWEST = {
     LIST_COURSE: "elearningPublicNewestCourse",
 };
 
+export const PUBLIC_CATEGORY = {
+    LIST: "publicCategoryList",
+};
+
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
     LIST: "elearningPublicHighlightTeachers",
 };

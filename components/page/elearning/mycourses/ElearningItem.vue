@@ -102,7 +102,7 @@
                         </li>
 
                         <li @click.prevent="shareSchool(elearning)">
-                          <IconSchooly class="icon fill-white" />Chia sẻ qua
+                          <IconLogo width="13" height="13"/>Chia sẻ qua
                           Schoolly
                         </li>
                       </ul>
@@ -301,7 +301,7 @@ import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
-import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
+import IconLogo from '~/assets/svg/icons/logo.svg?inline';
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
@@ -317,7 +317,7 @@ export default {
     IconUnArchive,
     IconArchive,
     IconFacebook,
-    IconSchooly,
+    IconLogo,
     IconQuestionCircle,
     ElearningItem2,
     MenuDropDown,

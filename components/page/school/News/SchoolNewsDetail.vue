@@ -33,18 +33,14 @@ export default {
     methods:{
         async fetchNewsDetail(news_id){
             const data = { id : news_id };
-            console.log(data,'hello')
             const rs = await this.$store.dispatch(
             `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.DETAIL}`,
                 data
             );
-            console.log('hello',rs)
         },
         async checkNewsId(){
-            const news_id = getParamQuery('id');
-            console.log('hello',news_id)
+            let news_id = this.$route.query.news_id;
             if(news_id){
-                console.log('hello',news_id)
                 await this.fetchNewsDetail(news_id)
             }else{
                 console.log('fail')
