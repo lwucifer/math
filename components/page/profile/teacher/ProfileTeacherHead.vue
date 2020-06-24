@@ -10,7 +10,7 @@
             <span class="h4">{{ get(info, 'name', '') }}</span>
           </div>
           <div>
-	    <n-link class="text-decoration-none text-base" to='/' target="_blank">
+	    <n-link class="text-decoration-none text-base" :to="`/school/${get(info, 'school_id', '')}`" target="_blank">
             	<span>{{ get(info, 'school_name', '') }}</span>
             </n-link>
           </div>
