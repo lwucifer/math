@@ -44,8 +44,9 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import { STUDY_MODE } from "~/utils/constants";
-import { RESPONSE_SUCCESS } from "../../../../../utils/config";
+import { RESPONSE_SUCCESS } from "~/utils/config";
 import { fullDateTimeSlash } from "~/utils/moment";
+import { getParamQuery } from '~/utils/common';
 
 export default {
   computed: {
@@ -69,6 +70,7 @@ export default {
     },
 
   },
+
 
   methods: {
     ...mapMutations("event", ["setStudyMode"]),

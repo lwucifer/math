@@ -7,7 +7,7 @@
           </template>
           <template v-slot:cell(date)="{ row }">
               <td style="width:25%">
-                  <span v-if="row.deadline">{{ row.deadline | moment("HH:mm") }} ngày {{ row.deadline | moment("DD/MM/YYYY") }}</span>
+                  <span v-if="row.deadline">{{ getLocalDateTime(row.deadline) | moment("HH:mm") }} ngày {{ row.deadline | moment("DD/MM/YYYY") }}</span>
               </td>
           </template>
           <template v-slot:cell(status)="{ row }">
@@ -23,6 +23,9 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
+import {
+  getLocalDateTime
+} from "~/utils/moment";
 const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     data(){
@@ -49,6 +52,9 @@ export default {
             const data = this.deadline.filter(item => item.category == "TEST");
             return data
         }
+    },
+    methods: {
+        getLocalDateTime
     },
 }
 </script>

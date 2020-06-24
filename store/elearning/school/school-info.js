@@ -46,11 +46,11 @@ const actions = {
   async [actionTypes.SCHOOL_INFO.ANNOUNCEMENT]({ commit }, params) {
     try {
       const { data } = await this.$axios.get(APIs.SCHOOL_ANNOUCEMENTS, { params });
-      if (result.success) {
+      if (data.success) {
         commit(mutationTypes.SCHOOL_INFO.SET_SCHOOL_ANNOUNCEMENT, data.data);
       }
     } catch (error) {
-      console.log("[ANNOUNCEMENT_DETAIL] error", error);
+      console.log("[ANNOUNCEMENT] error", error);
     }
   },
 
@@ -102,7 +102,7 @@ const actions = {
   async [actionTypes.SCHOOL_INFO.TIMETABLE]({ commit }, params) {
     try {
       const { data } = await this.$axios.get(APIs.SCHOOL_TIMETABLE, { params });
-      if (result.success) {
+      if (data.success) {
         commit(mutationTypes.SCHOOL_INFO.SET_SCHOOL_TIMETABLE, data.data);
       }
     } catch (error) {

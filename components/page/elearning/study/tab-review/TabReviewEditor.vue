@@ -3,7 +3,7 @@
     <app-avatar
       :size="40"
       class="mr-4"
-      :src="$store.state.auth.token ? $store.state.auth.token.avatar : ''"
+        :src="$store.state.auth.token && $store.state.auth.token.avatar && $store.state.auth.token.avatar.low ? $store.state.auth.token.avatar.low : ''"
     />
 
     <div class="flex-grow e-study-tab-qa-editor__right">

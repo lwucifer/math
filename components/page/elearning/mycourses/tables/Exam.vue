@@ -25,27 +25,32 @@
 
       <template v-slot:cell(deadline)="{row}">
         <td>
-          <span v-if="get(row, 'deadline', false)">{{ get(row, 'deadline') | getDateBirthday }}</span>
+          <span v-if="get(row, 'submission_time', false)">{{ get(row, 'submission_time') | getDateBirthday }}</span>
           <span v-else>-</span>
         </td>
       </template>
 
       <template v-slot:cell(status)="{row}">
         <td>
-          <v-popover trigger="hover" placement="bottom-end" popover-class="tooltip--submit-status">
-            <span class="nowrap" :class="statusCls(row)">
-              <span>{{ getScoreDetail(row)}}</span>
-            </span>
-            <template slot="popover" class="tooltip-detail">
-              <div>
-                <submit-status
-                  :timestamp="get(row, 'deadline', false) ? getDateTimeHhMmDdMmYyDash(get(row, 'deadline')): null"
-                  :scoreDetail="getScoreDetail(row)"
-                  :result="get(row, 'result')"
-                ></submit-status>
-              </div>
-            </template>
-          </v-popover>
+          <span class="nowrap" :class="statusCls(row)" v-if="get(row, 'result', '') == SUBMISSION_RESULTS.NONE">
+            <span>{{ getScoreDetail(row)}}</span>
+          </span>
+          <span v-else>
+            <v-popover trigger="hover" placement="bottom-end" popover-class="tooltip--submit-status">
+              <span class="nowrap" :class="statusCls(row)">
+                <span>{{ getScoreDetail(row)}}</span>
+              </span>
+              <template slot="popover" class="tooltip-detail">
+                <div>
+                  <submit-status
+                    :timestamp="get(row, 'submission_time', false) ? getDateTimeHhMmDdMmYyDash(get(row, 'submission_time')): null"
+                    :scoreDetail="getScoreDetail(row)"
+                    :result="get(row, 'result')"
+                  ></submit-status>
+                </div>
+              </template>
+            </v-popover>
+          </span>
         </td>
       </template>
 
@@ -58,7 +63,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/${$route.params.id}/study?lesson_id=${row.id}`"
+            :to="`/elearning/${$route.params.id}/study?elearning_id=${$route.params.id}&category_type=${EXERCISE_CATEGORIES.TEST}`"
           >
             <IconArrow height="13" />
           </n-link>
@@ -85,7 +90,7 @@ import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 import IconStar from "~/assets/svg/v2-icons/star_rate_18px.svg?inline";
 import SubmitStatus from "~/components/page/elearning/mycourses/SubmitStatus";
 import { subResult2Txt } from "~/plugins/filters";
-import { SUBMISSION_RESULTS } from "~/utils/constants";
+import { SUBMISSION_RESULTS, EXERCISE_CATEGORIES } from "~/utils/constants";
 import { getDateTimeHhMmDdMmYyDash } from "~/plugins/filters";
 import { mapActions, mapGetters } from "vuex";
 
@@ -147,7 +152,9 @@ export default {
           name: "action",
           text: ""
         }
-      ]
+      ],
+      SUBMISSION_RESULTS: SUBMISSION_RESULTS,
+      EXERCISE_CATEGORIES: EXERCISE_CATEGORIES,
     };
   },
 
