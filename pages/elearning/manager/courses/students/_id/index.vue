@@ -11,7 +11,7 @@
             <div class="d-flex">
               <h5 class="text-primary">Thông tin học sinh</h5>
               <app-button
-                v-if="!get(progress, 'is_banned', false)"
+                v-if="!get(progress, 'banned', false)"
                 square
                 color="secondary"
                 size="sm"
@@ -154,7 +154,9 @@ export default {
           this.$route.query && this.$route.query.elearning_id
             ? this.$route.query.elearning_id
             : "",
-        user_id: this.$store.state.auth.token ? this.$store.state.auth.token.id : "",
+        user_id: this.$route.query && this.$route.query.user_id
+            ? this.$route.query.user_id
+            : "",
         banned: !isBanned
       });
       const dataQuery = {
