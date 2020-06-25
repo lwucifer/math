@@ -50,18 +50,6 @@ const actions = {
     }
   },
 
-  async [actionTypes.TEACHING_OLCLASSES.DETAIL]({ commit }, class_id) {
-    try {
-      const result = await new OlClass(this.$axios)[actionTypes.BASE.DETAIL](
-        class_id
-      );
-      return result;
-    } catch (error) {
-      console.log("[TEACHING Olclass] list.error", error);
-    }
-    return null;
-  },
-
   async [actionTypes.TEACHING_OLCLASSES.ADD]({ commit }, payload) {
     try {
       const result = await new OlClass(this.$axios)["postWithRawJson"](payload);
