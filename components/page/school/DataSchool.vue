@@ -1,19 +1,19 @@
 <template>
     <div class="data-school">
         <div class="data-school__item">
-            <span>{{get(this,"school.teacher_number")}}</span>Giáo viên
+            <span>{{get(this,"school.teacher_number",0)}}</span>Giáo viên
         </div>
 
         <div class="data-school__item">
-            <span>{{get(this,"school.student_number")}}</span>Học sinh
+            <span>{{get(this,"school.student_number",0)}}</span>Học sinh
         </div>
 
         <div class="data-school__item">
-            <span>{{get(this,"school.lession_number")}}</span>Bài giảng
+            <span>{{get(this,"school.lession_number",0)}}</span>Bài giảng
         </div>
 
         <div class="data-school__item">
-            <span>{{get(this,"school.elearning_number")}}</span>Khoá học
+            <span>{{get(this,"school.elearning_number",0)}}</span>Khoá học
         </div>
     </div>
 </template>
